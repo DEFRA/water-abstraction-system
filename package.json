@@ -1,0 +1,36 @@
+{
+  "name": "water-abstraction-system",
+  "version": "0.1.0",
+  "description": "System for managing water abstraction licences, including alerts, returns and billing",
+  "homepage": "https://github.com/DEFRA/water-abstraction-team",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "standard",
+    "test": "lab --silent-skips --shuffle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DEFRA/water-abstraction-system"
+  },
+  "author": "Water service team",
+  "license": "OGL-UK-3.0",
+  "dependencies": {
+    "@airbrake/node": "^2.1.7",
+    "@hapi/hapi": "^20.2.2",
+    "blipp": "^4.0.2",
+    "dotenv": "^16.0.3",
+    "hapi-pino": "^11.0.0",
+    "knex": "^2.3.0",
+    "objection": "^3.0.1",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "@hapi/code": "^9.0.1",
+    "@hapi/hoek": "^10.0.1",
+    "@hapi/lab": "^25.0.1",
+    "pino-pretty": "^9.1.1",
+    "sinon": "^14.0.1",
+    "standard": "^17.0.0"
+  }
+}

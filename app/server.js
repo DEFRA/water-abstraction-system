@@ -1,0 +1,51 @@
+'use strict'
+
+const Hapi = require('@hapi/hapi')
+
+const ServerConfig = require('../config/server.config.js')
+const TestConfig = require('../config/test.config.js')
+
+const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
+const BlippPlugin = require('./plugins/blipp.plugin.js')
+const HapiPinoPlugin = require('./plugins/hapi_pino.plugin.js')
+const RequestNotifierPlugin = require('./plugins/request_notifier.plugin.js')
+const RouterPlugin = require('./plugins/router.plugin.js')
+const StopPlugin = require('./plugins/stop.plugin.js')
+
+const registerPlugins = async (server) => {
+  // Register the remaining plugins
+  await server.register(StopPlugin)
+  await server.register(RouterPlugin)
+  await server.register(HapiPinoPlugin(TestConfig.logInTest))
+  await server.register(AirbrakePlugin)
+  await server.register(RequestNotifierPlugin)
+
+  // Register non-production plugins
+  if (ServerConfig.environment === 'development') {
+    await server.register(BlippPlugin)
+  }
+}
+
+const init = async () => {
+  // Create the hapi server
+  const server = Hapi.server(ServerConfig.hapi)
+
+  await registerPlugins(server)
+  await server.initialize()
+
+  return server
+}
+
+const start = async () => {
+  const server = await init()
+  await server.start()
+
+  return server
+}
+
+process.on('unhandledRejection', err => {
+  console.log(err)
+  process.exit(1)
+})
+
+module.exports = { init, start }
