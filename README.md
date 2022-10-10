@@ -23,6 +23,13 @@ First clone the repository and then drop into your new local repo:
 git clone https://github.com/DEFRA/water-abstraction-system.git && cd water-abstraction-system
 ```
 
+Create the databases:
+
+```bash
+npm run create-db
+npm run create-test-db
+```
+
 Our preference is to run the database and API within Docker, so [install Docker](https://docs.docker.com/get-docker/) if you don't already have it.
 
 ## Configuration
