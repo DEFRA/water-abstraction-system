@@ -15,6 +15,7 @@ const SERVICE_NAME = 'Manage your water abstraction or impoundment licence'
 const path = require('path')
 const nunjucks = require('nunjucks')
 const pkg = require('../../package.json')
+const ServerConfig = require('../../config/server.config.js')
 
 const ViewsPlugin = {
   plugin: require('@hapi/vision'),
@@ -44,7 +45,8 @@ const ViewsPlugin = {
     },
     path: '../views',
     relativeTo: __dirname,
-    isCached: false, // TODO: Make this conditional so caching is `false` in dev and `true` everywhere else
+    isCached: !(ServerConfig.environment === 'development'), // Disable caching if we're running in dev
+
     // The context contains anything we want to pass through to our templates, eg. `assetPath` is referred to in
     // layout.njk as the path to get static assets like client-side javascript. These are added to or overridden in the
     // h.view() call in a controller.
