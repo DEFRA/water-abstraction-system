@@ -11,14 +11,17 @@ const HapiPinoPlugin = require('./plugins/hapi_pino.plugin.js')
 const RequestNotifierPlugin = require('./plugins/request_notifier.plugin.js')
 const RouterPlugin = require('./plugins/router.plugin.js')
 const StopPlugin = require('./plugins/stop.plugin.js')
+const ViewsPlugin = require('./plugins/views.plugin.js')
 
 const registerPlugins = async (server) => {
   // Register the remaining plugins
   await server.register(StopPlugin)
+  await server.register(require('@hapi/inert'))
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin(TestConfig.logInTest))
   await server.register(AirbrakePlugin)
   await server.register(RequestNotifierPlugin)
+  await server.register(ViewsPlugin)
 
   // Register non-production plugins
   if (ServerConfig.environment === 'development') {

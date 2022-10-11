@@ -15,12 +15,14 @@ const FilterRoutesService = require('../services/plugins/filter_routes.service.j
 const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const AirbrakeRoutes = require('../routes/airbrake.routes.js')
+const AssetRoutes = require('../routes/assets.routes.js')
 const DatabaseRoutes = require('../routes/database.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 
 const routes = [
   ...RootRoutes,
   ...AirbrakeRoutes,
+  ...AssetRoutes,
   ...DatabaseRoutes
 ]
 
