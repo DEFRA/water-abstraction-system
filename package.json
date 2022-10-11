@@ -20,6 +20,7 @@
   "dependencies": {
     "@airbrake/node": "^2.1.7",
     "@hapi/hapi": "^20.2.2",
+    "@hapi/inert": "^7.0.0",
     "@hapi/vision": "^7.0.0",
     "blipp": "^4.0.2",
     "dotenv": "^16.0.3",
