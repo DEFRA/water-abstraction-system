@@ -25,10 +25,7 @@ const ViewsPlugin = {
       njk: {
         compile: (src, options) => {
           const template = nunjucks.compile(src, options.environment)
-
-          return (context) => {
-            return template.render(context)
-          }
+          return context => template.render(context)
         },
         prepare: (options, next) => {
           options.compileOptions.environment = nunjucks.configure([
@@ -45,7 +42,7 @@ const ViewsPlugin = {
     },
     path: '../views',
     relativeTo: __dirname,
-    isCached: !(ServerConfig.environment === 'development'), // Disable caching if we're running in dev
+    isCached: ServerConfig.environment !== 'development', // Disable caching if we're running in dev
 
     // The context contains anything we want to pass through to our templates, eg. `assetPath` is referred to in
     // layout.njk as the path to get static assets like client-side javascript. These are added to or overridden in the
