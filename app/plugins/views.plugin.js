@@ -16,7 +16,6 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 const pkg = require('../../package.json')
 
-// TODO: Document/understand the various options
 const ViewsPlugin = {
   plugin: require('@hapi/vision'),
   options: {
@@ -35,8 +34,8 @@ const ViewsPlugin = {
             path.join(options.relativeTo || process.cwd(), options.path),
             'node_modules/govuk-frontend/'
           ], {
-            autoescape: true,
-            watch: false
+            autoescape: true, // Automatically escape dangerous characters
+            watch: false // We reload the template each time a page is accessed so don't need to watch files for changes
           })
 
           return next()
@@ -46,6 +45,9 @@ const ViewsPlugin = {
     path: '../views',
     relativeTo: __dirname,
     isCached: false, // TODO: Make this conditional so caching is `false` in dev and `true` everywhere else
+    // The context contains anything we want to pass through to our templates, eg. `assetPath` is referred to in
+    // layout.njk as the path to get static assets like client-side javascript. These are added to or overridden in the
+    // h.view() call in a controller.
     context: {
       appVersion: pkg.version,
       assetPath: '/assets',
