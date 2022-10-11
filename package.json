@@ -6,10 +6,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "build:css": "bin/build-css",
+    "build": "bin/build",
     "create-db": "node db/create.database.js",
     "create-test-db": "NODE_ENV=test node db/create.database.js",
     "lint": "standard",
-    "test": "lab --silent-skips --shuffle"
+    "test": "lab --silent-skips --shuffle",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
