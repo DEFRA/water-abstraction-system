@@ -10,6 +10,8 @@
  * @module ViewsPlugin
  */
 
+const SERVICE_NAME = 'Manage your water abstraction or impoundment licence'
+
 const path = require('path')
 const nunjucks = require('nunjucks')
 const pkg = require('../../package.json')
@@ -46,8 +48,8 @@ const ViewsPlugin = {
     context: {
       appVersion: pkg.version,
       assetPath: '/assets',
-      serviceName: 'Service name', // TODO: Update the service name
-      pageTitle: 'Service name - GOV.UK' // TODO: Update the service name
+      serviceName: SERVICE_NAME,
+      pageTitle: `${SERVICE_NAME} - GOV.UK`
     }
   }
 }
