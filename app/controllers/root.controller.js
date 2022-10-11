@@ -6,7 +6,7 @@ class RootController {
   }
 
   static async helloWorld (_req, h) {
-    return h.view('home', {
+    return h.view('home.njk', {
       title: 'Hello',
       message: 'World',
       pageTitle: 'Hello World!'
