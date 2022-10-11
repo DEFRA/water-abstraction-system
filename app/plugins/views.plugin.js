@@ -21,7 +21,8 @@ const ViewsPlugin = {
   plugin: require('@hapi/vision'),
   options: {
     engines: {
-      html: {
+      // The 'engine' is the file extension this applies to; in this case, .njk
+      njk: {
         compile: (src, options) => {
           const template = nunjucks.compile(src, options.environment)
 
