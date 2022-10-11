@@ -4,6 +4,13 @@ class RootController {
   static async index (_req, _h) {
     return { status: 'alive' }
   }
+
+  static async helloWorld (_req, h) {
+    return h.view('home', {
+      title: 'Hello',
+      message: 'World'
+    })
+  }
 }
 
 module.exports = RootController
