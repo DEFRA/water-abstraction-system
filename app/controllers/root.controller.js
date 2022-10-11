@@ -8,7 +8,8 @@ class RootController {
   static async helloWorld (_req, h) {
     return h.view('home', {
       title: 'Hello',
-      message: 'World'
+      message: 'World',
+      pageTitle: 'Hello World!'
     })
   }
 }
