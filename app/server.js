@@ -7,6 +7,7 @@ const TestConfig = require('../config/test.config.js')
 
 const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
 const BlippPlugin = require('./plugins/blipp.plugin.js')
+const ErrorPagesPlugin = require('./plugins/error_pages.plugin.js')
 const HapiPinoPlugin = require('./plugins/hapi_pino.plugin.js')
 const RequestNotifierPlugin = require('./plugins/request_notifier.plugin.js')
 const RouterPlugin = require('./plugins/router.plugin.js')
@@ -20,6 +21,7 @@ const registerPlugins = async (server) => {
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin(TestConfig.logInTest))
   await server.register(AirbrakePlugin)
+  await server.register(ErrorPagesPlugin)
   await server.register(RequestNotifierPlugin)
   await server.register(ViewsPlugin)
 
