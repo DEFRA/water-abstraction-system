@@ -6,10 +6,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "build:css": "bin/build-css",
+    "build": "bin/build",
     "create-db": "node db/create.database.js",
     "create-test-db": "NODE_ENV=test node db/create.database.js",
     "lint": "standard",
-    "test": "lab --silent-skips --shuffle"
+    "test": "lab --silent-skips --shuffle",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -20,10 +23,14 @@
   "dependencies": {
     "@airbrake/node": "^2.1.7",
     "@hapi/hapi": "^20.2.2",
+    "@hapi/inert": "^7.0.0",
+    "@hapi/vision": "^7.0.0",
     "blipp": "^4.0.2",
     "dotenv": "^16.0.3",
+    "govuk-frontend": "^4.3.1",
     "hapi-pino": "^11.0.0",
     "knex": "^2.3.0",
+    "nunjucks": "^3.2.3",
     "objection": "^3.0.1",
     "pg": "^8.8.0"
   },
@@ -31,6 +38,7 @@
     "@hapi/code": "^9.0.1",
     "@hapi/hoek": "^10.0.1",
     "@hapi/lab": "^25.0.1",
+    "node-sass": "^7.0.3",
     "pino-pretty": "^9.1.1",
     "sinon": "^14.0.1",
     "standard": "^17.0.0"

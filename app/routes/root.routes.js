@@ -18,6 +18,14 @@ const routes = [
     options: {
       auth: false
     }
+  },
+  {
+    method: 'GET',
+    path: '/hello-world',
+    handler: RootController.helloWorld,
+    options: {
+      auth: false
+    }
   }
 ]
 

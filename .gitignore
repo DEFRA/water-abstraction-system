@@ -40,3 +40,6 @@ node_modules/
 coverage/
 coverage.html
 lcov.info
+
+# Build assets
+app/public/build
