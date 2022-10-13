@@ -5,11 +5,37 @@ class RootController {
     return { status: 'alive' }
   }
 
-  static async helloWorld (_req, h) {
+  static helloWorld (_req, h) {
     return h.view('home.njk', {
       title: 'Hello',
       message: 'World',
       pageTitle: 'Hello World!'
+    })
+  }
+
+  static serviceStatus (_req, h) {
+    const importRows = [
+      [
+        {
+          text: 'First 6 weeks'
+        },
+        {
+          text: '£109.80 per week'
+        },
+        {
+          text: 'First 6 weeks'
+        },
+        {
+          text: 'First 6 weeks'
+        },
+        {
+          text: 'First 6 weeks'
+        }
+      ]
+    ]
+    return h.view('service_status.njk', {
+      pageTitle: 'Service Status',
+      importRows
     })
   }
 }
