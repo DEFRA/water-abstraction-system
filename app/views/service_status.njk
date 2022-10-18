@@ -29,5 +29,26 @@
       ],
       rows: importRows
     }) }}
+
+    {{ govukTable({
+      caption: "Virus scanner",
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      rows: virusScannerRows
+    }) }}
+
+    {{ govukTable({
+      caption: "Cache connectivity",
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      rows: cacheConnectivityRows
+    }) }}
+
+    {{ govukTable({
+      caption: "Service versions",
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      rows: serviceVersionsRows
+    }) }}
   </div>
 {% endblock %}

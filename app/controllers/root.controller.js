@@ -1,5 +1,7 @@
 'use strict'
 
+const ServiceStatusService = require('../services/service_status.service')
+
 class RootController {
   static async index (_req, _h) {
     return { status: 'alive' }
@@ -13,29 +15,12 @@ class RootController {
     })
   }
 
-  static serviceStatus (_req, h) {
-    const importRows = [
-      [
-        {
-          text: 'First 6 weeks'
-        },
-        {
-          text: '£109.80 per week'
-        },
-        {
-          text: 'First 6 weeks'
-        },
-        {
-          text: 'First 6 weeks'
-        },
-        {
-          text: 'First 6 weeks'
-        }
-      ]
-    ]
+  static async serviceStatus (_req, h) {
+    const pageData = await ServiceStatusService.go()
+
     return h.view('service_status.njk', {
       pageTitle: 'Service Status',
-      importRows
+      ...pageData
     })
   }
 }
