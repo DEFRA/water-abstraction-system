@@ -13,60 +13,15 @@
 */
 class ServiceStatusService {
   static async go () {
-    // const importData = [
-    //   'Licences (NALD)',
-    //   '100%',
-    //   'No',
-    //   'October 13, 2022 2:12 PM',
-    //   ''
-    // ]
-
-    const importData = [
-      [
-        'Cell 1.1',
-        'Cell 1.2',
-        'Cell 1.3',
-        'Cell 1.4',
-        'Cell 1.5'
-      ],
-      [
-        'Cell 2.1',
-        'Cell 2.2',
-        'Cell 2.3',
-        'Cell 2.4',
-        'Cell 2.5'
-      ]
-    ]
-
-    const virusScannerData = [
-      [
-        'Status',
-        'OK'
-      ]
-    ]
-
-    const cacheConnectivityData = [
-      [
-        'Status',
-        'Connected'
-      ]
-    ]
-
-    const serviceVersionsData = [
-      [
-        'Water service',
-        '3.0.1'
-      ],
-      [
-        'IDM',
-        '2.25.1'
-      ]
-    ]
+    const importData = this._getImportData()
+    const virusScannerData = this._getVirusScannerData()
+    const cacheConnectivityData = this._getCacheConnectivityData()
+    const serviceVersionsData = this._getServiceVersionsData()
 
     const importRows = this._mapArrayToTextCells(importData)
-    const virusScannerRows = this._mapArrayToTextCells(virusScannerData)
-    const cacheConnectivityRows = this._mapArrayToTextCells(cacheConnectivityData)
-    const serviceVersionsRows = this._mapArrayToTextCells(serviceVersionsData)
+    const virusScannerRows = this._mapArrayToStatusCells(virusScannerData)
+    const cacheConnectivityRows = this._mapArrayToStatusCells(cacheConnectivityData)
+    const serviceVersionsRows = this._mapArrayToStatusCells(serviceVersionsData)
 
     return {
       importRows,
@@ -85,6 +40,68 @@ class ServiceStatusService {
         return { text: cell }
       })
     })
+  }
+
+  static _mapArrayToStatusCells (rows) {
+    // Map each row in the array we've received
+    return rows.map(row => {
+      // A status row has only two elements: the first is standard text, the other is mapped as numeric to right-justify
+      // it
+      return [
+        { text: row[0] },
+        { text: row[1], format: 'numeric' }
+      ]
+    })
+  }
+
+  static _getImportData () {
+    return [
+      [
+        'Cell 1.1',
+        'Cell 1.2',
+        'Cell 1.3',
+        'Cell 1.4',
+        'Cell 1.5'
+      ],
+      [
+        'Cell 2.1',
+        'Cell 2.2',
+        'Cell 2.3',
+        'Cell 2.4',
+        'Cell 2.5'
+      ]
+    ]
+  }
+
+  static _getVirusScannerData () {
+    return [
+      [
+        'Status',
+        'OK'
+      ]
+    ]
+  }
+
+  static _getCacheConnectivityData () {
+    return [
+      [
+        'Status',
+        'Connected'
+      ]
+    ]
+  }
+
+  static _getServiceVersionsData () {
+    return [
+      [
+        'Water service',
+        '3.0.1'
+      ],
+      [
+        'IDM',
+        '2.25.1'
+      ]
+    ]
   }
 }
 

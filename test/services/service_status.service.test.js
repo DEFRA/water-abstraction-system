@@ -27,14 +27,14 @@ const secondRow = [
 ]
 
 describe('Service Status service', () => {
-  it('returns data in the expected format', async () => {
-    const result = await ServiceStatusService.go()
+  describe('importRows data', () => {
+    it('returns data in the expected format', async () => {
+      const { importRows } = await ServiceStatusService.go()
 
-    expect(result).to.equal({
-      importRows: [
+      expect(importRows).to.equal([
         firstRow,
         secondRow
-      ]
+      ])
     })
   })
 })
