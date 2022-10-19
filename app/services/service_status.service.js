@@ -15,13 +15,15 @@ class ServiceStatusService {
   static async go () {
     const importData = await this._getImportData()
     const virusScannerData = await this._getVirusScannerData()
-    const cacheConnectivityData = await this._getCacheConnectivityData()
+    const redisConnectivityData = await this._getRedisConnectivityData()
+    const addressFacadeData = await this._getAddressFacadeData()
     const serviceVersionsData = await this._getServiceVersionsData()
 
     return {
       importRows: this._mapArrayToTextCells(importData),
-      virusScannerRows: this._mapArrayToStatusCells(virusScannerData),
-      cacheConnectivityRows: this._mapArrayToStatusCells(cacheConnectivityData),
+      virusScannerData,
+      redisConnectivityData,
+      addressFacadeData,
       serviceVersionsRows: this._mapArrayToStatusCells(serviceVersionsData)
     }
   }
@@ -73,21 +75,15 @@ class ServiceStatusService {
   }
 
   static async _getVirusScannerData () {
-    return [
-      [
-        'Status',
-        'OK'
-      ]
-    ]
+    return 'ClamAV 0.103.5/26694/Wed Oct 19 07:58:25 2022'
   }
 
-  static async _getCacheConnectivityData () {
-    return [
-      [
-        'Status',
-        'Connected'
-      ]
-    ]
+  static async _getRedisConnectivityData () {
+    return 'Redis server v=5.0.7 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924'
+  }
+
+  static async _getAddressFacadeData () {
+    return 'hola'
   }
 
   static async _getServiceVersionsData () {

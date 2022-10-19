@@ -4,7 +4,22 @@
 
 {% block content %}
   <div class="govuk-body">
-    <h1 class="govuk-heading-l">Service Status</h1>
+    <h1 class="govuk-heading-l">Service status</h1>
+
+    <h2 class="govuk-heading-m">Virus scanner</h2>
+    <p class="govuk-body">{{ virusScannerData }}</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Redis</h2>
+    <p class="govuk-body">{{ redisConnectivityData }}</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Address facade</h2>
+    <p class="govuk-body">{{ addressFacadeData }}</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     {{ govukTable({
       caption: "Imports",
@@ -28,20 +43,6 @@
         }
       ],
       rows: importRows
-    }) }}
-
-    {{ govukTable({
-      caption: "Virus scanner",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      rows: virusScannerRows
-    }) }}
-
-    {{ govukTable({
-      caption: "Cache connectivity",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      rows: cacheConnectivityRows
     }) }}
 
     {{ govukTable({
