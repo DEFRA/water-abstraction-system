@@ -4,6 +4,12 @@
  * @module ServiceStatusService
  */
 
+// We use promisify to wrap exec in a promise. This allows us to await it without resorting to using callbacks.
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
+
+const servicesConfig = require('../../config/services.config')
+
 /**
  * Returns data required to populate our `/service-status` page, eg. task activity status, virus checker status, service
  * version numbers, etc.
@@ -13,16 +19,20 @@
 */
 class ServiceStatusService {
   static async go () {
-    const importData = await this._getImportData()
     const virusScannerData = await this._getVirusScannerData()
-    const cacheConnectivityData = await this._getCacheConnectivityData()
-    const serviceVersionsData = await this._getServiceVersionsData()
+    const redisConnectivityData = await this._getRedisConnectivityData()
+
+    const { got } = await import('got')
+    const addressFacadeData = await this._getAddressFacadeData(got)
+    const chargingModuleData = await this._getChargingModuleData(got)
+    const appData = await this._getAppData(got)
 
     return {
-      importRows: this._mapArrayToTextCells(importData),
-      virusScannerRows: this._mapArrayToStatusCells(virusScannerData),
-      cacheConnectivityRows: this._mapArrayToStatusCells(cacheConnectivityData),
-      serviceVersionsRows: this._mapArrayToStatusCells(serviceVersionsData)
+      virusScannerData,
+      redisConnectivityData,
+      addressFacadeData,
+      chargingModuleData,
+      appData
     }
   }
 
@@ -37,70 +47,84 @@ class ServiceStatusService {
     })
   }
 
-  /**
-   * Receives an array of statuses and returns it in the format required by the nunjucks template in the view.
-   */
-  static _mapArrayToStatusCells (rows) {
-    // Map each row in the array we've received
-    return rows.map(row => {
-      // A status row has only two elements:
-      // * The thing having its status reported, which is a standard text cell;
-      // * Its status, which is formatted numeric so that it's right justified on its row.
-      return [
-        { text: row[0] },
-        { text: row[1], format: 'numeric' }
-      ]
-    })
+  static async _getVirusScannerData () {
+    try {
+      const { stdout, stderr } = await exec('clamdscan --version')
+      return stderr ? `ERROR: ${stderr}` : stdout
+    } catch (error) {
+      return `ERROR: ${error.message}`
+    }
   }
 
-  static async _getImportData () {
-    return [
+  static async _getRedisConnectivityData () {
+    try {
+      const { stdout, stderr } = await exec('redis-server --version')
+      return stderr ? `ERROR: ${stderr}` : stdout
+    } catch (error) {
+      return `ERROR: ${error.message}`
+    }
+  }
+
+  static async _getAddressFacadeData (got) {
+    const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
+
+    const response = await got.get(statusUrl)
+
+    return response.body
+  }
+
+  static async _getChargingModuleData (got) {
+    const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
+
+    const response = await got.get(statusUrl)
+
+    return response.headers['x-cma-docker-tag']
+  }
+
+  static async _getImportData (got) {
+    const jobs = this._mapArrayToTextCells([
       [
         'Cell 1.1',
-        'Cell 1.2',
-        'Cell 1.3',
-        'Cell 1.4',
-        'Cell 1.5'
+        'Cell 1.2'
       ],
       [
         'Cell 2.1',
-        'Cell 2.2',
-        'Cell 2.3',
-        'Cell 2.4',
-        'Cell 2.5'
+        'Cell 2.2'
       ]
-    ]
+    ])
+
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8007/health/info').json()
+
+    return {
+      name: 'Import',
+      version: response.version,
+      commit: response.commit,
+      jobs
+    }
   }
 
-  static async _getVirusScannerData () {
-    return [
-      [
-        'Status',
-        'OK'
-      ]
+  static async _getAppData (got) {
+    const services = [
+      { name: 'Service - foreground', url: new URL('/health/info', servicesConfig.serviceForeground.url) },
+      { name: 'Service - background', url: new URL('/health/info', servicesConfig.serviceBackground.url) },
+      { name: 'Reporting', url: new URL('/health/info', servicesConfig.reporting.url) },
+      { name: 'Import', url: new URL('/health/info', servicesConfig.import.url) },
+      { name: 'Tactical CRM', url: new URL('/health/info', servicesConfig.tacticalCrm.url) },
+      { name: 'External UI', url: new URL('/health/info', servicesConfig.externalUi.url) },
+      { name: 'Internal UI', url: new URL('/health/info', servicesConfig.internalUi.url) },
+      { name: 'Tactical IDM', url: new URL('/health/info', servicesConfig.tacticalIdm.url) },
+      { name: 'Permit repository', url: new URL('/health/info', servicesConfig.permitRepository.url) },
+      { name: 'Returns', url: new URL('/health/info', servicesConfig.returns.url) }
     ]
-  }
 
-  static async _getCacheConnectivityData () {
-    return [
-      [
-        'Status',
-        'Connected'
-      ]
-    ]
-  }
+    for (const service of services) {
+      const response = await got.get(service.url).json()
+      service.version = response.version
+      service.commit = response.commit
+    }
 
-  static async _getServiceVersionsData () {
-    return [
-      [
-        'Water service',
-        '3.0.1'
-      ],
-      [
-        'IDM',
-        '2.25.1'
-      ]
-    ]
+    return services
   }
 }
 
