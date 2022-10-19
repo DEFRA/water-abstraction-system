@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block content %}
   <div class="govuk-body">
@@ -19,37 +20,47 @@
     <h2 class="govuk-heading-m">Address facade</h2>
     <p class="govuk-body">{{ addressFacadeData }}</p>
 
+    {% for app in appData %}
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    {{ govukTable({
-      caption: "Imports",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      head: [
+    <h2 class="govuk-heading-m">{{ app.name }}</h2>
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      rows: [
         {
-          text: "Import task name"
+          key: {
+            text: "Version"
+          },
+          value: {
+            text: app.version
+          }
         },
         {
-          text: "Success rate (last 3 days)"
-        },
-        {
-          text: "Active"
-        },
-        {
-          text: "Last updated"
-        },
-        {
-          text: "Last checked"
+          key: {
+            text: "Commit hash"
+          },
+          value: {
+            text: app.commit
+          }
         }
-      ],
-      rows: importRows
+      ]
     }) }}
 
-    {{ govukTable({
-      caption: "Service versions",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      rows: serviceVersionsRows
-    }) }}
+    {% if app.jobs.length %}
+      {{ govukTable({
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: "Job name"
+          },
+          {
+            text: "Last updated"
+          }
+        ],
+        rows: app.jobs
+      }) }}
+    {% endif %}
+
+  {% endfor %}
   </div>
 {% endblock %}

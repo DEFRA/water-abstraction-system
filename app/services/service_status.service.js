@@ -13,18 +13,17 @@
 */
 class ServiceStatusService {
   static async go () {
-    const importData = await this._getImportData()
     const virusScannerData = await this._getVirusScannerData()
     const redisConnectivityData = await this._getRedisConnectivityData()
     const addressFacadeData = await this._getAddressFacadeData()
-    const serviceVersionsData = await this._getServiceVersionsData()
+
+    const appData = await this._getAppData()
 
     return {
-      importRows: this._mapArrayToTextCells(importData),
       virusScannerData,
       redisConnectivityData,
       addressFacadeData,
-      serviceVersionsRows: this._mapArrayToStatusCells(serviceVersionsData)
+      appData
     }
   }
 
@@ -39,41 +38,6 @@ class ServiceStatusService {
     })
   }
 
-  /**
-   * Receives an array of statuses and returns it in the format required by the nunjucks template in the view.
-   */
-  static _mapArrayToStatusCells (rows) {
-    // Map each row in the array we've received
-    return rows.map(row => {
-      // A status row has only two elements:
-      // * The thing having its status reported, which is a standard text cell;
-      // * Its status, which is formatted numeric so that it's right justified on its row.
-      return [
-        { text: row[0] },
-        { text: row[1], format: 'numeric' }
-      ]
-    })
-  }
-
-  static async _getImportData () {
-    return [
-      [
-        'Cell 1.1',
-        'Cell 1.2',
-        'Cell 1.3',
-        'Cell 1.4',
-        'Cell 1.5'
-      ],
-      [
-        'Cell 2.1',
-        'Cell 2.2',
-        'Cell 2.3',
-        'Cell 2.4',
-        'Cell 2.5'
-      ]
-    ]
-  }
-
   static async _getVirusScannerData () {
     return 'ClamAV 0.103.5/26694/Wed Oct 19 07:58:25 2022'
   }
@@ -86,16 +50,51 @@ class ServiceStatusService {
     return 'hola'
   }
 
-  static async _getServiceVersionsData () {
-    return [
+  static async _getServiceData () {
+    return {
+      name: 'Service',
+      version: '3.0.1',
+      commit: 'a3e1ecec366d0b6a188e3e1ad8b6f733b7e32012',
+      jobs: []
+    }
+  }
+
+  static async _getReportingData () {
+    return {
+      name: 'Reporting',
+      version: '2.25.1',
+      commit: '0b860b53a80989868e0532f0b4775df21ed2821b',
+      jobs: []
+    }
+  }
+
+  static async _getImportData () {
+    const jobs = this._mapArrayToTextCells([
       [
-        'Water service',
-        '3.0.1'
+        'Cell 1.1',
+        'Cell 1.2'
       ],
       [
-        'IDM',
-        '2.25.1'
+        'Cell 2.1',
+        'Cell 2.2'
       ]
+    ])
+    return {
+      name: 'Import',
+      version: '2.25.1',
+      commit: '5ce81a4226bab61071c8ab8cf70b2959e759444f',
+      jobs
+    }
+  }
+
+  static async _getAppData () {
+    const serviceData = await this._getServiceData()
+    const reportingData = await this._getReportingData()
+    const importData = await this._getImportData()
+    return [
+      serviceData,
+      reportingData,
+      importData
     ]
   }
 }
