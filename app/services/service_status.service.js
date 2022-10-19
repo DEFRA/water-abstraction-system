@@ -13,40 +13,39 @@
 */
 class ServiceStatusService {
   static async go () {
-    const importData = this._getImportData()
-    const virusScannerData = this._getVirusScannerData()
-    const cacheConnectivityData = this._getCacheConnectivityData()
-    const serviceVersionsData = this._getServiceVersionsData()
-
-    const importRows = this._mapArrayToTextCells(importData)
-    const virusScannerRows = this._mapArrayToStatusCells(virusScannerData)
-    const cacheConnectivityRows = this._mapArrayToStatusCells(cacheConnectivityData)
-    const serviceVersionsRows = this._mapArrayToStatusCells(serviceVersionsData)
+    const importData = await this._getImportData()
+    const virusScannerData = await this._getVirusScannerData()
+    const cacheConnectivityData = await this._getCacheConnectivityData()
+    const serviceVersionsData = await this._getServiceVersionsData()
 
     return {
-      importRows,
-      virusScannerRows,
-      cacheConnectivityRows,
-      serviceVersionsRows
+      importRows: this._mapArrayToTextCells(importData),
+      virusScannerRows: this._mapArrayToStatusCells(virusScannerData),
+      cacheConnectivityRows: this._mapArrayToStatusCells(cacheConnectivityData),
+      serviceVersionsRows: this._mapArrayToStatusCells(serviceVersionsData)
     }
   }
 
+  /**
+   * Receives an array and returns it in the format required by the nunjucks template in the view.
+   */
   static _mapArrayToTextCells (rows) {
-    // Map each row in the array we've received
     return rows.map(row => {
-      // Map each cell in the row
       return row.map(cell => {
-        // Return an object in the format needed to populate a table
         return { text: cell }
       })
     })
   }
 
+  /**
+   * Receives an array of statuses and returns it in the format required by the nunjucks template in the view.
+   */
   static _mapArrayToStatusCells (rows) {
     // Map each row in the array we've received
     return rows.map(row => {
-      // A status row has only two elements: the first is standard text, the other is mapped as numeric to right-justify
-      // it
+      // A status row has only two elements:
+      // * The thing having its status reported, which is a standard text cell;
+      // * Its status, which is formatted numeric so that it's right justified on its row.
       return [
         { text: row[0] },
         { text: row[1], format: 'numeric' }
@@ -54,7 +53,7 @@ class ServiceStatusService {
     })
   }
 
-  static _getImportData () {
+  static async _getImportData () {
     return [
       [
         'Cell 1.1',
@@ -73,7 +72,7 @@ class ServiceStatusService {
     ]
   }
 
-  static _getVirusScannerData () {
+  static async _getVirusScannerData () {
     return [
       [
         'Status',
@@ -82,7 +81,7 @@ class ServiceStatusService {
     ]
   }
 
-  static _getCacheConnectivityData () {
+  static async _getCacheConnectivityData () {
     return [
       [
         'Status',
@@ -91,7 +90,7 @@ class ServiceStatusService {
     ]
   }
 
-  static _getServiceVersionsData () {
+  static async _getServiceVersionsData () {
     return [
       [
         'Water service',
