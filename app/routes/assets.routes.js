@@ -1,5 +1,3 @@
-'use strict'
-
 const routes = [{
   method: 'GET',
   path: '/robots.txt',
@@ -26,4 +24,4 @@ const routes = [{
   }
 }]
 
-module.exports = routes
+export default routes

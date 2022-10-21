@@ -1,10 +1,8 @@
-'use strict'
-
 /**
  * @module DatabaseHealthCheckService
  */
 
-const { db } = require('../../db/db.js')
+import { db } from '../../db/db.js'
 
 /**
  * Generates an array of stats for each table in the database when `go()` is called
@@ -23,4 +21,4 @@ class DatabaseHealthCheckService {
   }
 }
 
-module.exports = DatabaseHealthCheckService
+export default DatabaseHealthCheckService

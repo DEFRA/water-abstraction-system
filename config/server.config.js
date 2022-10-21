@@ -1,8 +1,8 @@
-'use strict'
+import dotenv from 'dotenv'
 
-require('dotenv').config()
+dotenv.config()
 
-const config = {
+const ServerConfig = {
   environment: process.env.NODE_ENV || 'development',
   hapi: {
     port: process.env.PORT,
@@ -22,4 +22,4 @@ const config = {
   }
 }
 
-module.exports = config
+export default ServerConfig

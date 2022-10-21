@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * @module BaseNotifierLib
  */
 
-const { Notifier } = require('@airbrake/node')
-const Pino = require('pino')
+import { Notifier } from '@airbrake/node'
+import Pino from 'pino'
 
-const AirbrakeConfig = require('../../config/airbrake.config.js')
+import AirbrakeConfig from '../../config/airbrake.config.js'
 
 /**
  * Based class for combined logging and Airbrake (Errbit) notification managers
@@ -164,4 +162,4 @@ class BaseNotifierLib {
   }
 }
 
-module.exports = BaseNotifierLib
+export default BaseNotifierLib

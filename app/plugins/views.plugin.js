@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Our views plugin which serves views using nunjucks and govuk-frontend.
  *
@@ -10,15 +8,19 @@
  * @module ViewsPlugin
  */
 
+import path from 'path'
+import nunjucks from 'nunjucks'
+import Vision from '@hapi/vision'
+
+import ServerConfig from '../../config/server.config.js'
+
 const SERVICE_NAME = 'Manage your water abstraction or impoundment licence'
 
-const path = require('path')
-const nunjucks = require('nunjucks')
-const pkg = require('../../package.json')
-const ServerConfig = require('../../config/server.config.js')
+// thanks to https://stackoverflow.com/a/66651120/19939610
+const __dirname = new URL('.', import.meta.url).pathname
 
 const ViewsPlugin = {
-  plugin: require('@hapi/vision'),
+  plugin: Vision,
   options: {
     engines: {
       // The 'engine' is the file extension this applies to; in this case, .njk
@@ -48,7 +50,7 @@ const ViewsPlugin = {
     // layout.njk as the path to get static assets like client-side javascript. These are added to or overridden in the
     // h.view() call in a controller.
     context: {
-      appVersion: pkg.version,
+      appVersion: process.env.npm_package_version,
       assetPath: '/assets',
       serviceName: SERVICE_NAME,
       pageTitle: `${SERVICE_NAME} - GOV.UK`
@@ -56,4 +58,4 @@ const ViewsPlugin = {
   }
 }
 
-module.exports = ViewsPlugin
+export default ViewsPlugin

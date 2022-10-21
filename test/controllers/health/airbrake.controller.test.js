@@ -1,18 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
+import Lab from '@hapi/lab'
+import Code from '@hapi/code'
+import Sinon from 'sinon'
+
+// Things we need to stub
+import Airbrake from '@airbrake/node'
+
+// For running our service
+import { init } from '../../../app/server.js'
 
 const { describe, it, beforeEach, after, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
-
-// For running our service
-const { init } = require('../../../app/server')
-
-// Things we need to stub
-const Airbrake = require('@airbrake/node')
 
 describe('Airbrake controller: GET /status/airbrake', () => {
   let server, airbrakeStub

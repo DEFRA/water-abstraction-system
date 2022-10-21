@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+import Lab from '@hapi/lab'
+import Code from '@hapi/code'
+import Hoek from '@hapi/hoek'
+
+// Thing under test
+import FilterRoutesService from '../../../app/services/plugins/filter_routes.service.js'
 
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
-
-const Hoek = require('@hapi/hoek')
-
-// Thing under test
-const FilterRoutesService = require('../../../app/services/plugins/filter_routes.service.js')
 
 describe('Filter routes service', () => {
   const routes = [

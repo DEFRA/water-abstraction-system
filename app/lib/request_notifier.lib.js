@@ -1,10 +1,8 @@
-'use strict'
-
 /**
  * @module RequestNotifierLib
  */
 
-const BaseNotifierLib = require('./base_notifier.lib.js')
+import BaseNotifierLib from './base_notifier.lib.js'
 
 /**
  * A combined logging and Airbrake (Errbit) notification manager for actions that take place within a
@@ -89,4 +87,4 @@ class RequestNotifierLib extends BaseNotifierLib {
   }
 }
 
-module.exports = RequestNotifierLib
+export default RequestNotifierLib

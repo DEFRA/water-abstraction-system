@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * @module ServiceStatusService
  */
@@ -104,4 +102,4 @@ class ServiceStatusService {
   }
 }
 
-module.exports = ServiceStatusService
+export default ServiceStatusService
