@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * @module AirbrakePlugin
  */
@@ -17,8 +15,8 @@
  * {@link https://github.com/DEFRA/charging-module-api/blob/master/app/plugins/airbrake.js}
  */
 
-const { Notifier } = require('@airbrake/node')
-const AirbrakeConfig = require('../../config/airbrake.config.js')
+import { Notifier } from '@airbrake/node'
+import AirbrakeConfig from '../../config/airbrake.config.js'
 
 const AirbrakePlugin = {
   name: 'airbrake',
@@ -57,4 +55,4 @@ const AirbrakePlugin = {
   }
 }
 
-module.exports = AirbrakePlugin
+export default AirbrakePlugin

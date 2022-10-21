@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Our router plugin which pulls in the various routes we have defined ready to be registered with the Hapi server
  * (server.js).
@@ -11,13 +9,13 @@
  * @module RouterPlugin
  */
 
-const FilterRoutesService = require('../services/plugins/filter_routes.service.js')
-const AirbrakeConfig = require('../../config/airbrake.config.js')
+import FilterRoutesService from '../services/plugins/filter_routes.service.js'
+import AirbrakeConfig from '../../config/airbrake.config.js'
 
-const AirbrakeRoutes = require('../routes/airbrake.routes.js')
-const AssetRoutes = require('../routes/assets.routes.js')
-const DatabaseRoutes = require('../routes/database.routes.js')
-const RootRoutes = require('../routes/root.routes.js')
+import AirbrakeRoutes from '../routes/airbrake.routes.js'
+import AssetRoutes from '../routes/assets.routes.js'
+import DatabaseRoutes from '../routes/database.routes.js'
+import RootRoutes from '../routes/root.routes.js'
 
 const routes = [
   ...RootRoutes,
@@ -37,4 +35,4 @@ const RouterPlugin = {
   }
 }
 
-module.exports = RouterPlugin
+export default RouterPlugin

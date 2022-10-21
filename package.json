@@ -20,6 +20,7 @@
   },
   "author": "Water service team",
   "license": "OGL-UK-3.0",
+  "type": "module",
   "dependencies": {
     "@airbrake/node": "^2.1.7",
     "@hapi/hapi": "^20.2.2",

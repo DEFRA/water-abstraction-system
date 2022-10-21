@@ -1,15 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
+import Lab from '@hapi/lab'
+import Code from '@hapi/code'
+import Sinon from 'sinon'
+
+// Thing under test
+import RequestNotifierLib from '../../app/lib/request_notifier.lib.js'
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
-
-// Thing under test
-const RequestNotifierLib = require('../../app/lib/request_notifier.lib.js')
 
 describe('RequestNotifierLib class', () => {
   const id = '1234567890'

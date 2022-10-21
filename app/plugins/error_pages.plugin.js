@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Add an `onPreResponse` listener to return error pages
  *
@@ -39,4 +37,4 @@ const ErrorPagesPlugin = {
   }
 }
 
-module.exports = ErrorPagesPlugin
+export default ErrorPagesPlugin

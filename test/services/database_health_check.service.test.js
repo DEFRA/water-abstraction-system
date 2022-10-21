@@ -1,14 +1,12 @@
-'use strict'
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+import Lab from '@hapi/lab'
+import Code from '@hapi/code'
+
+// Thing under test
+import DatabaseHealthCheckService from '../../app/services/database_health_check.service.js'
 
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
-
-// Thing under test
-const DatabaseHealthCheckService = require('../../app/services/database_health_check.service.js')
 
 describe('Database Health Check service', () => {
   it('confirms connection to the db by not throwing an error', async () => {

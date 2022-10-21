@@ -1,14 +1,12 @@
-'use strict'
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
+import Lab from '@hapi/lab'
+import Code from '@hapi/code'
+
+// Thing under test
+import ServiceStatusService from '../../app/services/service_status.service.js'
 
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
-
-// Thing under test
-const ServiceStatusService = require('../../app/services/service_status.service.js')
 
 const firstRow = [
   { text: 'Cell 1.1' },

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * @module FilterRoutesService
  */
@@ -46,4 +44,4 @@ class FilterRoutesService {
   }
 }
 
-module.exports = FilterRoutesService
+export default FilterRoutesService

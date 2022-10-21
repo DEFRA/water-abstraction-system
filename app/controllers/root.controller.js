@@ -1,6 +1,4 @@
-'use strict'
-
-const ServiceStatusService = require('../services/service_status.service')
+import ServiceStatusService from '../services/service_status.service.js'
 
 class RootController {
   static async index (_req, _h) {
@@ -25,4 +23,4 @@ class RootController {
   }
 }
 
-module.exports = RootController
+export default RootController

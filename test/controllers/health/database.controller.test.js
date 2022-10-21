@@ -1,15 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
+import Lab from '@hapi/lab'
+import Code from '@hapi/code'
+import Sinon from 'sinon'
+
+// For running our service
+import { init } from '../../../app/server.js'
 
 const { describe, it, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
-
-// For running our service
-const { init } = require('../../../app/server')
 
 describe('Database controller', () => {
   let server

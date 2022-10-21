@@ -1,23 +1,22 @@
-'use strict'
+import Hapi from '@hapi/hapi'
+import Inert from '@hapi/inert'
 
-const Hapi = require('@hapi/hapi')
+import ServerConfig from '../config/server.config.js'
+import TestConfig from '../config/test.config.js'
 
-const ServerConfig = require('../config/server.config.js')
-const TestConfig = require('../config/test.config.js')
-
-const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
-const BlippPlugin = require('./plugins/blipp.plugin.js')
-const ErrorPagesPlugin = require('./plugins/error_pages.plugin.js')
-const HapiPinoPlugin = require('./plugins/hapi_pino.plugin.js')
-const RequestNotifierPlugin = require('./plugins/request_notifier.plugin.js')
-const RouterPlugin = require('./plugins/router.plugin.js')
-const StopPlugin = require('./plugins/stop.plugin.js')
-const ViewsPlugin = require('./plugins/views.plugin.js')
+import AirbrakePlugin from './plugins/airbrake.plugin.js'
+import BlippPlugin from './plugins/blipp.plugin.js'
+import ErrorPagesPlugin from './plugins/error_pages.plugin.js'
+import HapiPinoPlugin from './plugins/hapi_pino.plugin.js'
+import RequestNotifierPlugin from './plugins/request_notifier.plugin.js'
+import RouterPlugin from './plugins/router.plugin.js'
+import StopPlugin from './plugins/stop.plugin.js'
+import ViewsPlugin from './plugins/views.plugin.js'
 
 const registerPlugins = async (server) => {
   // Register the remaining plugins
   await server.register(StopPlugin)
-  await server.register(require('@hapi/inert'))
+  await server.register(Inert)
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin(TestConfig.logInTest))
   await server.register(AirbrakePlugin)
@@ -53,4 +52,4 @@ process.on('unhandledRejection', err => {
   process.exit(1)
 })
 
-module.exports = { init, start }
+export { init, start }
