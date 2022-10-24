@@ -4,6 +4,9 @@
  * @module ServiceStatusService
  */
 
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
+
 /**
  * Returns data required to populate our `/service-status` page, eg. task activity status, virus checker status, service
  * version numbers, etc.
@@ -39,7 +42,12 @@ class ServiceStatusService {
   }
 
   static async _getVirusScannerData () {
-    return 'ClamAV 0.103.5/26694/Wed Oct 19 07:58:25 2022'
+    try {
+      const { stdout, stderr } = await exec('clamdscan --version')
+      return stderr ? `ERROR: ${stderr}` : stdout
+    } catch (error) {
+      return `ERROR: ${error.message}`
+    }
   }
 
   static async _getRedisConnectivityData () {
