@@ -8,6 +8,8 @@
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
+const addressFacadeConfig = require('../../config/address_facade.config')
+
 /**
  * Returns data required to populate our `/service-status` page, eg. task activity status, virus checker status, service
  * version numbers, etc.
@@ -61,7 +63,14 @@ class ServiceStatusService {
   }
 
   static async _getAddressFacadeData () {
-    return 'hola'
+    const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
+
+    try {
+      const { stdout, stderr } = await exec(`curl -X GET --header 'Accept: text/plain' --silent '${statusUrl.href}'`)
+      return stderr ? `ERROR: ${stderr}` : stdout
+    } catch (error) {
+      return `ERROR: ${error}`
+    }
   }
 
   static async _getServiceData () {
