@@ -52,7 +52,12 @@ class ServiceStatusService {
   }
 
   static async _getRedisConnectivityData () {
-    return 'Redis server v=5.0.7 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924'
+    try {
+      const { stdout, stderr } = await exec('redis-server --version')
+      return stderr ? `ERROR: ${stderr}` : stdout
+    } catch (error) {
+      return `ERROR: ${error.message}`
+    }
   }
 
   static async _getAddressFacadeData () {
