@@ -23,7 +23,8 @@ class ServiceStatusService {
     const redisConnectivityData = await this._getRedisConnectivityData()
     const addressFacadeData = await this._getAddressFacadeData()
 
-    const appData = await this._getAppData()
+    const { got } = await import('got')
+    const appData = await this._getAppData(got)
 
     return {
       virusScannerData,
@@ -73,11 +74,14 @@ class ServiceStatusService {
     }
   }
 
-  static async _getServiceData () {
+  static async _getServiceData (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8001/health/status').json()
+
     return {
       name: 'Service',
-      version: '3.0.1',
-      commit: 'a3e1ecec366d0b6a188e3e1ad8b6f733b7e32012',
+      version: response.version,
+      commit: response.commit,
       jobs: []
     }
   }
@@ -110,8 +114,8 @@ class ServiceStatusService {
     }
   }
 
-  static async _getAppData () {
-    const serviceData = await this._getServiceData()
+  static async _getAppData (got) {
+    const serviceData = await this._getServiceData(got)
     const reportingData = await this._getReportingData()
     const importData = await this._getImportData()
     return [
