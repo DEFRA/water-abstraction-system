@@ -74,28 +74,43 @@ class ServiceStatusService {
     }
   }
 
-  static async _getServiceData (got) {
+  static async _getForegroundServiceData (got) {
     // TODO move the URL into config
     const response = await got.get('http://localhost:8001/health/info').json()
 
     return {
-      name: 'Service',
+      name: 'Service - foreground',
       version: response.version,
       commit: response.commit,
       jobs: []
     }
   }
 
-  static async _getReportingData () {
+  static async _getBackgroundServiceData (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8012/health/info').json()
+
     return {
-      name: 'Reporting',
-      version: '2.25.1',
-      commit: '0b860b53a80989868e0532f0b4775df21ed2821b',
+      name: 'Service - background',
+      version: response.version,
+      commit: response.commit,
       jobs: []
     }
   }
 
-  static async _getImportData () {
+  static async _getReportingData (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8011/health/info').json()
+
+    return {
+      name: 'Reporting',
+      version: response.version,
+      commit: response.commit,
+      jobs: []
+    }
+  }
+
+  static async _getImportData (got) {
     const jobs = this._mapArrayToTextCells([
       [
         'Cell 1.1',
@@ -106,22 +121,112 @@ class ServiceStatusService {
         'Cell 2.2'
       ]
     ])
+
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8007/health/info').json()
+
     return {
       name: 'Import',
-      version: '2.25.1',
-      commit: '5ce81a4226bab61071c8ab8cf70b2959e759444f',
+      version: response.version,
+      commit: response.commit,
       jobs
     }
   }
 
+  static async _getTacticalCrm (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8002/health/info').json()
+
+    return {
+      name: 'Tactical CRM',
+      version: response.version,
+      commit: response.commit,
+      jobs: []
+    }
+  }
+
+  static async _getExternalUi (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8000/health/info').json()
+
+    return {
+      name: 'External UI',
+      version: response.version,
+      commit: response.commit,
+      jobs: []
+    }
+  }
+
+  static async _getInternallUi (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8008/health/info').json()
+
+    return {
+      name: 'Internal UI',
+      version: response.version,
+      commit: response.commit,
+      jobs: []
+    }
+  }
+
+  static async _getTacticalIdm (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8003/health/info').json()
+
+    return {
+      name: 'Tactical IDM',
+      version: response.version,
+      commit: response.commit,
+      jobs: []
+    }
+  }
+
+  static async _getPermitRepo (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8004/health/info').json()
+
+    return {
+      name: 'Permit repository',
+      version: response.version,
+      commit: response.commit,
+      jobs: []
+    }
+  }
+
+  static async _getReturns (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8006/health/info').json()
+
+    return {
+      name: 'Returns',
+      version: response.version,
+      commit: response.commit,
+      jobs: []
+    }
+  }
+
   static async _getAppData (got) {
-    const serviceData = await this._getServiceData(got)
-    const reportingData = await this._getReportingData()
-    const importData = await this._getImportData()
+    const foregroundServiceData = await this._getForegroundServiceData(got)
+    const backgroundServiceData = await this._getBackgroundServiceData(got)
+    const reportingData = await this._getReportingData(got)
+    const importData = await this._getImportData(got)
+    const tacticalCrm = await this._getTacticalCrm(got)
+    const externalUi = await this._getExternalUi(got)
+    const internalUi = await this._getInternallUi(got)
+    const tacticalIdm = await this._getTacticalIdm(got)
+    const permitRepo = await this._getPermitRepo(got)
+    const returns = await this._getReturns(got)
     return [
-      serviceData,
+      foregroundServiceData,
+      backgroundServiceData,
       reportingData,
-      importData
+      importData,
+      tacticalCrm,
+      externalUi,
+      internalUi,
+      tacticalIdm,
+      permitRepo,
+      returns
     ]
   }
 }
