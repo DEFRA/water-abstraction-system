@@ -76,7 +76,7 @@ class ServiceStatusService {
 
   static async _getServiceData (got) {
     // TODO move the URL into config
-    const response = await got.get('http://localhost:8001/health/status').json()
+    const response = await got.get('http://localhost:8001/health/info').json()
 
     return {
       name: 'Service',
