@@ -21,9 +21,9 @@ class ServiceStatusService {
   static async go () {
     const virusScannerData = await this._getVirusScannerData()
     const redisConnectivityData = await this._getRedisConnectivityData()
-    const addressFacadeData = await this._getAddressFacadeData()
 
     const { got } = await import('got')
+    const addressFacadeData = await this._getAddressFacadeData(got)
     const appData = await this._getAppData(got)
 
     return {
@@ -63,15 +63,13 @@ class ServiceStatusService {
     }
   }
 
-  static async _getAddressFacadeData () {
+  static async _getAddressFacadeData (got) {
+    // TODO move the URL into config
     const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
 
-    try {
-      const { stdout, stderr } = await exec(`curl -X GET --header 'Accept: text/plain' --silent '${statusUrl.href}'`)
-      return stderr ? `ERROR: ${stderr}` : stdout
-    } catch (error) {
-      return `ERROR: ${error}`
-    }
+    const response = await got.get(statusUrl)
+
+    return response.body
   }
 
   static async _getForegroundServiceData (got) {
