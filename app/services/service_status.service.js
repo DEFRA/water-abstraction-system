@@ -72,6 +72,17 @@ class ServiceStatusService {
     return response.body
   }
 
+  static async _getChargingModuleData (got) {
+    // TODO move the URL into config
+    const response = await got.get('http://localhost:8020/status')
+
+    return {
+      name: 'Charging module',
+      version: response.headers['x-cma-docker-tag'],
+      commit: response.headers['x-cma-git-commit']
+    }
+  }
+
   static async _getForegroundServiceData (got) {
     // TODO move the URL into config
     const response = await got.get('http://localhost:8001/health/info').json()
@@ -204,6 +215,7 @@ class ServiceStatusService {
   }
 
   static async _getAppData (got) {
+    const chargingModule = await this._getChargingModuleData(got)
     const foregroundServiceData = await this._getForegroundServiceData(got)
     const backgroundServiceData = await this._getBackgroundServiceData(got)
     const reportingData = await this._getReportingData(got)
@@ -215,6 +227,7 @@ class ServiceStatusService {
     const permitRepo = await this._getPermitRepo(got)
     const returns = await this._getReturns(got)
     return [
+      chargingModule,
       foregroundServiceData,
       backgroundServiceData,
       reportingData,
