@@ -8,7 +8,7 @@
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
-const addressFacadeConfig = require('../../config/address_facade.config')
+const servicesConfig = require('../../config/services.config')
 
 /**
  * Returns data required to populate our `/service-status` page, eg. task activity status, virus checker status, service
@@ -24,12 +24,14 @@ class ServiceStatusService {
 
     const { got } = await import('got')
     const addressFacadeData = await this._getAddressFacadeData(got)
+    const chargingModuleData = await this._getChargingModuleData(got)
     const appData = await this._getAppData(got)
 
     return {
       virusScannerData,
       redisConnectivityData,
       addressFacadeData,
+      chargingModuleData,
       appData
     }
   }
@@ -43,16 +45,6 @@ class ServiceStatusService {
         return { text: cell }
       })
     })
-  }
-
-  static async _getServiceStatusData (got, url) {
-    // TODO move the URL into config
-    const response = await got.get(url).json()
-
-    return {
-      version: response.version,
-      commit: response.commit
-    }
   }
 
   static async _getVirusScannerData () {
@@ -74,8 +66,7 @@ class ServiceStatusService {
   }
 
   static async _getAddressFacadeData (got) {
-    // TODO move the URL into config
-    const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
+    const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
 
     const response = await got.get(statusUrl)
 
@@ -83,50 +74,11 @@ class ServiceStatusService {
   }
 
   static async _getChargingModuleData (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8020/status')
+    const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
 
-    return {
-      name: 'Charging module',
-      version: response.headers['x-cma-docker-tag'],
-      commit: response.headers['x-cma-git-commit']
-    }
-  }
+    const response = await got.get(statusUrl)
 
-  static async _getForegroundServiceData (got) {
-    // TODO move the URL into config
-    const data = await this._getServiceStatusData(got, 'http://localhost:8001/health/info').json()
-
-    return {
-      name: 'Service - foreground',
-      version: data.version,
-      commit: data.commit,
-      jobs: []
-    }
-  }
-
-  static async _getBackgroundServiceData (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8012/health/info').json()
-
-    return {
-      name: 'Service - background',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
-  }
-
-  static async _getReportingData (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8011/health/info').json()
-
-    return {
-      name: 'Reporting',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
+    return response.headers['x-cma-docker-tag']
   }
 
   static async _getImportData (got) {
@@ -152,103 +104,27 @@ class ServiceStatusService {
     }
   }
 
-  static async _getTacticalCrm (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8002/health/info').json()
-
-    return {
-      name: 'Tactical CRM',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
-  }
-
-  static async _getExternalUi (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8000/health/info').json()
-
-    return {
-      name: 'External UI',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
-  }
-
-  static async _getInternallUi (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8008/health/info').json()
-
-    return {
-      name: 'Internal UI',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
-  }
-
-  static async _getTacticalIdm (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8003/health/info').json()
-
-    return {
-      name: 'Tactical IDM',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
-  }
-
-  static async _getPermitRepo (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8004/health/info').json()
-
-    return {
-      name: 'Permit repository',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
-  }
-
-  static async _getReturns (got) {
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8006/health/info').json()
-
-    return {
-      name: 'Returns',
-      version: response.version,
-      commit: response.commit,
-      jobs: []
-    }
-  }
-
   static async _getAppData (got) {
-    const chargingModule = await this._getChargingModuleData(got)
-    const foregroundServiceData = await this._getForegroundServiceData(got)
-    const backgroundServiceData = await this._getBackgroundServiceData(got)
-    const reportingData = await this._getReportingData(got)
-    const importData = await this._getImportData(got)
-    const tacticalCrm = await this._getTacticalCrm(got)
-    const externalUi = await this._getExternalUi(got)
-    const internalUi = await this._getInternallUi(got)
-    const tacticalIdm = await this._getTacticalIdm(got)
-    const permitRepo = await this._getPermitRepo(got)
-    const returns = await this._getReturns(got)
-    return [
-      chargingModule,
-      foregroundServiceData,
-      backgroundServiceData,
-      reportingData,
-      importData,
-      tacticalCrm,
-      externalUi,
-      internalUi,
-      tacticalIdm,
-      permitRepo,
-      returns
+    const services = [
+      { name: 'Service - foreground', url: new URL('/health/info', servicesConfig.serviceForeground.url) },
+      { name: 'Service - background', url: new URL('/health/info', servicesConfig.serviceBackground.url) },
+      { name: 'Reporting', url: new URL('/health/info', servicesConfig.reporting.url) },
+      { name: 'Import', url: new URL('/health/info', servicesConfig.import.url) },
+      { name: 'Tactical CRM', url: new URL('/health/info', servicesConfig.tacticalCrm.url) },
+      { name: 'External UI', url: new URL('/health/info', servicesConfig.externalUi.url) },
+      { name: 'Internal UI', url: new URL('/health/info', servicesConfig.internalUi.url) },
+      { name: 'Tactical IDM', url: new URL('/health/info', servicesConfig.tacticalIdm.url) },
+      { name: 'Permit repository', url: new URL('/health/info', servicesConfig.permitRepository.url) },
+      { name: 'Returns', url: new URL('/health/info', servicesConfig.returns.url) }
     ]
+
+    for (const service of services) {
+      const response = await got.get(service.url).json()
+      service.version = response.version
+      service.commit = response.commit
+    }
+
+    return services
   }
 }
 
