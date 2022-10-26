@@ -45,6 +45,16 @@ class ServiceStatusService {
     })
   }
 
+  static async _getServiceStatusData (got, url) {
+    // TODO move the URL into config
+    const response = await got.get(url).json()
+
+    return {
+      version: response.version,
+      commit: response.commit
+    }
+  }
+
   static async _getVirusScannerData () {
     try {
       const { stdout, stderr } = await exec('clamdscan --version')
@@ -85,12 +95,12 @@ class ServiceStatusService {
 
   static async _getForegroundServiceData (got) {
     // TODO move the URL into config
-    const response = await got.get('http://localhost:8001/health/info').json()
+    const data = await this._getServiceStatusData(got, 'http://localhost:8001/health/info').json()
 
     return {
       name: 'Service - foreground',
-      version: response.version,
-      commit: response.commit,
+      version: data.version,
+      commit: data.commit,
       jobs: []
     }
   }
