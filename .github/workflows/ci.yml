@@ -11,6 +11,19 @@ jobs:
       AIRBRAKE_HOST: https://my-errbit-instance.com
       AIRBRAKE_KEY: longvaluefullofnumbersandlettersinlowercase
       PORT: 3000
+      # External services - they don't exist here but we have code that depends on these values being present
+      EA_ADDRESS_FACADE_URL: http://localhost:8009
+      CHARGING_MODULE_URL: http://localhost:8020
+      SERVICE_FOREGROUND_URL: http://localhost:8001
+      SERVICE_BACKGROUND_URL: http://localhost:8012
+      REPORTING_URL: http://localhost:8011
+      IMPORT_URL: http://localhost:8007
+      TACTICAL_CRM_URL: http://localhost:8002
+      EXTERNAL_UI_URL: http://localhost:8000
+      INTERNAL_UI_URL: http://localhost:8008
+      TACTICAL_IDM_URL: http://localhost:8003
+      PERMIT_REPOSITORY_URL: http://localhost:8004
+      RETURNS_URL: http://localhost:8006
       # These need to be duplicated in services section for postgres. Unfortunately, there is not a way to reuse them
       POSTGRES_USER: water_user
       POSTGRES_PASSWORD: password
@@ -19,6 +32,7 @@ jobs:
       POSTGRES_DB: wabs_test
       POSTGRES_DB_TEST: wabs_test
       ENVIRONMENT: dev
+
 
     # Service containers to run with `runner-job`
     services:
