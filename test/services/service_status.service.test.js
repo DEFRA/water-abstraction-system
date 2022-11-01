@@ -16,7 +16,9 @@ const { expect } = Code
 let ServiceStatusService // = require('../../app/services/service_status.service')
 
 describe('Service Status service', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
+    // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFace and the
+    // water-api (foreground-service) though, which is why they are defined separately in each test.
     Nock('http://localhost:8020')
       .get('/status')
       .reply(200, { status: 'alive' },
@@ -37,16 +39,24 @@ describe('Service Status service', () => {
     Nock('http://localhost:8006').get('/health/info').reply(200, { version: '8.0.6', commit: 'b181625' })
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     Sinon.restore()
     Nock.cleanAll()
   })
 
   describe('when all the services are running', () => {
     beforeEach(async () => {
+      // In this scenario everything is hunky-dory so we return 2xx responses from these services
       Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
       Nock('http://localhost:8001').get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
 
+      // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
+      // `child-process.exec()` behaves in the class under test.
+      // We create an anonymous stub, which responds differently for the 1st and 2nd call. We rely on knowing the order
+      // they are called in the class under test for this to work.
+      // We then stub the util library's `promisify()` method and tell it to calll our anonymous stub when invoked.
+      // The bit that makes all this work is the fact we use Proxyquire to load our stubbed util instead of the real
+      // one when we load our class under test
       const execStub = Sinon.stub().onFirstCall().resolves({ stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n', stderror: null })
       execStub.onSecondCall().resolves({ stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n', stderror: null })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
@@ -66,12 +76,15 @@ describe('Service Status service', () => {
 
   describe('when a service we check via the shell', () => {
     beforeEach(async () => {
+      // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
       Nock('http://localhost:8001').get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
     })
 
     describe('is not running', () => {
       beforeEach(async () => {
+        // We tweak our anonymous stub so that it returns stderr populated, which is what happens if the shell call
+        // returns a non-zero exit code.
         const execStub = Sinon.stub().onFirstCall().resolves({ stdout: null, stderr: 'Could not connect to clamd' })
         execStub.onSecondCall().resolves({ stdout: null, stderr: 'Could not connect to Redis' })
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
@@ -93,6 +106,8 @@ describe('Service Status service', () => {
 
     describe('throws an exception', () => {
       beforeEach(async () => {
+        // In this tweak we tell our anonymous stub to throw an exception when invoked. Not sure when this would happen
+        // but we've coded for the eventuality so we need to test it
         const execStub = Sinon.stub().onFirstCall().throwsException(new Error('ClamAV check went boom'))
         execStub.onSecondCall().throwsException(new Error('Redis check went boom'))
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
@@ -115,27 +130,48 @@ describe('Service Status service', () => {
 
   describe('when a service we check via http request', () => {
     beforeEach(async () => {
+      // In these scenarios everything is hunky-dory with clamav and redis. So, we go back to our original stubbing
       const execStub = Sinon.stub().onFirstCall().resolves({ stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n', stderror: null })
       execStub.onSecondCall().resolves({ stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n', stderror: null })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
       ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
     })
 
-    describe.only('is not running', () => {
+    describe('cannot be reached because of a network error', () => {
       beforeEach(async () => {
-        Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
-        Nock('http://localhost:8001').get('/health/info').replyWithError({ code: 'ETIMEDOUT' }).persist()
+        Nock('http://localhost:8009').get('/address-service/hola').replyWithError({ code: 'ECONNRESET' })
+        Nock('http://localhost:8001').get('/health/info').replyWithError({ code: 'ECONNRESET' })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
         const result = await ServiceStatusService.go()
 
-        console.log(result)
+        expect(result).to.include([
+          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        ])
+        expect(result.appData).to.have.length(10)
+
+        expect(result.addressFacadeData).to.startWith('ERROR:')
+        expect(result.appData[0].version).to.startWith('ERROR:')
+      })
+    })
+
+    describe('returns a 5xx response', () => {
+      beforeEach(async () => {
+        Nock('http://localhost:8009').get('/address-service/hola').reply(500, 'Kaboom')
+        Nock('http://localhost:8001').get('/health/info').reply(500, 'Kaboom')
+      })
+
+      it('handles the error and still returns a result for the other services', async () => {
+        const result = await ServiceStatusService.go()
 
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
         expect(result.appData).to.have.length(10)
+
+        expect(result.addressFacadeData).to.startWith('ERROR:')
+        expect(result.appData[0].version).to.startWith('ERROR:')
       })
     })
   })
