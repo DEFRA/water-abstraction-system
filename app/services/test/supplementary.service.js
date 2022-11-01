@@ -5,8 +5,8 @@
  */
 
 /**
- * Generates an array of stats for each table in the database when `go()` is called
- *
+ * Returns charge versions selected for supplementary billing
+ * At present this returns a set response until further development
 */
 class TestSupplementaryService {
   static async go () {
