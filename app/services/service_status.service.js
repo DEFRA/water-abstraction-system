@@ -23,10 +23,9 @@ class ServiceStatusService {
     const virusScannerData = await this._getVirusScannerData()
     const redisConnectivityData = await this._getRedisConnectivityData()
 
-    const { got } = await import('got')
-    const addressFacadeData = await this._getAddressFacadeData(got)
-    const chargingModuleData = await this._getChargingModuleData(got)
-    const appData = await this._getAppData(got)
+    const addressFacadeData = await this._getAddressFacadeData()
+    const chargingModuleData = await this._getChargingModuleData()
+    const appData = await this._getAppData()
 
     return {
       virusScannerData,
@@ -68,35 +67,42 @@ class ServiceStatusService {
 
   static async _getAddressFacadeData (got) {
     const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
+    const result = await this._requestData(statusUrl)
 
-    const response = await got.get(statusUrl)
-
-    return response.body
+    return result.succeeded ? result.response.body : result.response
   }
 
   static async _getChargingModuleData (got) {
     const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
+    const result = await this._requestData(statusUrl)
 
-    const response = await got.get(statusUrl)
-
-    return response.headers['x-cma-docker-tag']
+    return result.succeeded ? result.response.headers['x-cma-docker-tag'] : result.response
   }
 
-  static async _requestAppData (got, serviceUrl) {
-    const healthInfoPath = new URL('/health/info', serviceUrl)
-    const result = {}
+  static async _requestData (url) {
+    // As of v12, the got dependency no longer supports CJS modules. This causes us a problem as we are locked into
+    // using these for the time being. Some workarounds are provided here: https://github.com/sindresorhus/got/issues/1789
+    // We have gone the route of using await import('got'). We cannot do this at the top level as Node doesn't support
+    // top level in CJS so we do it here instead.
+    const { got } = await import('got')
+    const result = {
+      succeeded: true,
+      response: null
+    }
 
     try {
-      const response = await got.get(healthInfoPath).json()
-
-      result.version = response.version
-      result.commit = response.commit
+      result.response = await got.get(url, {
+        retry: {
+          // We ensure that the only network errors Got retries are timeout errors
+          errorCodes: ['ETIMEDOUT'],
+          // We set statusCodes as an empty array to ensure that 4xx, 5xx etc. errors are not retried
+          statusCodes: []
+        }
+      })
     } catch (error) {
-      console.log('I got here')
       const statusCode = error.response ? error.response.statusCode : 'N/A'
-      result.version = `ERROR: ${statusCode} - ${error.name}`
-
-      result.commit = error.message
+      result.response = `ERROR: ${statusCode} - ${error.name} - ${error.message}`
+      result.succeeded = false
     }
 
     return result
@@ -117,25 +123,33 @@ class ServiceStatusService {
     return jobs
   }
 
-  static async _getAppData (got) {
+  static async _getAppData () {
+    const healthInfoPath = '/health/info'
     const services = [
-      { name: 'Service - foreground', url: servicesConfig.serviceForeground.url },
-      { name: 'Service - background', url: servicesConfig.serviceBackground.url },
-      { name: 'Reporting', url: servicesConfig.reporting.url },
-      { name: 'Import', url: servicesConfig.import.url },
-      { name: 'Tactical CRM', url: servicesConfig.tacticalCrm.url },
-      { name: 'External UI', url: servicesConfig.externalUi.url },
-      { name: 'Internal UI', url: servicesConfig.internalUi.url },
-      { name: 'Tactical IDM', url: servicesConfig.tacticalIdm.url },
-      { name: 'Permit repository', url: servicesConfig.permitRepository.url },
-      { name: 'Returns', url: servicesConfig.returns.url }
+      { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) },
+      { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) },
+      { name: 'Reporting', url: new URL(healthInfoPath, servicesConfig.reporting.url) },
+      { name: 'Import', url: new URL(healthInfoPath, servicesConfig.import.url) },
+      { name: 'Tactical CRM', url: new URL(healthInfoPath, servicesConfig.tacticalCrm.url) },
+      { name: 'External UI', url: new URL(healthInfoPath, servicesConfig.externalUi.url) },
+      { name: 'Internal UI', url: new URL(healthInfoPath, servicesConfig.internalUi.url) },
+      { name: 'Tactical IDM', url: new URL(healthInfoPath, servicesConfig.tacticalIdm.url) },
+      { name: 'Permit repository', url: new URL(healthInfoPath, servicesConfig.permitRepository.url) },
+      { name: 'Returns', url: new URL(healthInfoPath, servicesConfig.returns.url) }
     ]
 
     for (const service of services) {
-      const result = await this._requestAppData(got, service.url)
-      service.version = result.version
-      service.commit = result.commit
-      service.jobs = service.name === 'Import' ? this._getImportJobsData() : []
+      const result = await this._requestData(service.url)
+
+      if (result.succeeded) {
+        const data = JSON.parse(result.response.body)
+        service.version = data.version
+        service.commit = data.commit
+        service.jobs = service.name === 'Import' ? this._getImportJobsData() : []
+      } else {
+        service.version = result.response
+        service.commit = ''
+      }
     }
 
     return services
