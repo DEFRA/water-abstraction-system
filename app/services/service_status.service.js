@@ -82,6 +82,26 @@ class ServiceStatusService {
     return response.headers['x-cma-docker-tag']
   }
 
+  static async _requestAppData (got, serviceUrl) {
+    const healthInfoPath = new URL('/health/info', serviceUrl)
+    const result = {}
+
+    try {
+      const response = await got.get(healthInfoPath).json()
+
+      result.version = response.version
+      result.commit = response.commit
+    } catch (error) {
+      console.log('I got here')
+      const statusCode = error.response ? error.response.statusCode : 'N/A'
+      result.version = `ERROR: ${statusCode} - ${error.name}`
+
+      result.commit = error.message
+    }
+
+    return result
+  }
+
   static _getImportJobsData () {
     const jobs = this._mapArrayToTextCells([
       [
@@ -98,24 +118,23 @@ class ServiceStatusService {
   }
 
   static async _getAppData (got) {
-    const healthInfoPath = '/health/info'
     const services = [
-      { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) },
-      { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) },
-      { name: 'Reporting', url: new URL(healthInfoPath, servicesConfig.reporting.url) },
-      { name: 'Import', url: new URL(healthInfoPath, servicesConfig.import.url) },
-      { name: 'Tactical CRM', url: new URL(healthInfoPath, servicesConfig.tacticalCrm.url) },
-      { name: 'External UI', url: new URL(healthInfoPath, servicesConfig.externalUi.url) },
-      { name: 'Internal UI', url: new URL(healthInfoPath, servicesConfig.internalUi.url) },
-      { name: 'Tactical IDM', url: new URL(healthInfoPath, servicesConfig.tacticalIdm.url) },
-      { name: 'Permit repository', url: new URL(healthInfoPath, servicesConfig.permitRepository.url) },
-      { name: 'Returns', url: new URL(healthInfoPath, servicesConfig.returns.url) }
+      { name: 'Service - foreground', url: servicesConfig.serviceForeground.url },
+      { name: 'Service - background', url: servicesConfig.serviceBackground.url },
+      { name: 'Reporting', url: servicesConfig.reporting.url },
+      { name: 'Import', url: servicesConfig.import.url },
+      { name: 'Tactical CRM', url: servicesConfig.tacticalCrm.url },
+      { name: 'External UI', url: servicesConfig.externalUi.url },
+      { name: 'Internal UI', url: servicesConfig.internalUi.url },
+      { name: 'Tactical IDM', url: servicesConfig.tacticalIdm.url },
+      { name: 'Permit repository', url: servicesConfig.permitRepository.url },
+      { name: 'Returns', url: servicesConfig.returns.url }
     ]
 
     for (const service of services) {
-      const response = await got.get(service.url).json()
-      service.version = response.version
-      service.commit = response.commit
+      const result = await this._requestAppData(got, service.url)
+      service.version = result.version
+      service.commit = result.commit
       service.jobs = service.name === 'Import' ? this._getImportJobsData() : []
     }
 
