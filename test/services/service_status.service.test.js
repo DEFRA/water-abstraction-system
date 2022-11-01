@@ -5,16 +5,17 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 const Nock = require('nock')
+const Proxyquire = require('proxyquire')
 
-const { describe, it, before, after } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-
 // Thing under test
-const ServiceStatusService = require('../../app/services/service_status.service')
+// Normally we'd set this to `= require('../../app/services/service_status.service')`. But to control how
+// `child_process.exec()` behaves in the service, after it's been promisfied we have to use proxyquire.
+let ServiceStatusService // = require('../../app/services/service_status.service')
 
-describe.only('Service Status service', () => {
+describe('Service Status service', () => {
   before(() => {
     Nock('http://localhost:8009')
       .get('/address-service/hola')
@@ -76,10 +77,23 @@ describe.only('Service Status service', () => {
   })
 
   describe('when all the services are running', () => {
-    it('does a thing', async () => {
+    beforeEach(async () => {
+      const execStub = Sinon.stub().onFirstCall().resolves({ stdout: 'ClamAV 0.103.6/26685/Mon Oct 10 08:00:01 2022\n', stderror: null })
+      execStub.onSecondCall().resolves({ stdout: 'Redis server v=5.0.7 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n', stderror: null })
+      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+    })
+
+    it('returns details on each', async () => {
       const result = await ServiceStatusService.go()
 
-      expect(result).not.to.be.undefined()
+      console.log(result)
+
+      expect(result).to.include([
+        'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+      ])
+
+      expect(result.appData).to.have.length(10)
     })
   })
 })
