@@ -7,7 +7,7 @@ const Sinon = require('sinon')
 const Nock = require('nock')
 const Proxyquire = require('proxyquire')
 
-const { describe, it, before, beforeEach, after } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
@@ -16,7 +16,7 @@ const { expect } = Code
 let ServiceStatusService // = require('../../app/services/service_status.service')
 
 describe('Service Status service', () => {
-  before(() => {
+  beforeEach(() => {
     Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
 
     Nock('http://localhost:8020')
@@ -40,7 +40,7 @@ describe('Service Status service', () => {
     Nock('http://localhost:8006').get('/health/info').reply(200, { version: '8.0.6', commit: 'b181625' })
   })
 
-  after(() => {
+  afterEach(() => {
     Sinon.restore()
     Nock.cleanAll()
   })
@@ -61,6 +61,50 @@ describe('Service Status service', () => {
       ])
 
       expect(result.appData).to.have.length(10)
+    })
+  })
+
+  describe('when a service we check via the shell', () => {
+    describe('is not running', () => {
+      beforeEach(async () => {
+        const execStub = Sinon.stub().onFirstCall().resolves({ stdout: null, stderr: 'Could not connect to clamd' })
+        execStub.onSecondCall().resolves({ stdout: null, stderr: 'Could not connect to Redis' })
+        const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+        ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+      })
+
+      it('handles the error and still returns a result for the other services', async () => {
+        const result = await ServiceStatusService.go()
+
+        expect(result).to.include([
+          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        ])
+        expect(result.appData).to.have.length(10)
+
+        expect(result.virusScannerData).to.startWith('ERROR:')
+        expect(result.redisConnectivityData).to.startWith('ERROR:')
+      })
+    })
+
+    describe('throws an exception', () => {
+      beforeEach(async () => {
+        const execStub = Sinon.stub().onFirstCall().throwsException(new Error('ClamAV check went boom'))
+        execStub.onSecondCall().throwsException(new Error('Redis check went boom'))
+        const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+        ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+      })
+
+      it('handles the error and still returns a result for the other services', async () => {
+        const result = await ServiceStatusService.go()
+
+        expect(result).to.include([
+          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        ])
+        expect(result.appData).to.have.length(10)
+
+        expect(result.virusScannerData).to.startWith('ERROR:')
+        expect(result.redisConnectivityData).to.startWith('ERROR:')
+      })
     })
   })
 })
