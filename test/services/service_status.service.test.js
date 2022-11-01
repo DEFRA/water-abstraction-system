@@ -16,9 +16,7 @@ const { expect } = Code
 let ServiceStatusService // = require('../../app/services/service_status.service')
 
 describe('Service Status service', () => {
-  beforeEach(() => {
-    Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
-
+  beforeEach(async () => {
     Nock('http://localhost:8020')
       .get('/status')
       .reply(200, { status: 'alive' },
@@ -28,7 +26,6 @@ describe('Service Status service', () => {
         ]
       )
 
-    Nock('http://localhost:8001').get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
     Nock('http://localhost:8012').get('/health/info').reply(200, { version: '8.0.12', commit: '83d0e8c' })
     Nock('http://localhost:8011').get('/health/info').reply(200, { version: '8.0.11', commit: 'a7030dc' })
     Nock('http://localhost:8007').get('/health/info').reply(200, { version: '8.0.7', commit: 'a181fb1' })
@@ -40,13 +37,16 @@ describe('Service Status service', () => {
     Nock('http://localhost:8006').get('/health/info').reply(200, { version: '8.0.6', commit: 'b181625' })
   })
 
-  afterEach(() => {
+  afterEach(async () => {
     Sinon.restore()
     Nock.cleanAll()
   })
 
   describe('when all the services are running', () => {
     beforeEach(async () => {
+      Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
+      Nock('http://localhost:8001').get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
+
       const execStub = Sinon.stub().onFirstCall().resolves({ stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n', stderror: null })
       execStub.onSecondCall().resolves({ stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n', stderror: null })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
@@ -65,6 +65,11 @@ describe('Service Status service', () => {
   })
 
   describe('when a service we check via the shell', () => {
+    beforeEach(async () => {
+      Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
+      Nock('http://localhost:8001').get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
+    })
+
     describe('is not running', () => {
       beforeEach(async () => {
         const execStub = Sinon.stub().onFirstCall().resolves({ stdout: null, stderr: 'Could not connect to clamd' })
@@ -104,6 +109,33 @@ describe('Service Status service', () => {
 
         expect(result.virusScannerData).to.startWith('ERROR:')
         expect(result.redisConnectivityData).to.startWith('ERROR:')
+      })
+    })
+  })
+
+  describe('when a service we check via http request', () => {
+    beforeEach(async () => {
+      const execStub = Sinon.stub().onFirstCall().resolves({ stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n', stderror: null })
+      execStub.onSecondCall().resolves({ stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n', stderror: null })
+      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+    })
+
+    describe.only('is not running', () => {
+      beforeEach(async () => {
+        Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
+        Nock('http://localhost:8001').get('/health/info').replyWithError({ code: 'ETIMEDOUT' }).persist()
+      })
+
+      it('handles the error and still returns a result for the other services', async () => {
+        const result = await ServiceStatusService.go()
+
+        console.log(result)
+
+        expect(result).to.include([
+          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        ])
+        expect(result.appData).to.have.length(10)
       })
     })
   })
