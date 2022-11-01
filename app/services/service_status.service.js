@@ -82,7 +82,7 @@ class ServiceStatusService {
     return response.headers['x-cma-docker-tag']
   }
 
-  static async _getImportData (got) {
+  static _getImportJobsData () {
     const jobs = this._mapArrayToTextCells([
       [
         'Cell 1.1',
@@ -94,15 +94,7 @@ class ServiceStatusService {
       ]
     ])
 
-    // TODO move the URL into config
-    const response = await got.get('http://localhost:8007/health/info').json()
-
-    return {
-      name: 'Import',
-      version: response.version,
-      commit: response.commit,
-      jobs
-    }
+    return jobs
   }
 
   static async _getAppData (got) {
@@ -124,6 +116,7 @@ class ServiceStatusService {
       const response = await got.get(service.url).json()
       service.version = response.version
       service.commit = response.commit
+      service.jobs = service.name === 'Import' ? this._getImportJobsData() : []
     }
 
     return services
