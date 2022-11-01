@@ -65,14 +65,14 @@ class ServiceStatusService {
     }
   }
 
-  static async _getAddressFacadeData (got) {
+  static async _getAddressFacadeData () {
     const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
     const result = await this._requestData(statusUrl)
 
     return result.succeeded ? result.response.body : result.response
   }
 
-  static async _getChargingModuleData (got) {
+  static async _getChargingModuleData () {
     const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
     const result = await this._requestData(statusUrl)
 
@@ -109,7 +109,7 @@ class ServiceStatusService {
   }
 
   static _getImportJobsData () {
-    const jobs = this._mapArrayToTextCells([
+    return this._mapArrayToTextCells([
       [
         'Cell 1.1',
         'Cell 1.2'
@@ -119,8 +119,6 @@ class ServiceStatusService {
         'Cell 2.2'
       ]
     ])
-
-    return jobs
   }
 
   static async _getAppData () {
