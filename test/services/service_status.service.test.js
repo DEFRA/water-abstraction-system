@@ -87,8 +87,6 @@ describe('Service Status service', () => {
     it('returns details on each', async () => {
       const result = await ServiceStatusService.go()
 
-      console.log(result)
-
       expect(result).to.include([
         'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
       ])
