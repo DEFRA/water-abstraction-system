@@ -106,17 +106,18 @@ class ServiceStatusService {
   }
 
   static async _getAppData (got) {
+    const healthInfoPath = '/health/info'
     const services = [
-      { name: 'Service - foreground', url: new URL('/health/info', servicesConfig.serviceForeground.url) },
-      { name: 'Service - background', url: new URL('/health/info', servicesConfig.serviceBackground.url) },
-      { name: 'Reporting', url: new URL('/health/info', servicesConfig.reporting.url) },
-      { name: 'Import', url: new URL('/health/info', servicesConfig.import.url) },
-      { name: 'Tactical CRM', url: new URL('/health/info', servicesConfig.tacticalCrm.url) },
-      { name: 'External UI', url: new URL('/health/info', servicesConfig.externalUi.url) },
-      { name: 'Internal UI', url: new URL('/health/info', servicesConfig.internalUi.url) },
-      { name: 'Tactical IDM', url: new URL('/health/info', servicesConfig.tacticalIdm.url) },
-      { name: 'Permit repository', url: new URL('/health/info', servicesConfig.permitRepository.url) },
-      { name: 'Returns', url: new URL('/health/info', servicesConfig.returns.url) }
+      { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) },
+      { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) },
+      { name: 'Reporting', url: new URL(healthInfoPath, servicesConfig.reporting.url) },
+      { name: 'Import', url: new URL(healthInfoPath, servicesConfig.import.url) },
+      { name: 'Tactical CRM', url: new URL(healthInfoPath, servicesConfig.tacticalCrm.url) },
+      { name: 'External UI', url: new URL(healthInfoPath, servicesConfig.externalUi.url) },
+      { name: 'Internal UI', url: new URL(healthInfoPath, servicesConfig.internalUi.url) },
+      { name: 'Tactical IDM', url: new URL(healthInfoPath, servicesConfig.tacticalIdm.url) },
+      { name: 'Permit repository', url: new URL(healthInfoPath, servicesConfig.permitRepository.url) },
+      { name: 'Returns', url: new URL(healthInfoPath, servicesConfig.returns.url) }
     ]
 
     for (const service of services) {
