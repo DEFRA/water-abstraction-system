@@ -17,7 +17,7 @@ let ServiceStatusService // = require('../../app/services/service_status.service
 
 describe('Service Status service', () => {
   beforeEach(() => {
-    // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFace and the
+    // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
     Nock('http://localhost:8020')
       .get('/status')
