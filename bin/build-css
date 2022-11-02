@@ -1,5 +1,0 @@
-#!/bin/bash
-
-node-sass --output-style=expanded \
-  --output=app/public/build/stylesheets \
-  client/sass
