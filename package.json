@@ -30,6 +30,7 @@
     "govuk-frontend": "^4.3.1",
     "hapi-pino": "^11.0.0",
     "knex": "^2.3.0",
+    "node-sass": "^7.0.3",
     "nunjucks": "^3.2.3",
     "objection": "^3.0.1",
     "pg": "^8.8.0"
@@ -38,7 +39,6 @@
     "@hapi/code": "^9.0.1",
     "@hapi/hoek": "^10.0.1",
     "@hapi/lab": "^25.0.1",
-    "node-sass": "^7.0.3",
     "pino-pretty": "^9.1.1",
     "sinon": "^14.0.1",
     "standard": "^17.0.0"
