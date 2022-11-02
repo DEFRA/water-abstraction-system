@@ -52,13 +52,23 @@ describe('Service Status service', () => {
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the class under test.
-      // We create an anonymous stub, which responds differently for the 1st and 2nd call. We rely on knowing the order
-      // they are called in the class under test for this to work.
-      // We then stub the util library's `promisify()` method and tell it to calll our anonymous stub when invoked.
-      // The bit that makes all this work is the fact we use Proxyquire to load our stubbed util instead of the real
-      // one when we load our class under test
-      const execStub = Sinon.stub().onFirstCall().resolves({ stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n', stderror: null })
-      execStub.onSecondCall().resolves({ stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n', stderror: null })
+      // We create an anonymous stub, which responds differently depending on which service is being checked. We then
+      // stub the util library's `promisify()` method and tell it to calll our anonymous stub when invoked. The bit that
+      // makes all this work is the fact we use Proxyquire to load our stubbed util instead of the real one when we load
+      // our class under test
+      const execStub = Sinon
+        .stub()
+        .withArgs('clamdscan --version')
+        .resolves({
+          stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
+          stderror: null
+        })
+      execStub
+        .withArgs('redis-server --version')
+        .resolves({
+          stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n',
+          stderror: null
+        })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
       ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
     })
@@ -85,8 +95,19 @@ describe('Service Status service', () => {
       beforeEach(async () => {
         // We tweak our anonymous stub so that it returns stderr populated, which is what happens if the shell call
         // returns a non-zero exit code.
-        const execStub = Sinon.stub().onFirstCall().resolves({ stdout: null, stderr: 'Could not connect to clamd' })
-        execStub.onSecondCall().resolves({ stdout: null, stderr: 'Could not connect to Redis' })
+        const execStub = Sinon
+          .stub()
+          .withArgs('clamdscan --version')
+          .resolves({
+            stdout: null,
+            stderr: 'Could not connect to clamd'
+          })
+        execStub
+          .withArgs('redis-server --version')
+          .resolves({
+            stdout: null,
+            stderr: 'Could not connect to Redis'
+          })
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
         ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
       })
@@ -108,8 +129,13 @@ describe('Service Status service', () => {
       beforeEach(async () => {
         // In this tweak we tell our anonymous stub to throw an exception when invoked. Not sure when this would happen
         // but we've coded for the eventuality so we need to test it
-        const execStub = Sinon.stub().onFirstCall().throwsException(new Error('ClamAV check went boom'))
-        execStub.onSecondCall().throwsException(new Error('Redis check went boom'))
+        const execStub = Sinon
+          .stub()
+          .withArgs('clamdscan --version')
+          .throwsException(new Error('ClamAV check went boom'))
+        execStub
+          .withArgs('redis-server --version')
+          .throwsException(new Error('Redis check went boom'))
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
         ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
       })
@@ -131,8 +157,19 @@ describe('Service Status service', () => {
   describe('when a service we check via http request', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory with clamav and redis. So, we go back to our original stubbing
-      const execStub = Sinon.stub().onFirstCall().resolves({ stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n', stderror: null })
-      execStub.onSecondCall().resolves({ stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n', stderror: null })
+      const execStub = Sinon
+        .stub()
+        .withArgs('clamdscan --version')
+        .resolves({
+          stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
+          stderror: null
+        })
+      execStub
+        .withArgs('redis-server --version')
+        .resolves({
+          stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n',
+          stderror: null
+        })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
       ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
     })
