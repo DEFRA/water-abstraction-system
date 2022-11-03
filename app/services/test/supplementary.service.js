@@ -24,6 +24,7 @@ class TestSupplementaryService {
 
   static async _fetchChargeVersions () {
     const chargeVersions = db.table('water.charge_versions')
+      .where('scheme', 'sroc')
       .select('chargeVersionId')
       .select('licenceRef')
 
