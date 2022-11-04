@@ -9,7 +9,10 @@
  *
  * @module HapiPinoPlugin
  */
+
 const HapiPino = require('hapi-pino')
+
+const HapiPinoIgnoreRequestService = require('../services/plugins/hapi_pino_ignore_request.service.js')
 
 /**
  * Return test configuration options for the logger
@@ -37,14 +40,6 @@ const testOptions = logInTest => {
   }
 }
 
-const ignoreRequest = (_options, request) => {
-  const staticPaths =  ['/', '/status']
-
-  const result = staticPaths.includes(request.path) || request.path.startsWith('/assets')
-
-  return result
-}
-
 const HapiPinoPlugin = logInTest => {
   return {
     plugin: HapiPino,
@@ -59,7 +54,7 @@ const HapiPinoPlugin = logInTest => {
       // We want our logs to focus on the main requests and not become full of 'noise' from requests for /assets or
       // pings from the AWS load balancer to /status. We pass this function to hapi-pino to control what gets filtered
       // https://github.com/pinojs/hapi-pino#optionsignorefunc-options-request--boolean
-      ignoreFunc: ignoreRequest
+      ignoreFunc: HapiPinoIgnoreRequestService.go
     }
   }
 }
