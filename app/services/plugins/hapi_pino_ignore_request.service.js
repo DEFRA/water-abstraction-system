@@ -38,8 +38,8 @@ class HapiPinoIgnoreRequestService {
    *
    * @returns {boolean} true if the request should be ignored, else false
    */
-  static go(_options, request) {
-    const staticPaths =  ['/', '/status']
+  static go (_options, request) {
+    const staticPaths = ['/', '/status']
 
     // If request is a known path ignore it
     if (staticPaths.includes(request.path)) {
