@@ -1,14 +1,14 @@
 'use strict'
 
 class AirbrakeController {
-  static async index (req, _h) {
+  static async index (request, _h) {
     // First section tests connecting to Airbrake through a manual notification
-    req.server.app.airbrake.notify({
+    request.server.app.airbrake.notify({
       message: 'Airbrake manual health check',
       error: new Error('Airbrake manual health check error'),
       session: {
         req: {
-          id: req.info.id
+          id: request.info.id
         }
       }
     })
