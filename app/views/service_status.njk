@@ -1,54 +1,71 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block content %}
   <div class="govuk-body">
-    <h1 class="govuk-heading-l">Service Status</h1>
+    <h1 class="govuk-heading-l">Service status</h1>
 
-    {{ govukTable({
-      caption: "Imports",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      head: [
+    <h2 class="govuk-heading-m">Virus scanner</h2>
+    <p class="govuk-body">{{ virusScannerData }}</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Redis</h2>
+    <p class="govuk-body">{{ redisConnectivityData }}</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Address facade</h2>
+    <p class="govuk-body">{{ addressFacadeData }}</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Charging module</h2>
+    <p class="govuk-body">{{ chargingModuleData }}</p>
+
+    {% for app in appData %}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">{{ app.name }}</h2>
+    {{ govukSummaryList({
+      classes: 'govuk-summary-list--no-border',
+      rows: [
         {
-          text: "Import task name"
+          key: {
+            text: "Version"
+          },
+          value: {
+            text: app.version
+          }
         },
         {
-          text: "Success rate (last 3 days)"
-        },
-        {
-          text: "Active"
-        },
-        {
-          text: "Last updated"
-        },
-        {
-          text: "Last checked"
+          key: {
+            text: "Commit hash"
+          },
+          value: {
+            text: app.commit
+          }
         }
-      ],
-      rows: importRows
+      ]
     }) }}
 
-    {{ govukTable({
-      caption: "Virus scanner",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      rows: virusScannerRows
-    }) }}
+    {% if app.jobs.length %}
+      {{ govukTable({
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: "Job name"
+          },
+          {
+            text: "Last updated"
+          }
+        ],
+        rows: app.jobs
+      }) }}
+    {% endif %}
 
-    {{ govukTable({
-      caption: "Cache connectivity",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      rows: cacheConnectivityRows
-    }) }}
-
-    {{ govukTable({
-      caption: "Service versions",
-      captionClasses: "govuk-table__caption--m",
-      firstCellIsHeader: true,
-      rows: serviceVersionsRows
-    }) }}
+  {% endfor %}
   </div>
 {% endblock %}

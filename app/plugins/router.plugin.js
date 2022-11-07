@@ -18,12 +18,14 @@ const AirbrakeRoutes = require('../routes/airbrake.routes.js')
 const AssetRoutes = require('../routes/assets.routes.js')
 const DatabaseRoutes = require('../routes/database.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
+const TestRoutes = require('../routes/test.routes.js')
 
 const routes = [
   ...RootRoutes,
   ...AirbrakeRoutes,
   ...AssetRoutes,
-  ...DatabaseRoutes
+  ...DatabaseRoutes,
+  ...TestRoutes
 ]
 
 const RouterPlugin = {
