@@ -9,7 +9,10 @@
  *
  * @module HapiPinoPlugin
  */
+
 const HapiPino = require('hapi-pino')
+
+const HapiPinoIgnoreRequestService = require('../services/plugins/hapi_pino_ignore_request.service.js')
 
 /**
  * Return test configuration options for the logger
@@ -48,8 +51,10 @@ const HapiPinoPlugin = logInTest => {
       transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
       // Redact Authorization headers, see https://getpino.io/#/docs/redaction
       redact: ['req.headers.authorization'],
-      // We don't want logs outputting for our 'health' routes
-      ignorePaths: ['/', '/status']
+      // We want our logs to focus on the main requests and not become full of 'noise' from requests for /assets or
+      // pings from the AWS load balancer to /status. We pass this function to hapi-pino to control what gets filtered
+      // https://github.com/pinojs/hapi-pino#optionsignorefunc-options-request--boolean
+      ignoreFunc: HapiPinoIgnoreRequestService.go
     }
   }
 }
