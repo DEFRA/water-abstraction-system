@@ -7,10 +7,11 @@
   "scripts": {
     "start": "node index.js",
     "build": "bin/build",
-    "migrate-db": "knex migrate:latest",
-    "migrate-test-db": "NODE_ENV=test knex migrate:latest",
-    "rollback-db": "knex migrate:rollback --all",
-    "rollback-test-db": "NODE_ENV=test knex migrate:rollback --all",
+    "migrate:make": "knex migrate:make --",
+    "migrate:db": "knex migrate:latest",
+    "migrate:db:test": "NODE_ENV=test knex migrate:latest",
+    "rollback:db": "knex migrate:rollback --all",
+    "rollback:db:test": "NODE_ENV=test knex migrate:rollback --all",
     "lint": "standard",
     "test": "lab --silent-skips --shuffle",
     "postinstall": "npm run build"
