@@ -1,5 +1,7 @@
 'use strict'
 
+require('dotenv').config()
+
 const config = {
   host: process.env.POSTGRES_HOST,
   user: process.env.POSTGRES_USER,
