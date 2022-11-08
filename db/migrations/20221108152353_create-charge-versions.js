@@ -14,6 +14,7 @@ exports.up = async function (knex) {
 
       // Data
       table.string('licence_ref')
+      table.string('scheme')
 
       // Automatic timestamps
       table.timestamps(false, true)
