@@ -1,5 +1,10 @@
 'use strict'
 
+// Unlike the other config files we need to directly reference dotenv. It is because this config is used when we run
+// migrations. The rest of the config is only used when we run the app. `app/server.js` loads dotenv which makes it
+// available to everything else thereafter
+require('dotenv').config()
+
 const config = {
   host: process.env.POSTGRES_HOST,
   user: process.env.POSTGRES_USER,
