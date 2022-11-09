@@ -1,7 +1,5 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
+'use strict'
+
 const tableName = 'charge_versions'
 
 exports.up = async function (knex) {
