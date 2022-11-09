@@ -29,8 +29,8 @@ jobs:
       POSTGRES_PASSWORD: password
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
-      POSTGRES_DB: wabs_test
-      POSTGRES_DB_TEST: wabs_test
+      POSTGRES_DB: wabs_system_test
+      POSTGRES_DB_TEST: wabs_system_test
       ENVIRONMENT: dev
 
 
