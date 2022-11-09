@@ -1,7 +1,5 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
+'use strict'
+
 exports.up = function (knex) {
   return knex.raw(`
     CREATE SCHEMA IF NOT EXISTS "water";
