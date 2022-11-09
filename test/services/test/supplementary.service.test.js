@@ -4,20 +4,49 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Thing under test
-const TestSupplementaryService = require('../../../app/services/test/supplementary.service.js')
+// Test helpers
+const ChargeVersionHelper = require('../../support/helpers/charge_version.helper')
+const DatabaseHelper = require('../../support/helpers/database.helper')
 
-describe('Test supplementary service', () => {
-  it('returns a set response', async () => {
-    const result = await TestSupplementaryService.go()
-    expect(result).to.equal({
-      chargeVersions: [
-        { id: '986d5b14-8686-429e-9ae7-1164c1300f8d', licenceRef: 'AT/SROC/SUPB/01' },
-        { id: 'ca0e4a77-bb13-4eef-a1a1-2ccf9e302cc4', licenceRef: 'AT/SROC/SUPB/03' }
-      ]
+// Thing under test
+const SupplementaryService = require('../../../app/services/test/supplementary.service.js')
+
+describe('Supplementary service', () => {
+  const testData = {
+    sroc: { licence_ref: '01/123', scheme: 'sroc' },
+    alcs: { licence_ref: '01/456', scheme: 'alcs' }
+  }
+  let testRecords
+
+  beforeEach(async () => {
+    await DatabaseHelper.clean()
+  })
+
+  describe('when there are charge versions to be included in supplimentery billing', () => {
+    beforeEach(async () => {
+      testRecords = await ChargeVersionHelper.add([testData.sroc, testData.alcs])
+    })
+
+    it('returns only those that match', async () => {
+      const result = await SupplementaryService.go()
+
+      expect(result.chargeVersions.length).to.equal(1)
+      expect(result.chargeVersions[0].charge_version_id).to.equal(testRecords[0].charge_version_id)
+    })
+  })
+
+  describe('when there are no charge versions to be included in supplimentery billing', () => {
+    beforeEach(async () => {
+      testRecords = await ChargeVersionHelper.add(testData.alcs)
+    })
+
+    it('returns no matches', async () => {
+      const result = await SupplementaryService.go()
+
+      expect(result.chargeVersions.length).to.equal(0)
     })
   })
 })
