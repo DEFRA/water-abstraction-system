@@ -1,13 +1,13 @@
 'use strict'
 
-const TestSupplementaryService = require('../../services/test/supplementary.service.js')
+const SupplementaryService = require('../../services/test/supplementary.service.js')
 
-class TestSupplementaryController {
+class SupplementaryController {
   static async index (_request, h) {
-    const result = await TestSupplementaryService.go()
+    const result = await SupplementaryService.go()
 
     return h.response(result).code(200)
   }
 }
 
-module.exports = TestSupplementaryController
+module.exports = SupplementaryController
