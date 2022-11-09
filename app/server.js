@@ -1,9 +1,11 @@
 'use strict'
 
+require('dotenv').config()
+
 const Hapi = require('@hapi/hapi')
 
 const ServerConfig = require('../config/server.config.js')
-const TestConfig = require('../config/test.config.js')
+const LogConfig = require('../config/log.config.js')
 
 const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
 const BlippPlugin = require('./plugins/blipp.plugin.js')
@@ -19,7 +21,7 @@ const registerPlugins = async (server) => {
   await server.register(StopPlugin)
   await server.register(require('@hapi/inert'))
   await server.register(RouterPlugin)
-  await server.register(HapiPinoPlugin(TestConfig.logInTest))
+  await server.register(HapiPinoPlugin(LogConfig.logInTest))
   await server.register(AirbrakePlugin)
   await server.register(ErrorPagesPlugin)
   await server.register(RequestNotifierPlugin)

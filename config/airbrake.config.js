@@ -1,7 +1,5 @@
 'use strict'
 
-require('dotenv').config()
-
 const config = {
   host: process.env.AIRBRAKE_HOST,
   projectKey: process.env.AIRBRAKE_KEY,

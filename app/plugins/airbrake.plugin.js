@@ -35,14 +35,14 @@ const AirbrakePlugin = {
 
     // When Hapi emits a request event with an error we capture the details and use Airbrake to send a request to our
     // Errbit instance
-    server.events.on({ name: 'request', channels: 'error' }, (req, event, _tags) => {
+    server.events.on({ name: 'request', channels: 'error' }, (request, event, _tags) => {
       server.app.airbrake
         .notify({
           error: event.error,
           session: {
-            route: req.route.path,
-            method: req.method,
-            url: req.url.href
+            route: request.route.path,
+            method: request.method,
+            url: request.url.href
           }
         })
         .then(notice => {

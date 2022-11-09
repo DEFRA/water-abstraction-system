@@ -3,11 +3,11 @@
 const ServiceStatusService = require('../services/service_status.service')
 
 class RootController {
-  static async index (_req, _h) {
+  static async index (_request, _h) {
     return { status: 'alive' }
   }
 
-  static helloWorld (_req, h) {
+  static helloWorld (_request, h) {
     return h.view('home.njk', {
       title: 'Hello',
       message: 'World',
@@ -15,7 +15,7 @@ class RootController {
     })
   }
 
-  static async serviceStatus (_req, h) {
+  static async serviceStatus (_request, h) {
     const pageData = await ServiceStatusService.go()
 
     return h.view('service_status.njk', {
