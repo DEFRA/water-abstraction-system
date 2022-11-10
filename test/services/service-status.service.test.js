@@ -4,14 +4,13 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
-const Nock = require('nock')
 const Proxyquire = require('proxyquire')
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const servicesConfig = require('../../config/services.config.js')
+// Things we need to stub
+const HttpRequestService = require('../../app/services/http_request.service')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/service_status.service')`. But to control how
@@ -19,39 +18,48 @@ const servicesConfig = require('../../config/services.config.js')
 let ServiceStatusService // = require('../../app/services/service_status.service')
 
 describe('Service Status service', () => {
+  const goodRequestResults = {
+    addressFacade: { succeeded: true, response: { statusCode: 200, body: 'hey there' } },
+    chargingModule: {
+      succeeded: true,
+      response: {
+        statusCode: 200,
+        headers: {
+          'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
+          'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v9.99.9'
+        }
+      }
+    },
+    app: { succeeded: true, response: { statusCode: 200, body: '{ "version": "9.0.99", "commit": "99d0e8c" }' } }
+  }
+  let httpRequestServiceStub
+
   beforeEach(() => {
+    httpRequestServiceStub = Sinon.stub(HttpRequestService, 'go')
+
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    Nock(servicesConfig.chargingModule.url)
-      .get('/status')
-      .reply(200, { status: 'alive' },
-        [
-          'x-cma-git-commit', '273604040a47e0977b0579a0fef0f09726d95e39',
-          'x-cma-docker-tag', 'ghcr.io/defra/sroc-charging-module-api:v9.99.9'
-        ]
-      )
-
-    Nock(servicesConfig.serviceBackground.url).get('/health/info').reply(200, { version: '8.0.12', commit: '83d0e8c' })
-    Nock(servicesConfig.reporting.url).get('/health/info').reply(200, { version: '8.0.11', commit: 'a7030dc' })
-    Nock(servicesConfig.import.url).get('/health/info').reply(200, { version: '8.0.7', commit: 'a181fb1' })
-    Nock(servicesConfig.tacticalCrm.url).get('/health/info').reply(200, { version: '8.0.2', commit: '58bd0c1' })
-    Nock(servicesConfig.externalUi.url).get('/health/info').reply(200, { version: '8.0.0', commit: 'f154e3f' })
-    Nock(servicesConfig.internalUi.url).get('/health/info').reply(200, { version: '8.0.8', commit: 'f154e3f' })
-    Nock(servicesConfig.tacticalIdm.url).get('/health/info').reply(200, { version: '8.0.3', commit: '2ddff3c' })
-    Nock(servicesConfig.permitRepository.url).get('/health/info').reply(200, { version: '8.0.4', commit: '09d5261' })
-    Nock(servicesConfig.returns.url).get('/health/info').reply(200, { version: '8.0.6', commit: 'b181625' })
+    httpRequestServiceStub.withArgs('http://localhost:8020/status').resolves(goodRequestResults.chargingModule)
+    httpRequestServiceStub.withArgs('http://localhost:8012/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8011/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8007/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8002/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8000/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8008/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8003/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8004/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub.withArgs('http://localhost:8006/health/info').resolves(goodRequestResults.app)
   })
 
   afterEach(() => {
     Sinon.restore()
-    Nock.cleanAll()
   })
 
   describe('when all the services are running', () => {
     beforeEach(async () => {
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
-      Nock(servicesConfig.addressFacade.url).get('/address-service/hola').reply(200, 'hey there')
-      Nock(servicesConfig.serviceForeground.url).get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
+      httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(goodRequestResults.addressFacade)
+      httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the module under test.
@@ -90,8 +98,8 @@ describe('Service Status service', () => {
   describe('when a service we check via the shell', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      Nock(servicesConfig.addressFacade.url).get('/address-service/hola').reply(200, 'hey there')
-      Nock(servicesConfig.serviceForeground.url).get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
+      httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(goodRequestResults.addressFacade)
+      httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -179,8 +187,9 @@ describe('Service Status service', () => {
 
     describe('cannot be reached because of a network error', () => {
       beforeEach(async () => {
-        Nock(servicesConfig.addressFacade.url).get('/address-service/hola').replyWithError({ code: 'ECONNRESET' })
-        Nock(servicesConfig.serviceForeground.url).get('/health/info').replyWithError({ code: 'ECONNRESET' })
+        const badResult = { succeeded: false, response: new Error('Kaboom') }
+        httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(badResult)
+        httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -198,8 +207,9 @@ describe('Service Status service', () => {
 
     describe('returns a 5xx response', () => {
       beforeEach(async () => {
-        Nock(servicesConfig.addressFacade.url).get('/address-service/hola').reply(500, 'Kaboom')
-        Nock(servicesConfig.serviceForeground.url).get('/health/info').reply(500, 'Kaboom')
+        const badResult = { succeeded: false, response: { statusCode: 500, body: 'Kaboom' } }
+        httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(badResult)
+        httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
