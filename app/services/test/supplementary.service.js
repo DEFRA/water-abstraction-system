@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module TestSupplementaryService
+ * @module SupplementaryService
  */
 
 const { db } = require('../../../db/db')
@@ -12,7 +12,7 @@ const { db } = require('../../../db/db')
 */
 
 // Format into the response and return the data
-class TestSupplementaryService {
+class SupplementaryService {
   static async go () {
     const chargeVersions = await this._fetchChargeVersions()
     const response = {
@@ -32,4 +32,4 @@ class TestSupplementaryService {
   }
 }
 
-module.exports = TestSupplementaryService
+module.exports = SupplementaryService
