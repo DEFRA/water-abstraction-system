@@ -23,10 +23,17 @@ class SupplementaryService {
   }
 
   static async _fetchChargeVersions () {
-    const chargeVersions = db.table('water.charge_versions')
-      .where('scheme', 'sroc')
-      .select('chargeVersionId')
-      .select('licenceRef')
+    const chargeVersions = db
+      .select('chargeVersionId', 'licences.licenceRef')
+      .from('water.charge_versions')
+      .innerJoin('water.licences', 'charge_versions.licence_id', 'licences.licence_id')
+      .where({
+        scheme: 'sroc',
+        end_date: null
+      })
+      .andWhere({
+        'licences.include_in_supplementary_billing': 'yes'
+      })
 
     return chargeVersions
   }
