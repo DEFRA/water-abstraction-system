@@ -7,11 +7,9 @@
 const { db } = require('../../../db/db')
 
 /**
- * Returns charge versions selected for supplementary billing
- * At present this returns a set response until further development
-*/
+ * @module SupplementaryService
+ */
 
-// Format into the response and return the data
 class SupplementaryService {
   static async go () {
     const chargeVersions = await this._fetchChargeVersions()
