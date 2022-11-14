@@ -4,6 +4,8 @@
  * @module HttpRequestService
  */
 
+const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent')
+
 const requestConfig = require('../../config/request.config.js')
 
 class HttpRequestService {
@@ -19,7 +21,7 @@ class HttpRequestService {
     }
 
     try {
-      result.response = await got.get(url, this._requestOptions())
+      result.response = await got.get(url, this._requestOptions(url))
       // If the result is not 2xx or 3xx Got will mark the result as unsuccesful using the response object's `ok:`
       // propertry
       result.succeeded = result.response.ok
@@ -30,8 +32,18 @@ class HttpRequestService {
     return result
   }
 
-  static _requestOptions () {
-    return {
+  static _requestAgent (url) {
+    const urlObject = new URL(url)
+
+    if (urlObject.protocol === 'https:') {
+      return new HttpsProxyAgent({ proxy: requestConfig.httpProxy })
+    }
+
+    return new HttpProxyAgent({ proxy: requestConfig.httpProxy })
+  }
+
+  static _requestOptions (url) {
+    const options = {
       // If we don't have this setting Got will throw its own HTTPError unless the result is 2xx or 3xx. That makes it
       // harder to see what the status code was because it doesn't get set on the response object for errors.
       throwHttpErrors: false,
@@ -45,6 +57,14 @@ class HttpRequestService {
         request: requestConfig.requestTimeout
       }
     }
+
+    if (requestConfig.httpProxy) {
+      options.agent = {
+        http: this._requestAgent(url)
+      }
+    }
+
+    return options
   }
 }
 

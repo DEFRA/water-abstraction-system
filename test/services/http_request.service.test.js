@@ -3,11 +3,14 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 const Nock = require('nock')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
+
+// Test helpers
+const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent')
 
 // Things we need to stub
 const requireConfig = require('../../config/request.config.js')
@@ -15,7 +18,7 @@ const requireConfig = require('../../config/request.config.js')
 // Thing under test
 const HttpRequestService = require('../../app/services/http_request.service.js')
 
-describe.only('Service Status service', () => {
+describe('Service Status service', () => {
   const testDomain = 'https://example.com'
 
   afterEach(() => {
@@ -120,6 +123,50 @@ describe.only('Service Status service', () => {
         expect(result.succeeded).to.be.true()
         expect(result.response.body).to.equal('Example domain')
         expect(result.response.statusCode).to.equal(200)
+      })
+    })
+  })
+
+  describe('when the request is behind a proxy', () => {
+    let proxySpy
+
+    beforeEach(async () => {
+      Sinon.stub(requireConfig, 'httpProxy').value('http://myproxy')
+    })
+
+    describe('and it is to a https address', () => {
+      beforeEach(async () => {
+        proxySpy = Sinon.spy(HttpRequestService, '_requestAgent')
+
+        Nock(testDomain).get(() => true).reply(200, 'Example domain')
+      })
+
+      it('returns a succesful result using the HttpsProxyAgent', async () => {
+        const result = await HttpRequestService.go(testDomain)
+
+        expect(result.succeeded).to.be.true()
+        expect(result.response.body).to.equal('Example domain')
+        expect(result.response.statusCode).to.equal(200)
+        expect(proxySpy.called).to.be.true()
+        expect(proxySpy.returnValues[0]).to.be.instanceOf(HttpsProxyAgent)
+      })
+    })
+
+    describe('and it is to a http address', () => {
+      beforeEach(async () => {
+        proxySpy = Sinon.spy(HttpRequestService, '_requestAgent')
+
+        Nock('http://example.com').get(() => true).reply(200, 'Example domain')
+      })
+
+      it('returns a succesful result using the HttpProxyAgent', async () => {
+        const result = await HttpRequestService.go('http://example.com')
+
+        expect(result.succeeded).to.be.true()
+        expect(result.response.body).to.equal('Example domain')
+        expect(result.response.statusCode).to.equal(200)
+        expect(proxySpy.called).to.be.true()
+        expect(proxySpy.returnValues[0]).to.be.instanceOf(HttpProxyAgent)
       })
     })
   })
