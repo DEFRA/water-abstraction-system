@@ -23,11 +23,18 @@ const servicesConfig = require('../../config/services.config')
 class ServiceStatusService {
   static async go () {
     const virusScannerData = await this._getVirusScannerData()
+    console.log('--> VIRUS')
     const redisConnectivityData = await this._getRedisConnectivityData()
+    console.log('--> REDIS')
 
     const addressFacadeData = await this._getAddressFacadeData()
-    const chargingModuleData = await this._getChargingModuleData()
+    console.log('--> ADDRESS')
+
     const appData = await this._getAppData()
+    console.log('--> APPS')
+
+    const chargingModuleData = await this._getChargingModuleData()
+    console.log('--> CHARGING')
 
     return {
       virusScannerData,
