@@ -11,8 +11,8 @@ const { db } = require('../../../db/db')
  */
 
 class SupplementaryService {
-  static async go () {
-    const chargeVersions = await this._fetchChargeVersions()
+  static async go (regionId) {
+    const chargeVersions = await this._fetchChargeVersions(regionId)
     const response = {
       chargeVersions
     }
@@ -20,7 +20,7 @@ class SupplementaryService {
     return response
   }
 
-  static async _fetchChargeVersions () {
+  static async _fetchChargeVersions (regionId) {
     const chargeVersions = db
       .select('chargeVersionId', 'licences.licenceRef')
       .from('water.charge_versions')
@@ -30,7 +30,8 @@ class SupplementaryService {
         end_date: null
       })
       .andWhere({
-        'licences.include_in_supplementary_billing': 'yes'
+        'licences.include_in_supplementary_billing': 'yes',
+        'licences.region_id': regionId
       })
 
     return chargeVersions

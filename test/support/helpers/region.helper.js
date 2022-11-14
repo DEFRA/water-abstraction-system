@@ -1,36 +1,37 @@
 'use strict'
 
 /**
- * @module LicenceHelper
+ * @module RegionHelper
  */
 
 const { db } = require('../../../db/db')
 
-class LicenceHelper {
+class RegionHelper {
   /**
-   * Add a new licence
+   * Add a region
    *
    * If no `data` is provided, default values will be used. These are
    *
-   * - `licence_ref` - 01/123
+   * - `charge_region_id` - S
+   * - `nald_region_id` - 9
    *
    * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
    *
    * @returns {string} The ID of the newly created record
    */
-  static async add (data = {}) {
-    const insertData = this.defaults(data)
-    const result = await db.table('water.licences')
+  static async add (data) {
+    const insertData = this._defaults(data)
+    const result = await db.table('water.regions')
       .insert(insertData)
-      .returning('licence_id')
+      .returning('region_id')
 
     return result
   }
 
-  static defaults (data = {}) {
+  static _defaults (data) {
     const defaults = {
-      licence_ref: '01/123',
-      region_id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7'
+      charge_region_id: 'S',
+      nald_region_id: 9
     }
 
     return {
@@ -40,4 +41,4 @@ class LicenceHelper {
   }
 }
 
-module.exports = LicenceHelper
+module.exports = RegionHelper

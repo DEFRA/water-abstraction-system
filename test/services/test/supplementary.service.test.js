@@ -8,13 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeVersionHelper = require('../../support/helpers/charge_version.helper')
-const DatabaseHelper = require('../../support/helpers/database.helper')
+const ChargeVersionHelper = require('../../support/helpers/charge_version.helper.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const SupplementaryService = require('../../../app/services/test/supplementary.service.js')
 
 describe('Supplementary service', () => {
+  const regionId = LicenceHelper.defaults().region_id
   let testRecords
 
   beforeEach(async () => {
@@ -39,7 +41,7 @@ describe('Supplementary service', () => {
     })
 
     it('returns only the current SROC charge versions that are applicable', async () => {
-      const result = await SupplementaryService.go()
+      const result = await SupplementaryService.go(regionId)
 
       expect(result.chargeVersions.length).to.equal(1)
       expect(result.chargeVersions[0].charge_version_id).to.equal(testRecords[0].charge_version_id)
@@ -56,7 +58,7 @@ describe('Supplementary service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await SupplementaryService.go()
+        const result = await SupplementaryService.go(regionId)
 
         expect(result.chargeVersions.length).to.equal(0)
       })
@@ -73,7 +75,7 @@ describe('Supplementary service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await SupplementaryService.go()
+        const result = await SupplementaryService.go(regionId)
 
         expect(result.chargeVersions.length).to.equal(0)
       })
@@ -90,7 +92,27 @@ describe('Supplementary service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await SupplementaryService.go()
+        const result = await SupplementaryService.go(regionId)
+
+        expect(result.chargeVersions.length).to.equal(0)
+      })
+    })
+
+    describe('because there are no licences linked to the selected region', () => {
+      beforeEach(async () => {
+        // This creates an SROC charge version linked to an invalid region
+        const otherRegionChargeVersion = await ChargeVersionHelper.add(
+          {},
+          {
+            include_in_supplementary_billing: 'yes',
+            region_id: 'e117b501-e3c1-4337-ad35-21c60ed9ad73'
+          }
+        )
+        testRecords = [otherRegionChargeVersion]
+      })
+
+      it('returns no applicable charge versions', async () => {
+        const result = await SupplementaryService.go(regionId)
 
         expect(result.chargeVersions.length).to.equal(0)
       })
