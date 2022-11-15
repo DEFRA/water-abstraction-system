@@ -23,7 +23,7 @@ describe('Supplementary service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when there are licences to be included in supplimentery billing', () => {
+  describe('when there are licences to be included in supplementary billing', () => {
     beforeEach(async () => {
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       const srocChargeVersion = await ChargeVersionHelper.add(
