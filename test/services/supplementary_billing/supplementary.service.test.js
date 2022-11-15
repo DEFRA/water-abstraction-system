@@ -13,7 +13,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const SupplementaryService = require('../../../app/services/test/supplementary.service.js')
+const SupplementaryService = require('../../../app/services/supplementary_billing/supplementary.service.js')
 
 describe('Supplementary service', () => {
   const { region_id: regionId } = LicenceHelper.defaults()
