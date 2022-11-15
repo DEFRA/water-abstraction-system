@@ -29,7 +29,7 @@ class ChargeVersionHelper {
    */
   static async add (data = {}, licence = {}) {
     const licenceId = await this._addLicence(licence)
-    const insertData = this._defaults({ ...data, licence_id: licenceId })
+    const insertData = this.defaults({ ...data, licence_id: licenceId })
 
     const result = await db.table('water.charge_versions')
       .insert(insertData)
@@ -38,13 +38,15 @@ class ChargeVersionHelper {
     return result
   }
 
-  static async _addLicence (licence) {
-    const result = await LicenceHelper.add(licence)
-
-    return result[0].licenceId
-  }
-
-  static _defaults (data) {
+  /**
+   * Returns the defaults used when creating a new charge version
+   *
+   * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
+   * for use in tests to avoid having to duplicate values.
+   *
+   * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+   */
+  static defaults (data = {}) {
     const defaults = {
       licence_ref: '01/123',
       scheme: 'sroc'
@@ -54,6 +56,12 @@ class ChargeVersionHelper {
       ...defaults,
       ...data
     }
+  }
+
+  static async _addLicence (licence) {
+    const result = await LicenceHelper.add(licence)
+
+    return result[0].licenceId
   }
 }
 

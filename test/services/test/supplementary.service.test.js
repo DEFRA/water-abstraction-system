@@ -83,7 +83,7 @@ describe('Supplementary service', () => {
 
     describe('because there are no current charge versions (they all have end dates)', () => {
       beforeEach(async () => {
-        // This creates an SROC charge version with an edn date linked to a licence marked for supplementary billing
+        // This creates an SROC charge version with an end date linked to a licence marked for supplementary billing
         const alcsChargeVersion = await ChargeVersionHelper.add(
           { end_date: new Date(2022, 2, 1) }, // 2022-03-01 - Months are zero indexed :-)
           { include_in_supplementary_billing: 'yes' }
@@ -100,7 +100,7 @@ describe('Supplementary service', () => {
 
     describe('because there are no licences linked to the selected region', () => {
       beforeEach(async () => {
-        // This creates an SROC charge version linked to an invalid region
+        // This creates an SROC charge version linked to a licence with an different region than selected
         const otherRegionChargeVersion = await ChargeVersionHelper.add(
           {},
           {
