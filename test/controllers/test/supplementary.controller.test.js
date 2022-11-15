@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+
 // Things we need to stub
 const FindRegionService = require('../../../app/services/test/find_region.service')
 const SupplementaryService = require('../../../app/services/test/supplementary.service.js')
@@ -35,7 +38,7 @@ describe('Supplementary controller', () => {
     let response
 
     beforeEach(async () => {
-      Sinon.stub(FindRegionService, 'go').resolves({ regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7' })
+      Sinon.stub(FindRegionService, 'go').resolves({ regionId: LicenceHelper.defaults().region_id })
       Sinon.stub(SupplementaryService, 'go').resolves({ chargeVersions: [] })
 
       response = await server.inject(options)

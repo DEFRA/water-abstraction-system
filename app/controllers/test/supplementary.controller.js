@@ -5,9 +5,9 @@ const SupplementaryService = require('../../services/test/supplementary.service.
 
 class SupplementaryController {
   static async index (request, h) {
-    const region = await FindRegionService.go(request.query.region)
+    const { regionId } = await FindRegionService.go(request.query.region)
 
-    const result = await SupplementaryService.go(region.regionId)
+    const result = await SupplementaryService.go(regionId)
 
     return h.response(result).code(200)
   }

@@ -13,9 +13,7 @@ const { db } = require('../../../db/db')
 class SupplementaryService {
   static async go (regionId) {
     const chargeVersions = await this._fetchChargeVersions(regionId)
-    const response = {
-      chargeVersions
-    }
+    const response = { chargeVersions }
 
     return response
   }
