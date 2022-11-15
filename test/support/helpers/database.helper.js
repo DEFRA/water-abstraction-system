@@ -1,5 +1,9 @@
 'use strict'
 
+/**
+ * @module DatabaseHelper
+ */
+
 const { db } = require('../../../db/db.js')
 
 /**
