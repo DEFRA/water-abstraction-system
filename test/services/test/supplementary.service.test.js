@@ -48,7 +48,7 @@ describe('Supplementary service', () => {
     })
   })
 
-  describe('when there are no licences to be included in supplimentery billing', () => {
+  describe('when there are no licences to be included in supplementary billing', () => {
     describe("because none of them are marked 'include_in_supplimentary_billing'", () => {
       beforeEach(async () => {
         // This creates an SROC charge version linked to a licence. But the licence won't be marked for supplementary
