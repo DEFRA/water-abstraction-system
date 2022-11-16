@@ -21,6 +21,7 @@ describe('Supplementary service', () => {
 
   describe('when there are licences to be included in supplementary billing', () => {
     const testRecords = [{ charge_version_id: '878bc903-836d-4549-83f5-4e20ccf87d2f' }]
+
     beforeEach(async () => {
       Sinon.stub(FetchChargeVersionsService, 'go').resolves(testRecords)
     })
