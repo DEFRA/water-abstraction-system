@@ -8,6 +8,7 @@
 class BillingPeriodService {
   static go () {
     const currentDate = this._currentDate()
+    const currentYear = currentDate.getFullYear()
     const startDay = 1
     const startMonth = 4
     const endDay = 31
@@ -18,11 +19,11 @@ class BillingPeriodService {
 
     // getMonth returns an integer (0-11). So that January is represented as 0 and December as 11, hence the  +1.
     if (currentDate.getMonth() + 1 <= endMonth) {
-      startYear = currentDate.getFullYear() - 1
-      endYear = currentDate.getFullYear()
+      startYear = currentYear - 1
+      endYear = currentYear
     } else {
-      startYear = currentDate.getFullYear()
-      endYear = currentDate.getFullYear() + 1
+      startYear = currentYear
+      endYear = currentYear + 1
     }
 
     return [{
