@@ -17,8 +17,18 @@ describe('Supplementary presenter', () => {
     beforeEach(() => {
       data = {
         chargeVersions: [
-          { chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8', licenceRef: 'AT/SROC/SUPB/01' },
-          { chargeVersionId: '732fde85-fd3b-44e8-811f-8e6f4eb8cf6f', licenceRef: 'AT/SROC/SUPB/01' }
+          {
+            chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
+            licenceRef: 'AT/SROC/SUPB/01',
+            scheme: 'sroc',
+            endDate: null
+          },
+          {
+            chargeVersionId: '732fde85-fd3b-44e8-811f-8e6f4eb8cf6f',
+            licenceRef: 'AT/SROC/SUPB/01',
+            scheme: 'sroc',
+            endDate: null
+          }
         ]
       }
     })

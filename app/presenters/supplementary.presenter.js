@@ -17,7 +17,9 @@ class SupplementaryPresenter {
     const chargeVersions = data.chargeVersions.map((chargeVersion) => {
       return {
         chargeVersionId: chargeVersion.chargeVersionId,
-        licenceRef: chargeVersion.licenceRef
+        licenceRef: chargeVersion.licenceRef,
+        scheme: chargeVersion.scheme,
+        endDate: chargeVersion.endDate
       }
     })
 
