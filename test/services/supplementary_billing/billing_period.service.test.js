@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const BillingPeriodService = require('../../../app/services/supplementary_billing/billing_period.service')
 
-describe('BillingPeriod service', () => {
+describe.only('BillingPeriod service', () => {
   afterEach(() => {
     Sinon.restore()
   })
@@ -19,8 +19,8 @@ describe('BillingPeriod service', () => {
   describe('when the date is in 2022 and falls within the 2022 financial year', () => {
     const testDate = new Date('2022-04-01')
     const expectedResult = {
-      startDate: '2022-04-01',
-      endDate: '2023-03-31'
+      startDate: new Date('2022-04-01'),
+      endDate: new Date('2023-03-31')
     }
 
     beforeEach(async () => {
@@ -38,8 +38,8 @@ describe('BillingPeriod service', () => {
   describe('when the date is in 2023 and falls within the 2022 financial year', () => {
     const testDate = new Date('2023-03-01')
     const expectedResult = {
-      startDate: '2022-04-01',
-      endDate: '2023-03-31'
+      startDate: new Date('2022-04-01'),
+      endDate: new Date('2023-03-31')
     }
 
     beforeEach(async () => {
@@ -57,8 +57,8 @@ describe('BillingPeriod service', () => {
   describe('when the date is in 2023 and falls within the 2023 financial year', () => {
     const testDate = new Date('2023-10-10')
     const expectedResult = {
-      startDate: '2023-04-01',
-      endDate: '2024-03-31'
+      startDate: new Date('2023-04-01'),
+      endDate: new Date('2024-03-31')
     }
 
     beforeEach(async () => {
