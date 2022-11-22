@@ -17,16 +17,16 @@ class FetchChargeVersionsService {
 
   static async _fetch (regionId) {
     const chargeVersions = db
-      .select('chargeVersionId', 'licences.licenceRef')
-      .from('water.charge_versions')
-      .innerJoin('water.licences', 'charge_versions.licence_id', 'licences.licence_id')
+      .select('chv.chargeVersionId', 'chv.scheme', 'chv.endDate', 'lic.licenceId', 'lic.licenceRef')
+      .from({ chv: 'water.charge_versions' })
+      .innerJoin({ lic: 'water.licences' }, 'chv.licence_id', 'lic.licence_id')
       .where({
         scheme: 'sroc',
         end_date: null
       })
       .andWhere({
-        'licences.include_in_supplementary_billing': 'yes',
-        'licences.region_id': regionId
+        'lic.include_in_supplementary_billing': 'yes',
+        'lic.region_id': regionId
       })
 
     return chargeVersions
