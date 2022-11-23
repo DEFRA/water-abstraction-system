@@ -11,13 +11,13 @@ const SupplementaryPresenter = require('../../presenters/supplementary.presenter
 class SupplementaryService {
   static async go (regionId) {
     const chargeVersions = await FetchChargeVersionsService.go(regionId)
-    const financialYears = BillingPeriodService.go()
+    const billingPeriods = BillingPeriodService.go()
 
-    return this._response(chargeVersions, financialYears)
+    return this._response(chargeVersions, billingPeriods)
   }
 
-  static _response (chargeVersions, financialYears) {
-    const presenter = new SupplementaryPresenter({ chargeVersions, financialYears })
+  static _response (chargeVersions, billingPeriods) {
+    const presenter = new SupplementaryPresenter({ chargeVersions, billingPeriods })
 
     return presenter.go()
   }

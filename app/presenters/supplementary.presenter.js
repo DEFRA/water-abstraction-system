@@ -62,6 +62,7 @@ class SupplementaryPresenter {
     })
 
     return {
+      billingPeriods: data.billingPeriods,
       licences,
       chargeVersions
     }

@@ -16,6 +16,9 @@ describe('Supplementary presenter', () => {
   describe('when there are results', () => {
     beforeEach(() => {
       data = {
+        billingPeriods: [
+          { startDate: new Date(2022, 3, 1), endDate: new Date(2023, 2, 31) }
+        ],
         chargeVersions: [
           {
             chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
@@ -39,6 +42,9 @@ describe('Supplementary presenter', () => {
       const presenter = new SupplementaryPresenter(data)
       const result = presenter.go()
 
+      expect(result.billingPeriods).to.have.length(1)
+      expect(result.billingPeriods[0]).to.equal(data.billingPeriods[0])
+
       expect(result.licences).to.have.length(1)
       expect(result.licences[0]).to.equal({
         licenceId: data.chargeVersions[0].licenceId,
@@ -53,6 +59,7 @@ describe('Supplementary presenter', () => {
   describe('when there are no results', () => {
     beforeEach(() => {
       data = {
+        billingPeriods: [],
         chargeVersions: []
       }
     })
@@ -61,8 +68,8 @@ describe('Supplementary presenter', () => {
       const presenter = new SupplementaryPresenter(data)
       const result = presenter.go()
 
+      expect(result.billingPeriods).to.be.empty()
       expect(result.licences).to.be.empty()
-
       expect(result.chargeVersions).to.be.empty()
     })
   })
