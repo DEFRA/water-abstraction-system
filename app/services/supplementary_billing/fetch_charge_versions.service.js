@@ -1,24 +1,20 @@
 'use strict'
 
 /**
- * @module SupplementaryService
+ * @module FetchChargeVersionsService
+ *
  */
 
 const { db } = require('../../../db/db')
 
-/**
- * @module SupplementaryService
- */
-
-class SupplementaryService {
+class FetchChargeVersionsService {
   static async go (regionId) {
-    const chargeVersions = await this._fetchChargeVersions(regionId)
-    const response = { chargeVersions }
+    const chargeVersions = await this._fetch(regionId)
 
-    return response
+    return chargeVersions
   }
 
-  static async _fetchChargeVersions (regionId) {
+  static async _fetch (regionId) {
     const chargeVersions = db
       .select('chargeVersionId', 'licences.licenceRef')
       .from('water.charge_versions')
@@ -36,4 +32,4 @@ class SupplementaryService {
   }
 }
 
-module.exports = SupplementaryService
+module.exports = FetchChargeVersionsService

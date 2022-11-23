@@ -13,9 +13,9 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const SupplementaryService = require('../../../app/services/test/supplementary.service.js')
+const FetchChargeVersionsService = require('../../../app/services/supplementary_billing/fetch_charge_versions.service.js')
 
-describe('Supplementary service', () => {
+describe('FetchChargeVersions service', () => {
   const { region_id: regionId } = LicenceHelper.defaults()
   let testRecords
 
@@ -41,10 +41,10 @@ describe('Supplementary service', () => {
     })
 
     it('returns only the current SROC charge versions that are applicable', async () => {
-      const result = await SupplementaryService.go(regionId)
+      const result = await FetchChargeVersionsService.go(regionId)
 
-      expect(result.chargeVersions.length).to.equal(1)
-      expect(result.chargeVersions[0].charge_version_id).to.equal(testRecords[0].charge_version_id)
+      expect(result.length).to.equal(1)
+      expect(result[0].charge_version_id).to.equal(testRecords[0].charge_version_id)
     })
   })
 
@@ -58,9 +58,9 @@ describe('Supplementary service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await SupplementaryService.go(regionId)
+        const result = await FetchChargeVersionsService.go(regionId)
 
-        expect(result.chargeVersions.length).to.equal(0)
+        expect(result.length).to.equal(0)
       })
     })
 
@@ -75,9 +75,9 @@ describe('Supplementary service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await SupplementaryService.go(regionId)
+        const result = await FetchChargeVersionsService.go(regionId)
 
-        expect(result.chargeVersions.length).to.equal(0)
+        expect(result.length).to.equal(0)
       })
     })
 
@@ -92,9 +92,9 @@ describe('Supplementary service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await SupplementaryService.go(regionId)
+        const result = await FetchChargeVersionsService.go(regionId)
 
-        expect(result.chargeVersions.length).to.equal(0)
+        expect(result.length).to.equal(0)
       })
     })
 
@@ -112,9 +112,9 @@ describe('Supplementary service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await SupplementaryService.go(regionId)
+        const result = await FetchChargeVersionsService.go(regionId)
 
-        expect(result.chargeVersions.length).to.equal(0)
+        expect(result.length).to.equal(0)
       })
     })
   })
