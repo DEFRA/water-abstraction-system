@@ -12,8 +12,8 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FindRegionService = require('../../../app/services/test/find_region.service')
-const SupplementaryService = require('../../../app/services/test/supplementary.service.js')
+const FindRegionService = require('../../../app/services/supplementary_billing/find_region.service')
+const SupplementaryService = require('../../../app/services/supplementary_billing/supplementary.service.js')
 
 // For running our service
 const { init } = require('../../../app/server')
