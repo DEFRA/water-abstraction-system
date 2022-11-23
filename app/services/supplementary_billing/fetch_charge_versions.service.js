@@ -5,7 +5,7 @@
  * @module FetchChargeVersionsService
  */
 
-const { db } = require('../../../db/db')
+const { db } = require('../../../db/db.js')
 
 class FetchChargeVersionsService {
   static async go (regionId) {

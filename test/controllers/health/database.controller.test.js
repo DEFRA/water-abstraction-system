@@ -9,7 +9,7 @@ const { describe, it, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // For running our service
-const { init } = require('../../../app/server')
+const { init } = require('../../../app/server.js')
 
 describe('Database controller', () => {
   let server

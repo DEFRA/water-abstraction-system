@@ -1,6 +1,6 @@
 'use strict'
 
-const SupplementaryController = require('../controllers/test/supplementary.controller')
+const SupplementaryController = require('../controllers/test/supplementary.controller.js')
 
 const routes = [
   {

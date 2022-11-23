@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // For running our service
-const { init } = require('../../app/server')
+const { init } = require('../../app/server.js')
 
 describe('Root controller: GET /', () => {
   let server

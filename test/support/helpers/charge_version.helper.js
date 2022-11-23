@@ -4,7 +4,7 @@
  * @module ChargeVersionHelper
  */
 
-const { db } = require('../../../db/db')
+const { db } = require('../../../db/db.js')
 
 const LicenceHelper = require('./licence.helper.js')
 

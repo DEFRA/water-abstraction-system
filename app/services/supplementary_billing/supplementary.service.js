@@ -5,7 +5,7 @@
  * @module SupplementaryService
  */
 
-const BillingPeriodService = require('./billing_period.service')
+const BillingPeriodService = require('./billing_period.service.js')
 const FetchChargeVersionsService = require('./fetch_charge_versions.service.js')
 const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
 

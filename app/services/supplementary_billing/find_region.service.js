@@ -5,7 +5,7 @@
  * @module FindRegionService
  */
 
-const { db } = require('../../../db/db')
+const { db } = require('../../../db/db.js')
 
 /**
  * @module FindRegionService

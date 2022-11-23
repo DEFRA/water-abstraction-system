@@ -10,7 +10,7 @@ const util = require('util')
 const ChildProcess = require('child_process')
 const exec = util.promisify(ChildProcess.exec)
 
-const servicesConfig = require('../../config/services.config')
+const servicesConfig = require('../../config/services.config.js')
 
 /**
  * Returns data required to populate our `/service-status` page, eg. task activity status, virus checker status, service

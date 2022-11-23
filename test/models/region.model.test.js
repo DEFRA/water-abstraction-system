@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const Region = require('../../app/models/region.model')
+const Region = require('../../app/models/region.model.js')
 
 describe('Region model', () => {
   it('returns data', async () => {

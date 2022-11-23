@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ChargeVersion = require('../../app/models/charge_version.model')
+const ChargeVersion = require('../../app/models/charge_version.model.js')
 
 describe('ChargeVersion model', () => {
   it('returns data', async () => {
