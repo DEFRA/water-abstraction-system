@@ -6,8 +6,8 @@
  */
 
 // We use promisify to wrap exec in a promise. This allows us to await it without resorting to using callbacks.
-const util = require('util')
 const ChildProcess = require('child_process')
+const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
 const servicesConfig = require('../../config/services.config.js')

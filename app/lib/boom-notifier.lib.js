@@ -5,9 +5,9 @@
  * @module BoomNotifierLib
  */
 
-const RequestNotifierLib = require('./request-notifier.lib.js')
-
 const Boom = require('@hapi/boom')
+
+const RequestNotifierLib = require('./request-notifier.lib.js')
 
 /**
  * A combined logging and Airbrake (Errbit) notification manager which extends RequestNotifierLib to also throw a Boom

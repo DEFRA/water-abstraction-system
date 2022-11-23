@@ -19,6 +19,7 @@
  */
 
 const { Notifier } = require('@airbrake/node')
+
 const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const AirbrakePlugin = {
