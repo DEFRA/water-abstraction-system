@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Checks status, including versions, of the various services which make up WRLS
  * @module ServiceStatusService
  */
 

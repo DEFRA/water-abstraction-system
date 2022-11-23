@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Controller for / endpoints
+ * @module SupplementaryController
+ */
+
 const ServiceStatusService = require('../services/service_status.service')
 
 class RootController {

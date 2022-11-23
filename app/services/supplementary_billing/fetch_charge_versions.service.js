@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Fetches SROC charge versions that might be included in a supplementary bill run
  * @module FetchChargeVersionsService
  */
 

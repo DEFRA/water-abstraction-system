@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Model for water.licences
  * @module LicenceModel
  */
 

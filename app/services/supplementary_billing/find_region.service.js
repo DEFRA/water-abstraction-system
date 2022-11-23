@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Fetches a region based on the NALD region ID provided
  * @module FindRegionService
  */
 

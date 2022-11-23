@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Controller for /health/airbrake endpoints
+ * @module AirbrakeController
+ */
+
 class AirbrakeController {
   static async index (request, _h) {
     // First section tests connecting to Airbrake through a manual notification

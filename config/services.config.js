@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Config values used to connect to our other services
+ * @module ServicesConfig
+ */
+
 const config = {
   addressFacade: {
     url: process.env.EA_ADDRESS_FACADE_URL

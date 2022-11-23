@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Used by HapiPinoPlugin to determine which requests to log
  * @module HapiPinoIgnoreRequestService
  */
 

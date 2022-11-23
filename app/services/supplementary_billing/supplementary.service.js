@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Determines the billing periods, licences and charge versions used to generate an SROC supplementary bill run
  * @module SupplementaryService
  */
 

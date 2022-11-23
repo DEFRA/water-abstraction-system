@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Used by the `RouterPlugin` to determine if a route should be registered with Hapi
  * @module FilterRoutesService
  */
 

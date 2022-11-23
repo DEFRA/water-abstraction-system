@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * A combined logging and Airbrake (Errbit) notification manager
  * @module RequestNotifierLib
  */
 

@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Controller for /health/database endpoints
+ * @module DatabaseController
+ */
+
 const DatabaseHealthCheckService = require('../../services/database_health_check.service.js')
 
 class DatabaseController {

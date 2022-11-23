@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Config values used to connect to PostgreSQL
+ * @module DatabaseConfig
+ */
+
 // Unlike the other config files we need to directly reference dotenv. It is because this config is used when we run
 // migrations. The rest of the config is only used when we run the app. `app/server.js` loads dotenv which makes it
 // available to everything else thereafter

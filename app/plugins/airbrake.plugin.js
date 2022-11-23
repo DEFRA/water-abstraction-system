@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Plugin to log errors using Airbrake API
  * @module AirbrakePlugin
  */
 
