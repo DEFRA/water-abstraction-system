@@ -20,7 +20,13 @@ describe('Supplementary service', () => {
   })
 
   describe('when there are licences to be included in supplementary billing', () => {
-    const testRecords = [{ charge_version_id: '878bc903-836d-4549-83f5-4e20ccf87d2f' }]
+    const testRecords = [{
+      chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
+      scheme: 'sroc',
+      endDate: null,
+      licenceId: '2627a306-23a3-432f-9c71-a71663888285',
+      licenceRef: 'AT/SROC/SUPB/01'
+    }]
 
     beforeEach(async () => {
       Sinon.stub(FetchChargeVersionsService, 'go').resolves(testRecords)
@@ -30,7 +36,7 @@ describe('Supplementary service', () => {
       const result = await SupplementaryService.go('regionId')
 
       expect(result.chargeVersions.length).to.equal(1)
-      expect(result.chargeVersions[0].charge_version_id).to.equal(testRecords[0].charge_version_id)
+      expect(result.chargeVersions[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
     })
   })
 

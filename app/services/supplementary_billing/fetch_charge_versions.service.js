@@ -2,11 +2,9 @@
 
 /**
  * @module FetchChargeVersionsService
- *
  */
 
 const { db } = require('../../../db/db')
-const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
 
 class FetchChargeVersionsService {
   static async go (regionId) {
@@ -30,12 +28,6 @@ class FetchChargeVersionsService {
       })
 
     return chargeVersions
-  }
-
-  static _response (data) {
-    const presenter = new SupplementaryPresenter(data)
-
-    return presenter.go()
   }
 }
 
