@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const Licence = require('../../app/models/licence.model.js')
 
-describe.only('Licence model', () => {
+describe('Licence model', () => {
   it('returns data', async () => {
     const query = await Licence.query()
 
