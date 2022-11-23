@@ -1,7 +1,12 @@
 'use strict'
 
-const FindRegionService = require('../../services/supplementary_billing/find_region.service')
-const SupplementaryService = require('../../services/supplementary_billing/supplementary.service.js')
+/**
+ * Controller for /test/supplementary endpoints
+ * @module SupplementaryController
+ */
+
+const FindRegionService = require('../../services/supplementary-billing/find-region.service.js')
+const SupplementaryService = require('../../services/supplementary-billing/supplementary.service.js')
 
 class SupplementaryController {
   static async index (request, h) {

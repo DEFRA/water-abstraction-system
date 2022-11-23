@@ -12,7 +12,7 @@
 
 const HapiPino = require('hapi-pino')
 
-const HapiPinoIgnoreRequestService = require('../services/plugins/hapi_pino_ignore_request.service.js')
+const HapiPinoIgnoreRequestService = require('../services/plugins/hapi-pino-ignore-request.service.js')
 
 /**
  * Return test configuration options for the logger

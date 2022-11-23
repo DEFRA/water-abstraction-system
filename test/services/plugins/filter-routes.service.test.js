@@ -10,7 +10,7 @@ const { expect } = Code
 const Hoek = require('@hapi/hoek')
 
 // Thing under test
-const FilterRoutesService = require('../../../app/services/plugins/filter_routes.service.js')
+const FilterRoutesService = require('../../../app/services/plugins/filter-routes.service.js')
 
 describe('Filter routes service', () => {
   const routes = [

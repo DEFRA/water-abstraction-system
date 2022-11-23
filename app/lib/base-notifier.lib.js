@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Base class for notification managers
  * @module BaseNotifierLib
  */
 

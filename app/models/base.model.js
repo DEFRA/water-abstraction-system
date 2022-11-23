@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Base class for all Objection-based models
  * @module BaseModel
  */
 

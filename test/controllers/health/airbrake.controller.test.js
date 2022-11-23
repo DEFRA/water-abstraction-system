@@ -9,7 +9,7 @@ const { describe, it, beforeEach, after, afterEach } = exports.lab = Lab.script(
 const { expect } = Code
 
 // For running our service
-const { init } = require('../../../app/server')
+const { init } = require('../../../app/server.js')
 
 // Things we need to stub
 const Airbrake = require('@airbrake/node')

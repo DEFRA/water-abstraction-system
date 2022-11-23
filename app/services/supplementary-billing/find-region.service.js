@@ -1,14 +1,11 @@
 'use strict'
 
 /**
+ * Fetches a region based on the NALD region ID provided
  * @module FindRegionService
  */
 
-const { db } = require('../../../db/db')
-
-/**
- * @module FindRegionService
- */
+const { db } = require('../../../db/db.js')
 
 class FindRegionService {
   /**

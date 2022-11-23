@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Plugin to log errors using Airbrake API
  * @module AirbrakePlugin
  */
 
@@ -18,6 +19,7 @@
  */
 
 const { Notifier } = require('@airbrake/node')
+
 const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const AirbrakePlugin = {

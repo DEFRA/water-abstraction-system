@@ -70,7 +70,7 @@ describe('Service Status service', () => {
           stderror: null
         })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-      ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+      ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
     })
 
     it('returns details on each', async () => {
@@ -109,7 +109,7 @@ describe('Service Status service', () => {
             stderr: 'Could not connect to Redis'
           })
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-        ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+        ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -137,7 +137,7 @@ describe('Service Status service', () => {
           .withArgs('redis-server --version')
           .throwsException(new Error('Redis check went boom'))
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-        ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+        ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -171,7 +171,7 @@ describe('Service Status service', () => {
           stderror: null
         })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-      ServiceStatusService = Proxyquire('../../app/services/service_status.service', { util: utilStub })
+      ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
     })
 
     describe('cannot be reached because of a network error', () => {

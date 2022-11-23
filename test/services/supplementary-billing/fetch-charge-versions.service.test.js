@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeVersionHelper = require('../../support/helpers/charge_version.helper.js')
+const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchChargeVersionsService = require('../../../app/services/supplementary_billing/fetch_charge_versions.service.js')
+const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 
 describe('FetchChargeVersions service', () => {
   const { region_id: regionId } = LicenceHelper.defaults()

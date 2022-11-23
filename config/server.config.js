@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Config values used by this service, for example, the port to use
+ * @module ServerConfig
+ */
+
 const config = {
   environment: process.env.NODE_ENV || 'development',
   hapi: {

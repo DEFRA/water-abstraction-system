@@ -4,17 +4,17 @@ require('dotenv').config()
 
 const Hapi = require('@hapi/hapi')
 
-const ServerConfig = require('../config/server.config.js')
-const LogConfig = require('../config/log.config.js')
-
 const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
 const BlippPlugin = require('./plugins/blipp.plugin.js')
-const ErrorPagesPlugin = require('./plugins/error_pages.plugin.js')
-const HapiPinoPlugin = require('./plugins/hapi_pino.plugin.js')
-const RequestNotifierPlugin = require('./plugins/request_notifier.plugin.js')
+const ErrorPagesPlugin = require('./plugins/error-pages.plugin.js')
+const HapiPinoPlugin = require('./plugins/hapi-pino.plugin.js')
+const RequestNotifierPlugin = require('./plugins/request-notifier.plugin.js')
 const RouterPlugin = require('./plugins/router.plugin.js')
 const StopPlugin = require('./plugins/stop.plugin.js')
 const ViewsPlugin = require('./plugins/views.plugin.js')
+
+const ServerConfig = require('../config/server.config.js')
+const LogConfig = require('../config/log.config.js')
 
 const registerPlugins = async (server) => {
   // Register the remaining plugins

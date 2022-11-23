@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Formats responses from the `SupplementaryService`
  * @module SupplementaryPresenter
  */
 

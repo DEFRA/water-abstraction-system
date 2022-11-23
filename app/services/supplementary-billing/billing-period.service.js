@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Calculates billing periods needed when generating a supplementary bill run
  * @module BillingPeriodService
  */
 

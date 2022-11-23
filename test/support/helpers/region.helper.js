@@ -4,7 +4,7 @@
  * @module RegionHelper
  */
 
-const { db } = require('../../../db/db')
+const { db } = require('../../../db/db.js')
 
 class RegionHelper {
   /**

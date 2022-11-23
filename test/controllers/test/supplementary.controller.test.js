@@ -12,11 +12,11 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FindRegionService = require('../../../app/services/supplementary_billing/find_region.service')
-const SupplementaryService = require('../../../app/services/supplementary_billing/supplementary.service.js')
+const FindRegionService = require('../../../app/services/supplementary-billing/find-region.service.js')
+const SupplementaryService = require('../../../app/services/supplementary-billing/supplementary.service.js')
 
 // For running our service
-const { init } = require('../../../app/server')
+const { init } = require('../../../app/server.js')
 
 describe('Supplementary controller', () => {
   let server

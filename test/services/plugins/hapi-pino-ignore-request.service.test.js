@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const LogConfig = require('../../../config/log.config')
+const LogConfig = require('../../../config/log.config.js')
 
 // Thing under test
-const HapiPinoIgnoreRequestService = require('../../../app/services/plugins/hapi_pino_ignore_request.service.js')
+const HapiPinoIgnoreRequestService = require('../../../app/services/plugins/hapi-pino-ignore-request.service.js')
 
 describe('Hapi Pino Ignore Request service', () => {
   const _options = {}

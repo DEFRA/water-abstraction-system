@@ -1,10 +1,11 @@
 'use strict'
 
 /**
+ * A combined logging and Airbrake (Errbit) notification manager
  * @module RequestNotifierLib
  */
 
-const BaseNotifierLib = require('./base_notifier.lib.js')
+const BaseNotifierLib = require('./base-notifier.lib.js')
 
 /**
  * A combined logging and Airbrake (Errbit) notification manager for actions that take place within a

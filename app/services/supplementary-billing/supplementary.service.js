@@ -1,11 +1,12 @@
 'use strict'
 
 /**
+ * Determines the billing periods, licences and charge versions used to generate an SROC supplementary bill run
  * @module SupplementaryService
  */
 
-const BillingPeriodService = require('./billing_period.service')
-const FetchChargeVersionsService = require('./fetch_charge_versions.service.js')
+const BillingPeriodService = require('./billing-period.service.js')
+const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
 
 class SupplementaryService {

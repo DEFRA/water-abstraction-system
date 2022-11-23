@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const BaseNotifierLib = require('../../app/lib/base_notifier.lib.js')
+const BaseNotifierLib = require('../../app/lib/base-notifier.lib.js')
 
 describe('BaseNotifierLib class', () => {
   let airbrakeFake

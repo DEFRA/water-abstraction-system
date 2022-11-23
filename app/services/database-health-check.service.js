@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Used by the `DatabaseController` to determine if connection to the database is healthy
  * @module DatabaseHealthCheckService
  */
 

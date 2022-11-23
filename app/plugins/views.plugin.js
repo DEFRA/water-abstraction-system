@@ -10,12 +10,14 @@
  * @module ViewsPlugin
  */
 
-const SERVICE_NAME = 'Manage your water abstraction or impoundment licence'
-
 const path = require('path')
 const nunjucks = require('nunjucks')
+
 const pkg = require('../../package.json')
+
 const ServerConfig = require('../../config/server.config.js')
+
+const SERVICE_NAME = 'Manage your water abstraction or impoundment licence'
 
 const ViewsPlugin = {
   plugin: require('@hapi/vision'),
