@@ -4,16 +4,22 @@
  * @module SupplementaryService
  */
 
-const FetchChargeVersionsService = require('./fetch_charge_versions.service.js')
 const BillingPeriodService = require('./billing_period.service')
+const FetchChargeVersionsService = require('./fetch_charge_versions.service.js')
+const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
 
 class SupplementaryService {
   static async go (regionId) {
     const chargeVersions = await FetchChargeVersionsService.go(regionId)
-    const financialYears = BillingPeriodService.go()
-    const response = { chargeVersions, financialYears }
+    const billingPeriods = BillingPeriodService.go()
 
-    return response
+    return this._response(chargeVersions, billingPeriods)
+  }
+
+  static _response (chargeVersions, billingPeriods) {
+    const presenter = new SupplementaryPresenter({ chargeVersions, billingPeriods })
+
+    return presenter.go()
   }
 }
 
