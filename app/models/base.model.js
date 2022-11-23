@@ -26,7 +26,7 @@ class BaseModel extends Model {
    * ```
    *  // ...
    *  relation: Model.ManyToManyRelation,
-        modelClass: 'authorised_system.model',
+        modelClass: 'charge_version.model',
       // ...
       ```
 
