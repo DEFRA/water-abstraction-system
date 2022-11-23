@@ -10,7 +10,7 @@ const BaseModel = require('./base.model.js')
 
 class LicenceModel extends BaseModel {
   static get tableName () {
-    return 'licences'
+    return 'water.licences'
   }
 
   static get relationMappings () {
@@ -19,16 +19,16 @@ class LicenceModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'charge_version.model',
         join: {
-          from: 'licences.licence_id',
-          to: 'charge_versions.licence_id'
+          from: 'water.licences.licence_id',
+          to: 'water.charge_versions.licence_id'
         }
       },
       regions: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'region.model',
         join: {
-          from: 'licences.region_id',
-          to: 'regions.region_id'
+          from: 'water.licences.region_id',
+          to: 'water.regions.region_id'
         }
       }
     }

@@ -10,7 +10,7 @@ const BaseModel = require('./base.model.js')
 
 class RegionModel extends BaseModel {
   static get tableName () {
-    return 'regions'
+    return 'water.regions'
   }
 
   static get relationMappings () {
@@ -19,8 +19,8 @@ class RegionModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
         join: {
-          from: 'regions.region_id',
-          to: 'licences.region_id'
+          from: 'water.regions.region_id',
+          to: 'water.licences.region_id'
         }
       }
     }
