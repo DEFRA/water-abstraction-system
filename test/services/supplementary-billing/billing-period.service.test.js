@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const BillingPeriodService = require('../../../app/services/supplementary_billing/billing_period.service.js')
+const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
 
 describe('BillingPeriod service', () => {
   afterEach(() => {

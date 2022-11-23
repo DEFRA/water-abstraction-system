@@ -5,7 +5,7 @@
  * @module SupplementaryController
  */
 
-const ServiceStatusService = require('../services/service_status.service.js')
+const ServiceStatusService = require('../services/service-status.service.js')
 
 class RootController {
   static async index (_request, _h) {

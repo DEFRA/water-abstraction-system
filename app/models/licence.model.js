@@ -18,7 +18,7 @@ class LicenceModel extends BaseModel {
     return {
       chargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge_version.model',
+        modelClass: 'charge-version.model',
         join: {
           from: 'water.licences.licence_id',
           to: 'water.charge_versions.licence_id'

@@ -11,7 +11,7 @@
  * @module RouterPlugin
  */
 
-const FilterRoutesService = require('../services/plugins/filter_routes.service.js')
+const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const AirbrakeRoutes = require('../routes/airbrake.routes.js')

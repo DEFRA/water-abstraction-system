@@ -5,7 +5,7 @@
  * @module BoomNotifierLib
  */
 
-const RequestNotifierLib = require('./request_notifier.lib.js')
+const RequestNotifierLib = require('./request-notifier.lib.js')
 
 const Boom = require('@hapi/boom')
 

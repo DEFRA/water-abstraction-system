@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchChargeVersionsService = require('../../../app/services/supplementary_billing/fetch_charge_versions.service.js')
+const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 
 // Thing under test
-const SupplementaryService = require('../../../app/services/supplementary_billing/supplementary.service.js')
+const SupplementaryService = require('../../../app/services/supplementary-billing/supplementary.service.js')
 
 describe('Supplementary service', () => {
   afterEach(() => {
