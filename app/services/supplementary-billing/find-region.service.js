@@ -7,10 +7,6 @@
 
 const { db } = require('../../../db/db.js')
 
-/**
- * @module FindRegionService
- */
-
 class FindRegionService {
   /**
    * Returns the `region_id` for the matching record in `water.regions`
