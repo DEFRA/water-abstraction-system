@@ -9,14 +9,23 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
+const FetchLicencesService = require('../../../app/services/supplementary-billing/fetch-licences.service.js')
 const FetchRegionService = require('../../../app/services/supplementary-billing/fetch-region.service.js')
 
 // Thing under test
 const SupplementaryService = require('../../../app/services/supplementary-billing/supplementary.service.js')
 
 describe('Supplementary service', () => {
+  const naldRegionId = 9
+  const currentBillingPeriod = {
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31')
+  }
+
   beforeEach(async () => {
+    Sinon.stub(BillingPeriodService, 'go').returns([currentBillingPeriod])
     Sinon.stub(FetchRegionService, 'go').resolves({ regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7' })
   })
 
@@ -24,36 +33,92 @@ describe('Supplementary service', () => {
     Sinon.restore()
   })
 
-  describe('when there are licences to be included in supplementary billing', () => {
-    const testRecords = [{
-      chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
-      scheme: 'sroc',
-      endDate: null,
-      licenceId: '2627a306-23a3-432f-9c71-a71663888285',
-      licenceRef: 'AT/SROC/SUPB/01'
-    }]
-
+  describe('the response for billing periods', () => {
     beforeEach(async () => {
-      Sinon.stub(FetchChargeVersionsService, 'go').resolves(testRecords)
+      Sinon.stub(FetchLicencesService, 'go').resolves([])
+      Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
     })
 
-    it('returns only the current SROC charge versions that are applicable', async () => {
-      const result = await SupplementaryService.go('regionId')
+    it('always includes the current billing period', async () => {
+      const result = await SupplementaryService.go(naldRegionId)
 
-      expect(result.chargeVersions.length).to.equal(1)
-      expect(result.chargeVersions[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+      expect(result.billingPeriods.length).to.equal(1)
+      expect(result.billingPeriods[0]).to.equal(currentBillingPeriod)
     })
   })
 
-  describe('when there are no licences to be included in supplementary billing', () => {
+  describe('the response for licences', () => {
     beforeEach(async () => {
       Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
     })
 
-    it('returns no charge versions', async () => {
-      const result = await SupplementaryService.go('regionId')
+    describe('when there are licences for supplementary billing', () => {
+      const testRecords = [{
+        licenceId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
+        licenceRef: 'AT/SROC/SUPB/01'
+      }]
 
-      expect(result.chargeVersions).to.be.empty()
+      beforeEach(async () => {
+        Sinon.stub(FetchLicencesService, 'go').resolves(testRecords)
+      })
+
+      it('returns the matching licences', async () => {
+        const result = await SupplementaryService.go(naldRegionId)
+
+        expect(result.licences.length).to.equal(1)
+        expect(result.licences[0].licenceId).to.equal(testRecords[0].licenceId)
+      })
+    })
+
+    describe('When there are no licences for supplementary billing', () => {
+      beforeEach(async () => {
+        Sinon.stub(FetchLicencesService, 'go').resolves([])
+      })
+
+      it('returns no results', async () => {
+        const result = await SupplementaryService.go(naldRegionId)
+
+        expect(result.licences).to.be.empty()
+      })
+    })
+  })
+
+  describe('the response for charge versions', () => {
+    beforeEach(async () => {
+      Sinon.stub(FetchLicencesService, 'go').resolves([])
+    })
+
+    describe('when there are charge versions for supplementary billing', () => {
+      const testRecords = [{
+        chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
+        scheme: 'sroc',
+        endDate: null,
+        licenceId: '2627a306-23a3-432f-9c71-a71663888285',
+        licenceRef: 'AT/SROC/SUPB/01'
+      }]
+
+      beforeEach(async () => {
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves(testRecords)
+      })
+
+      it('returns the matching charge versions', async () => {
+        const result = await SupplementaryService.go(naldRegionId)
+
+        expect(result.chargeVersions.length).to.equal(1)
+        expect(result.chargeVersions[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+      })
+    })
+
+    describe('When there are no charge versions for supplementary billing', () => {
+      beforeEach(async () => {
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
+      })
+
+      it('returns no results', async () => {
+        const result = await SupplementaryService.go(naldRegionId)
+
+        expect(result.chargeVersions).to.be.empty()
+      })
     })
   })
 })
