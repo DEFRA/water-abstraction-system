@@ -2,12 +2,12 @@
 
 /**
  * Fetches a region based on the NALD region ID provided
- * @module FindRegionService
+ * @module FetchRegionService
  */
 
 const { db } = require('../../../db/db.js')
 
-class FindRegionService {
+class FetchRegionService {
   /**
    * Returns the `region_id` for the matching record in `water.regions`
    *
@@ -20,12 +20,12 @@ class FindRegionService {
    * @returns {string} The region_id (a GUID) for the matching region
    */
   static async go (naldRegionId) {
-    const region = await this._fetchRegion(naldRegionId)
+    const region = await this._fetch(naldRegionId)
 
     return region
   }
 
-  static async _fetchRegion (naldRegionId) {
+  static async _fetch (naldRegionId) {
     const result = await db
       .select('region_id')
       .from('water.regions')
@@ -38,4 +38,4 @@ class FindRegionService {
   }
 }
 
-module.exports = FindRegionService
+module.exports = FetchRegionService

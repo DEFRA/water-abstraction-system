@@ -5,12 +5,12 @@
  * @module SupplementaryController
  */
 
-const FindRegionService = require('../../services/supplementary-billing/find-region.service.js')
+const FetchRegionService = require('../../services/supplementary-billing/fetch-region.service.js')
 const SupplementaryService = require('../../services/supplementary-billing/supplementary.service.js')
 
 class SupplementaryController {
   static async index (request, h) {
-    const { regionId } = await FindRegionService.go(request.query.region)
+    const { regionId } = await FetchRegionService.go(request.query.region)
 
     const result = await SupplementaryService.go(regionId)
 

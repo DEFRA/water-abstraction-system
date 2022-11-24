@@ -12,7 +12,7 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FindRegionService = require('../../../app/services/supplementary-billing/find-region.service.js')
+const FetchRegionService = require('../../../app/services/supplementary-billing/fetch-region.service.js')
 const SupplementaryService = require('../../../app/services/supplementary-billing/supplementary.service.js')
 
 // For running our service
@@ -38,7 +38,7 @@ describe('Supplementary controller', () => {
     let response
 
     beforeEach(async () => {
-      Sinon.stub(FindRegionService, 'go').resolves({ regionId: LicenceHelper.defaults().region_id })
+      Sinon.stub(FetchRegionService, 'go').resolves({ regionId: LicenceHelper.defaults().region_id })
       Sinon.stub(SupplementaryService, 'go').resolves({ chargeVersions: [] })
 
       response = await server.inject(options)
