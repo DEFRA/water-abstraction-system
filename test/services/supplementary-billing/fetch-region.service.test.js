@@ -14,7 +14,7 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Thing under test
 const FetchRegionService = require('../../../app/services/supplementary-billing/fetch-region.service.js')
 
-describe('Fetch Regio Service', () => {
+describe('Fetch Region service', () => {
   const naldRegionId = 9
   let testRecords
 
