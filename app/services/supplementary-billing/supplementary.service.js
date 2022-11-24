@@ -7,11 +7,13 @@
 
 const BillingPeriodService = require('./billing-period.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchRegionService = require('./fetch-region.service.js')
 const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
 
 class SupplementaryService {
-  static async go (regionId) {
-    const chargeVersions = await FetchChargeVersionsService.go(regionId)
+  static async go (naldRegionId) {
+    const region = await FetchRegionService.go(naldRegionId)
+    const chargeVersions = await FetchChargeVersionsService.go(region.regionId)
     const billingPeriods = BillingPeriodService.go()
 
     return this._response(chargeVersions, billingPeriods)

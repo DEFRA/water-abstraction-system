@@ -10,11 +10,16 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
+const FetchRegionService = require('../../../app/services/supplementary-billing/fetch-region.service.js')
 
 // Thing under test
 const SupplementaryService = require('../../../app/services/supplementary-billing/supplementary.service.js')
 
 describe('Supplementary service', () => {
+  beforeEach(async () => {
+    Sinon.stub(FetchRegionService, 'go').resolves({ regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7' })
+  })
+
   afterEach(() => {
     Sinon.restore()
   })
