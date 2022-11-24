@@ -9,13 +9,12 @@ const LicenceModel = require('../../models/licence.model.js')
 
 class FetchLicencesService {
   /**
-   * Returns the `region_id` for the matching record in `water.regions`
+   * Fetches licences flagged for supplementary billing that are linked to the selected region
    *
-   * > This is a temporary service added whilst developing the new SROC supplementary bill run functionality. We expect
-   * > the region ID to be provided by the UI as part of the normal workflow
+   * This is a temporary service to help us confirm we are selecting the correct data to use when creating a
+   * supplementary bill run. Its primary aim is to meet the acceptance criteria defined in WATER-3787.
    *
-   * @param {string} naldRegionId The NALD region ID (a number between 1 to 9, 9 being the test region) for the region
-   * to find
+   * @param {Objecy} region Instance of `RegionModel` for the selected region
    *
    * @returns {Object[]} Array of matching `LicenceModel`
    */
