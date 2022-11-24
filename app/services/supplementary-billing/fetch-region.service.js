@@ -5,7 +5,7 @@
  * @module FetchRegionService
  */
 
-const { db } = require('../../../db/db.js')
+const RegionModel = require('../../models/region.model.js')
 
 class FetchRegionService {
   /**
@@ -26,12 +26,8 @@ class FetchRegionService {
   }
 
   static async _fetch (naldRegionId) {
-    const result = await db
-      .select('region_id')
-      .from('water.regions')
-      .where({
-        nald_region_id: naldRegionId
-      })
+    const result = await RegionModel.query()
+      .where('nald_region_id', naldRegionId)
       .first()
 
     return result
