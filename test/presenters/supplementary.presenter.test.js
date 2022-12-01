@@ -19,6 +19,9 @@ describe('Supplementary presenter', () => {
         billingPeriods: [
           { startDate: new Date(2022, 3, 1), endDate: new Date(2023, 2, 31) }
         ],
+        licences: [
+          { licenceId: '0000579f-0f8f-4e21-b63a-063384ad32c8', licenceRef: 'AT/SROC/SUPB/01' }
+        ],
         chargeVersions: [
           {
             chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
@@ -60,6 +63,7 @@ describe('Supplementary presenter', () => {
     beforeEach(() => {
       data = {
         billingPeriods: [],
+        licences: [],
         chargeVersions: []
       }
     })

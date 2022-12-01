@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
 
-describe('BillingPeriod service', () => {
+describe('Billing Period service', () => {
   afterEach(() => {
     Sinon.restore()
   })

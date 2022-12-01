@@ -15,7 +15,7 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 // Thing under test
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 
-describe('FetchChargeVersions service', () => {
+describe('Fetch Charge Versions service', () => {
   const { region_id: regionId } = LicenceHelper.defaults()
   let testRecords
 
