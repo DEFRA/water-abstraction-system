@@ -21,7 +21,6 @@ exports.up = async function (knex) {
       table.integer('net_total')
       table.integer('bill_run_number')
       table.string('source')
-      // TODO: Not sure if I should be using decimal. The type in PostGres is numeric but the values look like bigInts. Can't see any decimals
       table.decimal('invoice_value')
       table.decimal('credit_note_value')
       table.string('transaction_file_reference')
