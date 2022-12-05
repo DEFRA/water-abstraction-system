@@ -23,6 +23,14 @@ class RegionModel extends BaseModel {
           from: 'water.regions.region_id',
           to: 'water.licences.region_id'
         }
+      },
+      billing_batches: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'billing_batch.model',
+        join: {
+          from: 'water.regions.region_id',
+          to: 'water.billing_batches.region_id'
+        }
       }
     }
   }
