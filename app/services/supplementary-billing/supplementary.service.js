@@ -16,7 +16,7 @@ class SupplementaryService {
     const region = await FetchRegionService.go(naldRegionId)
     const billingPeriods = BillingPeriodService.go()
     const licences = await FetchLicencesService.go(region)
-    const chargeVersions = await FetchChargeVersionsService.go(region.regionId)
+    const chargeVersions = await FetchChargeVersionsService.go(region.regionId, billingPeriods[0])
 
     return this._response({ billingPeriods, licences, chargeVersions })
   }
