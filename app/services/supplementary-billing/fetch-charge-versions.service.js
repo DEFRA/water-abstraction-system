@@ -8,6 +8,18 @@
 const { db } = require('../../../db/db.js')
 
 class FetchChargeVersionsService {
+  /**
+   * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
+   * billed
+   *
+   * > This is not the final form of the service. It is a 'work in progress' as we implement tickets that gradually
+   * > build up our understanding of SROC supplementary billing
+   *
+   * @param {string} regionId GUID of the region which the licences will be linked to
+   * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+   *
+   * @returns an array of Objects containing the relevant charge versions
+   */
   static async go (regionId, billingPeriod) {
     const chargeVersions = await this._fetch(regionId, billingPeriod)
 
