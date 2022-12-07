@@ -17,7 +17,7 @@ class RegionModel extends BaseModel {
   static get relationMappings () {
     return {
       licences: {
-        relation: Model.BelongsToOneRelation,
+        relation: Model.HasManyRelation,
         modelClass: 'licence.model',
         join: {
           from: 'water.regions.region_id',
