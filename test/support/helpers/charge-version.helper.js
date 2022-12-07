@@ -49,7 +49,8 @@ class ChargeVersionHelper {
   static defaults (data = {}) {
     const defaults = {
       licence_ref: '01/123',
-      scheme: 'sroc'
+      scheme: 'sroc',
+      start_date: new Date('2022-04-01')
     }
 
     return {

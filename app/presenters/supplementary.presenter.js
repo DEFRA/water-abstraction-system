@@ -27,6 +27,7 @@ class SupplementaryPresenter {
         licenceRef: chargeVersion.licenceRef,
         licenceId: chargeVersion.licenceId,
         scheme: chargeVersion.scheme,
+        startDate: chargeVersion.startDate,
         endDate: chargeVersion.endDate
       }
     })

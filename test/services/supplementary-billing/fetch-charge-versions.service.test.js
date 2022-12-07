@@ -18,6 +18,7 @@ const FetchChargeVersionsService = require('../../../app/services/supplementary-
 describe('Fetch Charge Versions service', () => {
   const { region_id: regionId } = LicenceHelper.defaults()
   let testRecords
+  let billingPeriod
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -25,6 +26,11 @@ describe('Fetch Charge Versions service', () => {
 
   describe('when there are licences to be included in supplementary billing', () => {
     beforeEach(async () => {
+      billingPeriod = {
+        startDate: new Date('2022-04-01'),
+        endDate: new Date('2023-03-31')
+      }
+
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       const srocChargeVersion = await ChargeVersionHelper.add(
         {},
@@ -41,7 +47,7 @@ describe('Fetch Charge Versions service', () => {
     })
 
     it('returns only the current SROC charge versions that are applicable', async () => {
-      const result = await FetchChargeVersionsService.go(regionId)
+      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       expect(result.length).to.equal(1)
       expect(result[0].charge_version_id).to.equal(testRecords[0].charge_version_id)
@@ -51,6 +57,11 @@ describe('Fetch Charge Versions service', () => {
   describe('when there are no licences to be included in supplementary billing', () => {
     describe("because none of them are marked 'include_in_supplementary_billing'", () => {
       beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
         // This creates an SROC charge version linked to a licence. But the licence won't be marked for supplementary
         // billing
         const srocChargeVersion = await ChargeVersionHelper.add()
@@ -58,7 +69,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result.length).to.equal(0)
       })
@@ -66,6 +77,11 @@ describe('Fetch Charge Versions service', () => {
 
     describe("because all the applicable charge versions are 'alcs' (presroc)", () => {
       beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
         // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
         const alcsChargeVersion = await ChargeVersionHelper.add(
           { scheme: 'alcs' },
@@ -75,31 +91,67 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result.length).to.equal(0)
       })
     })
 
-    describe('because there are no current charge versions (they all have end dates)', () => {
-      beforeEach(async () => {
-        // This creates an SROC charge version with an end date linked to a licence marked for supplementary billing
-        const alcsChargeVersion = await ChargeVersionHelper.add(
-          { end_date: new Date(2022, 2, 1) }, // 2022-03-01 - Months are zero indexed :-)
-          { include_in_supplementary_billing: 'yes' }
-        )
-        testRecords = [alcsChargeVersion]
+    describe('because there are no current charge versions', () => {
+      describe('as they all have start dates before the billing period', () => {
+        beforeEach(async () => {
+          billingPeriod = {
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2023-03-31')
+          }
+
+          // This creates an SROC charge version with a start date before the billing period. This would have been
+          // picked up by a previous bill run
+          const alcsChargeVersion = await ChargeVersionHelper.add(
+            { start_date: new Date(2022, 2, 31) }, // 2022-03-01 - Months are zero indexed :-)
+            { include_in_supplementary_billing: 'yes' }
+          )
+          testRecords = [alcsChargeVersion]
+        })
+
+        it('returns no applicable charge versions', async () => {
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+          expect(result.length).to.equal(0)
+        })
       })
 
-      it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId)
+      describe('as they all have start dates after the billing period', () => {
+        beforeEach(async () => {
+          billingPeriod = {
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2023-03-31')
+          }
 
-        expect(result.length).to.equal(0)
+          // This creates an SROC charge version with a start date after the billing period. This will be picked in
+          // next years bill runs
+          const alcsChargeVersion = await ChargeVersionHelper.add(
+            { start_date: new Date(2023, 3, 1) }, // 2023-04-01 - Months are zero indexed :-)
+            { include_in_supplementary_billing: 'yes' }
+          )
+          testRecords = [alcsChargeVersion]
+        })
+
+        it('returns no applicable charge versions', async () => {
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+          expect(result.length).to.equal(0)
+        })
       })
     })
 
     describe('because there are no licences linked to the selected region', () => {
       beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
         // This creates an SROC charge version linked to a licence with an different region than selected
         const otherRegionChargeVersion = await ChargeVersionHelper.add(
           {},
@@ -112,7 +164,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result.length).to.equal(0)
       })

@@ -10,6 +10,9 @@ const Proxyquire = require('proxyquire')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const servicesConfig = require('../../config/services.config.js')
+
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/service_status.service')`. But to control how
 // `child_process.exec()` behaves in the service, after it's been promisfied we have to use proxyquire.
@@ -19,7 +22,7 @@ describe('Service Status service', () => {
   beforeEach(() => {
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    Nock('http://localhost:8020')
+    Nock(servicesConfig.chargingModule.url)
       .get('/status')
       .reply(200, { status: 'alive' },
         [
@@ -28,15 +31,15 @@ describe('Service Status service', () => {
         ]
       )
 
-    Nock('http://localhost:8012').get('/health/info').reply(200, { version: '8.0.12', commit: '83d0e8c' })
-    Nock('http://localhost:8011').get('/health/info').reply(200, { version: '8.0.11', commit: 'a7030dc' })
-    Nock('http://localhost:8007').get('/health/info').reply(200, { version: '8.0.7', commit: 'a181fb1' })
-    Nock('http://localhost:8002').get('/health/info').reply(200, { version: '8.0.2', commit: '58bd0c1' })
-    Nock('http://localhost:8000').get('/health/info').reply(200, { version: '8.0.0', commit: 'f154e3f' })
-    Nock('http://localhost:8008').get('/health/info').reply(200, { version: '8.0.8', commit: 'f154e3f' })
-    Nock('http://localhost:8003').get('/health/info').reply(200, { version: '8.0.3', commit: '2ddff3c' })
-    Nock('http://localhost:8004').get('/health/info').reply(200, { version: '8.0.4', commit: '09d5261' })
-    Nock('http://localhost:8006').get('/health/info').reply(200, { version: '8.0.6', commit: 'b181625' })
+    Nock(servicesConfig.serviceBackground.url).get('/health/info').reply(200, { version: '8.0.12', commit: '83d0e8c' })
+    Nock(servicesConfig.reporting.url).get('/health/info').reply(200, { version: '8.0.11', commit: 'a7030dc' })
+    Nock(servicesConfig.import.url).get('/health/info').reply(200, { version: '8.0.7', commit: 'a181fb1' })
+    Nock(servicesConfig.tacticalCrm.url).get('/health/info').reply(200, { version: '8.0.2', commit: '58bd0c1' })
+    Nock(servicesConfig.externalUi.url).get('/health/info').reply(200, { version: '8.0.0', commit: 'f154e3f' })
+    Nock(servicesConfig.internalUi.url).get('/health/info').reply(200, { version: '8.0.8', commit: 'f154e3f' })
+    Nock(servicesConfig.tacticalIdm.url).get('/health/info').reply(200, { version: '8.0.3', commit: '2ddff3c' })
+    Nock(servicesConfig.permitRepository.url).get('/health/info').reply(200, { version: '8.0.4', commit: '09d5261' })
+    Nock(servicesConfig.returns.url).get('/health/info').reply(200, { version: '8.0.6', commit: 'b181625' })
   })
 
   afterEach(() => {
@@ -47,8 +50,8 @@ describe('Service Status service', () => {
   describe('when all the services are running', () => {
     beforeEach(async () => {
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
-      Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
-      Nock('http://localhost:8001').get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
+      Nock(servicesConfig.addressFacade.url).get('/address-service/hola').reply(200, 'hey there')
+      Nock(servicesConfig.serviceForeground.url).get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the class under test.
@@ -87,8 +90,8 @@ describe('Service Status service', () => {
   describe('when a service we check via the shell', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      Nock('http://localhost:8009').get('/address-service/hola').reply(200, 'hey there')
-      Nock('http://localhost:8001').get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
+      Nock(servicesConfig.addressFacade.url).get('/address-service/hola').reply(200, 'hey there')
+      Nock(servicesConfig.serviceForeground.url).get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
     })
 
     describe('is not running', () => {
@@ -176,8 +179,8 @@ describe('Service Status service', () => {
 
     describe('cannot be reached because of a network error', () => {
       beforeEach(async () => {
-        Nock('http://localhost:8009').get('/address-service/hola').replyWithError({ code: 'ECONNRESET' })
-        Nock('http://localhost:8001').get('/health/info').replyWithError({ code: 'ECONNRESET' })
+        Nock(servicesConfig.addressFacade.url).get('/address-service/hola').replyWithError({ code: 'ECONNRESET' })
+        Nock(servicesConfig.serviceForeground.url).get('/health/info').replyWithError({ code: 'ECONNRESET' })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -195,8 +198,8 @@ describe('Service Status service', () => {
 
     describe('returns a 5xx response', () => {
       beforeEach(async () => {
-        Nock('http://localhost:8009').get('/address-service/hola').reply(500, 'Kaboom')
-        Nock('http://localhost:8001').get('/health/info').reply(500, 'Kaboom')
+        Nock(servicesConfig.addressFacade.url).get('/address-service/hola').reply(500, 'Kaboom')
+        Nock(servicesConfig.serviceForeground.url).get('/health/info').reply(500, 'Kaboom')
       })
 
       it('handles the error and still returns a result for the other services', async () => {
