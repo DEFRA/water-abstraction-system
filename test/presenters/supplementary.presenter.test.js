@@ -26,6 +26,7 @@ describe('Supplementary presenter', () => {
           {
             chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
             scheme: 'sroc',
+            startDate: new Date('2022-04-01'),
             endDate: null,
             licenceRef: 'AT/SROC/SUPB/01',
             licenceId: '0000579f-0f8f-4e21-b63a-063384ad32c8'
@@ -33,6 +34,7 @@ describe('Supplementary presenter', () => {
           {
             chargeVersionId: '732fde85-fd3b-44e8-811f-8e6f4eb8cf6f',
             scheme: 'sroc',
+            startDate: new Date('2022-04-01'),
             endDate: null,
             licenceRef: 'AT/SROC/SUPB/01',
             licenceId: '0000579f-0f8f-4e21-b63a-063384ad32c8'
