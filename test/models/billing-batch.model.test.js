@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const BillingBatch = require('../../app/models/billing_batch.model.js')
+const BillingBatch = require('../../app/models/billing-batch.model.js')
 
 describe('Billing Batch model', () => {
   it('returns data', async () => {
