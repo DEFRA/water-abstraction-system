@@ -16,7 +16,7 @@ class ChargeVersionModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      licences: {
+      licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
         join: {
