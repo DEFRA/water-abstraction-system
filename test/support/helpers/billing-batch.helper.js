@@ -17,8 +17,6 @@ class BillingBatchHelper {
    * - `from_financial_year_ending` - 2023
    * - `to_financial_year_ending` - 2023
    * - `status` - processing
-   * - `bill_run_number` - 99999
-   * - `source` - wrls
    * - `scheme` - sroc
    *
    * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
