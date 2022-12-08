@@ -1,32 +1,23 @@
 'use strict'
 
 /**
+ * Creates a billing batch based on the regionId & billing period provided
  * @module CreateBillingBatchService
  */
 
-const { db } = require('../../../db/db.js')
+const BillingBatchModel = require('../../models/billing-batch.model.js')
 
 class CreateBillingBatchService {
   /**
-   * Add a new billing batch
+   * Create a new billing batch
    *
-   * If no `data` is provided, default values will be used. These are
+   * @param {Object} [regionId] The region_id for the selected region
+   * @param {Object} [billingPeriod] The billing period in the format { startDate: 2022-04-01, endDate: 2023-03-31 }
    *
-   * - `region_id` - bd114474-790f-4470-8ba4-7b0cc9c225d7
-   * - `batch_type` - supplementary
-   * - `from_financial_year_ending` - 2023
-   * - `to_financial_year_ending` - 2023
-   * - `status` - processing
-   * - `bill_run_number` - 99999
-   * - `source` - wrls
-   * - `scheme` - sroc
-   *
-   * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
-   *
-   * @returns {string} The ID of the newly created record
+   * @returns {Object} The newly created billing batch record
    */
   static async go (regionId, billingPeriod) {
-    const billingBatchId = await db.table('water.billing_batches')
+    const billingBatch = await BillingBatchModel.query()
       .insert({
         region_id: regionId,
         batch_type: 'supplementary',
@@ -35,9 +26,9 @@ class CreateBillingBatchService {
         status: 'processing',
         scheme: 'sroc'
       })
-      .returning('billing_batch_id')
+      .returning('*')
 
-    return billingBatchId
+    return billingBatch
   }
 }
 
