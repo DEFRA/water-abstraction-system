@@ -28,7 +28,11 @@ class ChargeVersionHelper {
    * @returns {string} The ID of the newly created record
    */
   static async add (data = {}, licence = {}) {
-    const licenceId = await this._addLicence(licence)
+    let licenceId = licence?.licenceId
+    if (!licenceId) {
+      licenceId = await this._addLicence(licence)
+    }
+
     const insertData = this.defaults({ ...data, licence_id: licenceId })
 
     const result = await db.table('water.charge_versions')
