@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for water.licences
+ * Model for water.billing_batches
  * @module BillingBatchModel
  */
 
