@@ -9,7 +9,6 @@ const BillingPeriodService = require('./billing-period.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
 const FetchRegionService = require('./fetch-region.service.js')
-const CreateBillingBatchService = require('./create-billing-batch.service')
 const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
 
 /**
@@ -27,9 +26,6 @@ class SupplementaryService {
     // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
     // This is why we are only passing through the first billing period; we know there is only one!
     const chargeVersions = await FetchChargeVersionsService.go(region.regionId, billingPeriods[0])
-
-    const billingBatch = await CreateBillingBatchService.go(region.regionId, billingPeriods[0])
-    console.log(billingBatch)
 
     return this._response({ billingPeriods, licences, chargeVersions })
   }
