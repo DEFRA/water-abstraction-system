@@ -11,9 +11,20 @@ const { expect } = Code
 const BillingBatch = require('../../app/models/billing-batch.model.js')
 
 describe('Billing Batch model', () => {
-  it('returns data', async () => {
+  it('can successfully run a query', async () => {
     const query = await BillingBatch.query()
 
     expect(query).to.exist()
+  })
+
+  describe('Relationships', () => {
+    describe('when linking to region', () => {
+      it('can successfully run a query', async () => {
+        const query = await BillingBatch.query()
+          .innerJoinRelated('region')
+
+        expect(query).to.exist()
+      })
+    })
   })
 })
