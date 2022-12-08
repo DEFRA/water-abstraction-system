@@ -34,7 +34,7 @@ describe('Fetch Licences service', () => {
           await ChargeVersionHelper.add({}, testRecords[0])
         })
 
-        it.only('returns results', async () => {
+        it('returns results', async () => {
           const result = await FetchLicencesService.go(region)
 
           expect(result.length).to.equal(1)
