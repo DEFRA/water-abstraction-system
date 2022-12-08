@@ -26,8 +26,10 @@ class FetchLicencesService {
 
   static async _fetch (region) {
     const result = await LicenceModel.query()
+      .innerJoinRelated('chargeVersions')
       .where('region_id', region.regionId)
       .where('include_in_supplementary_billing', 'yes')
+      .where('chargeVersions.scheme', 'sroc')
 
     return result
   }

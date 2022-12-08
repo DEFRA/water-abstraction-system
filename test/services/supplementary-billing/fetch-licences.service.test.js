@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
@@ -28,11 +29,25 @@ describe('Fetch Licences service', () => {
         testRecords = await LicenceHelper.add({ include_in_supplementary_billing: 'yes' })
       })
 
-      it('returns results', async () => {
-        const result = await FetchLicencesService.go(region)
+      describe('and that have an SROC charge version', () => {
+        beforeEach(async () => {
+          await ChargeVersionHelper.add({}, testRecords[0])
+        })
 
-        expect(result.length).to.equal(1)
-        expect(result[0].licenceId).to.equal(testRecords[0].licenceId)
+        it('returns results', async () => {
+          const result = await FetchLicencesService.go(region)
+
+          expect(result.length).to.equal(1)
+          expect(result[0].licenceId).to.equal(testRecords[0].licenceId)
+        })
+      })
+
+      describe('but do not have an SROC charge version', () => {
+        it('returns no results', async () => {
+          const result = await FetchLicencesService.go(region)
+
+          expect(result.length).to.equal(0)
+        })
       })
     })
 
