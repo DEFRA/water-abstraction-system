@@ -50,8 +50,6 @@ class BillingBatchHelper {
       from_financial_year_ending: 2023,
       to_financial_year_ending: 2023,
       status: 'processing',
-      bill_run_number: 99999,
-      source: 'wrls',
       scheme: 'sroc'
     }
 

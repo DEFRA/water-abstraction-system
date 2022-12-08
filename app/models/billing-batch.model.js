@@ -16,7 +16,7 @@ class BillingBatchModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      regions: {
+      region: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'region.model',
         join: {
