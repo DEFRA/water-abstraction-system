@@ -11,12 +11,12 @@ const BaseModel = require('./base.model.js')
 
 class ChargeVersionModel extends BaseModel {
   static get tableName () {
-    return 'water.chargeVersions'
+    return 'water.charge_versions'
   }
 
   static get relationMappings () {
     return {
-      licences: {
+      licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
         join: {

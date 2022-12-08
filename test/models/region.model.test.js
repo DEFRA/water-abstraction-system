@@ -11,9 +11,20 @@ const { expect } = Code
 const Region = require('../../app/models/region.model.js')
 
 describe('Region model', () => {
-  it('returns data', async () => {
-    const query = await Region.query()
+  it('can successfully run a query', async () => {
+    const result = await Region.query()
 
-    expect(query).to.exist()
+    expect(result).to.exist()
+  })
+
+  describe('Relationships', () => {
+    describe('when linking to licences', () => {
+      it('can successfully run a query', async () => {
+        const result = await Region.query()
+          .innerJoinRelated('licences')
+
+        expect(result).to.exist()
+      })
+    })
   })
 })
