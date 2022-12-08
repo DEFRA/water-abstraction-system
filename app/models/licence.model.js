@@ -24,7 +24,7 @@ class LicenceModel extends BaseModel {
           to: 'water.charge_versions.licence_id'
         }
       },
-      regions: {
+      region: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'region.model',
         join: {

@@ -11,9 +11,20 @@ const { expect } = Code
 const ChargeVersion = require('../../app/models/charge-version.model.js')
 
 describe('ChargeVersion model', () => {
-  it('returns data', async () => {
+  it('can successfully run a query', async () => {
     const query = await ChargeVersion.query()
 
     expect(query).to.exist()
+  })
+
+  describe('Relationships', () => {
+    describe('when linking to charge versions', () => {
+      it('can successfully run a query', async () => {
+        const query = await ChargeVersion.query()
+          .innerJoinRelated('licence')
+
+        expect(query).to.exist()
+      })
+    })
   })
 })
