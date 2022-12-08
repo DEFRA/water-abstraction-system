@@ -36,8 +36,8 @@ class FetchChargeVersionsService {
         'lic.include_in_supplementary_billing': 'yes',
         'lic.region_id': regionId
       })
-      .andWhere('start_date', '>=', billingPeriod.startDate)
-      .andWhere('start_date', '<=', billingPeriod.endDate)
+      .andWhere('chv.start_date', '>=', billingPeriod.startDate)
+      .andWhere('chv.start_date', '<=', billingPeriod.endDate)
 
     return chargeVersions
   }
