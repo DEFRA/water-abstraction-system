@@ -21,14 +21,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/hello-world',
-    handler: RootController.helloWorld,
-    options: {
-      auth: false
-    }
-  },
-  {
-    method: 'GET',
     path: '/service-status',
     handler: RootController.serviceStatus,
     options: {

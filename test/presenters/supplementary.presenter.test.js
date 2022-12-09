@@ -44,8 +44,7 @@ describe('Supplementary presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const presenter = new SupplementaryPresenter(data)
-      const result = presenter.go()
+      const result = SupplementaryPresenter.go(data)
 
       expect(result.billingPeriods).to.have.length(1)
       expect(result.billingPeriods[0]).to.equal(data.billingPeriods[0])
@@ -71,8 +70,7 @@ describe('Supplementary presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const presenter = new SupplementaryPresenter(data)
-      const result = presenter.go()
+      const result = SupplementaryPresenter.go(data)
 
       expect(result.billingPeriods).to.be.empty()
       expect(result.licences).to.be.empty()
