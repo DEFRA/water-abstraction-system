@@ -14,7 +14,7 @@ class FetchLicencesService {
    * This is a temporary service to help us confirm we are selecting the correct data to use when creating a
    * supplementary bill run. Its primary aim is to meet the acceptance criteria defined in WATER-3787.
    *
-   * @param {Objecy} region Instance of `RegionModel` for the selected region
+   * @param {Object} region Instance of `RegionModel` for the selected region
    *
    * @returns {Object[]} Array of matching `LicenceModel`
    */
