@@ -1,18 +1,22 @@
 'use strict'
 
 /**
- * @module LicenceHelper
+ * @module BillingBatchHelper
  */
 
 const { db } = require('../../../db/db.js')
 
 /**
- * Add a new licence
+ * Add a new billing batch
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licence_ref` - 01/123
  * - `region_id` - bd114474-790f-4470-8ba4-7b0cc9c225d7
+ * - `batch_type` - supplementary
+ * - `from_financial_year_ending` - 2023
+ * - `to_financial_year_ending` - 2023
+ * - `status` - processing
+ * - `scheme` - sroc
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -21,15 +25,15 @@ const { db } = require('../../../db/db.js')
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  const result = await db.table('water.licences')
+  const result = await db.table('water.billing_batches')
     .insert(insertData)
-    .returning('licence_id')
+    .returning('billing_batch_id')
 
   return result
 }
 
 /**
- * Returns the defaults used when creating a new licence
+ * Returns the defaults used when creating a new billing batch
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -38,8 +42,12 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    licence_ref: '01/123',
-    region_id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7'
+    region_id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7',
+    batch_type: 'supplementary',
+    from_financial_year_ending: 2023,
+    to_financial_year_ending: 2023,
+    status: 'processing',
+    scheme: 'sroc'
   }
 
   return {
@@ -49,6 +57,5 @@ function defaults (data = {}) {
 }
 
 module.exports = {
-  add,
-  defaults
+  add
 }

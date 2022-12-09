@@ -54,11 +54,11 @@ describe('Service Status service', () => {
       Nock(servicesConfig.serviceForeground.url).get('/health/info').reply(200, { version: '8.0.1', commit: '83d0e8c' })
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
-      // `child-process.exec()` behaves in the class under test.
+      // `child-process.exec()` behaves in the module under test.
       // We create an anonymous stub, which responds differently depending on which service is being checked. We then
       // stub the util library's `promisify()` method and tell it to calll our anonymous stub when invoked. The bit that
       // makes all this work is the fact we use Proxyquire to load our stubbed util instead of the real one when we load
-      // our class under test
+      // our module under test
       const execStub = Sinon
         .stub()
         .withArgs('clamdscan --version')
