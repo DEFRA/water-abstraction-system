@@ -31,9 +31,7 @@ class SupplementaryService {
   }
 
   static _response (data) {
-    const presenter = new SupplementaryPresenter(data)
-
-    return presenter.go()
+    return SupplementaryPresenter.go(data)
   }
 }
 
