@@ -13,7 +13,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const CreateEventService = require('../../../app/services/supplementary-billing/create-event.service.js')
 
-describe.only('Create Event service', () => {
+describe('Create Event service', () => {
   const type = 'billing-batch'
   const subtype = 'supplementary'
   const issuer = 'test.user@defra.gov.uk'
