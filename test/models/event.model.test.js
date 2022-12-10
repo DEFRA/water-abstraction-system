@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const Event = require('../../app/models/event.model')
+const Event = require('../../app/models/event.model.js')
 
 describe('Event model', () => {
   it('can successfully run a query', async () => {
