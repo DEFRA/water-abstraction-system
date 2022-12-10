@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates an event based on the type, subtype, issuer, licences, metadata & status provided
+ * Creates an event based on the type, subtype, issuer, metadata & status provided
  * @module CreateEventService
  */
 
