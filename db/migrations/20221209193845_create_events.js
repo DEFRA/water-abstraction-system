@@ -14,7 +14,6 @@ exports.up = async function (knex) {
       table.string('type')
       table.string('subtype')
       table.string('issuer')
-      table.jsonb('licences')
       table.jsonb('metadata')
       table.string('status')
 

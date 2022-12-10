@@ -14,7 +14,6 @@ const { db } = require('../../../db/db.js')
  * - `type` - billing-batch
  * - `subtype` - supplementary
  * - `issuer` - test.user@defra.gov.uk
- * - `licences` - []
  * - `metadata` - {}
  * - `status` - start
  *
@@ -45,8 +44,16 @@ function defaults (data = {}) {
     type: 'billing-batch',
     subtype: 'supplementary',
     issuer: 'test.user@defra.gov.uk',
-    licences: [],
-    metadata: {},
+    metadata: {
+      batch: {
+        id: '744c307f-904f-43c4-9458-24f062381d02',
+        type: 'supplementary',
+        region: {
+          id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7'
+        },
+        scheme: 'sroc'
+      }
+    },
     status: 'start'
   }
 
