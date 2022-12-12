@@ -41,11 +41,25 @@ function _requestAgent (url) {
 
   if (urlObject.protocol === 'https:') {
     console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpsProxy', requestConfig.httpProxy)
-    return new HttpsProxyAgent({ proxy: requestConfig.httpProxy })
+    return new HttpsProxyAgent({
+      keepAlive: true,
+      keepAliveMsecs: 1000,
+      maxSockets: 256,
+      maxFreeSockets: 256,
+      scheduling: 'lifo',
+      proxy: requestConfig.httpProxy
+    })
   }
 
   console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpProxy', requestConfig.httpProxy)
-  return new HttpProxyAgent({ proxy: requestConfig.httpProxy })
+  return new HttpProxyAgent({
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 256,
+    maxFreeSockets: 256,
+    scheduling: 'lifo',
+    proxy: requestConfig.httpProx
+  })
 }
 
 function _requestOptions (url) {
