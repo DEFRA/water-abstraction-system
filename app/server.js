@@ -14,14 +14,13 @@ const StopPlugin = require('./plugins/stop.plugin.js')
 const ViewsPlugin = require('./plugins/views.plugin.js')
 
 const ServerConfig = require('../config/server.config.js')
-const LogConfig = require('../config/log.config.js')
 
 const registerPlugins = async (server) => {
   // Register the remaining plugins
   await server.register(StopPlugin)
   await server.register(require('@hapi/inert'))
   await server.register(RouterPlugin)
-  await server.register(HapiPinoPlugin(LogConfig.logInTest))
+  await server.register(HapiPinoPlugin())
   await server.register(AirbrakePlugin)
   await server.register(ErrorPagesPlugin)
   await server.register(RequestNotifierPlugin)
