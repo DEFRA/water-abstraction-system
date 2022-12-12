@@ -42,6 +42,20 @@ describe('Fetch Licences service', () => {
         })
       })
 
+      describe('and that have multiple SROC charge versions', () => {
+        beforeEach(async () => {
+          await ChargeVersionHelper.add({}, testRecords[0])
+          await ChargeVersionHelper.add({}, testRecords[0])
+        })
+
+        it('returns a licence only once in the results', async () => {
+          const result = await FetchLicencesService.go(region)
+
+          expect(result.length).to.equal(1)
+          expect(result[0].licenceId).to.equal(testRecords[0].licenceId)
+        })
+      })
+
       describe('but do not have an SROC charge version', () => {
         it('returns no results', async () => {
           const result = await FetchLicencesService.go(region)
