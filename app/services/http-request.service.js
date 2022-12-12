@@ -21,11 +21,15 @@ async function go (url) {
   }
 
   try {
-    result.response = await got.get(url, _requestOptions(url))
+    const options = _requestOptions(url)
+    console.log('🚀 ~ file: http-request.service.js:25 ~ go ~ options', options)
+
+    result.response = await got.get(url, options)
     // If the result is not 2xx or 3xx Got will mark the result as unsuccesful using the response object's `ok:`
     // property
     result.succeeded = result.response.ok
   } catch (error) {
+    console.log('🚀 ~ file: http-request.service.js:32 ~ go ~ error', error)
     result.response = error
   }
 
