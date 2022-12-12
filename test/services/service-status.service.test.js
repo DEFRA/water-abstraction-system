@@ -9,13 +9,16 @@ const Proxyquire = require('proxyquire')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const servicesConfig = require('../../config/services.config.js')
+
 // Things we need to stub
 const HttpRequestService = require('../../app/services/http_request.service')
 
 // Thing under test
-// Normally we'd set this to `= require('../../app/services/service_status.service')`. But to control how
+// Normally we'd set this to `= require('../../app/services/service-status.service')`. But to control how
 // `child_process.exec()` behaves in the service, after it's been promisfied we have to use proxyquire.
-let ServiceStatusService // = require('../../app/services/service_status.service')
+let ServiceStatusService // = require('../../app/services/service-status.service')
 
 describe('Service Status service', () => {
   const goodRequestResults = {
@@ -39,16 +42,36 @@ describe('Service Status service', () => {
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    httpRequestServiceStub.withArgs('http://localhost:8020/status').resolves(goodRequestResults.chargingModule)
-    httpRequestServiceStub.withArgs('http://localhost:8012/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8011/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8007/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8002/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8000/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8008/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8003/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8004/health/info').resolves(goodRequestResults.app)
-    httpRequestServiceStub.withArgs('http://localhost:8006/health/info').resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.chargingModule.url}/status`)
+      .resolves(goodRequestResults.chargingModule)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.serviceBackground.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.reporting.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.import.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.tacticalCrm.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.externalUi.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.internalUi.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.tacticalIdm.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.permitRepository.url}/health/info`)
+      .resolves(goodRequestResults.app)
+    httpRequestServiceStub
+      .withArgs(`${servicesConfig.returns.url}/health/info`)
+      .resolves(goodRequestResults.app)
   })
 
   afterEach(() => {
@@ -58,8 +81,12 @@ describe('Service Status service', () => {
   describe('when all the services are running', () => {
     beforeEach(async () => {
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
-      httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(goodRequestResults.addressFacade)
-      httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(goodRequestResults.app)
+      httpRequestServiceStub
+        .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+        .resolves(goodRequestResults.addressFacade)
+      httpRequestServiceStub
+        .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
+        .resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the module under test.
@@ -98,8 +125,12 @@ describe('Service Status service', () => {
   describe('when a service we check via the shell', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(goodRequestResults.addressFacade)
-      httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(goodRequestResults.app)
+      httpRequestServiceStub
+        .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+        .resolves(goodRequestResults.addressFacade)
+      httpRequestServiceStub
+        .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
+        .resolves(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -188,8 +219,12 @@ describe('Service Status service', () => {
     describe('cannot be reached because of a network error', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
-        httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(badResult)
-        httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(badResult)
+        httpRequestServiceStub
+          .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+          .resolves(badResult)
+        httpRequestServiceStub
+          .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
+          .resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -208,8 +243,12 @@ describe('Service Status service', () => {
     describe('returns a 5xx response', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: 'Kaboom' } }
-        httpRequestServiceStub.withArgs('http://localhost:8009/address-service/hola').resolves(badResult)
-        httpRequestServiceStub.withArgs('http://localhost:8001/health/info').resolves(badResult)
+        httpRequestServiceStub
+          .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+          .resolves(badResult)
+        httpRequestServiceStub
+          .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
+          .resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {

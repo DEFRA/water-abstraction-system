@@ -75,7 +75,7 @@ async function _getAddressFacadeData () {
     return result.response.body
   }
 
-  return this._parseFailedRequestResult(result)
+  return _parseFailedRequestResult(result)
 }
 
 async function _getChargingModuleData () {
@@ -86,7 +86,7 @@ async function _getChargingModuleData () {
     return result.response.headers['x-cma-docker-tag']
   }
 
-  return this._parseFailedRequestResult(result)
+  return _parseFailedRequestResult(result)
 }
 
 function _getImportJobsData () {
