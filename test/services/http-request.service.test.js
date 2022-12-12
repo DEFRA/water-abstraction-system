@@ -16,7 +16,7 @@ const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent')
 const requireConfig = require('../../config/request.config.js')
 
 // Thing under test
-const HttpRequestService = require('../../app/services/http_request.service.js')
+const HttpRequestService = require('../../app/services/http-request.service.js')
 
 describe('Service Status service', () => {
   const testDomain = 'https://example.com'

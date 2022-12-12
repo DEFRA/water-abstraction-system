@@ -13,7 +13,7 @@ const { expect } = Code
 const servicesConfig = require('../../config/services.config.js')
 
 // Things we need to stub
-const HttpRequestService = require('../../app/services/http_request.service')
+const HttpRequestService = require('../../app/services/http-request.service')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/service-status.service')`. But to control how

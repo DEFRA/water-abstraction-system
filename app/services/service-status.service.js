@@ -10,7 +10,7 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
-const HttpRequestService = require('./http_request.service.js')
+const HttpRequestService = require('./http-request.service.js')
 
 const servicesConfig = require('../../config/services.config.js')
 
