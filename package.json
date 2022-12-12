@@ -32,6 +32,7 @@
     "got": "^12.5.3",
     "govuk-frontend": "^4.4.0",
     "hapi-pino": "^11.0.1",
+    "joi": "^17.7.0",
     "knex": "^2.3.0",
     "nunjucks": "^3.2.3",
     "objection": "^3.0.1",
