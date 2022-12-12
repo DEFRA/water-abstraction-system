@@ -13,44 +13,24 @@
 const HapiPino = require('hapi-pino')
 
 const HapiPinoIgnoreRequestService = require('../services/plugins/hapi-pino-ignore-request.service.js')
+const HapiPinoLogInTestService = require('../services/plugins/hapi-pino-log-in-test.service.js')
 
-/**
- * Return test configuration options for the logger
- *
- * When we run our unit tests we don't want the output polluted by noise from the logger. So as a default we set the
- * configuration to tell hapi-pino to ignore all events.
- *
- * But there will be times when trying to diagnose an issue that we will want log output. So using an env var we can
- * override the default and tell hapi-pino to log everything as normal.
- *
- * In both cases using the
- * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax|spread operator} on
- * the returned value will allow it to be incorporated with our default hapi-pino options.
- */
-const testOptions = logInTest => {
-  if (process.env.NODE_ENV !== 'test' || logInTest) {
-    return {}
-  }
+const LogConfig = require('../../config/log.config.js')
 
-  return {
-    // Don't log requests etc
-    logEvents: false,
-    // Don't log anything tagged with DEBUG or info, for example, req.log(['INFO'], 'User is an admin')
-    ignoredEventTags: { log: ['DEBUG', 'INFO'], request: ['DEBUG', 'INFO'] }
-  }
-}
-
-const HapiPinoPlugin = logInTest => {
+const HapiPinoPlugin = () => {
   return {
     plugin: HapiPino,
     options: {
       // Include our test configuration
-      ...testOptions(logInTest),
+      ...HapiPinoLogInTestService.go(LogConfig.logInTest),
       // When not in the production environment we want a 'pretty' version of the JSON to make it easier to grok what has
       // happened
       transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
       // Redact Authorization headers, see https://getpino.io/#/docs/redaction
       redact: ['req.headers.authorization'],
+      // Adding this here means it will be passed to HapiPinoIgnoreRequestService.go() within the `options` arg when
+      // Hapi-pino uses the ignoreFunc property
+      logAssetRequests: LogConfig.logAssetRequests,
       // We want our logs to focus on the main requests and not become full of 'noise' from requests for /assets or
       // pings from the AWS load balancer to /status. We pass this function to hapi-pino to control what gets filtered
       // https://github.com/pinojs/hapi-pino#optionsignorefunc-options-request--boolean

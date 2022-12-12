@@ -5,8 +5,6 @@
  * @module HapiPinoIgnoreRequestService
  */
 
-const LogConfig = require('../../../config/log.config.js')
-
 /**
  * Returns true or false whether a request should be loged
  *
@@ -38,8 +36,8 @@ const LogConfig = require('../../../config/log.config.js')
  *
  * @returns {boolean} true if the request should be ignored, else false
  */
-function go (_options, request) {
-  const staticPaths = ['/', '/status']
+function go (options, request) {
+  const staticPaths = ['/', '/status', '/favicon.ico']
 
   // If request is a known path ignore it
   if (staticPaths.includes(request.path)) {
@@ -47,7 +45,7 @@ function go (_options, request) {
   }
 
   // If logging asset requests is disabled and the request is for an asset ignore it
-  if (!LogConfig.logAssetRequests && request.path.startsWith('/assets')) {
+  if (!options.logAssetRequests && request.path.startsWith('/assets')) {
     return true
   }
 
