@@ -21,8 +21,7 @@ async function go (url) {
   }
 
   try {
-    const options = _requestOptions(url)
-    console.log('🚀 ~ file: http-request.service.js:25 ~ go ~ options', options)
+    const options = _requestOptions()
 
     result.response = await got.get(url, options)
     // If the result is not 2xx or 3xx Got will mark the result as unsuccesful using the response object's `ok:`
@@ -36,39 +35,49 @@ async function go (url) {
   return result
 }
 
-function _requestAgent (url) {
-  const urlObject = new URL(url)
-  let agent
-
-  if (urlObject.protocol === 'https:') {
-    console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpsProxy', requestConfig.httpsProxy)
-    agent = new HttpsProxyAgent({
-      keepAlive: true,
-      keepAliveMsecs: 1000,
-      maxSockets: 256,
-      maxFreeSockets: 256,
-      scheduling: 'lifo',
-      proxy: requestConfig.httpsProxy
-    })
+function _requestAgent () {
+  const baseProxyOptions = {
+    maxFreeSockets: 256,
+    maxSockets: 256,
+    keepAlive: false
   }
 
-  console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpProxy', requestConfig.httpProxy)
-  agent = new HttpProxyAgent({
-    keepAlive: true,
-    keepAliveMsecs: 1000,
-    maxSockets: 256,
-    maxFreeSockets: 256,
-    scheduling: 'lifo',
-    proxy: requestConfig.httpProxy
+  const httpsProxyUrl = new URL(requestConfig.httpsProxy)
+  const https = new HttpsProxyAgent({
+    ...baseProxyOptions,
+    proxy: {
+      protocol: httpsProxyUrl.protocol,
+      hostname: httpsProxyUrl.hostname,
+      port: httpsProxyUrl.port,
+      username: null,
+      password: null,
+    }
   })
 
-  console.log('🚀 ~ file: http-request.service.js:65 ~ _requestAgent ~ agent', agent)
-  console.log('🚀 ~ file: http-request.service.js:66 ~ _requestAgent ~ agent.proxy', agent.proxy)
+  const httpProxyUrl = new URL(requestConfig.httpProxy)
+  const http = new HttpProxyAgent({
+    ...baseProxyOptions,
+    proxy: {
+      protocol: httpProxyUrl.protocol,
+      hostname: httpProxyUrl.hostname,
+      port: httpProxyUrl.port,
+      username: null,
+      password: null,
+    }
+  })
 
-  return agent
+  console.log('🚀 ~ file: http-request.service.js:70 ~ _requestAgents ~ https', https)
+  console.log('🚀 ~ file: http-request.service.js:71 ~ _requestAgents ~ https.proxy', https.proxy)
+  console.log('🚀 ~ file: http-request.service.js:72 ~ _requestAgents ~ http', http)
+  console.log('🚀 ~ file: http-request.service.js:73 ~ _requestAgents ~ http.proxy', http.proxy)
+
+  return {
+    http,
+    https
+  }
 }
 
-function _requestOptions (url) {
+function _requestOptions () {
   const options = {
     // If we don't have this setting Got will throw its own HTTPError unless the result is 2xx or 3xx. That makes it
     // harder to see what the status code was because it doesn't get set on the response object for errors.
@@ -85,9 +94,7 @@ function _requestOptions (url) {
   }
 
   if (requestConfig.httpProxy) {
-    options.agent = {
-      http: _requestAgent(url)
-    }
+    options.agent = _requestAgent()
   }
 
   return options
