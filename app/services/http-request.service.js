@@ -38,10 +38,11 @@ async function go (url) {
 
 function _requestAgent (url) {
   const urlObject = new URL(url)
+  let agent
 
   if (urlObject.protocol === 'https:') {
     console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpsProxy', requestConfig.httpsProxy)
-    return new HttpsProxyAgent({
+    agent = new HttpsProxyAgent({
       keepAlive: true,
       keepAliveMsecs: 1000,
       maxSockets: 256,
@@ -52,7 +53,7 @@ function _requestAgent (url) {
   }
 
   console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpProxy', requestConfig.httpProxy)
-  return new HttpProxyAgent({
+  agent = new HttpProxyAgent({
     keepAlive: true,
     keepAliveMsecs: 1000,
     maxSockets: 256,
@@ -60,6 +61,11 @@ function _requestAgent (url) {
     scheduling: 'lifo',
     proxy: requestConfig.httpProxy
   })
+
+  console.log('🚀 ~ file: http-request.service.js:65 ~ _requestAgent ~ agent', agent)
+  console.log('🚀 ~ file: http-request.service.js:66 ~ _requestAgent ~ agent.proxy', agent.proxy)
+
+  return agent
 }
 
 function _requestOptions (url) {
