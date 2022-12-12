@@ -58,7 +58,7 @@ function _requestAgent (url) {
     maxSockets: 256,
     maxFreeSockets: 256,
     scheduling: 'lifo',
-    proxy: requestConfig.httpProx
+    proxy: requestConfig.httpProxy
   })
 }
 
