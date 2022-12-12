@@ -26,8 +26,16 @@ async function go () {
   const redisConnectivityData = await _getRedisConnectivityData()
 
   const addressFacadeData = await _getAddressFacadeData()
-  const chargingModuleData = await _getChargingModuleData()
-  const appData = await _getAppData()
+  // const chargingModuleData = await _getChargingModuleData()
+  // const appData = await _getAppData()
+
+  return {
+    virusScannerData,
+    redisConnectivityData,
+    addressFacadeData,
+    chargingModuleData: {},
+    appData: {}
+  }
 
   return {
     virusScannerData,
