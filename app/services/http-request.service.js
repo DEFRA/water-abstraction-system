@@ -40,14 +40,14 @@ function _requestAgent (url) {
   const urlObject = new URL(url)
 
   if (urlObject.protocol === 'https:') {
-    console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpsProxy', requestConfig.httpProxy)
+    console.log('🚀 ~ file: http-request.service.js ~ _requestAgent ~ httpsProxy', requestConfig.httpsProxy)
     return new HttpsProxyAgent({
       keepAlive: true,
       keepAliveMsecs: 1000,
       maxSockets: 256,
       maxFreeSockets: 256,
       scheduling: 'lifo',
-      proxy: requestConfig.httpProxy
+      proxy: requestConfig.httpsProxy
     })
   }
 
