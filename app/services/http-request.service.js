@@ -95,24 +95,22 @@ function _requestOptions () {
       request: requestConfig.requestTimeout
     },
     agent: {
-      agent: {
-        http: new HttpProxyAgent({
-          keepAlive: true,
-          keepAliveMsecs: 1000,
-          maxSockets: 256,
-          maxFreeSockets: 256,
-          scheduling: 'lifo',
-          proxy: requestConfig.httpProxy
-        }),
-        https: new HttpsProxyAgent({
-          keepAlive: true,
-          keepAliveMsecs: 1000,
-          maxSockets: 256,
-          maxFreeSockets: 256,
-          scheduling: 'lifo',
-          proxy: requestConfig.httpsProxy
-        })
-      }
+      http: new HttpProxyAgent({
+        keepAlive: true,
+        keepAliveMsecs: 1000,
+        maxSockets: 256,
+        maxFreeSockets: 256,
+        scheduling: 'lifo',
+        proxy: requestConfig.httpProxy
+      }),
+      https: new HttpsProxyAgent({
+        keepAlive: true,
+        keepAliveMsecs: 1000,
+        maxSockets: 256,
+        maxFreeSockets: 256,
+        scheduling: 'lifo',
+        proxy: requestConfig.httpsProxy
+      })
     }
   }
 
