@@ -21,11 +21,7 @@ describe('Create Bill Run validator', () => {
 
       const result = await CreateBillRunValidator.go(validData)
 
-      expect(result).to.equal({
-        type: 'supplementary',
-        scheme: 'sroc',
-        previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
-      })
+      expect(result).to.equal(validData)
     })
 
     describe('which does not include `previousBillRunId`', () => {
@@ -37,10 +33,7 @@ describe('Create Bill Run validator', () => {
 
         const result = await CreateBillRunValidator.go(validData)
 
-        expect(result).to.equal({
-          type: 'supplementary',
-          scheme: 'sroc'
-        })
+        expect(result).to.equal(validData)
       })
     })
   })
