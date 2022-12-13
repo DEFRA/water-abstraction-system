@@ -22,6 +22,7 @@ async function go (url) {
 
   try {
     const options = _requestOptions()
+    console.log('🚀 ~ file: http-request.service.js:25 ~ go ~ options', options)
 
     result.response = await got.get(url, options)
     // If the result is not 2xx or 3xx Got will mark the result as unsuccesful using the response object's `ok:`
