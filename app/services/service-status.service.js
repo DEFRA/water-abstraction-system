@@ -81,20 +81,21 @@ async function _getAddressFacadeData () {
 async function _getChargingModuleData () {
   const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
   let result = await HttpRequestService.go(statusUrl.href)
-  console.log('🚀 ~ file: service-status.service.js:84 ~ _getChargingModuleData ~ result', result)
 
   let localResult
   if (result.succeeded) {
-    localResult = `local - ${result.response.headers['x-cma-docker-tag']}`
+    localResult = `local - ${result.response.headers['x-cma-docker-tag']} - ${servicesConfig.chargingModule.url}`
   } else {
+    console.log('🚀 ~ file: service-status.service.js:89 ~ _getChargingModuleData ~ result', result)
     localResult = _parseFailedRequestResult(result)
   }
 
   result = await HttpRequestService.go('https://cha-tra-agw.aws.defra.cloud/status')
   let externalResult
   if (result.succeeded) {
-    externalResult = `external - ${result.response.headers['x-cma-docker-tag']}`
+    externalResult = `external - ${result.response.headers['x-cma-docker-tag']} - https://cha-tra-agw.aws.defra.cloud/status`
   } else {
+    console.log('🚀 ~ file: service-status.service.js:98 ~ _getChargingModuleData ~ result', result)
     externalResult = _parseFailedRequestResult(result)
   }
 
