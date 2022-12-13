@@ -83,21 +83,22 @@ async function _getChargingModuleData () {
   let result = await HttpRequestService.go(statusUrl.href)
   console.log('🚀 ~ file: service-status.service.js:84 ~ _getChargingModuleData ~ result', result)
 
-  let finalResult = ''
+  let localResult
   if (result.succeeded) {
-    finalResult = `local - ${result.response.headers['x-cma-docker-tag']}`
-    // return result.response.headers['x-cma-docker-tag']
-
-    result = await HttpRequestService.go('https://cha-tra-agw.aws.defra.cloud/status')
-
-    if (result.succeeded) {
-      finalResult = `${finalResult} : external - ${result.response.headers['x-cma-docker-tag']}`
-    }
+    localResult = `local - ${result.response.headers['x-cma-docker-tag']}`
+  } else {
+    localResult = _parseFailedRequestResult(result)
   }
 
+  result = await HttpRequestService.go('https://cha-tra-agw.aws.defra.cloud/status')
+  let externalResult
+  if (result.succeeded) {
+    externalResult = `external - ${result.response.headers['x-cma-docker-tag']}`
+  } else {
+    externalResult = _parseFailedRequestResult(result)
+  }
 
-
-  return _parseFailedRequestResult(result)
+  return `${localResult} : ${externalResult}`
 }
 
 function _getImportJobsData () {
