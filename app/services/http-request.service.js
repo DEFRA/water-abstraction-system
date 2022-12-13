@@ -96,6 +96,7 @@ function _requestOptions () {
       request: requestConfig.requestTimeout
     },
     agent: {
+      http: new HttpProxyAgent({ proxy: requestConfig.httpProxy }),
       https: new HttpsProxyAgent({ proxy: requestConfig.httpsProxy })
     }
   }
