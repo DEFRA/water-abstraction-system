@@ -26,14 +26,14 @@ async function go () {
   const redisConnectivityData = await _getRedisConnectivityData()
 
   const addressFacadeData = await _getAddressFacadeData()
-  // const chargingModuleData = await _getChargingModuleData()
+  const chargingModuleData = await _getChargingModuleData()
   const appData = await _getAppData()
 
   return {
     virusScannerData,
     redisConnectivityData,
     addressFacadeData,
-    chargingModuleData: {},
+    chargingModuleData,
     appData
   }
 }
@@ -80,11 +80,21 @@ async function _getAddressFacadeData () {
 
 async function _getChargingModuleData () {
   const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
-  const result = await HttpRequestService.go(statusUrl.href)
+  let result = await HttpRequestService.go(statusUrl.href)
 
+  let finalResult = ''
   if (result.succeeded) {
-    return result.response.headers['x-cma-docker-tag']
+    finalResult = `local - ${result.response.headers['x-cma-docker-tag']}`
+    // return result.response.headers['x-cma-docker-tag']
+
+    result = await HttpRequestService.go('https://cha-tra-agw.aws.defra.cloud/status')
+
+    if (result.succeeded) {
+      finalResult = `${finalResult} : external - ${result.response.headers['x-cma-docker-tag']}`
+    }
   }
+
+
 
   return _parseFailedRequestResult(result)
 }
