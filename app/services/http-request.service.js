@@ -96,7 +96,7 @@ function _requestOptions () {
       request: requestConfig.requestTimeout
     },
     agent: {
-      https: new HttpsProxyAgent({
+      http: new HttpProxyAgent({
         keepAlive: true,
         keepAliveMsecs: 1000,
         maxSockets: 256,
