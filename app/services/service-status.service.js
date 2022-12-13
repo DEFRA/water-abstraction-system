@@ -81,6 +81,7 @@ async function _getAddressFacadeData () {
 async function _getChargingModuleData () {
   const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
   let result = await HttpRequestService.go(statusUrl.href)
+  console.log('🚀 ~ file: service-status.service.js:84 ~ _getChargingModuleData ~ result', result)
 
   let finalResult = ''
   if (result.succeeded) {
