@@ -80,26 +80,13 @@ async function _getAddressFacadeData () {
 
 async function _getChargingModuleData () {
   const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
-  let result = await HttpRequestService.go(statusUrl.href)
+  const result = await HttpRequestService.go(statusUrl.href)
 
-  let localResult
   if (result.succeeded) {
-    localResult = `local - ${result.response.headers['x-cma-docker-tag']} - ${servicesConfig.chargingModule.url}`
-  } else {
-    console.log('🚀 ~ file: service-status.service.js:89 ~ _getChargingModuleData ~ result', result)
-    localResult = _parseFailedRequestResult(result)
+    return result.response.headers['x-cma-docker-tag']
   }
 
-  result = await HttpRequestService.go('https://cha-tra-agw.aws.defra.cloud/status')
-  let externalResult
-  if (result.succeeded) {
-    externalResult = `external - ${result.response.headers['x-cma-docker-tag']} - https://cha-tra-agw.aws.defra.cloud/status`
-  } else {
-    console.log('🚀 ~ file: service-status.service.js:98 ~ _getChargingModuleData ~ result', result)
-    externalResult = _parseFailedRequestResult(result)
-  }
-
-  return `${localResult} : ${externalResult}`
+  return _parseFailedRequestResult(result)
 }
 
 function _getImportJobsData () {
@@ -118,8 +105,8 @@ function _getImportJobsData () {
 async function _getAppData () {
   const healthInfoPath = '/health/info'
   const services = [
-    { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) }
-    // { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) },
+    { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) },
+    { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) }
     // { name: 'Reporting', url: new URL(healthInfoPath, servicesConfig.reporting.url) }//,
     // { name: 'Import', url: new URL(healthInfoPath, servicesConfig.import.url) },
     // { name: 'Tactical CRM', url: new URL(healthInfoPath, servicesConfig.tacticalCrm.url) },
