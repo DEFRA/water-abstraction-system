@@ -36,49 +36,49 @@ async function go (url) {
   return result
 }
 
-function _requestAgent () {
-  const baseProxyOptions = {
-    maxFreeSockets: 256,
-    maxSockets: 256,
-    keepAlive: false
-  }
+// function _requestAgent () {
+//   const baseProxyOptions = {
+//     maxFreeSockets: 256,
+//     maxSockets: 256,
+//     keepAlive: false
+//   }
 
-  const httpsProxyUrl = new URL(requestConfig.httpsProxy)
-  const https = new HttpsProxyAgent({
-    ...baseProxyOptions,
-    proxy: {
-      protocol: httpsProxyUrl.protocol,
-      hostname: httpsProxyUrl.hostname,
-      port: httpsProxyUrl.port,
-      username: null,
-      password: null,
-    }
-  })
-  https.defaultPort = 3128
+//   const httpsProxyUrl = new URL(requestConfig.httpsProxy)
+//   const https = new HttpsProxyAgent({
+//     ...baseProxyOptions,
+//     proxy: {
+//       protocol: httpsProxyUrl.protocol,
+//       hostname: httpsProxyUrl.hostname,
+//       port: httpsProxyUrl.port,
+//       username: null,
+//       password: null,
+//     }
+//   })
+//   https.defaultPort = 3128
 
-  const httpProxyUrl = new URL(requestConfig.httpProxy)
-  const http = new HttpProxyAgent({
-    ...baseProxyOptions,
-    proxy: {
-      protocol: httpProxyUrl.protocol,
-      hostname: httpProxyUrl.hostname,
-      port: httpProxyUrl.port,
-      username: null,
-      password: null,
-    }
-  })
-  http.defaultPort = 3128
+//   const httpProxyUrl = new URL(requestConfig.httpProxy)
+//   const http = new HttpProxyAgent({
+//     ...baseProxyOptions,
+//     proxy: {
+//       protocol: httpProxyUrl.protocol,
+//       hostname: httpProxyUrl.hostname,
+//       port: httpProxyUrl.port,
+//       username: null,
+//       password: null,
+//     }
+//   })
+//   http.defaultPort = 3128
 
-  console.log('🚀 ~ file: http-request.service.js:70 ~ _requestAgents ~ https', https)
-  console.log('🚀 ~ file: http-request.service.js:71 ~ _requestAgents ~ https.proxy', https.proxy)
-  console.log('🚀 ~ file: http-request.service.js:72 ~ _requestAgents ~ http', http)
-  console.log('🚀 ~ file: http-request.service.js:73 ~ _requestAgents ~ http.proxy', http.proxy)
+//   console.log('🚀 ~ file: http-request.service.js:70 ~ _requestAgents ~ https', https)
+//   console.log('🚀 ~ file: http-request.service.js:71 ~ _requestAgents ~ https.proxy', https.proxy)
+//   console.log('🚀 ~ file: http-request.service.js:72 ~ _requestAgents ~ http', http)
+//   console.log('🚀 ~ file: http-request.service.js:73 ~ _requestAgents ~ http.proxy', http.proxy)
 
-  return {
-    http,
-    https
-  }
-}
+//   return {
+//     http,
+//     https
+//   }
+// }
 
 function _requestOptions () {
   const options = {
@@ -95,21 +95,13 @@ function _requestOptions () {
       request: requestConfig.requestTimeout
     },
     agent: {
-      http: new HttpProxyAgent({
-        keepAlive: true,
-        keepAliveMsecs: 1000,
-        maxSockets: 256,
-        maxFreeSockets: 256,
-        scheduling: 'lifo',
-        proxy: requestConfig.httpProxy
-      }),
       https: new HttpsProxyAgent({
         keepAlive: true,
         keepAliveMsecs: 1000,
         maxSockets: 256,
         maxFreeSockets: 256,
         scheduling: 'lifo',
-        proxy: requestConfig.httpsProxy
+        proxy: requestConfig.httpProxy
       })
     }
   }
