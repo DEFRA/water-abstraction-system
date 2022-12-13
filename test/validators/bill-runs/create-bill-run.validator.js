@@ -46,10 +46,46 @@ describe('Create Bill Run validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    it('returns a promise that rejects', async () => {
-      const invalidData = { }
+    describe('because `type` is missing', () => {
+      it('returns a promise that rejects', async () => {
+        const invalidData = {
+          scheme: 'sroc'
+        }
 
-      await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+      })
+    })
+
+    describe('because `scheme` is missing', () => {
+      it('returns a promise that rejects', async () => {
+        const invalidData = {
+          type: 'supplementary'
+        }
+
+        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+      })
+    })
+
+    describe('because `type` has an invalid value', () => {
+      it('returns a promise that rejects', async () => {
+        const invalidData = {
+          type: 'INVALID',
+          scheme: 'sroc'
+        }
+
+        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+      })
+    })
+
+    describe('because `scheme` has an invalid value', () => {
+      it('returns a promise that rejects', async () => {
+        const invalidData = {
+          type: 'supplementary',
+          scheme: 'INVALID'
+        }
+
+        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+      })
     })
   })
 })
