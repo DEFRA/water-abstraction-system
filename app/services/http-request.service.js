@@ -54,6 +54,7 @@ function _requestAgent () {
       password: null,
     }
   })
+  https.defaultPort = 3128
 
   const httpProxyUrl = new URL(requestConfig.httpProxy)
   const http = new HttpProxyAgent({
@@ -66,6 +67,7 @@ function _requestAgent () {
       password: null,
     }
   })
+  http.defaultPort = 3128
 
   console.log('🚀 ~ file: http-request.service.js:70 ~ _requestAgents ~ https', https)
   console.log('🚀 ~ file: http-request.service.js:71 ~ _requestAgents ~ https.proxy', https.proxy)
