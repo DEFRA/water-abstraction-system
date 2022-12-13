@@ -105,8 +105,8 @@ function _getImportJobsData () {
 async function _getAppData () {
   const healthInfoPath = '/health/info'
   const services = [
-    { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) }//,
-    // { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) },
+    { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) },
+    { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) },
     // { name: 'Reporting', url: new URL(healthInfoPath, servicesConfig.reporting.url) },
     // { name: 'Import', url: new URL(healthInfoPath, servicesConfig.import.url) },
     // { name: 'Tactical CRM', url: new URL(healthInfoPath, servicesConfig.tacticalCrm.url) },
