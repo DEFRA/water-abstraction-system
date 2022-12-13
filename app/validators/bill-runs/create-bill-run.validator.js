@@ -11,8 +11,8 @@ const Joi = require('joi')
 */
 async function go (data) {
   const schema = Joi.object({
-    type: Joi.string().required(),
-    scheme: Joi.string().required(),
+    type: Joi.string().valid('supplementary').required(),
+    scheme: Joi.string().valid('sroc').required(),
     previousBillRunId: Joi.string().guid().optional()
   })
 
