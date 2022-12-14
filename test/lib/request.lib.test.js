@@ -168,7 +168,6 @@ describe('RequestLib', () => {
 
         expect(result.succeeded).to.be.true()
         expect(result.response.body).to.equal({ data: 'hello world' })
-
       })
     })
 
