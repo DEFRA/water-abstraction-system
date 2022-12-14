@@ -19,17 +19,40 @@ describe('Bill Runs controller:', () => {
   })
 
   describe('POST /bill-runs', () => {
-    it('returns a dummy response', async () => {
-      const options = {
-        method: 'POST',
-        url: '/bill-runs'
-      }
+    describe('when a valid request is sent', () => {
+      it('returns a dummy response', async () => {
+        const options = {
+          method: 'POST',
+          url: '/bill-runs',
+          payload: {
+            type: 'supplementary',
+            scheme: 'sroc'
+          }
+        }
 
-      const response = await server.inject(options)
-      const payload = JSON.parse(response.payload)
+        const response = await server.inject(options)
+        const payload = JSON.parse(response.payload)
 
-      expect(response.statusCode).to.equal(200)
-      expect(payload.test).to.equal('ok')
+        expect(response.statusCode).to.equal(200)
+        expect(payload.type).to.equal('supplementary')
+      })
+    })
+
+    describe('when an invvalid request is sent', () => {
+      it('returns an error response', async () => {
+        const options = {
+          method: 'POST',
+          url: '/bill-runs',
+          payload: {
+            type: 'supplementary',
+            scheme: 'INVALID'
+          }
+        }
+
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(400)
+      })
     })
   })
 })
