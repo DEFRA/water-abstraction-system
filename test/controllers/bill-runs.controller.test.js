@@ -38,7 +38,7 @@ describe('Bill Runs controller:', () => {
       })
     })
 
-    describe('when an invvalid request is sent', () => {
+    describe('when an invalid request is sent', () => {
       it('returns an error response', async () => {
         const options = {
           method: 'POST',
@@ -50,8 +50,10 @@ describe('Bill Runs controller:', () => {
         }
 
         const response = await server.inject(options)
+        const payload = JSON.parse(response.payload)
 
         expect(response.statusCode).to.equal(400)
+        expect(payload.message).to.startWith('"scheme" must be')
       })
     })
   })

@@ -8,7 +8,12 @@ const routes = [
     path: '/bill-runs',
     handler: BillRunsController.createBillRun,
     options: {
-      description: 'Used to create a bill run'
+      description: 'Used to create a bill run',
+      plugins: {
+        errorPages: {
+          plainOutput: true
+        }
+      }
     }
   }
 ]
