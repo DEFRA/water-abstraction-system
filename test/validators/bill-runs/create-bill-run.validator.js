@@ -21,7 +21,11 @@ describe('Create Bill Run validator', () => {
 
       const result = await CreateBillRunValidator.go(validData)
 
-      expect(result).to.equal(validData)
+      expect(result.value).to.equal({
+        type: 'supplementary',
+        scheme: 'sroc',
+        previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
+      })
     })
 
     describe('which does not include `previousBillRunId`', () => {
@@ -33,51 +37,62 @@ describe('Create Bill Run validator', () => {
 
         const result = await CreateBillRunValidator.go(validData)
 
-        expect(result).to.equal(validData)
+        expect(result.value).to.equal({
+          type: 'supplementary',
+          scheme: 'sroc'
+        })
       })
     })
   })
 
   describe('when invalid data is provided', () => {
     describe('because `type` is missing', () => {
-      it('returns a promise that rejects', async () => {
+      it('returns an error', async () => {
         const invalidData = {
           scheme: 'sroc'
         }
 
-        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+        const result = await CreateBillRunValidator.go(invalidData)
+
+        expect(result.error).to.not.be.empty()
       })
     })
 
     describe('because `scheme` is missing', () => {
-      it('returns a promise that rejects', async () => {
+      it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary'
         }
 
-        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+        const result = await CreateBillRunValidator.go(invalidData)
+
+        expect(result.error).to.not.be.empty()
       })
     })
 
     describe('because `type` has an invalid value', () => {
-      it('returns a promise that rejects', async () => {
+      it('returns an error', async () => {
         const invalidData = {
           type: 'INVALID',
           scheme: 'sroc'
         }
 
-        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+        const result = await CreateBillRunValidator.go(invalidData)
+
+        expect(result.error).to.not.be.empty()
       })
     })
 
     describe('because `scheme` has an invalid value', () => {
-      it('returns a promise that rejects', async () => {
+      it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',
           scheme: 'INVALID'
         }
 
-        await expect(CreateBillRunValidator.go(invalidData)).to.reject()
+        const result = await CreateBillRunValidator.go(invalidData)
+
+        expect(result.error).to.not.be.empty()
       })
     })
   })
