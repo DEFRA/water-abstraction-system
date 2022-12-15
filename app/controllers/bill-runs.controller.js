@@ -9,7 +9,7 @@ const Boom = require('@hapi/boom')
 
 const CreateBillRunValidator = require('../validators/bill-runs/create-bill-run.validator')
 
-async function createBillRun (request, h) {
+async function createBillRun (request, _h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
 
   if (validatedData.error) {
