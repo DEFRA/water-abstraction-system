@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Use for making http requests to other services
  * @module RequestLib
  */
 
@@ -8,6 +9,26 @@ const { HttpsProxyAgent } = require('hpagent')
 
 const requestConfig = require('../../config/request.config.js')
 
+/**
+ * Make a GET request to the specified URL
+ *
+ * Use when you need to make a GET request. It returns a result tuple
+ *
+ * ```javascript
+ * {
+ *  succeeded: true,
+ *  response: {} // The full response from Got
+ * }
+ * ```
+ *
+ * Any 2xx or 3xx will be flagged as succeeded. Anything else and `succeeded:` will be false. As long as the other
+ * service responds, `response:` will be the full response Got returns. In the event of a network error `response:` will
+ * be a Got error instance.
+ *
+ * @param {string} url The full URL that you wish to connect to
+ * @param {Object} additionalOptions Append to or replace the options passed to Got when making the request
+ * @returns {Object} The result of the request; whether it succeeded and the response or error returned
+ */
 async function get (url, additionalOptions = {}) {
   const got = await _importGot()
   const result = {
