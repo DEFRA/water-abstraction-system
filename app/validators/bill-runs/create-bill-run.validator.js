@@ -13,6 +13,7 @@ function go (data) {
   const schema = Joi.object({
     type: Joi.string().valid('supplementary').required(),
     scheme: Joi.string().valid('sroc').required(),
+    region: Joi.string().guid().required(),
     previousBillRunId: Joi.string().guid().optional()
   })
 

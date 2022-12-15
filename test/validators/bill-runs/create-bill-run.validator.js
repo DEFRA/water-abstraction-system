@@ -16,6 +16,7 @@ describe('Create Bill Run validator', () => {
       const validData = {
         type: 'supplementary',
         scheme: 'sroc',
+        region: '07ae7f3a-2677-4102-b352-cc006828948c',
         previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
       }
 
@@ -24,6 +25,7 @@ describe('Create Bill Run validator', () => {
       expect(result.value).to.equal({
         type: 'supplementary',
         scheme: 'sroc',
+        region: '07ae7f3a-2677-4102-b352-cc006828948c',
         previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
       })
     })
@@ -32,14 +34,16 @@ describe('Create Bill Run validator', () => {
       it('returns validated data', async () => {
         const validData = {
           type: 'supplementary',
-          scheme: 'sroc'
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c'
         }
 
         const result = await CreateBillRunValidator.go(validData)
 
         expect(result.value).to.equal({
           type: 'supplementary',
-          scheme: 'sroc'
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c'
         })
       })
     })
@@ -49,7 +53,8 @@ describe('Create Bill Run validator', () => {
     describe('because `type` is missing', () => {
       it('returns an error', async () => {
         const invalidData = {
-          scheme: 'sroc'
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c'
         }
 
         const result = await CreateBillRunValidator.go(invalidData)
@@ -61,7 +66,21 @@ describe('Create Bill Run validator', () => {
     describe('because `scheme` is missing', () => {
       it('returns an error', async () => {
         const invalidData = {
-          type: 'supplementary'
+          type: 'supplementary',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c'
+        }
+
+        const result = await CreateBillRunValidator.go(invalidData)
+
+        expect(result.error).to.not.be.empty()
+      })
+    })
+
+    describe('because `region` is missing', () => {
+      it('returns an error', async () => {
+        const invalidData = {
+          type: 'supplementary',
+          scheme: 'sroc'
         }
 
         const result = await CreateBillRunValidator.go(invalidData)
@@ -88,6 +107,20 @@ describe('Create Bill Run validator', () => {
         const invalidData = {
           type: 'supplementary',
           scheme: 'INVALID'
+        }
+
+        const result = await CreateBillRunValidator.go(invalidData)
+
+        expect(result.error).to.not.be.empty()
+      })
+    })
+
+    describe('because `region` has an invalid value', () => {
+      it('returns an error', async () => {
+        const invalidData = {
+          type: 'supplementary',
+          scheme: 'sroc',
+          region: 'INVALID'
         }
 
         const result = await CreateBillRunValidator.go(invalidData)
