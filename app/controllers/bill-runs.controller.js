@@ -10,13 +10,19 @@ const Boom = require('@hapi/boom')
 const CreateBillRunValidator = require('../validators/bill-runs/create-bill-run.validator')
 
 async function createBillRun (request, h) {
-  const result = CreateBillRunValidator.go(request.payload)
+  const validatedData = CreateBillRunValidator.go(request.payload)
 
-  if (result.error) {
-    return _formattedValidationError(result.error)
+  if (validatedData.error) {
+    return _formattedValidationError(validatedData.error)
   }
 
-  return result.value
+  return {
+    id: 'DUMMY_SROC_BATCH',
+    region: validatedData.value.region,
+    scheme: validatedData.value.scheme,
+    batchType: validatedData.value.type,
+    status: 'ready'
+  }
 }
 
 // Takes an error from a validator and returns a suitable Boom error

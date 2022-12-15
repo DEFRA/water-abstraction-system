@@ -26,15 +26,17 @@ describe('Bill Runs controller:', () => {
           url: '/bill-runs',
           payload: {
             type: 'supplementary',
-            scheme: 'sroc'
+            scheme: 'sroc',
+            region: '07ae7f3a-2677-4102-b352-cc006828948c'
           }
         }
 
         const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
+        console.log('🚀 ~ file: bill-runs.controller.test.js:36 ~ it ~ payload', payload)
 
         expect(response.statusCode).to.equal(200)
-        expect(payload.type).to.equal('supplementary')
+        expect(payload.batchType).to.equal('supplementary')
       })
     })
 
@@ -45,7 +47,8 @@ describe('Bill Runs controller:', () => {
           url: '/bill-runs',
           payload: {
             type: 'supplementary',
-            scheme: 'INVALID'
+            scheme: 'INVALID',
+            region: '07ae7f3a-2677-4102-b352-cc006828948c'
           }
         }
 
