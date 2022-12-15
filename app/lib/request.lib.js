@@ -100,8 +100,7 @@ function _requestOptions (additionalOptions) {
     }
   }
 
-  // Copies properties from one object to another; Object.assign(target, source). Matching properties get overriden
-  return Object.assign(defaultOptions, additionalOptions)
+  return { ...defaultOptions, ...additionalOptions }
 }
 
 module.exports = {
