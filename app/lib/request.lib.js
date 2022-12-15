@@ -4,6 +4,8 @@
  * @module RequestLib
  */
 
+const { HttpsProxyAgent } = require('hpagent')
+
 const requestConfig = require('../../config/request.config.js')
 
 async function get (url, additionalOptions = {}) {
@@ -48,6 +50,14 @@ async function _importGot () {
  */
 function _requestOptions (additionalOptions) {
   const defaultOptions = {
+    // This uses the spread operator and a logical AND short circuit evaluation to allow us to determine whether the
+    // following columns are added to the options or not. Thanks to https://stackoverflow.com/a/40560953/6117745 for
+    // this
+    ...(requestConfig.httpProxy && {
+      agent: {
+        https: new HttpsProxyAgent({ proxy: requestConfig.httpProxy })
+      }
+    }),
     // If we don't have this setting Got will throw its own HTTPError unless the result is 2xx or 3xx. That makes it
     // impossible to see what the status code was because it doesn't get set on the response object Got provides when
     // an error is thrown. With this set Got will treat a 404 in the same way it treats a 204.
