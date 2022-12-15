@@ -35,7 +35,7 @@ describe('Bill Runs controller:', () => {
         const payload = JSON.parse(response.payload)
 
         expect(response.statusCode).to.equal(200)
-        expect(payload.batchType).to.equal('supplementary')
+        expect(payload.type).to.equal('supplementary')
       })
     })
 

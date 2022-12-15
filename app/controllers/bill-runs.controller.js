@@ -20,7 +20,7 @@ async function createBillRun (request, h) {
     id: 'DUMMY_SROC_BATCH',
     region: validatedData.value.region,
     scheme: validatedData.value.scheme,
-    batchType: validatedData.value.type,
+    type: validatedData.value.type,
     status: 'ready'
   }
 }
