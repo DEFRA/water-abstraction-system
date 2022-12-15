@@ -133,7 +133,7 @@ describe('RequestLib', () => {
               .delay(100)
               .reply(200, { data: 'hello world' })
               .get(() => true)
-              .reply(200, { data: 'hello world' })
+              .reply(200, { data: 'delayed hello world' })
           })
 
           describe('the result it returns', () => {
@@ -148,7 +148,7 @@ describe('RequestLib', () => {
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
-              expect(result.response.body).to.equal('{"data":"hello world"}')
+              expect(result.response.body).to.equal('{"data":"delayed hello world"}')
             })
           })
         })
