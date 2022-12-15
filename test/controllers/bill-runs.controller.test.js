@@ -33,7 +33,6 @@ describe('Bill Runs controller:', () => {
 
         const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
-        console.log('🚀 ~ file: bill-runs.controller.test.js:36 ~ it ~ payload', payload)
 
         expect(response.statusCode).to.equal(200)
         expect(payload.batchType).to.equal('supplementary')
