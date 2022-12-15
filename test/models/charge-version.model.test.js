@@ -18,10 +18,19 @@ describe('ChargeVersion model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge versions', () => {
+    describe('when linking to licence', () => {
       it('can successfully run a query', async () => {
         const query = await ChargeVersion.query()
           .innerJoinRelated('licence')
+
+        expect(query).to.exist()
+      })
+    })
+
+    describe('when linking to charge element', () => {
+      it('can successfully run a query', async () => {
+        const query = await ChargeVersion.query()
+          .innerJoinRelated('chargeElement')
 
         expect(query).to.exist()
       })

@@ -24,7 +24,7 @@ class ChargeVersionModel extends BaseModel {
           to: 'water.licences.licence_id'
         }
       },
-      chargeElements: {
+      chargeElement: {
         relation: Model.HasManyRelation,
         modelClass: 'charge-element.model',
         join: {
