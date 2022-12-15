@@ -25,6 +25,7 @@ async function go (region) {
 
 async function _fetch (region) {
   const result = await LicenceModel.query()
+    .distinctOn('licence_id')
     .innerJoinRelated('chargeVersions')
     .where('region_id', region.regionId)
     .where('include_in_supplementary_billing', 'yes')
