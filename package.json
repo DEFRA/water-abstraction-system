@@ -24,6 +24,7 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@airbrake/node": "^2.1.8",
+    "@hapi/boom": "^10.0.0",
     "@hapi/hapi": "^21.1.0",
     "@hapi/inert": "^7.0.0",
     "@hapi/vision": "^7.0.0",
@@ -32,6 +33,7 @@
     "got": "^12.5.3",
     "govuk-frontend": "^4.4.0",
     "hapi-pino": "^11.0.1",
+    "joi": "^17.7.0",
     "knex": "^2.3.0",
     "nunjucks": "^3.2.3",
     "objection": "^3.0.1",
