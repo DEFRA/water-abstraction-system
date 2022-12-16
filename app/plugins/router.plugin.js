@@ -11,11 +11,10 @@
  * @module RouterPlugin
  */
 
-const AirbrakeRoutes = require('../routes/airbrake.routes.js')
 const AssetRoutes = require('../routes/assets.routes.js')
 const BillRunRoutes = require('../routes/bill-runs.routes')
-const DatabaseRoutes = require('../routes/database.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
+const HealthRoutes = require('../routes/health.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 const TestRoutes = require('../routes/test.routes.js')
 
@@ -23,11 +22,10 @@ const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const routes = [
   ...RootRoutes,
-  ...AirbrakeRoutes,
   ...AssetRoutes,
-  ...BillRunRoutes,
-  ...DatabaseRoutes,
-  ...TestRoutes
+  ...HealthRoutes,
+  ...TestRoutes,
+  ...BillRunRoutes
 ]
 
 const RouterPlugin = {

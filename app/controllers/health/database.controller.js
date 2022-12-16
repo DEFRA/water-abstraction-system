@@ -5,7 +5,7 @@
  * @module DatabaseController
  */
 
-const DatabaseHealthCheckService = require('../../services/database-health-check.service.js')
+const DatabaseHealthCheckService = require('../../services/health/database-health-check.service.js')
 
 async function index (_request, h) {
   const result = await DatabaseHealthCheckService.go()
