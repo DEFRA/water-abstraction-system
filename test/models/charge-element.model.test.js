@@ -35,5 +35,14 @@ describe('Charge Element model', () => {
         expect(query).to.exist()
       })
     })
+
+    describe('when linking to charge purpose', () => {
+      it('can successfully run a query', async () => {
+        const query = await ChargeElement.query()
+          .innerJoinRelated('chargePurpose')
+
+        expect(query).to.exist()
+      })
+    })
   })
 })

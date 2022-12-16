@@ -31,6 +31,14 @@ class ChargeElementModel extends BaseModel {
           from: 'water.charge_elements.billing_charge_category_id',
           to: 'water.billing_charge_categories.billing_charge_category_id'
         }
+      },
+      chargePurpose: {
+        relation: Model.HasManyRelation,
+        modelClass: 'charge-purpose.model',
+        join: {
+          from: 'water.charge_elements.charge_element_id',
+          to: 'water.charge_purposes.charge_element_id'
+        }
       }
     }
   }
