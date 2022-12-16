@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const BillingChargeCategory = require('../../app/models/billing-charge-category.model.js')
 
-describe.only('Billing Charge Category model', () => {
+describe('Billing Charge Category model', () => {
   it('can successfully run a query', async () => {
     const query = await BillingChargeCategory.query()
 

@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ChargeElement = require('../../app/models/charge-element.model.js')
 
-describe('Charge Element model', () => {
+describe.only('Charge Element model', () => {
   it('can successfully run a query', async () => {
     const query = await ChargeElement.query()
 
@@ -22,6 +22,15 @@ describe('Charge Element model', () => {
       it('can successfully run a query', async () => {
         const query = await ChargeElement.query()
           .innerJoinRelated('chargeVersion')
+
+        expect(query).to.exist()
+      })
+    })
+
+    describe('when linking to billing charge category', () => {
+      it('can successfully run a query', async () => {
+        const query = await ChargeElement.query()
+          .innerJoinRelated('billingChargeCategory')
 
         expect(query).to.exist()
       })
