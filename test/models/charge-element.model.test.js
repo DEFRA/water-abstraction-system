@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ChargeElement = require('../../app/models/charge-element.model.js')
 
-describe.only('Charge Element model', () => {
+describe('Charge Element model', () => {
   it('can successfully run a query', async () => {
     const query = await ChargeElement.query()
 
