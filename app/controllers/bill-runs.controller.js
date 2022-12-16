@@ -9,6 +9,8 @@ const Boom = require('@hapi/boom')
 
 const CreateBillRunValidator = require('../validators/bill-runs/create-bill-run.validator')
 
+const BillingBatchModel = require('../models/billing-batch.model')
+
 async function createBillRun (request, _h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
 
@@ -16,12 +18,32 @@ async function createBillRun (request, _h) {
     return _formattedValidationError(validatedData.error)
   }
 
+  const { type, scheme, region } = validatedData.value
+
+  let billRun
+
+  try {
+    billRun = await BillingBatchModel
+      .query()
+      .insert({
+        batchType: type,
+        scheme,
+        regionId: region,
+        fromFinancialYearEnding: 2022,
+        toFinancialYearEnding: 2022,
+        status: 'ready'
+      })
+      .returning('*')
+  } catch (error) {
+    console.log('🚀 ~ file: bill-runs.controller.js:34 ~ createBillRun ~ error', error)
+  }
+
   return {
-    id: 'DUMMY_SROC_BATCH',
-    region: validatedData.value.region,
-    scheme: validatedData.value.scheme,
-    type: validatedData.value.type,
-    status: 'ready'
+    id: billRun.billingBatchId,
+    region: billRun.regionId,
+    scheme: billRun.scheme,
+    type: billRun.batchType,
+    status: billRun.status
   }
 }
 
