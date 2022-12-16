@@ -18,6 +18,10 @@ class BillingBatchModel extends BaseModel {
     return 'billingBatchId'
   }
 
+  static get idColumn () {
+    return 'billing_batch_id'
+  }
+
   static get relationMappings () {
     return {
       region: {
