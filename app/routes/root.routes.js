@@ -13,6 +13,13 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/robots.txt',
+    handler: {
+      file: 'app/public/static/robots.txt'
+    }
+  },
+  {
+    method: 'GET',
     path: '/status',
     handler: RootController.index,
     options: {
