@@ -9,7 +9,7 @@ const { describe, it, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ServiceStatusService = require('../../../app/services/service-status.service.js')
+const InfoService = require('../../../app/services/health/info.service.js')
 
 // For running our service
 const { init } = require('../../../app/server.js')
@@ -33,7 +33,7 @@ describe('Info controller', () => {
     }
 
     beforeEach(async () => {
-      Sinon.stub(ServiceStatusService, 'go').resolves({
+      Sinon.stub(InfoService, 'go').resolves({
         virusScannerData: 'ClamAV 0.103.6/26738/Fri Dec 2 11:12:06 2022',
         redisConnectivityData: 'ERROR: Command failed: redis-server --version /bin/sh: 1: redis-server: not found',
         addressFacadeData: 'hola',

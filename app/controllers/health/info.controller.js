@@ -5,10 +5,10 @@
  * @module InfoController
  */
 
-const ServiceStatusService = require('../../services/service-status.service.js')
+const InfoService = require('../../services/health/info.service.js')
 
 async function index (_request, h) {
-  const pageData = await ServiceStatusService.go()
+  const pageData = await InfoService.go()
 
   return h.view('service_status.njk', {
     pageTitle: 'Service Status',

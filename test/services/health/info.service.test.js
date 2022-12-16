@@ -11,14 +11,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const servicesConfig = require('../../config/services.config.js')
+const servicesConfig = require('../../../config/services.config.js')
 
 // Thing under test
-// Normally we'd set this to `= require('../../app/services/service_status.service')`. But to control how
+// Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
 // `child_process.exec()` behaves in the service, after it's been promisfied we have to use proxyquire.
-let ServiceStatusService // = require('../../app/services/service_status.service')
+let InfoService // = require('../../app/services/health/info.service')
 
-describe('Service Status service', () => {
+describe('Info service', () => {
   beforeEach(() => {
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
@@ -73,11 +73,11 @@ describe('Service Status service', () => {
           stderror: null
         })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-      ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
+      InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
     it('returns details on each', async () => {
-      const result = await ServiceStatusService.go()
+      const result = await InfoService.go()
 
       expect(result).to.include([
         'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
@@ -112,11 +112,11 @@ describe('Service Status service', () => {
             stderr: 'Could not connect to Redis'
           })
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-        ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
+        InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await ServiceStatusService.go()
+        const result = await InfoService.go()
 
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
@@ -140,11 +140,11 @@ describe('Service Status service', () => {
           .withArgs('redis-server --version')
           .throwsException(new Error('Redis check went boom'))
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-        ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
+        InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await ServiceStatusService.go()
+        const result = await InfoService.go()
 
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
@@ -174,7 +174,7 @@ describe('Service Status service', () => {
           stderror: null
         })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
-      ServiceStatusService = Proxyquire('../../app/services/service-status.service', { util: utilStub })
+      InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
     describe('cannot be reached because of a network error', () => {
@@ -184,7 +184,7 @@ describe('Service Status service', () => {
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await ServiceStatusService.go()
+        const result = await InfoService.go()
 
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
@@ -203,7 +203,7 @@ describe('Service Status service', () => {
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await ServiceStatusService.go()
+        const result = await InfoService.go()
 
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
