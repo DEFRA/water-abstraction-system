@@ -23,6 +23,14 @@ class ChargeElementModel extends BaseModel {
           from: 'water.charge_elements.charge_version_id',
           to: 'water.charge_versions.charge_version_id'
         }
+      },
+      billingChargeCategory: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'billing-charge-category.model',
+        join: {
+          from: 'water.charge_elements.billing_charge_category_id',
+          to: 'water.billing_charge_categories.billing_charge_category_id'
+        }
       }
     }
   }
