@@ -26,5 +26,14 @@ describe('Charge Element model', () => {
         expect(query).to.exist()
       })
     })
+
+    describe('when linking to billing charge category', () => {
+      it('can successfully run a query', async () => {
+        const query = await ChargeElement.query()
+          .innerJoinRelated('billingChargeCategory')
+
+        expect(query).to.exist()
+      })
+    })
   })
 })
