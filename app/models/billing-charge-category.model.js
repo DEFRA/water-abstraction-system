@@ -17,7 +17,7 @@ class BillingChargeCategoryModel extends BaseModel {
   static get relationMappings () {
     return {
       chargeElement: {
-        relation: Model.BelongsToOneRelation,
+        relation: Model.HasManyRelation,
         modelClass: 'charge-element.model',
         join: {
           from: 'water.billing_charge_categories.billing_charge_category_id',
