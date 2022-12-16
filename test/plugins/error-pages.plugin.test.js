@@ -3,7 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Stub = require('sinon')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -15,7 +15,6 @@ const Boom = require('@hapi/boom')
 const { init } = require('../../app/server.js')
 const { Exception } = require('sass')
 const Sinon = require('sinon')
-const { afterDelete } = require('../../app/models/base.model')
 
 describe('Error Pages plugin', () => {
   const options = {
@@ -23,7 +22,6 @@ describe('Error Pages plugin', () => {
     url: '/error-pages'
   }
   let server
-
 
   beforeEach(async () => {
     // Create server before each test
