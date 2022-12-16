@@ -2,7 +2,7 @@
 
 /**
  * Controller for / endpoints
- * @module SupplementaryController
+ * @module RootController
  */
 
 async function index (_request, _h) {
