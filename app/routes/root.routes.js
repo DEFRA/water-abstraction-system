@@ -13,16 +13,15 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/status',
-    handler: RootController.index,
-    options: {
-      auth: false
+    path: '/robots.txt',
+    handler: {
+      file: 'app/public/static/robots.txt'
     }
   },
   {
     method: 'GET',
-    path: '/service-status',
-    handler: RootController.serviceStatus,
+    path: '/status',
+    handler: RootController.index,
     options: {
       auth: false
     }

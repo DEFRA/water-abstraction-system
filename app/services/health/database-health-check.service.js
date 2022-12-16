@@ -5,7 +5,7 @@
  * @module DatabaseHealthCheckService
  */
 
-const { db } = require('../../db/db.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Generates an array of stats for each table in the database
