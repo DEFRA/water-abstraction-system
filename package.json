@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@hapi/code": "^9.0.2",
-    "@hapi/hoek": "^10.0.1",
+    "@hapi/hoek": "^11.0.2",
     "@hapi/lab": "^25.0.1",
     "nock": "^13.2.9",
     "pino-pretty": "^9.1.1",
