@@ -14,7 +14,6 @@ const Boom = require('@hapi/boom')
 // For running our service
 const { init } = require('../../app/server.js')
 const { Exception } = require('sass')
-const Sinon = require('sinon')
 
 describe('Error Pages plugin', () => {
   const options = {
