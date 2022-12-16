@@ -28,7 +28,8 @@ const routes = [
     path: '/health/info',
     handler: InfoController.index,
     options: {
-      auth: false
+      description: 'Used by the delivery team to confirm we can connect to our other apps and services. It also ' +
+      'returns us the version and commit hash for each one.'
     }
   }
 ]
