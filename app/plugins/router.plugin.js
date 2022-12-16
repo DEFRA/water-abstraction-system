@@ -16,6 +16,7 @@ const AssetRoutes = require('../routes/assets.routes.js')
 const BillRunRoutes = require('../routes/bill-runs.routes')
 const DatabaseRoutes = require('../routes/database.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
+const InfoRoutes = require('../routes/info.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 const TestRoutes = require('../routes/test.routes.js')
 
@@ -27,6 +28,7 @@ const routes = [
   ...AssetRoutes,
   ...BillRunRoutes,
   ...DatabaseRoutes,
+  ...InfoRoutes,
   ...TestRoutes
 ]
 

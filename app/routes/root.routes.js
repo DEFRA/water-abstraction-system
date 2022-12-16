@@ -18,14 +18,6 @@ const routes = [
     options: {
       auth: false
     }
-  },
-  {
-    method: 'GET',
-    path: '/service-status',
-    handler: RootController.serviceStatus,
-    options: {
-      auth: false
-    }
   }
 ]
 
