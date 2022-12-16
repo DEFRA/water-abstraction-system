@@ -14,6 +14,10 @@ class BillingBatchModel extends BaseModel {
     return 'water.billing_batches'
   }
 
+  static get idColumn () {
+    return 'billing_batch_id'
+  }
+
   static get relationMappings () {
     return {
       region: {

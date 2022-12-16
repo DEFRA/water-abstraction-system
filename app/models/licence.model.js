@@ -14,6 +14,10 @@ class LicenceModel extends BaseModel {
     return 'water.licences'
   }
 
+  static get idColumn () {
+    return 'licence_id'
+  }
+
   static get relationMappings () {
     return {
       chargeVersions: {

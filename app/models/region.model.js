@@ -14,6 +14,10 @@ class RegionModel extends BaseModel {
     return 'water.regions'
   }
 
+  static get idColumn () {
+    return 'region_id'
+  }
+
   static get relationMappings () {
     return {
       licences: {

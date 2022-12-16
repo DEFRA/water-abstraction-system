@@ -11,6 +11,10 @@ class EventModel extends BaseModel {
   static get tableName () {
     return 'water.events'
   }
+
+  static get idColumn () {
+    return 'event_id'
+  }
 }
 
 module.exports = EventModel
