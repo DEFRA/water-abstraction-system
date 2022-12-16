@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Stub = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -13,6 +14,8 @@ const Boom = require('@hapi/boom')
 // For running our service
 const { init } = require('../../app/server.js')
 const { Exception } = require('sass')
+const Sinon = require('sinon')
+const { afterDelete } = require('../../app/models/base.model')
 
 describe('Error Pages plugin', () => {
   const options = {
@@ -21,9 +24,17 @@ describe('Error Pages plugin', () => {
   }
   let server
 
-  // Create server before each test
+
   beforeEach(async () => {
+    // Create server before each test
     server = await init()
+
+    // We silence any calls to server.logger made in the plugin to try and keep the test output as clean as possible
+    Sinon.stub(server, 'logger')
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('When the error is a Boom error', () => {
