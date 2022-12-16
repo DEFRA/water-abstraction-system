@@ -22,7 +22,7 @@ const ErrorPagesPlugin = {
 
         const { errorPages: pluginSettings } = request.route.settings.plugins
 
-        if (response.isBoom && !pluginSettings.plainOutput) {
+        if (response.isBoom && !pluginSettings?.plainOutput) {
           const { statusCode } = response.output
 
           if (statusCode === 404) {
