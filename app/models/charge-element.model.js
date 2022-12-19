@@ -14,6 +14,10 @@ class ChargeElementModel extends BaseModel {
     return 'water.charge_elements'
   }
 
+  static get idColumn () {
+    return 'charge_element_id'
+  }
+
   static get relationMappings () {
     return {
       chargeVersion: {

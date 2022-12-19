@@ -14,6 +14,10 @@ class ChargePurposeModel extends BaseModel {
     return 'water.charge_purposes'
   }
 
+  static get idColumn () {
+    return 'charge_purpose_id'
+  }
+
   static get relationMappings () {
     return {
       chargeElement: {

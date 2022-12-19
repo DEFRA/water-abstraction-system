@@ -14,6 +14,10 @@ class BillingChargeCategoryModel extends BaseModel {
     return 'water.billing_charge_categories'
   }
 
+  static get idColumn () {
+    return 'billing_charge_category_id'
+  }
+
   static get relationMappings () {
     return {
       chargeElement: {
