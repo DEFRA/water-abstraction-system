@@ -10,6 +10,8 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
+const RequestLib = require('../../lib/request.lib.js')
+
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
@@ -67,45 +69,24 @@ async function _getRedisConnectivityData () {
 
 async function _getAddressFacadeData () {
   const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
-  const result = await _requestData(statusUrl)
+  const result = await RequestLib.get(statusUrl.href)
 
-  return result.succeeded ? result.response.body : result.response
+  if (result.succeeded) {
+    return result.response.body
+  }
+
+  return _parseFailedRequestResult(result)
 }
 
 async function _getChargingModuleData () {
   const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
-  const result = await _requestData(statusUrl)
+  const result = await RequestLib.get(statusUrl.href)
 
-  return result.succeeded ? result.response.headers['x-cma-docker-tag'] : result.response
-}
-
-async function _requestData (url) {
-  // As of v12, the got dependency no longer supports CJS modules. This causes us a problem as we are locked into
-  // using these for the time being. Some workarounds are provided here: https://github.com/sindresorhus/got/issues/1789
-  // We have gone the route of using await import('got'). We cannot do this at the top level as Node doesn't support
-  // top level in CJS so we do it here instead.
-  const { got } = await import('got')
-  const result = {
-    succeeded: true,
-    response: null
+  if (result.succeeded) {
+    return result.response.headers['x-cma-docker-tag']
   }
 
-  try {
-    result.response = await got.get(url, {
-      retry: {
-        // We ensure that the only network errors Got retries are timeout errors
-        errorCodes: ['ETIMEDOUT'],
-        // We set statusCodes as an empty array to ensure that 4xx, 5xx etc. errors are not retried
-        statusCodes: []
-      }
-    })
-  } catch (error) {
-    const statusCode = error.response ? error.response.statusCode : 'N/A'
-    result.response = `ERROR: ${statusCode} - ${error.name} - ${error.message}`
-    result.succeeded = false
-  }
-
-  return result
+  return _parseFailedRequestResult(result)
 }
 
 function _getImportJobsData () {
@@ -137,7 +118,7 @@ async function _getAppData () {
   ]
 
   for (const service of services) {
-    const result = await _requestData(service.url)
+    const result = await RequestLib.get(service.url.href)
 
     if (result.succeeded) {
       const data = JSON.parse(result.response.body)
@@ -145,12 +126,20 @@ async function _getAppData () {
       service.commit = data.commit
       service.jobs = service.name === 'Import' ? _getImportJobsData() : []
     } else {
-      service.version = result.response
+      service.version = _parseFailedRequestResult(result)
       service.commit = ''
     }
   }
 
   return services
+}
+
+function _parseFailedRequestResult (result) {
+  if (result.response.statusCode) {
+    return `ERROR: ${result.response.statusCode} - ${result.response.body}`
+  }
+
+  return `ERROR: ${result.response.name} - ${result.response.message}`
 }
 
 module.exports = {
