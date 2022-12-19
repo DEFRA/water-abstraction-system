@@ -5,7 +5,7 @@
  * @module FetchChargeVersionsService
  */
 
-const { db } = require('../../../db/db.js')
+const ChargeVersion = require('../../models/charge-version.model.js')
 
 /**
  * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
@@ -26,17 +26,16 @@ async function go (regionId, billingPeriod) {
 }
 
 async function _fetch (regionId, billingPeriod) {
-  const chargeVersions = db
-    .select('chv.chargeVersionId', 'chv.scheme', 'chv.startDate', 'chv.endDate', 'lic.licenceId', 'lic.licenceRef')
-    .from({ chv: 'water.charge_versions' })
-    .innerJoin({ lic: 'water.licences' }, 'chv.licence_id', 'lic.licence_id')
-    .where({
-      scheme: 'sroc',
-      'lic.include_in_supplementary_billing': 'yes',
-      'lic.region_id': regionId
-    })
-    .andWhere('chv.start_date', '>=', billingPeriod.startDate)
-    .andWhere('chv.start_date', '<=', billingPeriod.endDate)
+  const chargeVersions = await ChargeVersion.query()
+    .select(
+      'chargeVersionId', 'scheme', 'chargeVersions.startDate', 'endDate', 'licence.licenceId', 'licence.licenceRef'
+    )
+    .innerJoinRelated('licence')
+    .where('scheme', 'sroc')
+    .where('include_in_supplementary_billing', 'yes')
+    .where('region_id', regionId)
+    .where('chargeVersions.start_date', '>=', billingPeriod.startDate)
+    .where('chargeVersions.start_date', '<=', billingPeriod.endDate)
 
   return chargeVersions
 }
