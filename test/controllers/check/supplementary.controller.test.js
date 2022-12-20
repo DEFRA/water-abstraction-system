@@ -25,10 +25,10 @@ describe('Supplementary controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /test/supplementary', () => {
+  describe('GET /check/supplementary', () => {
     const options = {
       method: 'GET',
-      url: '/test/supplementary?region=9'
+      url: '/check/supplementary?region=9'
     }
 
     let response
