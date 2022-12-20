@@ -9,7 +9,7 @@ const BillingPeriodService = require('../supplementary-billing/billing-period.se
 const FetchChargeVersionsService = require('../supplementary-billing/fetch-charge-versions.service.js')
 const FetchLicencesService = require('../supplementary-billing/fetch-licences.service.js')
 const FetchRegionService = require('../supplementary-billing/fetch-region.service.js')
-const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
+const SupplementaryDataPresenter = require('../../presenters/check/supplementary-data.presenter.js')
 
 async function go (naldRegionId) {
   const region = await FetchRegionService.go(naldRegionId)
@@ -26,7 +26,7 @@ async function go (naldRegionId) {
 }
 
 function _response (data) {
-  return SupplementaryPresenter.go(data)
+  return SupplementaryDataPresenter.go(data)
 }
 
 module.exports = {

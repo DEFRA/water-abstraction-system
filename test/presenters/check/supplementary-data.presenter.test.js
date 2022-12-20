@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SupplementaryPresenter = require('../../app/presenters/supplementary.presenter.js')
+const SupplementaryDataPresenter = require('../../../app/presenters/check/supplementary-data.presenter.js')
 
 describe('Supplementary presenter', () => {
   let data
@@ -44,7 +44,7 @@ describe('Supplementary presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = SupplementaryPresenter.go(data)
+      const result = SupplementaryDataPresenter.go(data)
 
       expect(result.billingPeriods).to.have.length(1)
       expect(result.billingPeriods[0]).to.equal(data.billingPeriods[0])
@@ -70,7 +70,7 @@ describe('Supplementary presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = SupplementaryPresenter.go(data)
+      const result = SupplementaryDataPresenter.go(data)
 
       expect(result.billingPeriods).to.be.empty()
       expect(result.licences).to.be.empty()
