@@ -9,7 +9,7 @@ const { describe, it, beforeEach, after } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const SupplementaryService = require('../../../app/services/supplementary-billing/supplementary.service.js')
+const SupplementaryDataService = require('../../../app/services/check/supplementary-data.service.js')
 
 // For running our service
 const { init } = require('../../../app/server.js')
@@ -34,7 +34,7 @@ describe('Supplementary controller', () => {
     let response
 
     beforeEach(async () => {
-      Sinon.stub(SupplementaryService, 'go').resolves({ billingPeriods: [], licences: [], chargeVersions: [] })
+      Sinon.stub(SupplementaryDataService, 'go').resolves({ billingPeriods: [], licences: [], chargeVersions: [] })
 
       response = await server.inject(options)
     })

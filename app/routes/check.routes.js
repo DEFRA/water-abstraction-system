@@ -8,7 +8,7 @@ const routes = [
     path: '/check/supplementary',
     handler: SupplementaryController.index,
     options: {
-      description: 'Endpoint to check the SROC supplementary billing logic'
+      description: 'Used by the delivery team to check the SROC supplementary billing logic'
     }
   }
 ]
