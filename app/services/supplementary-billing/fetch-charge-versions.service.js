@@ -27,15 +27,20 @@ async function go (regionId, billingPeriod) {
 
 async function _fetch (regionId, billingPeriod) {
   const chargeVersions = await ChargeVersion.query()
+    .alias('cv')
     .select(
-      'chargeVersionId', 'scheme', 'chargeVersions.startDate', 'endDate', 'licence.licenceId', 'licence.licenceRef'
+      'cv.chargeVersionId', 'cv.scheme', 'cv.startDate', 'cv.endDate', 'lic.licenceId', 'lic.licenceRef',
+      'bcc.reference', 'cp.abstractionPeriodStartDay', 'cp.abstractionPeriodStartMonth', 'cp.abstractionPeriodEndDay',
+      'cp.abstractionPeriodEndMonth'
     )
-    .innerJoinRelated('licence')
-    .where('scheme', 'sroc')
-    .where('include_in_supplementary_billing', 'yes')
-    .where('region_id', regionId)
-    .where('chargeVersions.start_date', '>=', billingPeriod.startDate)
-    .where('chargeVersions.start_date', '<=', billingPeriod.endDate)
+    .innerJoinRelated('licence as lic')
+    .innerJoinRelated('billingChargeCategory as bcc')
+    .innerJoinRelated('chargePurpose as cp')
+    .where('cv.scheme', 'sroc')
+    .where('lic.includeInSupplementaryBilling', 'yes')
+    .where('lic.regionId', regionId)
+    .where('cv.startDate', '>=', billingPeriod.startDate)
+    .where('cv.startDate', '<=', billingPeriod.endDate)
 
   return chargeVersions
 }
