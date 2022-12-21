@@ -15,7 +15,7 @@ class RegionModel extends BaseModel {
   }
 
   static get idColumn () {
-    return 'region_id'
+    return 'regionId'
   }
 
   static get relationMappings () {
@@ -24,16 +24,16 @@ class RegionModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'licence.model',
         join: {
-          from: 'regions.region_id',
-          to: 'licences.region_id'
+          from: 'regions.regionId',
+          to: 'licences.regionId'
         }
       },
       billingBatches: {
         relation: Model.HasManyRelation,
         modelClass: 'billing_batch.model',
         join: {
-          from: 'regions.region_id',
-          to: 'billing_batches.region_id'
+          from: 'regions.regionId',
+          to: 'billingBatches.regionId'
         }
       }
     }

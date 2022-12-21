@@ -13,7 +13,7 @@ class EventModel extends BaseModel {
   }
 
   static get idColumn () {
-    return 'event_id'
+    return 'eventId'
   }
 }
 
