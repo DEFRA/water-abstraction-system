@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats responses from the `SupplementaryService`
- * @module SupplementaryPresenter
+ * Formats responses from the `SupplementaryDataService`
+ * @module SupplementaryDataPresenter
  */
 
 function go (data) {
