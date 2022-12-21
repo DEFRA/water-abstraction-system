@@ -27,20 +27,43 @@ async function go (regionId, billingPeriod) {
 
 async function _fetch (regionId, billingPeriod) {
   const chargeVersions = await ChargeVersion.query()
-    .alias('cv')
-    .select(
-      'cv.chargeVersionId', 'cv.scheme', 'cv.startDate', 'cv.endDate', 'lic.licenceId', 'lic.licenceRef',
-      'bcc.reference', 'cp.abstractionPeriodStartDay', 'cp.abstractionPeriodStartMonth', 'cp.abstractionPeriodEndDay',
-      'cp.abstractionPeriodEndMonth'
-    )
-    .innerJoinRelated('licence as lic')
-    .innerJoinRelated('billingChargeCategory as bcc')
-    .innerJoinRelated('chargePurpose as cp')
-    .where('cv.scheme', 'sroc')
-    .where('lic.includeInSupplementaryBilling', 'yes')
-    .where('lic.regionId', regionId)
-    .where('cv.startDate', '>=', billingPeriod.startDate)
-    .where('cv.startDate', '<=', billingPeriod.endDate)
+    .select('chargeVersionId', 'scheme', 'chargeVersions.startDate', 'chargeVersions.endDate')
+    .innerJoinRelated('licence')
+    .where('scheme', 'sroc')
+    .where('includeInSupplementaryBilling', 'yes')
+    .where('regionId', regionId)
+    .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
+    .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .withGraphFetched('licence')
+    .modifyGraph('licence', builder => {
+      builder.select(
+        'licenceId',
+        'licenceRef'
+      )
+    })
+    .withGraphFetched('chargeElements.chargePurposes')
+    .modifyGraph('chargeElements', builder => {
+      builder.select(
+        'chargeElementId'
+      )
+    })
+    .modifyGraph('chargeElements.chargePurposes', builder => {
+      builder.select(
+        'abstractionPeriodStartDay',
+        'abstractionPeriodStartMonth',
+        'abstractionPeriodEndDay',
+        'abstractionPeriodEndMonth'
+      )
+    })
+    .withGraphFetched('chargeElements.billingChargeCategory')
+    .modifyGraph('chargeElements.billingChargeCategory', builder => {
+      builder.select(
+        'reference'
+      )
+    })
+
+    console.log(chargeVersions)
+    console.log(chargeVersions[0].chargeElements[0])
 
   return chargeVersions
 }
