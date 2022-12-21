@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for water.billing_charge_categories
+ * Model for billingChargeCategories
  * @module BillingChargeCategoryModel
  */
 
@@ -11,11 +11,11 @@ const BaseModel = require('./base.model.js')
 
 class BillingChargeCategoryModel extends BaseModel {
   static get tableName () {
-    return 'water.billing_charge_categories'
+    return 'billingChargeCategories'
   }
 
   static get idColumn () {
-    return 'billing_charge_category_id'
+    return 'billingChargeCategoryId'
   }
 
   static get relationMappings () {
@@ -24,8 +24,8 @@ class BillingChargeCategoryModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'charge-element.model',
         join: {
-          from: 'water.billing_charge_categories.billing_charge_category_id',
-          to: 'water.charge_elements.billing_charge_category_id'
+          from: 'billingChargeCategories.billingChargeCategoryId',
+          to: 'chargeElements.billingChargeCategoryId'
         }
       }
     }

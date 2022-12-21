@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for water.regions
+ * Model for regions
  * @module RegionModel
  */
 
@@ -11,11 +11,11 @@ const BaseModel = require('./base.model.js')
 
 class RegionModel extends BaseModel {
   static get tableName () {
-    return 'water.regions'
+    return 'regions'
   }
 
   static get idColumn () {
-    return 'region_id'
+    return 'regionId'
   }
 
   static get relationMappings () {
@@ -24,16 +24,16 @@ class RegionModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'licence.model',
         join: {
-          from: 'water.regions.region_id',
-          to: 'water.licences.region_id'
+          from: 'regions.regionId',
+          to: 'licences.regionId'
         }
       },
       billingBatches: {
         relation: Model.HasManyRelation,
         modelClass: 'billing_batch.model',
         join: {
-          from: 'water.regions.region_id',
-          to: 'water.billing_batches.region_id'
+          from: 'regions.regionId',
+          to: 'billingBatches.regionId'
         }
       }
     }
