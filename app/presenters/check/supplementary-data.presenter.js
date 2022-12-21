@@ -12,16 +12,7 @@ function go (data) {
       licenceRef: licence.licenceRef
     }
   })
-  const chargeVersions = data.chargeVersions.map((chargeVersion) => {
-    return {
-      chargeVersionId: chargeVersion.chargeVersionId,
-      licenceRef: chargeVersion.licenceRef,
-      licenceId: chargeVersion.licenceId,
-      scheme: chargeVersion.scheme,
-      startDate: chargeVersion.startDate,
-      endDate: chargeVersion.endDate
-    }
-  })
+  const chargeVersions = data.chargeVersions
 
   return {
     billingPeriods: data.billingPeriods,

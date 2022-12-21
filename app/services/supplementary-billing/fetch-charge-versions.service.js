@@ -41,6 +41,12 @@ async function _fetch (regionId, billingPeriod) {
         'licenceRef'
       )
     })
+    .withGraphFetched('chargeElements.billingChargeCategory')
+    .modifyGraph('chargeElements.billingChargeCategory', builder => {
+      builder.select(
+        'reference'
+      )
+    })
     .withGraphFetched('chargeElements.chargePurposes')
     .modifyGraph('chargeElements', builder => {
       builder.select(
@@ -55,15 +61,6 @@ async function _fetch (regionId, billingPeriod) {
         'abstractionPeriodEndMonth'
       )
     })
-    .withGraphFetched('chargeElements.billingChargeCategory')
-    .modifyGraph('chargeElements.billingChargeCategory', builder => {
-      builder.select(
-        'reference'
-      )
-    })
-
-    console.log(chargeVersions)
-    console.log(chargeVersions[0].chargeElements[0])
 
   return chargeVersions
 }
