@@ -5,10 +5,10 @@
  * @module SupplementaryController
  */
 
-const SupplementaryService = require('../../services/supplementary-billing/supplementary.service.js')
+const SupplementaryDataService = require('../../services/check/supplementary-data.service.js')
 
 async function index (request, h) {
-  const result = await SupplementaryService.go(request.query.region)
+  const result = await SupplementaryDataService.go(request.query.region)
 
   return h.response(result).code(200)
 }
