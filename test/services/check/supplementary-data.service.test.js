@@ -15,7 +15,7 @@ const FetchLicencesService = require('../../../app/services/supplementary-billin
 const FetchRegionService = require('../../../app/services/supplementary-billing/fetch-region.service.js')
 
 // Thing under test
-const SupplementaryService = require('../../../app/services/supplementary-billing/supplementary.service.js')
+const SupplementaryDataService = require('../../../app/services/check/supplementary-data.service.js')
 
 describe('Supplementary service', () => {
   const naldRegionId = 9
@@ -40,7 +40,7 @@ describe('Supplementary service', () => {
     })
 
     it('always includes the current billing period', async () => {
-      const result = await SupplementaryService.go(naldRegionId)
+      const result = await SupplementaryDataService.go(naldRegionId)
 
       expect(result.billingPeriods.length).to.equal(1)
       expect(result.billingPeriods[0]).to.equal(currentBillingPeriod)
@@ -63,7 +63,7 @@ describe('Supplementary service', () => {
       })
 
       it('returns the matching licences', async () => {
-        const result = await SupplementaryService.go(naldRegionId)
+        const result = await SupplementaryDataService.go(naldRegionId)
 
         expect(result.licences.length).to.equal(1)
         expect(result.licences[0].licenceId).to.equal(testRecords[0].licenceId)
@@ -76,7 +76,7 @@ describe('Supplementary service', () => {
       })
 
       it('returns no results', async () => {
-        const result = await SupplementaryService.go(naldRegionId)
+        const result = await SupplementaryDataService.go(naldRegionId)
 
         expect(result.licences).to.be.empty()
       })
@@ -102,7 +102,7 @@ describe('Supplementary service', () => {
       })
 
       it('returns the matching charge versions', async () => {
-        const result = await SupplementaryService.go(naldRegionId)
+        const result = await SupplementaryDataService.go(naldRegionId)
 
         expect(result.chargeVersions.length).to.equal(1)
         expect(result.chargeVersions[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
@@ -115,7 +115,7 @@ describe('Supplementary service', () => {
       })
 
       it('returns no results', async () => {
-        const result = await SupplementaryService.go(naldRegionId)
+        const result = await SupplementaryDataService.go(naldRegionId)
 
         expect(result.chargeVersions).to.be.empty()
       })

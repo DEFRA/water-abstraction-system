@@ -1,18 +1,15 @@
 'use strict'
 
 /**
- * Determines the billing periods, licences and charge versions used to generate an SROC supplementary bill run
- *
- * WIP: This is currently being used to generate testing data to confirm we are understanding SROC supplementary
- * billing. We intend to refactor things so that the service starts representing what is actually required.
- * @module SupplementaryService
+ * Confirms the billing periods, licences and charge versions used to generate an SROC supplementary bill run
+ * @module SupplementaryDataService
  */
 
-const BillingPeriodService = require('./billing-period.service.js')
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const FetchLicencesService = require('./fetch-licences.service.js')
-const FetchRegionService = require('./fetch-region.service.js')
-const SupplementaryPresenter = require('../../presenters/supplementary.presenter.js')
+const BillingPeriodService = require('../supplementary-billing/billing-period.service.js')
+const FetchChargeVersionsService = require('../supplementary-billing/fetch-charge-versions.service.js')
+const FetchLicencesService = require('../supplementary-billing/fetch-licences.service.js')
+const FetchRegionService = require('../supplementary-billing/fetch-region.service.js')
+const SupplementaryDataPresenter = require('../../presenters/check/supplementary-data.presenter.js')
 
 async function go (naldRegionId) {
   const region = await FetchRegionService.go(naldRegionId)
@@ -29,7 +26,7 @@ async function go (naldRegionId) {
 }
 
 function _response (data) {
-  return SupplementaryPresenter.go(data)
+  return SupplementaryDataPresenter.go(data)
 }
 
 module.exports = {
