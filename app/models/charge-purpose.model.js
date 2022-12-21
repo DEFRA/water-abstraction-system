@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for water.charge_purposes
+ * Model for chargePurposes
  * @module ChargePurposeModel
  */
 
@@ -11,11 +11,11 @@ const BaseModel = require('./base.model.js')
 
 class ChargePurposeModel extends BaseModel {
   static get tableName () {
-    return 'water.charge_purposes'
+    return 'chargePurposes'
   }
 
   static get idColumn () {
-    return 'charge_purpose_id'
+    return 'chargePurposeId'
   }
 
   static get relationMappings () {
@@ -24,8 +24,8 @@ class ChargePurposeModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'charge-element.model',
         join: {
-          from: 'water.charge_purposes.charge_element_id',
-          to: 'water.charge_elements.charge_element_id'
+          from: 'chargePurposes.chargeElementId',
+          to: 'chargeElements.chargeElementId'
         }
       }
     }

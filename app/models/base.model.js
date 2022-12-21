@@ -5,7 +5,7 @@
  * @module BaseModel
  */
 
-const { Model } = require('objection')
+const { Model, QueryBuilder } = require('objection')
 
 const { db } = require('../../db/db.js')
 
@@ -36,6 +36,22 @@ class BaseModel extends Model {
   static get modelPaths () {
     return [__dirname]
   }
+
+  static get defaultSchema () {
+    return 'water'
+  }
 }
+
+class DefaultSchemaQueryBuilder extends QueryBuilder {
+  constructor (modelClass) {
+    super(modelClass)
+    if (modelClass.defaultSchema) {
+      this.withSchema(modelClass.defaultSchema)
+    }
+  }
+}
+
+Model.QueryBuilder = DefaultSchemaQueryBuilder
+Model.RelatedQueryBuilder = DefaultSchemaQueryBuilder
 
 module.exports = BaseModel

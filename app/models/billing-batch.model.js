@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for water.billing_batches
+ * Model for billing_batches
  * @module BillingBatchModel
  */
 
@@ -11,7 +11,7 @@ const BaseModel = require('./base.model.js')
 
 class BillingBatchModel extends BaseModel {
   static get tableName () {
-    return 'water.billing_batches'
+    return 'billing_batches'
   }
 
   static get idColumn () {
@@ -24,8 +24,8 @@ class BillingBatchModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'region.model',
         join: {
-          from: 'water.billing_batches.region_id',
-          to: 'water.regions.region_id'
+          from: 'billing_batches.region_id',
+          to: 'regions.region_id'
         }
       }
     }
