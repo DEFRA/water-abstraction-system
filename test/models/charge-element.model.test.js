@@ -39,7 +39,7 @@ describe('Charge Element model', () => {
     describe('when linking to charge purpose', () => {
       it('can successfully run a query', async () => {
         const query = await ChargeElement.query()
-          .innerJoinRelated('chargePurpose')
+          .innerJoinRelated('chargePurposes')
 
         expect(query).to.exist()
       })

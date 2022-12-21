@@ -30,7 +30,7 @@ describe('ChargeVersion model', () => {
     describe('when linking to charge element', () => {
       it('can successfully run a query', async () => {
         const query = await ChargeVersion.query()
-          .innerJoinRelated('chargeElement')
+          .innerJoinRelated('chargeElements')
 
         expect(query).to.exist()
       })
