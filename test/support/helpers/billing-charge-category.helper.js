@@ -63,5 +63,6 @@ function defaults (data = {}) {
 }
 
 module.exports = {
-  add
+  add,
+  defaults
 }
