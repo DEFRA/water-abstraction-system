@@ -18,8 +18,8 @@ describe('Supplementary presenter', () => {
       data = {
         billingPeriods: [
           {
-            startDate: new Date(2022, 4, 1),
-            endDate: new Date(2023, 3, 31)
+            startDate: new Date(2022, 3, 1), // 2022-04-01 - Months are zero indexed
+            endDate: new Date(2023, 2, 31)
           }
         ],
         licences: [
