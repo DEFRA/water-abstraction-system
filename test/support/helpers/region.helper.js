@@ -4,28 +4,26 @@
  * @module RegionHelper
  */
 
-const { db } = require('../../../db/db.js')
+const RegionModel = require('../../../app/models/region.model.js')
 
 /**
  * Add a new region
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `charge_region_id` - S
- * - `nald_region_id` - 9
+ * - `chargeRegionId` - S
+ * - `naldRegionId` - 9
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {string} The ID of the newly created record
+ * @returns {module:RegionModel} The instance of the newly created record
  */
-async function add (data = {}) {
+function add (data = {}) {
   const insertData = defaults(data)
 
-  const result = await db.table('water.regions')
-    .insert(insertData)
-    .returning('region_id')
-
-  return result
+  return RegionModel.query()
+    .insert({ ...insertData })
+    .returning('*')
 }
 
 /**
@@ -38,8 +36,8 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    charge_region_id: 'S',
-    nald_region_id: 9
+    chargeRegionId: 'S',
+    naldRegionId: 9
   }
 
   return {
