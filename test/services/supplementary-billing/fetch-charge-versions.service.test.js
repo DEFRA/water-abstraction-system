@@ -108,7 +108,7 @@ describe('Fetch Charge Versions service', () => {
           // This creates an SROC charge version with a start date before the billing period. This would have been
           // picked up by a previous bill run
           const alcsChargeVersion = await ChargeVersionHelper.add(
-            { start_date: new Date(2022, 2, 31) }, // 2022-03-01 - Months are zero indexed :-)
+            { start_date: new Date(2022, 2, 31) }, // 2022-03-31 - Months are zero indexed :-)
             { include_in_supplementary_billing: 'yes' }
           )
           testRecords = [alcsChargeVersion]
