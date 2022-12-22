@@ -55,6 +55,7 @@ async function _fetch (regionId, billingPeriod) {
     })
     .modifyGraph('chargeElements.chargePurposes', builder => {
       builder.select(
+        'chargePurposeId',
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
         'abstractionPeriodEndDay',
