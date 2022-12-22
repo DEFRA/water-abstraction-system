@@ -16,7 +16,7 @@ const FetchRegionService = require('../../../app/services/supplementary-billing/
 
 describe('Fetch Region service', () => {
   const naldRegionId = 9
-  let testRecords
+  let testRegion
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -24,19 +24,19 @@ describe('Fetch Region service', () => {
 
   describe('when there is a region with a matching NALD region id', () => {
     beforeEach(async () => {
-      testRecords = await RegionHelper.add()
+      testRegion = await RegionHelper.add()
     })
 
     it('returns results', async () => {
       const result = await FetchRegionService.go(naldRegionId)
 
-      expect(result.regionId).to.equal(testRecords[0].regionId)
+      expect(result.regionId).to.equal(testRegion.regionId)
     })
   })
 
   describe('when there is no region with a matching NALD region id', () => {
     beforeEach(async () => {
-      RegionHelper.add({ nald_region_id: 99 })
+      RegionHelper.add({ naldRegionId: 99 })
     })
 
     it('returns no results', async () => {

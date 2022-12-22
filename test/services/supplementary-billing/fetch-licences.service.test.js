@@ -16,8 +16,8 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const FetchLicencesService = require('../../../app/services/supplementary-billing/fetch-licences.service.js')
 
 describe('Fetch Licences service', () => {
-  const region = { regionId: LicenceHelper.defaults().region_id }
-  let testRecords
+  const region = { regionId: LicenceHelper.defaults().regionId }
+  let testLicence
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -26,33 +26,33 @@ describe('Fetch Licences service', () => {
   describe('when there are licences for the matching region', () => {
     describe('that are flagged to be included in supplementary billing', () => {
       beforeEach(async () => {
-        testRecords = await LicenceHelper.add({ include_in_supplementary_billing: 'yes' })
+        testLicence = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes' })
       })
 
       describe('and that have an SROC charge version', () => {
         beforeEach(async () => {
-          await ChargeVersionHelper.add({}, testRecords[0])
+          await ChargeVersionHelper.add({}, testLicence)
         })
 
         it('returns results', async () => {
           const result = await FetchLicencesService.go(region)
 
           expect(result.length).to.equal(1)
-          expect(result[0].licenceId).to.equal(testRecords[0].licenceId)
+          expect(result[0].licenceId).to.equal(testLicence.licenceId)
         })
       })
 
       describe('and that have multiple SROC charge versions', () => {
         beforeEach(async () => {
-          await ChargeVersionHelper.add({}, testRecords[0])
-          await ChargeVersionHelper.add({}, testRecords[0])
+          await ChargeVersionHelper.add({}, testLicence)
+          await ChargeVersionHelper.add({}, testLicence)
         })
 
         it('returns a licence only once in the results', async () => {
           const result = await FetchLicencesService.go(region)
 
           expect(result.length).to.equal(1)
-          expect(result[0].licenceId).to.equal(testRecords[0].licenceId)
+          expect(result[0].licenceId).to.equal(testLicence.licenceId)
         })
       })
 
@@ -67,7 +67,7 @@ describe('Fetch Licences service', () => {
 
     describe('that are not flagged to be included in supplementary billing', () => {
       beforeEach(async () => {
-        LicenceHelper.add()
+        await LicenceHelper.add()
       })
 
       it('returns no results', async () => {
@@ -80,7 +80,7 @@ describe('Fetch Licences service', () => {
 
   describe('when there are no licences for the matching region', () => {
     beforeEach(async () => {
-      LicenceHelper.add({ region_id: '000446bd-182a-4340-be6b-d719855ace1a' })
+      await LicenceHelper.add({ regionId: '000446bd-182a-4340-be6b-d719855ace1a' })
     })
 
     it('returns no results', async () => {
