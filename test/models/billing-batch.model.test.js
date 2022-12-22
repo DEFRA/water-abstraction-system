@@ -52,7 +52,7 @@ describe('Billing Batch model', () => {
         expect(query).to.exist()
       })
 
-      it.only('can eager load the region', async () => {
+      it('can eager load the region', async () => {
         const result = await BillingBatchModel.query()
           .findById(testBillingBatch.billingBatchId)
           .withGraphFetched('region')
