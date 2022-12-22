@@ -17,27 +17,44 @@ describe('Supplementary presenter', () => {
     beforeEach(() => {
       data = {
         billingPeriods: [
-          { startDate: new Date(2022, 3, 1), endDate: new Date(2023, 2, 31) }
+          {
+            startDate: new Date(2022, 4, 1),
+            endDate: new Date(2023, 3, 31)
+          }
         ],
         licences: [
-          { licenceId: '0000579f-0f8f-4e21-b63a-063384ad32c8', licenceRef: 'AT/SROC/SUPB/01' }
+          {
+            licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+            licenceRef: 'AT/SROC/SUPB/01'
+          }
         ],
         chargeVersions: [
           {
-            chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
+            chargeVersionId: '6a472535-145c-4170-ab59-f555783fa6e7',
             scheme: 'sroc',
-            startDate: new Date('2022-04-01'),
+            startDate: new Date(2022, 4, 1),
             endDate: null,
-            licenceRef: 'AT/SROC/SUPB/01',
-            licenceId: '0000579f-0f8f-4e21-b63a-063384ad32c8'
-          },
-          {
-            chargeVersionId: '732fde85-fd3b-44e8-811f-8e6f4eb8cf6f',
-            scheme: 'sroc',
-            startDate: new Date('2022-04-01'),
-            endDate: null,
-            licenceRef: 'AT/SROC/SUPB/01',
-            licenceId: '0000579f-0f8f-4e21-b63a-063384ad32c8'
+            licence: {
+              licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+              licenceRef: 'AT/SROC/SUPB/01'
+            },
+            chargeElements: [
+              {
+                chargeElementId: '0382824f-2b17-4294-aa57-c5fe5749960f',
+                chargePurposes: [
+                  {
+                    chargePurposeId: 'ffcb7d57-6148-4ee7-bc95-9de23c0cdc39',
+                    abstractionPeriodStartDay: 1,
+                    abstractionPeriodStartMonth: 4,
+                    abstractionPeriodEndDay: 31,
+                    abstractionPeriodEndMonth: 3
+                  }
+                ],
+                billingChargeCategory: {
+                  reference: '4.2.1'
+                }
+              }
+            ]
           }
         ]
       }
@@ -51,11 +68,11 @@ describe('Supplementary presenter', () => {
 
       expect(result.licences).to.have.length(1)
       expect(result.licences[0]).to.equal({
-        licenceId: data.chargeVersions[0].licenceId,
-        licenceRef: data.chargeVersions[0].licenceRef
+        licenceId: data.chargeVersions[0].licence.licenceId,
+        licenceRef: data.chargeVersions[0].licence.licenceRef
       })
 
-      expect(result.chargeVersions).to.have.length(2)
+      expect(result.chargeVersions).to.have.length(1)
       expect(result.chargeVersions[0]).to.equal(data.chargeVersions[0])
     })
   })
