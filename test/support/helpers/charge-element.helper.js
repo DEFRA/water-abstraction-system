@@ -4,39 +4,37 @@
  * @module ChargeElementHelper
  */
 
-const { db } = require('../../../db/db.js')
+const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 
 /**
  * Add a new charge element
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `charge_version_id` - b033e8d1-3ad4-4782-930b-c1e10cb9110e
+ * - `chargeVersionId` - b033e8d1-3ad4-4782-930b-c1e10cb9110e
  * - `source` - non-tidal
  * - `loss` - low
  * - `description` - Mineral washing
- * - `is_section_127_agreement_enabled` - true
+ * - `isSection127AgreementEnabled` - true
  * - `scheme` - sroc
- * - `is_restricted_source` - true
- * - `water_model` - no model
+ * - `isRestrictedSource` - true
+ * - `waterModel` - no model
  * - `volume` - 6.819
- * - `billing_charge_category_id` - cd9ca44d-2ddb-4d5d-ac62-79883176bdec
- * - `additional_charges` - { isSupplyPublicWater: true }
+ * - `billingChargeCategoryId` - cd9ca44d-2ddb-4d5d-ac62-79883176bdec
+ * - `additionalCharges` - { isSupplyPublicWater: true }
  * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 }
- * - `eiuc_region` - Anglian
+ * - `eiucRegion` - Anglian
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {string} The ID of the newly created record
+ * @returns {module:ChargeElementModel} The instance of the newly created record
  */
-async function add (data = {}) {
+function add (data = {}) {
   const insertData = defaults(data)
 
-  const result = await db.table('water.charge_elements')
-    .insert(insertData)
-    .returning('charge_element_id')
-
-  return result
+  return ChargeElementModel.query()
+    .insert({ ...insertData })
+    .returning('*')
 }
 
 /**
@@ -49,19 +47,19 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    charge_version_id: 'b033e8d1-3ad4-4782-930b-c1e10cb9110e',
+    chargeVersionId: 'b033e8d1-3ad4-4782-930b-c1e10cb9110e',
     source: 'non-tidal',
     loss: 'low',
     description: 'Mineral washing',
-    is_section_127_agreement_enabled: true,
+    isSection127AgreementEnabled: true,
     scheme: 'sroc',
-    is_restricted_source: true,
-    water_model: 'no model',
+    isRestrictedSource: true,
+    waterModel: 'no model',
     volume: 6.819,
-    billing_charge_category_id: 'cd9ca44d-2ddb-4d5d-ac62-79883176bdec',
-    additional_charges: { isSupplyPublicWater: true },
+    billingChargeCategoryId: 'cd9ca44d-2ddb-4d5d-ac62-79883176bdec',
+    additionalCharges: { isSupplyPublicWater: true },
     adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    eiuc_region: 'Anglian'
+    eiucRegion: 'Anglian'
   }
 
   return {

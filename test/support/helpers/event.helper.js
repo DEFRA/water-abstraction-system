@@ -4,7 +4,7 @@
  * @module EventHelper
  */
 
-const { db } = require('../../../db/db.js')
+const EventModel = require('../../../app/models/event.model.js')
 
 /**
  * Add a new event
@@ -27,16 +27,14 @@ const { db } = require('../../../db/db.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {string} The newly created event record
+ * @returns {module:EventModel} The instance of the newly created record
  */
-async function add (data = {}) {
+function add (data = {}) {
   const insertData = defaults(data)
 
-  const result = await db.table('water.events')
-    .insert(insertData)
+  return EventModel.query()
+    .insert({ ...insertData })
     .returning('*')
-
-  return result
 }
 
 /**

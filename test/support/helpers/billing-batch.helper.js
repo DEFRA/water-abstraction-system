@@ -4,32 +4,30 @@
  * @module BillingBatchHelper
  */
 
-const { db } = require('../../../db/db.js')
+const BillingBatchModel = require('../../../app/models/billing-batch.model.js')
 
 /**
  * Add a new billing batch
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `region_id` - bd114474-790f-4470-8ba4-7b0cc9c225d7
- * - `batch_type` - supplementary
- * - `from_financial_year_ending` - 2023
- * - `to_financial_year_ending` - 2023
+ * - `regionId` - bd114474-790f-4470-8ba4-7b0cc9c225d7
+ * - `batchType` - supplementary
+ * - `fromFinancialYearEnding` - 2023
+ * - `toFinancialYearEnding` - 2023
  * - `status` - processing
  * - `scheme` - sroc
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {string} The ID of the newly created record
+ * @returns {module:BillingBatchModel} The instance of the newly created record
  */
-async function add (data = {}) {
+function add (data = {}) {
   const insertData = defaults(data)
 
-  const result = await db.table('water.billing_batches')
-    .insert(insertData)
-    .returning('billing_batch_id')
-
-  return result
+  return BillingBatchModel.query()
+    .insert({ ...insertData })
+    .returning('*')
 }
 
 /**
@@ -42,10 +40,10 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    region_id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7',
-    batch_type: 'supplementary',
-    from_financial_year_ending: 2023,
-    to_financial_year_ending: 2023,
+    regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7',
+    batchType: 'supplementary',
+    fromFinancialYearEnding: 2023,
+    toFinancialYearEnding: 2023,
     status: 'processing',
     scheme: 'sroc'
   }
