@@ -20,30 +20,6 @@ class ChargeVersionModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      billingChargeCategory: {
-        relation: Model.ManyToManyRelation,
-        modelClass: 'billing-charge-category.model',
-        join: {
-          from: 'water.charge_versions.charge_version_id',
-          through: {
-            from: 'water.charge_elements.charge_version_id',
-            to: 'water.charge_elements.billing_charge_category_id'
-          },
-          to: 'water.billing_charge_categories.billing_charge_category_id'
-        }
-      },
-      chargePurpose: {
-        relation: Model.ManyToManyRelation,
-        modelClass: 'charge-purpose.model',
-        join: {
-          from: 'water.charge_versions.charge_version_id',
-          through: {
-            from: 'water.charge_elements.charge_version_id',
-            to: 'water.charge_elements.charge_element_id'
-          },
-          to: 'water.charge_purposes.charge_element_id'
-        }
-      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
