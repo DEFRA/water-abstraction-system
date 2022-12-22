@@ -17,20 +17,20 @@ const DatabaseHelper = require('../support/helpers/database.helper.js')
 const BillingChargeCategoryModel = require('../../app/models/billing-charge-category.model.js')
 
 describe('Billing Charge Category model', () => {
-  let testBillingChargeCategory
+  let testRecord
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    testBillingChargeCategory = await BillingChargeCategoryHelper.add()
+    testRecord = await BillingChargeCategoryHelper.add()
   })
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await BillingChargeCategoryModel.query().findById(testBillingChargeCategory.billingChargeCategoryId)
+      const result = await BillingChargeCategoryModel.query().findById(testRecord.billingChargeCategoryId)
 
       expect(result).to.be.an.instanceOf(BillingChargeCategoryModel)
-      expect(result.billingChargeCategoryId).to.equal(testBillingChargeCategory.billingChargeCategoryId)
+      expect(result.billingChargeCategoryId).to.equal(testRecord.billingChargeCategoryId)
     })
   })
 
@@ -39,7 +39,7 @@ describe('Billing Charge Category model', () => {
       let testChargeElements
 
       beforeEach(async () => {
-        const { billingChargeCategoryId } = testBillingChargeCategory
+        const { billingChargeCategoryId } = testRecord
 
         testChargeElements = []
         for (let i = 0; i < 2; i++) {
@@ -57,11 +57,11 @@ describe('Billing Charge Category model', () => {
 
       it('can eager load the charge elements', async () => {
         const result = await BillingChargeCategoryModel.query()
-          .findById(testBillingChargeCategory.billingChargeCategoryId)
+          .findById(testRecord.billingChargeCategoryId)
           .withGraphFetched('chargeElements')
 
         expect(result).to.be.instanceOf(BillingChargeCategoryModel)
-        expect(result.billingChargeCategoryId).to.equal(testBillingChargeCategory.billingChargeCategoryId)
+        expect(result.billingChargeCategoryId).to.equal(testRecord.billingChargeCategoryId)
 
         expect(result.chargeElements).to.be.an.array()
         expect(result.chargeElements[0]).to.be.an.instanceOf(ChargeElementModel)

@@ -17,7 +17,7 @@ const RegionModel = require('../../app/models/region.model.js')
 const BillingBatchModel = require('../../app/models/billing-batch.model.js')
 
 describe('Billing Batch model', () => {
-  let testBillingBatch
+  let testRecord
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -25,14 +25,14 @@ describe('Billing Batch model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testBillingBatch = await BillingBatchHelper.add()
+      testRecord = await BillingBatchHelper.add()
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await BillingBatchModel.query().findById(testBillingBatch.billingBatchId)
+      const result = await BillingBatchModel.query().findById(testRecord.billingBatchId)
 
       expect(result).to.be.an.instanceOf(BillingBatchModel)
-      expect(result.billingBatchId).to.equal(testBillingBatch.billingBatchId)
+      expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
     })
   })
 
@@ -42,7 +42,7 @@ describe('Billing Batch model', () => {
 
       beforeEach(async () => {
         testRegion = await RegionHelper.add()
-        testBillingBatch = await BillingBatchHelper.add({ regionId: testRegion.regionId })
+        testRecord = await BillingBatchHelper.add({ regionId: testRegion.regionId })
       })
 
       it('can successfully run a related query', async () => {
@@ -54,11 +54,11 @@ describe('Billing Batch model', () => {
 
       it('can eager load the region', async () => {
         const result = await BillingBatchModel.query()
-          .findById(testBillingBatch.billingBatchId)
+          .findById(testRecord.billingBatchId)
           .withGraphFetched('region')
 
         expect(result).to.be.instanceOf(BillingBatchModel)
-        expect(result.billingBatchId).to.equal(testBillingBatch.billingBatchId)
+        expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
         expect(result.region).to.equal(testRegion)
