@@ -26,7 +26,7 @@ async function go (naldRegionId) {
 
 async function _fetch (naldRegionId) {
   const result = await RegionModel.query()
-    .where('nald_region_id', naldRegionId)
+    .where('naldRegionId', naldRegionId)
     .first()
 
   return result
