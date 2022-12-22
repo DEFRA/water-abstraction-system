@@ -24,6 +24,10 @@ jobs:
       TACTICAL_IDM_URL: http://localhost:8003
       PERMIT_REPOSITORY_URL: http://localhost:8004
       RETURNS_URL: http://localhost:8006
+      # External Charging Module JWT (AWS Cognito) service
+      CHARGING_MODULE_TOKEN_URL: https://myinstance.amazoncognito.com
+      CHARGING_MODULE_TOKEN_USERNAME: valuefullofnumbersandlettersinlowercase
+      CHARGING_MODULE_TOKEN_PASSWORD: longvaluefullofnumbersandlettersinlowercase
       # These need to be duplicated in services section for postgres. Unfortunately, there is not a way to reuse them
       POSTGRES_USER: water_user
       POSTGRES_PASSWORD: password
