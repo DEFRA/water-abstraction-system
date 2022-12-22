@@ -41,7 +41,30 @@ async function get (url, additionalOptions = {}) {
 
     result.response = await got.get(url, options)
 
-    // If the result is not 2xx or 3xx Got will mark the result as unsuccesful using the response object's `ok:`
+    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
+    // property
+    result.succeeded = result.response.ok
+  } catch (error) {
+    // If it's a network error, for example 'ETIMEDOUT', we'll end up here
+    result.response = error
+  }
+
+  return result
+}
+
+async function post (url, additionalOptions = {}) {
+  const got = await _importGot()
+  const result = {
+    succeeded: false,
+    response: null
+  }
+
+  try {
+    const options = _requestOptions(additionalOptions)
+
+    result.response = await got.post(url, options)
+
+    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
     // property
     result.succeeded = result.response.ok
   } catch (error) {
@@ -90,6 +113,9 @@ function _requestOptions (additionalOptions) {
     retry: {
       // We ensure that the only network errors Got retries are timeout errors
       errorCodes: ['ETIMEDOUT'],
+      // By default, Got does not retry POST requests. As we only retry timeouts there is no risk in retrying POST
+      // requests. So, we set methods to be Got's defaults plus 'POST'
+      methods: ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
       // We set statusCodes as an empty array to ensure that 4xx, 5xx etc. errors are not retried
       statusCodes: []
     },
@@ -105,5 +131,6 @@ function _requestOptions (additionalOptions) {
 }
 
 module.exports = {
-  get
+  get,
+  post
 }
