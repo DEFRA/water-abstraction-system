@@ -10,7 +10,12 @@ const config = {
     url: process.env.EA_ADDRESS_FACADE_URL
   },
   chargingModule: {
-    url: process.env.CHARGING_MODULE_URL
+    url: process.env.CHARGING_MODULE_URL,
+    token: {
+      url: process.env.CHARGING_MODULE_TOKEN_URL,
+      username: process.env.CHARGING_MODULE_TOKEN_USERNAME,
+      password: process.env.CHARGING_MODULE_TOKEN_PASSWORD
+    }
   },
   serviceForeground: {
     url: process.env.SERVICE_FOREGROUND_URL
