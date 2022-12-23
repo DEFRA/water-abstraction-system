@@ -16,7 +16,7 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 
 describe('Fetch Charge Versions service', () => {
-  const { region_id: regionId } = LicenceHelper.defaults()
+  const { regionId } = LicenceHelper.defaults()
   let testRecords
   let billingPeriod
 
@@ -34,13 +34,13 @@ describe('Fetch Charge Versions service', () => {
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       const srocChargeVersion = await ChargeVersionHelper.add(
         {},
-        { include_in_supplementary_billing: 'yes' }
+        { includeInSupplementaryBilling: 'yes' }
       )
 
       // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
       const alcsChargeVersion = await ChargeVersionHelper.add(
         { scheme: 'alcs' },
-        { include_in_supplementary_billing: 'yes' }
+        { includeInSupplementaryBilling: 'yes' }
       )
 
       testRecords = [srocChargeVersion, alcsChargeVersion]
@@ -50,12 +50,12 @@ describe('Fetch Charge Versions service', () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       expect(result.length).to.equal(1)
-      expect(result[0].charge_version_id).to.equal(testRecords[0].charge_version_id)
+      expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
     })
   })
 
   describe('when there are no licences to be included in supplementary billing', () => {
-    describe("because none of them are marked 'include_in_supplementary_billing'", () => {
+    describe("because none of them are marked 'includeInSupplementaryBilling'", () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -85,7 +85,7 @@ describe('Fetch Charge Versions service', () => {
         // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
         const alcsChargeVersion = await ChargeVersionHelper.add(
           { scheme: 'alcs' },
-          { include_in_supplementary_billing: 'yes' }
+          { includeInSupplementaryBilling: 'yes' }
         )
         testRecords = [alcsChargeVersion]
       })
@@ -108,8 +108,8 @@ describe('Fetch Charge Versions service', () => {
           // This creates an SROC charge version with a start date before the billing period. This would have been
           // picked up by a previous bill run
           const alcsChargeVersion = await ChargeVersionHelper.add(
-            { start_date: new Date(2022, 2, 31) }, // 2022-03-31 - Months are zero indexed :-)
-            { include_in_supplementary_billing: 'yes' }
+            { startDate: new Date(2022, 2, 31) }, // 2022-03-01 - Months are zero indexed :-)
+            { includeInSupplementaryBilling: 'yes' }
           )
           testRecords = [alcsChargeVersion]
         })
@@ -131,8 +131,8 @@ describe('Fetch Charge Versions service', () => {
           // This creates an SROC charge version with a start date after the billing period. This will be picked in
           // next years bill runs
           const alcsChargeVersion = await ChargeVersionHelper.add(
-            { start_date: new Date(2023, 3, 1) }, // 2023-04-01 - Months are zero indexed :-)
-            { include_in_supplementary_billing: 'yes' }
+            { startDate: new Date(2023, 3, 1) }, // 2023-04-01 - Months are zero indexed :-)
+            { includeInSupplementaryBilling: 'yes' }
           )
           testRecords = [alcsChargeVersion]
         })
@@ -156,8 +156,8 @@ describe('Fetch Charge Versions service', () => {
         const otherRegionChargeVersion = await ChargeVersionHelper.add(
           {},
           {
-            include_in_supplementary_billing: 'yes',
-            region_id: 'e117b501-e3c1-4337-ad35-21c60ed9ad73'
+            includeInSupplementaryBilling: 'yes',
+            regionId: 'e117b501-e3c1-4337-ad35-21c60ed9ad73'
           }
         )
         testRecords = [otherRegionChargeVersion]

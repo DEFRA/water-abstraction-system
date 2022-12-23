@@ -18,10 +18,10 @@ const BillingBatchModel = require('../../models/billing-batch.model.js')
 async function go (regionId, billingPeriod) {
   const billingBatch = await BillingBatchModel.query()
     .insert({
-      region_id: regionId,
-      batch_type: 'supplementary',
-      from_financial_year_ending: billingPeriod.endDate.getFullYear(),
-      to_financial_year_ending: billingPeriod.endDate.getFullYear(),
+      regionId,
+      batchType: 'supplementary',
+      fromFinancialYearEnding: billingPeriod.endDate.getFullYear(),
+      toFinancialYearEnding: billingPeriod.endDate.getFullYear(),
       status: 'processing',
       scheme: 'sroc'
     })

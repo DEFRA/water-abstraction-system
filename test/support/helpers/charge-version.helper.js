@@ -4,8 +4,7 @@
  * @module ChargeVersionHelper
  */
 
-const { db } = require('../../../db/db.js')
-
+const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
 const LicenceHelper = require('./licence.helper.js')
 
 /**
@@ -16,29 +15,35 @@ const LicenceHelper = require('./licence.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
+ * - `licenceRef` - 01/123
  * - `scheme` - sroc
- * - `licence_ref` - 01/123
+ * - `startDate` - 2022-04-01
  *
  * See `LicenceHelper` for the licence defaults
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  * @param {Object} [licence] Any licence data you want to use instead of the defaults used here or in the database
  *
- * @returns {string} The ID of the newly created record
+ * @returns {module:ChargeVersionModel} The instance of the newly created record
  */
 async function add (data = {}, licence = {}) {
-  let licenceId = licence?.licenceId
-  if (!licenceId) {
-    licenceId = await _addLicence(licence)
+  const licenceId = await _licenceId(licence)
+
+  const insertData = defaults({ ...data, licenceId })
+
+  return ChargeVersionModel.query()
+    .insert({ ...insertData })
+    .returning('*')
+}
+
+async function _licenceId (providedLicence) {
+  if (providedLicence?.licenceId) {
+    return providedLicence.licenceId
   }
 
-  const insertData = defaults({ ...data, licence_id: licenceId })
+  const licence = await LicenceHelper.add(providedLicence)
 
-  const result = await db.table('water.charge_versions')
-    .insert(insertData)
-    .returning('charge_version_id')
-
-  return result
+  return licence.licenceId
 }
 
 /**
@@ -51,21 +56,15 @@ async function add (data = {}, licence = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    licence_ref: '01/123',
+    licenceRef: '01/123',
     scheme: 'sroc',
-    start_date: new Date('2022-04-01')
+    startDate: new Date('2022-04-01')
   }
 
   return {
     ...defaults,
     ...data
   }
-}
-
-async function _addLicence (licence) {
-  const result = await LicenceHelper.add(licence)
-
-  return result[0].licenceId
 }
 
 module.exports = {
