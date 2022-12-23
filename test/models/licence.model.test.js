@@ -37,7 +37,7 @@ describe('Licence model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to versions', () => {
+    describe('when linking to charge versions', () => {
       let testChargeVersions
 
       beforeEach(async () => {
