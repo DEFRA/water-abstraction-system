@@ -27,7 +27,7 @@ describe('Fetch Charge Versions service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe.only('when there are licences to be included in supplementary billing', () => {
+  describe('when there are licences to be included in supplementary billing', () => {
     let billingChargeCategory
     let chargeElement
     let chargePurpose
