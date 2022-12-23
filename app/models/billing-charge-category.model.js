@@ -20,7 +20,7 @@ class BillingChargeCategoryModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      chargeElement: {
+      chargeElements: {
         relation: Model.HasManyRelation,
         modelClass: 'charge-element.model',
         join: {

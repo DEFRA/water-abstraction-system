@@ -30,7 +30,7 @@ class RegionModel extends BaseModel {
       },
       billingBatches: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing_batch.model',
+        modelClass: 'billing-batch.model',
         join: {
           from: 'regions.regionId',
           to: 'billingBatches.regionId'
