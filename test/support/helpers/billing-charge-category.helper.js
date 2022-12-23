@@ -30,7 +30,7 @@ function add (data = {}) {
   const insertData = defaults(data)
 
   return BillingChargeCategoryModel.query()
-    .insertData({ ...insertData })
+    .insert({ ...insertData })
     .returning('*')
 }
 

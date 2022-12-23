@@ -8,6 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingChargeCategoryHelper = require('../../support/helpers/billing-charge-category.helper.js')
+const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
+const ChargePurposeHelper = require('../../support/helpers/charge-purpose.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -25,6 +28,10 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are licences to be included in supplementary billing', () => {
+    let billingChargeCategory
+    let chargeElement
+    let chargePurpose
+
     beforeEach(async () => {
       billingPeriod = {
         startDate: new Date('2022-04-01'),
@@ -44,6 +51,17 @@ describe('Fetch Charge Versions service', () => {
       )
 
       testRecords = [srocChargeVersion, alcsChargeVersion]
+
+      billingChargeCategory = await BillingChargeCategoryHelper.add()
+
+      chargeElement = await ChargeElementHelper.add({
+        chargeVersionId: srocChargeVersion.chargeVersionId,
+        billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId
+      })
+
+      chargePurpose = await ChargePurposeHelper.add({
+        chargeElementId: chargeElement.chargeElementId
+      })
     })
 
     it('returns only the current SROC charge versions that are applicable', async () => {
@@ -51,6 +69,28 @@ describe('Fetch Charge Versions service', () => {
 
       expect(result.length).to.equal(1)
       expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+    })
+
+    it('includes related charge elements, billing charge category and charge purposes', async () => {
+      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+      const expectedResult = {
+        chargeElementId: chargeElement.chargeElementId,
+        billingChargeCategory: {
+          reference: billingChargeCategory.reference
+        },
+        chargePurposes: [{
+          chargePurposeId: chargePurpose.chargePurposeId,
+          abstractionPeriodStartDay: chargePurpose.abstractionPeriodStartDay,
+          abstractionPeriodStartMonth: chargePurpose.abstractionPeriodStartMonth,
+          abstractionPeriodEndDay: chargePurpose.abstractionPeriodEndDay,
+          abstractionPeriodEndMonth: chargePurpose.abstractionPeriodEndMonth
+        }]
+      }
+
+      expect(result.length).to.equal(1)
+      expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+      expect(result[0].chargeElements[0]).to.equal(expectedResult)
     })
   })
 

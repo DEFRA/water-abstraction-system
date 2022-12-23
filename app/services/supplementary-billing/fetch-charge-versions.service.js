@@ -5,7 +5,7 @@
  * @module FetchChargeVersionsService
  */
 
-const { db } = require('../../../db/db.js')
+const ChargeVersion = require('../../models/charge-version.model.js')
 
 /**
  * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
@@ -26,17 +26,42 @@ async function go (regionId, billingPeriod) {
 }
 
 async function _fetch (regionId, billingPeriod) {
-  const chargeVersions = db
-    .select('chv.chargeVersionId', 'chv.scheme', 'chv.startDate', 'chv.endDate', 'lic.licenceId', 'lic.licenceRef')
-    .from({ chv: 'water.charge_versions' })
-    .innerJoin({ lic: 'water.licences' }, 'chv.licence_id', 'lic.licence_id')
-    .where({
-      scheme: 'sroc',
-      'lic.include_in_supplementary_billing': 'yes',
-      'lic.region_id': regionId
+  const chargeVersions = await ChargeVersion.query()
+    .select('chargeVersionId', 'scheme', 'chargeVersions.startDate', 'chargeVersions.endDate')
+    .innerJoinRelated('licence')
+    .where('scheme', 'sroc')
+    .where('includeInSupplementaryBilling', 'yes')
+    .where('regionId', regionId)
+    .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
+    .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .withGraphFetched('licence')
+    .modifyGraph('licence', builder => {
+      builder.select(
+        'licenceId',
+        'licenceRef'
+      )
     })
-    .andWhere('chv.start_date', '>=', billingPeriod.startDate)
-    .andWhere('chv.start_date', '<=', billingPeriod.endDate)
+    .withGraphFetched('chargeElements.billingChargeCategory')
+    .modifyGraph('chargeElements.billingChargeCategory', builder => {
+      builder.select(
+        'reference'
+      )
+    })
+    .withGraphFetched('chargeElements.chargePurposes')
+    .modifyGraph('chargeElements', builder => {
+      builder.select(
+        'chargeElementId'
+      )
+    })
+    .modifyGraph('chargeElements.chargePurposes', builder => {
+      builder.select(
+        'chargePurposeId',
+        'abstractionPeriodStartDay',
+        'abstractionPeriodStartMonth',
+        'abstractionPeriodEndDay',
+        'abstractionPeriodEndMonth'
+      )
+    })
 
   return chargeVersions
 }
