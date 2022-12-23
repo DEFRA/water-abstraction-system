@@ -7,9 +7,9 @@
 
 const Boom = require('@hapi/boom')
 
-const CreateBillRunValidator = require('../validators/bill-runs/create-bill-run.validator')
+const CreateBillRunValidator = require('../../validators/bill-runs/create-bill-run.validator')
 
-const BillingBatchModel = require('../models/billing-batch.model')
+const BillingBatchModel = require('../../models/billing-batch.model')
 
 async function createBillRun (request, _h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
