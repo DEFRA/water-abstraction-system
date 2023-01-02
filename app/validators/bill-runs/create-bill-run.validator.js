@@ -14,7 +14,8 @@ function go (data) {
     type: Joi.string().valid('supplementary').required(),
     scheme: Joi.string().valid('sroc').required(),
     region: Joi.string().guid().required(),
-    previousBillRunId: Joi.string().guid().optional()
+    previousBillRunId: Joi.string().guid().optional(),
+    user: Joi.string().email().required()
   })
 
   return schema.validate(data)
