@@ -16,7 +16,7 @@ const RegionModel = require('../../../app/models/region.model.js')
 // Thing under test
 const CreateBillingBatchService = require('../../../app/services/supplementary-billing/create-billing-batch.service.js')
 
-describe.only('Create Billing Batch service', () => {
+describe('Create Billing Batch service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
   let region
 
