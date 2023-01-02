@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats a `BillingBatchModel` into the metadata content needed for a bill run's 'event' record
- * @module CreateBillRunEventPresenter
+ * Formats a `BillingBatchModel` into the metadata content needed for a bill batch's 'event' record
+ * @module CreateBillingBatchEventPresenter
  */
 
 function go (billingBatch) {

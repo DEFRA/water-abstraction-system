@@ -14,9 +14,9 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
-const CreateBillRunEventPresenter = require('../../../app/presenters/supplementary-billing/create-bill-run-event.presenter.js')
+const CreateBillingBatchEventPresenter = require('../../../app/presenters/supplementary-billing/create-billing-batch-event.presenter.js')
 
-describe('Create Bill Run Event presenter', () => {
+describe('Create Billing Batch Event presenter', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
@@ -34,7 +34,7 @@ describe('Create Bill Run Event presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateBillRunEventPresenter.go(billingBatch)
+      const result = CreateBillingBatchEventPresenter.go(billingBatch)
 
       expect(result.batch).to.exist()
       expect(result.batch.id).to.equal(billingBatch.billingBatchId)
