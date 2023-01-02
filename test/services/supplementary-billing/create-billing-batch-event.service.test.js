@@ -8,38 +8,45 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingBatchHelper = require('../../support/helpers/billing-batch.helper.js')
+const BillingBatchModel = require('../../../app/models/billing-batch.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const EventModel = require('../../../app/models/event.model.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const CreateBillingBatchEventService = require('../../../app/services/supplementary-billing/create-billing-batch-event.service.js')
 
 describe('Create Event service', () => {
-  const type = 'billing-batch'
-  const subtype = 'supplementary'
-  const issuer = 'test.user@defra.gov.uk'
-  const metadata = {
-    batch: {
-      id: '744c307f-904f-43c4-9458-24f062381d02',
-      type: 'supplementary',
-      region: {
-        id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7'
-      },
-      scheme: 'sroc'
-    }
-  }
-  const status = 'start'
-
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
 
-  it('creates an event record', async () => {
-    const result = await CreateBillingBatchEventService.go(type, subtype, issuer, metadata, status)
+  describe('when a BillingBatchModel instance is provided', () => {
+    const issuer = 'test.user@defra.gov.uk'
+    let billingBatch
 
-    expect(result.type).to.equal(type)
-    expect(result.subtype).to.equal(subtype)
-    expect(result.issuer).to.equal(issuer)
-    expect(result.metadata).to.equal(metadata)
-    expect(result.status).to.equal(status)
+    beforeEach(async () => {
+      const region = await RegionHelper.add()
+      const testBillingBatch = await BillingBatchHelper.add({ regionId: region.regionId })
+
+      billingBatch = await BillingBatchModel.query()
+        .findById(testBillingBatch.billingBatchId)
+        .withGraphFetched('region')
+    })
+
+    it('creates an event record', async () => {
+      const result = await CreateBillingBatchEventService.go(billingBatch, issuer)
+
+      expect(result).to.be.an.instanceOf(EventModel)
+
+      expect(result.type).to.equal('billing-batch')
+      expect(result.subtype).to.equal(billingBatch.batchType)
+      expect(result.issuer).to.equal(issuer)
+      expect(result.status).to.equal('start')
+
+      expect(result.metadata).to.exist()
+      expect(result.metadata.batch.id).to.equal(billingBatch.billingBatchId)
+    })
   })
 })
