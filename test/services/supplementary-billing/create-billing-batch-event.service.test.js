@@ -11,7 +11,7 @@ const { expect } = Code
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const CreateEventService = require('../../../app/services/supplementary-billing/create-event.service.js')
+const CreateBillingBatchEventService = require('../../../app/services/supplementary-billing/create-billing-batch-event.service.js')
 
 describe('Create Event service', () => {
   const type = 'billing-batch'
@@ -34,7 +34,7 @@ describe('Create Event service', () => {
   })
 
   it('creates an event record', async () => {
-    const result = await CreateEventService.go(type, subtype, issuer, metadata, status)
+    const result = await CreateBillingBatchEventService.go(type, subtype, issuer, metadata, status)
 
     expect(result.type).to.equal(type)
     expect(result.subtype).to.equal(subtype)
