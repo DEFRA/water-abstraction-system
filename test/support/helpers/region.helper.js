@@ -13,6 +13,8 @@ const RegionModel = require('../../../app/models/region.model.js')
  *
  * - `chargeRegionId` - S
  * - `naldRegionId` - 9
+ * - `name` - Sroc Supplementary Bill (Test)
+ * - `displayName` - Sroc Test
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -37,7 +39,9 @@ function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     chargeRegionId: 'S',
-    naldRegionId: 9
+    naldRegionId: 9,
+    name: 'Sroc Supplementary Bill (Test)',
+    displayName: 'Sroc Test'
   }
 
   return {
