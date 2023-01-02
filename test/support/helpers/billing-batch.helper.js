@@ -17,6 +17,7 @@ const BillingBatchModel = require('../../../app/models/billing-batch.model.js')
  * - `toFinancialYearEnding` - 2023
  * - `status` - processing
  * - `scheme` - sroc
+ * - `source` - wrls
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -45,7 +46,8 @@ function defaults (data = {}) {
     fromFinancialYearEnding: 2023,
     toFinancialYearEnding: 2023,
     status: 'processing',
-    scheme: 'sroc'
+    scheme: 'sroc',
+    source: 'wrls'
   }
 
   return {
