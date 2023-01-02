@@ -27,7 +27,8 @@ describe('Bill Runs controller:', () => {
           payload: {
             type: 'supplementary',
             scheme: 'sroc',
-            region: '07ae7f3a-2677-4102-b352-cc006828948c'
+            region: '07ae7f3a-2677-4102-b352-cc006828948c',
+            user: 'test.user@defra.gov.uk'
           }
         }
 
@@ -47,7 +48,8 @@ describe('Bill Runs controller:', () => {
           payload: {
             type: 'supplementary',
             scheme: 'INVALID',
-            region: '07ae7f3a-2677-4102-b352-cc006828948c'
+            region: '07ae7f3a-2677-4102-b352-cc006828948c',
+            user: 'test.user@defra.gov.uk'
           }
         }
 
