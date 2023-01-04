@@ -22,8 +22,9 @@ exports.up = async function (knex) {
       table.bigInteger('min_volume')
       table.bigInteger('max_volume')
 
-      // Automatic timestamps
-      table.timestamps(false, true)
+      // Legacy timestamps
+      table.timestamp('date_created', { useTz: false }).notNullable()
+      table.timestamp('date_updated', { useTz: false })
     })
 
   await knex.raw(`

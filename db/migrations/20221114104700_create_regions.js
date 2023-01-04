@@ -16,8 +16,9 @@ exports.up = async function (knex) {
       table.string('name')
       table.string('display_name')
 
-      // Automatic timestamps
-      table.timestamps(false, true)
+      // Legacy timestamps
+      table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+      table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
     })
 
   await knex.raw(`

@@ -17,8 +17,9 @@ exports.up = async function (knex) {
       table.jsonb('metadata')
       table.string('status')
 
-      // Automatic timestamps
-      table.timestamps(false, true)
+      // Legacy timestamps
+      table.timestamp('created', { precision: 0, useTz: false }).notNullable().defaultTo(knex.fn.now())
+      table.timestamp('modified', { precision: 0, useTz: false }).notNullable().defaultTo(knex.fn.now())
     })
 
   await knex.raw(`
