@@ -13,6 +13,7 @@ exports.up = async function (knex) {
       // Data
       table.string('licence_ref')
       table.string('include_in_supplementary_billing')
+      table.uuid('region_id')
 
       // Automatic timestamps
       table.timestamps(false, true)

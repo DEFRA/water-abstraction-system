@@ -25,6 +25,7 @@ exports.up = async function (knex) {
       table.decimal('credit_note_value')
       table.string('transaction_file_reference')
       table.string('scheme')
+      table.boolean('is_summer').notNullable().defaultTo(false)
 
       // Automatic timestamps
       table.timestamps(false, true)

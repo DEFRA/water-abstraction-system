@@ -13,6 +13,8 @@ exports.up = async function (knex) {
       // Data
       table.string('charge_region_id')
       table.integer('nald_region_id')
+      table.string('name')
+      table.string('display_name')
 
       // Automatic timestamps
       table.timestamps(false, true)

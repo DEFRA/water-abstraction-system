@@ -13,6 +13,9 @@ exports.up = async function (knex) {
       // Data
       table.string('licence_ref')
       table.string('scheme')
+      table.uuid('licence_id')
+      table.date('start_date')
+      table.date('end_date')
 
       // Automatic timestamps
       table.timestamps(false, true)
