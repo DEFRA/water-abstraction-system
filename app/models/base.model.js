@@ -5,7 +5,7 @@
  * @module BaseModel
  */
 
-const { Model, QueryBuilder } = require('objection')
+const { Model } = require('objection')
 
 const { db } = require('../../db/db.js')
 
@@ -16,42 +16,26 @@ Model.knex(db)
 
 class BaseModel extends Model {
   /**
-   * An objective property we override to tell it where to search for models for relationships
+   * Array of paths to search for models used in relationships
    *
-   * When setting a relationship in a model we have to provide a reference to the related model. As we need to set the
-   * relationship on both sides this leads to
+   * This is an objective property we override. When setting a relationship in a model we have to provide a reference
+   * to the related model. As we need to set the relationship on both sides this leads to
    * {@link https://vincit.github.io/objection.js/guide/relations.html#require-loops|require-loops}. We can avoid this
    * by having the model tell Objection where to search for models for relationships. In the relationship declaration we
    * can then just use a string value
    *
    * ```
-   *  // ...
-   *  relation: Model.ManyToManyRelation,
-        modelClass: 'charge_version.model',
-      // ...
-      ```
-
-      We don't want to do this in every model so set it in the `BaseModel` as Objection recommends.
+   * // ...
+   * relation: Model.ManyToManyRelation,
+   * modelClass: 'charge_version.model',
+   * // ...
+   * ```
+   *
+   * We don't want to do this in every model so set it in the `BaseModel` as Objection recommends.
    */
   static get modelPaths () {
     return [__dirname]
   }
-
-  static get defaultSchema () {
-    return 'water'
-  }
 }
-
-class DefaultSchemaQueryBuilder extends QueryBuilder {
-  constructor (modelClass) {
-    super(modelClass)
-    if (modelClass.defaultSchema) {
-      this.withSchema(modelClass.defaultSchema)
-    }
-  }
-}
-
-Model.QueryBuilder = DefaultSchemaQueryBuilder
-Model.RelatedQueryBuilder = DefaultSchemaQueryBuilder
 
 module.exports = BaseModel
