@@ -44,8 +44,8 @@ describe('Create Billing Batch Event presenter', () => {
       expect(result.batch.isSummer).to.equal(billingBatch.isSummer)
       expect(result.batch.netTotal).to.equal(billingBatch.netTotal)
 
-      expect(result.batch.dateCreated).to.equal(billingBatch.createdAt)
-      expect(result.batch.dateUpdated).to.equal(billingBatch.updatedAt)
+      expect(result.batch.dateCreated).to.equal(billingBatch.dateCreated)
+      expect(result.batch.dateUpdated).to.equal(billingBatch.dateUpdated)
       expect(result.batch.invoiceCount).to.equal(billingBatch.invoiceCount)
       expect(result.batch.invoiceValue).to.equal(billingBatch.invoiceValue)
       expect(result.batch.creditNoteCount).to.equal(billingBatch.creditNoteCount)
