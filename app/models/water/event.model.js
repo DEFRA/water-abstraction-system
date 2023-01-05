@@ -5,9 +5,9 @@
  * @module EventModel
  */
 
-const BaseModel = require('../base.model.js')
+const WaterBaseModel = require('./water-base.model.js')
 
-class EventModel extends BaseModel {
+class EventModel extends WaterBaseModel {
   static get tableName () {
     return 'events'
   }
