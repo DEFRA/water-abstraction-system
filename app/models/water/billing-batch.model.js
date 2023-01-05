@@ -7,7 +7,7 @@
 
 const { Model } = require('objection')
 
-const BaseModel = require('./base.model.js')
+const BaseModel = require('../base.model.js')
 
 class BillingBatchModel extends BaseModel {
   static get tableName () {

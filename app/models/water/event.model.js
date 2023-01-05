@@ -5,7 +5,7 @@
  * @module EventModel
  */
 
-const BaseModel = require('./base.model.js')
+const BaseModel = require('../base.model.js')
 
 class EventModel extends BaseModel {
   static get tableName () {
