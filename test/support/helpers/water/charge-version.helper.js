@@ -4,7 +4,7 @@
  * @module ChargeVersionHelper
  */
 
-const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
+const ChargeVersionModel = require('../../../../app/models/water/charge-version.model.js')
 const LicenceHelper = require('./licence.helper.js')
 
 /**

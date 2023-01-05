@@ -4,7 +4,7 @@
  * @module ChargePurposeHelper
  */
 
-const ChargePurposeModel = require('../../../app/models/charge-purpose.model.js')
+const ChargePurposeModel = require('../../../../app/models/water/charge-purpose.model.js')
 
 /**
  * Add a new charge purpose
