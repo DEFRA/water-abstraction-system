@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 
 // Thing under test
 const FetchLicencesService = require('../../../app/services/supplementary-billing/fetch-licences.service.js')

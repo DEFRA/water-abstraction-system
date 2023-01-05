@@ -6,7 +6,7 @@
  */
 
 const CreateBillingBatchEventPresenter = require('../../presenters/supplementary-billing/create-billing-batch-event.presenter.js')
-const EventModel = require('../../models/event.model.js')
+const EventModel = require('../../models/water/event.model.js')
 
 /**
  * Create an event for when a new bill run is initialised

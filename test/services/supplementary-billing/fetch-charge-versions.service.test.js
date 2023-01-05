@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../support/helpers/billing-charge-category.helper.js')
-const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const ChargePurposeHelper = require('../../support/helpers/charge-purpose.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
+const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
+const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
+const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 
 // Thing under test
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')

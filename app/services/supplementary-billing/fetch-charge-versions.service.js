@@ -5,7 +5,7 @@
  * @module FetchChargeVersionsService
  */
 
-const ChargeVersion = require('../../models/charge-version.model.js')
+const ChargeVersion = require('../../models/water/charge-version.model.js')
 
 /**
  * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
