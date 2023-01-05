@@ -8,11 +8,11 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../support/helpers/database.helper.js')
-const EventHelper = require('../support/helpers/event.helper.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const EventHelper = require('../../support/helpers/water/event.helper.js')
 
 // Thing under test
-const EventModel = require('../../app/models/event.model.js')
+const EventModel = require('../../../app/models/water/event.model.js')
 
 describe('Event model', () => {
   let testRecord
