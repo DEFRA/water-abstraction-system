@@ -10,7 +10,6 @@ const RequestLib = require('../lib/request.lib.js')
 const servicesConfig = require('../../config/services.config.js')
 
 async function go () {
-  console.log(`--> ${servicesConfig.chargingModule.token.url}`)
   const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)
 
   const result = await RequestLib.post(url.href, _options())
