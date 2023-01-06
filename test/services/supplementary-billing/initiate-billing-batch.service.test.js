@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchModel = require('../../../app/models/billing-batch.model.js')
+const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const EventModel = require('../../../app/models/event.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+const EventModel = require('../../../app/models/water/event.model.js')
+const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
 const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')

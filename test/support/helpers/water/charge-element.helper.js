@@ -4,7 +4,7 @@
  * @module ChargeElementHelper
  */
 
-const ChargeElementModel = require('../../../app/models/charge-element.model.js')
+const ChargeElementModel = require('../../../../app/models/water/charge-element.model.js')
 
 /**
  * Add a new charge element

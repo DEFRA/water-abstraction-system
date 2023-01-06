@@ -4,7 +4,7 @@
  * @module EventHelper
  */
 
-const EventModel = require('../../../app/models/event.model.js')
+const EventModel = require('../../../../app/models/water/event.model.js')
 
 /**
  * Add a new event

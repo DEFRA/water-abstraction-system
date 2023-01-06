@@ -4,7 +4,7 @@
  * @module BillingChargeCategoryHelper
  */
 
-const BillingChargeCategoryModel = require('../../../app/models/billing-charge-category.model.js')
+const BillingChargeCategoryModel = require('../../../../app/models/water/billing-charge-category.model.js')
 
 /**
  * Add a new billing charge category

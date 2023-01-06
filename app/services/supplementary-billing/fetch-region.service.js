@@ -5,7 +5,7 @@
  * @module FetchRegionService
  */
 
-const RegionModel = require('../../models/region.model.js')
+const RegionModel = require('../../models/water/region.model.js')
 
 /**
  * Fetches the region with the matching NALD Region ID

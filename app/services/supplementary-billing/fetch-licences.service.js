@@ -5,7 +5,7 @@
  * @module FetchLicencesService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+const LicenceModel = require('../../models/water/licence.model.js')
 
 /**
  * Fetches licences flagged for supplementary billing that are linked to the selected region

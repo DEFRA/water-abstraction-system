@@ -4,7 +4,7 @@
  * @module RegionHelper
  */
 
-const RegionModel = require('../../../app/models/region.model.js')
+const RegionModel = require('../../../../app/models/water/region.model.js')
 
 /**
  * Add a new region

@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Thing under test
 const FetchRegionService = require('../../../app/services/supplementary-billing/fetch-region.service.js')

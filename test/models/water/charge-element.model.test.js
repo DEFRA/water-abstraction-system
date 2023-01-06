@@ -8,17 +8,17 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../support/helpers/billing-charge-category.helper.js')
-const BillingChargeCategoryModel = require('../../app/models/billing-charge-category.model.js')
-const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
-const ChargePurposeHelper = require('../support/helpers/charge-purpose.helper.js')
-const ChargePurposeModel = require('../../app/models/charge-purpose.model.js')
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
+const BillingChargeCategoryModel = require('../../../app/models/water/billing-charge-category.model.js')
+const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
+const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
+const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
+const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
+const ChargeVersionModel = require('../../../app/models/water/charge-version.model.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const ChargeElementModel = require('../../app/models/charge-element.model.js')
+const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 
 describe('Charge Element model', () => {
   let testRecord
