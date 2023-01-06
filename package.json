@@ -54,6 +54,12 @@
     "standardx": "^7.0.0"
   },
   "eslintConfig": {
+    "rules": {
+      "func-style": [
+        "error",
+        "declaration"
+      ]
+    },
     "parserOptions": {
       "ecmaVersion": 12
     }
