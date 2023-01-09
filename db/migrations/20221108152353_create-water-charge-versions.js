@@ -13,18 +13,14 @@ exports.up = async function (knex) {
       // Data
       table.string('licence_ref')
       table.string('scheme')
+      table.uuid('licence_id')
+      table.date('start_date')
+      table.date('end_date')
 
-      // Automatic timestamps
-      table.timestamps(false, true)
+      // Legacy timestamps
+      table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+      table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
     })
-
-  await knex.raw(`
-    CREATE TRIGGER update_timestamp
-    BEFORE UPDATE
-    ON water.${tableName}
-    FOR EACH ROW
-    EXECUTE PROCEDURE update_timestamp();
-  `)
 }
 
 exports.down = function (knex) {

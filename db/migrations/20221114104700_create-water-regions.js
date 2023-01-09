@@ -13,9 +13,12 @@ exports.up = async function (knex) {
       // Data
       table.string('charge_region_id')
       table.integer('nald_region_id')
+      table.string('name')
+      table.string('display_name')
 
-      // Automatic timestamps
-      table.timestamps(false, true)
+      // Legacy timestamps
+      table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+      table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
     })
 
   await knex.raw(`
