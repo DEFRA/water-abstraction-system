@@ -13,6 +13,7 @@ const DatabaseHelper = require('../support/helpers/database.helper.js')
 const RegionHelper = require('../support/helpers/water/region.helper.js')
 
 // Things we need to stub
+const ChargeModuleTokenService = require('../../app/services/charge-module-token.service.js')
 const RequestLib = require('../../app/lib/request.lib.js')
 
 // Thing under test
@@ -24,6 +25,11 @@ describe.only('Charge module create bill run service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
     testRegion = await RegionHelper.add()
+
+    Sinon.stub(ChargeModuleTokenService, 'go').resolves({
+      accessToken: 'ACCESS_TOKEN',
+      expiresIn: 3600
+    })
   })
 
   afterEach(() => {
@@ -47,7 +53,8 @@ describe.only('Charge module create bill run service', () => {
       const requestArgs = RequestLib.post.firstCall.args
 
       expect(requestArgs[0]).to.endWith('/wrls/bill-runs')
-      expect(requestArgs[1]).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
+      expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
+      expect(requestArgs[1].body).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
     })
 
     it('returns an object with the id and bill run number', async () => {

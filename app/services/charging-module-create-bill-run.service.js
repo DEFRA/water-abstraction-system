@@ -5,8 +5,9 @@
  * @module ChargingModuleCreateBillRunService
  */
 
-const RequestLib = require('../lib/request.lib.js')
+const ChargeModuleTokenService = require('./charge-module-token.service.js')
 const RegionModel = require('../models/water/region.model.js')
+const RequestLib = require('../lib/request.lib.js')
 
 const servicesConfig = require('../../config/services.config.js')
 
@@ -22,19 +23,25 @@ async function go (regionId, ruleset) {
   const url = new URL('/v3/wrls/bill-runs', servicesConfig.chargingModule.url)
 
   // TODO: Obtain cognito token using ChargingModuleTokenService
+  const authentication = await ChargeModuleTokenService.go()
 
-  const options = await _options(regionId, ruleset)
+  const options = await _options(regionId, ruleset, authentication)
   const result = await RequestLib.post(url.href, options)
 
   return _parseResult(result)
 }
 
-async function _options (regionId, ruleset) {
+async function _options (regionId, ruleset, authentication) {
   const region = await _getChargeRegionId(regionId)
 
   return {
-    region,
-    ruleset
+    headers: {
+      authorization: `Bearer ${authentication.accessToken}`
+    },
+    body: {
+      region,
+      ruleset
+    }
   }
 }
 
