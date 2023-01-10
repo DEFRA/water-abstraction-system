@@ -8,6 +8,10 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const DatabaseHelper = require('../support/helpers/database.helper.js')
+const RegionHelper = require('../support/helpers/water/region.helper.js')
+
 // Things we need to stub
 const RequestLib = require('../../app/lib/request.lib.js')
 
@@ -15,6 +19,13 @@ const RequestLib = require('../../app/lib/request.lib.js')
 const ChargingModuleCreateBillRunService = require('../../app/services/charging-module-create-bill-run.service.js')
 
 describe.only('Charge module create bill run service', () => {
+  let testRegion
+
+  beforeEach(async () => {
+    await DatabaseHelper.clean()
+    testRegion = await RegionHelper.add()
+  })
+
   afterEach(() => {
     Sinon.restore()
   })
@@ -30,8 +41,16 @@ describe.only('Charge module create bill run service', () => {
       })
     })
 
+    it('calls the Charging Module with the correct region', async () => {
+      await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+
+      const requestArgs = RequestLib.post.args[0]
+
+      expect(requestArgs).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
+    })
+
     it('returns an object with the id and bill run number', async () => {
-      const result = await ChargingModuleCreateBillRunService.go()
+      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
 
       expect(result.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
       expect(result.billRunNumber).to.equal(10004)
@@ -51,7 +70,7 @@ describe.only('Charge module create bill run service', () => {
     })
 
     it('returns the appropriate error response', async () => {
-      const result = await ChargingModuleCreateBillRunService.go()
+      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
 
       expect(result).to.equal('NOPE')
     })

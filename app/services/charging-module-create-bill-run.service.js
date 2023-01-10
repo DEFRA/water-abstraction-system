@@ -6,6 +6,7 @@
  */
 
 const RequestLib = require('../lib/request.lib.js')
+const RegionModel = require('../models/water/region.model.js')
 
 const servicesConfig = require('../../config/services.config.js')
 
@@ -22,20 +23,28 @@ async function go (regionId, ruleset) {
 
   // TODO: Obtain cognito token using ChargingModuleTokenService
 
-  const options = _options(regionId, ruleset)
+  const options = await _options(regionId, ruleset)
   const result = await RequestLib.post(url.href, options)
 
   return _parseResult(result)
 }
 
-function _options (regionId, ruleset) {
-  // TODO: Look up regionId to get the corresponding letter
-  const region = 'A'
+async function _options (regionId, ruleset) {
+  const region = await _getChargeRegionId(regionId)
 
   return {
     region,
     ruleset
   }
+}
+
+// Gets the single-letter charge region id for the provided region id UUID
+async function _getChargeRegionId (regionId) {
+  const result = await RegionModel.query()
+    .where('regionId', regionId)
+    .first()
+
+  return result.chargeRegionId
 }
 
 function _parseResult (result) {
