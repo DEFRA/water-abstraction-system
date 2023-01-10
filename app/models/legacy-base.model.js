@@ -65,6 +65,34 @@ class LegacyBaseModel extends BaseModel {
   static get schema () {
     throw new Error('defaultSchema() not implemented in child class')
   }
+
+  static get translations () {
+    return []
+  }
+
+  $parseDatabaseJson (json) {
+    json = super.$parseDatabaseJson(json)
+
+    for (const translation of this.constructor.translations) {
+      json[translation.model] = json[translation.database]
+
+      delete json[translation.database]
+    }
+
+    return json
+  }
+
+  $formatDatabaseJson (json) {
+    json = super.$formatDatabaseJson(json)
+
+    for (const translation of this.constructor.translations) {
+      json[translation.database] = json[translation.model]
+
+      delete json[translation.model]
+    }
+
+    return json
+  }
 }
 
 class SchemaQueryBuilder extends QueryBuilder {
