@@ -46,6 +46,8 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const timestamp = new Date().toISOString()
+
   const defaults = {
     type: 'billing-batch',
     subtype: 'supplementary',
@@ -60,7 +62,9 @@ function defaults (data = {}) {
         scheme: 'sroc'
       }
     },
-    status: 'start'
+    status: 'start',
+    createdAt: timestamp,
+    updatedAt: timestamp
   }
 
   return {
