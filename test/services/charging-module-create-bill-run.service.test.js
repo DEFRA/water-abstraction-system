@@ -41,12 +41,13 @@ describe.only('Charge module create bill run service', () => {
       })
     })
 
-    it('calls the Charging Module with the correct region', async () => {
+    it('calls the Charging Module with the required options', async () => {
       await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
 
-      const requestArgs = RequestLib.post.args[0]
+      const requestArgs = RequestLib.post.firstCall.args
 
-      expect(requestArgs).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
+      expect(requestArgs[0]).to.endWith('/wrls/bill-runs')
+      expect(requestArgs[1]).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
     })
 
     it('returns an object with the id and bill run number', async () => {
