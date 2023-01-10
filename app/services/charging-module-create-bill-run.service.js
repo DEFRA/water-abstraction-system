@@ -22,7 +22,6 @@ const servicesConfig = require('../../config/services.config.js')
 async function go (regionId, ruleset) {
   const url = new URL('/v3/wrls/bill-runs', servicesConfig.chargingModule.url)
 
-  // TODO: Obtain cognito token using ChargingModuleTokenService
   const authentication = await ChargeModuleTokenService.go()
 
   const options = await _options(regionId, ruleset, authentication)
