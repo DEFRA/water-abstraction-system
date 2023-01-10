@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Connects with the Charge Module API's Cognito service to get a JWT for authentication
- * @module ChargeModuleTokenService
+ * Connects with the Charging Module API's Cognito service to get a JWT for authentication
+ * @module ChargingModuleTokenService
  */
 
 const RequestLib = require('../lib/request.lib.js')
