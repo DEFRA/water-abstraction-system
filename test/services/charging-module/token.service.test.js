@@ -12,7 +12,7 @@ const { expect } = Code
 const RequestLib = require('../../../app/lib/request.lib.js')
 
 // Thing under test
-const ChargingModuleTokenService = require('../../../app/services/charging-module/charging-module-token.service.js')
+const ChargingModuleTokenService = require('../../../app/services/charging-module/token.service.js')
 
 describe('Charging module token service', () => {
   afterEach(() => {

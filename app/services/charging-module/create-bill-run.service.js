@@ -5,7 +5,7 @@
  * @module ChargingModuleCreateBillRunService
  */
 
-const ChargingModuleTokenService = require('./charging-module-token.service.js')
+const ChargingModuleTokenService = require('./token.service.js')
 const RegionModel = require('../../models/water/region.model.js')
 const RequestLib = require('../../lib/request.lib.js')
 
