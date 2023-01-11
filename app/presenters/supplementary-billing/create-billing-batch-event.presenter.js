@@ -11,9 +11,7 @@ function go (billingBatch) {
     billingBatchId,
     creditNoteCount,
     creditNoteValue,
-    dateCreated,
     createdAt,
-    dateUpdated,
     updatedAt,
     fromFinancialYearEnding,
     invoiceCount,
@@ -44,12 +42,8 @@ function go (billingBatch) {
       isSummer,
       netTotal,
       startYear: { yearEnding: fromFinancialYearEnding },
-      // NOTE: In the 'real' schema timestamp fields are dateCreated & dateUpdated. If you follow the standard
-      // convention of using a trigger as seen in db/migrations/[*]_create_update_timestamp_trigger.js you get
-      // createdAt & updatedAt. In our testing schema we use the later. To ensure unit tests pass we need to account
-      // for both.
-      dateCreated: dateCreated ?? createdAt,
-      dateUpdated: dateUpdated ?? updatedAt,
+      dateCreated: createdAt,
+      dateUpdated: updatedAt,
       invoiceCount,
       invoiceValue,
       creditNoteCount,
