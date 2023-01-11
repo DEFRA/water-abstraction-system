@@ -13,7 +13,7 @@ const DatabaseHelper = require('../support/helpers/database.helper.js')
 const RegionHelper = require('../support/helpers/water/region.helper.js')
 
 // Things we need to stub
-const ChargeModuleTokenService = require('../../app/services/charge-module-token.service.js')
+const ChargingModuleTokenService = require('../../app/services/charging-module-token.service.js')
 const RequestLib = require('../../app/lib/request.lib.js')
 
 // Thing under test
@@ -26,7 +26,7 @@ describe('Charge module create bill run service', () => {
     await DatabaseHelper.clean()
     testRegion = await RegionHelper.add()
 
-    Sinon.stub(ChargeModuleTokenService, 'go').resolves({
+    Sinon.stub(ChargingModuleTokenService, 'go').resolves({
       accessToken: 'ACCESS_TOKEN',
       expiresIn: 3600
     })

@@ -5,7 +5,7 @@
  * @module ChargingModuleCreateBillRunService
  */
 
-const ChargeModuleTokenService = require('./charge-module-token.service.js')
+const ChargingModuleTokenService = require('./charging-module-token.service.js')
 const RegionModel = require('../models/water/region.model.js')
 const RequestLib = require('../lib/request.lib.js')
 
@@ -24,7 +24,7 @@ const servicesConfig = require('../../config/services.config.js')
 async function go (regionId, ruleset) {
   const url = new URL('/v3/wrls/bill-runs', servicesConfig.chargingModule.url)
 
-  const authentication = await ChargeModuleTokenService.go()
+  const authentication = await ChargingModuleTokenService.go()
 
   const options = await _options(regionId, ruleset, authentication)
   const result = await RequestLib.post(url.href, options)
