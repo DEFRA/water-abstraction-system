@@ -67,7 +67,7 @@ class LegacyBaseModel extends BaseModel {
   }
 
   static get translations () {
-    return []
+    throw new Error('translations() not implemented in child class')
   }
 
   $parseDatabaseJson (json) {

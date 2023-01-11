@@ -11,9 +11,13 @@ const { expect } = Code
 const LegacyBaseModel = require('../../app/models/legacy-base.model.js')
 
 describe('Legacy Base model', () => {
-  describe('.schema()', () => {
+  describe('.schema', () => {
     describe('when the getter is not overridden', () => {
-      class BadModel extends LegacyBaseModel {}
+      class BadModel extends LegacyBaseModel {
+        static get translations () {
+          return []
+        }
+      }
 
       it('throws an error when called', () => {
         expect(() => BadModel.query()).to.throw()
@@ -25,10 +29,46 @@ describe('Legacy Base model', () => {
         static get schema () {
           return 'water'
         }
+
+        static get translations () {
+          return []
+        }
       }
 
       it('does not throw an error when called', () => {
         expect(() => GoodModel.query()).not.to.throw()
+      })
+    })
+  })
+
+  describe('.translations', () => {
+    describe('when the getter is not overridden', () => {
+      class BadModel extends LegacyBaseModel {
+        static get schema () {
+          return 'water'
+        }
+      }
+
+      it('throws an error when called', () => {
+        const instance = new BadModel()
+        expect(() => instance.$toJson()).not.to.throw()
+      })
+    })
+
+    describe('when the getter is overridden', () => {
+      class GoodModel extends LegacyBaseModel {
+        static get schema () {
+          return 'water'
+        }
+
+        static get translations () {
+          return []
+        }
+      }
+
+      it('does not throw an error when called', () => {
+        const instance = new GoodModel()
+        expect(() => instance.$toJson()).not.to.throw()
       })
     })
   })
