@@ -47,8 +47,8 @@ async function _options (regionId, ruleset, authentication) {
 // Gets the single-letter charge region id for the provided region id UUID
 async function _getChargeRegionId (regionId) {
   const result = await RegionModel.query()
-    .where('regionId', regionId)
-    .first()
+    .select('chargeRegionId')
+    .findOne('regionId', regionId)
 
   return result.chargeRegionId
 }
