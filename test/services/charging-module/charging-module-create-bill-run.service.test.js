@@ -9,15 +9,15 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../support/helpers/database.helper.js')
-const RegionHelper = require('../support/helpers/water/region.helper.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
-const ChargingModuleTokenService = require('../../app/services/charging-module-token.service.js')
-const RequestLib = require('../../app/lib/request.lib.js')
+const ChargingModuleTokenService = require('../../../app/services/charging-module/charging-module-token.service.js')
+const RequestLib = require('../../../app/lib/request.lib.js')
 
 // Thing under test
-const ChargingModuleCreateBillRunService = require('../../app/services/charging-module-create-bill-run.service.js')
+const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/charging-module-create-bill-run.service.js')
 
 describe('Charge module create bill run service', () => {
   let testRegion

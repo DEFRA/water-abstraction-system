@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const RequestLib = require('../../app/lib/request.lib.js')
+const RequestLib = require('../../../app/lib/request.lib.js')
 
 // Thing under test
-const ChargingModuleTokenService = require('../../app/services/charging-module-token.service.js')
+const ChargingModuleTokenService = require('../../../app/services/charging-module/charging-module-token.service.js')
 
 describe('Charging module token service', () => {
   afterEach(() => {
