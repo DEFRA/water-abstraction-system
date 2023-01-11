@@ -14,7 +14,7 @@ const servicesConfig = require('../../config/services.config.js')
 /**
  * Sends a request to the Charging Module to create a new bill run and returns the result.
  *
- * @param {string} regionId The id of the region the bill run is to be created for
+ * @param {string} regionId The UUID of the region the bill run is to be created for
  * @param {string} ruleset The ruleset that the bill run is to be created for, either `sroc` or `presroc`
  *
  * @returns {Object} result An object representing the result of the request
@@ -65,7 +65,6 @@ function _parseResult (result) {
 
   return {
     succeeded: true,
-    // The CM returns an object containing a `billRun` object. We simply want to return that inner object.
     response: parsedBody.billRun
   }
 }
