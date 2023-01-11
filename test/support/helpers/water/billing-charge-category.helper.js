@@ -61,7 +61,7 @@ function defaults (data = {}) {
     // epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold the seconds since the epoch. Pass it
     // an ISO string though ('2023-01-05T08:37:05.575Z') and PostgreSQL can do the conversion
     // https://stackoverflow.com/a/61912776/6117745
-    dateCreated: new Date().toISOString()
+    createdAt: new Date().toISOString()
   }
 
   return {
