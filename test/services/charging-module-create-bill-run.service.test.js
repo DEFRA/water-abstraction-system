@@ -59,15 +59,15 @@ describe('Charge module create bill run service', () => {
       expect(requestArgs[1].body).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
     })
 
-    it('returns a result object containing the success status', async () => {
+    it('returns a `true` success status', async () => {
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns a result object with the `billRun` property containing the bill run id and number', async () => {
-      const { billRun } = result
+    it('returns the bill run id and number in the `response`', async () => {
+      const { response } = result
 
-      expect(billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
-      expect(billRun.billRunNumber).to.equal(10004)
+      expect(response.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
+      expect(response.billRunNumber).to.equal(10004)
     })
   })
 
@@ -87,22 +87,16 @@ describe('Charge module create bill run service', () => {
       result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
     })
 
-    it('returns a result object containing the success status', async () => {
+    it('returns a `false` success status', async () => {
       expect(result.succeeded).to.be.false()
     })
 
-    it('returns a result object with a null `billRun` property', async () => {
-      const { billRun } = result
+    it('returns the error in the `response`', async () => {
+      const { response } = result
 
-      expect(billRun).to.be.null()
-    })
-
-    it('returns a result object containing an `errorResponse` object', async () => {
-      const { errorResponse } = result
-
-      expect(errorResponse.statusCode).to.equal(403)
-      expect(errorResponse.error).to.equal('Forbidden')
-      expect(errorResponse.message).to.equal("Unauthorised for regime 'wrls'")
+      expect(response.statusCode).to.equal(403)
+      expect(response.error).to.equal('Forbidden')
+      expect(response.message).to.equal("Unauthorised for regime 'wrls'")
     })
   })
 })
