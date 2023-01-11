@@ -18,6 +18,13 @@ class BillingBatchModel extends WaterBaseModel {
     return 'billingBatchId'
   }
 
+  static get translations () {
+    return [
+      { database: 'dateCreated', model: 'createdAt' },
+      { database: 'dateUpdated', model: 'updatedAt' }
+    ]
+  }
+
   static get relationMappings () {
     return {
       region: {

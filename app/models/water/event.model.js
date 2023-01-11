@@ -15,6 +15,13 @@ class EventModel extends WaterBaseModel {
   static get idColumn () {
     return 'eventId'
   }
+
+  static get translations () {
+    return [
+      { database: 'created', model: 'createdAt' },
+      { database: 'modified', model: 'updatedAt' }
+    ]
+  }
 }
 
 module.exports = EventModel
