@@ -121,9 +121,12 @@ class LegacyBaseModel extends BaseModel {
    * EventModel.query().where('createdAt', '<', new Date().toISOString())
    * ```
    *
-   * Overriding {@link https://vincit.github.io/objection.js/api/model/static-properties.html#static-columnnamemappers columnNameMappers}
-   * had the same result as what we're doing. We also looked into {@link https://vincit.github.io/objection.js/api/objection/#knexidentifiermapping knexIdentifierMapping}. This would do the mapping at a lower level, in the same way we've
-   * used {@link https://vincit.github.io/objection.js/api/objection/#knexsnakecasemappers knexSnakeCaseMappers} to
+   * Overriding
+   * {@link https://vincit.github.io/objection.js/api/model/static-properties.html#static-columnnamemappers columnNameMappers}
+   * had the same result as what we're doing. We also looked into
+   * {@link https://vincit.github.io/objection.js/api/objection/#knexidentifiermapping knexIdentifierMapping}. This
+   * would do the mapping at a lower level, in the same way we've used
+   * {@link https://vincit.github.io/objection.js/api/objection/#knexsnakecasemappers knexSnakeCaseMappers} to
    * make changes before Objection.js takes over.
    *
    * The first problem we hit was that you can only use one of these; you can't apply both to the config object based to
