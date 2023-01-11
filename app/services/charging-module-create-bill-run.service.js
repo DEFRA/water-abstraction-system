@@ -18,10 +18,14 @@ const servicesConfig = require('../../config/services.config.js')
  * @param {string} ruleset The ruleset that the bill run is to be created for, either `sroc` or `presroc`
  *
  * @returns {Object} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the bill run creation request was successful
- * @returns {Object|undefined} result.billRun If successful, an object with details of the created bill run
+
+* @returns {boolean} result.succeeded Whether the bill run creation request was successful
+
+ * @returns {Object|null} result.billRun If successful, an object with details of the created bill run
  * @returns {string} result.billRun.id UUID of the bill run
  * @returns {number} result.billRun.billRunNumber The number of the bill run
+
+ * @returns {Object} [result.errorResponse] Optional object detailing any error response
  */
 async function go (regionId, ruleset) {
   const url = new URL('/v3/wrls/bill-runs', servicesConfig.chargingModule.url)
@@ -60,17 +64,20 @@ async function _getChargeRegionId (regionId) {
 function _parseResult (result) {
   const { succeeded } = result
 
-  let billRun
-
-  if (succeeded) {
-    // The CM returns an object containing a `billRun` object. We simply want to return that inner object.
-  const data = JSON.parse(result.response.body)
-    billRun = data.billRun
+  if (!succeeded) {
+    return {
+      succeeded,
+      billRun: null,
+      errorResponse: result.response
+    }
   }
+
+  const data = JSON.parse(result.response.body)
 
   return {
     succeeded,
-    billRun
+    // The CM returns an object containing a `billRun` object. We simply want to return that inner object.
+    billRun: data.billRun
   }
 }
 

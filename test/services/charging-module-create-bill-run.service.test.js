@@ -91,10 +91,18 @@ describe('Charge module create bill run service', () => {
       expect(result.succeeded).to.be.false()
     })
 
-    it('returns a result object with the `billRun` property undefined', async () => {
+    it('returns a result object with a null `billRun` property', async () => {
       const { billRun } = result
 
-      expect(billRun).to.be.undefined()
+      expect(billRun).to.be.null()
+    })
+
+    it('returns a result object containing an `errorResponse` object', async () => {
+      const { errorResponse } = result
+
+      expect(errorResponse.statusCode).to.equal(403)
+      expect(errorResponse.error).to.equal('Forbidden')
+      expect(errorResponse.message).to.equal("Unauthorised for regime 'wrls'")
     })
   })
 })
