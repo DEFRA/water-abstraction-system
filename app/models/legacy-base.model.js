@@ -74,9 +74,11 @@ class LegacyBaseModel extends BaseModel {
     json = super.$parseDatabaseJson(json)
 
     for (const translation of this.constructor.translations) {
-      json[translation.model] = json[translation.database]
+      if (translation.database in json) {
+        json[translation.model] = json[translation.database]
 
-      delete json[translation.database]
+        delete json[translation.database]
+      }
     }
 
     return json
@@ -86,9 +88,11 @@ class LegacyBaseModel extends BaseModel {
     json = super.$formatDatabaseJson(json)
 
     for (const translation of this.constructor.translations) {
-      json[translation.database] = json[translation.model]
+      if (translation.model in json) {
+        json[translation.database] = json[translation.model]
 
-      delete json[translation.model]
+        delete json[translation.model]
+      }
     }
 
     return json
