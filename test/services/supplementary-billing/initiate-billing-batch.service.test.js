@@ -16,6 +16,7 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
 const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
+const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
 
 // Thing under test
 const InitiateBillingBatchService = require('../../../app//services/supplementary-billing/initiate-billing-batch.service.js')
@@ -39,6 +40,14 @@ describe('Initiate Billing Batch service', () => {
     }
 
     Sinon.stub(BillingPeriodService, 'go').returns([currentBillingPeriod])
+
+    Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+      suceeded: true,
+      response: {
+        id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
+        billRunNumber: 10004
+      }
+    })
   })
 
   afterEach(() => {
