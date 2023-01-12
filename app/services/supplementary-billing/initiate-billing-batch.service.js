@@ -29,7 +29,7 @@ async function go (billRunRequestData) {
 
   const { region, scheme, type, user } = billRunRequestData
   const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
-  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, chargingModuleBillRun.id)
+  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, undefined, chargingModuleBillRun.response.id)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
 
