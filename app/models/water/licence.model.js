@@ -35,6 +35,14 @@ class LicenceModel extends WaterBaseModel {
           from: 'licences.regionId',
           to: 'regions.regionId'
         }
+      },
+      billingInvoiceLicences: {
+        relation: Model.HasManyRelation,
+        modelClass: 'billing-invoice-licence.model',
+        join: {
+          from: 'licences.licenceId',
+          to: 'billingInvoiceLicences.licenceId'
+        }
       }
     }
   }

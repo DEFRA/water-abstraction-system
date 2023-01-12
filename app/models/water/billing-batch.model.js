@@ -27,6 +27,14 @@ class BillingBatchModel extends WaterBaseModel {
           from: 'billingBatches.regionId',
           to: 'regions.regionId'
         }
+      },
+      billingInvoices: {
+        relation: Model.HasManyRelation,
+        modelClass: 'billing-invoice.model',
+        join: {
+          from: 'billingBatches.billingBatchId',
+          to: 'billingInvoices.billingBatchId'
+        }
       }
     }
   }
