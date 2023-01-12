@@ -19,7 +19,8 @@ describe('Create Billing Batch presenter', () => {
         billingBatchId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         regionId: '6a472535-145c-4170-ab59-f555783fa6e7',
         scheme: 'sroc',
-        status: 'processing'
+        status: 'processing',
+        externalId: '2bbbe459-966e-4026-b5d2-2f10867bdddd'
       }
     })
 
@@ -30,6 +31,7 @@ describe('Create Billing Batch presenter', () => {
       expect(result.region).to.equal(data.regionId)
       expect(result.scheme).to.equal(data.scheme)
       expect(result.status).to.equal(data.status)
+      expect(result.externalId).to.equal(data.externalId)
     })
   })
 
@@ -39,7 +41,8 @@ describe('Create Billing Batch presenter', () => {
         billingBatchId: null,
         regionId: null,
         scheme: null,
-        status: null
+        status: null,
+        externalId: null
       }
     })
 
@@ -50,6 +53,7 @@ describe('Create Billing Batch presenter', () => {
       expect(result.region).to.be.null()
       expect(result.scheme).to.be.null()
       expect(result.status).to.be.null()
+      expect(result.externalId).to.be.null()
     })
   })
 })

@@ -11,7 +11,8 @@ function go (billingBatch) {
     regionId: region,
     scheme,
     batchType,
-    status
+    status,
+    externalId
   } = billingBatch
 
   return {
@@ -19,7 +20,8 @@ function go (billingBatch) {
     region,
     scheme,
     batchType,
-    status
+    status,
+    externalId
   }
 }
 
