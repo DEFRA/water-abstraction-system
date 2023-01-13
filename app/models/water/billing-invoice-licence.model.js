@@ -24,8 +24,8 @@ class BillingInvoiceLicenceModel extends WaterBaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'billing-invoice.model',
         join: {
-          from: 'billingInvoiceLicences.billinginvoiceId',
-          to: 'billingInvoices.billinginvoiceId'
+          from: 'billingInvoiceLicences.billingInvoiceId',
+          to: 'billingInvoices.billingInvoiceId'
         }
       },
       licence: {
