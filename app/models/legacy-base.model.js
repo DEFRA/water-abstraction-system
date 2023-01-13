@@ -86,7 +86,7 @@ class LegacyBaseModel extends BaseModel {
    *    { database: 'created', model: 'createdAt' },
    *    { database: 'modified', model: 'updatedAt' }
    *  ]
-   *}
+   * }
    * ```
    *
    */
