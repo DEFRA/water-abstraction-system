@@ -7,7 +7,7 @@
 
 const RequestLib = require('../../lib/request.lib.js')
 
-const servicesConfig = require('../../../config/services.config')
+const servicesConfig = require('../../../config/services.config.js')
 
 async function go () {
   const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)

@@ -6,11 +6,10 @@
  */
 
 const BillingPeriodService = require('./billing-period.service.js')
+const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CreateBillingBatchPresenter = require('../../presenters/supplementary-billing/create-billing-batch.presenter.js')
 const CreateBillingBatchService = require('./create-billing-batch.service.js')
 const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
-// TODO: Investigate why unrelated tests fail if this is required before some other modules
-const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 
 /**
  * Initiate a new billing batch
@@ -28,6 +27,7 @@ async function go (billRunRequestData) {
   const billingPeriod = BillingPeriodService.go()[0]
 
   const { region, scheme, type, user } = billRunRequestData
+
   const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
   const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, undefined, chargingModuleBillRun.response.id)
 
