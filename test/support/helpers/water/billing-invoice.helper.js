@@ -5,25 +5,43 @@
  */
 
 const BillingInvoiceModel = require('../../../../app/models/water/billing-invoice.model.js')
+const BillingBatchHelper = require('./billing-batch.helper.js')
 
 /**
  * Add a new billing invoice
  *
+ * A billing invoice is always linked to a billing batch. So, creating a billing invoice will automatically
+ * create a new billing batch and handle linking the two together by `billingBatchId`.
+ *
  * If no `data` is provided, default values will be used. These are
  *
- * - `billingBatchId` - f2fdcf4b-de93-4079-bae6-9247f2ecec57
  * - `financialYearEnding` - 2023
  *
+ * See `BillingBatchHelper` for the billing batch defaults
+ *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ * @param {Object} [billingBatch] Any billing batch data you want to use instead of the defaults used here or in the database
  *
  * @returns {module:BillingInvoiceModel} The instance of the newly created record
  */
-function add (data = {}) {
-  const insertData = defaults(data)
+async function add (data = {}, billingBatch = {}) {
+  const billingBatchId = await _billingBatchId(billingBatch)
+
+  const insertData = defaults({ ...data, billingBatchId })
 
   return BillingInvoiceModel.query()
     .insert({ ...insertData })
     .returning('*')
+}
+
+async function _billingBatchId (providedBillingBatch) {
+  if (providedBillingBatch?.billingBatchId) {
+    return providedBillingBatch.billingBatchId
+  }
+
+  const billingBatch = await BillingBatchHelper.add(providedBillingBatch)
+
+  return billingBatch.billingBatchId
 }
 
 /**
@@ -36,7 +54,6 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    billingBatchId: 'f2fdcf4b-de93-4079-bae6-9247f2ecec57',
     financialYearEnding: 2023
   }
 
