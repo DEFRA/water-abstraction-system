@@ -4,31 +4,34 @@
  * @module BillingInvoiceLicenceHelper
  */
 
+const BillingInvoiceHelper = require('./billing-invoice.helper.js')
 const BillingInvoiceLicenceModel = require('../../../../app/models/water/billing-invoice-licence.model.js')
 const LicenceHelper = require('./licence.helper.js')
 
 /**
  * Add a new billing invoice licence
  *
- * A billing invoice licence is always linked to a licence. So, creating a billing invoice licence will automatically
- * create a new licence and handle linking the two together by `licenceId`.
+ * A billing invoice licence is always linked to a licence and a billing invoice. So, creating a billing invoice licence will automatically
+ * create a new licence, a new billing invoice and handle linking them together by `licenceId` & `billingInvoiceId`.
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `billingInvoiceId` - 7b6bf750-9a97-4a02-9807-e252a7755e44
  * - `licenceRef` - 01/123
  *
  * See `LicenceHelper` for the licence defaults
+ * See `BillingInvoiceHelper` for the billing invoice defaults
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  * @param {Object} [licence] Any licence data you want to use instead of the defaults used here or in the database
+ * @param {Object} [billingInvoice] Any billing invoice data you want to use instead of the defaults used here or in the database
  *
  * @returns {module:BillingInvoiceLicenceModel} The instance of the newly created record
  */
-async function add (data = {}, licence = {}) {
+async function add (data = {}, licence = {}, billingInvoice = {}) {
   const licenceId = await _licenceId(licence)
+  const billingInvoiceId = await _billingInvoiceId(billingInvoice)
 
-  const insertData = defaults({ ...data, licenceId })
+  const insertData = defaults({ ...data, licenceId, billingInvoiceId })
 
   return BillingInvoiceLicenceModel.query()
     .insert({ ...insertData })
@@ -45,6 +48,16 @@ async function _licenceId (providedLicence) {
   return licence.licenceId
 }
 
+async function _billingInvoiceId (providedBillingInvoice) {
+  if (providedBillingInvoice?.billingInvoiceId) {
+    return providedBillingInvoice.billingInvoiceId
+  }
+
+  const billingInvoice = await BillingInvoiceHelper.add(providedBillingInvoice)
+
+  return billingInvoice.billingInvoiceId
+}
+
 /**
  * Returns the defaults used when creating a new billing invoice licence
  *
@@ -55,7 +68,6 @@ async function _licenceId (providedLicence) {
  */
 function defaults (data = {}) {
   const defaults = {
-    billingInvoiceId: '7b6bf750-9a97-4a02-9807-e252a7755e44',
     licenceRef: '01/123'
   }
 
