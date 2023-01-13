@@ -67,7 +67,7 @@ describe('Billing Batch model', () => {
       })
     })
 
-    describe.only('when linking to billing invoices', () => {
+    describe('when linking to billing invoices', () => {
       let testBillingInvoices
 
       beforeEach(async () => {
