@@ -73,8 +73,8 @@ class LegacyBaseModel extends BaseModel {
    * column which has the timestamp for when a record is created has been named `date_created`, 'created', 'modified',
    * and 'created_at`.
    *
-   * Within our code we want to just be using `created_at`, in this example, as this is what the field would have been
-   * called if Knex had been used to generate the migrations and build the tables.
+   * Within our code we want to just be using `createdAt` (which would be `created_at` in the DB), as this is what the
+   * field would have been called if Knex had been used to generate the migrations and build the tables.
    *
    * All models that extend `LegacyBaseModel` are expected to implement this getter. It should always return an array.
    * If there are no translations an empty array is valid.
