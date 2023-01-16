@@ -29,6 +29,12 @@ async function go (billRunRequestData) {
   const { region, scheme, type, user } = billRunRequestData
 
   const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
+
+  // A failed response will be due to a failed `RequestLib` request so format an error message accordingly and throw it
+  if (!chargingModuleBillRun.succeeded) {
+    throw Error(`${chargingModuleBillRun.response.statusCode} - ${chargingModuleBillRun.response.message}`)
+  }
+
   const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, undefined, chargingModuleBillRun.response.id)
 
   await CreateBillingBatchEventService.go(billingBatch, user)

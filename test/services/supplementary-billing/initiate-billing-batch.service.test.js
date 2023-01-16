@@ -40,45 +40,71 @@ describe('Initiate Billing Batch service', () => {
     }
 
     Sinon.stub(BillingPeriodService, 'go').returns([currentBillingPeriod])
-
-    Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
-      suceeded: true,
-      response: {
-        id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
-        billRunNumber: 10004
-      }
-    })
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  it('creates a new billing batch record', async () => {
-    await InitiateBillingBatchService.go(validatedRequestData)
+  describe('when initiating a billing batch succeeds', () => {
+    beforeEach(() => {
+      Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+        succeeded: true,
+        response: {
+          id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
+          billRunNumber: 10004
+        }
+      })
+    })
 
-    const count = await BillingBatchModel.query().resultSize()
+    it('creates a new billing batch record', async () => {
+      await InitiateBillingBatchService.go(validatedRequestData)
 
-    expect(count).to.equal(1)
+      const count = await BillingBatchModel.query().resultSize()
+
+      expect(count).to.equal(1)
+    })
+
+    it('creates a new event record', async () => {
+      await InitiateBillingBatchService.go(validatedRequestData)
+
+      const count = await EventModel.query().resultSize()
+
+      expect(count).to.equal(1)
+    })
+
+    it('returns a response', async () => {
+      const result = await InitiateBillingBatchService.go(validatedRequestData)
+
+      const billingBatch = await BillingBatchModel.query().first()
+
+      expect(result.id).to.equal(billingBatch.billingBatchId)
+      expect(result.region).to.equal(billingBatch.regionId)
+      expect(result.scheme).to.equal('sroc')
+      expect(result.batchType).to.equal('supplementary')
+      expect(result.status).to.equal('processing')
+    })
   })
 
-  it('creates a new event record', async () => {
-    await InitiateBillingBatchService.go(validatedRequestData)
+  describe('when initiating a billing batch fails', () => {
+    describe('because a bill run could not be created in the Charging Module', () => {
+      beforeEach(() => {
+        Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+          succeeded: false,
+          response: {
+            statusCode: 403,
+            error: 'Forbidden',
+            message: "Unauthorised for regime 'wrls'"
+          }
+        })
+      })
 
-    const count = await EventModel.query().resultSize()
+      it('rejects with an appropriate error', async () => {
+        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
 
-    expect(count).to.equal(1)
-  })
-
-  it('returns a response', async () => {
-    const result = await InitiateBillingBatchService.go(validatedRequestData)
-
-    const billingBatch = await BillingBatchModel.query().first()
-
-    expect(result.id).to.equal(billingBatch.billingBatchId)
-    expect(result.region).to.equal(billingBatch.regionId)
-    expect(result.scheme).to.equal('sroc')
-    expect(result.batchType).to.equal('supplementary')
-    expect(result.status).to.equal('processing')
+        expect(err).to.be.an.error()
+        expect(err.message).to.equal("403 - Unauthorised for regime 'wrls'")
+      })
+    })
   })
 })
