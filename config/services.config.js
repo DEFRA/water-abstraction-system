@@ -5,6 +5,10 @@
  * @module ServicesConfig
  */
 
+// We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
+// Requiring dotenv in multiple places has no effect on the app when running for real.
+require('dotenv').config()
+
 const config = {
   addressFacade: {
     url: process.env.EA_ADDRESS_FACADE_URL
