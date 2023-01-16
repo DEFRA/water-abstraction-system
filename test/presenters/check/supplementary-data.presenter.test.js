@@ -25,7 +25,31 @@ describe('Supplementary presenter', () => {
         licences: [
           {
             licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-            licenceRef: 'AT/SROC/SUPB/01'
+            licenceRef: 'AT/SROC/SUPB/01',
+            billingInvoiceLicences: [
+              {
+                billingInvoiceLicenceId: '585135da-0879-400a-b329-4d94b214ca66',
+                billingInvoice: null
+              },
+              {
+                billingInvoiceLicenceId: '585135da-0879-400a-b329-4d94b214ca66',
+                billingInvoice: { financialYearEnding: 2023 }
+              }
+            ]
+          },
+          {
+            licenceId: '81b50b35-459a-43f0-a48a-262028a34493',
+            licenceRef: 'AT/SROC/SUPB/02',
+            billingInvoiceLicences: [
+              {
+                billingInvoiceLicenceId: 'f2a4689f-1c6f-4388-8a42-c1daddcc7f2f',
+                billingInvoice: null
+              },
+              {
+                billingInvoiceLicenceId: '5846052d-2acf-43c3-8c5a-353debb1b8ed',
+                billingInvoice: null
+              }
+            ]
           }
         ],
         chargeVersions: [
@@ -66,10 +90,16 @@ describe('Supplementary presenter', () => {
       expect(result.billingPeriods).to.have.length(1)
       expect(result.billingPeriods[0]).to.equal(data.billingPeriods[0])
 
-      expect(result.licences).to.have.length(1)
+      expect(result.licences).to.have.length(2)
       expect(result.licences[0]).to.equal({
-        licenceId: data.chargeVersions[0].licence.licenceId,
-        licenceRef: data.chargeVersions[0].licence.licenceRef
+        licenceId: data.licences[0].licenceId,
+        licenceRef: data.licences[0].licenceRef,
+        licenceExistsInBilling: true
+      })
+      expect(result.licences[1]).to.equal({
+        licenceId: data.licences[1].licenceId,
+        licenceRef: data.licences[1].licenceRef,
+        licenceExistsInBilling: false
       })
 
       expect(result.chargeVersions).to.have.length(1)
