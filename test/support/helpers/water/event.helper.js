@@ -5,6 +5,7 @@
  */
 
 const EventModel = require('../../../../app/models/water/event.model.js')
+const GeneralLib = require('../../../../app/lib/general.lib.js')
 
 /**
  * Add a new event
@@ -24,6 +25,8 @@ const EventModel = require('../../../../app/models/water/event.model.js')
                   }
                 }
  * - `status` - start
+ * - `createdAt` - current Date and time as an ISO string
+ * - `updatedAt` - current Date and time as an ISO string
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -46,6 +49,8 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const timestamp = GeneralLib.timestampForPostgres()
+
   const defaults = {
     type: 'billing-batch',
     subtype: 'supplementary',
@@ -60,7 +65,9 @@ function defaults (data = {}) {
         scheme: 'sroc'
       }
     },
-    status: 'start'
+    status: 'start',
+    createdAt: timestamp,
+    updatedAt: timestamp
   }
 
   return {
