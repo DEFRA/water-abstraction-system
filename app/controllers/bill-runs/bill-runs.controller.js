@@ -17,9 +17,12 @@ async function create (request, h) {
     return _formattedValidationError(validatedData.error)
   }
 
-  const result = await InitiateBillingBatchService.go(validatedData.value)
-
-  return h.response(result).code(200)
+  try {
+    const result = await InitiateBillingBatchService.go(validatedData.value)
+    return h.response(result).code(200)
+  } catch (error) {
+    return _formattedInitiateBillingBatchError(error)
+  }
 }
 
 /**
@@ -27,6 +30,13 @@ async function create (request, h) {
 */
 function _formattedValidationError (error) {
   return Boom.badRequest(error.details[0].message)
+}
+
+/**
+ * Takes an error thrown during operation and returns a suitable Boom error
+ */
+function _formattedInitiateBillingBatchError (error) {
+  return Boom.badImplementation(error.message)
 }
 
 module.exports = {
