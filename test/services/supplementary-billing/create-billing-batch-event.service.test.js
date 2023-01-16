@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -18,8 +19,19 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const CreateBillingBatchEventService = require('../../../app/services/supplementary-billing/create-billing-batch-event.service.js')
 
 describe('Create Event service', () => {
+  let clock
+  let testDate
+
   beforeEach(async () => {
     await DatabaseHelper.clean()
+
+    testDate = new Date(2015, 9, 21, 20, 31, 57)
+    clock = Sinon.useFakeTimers(testDate)
+  })
+
+  afterEach(() => {
+    clock.restore()
+    Sinon.restore()
   })
 
   describe('when a BillingBatchModel instance is provided', () => {
@@ -44,6 +56,8 @@ describe('Create Event service', () => {
       expect(result.subtype).to.equal(billingBatch.batchType)
       expect(result.issuer).to.equal(issuer)
       expect(result.status).to.equal('start')
+      expect(result.createdAt).to.equal(testDate)
+      expect(result.updatedAt).to.equal(testDate)
 
       expect(result.metadata).to.exist()
       expect(result.metadata.batch.id).to.equal(billingBatch.billingBatchId)

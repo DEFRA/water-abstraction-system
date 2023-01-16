@@ -7,6 +7,7 @@
 
 const CreateBillingBatchEventPresenter = require('../../presenters/supplementary-billing/create-billing-batch-event.presenter.js')
 const EventModel = require('../../models/water/event.model.js')
+const GeneralLib = require('../../lib/general.lib.js')
 
 /**
  * Create an event for when a new bill run is initialised
@@ -18,13 +19,19 @@ const EventModel = require('../../models/water/event.model.js')
  * @returns {Object} The newly created event record
  */
 async function go (billingBatch, issuer) {
+  // The legacy `water.events` table does not have a default set for its timestamp fields. So, we have to manually set
+  // them when creating the record
+  const timestamp = GeneralLib.timestampForPostgres()
+
   const event = await EventModel.query()
     .insert({
       type: 'billing-batch',
       subtype: billingBatch.batchType,
       issuer,
       metadata: _metadata(billingBatch),
-      status: 'start'
+      status: 'start',
+      createdAt: timestamp,
+      updatedAt: timestamp
     })
     .returning('*')
 
