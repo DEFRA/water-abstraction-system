@@ -7,9 +7,12 @@
 
 function go (data) {
   const licences = data.licences.map((licence) => {
+    const licenceExistsInBilling = _licenceExistsInBilling(licence.billingInvoiceLicences)
+
     return {
       licenceId: licence.licenceId,
-      licenceRef: licence.licenceRef
+      licenceRef: licence.licenceRef,
+      licenceExistsInBilling
     }
   })
   const chargeVersions = data.chargeVersions
@@ -19,6 +22,17 @@ function go (data) {
     licences,
     chargeVersions
   }
+}
+
+function _licenceExistsInBilling (billingInvoiceLicences) {
+  let i
+  for (i = 0; i < billingInvoiceLicences.length; i++) {
+    if (billingInvoiceLicences[i].billingInvoice) {
+      return true
+    }
+  }
+
+  return false
 }
 
 module.exports = {
