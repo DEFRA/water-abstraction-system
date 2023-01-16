@@ -5,9 +5,8 @@
  * @module DatabaseConfig
  */
 
-// Unlike the other config files we need to directly reference dotenv. It is because this config is used when we run
-// migrations. The rest of the config is only used when we run the app. `app/server.js` loads dotenv which makes it
-// available to everything else thereafter
+// We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
+// Requiring dotenv in multiple places has no effect on the app when running for real.
 require('dotenv').config()
 
 const config = {
