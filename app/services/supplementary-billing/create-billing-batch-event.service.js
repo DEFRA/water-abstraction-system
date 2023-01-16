@@ -29,6 +29,7 @@ async function go (billingBatch, issuer) {
       subtype: billingBatch.batchType,
       issuer,
       metadata: _metadata(billingBatch),
+      licences: [],
       status: 'start',
       createdAt: timestamp,
       updatedAt: timestamp

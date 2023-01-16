@@ -55,6 +55,7 @@ describe('Create Event service', () => {
       expect(result.type).to.equal('billing-batch')
       expect(result.subtype).to.equal(billingBatch.batchType)
       expect(result.issuer).to.equal(issuer)
+      expect(result.licences).to.equal([])
       expect(result.status).to.equal('start')
       expect(result.createdAt).to.equal(testDate)
       expect(result.updatedAt).to.equal(testDate)
