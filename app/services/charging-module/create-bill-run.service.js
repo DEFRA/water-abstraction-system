@@ -5,12 +5,11 @@
  * @module ChargingModuleCreateBillRunService
  */
 
+const ChargingModuleTokenService = require('./token.service.js')
 const RegionModel = require('../../models/water/region.model.js')
 const RequestLib = require('../../lib/request.lib.js')
 
 const servicesConfig = require('../../../config/services.config.js')
-
-const ChargingModuleTokenService = require('./token.service.js')
 
 /**
  * Sends a request to the Charging Module to create a new bill run and returns the result.
