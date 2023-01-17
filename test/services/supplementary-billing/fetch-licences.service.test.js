@@ -17,7 +17,7 @@ const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 // Thing under test
 const FetchLicencesService = require('../../../app/services/supplementary-billing/fetch-licences.service.js')
 
-describe.only('Fetch Licences service', () => {
+describe('Fetch Licences service', () => {
   const region = { regionId: LicenceHelper.defaults().regionId }
   const billingPeriodFinancialYearEnding = 2023
   let testLicence
