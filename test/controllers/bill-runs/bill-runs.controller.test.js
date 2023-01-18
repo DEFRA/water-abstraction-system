@@ -33,6 +33,7 @@ describe('Bill Runs controller', () => {
   // Create server before each test
   beforeEach(async () => {
     server = await init()
+    Sinon.stub(server.logger, 'error')
   })
 
   afterEach(() => {
@@ -62,13 +63,29 @@ describe('Bill Runs controller', () => {
       })
     })
 
-    describe('when the request is invalid', () => {
-      it('returns an error response', async () => {
-        const response = await server.inject(options('INVALID'))
-        const payload = JSON.parse(response.payload)
+    describe('when the request fails', () => {
+      describe('because the request is invalid', () => {
+        it('returns an error response', async () => {
+          const response = await server.inject(options('INVALID'))
+          const payload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(400)
-        expect(payload.message).to.startWith('"scheme" must be')
+          expect(response.statusCode).to.equal(400)
+          expect(payload.message).to.startWith('"scheme" must be')
+        })
+      })
+
+      describe('because the billing batch could not be initiated', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateBillingBatchService, 'go').rejects()
+        })
+
+        it('returns an error response', async () => {
+          const response = await server.inject(options())
+          const payload = JSON.parse(response.payload)
+
+          expect(response.statusCode).to.equal(500)
+          expect(payload.message).to.equal('An internal server error occurred')
+        })
       })
     })
   })
