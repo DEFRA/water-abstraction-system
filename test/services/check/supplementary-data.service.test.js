@@ -55,7 +55,8 @@ describe('Supplementary service', () => {
     describe('when there are licences for supplementary billing', () => {
       const testRecords = [{
         licenceId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
-        licenceRef: 'AT/SROC/SUPB/01'
+        licenceRef: 'AT/SROC/SUPB/01',
+        licenceExistsInBilling: true
       }]
 
       beforeEach(async () => {

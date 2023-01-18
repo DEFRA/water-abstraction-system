@@ -1,21 +1,21 @@
 'use strict'
 
 /**
- * Model for billingBatches
- * @module BillingBatchModel
+ * Model for billingInvoices
+ * @module BillingInvoiceModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class BillingBatchModel extends WaterBaseModel {
+class BillingInvoiceModel extends WaterBaseModel {
   static get tableName () {
-    return 'billingBatches'
+    return 'billingInvoices'
   }
 
   static get idColumn () {
-    return 'billingBatchId'
+    return 'billingInvoiceId'
   }
 
   static get translations () {
@@ -27,24 +27,24 @@ class BillingBatchModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      region: {
+      billingBatch: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'region.model',
+        modelClass: 'billing-batch.model',
         join: {
-          from: 'billingBatches.regionId',
-          to: 'regions.regionId'
+          from: 'billingInvoices.billingBatchId',
+          to: 'billingBatches.billingBatchId'
         }
       },
-      billingInvoices: {
+      billingInvoiceLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-invoice.model',
+        modelClass: 'billing-invoice-licence.model',
         join: {
-          from: 'billingBatches.billingBatchId',
-          to: 'billingInvoices.billingBatchId'
+          from: 'billingInvoices.billingInvoiceId',
+          to: 'billingInvoiceLicences.billingInvoiceId'
         }
       }
     }
   }
 }
 
-module.exports = BillingBatchModel
+module.exports = BillingInvoiceModel

@@ -14,7 +14,8 @@ const SupplementaryDataPresenter = require('../../presenters/check/supplementary
 async function go (naldRegionId) {
   const region = await FetchRegionService.go(naldRegionId)
   const billingPeriods = BillingPeriodService.go()
-  const licences = await FetchLicencesService.go(region)
+  const billingPeriodFinancialYearEnding = billingPeriods[0].endDate.getFullYear()
+  const licences = await FetchLicencesService.go(region, billingPeriodFinancialYearEnding)
 
   // We know in the future we will be calculating multiple billing periods and so will have to iterate through each,
   // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process

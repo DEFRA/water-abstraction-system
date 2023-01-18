@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const ChargeVersionModel = require('../../../app/models/water/charge-version.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
@@ -99,6 +101,41 @@ describe('Licence model', () => {
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
         expect(result.region).to.equal(testRegion)
+      })
+    })
+
+    describe('when linking to billing invoice licences', () => {
+      let testBillingInvoiceLicences
+
+      beforeEach(async () => {
+        const { licenceId, licenceRef } = testRecord
+
+        testBillingInvoiceLicences = []
+        for (let i = 0; i < 2; i++) {
+          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ licenceRef }, { licenceId })
+          testBillingInvoiceLicences.push(billingInvoiceLicence)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('billingInvoiceLicences')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the billing invoice licences', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.licenceId)
+          .withGraphFetched('billingInvoiceLicences')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.licenceId).to.equal(testRecord.licenceId)
+
+        expect(result.billingInvoiceLicences).to.be.an.array()
+        expect(result.billingInvoiceLicences[0]).to.be.an.instanceOf(BillingInvoiceLicenceModel)
+        expect(result.billingInvoiceLicences).to.include(testBillingInvoiceLicences[0])
+        expect(result.billingInvoiceLicences).to.include(testBillingInvoiceLicences[1])
       })
     })
   })

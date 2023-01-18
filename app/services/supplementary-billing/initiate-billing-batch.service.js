@@ -6,6 +6,7 @@
  */
 
 const BillingPeriodService = require('./billing-period.service.js')
+const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CreateBillingBatchPresenter = require('../../presenters/supplementary-billing/create-billing-batch.presenter.js')
 const CreateBillingBatchService = require('./create-billing-batch.service.js')
 const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
@@ -26,7 +27,15 @@ async function go (billRunRequestData) {
   const billingPeriod = BillingPeriodService.go()[0]
 
   const { region, scheme, type, user } = billRunRequestData
-  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme)
+
+  const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
+
+  // A failed response will be due to a failed `RequestLib` request so format an error message accordingly and throw it
+  if (!chargingModuleBillRun.succeeded) {
+    throw Error(`${chargingModuleBillRun.response.statusCode} - ${chargingModuleBillRun.response.message}`)
+  }
+
+  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, undefined, chargingModuleBillRun.response.id)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
 
