@@ -38,6 +38,7 @@ describe('Create Billing Batch service', () => {
       expect(result.batchType).to.equal('supplementary')
       expect(result.scheme).to.equal('sroc')
       expect(result.source).to.equal('wrls')
+      expect(result.externalId).to.be.null()
 
       expect(result.region).to.be.an.instanceOf(RegionModel)
       expect(result.region.regionId).to.equal(region.regionId)
@@ -48,9 +49,10 @@ describe('Create Billing Batch service', () => {
     const batchType = 'annual'
     const scheme = 'wrls'
     const source = 'nald'
+    const externalId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
 
     it('returns the new billing batch instance containing the provided values', async () => {
-      const result = await CreateBillingBatchService.go(region.regionId, billingPeriod, batchType, scheme, source)
+      const result = await CreateBillingBatchService.go(region.regionId, billingPeriod, batchType, scheme, source, externalId)
 
       expect(result).to.be.an.instanceOf(BillingBatchModel)
 
@@ -60,6 +62,7 @@ describe('Create Billing Batch service', () => {
       expect(result.batchType).to.equal(batchType)
       expect(result.scheme).to.equal(scheme)
       expect(result.source).to.equal(source)
+      expect(result.externalId).to.equal(externalId)
 
       expect(result.region).to.be.an.instanceOf(RegionModel)
       expect(result.region.regionId).to.equal(region.regionId)

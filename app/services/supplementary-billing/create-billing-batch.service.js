@@ -15,10 +15,11 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
  * @param {string} [batchType=supplementary] The type of billing batch to create. Defaults to 'supplementary'
  * @param {string} [scheme=sroc] The applicable charging scheme. Defaults to 'sroc'
  * @param {string} [source=wrls] Where the billing batch originated from. Records imported from NALD have the source 'nald'. Those created in the service use 'wrls'. Defaults to 'wrls'
+ * @param {string} [externalId=null] The id of the bill run as created in the Charging Module
  *
  * @returns {module:BillingBatchModel} The newly created billing batch instance with the `.region` property populated
  */
-async function go (regionId, billingPeriod, batchType = 'supplementary', scheme = 'sroc', source = 'wrls') {
+async function go (regionId, billingPeriod, batchType = 'supplementary', scheme = 'sroc', source = 'wrls', externalId = null) {
   const billingBatch = await BillingBatchModel.query()
     .insert({
       regionId,
@@ -27,7 +28,8 @@ async function go (regionId, billingPeriod, batchType = 'supplementary', scheme 
       toFinancialYearEnding: billingPeriod.endDate.getFullYear(),
       status: 'processing',
       scheme,
-      source
+      source,
+      externalId
     })
     .returning('*')
     .withGraphFetched('region')

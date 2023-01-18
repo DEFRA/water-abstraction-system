@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Connects with the Charge Module API's Cognito service to get a JWT for authentication
- * @module ChargeModuleTokenService
+ * Connects with the Charging Module API's Cognito service to get a JWT for authentication
+ * @module ChargingModuleTokenService
  */
 
-const RequestLib = require('../lib/request.lib.js')
+const RequestLib = require('../../lib/request.lib.js')
 
-const servicesConfig = require('../../config/services.config.js')
+const servicesConfig = require('../../../config/services.config.js')
 
 async function go () {
   const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)
