@@ -26,11 +26,7 @@ function go (data) {
 
 function _licenceExistsInBilling (billingInvoiceLicences) {
   if (billingInvoiceLicences) {
-    for (let i = 0; i < billingInvoiceLicences.length; i++) {
-      if (billingInvoiceLicences[i].billingInvoice) {
-        return true
-      }
-    }
+    return billingInvoiceLicences.some((billingInvoiceLicence) => billingInvoiceLicence.billingInvoice)
   }
 
   return false
