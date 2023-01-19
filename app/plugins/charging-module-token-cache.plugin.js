@@ -11,7 +11,7 @@ const ChargingModuleTokenService = require('../services/charging-module/token.se
  */
 
 const ChargingModuleTokenCachePlugin = {
-  name: 'Cache',
+  name: 'ChargingModuleTokenCache',
   register: (server, _options) => {
     // `flags` is passed to our server method automatically by hapi. We use it to set the ttl on a per-request basis
     server.method('getChargingModuleToken', async (flags) => {
