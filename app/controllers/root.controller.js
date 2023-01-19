@@ -9,16 +9,13 @@ async function index (_request, _h) {
   return { status: 'alive' }
 }
 
-async function tokenSet (request, _h) {
-  return { token: 'set' }
-}
+async function get (request, _h) {
+  const date = await request.server.methods.getChargingModuleToken()
 
-async function tokenGet (request, _h) {
-  return { token: 'get' }
+  return { date }
 }
 
 module.exports = {
   index,
-  tokenSet,
-  tokenGet
+  get
 }

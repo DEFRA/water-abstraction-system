@@ -28,16 +28,8 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/token/set',
-    handler: RootController.tokenSet,
-    options: {
-      auth: false
-    }
-  },
-  {
-    method: 'GET',
     path: '/token/get',
-    handler: RootController.tokenGet,
+    handler: RootController.get,
     options: {
       auth: false
     }
