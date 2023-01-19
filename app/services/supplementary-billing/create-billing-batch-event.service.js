@@ -29,7 +29,7 @@ async function go (billingBatch, issuer) {
       subtype: billingBatch.batchType,
       issuer,
       metadata: _metadata(billingBatch),
-      licences: [],
+      licences: JSON.stringify([]),
       status: 'start',
       createdAt: timestamp,
       updatedAt: timestamp
