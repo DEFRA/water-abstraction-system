@@ -39,7 +39,7 @@ async function _options (regionId, ruleset, authentication) {
     headers: {
       authorization: `Bearer ${authentication.accessToken}`
     },
-    body: {
+    json: {
       region,
       ruleset
     }
