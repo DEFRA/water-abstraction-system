@@ -21,7 +21,7 @@ const ChargingModuleTokenCachePlugin = {
       // Otherwise, set the expiry time to 0 to avoid caching the unsuccessful attempt
       flags.ttl = token.expiresIn ? _setExpiryTime(token.expiresIn) : 0
 
-      return { ...token, ttl: flags.ttl }
+      return token
     }, {
       cache: {
         // We need to set an expiry time here but we will always override it
