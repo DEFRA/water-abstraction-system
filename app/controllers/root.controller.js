@@ -10,9 +10,9 @@ async function index (_request, _h) {
 }
 
 async function get (request, _h) {
-  const date = await request.server.methods.getChargingModuleToken()
+  const token = await request.server.methods.getChargingModuleToken()
 
-  return { date }
+  return token
 }
 
 module.exports = {
