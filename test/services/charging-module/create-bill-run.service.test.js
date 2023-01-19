@@ -56,7 +56,7 @@ describe('Charge module create bill run service', () => {
 
       expect(requestArgs[0]).to.endWith('/wrls/bill-runs')
       expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
-      expect(requestArgs[1].body).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
+      expect(requestArgs[1].json).to.include({ region: testRegion.chargeRegionId, ruleset: 'sroc' })
     })
 
     it('returns a `true` success status', async () => {
