@@ -10,6 +10,8 @@ function go (billingPeriod, chargePurpose) {
 
   _flagPeriodsForConsideration(billingPeriod, abstractionPeriods)
 
+  _calculateBillableDays(abstractionPeriods)
+
   return abstractionPeriods
 }
 
@@ -46,6 +48,16 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
   }
 
   return [previousPeriod, firstPeriod]
+}
+
+function _calculateBillableDays (abstractionPeriods) {
+  let difference
+  let billableDays
+  for (const abstractionPeriod of abstractionPeriods) {
+    difference = abstractionPeriod.endDate.getTime() - abstractionPeriod.startDate.getTime() // difference in msecs
+    billableDays = Math.ceil(difference / (1000 * 3600 * 24)) + 1 // (1000 msecs * (60 secs * 60 mins) * 24 hrs)
+    abstractionPeriod.billableDays = billableDays
+  }
 }
 
 function _flagPeriodsForConsideration (billingPeriod, abstractionPeriods) {
