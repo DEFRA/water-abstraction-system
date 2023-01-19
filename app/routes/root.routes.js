@@ -25,14 +25,6 @@ const routes = [
     options: {
       auth: false
     }
-  },
-  {
-    method: 'GET',
-    path: '/token/get',
-    handler: RootController.get,
-    options: {
-      auth: false
-    }
   }
 ]
 
