@@ -17,19 +17,31 @@ const LicenceModel = require('../../models/water/licence.model.js')
  *
  * @returns {Object[]} Array of matching `LicenceModel`
  */
-async function go (region) {
-  const licences = await _fetch(region)
+async function go (region, billingPeriodFinancialYearEnding) {
+  const licences = await _fetch(region, billingPeriodFinancialYearEnding)
 
   return licences
 }
 
-async function _fetch (region) {
+async function _fetch (region, billingPeriodFinancialYearEnding) {
   const result = await LicenceModel.query()
     .distinctOn('licenceId')
     .innerJoinRelated('chargeVersions')
     .where('regionId', region.regionId)
     .where('includeInSupplementaryBilling', 'yes')
     .where('chargeVersions.scheme', 'sroc')
+    .withGraphFetched('billingInvoiceLicences.billingInvoice')
+    .modifyGraph('billingInvoiceLicences', builder => {
+      builder.select(
+        'billingInvoiceLicenceId'
+      )
+    })
+    .modifyGraph('billingInvoiceLicences.billingInvoice', builder => {
+      builder.select(
+        'financialYearEnding'
+      )
+        .where('financialYearEnding', billingPeriodFinancialYearEnding)
+    })
 
   return result
 }
