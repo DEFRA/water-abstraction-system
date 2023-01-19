@@ -10,23 +10,29 @@ const ChargingModuleTokenService = require('../services/charging-module/token.se
  * @module ChargingModuleTokenCachePlugin
  */
 
+const ONE_HOUR_IN_MS = 60 * 60 * 1000
+const ONE_MINUTE_IN_MS = 60 * 1000
+
 const ChargingModuleTokenCachePlugin = {
   name: 'ChargingModuleTokenCache',
   register: (server, _options) => {
-    // `flags` is passed to our server method automatically by hapi. We use it to set the ttl on a per-request basis
+    // `flags` is passed to our server method automatically by hapi. Overwriting `flags.ttl` in our method lets us
+    // override the cache default expiry time
     server.method('getChargingModuleToken', async (flags) => {
       const token = await ChargingModuleTokenService.go()
 
-      // If the response has an expiry time then use this to set the cache expiry
+      // If the token request was successful it returns an expiry time, so use this to set the cache expiry
       // Otherwise, set the expiry time to 0 to avoid caching the unsuccessful attempt
       flags.ttl = token.expiresIn ? _setExpiryTime(token.expiresIn) : 0
 
       return token
     }, {
       cache: {
-        // We need to set an expiry time here but we will always override it
-        expiresIn: 5000,
-        generateTimeout: 2000
+        // Hapi requires us to set an expiry time here but we will always override it via `flags.ttl`
+        expiresIn: ONE_HOUR_IN_MS,
+        // Hapi requires us to set a timeout value here so we set it to error after one minute. In practice we would
+        // expect ChargingModuleTokenService to have returned an unsuccessful response which we would gracefully handle
+        generateTimeout: ONE_MINUTE_IN_MS
       }
     })
   }
