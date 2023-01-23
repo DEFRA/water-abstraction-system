@@ -78,9 +78,9 @@ describe('Charge module create bill run service', () => {
       Sinon.stub(RequestLib, 'post').resolves({
         succeeded: false,
         response: {
-          statusCode: 403,
-          error: 'Forbidden',
-          message: "Unauthorised for regime 'wrls'"
+          // For consistency we include the status code in the response but note that it is also returned in the body
+          statusCode: 401,
+          body: '{"statusCode":401,"error":"Unauthorized","message":"Invalid JWT: Token format not valid","attributes":{"error":"Invalid JWT: Token format not valid"}}'
         }
       })
 
@@ -94,9 +94,9 @@ describe('Charge module create bill run service', () => {
     it('returns the error in the `response`', async () => {
       const { response } = result
 
-      expect(response.statusCode).to.equal(403)
-      expect(response.error).to.equal('Forbidden')
-      expect(response.message).to.equal("Unauthorised for regime 'wrls'")
+      expect(response.statusCode).to.equal(401)
+      expect(response.error).to.equal('Unauthorized')
+      expect(response.message).to.equal('Invalid JWT: Token format not valid')
     })
   })
 })
