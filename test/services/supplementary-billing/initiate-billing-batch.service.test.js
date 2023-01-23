@@ -82,7 +82,7 @@ describe('Initiate Billing Batch service', () => {
       expect(result.region).to.equal(billingBatch.regionId)
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
-      expect(result.status).to.equal('processing')
+      expect(result.status).to.equal('queued')
     })
   })
 

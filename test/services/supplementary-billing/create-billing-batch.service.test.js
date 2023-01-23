@@ -32,7 +32,7 @@ describe('Create Billing Batch service', () => {
 
       expect(result).to.be.an.instanceOf(BillingBatchModel)
 
-      expect(result.status).to.equal('processing')
+      expect(result.status).to.equal('queued')
       expect(result.fromFinancialYearEnding).to.equal(2023)
       expect(result.toFinancialYearEnding).to.equal(2023)
       expect(result.batchType).to.equal('supplementary')
@@ -56,7 +56,7 @@ describe('Create Billing Batch service', () => {
 
       expect(result).to.be.an.instanceOf(BillingBatchModel)
 
-      expect(result.status).to.equal('processing')
+      expect(result.status).to.equal('queued')
       expect(result.fromFinancialYearEnding).to.equal(2023)
       expect(result.toFinancialYearEnding).to.equal(2023)
       expect(result.batchType).to.equal(batchType)
