@@ -196,6 +196,7 @@ function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
     }
   }
 }
+
 /**
  * Adds the `consider` flag to each abstraction billing period as to whether it should be included in billing
  *
