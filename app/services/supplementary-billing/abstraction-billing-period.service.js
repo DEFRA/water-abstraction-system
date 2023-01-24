@@ -147,13 +147,17 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
  * @returns {Date} periods[].startDate
  * @returns {Date} periods[].endDate
  * @returns {boolean} periods[].consider
+ * @returns {Date} periods[].billableStartDate
+ * @returns {Date} periods[].billableEndDate
  * @returns {number} periods[].billableDays
  */
 function _calculateBillableDays (abstractionPeriods) {
   for (const abstractionPeriod of abstractionPeriods) {
-    const difference = abstractionPeriod.endDate.getTime() - abstractionPeriod.startDate.getTime() // difference in msecs
-    const billableDays = Math.ceil(difference / (1000 * 3600 * 24)) + 1 // (1000 msecs * (60 secs * 60 mins) * 24 hrs)
-    abstractionPeriod.billableDays = billableDays
+    if (abstractionPeriod.billableStartDate) {
+      const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
+      const billableDays = Math.ceil(difference / (1000 * 3600 * 24)) + 1 // (1000 msecs * (60 secs * 60 mins) * 24 hrs)
+      abstractionPeriod.billableDays = billableDays
+    }
   }
 }
 
@@ -167,8 +171,8 @@ function _calculateBillableDays (abstractionPeriods) {
  * @returns {Date} periods[].startDate
  * @returns {Date} periods[].endDate
  * @returns {boolean} periods[].consider
- * @returns {number} periods[].billableStartDate
- * @returns {number} periods[].billableEndDate
+ * @returns {Date} periods[].billableStartDate
+ * @returns {Date} periods[].billableEndDate
  */
 function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
   let billableStartDate
