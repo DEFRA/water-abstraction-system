@@ -56,16 +56,15 @@ async function _getChargeRegionId (regionId) {
 }
 
 function _parseResult (result) {
-  // Simply return the result as-is if we were unsuccessful
-  if (!result.succeeded) {
-    return result
-  }
-
   const parsedBody = JSON.parse(result.response.body)
 
+  // If the request succeeded then we return the bill run in the response; otherwise, we simply return the entire body
+  // as this includes the status code and error messages
+  const response = result.succeeded ? parsedBody.billRun : parsedBody
+
   return {
-    succeeded: true,
-    response: parsedBody.billRun
+    succeeded: result.succeeded,
+    response
   }
 }
 
