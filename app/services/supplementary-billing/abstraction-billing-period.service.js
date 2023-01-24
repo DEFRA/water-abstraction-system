@@ -139,7 +139,7 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
 }
 
 /**
- * Calculates the 'billable days' for each abstraction billing period
+ * Calculates the 'billable days' for each abstraction billable period
  *
  * @param {Object[]} abstractionPeriods An array of abstraction billing periods
  *
