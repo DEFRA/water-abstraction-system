@@ -46,6 +46,8 @@ function go (billingPeriod, chargePurpose) {
 
   _flagPeriodsForConsideration(billingPeriod, abstractionPeriods)
 
+  _calculateBillablePeriods(abstractionPeriods, billingPeriod)
+
   _calculateBillableDays(abstractionPeriods)
 
   return abstractionPeriods
@@ -148,15 +150,48 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
  * @returns {number} periods[].billableDays
  */
 function _calculateBillableDays (abstractionPeriods) {
-  let difference
-  let billableDays
   for (const abstractionPeriod of abstractionPeriods) {
-    difference = abstractionPeriod.endDate.getTime() - abstractionPeriod.startDate.getTime() // difference in msecs
-    billableDays = Math.ceil(difference / (1000 * 3600 * 24)) + 1 // (1000 msecs * (60 secs * 60 mins) * 24 hrs)
+    const difference = abstractionPeriod.endDate.getTime() - abstractionPeriod.startDate.getTime() // difference in msecs
+    const billableDays = Math.ceil(difference / (1000 * 3600 * 24)) + 1 // (1000 msecs * (60 secs * 60 mins) * 24 hrs)
     abstractionPeriod.billableDays = billableDays
   }
 }
 
+/**
+ * Calculates the 'billable period' for each abstraction billing period
+ *
+ * @param {Object[]} abstractionPeriods An array of abstraction billing periods
+ * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
+ *
+ * @returns {Object[]} The array abstraction periods each with new `billableStartDate` & `billableEndDate` properties
+ * @returns {Date} periods[].startDate
+ * @returns {Date} periods[].endDate
+ * @returns {boolean} periods[].consider
+ * @returns {number} periods[].billableStartDate
+ * @returns {number} periods[].billableEndDate
+ */
+function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
+  let billableStartDate
+  let billableEndDate
+  for (const abstractionPeriod of abstractionPeriods) {
+    if (abstractionPeriod.startDate < billingPeriod.startDate) {
+      billableStartDate = billingPeriod.startDate
+    } else {
+      billableStartDate = abstractionPeriod.startDate
+    }
+
+    if (abstractionPeriod.endDate > billingPeriod.endDate) {
+      billableEndDate = billingPeriod.endDate
+    } else {
+      billableEndDate = abstractionPeriod.endDate
+    }
+
+    if (billableStartDate <= billableEndDate) {
+      abstractionPeriod.billableStartDate = billableStartDate
+      abstractionPeriod.billableEndDate = billableEndDate
+    }
+  }
+}
 /**
  * Adds the `consider` flag to each abstraction billing period as to whether it should be included in billing
  *
