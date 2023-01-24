@@ -26,7 +26,7 @@ async function go (regionId, billingPeriod, batchType = 'supplementary', scheme 
       batchType,
       fromFinancialYearEnding: billingPeriod.endDate.getFullYear(),
       toFinancialYearEnding: billingPeriod.endDate.getFullYear(),
-      status: 'processing',
+      status: 'queued',
       scheme,
       source,
       externalId
