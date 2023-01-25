@@ -14,7 +14,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const CheckLiveBillRunService = require('../../../app/services/supplementary-billing/check-live-bill-run.service.js')
 
-describe.only('Check Live Bill Run service', () => {
+describe('Check Live Bill Run service', () => {
   let billRunRegion
 
   beforeEach(async () => {
@@ -29,7 +29,7 @@ describe.only('Check Live Bill Run service', () => {
       })
 
       it('returns `true`', async () => {
-        const result = await CheckLiveBillRunService.go(billRunRegion, 'sroc', 'supplementary', 2023)
+        const result = await CheckLiveBillRunService.go(billRunRegion, 2023)
 
         expect(result).to.be.true()
       })
@@ -42,7 +42,7 @@ describe.only('Check Live Bill Run service', () => {
       })
 
       it('returns `false`', async () => {
-        const result = await CheckLiveBillRunService.go(billRunRegion, 'sroc', 'supplementary', 2023)
+        const result = await CheckLiveBillRunService.go(billRunRegion, 2023)
 
         expect(result).to.be.false()
       })
@@ -56,7 +56,7 @@ describe.only('Check Live Bill Run service', () => {
     })
 
     it('returns `false`', async () => {
-      const result = await CheckLiveBillRunService.go(billRunRegion, 'sroc', 'supplementary', 2023)
+      const result = await CheckLiveBillRunService.go(billRunRegion, 2023)
 
       expect(result).to.be.false()
     })
