@@ -23,14 +23,9 @@
  * - 1 Jan 2022 to 30 Jun 2022
  * - 1 Jan 2023 to 30 Jun 2023
  *
- * This is why we always return 2 abstraction periods for each charge purpose. For each period, we calculate the
- * 'billable days'. This is how much of the period intersects with the billing period. Finally, we add a 'consider'
- * flag. This is a boolean which identifies whether a period intersects the billing period. For example, if the
- * abstraction period was 1 Jan to 31 Mar, only one of the periods we create would intersect with a billing period of
- * 2022-04-01 to 2023-03-31
- *
- * - 1 Jan 2022 to 31 Mar 2022 - `false`
- * - 1 Jan 2023 to 31 Mar 2023 - `true`
+ * This is why we always calculate 2 abstraction periods for each charge purpose which we then subsequently check and
+ * disgard if they fall outside the billing period. For each valid period we calculate the 'billing period', from
+ * which we calculate the 'billable days'. This is how much of the period intersects with the billing period.
  *
  * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
  * @param {module:ChargePurposeModel} chargePurpose The abstraction period to be checked
@@ -39,8 +34,6 @@
  */
 function go (billingPeriod, chargePurpose) {
   const abstractionPeriods = _abstractionPeriods(billingPeriod, chargePurpose)
-
-  _flagPeriodsForConsideration(abstractionPeriods, billingPeriod)
 
   _calculateBillablePeriods(abstractionPeriods, billingPeriod)
 
@@ -90,6 +83,9 @@ function go (billingPeriod, chargePurpose) {
  * We also handle the edge case of the months being equal. If this is the case we still treat the abstraction period as
  * in-year and out-year, only we use the days in the comparison instead of the months.
  *
+ * The date ranges that are created are then checked to see if they fall within the billing period and added to the
+ * `abstractionPeriods` array if valid.
+ *
  * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
  * @param {module:ChargePurposeModel} chargePurpose The abstraction period to be checked
  *
@@ -129,7 +125,16 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
     endDate: _subtractOneYear(firstPeriod.endDate)
   }
 
-  return [previousPeriod, firstPeriod]
+  const abstractionPeriods = []
+  if (_isPeriodValid(previousPeriod, billingPeriod)) {
+    abstractionPeriods.push(previousPeriod)
+  }
+
+  if (_isPeriodValid(firstPeriod, billingPeriod)) {
+    abstractionPeriods.push(firstPeriod)
+  }
+
+  return abstractionPeriods
 }
 
 /**
@@ -182,29 +187,27 @@ function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
 }
 
 /**
- * Adds the `consider` flag to each abstraction billing period as to whether it should be included in billing
+ * Checks each abstraction billing period to see whether it should be included in billing
  *
- * The flag is determined by calculating whether the abstraction period intersects with the billing period. For example,
+ * This is determined by calculating whether the abstraction period intersects with the billing period. For example,
  * if the billing period is 2022-04-01 to 2023-03-31 and the abstraction period was 01-Nov to 31-Mar:
  *
  * - 01-Nov-2022 to 31-Mar-2023 = `true`
  * - 01-Nov-2021 to 31-Mar-2022 = `false`
  *
+ * @param {Object} abstractionPeriod Object that has a `startDate` and `endDate` that defines the abstraction period
  * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
- * @param {Object[]} abstractionPeriods An array of abstraction billing periods
  *
- * @returns {Object[]} The array abstraction periods each with a new `consider` property
+ * @returns {Boolean} True if the `abstractionPeriod` intersects the `billingPeriod`
  * c
  */
-function _flagPeriodsForConsideration (abstractionPeriods, billingPeriod) {
-  for (const abstractionPeriod of abstractionPeriods) {
-    if (abstractionPeriod.startDate > billingPeriod.endDate) {
-      abstractionPeriod.consider = false
-    } else if (abstractionPeriod.endDate < billingPeriod.startDate) {
-      abstractionPeriod.consider = false
-    } else {
-      abstractionPeriod.consider = true
-    }
+function _isPeriodValid (abstractionPeriod, billingPeriod) {
+  if (abstractionPeriod.startDate > billingPeriod.endDate) {
+    return false
+  } else if (abstractionPeriod.endDate < billingPeriod.startDate) {
+    return false
+  } else {
+    return true
   }
 }
 

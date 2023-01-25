@@ -34,14 +34,12 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.true()
           expect(result[0].startDate).to.equal(new Date('2022-01-01'))
           expect(result[0].endDate).to.equal(new Date('2022-05-31'))
           expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
           expect(result[0].billableEndDate).to.equal(new Date('2022-05-31'))
           expect(result[0].billableDays).to.equal(61)
 
-          expect(result[1].consider).to.be.true()
           expect(result[1].startDate).to.equal(new Date('2023-01-01'))
           expect(result[1].endDate).to.equal(new Date('2023-05-31'))
           expect(result[1].billableStartDate).to.equal(new Date('2023-01-01'))
@@ -65,19 +63,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.true()
           expect(result[0].startDate).to.equal(new Date('2022-05-01'))
           expect(result[0].endDate).to.equal(new Date('2022-10-31'))
           expect(result[0].billableStartDate).to.equal(new Date('2022-05-01'))
           expect(result[0].billableEndDate).to.equal(new Date('2022-10-31'))
           expect(result[0].billableDays).to.equal(184)
 
-          expect(result[1].consider).to.be.false()
-          expect(result[1].startDate).to.equal(new Date('2023-05-01'))
-          expect(result[1].endDate).to.equal(new Date('2023-10-31'))
-          expect(result[1].billableStartDate).to.be.undefined()
-          expect(result[1].billableEndDate).to.be.undefined()
-          expect(result[1].billableDays).to.be.undefined()
+          expect(result[1]).to.be.undefined()
         })
       })
 
@@ -96,19 +88,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.true()
           expect(result[0].startDate).to.equal(new Date('2022-04-01'))
           expect(result[0].endDate).to.equal(new Date('2022-10-31'))
           expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
           expect(result[0].billableEndDate).to.equal(new Date('2022-10-31'))
           expect(result[0].billableDays).to.equal(214)
 
-          expect(result[1].consider).to.be.false()
-          expect(result[1].startDate).to.equal(new Date('2023-04-01'))
-          expect(result[1].endDate).to.equal(new Date('2023-10-31'))
-          expect(result[1].billableStartDate).to.be.undefined()
-          expect(result[1].billableEndDate).to.be.undefined()
-          expect(result[1].billableDays).to.be.undefined()
+          expect(result[1]).to.be.undefined()
         })
       })
     })
@@ -129,19 +115,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.false()
-          expect(result[0].startDate).to.equal(new Date('2022-03-01'))
-          expect(result[0].endDate).to.equal(new Date('2022-03-31'))
-          expect(result[0].billableStartDate).to.be.undefined()
-          expect(result[0].billableEndDate).to.be.undefined()
-          expect(result[0].billableDays).to.be.undefined()
+          expect(result[0].startDate).to.equal(new Date('2023-03-01'))
+          expect(result[0].endDate).to.equal(new Date('2023-03-31'))
+          expect(result[0].billableStartDate).to.equal(new Date('2023-03-01'))
+          expect(result[0].billableEndDate).to.equal(new Date('2023-03-31'))
+          expect(result[0].billableDays).to.equal(31)
 
-          expect(result[1].consider).to.be.true()
-          expect(result[1].startDate).to.equal(new Date('2023-03-01'))
-          expect(result[1].endDate).to.equal(new Date('2023-03-31'))
-          expect(result[1].billableStartDate).to.equal(new Date('2023-03-01'))
-          expect(result[1].billableEndDate).to.equal(new Date('2023-03-31'))
-          expect(result[1].billableDays).to.equal(31)
+          expect(result[1]).to.be.undefined()
         })
       })
 
@@ -160,19 +140,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.true()
           expect(result[0].startDate).to.equal(new Date('2022-05-01'))
           expect(result[0].endDate).to.equal(new Date('2022-05-31'))
           expect(result[0].billableStartDate).to.equal(new Date('2022-05-01'))
           expect(result[0].billableEndDate).to.equal(new Date('2022-05-31'))
           expect(result[0].billableDays).to.equal(31)
 
-          expect(result[1].consider).to.be.false()
-          expect(result[1].startDate).to.equal(new Date('2023-05-01'))
-          expect(result[1].endDate).to.equal(new Date('2023-05-31'))
-          expect(result[1].billableStartDate).to.be.undefined()
-          expect(result[1].billableEndDate).to.be.undefined()
-          expect(result[1].billableDays).to.be.undefined()
+          expect(result[1]).to.be.undefined()
         })
       })
 
@@ -191,19 +165,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.true()
           expect(result[0].startDate).to.equal(new Date('2022-04-01'))
           expect(result[0].endDate).to.equal(new Date('2022-04-30'))
           expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
           expect(result[0].billableEndDate).to.equal(new Date('2022-04-30'))
           expect(result[0].billableDays).to.equal(30)
 
-          expect(result[1].consider).to.be.false()
-          expect(result[1].startDate).to.equal(new Date('2023-04-01'))
-          expect(result[1].endDate).to.equal(new Date('2023-04-30'))
-          expect(result[1].billableStartDate).to.be.undefined()
-          expect(result[1].billableEndDate).to.be.undefined()
-          expect(result[1].billableDays).to.be.undefined()
+          expect(result[1]).to.be.undefined()
         })
       })
     })
@@ -226,19 +194,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.false()
-          expect(result[0].startDate).to.equal(new Date('2021-03-01'))
-          expect(result[0].endDate).to.equal(new Date('2022-02-28'))
-          expect(result[0].billableStartDate).to.be.undefined()
-          expect(result[0].billableEndDate).to.be.undefined()
-          expect(result[0].billableDays).to.be.undefined()
+          expect(result[0].startDate).to.equal(new Date('2022-03-01'))
+          expect(result[0].endDate).to.equal(new Date('2023-02-28'))
+          expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
+          expect(result[0].billableEndDate).to.equal(new Date('2023-02-28'))
+          expect(result[0].billableDays).to.equal(334)
 
-          expect(result[1].consider).to.be.true()
-          expect(result[1].startDate).to.equal(new Date('2022-03-01'))
-          expect(result[1].endDate).to.equal(new Date('2023-02-28'))
-          expect(result[1].billableStartDate).to.equal(new Date('2022-04-01'))
-          expect(result[1].billableEndDate).to.equal(new Date('2023-02-28'))
-          expect(result[1].billableDays).to.equal(334)
+          expect(result[1]).to.be.undefined()
         })
       })
 
@@ -257,14 +219,12 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.true()
           expect(result[0].startDate).to.equal(new Date('2021-10-01'))
           expect(result[0].endDate).to.equal(new Date('2022-09-30'))
           expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
           expect(result[0].billableEndDate).to.equal(new Date('2022-09-30'))
           expect(result[0].billableDays).to.equal(183)
 
-          expect(result[1].consider).to.be.true()
           expect(result[1].startDate).to.equal(new Date('2022-10-01'))
           expect(result[1].endDate).to.equal(new Date('2023-09-30'))
           expect(result[1].billableStartDate).to.equal(new Date('2022-10-01'))
@@ -288,19 +248,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.false()
-          expect(result[0].startDate).to.equal(new Date('2021-04-01'))
-          expect(result[0].endDate).to.equal(new Date('2022-03-31'))
-          expect(result[0].billableStartDate).to.be.undefined()
-          expect(result[0].billableEndDate).to.be.undefined()
-          expect(result[0].billableDays).to.be.undefined()
+          expect(result[0].startDate).to.equal(new Date('2022-04-01'))
+          expect(result[0].endDate).to.equal(new Date('2023-03-31'))
+          expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
+          expect(result[0].billableEndDate).to.equal(new Date('2023-03-31'))
+          expect(result[0].billableDays).to.equal(365)
 
-          expect(result[1].consider).to.be.true()
-          expect(result[1].startDate).to.equal(new Date('2022-04-01'))
-          expect(result[1].endDate).to.equal(new Date('2023-03-31'))
-          expect(result[1].billableStartDate).to.equal(new Date('2022-04-01'))
-          expect(result[1].billableEndDate).to.equal(new Date('2023-03-31'))
-          expect(result[1].billableDays).to.equal(365)
+          expect(result[1]).to.be.undefined()
         })
       })
     })
@@ -321,19 +275,13 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.false()
-          expect(result[0].startDate).to.equal(new Date('2021-03-31'))
-          expect(result[0].endDate).to.equal(new Date('2022-03-01'))
-          expect(result[0].billableStartDate).to.be.undefined()
-          expect(result[0].billableEndDate).to.be.undefined()
-          expect(result[0].billableDays).to.be.undefined()
+          expect(result[0].startDate).to.equal(new Date('2022-03-31'))
+          expect(result[0].endDate).to.equal(new Date('2023-03-01'))
+          expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
+          expect(result[0].billableEndDate).to.equal(new Date('2023-03-01'))
+          expect(result[0].billableDays).to.equal(335)
 
-          expect(result[1].consider).to.be.true()
-          expect(result[1].startDate).to.equal(new Date('2022-03-31'))
-          expect(result[1].endDate).to.equal(new Date('2023-03-01'))
-          expect(result[1].billableStartDate).to.equal(new Date('2022-04-01'))
-          expect(result[1].billableEndDate).to.equal(new Date('2023-03-01'))
-          expect(result[1].billableDays).to.equal(335)
+          expect(result[1]).to.be.undefined()
         })
       })
 
@@ -352,14 +300,12 @@ describe('Abstraction Billing Period service', () => {
 
           expect(result).to.be.an.array()
 
-          expect(result[0].consider).to.be.true()
           expect(result[0].startDate).to.equal(new Date('2021-10-01'))
           expect(result[0].endDate).to.equal(new Date('2022-09-30'))
           expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
           expect(result[0].billableEndDate).to.equal(new Date('2022-09-30'))
           expect(result[0].billableDays).to.equal(183)
 
-          expect(result[1].consider).to.be.true()
           expect(result[1].startDate).to.equal(new Date('2022-10-01'))
           expect(result[1].endDate).to.equal(new Date('2023-09-30'))
           expect(result[1].billableStartDate).to.equal(new Date('2022-10-01'))
@@ -385,19 +331,13 @@ describe('Abstraction Billing Period service', () => {
 
       expect(result).to.be.an.array()
 
-      expect(result[0].consider).to.be.true()
       expect(result[0].startDate).to.equal(new Date('2022-04-01'))
       expect(result[0].endDate).to.equal(new Date('2022-04-01'))
       expect(result[0].billableStartDate).to.equal(new Date('2022-04-01'))
       expect(result[0].billableEndDate).to.equal(new Date('2022-04-01'))
       expect(result[0].billableDays).to.equal(1)
 
-      expect(result[1].consider).to.be.false()
-      expect(result[1].startDate).to.equal(new Date('2023-04-01'))
-      expect(result[1].endDate).to.equal(new Date('2023-04-01'))
-      expect(result[1].billableStartDate).to.be.undefined()
-      expect(result[1].billableEndDate).to.be.undefined()
-      expect(result[1].billableDays).to.be.undefined()
+      expect(result[1]).to.be.undefined()
     })
   })
 })
