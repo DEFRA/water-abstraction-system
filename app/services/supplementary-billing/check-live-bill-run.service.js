@@ -7,12 +7,12 @@
 
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 
-const LIVE_STATUSES = ['processing', 'ready', 'review']
+const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
 
 /**
  * Check whether a "live" bill run exists for the specified region, scheme, type and financial year
  *
- * We define "live" as having the status `processing`, `ready` or `review`
+ * We define "live" as having the status `processing`, `ready`, `review` or `queued`
  *
  * @param {*} regionId The id of the region to be checked
  * @param {*} financialYear The financial year to be checked
