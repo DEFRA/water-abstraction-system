@@ -152,10 +152,11 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
  * @returns {number} periods[].billableDays
  */
 function _calculateBillableDays (abstractionPeriods) {
+  const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
   for (const abstractionPeriod of abstractionPeriods) {
     if (abstractionPeriod.billableStartDate) {
       const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
-      const billableDays = Math.ceil(difference / (1000 * 3600 * 24)) + 1 // (1000 msecs * (60 secs * 60 mins) * 24 hrs)
+      const billableDays = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
       abstractionPeriod.billableDays = billableDays
     }
   }
