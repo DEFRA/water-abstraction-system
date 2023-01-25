@@ -111,8 +111,7 @@ describe.only('Initiate Billing Batch service', () => {
 
     describe('because a bill run already exists for this region and financial year', () => {
       beforeEach(() => {
-        CheckLiveBillRunService.go.restore()
-        Sinon.stub(CheckLiveBillRunService, 'go').resolves(true)
+        CheckLiveBillRunService.go.resolves(true)
       })
 
       it('rejects with an appropriate error', async () => {
