@@ -200,7 +200,7 @@ function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
  * @returns {Object[]} The array abstraction periods each with a new `consider` property
  * c
  */
-function _flagPeriodsForConsideration (billingPeriod, abstractionPeriods) {
+function _flagPeriodsForConsideration (abstractionPeriods, billingPeriod) {
   for (const abstractionPeriod of abstractionPeriods) {
     if (abstractionPeriod.startDate > billingPeriod.endDate) {
       abstractionPeriod.consider = false
