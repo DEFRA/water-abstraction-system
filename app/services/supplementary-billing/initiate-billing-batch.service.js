@@ -33,7 +33,7 @@ async function go (billRunRequestData) {
   const liveBillRunExists = await CheckLiveBillRunService.go(region, financialYear)
 
   if (liveBillRunExists) {
-    throw Error()
+    throw Error(`Batch already live for region ${region}`)
   }
 
   const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')

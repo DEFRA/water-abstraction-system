@@ -22,7 +22,7 @@ const CheckLiveBillRunService = require('../../../app/services/supplementary-bil
 // Thing under test
 const InitiateBillingBatchService = require('../../../app//services/supplementary-billing/initiate-billing-batch.service.js')
 
-describe.only('Initiate Billing Batch service', () => {
+describe('Initiate Billing Batch service', () => {
   const currentBillingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -118,6 +118,7 @@ describe.only('Initiate Billing Batch service', () => {
         const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
 
         expect(err).to.be.an.error()
+        expect(err.message).to.equal(`Batch already live for region ${validatedRequestData.region}`)
       })
     })
 
