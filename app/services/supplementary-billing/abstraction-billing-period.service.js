@@ -35,9 +35,10 @@
 function go (billingPeriod, chargePurpose) {
   const abstractionPeriods = _abstractionPeriods(billingPeriod, chargePurpose)
 
-  _calculateBillablePeriods(abstractionPeriods, billingPeriod)
-
-  _calculateBillableDays(abstractionPeriods)
+  for (const abstractionPeriod of abstractionPeriods) {
+    _calculateBillablePeriods(abstractionPeriod, billingPeriod)
+    _calculateBillableDays(abstractionPeriod)
+  }
 
   return abstractionPeriods
 }
@@ -138,51 +139,48 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
 }
 
 /**
- * Calculates the 'billable days' for each abstraction billable period
+ * Calculates the 'billable days' for a billable abstraction period
  *
- * @param {Object[]} abstractionPeriods An array of abstraction billing periods
+ * @param {Object} abstractionPeriod An abstraction billing period
  *
- * @returns {Object[]} The array abstraction periods each with a new `billableDays` property
+ * @returns {Object} The abstraction period with a new `billableDays` property
  */
-function _calculateBillableDays (abstractionPeriods) {
+function _calculateBillableDays (abstractionPeriod) {
   const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
-  for (const abstractionPeriod of abstractionPeriods) {
-    if (abstractionPeriod.billableStartDate) {
-      const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
-      const billableDays = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
-      abstractionPeriod.billableDays = billableDays
-    }
+  if (abstractionPeriod.billableStartDate) {
+    const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
+    const billableDays = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
+    abstractionPeriod.billableDays = billableDays
   }
 }
 
 /**
- * Calculates the 'billable period' for each abstraction billing period
+ * Calculates the 'billable period' for an abstraction billing period
  *
- * @param {Object[]} abstractionPeriods An array of abstraction billing periods
+ * @param {Object} abstractionPeriod An abstraction billing period
  * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
  *
- * @returns {Object[]} The array abstraction periods each with new `billableStartDate` & `billableEndDate` properties
+ * @returns {Object} The abstraction period with new `billableStartDate` & `billableEndDate` properties
  */
-function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
+function _calculateBillablePeriods (abstractionPeriod, billingPeriod) {
   let billableStartDate
   let billableEndDate
-  for (const abstractionPeriod of abstractionPeriods) {
-    if (abstractionPeriod.startDate < billingPeriod.startDate) {
-      billableStartDate = billingPeriod.startDate
-    } else {
-      billableStartDate = abstractionPeriod.startDate
-    }
 
-    if (abstractionPeriod.endDate > billingPeriod.endDate) {
-      billableEndDate = billingPeriod.endDate
-    } else {
-      billableEndDate = abstractionPeriod.endDate
-    }
+  if (abstractionPeriod.startDate < billingPeriod.startDate) {
+    billableStartDate = billingPeriod.startDate
+  } else {
+    billableStartDate = abstractionPeriod.startDate
+  }
 
-    if (billableStartDate <= billableEndDate) {
-      abstractionPeriod.billableStartDate = billableStartDate
-      abstractionPeriod.billableEndDate = billableEndDate
-    }
+  if (abstractionPeriod.endDate > billingPeriod.endDate) {
+    billableEndDate = billingPeriod.endDate
+  } else {
+    billableEndDate = abstractionPeriod.endDate
+  }
+
+  if (billableStartDate <= billableEndDate) {
+    abstractionPeriod.billableStartDate = billableStartDate
+    abstractionPeriod.billableEndDate = billableEndDate
   }
 }
 
