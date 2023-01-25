@@ -98,8 +98,6 @@ function go (billingPeriod, chargePurpose) {
  * @param {module:ChargePurposeModel} chargePurpose The abstraction period to be checked
  *
  * @returns {Object[]} An array of abstraction periods
- * @returns {Date} periods[].startDate
- * @returns {Date} periods[].endDate
  */
 function _abstractionPeriods (billingPeriod, chargePurpose) {
   const billingPeriodStartYear = billingPeriod.startDate.getFullYear()
@@ -144,12 +142,6 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
  * @param {Object[]} abstractionPeriods An array of abstraction billing periods
  *
  * @returns {Object[]} The array abstraction periods each with a new `billableDays` property
- * @returns {Date} periods[].startDate
- * @returns {Date} periods[].endDate
- * @returns {boolean} periods[].consider
- * @returns {Date} periods[].billableStartDate
- * @returns {Date} periods[].billableEndDate
- * @returns {number} periods[].billableDays
  */
 function _calculateBillableDays (abstractionPeriods) {
   const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
@@ -169,11 +161,6 @@ function _calculateBillableDays (abstractionPeriods) {
  * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
  *
  * @returns {Object[]} The array abstraction periods each with new `billableStartDate` & `billableEndDate` properties
- * @returns {Date} periods[].startDate
- * @returns {Date} periods[].endDate
- * @returns {boolean} periods[].consider
- * @returns {Date} periods[].billableStartDate
- * @returns {Date} periods[].billableEndDate
  */
 function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
   let billableStartDate
@@ -211,8 +198,6 @@ function _calculateBillablePeriods (abstractionPeriods, billingPeriod) {
  * @param {Object[]} abstractionPeriods An array of abstraction billing periods
  *
  * @returns {Object[]} The array abstraction periods each with a new `consider` property
- * @returns {Date} periods[].startDate
- * @returns {Date} periods[].endDate
  * c
  */
 function _flagPeriodsForConsideration (billingPeriod, abstractionPeriods) {
