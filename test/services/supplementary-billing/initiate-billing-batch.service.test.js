@@ -107,7 +107,7 @@ describe('Initiate Billing Batch service', () => {
       })
     })
 
-    describe('and the error doesn\'t include a messge', () => {
+    describe('and the error doesn\'t include a message', () => {
       beforeEach(() => {
         Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
           succeeded: false,
