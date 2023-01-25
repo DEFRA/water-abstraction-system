@@ -36,10 +36,6 @@
  * @param {module:ChargePurposeModel} chargePurpose The abstraction period to be checked
  *
  * @returns {Object[]} An array of abstraction periods
- * @returns {Date} periods[].startDate
- * @returns {Date} periods[].endDate
- * @returns {boolean} periods[].consider
- * @returns {number} periods[].billableDays
  */
 function go (billingPeriod, chargePurpose) {
   const abstractionPeriods = _abstractionPeriods(billingPeriod, chargePurpose)
