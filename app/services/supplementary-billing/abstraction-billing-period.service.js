@@ -159,7 +159,6 @@ function _calculateBillableDays (abstractionPeriod) {
  * @param {Object} abstractionPeriod An abstraction billing period
  * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
  *
- * @returns {Object} The abstraction period with new `billableStartDate` & `billableEndDate` properties
  */
 function _calculateBillablePeriods (abstractionPeriod, billingPeriod) {
   let billableStartDate
