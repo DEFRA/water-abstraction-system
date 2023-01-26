@@ -36,7 +36,7 @@ function go (billingPeriod, chargePurpose) {
   const abstractionPeriods = _abstractionPeriods(billingPeriod, chargePurpose)
 
   for (const abstractionPeriod of abstractionPeriods) {
-    _calculateBillablePeriods(abstractionPeriod, billingPeriod)
+    _calculateBillablePeriod(abstractionPeriod, billingPeriod)
     _calculateBillableDays(abstractionPeriod)
   }
 
