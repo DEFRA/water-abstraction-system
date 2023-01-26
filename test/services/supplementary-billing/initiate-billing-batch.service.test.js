@@ -17,6 +17,7 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 // Things we need to stub
 const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
 const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
+const CheckLiveBillRunService = require('../../../app/services/supplementary-billing/check-live-bill-run.service.js')
 
 // Thing under test
 const InitiateBillingBatchService = require('../../../app//services/supplementary-billing/initiate-billing-batch.service.js')
@@ -40,6 +41,7 @@ describe('Initiate Billing Batch service', () => {
     }
 
     Sinon.stub(BillingPeriodService, 'go').returns([currentBillingPeriod])
+    Sinon.stub(CheckLiveBillRunService, 'go').resolves(false)
   })
 
   afterEach(() => {
@@ -107,7 +109,20 @@ describe('Initiate Billing Batch service', () => {
       })
     })
 
-    describe('and the error doesn\'t include a messge', () => {
+    describe('because a bill run already exists for this region and financial year', () => {
+      beforeEach(() => {
+        CheckLiveBillRunService.go.resolves(true)
+      })
+
+      it('rejects with an appropriate error', async () => {
+        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
+
+        expect(err).to.be.an.error()
+        expect(err.message).to.equal(`Batch already live for region ${validatedRequestData.region}`)
+      })
+    })
+
+    describe('and the error doesn\'t include a message', () => {
       beforeEach(() => {
         Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
           succeeded: false,
