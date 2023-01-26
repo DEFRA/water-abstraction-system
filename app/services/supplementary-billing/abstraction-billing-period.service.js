@@ -143,7 +143,6 @@ function _abstractionPeriods (billingPeriod, chargePurpose) {
  *
  * @param {Object} abstractionPeriod An abstraction billing period
  *
- * @returns {Object} The abstraction period with a new `billableDays` property
  */
 function _calculateBillableDays (abstractionPeriod) {
   const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
