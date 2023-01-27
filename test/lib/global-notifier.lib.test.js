@@ -20,6 +20,7 @@ describe('GlobalNotifierLib class', () => {
 
   beforeEach(async () => {
     airbrakeFake = { notify: Sinon.fake.resolves({ id: 1 }), flush: Sinon.fake() }
+    Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
 
     pinoFake = { info: Sinon.fake(), error: Sinon.fake() }
     Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
@@ -27,6 +28,20 @@ describe('GlobalNotifierLib class', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('#constructor', () => {
+    describe("when the 'logger' argument is not provided", () => {
+      it('throws an error', () => {
+        expect(() => new GlobalNotifierLib(null, airbrakeFake)).to.throw()
+      })
+    })
+
+    describe("when the 'notifier' argument is not provided", () => {
+      it('throws an error', () => {
+        expect(() => new GlobalNotifierLib(pinoFake)).to.throw()
+      })
+    })
   })
 
   describe('when a log entry is made', () => {
@@ -38,7 +53,7 @@ describe('GlobalNotifierLib class', () => {
         message,
         id
       }
-      const testNotifier = new GlobalNotifierLib(airbrakeFake)
+      const testNotifier = new GlobalNotifierLib(pinoFake, airbrakeFake)
       testNotifier.omg(message, { id })
 
       expect(pinoFake.info.calledOnceWith(expectedArgs)).to.be.true()
@@ -56,7 +71,7 @@ describe('GlobalNotifierLib class', () => {
           ...data
         }
       }
-      const testNotifier = new GlobalNotifierLib(airbrakeFake)
+      const testNotifier = new GlobalNotifierLib(pinoFake, airbrakeFake)
       testNotifier.omfg(message, data)
 
       expect(airbrakeFake.notify.calledOnceWith(expectedArgs)).to.be.true()

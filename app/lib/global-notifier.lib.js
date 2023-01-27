@@ -13,10 +13,15 @@ const BaseNotifierLib = require('./base-notifier.lib.js')
  * Created for use with the `app/plugins/global-notifier.plugin.js`.
  */
 class GlobalNotifierLib extends BaseNotifierLib {
-  constructor (airbrakeNotifier) {
-    // We expect the plugin to provide the existing instance of Airbrake created at startup. But we lean into
-    // BaseNotifierLib's logic for creating an instance of Pino when one isn't provided
-    super(null, airbrakeNotifier)
+  constructor (logger, notifier) {
+    // This is here more to make it clear that we expect these args to be provided. BaseNotifierLib has the built-in
+    // ability to instantiate them if not provided. But for our use case in global-notifier.plugin.js we want to ensure
+    // we are using the existing instances.
+    if (!logger || !notifier) {
+      throw new Error('new instance of GlobalNotifierLib is missing a required argument')
+    }
+
+    super(logger, notifier)
   }
 
   _formatLogPacket (message, data) {
