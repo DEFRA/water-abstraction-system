@@ -31,22 +31,16 @@ async function go (billRunRequestData) {
 
   await _checkForExistingBillRun(region, billingPeriod)
 
-  const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
+  const chargingModuleBillRunId = await _createChargingModuleBillRun(region)
 
-  // A failed response will be due to a failed `RequestLib` request so format an error message accordingly and throw it
-  if (!chargingModuleBillRun.succeeded) {
-    // We always get the status code and error
-    const errorHead = `${chargingModuleBillRun.response.statusCode} ${chargingModuleBillRun.response.error}`
-
-    // We should always get an additional error messge but if not then simply throw the status code and error
-    if (!chargingModuleBillRun.response.message) {
-      throw Error(errorHead)
-    }
-
-    throw Error(errorHead + ` - ${chargingModuleBillRun.response.message}`)
-  }
-
-  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, undefined, chargingModuleBillRun.response.id)
+  const billingBatch = await CreateBillingBatchService.go(
+    region,
+    billingPeriod,
+    type,
+    scheme,
+    undefined,
+    chargingModuleBillRunId
+  )
 
   await CreateBillingBatchEventService.go(billingBatch, user)
 
@@ -60,6 +54,25 @@ async function _checkForExistingBillRun (region, billingPeriod) {
   if (liveBillRunExists) {
     throw Error(`Batch already live for region ${region}`)
   }
+}
+
+async function _createChargingModuleBillRun (region) {
+  const result = await ChargingModuleCreateBillRunService.go(region, 'sroc')
+
+  // A failed response will be due to a failed `RequestLib` request so format an error message accordingly and throw it
+  if (!result.succeeded) {
+    // We always get the status code and error
+    const errorHead = `${result.response.statusCode} ${result.response.error}`
+
+    // We should always get an additional error message but if not then simply throw the status code and error
+    if (!result.response.message) {
+      throw Error(errorHead)
+    }
+
+    throw Error(errorHead + ` - ${result.response.message}`)
+  }
+
+  return result.response.id
 }
 
 function _response (billingBatch) {
