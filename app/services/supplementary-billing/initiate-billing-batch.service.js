@@ -23,18 +23,13 @@ const CreateBillingBatchEventService = require('./create-billing-batch-event.ser
  * @returns {Object} Details of the newly created billing batch record
  */
 async function go (billRunRequestData) {
+  const { region, scheme, type, user } = billRunRequestData
+
   // NOTE: It will be required in the future that we cater for a range of billing periods, as changes can be back dated
   // up to 5 years. For now though, our delivery scope is only for the current billing period hence billingPeriods[0]
   const billingPeriod = BillingPeriodService.go()[0]
 
-  const { region, scheme, type, user } = billRunRequestData
-
-  const financialYear = billingPeriod.endDate.getFullYear()
-  const liveBillRunExists = await CheckLiveBillRunService.go(region, financialYear)
-
-  if (liveBillRunExists) {
-    throw Error(`Batch already live for region ${region}`)
-  }
+  await _checkForExistingBillRun(region, billingPeriod)
 
   const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
 
@@ -56,6 +51,15 @@ async function go (billRunRequestData) {
   await CreateBillingBatchEventService.go(billingBatch, user)
 
   return _response(billingBatch)
+}
+
+async function _checkForExistingBillRun (region, billingPeriod) {
+  const financialYear = billingPeriod.endDate.getFullYear()
+  const liveBillRunExists = await CheckLiveBillRunService.go(region, financialYear)
+
+  if (liveBillRunExists) {
+    throw Error(`Batch already live for region ${region}`)
+  }
 }
 
 function _response (billingBatch) {
