@@ -5,7 +5,7 @@
  * @module FetchLicencesService
  */
 
-const LicenceModel = require('../../models/water/licence.model.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Fetches licences flagged for supplementary billing that are linked to the selected region
@@ -24,24 +24,29 @@ async function go (region, billingPeriodFinancialYearEnding) {
 }
 
 async function _fetch (region, billingPeriodFinancialYearEnding) {
-  const result = await LicenceModel.query()
-    .distinctOn('licenceId')
-    .innerJoinRelated('chargeVersions')
-    .where('regionId', region.regionId)
-    .where('includeInSupplementaryBilling', 'yes')
-    .where('chargeVersions.scheme', 'sroc')
-    .withGraphFetched('billingInvoiceLicences.billingInvoice')
-    .modifyGraph('billingInvoiceLicences', builder => {
-      builder.select(
-        'billingInvoiceLicenceId'
-      )
+  const result = db
+    .select('l.licenceId', 'l.licenceRef')
+    .count('billed.licenceId as numberOfTimesBilled')
+    .distinctOn('l.licenceId')
+    .from('water.licences as l')
+    .leftOuterJoin(
+      db
+        .select('bil.licenceId')
+        .from('water.billingInvoiceLicences as bil')
+        .innerJoin('water.billingInvoices as bi', 'bil.billingInvoiceId', 'bi.billingInvoiceId')
+        .innerJoin('water.billingBatches as bb', 'bi.billingBatchId', 'bb.billingBatchId')
+        .where({
+          'bi.financialYearEnding': billingPeriodFinancialYearEnding,
+          'bb.status': 'sent',
+          'bb.scheme': 'sroc'
+        }).as('billed'),
+      'l.licenceId', 'billed.licenceId'
+    )
+    .where({
+      'l.includeInSupplementaryBilling': 'yes',
+      'l.regionId': region.regionId
     })
-    .modifyGraph('billingInvoiceLicences.billingInvoice', builder => {
-      builder.select(
-        'financialYearEnding'
-      )
-        .where('financialYearEnding', billingPeriodFinancialYearEnding)
-    })
+    .groupBy('l.licenceId')
 
   return result
 }
