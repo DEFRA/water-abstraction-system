@@ -90,22 +90,43 @@ describe('Initiate Billing Batch service', () => {
 
   describe('when initiating a billing batch fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
-      beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
-          succeeded: false,
-          response: {
-            statusCode: 403,
-            error: 'Forbidden',
-            message: "Unauthorised for regime 'wrls'"
-          }
+      describe('and the error includes a message', () => {
+        beforeEach(() => {
+          Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+            succeeded: false,
+            response: {
+              statusCode: 403,
+              error: 'Forbidden',
+              message: "Unauthorised for regime 'wrls'"
+            }
+          })
+        })
+
+        it('rejects with an appropriate error', async () => {
+          const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
+
+          expect(err).to.be.an.error()
+          expect(err.message).to.equal("403 Forbidden - Unauthorised for regime 'wrls'")
         })
       })
 
-      it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
+      describe('and the error does not include a message', () => {
+        beforeEach(() => {
+          Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+            succeeded: false,
+            response: {
+              statusCode: 403,
+              error: 'Forbidden'
+            }
+          })
+        })
 
-        expect(err).to.be.an.error()
-        expect(err.message).to.equal("403 Forbidden - Unauthorised for regime 'wrls'")
+        it('rejects with an appropriate error', async () => {
+          const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
+
+          expect(err).to.be.an.error()
+          expect(err.message).to.equal('403 Forbidden')
+        })
       })
     })
 
@@ -119,25 +140,6 @@ describe('Initiate Billing Batch service', () => {
 
         expect(err).to.be.an.error()
         expect(err.message).to.equal(`Batch already live for region ${validatedRequestData.region}`)
-      })
-    })
-
-    describe('and the error doesn\'t include a message', () => {
-      beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
-          succeeded: false,
-          response: {
-            statusCode: 403,
-            error: 'Forbidden'
-          }
-        })
-      })
-
-      it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
-
-        expect(err).to.be.an.error()
-        expect(err.message).to.equal('403 Forbidden')
       })
     })
   })
