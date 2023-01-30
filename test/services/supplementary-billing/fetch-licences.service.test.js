@@ -33,7 +33,7 @@ describe('Fetch Licences service', () => {
       })
 
       describe('Licence not previously billed', () => {
-        it('returns results', async () => {
+        it('returns the expected results', async () => {
           const result = await FetchLicencesService.go(region, billingPeriodFinancialYearEnding)
 
           expect(result.length).to.equal(1)
