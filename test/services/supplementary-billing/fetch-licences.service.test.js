@@ -43,7 +43,7 @@ describe('Fetch Licences service', () => {
         })
       })
 
-      describe('Licence previously billed in current period 2023', () => {
+      describe('and that have been billed in the current period', () => {
         beforeEach(async () => {
           billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
