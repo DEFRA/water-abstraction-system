@@ -27,7 +27,7 @@ describe('Fetch Licences service', () => {
   })
 
   describe('when there are licences for the matching region', () => {
-    describe('that are flagged to be included in supplementary billing.', () => {
+    describe('that are flagged to be included in supplementary billing', () => {
       beforeEach(async () => {
         testLicence = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes' })
       })
