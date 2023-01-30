@@ -49,7 +49,7 @@ describe('Fetch Licences service', () => {
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
 
-        it('returns results', async () => {
+        it('returns the expected results', async () => {
           const result = await FetchLicencesService.go(region, billingPeriodFinancialYearEnding)
 
           expect(result.length).to.equal(1)
