@@ -112,7 +112,7 @@ describe('Fetch Licences service', () => {
         })
       })
 
-      // This situation should not occur normally, but as the billing batch is filtered on scheme I'm going to test it
+      // NOTE: This situation will not occur normally. But as the billing batch is filtered on `scheme` we wanted a test to ensure the filter worked
       describe('Licence previously billed in current period 2023 but scheme not sroc', () => {
         beforeEach(async () => {
           billingInvoice = await BillingInvoiceHelper.add(
