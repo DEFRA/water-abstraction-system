@@ -94,7 +94,7 @@ describe('Fetch Licences service', () => {
         })
       })
 
-      describe('and has been billed twice in current period 2023', () => {
+      describe('and that have been billed twice in the current period', () => {
         beforeEach(async () => {
           billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
