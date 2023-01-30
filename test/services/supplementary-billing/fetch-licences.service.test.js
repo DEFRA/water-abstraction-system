@@ -32,7 +32,7 @@ describe('Fetch Licences service', () => {
         testLicence = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes' })
       })
 
-      describe('Licence not previously billed', () => {
+      describe('and that have not been previously billed', () => {
         it('returns the expected results', async () => {
           const result = await FetchLicencesService.go(region, billingPeriodFinancialYearEnding)
 
