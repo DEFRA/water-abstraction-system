@@ -59,7 +59,7 @@ describe('Fetch Licences service', () => {
         })
       })
 
-      describe('Licence previously billed in current period 2023, billing batch status not `sent`', () => {
+      describe("and that are included in an 'unsent' billing batch in the current period", () => {
         beforeEach(async () => {
           billingInvoice = await BillingInvoiceHelper.add(
             { financialYearEnding: billingPeriodFinancialYearEnding },
