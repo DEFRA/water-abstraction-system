@@ -26,30 +26,12 @@ describe('Supplementary presenter', () => {
           {
             licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
             licenceRef: 'AT/SROC/SUPB/01',
-            billingInvoiceLicences: [
-              {
-                billingInvoiceLicenceId: '585135da-0879-400a-b329-4d94b214ca66',
-                billingInvoice: null
-              },
-              {
-                billingInvoiceLicenceId: '585135da-0879-400a-b329-4d94b214ca66',
-                billingInvoice: { financialYearEnding: 2023 }
-              }
-            ]
+            numberOfTimesBilled: 1
           },
           {
             licenceId: '81b50b35-459a-43f0-a48a-262028a34493',
             licenceRef: 'AT/SROC/SUPB/02',
-            billingInvoiceLicences: [
-              {
-                billingInvoiceLicenceId: 'f2a4689f-1c6f-4388-8a42-c1daddcc7f2f',
-                billingInvoice: null
-              },
-              {
-                billingInvoiceLicenceId: '5846052d-2acf-43c3-8c5a-353debb1b8ed',
-                billingInvoice: null
-              }
-            ]
+            numberOfTimesBilled: 0
           }
         ],
         chargeVersions: [

@@ -24,7 +24,7 @@ describe('Check Live Bill Run service', () => {
   describe('when an sroc supplementary bill run exists for this region and financial year', () => {
     describe('with a status considered to be "live"', () => {
       beforeEach(async () => {
-        billRun = await BillingBatchHelper.add()
+        billRun = await BillingBatchHelper.add({ status: 'queued' })
       })
 
       it('returns `true`', async () => {
@@ -36,7 +36,7 @@ describe('Check Live Bill Run service', () => {
 
     describe('with a status not considered to be "live"', () => {
       beforeEach(async () => {
-        billRun = await BillingBatchHelper.add({ status: 'sent' })
+        billRun = await BillingBatchHelper.add()
       })
 
       it('returns `false`', async () => {

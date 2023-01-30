@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
 const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 
@@ -28,28 +27,24 @@ describe('Fetch Licences service', () => {
   })
 
   describe('when there are licences for the matching region', () => {
-    describe('that are flagged to be included in supplementary billing', () => {
+    describe('that are flagged to be included in supplementary billing.', () => {
       beforeEach(async () => {
         testLicence = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes' })
       })
 
-      describe('and that have an SROC charge version. Licence not previosly billed', () => {
-        beforeEach(async () => {
-          await ChargeVersionHelper.add({}, testLicence)
-        })
-
+      describe('Licence not previously billed', () => {
         it('returns results', async () => {
           const result = await FetchLicencesService.go(region, billingPeriodFinancialYearEnding)
 
           expect(result.length).to.equal(1)
           expect(result[0].licenceId).to.equal(testLicence.licenceId)
-          expect(result[0].billingInvoiceLicences).to.equal([])
+          expect(result[0].licenceRef).to.equal(testLicence.licenceRef)
+          expect(result[0].numberOfTimesBilled).to.equal(0)
         })
       })
 
-      describe('and that have an SROC charge version. Licence previosly billed in current period 2023', () => {
+      describe('Licence previously billed in current period 2023', () => {
         beforeEach(async () => {
-          await ChargeVersionHelper.add({}, testLicence)
           billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
@@ -59,13 +54,32 @@ describe('Fetch Licences service', () => {
 
           expect(result.length).to.equal(1)
           expect(result[0].licenceId).to.equal(testLicence.licenceId)
-          expect(result[0].billingInvoiceLicences[0].billingInvoice.financialYearEnding).to.equal(billingPeriodFinancialYearEnding)
+          expect(result[0].licenceRef).to.equal(testLicence.licenceRef)
+          expect(result[0].numberOfTimesBilled).to.equal(1)
         })
       })
 
-      describe('and that have an SROC charge version. Licence previosly billed in previous period 2022', () => {
+      describe('Licence previously billed in current period 2023, billing batch status not `sent`', () => {
         beforeEach(async () => {
-          await ChargeVersionHelper.add({}, testLicence)
+          billingInvoice = await BillingInvoiceHelper.add(
+            { financialYearEnding: billingPeriodFinancialYearEnding },
+            { status: 'queued' }
+          )
+          await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
+        })
+
+        it('returns results', async () => {
+          const result = await FetchLicencesService.go(region, billingPeriodFinancialYearEnding)
+
+          expect(result.length).to.equal(1)
+          expect(result[0].licenceId).to.equal(testLicence.licenceId)
+          expect(result[0].licenceRef).to.equal(testLicence.licenceRef)
+          expect(result[0].numberOfTimesBilled).to.equal(0)
+        })
+      })
+
+      describe('Licence previosly billed in previous period 2022', () => {
+        beforeEach(async () => {
           billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: 2022 })
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
@@ -75,14 +89,17 @@ describe('Fetch Licences service', () => {
 
           expect(result.length).to.equal(1)
           expect(result[0].licenceId).to.equal(testLicence.licenceId)
-          expect(result[0].billingInvoiceLicences[0].billingInvoice).to.equal(null)
+          expect(result[0].licenceRef).to.equal(testLicence.licenceRef)
+          expect(result[0].numberOfTimesBilled).to.equal(0)
         })
       })
 
-      describe('and that have multiple SROC charge versions', () => {
+      describe('and has been billed twice in current period 2023', () => {
         beforeEach(async () => {
-          await ChargeVersionHelper.add({}, testLicence)
-          await ChargeVersionHelper.add({}, testLicence)
+          billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
+          await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
+          billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
+          await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
 
         it('returns a licence only once in the results', async () => {
@@ -90,14 +107,28 @@ describe('Fetch Licences service', () => {
 
           expect(result.length).to.equal(1)
           expect(result[0].licenceId).to.equal(testLicence.licenceId)
+          expect(result[0].licenceRef).to.equal(testLicence.licenceRef)
+          expect(result[0].numberOfTimesBilled).to.equal(2)
         })
       })
 
-      describe('but do not have an SROC charge version', () => {
+      // This situation should not occur normally, but as the billing batch is filtered on scheme I'm going to test it
+      describe('Licence previously billed in current period 2023 but scheme not sroc', () => {
+        beforeEach(async () => {
+          billingInvoice = await BillingInvoiceHelper.add(
+            { financialYearEnding: billingPeriodFinancialYearEnding },
+            { scheme: 'alcs' }
+          )
+          await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
+        })
+
         it('returns no results', async () => {
           const result = await FetchLicencesService.go(region, billingPeriodFinancialYearEnding)
 
-          expect(result.length).to.equal(0)
+          expect(result.length).to.equal(1)
+          expect(result[0].licenceId).to.equal(testLicence.licenceId)
+          expect(result[0].licenceRef).to.equal(testLicence.licenceRef)
+          expect(result[0].numberOfTimesBilled).to.equal(0)
         })
       })
     })
@@ -117,7 +148,10 @@ describe('Fetch Licences service', () => {
 
   describe('when there are no licences for the matching region', () => {
     beforeEach(async () => {
-      await LicenceHelper.add({ regionId: '000446bd-182a-4340-be6b-d719855ace1a' })
+      await LicenceHelper.add({
+        regionId: '000446bd-182a-4340-be6b-d719855ace1a',
+        includeInSupplementaryBilling: 'yes'
+      })
     })
 
     it('returns no results', async () => {
