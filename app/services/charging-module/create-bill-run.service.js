@@ -63,8 +63,6 @@ function _parseResult (result) {
   if (result.response.body) {
     const parsedBody = JSON.parse(result.response.body)
     response = result.succeeded ? parsedBody.billRun : parsedBody
-  } else {
-    response = result.response
   }
 
   return {
