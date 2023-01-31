@@ -49,8 +49,8 @@ async function go (billRunRequestData) {
 
 function _billingBatchOptions (type, scheme, chargingModuleBillRun) {
   const options = {
-    batchType: type,
     scheme,
+    batchType: type,
     externalId: chargingModuleBillRun.response.id
   }
 
