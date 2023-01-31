@@ -12,7 +12,8 @@ function go (billingBatch) {
     scheme,
     batchType,
     status,
-    externalId
+    externalId,
+    errorCode
   } = billingBatch
 
   return {
@@ -21,7 +22,8 @@ function go (billingBatch) {
     scheme,
     batchType,
     status,
-    externalId
+    externalId,
+    errorCode
   }
 }
 

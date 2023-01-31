@@ -5,6 +5,7 @@
  * @module InitiateBillingBatchService
  */
 
+const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const BillingPeriodService = require('./billing-period.service.js')
 const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
@@ -15,8 +16,8 @@ const CreateBillingBatchEventService = require('./create-billing-batch-event.ser
 /**
  * Initiate a new billing batch
  *
- * Initiating a new billing batch means creating both the `billing_batch` and `event` record with the appropriate data.
- * In the future it will also encompass creating the bill run record in the SROC Charging Module API.
+ * Initiating a new billing batch means creating both the `billing_batch` and `event` record with the appropriate data,
+ * along with a bill run record in the SROC Charging Module API.
  *
  * @param {Object} billRunRequestData Validated version of the data sent in the request to create the new billing batch
  *
@@ -38,24 +39,27 @@ async function go (billRunRequestData) {
 
   const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
 
-  // A failed response will be due to a failed `RequestLib` request so format an error message accordingly and throw it
-  if (!chargingModuleBillRun.succeeded) {
-    // We always get the status code and error
-    const errorHead = `${chargingModuleBillRun.response.statusCode} ${chargingModuleBillRun.response.error}`
-
-    // We should always get an additional error messge but if not then simply throw the status code and error
-    if (!chargingModuleBillRun.response.message) {
-      throw Error(errorHead)
-    }
-
-    throw Error(errorHead + ` - ${chargingModuleBillRun.response.message}`)
-  }
-
-  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, undefined, chargingModuleBillRun.response.id)
+  const billingBatchOptions = _billingBatchOptions(type, scheme, chargingModuleBillRun)
+  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, billingBatchOptions)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
 
   return _response(billingBatch)
+}
+
+function _billingBatchOptions (type, scheme, chargingModuleBillRun) {
+  const options = {
+    scheme,
+    batchType: type,
+    externalId: chargingModuleBillRun.response.id
+  }
+
+  if (!chargingModuleBillRun.succeeded) {
+    options.status = 'error'
+    options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
+  }
+
+  return options
 }
 
 function _response (billingBatch) {
