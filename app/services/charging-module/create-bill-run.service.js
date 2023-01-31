@@ -60,8 +60,8 @@ function _parseResult (result) {
 
   // If the request got a response from the Charging Module we will have a response body. If the request errored, for
   // example a timeout because the Charging Module is down, response will be the instance of the error thrown by Got.
-  if (result.response.body) {
-    const parsedBody = JSON.parse(result.response.body)
+  if (response.body) {
+    const parsedBody = JSON.parse(response.body)
     response = result.succeeded ? parsedBody.billRun : parsedBody
   }
 
