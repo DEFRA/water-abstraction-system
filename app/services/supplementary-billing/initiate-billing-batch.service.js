@@ -15,8 +15,8 @@ const CreateBillingBatchEventService = require('./create-billing-batch-event.ser
 /**
  * Initiate a new billing batch
  *
- * Initiating a new billing batch means creating both the `billing_batch` and `event` record with the appropriate data.
- * In the future it will also encompass creating the bill run record in the SROC Charging Module API.
+ * Initiating a new billing batch means creating both the `billing_batch` and `event` record with the appropriate data,
+ * along with a bill run record in the SROC Charging Module API.
  *
  * @param {Object} billRunRequestData Validated version of the data sent in the request to create the new billing batch
  *
