@@ -18,6 +18,7 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
  * @param {string} [options.source=wrls] Where the billing batch originated from. Records imported from NALD have the source 'nald'. Those created in the service use 'wrls'. Defaults to 'wrls'
  * @param {string} [options.externalId=null] The id of the bill run as created in the Charging Module
  * @param {string} [options.status=queued] The status that the bill run should be created with
+ * @param {number} [options.errorCode=null] Numeric error code
  *
  * @returns {module:BillingBatchModel} The newly created billing batch instance with the `.region` property populated
  */
@@ -43,7 +44,8 @@ function optionsDefaults (data) {
     scheme: 'sroc',
     source: 'wrls',
     externalId: null,
-    status: 'queued'
+    status: 'queued',
+    errorCode: null
   }
 
   return {
