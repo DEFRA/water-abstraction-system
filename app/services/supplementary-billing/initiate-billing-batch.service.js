@@ -12,7 +12,7 @@ const CreateBillingBatchPresenter = require('../../presenters/supplementary-bill
 const CreateBillingBatchService = require('./create-billing-batch.service.js')
 const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
 
-const FAILED_TO_CREATE_BILL_RUN_ERROR_CODE = 50
+const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 
 /**
  * Initiate a new billing batch
@@ -57,7 +57,7 @@ function _billingBatchOptions (type, scheme, chargingModuleBillRun) {
 
   if (!chargingModuleBillRun.succeeded) {
     options.status = 'error'
-    options.errorCode = FAILED_TO_CREATE_BILL_RUN_ERROR_CODE
+    options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
   }
 
   return options
