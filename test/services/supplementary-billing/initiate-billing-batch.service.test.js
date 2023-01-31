@@ -85,6 +85,7 @@ describe('Initiate Billing Batch service', () => {
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
       expect(result.status).to.equal('queued')
+      expect(result.errorCode).to.equal(null)
     })
   })
 
@@ -101,7 +102,7 @@ describe('Initiate Billing Batch service', () => {
         })
       })
 
-      it('creates a bill run with `error` status', async () => {
+      it('creates a bill run with `error` status and error code 50', async () => {
         const result = await InitiateBillingBatchService.go(validatedRequestData)
 
         const billingBatch = await BillingBatchModel.query().first()
@@ -111,6 +112,7 @@ describe('Initiate Billing Batch service', () => {
         expect(result.scheme).to.equal('sroc')
         expect(result.batchType).to.equal('supplementary')
         expect(result.status).to.equal('error')
+        expect(result.errorCode).to.equal(50)
       })
     })
 
