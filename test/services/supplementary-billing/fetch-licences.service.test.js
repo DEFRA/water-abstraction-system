@@ -45,7 +45,10 @@ describe('Fetch Licences service', () => {
 
       describe('and that have been billed in the current period', () => {
         beforeEach(async () => {
-          billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
+          billingInvoice = await BillingInvoiceHelper.add(
+            { financialYearEnding: billingPeriodFinancialYearEnding },
+            { status: 'sent' }
+          )
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
 
@@ -61,10 +64,7 @@ describe('Fetch Licences service', () => {
 
       describe("and that are included in an 'unsent' billing batch in the current period", () => {
         beforeEach(async () => {
-          billingInvoice = await BillingInvoiceHelper.add(
-            { financialYearEnding: billingPeriodFinancialYearEnding },
-            { status: 'queued' }
-          )
+          billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
 
@@ -80,7 +80,10 @@ describe('Fetch Licences service', () => {
 
       describe('and that have been billed in the previous period', () => {
         beforeEach(async () => {
-          billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: 2022 })
+          billingInvoice = await BillingInvoiceHelper.add(
+            { financialYearEnding: 2022 },
+            { status: 'sent' }
+          )
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
 
@@ -96,9 +99,15 @@ describe('Fetch Licences service', () => {
 
       describe('and that have been billed twice in the current period', () => {
         beforeEach(async () => {
-          billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
+          billingInvoice = await BillingInvoiceHelper.add(
+            { financialYearEnding: billingPeriodFinancialYearEnding },
+            { status: 'sent' }
+          )
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
-          billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: billingPeriodFinancialYearEnding })
+          billingInvoice = await BillingInvoiceHelper.add(
+            { financialYearEnding: billingPeriodFinancialYearEnding },
+            { status: 'sent' }
+          )
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })
 
@@ -117,7 +126,7 @@ describe('Fetch Licences service', () => {
         beforeEach(async () => {
           billingInvoice = await BillingInvoiceHelper.add(
             { financialYearEnding: billingPeriodFinancialYearEnding },
-            { scheme: 'alcs' }
+            { status: 'sent', scheme: 'alcs' }
           )
           await BillingInvoiceLicenceHelper.add({}, testLicence, billingInvoice)
         })

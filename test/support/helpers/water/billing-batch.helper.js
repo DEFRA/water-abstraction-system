@@ -45,7 +45,7 @@ function defaults (data = {}) {
     batchType: 'supplementary',
     fromFinancialYearEnding: 2023,
     toFinancialYearEnding: 2023,
-    status: 'sent',
+    status: 'queued',
     scheme: 'sroc',
     source: 'wrls'
   }
