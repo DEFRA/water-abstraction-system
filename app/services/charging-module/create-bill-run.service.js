@@ -56,11 +56,16 @@ async function _getChargeRegionId (regionId) {
 }
 
 function _parseResult (result) {
-  const parsedBody = JSON.parse(result.response.body)
+  let response = result.response
 
-  // If the request succeeded then we return the bill run in the response; otherwise, we simply return the entire body
-  // as this includes the status code and error messages
-  const response = result.succeeded ? parsedBody.billRun : parsedBody
+  // If the request got a response from the Charging Module we will have a response body. If the request errored, for
+  // example a timeout because the Charging Module is down, response will be the instance of the error thrown by Got.
+  if (result.response.body) {
+    const parsedBody = JSON.parse(result.response.body)
+    response = result.succeeded ? parsedBody.billRun : parsedBody
+  } else {
+    response = result.response
+  }
 
   return {
     succeeded: result.succeeded,
