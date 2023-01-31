@@ -72,31 +72,54 @@ describe('Charge module create bill run service', () => {
   })
 
   describe('when the service cannot create a bill run', () => {
-    let result
-
-    beforeEach(async () => {
-      Sinon.stub(RequestLib, 'post').resolves({
-        succeeded: false,
-        response: {
-          // For consistency we include the status code in the response but note that it is also returned in the body
-          statusCode: 401,
-          body: '{"statusCode":401,"error":"Unauthorized","message":"Invalid JWT: Token format not valid","attributes":{"error":"Invalid JWT: Token format not valid"}}'
-        }
+    describe('because the request did not return a 2xx/3xx response', () => {
+      beforeEach(async () => {
+        Sinon.stub(RequestLib, 'post').resolves({
+          succeeded: false,
+          response: {
+            // For consistency we include the status code in the response but note that it is also returned in the body
+            statusCode: 401,
+            body: '{"statusCode":401,"error":"Unauthorized","message":"Invalid JWT: Token format not valid","attributes":{"error":"Invalid JWT: Token format not valid"}}'
+          }
+        })
       })
 
-      result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+      it('returns a `false` success status', async () => {
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the `response`', async () => {
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+
+        expect(result.response.statusCode).to.equal(401)
+        expect(result.response.error).to.equal('Unauthorized')
+        expect(result.response.message).to.equal('Invalid JWT: Token format not valid')
+      })
     })
 
-    it('returns a `false` success status', async () => {
-      expect(result.succeeded).to.be.false()
-    })
+    describe('because the request attempt returned an error, for example, TimeoutError', () => {
+      beforeEach(async () => {
+        Sinon.stub(RequestLib, 'post').resolves({
+          succeeded: false,
+          response: new Error("Timeout awaiting 'request' for 5000ms")
+        })
+      })
 
-    it('returns the error in the `response`', async () => {
-      const { response } = result
+      it('returns a `false` success status', async () => {
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
 
-      expect(response.statusCode).to.equal(401)
-      expect(response.error).to.equal('Unauthorized')
-      expect(response.message).to.equal('Invalid JWT: Token format not valid')
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error in the `response`', async () => {
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+
+        expect(result.response.statusCode).not.to.exist()
+        expect(result.response.body).not.to.exist()
+        expect(result.response.message).to.equal("Timeout awaiting 'request' for 5000ms")
+      })
     })
   })
 })
