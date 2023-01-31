@@ -51,7 +51,12 @@ async function go (billRunRequestData) {
     throw Error(errorHead + ` - ${chargingModuleBillRun.response.message}`)
   }
 
-  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, type, scheme, undefined, chargingModuleBillRun.response.id)
+  const billingBatchOptions = {
+    batchType: type,
+    scheme,
+    externalId: chargingModuleBillRun.response.id
+  }
+  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, billingBatchOptions)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
 
