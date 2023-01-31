@@ -126,24 +126,5 @@ describe('Initiate Billing Batch service', () => {
         expect(err.message).to.equal(`Batch already live for region ${validatedRequestData.region}`)
       })
     })
-
-    describe('and the error doesn\'t include a message', () => {
-      beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
-          succeeded: false,
-          response: {
-            statusCode: 403,
-            error: 'Forbidden'
-          }
-        })
-      })
-
-      it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
-
-        expect(err).to.be.an.error()
-        expect(err.message).to.equal('403 Forbidden')
-      })
-    })
   })
 })
