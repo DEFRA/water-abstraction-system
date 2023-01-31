@@ -11,7 +11,9 @@ const BillingBatchHelper = require('./billing-batch.helper.js')
  * Add a new billing invoice
  *
  * A billing invoice is always linked to a billing batch. So, creating a billing invoice will automatically
- * create a new billing batch and handle linking the two together by `billingBatchId`.
+ * create a new billing batch and handle linking the two together by `billingBatchId`. If a `financialYearEnding` has
+ * been provided for the billing invoice, but not for the billing batch. The billing batch will use the 'financialYearEnding'
+ * from the billing invoice to populate it's `fromFinancialYearEnding` & `toFinancialYearEnding` items.
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -25,6 +27,11 @@ const BillingBatchHelper = require('./billing-batch.helper.js')
  * @returns {module:BillingInvoiceModel} The instance of the newly created record
  */
 async function add (data = {}, billingBatch = {}) {
+  if (data.financialYearEnding && !billingBatch.fromFinancialYearEnding) {
+    billingBatch.fromFinancialYearEnding = data.financialYearEnding
+    billingBatch.toFinancialYearEnding = data.financialYearEnding
+  }
+
   const billingBatchId = await _billingBatchId(billingBatch)
 
   const insertData = defaults({ ...data, billingBatchId })
