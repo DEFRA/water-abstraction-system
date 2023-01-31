@@ -5,14 +5,13 @@
  * @module InitiateBillingBatchService
  */
 
+const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const BillingPeriodService = require('./billing-period.service.js')
 const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
 const CreateBillingBatchPresenter = require('../../presenters/supplementary-billing/create-billing-batch.presenter.js')
 const CreateBillingBatchService = require('./create-billing-batch.service.js')
 const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
-
-const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 
 /**
  * Initiate a new billing batch
