@@ -38,29 +38,26 @@ async function go (billRunRequestData) {
 
   const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
 
-  // A failed response will be due to a failed `RequestLib` request so format an error message accordingly and throw it
-  if (!chargingModuleBillRun.succeeded) {
-    // We always get the status code and error
-    const errorHead = `${chargingModuleBillRun.response.statusCode} ${chargingModuleBillRun.response.error}`
-
-    // We should always get an additional error messge but if not then simply throw the status code and error
-    if (!chargingModuleBillRun.response.message) {
-      throw Error(errorHead)
-    }
-
-    throw Error(errorHead + ` - ${chargingModuleBillRun.response.message}`)
-  }
-
-  const billingBatchOptions = {
-    batchType: type,
-    scheme,
-    externalId: chargingModuleBillRun.response.id
-  }
+  const billingBatchOptions = _billingBatchOptions(type, scheme, chargingModuleBillRun)
   const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, billingBatchOptions)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
 
   return _response(billingBatch)
+}
+
+function _billingBatchOptions (type, scheme, chargingModuleBillRun) {
+  const options = {
+    batchType: type,
+    scheme,
+    externalId: chargingModuleBillRun.response.id
+  }
+
+  if (!chargingModuleBillRun.succeeded) {
+    options.status = 'error'
+  }
+
+  return options
 }
 
 function _response (billingBatch) {
