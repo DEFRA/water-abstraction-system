@@ -12,29 +12,47 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
  *
  * @param {Object} regionId The regionId for the selected region
  * @param {Object} billingPeriod The billing period in the format { startDate: 2022-04-01, endDate: 2023-03-31 }
- * @param {string} [batchType=supplementary] The type of billing batch to create. Defaults to 'supplementary'
- * @param {string} [scheme=sroc] The applicable charging scheme. Defaults to 'sroc'
- * @param {string} [source=wrls] Where the billing batch originated from. Records imported from NALD have the source 'nald'. Those created in the service use 'wrls'. Defaults to 'wrls'
- * @param {string} [externalId=null] The id of the bill run as created in the Charging Module
+ * @param {Object} options Optional params to be overridden
+ * @param {string} [options.batchType=supplementary] The type of billing batch to create. Defaults to 'supplementary'
+ * @param {string} [options.scheme=sroc] The applicable charging scheme. Defaults to 'sroc'
+ * @param {string} [options.source=wrls] Where the billing batch originated from. Records imported from NALD have the
+ *  source 'nald'. Those created in the service use 'wrls'. Defaults to 'wrls'
+ * @param {string} [options.externalId=null] The id of the bill run as created in the Charging Module
+ * @param {string} [options.status=queued] The status that the bill run should be created with
+ * @param {number} [options.errorCode=null] Numeric error code
  *
  * @returns {module:BillingBatchModel} The newly created billing batch instance with the `.region` property populated
  */
-async function go (regionId, billingPeriod, batchType = 'supplementary', scheme = 'sroc', source = 'wrls', externalId = null) {
+async function go (regionId, billingPeriod, options) {
+  const optionsData = optionsDefaults(options)
+
   const billingBatch = await BillingBatchModel.query()
     .insert({
       regionId,
-      batchType,
       fromFinancialYearEnding: billingPeriod.endDate.getFullYear(),
       toFinancialYearEnding: billingPeriod.endDate.getFullYear(),
-      status: 'queued',
-      scheme,
-      source,
-      externalId
+      ...optionsData
     })
     .returning('*')
     .withGraphFetched('region')
 
   return billingBatch
+}
+
+function optionsDefaults (data) {
+  const defaults = {
+    batchType: 'supplementary',
+    scheme: 'sroc',
+    source: 'wrls',
+    externalId: null,
+    status: 'queued',
+    errorCode: null
+  }
+
+  return {
+    ...defaults,
+    ...data
+  }
 }
 
 module.exports = {

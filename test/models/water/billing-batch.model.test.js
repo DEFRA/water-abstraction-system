@@ -103,4 +103,14 @@ describe('Billing Batch model', () => {
       })
     })
   })
+
+  describe('Static getters', () => {
+    describe('Error codes', () => {
+      it('returns the requested error code', async () => {
+        const result = BillingBatchModel.errorCodes.failedToCreateBillRun
+
+        expect(result).to.equal(50)
+      })
+    })
+  })
 })

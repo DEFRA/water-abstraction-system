@@ -85,6 +85,7 @@ describe('Initiate Billing Batch service', () => {
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
       expect(result.status).to.equal('queued')
+      expect(result.errorCode).to.equal(null)
     })
   })
 
@@ -101,11 +102,17 @@ describe('Initiate Billing Batch service', () => {
         })
       })
 
-      it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
+      it('creates a bill run with `error` status and error code 50', async () => {
+        const result = await InitiateBillingBatchService.go(validatedRequestData)
 
-        expect(err).to.be.an.error()
-        expect(err.message).to.equal("403 Forbidden - Unauthorised for regime 'wrls'")
+        const billingBatch = await BillingBatchModel.query().first()
+
+        expect(result.id).to.equal(billingBatch.billingBatchId)
+        expect(result.region).to.equal(billingBatch.regionId)
+        expect(result.scheme).to.equal('sroc')
+        expect(result.batchType).to.equal('supplementary')
+        expect(result.status).to.equal('error')
+        expect(result.errorCode).to.equal(50)
       })
     })
 
@@ -119,25 +126,6 @@ describe('Initiate Billing Batch service', () => {
 
         expect(err).to.be.an.error()
         expect(err.message).to.equal(`Batch already live for region ${validatedRequestData.region}`)
-      })
-    })
-
-    describe('and the error doesn\'t include a message', () => {
-      beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
-          succeeded: false,
-          response: {
-            statusCode: 403,
-            error: 'Forbidden'
-          }
-        })
-      })
-
-      it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
-
-        expect(err).to.be.an.error()
-        expect(err.message).to.equal('403 Forbidden')
       })
     })
   })

@@ -45,6 +45,20 @@ class BillingBatchModel extends WaterBaseModel {
       }
     }
   }
+
+  static get errorCodes () {
+    return {
+      failedToPopulateChargeVersions: 10,
+      failedToProcessChargeVersions: 20,
+      failedToPrepareTransactions: 30,
+      failedToCreateCharge: 40,
+      failedToCreateBillRun: 50,
+      failedToDeleteInvoice: 60,
+      failedToProcessTwoPartTariff: 70,
+      failedToGetChargeModuleBillRunSummary: 80,
+      failedToProcessRebilling: 90
+    }
+  }
 }
 
 module.exports = BillingBatchModel
