@@ -35,8 +35,8 @@ describe.only('Format Sroc Transaction Line service', () => {
         .withGraphFetched('chargePurposes')
 
       chargePeriod = {
-        startDate: new Date(2023, 1, 1),
-        endDate: new Date(2023, 1, 6)
+        startDate: new Date(2022, 10, 1),
+        endDate: new Date(2023, 2, 1)
       }
     })
 
@@ -45,14 +45,15 @@ describe.only('Format Sroc Transaction Line service', () => {
 
       const expectedResult = {
         chargeElementId: eagerChargeElement.id,
-        startDate: new Date(2023, 1, 1),
-        endDate: new Date(2023, 1, 6),
+        startDate: new Date(2022, 10, 1),
+        endDate: new Date(2023, 2, 1),
         source: 'non-tidal',
         season: 'all year',
         loss: 'low',
         isCredit: false,
         authorisedQuantity: '6.82',
         billableQuantity: '6.82',
+        billableDays: 60,
         status: 'candidate',
         volume: '6.82',
         section126Factor: 1,

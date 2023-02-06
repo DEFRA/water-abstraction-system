@@ -6,6 +6,8 @@
  * @module FormatSrocTransactionLineService
  */
 
+const AbstractionBillingPeriodService = require('./abstraction-billing-period.service.js')
+
 /**
  * @returns {Object[]} an array of billing periods each containing a `startDate` and `endDate`.
  */
@@ -22,7 +24,7 @@ function go (chargeElement, chargePeriod) {
     authorisedQuantity: chargeElement.volume,
     billableQuantity: chargeElement.volume,
     authorisedDays: 'TODO',
-    billableDays: 'TODO',
+    billableDays: _calculateBillableDays(chargePeriod, chargeElement),
     status: 'candidate',
     description: 'TODO',
     volume: chargeElement.volume,
@@ -43,6 +45,24 @@ function go (chargeElement, chargePeriod) {
     isWaterUndertaker: 'TODO',
     purposes: _generatePurposes(chargeElement)
   }
+}
+
+function _calculateBillableDays (chargePeriod, chargeElement) {
+  const billingPeriod = {
+    startDate: chargePeriod.startDate,
+    endDate: chargePeriod.endDate
+  }
+
+  // Normally AbstractionBillingPeriodService takes a charge element instance, but here we want to use the start/end
+  // day/month in the charge element. Since these fields in a charge element align with these fields in a charge
+  // purpose, we simply pass chargeElement along as-is
+  const abstractionPeriods = AbstractionBillingPeriodService.go(billingPeriod, chargeElement)
+
+  // The abstractionPeriods array can potentially have 2 items: the previous period and the current period, in that
+  // order. We always want to use the current period so we simply pop the last item from the array
+  const currentPeriod = abstractionPeriods.pop()
+
+  return currentPeriod.billableDays
 }
 
 /**
