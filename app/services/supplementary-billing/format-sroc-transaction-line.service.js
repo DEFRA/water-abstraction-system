@@ -10,8 +10,6 @@
  * @returns {Object[]} an array of billing periods each containing a `startDate` and `endDate`.
  */
 function go (chargeElement, chargePeriod) {
-  console.log('🚀 ~ file: format-sroc-transaction-line.service.js:13 ~ go ~ chargeElement', chargeElement)
-
   return {
     chargeElementId: chargeElement.id,
     startDate: chargePeriod.startDate,
