@@ -35,15 +35,39 @@ describe.only('Format Sroc Transaction Line service', () => {
         .withGraphFetched('chargePurposes')
 
       chargePeriod = {
-        startDate: new Date(),
-        endDate: new Date()
+        startDate: new Date(2023, 1, 1),
+        endDate: new Date(2023, 1, 6)
       }
     })
 
     it('returns the expected data', () => {
       const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod)
 
-      expect(result.scheme).to.equal('sroc')
+      const expectedResult = {
+        chargeElementId: eagerChargeElement.id,
+        startDate: new Date(2023, 1, 1),
+        endDate: new Date(2023, 1, 6),
+        source: 'non-tidal',
+        season: 'all year',
+        loss: 'low',
+        isCredit: false,
+        authorisedQuantity: '6.82',
+        billableQuantity: '6.82',
+        status: 'candidate',
+        volume: '6.82',
+        section126Factor: 1,
+        section127Agreement: false,
+        section130Agreement: false,
+        scheme: 'sroc',
+        aggregateFactor: 0.562114443,
+        adjustmentFactor: 1,
+        chargeCategoryCode: '4.4.5',
+        chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+        isWinterOnly: false,
+        purposes: '[]'
+      }
+
+      expect(result).to.equal(expectedResult)
     })
   })
 })
