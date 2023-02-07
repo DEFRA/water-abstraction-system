@@ -23,8 +23,8 @@ function go (chargeElement, chargePeriod, financialYear) {
     chargeType: 'TODO', // flags.isCompensationCharge ? 'compensation' : 'standard'
     authorisedQuantity: chargeElement.volume,
     billableQuantity: chargeElement.volume,
-    authorisedDays: _calculateAuthorisedDays(financialYear, chargeElement),
-    billableDays: _calculateBillableDays(chargePeriod, chargeElement),
+    authorisedDays: _calculateAuthorisedDaysField(financialYear, chargeElement),
+    billableDays: _calculateBillableDaysField(chargePeriod, chargeElement),
     status: 'candidate',
     description: 'TODO',
     volume: chargeElement.volume,
@@ -47,49 +47,35 @@ function go (chargeElement, chargePeriod, financialYear) {
   }
 }
 
-function _calculateAuthorisedDays (financialYear, chargeElement) {
+function _calculateAuthorisedDaysField (financialYear, chargeElement) {
   const billingPeriod = {
-    startDate: _financialYearStartDate(financialYear),
-    endDate: _financialYearEndDate(financialYear)
+    // The financial year starts on 1st April of the year before the one given ie. 01/04/2022 for financial year 2023
+    startDate: new Date(financialYear - 1, 3, 1),
+    // The financial year ends on 31st March of the year given ie. 31/03/2023 for financial year 2023
+    endDate: new Date(financialYear, 2, 31)
   }
 
-  // Normally AbstractionBillingPeriodService takes a charge element instance, but here we want to use the start/end
-  // day/month in the charge element. Since these fields in a charge element align with these fields in a charge
-  // purpose, we simply pass chargeElement along as-is
-  const abstractionPeriods = AbstractionBillingPeriodService.go(billingPeriod, chargeElement)
-
-  // The abstractionPeriods array can potentially have 2 items: the previous period and the current period, in that
-  // order. We always want to use the current period so we simply pop the last item from the array
-  const currentPeriod = abstractionPeriods.pop()
-
-  return currentPeriod.billableDays
+  return _calculateNumberOfBillableDays(billingPeriod, chargeElement)
 }
 
-// The financial year starts on 1st April of the year prior to the one given
-// ie. for financial year 2023, the start date is 01/04/2022
-function _financialYearStartDate (financialYear) {
-  return new Date(financialYear - 1, 3, 1)
-}
-
-// The financial year starts on 31st March of the year given
-// ie. for financial year 2023, the start date is 31/03/2023
-function _financialYearEndDate (financialYear) {
-  return new Date(financialYear, 2, 31)
-}
-
-function _calculateBillableDays (chargePeriod, chargeElement) {
+function _calculateBillableDaysField (chargePeriod, chargeElement) {
   const billingPeriod = {
     startDate: chargePeriod.startDate,
     endDate: chargePeriod.endDate
   }
 
+  return _calculateNumberOfBillableDays(billingPeriod, chargeElement)
+}
+
+function _calculateNumberOfBillableDays (billingPeriod, chargeElement) {
   // Normally AbstractionBillingPeriodService takes a charge purpose instance, but here we want to use the start/end
   // day/month in the charge element. Since these fields in a charge element align with these fields in a charge
   // purpose, we simply pass chargeElement along as-is
   const abstractionPeriods = AbstractionBillingPeriodService.go(billingPeriod, chargeElement)
 
-  // The abstractionPeriods array can potentially have 2 items: the previous period and the current period, in that
-  // order. We always want to use the current period so we simply pop the last item from the array
+  // The abstractionPeriods array can potentially have 1 or 2 items: the previous period (which is not always present)
+  // and the current period (which is always present) in that order. We always want to use the current period so we
+  // simply pop the last item from the array
   const currentPeriod = abstractionPeriods.pop()
 
   return currentPeriod.billableDays
