@@ -41,7 +41,7 @@ describe.only('Format Sroc Transaction Line service', () => {
     })
 
     it('returns the expected data', () => {
-      const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod)
+      const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023)
 
       const expectedResult = {
         chargeElementId: eagerChargeElement.id,
@@ -53,6 +53,7 @@ describe.only('Format Sroc Transaction Line service', () => {
         isCredit: false,
         authorisedQuantity: '6.82',
         billableQuantity: '6.82',
+        authorisedDays: 90,
         billableDays: 60,
         status: 'candidate',
         volume: '6.82',
