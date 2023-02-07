@@ -13,7 +13,7 @@ const AbstractionBillingPeriodService = require('./abstraction-billing-period.se
  */
 function go (chargeElement, chargePeriod, financialYear) {
   return {
-    chargeElementId: chargeElement.id,
+    chargeElementId: chargeElement.chargeElementId,
     startDate: chargePeriod.startDate,
     endDate: chargePeriod.endDate,
     source: chargeElement.source,

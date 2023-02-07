@@ -44,7 +44,7 @@ describe.only('Format Sroc Transaction Line service', () => {
       const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023)
 
       const expectedResult = {
-        chargeElementId: eagerChargeElement.id,
+        chargeElementId: eagerChargeElement.chargeElementId,
         startDate: new Date(2022, 10, 1),
         endDate: new Date(2023, 2, 1),
         source: 'non-tidal',
