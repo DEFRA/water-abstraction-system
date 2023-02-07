@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -16,15 +16,10 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const FormatSrocTransactionLineservice = require('../../../app/services/supplementary-billing/format-sroc-transaction-line.service.js')
 
 describe.only('Format Sroc Transaction Line service', () => {
-  afterEach(() => {
-    DatabaseHelper.clean()
-  })
-
-  describe('when a standard charge element is supplied', () => {
     let eagerChargeElement
     let chargePeriod
 
-    before(async () => {
+  beforeEach(async () => {
       const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
 
       const chargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
@@ -38,6 +33,11 @@ describe.only('Format Sroc Transaction Line service', () => {
       }
     })
 
+  afterEach(async () => {
+    await DatabaseHelper.clean()
+  })
+
+  describe('when a standard charge element is supplied', () => {
     it('returns the expected data', () => {
       const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023)
 
