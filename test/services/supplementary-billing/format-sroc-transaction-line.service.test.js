@@ -3,7 +3,6 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, before, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -18,7 +17,6 @@ const FormatSrocTransactionLineservice = require('../../../app/services/suppleme
 
 describe.only('Format Sroc Transaction Line service', () => {
   afterEach(() => {
-    Sinon.restore()
     DatabaseHelper.clean()
   })
 
