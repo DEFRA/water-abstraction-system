@@ -11,7 +11,9 @@ const AbstractionBillingPeriodService = require('./abstraction-billing-period.se
 /**
  * @returns {Object[]} an array of billing periods each containing a `startDate` and `endDate`.
  */
-function go (chargeElement, chargePeriod, financialYear) {
+function go (chargeElement, chargePeriod, financialYear, options) {
+  const optionsData = _optionsDefaults(options)
+
   return {
     chargeElementId: chargeElement.chargeElementId,
     startDate: chargePeriod.startDate,
@@ -20,7 +22,7 @@ function go (chargeElement, chargePeriod, financialYear) {
     season: 'all year',
     loss: chargeElement.loss,
     isCredit: false,
-    chargeType: 'TODO', // flags.isCompensationCharge ? 'compensation' : 'standard'
+    chargeType: optionsData.isCompensationCharge ? 'compensation' : 'standard',
     authorisedQuantity: chargeElement.volume,
     billableQuantity: chargeElement.volume,
     authorisedDays: _calculateAuthorisedDaysField(financialYear, chargeElement),
@@ -44,6 +46,17 @@ function go (chargeElement, chargePeriod, financialYear) {
     isWinterOnly: !!chargeElement.adjustments.winter,
     isWaterUndertaker: 'TODO',
     purposes: _generatePurposes(chargeElement)
+  }
+}
+
+function _optionsDefaults (options) {
+  const defaults = {
+    isCompensationCharge: false
+  }
+
+  return {
+    ...defaults,
+    ...options
   }
 }
 

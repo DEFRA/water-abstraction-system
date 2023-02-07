@@ -16,22 +16,22 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const FormatSrocTransactionLineservice = require('../../../app/services/supplementary-billing/format-sroc-transaction-line.service.js')
 
 describe.only('Format Sroc Transaction Line service', () => {
-    let eagerChargeElement
-    let chargePeriod
+  let eagerChargeElement
+  let chargePeriod
 
   beforeEach(async () => {
-      const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
+    const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
 
-      const chargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
-      eagerChargeElement = await chargeElement.$query()
-        .withGraphFetched('billingChargeCategory')
-        .withGraphFetched('chargePurposes')
+    const chargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
+    eagerChargeElement = await chargeElement.$query()
+      .withGraphFetched('billingChargeCategory')
+      .withGraphFetched('chargePurposes')
 
-      chargePeriod = {
-        startDate: new Date(2022, 10, 1),
-        endDate: new Date(2023, 2, 1)
-      }
-    })
+    chargePeriod = {
+      startDate: new Date(2022, 10, 1),
+      endDate: new Date(2023, 2, 1)
+    }
+  })
 
   afterEach(async () => {
     await DatabaseHelper.clean()
@@ -49,6 +49,7 @@ describe.only('Format Sroc Transaction Line service', () => {
         season: 'all year',
         loss: 'low',
         isCredit: false,
+        chargeType: 'standard',
         authorisedQuantity: '6.82',
         billableQuantity: '6.82',
         authorisedDays: 90,
@@ -68,6 +69,16 @@ describe.only('Format Sroc Transaction Line service', () => {
       }
 
       expect(result).to.equal(expectedResult)
+    })
+  })
+
+  describe('when options are supplied', () => {
+    describe('isCompensation charge is `true`', () => {
+      it('returns the expected data', () => {
+        const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isCompensationCharge: true })
+
+        expect(result.chargeType).to.equal('compensation')
+      })
     })
   })
 })
