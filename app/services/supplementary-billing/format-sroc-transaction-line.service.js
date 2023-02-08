@@ -33,7 +33,7 @@ function go (chargeElement, chargePeriod, financialYear, options) {
     section126Factor: chargeElement.adjustments.s126 || 1,
     section127Agreement: !!chargeElement.adjustments.s127,
     section130Agreement: !!chargeElement.adjustments.s130,
-    isNewLicence: 'TODO',
+    isNewLicence: optionsData.isNewLicence,
     isTwoPartSecondPartCharge: 'TODO',
     scheme: 'sroc',
     aggregateFactor: chargeElement.adjustments.aggregate || 1,
@@ -52,7 +52,8 @@ function go (chargeElement, chargePeriod, financialYear, options) {
 function _optionsDefaults (options) {
   const defaults = {
     isCompensationCharge: false,
-    isWaterUndertaker: false
+    isWaterUndertaker: false,
+    isNewLicence: false
   }
 
   return {

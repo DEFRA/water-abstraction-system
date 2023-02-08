@@ -75,7 +75,7 @@ describe.only('Format Sroc Transaction Line service', () => {
 
   describe('when options are supplied', () => {
     describe('isCompensation charge is `true`', () => {
-      it('returns the expected data', () => {
+      it('returns the expected data', async () => {
         const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isCompensationCharge: true })
 
         expect(result.chargeType).to.equal('compensation')
@@ -83,10 +83,18 @@ describe.only('Format Sroc Transaction Line service', () => {
     })
 
     describe('isWaterUndertaker charge is `true`', () => {
-      it('returns the expected data', () => {
+      it('returns the expected data', async () => {
         const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isWaterUndertaker: true })
 
         expect(result.isWaterUndertaker).to.equal(true)
+      })
+    })
+
+    describe('isNewLicence charge is `true`', () => {
+      it('returns the expected data', async () => {
+        const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isNewLicence: true })
+
+        expect(result.isNewLicence).to.equal(true)
       })
     })
   })
