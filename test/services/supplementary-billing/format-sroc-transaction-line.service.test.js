@@ -60,6 +60,7 @@ describe.only('Format Sroc Transaction Line service', () => {
         section127Agreement: false,
         section130Agreement: false,
         isNewLicence: false,
+        isTwoPartSecondPartCharge: false,
         scheme: 'sroc',
         aggregateFactor: 0.562114443,
         adjustmentFactor: 1,

@@ -34,7 +34,7 @@ function go (chargeElement, chargePeriod, financialYear, options) {
     section127Agreement: !!chargeElement.adjustments.s127,
     section130Agreement: !!chargeElement.adjustments.s130,
     isNewLicence: optionsData.isNewLicence,
-    isTwoPartSecondPartCharge: 'TODO',
+    isTwoPartSecondPartCharge: false,
     scheme: 'sroc',
     aggregateFactor: chargeElement.adjustments.aggregate || 1,
     adjustmentFactor: chargeElement.adjustments.charge || 1,
