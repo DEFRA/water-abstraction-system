@@ -44,14 +44,15 @@ function go (chargeElement, chargePeriod, financialYear, options) {
     supportedSourceName: 'TODO',
     isWaterCompanyCharge: 'TODO',
     isWinterOnly: !!chargeElement.adjustments.winter,
-    isWaterUndertaker: 'TODO',
+    isWaterUndertaker: optionsData.isWaterUndertaker,
     purposes: _generatePurposes(chargeElement)
   }
 }
 
 function _optionsDefaults (options) {
   const defaults = {
-    isCompensationCharge: false
+    isCompensationCharge: false,
+    isWaterUndertaker: false
   }
 
   return {

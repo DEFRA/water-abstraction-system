@@ -65,6 +65,7 @@ describe.only('Format Sroc Transaction Line service', () => {
         chargeCategoryCode: '4.4.5',
         chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
         isWinterOnly: false,
+        isWaterUndertaker: false,
         purposes: '[]'
       }
 
@@ -78,6 +79,14 @@ describe.only('Format Sroc Transaction Line service', () => {
         const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isCompensationCharge: true })
 
         expect(result.chargeType).to.equal('compensation')
+      })
+    })
+
+    describe('isWaterUndertaker charge is `true`', () => {
+      it('returns the expected data', () => {
+        const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isWaterUndertaker: true })
+
+        expect(result.isWaterUndertaker).to.equal(true)
       })
     })
   })
