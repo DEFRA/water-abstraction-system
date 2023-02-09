@@ -15,7 +15,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const FormatSrocTransactionLineservice = require('../../../app/services/supplementary-billing/format-sroc-transaction-line.service.js')
 
-describe.only('Format Sroc Transaction Line service', () => {
+describe('Format Sroc Transaction Line service', () => {
   let billingChargeCategoryId
   let chargePeriod
   let eagerChargeElement
