@@ -28,7 +28,7 @@ function go (chargeElement, chargePeriod, financialYear, options) {
     authorisedDays: _calculateAuthorisedDaysField(financialYear, chargeElement),
     billableDays: _calculateBillableDaysField(chargePeriod, chargeElement),
     status: 'candidate',
-    description: 'TODO',
+    description: _generateDescription(chargeElement, optionsData),
     volume: chargeElement.volume,
     section126Factor: chargeElement.adjustments.s126 || 1,
     section127Agreement: !!chargeElement.adjustments.s127,
@@ -105,6 +105,14 @@ function _generatePurposes (chargeElement) {
   })
 
   return JSON.stringify(jsonChargePurposes)
+}
+
+function _generateDescription (chargeElement, options) {
+  if (options.isCompensationCharge) {
+    return 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
+  }
+
+  return `Water abstraction charge: ${chargeElement.description}`
 }
 
 module.exports = {

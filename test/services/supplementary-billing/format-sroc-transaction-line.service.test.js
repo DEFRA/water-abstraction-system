@@ -57,6 +57,7 @@ describe.only('Format Sroc Transaction Line service', () => {
         authorisedDays: 90,
         billableDays: 60,
         status: 'candidate',
+        description: 'Water abstraction charge: Mineral washing',
         volume: '6.82',
         section126Factor: 1,
         section127Agreement: false,
@@ -134,6 +135,16 @@ describe.only('Format Sroc Transaction Line service', () => {
       const result = FormatSrocTransactionLineservice.go(eagerSupportedSourceChargeElement, chargePeriod, 2023)
 
       expect(result.supportedSourceName).to.equal('SUPPORTED_SOURCE_NAME')
+    })
+  })
+
+  describe('when the description differs from the default', () => {
+    describe('because this is a compensation charge', () => {
+      it('returns the expected compensation charge description', () => {
+        const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isCompensationCharge: true })
+
+        expect(result.description).to.startWith('Compensation charge')
+      })
     })
   })
 })
