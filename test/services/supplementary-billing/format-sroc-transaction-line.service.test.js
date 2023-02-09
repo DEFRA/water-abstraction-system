@@ -66,6 +66,7 @@ describe.only('Format Sroc Transaction Line service', () => {
         adjustmentFactor: 1,
         chargeCategoryCode: '4.4.5',
         chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+        isWaterCompanyCharge: true,
         isWinterOnly: false,
         isWaterUndertaker: false,
         purposes: '[]'
