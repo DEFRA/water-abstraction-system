@@ -6,7 +6,8 @@
  */
 
 /**
- * Consolidate date ranges by merging all overlapping ranges and returning an array of the resulting ranges.
+ * Consolidate date ranges by merging all overlapping ranges and returning an array of the resulting ranges. Note that
+ * the returned range will be sorted in order of start date, from earliest to latest.
  *
  * Say we have the following dates:
  *
@@ -21,7 +22,7 @@
  * therefore looks like this:
  *
  * [
- *   { startDate: 2023-01-01, endDate: 2023-04-01 }, // Range 1 & 2 consolidated
+ *   { startDate: 2023-01-01, endDate: 2023-04-01 }, // Ranges 1 & 2 merged
  *   { startDate: 2023-06-01, endDate: 2023-07-01 }  // Range 3 unchanged
  * ]
  *
@@ -38,7 +39,7 @@
  * Consolidates to:
  *
  * [
- *   { startDate: 2023-01-01, endDate: 2023-07-01 }, // Ranges 1 & 2 consolidated
+ *   { startDate: 2023-01-01, endDate: 2023-07-01 }, // Ranges 1 & 2 merged
  *   { startDate: 2023-10-01, endDate: 2023-10-31 }, // Range 3 unchanged
  *   { startDate: 2023-11-01, endDate: 2023-12-01 }  // Range 4 unchanged
  * ]
