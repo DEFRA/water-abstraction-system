@@ -62,31 +62,43 @@ function _optionsDefaults (options) {
   }
 }
 
+/**
+ * Calculates the number of authorised days by using AbstractionBillingPeriodService to calculate the number of
+ * overlapping days of the financial year and the charge element's abstraction period
+ */
 function _calculateAuthorisedDaysField (financialYear, chargeElement) {
-  const billingPeriod = {
+  const periodToCalculateFor = {
     // The financial year starts on 1st April of the year before the one given ie. 01/04/2022 for financial year 2023
     startDate: new Date(financialYear - 1, 3, 1),
     // The financial year ends on 31st March of the year given ie. 31/03/2023 for financial year 2023
     endDate: new Date(financialYear, 2, 31)
   }
 
-  return _calculateNumberOfBillableDays(billingPeriod, chargeElement)
+  return _calculateNumberOfOverlappingDays(periodToCalculateFor, chargeElement)
 }
 
+/**
+ * Calculates the number of authorised days by using AbstractionBillingPeriodService to calculate the number of
+ * overlapping days of the charge period and the charge element's abstraction period
+ */
 function _calculateBillableDaysField (chargePeriod, chargeElement) {
-  const billingPeriod = {
+  const periodToCalculateFor = {
     startDate: chargePeriod.startDate,
     endDate: chargePeriod.endDate
   }
 
-  return _calculateNumberOfBillableDays(billingPeriod, chargeElement)
+  return _calculateNumberOfOverlappingDays(periodToCalculateFor, chargeElement)
 }
 
-function _calculateNumberOfBillableDays (billingPeriod, chargeElement) {
+/**
+ * Takes a period (ie. an object with `startDate` and `endDate`) and uses AbstractionBillingPeriodService to calculate
+ * the number of overlapping days of the provided period and the charge element's abstraction period
+ */
+function _calculateNumberOfOverlappingDays (periodToCalculateFor, chargeElement) {
   // Normally AbstractionBillingPeriodService takes a charge purpose instance, but here we want to use the start/end
   // day/month in the charge element. Since these fields in a charge element align with these fields in a charge
   // purpose, we simply pass chargeElement along as-is
-  const abstractionPeriods = AbstractionBillingPeriodService.go(billingPeriod, chargeElement)
+  const abstractionPeriods = AbstractionBillingPeriodService.go(periodToCalculateFor, chargeElement)
 
   // The abstractionPeriods array can potentially have 1 or 2 items: the previous period (which is not always present)
   // and the current period (which is always present) in that order. We always want to use the current period so we
