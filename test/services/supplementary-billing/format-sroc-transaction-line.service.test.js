@@ -16,11 +16,13 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const FormatSrocTransactionLineservice = require('../../../app/services/supplementary-billing/format-sroc-transaction-line.service.js')
 
 describe.only('Format Sroc Transaction Line service', () => {
-  let eagerChargeElement
+  let billingChargeCategoryId
   let chargePeriod
+  let eagerChargeElement
 
   beforeEach(async () => {
-    const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
+    const billingChargeCategory = await BillingChargeCategoryHelper.add()
+    billingChargeCategoryId = billingChargeCategory.billingChargeCategoryId
 
     const chargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
     eagerChargeElement = await chargeElement.$query()
@@ -66,6 +68,8 @@ describe.only('Format Sroc Transaction Line service', () => {
         adjustmentFactor: 1,
         chargeCategoryCode: '4.4.5',
         chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+        isSupportedSource: false,
+        supportedSourceName: null,
         isWaterCompanyCharge: true,
         isWinterOnly: false,
         isWaterUndertaker: false,
@@ -78,7 +82,7 @@ describe.only('Format Sroc Transaction Line service', () => {
 
   describe('when options are supplied', () => {
     describe('isCompensation charge is `true`', () => {
-      it('returns the expected data', async () => {
+      it('returns the expected data', () => {
         const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isCompensationCharge: true })
 
         expect(result.chargeType).to.equal('compensation')
@@ -86,7 +90,7 @@ describe.only('Format Sroc Transaction Line service', () => {
     })
 
     describe('isWaterUndertaker charge is `true`', () => {
-      it('returns the expected data', async () => {
+      it('returns the expected data', () => {
         const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isWaterUndertaker: true })
 
         expect(result.isWaterUndertaker).to.equal(true)
@@ -94,11 +98,42 @@ describe.only('Format Sroc Transaction Line service', () => {
     })
 
     describe('isNewLicence charge is `true`', () => {
-      it('returns the expected data', async () => {
+      it('returns the expected data', () => {
         const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isNewLicence: true })
 
         expect(result.isNewLicence).to.equal(true)
       })
+    })
+  })
+
+  describe('when the charge element has a supported source', () => {
+    let eagerSupportedSourceChargeElement
+
+    beforeEach(async () => {
+      const additionalCharges = {
+        supportedSource: {
+          id: '87391339-25c3-4132-9a78-0f7d7c111042',
+          name: 'SUPPORTED_SOURCE_NAME'
+        },
+        isSupplyPublicWater: false
+      }
+
+      const supportedSourceChargeElement = await ChargeElementHelper.add({ additionalCharges, billingChargeCategoryId })
+      eagerSupportedSourceChargeElement = await supportedSourceChargeElement.$query()
+        .withGraphFetched('billingChargeCategory')
+        .withGraphFetched('chargePurposes')
+    })
+
+    it('returns `isSupportedSource` as `true`', () => {
+      const result = FormatSrocTransactionLineservice.go(eagerSupportedSourceChargeElement, chargePeriod, 2023)
+
+      expect(result.isSupportedSource).to.equal(true)
+    })
+
+    it('returns `supportedSourceName` field with the supported source name', () => {
+      const result = FormatSrocTransactionLineservice.go(eagerSupportedSourceChargeElement, chargePeriod, 2023)
+
+      expect(result.supportedSourceName).to.equal('SUPPORTED_SOURCE_NAME')
     })
   })
 })
