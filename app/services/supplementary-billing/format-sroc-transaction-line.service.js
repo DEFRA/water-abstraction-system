@@ -42,7 +42,7 @@ function go (chargeElement, chargePeriod, financialYear, options) {
     chargeCategoryDescription: chargeElement.billingChargeCategory.shortDescription,
     isSupportedSource: 'TODO',
     supportedSourceName: 'TODO',
-    isWaterCompanyCharge: !!chargeElement.additionalCharges.isSupplyPublicWater,
+    isWaterCompanyCharge: !!chargeElement.additionalCharges?.isSupplyPublicWater,
     isWinterOnly: !!chargeElement.adjustments.winter,
     isWaterUndertaker: optionsData.isWaterUndertaker,
     purposes: _generatePurposes(chargeElement)
