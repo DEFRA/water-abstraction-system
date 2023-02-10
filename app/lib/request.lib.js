@@ -49,6 +49,10 @@ async function get (url, additionalOptions = {}) {
     result.response = error
   }
 
+  if (!result.succeeded) {
+    _logFailure('GET', result, url, additionalOptions)
+  }
+
   return result
 }
 
@@ -72,6 +76,10 @@ async function post (url, additionalOptions = {}) {
     result.response = error
   }
 
+  if (!result.succeeded) {
+    _logFailure('POST', result, url, additionalOptions)
+  }
+
   return result
 }
 
@@ -83,6 +91,19 @@ async function _importGot () {
   const { got } = await import('got')
 
   return got
+}
+
+function _logFailure (method, result, url, additionalOptions) {
+  const data = {
+    method,
+    result,
+    url,
+    additionalOptions
+  }
+
+  const severity = result.response instanceof Error ? 'errored' : 'failed'
+
+  global.GlobalNotifier.omfg(`${method} request ${severity}`, data)
 }
 
 /**
