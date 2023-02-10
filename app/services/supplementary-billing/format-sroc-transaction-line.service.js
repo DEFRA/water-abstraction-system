@@ -9,6 +9,11 @@
 const AbstractionBillingPeriodService = require('./abstraction-billing-period.service.js')
 
 /**
+ * @param {Object} chargeElement
+ * @param {Object} chargePeriod (extracted from the charge version)
+ * @param {Integer} financialYear
+ * @param {Object} options
+ *
  * @returns {Object[]} an array of billing periods each containing a `startDate` and `endDate`.
  */
 function go (chargeElement, chargePeriod, financialYear, options) {
