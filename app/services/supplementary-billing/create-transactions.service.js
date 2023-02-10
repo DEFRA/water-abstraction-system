@@ -8,15 +8,11 @@
 const AbstractionBillingPeriodService = require('./abstraction-billing-period.service.js')
 
 /**
- * Check whether a "live" bill run exists for the specified region, scheme, type and financial year
- *
- * We define "live" as having the status `processing`, `ready`, `review` or `queued`
- *
  * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
  * @param {Object[]} chargeElements An array of `chargeElements` containing an array of `chargePurposes` which define
  * the abstraction periods
  *
- * @returns {Object} Whether a "live" bill run exists
+ * @returns {Object[]} An array that has the `reference` and `billableDays` for each charge element on a charge version
  */
 function go (billingPeriod, chargeElements) {
   const transactionLines = []

@@ -33,7 +33,9 @@ function _addTransactionLines (billingPeriods, chargeVersions) {
   const billingPeriod = billingPeriods[0]
 
   for (const chargeVersion of chargeVersions) {
-    chargeVersion.transactionLines = CreateTransactionsService.go(billingPeriod, chargeVersion.chargeElements)
+    if (chargeVersion.chargeElements) {
+      chargeVersion.transactionLines = CreateTransactionsService.go(billingPeriod, chargeVersion.chargeElements)
+    }
   }
 }
 
