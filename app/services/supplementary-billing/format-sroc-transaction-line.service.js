@@ -100,12 +100,13 @@ function _calculateNumberOfOverlappingDays (periodToCalculateFor, chargeElement)
   // purpose, we simply pass chargeElement along as-is
   const abstractionPeriods = AbstractionBillingPeriodService.go(periodToCalculateFor, chargeElement)
 
-  // The abstractionPeriods array can potentially have 1 or 2 items: the previous period (which is not always present)
-  // and the current period (which is always present) in that order. We always want to use the current period so we
-  // simply pop the last item from the array
-  const currentPeriod = abstractionPeriods.pop()
+  // abstractionPeriods comes back as an array of one or more periods, each with a billableDays property. We need to add
+  // all of these to get our final number of billble days
+  const billableDays = abstractionPeriods.reduce((acc, abstractionPeriod) => {
+    return acc + abstractionPeriod.billableDays
+  }, 0)
 
-  return currentPeriod.billableDays
+  return billableDays
 }
 
 /**

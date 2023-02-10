@@ -15,7 +15,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const FormatSrocTransactionLineservice = require('../../../app/services/supplementary-billing/format-sroc-transaction-line.service.js')
 
-describe('Format Sroc Transaction Line service', () => {
+describe.only('Format Sroc Transaction Line service', () => {
   let billingChargeCategoryId
   let chargePeriod
   let eagerChargeElement
@@ -54,8 +54,8 @@ describe('Format Sroc Transaction Line service', () => {
         chargeType: 'standard',
         authorisedQuantity: '6.82',
         billableQuantity: '6.82',
-        authorisedDays: 90,
-        billableDays: 60,
+        authorisedDays: 365,
+        billableDays: 121,
         status: 'candidate',
         description: 'Water abstraction charge: Mineral washing',
         volume: '6.82',
