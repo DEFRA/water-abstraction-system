@@ -15,6 +15,9 @@ module.exports = {
     '__asyncGenerator', '__asyncDelegator', '__asyncValues', '__makeTemplateObject', '__importStar', '__importDefault',
     '__classPrivateFieldGet', '__classPrivateFieldSet',
     // We also ignore globals exposed by global-agent:
-    'GLOBAL_AGENT','ROARR'
+    'GLOBAL_AGENT','ROARR',
+    // GlobalNotifier is added by us a global in a server plugin. It's how we make logging available anywhere in the app
+    // whilst avoiding having to pass it around
+    'GlobalNotifier'
   ].join(',')
 }

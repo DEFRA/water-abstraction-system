@@ -17,10 +17,20 @@ const RequestLib = require('../../app/lib/request.lib.js')
 
 describe('RequestLib', () => {
   const testDomain = 'http://example.com'
+  let notifierStub
+
+  beforeEach(() => {
+    // RequestLib depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+  })
 
   afterEach(() => {
     Sinon.restore()
     Nock.cleanAll()
+    delete global.GlobalNotifier
   })
 
   describe('#get()', () => {
@@ -52,6 +62,12 @@ describe('RequestLib', () => {
           Nock(testDomain).get('/').reply(500, { data: 'hello world' })
         })
 
+        it('records the failure', async () => {
+          await RequestLib.get(testDomain)
+
+          expect(notifierStub.omfg.calledWith('GET request failed')).to.be.true()
+        })
+
         describe('the result it returns', () => {
           it("has a 'succeeded' property marked as false", async () => {
             const result = await RequestLib.get(testDomain)
@@ -72,6 +88,12 @@ describe('RequestLib', () => {
       describe('because there was a network issue', () => {
         beforeEach(() => {
           Nock(testDomain).get('/').replyWithError({ code: 'ECONNRESET' })
+        })
+
+        it('records the error', async () => {
+          await RequestLib.get(testDomain)
+
+          expect(notifierStub.omfg.calledWith('GET request errored')).to.be.true()
         })
 
         describe('the result it returns', () => {
@@ -218,6 +240,12 @@ describe('RequestLib', () => {
           Nock(testDomain).post('/').reply(500, { data: 'hello world' })
         })
 
+        it('records the failure', async () => {
+          await RequestLib.post(testDomain)
+
+          expect(notifierStub.omfg.calledWith('POST request failed')).to.be.true()
+        })
+
         describe('the result it returns', () => {
           it("has a 'succeeded' property marked as false", async () => {
             const result = await RequestLib.post(testDomain)
@@ -238,6 +266,12 @@ describe('RequestLib', () => {
       describe('because there was a network issue', () => {
         beforeEach(() => {
           Nock(testDomain).post('/').replyWithError({ code: 'ECONNRESET' })
+        })
+
+        it('records the error', async () => {
+          await RequestLib.post(testDomain)
+
+          expect(notifierStub.omfg.calledWith('POST request errored')).to.be.true()
         })
 
         describe('the result it returns', () => {
