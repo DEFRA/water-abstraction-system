@@ -15,13 +15,13 @@ const AbstractionBillingPeriodService = require('./abstraction-billing-period.se
  * @returns {Object[]} An array that has the `reference` and `billableDays` for each charge element on a charge version
  */
 function go (billingPeriod, chargeElements) {
-  const transactionLines = []
-  for (const chargeElement of chargeElements) {
-    const transactionLine = {}
-    transactionLine.reference = chargeElement.billingChargeCategory.reference
-    transactionLine.billableDays = _calculateBillableDays(billingPeriod, chargeElement.chargePurposes)
-    transactionLines.push(transactionLine)
-  }
+  const transactionLines = chargeElements.map((chargeElement) => {
+    return {
+      reference: chargeElement.billingChargeCategory.reference,
+      billableDays: _calculateBillableDays(billingPeriod, chargeElement.chargePurposes)
+    }
+  })
+
   return transactionLines
 }
 
