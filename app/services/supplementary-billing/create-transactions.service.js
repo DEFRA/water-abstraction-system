@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates transaction lines based on the charge referece and abstraction period
+ * Generates the transaction lines for a supplementary bill run
  * @module CreateTransactionsService
  */
 
