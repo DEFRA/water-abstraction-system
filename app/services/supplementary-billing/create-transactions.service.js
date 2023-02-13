@@ -9,7 +9,7 @@ const AbstractionBillingPeriodService = require('./abstraction-billing-period.se
 
 /**
  * Creates a transaction line and calculates the billable days for each charge element
- * 
+ *
  * Each SROC charge version linked to a licence will have one or more charge elements that are linked to a charge reference.
  *
  * A transaction line is needed for each of these charge references. Linked to the charge element are one or more abstraction periods.
