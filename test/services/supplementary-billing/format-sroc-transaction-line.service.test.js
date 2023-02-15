@@ -73,11 +73,19 @@ describe.only('Format Sroc Transaction Line service', () => {
         supportedSourceName: null,
         isWaterCompanyCharge: true,
         isWinterOnly: false,
-        isWaterUndertaker: false,
-        purposes: '[]'
+        isWaterUndertaker: false
       }
 
-      expect(result).to.equal(expectedResult)
+      // We skip checking 'purposes' as we test this elsewhere
+      expect(result).to.equal(expectedResult, { skip: 'purposes' })
+    })
+
+    it('returns the charge purpose as JSON in `purposes`', () => {
+      const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023)
+
+      const parsedPurposes = JSON.parse(result.purposes)
+
+      expect(parsedPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
     })
   })
 
