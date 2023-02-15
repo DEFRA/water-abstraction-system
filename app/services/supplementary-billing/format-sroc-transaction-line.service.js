@@ -7,6 +7,7 @@
  */
 
 const AbstractionBillingPeriodService = require('./abstraction-billing-period.service.js')
+const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
 
 /**
  * @param {Object} chargeElement
@@ -31,7 +32,7 @@ function go (chargeElement, chargePeriod, financialYear, options) {
     authorisedQuantity: chargeElement.volume,
     billableQuantity: chargeElement.volume,
     authorisedDays: _calculateAuthorisedDaysField(financialYear, chargeElement),
-    billableDays: _calculateBillableDaysField(chargePeriod, chargeElement),
+    billableDays: _calculateBillableDaysField(chargePeriod, chargeElement, financialYear),
     status: 'candidate',
     description: _generateDescription(chargeElement, optionsData),
     volume: chargeElement.volume,
@@ -69,49 +70,101 @@ function _optionsDefaults (options) {
 
 /**
  * Calculates the number of authorised days by using AbstractionBillingPeriodService to calculate the number of
- * overlapping days of the financial year and the charge element's abstraction period
+ * overlapping days of the financial year and the charge element's abstraction periods
  */
 function _calculateAuthorisedDaysField (financialYear, chargeElement) {
-  const periodToCalculateFor = {
-    // The financial year starts on 1st April of the year before the one given ie. 01/04/2022 for financial year 2023
-    startDate: new Date(financialYear - 1, 3, 1),
-    // The financial year ends on 31st March of the year given ie. 31/03/2023 for financial year 2023
-    endDate: new Date(financialYear, 2, 31)
+  // Define an abstraction period for the financial year, ie. 1/4 to 31/3
+  const abstractionPeriodToCalculateFor = {
+    abstractionPeriodStartDay: 1,
+    abstractionPeriodStartMonth: 4,
+    abstractionPeriodEndDay: 31,
+    abstractionPeriodEndMonth: 3
   }
 
-  return _calculateNumberOfOverlappingDays(periodToCalculateFor, chargeElement)
+  return _calculateNumberOfOverlappingDays(abstractionPeriodToCalculateFor, chargeElement, financialYear)
 }
 
 /**
  * Calculates the number of authorised days by using AbstractionBillingPeriodService to calculate the number of
- * overlapping days of the charge period and the charge element's abstraction period
+ * overlapping days of the charge period and the charge element's abstraction periods
  */
-function _calculateBillableDaysField (chargePeriod, chargeElement) {
-  const periodToCalculateFor = {
-    startDate: chargePeriod.startDate,
-    endDate: chargePeriod.endDate
+function _calculateBillableDaysField (chargePeriod, chargeElement, financialYear) {
+  // Note that we add 1 to the month as JavaScript months are zero-index (ie. 0 = Jan, 1 = Feb etc.)
+  const abstractionPeriodToCalculateFor = {
+    abstractionPeriodStartDay: chargePeriod.startDate.getDate(),
+    abstractionPeriodStartMonth: chargePeriod.startDate.getMonth() + 1,
+    abstractionPeriodEndDay: chargePeriod.endDate.getDate(),
+    abstractionPeriodEndMonth: chargePeriod.endDate.getMonth() + 1
   }
 
-  return _calculateNumberOfOverlappingDays(periodToCalculateFor, chargeElement)
+  return _calculateNumberOfOverlappingDays(abstractionPeriodToCalculateFor, chargeElement, financialYear)
 }
 
 /**
  * Takes a period (ie. an object with `startDate` and `endDate`) and uses AbstractionBillingPeriodService to calculate
- * the number of overlapping days of the provided period and the charge element's abstraction period
+ * the number of overlapping days of the provided period and the charge element's abstraction periods
  */
-function _calculateNumberOfOverlappingDays (periodToCalculateFor, chargeElement) {
-  // Normally AbstractionBillingPeriodService takes a charge purpose instance, but here we want to use the start/end
-  // day/month in the charge element. Since these fields in a charge element align with these fields in a charge
-  // purpose, we simply pass chargeElement along as-is
-  const abstractionPeriods = AbstractionBillingPeriodService.go(periodToCalculateFor, chargeElement)
+function _calculateNumberOfOverlappingDays (abstractionPeriodToCalculateFor, chargeElement, financialYear) {
+  // Convert the abstraction periods of the charge element's charge purposes into actual dates
+  const chargePurposeDateRanges = _mapAbstractionPeriodsToDateRanges(chargeElement.chargePurposes, financialYear)
 
-  // abstractionPeriods comes back as an array of one or more periods, each with a billableDays property. We need to add
-  // all of these to get our final number of billble days
-  const billableDays = abstractionPeriods.reduce((acc, abstractionPeriod) => {
+  // Consolidate the resulting date ranges to avoid counting the overlapping dates more than once
+  const consolidatedDateRanges = ConsolidateDateRangesService.go(chargePurposeDateRanges)
+
+  // AbstractionBillingPeriodService returns an array of abstraction periods, each of which has a `billableDays`
+  // property which is the number of overlapping days of the date range and the period we provide it with. Mapping the
+  // array we get back would give us an array of arrays; we therefore flatten this after mapping to give us just a flat
+  // array of abstraction periods
+  const abstractionPeriods = consolidatedDateRanges.map((dateRange) => {
+    return AbstractionBillingPeriodService.go(dateRange, abstractionPeriodToCalculateFor)
+  }).flat(Infinity)
+
+  // We now sum all the `billableDays` properties of the returned abstraction periods to give us the total number of
+  // overlapping days. Note that this could have been done in the previous step by summing as we go but we do it as a
+  // separate step for clarity
+  const totalBillableDays = abstractionPeriods.reduce((acc, abstractionPeriod) => {
     return acc + abstractionPeriod.billableDays
   }, 0)
 
-  return billableDays
+  return totalBillableDays
+}
+
+/**
+ * Takes an array of charge purposes and converts their abstraction periods (which are defined as the start and end
+ * day and months) into actual dates in the given financial year, returning them as an array of date ranges (ie.
+ * objects with a `startDate` and `endDate` property)
+ */
+function _mapAbstractionPeriodsToDateRanges (chargePurposes, financialYear) {
+  const abstractionPeriods = chargePurposes.map(chargePurpose => {
+    const {
+      abstractionPeriodStartDay: startDay,
+      abstractionPeriodStartMonth: startMonth,
+      abstractionPeriodEndDay: endDay,
+      abstractionPeriodEndMonth: endMonth
+    } = chargePurpose
+
+    const abstractionPeriod = {}
+    // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
+    // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
+    if (endMonth === startMonth) {
+      if (endDay >= startDay) {
+        abstractionPeriod.startDate = new Date(financialYear, startMonth - 1, startDay)
+        abstractionPeriod.endDate = new Date(financialYear, endMonth - 1, endDay)
+      } else {
+        abstractionPeriod.startDate = new Date(financialYear - 1, startMonth - 1, startDay)
+        abstractionPeriod.endDate = new Date(financialYear, endMonth - 1, endDay)
+      }
+    } else if (endMonth >= startMonth) {
+      abstractionPeriod.startDate = new Date(financialYear, startMonth - 1, startDay)
+      abstractionPeriod.endDate = new Date(financialYear, endMonth - 1, endDay)
+    } else {
+      abstractionPeriod.startDate = new Date(financialYear - 1, startMonth - 1, startDay)
+      abstractionPeriod.endDate = new Date(financialYear, endMonth - 1, endDay)
+    }
+    return abstractionPeriod
+  })
+
+  return abstractionPeriods
 }
 
 /**

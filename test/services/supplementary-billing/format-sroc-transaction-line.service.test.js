@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
+const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
@@ -18,6 +19,7 @@ const FormatSrocTransactionLineservice = require('../../../app/services/suppleme
 describe.only('Format Sroc Transaction Line service', () => {
   let billingChargeCategoryId
   let chargePeriod
+  let chargePurpose
   let eagerChargeElement
 
   beforeEach(async () => {
@@ -25,6 +27,7 @@ describe.only('Format Sroc Transaction Line service', () => {
     billingChargeCategoryId = billingChargeCategory.billingChargeCategoryId
 
     const chargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
+    chargePurpose = await ChargePurposeHelper.add({ chargeElementId: chargeElement.chargeElementId })
     eagerChargeElement = await chargeElement.$query()
       .withGraphFetched('billingChargeCategory')
       .withGraphFetched('chargePurposes')
@@ -128,6 +131,7 @@ describe.only('Format Sroc Transaction Line service', () => {
       }
 
       const supportedSourceChargeElement = await ChargeElementHelper.add({ additionalCharges, billingChargeCategoryId })
+      await ChargePurposeHelper.add({ chargeElementId: supportedSourceChargeElement.chargeElementId })
       eagerSupportedSourceChargeElement = await supportedSourceChargeElement.$query()
         .withGraphFetched('billingChargeCategory')
         .withGraphFetched('chargePurposes')
