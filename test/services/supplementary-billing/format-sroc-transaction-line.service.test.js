@@ -116,6 +116,14 @@ describe.only('Format Sroc Transaction Line service', () => {
         expect(result.isNewLicence).to.equal(true)
       })
     })
+
+    describe('isTwoPartSecondPartCharge charge is `true`', () => {
+      it('returns the expected data', () => {
+        const result = FormatSrocTransactionLineservice.go(eagerChargeElement, chargePeriod, 2023, { isTwoPartSecondPartCharge: true })
+
+        expect(result.isTwoPartSecondPartCharge).to.equal(true)
+      })
+    })
   })
 
   describe('when the charge element has a supported source', () => {
