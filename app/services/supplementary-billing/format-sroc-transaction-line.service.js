@@ -10,12 +10,19 @@ const AbstractionBillingPeriodService = require('./abstraction-billing-period.se
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
 
 /**
- * @param {Object} chargeElement The charge element
- * @param {Object} chargeVersion
- * @param {Integer} financialYearEnding
- * @param {Object} [options]
+ * Takes a charge element, charge version and financial year and returns an object representing an sroc transaction
+ * line, formatted ready to be inserted into the db.
  *
- * @returns {Object[]} an array of billing periods each containing a `startDate` and `endDate`.
+ * @param {Object} chargeElement The charge element the transaction is to be created for.
+ * @param {Object} chargeVersion The charge version the transaction is to be created for.
+ * @param {Integer} financialYearEnding The year that the financial year of the transaction ends.
+ * @param {Object} [options] Object of options to set for the transaction. All options default to `false`
+ * @param {Boolean} [options.isCompensationCharge] Is this transaction a compensation charge?
+ * @param {Boolean} [options.isWaterUndertaker] Is this transaction for a water undertaker?
+ * @param {Boolean} [options.isNewLicence] Is this transaction for a new licence?
+ * @param {Boolean} [options.isTwoPartSecondPartCharge] Is this the second part charge for a two-part tariff?
+ *
+ * @returns {Object} The formatted transaction line data.
  */
 function go (chargeElement, chargeVersion, financialYearEnding, options) {
   const optionsData = _optionsDefaults(options)
