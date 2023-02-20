@@ -16,7 +16,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const CreateBillingInvoiceLicenceService = require('../../../app/services/supplementary-billing/create-billing-invoice-licence.service.js')
 
-describe.only('Create Billing Invoice Licence service', () => {
+describe('Create Billing Invoice Licence service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
