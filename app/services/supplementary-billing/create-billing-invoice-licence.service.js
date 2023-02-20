@@ -22,7 +22,6 @@ async function go (billingInvoice, licence) {
       billingInvoiceId: billingInvoice.billingInvoiceId,
       licenceRef: licence.licenceRef,
       licenceId: licence.licenceId
-
     })
     .returning('*')
 
