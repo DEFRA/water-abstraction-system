@@ -88,14 +88,14 @@ function _optionsDefaults (options) {
  * Note that charge versions may not have an end date; in this case, we simply use the financial year end date.
  */
 function _determineChargePeriod (chargeVersion, financialYearEnding) {
+  const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
+  const chargeVersionStartDate = chargeVersion.startDate
+  const latestStartDateTimestamp = Math.max(financialYearStartDate, chargeVersionStartDate)
+
   const financialYearEndDate = new Date(financialYearEnding, 2, 31)
   // If the charge version has no end date then use the financial year end date instead
   const chargeVersionEndDate = chargeVersion.endDate || financialYearEndDate
   const earliestEndDateTimestamp = Math.min(financialYearEndDate, chargeVersionEndDate)
-
-  const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
-  const chargeVersionStartDate = chargeVersion.startDate
-  const latestStartDateTimestamp = Math.max(financialYearStartDate, chargeVersionStartDate)
 
   return {
     startDate: new Date(latestStartDateTimestamp),
@@ -104,8 +104,8 @@ function _determineChargePeriod (chargeVersion, financialYearEnding) {
 }
 
 /**
- * Calculates the number of authorised days by using AbstractionBillingPeriodService to calculate the number of
- * overlapping days of the financial year and the charge element's abstraction periods
+ * Calculates the number of authorised days, ie. the number of overlapping days of the financial year and the charge
+ * element's abstraction periods
  */
 function _calculateAuthorisedDaysField (financialYearEnding, chargeElement) {
   // Define an abstraction period for the financial year, ie. 1/4 to 31/3
@@ -120,8 +120,8 @@ function _calculateAuthorisedDaysField (financialYearEnding, chargeElement) {
 }
 
 /**
- * Calculates the number of authorised days by using AbstractionBillingPeriodService to calculate the number of
- * overlapping days of the charge period and the charge element's abstraction periods
+ * Calculates the number of authorised days , ie. the number of overlapping days of the charge period and the charge
+ * element's abstraction periods
  */
 function _calculateBillableDaysField (chargePeriod, chargeElement, financialYearEnding) {
   // Note that we add 1 to the month as JavaScript months are zero-index (ie. 0 = Jan, 1 = Feb etc.)
@@ -136,8 +136,8 @@ function _calculateBillableDaysField (chargePeriod, chargeElement, financialYear
 }
 
 /**
- * Takes a period (ie. an object with `startDate` and `endDate`) and uses AbstractionBillingPeriodService to calculate
- * the number of overlapping days of the provided period and the charge element's abstraction periods
+ * Takes an abstraction period and uses AbstractionBillingPeriodService to calculate the number of overlapping days of
+ * the provided period and the charge element's abstraction periods
  */
 function _calculateNumberOfOverlappingDays (abstractionPeriodToCalculateFor, chargeElement, financialYearEnding) {
   // Convert the abstraction periods of the charge element's charge purposes into actual dates
