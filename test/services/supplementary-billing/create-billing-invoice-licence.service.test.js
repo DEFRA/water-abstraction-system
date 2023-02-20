@@ -30,7 +30,7 @@ describe('Create Billing Invoice Licence service', () => {
       licence = await LicenceHelper.add()
     })
 
-    it('creates an event record', async () => {
+    it('returns the new billing invoice licence instance', async () => {
       const result = await CreateBillingInvoiceLicenceService.go(billingInvoice, licence)
 
       expect(result).to.be.an.instanceOf(BillingInvoiceLicenceModel)
