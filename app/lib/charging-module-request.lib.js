@@ -10,50 +10,55 @@ const RequestLib = require('./request.lib.js')
 const servicesConfig = require('../../config/services.config.js')
 
 /**
+ * Sends a GET request to the Charging Module for the provided route
  *
  * @param {string} route The route that you wish to connect to
  * @returns {Object} The result of the request; whether it succeeded and the response or error returned
  */
 async function get (route) {
-  const url = new URL(route, servicesConfig.chargingModule.url)
-  const authentication = await ChargingModuleTokenService.go()
-  const options = _getOptions(authentication)
-
-  const result = await RequestLib.get(url.href, options)
+  const result = await _sendRequest(route, RequestLib.get)
 
   return _parseResult(result)
 }
 
 /**
+ * Sends a POST request to the Charging Module for the provided route
  *
  * @param {string} route The route that you wish to connect to
- * @param {Object} additionalOptions Append to or replace the options passed to Got when making the request
+ * @param {Object} body Body of the request which will be sent to the route as json
  * @returns {Object} The result of the request; whether it succeeded and the response or error returned
  */
-async function post (route, additionalOptions = {}) {
-  const url = new URL(route, servicesConfig.chargingModule.url)
-  const authentication = await ChargingModuleTokenService.go()
-  const options = _postOptions(authentication, additionalOptions)
-
-  const result = await RequestLib.post(url.href, options)
+async function post (route, body = {}) {
+  const result = await _sendRequest(route, RequestLib.post, body)
 
   return _parseResult(result)
 }
 
-function _getOptions (authentication) {
-  return {
+/**
+ * Sends a request to the Charging Module to the provided using the provided RequestLib method
+ *
+ * @param {string} route
+ * @param {Object} method An instance of a RequestLib method which will be used to send the request
+ * @param {Object} [body] Optional body to be sent to the route as json
+ * @returns
+ */
+async function _sendRequest (route, method, body = {}) {
+  const url = new URL(route, servicesConfig.chargingModule.url)
+  const authentication = await ChargingModuleTokenService.go()
+
+  const result = await method(url.href, {
     headers: {
-      authorization: `Bearer ${authentication.accessToken}`
-    }
-  }
+      ..._authorizationHeader(authentication.accessToken)
+    },
+    json: body
+  })
+
+  return result
 }
 
-function _postOptions (authentication, additionalOptions) {
+function _authorizationHeader (accessToken) {
   return {
-    headers: {
-      authorization: `Bearer ${authentication.accessToken}`
-    },
-    json: additionalOptions
+    authorization: `Bearer ${accessToken}`
   }
 }
 
