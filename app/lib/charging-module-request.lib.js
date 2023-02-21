@@ -47,9 +47,7 @@ async function _sendRequest (route, method, body = {}) {
   const authentication = await ChargingModuleTokenService.go()
 
   const result = await method(url.href, {
-    headers: {
-      ..._authorizationHeader(authentication.accessToken)
-    },
+    headers: _authorizationHeader(authentication.accessToken),
     json: body
   })
 
