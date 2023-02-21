@@ -32,26 +32,26 @@ describe.only('ChargingModuleRequestLib', () => {
   describe('#get', () => {
     let result
 
-    beforeEach(async () => {
-      Sinon.stub(RequestLib, 'get').resolves({
-        succeeded: true,
-        response: {
-          statusCode: 200,
-          body: '{"testObject": {"test": "yes"}}'
-        }
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(RequestLib, 'get').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: '{"testObject": {"test": "yes"}}'
+          }
+        })
+
+        result = await ChargingModuleRequestLib.get(testRoute)
       })
 
-      result = await ChargingModuleRequestLib.get(testRoute)
-    })
+      it('calls the Charging Module with the required options', async () => {
+        const requestArgs = RequestLib.get.firstCall.args
 
-    it('calls the Charging Module with the required options', async () => {
-      const requestArgs = RequestLib.get.firstCall.args
+        expect(requestArgs[0]).to.endWith('/TEST_ROUTE')
+        expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
+      })
 
-      expect(requestArgs[0]).to.endWith('/TEST_ROUTE')
-      expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
-    })
-
-    describe('when the request succeeds', () => {
       it('returns a `true` success status', async () => {
         expect(result.succeeded).to.be.true()
       })
@@ -60,6 +60,30 @@ describe.only('ChargingModuleRequestLib', () => {
         const { response } = result
 
         expect(response.testObject.test).to.equal('yes')
+      })
+    })
+
+    describe('when the request fails', () => {
+      beforeEach(async () => {
+        Sinon.stub(RequestLib, 'get').resolves({
+          succeeded: false,
+          response: {
+            statusCode: 400,
+            testError: 'TEST_ERROR'
+          }
+        })
+
+        result = await ChargingModuleRequestLib.get(testRoute)
+      })
+
+      it('returns a `false` success status', async () => {
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error response', async () => {
+        const { response } = result
+
+        expect(response.testError).to.equal('TEST_ERROR')
       })
     })
   })
@@ -67,27 +91,27 @@ describe.only('ChargingModuleRequestLib', () => {
   describe('#post', () => {
     let result
 
-    beforeEach(async () => {
-      Sinon.stub(RequestLib, 'post').resolves({
-        succeeded: true,
-        response: {
-          statusCode: 200,
-          body: '{"testObject": {"test": "yes"}}'
-        }
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(RequestLib, 'post').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: '{"testObject": {"test": "yes"}}'
+          }
+        })
+
+        result = await ChargingModuleRequestLib.post(testRoute, { test: true })
       })
 
-      result = await ChargingModuleRequestLib.post(testRoute, { test: true })
-    })
+      it('calls the Charging Module with the required options', async () => {
+        const requestArgs = RequestLib.post.firstCall.args
 
-    it('calls the Charging Module with the required options', async () => {
-      const requestArgs = RequestLib.post.firstCall.args
+        expect(requestArgs[0]).to.endWith('/TEST_ROUTE')
+        expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
+        expect(requestArgs[1].json).to.include({ test: true })
+      })
 
-      expect(requestArgs[0]).to.endWith('/TEST_ROUTE')
-      expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
-      expect(requestArgs[1].json).to.include({ test: true })
-    })
-
-    describe('when the request succeeds', () => {
       it('returns a `true` success status', async () => {
         expect(result.succeeded).to.be.true()
       })
@@ -96,6 +120,30 @@ describe.only('ChargingModuleRequestLib', () => {
         const { response } = result
 
         expect(response.testObject.test).to.equal('yes')
+      })
+    })
+
+    describe('when the request fails', () => {
+      beforeEach(async () => {
+        Sinon.stub(RequestLib, 'post').resolves({
+          succeeded: false,
+          response: {
+            statusCode: 400,
+            testError: 'TEST_ERROR'
+          }
+        })
+
+        result = await ChargingModuleRequestLib.post(testRoute, { test: true })
+      })
+
+      it('returns a `false` success status', async () => {
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error response', async () => {
+        const { response } = result
+
+        expect(response.testError).to.equal('TEST_ERROR')
       })
     })
   })
