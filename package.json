@@ -14,7 +14,8 @@
     "rollback:db:test": "NODE_ENV=test knex migrate:rollback --all",
     "lint": "standard",
     "test": "lab --silent-skips --shuffle",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",

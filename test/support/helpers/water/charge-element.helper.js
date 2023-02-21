@@ -24,6 +24,10 @@ const ChargeElementModel = require('../../../../app/models/water/charge-element.
  * - `additionalCharges` - { isSupplyPublicWater: true }
  * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 }
  * - `eiucRegion` - Anglian
+ * - `abstractionPeriodStartDay` - 1
+ * - `abstractionPeriodStartMonth` - 1
+ * - `abstractionPeriodEndDay` - 31
+ * - `abstractionPeriodEndMonth` - 12
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -59,7 +63,11 @@ function defaults (data = {}) {
     billingChargeCategoryId: 'cd9ca44d-2ddb-4d5d-ac62-79883176bdec',
     additionalCharges: { isSupplyPublicWater: true },
     adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 },
-    eiucRegion: 'Anglian'
+    eiucRegion: 'Anglian',
+    abstractionPeriodStartDay: 1,
+    abstractionPeriodStartMonth: 1,
+    abstractionPeriodEndDay: 31,
+    abstractionPeriodEndMonth: 12
   }
 
   return {
