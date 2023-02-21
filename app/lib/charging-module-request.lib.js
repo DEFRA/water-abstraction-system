@@ -45,18 +45,19 @@ async function post (route, body = {}) {
 async function _sendRequest (route, method, body = {}) {
   const url = new URL(route, servicesConfig.chargingModule.url)
   const authentication = await ChargingModuleTokenService.go()
+  const options = _requestOptions(authentication.accessToken, body)
 
-  const result = await method(url.href, {
-    headers: _authorizationHeader(authentication.accessToken),
-    json: body
-  })
+  const result = await method(url.href, options)
 
   return result
 }
 
-function _authorizationHeader (accessToken) {
+function _requestOptions (accessToken, body) {
   return {
-    authorization: `Bearer ${accessToken}`
+    headers: {
+      authorization: `Bearer ${accessToken}`
+    },
+    json: body
   }
 }
 
