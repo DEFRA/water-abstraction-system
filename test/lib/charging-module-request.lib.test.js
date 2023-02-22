@@ -14,7 +14,7 @@ const RequestLib = require('../../app/lib/request.lib.js')
 // Thing under test
 const ChargingModuleRequestLib = require('../../app/lib/charging-module-request.lib.js')
 
-describe.only('ChargingModuleRequestLib', () => {
+describe('ChargingModuleRequestLib', () => {
   const testRoute = 'TEST_ROUTE'
 
   before(async () => {
