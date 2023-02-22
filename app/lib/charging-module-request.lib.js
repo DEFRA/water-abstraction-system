@@ -5,7 +5,6 @@
  * @module ChargingModuleRequestLib
  */
 
-const ChargingModuleTokenService = require('../services/charging-module/token.service.js')
 const RequestLib = require('./request.lib.js')
 const servicesConfig = require('../../config/services.config.js')
 
@@ -44,7 +43,7 @@ async function post (route, body = {}) {
  */
 async function _sendRequest (route, method, body = {}) {
   const url = new URL(route, servicesConfig.chargingModule.url)
-  const authentication = await ChargingModuleTokenService.go()
+  const authentication = await global.HapiServerMethods.getChargingModuleToken()
   const options = _requestOptions(authentication.accessToken, body)
 
   const result = await method(url.href, options)

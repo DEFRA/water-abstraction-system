@@ -5,11 +5,10 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, before, beforeEach, after, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ChargingModuleTokenService = require('../../app/services/charging-module/token.service.js')
 const RequestLib = require('../../app/lib/request.lib.js')
 
 // Thing under test
@@ -18,15 +17,23 @@ const ChargingModuleRequestLib = require('../../app/lib/charging-module-request.
 describe.only('ChargingModuleRequestLib', () => {
   const testRoute = 'TEST_ROUTE'
 
-  beforeEach(async () => {
-    Sinon.stub(ChargingModuleTokenService, 'go').resolves({
-      accessToken: 'ACCESS_TOKEN',
-      expiresIn: 3600
-    })
+  before(async () => {
+    // ChargingModuleRequestLib makes use of the getChargingModuleToken() server method, which we therefore need to stub
+    global.HapiServerMethods = {
+      getChargingModuleToken: Sinon.stub().resolves({
+        accessToken: 'ACCESS_TOKEN',
+        expiresIn: 3600
+      })
+    }
   })
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(() => {
+    // Tidy up our global server methods stub once done
+    delete global.HapiServerMethods
   })
 
   describe('#get', () => {
