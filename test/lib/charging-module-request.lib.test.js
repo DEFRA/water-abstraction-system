@@ -19,6 +19,7 @@ describe('ChargingModuleRequestLib', () => {
 
   before(async () => {
     // ChargingModuleRequestLib makes use of the getChargingModuleToken() server method, which we therefore need to stub
+    // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
     global.HapiServerMethods = {
       getChargingModuleToken: Sinon.stub().resolves({
         accessToken: 'ACCESS_TOKEN',
