@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Use for making http requests to other services
+ * Use for making http requests to the Charging Module
  * @module ChargingModuleRequestLib
  */
 
@@ -11,8 +11,11 @@ const servicesConfig = require('../../config/services.config.js')
 /**
  * Sends a GET request to the Charging Module for the provided route
  *
- * @param {string} route The route that you wish to connect to
- * @returns {Object} The result of the request; whether it succeeded and the response or error returned
+ * @param {string} route The route to send the request to
+ *
+ * @returns {Object} result An object representing the result of the request
+ * @returns {boolean} result.succeeded Whether the request was successful
+ * @returns {Object} result.response The Charging Module response if successful; or the error response if not
  */
 async function get (route) {
   const result = await _sendRequest(route, RequestLib.get)
@@ -23,9 +26,12 @@ async function get (route) {
 /**
  * Sends a POST request to the Charging Module for the provided route
  *
- * @param {string} route The route that you wish to connect to
- * @param {Object} body Body of the request which will be sent to the route as json
- * @returns {Object} The result of the request; whether it succeeded and the response or error returned
+ * @param {string} route The route to send the request to
+ * @param {Object} [body] The body of the request
+ *
+ * @returns {Object} result An object representing the result of the request
+ * @returns {boolean} result.succeeded Whether the request was successful
+ * @returns {Object} result.response The Charging Module response if successful; or the error response if not
  */
 async function post (route, body = {}) {
   const result = await _sendRequest(route, RequestLib.post, body)
@@ -36,10 +42,11 @@ async function post (route, body = {}) {
 /**
  * Sends a request to the Charging Module to the provided using the provided RequestLib method
  *
- * @param {string} route
+ * @param {string} route The route that you wish to connect to
  * @param {Object} method An instance of a RequestLib method which will be used to send the request
  * @param {Object} [body] Optional body to be sent to the route as json
- * @returns
+ *
+ * @returns {Object} The result of the request passed back from RequestLib
  */
 async function _sendRequest (route, method, body = {}) {
   const url = new URL(route, servicesConfig.chargingModule.url)
@@ -60,6 +67,9 @@ function _requestOptions (accessToken, body) {
   }
 }
 
+/**
+ * Parses the response from RequestLib. If the response contains a body then we convert it from JSON to an object.
+ */
 function _parseResult (result) {
   let response = result.response
 
