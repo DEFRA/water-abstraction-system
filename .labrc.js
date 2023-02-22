@@ -18,6 +18,8 @@ module.exports = {
     'GLOBAL_AGENT','ROARR',
     // GlobalNotifier is added by us a global in a server plugin. It's how we make logging available anywhere in the app
     // whilst avoiding having to pass it around
-    'GlobalNotifier'
+    'GlobalNotifier',
+    // HapiServerMethods is added by us in a server plugin to allow us to access server methods globally.
+    'HapiServerMethods'
   ].join(',')
 }
