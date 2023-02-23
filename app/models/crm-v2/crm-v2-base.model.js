@@ -9,7 +9,7 @@ const LegacyBaseModel = require('../legacy-base.model.js')
 
 class CrmV2BaseModel extends LegacyBaseModel {
   static get schema () {
-    return 'crmV2'
+    return 'crm_v2'
   }
 }
 
