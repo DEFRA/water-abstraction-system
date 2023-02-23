@@ -10,6 +10,7 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
+const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const RequestLib = require('../../lib/request.lib.js')
 
 const servicesConfig = require('../../../config/services.config.js')
@@ -79,8 +80,7 @@ async function _getAddressFacadeData () {
 }
 
 async function _getChargingModuleData () {
-  const statusUrl = new URL('/status', servicesConfig.chargingModule.url)
-  const result = await RequestLib.get(statusUrl.href)
+  const result = await ChargingModuleRequestLib.get('/status')
 
   if (result.succeeded) {
     return result.response.headers['x-cma-docker-tag']

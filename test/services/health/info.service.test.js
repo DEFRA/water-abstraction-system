@@ -13,6 +13,7 @@ const { expect } = Code
 const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
+const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
 const RequestLib = require('../../../app/lib/request.lib.js')
 
 // Thing under test
@@ -35,15 +36,13 @@ describe('Info service', () => {
     },
     app: { succeeded: true, response: { statusCode: 200, body: '{ "version": "9.0.99", "commit": "99d0e8c" }' } }
   }
+  let chargingModuleRequestLibStub
   let requestLibStub
 
   beforeEach(() => {
     requestLibStub = Sinon.stub(RequestLib, 'get')
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    requestLibStub
-      .withArgs(`${servicesConfig.chargingModule.url}/status`)
-      .resolves(goodRequestResults.chargingModule)
     requestLibStub
       .withArgs(`${servicesConfig.serviceBackground.url}/health/info`)
       .resolves(goodRequestResults.app)
@@ -71,6 +70,11 @@ describe('Info service', () => {
     requestLibStub
       .withArgs(`${servicesConfig.returns.url}/health/info`)
       .resolves(goodRequestResults.app)
+
+    chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
+    chargingModuleRequestLibStub
+      .withArgs('/status')
+      .resolves(goodRequestResults.chargingModule)
   })
 
   afterEach(() => {
