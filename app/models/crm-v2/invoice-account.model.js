@@ -7,9 +7,9 @@
 
 const { Model } = require('objection')
 
-const WaterBaseModel = require('./water-base.model.js')
+const CrmV2BaseModel = require('./crm-v2-base.model.js')
 
-class InvoiceAccountModel extends WaterBaseModel {
+class InvoiceAccountModel extends CrmV2BaseModel {
   static get tableName () {
     return 'invoiceAccounts'
   }
