@@ -48,7 +48,7 @@ async function post (route, body = {}) {
  *
  * @returns {Object} The result of the request passed back from RequestLib
  */
-async function _sendRequest (route, method, body = {}) {
+async function _sendRequest (route, method, body) {
   const url = new URL(route, servicesConfig.chargingModule.url)
   const authentication = await global.HapiServerMethods.getChargingModuleToken()
   const options = _requestOptions(authentication.accessToken, body)
