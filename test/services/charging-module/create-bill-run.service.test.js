@@ -60,7 +60,7 @@ describe('Charge module create bill run service', () => {
   })
 
   describe('when the service cannot create a bill run', () => {
-    describe.only('because the request did not return a 2xx/3xx response', () => {
+    describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
           succeeded: false,
