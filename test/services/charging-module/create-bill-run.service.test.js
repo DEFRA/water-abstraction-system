@@ -56,8 +56,8 @@ describe('Charge module create bill run service', () => {
     it('returns the bill run id and number in the `response`', async () => {
       const { response } = result
 
-      expect(response.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
-      expect(response.billRunNumber).to.equal(10004)
+      expect(response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
+      expect(response.body.billRun.billRunNumber).to.equal(10004)
     })
   })
 
@@ -86,9 +86,9 @@ describe('Charge module create bill run service', () => {
       it('returns the error in the `response`', async () => {
         const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
 
-        expect(result.response.statusCode).to.equal(401)
-        expect(result.response.error).to.equal('Unauthorized')
-        expect(result.response.message).to.equal('Invalid JWT: Token format not valid')
+        expect(result.response.body.statusCode).to.equal(401)
+        expect(result.response.body.error).to.equal('Unauthorized')
+        expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
       })
     })
 

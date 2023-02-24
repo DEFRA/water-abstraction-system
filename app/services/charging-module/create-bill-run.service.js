@@ -23,7 +23,7 @@ async function go (regionId, ruleset) {
 
   const result = await ChargingModuleRequestLib.post('/v3/wrls/bill-runs', { region, ruleset })
 
-  return _parseResult(result)
+  return result
 }
 
 // Gets the single-letter charge region code for the provided regionId UUID
@@ -33,17 +33,6 @@ async function _getChargeRegionId (regionId) {
     .findOne('regionId', regionId)
 
   return result.chargeRegionId
-}
-
-/**
- * If the request was successful, the CM will have returned the bill run details in a `billRun` object within the
- * response. For simplicity, we take this and put the bill run details directly in the response.
- */
-function _parseResult (result) {
-  return {
-    succeeded: result.succeeded,
-    response: result.response.billRun ? result.response.billRun : result.response
-  }
 }
 
 module.exports = {
