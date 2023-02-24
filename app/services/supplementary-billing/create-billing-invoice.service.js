@@ -23,7 +23,7 @@ async function go (chargeVersion, billingPeriod, billingBatchId) {
   const billingInvoice = await BillingInvoiceModel.query()
     .insert({
       invoiceAccountId: chargeVersion.invoiceAccountId,
-      address: {}, // Have left empty as doesn't appear to be used for SROC
+      address: {}, // Address is set to an empty object for SROC billing invoices
       invoiceAccountNumber: await _getInvoiceAccountNumber(chargeVersion.invoiceAccountId),
       billingBatchId,
       financialYearEnding: billingPeriod.endDate.getFullYear()
