@@ -19,14 +19,17 @@ describe('Create Billing Invoice service', () => {
   const billingBatchId = '95177485-bfe7-48ed-b2f0-dba5a5084b45'
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
 
+  let invoiceAccount
+  let chargeVersion
+
   beforeEach(async () => {
     await DatabaseHelper.clean()
+
+    invoiceAccount = await InvoiceAccountHelper.add({ invoiceAccountNumber: 'TEST12345A' })
+    chargeVersion = { invoiceAccountId: invoiceAccount.invoiceAccountId }
   })
 
   it('returns the new billing invoice instance containing the correct data', async () => {
-    const invoiceAccount = await InvoiceAccountHelper.add({ invoiceAccountNumber: 'TEST12345A' })
-    const chargeVersion = { invoiceAccountId: invoiceAccount.invoiceAccountId }
-
     const result = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
 
     expect(result).to.be.an.instanceOf(BillingInvoiceModel)
