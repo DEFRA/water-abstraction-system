@@ -15,7 +15,7 @@ const servicesConfig = require('../../config/services.config.js')
  *
  * @returns {Object} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The Charging Module response if successful; or the error response if not
+ * @returns {Object} result.response The Charging Module response if successful or the error response if not.
  */
 async function get (route) {
   const result = await _sendRequest(route, RequestLib.get)
@@ -31,7 +31,7 @@ async function get (route) {
  *
  * @returns {Object} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The Charging Module response if successful; or the error response if not
+ * @returns {Object} result.response The Charging Module response if successful or the error response if not.
  */
 async function post (route, body = {}) {
   const result = await _sendRequest(route, RequestLib.post, body)
@@ -71,12 +71,12 @@ function _requestOptions (accessToken, body) {
  * Parses the response from RequestLib. If the response contains a body then we convert it from JSON to an object.
  */
 function _parseResult (result) {
-  let response = result.response
+  const { response } = result
 
-  // If the request got a response from the Charging Module we will have a response body. If the request errored, for
-  // example a timeout because the Charging Module is down, response will be the instance of the error thrown by Got.
+  // If the request got a response from the Charging Module we will have a response body in JSON format. In this
+  // scenario, we overwrite it with a parsed object.
   if (response.body) {
-    response = JSON.parse(response.body)
+    response.body = JSON.parse(response.body)
   }
 
   return {

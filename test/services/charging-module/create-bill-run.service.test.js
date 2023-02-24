@@ -37,9 +37,11 @@ describe('Charge module create bill run service', () => {
       Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
         succeeded: true,
         response: {
-          billRun: {
-            id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
-            billRunNumber: 10004
+          body: {
+            billRun: {
+              id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
+              billRunNumber: 10004
+            }
           }
         }
       })
@@ -65,10 +67,12 @@ describe('Charge module create bill run service', () => {
         Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
           succeeded: false,
           response: {
-            statusCode: 401,
-            error: 'Unauthorized',
-            message: 'Invalid JWT: Token format not valid',
-            attributes: { error: 'Invalid JWT: Token format not valid' }
+            body: {
+              statusCode: 401,
+              error: 'Unauthorized',
+              message: 'Invalid JWT: Token format not valid',
+              attributes: { error: 'Invalid JWT: Token format not valid' }
+            }
           }
         })
       })
