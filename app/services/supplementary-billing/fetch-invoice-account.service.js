@@ -21,9 +21,7 @@ async function go (invoiceAccountId) {
 }
 
 async function _fetch (invoiceAccountId) {
-  const result = await InvoiceAccountModel.query()
-    .where('invoiceAccountId', invoiceAccountId)
-    .first()
+  const result = await InvoiceAccountModel.query().findById(invoiceAccountId)
 
   return result
 }
