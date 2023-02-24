@@ -13,8 +13,8 @@ const FetchInvoiceAccountService = require('./fetch-invoice-account.service.js')
  * Create the initial billing invoice for the provided charge version, billing period and billing batch prior to
  * transactions being sent to the charging module
  *
- * @param {Object[]} chargeVersion An Object containing the relevant charge version
- * @param {Object[]} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
+ * @param {Object} chargeVersion An Object containing the relevant charge version
+ * @param {Object} billingPeriod Object that has a `startDate` and `endDate` that defines the billing period
  * @param {string} billingBatchId GUID of the billing batch
  *
  * @returns {Object} The newly-created billing invoice record
