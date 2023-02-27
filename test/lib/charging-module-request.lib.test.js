@@ -64,10 +64,8 @@ describe('ChargingModuleRequestLib', () => {
         expect(result.succeeded).to.be.true()
       })
 
-      it('returns the response as an object', async () => {
-        const { response } = result
-
-        expect(response.testObject.test).to.equal('yes')
+      it('returns the response body as an object', async () => {
+        expect(result.response.body.testObject.test).to.equal('yes')
       })
     })
 
@@ -76,8 +74,9 @@ describe('ChargingModuleRequestLib', () => {
         Sinon.stub(RequestLib, 'get').resolves({
           succeeded: false,
           response: {
-            statusCode: 400,
-            testError: 'TEST_ERROR'
+            statusCode: 404,
+            statusMessage: 'Not Found',
+            body: '{"statusCode":404,"error":"Not Found","message":"Not Found"}'
           }
         })
 
@@ -89,9 +88,7 @@ describe('ChargingModuleRequestLib', () => {
       })
 
       it('returns the error response', async () => {
-        const { response } = result
-
-        expect(response.testError).to.equal('TEST_ERROR')
+        expect(result.response.statusMessage).to.equal('Not Found')
       })
     })
   })
@@ -105,11 +102,12 @@ describe('ChargingModuleRequestLib', () => {
           succeeded: true,
           response: {
             statusCode: 200,
-            body: '{"testObject": {"test": "yes"}}'
+            statusMessage: 'OK',
+            body: '{"testObject": {"test":"yes"}}'
           }
         })
 
-        result = await ChargingModuleRequestLib.post(testRoute, { test: true })
+        result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
       })
 
       it('calls the Charging Module with the required options', async () => {
@@ -117,17 +115,15 @@ describe('ChargingModuleRequestLib', () => {
 
         expect(requestArgs[0]).to.endWith('/TEST_ROUTE')
         expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
-        expect(requestArgs[1].json).to.include({ test: true })
+        expect(requestArgs[1].body).to.equal('{"test":"yes"}')
       })
 
       it('returns a `true` success status', async () => {
         expect(result.succeeded).to.be.true()
       })
 
-      it('returns the response as an object', async () => {
-        const { response } = result
-
-        expect(response.testObject.test).to.equal('yes')
+      it('returns the response body as an object', async () => {
+        expect(result.response.body.testObject.test).to.equal('yes')
       })
     })
 
@@ -136,8 +132,9 @@ describe('ChargingModuleRequestLib', () => {
         Sinon.stub(RequestLib, 'post').resolves({
           succeeded: false,
           response: {
-            statusCode: 400,
-            testError: 'TEST_ERROR'
+            statusCode: 404,
+            statusMessage: 'Not Found',
+            body: '{"statusCode":404,"error":"Not Found","message":"Not Found"}'
           }
         })
 
@@ -149,9 +146,7 @@ describe('ChargingModuleRequestLib', () => {
       })
 
       it('returns the error response', async () => {
-        const { response } = result
-
-        expect(response.testError).to.equal('TEST_ERROR')
+        expect(result.response.statusMessage).to.equal('Not Found')
       })
     })
   })
