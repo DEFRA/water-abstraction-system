@@ -17,6 +17,10 @@ const BillingBatchHelper = require('./billing-batch.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
+ * - `invoiceAccountId` - 396ee68f-d665-4770-b0ad-d70a007f9bd5
+ * - `address` - {}
+ * - `invoiceAccountNumber` - T12345678A
+ * - `billingBatchId` - 1d9e3142-8893-4dff-9043-f4b3b34e230d
  * - `financialYearEnding` - 2023
  *
  * See `BillingBatchHelper` for the billing batch defaults
@@ -61,6 +65,10 @@ async function _billingBatchId (providedBillingBatch) {
  */
 function defaults (data = {}) {
   const defaults = {
+    invoiceAccountId: '396ee68f-d665-4770-b0ad-d70a007f9bd5',
+    address: {},
+    invoiceAccountNumber: 'T12345678A',
+    billingBatchId: '1d9e3142-8893-4dff-9043-f4b3b34e230d',
     financialYearEnding: 2023
   }
 

@@ -17,7 +17,7 @@ const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-l
  * @returns {Object} The newly-created billing invoice licence record
  */
 async function go (billingInvoice, licence) {
-  const event = await BillingInvoiceLicenceModel.query()
+  const billingInvoiceLicence = await BillingInvoiceLicenceModel.query()
     .insert({
       billingInvoiceId: billingInvoice.billingInvoiceId,
       licenceRef: licence.licenceRef,
@@ -25,7 +25,7 @@ async function go (billingInvoice, licence) {
     })
     .returning('*')
 
-  return event
+  return billingInvoiceLicence
 }
 
 module.exports = {
