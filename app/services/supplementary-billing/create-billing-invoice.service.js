@@ -19,14 +19,25 @@ const FetchInvoiceAccountService = require('./fetch-invoice-account.service.js')
  *
  * @returns {Object} The newly-created billing invoice record
  */
+// TODO: REFACTOR THIS TO UPSERT INSTEAD OF RETRIEVE AND RETURN EXISTING
 async function go (chargeVersion, billingPeriod, billingBatchId) {
+  const retrievedBillingInvoice = await BillingInvoiceModel.query()
+    .where('invoiceAccountId', chargeVersion.invoiceAccountId)
+    .where('billingBatchId', billingBatchId)
+    .first()
+
+  if (retrievedBillingInvoice) {
+    return retrievedBillingInvoice
+  }
+
   const billingInvoice = await BillingInvoiceModel.query()
     .insert({
       invoiceAccountId: chargeVersion.invoiceAccountId,
       address: {}, // Address is set to an empty object for SROC billing invoices
       invoiceAccountNumber: await _getInvoiceAccountNumber(chargeVersion.invoiceAccountId),
       billingBatchId,
-      financialYearEnding: billingPeriod.endDate.getFullYear()
+      financialYearEnding: billingPeriod.endDate.getFullYear(),
+      isCredit: false
     })
     .returning('*')
 
