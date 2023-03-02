@@ -72,12 +72,16 @@ function _requestOptions (accessToken, body) {
  * Parses the response from RequestLib. If the response contains a body then we convert it from JSON to an object.
  */
 function _parseResult (result) {
-  const { statusCode, body } = result.response
+  const { body, headers, statusCode } = result.response
 
   if (body) {
     return {
       succeeded: result.succeeded,
       response: {
+        info: {
+          gitCommit: headers['x-cma-git-commit'],
+          dockerTag: headers['x-cma-docker-tag']
+        },
         statusCode,
         body
       }
