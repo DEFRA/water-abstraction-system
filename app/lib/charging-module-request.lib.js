@@ -63,6 +63,7 @@ function _requestOptions (accessToken, body) {
     headers: {
       authorization: `Bearer ${accessToken}`
     },
+    responseType: 'json',
     body: JSON.stringify(body)
   }
 }
@@ -71,18 +72,19 @@ function _requestOptions (accessToken, body) {
  * Parses the response from RequestLib. If the response contains a body then we convert it from JSON to an object.
  */
 function _parseResult (result) {
-  const { response } = result
+  const { statusCode, body } = result.response
 
-  // If the request got a response from the Charging Module we will have a response body in JSON format. In this
-  // scenario, we overwrite it with a parsed object.
-  if (response.body) {
-    response.body = JSON.parse(response.body)
+  if (body) {
+    return {
+      succeeded: result.succeeded,
+      response: {
+        statusCode,
+        body
+      }
+    }
   }
 
-  return {
-    succeeded: result.succeeded,
-    response
-  }
+  return result
 }
 
 module.exports = {
