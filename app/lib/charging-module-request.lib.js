@@ -15,7 +15,7 @@ const servicesConfig = require('../../config/services.config.js')
  *
  * @returns {Object} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The Charging Module response if successful or the error response if not.
+ * @returns {Object} result.response The Charging Module response if successful or the error response if not
  */
 async function get (route) {
   const result = await _sendRequest(route, RequestLib.get)
@@ -69,7 +69,11 @@ function _requestOptions (accessToken, body) {
 }
 
 /**
- * Parses the response from RequestLib. If the response contains a body then we convert it from JSON to an object.
+ * Parses the charging module response returned from RequestLib
+ *
+ * @param {Object} result The result object returned by RequestLib
+ *
+ * @returns {Object} If result was not an error, a parsed version of the response
  */
 function _parseResult (result) {
   const { body, headers, statusCode } = result.response
