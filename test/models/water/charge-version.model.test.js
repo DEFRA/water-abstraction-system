@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const ChangeReasonHelper = require('../../support/helpers/water/change-reason.helper.js')
+const ChangeReasonModel = require('../../../app/models/water/change-reason.model.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
@@ -64,6 +66,36 @@ describe('ChargeVersion model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to change reason', () => {
+      let testChangeReason
+
+      beforeEach(async () => {
+        testChangeReason = await ChangeReasonHelper.add()
+
+        const { changeReasonId } = testChangeReason
+        testRecord = await ChargeVersionHelper.add({ changeReasonId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('changeReason')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the change reason', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.chargeVersionId)
+          .withGraphFetched('changeReason')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersionId).to.equal(testRecord.chargeVersionId)
+
+        expect(result.changeReason).to.be.an.instanceOf(ChangeReasonModel)
+        expect(result.changeReason).to.equal(testChangeReason)
       })
     })
 
