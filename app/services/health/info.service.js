@@ -80,7 +80,8 @@ async function _getAddressFacadeData () {
 }
 
 async function _getChargingModuleData () {
-  const result = await ChargingModuleRequestLib.get('/status')
+  const result = await ChargingModuleRequestLib.get('status')
+  await ChargingModuleRequestLib.post('v3/wrls/bill-runs', { region: 'A', ruleset: 'sroc' })
 
   if (result.succeeded) {
     return result.response.info.dockerTag
