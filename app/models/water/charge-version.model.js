@@ -35,6 +35,14 @@ class ChargeVersionModel extends WaterBaseModel {
           to: 'licences.licenceId'
         }
       },
+      changeReason: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'change-reason.model',
+        join: {
+          from: 'chargeVersions.changeReasonId',
+          to: 'changeReasons.changeReasonId'
+        }
+      },
       chargeElements: {
         relation: Model.HasManyRelation,
         modelClass: 'charge-element.model',
