@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
 const BillingChargeCategoryModel = require('../../../app/models/water/billing-charge-category.model.js')
+const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
+const BillingTransactionModel = require('../../../app/models/water/billing-transaction.model.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
@@ -101,6 +103,41 @@ describe('Charge Element model', () => {
         expect(result.chargePurposes[0]).to.be.an.instanceOf(ChargePurposeModel)
         expect(result.chargePurposes).to.include(testChargePurposes[0])
         expect(result.chargePurposes).to.include(testChargePurposes[1])
+      })
+    })
+
+    describe('when linking to billing transactions', () => {
+      let testBillingTransactions
+
+      beforeEach(async () => {
+        const { chargeElementId } = testRecord
+
+        testBillingTransactions = []
+        for (let i = 0; i < 2; i++) {
+          const billingTransaction = await BillingTransactionHelper.add({ description: `TEST BILLING TRANSACTION ${i}`, chargeElementId })
+          testBillingTransactions.push(billingTransaction)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeElementModel.query()
+          .innerJoinRelated('billingTransactions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the billing transactions', async () => {
+        const result = await ChargeElementModel.query()
+          .findById(testRecord.chargeElementId)
+          .withGraphFetched('billingTransactions')
+
+        expect(result).to.be.instanceOf(ChargeElementModel)
+        expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
+
+        expect(result.billingTransactions).to.be.an.array()
+        expect(result.billingTransactions[0]).to.be.an.instanceOf(BillingTransactionModel)
+        expect(result.billingTransactions).to.include(testBillingTransactions[0])
+        expect(result.billingTransactions).to.include(testBillingTransactions[1])
       })
     })
 
