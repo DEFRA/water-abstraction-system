@@ -1,5 +1,6 @@
 'use strict'
 
+const { ref } = require('objection')
 /**
  * Fetches SROC charge versions that might be included in a supplementary bill run
  * @module FetchChargeVersionsService
@@ -27,7 +28,13 @@ async function go (regionId, billingPeriod) {
 
 async function _fetch (regionId, billingPeriod) {
   const chargeVersions = await ChargeVersion.query()
-    .select('chargeVersionId', 'scheme', 'chargeVersions.startDate', 'chargeVersions.endDate', 'invoiceAccountId')
+    .select([
+      'chargeVersionId',
+      'scheme',
+      'chargeVersions.startDate',
+      'chargeVersions.endDate',
+      'invoiceAccountId'
+    ])
     .innerJoinRelated('licence')
     .where('scheme', 'sroc')
     .where('includeInSupplementaryBilling', 'yes')
@@ -36,31 +43,55 @@ async function _fetch (regionId, billingPeriod) {
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .withGraphFetched('licence')
     .modifyGraph('licence', builder => {
-      builder.select(
+      builder.select([
         'licenceId',
-        'licenceRef'
-      )
+        'licenceRef',
+        'isWaterUndertaker',
+        ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
+        ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
+      ])
+    })
+    .withGraphFetched('licence.region')
+    .modifyGraph('licence.region', builder => {
+      builder.select([
+        'regionId',
+        'chargeRegionId'
+      ])
+    })
+    .withGraphFetched('changeReason')
+    .modifyGraph('changeReason', builder => {
+      builder.select([
+        'triggersMinimumCharge'
+      ])
+    })
+    .withGraphFetched('chargeElements')
+    .modifyGraph('chargeElements', builder => {
+      builder.select([
+        'chargeElementId',
+        'source',
+        'loss',
+        'volume',
+        'adjustments',
+        'additionalCharges',
+        'description'
+      ])
     })
     .withGraphFetched('chargeElements.billingChargeCategory')
     .modifyGraph('chargeElements.billingChargeCategory', builder => {
-      builder.select(
-        'reference'
-      )
+      builder.select([
+        'reference',
+        'shortDescription'
+      ])
     })
     .withGraphFetched('chargeElements.chargePurposes')
-    .modifyGraph('chargeElements', builder => {
-      builder.select(
-        'chargeElementId'
-      )
-    })
     .modifyGraph('chargeElements.chargePurposes', builder => {
-      builder.select(
+      builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
         'abstractionPeriodEndDay',
         'abstractionPeriodEndMonth'
-      )
+      ])
     })
 
   return chargeVersions
