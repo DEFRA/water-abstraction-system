@@ -64,7 +64,7 @@ function _requestOptions (accessToken, body) {
       authorization: `Bearer ${accessToken}`
     },
     responseType: 'json',
-    body: JSON.stringify(body)
+    json: body
   }
 }
 
