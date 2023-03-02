@@ -58,6 +58,18 @@ async function _sendRequest (route, method, body) {
   return result
 }
 
+/**
+ * Additional options that will be added to the default options used by RequestLib
+ *
+ * We use it to set the authorization header with the AWS Cognito token on our requests, the body (which is always
+ * a JSON object) for our POST requests and the option to tell Got that we expect JSON responses. This means Got will
+ * automatically handle parsing the response to a JSON object for us.
+ *
+ * @param {string} accessToken
+ * @param {Object} body
+ *
+ * @returns Charging Module API specific options to be passed to RequestLib
+ */
 function _requestOptions (accessToken, body) {
   return {
     headers: {
