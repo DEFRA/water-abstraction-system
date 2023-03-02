@@ -50,6 +50,14 @@ class ChargeElementModel extends WaterBaseModel {
           from: 'chargeElements.chargeElementId',
           to: 'chargePurposes.chargeElementId'
         }
+      },
+      billingTransactions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'billing-transaction.model',
+        join: {
+          from: 'chargeElements.chargeElementId',
+          to: 'billingTransactions.chargeElementId'
+        }
       }
     }
   }
