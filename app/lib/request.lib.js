@@ -93,6 +93,21 @@ async function _importGot () {
   return got
 }
 
+/**
+ * Logs the failed request
+ *
+ * If the request failed because the external service returned a `4xx/5xx` response we just log the failure. We also
+ * generate our own response object to avoid outputting the full response object Got generates.
+ *
+ * If the request failed because of an error, for example a timeout, then we both log and send a notification to our
+ * Errbit instance. We also output the full response to the log as it will be the Got error containing all the info
+ * we need to diagnose the problem.
+ *
+ * @param {string} method the type of request made, for example, 'GET', 'POST, or 'PATCH'
+ * @param {Object} result the result we object generate
+ * @param {*} url the requested url
+ * @param {*} additionalOptions any additional options that were passed to Got by the calling service
+ */
 function _logFailure (method, result, url, additionalOptions) {
   const data = {
     method,
