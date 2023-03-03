@@ -53,8 +53,17 @@ describe('Initiate Billing Batch service', () => {
       Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
         succeeded: true,
         response: {
-          id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
-          billRunNumber: 10004
+          info: {
+            gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
+            dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+          },
+          statusCode: 200,
+          body: {
+            billRun: {
+              id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
+              billRunNumber: 10004
+            }
+          }
         }
       })
     })
@@ -95,9 +104,16 @@ describe('Initiate Billing Batch service', () => {
         Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
           succeeded: false,
           response: {
+            info: {
+              gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
+              dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+            },
             statusCode: 403,
-            error: 'Forbidden',
-            message: "Unauthorised for regime 'wrls'"
+            body: {
+              statusCode: 403,
+              error: 'Forbidden',
+              message: "Unauthorised for regime 'wrls'"
+            }
           }
         })
       })
