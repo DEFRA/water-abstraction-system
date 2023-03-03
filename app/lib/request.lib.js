@@ -27,36 +27,18 @@ const requestConfig = require('../../config/request.config.js')
  *
  * @param {string} url The full URL that you wish to connect to
  * @param {Object} additionalOptions Append to or replace the options passed to Got when making the request
+ *
  * @returns {Object} The result of the request; whether it succeeded and the response or error returned
  */
 async function get (url, additionalOptions = {}) {
-  const got = await _importGot()
-  const result = {
-    succeeded: false,
-    response: null
-  }
-
-  try {
-    const options = _requestOptions(additionalOptions)
-
-    result.response = await got.get(url, options)
-
-    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
-    // property
-    result.succeeded = result.response.ok
-  } catch (error) {
-    // If it's a network error, for example 'ETIMEDOUT', we'll end up here
-    result.response = error
-  }
-
-  if (!result.succeeded) {
-    _logFailure('GET', result, url, additionalOptions)
-  }
-
-  return result
+  return await _sendRequest('get', url, additionalOptions)
 }
 
 async function post (url, additionalOptions = {}) {
+  return await _sendRequest('post', url, additionalOptions)
+}
+
+async function _sendRequest (method, url, additionalOptions) {
   const got = await _importGot()
   const result = {
     succeeded: false,
@@ -66,7 +48,7 @@ async function post (url, additionalOptions = {}) {
   try {
     const options = _requestOptions(additionalOptions)
 
-    result.response = await got.post(url, options)
+    result.response = await got[method](url, options)
 
     // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
     // property
@@ -77,7 +59,7 @@ async function post (url, additionalOptions = {}) {
   }
 
   if (!result.succeeded) {
-    _logFailure('POST', result, url, additionalOptions)
+    _logFailure(method.toUpperCase(), result, url, additionalOptions)
   }
 
   return result
