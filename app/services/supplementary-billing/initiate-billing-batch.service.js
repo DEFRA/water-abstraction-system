@@ -50,14 +50,17 @@ async function go (billRunRequestData) {
 function _billingBatchOptions (type, scheme, chargingModuleResult) {
   const options = {
     scheme,
-    batchType: type,
-    externalId: chargingModuleResult.response.body.billRun.id
+    batchType: type
   }
 
-  if (!chargingModuleResult.succeeded) {
-    options.status = 'error'
-    options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
+  if (chargingModuleResult.succeeded) {
+    options.externalId = chargingModuleResult.response.body.billRun.id
+
+    return options
   }
+
+  options.status = 'error'
+  options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
 
   return options
 }
