@@ -86,7 +86,7 @@ async function _importGot () {
  * we need to diagnose the problem.
  *
  * @param {string} method the type of request made, for example, 'GET', 'POST, or 'PATCH'
- * @param {Object} result the result we object generate
+ * @param {Object} result the result object we generate
  * @param {*} url the requested url
  * @param {*} additionalOptions any additional options that were passed to Got by the calling service
  */
