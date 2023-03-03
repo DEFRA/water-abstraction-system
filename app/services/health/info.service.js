@@ -80,10 +80,10 @@ async function _getAddressFacadeData () {
 }
 
 async function _getChargingModuleData () {
-  const result = await ChargingModuleRequestLib.get('/status')
+  const result = await ChargingModuleRequestLib.get('status')
 
   if (result.succeeded) {
-    return result.response.headers['x-cma-docker-tag']
+    return result.response.info.dockerTag
   }
 
   return _parseFailedRequestResult(result)

@@ -37,9 +37,9 @@ async function go (billRunRequestData) {
     throw Error(`Batch already live for region ${region}`)
   }
 
-  const chargingModuleBillRun = await ChargingModuleCreateBillRunService.go(region, 'sroc')
+  const chargingModuleResult = await ChargingModuleCreateBillRunService.go(region, 'sroc')
 
-  const billingBatchOptions = _billingBatchOptions(type, scheme, chargingModuleBillRun)
+  const billingBatchOptions = _billingBatchOptions(type, scheme, chargingModuleResult)
   const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, billingBatchOptions)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
@@ -47,17 +47,20 @@ async function go (billRunRequestData) {
   return _response(billingBatch)
 }
 
-function _billingBatchOptions (type, scheme, chargingModuleBillRun) {
+function _billingBatchOptions (type, scheme, chargingModuleResult) {
   const options = {
     scheme,
-    batchType: type,
-    externalId: chargingModuleBillRun.response.id
+    batchType: type
   }
 
-  if (!chargingModuleBillRun.succeeded) {
-    options.status = 'error'
-    options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
+  if (chargingModuleResult.succeeded) {
+    options.externalId = chargingModuleResult.response.body.billRun.id
+
+    return options
   }
+
+  options.status = 'error'
+  options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
 
   return options
 }

@@ -21,7 +21,7 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
 async function go (regionId, ruleset) {
   const region = await _getChargeRegionId(regionId)
 
-  const result = await ChargingModuleRequestLib.post('/v3/wrls/bill-runs', { region, ruleset })
+  const result = await ChargingModuleRequestLib.post('v3/wrls/bill-runs', { region, ruleset })
 
   return result
 }

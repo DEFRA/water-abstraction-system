@@ -15,6 +15,10 @@ const RequestLib = require('../../app/lib/request.lib.js')
 const ChargingModuleRequestLib = require('../../app/lib/charging-module-request.lib.js')
 
 describe('ChargingModuleRequestLib', () => {
+  const headers = {
+    'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
+    'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+  }
   const testRoute = 'TEST_ROUTE'
 
   before(async () => {
@@ -45,8 +49,9 @@ describe('ChargingModuleRequestLib', () => {
         Sinon.stub(RequestLib, 'get').resolves({
           succeeded: true,
           response: {
+            headers,
             statusCode: 200,
-            body: '{"testObject": {"test": "yes"}}'
+            body: { testObject: { test: 'yes' } }
           }
         })
 
@@ -56,7 +61,7 @@ describe('ChargingModuleRequestLib', () => {
       it('calls the Charging Module with the required options', async () => {
         const requestArgs = RequestLib.get.firstCall.args
 
-        expect(requestArgs[0]).to.endWith('/TEST_ROUTE')
+        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
         expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
@@ -67,6 +72,17 @@ describe('ChargingModuleRequestLib', () => {
       it('returns the response body as an object', async () => {
         expect(result.response.body.testObject.test).to.equal('yes')
       })
+
+      it('returns the status code', async () => {
+        expect(result.response.statusCode).to.equal(200)
+      })
+
+      it('returns the information about the running Charging Module API', async () => {
+        expect(result.response.info).to.equal({
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+        })
+      })
     })
 
     describe('when the request fails', () => {
@@ -74,9 +90,10 @@ describe('ChargingModuleRequestLib', () => {
         Sinon.stub(RequestLib, 'get').resolves({
           succeeded: false,
           response: {
+            headers,
             statusCode: 404,
             statusMessage: 'Not Found',
-            body: '{"statusCode":404,"error":"Not Found","message":"Not Found"}'
+            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
           }
         })
 
@@ -88,7 +105,18 @@ describe('ChargingModuleRequestLib', () => {
       })
 
       it('returns the error response', async () => {
-        expect(result.response.statusMessage).to.equal('Not Found')
+        expect(result.response.body.message).to.equal('Not Found')
+      })
+
+      it('returns the status code', async () => {
+        expect(result.response.statusCode).to.equal(404)
+      })
+
+      it('returns the information about the running Charging Module API', async () => {
+        expect(result.response.info).to.equal({
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+        })
       })
     })
   })
@@ -101,9 +129,9 @@ describe('ChargingModuleRequestLib', () => {
         Sinon.stub(RequestLib, 'post').resolves({
           succeeded: true,
           response: {
+            headers,
             statusCode: 200,
-            statusMessage: 'OK',
-            body: '{"testObject": {"test":"yes"}}'
+            body: { testObject: { test: 'yes' } }
           }
         })
 
@@ -113,9 +141,9 @@ describe('ChargingModuleRequestLib', () => {
       it('calls the Charging Module with the required options', async () => {
         const requestArgs = RequestLib.post.firstCall.args
 
-        expect(requestArgs[0]).to.endWith('/TEST_ROUTE')
+        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
         expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
-        expect(requestArgs[1].body).to.equal('{"test":"yes"}')
+        expect(requestArgs[1].json).to.equal({ test: 'yes' })
       })
 
       it('returns a `true` success status', async () => {
@@ -125,6 +153,17 @@ describe('ChargingModuleRequestLib', () => {
       it('returns the response body as an object', async () => {
         expect(result.response.body.testObject.test).to.equal('yes')
       })
+
+      it('returns the status code', async () => {
+        expect(result.response.statusCode).to.equal(200)
+      })
+
+      it('returns the information about the running Charging Module API', async () => {
+        expect(result.response.info).to.equal({
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+        })
+      })
     })
 
     describe('when the request fails', () => {
@@ -132,9 +171,10 @@ describe('ChargingModuleRequestLib', () => {
         Sinon.stub(RequestLib, 'post').resolves({
           succeeded: false,
           response: {
+            headers,
             statusCode: 404,
             statusMessage: 'Not Found',
-            body: '{"statusCode":404,"error":"Not Found","message":"Not Found"}'
+            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
           }
         })
 
@@ -146,7 +186,18 @@ describe('ChargingModuleRequestLib', () => {
       })
 
       it('returns the error response', async () => {
-        expect(result.response.statusMessage).to.equal('Not Found')
+        expect(result.response.body.message).to.equal('Not Found')
+      })
+
+      it('returns the status code', async () => {
+        expect(result.response.statusCode).to.equal(404)
+      })
+
+      it('returns the information about the running Charging Module API', async () => {
+        expect(result.response.info).to.equal({
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
+        })
       })
     })
   })

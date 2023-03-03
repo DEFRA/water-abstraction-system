@@ -28,9 +28,9 @@ describe('Info service', () => {
       succeeded: true,
       response: {
         statusCode: 200,
-        headers: {
-          'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
-          'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v9.99.9'
+        info: {
+          gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
+          dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
         }
       }
     },
@@ -73,7 +73,7 @@ describe('Info service', () => {
 
     chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
     chargingModuleRequestLibStub
-      .withArgs('/status')
+      .withArgs('status')
       .resolves(goodRequestResults.chargingModule)
   })
 
