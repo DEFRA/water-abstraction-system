@@ -37,7 +37,8 @@ async function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     licenceRef: '01/123',
-    regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7'
+    regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7',
+    regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
   }
 
   return {

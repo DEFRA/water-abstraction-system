@@ -11,26 +11,35 @@ const { expect } = Code
 const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
+const ChangeReasonHelper = require('../../support/helpers/water/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
+const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Thing under test
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 
 describe('Fetch Charge Versions service', () => {
-  const { regionId } = LicenceHelper.defaults()
+  const licenceDefaults = LicenceHelper.defaults()
+
   let testRecords
   let billingPeriod
+  let region
+  let regionId
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
+
+    region = await RegionHelper.add()
+    regionId = region.regionId
   })
 
   describe('when there are licences to be included in supplementary billing', () => {
     let billingChargeCategory
     let chargeElement
     let chargePurpose
+    let changeReason
 
     beforeEach(async () => {
       billingPeriod = {
@@ -38,16 +47,18 @@ describe('Fetch Charge Versions service', () => {
         endDate: new Date('2023-03-31')
       }
 
+      changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
+
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       const srocChargeVersion = await ChargeVersionHelper.add(
-        {},
-        { includeInSupplementaryBilling: 'yes' }
+        { changeReasonId: changeReason.changeReasonId },
+        { regionId, isWaterUndertaker: true, includeInSupplementaryBilling: 'yes' }
       )
 
       // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
       const alcsChargeVersion = await ChargeVersionHelper.add(
         { scheme: 'alcs' },
-        { includeInSupplementaryBilling: 'yes' }
+        { regionId, includeInSupplementaryBilling: 'yes' }
       )
 
       testRecords = [srocChargeVersion, alcsChargeVersion]
@@ -71,13 +82,37 @@ describe('Fetch Charge Versions service', () => {
       expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
     })
 
+    it('includes related licence and region', async () => {
+      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+      expect(result[0].licence.licenceRef).to.equal(licenceDefaults.licenceRef)
+      expect(result[0].licence.isWaterUndertaker).to.equal(true)
+      expect(result[0].licence.historicalAreaCode).to.equal(licenceDefaults.regions.historicalAreaCode)
+      expect(result[0].licence.regionalChargeArea).to.equal(licenceDefaults.regions.regionalChargeArea)
+      expect(result[0].licence.region.regionId).to.equal(regionId)
+      expect(result[0].licence.region.chargeRegionId).to.equal(region.chargeRegionId)
+    })
+
+    it('includes related change reason', async () => {
+      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+      expect(result[0].changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
+    })
+
     it('includes related charge elements, billing charge category and charge purposes', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       const expectedResult = {
         chargeElementId: chargeElement.chargeElementId,
+        source: chargeElement.source,
+        loss: chargeElement.loss,
+        volume: chargeElement.volume,
+        adjustments: chargeElement.adjustments,
+        additionalCharges: chargeElement.additionalCharges,
+        description: chargeElement.description,
         billingChargeCategory: {
-          reference: billingChargeCategory.reference
+          reference: billingChargeCategory.reference,
+          shortDescription: billingChargeCategory.shortDescription
         },
         chargePurposes: [{
           chargePurposeId: chargePurpose.chargePurposeId,
