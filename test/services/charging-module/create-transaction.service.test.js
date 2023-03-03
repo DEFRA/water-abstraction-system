@@ -20,10 +20,8 @@ describe('Charge module create transaction service', () => {
   })
 
   describe('when the service can create a transaction', () => {
-    const billingbatchId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
-    const transactionData = {}
-
-    let result
+    const billingBatchId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
+    const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
 
     beforeEach(async () => {
       Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
@@ -35,22 +33,26 @@ describe('Charge module create transaction service', () => {
           },
           statusCode: 200,
           body: {
-            transaction: 'DATA'
+            transaction: {
+              id: 'fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3',
+              clientId: transactionData.billingTransactionId
+            }
           }
         }
       })
-
-      result = await ChargingModuleCreateTransactionService.go(billingbatchId, transactionData)
     })
 
     it('returns a `true` success status', async () => {
+      const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
+
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the transaction in the `response`', async () => {
-      const { response } = result
+    it('returns the CM transaction ID and our ID in the `response`', async () => {
+      const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
 
-      expect(response.body.transaction).to.equal('DATA')
+      expect(result.response.body.transaction.id).to.equal('fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3')
+      expect(result.response.body.transaction.clientId).to.equal(transactionData.billingTransactionId)
     })
   })
 })
