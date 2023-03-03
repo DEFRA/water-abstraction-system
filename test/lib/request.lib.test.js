@@ -23,7 +23,7 @@ describe('RequestLib', () => {
     // RequestLib depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
   })
 
@@ -62,10 +62,20 @@ describe('RequestLib', () => {
           Nock(testDomain).get('/').reply(500, { data: 'hello world' })
         })
 
-        it('records the failure', async () => {
+        it('logs the failure', async () => {
           await RequestLib.get(testDomain)
 
-          expect(notifierStub.omfg.calledWith('GET request failed')).to.be.true()
+          const logDataArg = notifierStub.omg.args[0][1]
+
+          expect(notifierStub.omg.calledWith('GET request failed')).to.be.true()
+          expect(logDataArg.method).to.equal('GET')
+          expect(logDataArg.url).to.equal('http://example.com')
+          expect(logDataArg.additionalOptions).to.equal({})
+          expect(logDataArg.result.succeeded).to.be.false()
+          expect(logDataArg.result.response).to.equal({
+            statusCode: 500,
+            body: '{"data":"hello world"}'
+          })
         })
 
         describe('the result it returns', () => {
@@ -75,7 +85,7 @@ describe('RequestLib', () => {
             expect(result.succeeded).to.be.false()
           })
 
-          it("has a 'response' property containg the web response", async () => {
+          it("has a 'response' property containing the web response", async () => {
             const result = await RequestLib.get(testDomain)
 
             expect(result.response).to.exist()
@@ -90,10 +100,17 @@ describe('RequestLib', () => {
           Nock(testDomain).get('/').replyWithError({ code: 'ECONNRESET' })
         })
 
-        it('records the error', async () => {
+        it('logs and records the error', async () => {
           await RequestLib.get(testDomain)
 
+          const logDataArg = notifierStub.omfg.args[0][1]
+
           expect(notifierStub.omfg.calledWith('GET request errored')).to.be.true()
+          expect(logDataArg.method).to.equal('GET')
+          expect(logDataArg.url).to.equal('http://example.com')
+          expect(logDataArg.additionalOptions).to.equal({})
+          expect(logDataArg.result.succeeded).to.be.false()
+          expect(logDataArg.result.response).to.be.an.error()
         })
 
         describe('the result it returns', () => {
@@ -103,7 +120,7 @@ describe('RequestLib', () => {
             expect(result.succeeded).to.be.false()
           })
 
-          it("has a 'response' property containg the error", async () => {
+          it("has a 'response' property containing the error", async () => {
             const result = await RequestLib.get(testDomain)
 
             expect(result.response).to.exist()
@@ -137,7 +154,7 @@ describe('RequestLib', () => {
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containg the error", async () => {
+            it("has a 'response' property containing the error", async () => {
               const result = await RequestLib.get(testDomain)
 
               expect(result.response).to.exist()
@@ -165,7 +182,7 @@ describe('RequestLib', () => {
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containg the web response", async () => {
+            it("has a 'response' property containing the web response", async () => {
               const result = await RequestLib.get(testDomain)
 
               expect(result.response).to.exist()
@@ -185,7 +202,7 @@ describe('RequestLib', () => {
 
         it('adds them to the options used when making the request', async () => {
           // We tell Got to return the response as json rather than text. We can confirm the option has been applied by
-          // checking the result.reponse.body below.
+          // checking the result.response.body below.
           const options = { responseType: 'json' }
           const result = await RequestLib.get(testDomain, options)
 
@@ -240,10 +257,20 @@ describe('RequestLib', () => {
           Nock(testDomain).post('/').reply(500, { data: 'hello world' })
         })
 
-        it('records the failure', async () => {
+        it('logs the failure', async () => {
           await RequestLib.post(testDomain)
 
-          expect(notifierStub.omfg.calledWith('POST request failed')).to.be.true()
+          const logDataArg = notifierStub.omg.args[0][1]
+
+          expect(notifierStub.omg.calledWith('POST request failed')).to.be.true()
+          expect(logDataArg.method).to.equal('POST')
+          expect(logDataArg.url).to.equal('http://example.com')
+          expect(logDataArg.additionalOptions).to.equal({})
+          expect(logDataArg.result.succeeded).to.be.false()
+          expect(logDataArg.result.response).to.equal({
+            statusCode: 500,
+            body: '{"data":"hello world"}'
+          })
         })
 
         describe('the result it returns', () => {
@@ -268,10 +295,17 @@ describe('RequestLib', () => {
           Nock(testDomain).post('/').replyWithError({ code: 'ECONNRESET' })
         })
 
-        it('records the error', async () => {
+        it('logs and records the error', async () => {
           await RequestLib.post(testDomain)
 
+          const logDataArg = notifierStub.omfg.args[0][1]
+
           expect(notifierStub.omfg.calledWith('POST request errored')).to.be.true()
+          expect(logDataArg.method).to.equal('POST')
+          expect(logDataArg.url).to.equal('http://example.com')
+          expect(logDataArg.additionalOptions).to.equal({})
+          expect(logDataArg.result.succeeded).to.be.false()
+          expect(logDataArg.result.response).to.be.an.error()
         })
 
         describe('the result it returns', () => {

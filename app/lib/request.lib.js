@@ -27,36 +27,18 @@ const requestConfig = require('../../config/request.config.js')
  *
  * @param {string} url The full URL that you wish to connect to
  * @param {Object} additionalOptions Append to or replace the options passed to Got when making the request
+ *
  * @returns {Object} The result of the request; whether it succeeded and the response or error returned
  */
 async function get (url, additionalOptions = {}) {
-  const got = await _importGot()
-  const result = {
-    succeeded: false,
-    response: null
-  }
-
-  try {
-    const options = _requestOptions(additionalOptions)
-
-    result.response = await got.get(url, options)
-
-    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
-    // property
-    result.succeeded = result.response.ok
-  } catch (error) {
-    // If it's a network error, for example 'ETIMEDOUT', we'll end up here
-    result.response = error
-  }
-
-  if (!result.succeeded) {
-    _logFailure('GET', result, url, additionalOptions)
-  }
-
-  return result
+  return await _sendRequest('get', url, additionalOptions)
 }
 
 async function post (url, additionalOptions = {}) {
+  return await _sendRequest('post', url, additionalOptions)
+}
+
+async function _sendRequest (method, url, additionalOptions) {
   const got = await _importGot()
   const result = {
     succeeded: false,
@@ -66,7 +48,7 @@ async function post (url, additionalOptions = {}) {
   try {
     const options = _requestOptions(additionalOptions)
 
-    result.response = await got.post(url, options)
+    result.response = await got[method](url, options)
 
     // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
     // property
@@ -77,7 +59,7 @@ async function post (url, additionalOptions = {}) {
   }
 
   if (!result.succeeded) {
-    _logFailure('POST', result, url, additionalOptions)
+    _logFailure(method.toUpperCase(), result, url, additionalOptions)
   }
 
   return result
@@ -93,17 +75,44 @@ async function _importGot () {
   return got
 }
 
+/**
+ * Logs the failed request
+ *
+ * If the request failed because the external service returned a `4xx/5xx` response we just log the failure. We also
+ * generate our own response object to avoid outputting the full response object Got generates.
+ *
+ * If the request failed because of an error, for example a timeout, then we both log and send a notification to our
+ * Errbit instance. We also output the full response to the log as it will be the Got error containing all the info
+ * we need to diagnose the problem.
+ *
+ * @param {string} method the type of request made, for example, 'GET', 'POST, or 'PATCH'
+ * @param {Object} result the result object we generate
+ * @param {*} url the requested url
+ * @param {*} additionalOptions any additional options that were passed to Got by the calling service
+ */
 function _logFailure (method, result, url, additionalOptions) {
   const data = {
     method,
-    result,
     url,
     additionalOptions
   }
 
-  const severity = result.response instanceof Error ? 'errored' : 'failed'
+  if (result.response instanceof Error) {
+    data.result = result
+    global.GlobalNotifier.omfg(`${method} request errored`, data)
 
-  global.GlobalNotifier.omfg(`${method} request ${severity}`, data)
+    return
+  }
+
+  data.result = {
+    succeeded: result.succeeded,
+    response: {
+      statusCode: result.response.statusCode,
+      body: result.response.body
+    }
+  }
+
+  global.GlobalNotifier.omg(`${method} request failed`, data)
 }
 
 /**
