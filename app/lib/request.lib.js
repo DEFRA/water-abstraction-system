@@ -96,14 +96,26 @@ async function _importGot () {
 function _logFailure (method, result, url, additionalOptions) {
   const data = {
     method,
-    result,
     url,
     additionalOptions
   }
 
-  const severity = result.response instanceof Error ? 'errored' : 'failed'
+  if (result.response instanceof Error) {
+    data.result = result
+    global.GlobalNotifier.omfg(`${method} request errored`, data)
 
-  global.GlobalNotifier.omfg(`${method} request ${severity}`, data)
+    return
+  }
+
+  data.result = {
+    succeeded: result.succeeded,
+    response: {
+      statusCode: result.response.statusCode,
+      body: result.response.body
+    }
+  }
+
+  global.GlobalNotifier.omg(`${method} request failed`, data)
 }
 
 /**
