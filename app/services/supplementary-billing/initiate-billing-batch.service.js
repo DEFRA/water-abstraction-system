@@ -55,6 +55,7 @@ function _billingBatchOptions (type, scheme, chargingModuleResult) {
 
   if (chargingModuleResult.succeeded) {
     options.externalId = chargingModuleResult.response.body.billRun.id
+    options.billRunNumber = chargingModuleResult.response.body.billRun.billRunNumber
 
     return options
   }
