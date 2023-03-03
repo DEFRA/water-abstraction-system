@@ -49,6 +49,13 @@ describe('Initiate Billing Batch service', () => {
   })
 
   describe('when initiating a billing batch succeeds', () => {
+    const responseBody = {
+      billRun: {
+        id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
+        billRunNumber: 10004
+      }
+    }
+
     beforeEach(() => {
       Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
         succeeded: true,
@@ -58,12 +65,7 @@ describe('Initiate Billing Batch service', () => {
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
           statusCode: 200,
-          body: {
-            billRun: {
-              id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
-              billRunNumber: 10004
-            }
-          }
+          body: responseBody
         }
       })
     })
@@ -71,9 +73,10 @@ describe('Initiate Billing Batch service', () => {
     it('creates a new billing batch record', async () => {
       await InitiateBillingBatchService.go(validatedRequestData)
 
-      const count = await BillingBatchModel.query().resultSize()
+      const result = await BillingBatchModel.query().limit(1).first()
 
-      expect(count).to.equal(1)
+      expect(result.externalId).to.equal(responseBody.billRun.id)
+      expect(result.billRunNumber).to.equal(responseBody.billRun.billRunNumber)
     })
 
     it('creates a new event record', async () => {
@@ -121,7 +124,7 @@ describe('Initiate Billing Batch service', () => {
       it('creates a bill run with `error` status and error code 50', async () => {
         const result = await InitiateBillingBatchService.go(validatedRequestData)
 
-        const billingBatch = await BillingBatchModel.query().first()
+        const billingBatch = await BillingBatchModel.query().limit(1).first()
 
         expect(result.id).to.equal(billingBatch.billingBatchId)
         expect(result.region).to.equal(billingBatch.regionId)
