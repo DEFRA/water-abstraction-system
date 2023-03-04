@@ -34,6 +34,10 @@ async function get (url, additionalOptions = {}) {
   return await _sendRequest('get', url, additionalOptions)
 }
 
+async function patch (url, additionalOptions = {}) {
+  return await _sendRequest('patch', url, additionalOptions)
+}
+
 async function post (url, additionalOptions = {}) {
   return await _sendRequest('post', url, additionalOptions)
 }
@@ -162,5 +166,6 @@ function _requestOptions (additionalOptions) {
 
 module.exports = {
   get,
+  patch,
   post
 }
