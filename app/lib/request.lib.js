@@ -147,9 +147,9 @@ function _requestOptions (additionalOptions) {
     retry: {
       // We ensure that the only network errors Got retries are timeout errors
       errorCodes: ['ETIMEDOUT'],
-      // By default, Got does not retry POST requests. As we only retry timeouts there is no risk in retrying POST
-      // requests. So, we set methods to be Got's defaults plus 'POST'
-      methods: ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
+      // By default, Got does not retry PATCH and POST requests. As we only retry timeouts there is no risk in retrying
+      // our PATCH and POST requests. So, we set methods to be Got's defaults plus 'PATCH' and 'POST'
+      methods: ['GET', 'PATCH', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
       // We set statusCodes as an empty array to ensure that 4xx, 5xx etc. errors are not retried
       statusCodes: []
     },
