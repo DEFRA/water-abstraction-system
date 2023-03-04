@@ -8,29 +8,21 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
-
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
 
 // Thing under test
-const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
+const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
 
-describe('Charge module create bill run service', () => {
-  let testRegion
-
-  beforeEach(async () => {
-    await DatabaseHelper.clean()
-    testRegion = await RegionHelper.add()
-  })
+describe('Charge module create transaction service', () => {
+  const billingBatchId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
+  const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the service can create a bill run', () => {
+  describe('when the service can create a transaction', () => {
     beforeEach(async () => {
       Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
         succeeded: true,
@@ -41,9 +33,9 @@ describe('Charge module create bill run service', () => {
           },
           statusCode: 200,
           body: {
-            billRun: {
-              id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
-              billRunNumber: 10004
+            transaction: {
+              id: 'fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3',
+              clientId: transactionData.billingTransactionId
             }
           }
         }
@@ -51,20 +43,20 @@ describe('Charge module create bill run service', () => {
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+      const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the bill run id and number in the `response`', async () => {
-      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+    it('returns the CM transaction ID and our ID in the `response`', async () => {
+      const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
 
-      expect(result.response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
-      expect(result.response.body.billRun.billRunNumber).to.equal(10004)
+      expect(result.response.body.transaction.id).to.equal('fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3')
+      expect(result.response.body.transaction.clientId).to.equal(transactionData.billingTransactionId)
     })
   })
 
-  describe('when the service cannot create a bill run', () => {
+  describe('when the service cannot create a transaction', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
@@ -86,13 +78,13 @@ describe('Charge module create bill run service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -109,13 +101,13 @@ describe('Charge module create bill run service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()
