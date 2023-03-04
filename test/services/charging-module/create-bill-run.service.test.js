@@ -31,8 +31,6 @@ describe('Charge module create bill run service', () => {
   })
 
   describe('when the service can create a bill run', () => {
-    let result
-
     beforeEach(async () => {
       Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
         succeeded: true,
@@ -50,19 +48,19 @@ describe('Charge module create bill run service', () => {
           }
         }
       })
-
-      result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
     })
 
     it('returns a `true` success status', async () => {
+      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the bill run id and number in the `response`', async () => {
-      const { response } = result
+      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
 
-      expect(response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
-      expect(response.body.billRun.billRunNumber).to.equal(10004)
+      expect(result.response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
+      expect(result.response.body.billRun.billRunNumber).to.equal(10004)
     })
   })
 
