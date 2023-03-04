@@ -21,6 +21,7 @@ const config = {
       password: process.env.CHARGING_MODULE_TOKEN_PASSWORD
     }
   },
+  legacyAuthToken: process.env.LEGACY_AUTH_TOKEN,
   serviceForeground: {
     url: process.env.SERVICE_FOREGROUND_URL
   },

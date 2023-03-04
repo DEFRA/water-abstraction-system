@@ -12,6 +12,7 @@ const exec = util.promisify(ChildProcess.exec)
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const RequestLib = require('../../lib/request.lib.js')
+const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
 const servicesConfig = require('../../../config/services.config.js')
 
@@ -103,27 +104,27 @@ function _getImportJobsData () {
 }
 
 async function _getAppData () {
-  const healthInfoPath = '/health/info'
+  const healthInfoPath = 'health/info'
+
   const services = [
-    { name: 'Service - foreground', url: new URL(healthInfoPath, servicesConfig.serviceForeground.url) },
-    { name: 'Service - background', url: new URL(healthInfoPath, servicesConfig.serviceBackground.url) },
-    { name: 'Reporting', url: new URL(healthInfoPath, servicesConfig.reporting.url) },
-    { name: 'Import', url: new URL(healthInfoPath, servicesConfig.import.url) },
-    { name: 'Tactical CRM', url: new URL(healthInfoPath, servicesConfig.tacticalCrm.url) },
-    { name: 'External UI', url: new URL(healthInfoPath, servicesConfig.externalUi.url) },
-    { name: 'Internal UI', url: new URL(healthInfoPath, servicesConfig.internalUi.url) },
-    { name: 'Tactical IDM', url: new URL(healthInfoPath, servicesConfig.tacticalIdm.url) },
-    { name: 'Permit repository', url: new URL(healthInfoPath, servicesConfig.permitRepository.url) },
-    { name: 'Returns', url: new URL(healthInfoPath, servicesConfig.returns.url) }
+    { name: 'Service - foreground', serviceName: 'water' },
+    { name: 'Service - background', serviceName: 'background' },
+    { name: 'Reporting', serviceName: 'reporting' },
+    { name: 'Import', serviceName: 'import' },
+    { name: 'Tactical CRM', serviceName: 'crm' },
+    { name: 'External UI', serviceName: 'external' },
+    { name: 'Internal UI', serviceName: 'internal' },
+    { name: 'Tactical IDM', serviceName: 'idm' },
+    { name: 'Permit repository', serviceName: 'permits' },
+    { name: 'Returns', serviceName: 'returns' }
   ]
 
   for (const service of services) {
-    const result = await RequestLib.get(service.url.href)
+    const result = await LegacyRequestLib.get(service.serviceName, healthInfoPath, false)
 
     if (result.succeeded) {
-      const data = JSON.parse(result.response.body)
-      service.version = data.version
-      service.commit = data.commit
+      service.version = result.response.body.version
+      service.commit = result.response.body.commit
       service.jobs = service.name === 'Import' ? _getImportJobsData() : []
     } else {
       service.version = _parseFailedRequestResult(result)

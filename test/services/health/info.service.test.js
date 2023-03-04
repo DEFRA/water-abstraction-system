@@ -14,6 +14,7 @@ const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 const RequestLib = require('../../../app/lib/request.lib.js')
 
 // Thing under test
@@ -34,44 +35,29 @@ describe('Info service', () => {
         }
       }
     },
-    app: { succeeded: true, response: { statusCode: 200, body: '{ "version": "9.0.99", "commit": "99d0e8c" }' } }
+    app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
   let chargingModuleRequestLibStub
+  let legacyRequestLibStub
   let requestLibStub
 
   beforeEach(() => {
+    chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
+    legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'get')
     requestLibStub = Sinon.stub(RequestLib, 'get')
+
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    requestLibStub
-      .withArgs(`${servicesConfig.serviceBackground.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.reporting.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.import.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.tacticalCrm.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.externalUi.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.internalUi.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.tacticalIdm.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.permitRepository.url}/health/info`)
-      .resolves(goodRequestResults.app)
-    requestLibStub
-      .withArgs(`${servicesConfig.returns.url}/health/info`)
-      .resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('background', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('reporting', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('import', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('crm', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('external', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('internal', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('idm', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('permits', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestLibStub.withArgs('returns', 'health/info', false).resolves(goodRequestResults.app)
 
-    chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
     chargingModuleRequestLibStub
       .withArgs('status')
       .resolves(goodRequestResults.chargingModule)
@@ -87,9 +73,7 @@ describe('Info service', () => {
       requestLibStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      requestLibStub
-        .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
-        .resolves(goodRequestResults.app)
+      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the module under test.
@@ -131,9 +115,7 @@ describe('Info service', () => {
       requestLibStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      requestLibStub
-        .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
-        .resolves(goodRequestResults.app)
+      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -226,9 +208,7 @@ describe('Info service', () => {
         requestLibStub
           .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
           .resolves(badResult)
-        requestLibStub
-          .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
-          .resolves(badResult)
+        legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -246,14 +226,12 @@ describe('Info service', () => {
 
     describe('returns a 5xx response', () => {
       beforeEach(async () => {
-        const badResult = { succeeded: false, response: { statusCode: 500, body: 'Kaboom' } }
+        const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
         requestLibStub
           .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
           .resolves(badResult)
-        requestLibStub
-          .withArgs(`${servicesConfig.serviceForeground.url}/health/info`)
-          .resolves(badResult)
+        legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
