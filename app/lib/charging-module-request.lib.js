@@ -24,9 +24,9 @@ async function get (path) {
 }
 
 /**
- * Sends a PATCH request to the Charging Module for the provided route
+ * Sends a PATCH request to the Charging Module for the provided path
  *
- * @param {string} path The route to send the request to (do not include the starting /)
+ * @param {string} path The path to send the request to (do not include the starting /)
  *
  * @returns {Object} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
@@ -39,7 +39,7 @@ async function patch (path) {
 }
 
 /**
- * Sends a POST request to the Charging Module for the provided route
+ * Sends a POST request to the Charging Module for the provided path
  *
  * @param {string} path The path to send the request to (do not include the starting /)
  * @param {Object} [body] The body of the request
@@ -55,7 +55,7 @@ async function post (path, body = {}) {
 }
 
 /**
- * Sends a request to the Charging Module to the provided using the provided RequestLib method
+ * Sends a request to the Charging Module using the provided RequestLib method
  *
  * @param {string} path The path that you wish to connect to (do not include the starting /)
  * @param {Object} method An instance of a RequestLib method which will be used to send the request
