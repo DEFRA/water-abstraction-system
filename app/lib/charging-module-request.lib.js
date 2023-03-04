@@ -24,6 +24,21 @@ async function get (path) {
 }
 
 /**
+ * Sends a PATCH request to the Charging Module for the provided route
+ *
+ * @param {string} path The route to send the request to (do not include the starting /)
+ *
+ * @returns {Object} result An object representing the result of the request
+ * @returns {boolean} result.succeeded Whether the request was successful
+ * @returns {Object} result.response The Charging Module response if successful or the error response if not
+ */
+async function patch (path) {
+  const result = await _sendRequest(path, RequestLib.patch)
+
+  return _parseResult(result)
+}
+
+/**
  * Sends a POST request to the Charging Module for the provided route
  *
  * @param {string} path The path to send the request to (do not include the starting /)
@@ -113,5 +128,6 @@ function _parseResult (result) {
 
 module.exports = {
   get,
+  patch,
   post
 }
