@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
-describe('Base presenter', () => {
+describe.only('Base presenter', () => {
   describe('#formatDate()', () => {
     it('correctly formats dates', async () => {
       // We check an array of dates, one for each month, to ensure that every month is formatted correctly
@@ -43,6 +43,15 @@ describe('Base presenter', () => {
         '12-NOV-2021',
         '12-DEC-2021'
       ])
+    })
+  })
+
+  describe('#leftPadZeroes()', () => {
+    it('correctly pads numbers', async () => {
+      const number = 123
+      const result = BasePresenter.leftPadZeroes(number, 7)
+
+      expect(result).to.equal('0000123')
     })
   })
 })
