@@ -9,7 +9,7 @@ const { randomUUID } = require('crypto')
 
 const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
 const ChargingModuleGenerateService = require('..//charging-module/generate-bill-run.service.js')
-const ChargeModuleTransactionRequestPresenter = require('../../presenters/supplementary-billing/charge-module-transaction-request.presenter.js')
+const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
 const CreateBillingInvoiceService = require('./create-billing-invoice.service.js')
 const CreateBillingInvoiceLicenceService = require('./create-billing-invoice-licence.service.js')
 const CreateBillingTransactionService = require('./create-billing-transaction.service.js')
@@ -38,6 +38,7 @@ async function go (billingBatch, billingPeriod) {
   // This is why we are only passing through the first billing period; we know there is only one!
   const chargeVersions = await FetchChargeVersionsService.go(billingBatch.region, billingPeriod)
 
+  // TODO: Handle an empty billing invoice
   for (const chargeVersion of chargeVersions) {
     const billingInvoice = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
     const billingInvoiceLicence = await CreateBillingInvoiceLicenceService.go(billingInvoice, chargeVersion.licence)
@@ -131,7 +132,7 @@ async function _processTransactionLine (
   // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
   transaction.billingTransactionId = randomUUID({ disableEntropyCache: true })
 
-  const chargingModuleRequest = ChargeModuleTransactionRequestPresenter.go(
+  const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
     transaction,
     billingPeriod,
     invoiceAccountNumber,
