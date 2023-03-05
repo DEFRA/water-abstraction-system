@@ -36,8 +36,23 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
+    adjustmentFactor: 1,
+    aggregateFactor: 1,
+    authorisedDays: 365,
+    authorisedQuantity: 11,
+    billableDays: 365,
+    billableQuantity: 11,
     billingInvoiceLicenceId: '7190937e-e176-4d50-ae4f-c00c5e76938a',
-    description: 'River Beult at Boughton Monchelsea'
+    chargeCategoryCode: '4.5.6',
+    chargeCategoryDescription: 'Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model',
+    chargeType: 'standard',
+    description: 'Water abstraction charge: Agriculture other than spray irrigation at East Rudham',
+    isCredit: false,
+    loss: 'medium',
+    season: 'all year',
+    scheme: 'sroc',
+    source: 'non-tidal',
+    volume: 11
   }
 
   return {
