@@ -18,8 +18,10 @@ const dbConfig = require('../knexfile.application')[environment]
 // https://github.com/knex/knex/issues/387#issuecomment-51554522
 // https://stackoverflow.com/a/39176670/6117745
 const pg = require('pg')
-// The magic number 20 comes from `SELECT oid FROM pg_type WHERE typname = 'int8';` and is unlikely to change.
-pg.types.setTypeParser(20, 'text', parseInt)
+
+pg.types.setTypeParser(pg.types.builtins.INT8, (value) => {
+  return parseInt(value)
+})
 
 pg.types.setTypeParser(pg.types.builtins.NUMERIC, (value) => {
   return parseFloat(value)
