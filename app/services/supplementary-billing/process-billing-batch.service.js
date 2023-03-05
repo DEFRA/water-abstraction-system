@@ -50,11 +50,12 @@ async function go (billingBatch, billingPeriod) {
       billingInvoice.invoiceAccountNumber,
       billingInvoiceLicence.billingInvoiceLicenceId
     )
-    // await UpdateBillingBatchStatusService.go(billingBatchId, 'ready') // TODO check this is the correct status
   }
 
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 
+  // NOTE: Retaining this as a candidate for updating the bill run status if the process errors or the bill run is empty
+  // await UpdateBillingBatchStatusService.go(billingData.id, 'ready')
   await LegacyRequestLib.post('water', `billing/batches/${billingBatchId}/refresh`)
 }
 
