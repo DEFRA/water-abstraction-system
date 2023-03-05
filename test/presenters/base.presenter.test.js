@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
-describe.only('Base presenter', () => {
+describe('Base presenter', () => {
   describe('#formatDate()', () => {
     it('correctly formats dates', async () => {
       // We check an array of dates, one for each month, to ensure that every month is formatted correctly
