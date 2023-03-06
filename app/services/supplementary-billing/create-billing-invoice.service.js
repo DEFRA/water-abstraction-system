@@ -19,8 +19,8 @@ const FetchInvoiceAccountService = require('./fetch-invoice-account.service.js')
  *
  * @returns {Object} The newly-created billing invoice record
  */
-// TODO: REFACTOR THIS TO UPSERT INSTEAD OF RETRIEVE AND RETURN EXISTING
 async function go (chargeVersion, billingPeriod, billingBatchId) {
+  // TODO: REFACTOR THIS TO UPSERT INSTEAD OF RETRIEVE AND RETURN EXISTING
   const retrievedBillingInvoice = await BillingInvoiceModel.query()
     .where('invoiceAccountId', chargeVersion.invoiceAccountId)
     .where('billingBatchId', billingBatchId)
