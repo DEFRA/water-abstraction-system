@@ -29,15 +29,26 @@ describe('Create Billing Invoice service', () => {
     chargeVersion = { invoiceAccountId: invoiceAccount.invoiceAccountId }
   })
 
-  it('returns the new billing invoice instance containing the correct data', async () => {
-    const result = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
+  describe('when no existing billing invoice exists', () => {
+    it('returns the new billing invoice instance containing the correct data', async () => {
+      const result = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
 
-    expect(result).to.be.an.instanceOf(BillingInvoiceModel)
+      expect(result).to.be.an.instanceOf(BillingInvoiceModel)
 
-    expect(result.invoiceAccountId).to.equal(invoiceAccount.invoiceAccountId)
-    expect(result.address).to.equal({})
-    expect(result.invoiceAccountNumber).to.equal(invoiceAccount.invoiceAccountNumber)
-    expect(result.billingBatchId).to.equal(billingBatchId)
-    expect(result.financialYearEnding).to.equal(2023)
+      expect(result.invoiceAccountId).to.equal(invoiceAccount.invoiceAccountId)
+      expect(result.address).to.equal({})
+      expect(result.invoiceAccountNumber).to.equal(invoiceAccount.invoiceAccountNumber)
+      expect(result.billingBatchId).to.equal(billingBatchId)
+      expect(result.financialYearEnding).to.equal(2023)
+    })
+  })
+
+  describe('when an existing billing invoice exists', () => {
+    it('returns an existing billing invoice instance containing the correct data', async () => {
+      const result1 = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
+      const result2 = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
+
+      expect(result1.billingInvoiceId).to.equal(result2.billingInvoiceId)
+    })
   })
 })
