@@ -129,7 +129,7 @@ async function _processTransactionLine (
 
   // No point carrying on if there is nothing to bill
   if (transaction.billableDays === 0) {
-    return
+    return transaction
   }
 
   // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
