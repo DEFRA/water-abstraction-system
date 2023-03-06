@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Transforms provided data into the format required for an sroc transaction line
+ * Determines what the charge period is for a charge version in a given billing period
  * @module DetermineChargePeriodService
  */
 
