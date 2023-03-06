@@ -12,6 +12,7 @@ const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
 const CreateBillingBatchPresenter = require('../../presenters/supplementary-billing/create-billing-batch.presenter.js')
 const CreateBillingBatchService = require('./create-billing-batch.service.js')
 const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
+const ProcessBillingBatchService = require('./process-billing-batch.service.js')
 
 /**
  * Initiate a new billing batch
@@ -43,6 +44,8 @@ async function go (billRunRequestData) {
   const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, billingBatchOptions)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
+
+  ProcessBillingBatchService.go(billingBatch, billingPeriod)
 
   return _response(billingBatch)
 }
