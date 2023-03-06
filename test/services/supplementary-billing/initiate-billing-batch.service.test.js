@@ -18,6 +18,7 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
 const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('../../../app/services/supplementary-billing/check-live-bill-run.service.js')
+const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
 
 // Thing under test
 const InitiateBillingBatchService = require('../../../app//services/supplementary-billing/initiate-billing-batch.service.js')
@@ -42,6 +43,10 @@ describe('Initiate Billing Batch service', () => {
 
     Sinon.stub(BillingPeriodService, 'go').returns([currentBillingPeriod])
     Sinon.stub(CheckLiveBillRunService, 'go').resolves(false)
+
+    // The InitiateBillingBatch service does not await the call to the ProcessBillingBatchService. It is intended to
+    // kick of the process and then move on. This is why we simply stub it in the tests.
+    Sinon.stub(ProcessBillingBatchService, 'go')
   })
 
   afterEach(() => {
