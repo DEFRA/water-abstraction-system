@@ -18,12 +18,6 @@ describe('Determine charge period service', () => {
   }
   let chargeVersion
 
-  // 1st charge version - CV
-  // 2nd financial year - FY
-
-  // neither overlaps
-  //   - CV has no end date
-
   describe('charge version starts inside the financial period', () => {
     beforeEach(() => {
       chargeVersion = {
