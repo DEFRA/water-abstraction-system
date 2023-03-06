@@ -8,6 +8,7 @@
 
 const AbstractionBillingPeriodService = require('./abstraction-billing-period.service.js')
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
+const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 
 /**
  * Takes a charge element, charge version and financial year and returns an object representing an sroc transaction
@@ -27,7 +28,7 @@ const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.
 function go (chargeElement, chargeVersion, financialYearEnding, options) {
   const optionsData = _optionsDefaults(options)
 
-  const chargePeriod = _determineChargePeriod(chargeVersion, financialYearEnding)
+  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
 
   return {
     chargeElementId: chargeElement.chargeElementId,
@@ -75,31 +76,6 @@ function _optionsDefaults (options) {
   return {
     ...defaults,
     ...options
-  }
-}
-
-/**
- * Returns a charge period, which is an object comprising `startDate` and `endDate`
- *
- * The charge period is determined as the overlap between the charge version's start and end dates, and the financial
- * year. So the charge period's start date is the later of the two's start dates, and the charge period end date is the
- * earlier of the two's end dates.
- *
- * Note that charge versions may not have an end date; in this case, we simply use the financial year end date.
- */
-function _determineChargePeriod (chargeVersion, financialYearEnding) {
-  const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
-  const chargeVersionStartDate = chargeVersion.startDate
-  const latestStartDateTimestamp = Math.max(financialYearStartDate, chargeVersionStartDate)
-
-  const financialYearEndDate = new Date(financialYearEnding, 2, 31)
-  // If the charge version has no end date then use the financial year end date instead
-  const chargeVersionEndDate = chargeVersion.endDate || financialYearEndDate
-  const earliestEndDateTimestamp = Math.min(financialYearEndDate, chargeVersionEndDate)
-
-  return {
-    startDate: new Date(latestStartDateTimestamp),
-    endDate: new Date(earliestEndDateTimestamp)
   }
 }
 
