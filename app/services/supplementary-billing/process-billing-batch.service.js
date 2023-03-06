@@ -7,6 +7,7 @@
 
 const { randomUUID } = require('crypto')
 
+const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
 const ChargingModuleGenerateService = require('..//charging-module/generate-bill-run.service.js')
 const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
@@ -17,7 +18,6 @@ const DetermineMinimumChargeService = require('./determine-minimum-charge.servic
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FormatSrocTransactionLineService = require('./format-sroc-transaction-line.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
-const UpdateBillingBatchStatusService = require('./update-billing-batch-status.service.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -30,13 +30,13 @@ const UpdateBillingBatchStatusService = require('./update-billing-batch-status.s
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
 
-  await UpdateBillingBatchStatusService.go(billingBatchId, 'processing')
+  await _updateStatus(billingBatchId, 'processing')
 
   // We know in the future we will be calculating multiple billing periods and so will have to iterate through each,
   // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
   // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
   // This is why we are only passing through the first billing period; we know there is only one!
-  const chargeVersions = await FetchChargeVersionsService.go(billingBatch.region, billingPeriod)
+  const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
   // TODO: Handle an empty billing invoice
   for (const chargeVersion of chargeVersions) {
@@ -57,6 +57,12 @@ async function go (billingBatch, billingPeriod) {
   // NOTE: Retaining this as a candidate for updating the bill run status if the process errors or the bill run is empty
   // await UpdateBillingBatchStatusService.go(billingData.id, 'ready')
   await LegacyRequestLib.post('water', `billing/batches/${billingBatchId}/refresh`)
+}
+
+async function _updateStatus (billingBatchId, status) {
+  await BillingBatchModel.query()
+    .findById(billingBatchId)
+    .patch({ status })
 }
 
 async function _processTransactionLines (cmBillRunId, billingPeriod, chargeVersion, invoiceAccountNumber, billingInvoiceLicenceId) {
@@ -81,7 +87,7 @@ async function _processTransactionLines (cmBillRunId, billingPeriod, chargeVersi
         options
       )
 
-      if (!transaction.billableDays === 0) {
+      if (transaction.billableDays === 0) {
         return
       }
 
