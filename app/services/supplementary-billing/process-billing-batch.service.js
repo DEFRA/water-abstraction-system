@@ -2,7 +2,7 @@
 
 /**
  * Processes a new billing batch
- * @module InitiateBillingBatchService
+ * @module ProcessBillingBatchService
  */
 
 const { randomUUID } = require('crypto')
