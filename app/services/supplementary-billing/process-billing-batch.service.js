@@ -16,6 +16,7 @@ const DetermineChargePeriodService = require('./determine-charge-period.service.
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
+const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
 /**
@@ -28,6 +29,7 @@ const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
  */
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
+  const financialYearEnding = billingPeriod.endDate.getFullYear()
 
   await _updateStatus(billingBatchId, 'processing')
 
@@ -37,10 +39,22 @@ async function go (billingBatch, billingPeriod) {
   // This is why we are only passing through the first billing period; we know there is only one!
   const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
-  // TODO: Handle an empty billing invoice
+  const generatedBillingInvoices = []
   for (const chargeVersion of chargeVersions) {
-    const billingInvoice = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
-    const billingInvoiceLicence = await CreateBillingInvoiceLicenceService.go(billingInvoice, chargeVersion.licence)
+    const { chargeElements, licence } = chargeVersion
+
+    const billingInvoice = await GenerateBillingInvoiceService.go(
+      chargeVersion.invoiceAccountId,
+      billingBatchId,
+      financialYearEnding,
+      generatedBillingInvoices
+    )
+    const billingInvoiceLicence = {
+      billingInvoiceLicenceId: randomUUID({ disableEntropyCache: true }),
+      billingInvoiceId: billingInvoice.billingInvoiceId,
+      licenceRef: licence.licenceRef,
+      licenceId: licence.licenceId
+    }
 
     if (chargeVersion.chargeElements) {
       const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
