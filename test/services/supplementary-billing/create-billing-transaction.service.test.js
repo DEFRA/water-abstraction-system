@@ -4,125 +4,30 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const BillingTransactionModel = require('../../../app/models/water/billing-transaction.model.js')
+
 // Thing under test
-const CreateTransactionsService = require('../../../app/services/supplementary-billing/create-transactions.service.js')
+const CreateBillingTransactionService = require('../../../app/services/supplementary-billing/create-billing-transaction.service.js')
 
-describe('Create Transactions service', () => {
-  const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+describe('Create billing transaction service', () => {
+  const transactionData = {
+    billingInvoiceLicenceId: '7190937e-e176-4d50-ae4f-c00c5e76938a',
+    description: 'River Beult at Boughton Monchelsea'
   }
-  let chargeElements
 
-  describe('when there is one chargeElement', () => {
-    describe('containing one chargePurpose', () => {
-      beforeEach(() => {
-        chargeElements = [
-          {
-            billingChargeCategory: { reference: '1.2.3' },
-            chargePurposes: [
-              {
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 4,
-                abstractionPeriodEndDay: 30,
-                abstractionPeriodEndMonth: 9
-              }
-            ]
-          }
-        ]
-      })
+  describe('when an object containing the transaction data is provided', () => {
+    it('returns the new billing transaction instance', async () => {
+      const result = await CreateBillingTransactionService.go(transactionData)
 
-      it('returns a correctly calculated array of transaction lines', () => {
-        const result = CreateTransactionsService.go(billingPeriod, chargeElements)
+      expect(result).to.be.an.instanceOf(BillingTransactionModel)
 
-        expect(result).to.be.an.array()
-
-        expect(result[0].reference).to.equal(chargeElements[0].billingChargeCategory.reference)
-        expect(result[0].billableDays).to.equal(183)
-      })
-    })
-
-    describe('containing two chargePurposes', () => {
-      beforeEach(() => {
-        chargeElements = [
-          {
-            billingChargeCategory: { reference: '1.2.3' },
-            chargePurposes: [
-              {
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 4,
-                abstractionPeriodEndDay: 30,
-                abstractionPeriodEndMonth: 9
-              },
-              {
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 10,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3
-              }
-            ]
-          }
-        ]
-      })
-
-      it('returns a correctly calculated array of transaction lines', () => {
-        const result = CreateTransactionsService.go(billingPeriod, chargeElements)
-
-        expect(result).to.be.an.array()
-
-        expect(result[0].reference).to.equal(chargeElements[0].billingChargeCategory.reference)
-        expect(result[0].billableDays).to.equal(365)
-      })
-    })
-  })
-
-  describe('when there are multiple chargeElements', () => {
-    beforeEach(() => {
-      chargeElements = [
-        {
-          billingChargeCategory: { reference: '1.2.3' },
-          chargePurposes: [
-            {
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 30,
-              abstractionPeriodEndMonth: 9
-            },
-            {
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 10,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3
-            }
-          ]
-        },
-        {
-          billingChargeCategory: { reference: '4.5.6' },
-          chargePurposes: [
-            {
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 28,
-              abstractionPeriodEndMonth: 2
-            }
-          ]
-        }
-      ]
-    })
-
-    it('returns a correctly calculated array of transaction lines', () => {
-      const result = CreateTransactionsService.go(billingPeriod, chargeElements)
-
-      expect(result).to.be.an.array()
-
-      expect(result[0].reference).to.equal(chargeElements[0].billingChargeCategory.reference)
-      expect(result[0].billableDays).to.equal(365)
-
-      expect(result[1].reference).to.equal(chargeElements[1].billingChargeCategory.reference)
-      expect(result[1].billableDays).to.equal(334)
+      expect(result.billingTransactionId).to.exist()
+      expect(result.billingInvoiceLicenceId).to.equal(transactionData.billingInvoiceLicenceId)
+      expect(result.description).to.equal(transactionData.description)
     })
   })
 })
