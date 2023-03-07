@@ -174,16 +174,16 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
 }
 
 function _calculateDays (abstractionOverlapPeriod) {
-  const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
-  let days = 0
-
-  if (abstractionOverlapPeriod.startDate) {
-    // difference in msecs
-    const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
-    days = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
+  if (!abstractionOverlapPeriod) {
+    return 0
   }
 
-  return days
+  const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
+
+  // difference in msecs
+  const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
+
+  return Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
 }
 
 function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
@@ -209,7 +209,7 @@ function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod)
     }
   }
 
-  return {}
+  return null
 }
 
 function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
