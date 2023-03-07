@@ -4,13 +4,6 @@ const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.
 
 function go (chargePeriod, billingPeriod, chargeElement) {
   const { chargePurposes } = chargeElement
-  const result = {
-    // authorisedDays is the number of overlapping days of the billing period and the charge element's abstraction
-    // periods
-    authorisedDays: 0,
-    // billableDays is the number of overlapping days of the charge period and the charge element's abstraction periods
-    billableDays: 0
-  }
 
   const authorisedAbstractionPeriods = []
   const billableAbstractionPeriods = []
@@ -20,28 +13,10 @@ function go (chargePeriod, billingPeriod, chargeElement) {
     billableAbstractionPeriods.push(..._abstractionPeriods(chargePeriod, chargePurpose))
   }
 
-  const consolidatedAuthorisedPeriods = ConsolidateDateRangesService.go(authorisedAbstractionPeriods)
-  const consolidatedBillablePeriods = ConsolidateDateRangesService.go(billableAbstractionPeriods)
-
-  for (const authorisedPeriod of consolidatedAuthorisedPeriods) {
-    _calculateOverlapPeriod(billingPeriod, authorisedPeriod)
-    _calculateDays(authorisedPeriod)
+  return {
+    authorisedDays: _consolidateAndCalculate(billingPeriod, authorisedAbstractionPeriods),
+    billableDays: _consolidateAndCalculate(chargePeriod, billableAbstractionPeriods)
   }
-
-  for (const billablePeriod of consolidatedBillablePeriods) {
-    _calculateOverlapPeriod(chargePeriod, billablePeriod)
-    _calculateDays(billablePeriod)
-  }
-
-  result.authorisedDays = consolidatedAuthorisedPeriods.reduce((accumulator, period) => {
-    return accumulator + period.days
-  }, 0)
-
-  result.billableDays = consolidatedBillablePeriods.reduce((accumulator, period) => {
-    return accumulator + period.days
-  }, 0)
-
-  return result
 }
 
 function _abstractionPeriods (referencePeriod, chargePurpose) {
@@ -119,6 +94,19 @@ function _calculateOverlapPeriod (referencePeriod, abstractionPeriod) {
     abstractionPeriod.overlapStartDate = overlapStartDate
     abstractionPeriod.overlapEndDate = overlapEndDate
   }
+}
+
+function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
+  const consolidatedAbstractionPeriods = ConsolidateDateRangesService.go(abstractionsPeriods)
+
+  for (const abstractionPeriod of consolidatedAbstractionPeriods) {
+    _calculateOverlapPeriod(referencePeriod, abstractionPeriod)
+    _calculateDays(abstractionPeriod)
+  }
+
+  return consolidatedAbstractionPeriods.reduce((accumulator, abstractionPeriod) => {
+    return accumulator + abstractionPeriod.days
+  }, 0)
 }
 
 function _isPeriodValid (referencePeriod, abstractionPeriod) {
