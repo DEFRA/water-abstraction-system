@@ -173,48 +173,55 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
   return abstractionPeriods
 }
 
-function _calculateDays (abstractionPeriod) {
+function _calculateDays (abstractionOverlapPeriod) {
   const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
-  if (abstractionPeriod.overlapStartDate) {
-    const difference = abstractionPeriod.overlapEndDate.getTime() - abstractionPeriod.overlapStartDate.getTime() // difference in msecs
-    const days = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
-    abstractionPeriod.days = days
+  let days = 0
+
+  if (abstractionOverlapPeriod.startDate) {
+    // difference in msecs
+    const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
+    days = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
   }
+
+  return days
 }
 
-function _calculateOverlapPeriod (referencePeriod, abstractionPeriod) {
-  let overlapStartDate
-  let overlapEndDate
+function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
+  let startDate
+  let endDate
 
   if (abstractionPeriod.startDate < referencePeriod.startDate) {
-    overlapStartDate = referencePeriod.startDate
+    startDate = referencePeriod.startDate
   } else {
-    overlapStartDate = abstractionPeriod.startDate
+    startDate = abstractionPeriod.startDate
   }
 
   if (abstractionPeriod.endDate > referencePeriod.endDate) {
-    overlapEndDate = referencePeriod.endDate
+    endDate = referencePeriod.endDate
   } else {
-    overlapEndDate = abstractionPeriod.endDate
+    endDate = abstractionPeriod.endDate
   }
 
-  if (overlapStartDate <= overlapEndDate) {
-    abstractionPeriod.overlapStartDate = overlapStartDate
-    abstractionPeriod.overlapEndDate = overlapEndDate
+  if (startDate <= endDate) {
+    return {
+      startDate,
+      endDate
+    }
   }
+
+  return {}
 }
 
 function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
   const consolidatedAbstractionPeriods = ConsolidateDateRangesService.go(abstractionsPeriods)
 
+  let days = 0
   for (const abstractionPeriod of consolidatedAbstractionPeriods) {
-    _calculateOverlapPeriod(referencePeriod, abstractionPeriod)
-    _calculateDays(abstractionPeriod)
+    const abstractionOverlapPeriod = _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod)
+    days += _calculateDays(abstractionOverlapPeriod)
   }
 
-  return consolidatedAbstractionPeriods.reduce((accumulator, abstractionPeriod) => {
-    return accumulator + abstractionPeriod.days
-  }, 0)
+  return days
 }
 
 /**
