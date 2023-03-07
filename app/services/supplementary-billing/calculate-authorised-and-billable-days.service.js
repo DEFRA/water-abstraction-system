@@ -24,12 +24,12 @@ function go (chargePeriod, billingPeriod, chargeElement) {
   const consolidatedBillablePeriods = ConsolidateDateRangesService.go(billableAbstractionPeriods)
 
   for (const authorisedPeriod of consolidatedAuthorisedPeriods) {
-    _calculateBillablePeriod(billingPeriod, authorisedPeriod)
+    _calculateOverlapPeriod(billingPeriod, authorisedPeriod)
     _calculateDays(authorisedPeriod)
   }
 
   for (const billablePeriod of consolidatedBillablePeriods) {
-    _calculateBillablePeriod(chargePeriod, billablePeriod)
+    _calculateOverlapPeriod(chargePeriod, billablePeriod)
     _calculateDays(billablePeriod)
   }
 
@@ -92,32 +92,32 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
 
 function _calculateDays (abstractionPeriod) {
   const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
-  if (abstractionPeriod.billableStartDate) {
-    const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
+  if (abstractionPeriod.overlapStartDate) {
+    const difference = abstractionPeriod.overlapEndDate.getTime() - abstractionPeriod.overlapStartDate.getTime() // difference in msecs
     const days = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
     abstractionPeriod.days = days
   }
 }
 
-function _calculateBillablePeriod (referencePeriod, abstractionPeriod) {
-  let billableStartDate
-  let billableEndDate
+function _calculateOverlapPeriod (referencePeriod, abstractionPeriod) {
+  let overlapStartDate
+  let overlapEndDate
 
   if (abstractionPeriod.startDate < referencePeriod.startDate) {
-    billableStartDate = referencePeriod.startDate
+    overlapStartDate = referencePeriod.startDate
   } else {
-    billableStartDate = abstractionPeriod.startDate
+    overlapStartDate = abstractionPeriod.startDate
   }
 
   if (abstractionPeriod.endDate > referencePeriod.endDate) {
-    billableEndDate = referencePeriod.endDate
+    overlapEndDate = referencePeriod.endDate
   } else {
-    billableEndDate = abstractionPeriod.endDate
+    overlapEndDate = abstractionPeriod.endDate
   }
 
-  if (billableStartDate <= billableEndDate) {
-    abstractionPeriod.billableStartDate = billableStartDate
-    abstractionPeriod.billableEndDate = billableEndDate
+  if (overlapStartDate <= overlapEndDate) {
+    abstractionPeriod.overlapStartDate = overlapStartDate
+    abstractionPeriod.overlapEndDate = overlapEndDate
   }
 }
 
