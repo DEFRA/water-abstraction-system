@@ -173,6 +173,22 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
   return abstractionPeriods
 }
 
+/**
+ * Calculates the numbers of days in an abstraction overlap period (inclusive)
+ *
+ * We uses JavaScript's
+ * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime|getTime()}
+ * function to give us the start and end time in milliseconds. We then take the difference and divide by how many
+ * milliseconds are in a day. This gives us the number of days.
+ *
+ * Finally, we add 1 to the result to make it inclusive of the last day. This is because our dates are set at
+ * midnight which means `endDate.getTime()` is the time at `endDate 00:00:00`.
+ *
+ * @param {Object} abstractionOverlapPeriod a start and end date representing the part of the abstraction period that
+ * overlaps the reference period
+ *
+ * @returns {number} the length of the period in days (inclusive)
+ */
 function _calculateDays (abstractionOverlapPeriod) {
   if (!abstractionOverlapPeriod) {
     return 0
@@ -183,6 +199,8 @@ function _calculateDays (abstractionOverlapPeriod) {
   // difference in msecs
   const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
 
+  // ceil() always rounds up, even if the result is 1.1 (rounds to 2). We add 1 to make the calculation inclusive of
+  // the last day
   return Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
 }
 
