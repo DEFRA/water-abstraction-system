@@ -17,6 +17,17 @@ const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-l
  * @returns {Object} The newly-created billing invoice licence record
  */
 async function go (billingInvoice, licence) {
+  // TODO: REFACTOR THIS TO UPSERT INSTEAD OF RETRIEVE AND RETURN EXISTING
+  const retrievedBillingInvoiceLicence = await BillingInvoiceLicenceModel.query()
+    .where('billingInvoiceId', billingInvoice.billingInvoiceId)
+    .where('licenceId', licence.licenceId)
+    .limit(1)
+    .first()
+
+  if (retrievedBillingInvoiceLicence) {
+    return retrievedBillingInvoiceLicence
+  }
+
   const billingInvoiceLicence = await BillingInvoiceLicenceModel.query()
     .insert({
       billingInvoiceId: billingInvoice.billingInvoiceId,
