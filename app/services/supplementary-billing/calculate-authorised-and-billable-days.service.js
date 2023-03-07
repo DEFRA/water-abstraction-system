@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Calculates authorised and billable days for a given charge element
+ * @module CalculateAuthorisedAndBillableDaysService
+ */
+
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
 
 function go (chargePeriod, billingPeriod, chargeElement) {
