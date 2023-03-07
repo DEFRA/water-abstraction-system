@@ -24,12 +24,12 @@ function go (chargePeriod, billingPeriod, chargeElement) {
   const consolidatedBillablePeriods = ConsolidateDateRangesService.go(billableAbstractionPeriods)
 
   for (const authorisedPeriod of consolidatedAuthorisedPeriods) {
-    _calculateBillablePeriod(authorisedPeriod, billingPeriod)
+    _calculateBillablePeriod(billingPeriod, authorisedPeriod)
     _calculateBillableDays(authorisedPeriod)
   }
 
   for (const billablePeriod of consolidatedBillablePeriods) {
-    _calculateBillablePeriod(billablePeriod, chargePeriod)
+    _calculateBillablePeriod(chargePeriod, billablePeriod)
     _calculateBillableDays(billablePeriod)
   }
 
@@ -44,9 +44,9 @@ function go (chargePeriod, billingPeriod, chargeElement) {
   return result
 }
 
-function _abstractionPeriods (period, chargePurpose) {
-  const periodStartYear = period.startDate.getFullYear()
-  const periodEndYear = period.endDate.getFullYear()
+function _abstractionPeriods (referencePeriod, chargePurpose) {
+  const periodStartYear = referencePeriod.startDate.getFullYear()
+  const periodEndYear = referencePeriod.endDate.getFullYear()
   const {
     abstractionPeriodStartDay: startDay,
     abstractionPeriodStartMonth: startMonth,
@@ -79,11 +79,11 @@ function _abstractionPeriods (period, chargePurpose) {
   }
 
   const abstractionPeriods = []
-  if (_isPeriodValid(period, previousPeriod)) {
+  if (_isPeriodValid(referencePeriod, previousPeriod)) {
     abstractionPeriods.push(previousPeriod)
   }
 
-  if (_isPeriodValid(period, firstPeriod)) {
+  if (_isPeriodValid(referencePeriod, firstPeriod)) {
     abstractionPeriods.push(firstPeriod)
   }
 
@@ -99,7 +99,7 @@ function _calculateBillableDays (abstractionPeriod) {
   }
 }
 
-function _calculateBillablePeriod (abstractionPeriod, billingPeriod) {
+function _calculateBillablePeriod (billingPeriod, abstractionPeriod) {
   let billableStartDate
   let billableEndDate
 
@@ -121,10 +121,10 @@ function _calculateBillablePeriod (abstractionPeriod, billingPeriod) {
   }
 }
 
-function _isPeriodValid (billingPeriod, abstractionPeriod) {
-  if (abstractionPeriod.startDate > billingPeriod.endDate) {
+function _isPeriodValid (referencePeriod, abstractionPeriod) {
+  if (abstractionPeriod.startDate > referencePeriod.endDate) {
     return false
-  } else if (abstractionPeriod.endDate < billingPeriod.startDate) {
+  } else if (abstractionPeriod.endDate < referencePeriod.startDate) {
     return false
   } else {
     return true
