@@ -5,23 +5,25 @@ const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.
 function go (chargePeriod, billingPeriod, chargeElement) {
   const { chargePurposes } = chargeElement
   const result = {
+    // authorisedDays is the number of overlapping days of the billing period and the charge element's abstraction
+    // periods
     authorisedDays: 0,
+    // billableDays is the number of overlapping days of the charge period and the charge element's abstraction periods
     billableDays: 0
   }
 
   const authorisedAbstractionPeriods = []
   const billableAbstractionPeriods = []
+
   for (const chargePurpose of chargePurposes) {
     authorisedAbstractionPeriods.push(..._abstractionPeriods(billingPeriod, chargePurpose))
     billableAbstractionPeriods.push(..._abstractionPeriods(chargePeriod, chargePurpose))
   }
 
   const consolidatedAuthorisedPeriods = ConsolidateDateRangesService.go(authorisedAbstractionPeriods)
-
   const consolidatedBillablePeriods = ConsolidateDateRangesService.go(billableAbstractionPeriods)
 
   for (const authorisedPeriod of consolidatedAuthorisedPeriods) {
-    console.log('🚀 ~ file: all-things.service.js:24 ~ go ~ authorisedPeriod:', authorisedPeriod)
     _calculateBillablePeriod(authorisedPeriod, billingPeriod)
     _calculateBillableDays(authorisedPeriod)
   }

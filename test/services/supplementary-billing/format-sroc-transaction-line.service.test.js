@@ -14,11 +14,8 @@ const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
-const DetermineChargePeriodService = require('../../../app/services/supplementary-billing/determine-charge-period.service.js')
-
 // Thing under test
 const FormatSrocTransactionLineService = require('../../../app/services/supplementary-billing/format-sroc-transaction-line.service.js')
-const AllThingsService = require('../../../app/services/supplementary-billing/all-things.service.js')
 
 describe('Format Sroc Transaction Line service', () => {
   let billingChargeCategoryId
@@ -72,17 +69,15 @@ describe('Format Sroc Transaction Line service', () => {
         .withGraphFetched('billingChargeCategory')
         .withGraphFetched('chargePurposes')
 
-      // const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023)
-
-      const chargePeriod = DetermineChargePeriodService.go(brokenChargeVersion, 2023)
       const billingPeriod = {
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31')
       }
-      const otherResult = AllThingsService.go(chargePeriod, billingPeriod, eagerChargeElement)
-      console.log('🚀 ~ file: format-sroc-transaction-line.service.test.js:75 ~ it ~ otherResult:', otherResult)
 
-      expect(otherResult.authorisedDays).to.be.greaterThan(0)
+      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod)
+
+      expect(result.authorisedDays).to.equal(365)
+      expect(result.billableDays).to.equal(121)
     })
   })
 
