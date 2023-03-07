@@ -90,18 +90,13 @@ function _abstractionPeriods (period, chargePurpose) {
   return abstractionPeriods
 }
 
-function _isPeriodValid (abstractionPeriod, billingPeriod) {
-  if (abstractionPeriod.startDate > billingPeriod.endDate) {
-    return false
-  } else if (abstractionPeriod.endDate < billingPeriod.startDate) {
-    return false
-  } else {
-    return true
+function _calculateBillableDays (abstractionPeriod) {
+  const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
+  if (abstractionPeriod.billableStartDate) {
+    const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
+    const billableDays = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
+    abstractionPeriod.billableDays = billableDays
   }
-}
-
-function _subtractOneYear (date) {
-  return new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
 }
 
 function _calculateBillablePeriod (abstractionPeriod, billingPeriod) {
@@ -126,13 +121,18 @@ function _calculateBillablePeriod (abstractionPeriod, billingPeriod) {
   }
 }
 
-function _calculateBillableDays (abstractionPeriod) {
-  const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
-  if (abstractionPeriod.billableStartDate) {
-    const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
-    const billableDays = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
-    abstractionPeriod.billableDays = billableDays
+function _isPeriodValid (abstractionPeriod, billingPeriod) {
+  if (abstractionPeriod.startDate > billingPeriod.endDate) {
+    return false
+  } else if (abstractionPeriod.endDate < billingPeriod.startDate) {
+    return false
+  } else {
+    return true
   }
+}
+
+function _subtractOneYear (date) {
+  return new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
 }
 
 module.exports = {
