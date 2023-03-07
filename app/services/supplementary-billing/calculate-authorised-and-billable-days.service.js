@@ -79,11 +79,11 @@ function _abstractionPeriods (period, chargePurpose) {
   }
 
   const abstractionPeriods = []
-  if (_isPeriodValid(previousPeriod, period)) {
+  if (_isPeriodValid(period, previousPeriod)) {
     abstractionPeriods.push(previousPeriod)
   }
 
-  if (_isPeriodValid(firstPeriod, period)) {
+  if (_isPeriodValid(period, firstPeriod)) {
     abstractionPeriods.push(firstPeriod)
   }
 
@@ -121,7 +121,7 @@ function _calculateBillablePeriod (abstractionPeriod, billingPeriod) {
   }
 }
 
-function _isPeriodValid (abstractionPeriod, billingPeriod) {
+function _isPeriodValid (billingPeriod, abstractionPeriod) {
   if (abstractionPeriod.startDate > billingPeriod.endDate) {
     return false
   } else if (abstractionPeriod.endDate < billingPeriod.startDate) {
