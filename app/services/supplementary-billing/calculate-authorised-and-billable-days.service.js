@@ -99,18 +99,18 @@ function _calculateBillableDays (abstractionPeriod) {
   }
 }
 
-function _calculateBillablePeriod (billingPeriod, abstractionPeriod) {
+function _calculateBillablePeriod (referencePeriod, abstractionPeriod) {
   let billableStartDate
   let billableEndDate
 
-  if (abstractionPeriod.startDate < billingPeriod.startDate) {
-    billableStartDate = billingPeriod.startDate
+  if (abstractionPeriod.startDate < referencePeriod.startDate) {
+    billableStartDate = referencePeriod.startDate
   } else {
     billableStartDate = abstractionPeriod.startDate
   }
 
-  if (abstractionPeriod.endDate > billingPeriod.endDate) {
-    billableEndDate = billingPeriod.endDate
+  if (abstractionPeriod.endDate > referencePeriod.endDate) {
+    billableEndDate = referencePeriod.endDate
   } else {
     billableEndDate = abstractionPeriod.endDate
   }
