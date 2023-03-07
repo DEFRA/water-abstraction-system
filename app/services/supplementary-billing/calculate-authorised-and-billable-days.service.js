@@ -25,20 +25,20 @@ function go (chargePeriod, billingPeriod, chargeElement) {
 
   for (const authorisedPeriod of consolidatedAuthorisedPeriods) {
     _calculateBillablePeriod(billingPeriod, authorisedPeriod)
-    _calculateBillableDays(authorisedPeriod)
+    _calculateDays(authorisedPeriod)
   }
 
   for (const billablePeriod of consolidatedBillablePeriods) {
     _calculateBillablePeriod(chargePeriod, billablePeriod)
-    _calculateBillableDays(billablePeriod)
+    _calculateDays(billablePeriod)
   }
 
   result.authorisedDays = consolidatedAuthorisedPeriods.reduce((accumulator, period) => {
-    return accumulator + period.billableDays
+    return accumulator + period.days
   }, 0)
 
   result.billableDays = consolidatedBillablePeriods.reduce((accumulator, period) => {
-    return accumulator + period.billableDays
+    return accumulator + period.days
   }, 0)
 
   return result
@@ -90,12 +90,12 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
   return abstractionPeriods
 }
 
-function _calculateBillableDays (abstractionPeriod) {
+function _calculateDays (abstractionPeriod) {
   const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
   if (abstractionPeriod.billableStartDate) {
     const difference = abstractionPeriod.billableEndDate.getTime() - abstractionPeriod.billableStartDate.getTime() // difference in msecs
-    const billableDays = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
-    abstractionPeriod.billableDays = billableDays
+    const days = Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
+    abstractionPeriod.days = days
   }
 }
 
