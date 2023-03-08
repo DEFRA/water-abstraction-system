@@ -120,10 +120,8 @@ async function _processTransactionLine (
   invoiceAccountNumber,
   options
 ) {
-  const financialYearEnding = billingPeriod.endDate.getFullYear()
-
   const transaction = {
-    ...FormatSrocTransactionLineService.go(chargeElement, chargeVersion, financialYearEnding, options),
+    ...FormatSrocTransactionLineService.go(chargeElement, chargeVersion, billingPeriod, options),
     billingInvoiceLicenceId
   }
 
