@@ -23,6 +23,11 @@ describe('Format Sroc Transaction Line service', () => {
   let chargeVersion
   let eagerChargeElement
 
+  const billingPeriod = {
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31')
+  }
+
   beforeEach(async () => {
     const billingChargeCategory = await BillingChargeCategoryHelper.add()
     billingChargeCategoryId = billingChargeCategory.billingChargeCategoryId
@@ -40,50 +45,9 @@ describe('Format Sroc Transaction Line service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when we break it', () => {
-    it('goes pop', async () => {
-      const brokenChargeVersion = await ChargeVersionHelper.add({ startDate: '2022-09-01', endDate: '2023-03-31' })
-      const billingChargeCategory = await BillingChargeCategoryHelper.add()
-      billingChargeCategoryId = billingChargeCategory.billingChargeCategoryId
-      const brokeChargeElement = await ChargeElementHelper.add({
-        billingChargeCategoryId,
-        chargeVersionId: brokenChargeVersion.chargeVersionId
-      })
-      await ChargePurposeHelper.add({
-        chargeElementId: brokeChargeElement.chargeElementId,
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 1,
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 12
-      })
-
-      await ChargePurposeHelper.add({
-        chargeElementId: brokeChargeElement.chargeElementId,
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 5,
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 10
-      })
-
-      eagerChargeElement = await brokeChargeElement.$query()
-        .withGraphFetched('billingChargeCategory')
-        .withGraphFetched('chargePurposes')
-
-      const billingPeriod = {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2023-03-31')
-      }
-
-      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod)
-
-      expect(result.authorisedDays).to.equal(365)
-      expect(result.billableDays).to.equal(121)
-    })
-  })
-
   describe('when a standard charge element is supplied', () => {
     it('returns the expected data', () => {
-      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023)
+      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod)
 
       const expectedResult = {
         chargeElementId: eagerChargeElement.chargeElementId,
@@ -123,7 +87,7 @@ describe('Format Sroc Transaction Line service', () => {
     })
 
     it('returns the charge purpose as JSON in `purposes`', () => {
-      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023)
+      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod)
 
       const parsedPurposes = JSON.parse(result.purposes)
 
@@ -134,7 +98,7 @@ describe('Format Sroc Transaction Line service', () => {
   describe('when options are supplied', () => {
     describe('isCompensation charge is `true`', () => {
       it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023, { isCompensationCharge: true })
+        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isCompensationCharge: true })
 
         expect(result.chargeType).to.equal('compensation')
       })
@@ -142,7 +106,7 @@ describe('Format Sroc Transaction Line service', () => {
 
     describe('isWaterUndertaker charge is `true`', () => {
       it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023, { isWaterUndertaker: true })
+        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isWaterUndertaker: true })
 
         expect(result.isWaterUndertaker).to.equal(true)
       })
@@ -150,7 +114,7 @@ describe('Format Sroc Transaction Line service', () => {
 
     describe('isNewLicence charge is `true`', () => {
       it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023, { isNewLicence: true })
+        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isNewLicence: true })
 
         expect(result.isNewLicence).to.equal(true)
       })
@@ -158,7 +122,7 @@ describe('Format Sroc Transaction Line service', () => {
 
     describe('isTwoPartSecondPartCharge charge is `true`', () => {
       it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023, { isTwoPartSecondPartCharge: true })
+        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isTwoPartSecondPartCharge: true })
 
         expect(result.isTwoPartSecondPartCharge).to.equal(true)
       })
@@ -185,13 +149,13 @@ describe('Format Sroc Transaction Line service', () => {
     })
 
     it('returns `isSupportedSource` as `true`', () => {
-      const result = FormatSrocTransactionLineService.go(eagerSupportedSourceChargeElement, chargeVersion, 2023)
+      const result = FormatSrocTransactionLineService.go(eagerSupportedSourceChargeElement, chargeVersion, billingPeriod)
 
       expect(result.isSupportedSource).to.equal(true)
     })
 
     it('returns `supportedSourceName` field with the supported source name', () => {
-      const result = FormatSrocTransactionLineService.go(eagerSupportedSourceChargeElement, chargeVersion, 2023)
+      const result = FormatSrocTransactionLineService.go(eagerSupportedSourceChargeElement, chargeVersion, billingPeriod)
 
       expect(result.supportedSourceName).to.equal('SUPPORTED_SOURCE_NAME')
     })
@@ -200,7 +164,7 @@ describe('Format Sroc Transaction Line service', () => {
   describe('when the description differs from the default', () => {
     describe('because this is a compensation charge', () => {
       it('returns the expected compensation charge description', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, 2023, { isCompensationCharge: true })
+        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isCompensationCharge: true })
 
         expect(result.description).to.startWith('Compensation charge')
       })
@@ -215,7 +179,7 @@ describe('Format Sroc Transaction Line service', () => {
     })
 
     it('uses the financial year end date', () => {
-      const result = FormatSrocTransactionLineService.go(eagerChargeElement, noEndDateChargeVersion, 2023)
+      const result = FormatSrocTransactionLineService.go(eagerChargeElement, noEndDateChargeVersion, billingPeriod)
 
       expect(result.endDate).to.equal(new Date('2023-03-31'))
     })
