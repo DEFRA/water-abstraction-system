@@ -162,7 +162,9 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
   }
 
   // Filter out any periods which don't overlap our reference period to return the ones which do
-  return [previousPeriod, firstPeriod, nextPeriod].filter((period) => _isPeriodValid(referencePeriod, period))
+  return [previousPeriod, firstPeriod, nextPeriod].filter((period) => {
+    return _isPeriodValid(referencePeriod, period)
+  })
 }
 
 /**
