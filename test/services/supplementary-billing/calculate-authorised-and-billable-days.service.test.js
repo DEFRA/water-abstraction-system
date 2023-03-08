@@ -24,7 +24,7 @@ const CalculateAuthorisedAndBillableDaysService = require('../../../app/services
 // - Out-year: If the abstraction period end month is _before_ the start month, for example 01-Nov to 31-Mar, then we
 //             assign the reference period's end year to the end date, and start year to the start date.
 
-describe.only('Calculate Authorised and Billable days service', () => {
+describe('Calculate Authorised and Billable days service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
