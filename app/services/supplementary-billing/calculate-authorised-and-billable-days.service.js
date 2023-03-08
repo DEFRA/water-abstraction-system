@@ -77,55 +77,38 @@ function go (chargePeriod, billingPeriod, chargeElement) {
 /**
  * Calculate from a charge purpose's abstraction data the relevant abstraction periods
  *
- * Before we can calculate the days and whether a period should be considered, we first have to assign a year to the
- * charge purpose's start and end values, for example, 1 Apr to 31 Oct.
+ * Before we can calculate the days and whether a period should be considered, we have to assign actual years to the
+ * charge purpose's abstraction start and end values.
  *
  * ## In-year
  *
- * If the abstraction period end month is _after_ the start month, for example 01-Jan to 31-May, then we assign the
- * reference period's end year to both the abstraction start and end dates.
- *
- * - **Reference period** 01-Apr-2022 to 31-Mar-2023
- * - **Abstraction period** 01-Jan to 31-May
- *
- * **Result:** Abstraction period is 01-Jan-2023 to 31-May-2023
- *
- * We then create a previous period by deducting 1 year from the one we calculated, for example, 01-Jan-2022 to
- * 31-May-2022. The result is 2 abstraction periods
- *
- * - 01-Jan-2023 to 31-May-2023
- * - 01-Jan-2022 to 31-May-2022
+ * An "in-year" abstraction period is one that starts and ends in the same year. It can be identified by the start day/
+ * month being before the end day/month. For example, 10-Oct to 31-Dec.
  *
  * ## Out-year
  *
- * If the abstraction period end month is _before_ the start month, for example 01-Nov to 31-Mar, then we assign the
- * reference period's end year to the end date, and start year to the start date.
+ * An "out-year" abstraction period is one that starts in one year and ends in the next. It can be identified by the
+ * start day/month being *after* the end day/month. For example, 01-Nov to 31-Mar.
  *
- * - **Reference period** 01-Apr-2022 to 31-Mar-2023
- * - **Abstraction period** 01-Nov to 31-Mar
+ * To arrive at actual dates for an abstraction period, we start by creating dates based on the reference period's start
+ * year. So if the reference period starts in 2022, our first period for the above examples would be:
  *
- * **Result:** Abstraction period is 01-Nov-2022 to 31-Mar-2023
+ * - **In-year abstraction period** 10-Oct-2022 to 31-Dec-2022
+ * - **Out-year abstraction period** 01-Nov-2022 to 31-Mar-2023
  *
- * We then create a previous period by deducting 1 year from the one we calculated, for example, 01-Nov-2022 to
- * 31-Mar-2023. The result is 2 abstraction periods
+ * To ensure we cover all possible abstraction periods which the reference period could overlap, we then create
+ * additional abstraction periods for the year before and the year after our first period:
  *
- * - 01-Nov-2022 to 31-Mar-2023
- * - 01-Nov-2021 to 31-Mar-2022
+ * - **In-year abstraction periods** 10-Oct-2021 to 31-Dec-2021 and 10-Oct-2023 to 31-Oct-2023
+ * - **Out-year abstraction periods** 01-Nov-2021 to 31-Mar-2022 and 01-Nov-2023 to 31-Mar-2024
  *
- * ## Months are equal
- *
- * We also handle the edge case of the months being equal. If this is the case we still treat the abstraction period as
- * in-year and out-year, only we use the days in the comparison instead of the months.
- *
- * ---
- *
- * The abstraction periods that are created are then checked to see if they fall within the reference period and added
- * to the `abstractionPeriods` array which then gets returned.
+ * Finally, we filter out any of these abstraction periods which don't overlap with the reference period, and return the
+ * results.
  *
  * @param {Object} referencePeriod either the billing period or charge period
  * @param {module:ChargePurposeModel} chargePurpose holds the abstraction start and end day and month values
  *
- * @returns {Object[]} An array of 1 or 2 abstraction periods each containing a start and end date
+ * @returns {Object[]} An array of abstraction periods each containing a start and end date
  */
 function _abstractionPeriods (referencePeriod, chargePurpose) {
   const periodStartYear = referencePeriod.startDate.getFullYear()
@@ -135,27 +118,26 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
     abstractionPeriodEndDay: endDay,
     abstractionPeriodEndMonth: endMonth
   } = chargePurpose
-  const firstPeriod = {}
 
   // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
   // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
-  firstPeriod.startDate = new Date(periodStartYear, startMonth - 1, startDay)
-  firstPeriod.endDate = new Date(periodStartYear, endMonth - 1, endDay)
+  const firstPeriod = {
+    startDate: new Date(periodStartYear, startMonth - 1, startDay),
+    endDate: new Date(periodStartYear, endMonth - 1, endDay)
+  }
 
-  // If an abstraction period wraps around the end of the year (ie. its end date is before its start date) then we need
-  // to add 1 to the year to correct it. eg. For an abstraction period 31/8 - 31/3, we would have our period starting
-  // (for example) 31/8/2022 and ending 31/3/2022. So we change the end date to 31/3/2023 to ensure it "wraps"
+  // Determine if this is an out-year abstraction period by checking whether the end date is before the start date. If
+  // it is then adjust the end date to be in the next year.
   if (firstPeriod.endDate < firstPeriod.startDate) {
     firstPeriod.endDate = _addOneYear(firstPeriod.endDate)
   }
 
-  // Create periods for the previous year and the following year, covering all possible years periods that our reference
-  // period could overlap
+  // Create periods for the previous year and the following year, covering all possible abstraction periods that our
+  // reference period could overlap
   const previousPeriod = {
     startDate: _subtractOneYear(firstPeriod.startDate),
     endDate: _subtractOneYear(firstPeriod.endDate)
   }
-
   const nextPeriod = {
     startDate: _addOneYear(firstPeriod.startDate),
     endDate: _addOneYear(firstPeriod.endDate)
