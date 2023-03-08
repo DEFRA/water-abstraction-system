@@ -182,8 +182,10 @@ function _calculateDays (abstractionOverlapPeriod) {
  * Before we can work out either the authorised or billable days, we first need to work out what part of the
  * abstraction period overlaps.
  *
- * So, for example, the abstraction period has been calculated as 01-Jan-2022 to 30-JUN-2022 and our reference is the
- * billing period. Then the overlap period is 01-APR-2022 to 30-JUN-2022.
+ * The simplest way to look at this is that the overlapping period is the latest start date and the earliest end date.
+ *
+ * So, for example, the abstraction period has been calculated as 01-JAN-2022 to 30-JUN-2022 and our reference is the
+ * billing period (ie. 31-MAR-2022 to 01-APR-2023). Then the overlap period is 01-APR-2022 to 30-JUN-2022.
  *
  * Other scenarios we have to handle are
  *
@@ -197,24 +199,12 @@ function _calculateDays (abstractionOverlapPeriod) {
  * the reference period
  */
 function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
-  let startDate
-  let endDate
-
-  if (abstractionPeriod.startDate < referencePeriod.startDate) {
-    startDate = referencePeriod.startDate
-  } else {
-    startDate = abstractionPeriod.startDate
-  }
-
-  if (abstractionPeriod.endDate > referencePeriod.endDate) {
-    endDate = referencePeriod.endDate
-  } else {
-    endDate = abstractionPeriod.endDate
-  }
+  const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, referencePeriod.startDate)
+  const earliestEndDateTimestamp = Math.min(abstractionPeriod.endDate, referencePeriod.endDate)
 
   return {
-    startDate,
-    endDate
+    startDate: new Date(latestStartDateTimestamp),
+    endDate: new Date(earliestEndDateTimestamp)
   }
 }
 
