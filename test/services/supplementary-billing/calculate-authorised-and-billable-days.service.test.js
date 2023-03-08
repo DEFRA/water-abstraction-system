@@ -231,7 +231,7 @@ describe('Calculate Authorised and Billable days service', () => {
           }
         })
 
-        it('returns 182 for authorised days and 59 for billable days', () => {
+        it('returns 182 for authorised days and 0 for billable days', () => {
           const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
 
           expect(result.authorisedDays).to.equal(182)
