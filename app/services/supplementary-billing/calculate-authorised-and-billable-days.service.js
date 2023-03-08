@@ -149,6 +149,8 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
     firstPeriod.endDate = _addOneYear(firstPeriod.endDate)
   }
 
+  // Create periods for the previous year and the following year, covering all possible years periods that our reference
+  // period could overlap
   const previousPeriod = {
     startDate: _subtractOneYear(firstPeriod.startDate),
     endDate: _subtractOneYear(firstPeriod.endDate)
@@ -159,20 +161,8 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
     endDate: _addOneYear(firstPeriod.endDate)
   }
 
-  const abstractionPeriods = []
-  if (_isPeriodValid(referencePeriod, previousPeriod)) {
-    abstractionPeriods.push(previousPeriod)
-  }
-
-  if (_isPeriodValid(referencePeriod, firstPeriod)) {
-    abstractionPeriods.push(firstPeriod)
-  }
-
-  if (_isPeriodValid(referencePeriod, nextPeriod)) {
-    abstractionPeriods.push(nextPeriod)
-  }
-
-  return abstractionPeriods
+  // Filter out any periods which don't overlap our reference period to return the ones which do
+  return [previousPeriod, firstPeriod, nextPeriod].filter((period) => _isPeriodValid(referencePeriod, period))
 }
 
 /**
