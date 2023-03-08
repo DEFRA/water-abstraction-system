@@ -235,13 +235,15 @@ function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
  * @returns {Boolean} true if the abstraction period intersects the reference period
  */
 function _isPeriodValid (referencePeriod, abstractionPeriod) {
-  if (abstractionPeriod.startDate > referencePeriod.endDate) {
+  // If one period starts after the other ends then there is no intersection
+  if (
+    abstractionPeriod.startDate > referencePeriod.endDate ||
+    referencePeriod.startDate > abstractionPeriod.endDate
+  ) {
     return false
-  } else if (abstractionPeriod.endDate < referencePeriod.startDate) {
-    return false
-  } else {
-    return true
   }
+
+  return true
 }
 
 function _addOneYear (date) {
