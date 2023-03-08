@@ -184,10 +184,6 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
  * @returns {number} the length of the period in days (inclusive)
  */
 function _calculateDays (abstractionOverlapPeriod) {
-  // if (!abstractionOverlapPeriod) {
-  //   return 0
-  // }
-
   const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
 
   // difference in msecs
