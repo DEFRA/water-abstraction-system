@@ -129,7 +129,6 @@ function go (chargePeriod, billingPeriod, chargeElement) {
  */
 function _abstractionPeriods (referencePeriod, chargePurpose) {
   const periodStartYear = referencePeriod.startDate.getFullYear()
-  const periodEndYear = referencePeriod.endDate.getFullYear()
   const {
     abstractionPeriodStartDay: startDay,
     abstractionPeriodStartMonth: startMonth,
@@ -140,29 +139,26 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
 
   // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
   // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
-  if (endMonth === startMonth) {
-    if (endDay >= startDay) {
-      firstPeriod.startDate = new Date(periodEndYear, startMonth - 1, startDay)
-      firstPeriod.endDate = new Date(periodEndYear, endMonth - 1, endDay)
-    } else {
-      firstPeriod.startDate = new Date(periodStartYear, startMonth - 1, startDay)
-      firstPeriod.endDate = new Date(periodEndYear, endMonth - 1, endDay)
-    }
-  } else if (endMonth >= startMonth) {
-    firstPeriod.startDate = new Date(periodEndYear, startMonth - 1, startDay)
-    firstPeriod.endDate = new Date(periodEndYear, endMonth - 1, endDay)
-  } else {
-    firstPeriod.startDate = new Date(periodStartYear, startMonth - 1, startDay)
-    firstPeriod.endDate = new Date(periodEndYear, endMonth - 1, endDay)
+  firstPeriod.startDate = new Date(periodStartYear, startMonth - 1, startDay)
+  firstPeriod.endDate = new Date(periodStartYear, endMonth - 1, endDay)
+
+  // If an abstraction period wraps around the end of the year (ie. its end date is before its start date) then we need
+  // to add 1 to the year to correct it. eg. For an abstraction period 31/8 - 31/3, we would have our period starting
+  // (for example) 31/8/2022 and ending 31/3/2022. So we change the end date to 31/3/2023 to ensure it "wraps"
+  if (firstPeriod.endDate < firstPeriod.startDate) {
+    firstPeriod.endDate = _addOneYear(firstPeriod.endDate)
   }
 
   const previousPeriod = {
     startDate: _subtractOneYear(firstPeriod.startDate),
     endDate: _subtractOneYear(firstPeriod.endDate)
   }
-console.log(firstPeriod)
-console.log('==================================')
-console.log(previousPeriod)
+
+  const nextPeriod = {
+    startDate: _addOneYear(firstPeriod.startDate),
+    endDate: _addOneYear(firstPeriod.endDate)
+  }
+
   const abstractionPeriods = []
   if (_isPeriodValid(referencePeriod, previousPeriod)) {
     abstractionPeriods.push(previousPeriod)
@@ -170,6 +166,10 @@ console.log(previousPeriod)
 
   if (_isPeriodValid(referencePeriod, firstPeriod)) {
     abstractionPeriods.push(firstPeriod)
+  }
+
+  if (_isPeriodValid(referencePeriod, nextPeriod)) {
+    abstractionPeriods.push(nextPeriod)
   }
 
   return abstractionPeriods
@@ -282,6 +282,10 @@ function _isPeriodValid (referencePeriod, abstractionPeriod) {
   } else {
     return true
   }
+}
+
+function _addOneYear (date) {
+  return new Date(date.getFullYear() + 1, date.getMonth(), date.getDate())
 }
 
 function _subtractOneYear (date) {
