@@ -1,0 +1,179 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { expect } = Code
+
+// Test helpers
+const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
+const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
+
+// Thing under test
+const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/supplementary-billing/calculate-authorised-and-billable-days.service.js')
+
+// NOTE: You might find it helpful to refresh your understanding of abstraction periods and what the service is trying
+// to fathom when referencing them to the billing and charge periods. See the documentation in the service. Also, a
+// a reminder of what in-year and out-year means.
+//
+// - In-year: If the abstraction period end month is _after_ the start month, for example 01-Jan to 31-May, then we
+//            assign the reference period's end year to both the abstraction start and end dates.
+// - Out-year: If the abstraction period end month is _before_ the start month, for example 01-Nov to 31-Mar, then we
+//             assign the reference period's end year to the end date, and start year to the start date.
+
+describe.only('Calculate Authorised and Billable days service', () => {
+  const billingPeriod = {
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31')
+  }
+  let chargePeriod
+  let chargeElement
+
+  beforeEach(async () => {
+    chargeElement = await ChargeElementHelper.add()
+  })
+
+  afterEach(async () => {
+    await DatabaseHelper.clean()
+  })
+
+  describe('when there is a single abstraction period (charge purpose)', () => {
+    describe('and the abstraction period is 01-JAN to 31-DEC (in-year)', () => {
+      beforeEach(async () => {
+        const chargePurpose = await ChargePurposeHelper.add({
+          chargeElementId: chargeElement.chargeElementId,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 1,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 12
+        })
+        chargeElement.chargePurposes = [chargePurpose]
+      })
+
+      describe('and the charge period is 01-NOV-2022 to 31-DEC-2022', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2022-06-30')
+          }
+        })
+
+        it('returns 91 for billable days and 365 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(365)
+          expect(result.billableDays).to.equal(91)
+        })
+      })
+
+      describe('and the charge period is 01-SEP-2022 to 31-MAR-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-09-01'),
+            endDate: new Date('2023-03-31')
+          }
+        })
+
+        it('returns 212 for billable days and 365 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(365)
+          expect(result.billableDays).to.equal(212)
+        })
+      })
+    })
+
+    describe('and the abstraction period is 01-APR to 31-OCT (in-year)', () => {
+      beforeEach(async () => {
+        const chargePurpose = await ChargePurposeHelper.add({
+          chargeElementId: chargeElement.chargeElementId,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 4,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 10
+        })
+        chargeElement.chargePurposes = [chargePurpose]
+      })
+
+      describe('and the charge period is 01-APR-2022 to 30-JUN-2022', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2022-06-30')
+          }
+        })
+
+        it('returns 91 for billable days and 214 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(214)
+          expect(result.billableDays).to.equal(91)
+        })
+      })
+
+      describe('and the charge period is 01-SEP-2022 to 31-MAR-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-09-01'),
+            endDate: new Date('2023-03-31')
+          }
+        })
+
+        it('returns 212 for billable days and 214 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(214)
+          expect(result.billableDays).to.equal(61)
+        })
+      })
+    })
+
+    describe.only('and the abstraction period is 01-MAR to 28-FEB (out-year)', () => {
+      beforeEach(async () => {
+        const chargePurpose = await ChargePurposeHelper.add({
+          chargeElementId: chargeElement.chargeElementId,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 3,
+          abstractionPeriodEndDay: 28,
+          abstractionPeriodEndMonth: 2
+        })
+        chargeElement.chargePurposes = [chargePurpose]
+      })
+
+      describe('and the charge period is 01-APR-2022 to 30-JUN-2022', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2022-06-30')
+          }
+        })
+
+        it('returns 0 for billable days and 334 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(334)
+          expect(result.billableDays).to.equal(0)
+        })
+      })
+
+      describe('and the charge period is 01-SEP-2022 to 31-MAR-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-09-01'),
+            endDate: new Date('2023-03-31')
+          }
+        })
+
+        it('returns 181 for billable days and 334 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(334)
+          expect(result.billableDays).to.equal(181)
+        })
+      })
+    })
+  })
+})
