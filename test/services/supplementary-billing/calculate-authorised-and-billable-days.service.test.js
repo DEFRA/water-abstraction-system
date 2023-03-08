@@ -24,7 +24,7 @@ const CalculateAuthorisedAndBillableDaysService = require('../../../app/services
 // - Out-year: If the abstraction period end month is _before_ the start month, for example 01-Nov to 31-Mar, then we
 //             assign the reference period's end year to the end date, and start year to the start date.
 
-describe.only('Calculate Authorised and Billable days service', () => {
+describe('Calculate Authorised and Billable days service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -56,122 +56,170 @@ describe.only('Calculate Authorised and Billable days service', () => {
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022', () => {
         beforeEach(async () => {
           chargePeriod = {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2022-06-30')
+            startDate: new Date('2022-11-01'),
+            endDate: new Date('2022-12-31')
           }
         })
 
-        it('returns 91 for billable days and 365 for authorised days', () => {
+        it('returns 61 for billable days and 365 for authorised days', () => {
           const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
 
           expect(result.authorisedDays).to.equal(365)
-          expect(result.billableDays).to.equal(91)
-        })
-      })
-
-      describe('and the charge period is 01-SEP-2022 to 31-MAR-2023', () => {
-        beforeEach(async () => {
-          chargePeriod = {
-            startDate: new Date('2022-09-01'),
-            endDate: new Date('2023-03-31')
-          }
-        })
-
-        it('returns 212 for billable days and 365 for authorised days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
-
-          expect(result.authorisedDays).to.equal(365)
-          expect(result.billableDays).to.equal(212)
-        })
-      })
-    })
-
-    describe('and the abstraction period is 01-APR to 31-OCT (in-year)', () => {
-      beforeEach(async () => {
-        const chargePurpose = await ChargePurposeHelper.add({
-          chargeElementId: chargeElement.chargeElementId,
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 10
-        })
-        chargeElement.chargePurposes = [chargePurpose]
-      })
-
-      describe('and the charge period is 01-APR-2022 to 30-JUN-2022', () => {
-        beforeEach(async () => {
-          chargePeriod = {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2022-06-30')
-          }
-        })
-
-        it('returns 91 for billable days and 214 for authorised days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
-
-          expect(result.authorisedDays).to.equal(214)
-          expect(result.billableDays).to.equal(91)
-        })
-      })
-
-      describe('and the charge period is 01-SEP-2022 to 31-MAR-2023', () => {
-        beforeEach(async () => {
-          chargePeriod = {
-            startDate: new Date('2022-09-01'),
-            endDate: new Date('2023-03-31')
-          }
-        })
-
-        it('returns 212 for billable days and 214 for authorised days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
-
-          expect(result.authorisedDays).to.equal(214)
           expect(result.billableDays).to.equal(61)
         })
       })
+
+      describe('and the charge period is 01-DEC-2022 to 31-JAN-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-12-01'),
+            endDate: new Date('2023-01-31')
+          }
+        })
+
+        it('returns 62 for billable days and 365 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(365)
+          expect(result.billableDays).to.equal(62)
+        })
+      })
+
+      describe('and the charge period is 01-JAN-2023 to 28-FEB-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-02-28')
+          }
+        })
+
+        it('returns 59 for billable days and 365 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(365)
+          expect(result.billableDays).to.equal(59)
+        })
+      })
     })
 
-    describe.only('and the abstraction period is 01-MAR to 28-FEB (out-year)', () => {
+    describe('and the abstraction period is 01-JAN to 30-JUN (in-year)', () => {
       beforeEach(async () => {
         const chargePurpose = await ChargePurposeHelper.add({
           chargeElementId: chargeElement.chargeElementId,
           abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 3,
-          abstractionPeriodEndDay: 28,
-          abstractionPeriodEndMonth: 2
+          abstractionPeriodStartMonth: 1,
+          abstractionPeriodEndDay: 30,
+          abstractionPeriodEndMonth: 6
         })
         chargeElement.chargePurposes = [chargePurpose]
       })
 
-      describe('and the charge period is 01-APR-2022 to 30-JUN-2022', () => {
+      describe('and the charge period is 01-NOV-2022 to 31-DEC-2022', () => {
         beforeEach(async () => {
           chargePeriod = {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2022-06-30')
+            startDate: new Date('2022-11-01'),
+            endDate: new Date('2022-12-31')
           }
         })
 
-        it('returns 0 for billable days and 334 for authorised days', () => {
+        it('returns 0 for billable days and 181 for authorised days', () => {
           const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
 
-          expect(result.authorisedDays).to.equal(334)
+          expect(result.authorisedDays).to.equal(181)
           expect(result.billableDays).to.equal(0)
         })
       })
 
-      describe('and the charge period is 01-SEP-2022 to 31-MAR-2023', () => {
+      describe('and the charge period is 01-DEC-2022 to 31-JAN-2023', () => {
         beforeEach(async () => {
           chargePeriod = {
-            startDate: new Date('2022-09-01'),
-            endDate: new Date('2023-03-31')
+            startDate: new Date('2022-12-01'),
+            endDate: new Date('2023-01-31')
           }
         })
 
-        it('returns 181 for billable days and 334 for authorised days', () => {
+        it('returns 31 for billable days and 181 for authorised days', () => {
           const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
 
-          expect(result.authorisedDays).to.equal(334)
-          expect(result.billableDays).to.equal(181)
+          expect(result.authorisedDays).to.equal(181)
+          expect(result.billableDays).to.equal(31)
+        })
+      })
+
+      describe('and the charge period is 01-JAN-2023 to 28-FEB-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-02-28')
+          }
+        })
+
+        it('returns 59 for billable days and 181 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(181)
+          expect(result.billableDays).to.equal(59)
+        })
+      })
+    })
+
+    describe('and the abstraction period is 01-OCT to 31-MAR (out-year)', () => {
+      beforeEach(async () => {
+        const chargePurpose = await ChargePurposeHelper.add({
+          chargeElementId: chargeElement.chargeElementId,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 10,
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3
+        })
+        chargeElement.chargePurposes = [chargePurpose]
+      })
+
+      describe.only('and the charge period is 01-NOV-2022 to 31-DEC-2022', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-11-01'),
+            endDate: new Date('2022-12-31')
+          }
+        })
+
+        it('returns 61 for billable days and 182 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(182)
+          expect(result.billableDays).to.equal(61)
+        })
+      })
+
+      describe('and the charge period is 01-DEC-2022 to 31-JAN-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2022-12-01'),
+            endDate: new Date('2023-01-31')
+          }
+        })
+
+        it('returns 62 for billable days and 182 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(182)
+          expect(result.billableDays).to.equal(62)
+        })
+      })
+
+      describe('and the charge period is 01-JAN-2023 to 28-FEB-2023', () => {
+        beforeEach(async () => {
+          chargePeriod = {
+            startDate: new Date('2023-01-01'),
+            endDate: new Date('2023-02-28')
+          }
+        })
+
+        it('returns 59 for billable days and 182 for authorised days', () => {
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+
+          expect(result.authorisedDays).to.equal(182)
+          expect(result.billableDays).to.equal(59)
         })
       })
     })

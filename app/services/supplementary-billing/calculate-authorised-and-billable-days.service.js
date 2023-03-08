@@ -160,7 +160,9 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
     startDate: _subtractOneYear(firstPeriod.startDate),
     endDate: _subtractOneYear(firstPeriod.endDate)
   }
-
+console.log(firstPeriod)
+console.log('==================================')
+console.log(previousPeriod)
   const abstractionPeriods = []
   if (_isPeriodValid(referencePeriod, previousPeriod)) {
     abstractionPeriods.push(previousPeriod)

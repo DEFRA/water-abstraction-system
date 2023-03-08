@@ -40,7 +40,7 @@ describe('Format Sroc Transaction Line service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe.only('when we break it', () => {
+  describe('when we break it', () => {
     it('goes pop', async () => {
       const brokenChargeVersion = await ChargeVersionHelper.add({ startDate: '2022-09-01', endDate: '2023-03-31' })
       const billingChargeCategory = await BillingChargeCategoryHelper.add()
