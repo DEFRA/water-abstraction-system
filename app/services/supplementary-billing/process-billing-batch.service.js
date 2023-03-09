@@ -74,7 +74,6 @@ async function _processTransactionLines (cmBillRunId, billingPeriod, chargePerio
   if (chargeVersion.chargeElements) {
     for (const chargeElement of chargeVersion.chargeElements) {
       const options = {
-        isTwoPartSecondPartCharge: false,
         isWaterUndertaker: chargeVersion.licence.isWaterUndertaker,
         isNewLicence: DetermineMinimumChargeService.go(chargeVersion, financialYearEnding),
         isCompensationCharge: false
