@@ -14,6 +14,7 @@ const ChargingModuleCreateTransactionPresenter = require('../../presenters/charg
 const CreateBillingInvoiceService = require('./create-billing-invoice.service.js')
 const CreateBillingInvoiceLicenceService = require('./create-billing-invoice-licence.service.js')
 const CreateBillingTransactionService = require('./create-billing-transaction.service.js')
+const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FormatSrocTransactionLineService = require('./format-sroc-transaction-line.service.js')
@@ -42,10 +43,12 @@ async function go (billingBatch, billingPeriod) {
   for (const chargeVersion of chargeVersions) {
     const billingInvoice = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
     const billingInvoiceLicence = await CreateBillingInvoiceLicenceService.go(billingInvoice, chargeVersion.licence)
+    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod.endDate.getFullYear())
 
     await _processTransactionLines(
       billingBatch.externalId,
       billingPeriod,
+      chargePeriod,
       chargeVersion,
       billingInvoice.invoiceAccountNumber,
       billingInvoiceLicence.billingInvoiceLicenceId
@@ -65,7 +68,7 @@ async function _updateStatus (billingBatchId, status) {
     .patch({ status })
 }
 
-async function _processTransactionLines (cmBillRunId, billingPeriod, chargeVersion, invoiceAccountNumber, billingInvoiceLicenceId) {
+async function _processTransactionLines (cmBillRunId, billingPeriod, chargePeriod, chargeVersion, invoiceAccountNumber, billingInvoiceLicenceId) {
   const financialYearEnding = billingPeriod.endDate.getFullYear()
 
   if (chargeVersion.chargeElements) {
@@ -81,6 +84,7 @@ async function _processTransactionLines (cmBillRunId, billingPeriod, chargeVersi
         chargeElement,
         chargeVersion,
         billingPeriod,
+        chargePeriod,
         cmBillRunId,
         billingInvoiceLicenceId,
         invoiceAccountNumber,
@@ -101,6 +105,7 @@ async function _processTransactionLines (cmBillRunId, billingPeriod, chargeVersi
           chargeElement,
           chargeVersion,
           billingPeriod,
+          chargePeriod,
           cmBillRunId,
           billingInvoiceLicenceId,
           invoiceAccountNumber,
@@ -115,13 +120,14 @@ async function _processTransactionLine (
   chargeElement,
   chargeVersion,
   billingPeriod,
+  chargePeriod,
   cmBillRunId,
   billingInvoiceLicenceId,
   invoiceAccountNumber,
   options
 ) {
   const transaction = {
-    ...FormatSrocTransactionLineService.go(chargeElement, chargeVersion, billingPeriod, options),
+    ...FormatSrocTransactionLineService.go(chargeElement, billingPeriod, chargePeriod, options),
     billingInvoiceLicenceId
   }
 

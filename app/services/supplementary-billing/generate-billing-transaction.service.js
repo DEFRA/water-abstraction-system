@@ -7,7 +7,6 @@
  */
 
 const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-authorised-and-billable-days.service.js')
-const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 
 /**
  * Takes a charge element, charge version and financial year and returns an object representing an sroc transaction
@@ -24,11 +23,8 @@ const DetermineChargePeriodService = require('./determine-charge-period.service.
  *
  * @returns {Object} The formatted transaction line data.
  */
-function go (chargeElement, chargeVersion, billingPeriod, options) {
+function go (chargeElement, billingPeriod, chargePeriod, options) {
   const optionsData = _optionsDefaults(options)
-
-  const financialYearEnding = billingPeriod.endDate.getFullYear()
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
 
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
     chargePeriod,
