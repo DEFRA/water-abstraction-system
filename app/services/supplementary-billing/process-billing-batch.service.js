@@ -43,18 +43,13 @@ async function go (billingBatch, billingPeriod) {
   for (const chargeVersion of chargeVersions) {
     const billingInvoice = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
     const billingInvoiceLicence = await CreateBillingInvoiceLicenceService.go(billingInvoice, chargeVersion.licence)
-    const financialYearEnding = billingPeriod.endDate.getFullYear()
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
-    const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
 
     await _processTransactionLines(
       billingBatch.externalId,
       billingPeriod,
-      chargePeriod,
       chargeVersion,
       billingInvoice.invoiceAccountNumber,
-      billingInvoiceLicence.billingInvoiceLicenceId,
-      isNewLicence
+      billingInvoiceLicence.billingInvoiceLicenceId
     )
   }
 
@@ -74,12 +69,14 @@ async function _updateStatus (billingBatchId, status) {
 async function _processTransactionLines (
   cmBillRunId,
   billingPeriod,
-  chargePeriod,
   chargeVersion,
   invoiceAccountNumber,
-  billingInvoiceLicenceId,
-  isNewLicence
+  billingInvoiceLicenceId
 ) {
+  const financialYearEnding = billingPeriod.endDate.getFullYear()
+  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
+  const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+
   if (chargeVersion.chargeElements) {
     for (const chargeElement of chargeVersion.chargeElements) {
       const options = {
