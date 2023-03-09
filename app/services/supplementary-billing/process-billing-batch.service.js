@@ -17,7 +17,11 @@ const DetermineMinimumChargeService = require('./determine-minimum-charge.servic
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
+const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
+
+const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
+const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-licence.model.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -40,42 +44,58 @@ async function go (billingBatch, billingPeriod) {
   const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
   let generatedBillingInvoices = []
-  for (const chargeVersion of chargeVersions) {
-    // const { chargeElements, licence } = chargeVersion
+  let generatedBillingInvoiceLicences = []
 
-    const result = await GenerateBillingInvoiceService.go(
+  const billingInvoiceLicencesToPersist = {}
+  const billingInvoicesToPersist = {}
+
+  for (const chargeVersion of chargeVersions) {
+    const { chargeElements, licence } = chargeVersion
+
+    const currentBillingInvoice = await GenerateBillingInvoiceService.go(
       generatedBillingInvoices,
       chargeVersion.invoiceAccountId,
       billingBatchId,
       financialYearEnding
     )
-    generatedBillingInvoices = result.billingInvoices
+    generatedBillingInvoices = currentBillingInvoice.billingInvoices
 
-    const billingInvoiceLicence = {
-      billingInvoiceLicenceId: randomUUID({ disableEntropyCache: true }),
-      billingInvoiceId: billingInvoice.billingInvoiceId,
-      licenceRef: licence.licenceRef,
-      licenceId: licence.licenceId
-    }
+    const currentBillingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(
+      generatedBillingInvoiceLicences,
+      currentBillingInvoice.billingInvoice.billingInvoiceId,
+      licence
+    )
+    generatedBillingInvoiceLicences = currentBillingInvoiceLicence.billingInvoiceLicences
 
-    let transactionLines = []
-    if (chargeVersion.chargeElements) {
-      transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
+    if (chargeElements) {
+      const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
 
       if (transactionLines.length > 0) {
         await _createTransactionLines(
           transactionLines,
           billingPeriod,
-          result.billingInvoice.invoiceAccountNumber,
-          billingInvoiceLicence.billingInvoiceLicenceId,
+          currentBillingInvoice.billingInvoice.invoiceAccountNumber,
+          currentBillingInvoiceLicence.billingInvoiceLicence.billingInvoiceLicenceId,
           chargeVersion,
           billingBatch.externalId
         )
+
+        // We add the transaction lines to the existing ones so that they don't get overwritten when we put the billing
+        // invoice licence into our `billingInvoiceLicencesToPersist` object
+        currentBillingInvoiceLicence.billingInvoiceLicence.transactionLines.push(...transactionLines)
+
+        // Our `billingInvoiceLicencesToPersist` object is a series of key/value pairs. Each key is the billing invoice
+        // licence id, and the value is the billing invoice licence itself. We do this so we have a unique set of
+        // billing invoice licences to persist, whereas if we were simply pushing them into an array we may have
+        // duplicate entries which we would then have to filter out (or check whether they exist before adding)
+        billingInvoiceLicencesToPersist[currentBillingInvoiceLicence.billingInvoiceLicence.billingInvoiceLicenceId] = currentBillingInvoiceLicence.billingInvoiceLicence
+        billingInvoicesToPersist[currentBillingInvoice.billingInvoice.billingInvoiceId] = currentBillingInvoice.billingInvoice
       }
     }
-    billingInvoiceLicence.transactionLines = transactionLines
   }
 
+  await _persistBillingInvoiceLicences(billingInvoiceLicencesToPersist)
+  await _persistBillingInvoices(billingInvoicesToPersist)
 
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 
@@ -131,6 +151,20 @@ async function _createTransactionLines (
 
     await CreateBillingTransactionService.go(transaction)
   }
+}
+
+async function _persistBillingInvoiceLicences (billingInvoiceLicencesToPersist) {
+  const billingInvoiceLicencesToInsert = Object.values(billingInvoiceLicencesToPersist)
+
+  await BillingInvoiceLicenceModel.query()
+    .insert(billingInvoiceLicencesToInsert)
+}
+
+async function _persistBillingInvoices (billingInvoicesToPersist) {
+  const billingInvoicesToInsert = Object.values(billingInvoicesToPersist)
+
+  await BillingInvoiceModel.query()
+    .insert(billingInvoicesToInsert)
 }
 
 module.exports = {
