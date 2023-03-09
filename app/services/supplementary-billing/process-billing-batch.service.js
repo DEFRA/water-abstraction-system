@@ -5,8 +5,6 @@
  * @module ProcessBillingBatchService
  */
 
-const { randomUUID } = require('crypto')
-
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
 const ChargingModuleGenerateService = require('..//charging-module/generate-bill-run.service.js')
@@ -14,9 +12,10 @@ const ChargingModuleCreateTransactionPresenter = require('../../presenters/charg
 const CreateBillingInvoiceService = require('./create-billing-invoice.service.js')
 const CreateBillingInvoiceLicenceService = require('./create-billing-invoice-licence.service.js')
 const CreateBillingTransactionService = require('./create-billing-transaction.service.js')
+const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const FormatSrocTransactionLineService = require('./format-sroc-transaction-line.service.js')
+const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
 /**
@@ -43,19 +42,27 @@ async function go (billingBatch, billingPeriod) {
     const billingInvoice = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
     const billingInvoiceLicence = await CreateBillingInvoiceLicenceService.go(billingInvoice, chargeVersion.licence)
 
-    await _processTransactionLines(
-      billingBatch.externalId,
-      billingPeriod,
-      chargeVersion,
-      billingInvoice.invoiceAccountNumber,
-      billingInvoiceLicence.billingInvoiceLicenceId
-    )
+    if (chargeVersion.chargeElements) {
+      const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
+
+      if (transactionLines.length > 0) {
+        await _createTransactionLines(
+          transactionLines,
+          billingPeriod,
+          billingInvoice.invoiceAccountNumber,
+          billingInvoiceLicence.billingInvoiceLicenceId,
+          chargeVersion,
+          billingBatch.externalId
+        )
+      }
+    }
   }
 
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 
   // NOTE: Retaining this as a candidate for updating the bill run status if the process errors or the bill run is empty
   // await UpdateBillingBatchStatusService.go(billingData.id, 'ready')
+
   await LegacyRequestLib.post('water', `billing/batches/${billingBatchId}/refresh`)
 }
 
@@ -65,94 +72,46 @@ async function _updateStatus (billingBatchId, status) {
     .patch({ status })
 }
 
-async function _processTransactionLines (cmBillRunId, billingPeriod, chargeVersion, invoiceAccountNumber, billingInvoiceLicenceId) {
+function _generateTransactionLines (billingPeriod, chargeVersion) {
   const financialYearEnding = billingPeriod.endDate.getFullYear()
+  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
+  const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+  const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
-  if (chargeVersion.chargeElements) {
-    for (const chargeElement of chargeVersion.chargeElements) {
-      const options = {
-        isTwoPartSecondPartCharge: false,
-        isWaterUndertaker: chargeVersion.licence.isWaterUndertaker,
-        isNewLicence: DetermineMinimumChargeService.go(chargeVersion, financialYearEnding),
-        isCompensationCharge: false
-      }
-
-      let transaction = await _processTransactionLine(
-        chargeElement,
-        chargeVersion,
-        billingPeriod,
-        cmBillRunId,
-        billingInvoiceLicenceId,
-        invoiceAccountNumber,
-        options
-      )
-
-      if (transaction.billableDays === 0) {
-        return
-      }
-
-      // Compensation charge line
-      // First, we look to see if there is anything to bill. If there is we then determine if a compensation charge line
-      // is needed. From looking at the legacy code this is based purely on whether the licence is flagged as a
-      // water undertaker
-      if (!options.isWaterUndertaker) {
-        options.isCompensationCharge = true
-        transaction = await _processTransactionLine(
-          chargeElement,
-          chargeVersion,
-          billingPeriod,
-          cmBillRunId,
-          billingInvoiceLicenceId,
-          invoiceAccountNumber,
-          options
-        )
-      }
-    }
+  const transactionLines = []
+  for (const chargeElement of chargeVersion.chargeElements) {
+    const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+    transactionLines.push(...result)
   }
+
+  return transactionLines
 }
 
-async function _processTransactionLine (
-  chargeElement,
-  chargeVersion,
+async function _createTransactionLines (
+  transactionLines,
   billingPeriod,
-  cmBillRunId,
-  billingInvoiceLicenceId,
   invoiceAccountNumber,
-  options
+  billingInvoiceLicenceId,
+  chargeVersion,
+  chargingModuleBillRunId
 ) {
-  const transaction = {
-    ...FormatSrocTransactionLineService.go(chargeElement, chargeVersion, billingPeriod, options),
-    billingInvoiceLicenceId
+  for (const transaction of transactionLines) {
+    const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
+      transaction,
+      billingPeriod,
+      invoiceAccountNumber,
+      chargeVersion.licence
+    )
+
+    const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(chargingModuleBillRunId, chargingModuleRequest)
+
+    // TODO: Handle a failed request
+    transaction.status = 'charge_created'
+    transaction.externalId = chargingModuleResponse.response.body.transaction.id
+    transaction.billingInvoiceLicenceId = billingInvoiceLicenceId
+
+    await CreateBillingTransactionService.go(transaction)
   }
-
-  // No point carrying on if there is nothing to bill
-  if (transaction.billableDays === 0) {
-    return transaction
-  }
-
-  // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
-  // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
-  // disabling this cache is a rounding error in comparison to the rest of the process.
-  //
-  // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
-  transaction.billingTransactionId = randomUUID({ disableEntropyCache: true })
-
-  const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
-    transaction,
-    billingPeriod,
-    invoiceAccountNumber,
-    chargeVersion.licence
-  )
-
-  const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(cmBillRunId, chargingModuleRequest)
-
-  // TODO: Handle a failed request
-  transaction.status = 'charge_created'
-  transaction.externalId = chargingModuleResponse.response.body.transaction.id
-
-  await CreateBillingTransactionService.go(transaction)
-
-  return transaction
 }
 
 module.exports = {
