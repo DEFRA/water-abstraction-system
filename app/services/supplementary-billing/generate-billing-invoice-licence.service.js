@@ -15,7 +15,7 @@ const { randomUUID } = require('crypto')
  *
  * @returns {Object} The newly-created billing invoice licence record
  */
-async function go (generatedBillingInvoiceLicences, billingInvoiceId, licence) {
+function go (generatedBillingInvoiceLicences, billingInvoiceId, licence) {
   let billingInvoiceLicence = _existing(generatedBillingInvoiceLicences, billingInvoiceId)
 
   if (billingInvoiceLicence) {
