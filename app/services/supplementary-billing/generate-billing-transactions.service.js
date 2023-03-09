@@ -81,14 +81,16 @@ function _standardTransaction (
   isWaterUndertaker
 ) {
   return {
+    authorisedDays,
+    billableDays,
+    isNewLicence,
     // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
     // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
     // disabling this cache is a rounding error in comparison to the rest of the process.
     //
     // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
     billingTransactionId: randomUUID({ disableEntropyCache: true }),
-    authorisedDays,
-    billableDays,
+    isWaterUndertaker,
     chargeElementId: chargeElement.chargeElementId,
     startDate: chargePeriod.startDate,
     endDate: chargePeriod.endDate,
@@ -105,7 +107,6 @@ function _standardTransaction (
     section126Factor: chargeElement.adjustments.s126 || 1,
     section127Agreement: !!chargeElement.adjustments.s127,
     section130Agreement: !!chargeElement.adjustments.s130,
-    isNewLicence,
     // NOTE: We do not currently support two part tariff bill runs. We set this to false until we implement that
     // functionality and understand what determines the flag
     isTwoPartSecondPartCharge: false,
@@ -118,7 +119,6 @@ function _standardTransaction (
     supportedSourceName: chargeElement.additionalCharges?.supportedSource?.name || null,
     isWaterCompanyCharge: !!chargeElement.additionalCharges?.isSupplyPublicWater,
     isWinterOnly: !!chargeElement.adjustments.winter,
-    isWaterUndertaker,
     purposes: _generatePurposes(chargeElement)
   }
 }
