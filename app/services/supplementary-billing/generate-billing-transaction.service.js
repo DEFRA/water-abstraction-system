@@ -20,7 +20,7 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * @returns {Object} The formatted transaction line data.
  */
-function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, options) {
+function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker, options) {
   const optionsData = _optionsDefaults(options)
 
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
@@ -61,15 +61,14 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, options) 
     supportedSourceName: chargeElement.additionalCharges?.supportedSource?.name || null,
     isWaterCompanyCharge: !!chargeElement.additionalCharges?.isSupplyPublicWater,
     isWinterOnly: !!chargeElement.adjustments.winter,
-    isWaterUndertaker: optionsData.isWaterUndertaker,
+    isWaterUndertaker,
     purposes: _generatePurposes(chargeElement)
   }
 }
 
 function _optionsDefaults (options) {
   const defaults = {
-    isCompensationCharge: false,
-    isWaterUndertaker: false
+    isCompensationCharge: false
   }
 
   return {

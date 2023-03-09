@@ -76,11 +76,11 @@ async function _processTransactionLines (
   const financialYearEnding = billingPeriod.endDate.getFullYear()
   const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
   const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+  const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
   if (chargeVersion.chargeElements) {
     for (const chargeElement of chargeVersion.chargeElements) {
       const options = {
-        isWaterUndertaker: chargeVersion.licence.isWaterUndertaker,
         isCompensationCharge: false
       }
 
@@ -93,6 +93,7 @@ async function _processTransactionLines (
         billingInvoiceLicenceId,
         invoiceAccountNumber,
         isNewLicence,
+        isWaterUndertaker,
         options
       )
 
