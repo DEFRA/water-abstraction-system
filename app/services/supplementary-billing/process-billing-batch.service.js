@@ -39,16 +39,18 @@ async function go (billingBatch, billingPeriod) {
   // This is why we are only passing through the first billing period; we know there is only one!
   const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
-  const generatedBillingInvoices = []
+  let generatedBillingInvoices = []
   for (const chargeVersion of chargeVersions) {
-    const { chargeElements, licence } = chargeVersion
+    // const { chargeElements, licence } = chargeVersion
 
-    const billingInvoice = await GenerateBillingInvoiceService.go(
+    const result = await GenerateBillingInvoiceService.go(
+      generatedBillingInvoices,
       chargeVersion.invoiceAccountId,
       billingBatchId,
-      financialYearEnding,
-      generatedBillingInvoices
+      financialYearEnding
     )
+    generatedBillingInvoices = result.billingInvoices
+
     const billingInvoiceLicence = {
       billingInvoiceLicenceId: randomUUID({ disableEntropyCache: true }),
       billingInvoiceId: billingInvoice.billingInvoiceId,
@@ -56,21 +58,24 @@ async function go (billingBatch, billingPeriod) {
       licenceId: licence.licenceId
     }
 
+    let transactionLines = []
     if (chargeVersion.chargeElements) {
-      const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
+      transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
 
       if (transactionLines.length > 0) {
         await _createTransactionLines(
           transactionLines,
           billingPeriod,
-          billingInvoice.invoiceAccountNumber,
+          result.billingInvoice.invoiceAccountNumber,
           billingInvoiceLicence.billingInvoiceLicenceId,
           chargeVersion,
           billingBatch.externalId
         )
       }
     }
+    billingInvoiceLicence.transactionLines = transactionLines
   }
+
 
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 
