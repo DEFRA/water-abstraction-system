@@ -57,6 +57,7 @@ async function go (billingBatch, billingPeriod) {
       financialYearEnding
     )
     generatedInvoices = invoiceData.billingInvoices
+    const { billingInvoiceId } = invoiceData.billingInvoice
 
     const invoiceLicenceData = GenerateBillingInvoiceLicenceService.go(
       generatedInvoiceLicences,
@@ -64,6 +65,7 @@ async function go (billingBatch, billingPeriod) {
       licence
     )
     generatedInvoiceLicences = invoiceLicenceData.billingInvoiceLicences
+    const { billingInvoiceLicenceId } = invoiceLicenceData.billingInvoiceLicence
 
     if (chargeElements) {
       const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
@@ -73,17 +75,19 @@ async function go (billingBatch, billingPeriod) {
           transactionLines,
           billingPeriod,
           invoiceData.billingInvoice.invoiceAccountNumber,
-          invoiceLicenceData.billingInvoiceLicence.billingInvoiceLicenceId,
+          billingInvoiceLicenceId,
           chargeVersion,
           billingBatch.externalId
         )
 
-        // Our `billingInvoiceLicencesToPersist` object is a series of key/value pairs. Each key is the billing invoice
-        // licence id, and the value is the billing invoice licence itself. We do this so we have a unique set of
-        // billing invoice licences to persist, whereas if we were simply pushing them into an array we may have
-        // duplicate entries which we would then have to filter out (or check whether they exist before adding)
-        invoiceLicencesToPersist[invoiceLicenceData.billingInvoiceLicence.billingInvoiceLicenceId] = invoiceLicenceData.billingInvoiceLicence
-        invoicesToPersist[invoiceData.billingInvoice.billingInvoiceId] = invoiceData.billingInvoice
+        // NOTE: Our `[..]ToPersist` objects are a series of key/value pairs. Each key is the ID of an invoice or
+        // invoice licence object we've generated and the value is the object itself. We do this so we have a unique
+        // set of generated objects we know needed persisting to the DB.
+
+        // If we were just pushed them into an array we would have duplicate entries. So, we would then have to filter
+        // out (or check whether they exist before adding)
+        invoiceLicencesToPersist[billingInvoiceLicenceId] = invoiceLicenceData.billingInvoiceLicence
+        invoicesToPersist[billingInvoiceId] = invoiceData.billingInvoice
       }
     }
   }
