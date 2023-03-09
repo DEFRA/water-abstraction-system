@@ -43,7 +43,9 @@ async function go (billingBatch, billingPeriod) {
   for (const chargeVersion of chargeVersions) {
     const billingInvoice = await CreateBillingInvoiceService.go(chargeVersion, billingPeriod, billingBatchId)
     const billingInvoiceLicence = await CreateBillingInvoiceLicenceService.go(billingInvoice, chargeVersion.licence)
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod.endDate.getFullYear())
+    const financialYearEnding = billingPeriod.endDate.getFullYear()
+    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
+    const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
 
     await _processTransactionLines(
       billingBatch.externalId,
@@ -51,7 +53,8 @@ async function go (billingBatch, billingPeriod) {
       chargePeriod,
       chargeVersion,
       billingInvoice.invoiceAccountNumber,
-      billingInvoiceLicence.billingInvoiceLicenceId
+      billingInvoiceLicence.billingInvoiceLicenceId,
+      isNewLicence
     )
   }
 
@@ -68,14 +71,19 @@ async function _updateStatus (billingBatchId, status) {
     .patch({ status })
 }
 
-async function _processTransactionLines (cmBillRunId, billingPeriod, chargePeriod, chargeVersion, invoiceAccountNumber, billingInvoiceLicenceId) {
-  const financialYearEnding = billingPeriod.endDate.getFullYear()
-
+async function _processTransactionLines (
+  cmBillRunId,
+  billingPeriod,
+  chargePeriod,
+  chargeVersion,
+  invoiceAccountNumber,
+  billingInvoiceLicenceId,
+  isNewLicence
+) {
   if (chargeVersion.chargeElements) {
     for (const chargeElement of chargeVersion.chargeElements) {
       const options = {
         isWaterUndertaker: chargeVersion.licence.isWaterUndertaker,
-        isNewLicence: DetermineMinimumChargeService.go(chargeVersion, financialYearEnding),
         isCompensationCharge: false
       }
 
@@ -87,6 +95,7 @@ async function _processTransactionLines (cmBillRunId, billingPeriod, chargePerio
         cmBillRunId,
         billingInvoiceLicenceId,
         invoiceAccountNumber,
+        isNewLicence,
         options
       )
 

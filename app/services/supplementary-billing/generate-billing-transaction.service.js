@@ -17,11 +17,10 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  * @param {Object} [options] Object of options to set for the transaction. All options default to `false`
  * @param {Boolean} [options.isCompensationCharge] Is this transaction a compensation charge?
  * @param {Boolean} [options.isWaterUndertaker] Is this transaction for a water undertaker?
- * @param {Boolean} [options.isNewLicence] Is this transaction for a new licence?
  *
  * @returns {Object} The formatted transaction line data.
  */
-function go (chargeElement, billingPeriod, chargePeriod, options) {
+function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, options) {
   const optionsData = _optionsDefaults(options)
 
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
@@ -49,7 +48,7 @@ function go (chargeElement, billingPeriod, chargePeriod, options) {
     section126Factor: chargeElement.adjustments.s126 || 1,
     section127Agreement: !!chargeElement.adjustments.s127,
     section130Agreement: !!chargeElement.adjustments.s130,
-    isNewLicence: optionsData.isNewLicence,
+    isNewLicence,
     // NOTE: We do not currently support two part tariff bill runs. We set this to false until we implement that
     // functionality and understand what determines the flag
     isTwoPartSecondPartCharge: false,
@@ -70,8 +69,7 @@ function go (chargeElement, billingPeriod, chargePeriod, options) {
 function _optionsDefaults (options) {
   const defaults = {
     isCompensationCharge: false,
-    isWaterUndertaker: false,
-    isNewLicence: false
+    isWaterUndertaker: false
   }
 
   return {
