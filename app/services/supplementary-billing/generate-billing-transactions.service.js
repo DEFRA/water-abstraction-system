@@ -6,6 +6,8 @@
  * @module FormatSrocTransactionLineService
  */
 
+const { randomUUID } = require('crypto')
+
 const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-authorised-and-billable-days.service.js')
 
 /**
@@ -14,22 +16,64 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * @param {Object} chargeElement The charge element the transaction is to be created for.
  * @param {Integer} billingPeriod The billing period the transaction is to be created for.
- * @param {Object} [options] Object of options to set for the transaction. All options default to `false`
- * @param {Boolean} [options.isCompensationCharge] Is this transaction a compensation charge?
- * @param {Boolean} [options.isWaterUndertaker] Is this transaction for a water undertaker?
  *
  * @returns {Object} The formatted transaction line data.
  */
-function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker, options) {
-  const optionsData = _optionsDefaults(options)
-
+function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker) {
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
     chargePeriod,
     billingPeriod,
     chargeElement
   )
 
+  const billingTransactions = []
+
+  if (billableDays === 0) {
+    return billingTransactions
+  }
+
+  billingTransactions.push(
+    _standardTransaction(
+      authorisedDays,
+      billableDays,
+      chargeElement,
+      chargePeriod,
+      isNewLicence,
+      isWaterUndertaker
+    )
+  )
+
+  if (!isWaterUndertaker) {
+    billingTransactions.push(_compensationTransaction(billingTransactions[0]))
+  }
+
+  return billingTransactions
+}
+
+function _compensationTransaction (standardTransaction) {
   return {
+    ...standardTransaction,
+    billingTransactionId: randomUUID({ disableEntropyCache: true }),
+    chargeType: 'compensation',
+    description: 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
+  }
+}
+
+function _standardTransaction (
+  authorisedDays,
+  billableDays,
+  chargeElement,
+  chargePeriod,
+  isNewLicence,
+  isWaterUndertaker
+) {
+  return {
+    // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
+    // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
+    // disabling this cache is a rounding error in comparison to the rest of the process.
+    //
+    // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
+    billingTransactionId: randomUUID({ disableEntropyCache: true }),
     authorisedDays,
     billableDays,
     chargeElementId: chargeElement.chargeElementId,
@@ -39,11 +83,11 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
     season: 'all year',
     loss: chargeElement.loss,
     isCredit: false,
-    chargeType: optionsData.isCompensationCharge ? 'compensation' : 'standard',
+    chargeType: 'standard',
     authorisedQuantity: chargeElement.volume,
     billableQuantity: chargeElement.volume,
     status: 'candidate',
-    description: _generateDescription(chargeElement, optionsData),
+    description: `Water abstraction charge: ${chargeElement.description}`,
     volume: chargeElement.volume,
     section126Factor: chargeElement.adjustments.s126 || 1,
     section127Agreement: !!chargeElement.adjustments.s127,
@@ -66,17 +110,6 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
   }
 }
 
-function _optionsDefaults (options) {
-  const defaults = {
-    isCompensationCharge: false
-  }
-
-  return {
-    ...defaults,
-    ...options
-  }
-}
-
 /**
  * Returns a json representation of all charge purposes in a charge element
  */
@@ -86,14 +119,6 @@ function _generatePurposes (chargeElement) {
   })
 
   return JSON.stringify(jsonChargePurposes)
-}
-
-function _generateDescription (chargeElement, options) {
-  if (options.isCompensationCharge) {
-    return 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
-  }
-
-  return `Water abstraction charge: ${chargeElement.description}`
 }
 
 module.exports = {
