@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -11,17 +12,20 @@ const { expect } = Code
 const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
-// Thing under test
-const FormatSrocTransactionLineService = require('../../../app/services/supplementary-billing/format-sroc-transaction-line.service.js')
+// Things we need to stub
+const CalculateAuthorisedAndBillableDaysServiceService = require('../../../app/services/supplementary-billing/calculate-authorised-and-billable-days.service.js')
 
-describe('Format Sroc Transaction Line service', () => {
-  let billingChargeCategoryId
+// Thing under test
+const GenerateBillingTransactionsService = require('../../../app/services/supplementary-billing/generate-billing-transactions.service.js')
+
+describe('Generate billing transactions service', () => {
+  let chargePeriod
   let chargePurpose
-  let chargeVersion
-  let eagerChargeElement
+  let chargeElement
+  let isNewLicence
+  let isWaterUndertaker
 
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
@@ -30,29 +34,34 @@ describe('Format Sroc Transaction Line service', () => {
 
   beforeEach(async () => {
     const billingChargeCategory = await BillingChargeCategoryHelper.add()
-    billingChargeCategoryId = billingChargeCategory.billingChargeCategoryId
+    const { billingChargeCategoryId } = billingChargeCategory
 
-    const chargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
-    chargePurpose = await ChargePurposeHelper.add({ chargeElementId: chargeElement.chargeElementId })
-    eagerChargeElement = await chargeElement.$query()
+    const baseChargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
+    chargePurpose = await ChargePurposeHelper.add({ chargeElementId: baseChargeElement.chargeElementId })
+    chargeElement = await baseChargeElement.$query()
       .withGraphFetched('billingChargeCategory')
       .withGraphFetched('chargePurposes')
-
-    chargeVersion = await ChargeVersionHelper.add({ startDate: '2022-11-01', endDate: '2023-03-01' })
   })
 
   afterEach(async () => {
     await DatabaseHelper.clean()
+    Sinon.restore()
   })
 
-  describe('when a standard charge element is supplied', () => {
-    it('returns the expected data', () => {
-      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod)
+  describe('when a charge element has billable days', () => {
+    let expectedStandardChargeResult
 
-      const expectedResult = {
-        chargeElementId: eagerChargeElement.chargeElementId,
-        startDate: new Date('2022-11-01'),
-        endDate: new Date('2023-03-01'),
+    beforeEach(() => {
+      chargePeriod = {
+        startDate: new Date('2022-04-01'),
+        endDate: new Date('2022-10-31')
+      }
+      isNewLicence = false
+
+      expectedStandardChargeResult = {
+        chargeElementId: chargeElement.chargeElementId,
+        startDate: chargePeriod.startDate,
+        endDate: chargePeriod.endDate,
         source: 'non-tidal',
         season: 'all year',
         loss: 'low',
@@ -61,7 +70,7 @@ describe('Format Sroc Transaction Line service', () => {
         authorisedQuantity: 6.82,
         billableQuantity: 6.82,
         authorisedDays: 365,
-        billableDays: 121,
+        billableDays: 214,
         status: 'candidate',
         description: 'Water abstraction charge: Mineral washing',
         volume: 6.82,
@@ -78,110 +87,131 @@ describe('Format Sroc Transaction Line service', () => {
         isSupportedSource: false,
         supportedSourceName: null,
         isWaterCompanyCharge: true,
-        isWinterOnly: false,
-        isWaterUndertaker: false
+        isWinterOnly: false
       }
 
-      // We skip checking 'purposes' as we test this elsewhere
-      expect(result).to.equal(expectedResult, { skip: 'purposes' })
+      Sinon.stub(CalculateAuthorisedAndBillableDaysServiceService, 'go').returns({ authorisedDays: 365, billableDays: 214 })
     })
 
-    it('returns the charge purpose as JSON in `purposes`', () => {
-      const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod)
+    describe('and is a water undertaker', () => {
+      beforeEach(() => {
+        isWaterUndertaker = true
+      })
 
-      const parsedPurposes = JSON.parse(result.purposes)
+      it('returns an array of one transaction containing the expected data', () => {
+        const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
-      expect(parsedPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
+        // Should only return the 'standard' charge transaction line
+        expect(result).to.have.length(1)
+        // We skip checking 'purposes' as we test this elsewhere
+        expect(result[0]).to.equal(
+          {
+            ...expectedStandardChargeResult,
+            isWaterUndertaker
+          },
+          { skip: ['purposes', 'billingTransactionId'] }
+        )
+      })
+
+      it('returns the charge purpose as JSON in the transaction line `purposes` property', () => {
+        const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+        const parsedPurposes = JSON.parse(result[0].purposes)
+
+        expect(parsedPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
+      })
+    })
+
+    describe('and is not a water undertaker', () => {
+      beforeEach(() => {
+        isWaterUndertaker = false
+      })
+
+      it('returns an array of two transactions containing the expected data', () => {
+        const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+        // Should return both a 'standard' charge and 'compensation' charge transaction line
+        expect(result).to.have.length(2)
+        // We skip checking 'purposes' as we test this elsewhere
+        expect(result[0]).to.equal(
+          {
+            ...expectedStandardChargeResult,
+            isWaterUndertaker
+          },
+          { skip: ['purposes', 'billingTransactionId'] }
+        )
+      })
+
+      it('returns a second compensation charge transaction', () => {
+        const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+        expect(result[1]).to.equal(
+          {
+            ...expectedStandardChargeResult,
+            isWaterUndertaker,
+            chargeType: 'compensation',
+            description: 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
+          },
+          { skip: ['purposes', 'billingTransactionId'] }
+        )
+      })
+
+      it('returns the charge purpose as JSON in both transaction lines `purposes` property', () => {
+        const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+        const parsedStandardPurposes = JSON.parse(result[0].purposes)
+        const parsedCompensationPurposes = JSON.parse(result[1].purposes)
+
+        expect(parsedStandardPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
+        expect(parsedCompensationPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
+      })
+    })
+
+    // NOTE: isNewLicence unlike isWaterUndertaker does not result in any behaviour changes in the service. It is just
+    // getting applied to the transaction lines the service generates as is. But as an arg to the service we felt it
+    // worth adding unit tests for, if only to document it as something that the service expects
+    describe('and is a new licence', () => {
+      beforeEach(() => {
+        isWaterUndertaker = false
+        isNewLicence = true
+      })
+
+      it('returns `isNewLicence` as true on both transaction lines in the result', () => {
+        const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+        expect(result[0].isNewLicence).to.be.true()
+      })
+    })
+
+    describe('returns `isNewLicence` as false on both transaction lines in the result', () => {
+      beforeEach(() => {
+        isWaterUndertaker = false
+      })
+
+      it('returns the expected data', () => {
+        const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+        expect(result[0].isNewLicence).to.be.false()
+      })
     })
   })
 
-  describe('when options are supplied', () => {
-    describe('isCompensation charge is `true`', () => {
-      it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isCompensationCharge: true })
-
-        expect(result.chargeType).to.equal('compensation')
-      })
-    })
-
-    describe('isWaterUndertaker charge is `true`', () => {
-      it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isWaterUndertaker: true })
-
-        expect(result.isWaterUndertaker).to.equal(true)
-      })
-    })
-
-    describe('isNewLicence charge is `true`', () => {
-      it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isNewLicence: true })
-
-        expect(result.isNewLicence).to.equal(true)
-      })
-    })
-
-    describe('isTwoPartSecondPartCharge charge is `true`', () => {
-      it('returns the expected data', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isTwoPartSecondPartCharge: true })
-
-        expect(result.isTwoPartSecondPartCharge).to.equal(true)
-      })
-    })
-  })
-
-  describe('when the charge element has a supported source', () => {
-    let eagerSupportedSourceChargeElement
-
-    beforeEach(async () => {
-      const additionalCharges = {
-        supportedSource: {
-          id: '87391339-25c3-4132-9a78-0f7d7c111042',
-          name: 'SUPPORTED_SOURCE_NAME'
-        },
-        isSupplyPublicWater: false
+  describe('when a charge element does not have billable days', () => {
+    beforeEach(() => {
+      chargePeriod = {
+        startDate: new Date('2022-04-01'),
+        endDate: new Date('2022-10-31')
       }
+      isNewLicence = false
+      isWaterUndertaker = false
 
-      const supportedSourceChargeElement = await ChargeElementHelper.add({ additionalCharges, billingChargeCategoryId })
-      await ChargePurposeHelper.add({ chargeElementId: supportedSourceChargeElement.chargeElementId })
-      eagerSupportedSourceChargeElement = await supportedSourceChargeElement.$query()
-        .withGraphFetched('billingChargeCategory')
-        .withGraphFetched('chargePurposes')
+      Sinon.stub(CalculateAuthorisedAndBillableDaysServiceService, 'go').returns({ authorisedDays: 365, billableDays: 0 })
     })
 
-    it('returns `isSupportedSource` as `true`', () => {
-      const result = FormatSrocTransactionLineService.go(eagerSupportedSourceChargeElement, chargeVersion, billingPeriod)
+    it('returns an empty array', () => {
+      const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
-      expect(result.isSupportedSource).to.equal(true)
-    })
-
-    it('returns `supportedSourceName` field with the supported source name', () => {
-      const result = FormatSrocTransactionLineService.go(eagerSupportedSourceChargeElement, chargeVersion, billingPeriod)
-
-      expect(result.supportedSourceName).to.equal('SUPPORTED_SOURCE_NAME')
-    })
-  })
-
-  describe('when the description differs from the default', () => {
-    describe('because this is a compensation charge', () => {
-      it('returns the expected compensation charge description', () => {
-        const result = FormatSrocTransactionLineService.go(eagerChargeElement, chargeVersion, billingPeriod, { isCompensationCharge: true })
-
-        expect(result.description).to.startWith('Compensation charge')
-      })
-    })
-  })
-
-  describe('when the charge version has no end date', () => {
-    let noEndDateChargeVersion
-
-    beforeEach(async () => {
-      noEndDateChargeVersion = await ChargeVersionHelper.add({ startDate: '2022-11-01' })
-    })
-
-    it('uses the financial year end date', () => {
-      const result = FormatSrocTransactionLineService.go(eagerChargeElement, noEndDateChargeVersion, billingPeriod)
-
-      expect(result.endDate).to.equal(new Date('2023-03-31'))
+      expect(result).to.be.empty()
     })
   })
 })
