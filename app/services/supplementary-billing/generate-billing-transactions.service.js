@@ -1,9 +1,8 @@
 'use strict'
 
 /**
- * Transforms provided data into the format required for an sroc transaction line
- *
- * @module FormatSrocTransactionLineService
+ * Generate billing transaction data from the the charge element and other information passed in
+ * @module GenerateBillingTransactionsService
  */
 
 const { randomUUID } = require('crypto')
@@ -11,13 +10,27 @@ const { randomUUID } = require('crypto')
 const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-authorised-and-billable-days.service.js')
 
 /**
- * Takes a charge element, charge version and financial year and returns an object representing an sroc transaction
- * line, formatted ready to be inserted into the db.
+ * Generates an array of transactions ready to be persisted as `billing_transactions`
  *
- * @param {Object} chargeElement The charge element the transaction is to be created for.
- * @param {Integer} billingPeriod The billing period the transaction is to be created for.
+ * The service first uses the charge element and period data to determine if there are any billable days. If there are
+ * none, it returns an empty array. With nothing to bill there is no point in generating any transaction line objects.
  *
- * @returns {Object} The formatted transaction line data.
+ * If there are billable days, it will generate a transaction object where the `chargeType` is 'standard'.
+ *
+ * If the `isWaterUndertaker` flag was false, it will then generate a second 'compensation' transaction object based on
+ * the first. The only differences are the charge type and description properties. This is something the Charging
+ * Module expects to receive when the licence is for a water undertaker.
+ *
+ * They will then be returned in an array for further processing before being persisted to the DB as
+ * `billing_transactions`.
+ *
+ * @param {Object} chargeElement the charge element the transaction generated from
+ * @param {Object} billingPeriod a start and end date representing the billing period for the billing batch
+ * @param {Object} chargePeriod a start and end date representing the charge period for the charge version
+ * @param {boolean} isNewLicence whether the charge version is linked to a new licence
+ * @param {boolean} isWaterUndertaker whether the charge version is linked to a water undertaker licence
+ *
+ * @returns {Object[]} an array of 0, 1 or 2 transaction objects
  */
 function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker) {
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
