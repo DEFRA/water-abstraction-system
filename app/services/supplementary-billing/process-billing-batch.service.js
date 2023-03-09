@@ -80,10 +80,6 @@ async function go (billingBatch, billingPeriod) {
           billingBatch.externalId
         )
 
-        // We add the transaction lines to the existing ones so that they don't get overwritten when we put the billing
-        // invoice licence into our `billingInvoiceLicencesToPersist` object
-        currentBillingInvoiceLicence.billingInvoiceLicence.transactionLines.push(...transactionLines)
-
         // Our `billingInvoiceLicencesToPersist` object is a series of key/value pairs. Each key is the billing invoice
         // licence id, and the value is the billing invoice licence itself. We do this so we have a unique set of
         // billing invoice licences to persist, whereas if we were simply pushing them into an array we may have
