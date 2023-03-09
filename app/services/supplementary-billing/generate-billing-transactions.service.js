@@ -45,34 +45,66 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
     return billingTransactions
   }
 
-  billingTransactions.push(
-    _standardTransaction(
-      authorisedDays,
-      billableDays,
-      chargeElement,
-      chargePeriod,
-      isNewLicence,
-      isWaterUndertaker
-    )
+  const standardTransaction = _standardTransaction(
+    _generateUuid(),
+    authorisedDays,
+    billableDays,
+    chargeElement,
+    chargePeriod,
+    isNewLicence,
+    isWaterUndertaker
   )
+  billingTransactions.push(standardTransaction)
 
   if (!isWaterUndertaker) {
-    billingTransactions.push(_compensationTransaction(billingTransactions[0]))
+    const compensationTransaction = _compensationTransaction(_generateUuid(), standardTransaction)
+    billingTransactions.push(compensationTransaction)
   }
 
   return billingTransactions
 }
 
-function _compensationTransaction (standardTransaction) {
+function _compensationTransaction (billingTransactionId, standardTransaction) {
   return {
     ...standardTransaction,
-    billingTransactionId: randomUUID({ disableEntropyCache: true }),
+    billingTransactionId,
     chargeType: 'compensation',
     description: 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
   }
 }
 
+/**
+ * Return a unique UUID to be used as an ID
+ *
+ * We only intend to persist the transaction and associated billing invoice and licence if there is something to bill!
+ * But we have to provide the charging module with the ID of our transaction so it can protect against duplicates.
+ *
+ * So, we generate our transaction ID's in the code and avoid having to send a DB insert just to get back an ID to use.
+ *
+ * @returns {string} a unique UUID
+ */
+function _generateUuid () {
+  // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
+  // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
+  // disabling this cache is a rounding error in comparison to the rest of the process.
+  //
+  // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
+  return randomUUID({ disableEntropyCache: true })
+}
+
+/**
+ * Returns a json representation of all charge purposes in a charge element
+ */
+function _generatePurposes (chargeElement) {
+  const jsonChargePurposes = chargeElement.chargePurposes.map((chargePurpose) => {
+    return chargePurpose.toJSON()
+  })
+
+  return JSON.stringify(jsonChargePurposes)
+}
+
 function _standardTransaction (
+  billingTransactionId,
   authorisedDays,
   billableDays,
   chargeElement,
@@ -81,15 +113,10 @@ function _standardTransaction (
   isWaterUndertaker
 ) {
   return {
+    billingTransactionId,
     authorisedDays,
     billableDays,
     isNewLicence,
-    // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
-    // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
-    // disabling this cache is a rounding error in comparison to the rest of the process.
-    //
-    // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
-    billingTransactionId: randomUUID({ disableEntropyCache: true }),
     isWaterUndertaker,
     chargeElementId: chargeElement.chargeElementId,
     startDate: chargePeriod.startDate,
@@ -121,17 +148,6 @@ function _standardTransaction (
     isWinterOnly: !!chargeElement.adjustments.winter,
     purposes: _generatePurposes(chargeElement)
   }
-}
-
-/**
- * Returns a json representation of all charge purposes in a charge element
- */
-function _generatePurposes (chargeElement) {
-  const jsonChargePurposes = chargeElement.chargePurposes.map((chargePurpose) => {
-    return chargePurpose.toJSON()
-  })
-
-  return JSON.stringify(jsonChargePurposes)
 }
 
 module.exports = {
