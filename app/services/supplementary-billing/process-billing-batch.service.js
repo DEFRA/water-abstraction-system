@@ -43,29 +43,29 @@ async function go (billingBatch, billingPeriod) {
   // This is why we are only passing through the first billing period; we know there is only one!
   const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
-  let generatedBillingInvoices = []
-  let generatedBillingInvoiceLicences = []
+  let generatedInvoices = []
+  let generatedInvoiceLicences = []
 
-  const billingInvoiceLicencesToPersist = {}
-  const billingInvoicesToPersist = {}
+  const invoicesToPersist = {}
+  const invoiceLicencesToPersist = {}
 
   for (const chargeVersion of chargeVersions) {
     const { chargeElements, licence } = chargeVersion
 
-    const currentBillingInvoice = await GenerateBillingInvoiceService.go(
-      generatedBillingInvoices,
+    const invoiceData = await GenerateBillingInvoiceService.go(
+      generatedInvoices,
       chargeVersion.invoiceAccountId,
       billingBatchId,
       financialYearEnding
     )
-    generatedBillingInvoices = currentBillingInvoice.billingInvoices
+    generatedInvoices = invoiceData.billingInvoices
 
-    const currentBillingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(
-      generatedBillingInvoiceLicences,
-      currentBillingInvoice.billingInvoice.billingInvoiceId,
+    const invoiceLicenceData = GenerateBillingInvoiceLicenceService.go(
+      generatedInvoiceLicences,
+      invoiceData.billingInvoice.billingInvoiceId,
       licence
     )
-    generatedBillingInvoiceLicences = currentBillingInvoiceLicence.billingInvoiceLicences
+    generatedInvoiceLicences = invoiceLicenceData.billingInvoiceLicences
 
     if (chargeElements) {
       const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
@@ -74,8 +74,8 @@ async function go (billingBatch, billingPeriod) {
         await _createTransactionLines(
           transactionLines,
           billingPeriod,
-          currentBillingInvoice.billingInvoice.invoiceAccountNumber,
-          currentBillingInvoiceLicence.billingInvoiceLicence.billingInvoiceLicenceId,
+          invoiceData.billingInvoice.invoiceAccountNumber,
+          invoiceLicenceData.billingInvoiceLicence.billingInvoiceLicenceId,
           chargeVersion,
           billingBatch.externalId
         )
@@ -84,14 +84,14 @@ async function go (billingBatch, billingPeriod) {
         // licence id, and the value is the billing invoice licence itself. We do this so we have a unique set of
         // billing invoice licences to persist, whereas if we were simply pushing them into an array we may have
         // duplicate entries which we would then have to filter out (or check whether they exist before adding)
-        billingInvoiceLicencesToPersist[currentBillingInvoiceLicence.billingInvoiceLicence.billingInvoiceLicenceId] = currentBillingInvoiceLicence.billingInvoiceLicence
-        billingInvoicesToPersist[currentBillingInvoice.billingInvoice.billingInvoiceId] = currentBillingInvoice.billingInvoice
+        invoiceLicencesToPersist[invoiceLicenceData.billingInvoiceLicence.billingInvoiceLicenceId] = invoiceLicenceData.billingInvoiceLicence
+        invoicesToPersist[invoiceData.billingInvoice.billingInvoiceId] = invoiceData.billingInvoice
       }
     }
   }
 
-  await _persistBillingInvoices(billingInvoicesToPersist)
-  await _persistBillingInvoiceLicences(billingInvoiceLicencesToPersist)
+  await _persistBillingInvoices(invoicesToPersist)
+  await _persistBillingInvoiceLicences(invoiceLicencesToPersist)
 
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 
