@@ -90,8 +90,8 @@ async function go (billingBatch, billingPeriod) {
     }
   }
 
-  await _persistBillingInvoiceLicences(billingInvoiceLicencesToPersist)
   await _persistBillingInvoices(billingInvoicesToPersist)
+  await _persistBillingInvoiceLicences(billingInvoiceLicencesToPersist)
 
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 
