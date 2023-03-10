@@ -155,16 +155,26 @@ function _generateTransactionLines (billingPeriod, chargeVersion) {
 }
 
 async function _persistBillingInvoiceLicences (billingInvoiceLicences) {
-  // We have to remove the .persist flag we added else the SQL query Objection will generate will fail
-  const insertData = Object.values(billingInvoiceLicences.map(({ persist, ...theRest }) => theRest))
+  // We have to remove the .persist flag we added else the SQL query Objection will generate will fail. So, we use
+  // object destructuring assignment to assign the `persist:` property to one var, and the rest to 'another' (which we
+  // name `propertiesToPersist`). We then have map() just return `propertiesToPersist` leaving 'persist' behind!
+  // Credit: https://stackoverflow.com/a/46839399/6117745
+  const insertData = billingInvoiceLicences.map((billingInvoiceLicence) => {
+    const { persist, ...propertiesToPersist } = billingInvoiceLicence
+
+    return propertiesToPersist
+  })
 
   await BillingInvoiceLicenceModel.query()
     .insert(insertData)
 }
 
 async function _persistBillingInvoices (billingInvoices) {
-  // We have to remove the .persist flag we added else the SQL query Objection will generate will fail
-  const insertData = Object.values(billingInvoices.map(({ persist, ...theRest }) => theRest))
+  const insertData = billingInvoices.map((billingInvoice) => {
+    const { persist, ...propertiesToPersist } = billingInvoice
+
+    return propertiesToPersist
+  })
 
   await BillingInvoiceModel.query()
     .insert(insertData)
