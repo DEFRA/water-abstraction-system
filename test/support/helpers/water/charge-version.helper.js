@@ -19,6 +19,7 @@ const LicenceHelper = require('./licence.helper.js')
  * - `scheme` - sroc
  * - `startDate` - 2022-04-01
  * - `invoiceAccountId` - 01931031-4680-4950-87d6-50f8fe784f6d
+ * - `status` - current
  *
  * See `LicenceHelper` for the licence defaults
  *
@@ -60,7 +61,8 @@ function defaults (data = {}) {
     licenceRef: '01/123',
     scheme: 'sroc',
     startDate: new Date('2022-04-01'),
-    invoiceAccountId: '01931031-4680-4950-87d6-50f8fe784f6d'
+    invoiceAccountId: '01931031-4680-4950-87d6-50f8fe784f6d',
+    status: 'current'
   }
 
   return {

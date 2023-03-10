@@ -39,6 +39,7 @@ async function _fetch (regionId, billingPeriod) {
     .where('scheme', 'sroc')
     .where('includeInSupplementaryBilling', 'yes')
     .where('regionId', regionId)
+    .where('chargeVersions.status', 'current')
     .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .withGraphFetched('licence')

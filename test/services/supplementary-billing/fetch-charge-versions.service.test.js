@@ -55,13 +55,20 @@ describe('Fetch Charge Versions service', () => {
         { regionId, isWaterUndertaker: true, includeInSupplementaryBilling: 'yes' }
       )
 
+      // This creates an SROC charge version linked to a licence marked for supplementary billing
+      // with a status of 'superseded'
+      const srocSupersededChargeVersion = await ChargeVersionHelper.add(
+        { changeReasonId: changeReason.changeReasonId, status: 'superseded' },
+        { regionId, isWaterUndertaker: true, includeInSupplementaryBilling: 'yes' }
+      )
+
       // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
       const alcsChargeVersion = await ChargeVersionHelper.add(
         { scheme: 'alcs' },
         { regionId, includeInSupplementaryBilling: 'yes' }
       )
 
-      testRecords = [srocChargeVersion, alcsChargeVersion]
+      testRecords = [srocChargeVersion, srocSupersededChargeVersion, alcsChargeVersion]
 
       billingChargeCategory = await BillingChargeCategoryHelper.add()
 
@@ -75,7 +82,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    it('returns only the current SROC charge versions that are applicable', async () => {
+    it("returns only the 'current' SROC charge versions that are applicable", async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       expect(result.length).to.equal(1)
@@ -150,6 +157,31 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
+    describe("because all the applicable charge versions do not have a 'current' status", () => {
+      beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
+        const srocSupersededChargeVersion = await ChargeVersionHelper.add(
+          { status: 'superseded' },
+          { regionId, isWaterUndertaker: true, includeInSupplementaryBilling: 'yes' }
+        )
+        const srocDraftChargeVersion = await ChargeVersionHelper.add(
+          { status: 'draft' },
+          { regionId, isWaterUndertaker: true, includeInSupplementaryBilling: 'yes' }
+        )
+        testRecords = [srocSupersededChargeVersion, srocDraftChargeVersion]
+      })
+
+      it('returns no applicable charge versions', async () => {
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(result.length).to.equal(0)
+      })
+    })
+
     describe("because all the applicable charge versions are 'alcs' (presroc)", () => {
       beforeEach(async () => {
         billingPeriod = {
@@ -172,7 +204,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('because there are no current charge versions', () => {
+    describe('because there are no charge versions in the billing period', () => {
       describe('as they all have start dates before the billing period', () => {
         beforeEach(async () => {
           billingPeriod = {
