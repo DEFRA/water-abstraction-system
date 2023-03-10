@@ -118,7 +118,7 @@ async function _finaliseBillingBatch (billingBatch, generatedInvoices, generated
 
   // The bill run is considered empty. We just need to set the status to indicate this in the UI
   if (billingInvoicesToInsert.length === 0) {
-    await _updateStatus(billingBatchId, 'processing')
+    await _updateStatus(billingBatchId, 'empty')
 
     return
   }
