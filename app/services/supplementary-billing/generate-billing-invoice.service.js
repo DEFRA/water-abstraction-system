@@ -50,12 +50,12 @@ async function go (generatedBillingInvoices, invoiceAccountId, billingBatchId, f
   const invoiceAccount = await InvoiceAccountModel.query().findById(invoiceAccountId)
 
   billingInvoice = {
-    billingInvoiceId: randomUUID({ disableEntropyCache: true }),
-    invoiceAccountId,
-    address: {}, // Address is set to an empty object for SROC billing invoices
-    invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
     billingBatchId,
     financialYearEnding,
+    invoiceAccountId,
+    billingInvoiceId: randomUUID({ disableEntropyCache: true }),
+    address: {}, // Address is set to an empty object for SROC billing invoices
+    invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
     isCredit: false
   }
   const updatedBillingInvoices = [...generatedBillingInvoices, billingInvoice]
