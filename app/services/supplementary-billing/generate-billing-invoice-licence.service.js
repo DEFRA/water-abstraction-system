@@ -36,7 +36,7 @@ const { randomUUID } = require('crypto')
  * array of generated billing invoice licences which includes the one being returned
  */
 function go (generatedBillingInvoiceLicences, billingInvoiceId, licence) {
-  let billingInvoiceLicence = _existing(generatedBillingInvoiceLicences, billingInvoiceId)
+  let billingInvoiceLicence = _existing(generatedBillingInvoiceLicences, billingInvoiceId, licence.licenceId)
 
   if (billingInvoiceLicence) {
     return {
@@ -59,9 +59,9 @@ function go (generatedBillingInvoiceLicences, billingInvoiceId, licence) {
   }
 }
 
-function _existing (generatedBillingInvoiceLicences, billingInvoiceId) {
+function _existing (generatedBillingInvoiceLicences, billingInvoiceId, licenceId) {
   return generatedBillingInvoiceLicences.filter((invoiceLicence) => {
-    return billingInvoiceId === invoiceLicence.billingInvoiceId
+    return (billingInvoiceId === invoiceLicence.billingInvoiceId && licenceId === invoiceLicence.licenceId)
   })[0]
 }
 
