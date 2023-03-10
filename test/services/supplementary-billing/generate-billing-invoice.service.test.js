@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
 
 // Thing under test
@@ -15,21 +16,22 @@ const GenerateBillingInvoiceService = require('../../../app/services/supplementa
 
 describe('Generate billing invoice service', () => {
   const billingBatchId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
+  const financialYearEnding = 2023
 
   let generatedBillingInvoices
   let expectedResult
   let invoiceAccount
 
+  beforeEach(async () => {
+    await DatabaseHelper.clean()
+
+    invoiceAccount = await InvoiceAccountHelper.add()
+  })
+
   describe('when `generatedBillingInvoices` is empty', () => {
     beforeEach(async () => {
-      invoiceAccount = await InvoiceAccountHelper.add()
       generatedBillingInvoices = []
-      expectedResult = _billingInvoiceGenerator(
-        invoiceAccount.invoiceAccountId,
-        invoiceAccount.invoiceAccountNumber,
-        billingBatchId,
-        2023
-      )
+      expectedResult = _billingInvoiceGenerator(invoiceAccount, billingBatchId, financialYearEnding)
     })
 
     it('returns a new billing invoice and an array populated with just it', async () => {
@@ -37,7 +39,7 @@ describe('Generate billing invoice service', () => {
         generatedBillingInvoices,
         invoiceAccount.invoiceAccountId,
         billingBatchId,
-        2023
+        financialYearEnding
       )
 
       expect(result.billingInvoice).to.equal(expectedResult, { skip: 'billingInvoiceId' })
@@ -46,26 +48,20 @@ describe('Generate billing invoice service', () => {
   })
 
   describe('when `generatedBillingInvoices` is populated', () => {
-    describe.only('and a matching billing invoice exists', () => {
+    describe('and a matching billing invoice exists', () => {
       let existingBillingInvoice
 
       beforeEach(async () => {
-        invoiceAccount = await InvoiceAccountHelper.add()
-        existingBillingInvoice = _billingInvoiceGenerator(
-          invoiceAccount.invoiceAccountId,
-          invoiceAccount.invoiceAccountNumber,
-          billingBatchId,
-          2023
-        )
+        existingBillingInvoice = _billingInvoiceGenerator(invoiceAccount, billingBatchId, financialYearEnding)
         generatedBillingInvoices = [existingBillingInvoice]
       })
 
-      it('returns the existing billing invoice object and the existing array', () => {
-        const result = GenerateBillingInvoiceService.go(
+      it('returns the existing billing invoice object and the existing array', async () => {
+        const result = await GenerateBillingInvoiceService.go(
           generatedBillingInvoices,
           invoiceAccount.invoiceAccountId,
           billingBatchId,
-          2023
+          financialYearEnding
         )
 
         expect(result.billingInvoice).to.equal(existingBillingInvoice)
@@ -73,32 +69,41 @@ describe('Generate billing invoice service', () => {
       })
     })
 
-    describe('and a matching billing invoice licence does not exist', () => {
-      let existingBillingInvoiceLicence
+    describe('and a matching billing invoice does not exist', () => {
+      let existingBillingInvoice
 
       beforeEach(() => {
-        existingBillingInvoiceLicence = _billingInvoiceLicenceGenerator('d0761e82-9c96-4304-9b4c-3c5d4c1af8bb', licence)
-        generatedBillingInvoiceLicences = [existingBillingInvoiceLicence]
+        existingBillingInvoice = _billingInvoiceGenerator(
+          { invoiceAccountId: '813b8bb3-f871-49c3-ac2c-0636e636d9f6', invoiceAccountNumber: 'ABC123' },
+          billingBatchId,
+          financialYearEnding
+        )
+        generatedBillingInvoices = [existingBillingInvoice]
 
-        expectedResult = _billingInvoiceLicenceGenerator(billingInvoiceId, licence)
+        expectedResult = _billingInvoiceGenerator(invoiceAccount, billingBatchId, financialYearEnding)
       })
 
-      it('returns a new billing invoice licence object and the existing array with the new object included', () => {
-        const result = GenerateBillingInvoiceLicenceService.go(generatedBillingInvoiceLicences, billingInvoiceId, licence)
+      it('returns a new billing invoice object and the existing array with the new object included', async () => {
+        const result = await GenerateBillingInvoiceService.go(
+          generatedBillingInvoices,
+          invoiceAccount.invoiceAccountId,
+          billingBatchId,
+          financialYearEnding
+        )
 
-        expect(result.billingInvoiceLicence).to.equal(expectedResult, { skip: 'billingInvoiceLicenceId' })
-        expect(result.billingInvoiceLicences).to.equal([...generatedBillingInvoiceLicences, result.billingInvoiceLicence])
+        expect(result.billingInvoice).to.equal(expectedResult, { skip: 'billingInvoiceId' })
+        expect(result.billingInvoices).to.equal([...generatedBillingInvoices, result.billingInvoice])
       })
     })
   })
 })
 
-function _billingInvoiceGenerator (invoiceAccountId, invoiceAccountNumber, billingBatchId, financialYearEnding) {
+function _billingInvoiceGenerator (invoiceAccount, billingBatchId, financialYearEnding) {
   return {
     billingInvoiceId: 'fa0c763e-3976-42df-ae2c-e93a954701dd',
-    invoiceAccountId,
+    invoiceAccountId: invoiceAccount.invoiceAccountId,
     address: {},
-    invoiceAccountNumber,
+    invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
     billingBatchId,
     financialYearEnding,
     isCredit: false
