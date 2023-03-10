@@ -67,9 +67,9 @@ async function go (generatedBillingInvoices, invoiceAccountId, billingBatchId, f
 }
 
 function _existing (generatedBillingInvoices, invoiceAccountId) {
-  return generatedBillingInvoices.filter((invoice) => {
+  return generatedBillingInvoices.find((invoice) => {
     return invoiceAccountId === invoice.invoiceAccountId
-  })[0]
+  })
 }
 
 module.exports = {

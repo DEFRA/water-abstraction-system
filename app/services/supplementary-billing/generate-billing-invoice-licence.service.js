@@ -60,9 +60,9 @@ function go (generatedBillingInvoiceLicences, billingInvoiceId, licence) {
 }
 
 function _existing (generatedBillingInvoiceLicences, billingInvoiceId, licenceId) {
-  return generatedBillingInvoiceLicences.filter((invoiceLicence) => {
+  return generatedBillingInvoiceLicences.find((invoiceLicence) => {
     return (billingInvoiceId === invoiceLicence.billingInvoiceId && licenceId === invoiceLicence.licenceId)
-  })[0]
+  })
 }
 
 module.exports = {
