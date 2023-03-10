@@ -6,6 +6,8 @@
  */
 
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
+const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
+const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-licence.model.js')
 const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
 const ChargingModuleGenerateService = require('..//charging-module/generate-bill-run.service.js')
 const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
@@ -18,9 +20,6 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
-const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
-const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-licence.model.js')
-
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
  *
@@ -31,7 +30,6 @@ const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-l
  */
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
-  const financialYearEnding = billingPeriod.endDate.getFullYear()
 
   await _updateStatus(billingBatchId, 'processing')
 
@@ -44,28 +42,25 @@ async function go (billingBatch, billingPeriod) {
   let generatedInvoices = []
   let generatedInvoiceLicences = []
 
-  const invoicesToPersist = {}
-  const invoiceLicencesToPersist = {}
-
   for (const chargeVersion of chargeVersions) {
     const { chargeElements, licence } = chargeVersion
 
-    const invoiceData = await GenerateBillingInvoiceService.go(
+    const billingInvoiceData = await GenerateBillingInvoiceService.go(
       generatedInvoices,
       chargeVersion.invoiceAccountId,
       billingBatchId,
-      financialYearEnding
+      billingPeriod.endDate.getFullYear()
     )
-    generatedInvoices = invoiceData.billingInvoices
-    const { billingInvoiceId } = invoiceData.billingInvoice
+    generatedInvoices = billingInvoiceData.billingInvoices
+    const { billingInvoice } = billingInvoiceData
 
-    const invoiceLicenceData = GenerateBillingInvoiceLicenceService.go(
+    const billingInvoiceLicenceData = GenerateBillingInvoiceLicenceService.go(
       generatedInvoiceLicences,
-      invoiceData.billingInvoice.billingInvoiceId,
+      billingInvoiceData.billingInvoice.billingInvoiceId,
       licence
     )
-    generatedInvoiceLicences = invoiceLicenceData.billingInvoiceLicences
-    const { billingInvoiceLicenceId } = invoiceLicenceData.billingInvoiceLicence
+    generatedInvoiceLicences = billingInvoiceLicenceData.billingInvoiceLicences
+    const { billingInvoiceLicence } = billingInvoiceLicenceData
 
     if (chargeElements) {
       const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
@@ -74,54 +69,19 @@ async function go (billingBatch, billingPeriod) {
         await _createTransactionLines(
           transactionLines,
           billingPeriod,
-          invoiceData.billingInvoice.invoiceAccountNumber,
-          billingInvoiceLicenceId,
+          billingInvoice.invoiceAccountNumber,
+          billingInvoiceLicence.billingInvoiceLicenceId,
           chargeVersion,
           billingBatch.externalId
         )
 
-        // NOTE: Our `[..]ToPersist` objects are a series of key/value pairs. Each key is the ID of an invoice or
-        // invoice licence object we've generated and the value is the object itself. We do this so we have a unique
-        // set of generated objects we know needed persisting to the DB.
-
-        // If we were just pushed them into an array we would have duplicate entries. So, we would then have to filter
-        // out (or check whether they exist before adding)
-        invoiceLicencesToPersist[billingInvoiceLicenceId] = invoiceLicenceData.billingInvoiceLicence
-        invoicesToPersist[billingInvoiceId] = invoiceData.billingInvoice
+        billingInvoice.persist = true
+        billingInvoiceLicence.persist = true
       }
     }
   }
 
-  await _persistBillingInvoices(invoicesToPersist)
-  await _persistBillingInvoiceLicences(invoiceLicencesToPersist)
-
-  await ChargingModuleGenerateService.go(billingBatch.externalId)
-
-  // NOTE: Retaining this as a candidate for updating the bill run status if the process errors or the bill run is empty
-  // await UpdateBillingBatchStatusService.go(billingData.id, 'ready')
-
-  await LegacyRequestLib.post('water', `billing/batches/${billingBatchId}/refresh`)
-}
-
-async function _updateStatus (billingBatchId, status) {
-  await BillingBatchModel.query()
-    .findById(billingBatchId)
-    .patch({ status })
-}
-
-function _generateTransactionLines (billingPeriod, chargeVersion) {
-  const financialYearEnding = billingPeriod.endDate.getFullYear()
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
-  const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
-  const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
-
-  const transactionLines = []
-  for (const chargeElement of chargeVersion.chargeElements) {
-    const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
-    transactionLines.push(...result)
-  }
-
-  return transactionLines
+  await _finaliseBillingBatch(billingBatch, generatedInvoices, generatedInvoiceLicences)
 }
 
 async function _createTransactionLines (
@@ -151,18 +111,69 @@ async function _createTransactionLines (
   }
 }
 
-async function _persistBillingInvoiceLicences (billingInvoiceLicencesToPersist) {
-  const billingInvoiceLicencesToInsert = Object.values(billingInvoiceLicencesToPersist)
+async function _finaliseBillingBatch (billingBatch, generatedInvoices, generatedInvoiceLicences) {
+  const { billingBatchId, externalId } = billingBatch
 
-  await BillingInvoiceLicenceModel.query()
-    .insert(billingInvoiceLicencesToInsert)
+  const billingInvoicesToInsert = generatedInvoices.filter((billingInvoice) => billingInvoice.persist)
+
+  // The bill run is considered empty. We just need to set the status to indicate this in the UI
+  if (billingInvoicesToInsert.length === 0) {
+    await _updateStatus(billingBatchId, 'processing')
+
+    return
+  }
+
+  // We need to persist the billing invoice and billing invoice licence records
+  const billingInvoiceLicencesToInsert = generatedInvoiceLicences.filter((invoiceLicence) => invoiceLicence.persist)
+
+  await _persistBillingInvoices(billingInvoicesToInsert)
+  await _persistBillingInvoiceLicences(billingInvoiceLicencesToInsert)
+
+  // We then need to tell the Charging Module to run its generate process. This is where the Charging module finalises
+  // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
+  await ChargingModuleGenerateService.go(externalId)
+
+  // We then tell our legacy service to queue up its refresh totals job. This requests the finalised bill run and
+  // invoice detail from the Charging Module and updates our data with it. The good news is the legacy code handles
+  // all that within this job. We just need to queue it up 😁
+  await LegacyRequestLib.post('water', `billing/batches/${billingBatchId}/refresh`)
 }
 
-async function _persistBillingInvoices (billingInvoicesToPersist) {
-  const billingInvoicesToInsert = Object.values(billingInvoicesToPersist)
+function _generateTransactionLines (billingPeriod, chargeVersion) {
+  const financialYearEnding = billingPeriod.endDate.getFullYear()
+  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
+  const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+  const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
+
+  const transactionLines = []
+  for (const chargeElement of chargeVersion.chargeElements) {
+    const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+    transactionLines.push(...result)
+  }
+
+  return transactionLines
+}
+
+async function _persistBillingInvoiceLicences (billingInvoiceLicences) {
+  // We have to remove the .persist flag we added else the SQL query Objection will generate will fail
+  const insertData = Object.values(billingInvoiceLicences.map(({ persist, ...theRest }) => theRest))
+
+  await BillingInvoiceLicenceModel.query()
+    .insert(insertData)
+}
+
+async function _persistBillingInvoices (billingInvoices) {
+  // We have to remove the .persist flag we added else the SQL query Objection will generate will fail
+  const insertData = Object.values(billingInvoices.map(({ persist, ...theRest }) => theRest))
 
   await BillingInvoiceModel.query()
-    .insert(billingInvoicesToInsert)
+    .insert(insertData)
+}
+
+async function _updateStatus (billingBatchId, status) {
+  await BillingBatchModel.query()
+    .findById(billingBatchId)
+    .patch({ status })
 }
 
 module.exports = {
