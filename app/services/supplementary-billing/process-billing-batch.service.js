@@ -41,28 +41,24 @@ async function go (billingBatch, billingPeriod) {
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
 
     for (const chargeVersion of chargeVersions) {
-      const { chargeElements, licence } = chargeVersion
+      const { licence } = chargeVersion
 
       const billingInvoice = await _generateBillingInvoice(chargeVersion, billingBatchId, billingPeriod)
       const billingInvoiceLicence = _generateBillingInvoiceLicence(billingInvoice, licence)
 
-      if (chargeElements) {
-        const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion, billingBatchId)
+      const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion, billingBatchId)
 
-        if (transactionLines.length > 0) {
-          await _createTransactionLines(
-            transactionLines,
-            billingPeriod,
-            billingInvoice,
-            billingInvoiceLicence,
-            chargeVersion,
-            billingBatch
-          )
-        }
-      }
+      await _createTransactionLines(
+        transactionLines,
+        billingPeriod,
+        billingInvoice,
+        billingInvoiceLicence,
+        chargeVersion,
+        billingBatch
+      )
     }
 
-    await _finaliseBillingBatch(billingBatch, generatedInvoices, generatedInvoiceLicences)
+    await _finaliseBillingBatch(billingBatch)
   } catch (error) {
     global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch, error })
   }
@@ -109,9 +105,7 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
     // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
     // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
     // This is why we are only passing through the first billing period; we know there is only one!
-    const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
-
-    return chargeVersions
+    return await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
   } catch (error) {
     HandleErroredBillingBatchService.go(
       billingBatch.billingBatchId,
@@ -130,6 +124,10 @@ async function _createTransactionLines (
   chargeVersion,
   billingBatch
 ) {
+  if (transactionLines.length === 0) {
+    return
+  }
+
   try {
     for (const transaction of transactionLines) {
       const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
@@ -161,7 +159,7 @@ async function _createTransactionLines (
   }
 }
 
-async function _finaliseBillingBatch (billingBatch, generatedInvoices, generatedInvoiceLicences) {
+async function _finaliseBillingBatch (billingBatch) {
   try {
     const { billingBatchId, externalId } = billingBatch
 
