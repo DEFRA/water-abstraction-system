@@ -31,57 +31,61 @@ const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
 
-  await _updateStatus(billingBatchId, 'processing')
+  try {
+    await _updateStatus(billingBatchId, 'processing')
 
-  // We know in the future we will be calculating multiple billing periods and so will have to iterate through each,
-  // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
-  // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
-  // This is why we are only passing through the first billing period; we know there is only one!
-  const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
+    // We know in the future we will be calculating multiple billing periods and so will have to iterate through each,
+    // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
+    // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
+    // This is why we are only passing through the first billing period; we know there is only one!
+    const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
-  let generatedInvoices = []
-  let generatedInvoiceLicences = []
+    let generatedInvoices = []
+    let generatedInvoiceLicences = []
 
-  for (const chargeVersion of chargeVersions) {
-    const { chargeElements, licence } = chargeVersion
+    for (const chargeVersion of chargeVersions) {
+      const { chargeElements, licence } = chargeVersion
 
-    const billingInvoiceData = await GenerateBillingInvoiceService.go(
-      generatedInvoices,
-      chargeVersion.invoiceAccountId,
-      billingBatchId,
-      billingPeriod.endDate.getFullYear()
-    )
-    generatedInvoices = billingInvoiceData.billingInvoices
-    const { billingInvoice } = billingInvoiceData
+      const billingInvoiceData = await GenerateBillingInvoiceService.go(
+        generatedInvoices,
+        chargeVersion.invoiceAccountId,
+        billingBatchId,
+        billingPeriod.endDate.getFullYear()
+      )
+      generatedInvoices = billingInvoiceData.billingInvoices
+      const { billingInvoice } = billingInvoiceData
 
-    const billingInvoiceLicenceData = GenerateBillingInvoiceLicenceService.go(
-      generatedInvoiceLicences,
-      billingInvoiceData.billingInvoice.billingInvoiceId,
-      licence
-    )
-    generatedInvoiceLicences = billingInvoiceLicenceData.billingInvoiceLicences
-    const { billingInvoiceLicence } = billingInvoiceLicenceData
+      const billingInvoiceLicenceData = GenerateBillingInvoiceLicenceService.go(
+        generatedInvoiceLicences,
+        billingInvoiceData.billingInvoice.billingInvoiceId,
+        licence
+      )
+      generatedInvoiceLicences = billingInvoiceLicenceData.billingInvoiceLicences
+      const { billingInvoiceLicence } = billingInvoiceLicenceData
 
-    if (chargeElements) {
-      const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
+      if (chargeElements) {
+        const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion)
 
-      if (transactionLines.length > 0) {
-        await _createTransactionLines(
-          transactionLines,
-          billingPeriod,
-          billingInvoice.invoiceAccountNumber,
-          billingInvoiceLicence.billingInvoiceLicenceId,
-          chargeVersion,
-          billingBatch.externalId
-        )
+        if (transactionLines.length > 0) {
+          await _createTransactionLines(
+            transactionLines,
+            billingPeriod,
+            billingInvoice.invoiceAccountNumber,
+            billingInvoiceLicence.billingInvoiceLicenceId,
+            chargeVersion,
+            billingBatch.externalId
+          )
 
-        billingInvoice.persist = true
-        billingInvoiceLicence.persist = true
+          billingInvoice.persist = true
+          billingInvoiceLicence.persist = true
+        }
       }
     }
-  }
 
-  await _finaliseBillingBatch(billingBatch, generatedInvoices, generatedInvoiceLicences)
+    await _finaliseBillingBatch(billingBatch, generatedInvoices, generatedInvoiceLicences)
+  } catch (error) {
+    global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch, error })
+  }
 }
 
 async function _createTransactionLines (
