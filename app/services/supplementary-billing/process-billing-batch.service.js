@@ -18,6 +18,7 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
+const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
 /**
@@ -84,7 +85,7 @@ async function go (billingBatch, billingPeriod) {
 
     await _finaliseBillingBatch(billingBatch, generatedInvoices, generatedInvoiceLicences)
   } catch (error) {
-    await _updateStatus(billingBatchId, 'error')
+    await HandleErroredBillingBatchService.go(billingBatchId)
 
     global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch, error })
   }
