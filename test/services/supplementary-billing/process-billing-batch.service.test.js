@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
 const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
@@ -20,6 +21,10 @@ describe.skip('Process billing batch service', () => {
     endDate: new Date('2023-03-31')
   }
   let billingBatch
+
+  beforeEach(async () => {
+    await DatabaseHelper.clean()
+  })
 
   afterEach(() => {
     Sinon.restore()
