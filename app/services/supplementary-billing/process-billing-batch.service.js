@@ -139,7 +139,6 @@ async function _createTransactionLines (
 
       const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(billingBatch.externalId, chargingModuleRequest)
 
-      // TODO: Handle a failed request
       transaction.status = 'charge_created'
       transaction.externalId = chargingModuleResponse.response.body.transaction.id
       transaction.billingInvoiceLicenceId = billingInvoiceLicence.billingInvoiceLicenceId
