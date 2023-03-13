@@ -84,6 +84,8 @@ async function go (billingBatch, billingPeriod) {
 
     await _finaliseBillingBatch(billingBatch, generatedInvoices, generatedInvoiceLicences)
   } catch (error) {
+    await _updateStatus(billingBatchId, 'error')
+
     global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch, error })
   }
 }
