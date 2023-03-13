@@ -30,7 +30,7 @@ const HandleErroredBillingBatchService = require('../../../app/services/suppleme
 // Thing under test
 const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
 
-describe.only('Process billing batch service', () => {
+describe('Process billing batch service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
