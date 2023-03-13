@@ -17,6 +17,11 @@ const RequestLib = require('../../app/lib/request.lib.js')
 
 describe('RequestLib', () => {
   const testDomain = 'http://example.com'
+  const shortBackoffLimitRetryOptions = {
+    ...RequestLib.defaultOptions.retry,
+    backoffLimit: 50
+  }
+
   let notifierStub
 
   beforeEach(() => {
@@ -156,13 +161,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.get(testDomain)
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.get(testDomain)
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -191,13 +196,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.get(testDomain)
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.get(testDomain)
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -365,13 +370,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.patch(testDomain)
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.patch(testDomain)
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -400,13 +405,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.patch(testDomain)
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.patch(testDomain)
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -574,13 +579,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.post(testDomain)
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.post(testDomain)
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -609,13 +614,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.post(testDomain)
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.post(testDomain)
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
