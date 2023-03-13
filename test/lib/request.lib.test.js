@@ -15,7 +15,7 @@ const requestConfig = require('../../config/request.config.js')
 // Thing under test
 const RequestLib = require('../../app/lib/request.lib.js')
 
-describe('RequestLib', () => {
+describe.only('RequestLib', () => {
   const testDomain = 'http://example.com'
   const shortBackoffLimitRetryOptions = {
     ...RequestLib.defaultOptions.retry,
@@ -141,9 +141,7 @@ describe('RequestLib', () => {
           Sinon.replace(requestConfig, 'timeout', 50)
         })
 
-        // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .get(() => true)
@@ -350,9 +348,7 @@ describe('RequestLib', () => {
           Sinon.replace(requestConfig, 'timeout', 50)
         })
 
-        // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .patch(() => true)
@@ -559,9 +555,7 @@ describe('RequestLib', () => {
           Sinon.replace(requestConfig, 'timeout', 50)
         })
 
-        // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .post(() => true)
