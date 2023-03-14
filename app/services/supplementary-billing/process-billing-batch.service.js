@@ -21,9 +21,6 @@ const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
-let generatedInvoices = []
-let generatedInvoiceLicences = []
-
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
  *
@@ -35,6 +32,14 @@ let generatedInvoiceLicences = []
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
 
+  // NOTE: This is where we store generated data that _might_ be persisted when we finalise the billing batch. We need
+  // to generate invoice and invoice licence information so we can persist those transactions we want to bill. When we
+  // persist a transaction we flag the accompanying invoice and invoice licence as needing persisting.
+  // This means a number of our methods are mutating this information as the billing batch is processed.
+  const generatedData = {
+    invoices: [],
+    invoiceLicences: []
+  }
   try {
     // Mark the start time for later logging
     const startTime = process.hrtime.bigint()
@@ -46,8 +51,8 @@ async function go (billingBatch, billingPeriod) {
     for (const chargeVersion of chargeVersions) {
       const { licence } = chargeVersion
 
-      const billingInvoice = await _generateBillingInvoice(chargeVersion, billingBatchId, billingPeriod)
-      const billingInvoiceLicence = _generateBillingInvoiceLicence(billingInvoice, licence)
+      const billingInvoice = await _generateBillingInvoice(generatedData, chargeVersion, billingBatchId, billingPeriod)
+      const billingInvoiceLicence = _generateBillingInvoiceLicence(generatedData, billingInvoice, licence)
 
       const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion, billingBatchId)
 
@@ -61,7 +66,7 @@ async function go (billingBatch, billingPeriod) {
       )
     }
 
-    await _finaliseBillingBatch(billingBatch)
+    await _finaliseBillingBatch(generatedData, billingBatch)
 
     // Log how log the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -88,15 +93,15 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
 }
 
-async function _generateBillingInvoice (chargeVersion, billingBatchId, billingPeriod) {
+async function _generateBillingInvoice (generatedData, chargeVersion, billingBatchId, billingPeriod) {
   try {
     const billingInvoiceData = await GenerateBillingInvoiceService.go(
-      generatedInvoices,
+      generatedData.invoices,
       chargeVersion.invoiceAccountId,
       billingBatchId,
       billingPeriod.endDate.getFullYear()
     )
-    generatedInvoices = billingInvoiceData.billingInvoices
+    generatedData.invoices = billingInvoiceData.billingInvoices
 
     return billingInvoiceData.billingInvoice
   } catch (error) {
@@ -106,14 +111,14 @@ async function _generateBillingInvoice (chargeVersion, billingBatchId, billingPe
   }
 }
 
-function _generateBillingInvoiceLicence (billingInvoice, licence) {
+function _generateBillingInvoiceLicence (generatedData, billingInvoice, licence) {
   try {
     const billingInvoiceLicenceData = GenerateBillingInvoiceLicenceService.go(
-      generatedInvoiceLicences,
+      generatedData.invoiceLicences,
       billingInvoice.billingInvoiceId,
       licence
     )
-    generatedInvoiceLicences = billingInvoiceLicenceData.billingInvoiceLicences
+    generatedData.invoiceLicences = billingInvoiceLicenceData.billingInvoiceLicences
 
     return billingInvoiceLicenceData.billingInvoiceLicence
   } catch (error) {
@@ -182,11 +187,12 @@ async function _createTransactionLines (
   }
 }
 
-async function _finaliseBillingBatch (billingBatch) {
-  try {
-    const { billingBatchId, externalId } = billingBatch
+async function _finaliseBillingBatch (generatedData, billingBatch) {
+  const { invoices, invoiceLicences } = generatedData
+  const { billingBatchId, externalId } = billingBatch
 
-    const billingInvoicesToInsert = generatedInvoices.filter((billingInvoice) => billingInvoice.persist)
+  try {
+    const billingInvoicesToInsert = invoices.filter((billingInvoice) => billingInvoice.persist)
 
     // The bill run is considered empty. We just need to set the status to indicate this in the UI
     if (billingInvoicesToInsert.length === 0) {
@@ -196,7 +202,7 @@ async function _finaliseBillingBatch (billingBatch) {
     }
 
     // We need to persist the billing invoice and billing invoice licence records
-    const billingInvoiceLicencesToInsert = generatedInvoiceLicences.filter((invoiceLicence) => invoiceLicence.persist)
+    const billingInvoiceLicencesToInsert = invoiceLicences.filter((invoiceLicence) => invoiceLicence.persist)
 
     await _persistBillingInvoices(billingInvoicesToInsert)
     await _persistBillingInvoiceLicences(billingInvoiceLicencesToInsert)
@@ -210,7 +216,7 @@ async function _finaliseBillingBatch (billingBatch) {
     // all that within this job. We just need to queue it up 😁
     await LegacyRequestLib.post('water', `billing/batches/${billingBatchId}/refresh`)
   } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+    HandleErroredBillingBatchService.go(billingBatchId)
 
     throw error
   }
@@ -225,7 +231,13 @@ function _generateTransactionLines (billingPeriod, chargeVersion, billingBatchId
 
     const transactionLines = []
     for (const chargeElement of chargeVersion.chargeElements) {
-      const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+      const result = GenerateBillingTransactionsService.go(
+        chargeElement,
+        billingPeriod,
+        chargePeriod,
+        isNewLicence,
+        isWaterUndertaker
+      )
       transactionLines.push(...result)
     }
 
