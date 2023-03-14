@@ -27,17 +27,17 @@ async function _getTransactions (billingBatch, licences) {
   const billingInvoices = await BillingInvoiceModel.query()
     .where({ billingBatchId: billingBatch.billingBatchId })
 
-  const [licence] = licences
-  const [billingInvoice] = billingInvoices
+  const licenceIds = licences.map(licence => licence.licenceId)
+  const billingInvoiceIds = billingInvoices.map(invoices => invoices.billingInvoiceId)
 
   const billingInvoiceLicences = await BillingInvoiceLicenceModel.query()
-    .where({ billingInvoiceId: billingInvoice.billingInvoiceId })
-    .where({ licenceId: licence.licenceId })
+    .whereIn('billingInvoiceId', billingInvoiceIds)
+    .whereIn('licenceId', licenceIds)
 
-  const [billingInvoiceLicence] = billingInvoiceLicences
+  const billingInvoiceLicenceIds = billingInvoiceLicences.map(licence => licence.billingInvoiceLicenceId)
 
   const billingTransactions = await BillingTransactionModel.query()
-    .where({ billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId })
+    .whereIn('billingInvoiceLicenceId', billingInvoiceLicenceIds)
 
   return billingTransactions
 }
