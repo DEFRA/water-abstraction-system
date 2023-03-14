@@ -11,6 +11,9 @@ const { expect } = Code
 // Test helpers
 const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
 const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
+const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
+const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
 const ChangeReasonHelper = require('../../support/helpers/water/change-reason.helper.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
@@ -25,20 +28,26 @@ const ReverseBillingBatchLicencesService = require('../../../app/services/supple
 
 describe.only('Reverse Billing Batch Licences service', () => {
   let billingBatch
+  let licence
+  let billingTransaction
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
     const { regionId } = await RegionHelper.add()
-    const { licenceId } = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes', regionId })
+    licence = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes', regionId })
     const { changeReasonId } = await ChangeReasonHelper.add()
     const { invoiceAccountId } = await InvoiceAccountHelper.add()
-    const { chargeVersionId } = await ChargeVersionHelper.add({ changeReasonId, invoiceAccountId }, { licenceId })
+    const { chargeVersionId } = await ChargeVersionHelper.add({ changeReasonId, invoiceAccountId }, licence)
     const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
     const { chargeElementId } = await ChargeElementHelper.add({ billingChargeCategoryId, chargeVersionId })
     await ChargePurposeHelper.add({ chargeElementId })
 
     billingBatch = await BillingBatchHelper.add({ regionId })
+
+    const billingInvoice = await BillingInvoiceHelper.add({}, billingBatch)
+    const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({}, licence, billingInvoice)
+    billingTransaction = await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId })
   })
 
   afterEach(() => {
@@ -46,10 +55,10 @@ describe.only('Reverse Billing Batch Licences service', () => {
   })
 
   describe('when the service is called', () => {
-    it('returns the billing batch id', async () => {
-      const result = await ReverseBillingBatchLicencesService.go(billingBatch, [])
+    it('returns the transactions for the given licence', async () => {
+      const result = await ReverseBillingBatchLicencesService.go(billingBatch, [licence])
 
-      expect(result).to.equal(billingBatch.billingBatchId)
+      expect(result).to.equal([billingTransaction])
     })
   })
 })
