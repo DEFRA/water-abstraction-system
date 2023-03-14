@@ -5,8 +5,6 @@
  * @module ReverseBillingBatchLicencesService
  */
 
-const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
-const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-licence.model.js')
 const BillingTransactionModel = require('../../models/water/billing-transaction.model.js')
 
 /**
@@ -18,28 +16,23 @@ const BillingTransactionModel = require('../../models/water/billing-transaction.
  * @returns {Array[]} Array of reversing transactions
  */
 async function go (billingBatch, licences) {
-  const transactions = await _getTransactions(billingBatch, licences)
+  const transactions = await _fetchTransactions(billingBatch, licences)
 
   return transactions
 }
 
-async function _getTransactions (billingBatch, licences) {
-  const billingInvoices = await BillingInvoiceModel.query()
-    .where({ billingBatchId: billingBatch.billingBatchId })
+/**
+ * Fetches all transactions in the provided billing batch for the provided licences
+ */
+async function _fetchTransactions (billingBatch, licences) {
+  const licenceIds = licences.map((licence) => {
+    return licence.licenceId
+  })
 
-  const licenceIds = licences.map(licence => licence.licenceId)
-  const billingInvoiceIds = billingInvoices.map(invoices => invoices.billingInvoiceId)
-
-  const billingInvoiceLicences = await BillingInvoiceLicenceModel.query()
-    .whereIn('billingInvoiceId', billingInvoiceIds)
-    .whereIn('licenceId', licenceIds)
-
-  const billingInvoiceLicenceIds = billingInvoiceLicences.map(licence => licence.billingInvoiceLicenceId)
-
-  const billingTransactions = await BillingTransactionModel.query()
-    .whereIn('billingInvoiceLicenceId', billingInvoiceLicenceIds)
-
-  return billingTransactions
+  return await BillingTransactionModel.query()
+    .joinRelated('billingInvoiceLicence.billingInvoice')
+    .whereIn('billingInvoiceLicence.licenceId', licenceIds)
+    .where('billingBatchId', billingBatch.billingBatchId)
 }
 
 module.exports = {
