@@ -23,6 +23,7 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
+const ChargingModuleGenerateService = require('../../../app/services/charging-module/generate-bill-run.service.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 const GenerateBillingTransactionsService = require('../../../app/services/supplementary-billing/generate-billing-transactions.service.js')
 const HandleErroredBillingBatchService = require('../../../app/services/supplementary-billing/handle-errored-billing-batch.service.js')
@@ -65,6 +66,29 @@ describe('Process billing batch service', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('when the service is called', () => {
+    beforeEach(() => {
+      Sinon.stub(ChargingModuleCreateTransactionService, 'go').resolves({
+        succeeded: true,
+        response: {
+          body: { transaction: { id: '7e752fa6-a19c-4779-b28c-6e536f028795' } }
+        }
+      })
+      Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
+        succeeded: true,
+        response: {}
+      })
+    })
+
+    it('logs the time taken to process the billing batch', async () => {
+      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+      const logMessage = notifierStub.omg.firstCall.args[0]
+
+      expect(logMessage).to.startWith(`Time taken to process billing batch ${billingBatch.billingBatchId}:`)
+    })
   })
 
   describe('when the service errors', () => {
