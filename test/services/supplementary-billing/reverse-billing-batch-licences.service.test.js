@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReverseBillingBatchLicencesService = require('../../../app/services/supplementary-billing/reverse-billing-batch-licences.service.js')
 
-describe.only('Reverse Billing Batch Licences service', () => {
+describe('Reverse Billing Batch Licences service', () => {
   const transactions = [
     {
       name: 'CREDIT',
