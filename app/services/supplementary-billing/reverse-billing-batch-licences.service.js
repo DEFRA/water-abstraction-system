@@ -29,7 +29,8 @@ async function go (transactions, billingInvoiceLicence) {
 /**
  * Receives an array of transactions and returns transactions that will reverse them. These transactions are identical
  * except the `isCredit` flag is flipped (eg. if a debit is to be reversed then a credit is returned), the status is set
- * to `candidate`, and the `billingInvoiceLicenceId` is set to the id of the supplied billing invoice licence.
+ * to `candidate`, the `billingInvoiceLicenceId` is set to the id of the supplied billing invoice licence, and a new
+ * `billingTransactionId` is generated.
  */
 function _reverseTransactions (transactions, billingInvoiceLicence) {
   return transactions.map((transaction) => {
