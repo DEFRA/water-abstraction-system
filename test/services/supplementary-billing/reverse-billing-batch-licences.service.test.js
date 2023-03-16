@@ -29,8 +29,8 @@ describe('Reverse Billing Batch Licences service', () => {
   }
 
   describe('when the service is called', () => {
-    it('returns reversing transactions', async () => {
-      const result = await ReverseBillingBatchLicencesService.go(transactions, billingInvoiceLicence)
+    it('returns reversing transactions', () => {
+      const result = ReverseBillingBatchLicencesService.go(transactions, billingInvoiceLicence)
 
       const credit = result.find((transaction) => transaction.name === 'CREDIT')
       const debit = result.find((transaction) => transaction.name === 'DEBIT')
