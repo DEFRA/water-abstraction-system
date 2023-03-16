@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Takes some transactions and returns transactions which will reverse them
- * @module ReverseBillingBatchLicencesService
+ * Takes previously billed transactions and returns reversed and cleansed versions of them
+ * @module ReverseBillingTransactionsService
  */
 
 const { randomUUID } = require('crypto')
@@ -22,7 +22,7 @@ const { randomUUID } = require('crypto')
  * @returns {Array[Object]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
  *  `billingInvoiceLicence`
  */
-async function go (transactions, billingInvoiceLicence) {
+function go (transactions, billingInvoiceLicence) {
   return _reverseTransactions(transactions, billingInvoiceLicence)
 }
 
@@ -34,12 +34,25 @@ async function go (transactions, billingInvoiceLicence) {
  */
 function _reverseTransactions (transactions, billingInvoiceLicence) {
   return transactions.map((transaction) => {
+    // TODO: The FetchBillingTransactionsService which we use to get the transactions to reverse adds the invoice
+    // account ID and number to each transaction returned. This is a performance measure to avoid an extra query to the
+    // DB. But if we don't strip them from the result when we try to persist our reversed versions, they fail because
+    // the billing_transactions table doesn't have these fields. We do the stripping here to avoid iterating through
+    // the collection multiple times. Ideally, we'd look to return a result from FetchBillingTransactionsService that
+    // avoids us having to do this.
+    const { invoiceAccountId, invoiceAccountNumber, ...propertiesToKeep } = transaction
+
     return {
-      ...transaction,
+      ...propertiesToKeep,
       billingTransactionId: _generateUuid(),
       billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
       isCredit: !transaction.isCredit,
-      status: 'candidate'
+      status: 'candidate',
+      // TODO: Our query result seems to return the transaction's `purposes:` property as [Object]. Clearly, we need
+      // to re-jig something or give Knex some more instructions on dealing with this JSONB field. But just to prove
+      // the process is working we use this service to deal with the issue and extract the JSON from the array we've
+      // been provided.
+      purposes: transaction.purposes[0]
     }
   })
 }
