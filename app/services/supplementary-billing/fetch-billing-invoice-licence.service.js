@@ -59,7 +59,37 @@ function _existing (foundBillingTransactions, licenceId, financialYearEnding) {
 
 async function _fetch (licenceId, financialYearEnding) {
   const result = db
-    .select('bt.*')
+    .select(
+      'authorisedDays',
+      'billableDays',
+      'isWaterUndertaker',
+      'chargeElementId',
+      'startDate',
+      'endDate',
+      'source',
+      'season',
+      'loss',
+      'isCredit',
+      'chargeType',
+      'authorisedQuantity',
+      'billableQuantity',
+      'description',
+      'volume',
+      'section126Factor',
+      'section127Agreement',
+      'section130Agreement',
+      'isTwoPartSecondPartCharge',
+      'scheme',
+      'aggregateFactor',
+      'adjustmentFactor',
+      'chargeCategoryCode',
+      'chargeCategoryDescription',
+      'isSupportedSource',
+      'supportedSourceName',
+      'isWaterCompanyCharge',
+      'isWinterOnly',
+      'purposes'
+    )
     .from('water.billingTransactions as bt')
     .innerJoin(
       db
