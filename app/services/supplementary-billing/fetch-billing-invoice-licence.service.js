@@ -39,7 +39,7 @@ async function go (foundBillingInvoiceLicenceIds, licenceId, financialYearEnding
   const billingInvoiceLicenceData = await _fetch(licenceId, financialYearEnding)
 
   billingInvoiceLicence = {
-    billingInvoiceLicenceId: billingInvoiceLicenceData.billingInvoiceLicenceId,
+    billingInvoiceLicenceId: billingInvoiceLicenceData[0].billingInvoiceLicenceId,
     licenceId,
     financialYearEnding
   }
