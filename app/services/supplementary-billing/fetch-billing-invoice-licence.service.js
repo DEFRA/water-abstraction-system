@@ -26,52 +26,59 @@ const { db } = require('../../../db/db.js')
  * @returns {Object} A result object containing either the found or generated billing invoice licence object, and an
  * array of generated billing invoices which includes the one being returned
  */
-async function go (foundBillingInvoiceLicenceIds, licenceId, financialYearEnding) {
-  let billingInvoiceLicence = _existing(foundBillingInvoiceLicenceIds, licenceId, financialYearEnding)
+async function go (foundBillingTransactions, licenceId, financialYearEnding) {
+  let billingTransaction = _existing(foundBillingTransactions, licenceId, financialYearEnding)
 
-  if (billingInvoiceLicence) {
+  if (billingTransaction) {
     return {
-      billingInvoiceLicence,
-      billingInvoiceLicences: foundBillingInvoiceLicenceIds
+      billingTransaction,
+      billingInvoiceLicences: foundBillingTransactions
     }
   }
 
-  const billingInvoiceLicenceData = await _fetch(licenceId, financialYearEnding)
+  const billingTransactionsData = await _fetch(licenceId, financialYearEnding)
 
-  billingInvoiceLicence = {
-    billingInvoiceLicenceId: billingInvoiceLicenceData[0].billingInvoiceLicenceId,
+  billingTransaction = {
+    billingTransactionsData,
     licenceId,
     financialYearEnding
   }
-  const updatedBillingInvoiceLicences = [...foundBillingInvoiceLicenceIds, billingInvoiceLicence]
+  const updatedBillingTransactions = [...foundBillingTransactions, billingTransaction]
 
   return {
-    billingInvoiceLicence,
-    billingInvoiceLicences: updatedBillingInvoiceLicences
+    billingTransaction,
+    billingTransactions: updatedBillingTransactions
   }
 }
 
-function _existing (foundBillingInvoiceLicenceIds, licenceId, financialYearEnding) {
-  return foundBillingInvoiceLicenceIds.find((invoiceLicences) => {
-    return licenceId === invoiceLicences.licenceId && financialYearEnding === invoiceLicences.financialYearEnding
+function _existing (foundBillingTransactions, licenceId, financialYearEnding) {
+  return foundBillingTransactions.find((billingTransaction) => {
+    return licenceId === billingTransaction.licenceId && financialYearEnding === billingTransaction.financialYearEnding
   })
 }
 
 async function _fetch (licenceId, financialYearEnding) {
   const result = db
-    .select('bil.billingInvoiceLicenceId')
-    .max('bil.date_created as latest_date_created')
-    .from('water.billingInvoiceLicences as bil')
-    .innerJoin('water.licences as l', 'bil.licenceId', 'l.licenceId')
-    .innerJoin('water.billingInvoices as bi', 'bil.billingInvoiceId', 'bi.billingInvoiceId')
-    .innerJoin('water.billingBatches as bb', 'bi.billingBatchId', 'bb.billingBatchId')
-    .where({
-      'bi.financialYearEnding': financialYearEnding,
-      'bb.status': 'sent',
-      'bb.scheme': 'sroc',
-      'l.licenceId': licenceId
-    })
-    .groupBy('bil.billingInvoiceLicenceId')
+    .select('bt.*')
+    .from('water.billingTransactions as bt')
+    .innerJoin(
+      db
+        .select('bil.billingInvoiceLicenceId')
+        .max('bil.date_created as latest_date_created')
+        .from('water.billingInvoiceLicences as bil')
+        .innerJoin('water.licences as l', 'bil.licenceId', 'l.licenceId')
+        .innerJoin('water.billingInvoices as bi', 'bil.billingInvoiceId', 'bi.billingInvoiceId')
+        .innerJoin('water.billingBatches as bb', 'bi.billingBatchId', 'bb.billingBatchId')
+        .where({
+          'bi.financialYearEnding': financialYearEnding,
+          'bb.status': 'sent',
+          'bb.scheme': 'sroc',
+          'l.licenceId': licenceId
+        })
+        .groupBy('bil.billingInvoiceLicenceId')
+        .as('validBillingInvoices'),
+      'bt.billingInvoiceLicenceId', 'validBillingInvoices.billingInvoiceLicenceId'
+    )
 
   return result
 }
