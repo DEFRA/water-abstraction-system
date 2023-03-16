@@ -5,34 +5,46 @@
  * @module ReverseBillingBatchLicencesService
  */
 
-const BillingTransactionModel = require('../../models/water/billing-transaction.model.js')
+const { randomUUID } = require('crypto')
 
 /**
  * TODO: document
  *
- * @param {module:BillingBatchModel} billingBatch The billing batch we want to look for the licences
- * @param {Array[]} licences An array of licences to look for in the billing batch
+ * @param {Array[module:BillingTransactionModel]} transactions Array of transactions to be reversed
+ * @param {module:BillingInvoiceLicenceModel} billingInvoiceLicence The billing invoice licence these transactions are
+ *  intended to be added to
  *
- * @returns {Array[]} Array of reversing transactions
+ * @returns {Array[]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
+ *  `billingInvoiceLicence`
  */
-async function go (billingBatch, licences) {
-  const transactions = await _fetchTransactions(billingBatch, licences)
-
-  return transactions
+async function go (transactions, billingInvoiceLicence) {
+  return _reverseTransactions(transactions, billingInvoiceLicence)
 }
 
 /**
- * Fetches all transactions in the provided billing batch for the provided licences
+ * Receives an array of transactions and returns transactions that will reverse them. These transactions are identical
+ * except the `isCredit` flag is flipped (eg. if a debit is to be reversed then a credit is returned), the status is set
+ * to `candidate`, and the `billingInvoiceLicenceId` is set to the id of the supplied billing invoice licence.
  */
-async function _fetchTransactions (billingBatch, licences) {
-  const licenceIds = licences.map((licence) => {
-    return licence.licenceId
+function _reverseTransactions (transactions, billingInvoiceLicence) {
+  return transactions.map((transaction) => {
+    return {
+      ...transaction,
+      billingTransactionId: _generateUuid(),
+      billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
+      isCredit: !transaction.isCredit,
+      status: 'candidate'
+    }
   })
+}
 
-  return await BillingTransactionModel.query()
-    .joinRelated('billingInvoiceLicence.billingInvoice')
-    .whereIn('billingInvoiceLicence.licenceId', licenceIds)
-    .where('billingBatchId', billingBatch.billingBatchId)
+function _generateUuid () {
+  // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
+  // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
+  // disabling this cache is a rounding error in comparison to the rest of the process.
+  //
+  // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
+  return randomUUID({ disableEntropyCache: true })
 }
 
 module.exports = {

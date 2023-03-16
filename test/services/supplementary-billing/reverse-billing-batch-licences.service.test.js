@@ -3,62 +3,49 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
-
-// Test helpers
-const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
-const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
-const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
-const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
-const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
-const ChangeReasonHelper = require('../../support/helpers/water/change-reason.helper.js')
-const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
-const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
-const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
-const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Thing under test
 const ReverseBillingBatchLicencesService = require('../../../app/services/supplementary-billing/reverse-billing-batch-licences.service.js')
 
 describe.only('Reverse Billing Batch Licences service', () => {
-  let billingBatch
-  let licence
-  let billingTransaction
+  const transactions = [
+    {
+      name: 'CREDIT',
+      isCredit: true,
+      status: 'TO_BE_OVERWRITTEN'
+    },
+    {
+      name: 'DEBIT',
+      isCredit: false,
+      status: 'TO_BE_OVERWRITTEN'
+    }
+  ]
 
-  beforeEach(async () => {
-    await DatabaseHelper.clean()
-
-    const { regionId } = await RegionHelper.add()
-    licence = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes', regionId })
-    const { changeReasonId } = await ChangeReasonHelper.add()
-    const { invoiceAccountId } = await InvoiceAccountHelper.add()
-    const { chargeVersionId } = await ChargeVersionHelper.add({ changeReasonId, invoiceAccountId }, licence)
-    const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
-    const { chargeElementId } = await ChargeElementHelper.add({ billingChargeCategoryId, chargeVersionId })
-    await ChargePurposeHelper.add({ chargeElementId })
-
-    billingBatch = await BillingBatchHelper.add({ regionId })
-
-    const billingInvoice = await BillingInvoiceHelper.add({}, billingBatch)
-    const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({}, licence, billingInvoice)
-    billingTransaction = await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId })
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-  })
+  const billingInvoiceLicence = {
+    billingInvoiceLicenceId: '8affaa71-c185-4b6c-9814-4c615c235611'
+  }
 
   describe('when the service is called', () => {
-    it('returns the transactions for the given licence', async () => {
-      const result = await ReverseBillingBatchLicencesService.go(billingBatch, [licence])
+    it('returns reversing transactions', async () => {
+      const result = await ReverseBillingBatchLicencesService.go(transactions, billingInvoiceLicence)
 
-      expect(result).to.equal([billingTransaction])
+      const credit = result.find((transaction) => transaction.name === 'CREDIT')
+      const debit = result.find((transaction) => transaction.name === 'DEBIT')
+
+      expect(result.length).to.equal(transactions.length)
+
+      expect(credit.isCredit).to.be.false()
+      expect(credit.status).to.equal('candidate')
+      expect(credit.billingInvoiceLicenceId).to.equal(billingInvoiceLicence.billingInvoiceLicenceId)
+      expect(credit.billingTransactionId).to.exist().and.to.be.a.string()
+
+      expect(debit.isCredit).to.be.true()
+      expect(debit.status).to.equal('candidate')
+      expect(debit.billingInvoiceLicenceId).to.equal(billingInvoiceLicence.billingInvoiceLicenceId)
+      expect(debit.billingTransactionId).to.exist().and.to.be.a.string()
     })
   })
 })
