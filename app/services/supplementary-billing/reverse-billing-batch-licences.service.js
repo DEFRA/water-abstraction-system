@@ -1,20 +1,25 @@
 'use strict'
 
 /**
- * Takes a billing batch and licences and returns transactions which will reverse those licences on the billing batch
+ * Takes some transactions and returns transactions which will reverse them
  * @module ReverseBillingBatchLicencesService
  */
 
 const { randomUUID } = require('crypto')
 
 /**
- * TODO: document
+ * Takes an array of transactions and returns an array of transactions which will reverse them.
+ *
+ * In some situations we need to "reverse" transactions; this is done by issuing new transactions which cancel them out.
+ * This service takes an array of transactions and a billing invoice licence, and returns an array of transactions which
+ * will reverse the original transactions, with their billing invoice licence id set to the id of the supplied billing
+ * invoice licence.
  *
  * @param {Array[module:BillingTransactionModel]} transactions Array of transactions to be reversed
  * @param {module:BillingInvoiceLicenceModel} billingInvoiceLicence The billing invoice licence these transactions are
  *  intended to be added to
  *
- * @returns {Array[]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
+ * @returns {Array[Object]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
  *  `billingInvoiceLicence`
  */
 async function go (transactions, billingInvoiceLicence) {
