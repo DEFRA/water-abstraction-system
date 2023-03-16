@@ -15,11 +15,13 @@ const CreateBillingTransactionService = require('./create-billing-transaction.se
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchPreviousBillingTransactionsService = require('./fetch-previous-billing-transactions.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
+const ReverseBillingBatchLicencesService = require('./reverse-billing-batch-licences.service.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -38,7 +40,8 @@ async function go (billingBatch, billingPeriod) {
   // This means a number of our methods are mutating this information as the billing batch is processed.
   const generatedData = {
     invoices: [],
-    invoiceLicences: []
+    invoiceLicences: [],
+    licenceIds: []
   }
   try {
     // Mark the start time for later logging
@@ -49,21 +52,8 @@ async function go (billingBatch, billingPeriod) {
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
 
     for (const chargeVersion of chargeVersions) {
-      const { licence } = chargeVersion
-
-      const billingInvoice = await _generateBillingInvoice(generatedData, chargeVersion, billingBatchId, billingPeriod)
-      const billingInvoiceLicence = _generateBillingInvoiceLicence(generatedData, billingInvoice, licence)
-
-      const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion, billingBatchId)
-
-      await _createTransactionLines(
-        transactionLines,
-        billingPeriod,
-        billingInvoice,
-        billingInvoiceLicence,
-        chargeVersion,
-        billingBatch
-      )
+      await _createStandardTransactionLines(generatedData, chargeVersion, billingBatch, billingPeriod)
+      await _createReverseTransactionLines(generatedData, chargeVersion, billingBatch, billingPeriod)
     }
 
     await _finaliseBillingBatch(generatedData, billingBatch)
@@ -73,6 +63,67 @@ async function go (billingBatch, billingPeriod) {
   } catch (error) {
     global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch, error })
   }
+}
+
+async function _createStandardTransactionLines (generatedData, chargeVersion, billingBatch, billingPeriod) {
+  const { licence } = chargeVersion
+  const { billingBatchId } = billingBatch
+
+  const billingInvoice = await _generateBillingInvoice(generatedData, chargeVersion, billingBatchId, billingPeriod)
+  const billingInvoiceLicence = _generateBillingInvoiceLicence(generatedData, billingInvoice, licence)
+
+  const transactionLines = _generateTransactionLines(billingPeriod, chargeVersion, billingBatchId)
+
+  await _createTransactionLines(
+    transactionLines,
+    billingPeriod,
+    billingInvoice,
+    billingInvoiceLicence,
+    chargeVersion,
+    billingBatch
+  )
+}
+
+async function _createReverseTransactionLines (generatedData, chargeVersion, billingBatch, billingPeriod) {
+  const { licence } = chargeVersion
+
+  const previousBillingTransactions = await FetchPreviousBillingTransactionsService.go(
+    generatedData.licenceIds,
+    licence.licenceId
+  )
+
+  if (previousBillingTransactions.length === 0) {
+    return
+  }
+
+  const billingInvoice = await _generateBillingInvoice(
+    generatedData,
+    { invoiceAccountId: previousBillingTransactions[0].invoiceAccountId },
+    billingBatch.billingBatchId,
+    billingPeriod
+  )
+
+  const billingInvoiceLicence = _generateBillingInvoiceLicence(generatedData, billingInvoice, licence)
+
+  const cleansedPreviousBillingTransactions = previousBillingTransactions.map((transaction) => {
+    const { invoiceAccountId, invoiceAccountNumber, ...cleansed } = transaction
+
+    return cleansed
+  })
+
+  const reversedTransactionLines = ReverseBillingBatchLicencesService.go(
+    cleansedPreviousBillingTransactions,
+    billingInvoiceLicence
+  )
+
+  await _createTransactionLines(
+    reversedTransactionLines,
+    billingPeriod,
+    billingInvoice,
+    billingInvoiceLicence,
+    chargeVersion,
+    billingBatch
+  )
 }
 
 /**
