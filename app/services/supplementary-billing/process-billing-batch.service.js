@@ -54,8 +54,30 @@ async function go (billingBatch, billingPeriod) {
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
 
     for (const chargeVersion of chargeVersions) {
-      await _createStandardTransactions(generatedData, chargeVersion, billingBatch, billingPeriod)
-      await _createReverseTransactions(generatedData, chargeVersion, billingBatch, billingPeriod)
+      const standardTransactionsData = await _generateStandardTransactions(generatedData, chargeVersion, billingBatch, billingPeriod)
+      const reverseTransactionsData = await _generateReverseTransactions(generatedData, chargeVersion, billingBatch, billingPeriod)
+
+      const cleansedTransactionLines = _cleanseTransactionLines(standardTransactionsData, reverseTransactionsData)
+
+      await _createTransactions(
+        cleansedTransactionLines.standardTransactionLines,
+        standardTransactionsData.billingPeriod,
+        standardTransactionsData.billingInvoice,
+        standardTransactionsData.billingInvoiceLicence,
+        standardTransactionsData.chargeVersion,
+        standardTransactionsData.billingBatch
+      )
+
+      if (reverseTransactionsData.length !== 0) {
+        await _createTransactions(
+          cleansedTransactionLines.reverseTransactionLines,
+          reverseTransactionsData.billingPeriod,
+          reverseTransactionsData.billingInvoice,
+          reverseTransactionsData.billingInvoiceLicence,
+          reverseTransactionsData.chargeVersion,
+          reverseTransactionsData.billingBatch
+        )
+      }
     }
 
     await _finaliseBillingBatch(generatedData, billingBatch)
@@ -64,6 +86,47 @@ async function go (billingBatch, billingPeriod) {
     _calculateAndLogTime(billingBatchId, startTime)
   } catch (error) {
     global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch, error })
+  }
+}
+
+/**
+ * Remove any "cancelling pairs" of transaction lines. We define a "cancelling pair" as a pair of transactions belonging
+ * to the same billing invoice licence which would send the same data to the Charging Module (and therefore return the
+ * same values) but with opposing credit flags -- in other words, a credit and a debit which cancel each other out.
+ */
+function _cleanseTransactionLines (standardTransactionsData, reverseTransactionsData) {
+  const standardTransactionLines = standardTransactionsData.transactionLines
+  const reverseTransactionLines = reverseTransactionsData.transactionLines
+
+  const cmStandardTransactions = standardTransactionLines.map((transaction) => {
+    return {
+      ...ChargingModuleCreateTransactionPresenter.go(
+        transaction,
+        standardTransactionsData.billingPeriod,
+        standardTransactionsData.billingInvoice.invoiceAccountNumber,
+        standardTransactionsData.chargeVersion.licence
+      ),
+      // We add the billing invoice licence to each object to make identifying cancelling pairs easier
+      billingInvoiceLicence: standardTransactionsData.billingInvoiceLicence
+    }
+  })
+
+  const cmReverseTransactions = reverseTransactionLines.map((transaction) => {
+    return {
+      ...ChargingModuleCreateTransactionPresenter.go(
+        transaction,
+        reverseTransactionsData.billingPeriod,
+        reverseTransactionsData.billingInvoice.invoiceAccountNumber,
+        reverseTransactionsData.chargeVersion.licence
+      ),
+      // We add the billing invoice licence to each object to make identifying cancelling pairs easier
+      billingInvoiceLicence: reverseTransactionsData.billingInvoiceLicence
+    }
+  })
+
+  return {
+    standardTransactionLines,
+    reverseTransactionLines
   }
 }
 
@@ -85,7 +148,7 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
 }
 
-async function _createReverseTransactions (generatedData, chargeVersion, billingBatch, billingPeriod) {
+async function _generateReverseTransactions (generatedData, chargeVersion, billingBatch, billingPeriod) {
   const { licence } = chargeVersion
   const { billingBatchId } = billingBatch
 
@@ -94,7 +157,7 @@ async function _createReverseTransactions (generatedData, chargeVersion, billing
 
     // If there are no previous transactions to reverse we stop processing at this point
     if (billingTransactions.length === 0) {
-      return
+      return []
     }
 
     const billingInvoice = await _generateBillingInvoice(
@@ -106,16 +169,17 @@ async function _createReverseTransactions (generatedData, chargeVersion, billing
 
     const billingInvoiceLicence = _generateBillingInvoiceLicence(generatedData, billingInvoice, licence)
 
-    const reversedTransactions = ReverseBillingTransactionsService.go(billingTransactions, billingInvoiceLicence)
+    const transactionLines = ReverseBillingTransactionsService.go(billingTransactions, billingInvoiceLicence)
 
-    await _createTransactions(
-      reversedTransactions,
+    // Return an array which are the arguments in order that we will later supply to _createTransactions()
+    return {
+      transactionLines,
       billingPeriod,
       billingInvoice,
       billingInvoiceLicence,
       chargeVersion,
       billingBatch
-    )
+    }
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatchId)
 
@@ -123,7 +187,7 @@ async function _createReverseTransactions (generatedData, chargeVersion, billing
   }
 }
 
-async function _createStandardTransactions (generatedData, chargeVersion, billingBatch, billingPeriod) {
+async function _generateStandardTransactions (generatedData, chargeVersion, billingBatch, billingPeriod) {
   const { licence } = chargeVersion
   const { billingBatchId } = billingBatch
 
@@ -133,14 +197,15 @@ async function _createStandardTransactions (generatedData, chargeVersion, billin
 
     const transactionLines = _generateTransactions(billingPeriod, chargeVersion, billingBatchId)
 
-    await _createTransactions(
+    // Return an object containing the arguments we will later supply to _createTransactions()
+    return {
       transactionLines,
       billingPeriod,
       billingInvoice,
       billingInvoiceLicence,
       chargeVersion,
       billingBatch
-    )
+    }
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatchId)
 

@@ -1,0 +1,64 @@
+// https://replit.com/languages/javascript
+
+const pair1 = {
+  id: 1,
+  value: 100,
+  credit: true
+}
+
+const pair2 = {
+  id: 1,
+  value: 100,
+  credit: false
+}
+
+const wrongValue1 = {
+  id: 1,
+  value: 110,
+  credit: true
+}
+
+const wrongValue2 = {
+  id: 1,
+  value: 120,
+  credit: false
+}
+
+const wrongId1 = {
+  id: 2,
+  value: 200,
+  credit: true
+}
+
+const wrongId2 = {
+  id: 3,
+  value: 200,
+  credit: false
+}
+
+const transactions = [ pair1, pair2, wrongValue1, wrongValue2, wrongId1, wrongId2 ]
+
+const getPairGroupingKey = transaction => {
+  const transactionDetails = { id: transaction.id, value: transaction.value }
+  return JSON.stringify(transactionDetails)
+}
+
+// EXISTING CODE
+// const pairGroups = groupBy(transactions, getPairGroupingKey) // DONE
+// const filteredGroups = mapValues(pairGroups, filterCancellingTransactions)
+// const result = flatMap(Object.values(filteredGroups))
+
+const pairGroups = transactions.reduce((acc, val) => {
+  const key = getPairGroupingKey(val)
+  if (!acc.hasOwnProperty(key)) {
+    acc[key] = []
+  }
+
+  acc[key].push(val)
+
+  return acc
+}, {})
+
+const result = pairGroups
+
+console.log(result)
