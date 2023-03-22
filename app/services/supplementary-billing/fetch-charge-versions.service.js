@@ -42,6 +42,10 @@ async function _fetch (regionId, billingPeriod) {
     .where('chargeVersions.status', 'current')
     .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .orderBy([
+      { column: 'chargeVersions.invoiceAccountId' },
+      { column: 'chargeVersions.licenceId' }
+    ])
     .withGraphFetched('licence')
     .modifyGraph('licence', builder => {
       builder.select([

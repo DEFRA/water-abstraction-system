@@ -27,10 +27,10 @@ function go (transactions, billingInvoiceLicence) {
 }
 
 /**
- * Receives an array of transactions and returns transactions that will reverse them. These transactions are identical
- * except the `isCredit` flag is flipped (eg. if a debit is to be reversed then a credit is returned), the status is set
- * to `candidate`, the `billingInvoiceLicenceId` is set to the id of the supplied billing invoice licence, and a new
- * `billingTransactionId` is generated.
+ * Receives an array of debit transactions and returns transactions that will reverse them. These transactions are
+ * identical except the `isCredit` flag is set to 'true', the status is set to `candidate`, the
+ * `billingInvoiceLicenceId` is set to the id of the supplied billing invoice licence, and a new `billingTransactionId`
+ * is generated.
  */
 function _reverseTransactions (transactions, billingInvoiceLicence) {
   return transactions.map((transaction) => {
@@ -46,7 +46,7 @@ function _reverseTransactions (transactions, billingInvoiceLicence) {
       ...propertiesToKeep,
       billingTransactionId: _generateUuid(),
       billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
-      isCredit: !transaction.isCredit,
+      isCredit: true,
       status: 'candidate',
       // TODO: Our query result seems to return the transaction's `purposes:` property as [Object]. Clearly, we need
       // to re-jig something or give Knex some more instructions on dealing with this JSONB field. But just to prove

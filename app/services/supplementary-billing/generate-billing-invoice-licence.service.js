@@ -35,34 +35,22 @@ const { randomUUID } = require('crypto')
  * @returns {Object} A result object containing either the found or generated billing invoice licence object, and an
  * array of generated billing invoice licences which includes the one being returned
  */
-function go (generatedBillingInvoiceLicences, billingInvoiceId, licence) {
-  let billingInvoiceLicence = _existing(generatedBillingInvoiceLicences, billingInvoiceId, licence.licenceId)
-
-  if (billingInvoiceLicence) {
-    return {
-      billingInvoiceLicence,
-      billingInvoiceLicences: generatedBillingInvoiceLicences
-    }
+function go (currentBillingInvoiceLicence, billingInvoiceId, licence) {
+  if (
+    currentBillingInvoiceLicence?.billingInvoiceId === billingInvoiceId &&
+    currentBillingInvoiceLicence?.licenceId === licence.licenceId
+  ) {
+    return currentBillingInvoiceLicence
   }
 
-  billingInvoiceLicence = {
+  const billingInvoiceLicence = {
     billingInvoiceId,
     billingInvoiceLicenceId: randomUUID({ disableEntropyCache: true }),
     licenceRef: licence.licenceRef,
     licenceId: licence.licenceId
   }
-  const updatedBillingInvoiceLicences = [...generatedBillingInvoiceLicences, billingInvoiceLicence]
 
-  return {
-    billingInvoiceLicence,
-    billingInvoiceLicences: updatedBillingInvoiceLicences
-  }
-}
-
-function _existing (generatedBillingInvoiceLicences, billingInvoiceId, licenceId) {
-  return generatedBillingInvoiceLicences.find((invoiceLicence) => {
-    return (billingInvoiceId === invoiceLicence.billingInvoiceId && licenceId === invoiceLicence.licenceId)
-  })
+  return billingInvoiceLicence
 }
 
 module.exports = {
