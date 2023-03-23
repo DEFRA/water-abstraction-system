@@ -51,8 +51,6 @@ async function go (billingBatch, billingPeriod) {
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
 
     for (const chargeVersion of chargeVersions) {
-      currentBillingData.licence = chargeVersion.licence
-
       const { billingInvoice, billingInvoiceLicence } = await _generateInvoiceData(
         currentBillingData,
         billingBatch,
@@ -70,6 +68,7 @@ async function go (billingBatch, billingPeriod) {
         currentBillingData.standardTransactions = []
       }
 
+      currentBillingData.licence = chargeVersion.licence
       currentBillingData.billingInvoice = billingInvoice
       currentBillingData.billingInvoiceLicence = billingInvoiceLicence
 
