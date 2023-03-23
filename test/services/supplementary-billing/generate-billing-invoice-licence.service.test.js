@@ -18,55 +18,58 @@ describe('Generate billing invoice licence service', () => {
 
   const billingInvoiceId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
 
-  let generatedBillingInvoiceLicences
+  let currentBillingInvoiceLicence
   let expectedResult
 
-  describe('when `generatedBillingInvoiceLicences` is empty', () => {
+  describe('when `currentBillingInvoiceLicence` is null', () => {
     beforeEach(() => {
-      generatedBillingInvoiceLicences = []
+      currentBillingInvoiceLicence = null
       expectedResult = _billingInvoiceLicenceGenerator(billingInvoiceId, licence)
     })
 
-    it('returns a new billing invoice licence and an array populated with just it', () => {
-      const result = GenerateBillingInvoiceLicenceService.go(generatedBillingInvoiceLicences, billingInvoiceId, licence)
+    it('returns a new billing invoice licence with the provided values', () => {
+      const result = GenerateBillingInvoiceLicenceService.go(currentBillingInvoiceLicence, billingInvoiceId, licence)
 
-      expect(result.billingInvoiceLicence).to.equal(expectedResult, { skip: 'billingInvoiceLicenceId' })
-      expect(result.billingInvoiceLicences).to.equal([result.billingInvoiceLicence])
+      expect(result).to.equal(expectedResult, { skip: 'billingInvoiceLicenceId' })
     })
   })
 
-  describe('when `generatedBillingInvoiceLicences` is populated', () => {
-    describe('and a matching billing invoice licence exists', () => {
-      let existingBillingInvoiceLicence
+  describe('when `currentBillingInvoiceLicence` is set', () => {
+    beforeEach(() => {
+      currentBillingInvoiceLicence = _billingInvoiceLicenceGenerator(billingInvoiceId, licence)
+    })
 
-      beforeEach(() => {
-        existingBillingInvoiceLicence = _billingInvoiceLicenceGenerator(billingInvoiceId, licence)
-        generatedBillingInvoiceLicences = [existingBillingInvoiceLicence]
+    describe('and the billing invoice id matches', () => {
+      describe('as well as the licence', () => {
+        it('returns the `currentBillingInvoiceLicence`', async () => {
+          const result = GenerateBillingInvoiceLicenceService.go(currentBillingInvoiceLicence, billingInvoiceId, licence)
+
+          expect(result).to.equal(currentBillingInvoiceLicence)
+        })
       })
 
-      it('returns the existing billing invoice licence object and the existing array', () => {
-        const result = GenerateBillingInvoiceLicenceService.go(generatedBillingInvoiceLicences, billingInvoiceId, licence)
+      describe('but the licence does not', () => {
+        const otherLicence = { licenceId: 'e6c07787-b367-408d-a2f8-a5313cfcef32', licenceRef: 'ABC1' }
 
-        expect(result.billingInvoiceLicence).to.equal(existingBillingInvoiceLicence)
-        expect(result.billingInvoiceLicences).to.equal(generatedBillingInvoiceLicences)
+        it('returns a new billing invoice licence with the provided values', () => {
+          const result = GenerateBillingInvoiceLicenceService.go(currentBillingInvoiceLicence, billingInvoiceId, otherLicence)
+
+          expect(result).not.to.equal(currentBillingInvoiceLicence)
+          expect(result.billingInvoiceId).to.equal(billingInvoiceId)
+          expect(result.licenceId).to.equal(otherLicence.licenceId)
+        })
       })
     })
 
-    describe('and a matching billing invoice licence does not exist', () => {
-      let existingBillingInvoiceLicence
+    describe('but the billing invoice id does not match', () => {
+      const otherBillingInvoiceId = 'fc9c4a2f-819d-4b31-9bcc-39c795660602'
 
-      beforeEach(() => {
-        existingBillingInvoiceLicence = _billingInvoiceLicenceGenerator('d0761e82-9c96-4304-9b4c-3c5d4c1af8bb', licence)
-        generatedBillingInvoiceLicences = [existingBillingInvoiceLicence]
+      it('returns a new billing invoice licence with the provided values', () => {
+        const result = GenerateBillingInvoiceLicenceService.go(currentBillingInvoiceLicence, otherBillingInvoiceId, licence)
 
-        expectedResult = _billingInvoiceLicenceGenerator(billingInvoiceId, licence)
-      })
-
-      it('returns a new billing invoice licence object and the existing array with the new object included', () => {
-        const result = GenerateBillingInvoiceLicenceService.go(generatedBillingInvoiceLicences, billingInvoiceId, licence)
-
-        expect(result.billingInvoiceLicence).to.equal(expectedResult, { skip: 'billingInvoiceLicenceId' })
-        expect(result.billingInvoiceLicences).to.equal([...generatedBillingInvoiceLicences, result.billingInvoiceLicence])
+        expect(result).not.to.equal(currentBillingInvoiceLicence)
+        expect(result.billingInvoiceId).to.equal(otherBillingInvoiceId)
+        expect(result.licenceId).to.equal(licence.licenceId)
       })
     })
   })
