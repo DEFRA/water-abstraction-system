@@ -15,13 +15,12 @@ const CreateBillingTransactionService = require('./create-billing-transaction.se
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const FetchPreviousBillingTransactionsService = require('./fetch-previous-billing-transactions.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
-const ReverseBillingTransactionsService = require('./reverse-billing-transactions.service.js')
+const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -86,119 +85,22 @@ async function go (billingBatch, billingPeriod) {
   }
 }
 
-async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod, billingBatch) {
-  const previousTransactions = await _generatePreviousTransactions(currentBillingData, billingPeriod)
-
-  const cleansedTransactions = _cleanseTransactions(
-    currentBillingData.standardTransactions,
-    previousTransactions,
-    billingBatch.billingBatchId
-  )
-
-  if (cleansedTransactions.length > 0) {
-    currentBillingData.isEmpty = false
-
-    await _createBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
-    await _createBillingInvoiceLicence(currentBillingData, billingBatch)
-  }
-}
-
-async function _fetchChargeVersions (billingBatch, billingPeriod) {
-  try {
-    // We know in the future we will be calculating multiple billing periods and so will have to iterate through each,
-    // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
-    // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
-    // This is why we are only passing through the first billing period; we know there is only one!
-    return await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
-  } catch (error) {
-    HandleErroredBillingBatchService.go(
-      billingBatch.billingBatchId,
-      BillingBatchModel.errorCodes.failedToProcessChargeVersions
-    )
-
-    throw error
-  }
-}
-
-async function _generateInvoiceData (currentBillingData, billingBatch, chargeVersion, billingPeriod) {
-  try {
-    const { invoiceAccountId, licence } = chargeVersion
-    const { billingBatchId } = billingBatch
-    const financialYearEnding = billingPeriod.endDate.getFullYear()
-
-    const billingInvoice = await GenerateBillingInvoiceService.go(currentBillingData.billingInvoice, invoiceAccountId, billingBatchId, financialYearEnding)
-    const billingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(currentBillingData.billingInvoiceLicence, billingInvoice.billingInvoiceId, licence)
-
-    return {
-      billingInvoice,
-      billingInvoiceLicence
-    }
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
-
-    throw error
-  }
-}
-
-async function _generatePreviousTransactions (currentBillingData, billingPeriod) {
-  const { billingInvoice, billingInvoiceLicence } = currentBillingData
-
-  try {
-    const financialYearEnding = billingPeriod.endDate.getFullYear()
-
-    const transactions = await FetchPreviousBillingTransactionsService.go(billingInvoice, billingInvoiceLicence, financialYearEnding)
-
-    return ReverseBillingTransactionsService.go(transactions, billingInvoiceLicence)
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingInvoice.billingBatchId)
-
-    throw error
-  }
-}
-
 /**
- * Remove any "cancelling pairs" of transaction lines. We define a "cancelling pair" as a pair of transactions belonging
- * to the same billing invoice licence which would send the same data to the Charging Module (and therefore return the
- * same values) but with opposing credit flags -- in other words, a credit and a debit which cancel each other out.
- */
-function _cleanseTransactions (standardTransactions, reverseTransactions, billingBatchId) {
-  try {
-    const cleansedTransactionLines = []
+   * Log the time taken to process the billing batch
+   *
+   * If `notifier` is not set then it will do nothing. If it is set this will get the current time and then calculate the
+   * difference from `startTime`. This and the `billRunId` are then used to generate a log message.
+   *
+   * @param {string} billingBatchId Id of the billing batch currently being 'processed'
+   * @param {BigInt} startTime The time the generate process kicked off. It is expected to be the result of a call to
+   * `process.hrtime.bigint()`
+   */
+function _calculateAndLogTime (billingBatchId, startTime) {
+  const endTime = process.hrtime.bigint()
+  const timeTakenNs = endTime - startTime
+  const timeTakenMs = timeTakenNs / 1000000n
 
-    for (const standardTransactionLine of standardTransactions) {
-      if (!_cancelStandardTransaction(standardTransactionLine, reverseTransactions)) {
-        cleansedTransactionLines.push(standardTransactionLine)
-      }
-    }
-
-    cleansedTransactionLines.push(...reverseTransactions)
-
-    return cleansedTransactionLines
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatchId)
-
-    throw error
-  }
-}
-
-function _cancelStandardTransaction (standardTransaction, reversedTransactions) {
-  const result = reversedTransactions.findIndex((reversedTransaction) => {
-    // Example of the things we are comparing
-    // - chargeType - standard or compensation
-    // - chargeCategory - 4.10.1
-    // - billableDays - 215
-    return reversedTransaction.chargeType === standardTransaction.chargeType &&
-      reversedTransaction.chargeCategoryCode === standardTransaction.chargeCategoryCode &&
-      reversedTransaction.billableDays === standardTransaction.billableDays
-  })
-
-  if (result === -1) {
-    return false
-  }
-
-  reversedTransactions.splice(result, 1)
-
-  return true
+  global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
 }
 
 async function _createBillingInvoiceLicence (currentBillingData, billingBatch) {
@@ -248,34 +150,84 @@ async function _createBillingTransactions (currentBillingData, billingBatch, bil
   }
 }
 
-async function _updateStatus (billingBatchId, status) {
+async function _fetchChargeVersions (billingBatch, billingPeriod) {
   try {
-    await BillingBatchModel.query()
-      .findById(billingBatchId)
-      .patch({ status })
+    // We know in the future we will be calculating multiple billing periods and so will have to iterate through each,
+    // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
+    // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
+    // This is why we are only passing through the first billing period; we know there is only one!
+    return await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
   } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatchId)
+    HandleErroredBillingBatchService.go(
+      billingBatch.billingBatchId,
+      BillingBatchModel.errorCodes.failedToProcessChargeVersions
+    )
 
     throw error
   }
 }
 
-/**
-   * Log the time taken to process the billing batch
-   *
-   * If `notifier` is not set then it will do nothing. If it is set this will get the current time and then calculate the
-   * difference from `startTime`. This and the `billRunId` are then used to generate a log message.
-   *
-   * @param {string} billingBatchId Id of the billing batch currently being 'processed'
-   * @param {BigInt} startTime The time the generate process kicked off. It is expected to be the result of a call to
-   * `process.hrtime.bigint()`
-   */
-function _calculateAndLogTime (billingBatchId, startTime) {
-  const endTime = process.hrtime.bigint()
-  const timeTakenNs = endTime - startTime
-  const timeTakenMs = timeTakenNs / 1000000n
+async function _finaliseBillingBatch (billingBatch, isEmpty) {
+  try {
+    // The bill run is considered empty. We just need to set the status to indicate this in the UI
+    if (isEmpty) {
+      await _updateStatus(billingBatch.billingBatchId, 'empty')
 
-  global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
+      return
+    }
+
+    // We then need to tell the Charging Module to run its generate process. This is where the Charging module finalises
+    // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
+    await ChargingModuleGenerateService.go(billingBatch.externalId)
+
+    await LegacyRequestLib.post('water', `billing/batches/${billingBatch.billingBatchId}/refresh`)
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+
+    throw error
+  }
+}
+
+async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod, billingBatch) {
+  try {
+    const cleansedTransactions = await ProcessBillingTransactionsService.go(
+      currentBillingData.standardTransactions,
+      currentBillingData.billingInvoice,
+      currentBillingData.billingInvoiceLicence,
+      billingPeriod
+    )
+
+    if (cleansedTransactions.length > 0) {
+      currentBillingData.isEmpty = false
+
+      await _createBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
+      await _createBillingInvoiceLicence(currentBillingData, billingBatch)
+    }
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+
+    throw error
+  }
+}
+
+async function _generateInvoiceData (currentBillingData, billingBatch, chargeVersion, billingPeriod) {
+  try {
+    const { invoiceAccountId, licence } = chargeVersion
+    const { billingBatchId } = billingBatch
+    const financialYearEnding = billingPeriod.endDate.getFullYear()
+
+    const billingInvoice = await GenerateBillingInvoiceService.go(currentBillingData.billingInvoice, invoiceAccountId, billingBatchId, financialYearEnding)
+    const billingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(currentBillingData.billingInvoiceLicence, billingInvoice.billingInvoiceId, licence)
+
+    return {
+      billingInvoice,
+      billingInvoiceLicence
+    }
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+
+    throw error
+  }
 }
 
 function _generateStandardTransactions (billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence) {
@@ -309,22 +261,13 @@ function _generateStandardTransactions (billingPeriod, chargeVersion, billingBat
   }
 }
 
-async function _finaliseBillingBatch (billingBatch, isEmpty) {
+async function _updateStatus (billingBatchId, status) {
   try {
-    // The bill run is considered empty. We just need to set the status to indicate this in the UI
-    if (isEmpty) {
-      await _updateStatus(billingBatch.billingBatchId, 'empty')
-
-      return
-    }
-
-    // We then need to tell the Charging Module to run its generate process. This is where the Charging module finalises
-    // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-    await ChargingModuleGenerateService.go(billingBatch.externalId)
-
-    await LegacyRequestLib.post('water', `billing/batches/${billingBatch.billingBatchId}/refresh`)
+    await BillingBatchModel.query()
+      .findById(billingBatchId)
+      .patch({ status })
   } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+    HandleErroredBillingBatchService.go(billingBatchId)
 
     throw error
   }
