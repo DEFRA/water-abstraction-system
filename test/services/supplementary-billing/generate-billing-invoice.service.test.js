@@ -18,7 +18,7 @@ describe('Generate billing invoice service', () => {
   const billingBatchId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
   const financialYearEnding = 2023
 
-  let generatedBillingInvoices
+  let currentBillingInvoice
   let expectedResult
   let invoiceAccount
 
@@ -28,71 +28,59 @@ describe('Generate billing invoice service', () => {
     invoiceAccount = await InvoiceAccountHelper.add()
   })
 
-  describe('when `generatedBillingInvoices` is empty', () => {
+  describe('when `currentBillingInvoice` is null', () => {
     beforeEach(async () => {
-      generatedBillingInvoices = []
+      currentBillingInvoice = null
       expectedResult = _billingInvoiceGenerator(invoiceAccount, billingBatchId, financialYearEnding)
     })
 
-    it('returns a new billing invoice and an array populated with just it', async () => {
+    it('returns a new billing invoice with the provided values', async () => {
       const result = await GenerateBillingInvoiceService.go(
-        generatedBillingInvoices,
+        currentBillingInvoice,
         invoiceAccount.invoiceAccountId,
         billingBatchId,
         financialYearEnding
       )
 
-      expect(result.billingInvoice).to.equal(expectedResult, { skip: 'billingInvoiceId' })
-      expect(result.billingInvoices).to.equal([result.billingInvoice])
+      expect(result).to.equal(expectedResult, { skip: 'billingInvoiceId' })
     })
   })
 
-  describe('when `generatedBillingInvoices` is populated', () => {
-    describe('and a matching billing invoice exists', () => {
-      let existingBillingInvoice
+  describe('when `currentBillingInvoice` is set', () => {
+    beforeEach(async () => {
+      currentBillingInvoice = _billingInvoiceGenerator(invoiceAccount, billingBatchId, financialYearEnding)
+    })
 
-      beforeEach(async () => {
-        existingBillingInvoice = _billingInvoiceGenerator(invoiceAccount, billingBatchId, financialYearEnding)
-        generatedBillingInvoices = [existingBillingInvoice]
-      })
-
-      it('returns the existing billing invoice object and the existing array', async () => {
+    describe('and the invoice account ID matches', () => {
+      it('returns the `currentBillingInvoice`', async () => {
         const result = await GenerateBillingInvoiceService.go(
-          generatedBillingInvoices,
-          invoiceAccount.invoiceAccountId,
+          currentBillingInvoice,
+          currentBillingInvoice.invoiceAccountId,
           billingBatchId,
           financialYearEnding
         )
 
-        expect(result.billingInvoice).to.equal(existingBillingInvoice)
-        expect(result.billingInvoices).to.equal(generatedBillingInvoices)
+        expect(result).to.equal(currentBillingInvoice)
       })
     })
 
-    describe('and a matching billing invoice does not exist', () => {
-      let existingBillingInvoice
+    describe('and the invoice account ID does not match', () => {
+      let otherInvoiceAccount
 
-      beforeEach(() => {
-        existingBillingInvoice = _billingInvoiceGenerator(
-          { invoiceAccountId: '813b8bb3-f871-49c3-ac2c-0636e636d9f6', invoiceAccountNumber: 'ABC123' },
-          billingBatchId,
-          financialYearEnding
-        )
-        generatedBillingInvoices = [existingBillingInvoice]
-
-        expectedResult = _billingInvoiceGenerator(invoiceAccount, billingBatchId, financialYearEnding)
+      beforeEach(async () => {
+        otherInvoiceAccount = await InvoiceAccountHelper.add()
       })
 
-      it('returns a new billing invoice object and the existing array with the new object included', async () => {
+      it('returns a new billing invoice with the provided values', async () => {
         const result = await GenerateBillingInvoiceService.go(
-          generatedBillingInvoices,
-          invoiceAccount.invoiceAccountId,
+          currentBillingInvoice,
+          otherInvoiceAccount.invoiceAccountId,
           billingBatchId,
           financialYearEnding
         )
 
-        expect(result.billingInvoice).to.equal(expectedResult, { skip: 'billingInvoiceId' })
-        expect(result.billingInvoices).to.equal([...generatedBillingInvoices, result.billingInvoice])
+        expect(result).not.to.equal(currentBillingInvoice)
+        expect(result.invoiceAccountId).to.equal(otherInvoiceAccount.invoiceAccountId)
       })
     })
   })
