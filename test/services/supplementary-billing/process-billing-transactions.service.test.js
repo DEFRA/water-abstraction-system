@@ -167,6 +167,29 @@ describe('Process billing batch service', () => {
             expect(result.length).to.equal(0)
           })
         })
+
+        describe('are empty', () => {
+          beforeEach(() => {
+            previousTransactions = [allPreviousTransactions[0], allPreviousTransactions[1]]
+
+            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+          })
+
+          it('returns only the previous transactions', async () => {
+            const result = await ProcessBillingTransactionsService.go(
+              [],
+              billingInvoice,
+              billingInvoiceLicence,
+              billingPeriod
+            )
+
+            expect(result.length).to.equal(2)
+
+            // NOTE: We know the text says 'I_WILL_BE_REMOVED' but in this scenario they won't be!
+            expect(result[0].purposes).to.equal('I_WILL_BE_REMOVED_1')
+            expect(result[1].purposes).to.equal('I_WILL_BE_REMOVED_2')
+          })
+        })
       })
     })
 
