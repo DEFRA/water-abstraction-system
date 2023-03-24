@@ -18,7 +18,7 @@ async function go (billingInvoice, billingInvoiceLicence, financialYearEnding) {
 }
 
 async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
-  const result = db
+  return db
     .select(
       'bt.authorisedDays',
       'bt.billableDays',
@@ -78,8 +78,6 @@ async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
     .where({
       'bt.isCredit': false
     })
-
-  return result
 }
 
 module.exports = {
