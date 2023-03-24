@@ -30,7 +30,7 @@ describe('Process billing batch service', () => {
       billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
       isCredit: false,
       status: 'candidate',
-      chargetype: 'standard',
+      chargeType: 'standard',
       chargeCategoryCode: '4.10.1',
       billableDays: 365
     },
@@ -39,7 +39,7 @@ describe('Process billing batch service', () => {
       billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
       isCredit: false,
       status: 'candidate',
-      chargetype: 'standard',
+      chargeType: 'standard',
       chargeCategoryCode: '5.11.2',
       billableDays: 265
     },
@@ -48,13 +48,50 @@ describe('Process billing batch service', () => {
       billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
       isCredit: false,
       status: 'candidate',
-      chargetype: 'standard',
+      chargeType: 'standard',
       chargeCategoryCode: '6.12.3',
       billableDays: 100
     }
   ]
 
-  let reversedTransactions
+  const allReversedTransactions = [
+    {
+      billingTransactionId: 'I_WILL_BE_REMOVED_1',
+      billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+      isCredit: true,
+      status: 'candidate',
+      chargeType: 'standard',
+      chargeCategoryCode: '4.10.1',
+      billableDays: 365
+    },
+    {
+      billingTransactionId: 'I_WILL_BE_REMOVED_2',
+      billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+      isCredit: true,
+      status: 'candidate',
+      chargeType: 'standard',
+      chargeCategoryCode: '5.11.2',
+      billableDays: 265
+    },
+    {
+      billingTransactionId: 'I_WILL_BE_REMOVED_3',
+      billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+      isCredit: false,
+      status: 'candidate',
+      chargeType: 'standard',
+      chargeCategoryCode: '6.12.3',
+      billableDays: 100
+    },
+    {
+      billingTransactionId: 'I_WILL_NOT_BE_REMOVED',
+      billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+      isCredit: false,
+      status: 'candidate',
+      chargeType: 'standard',
+      chargeCategoryCode: '9.9.9',
+      billableDays: 180
+    }
+  ]
 
   beforeEach(() => {
     Sinon.stub(FetchPreviousBillingTransactionsService, 'go')
@@ -64,162 +101,91 @@ describe('Process billing batch service', () => {
     Sinon.restore()
   })
 
-  describe('when the service is called with previous transactions that will all be cancelled out', () => {
-    beforeEach(() => {
-      reversedTransactions = [
-        {
-          billingTransactionId: 'I_WILL_BE_REMOVED_1',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: true,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '4.10.1',
-          billableDays: 365
-        },
-        {
-          billingTransactionId: 'I_WILL_BE_REMOVED_2',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: true,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '5.11.2',
-          billableDays: 265
-        }
-      ]
+  describe('when the billing invoice, licence and period', () => {
+    describe('match to transactions on a previous billing batch', () => {
+      describe('and the standard transactions provided', () => {
+        let reversedTransactions
 
-      Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
+        describe('completely cancel out the previous transactions from the last billing batch', () => {
+          beforeEach(() => {
+            reversedTransactions = [allReversedTransactions[0], allReversedTransactions[1]]
+
+            Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
+          })
+
+          it('returns the uncanceled standard transactions', async () => {
+            const result = await ProcessBillingTransactionsService.go(
+              standardTransactions,
+              billingInvoice,
+              billingInvoiceLicence,
+              billingPeriod
+            )
+
+            expect(result.length).to.equal(1)
+            expect(result[0]).to.equal(standardTransactions[2])
+          })
+        })
+
+        describe('partially cancel out the previous transactions from the last billing batch', () => {
+          beforeEach(() => {
+            reversedTransactions = [allReversedTransactions[0], allReversedTransactions[1], allReversedTransactions[3]]
+
+            Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
+          })
+
+          it('returns the uncanceled standard and reversed transactions', async () => {
+            const result = await ProcessBillingTransactionsService.go(
+              standardTransactions,
+              billingInvoice,
+              billingInvoiceLicence,
+              billingPeriod
+            )
+
+            expect(result.length).to.equal(2)
+            expect(result[0].billingTransactionId).to.equal('STANDARD_TRANSACTION_3')
+            expect(result[1].billingTransactionId).to.equal('I_WILL_NOT_BE_REMOVED')
+          })
+        })
+
+        describe('are cancelled out by the previous transactions from the last billing batch', () => {
+          beforeEach(() => {
+            reversedTransactions = [allReversedTransactions[0], allReversedTransactions[1], allReversedTransactions[2]]
+
+            Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
+          })
+
+          it('returns no transactions', async () => {
+            const result = await ProcessBillingTransactionsService.go(
+              standardTransactions,
+              billingInvoice,
+              billingInvoiceLicence,
+              billingPeriod
+            )
+
+            expect(result.length).to.equal(0)
+          })
+        })
+      })
     })
 
-    // afterEach(() => {
-    //   Sinon.restore()
-    // })
+    describe('do not match to transactions on a previous billing batch', () => {
+      beforeEach(() => {
+        Sinon.stub(ReverseBillingTransactionsService, 'go').returns([])
+      })
 
-    it('returns transactions with cancelling transactions removed', async () => {
-      const result = await ProcessBillingTransactionsService.go(
-        standardTransactions,
-        billingInvoice,
-        billingInvoiceLicence,
-        billingPeriod
-      )
+      it('returns the standard transactions unchanged', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          standardTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
 
-      expect(result.length).to.equal(1)
-      expect(result[0]).to.equal(standardTransactions[2])
-    })
-  })
-
-  describe('when the service is called with previous transactions that will be partially cancelled out', () => {
-    beforeEach(() => {
-      reversedTransactions = [
-        {
-          billingTransactionId: 'I_WILL_BE_REMOVED_1',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: true,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '4.10.1',
-          billableDays: 365
-        },
-        {
-          billingTransactionId: 'I_WILL_BE_REMOVED_2',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: true,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '5.11.2',
-          billableDays: 265
-        },
-        {
-          billingTransactionId: 'I_WILL_NOT_BE_REMOVED',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: false,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '9.9.9',
-          billableDays: 180
-        }
-      ]
-
-      Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
-    })
-
-    it('returns transactions with cancelling transactions removed', async () => {
-      const result = await ProcessBillingTransactionsService.go(
-        standardTransactions,
-        billingInvoice,
-        billingInvoiceLicence,
-        billingPeriod
-      )
-
-      expect(result.length).to.equal(2)
-      expect(result[0].billingTransactionId).to.equal('STANDARD_TRANSACTION_3')
-      expect(result[1].billingTransactionId).to.equal('I_WILL_NOT_BE_REMOVED')
-    })
-  })
-
-  describe('when the service is called so all transactions will be cancelled out', () => {
-    beforeEach(() => {
-      reversedTransactions = [
-        {
-          billingTransactionId: 'I_WILL_BE_REMOVED_1',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: true,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '4.10.1',
-          billableDays: 365
-        },
-        {
-          billingTransactionId: 'I_WILL_BE_REMOVED_2',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: true,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '5.11.2',
-          billableDays: 265
-        },
-        {
-          billingTransactionId: 'I_WILL_BE_REMOVED_3',
-          billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-          isCredit: false,
-          status: 'candidate',
-          chargetype: 'standard',
-          chargeCategoryCode: '6.12.3',
-          billableDays: 100
-        }
-      ]
-
-      Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
-    })
-
-    it('returns no transactions', async () => {
-      const result = await ProcessBillingTransactionsService.go(
-        standardTransactions,
-        billingInvoice,
-        billingInvoiceLicence,
-        billingPeriod
-      )
-
-      expect(result.length).to.equal(0)
-    })
-  })
-
-  describe('when the service is called with no previous transactions', () => {
-    beforeEach(() => {
-      Sinon.stub(ReverseBillingTransactionsService, 'go').returns([])
-    })
-
-    it('returns transactions with cancelling transactions removed', async () => {
-      const result = await ProcessBillingTransactionsService.go(
-        standardTransactions,
-        billingInvoice,
-        billingInvoiceLicence,
-        billingPeriod
-      )
-
-      expect(result.length).to.equal(3)
-      expect(result[0].billingTransactionId).to.equal('STANDARD_TRANSACTION_1')
-      expect(result[1].billingTransactionId).to.equal('STANDARD_TRANSACTION_2')
-      expect(result[2].billingTransactionId).to.equal('STANDARD_TRANSACTION_3')
+        expect(result.length).to.equal(3)
+        expect(result[0].billingTransactionId).to.equal('STANDARD_TRANSACTION_1')
+        expect(result[1].billingTransactionId).to.equal('STANDARD_TRANSACTION_2')
+        expect(result[2].billingTransactionId).to.equal('STANDARD_TRANSACTION_3')
+      })
     })
   })
 })
