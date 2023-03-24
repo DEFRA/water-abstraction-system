@@ -190,6 +190,12 @@ async function _finaliseBillingBatch (billingBatch, isEmpty) {
 
 async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod, billingBatch) {
   try {
+    // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
+    // first place
+    if (!currentBillingData.billingInvoice) {
+      return
+    }
+
     const cleansedTransactions = await ProcessBillingTransactionsService.go(
       currentBillingData.calculatedTransactions,
       currentBillingData.billingInvoice,

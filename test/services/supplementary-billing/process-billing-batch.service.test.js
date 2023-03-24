@@ -69,6 +69,20 @@ describe.only('Process billing batch service', () => {
   })
 
   describe('when the service is called', () => {
+    describe('and there are no charge versions to process', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
+      })
+
+      it('sets the Billing Batch status to empty', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+        expect(result.status).to.equal('empty')
+      })
+    })
+
     beforeEach(() => {
       Sinon.stub(ChargingModuleCreateTransactionService, 'go').resolves({
         succeeded: true,
