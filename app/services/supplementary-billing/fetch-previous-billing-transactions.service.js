@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches a licence's debit transactions from the last 'sent' billing batch it was in
- * @module FetchBillingTransactionsService
+ * Fetches the previously billed transactions that match the invoice, licence and year provided
+ * @module FetchPreviousBillingTransactionsService
  */
 
 const { db } = require('../../../db/db.js')
