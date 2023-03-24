@@ -10,14 +10,13 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchPreviousBillingTransactionsService = require('../../../app/services/supplementary-billing/fetch-previous-billing-transactions.service.js')
-const ReverseBillingTransactionsService = require('../../../app/services/supplementary-billing/reverse-billing-transactions.service.js')
 
 // Thing under test
 const ProcessBillingTransactionsService = require('../../../app/services/supplementary-billing/process-billing-transactions.service.js')
 
 describe('Process billing batch service', () => {
-  const billingInvoice = 'BILLING_INVOICE'
-  const billingInvoiceLicence = 'BILLING_INVOICE_LICENCE'
+  const billingInvoice = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
+  const billingInvoiceLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
 
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
@@ -26,76 +25,79 @@ describe('Process billing batch service', () => {
 
   const standardTransactions = [
     {
-      billingTransactionId: 'STANDARD_TRANSACTION_1',
-      billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+      billingTransactionId: '61abdc15-7859-4783-9622-6cb8de7f2461',
+      billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
       isCredit: false,
       status: 'candidate',
       chargeType: 'standard',
       chargeCategoryCode: '4.10.1',
-      billableDays: 365
+      billableDays: 365,
+      purposes: 'STANDARD_TRANSACTION_1'
     },
     {
-      billingTransactionId: 'STANDARD_TRANSACTION_2',
-      billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+      billingTransactionId: 'a903cdd3-1804-4237-aeb9-70ef9008469d',
+      billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
       isCredit: false,
       status: 'candidate',
       chargeType: 'standard',
       chargeCategoryCode: '5.11.2',
-      billableDays: 265
+      billableDays: 265,
+      purposes: 'STANDARD_TRANSACTION_2'
     },
     {
-      billingTransactionId: 'STANDARD_TRANSACTION_3',
-      billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+      billingTransactionId: '34453414-0ecb-49ce-8442-619d22c882f0',
+      billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
       isCredit: false,
       status: 'candidate',
       chargeType: 'standard',
       chargeCategoryCode: '6.12.3',
-      billableDays: 100
+      billableDays: 100,
+      purposes: 'STANDARD_TRANSACTION_3'
     }
   ]
 
-  const allReversedTransactions = [
+  const allPreviousTransactions = [
     {
-      billingTransactionId: 'I_WILL_BE_REMOVED_1',
+      billingTransactionId: '8d68eb26-d054-47a7-aee8-cd93a24fa860',
       billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-      isCredit: true,
+      isCredit: false,
       status: 'candidate',
       chargeType: 'standard',
       chargeCategoryCode: '4.10.1',
-      billableDays: 365
+      billableDays: 365,
+      purposes: ['I_WILL_BE_REMOVED_1']
     },
     {
-      billingTransactionId: 'I_WILL_BE_REMOVED_2',
+      billingTransactionId: '63742bee-cb1b-44f1-86f6-c7d546f59c88',
       billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-      isCredit: true,
+      isCredit: false,
       status: 'candidate',
       chargeType: 'standard',
       chargeCategoryCode: '5.11.2',
-      billableDays: 265
+      billableDays: 265,
+      purposes: ['I_WILL_BE_REMOVED_2']
     },
     {
-      billingTransactionId: 'I_WILL_BE_REMOVED_3',
+      billingTransactionId: '4f254a70-d36e-46eb-9e4b-59503c3d5994',
       billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
       isCredit: false,
       status: 'candidate',
       chargeType: 'standard',
       chargeCategoryCode: '6.12.3',
-      billableDays: 100
+      billableDays: 100,
+      purposes: ['I_WILL_BE_REMOVED_3']
     },
     {
-      billingTransactionId: 'I_WILL_NOT_BE_REMOVED',
+      billingTransactionId: '733bdb55-5386-4fdb-a581-1e98f9a35bed',
       billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
       isCredit: false,
       status: 'candidate',
       chargeType: 'standard',
       chargeCategoryCode: '9.9.9',
-      billableDays: 180
+      billableDays: 180,
+      purposes: ['I_WILL_NOT_BE_REMOVED']
     }
   ]
-
-  beforeEach(() => {
-    Sinon.stub(FetchPreviousBillingTransactionsService, 'go')
-  })
 
   afterEach(() => {
     Sinon.restore()
@@ -104,13 +106,13 @@ describe('Process billing batch service', () => {
   describe('when the billing invoice, licence and period', () => {
     describe('match to transactions on a previous billing batch', () => {
       describe('and the standard transactions provided', () => {
-        let reversedTransactions
+        let previousTransactions
 
         describe('completely cancel out the previous transactions from the last billing batch', () => {
           beforeEach(() => {
-            reversedTransactions = [allReversedTransactions[0], allReversedTransactions[1]]
+            previousTransactions = [allPreviousTransactions[0], allPreviousTransactions[1]]
 
-            Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
+            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns the uncanceled standard transactions', async () => {
@@ -128,9 +130,9 @@ describe('Process billing batch service', () => {
 
         describe('partially cancel out the previous transactions from the last billing batch', () => {
           beforeEach(() => {
-            reversedTransactions = [allReversedTransactions[0], allReversedTransactions[1], allReversedTransactions[3]]
+            previousTransactions = [allPreviousTransactions[0], allPreviousTransactions[1], allPreviousTransactions[3]]
 
-            Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
+            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns the uncanceled standard and reversed transactions', async () => {
@@ -142,16 +144,16 @@ describe('Process billing batch service', () => {
             )
 
             expect(result.length).to.equal(2)
-            expect(result[0].billingTransactionId).to.equal('STANDARD_TRANSACTION_3')
-            expect(result[1].billingTransactionId).to.equal('I_WILL_NOT_BE_REMOVED')
+            expect(result[0].purposes).to.equal('STANDARD_TRANSACTION_3')
+            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
           })
         })
 
         describe('are cancelled out by the previous transactions from the last billing batch', () => {
           beforeEach(() => {
-            reversedTransactions = [allReversedTransactions[0], allReversedTransactions[1], allReversedTransactions[2]]
+            previousTransactions = [allPreviousTransactions[0], allPreviousTransactions[1], allPreviousTransactions[2]]
 
-            Sinon.stub(ReverseBillingTransactionsService, 'go').returns(reversedTransactions)
+            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns no transactions', async () => {
@@ -170,7 +172,7 @@ describe('Process billing batch service', () => {
 
     describe('do not match to transactions on a previous billing batch', () => {
       beforeEach(() => {
-        Sinon.stub(ReverseBillingTransactionsService, 'go').returns([])
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves([])
       })
 
       it('returns the standard transactions unchanged', async () => {
@@ -182,9 +184,9 @@ describe('Process billing batch service', () => {
         )
 
         expect(result.length).to.equal(3)
-        expect(result[0].billingTransactionId).to.equal('STANDARD_TRANSACTION_1')
-        expect(result[1].billingTransactionId).to.equal('STANDARD_TRANSACTION_2')
-        expect(result[2].billingTransactionId).to.equal('STANDARD_TRANSACTION_3')
+        expect(result[0].purposes).to.equal('STANDARD_TRANSACTION_1')
+        expect(result[1].purposes).to.equal('STANDARD_TRANSACTION_2')
+        expect(result[2].purposes).to.equal('STANDARD_TRANSACTION_3')
       })
     })
   })

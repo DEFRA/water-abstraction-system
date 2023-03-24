@@ -6,6 +6,10 @@ const ReverseBillingTransactionsService = require('./reverse-billing-transaction
 async function go (standardTransactions, billingInvoice, billingInvoiceLicence, billingPeriod) {
   const previousTransactions = await _fetchPreviousTransactions(billingInvoice, billingInvoiceLicence, billingPeriod)
 
+  if (previousTransactions.length === 0) {
+    return standardTransactions
+  }
+
   const reversedTransactions = ReverseBillingTransactionsService.go(previousTransactions, billingInvoiceLicence)
 
   return _cleanseTransactions(standardTransactions, reversedTransactions)
