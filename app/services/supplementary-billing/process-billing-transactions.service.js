@@ -3,27 +3,27 @@
 const FetchPreviousBillingTransactionsService = require('./fetch-previous-billing-transactions.service.js')
 const ReverseBillingTransactionsService = require('./reverse-billing-transactions.service.js')
 
-async function go (standardTransactions, billingInvoice, billingInvoiceLicence, billingPeriod) {
+async function go (calculatedTransactions, billingInvoice, billingInvoiceLicence, billingPeriod) {
   const previousTransactions = await _fetchPreviousTransactions(billingInvoice, billingInvoiceLicence, billingPeriod)
 
   if (previousTransactions.length === 0) {
-    return standardTransactions
+    return calculatedTransactions
   }
 
   const reversedTransactions = ReverseBillingTransactionsService.go(previousTransactions, billingInvoiceLicence)
 
-  return _cleanseTransactions(standardTransactions, reversedTransactions)
+  return _cleanseTransactions(calculatedTransactions, reversedTransactions)
 }
 
-function _cancelStandardTransaction (standardTransaction, reversedTransactions) {
+function _cancelCalculatedTransaction (calculatedTransaction, reversedTransactions) {
   const result = reversedTransactions.findIndex((reversedTransaction) => {
     // Example of the things we are comparing
     // - chargeType - standard or compensation
     // - chargeCategory - 4.10.1
     // - billableDays - 215
-    return reversedTransaction.chargeType === standardTransaction.chargeType &&
-      reversedTransaction.chargeCategoryCode === standardTransaction.chargeCategoryCode &&
-      reversedTransaction.billableDays === standardTransaction.billableDays
+    return reversedTransaction.chargeType === calculatedTransaction.chargeType &&
+      reversedTransaction.chargeCategoryCode === calculatedTransaction.chargeCategoryCode &&
+      reversedTransaction.billableDays === calculatedTransaction.billableDays
   })
 
   if (result === -1) {
@@ -40,12 +40,12 @@ function _cancelStandardTransaction (standardTransaction, reversedTransactions) 
  * to the same billing invoice licence which would send the same data to the Charging Module (and therefore return the
  * same values) but with opposing credit flags -- in other words, a credit and a debit which cancel each other out.
  */
-function _cleanseTransactions (standardTransactions, reverseTransactions) {
+function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
   const cleansedTransactionLines = []
 
-  for (const standardTransactionLine of standardTransactions) {
-    if (!_cancelStandardTransaction(standardTransactionLine, reverseTransactions)) {
-      cleansedTransactionLines.push(standardTransactionLine)
+  for (const calculatedTransactionLine of calculatedTransactions) {
+    if (!_cancelCalculatedTransaction(calculatedTransactionLine, reverseTransactions)) {
+      cleansedTransactionLines.push(calculatedTransactionLine)
     }
   }
 

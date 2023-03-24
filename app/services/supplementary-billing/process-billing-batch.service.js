@@ -38,7 +38,7 @@ async function go (billingBatch, billingPeriod) {
     licence: null,
     billingInvoice: null,
     billingInvoiceLicence: null,
-    standardTransactions: []
+    calculatedTransactions: []
   }
 
   try {
@@ -64,15 +64,15 @@ async function go (billingBatch, billingPeriod) {
         currentBillingData.billingInvoiceLicence.billingInvoiceLicenceId !== billingInvoiceLicence.billingInvoiceLicenceId
       ) {
         await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
-        currentBillingData.standardTransactions = []
+        currentBillingData.calculatedTransactions = []
       }
 
       currentBillingData.licence = chargeVersion.licence
       currentBillingData.billingInvoice = billingInvoice
       currentBillingData.billingInvoiceLicence = billingInvoiceLicence
 
-      const standardTransactions = _generateStandardTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
-      currentBillingData.standardTransactions.push(...standardTransactions)
+      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
+      currentBillingData.calculatedTransactions.push(...calculatedTransactions)
     }
     await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
 
@@ -191,7 +191,7 @@ async function _finaliseBillingBatch (billingBatch, isEmpty) {
 async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod, billingBatch) {
   try {
     const cleansedTransactions = await ProcessBillingTransactionsService.go(
-      currentBillingData.standardTransactions,
+      currentBillingData.calculatedTransactions,
       currentBillingData.billingInvoice,
       currentBillingData.billingInvoiceLicence,
       billingPeriod
@@ -230,7 +230,7 @@ async function _generateInvoiceData (currentBillingData, billingBatch, chargeVer
   }
 }
 
-function _generateStandardTransactions (billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence) {
+function _generateCalculatedTransactions (billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence) {
   try {
     const financialYearEnding = billingPeriod.endDate.getFullYear()
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)

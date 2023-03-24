@@ -23,7 +23,7 @@ describe('Process billing batch service', () => {
     endDate: new Date('2023-03-31')
   }
 
-  const standardTransactions = [
+  const calculatedTransactions = [
     {
       billingTransactionId: '61abdc15-7859-4783-9622-6cb8de7f2461',
       billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
@@ -32,7 +32,7 @@ describe('Process billing batch service', () => {
       chargeType: 'standard',
       chargeCategoryCode: '4.10.1',
       billableDays: 365,
-      purposes: 'STANDARD_TRANSACTION_1'
+      purposes: 'CALCULATED_TRANSACTION_1'
     },
     {
       billingTransactionId: 'a903cdd3-1804-4237-aeb9-70ef9008469d',
@@ -42,7 +42,7 @@ describe('Process billing batch service', () => {
       chargeType: 'standard',
       chargeCategoryCode: '5.11.2',
       billableDays: 265,
-      purposes: 'STANDARD_TRANSACTION_2'
+      purposes: 'CALCULATED_TRANSACTION_2'
     },
     {
       billingTransactionId: '34453414-0ecb-49ce-8442-619d22c882f0',
@@ -52,7 +52,7 @@ describe('Process billing batch service', () => {
       chargeType: 'standard',
       chargeCategoryCode: '6.12.3',
       billableDays: 100,
-      purposes: 'STANDARD_TRANSACTION_3'
+      purposes: 'CALCULATED_TRANSACTION_3'
     }
   ]
 
@@ -105,7 +105,7 @@ describe('Process billing batch service', () => {
 
   describe('when the billing invoice, licence and period', () => {
     describe('match to transactions on a previous billing batch', () => {
-      describe('and the standard transactions provided', () => {
+      describe('and the calculated transactions provided', () => {
         let previousTransactions
 
         describe('completely cancel out the previous transactions from the last billing batch', () => {
@@ -115,16 +115,16 @@ describe('Process billing batch service', () => {
             Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
           })
 
-          it('returns the uncanceled standard transactions', async () => {
+          it('returns the uncanceled calculated transactions', async () => {
             const result = await ProcessBillingTransactionsService.go(
-              standardTransactions,
+              calculatedTransactions,
               billingInvoice,
               billingInvoiceLicence,
               billingPeriod
             )
 
             expect(result.length).to.equal(1)
-            expect(result[0]).to.equal(standardTransactions[2])
+            expect(result[0]).to.equal(calculatedTransactions[2])
           })
         })
 
@@ -135,16 +135,16 @@ describe('Process billing batch service', () => {
             Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
           })
 
-          it('returns the uncanceled standard and reversed transactions', async () => {
+          it('returns the uncanceled calculated and reversed transactions', async () => {
             const result = await ProcessBillingTransactionsService.go(
-              standardTransactions,
+              calculatedTransactions,
               billingInvoice,
               billingInvoiceLicence,
               billingPeriod
             )
 
             expect(result.length).to.equal(2)
-            expect(result[0].purposes).to.equal('STANDARD_TRANSACTION_3')
+            expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
             expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
           })
         })
@@ -158,7 +158,7 @@ describe('Process billing batch service', () => {
 
           it('returns no transactions', async () => {
             const result = await ProcessBillingTransactionsService.go(
-              standardTransactions,
+              calculatedTransactions,
               billingInvoice,
               billingInvoiceLicence,
               billingPeriod
@@ -175,18 +175,18 @@ describe('Process billing batch service', () => {
         Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves([])
       })
 
-      it('returns the standard transactions unchanged', async () => {
+      it('returns the calculated transactions unchanged', async () => {
         const result = await ProcessBillingTransactionsService.go(
-          standardTransactions,
+          calculatedTransactions,
           billingInvoice,
           billingInvoiceLicence,
           billingPeriod
         )
 
         expect(result.length).to.equal(3)
-        expect(result[0].purposes).to.equal('STANDARD_TRANSACTION_1')
-        expect(result[1].purposes).to.equal('STANDARD_TRANSACTION_2')
-        expect(result[2].purposes).to.equal('STANDARD_TRANSACTION_3')
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_1')
+        expect(result[1].purposes).to.equal('CALCULATED_TRANSACTION_2')
+        expect(result[2].purposes).to.equal('CALCULATED_TRANSACTION_3')
       })
     })
   })
