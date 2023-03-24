@@ -37,19 +37,14 @@ const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.j
  * @returns {Object} A result object containing either the found or generated billing invoice object, and an array of
  * generated billing invoices which includes the one being returned
  */
-async function go (generatedBillingInvoices, invoiceAccountId, billingBatchId, financialYearEnding) {
-  let billingInvoice = _existing(generatedBillingInvoices, invoiceAccountId)
-
-  if (billingInvoice) {
-    return {
-      billingInvoice,
-      billingInvoices: generatedBillingInvoices
-    }
+async function go (currentBillingInvoice, invoiceAccountId, billingBatchId, financialYearEnding) {
+  if (currentBillingInvoice?.invoiceAccountId === invoiceAccountId) {
+    return currentBillingInvoice
   }
 
   const invoiceAccount = await InvoiceAccountModel.query().findById(invoiceAccountId)
 
-  billingInvoice = {
+  const billingInvoice = {
     billingBatchId,
     financialYearEnding,
     invoiceAccountId,
@@ -58,18 +53,8 @@ async function go (generatedBillingInvoices, invoiceAccountId, billingBatchId, f
     invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
     isCredit: false
   }
-  const updatedBillingInvoices = [...generatedBillingInvoices, billingInvoice]
 
-  return {
-    billingInvoice,
-    billingInvoices: updatedBillingInvoices
-  }
-}
-
-function _existing (generatedBillingInvoices, invoiceAccountId) {
-  return generatedBillingInvoices.find((invoice) => {
-    return invoiceAccountId === invoice.invoiceAccountId
-  })
+  return billingInvoice
 }
 
 module.exports = {
