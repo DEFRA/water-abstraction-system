@@ -31,7 +31,7 @@ const HandleErroredBillingBatchService = require('../../../app/services/suppleme
 // Thing under test
 const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
 
-describe('Process billing batch service', () => {
+describe.only('Process billing batch service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -94,76 +94,78 @@ describe('Process billing batch service', () => {
   describe('when the service errors', () => {
     const expectedError = new Error('ERROR')
 
-    beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').rejects(expectedError)
-    })
+    describe('because fetching the charge versions fails', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchChargeVersionsService, 'go').rejects()
+      })
 
-    it('handles the error', async () => {
-      await expect(ProcessBillingBatchService.go(billingBatch, billingPeriod)).not.to.reject()
-    })
+      it('sets the appropriate error code', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
 
-    it('calls HandleErroredBillingBatchService with the billing batch id', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
-
-      expect(handlerArgs[0]).to.equal(billingBatch.billingBatchId)
-    })
-
-    it('logs the error', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
-
-      const logDataArg = notifierStub.omfg.firstCall.args[1]
-
-      expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
-      expect(logDataArg.billingBatch).to.equal(billingBatch)
-      expect(logDataArg.error).to.equal({
-        name: expectedError.name,
-        message: expectedError.message,
-        stack: expectedError.stack
+        expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToProcessChargeVersions)
       })
     })
-  })
 
-  describe('when attempting to fetch the charge versions fails', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').rejects()
+    describe('because generating the calculated transactions fails', () => {
+      beforeEach(() => {
+        Sinon.stub(GenerateBillingTransactionsService, 'go').throws()
+      })
+
+      it('sets the appropriate error code', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+
+        expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToPrepareTransactions)
+      })
     })
 
-    it('sets the appropriate error code', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+    describe('because creating the billing transactions', () => {
+      beforeEach(() => {
+        Sinon.stub(ChargingModuleCreateTransactionService, 'go').rejects()
+      })
 
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+      it('sets the appropriate error code', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
 
-      expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToProcessChargeVersions)
-    })
-  })
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
-  describe('when attempting to generate the transaction lines fails', () => {
-    beforeEach(() => {
-      Sinon.stub(GenerateBillingTransactionsService, 'go').throws()
-    })
-
-    it('sets the appropriate error code', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
-
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
-
-      expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToPrepareTransactions)
-    })
-  })
-
-  describe('when attempting to create the transaction lines fails', () => {
-    beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateTransactionService, 'go').rejects()
+        expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToCreateCharge)
+      })
     })
 
-    it('sets the appropriate error code', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+    describe('no matter the reason', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchChargeVersionsService, 'go').rejects(expectedError)
+      })
 
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+      it('handles the error', async () => {
+        await expect(ProcessBillingBatchService.go(billingBatch, billingPeriod)).not.to.reject()
+      })
 
-      expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToCreateCharge)
+      it('sets the Billing Batch status to errored', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+
+        expect(handlerArgs[0]).to.equal(billingBatch.billingBatchId)
+      })
+
+      it('logs the error', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const logDataArg = notifierStub.omfg.firstCall.args[1]
+
+        expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
+        expect(logDataArg.billingBatch).to.equal(billingBatch)
+        expect(logDataArg.error).to.equal({
+          name: expectedError.name,
+          message: expectedError.message,
+          stack: expectedError.stack
+        })
+      })
     })
   })
 })
