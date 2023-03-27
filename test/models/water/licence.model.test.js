@@ -12,6 +12,8 @@ const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing
 const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const ChargeVersionModel = require('../../../app/models/water/charge-version.model.js')
+const ChargeVersionWorkflowHelper = require('../../support/helpers/water/charge-version-workflow.helper.js')
+const ChargeVersionWorkflowModel = require('../../../app/models/water/charge-version-workflow.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
@@ -136,6 +138,41 @@ describe('Licence model', () => {
         expect(result.billingInvoiceLicences[0]).to.be.an.instanceOf(BillingInvoiceLicenceModel)
         expect(result.billingInvoiceLicences).to.include(testBillingInvoiceLicences[0])
         expect(result.billingInvoiceLicences).to.include(testBillingInvoiceLicences[1])
+      })
+    })
+
+    describe.only('when linking to charge version workflows', () => {
+      let testChargeVersionWorkflows
+
+      beforeEach(async () => {
+        const { licenceId } = testRecord
+
+        testChargeVersionWorkflows = []
+        for (let i = 0; i < 2; i++) {
+          const chargeVersionWorkflow = await ChargeVersionWorkflowHelper.add({ licenceId })
+          testChargeVersionWorkflows.push(chargeVersionWorkflow)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('chargeVersionWorkflows')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the charge version workflows', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.licenceId)
+          .withGraphFetched('chargeVersionWorkflows')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.licenceId).to.equal(testRecord.licenceId)
+
+        expect(result.chargeVersionWorkflows).to.be.an.array()
+        expect(result.chargeVersionWorkflows[0]).to.be.an.instanceOf(ChargeVersionWorkflowModel)
+        expect(result.chargeVersionWorkflows).to.include(testChargeVersionWorkflows[0])
+        expect(result.chargeVersionWorkflows).to.include(testChargeVersionWorkflows[1])
       })
     })
   })
