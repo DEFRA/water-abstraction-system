@@ -13,6 +13,7 @@ const ChargeElementHelper = require('../../support/helpers/water/charge-element.
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChangeReasonHelper = require('../../support/helpers/water/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
+const ChargeVersionWorkflowHelper = require('../../support/helpers/water/charge-version-workflow.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
@@ -268,6 +269,32 @@ describe('Fetch Charge Versions service', () => {
           }
         )
         testRecords = [otherRegionChargeVersion]
+      })
+
+      it('returns no applicable charge versions', async () => {
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(result.length).to.equal(0)
+      })
+    })
+
+    describe.only('because the licence is in workflow', () => {
+      beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
+        const chargeVersion = await ChargeVersionHelper.add(
+          {},
+          {
+            includeInSupplementaryBilling: 'yes',
+            regionId
+          }
+        )
+        await ChargeVersionWorkflowHelper.add({ licenceId: chargeVersion.licenceId })
+
+        testRecords = [chargeVersion]
       })
 
       it('returns no applicable charge versions', async () => {

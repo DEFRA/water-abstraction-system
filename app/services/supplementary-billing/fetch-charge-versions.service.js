@@ -7,6 +7,7 @@ const { ref } = require('objection')
  */
 
 const ChargeVersion = require('../../models/water/charge-version.model.js')
+const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 
 /**
  * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
@@ -42,6 +43,7 @@ async function _fetch (regionId, billingPeriod) {
     .where('chargeVersions.status', 'current')
     .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .whereNotExists(ChargeVersionWorkflow.query().select(1).whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId'))
     .orderBy([
       { column: 'chargeVersions.invoiceAccountId' },
       { column: 'chargeVersions.licenceId' }
