@@ -43,7 +43,11 @@ async function _fetch (regionId, billingPeriod) {
     .where('chargeVersions.status', 'current')
     .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .whereNotExists(ChargeVersionWorkflow.query().select(1).whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId'))
+    .whereNotExists(
+      ChargeVersionWorkflow.query()
+        .select(1)
+        .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
+    )
     .orderBy([
       { column: 'chargeVersions.invoiceAccountId' },
       { column: 'chargeVersions.licenceId' }
