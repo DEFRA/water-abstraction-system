@@ -45,7 +45,7 @@ describe('Process billing batch service', () => {
     await DatabaseHelper.clean()
 
     const { regionId } = await RegionHelper.add()
-    const { licenceId } = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes', regionId })
+    const { licenceId } = await LicenceHelper.add({ includeInSrocSupplementaryBilling: 'yes', regionId })
     const { changeReasonId } = await ChangeReasonHelper.add()
     const { invoiceAccountId } = await InvoiceAccountHelper.add()
     const { chargeVersionId } = await ChargeVersionHelper.add({ changeReasonId, invoiceAccountId }, { licenceId })
