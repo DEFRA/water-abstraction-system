@@ -141,7 +141,7 @@ describe('Licence model', () => {
       })
     })
 
-    describe.only('when linking to charge version workflows', () => {
+    describe('when linking to charge version workflows', () => {
       let testChargeVersionWorkflows
 
       beforeEach(async () => {
