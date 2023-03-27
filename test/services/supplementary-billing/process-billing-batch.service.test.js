@@ -31,12 +31,16 @@ const HandleErroredBillingBatchService = require('../../../app/services/suppleme
 // Thing under test
 const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
 
-describe.only('Process billing batch service', () => {
+describe('Process billing batch service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
   }
 
+  let licence
+  let changeReason
+  let invoiceAccount
+  let billingChargeCategory
   let billingBatch
   let handleErroredBillingBatchStub
   let notifierStub
@@ -45,13 +49,10 @@ describe.only('Process billing batch service', () => {
     await DatabaseHelper.clean()
 
     const { regionId } = await RegionHelper.add()
-    const { licenceId } = await LicenceHelper.add({ includeInSrocSupplementaryBilling: 'yes', regionId })
-    const { changeReasonId } = await ChangeReasonHelper.add()
-    const { invoiceAccountId } = await InvoiceAccountHelper.add()
-    const { chargeVersionId } = await ChargeVersionHelper.add({ changeReasonId, invoiceAccountId }, { licenceId })
-    const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
-    const { chargeElementId } = await ChargeElementHelper.add({ billingChargeCategoryId, chargeVersionId })
-    await ChargePurposeHelper.add({ chargeElementId })
+    licence = await LicenceHelper.add({ includeInSupplementaryBilling: 'yes', regionId })
+    changeReason = await ChangeReasonHelper.add()
+    invoiceAccount = await InvoiceAccountHelper.add()
+    billingChargeCategory = await BillingChargeCategoryHelper.add()
 
     billingBatch = await BillingBatchHelper.add({ regionId })
 
@@ -83,16 +84,53 @@ describe.only('Process billing batch service', () => {
       })
     })
 
-    beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateTransactionService, 'go').resolves({
-        succeeded: true,
-        response: {
-          body: { transaction: { id: '7e752fa6-a19c-4779-b28c-6e536f028795' } }
-        }
+    describe('and there are charge versions to process', () => {
+      beforeEach(() => {
+        Sinon.stub(ChargingModuleCreateTransactionService, 'go').resolves({
+          succeeded: true,
+          response: {
+            body: { transaction: { id: '7e752fa6-a19c-4779-b28c-6e536f028795' } }
+          }
+        })
+        Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
+          succeeded: true,
+          response: {}
+        })
       })
-      Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
-        succeeded: true,
-        response: {}
+
+      describe('but none of them are billable (billable days calculated as 0', () => {
+        beforeEach(async () => {
+          const { chargeVersionId } = await ChargeVersionHelper.add(
+            {
+              changeReasonId: changeReason.changeReasonId,
+              invoiceAccountId: invoiceAccount.invoiceAccountId,
+              startDate: new Date(2022, 7, 1, 9)
+            },
+            {
+              licenceId: licence.licenceId
+            }
+          )
+          const { chargeElementId } = await ChargeElementHelper.add(
+            { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+          )
+          await ChargePurposeHelper.add({
+            chargeElementId,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 5
+          })
+        })
+
+        describe('and there are no previous billed transactions', () => {
+          it('sets the Billing Batch status to empty', async () => {
+            await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+            const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+            expect(result.status).to.equal('empty')
+          })
+        })
       })
     })
 
@@ -123,7 +161,16 @@ describe.only('Process billing batch service', () => {
     })
 
     describe('because generating the calculated transactions fails', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
+        const { chargeVersionId } = await ChargeVersionHelper.add(
+          { changeReasonId: changeReason.changeReasonId, invoiceAccountId: invoiceAccount.invoiceAccountId },
+          { licenceId: licence.licenceId }
+        )
+        const { chargeElementId } = await ChargeElementHelper.add(
+          { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+        )
+        await ChargePurposeHelper.add({ chargeElementId })
+
         Sinon.stub(GenerateBillingTransactionsService, 'go').throws()
       })
 
@@ -137,7 +184,16 @@ describe.only('Process billing batch service', () => {
     })
 
     describe('because creating the billing transactions', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
+        const { chargeVersionId } = await ChargeVersionHelper.add(
+          { changeReasonId: changeReason.changeReasonId, invoiceAccountId: invoiceAccount.invoiceAccountId },
+          { licenceId: licence.licenceId }
+        )
+        const { chargeElementId } = await ChargeElementHelper.add(
+          { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+        )
+        await ChargePurposeHelper.add({ chargeElementId })
+
         Sinon.stub(ChargingModuleCreateTransactionService, 'go').rejects()
       })
 
