@@ -278,7 +278,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe.only('because the licence is in workflow', () => {
+    describe('because the licence is in workflow', () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
