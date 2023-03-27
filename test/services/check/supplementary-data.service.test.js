@@ -11,7 +11,6 @@ const { expect } = Code
 // Things we need to stub
 const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
-const FetchLicencesService = require('../../../app/services/supplementary-billing/fetch-licences.service.js')
 const FetchRegionService = require('../../../app/services/supplementary-billing/fetch-region.service.js')
 
 // Thing under test
@@ -35,7 +34,6 @@ describe('Supplementary service', () => {
 
   describe('the response for billing periods', () => {
     beforeEach(async () => {
-      Sinon.stub(FetchLicencesService, 'go').resolves([])
       Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
     })
 
@@ -47,48 +45,7 @@ describe('Supplementary service', () => {
     })
   })
 
-  describe('the response for licences', () => {
-    beforeEach(async () => {
-      Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
-    })
-
-    describe('when there are licences for supplementary billing', () => {
-      const testRecords = [{
-        licenceId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',
-        licenceRef: 'AT/SROC/SUPB/01',
-        licenceExistsInBilling: true
-      }]
-
-      beforeEach(async () => {
-        Sinon.stub(FetchLicencesService, 'go').resolves(testRecords)
-      })
-
-      it('returns the matching licences', async () => {
-        const result = await SupplementaryDataService.go(naldRegionId)
-
-        expect(result.licences.length).to.equal(1)
-        expect(result.licences[0].licenceId).to.equal(testRecords[0].licenceId)
-      })
-    })
-
-    describe('When there are no licences for supplementary billing', () => {
-      beforeEach(async () => {
-        Sinon.stub(FetchLicencesService, 'go').resolves([])
-      })
-
-      it('returns no results', async () => {
-        const result = await SupplementaryDataService.go(naldRegionId)
-
-        expect(result.licences).to.be.empty()
-      })
-    })
-  })
-
   describe('the response for charge versions', () => {
-    beforeEach(async () => {
-      Sinon.stub(FetchLicencesService, 'go').resolves([])
-    })
-
     describe('when there are charge versions for supplementary billing', () => {
       const testRecords = [{
         chargeVersionId: '4b5cbe04-a0e2-468c-909e-1e2d93810ba8',

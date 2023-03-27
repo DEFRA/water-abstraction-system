@@ -22,18 +22,6 @@ describe('Supplementary presenter', () => {
             endDate: new Date(2023, 2, 31)
           }
         ],
-        licences: [
-          {
-            licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-            licenceRef: 'AT/SROC/SUPB/01',
-            numberOfTimesBilled: 1
-          },
-          {
-            licenceId: '81b50b35-459a-43f0-a48a-262028a34493',
-            licenceRef: 'AT/SROC/SUPB/02',
-            numberOfTimesBilled: 0
-          }
-        ],
         chargeVersions: [
           {
             chargeVersionId: '6a472535-145c-4170-ab59-f555783fa6e7',
@@ -72,18 +60,6 @@ describe('Supplementary presenter', () => {
       expect(result.billingPeriods).to.have.length(1)
       expect(result.billingPeriods[0]).to.equal(data.billingPeriods[0])
 
-      expect(result.licences).to.have.length(2)
-      expect(result.licences[0]).to.equal({
-        licenceId: data.licences[0].licenceId,
-        licenceRef: data.licences[0].licenceRef,
-        licenceExistsInBilling: true
-      })
-      expect(result.licences[1]).to.equal({
-        licenceId: data.licences[1].licenceId,
-        licenceRef: data.licences[1].licenceRef,
-        licenceExistsInBilling: false
-      })
-
       expect(result.chargeVersions).to.have.length(1)
       expect(result.chargeVersions[0]).to.equal(data.chargeVersions[0])
     })
@@ -93,7 +69,6 @@ describe('Supplementary presenter', () => {
     beforeEach(() => {
       data = {
         billingPeriods: [],
-        licences: [],
         chargeVersions: []
       }
     })
@@ -102,7 +77,6 @@ describe('Supplementary presenter', () => {
       const result = SupplementaryDataPresenter.go(data)
 
       expect(result.billingPeriods).to.be.empty()
-      expect(result.licences).to.be.empty()
       expect(result.chargeVersions).to.be.empty()
     })
   })
