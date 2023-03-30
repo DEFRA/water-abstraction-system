@@ -37,6 +37,10 @@ describe('Process billing batch service', () => {
     endDate: new Date('2023-03-31')
   }
 
+  let licence
+  let changeReason
+  let invoiceAccount
+  let billingChargeCategory
   let billingBatch
   let handleErroredBillingBatchStub
   let notifierStub
@@ -45,13 +49,10 @@ describe('Process billing batch service', () => {
     await DatabaseHelper.clean()
 
     const { regionId } = await RegionHelper.add()
-    const { licenceId } = await LicenceHelper.add({ includeInSrocSupplementaryBilling: 'yes', regionId })
-    const { changeReasonId } = await ChangeReasonHelper.add()
-    const { invoiceAccountId } = await InvoiceAccountHelper.add()
-    const { chargeVersionId } = await ChargeVersionHelper.add({ changeReasonId, invoiceAccountId }, { licenceId })
-    const { billingChargeCategoryId } = await BillingChargeCategoryHelper.add()
-    const { chargeElementId } = await ChargeElementHelper.add({ billingChargeCategoryId, chargeVersionId })
-    await ChargePurposeHelper.add({ chargeElementId })
+    licence = await LicenceHelper.add({ includeInSrocSupplementaryBilling: true, regionId })
+    changeReason = await ChangeReasonHelper.add()
+    invoiceAccount = await InvoiceAccountHelper.add()
+    billingChargeCategory = await BillingChargeCategoryHelper.add()
 
     billingBatch = await BillingBatchHelper.add({ regionId })
 
@@ -69,16 +70,67 @@ describe('Process billing batch service', () => {
   })
 
   describe('when the service is called', () => {
-    beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateTransactionService, 'go').resolves({
-        succeeded: true,
-        response: {
-          body: { transaction: { id: '7e752fa6-a19c-4779-b28c-6e536f028795' } }
-        }
+    describe('and there are no charge versions to process', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
       })
-      Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
-        succeeded: true,
-        response: {}
+
+      it('sets the Billing Batch status to empty', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+        expect(result.status).to.equal('empty')
+      })
+    })
+
+    describe('and there are charge versions to process', () => {
+      beforeEach(() => {
+        Sinon.stub(ChargingModuleCreateTransactionService, 'go').resolves({
+          succeeded: true,
+          response: {
+            body: { transaction: { id: '7e752fa6-a19c-4779-b28c-6e536f028795' } }
+          }
+        })
+        Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
+          succeeded: true,
+          response: {}
+        })
+      })
+
+      describe('but none of them are billable (billable days calculated as 0', () => {
+        beforeEach(async () => {
+          const { chargeVersionId } = await ChargeVersionHelper.add(
+            {
+              changeReasonId: changeReason.changeReasonId,
+              invoiceAccountId: invoiceAccount.invoiceAccountId,
+              startDate: new Date(2022, 7, 1, 9)
+            },
+            {
+              licenceId: licence.licenceId
+            }
+          )
+          const { chargeElementId } = await ChargeElementHelper.add(
+            { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+          )
+          await ChargePurposeHelper.add({
+            chargeElementId,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 5
+          })
+        })
+
+        describe('and there are no previous billed transactions', () => {
+          it('sets the Billing Batch status to empty', async () => {
+            await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+            const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+            expect(result.status).to.equal('empty')
+          })
+        })
       })
     })
 
@@ -94,76 +146,96 @@ describe('Process billing batch service', () => {
   describe('when the service errors', () => {
     const expectedError = new Error('ERROR')
 
-    beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').rejects(expectedError)
-    })
+    describe('because fetching the charge versions fails', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchChargeVersionsService, 'go').rejects()
+      })
 
-    it('handles the error', async () => {
-      await expect(ProcessBillingBatchService.go(billingBatch, billingPeriod)).not.to.reject()
-    })
+      it('sets the appropriate error code', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
 
-    it('calls HandleErroredBillingBatchService with the billing batch id', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
-
-      expect(handlerArgs[0]).to.equal(billingBatch.billingBatchId)
-    })
-
-    it('logs the error', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
-
-      const logDataArg = notifierStub.omfg.firstCall.args[1]
-
-      expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
-      expect(logDataArg.billingBatch).to.equal(billingBatch)
-      expect(logDataArg.error).to.equal({
-        name: expectedError.name,
-        message: expectedError.message,
-        stack: expectedError.stack
+        expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToProcessChargeVersions)
       })
     })
-  })
 
-  describe('when attempting to fetch the charge versions fails', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').rejects()
+    describe('because generating the calculated transactions fails', () => {
+      beforeEach(async () => {
+        const { chargeVersionId } = await ChargeVersionHelper.add(
+          { changeReasonId: changeReason.changeReasonId, invoiceAccountId: invoiceAccount.invoiceAccountId },
+          { licenceId: licence.licenceId }
+        )
+        const { chargeElementId } = await ChargeElementHelper.add(
+          { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+        )
+        await ChargePurposeHelper.add({ chargeElementId })
+
+        Sinon.stub(GenerateBillingTransactionsService, 'go').throws()
+      })
+
+      it('sets the appropriate error code', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+
+        expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToPrepareTransactions)
+      })
     })
 
-    it('sets the appropriate error code', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+    describe('because creating the billing transactions', () => {
+      beforeEach(async () => {
+        const { chargeVersionId } = await ChargeVersionHelper.add(
+          { changeReasonId: changeReason.changeReasonId, invoiceAccountId: invoiceAccount.invoiceAccountId },
+          { licenceId: licence.licenceId }
+        )
+        const { chargeElementId } = await ChargeElementHelper.add(
+          { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+        )
+        await ChargePurposeHelper.add({ chargeElementId })
 
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+        Sinon.stub(ChargingModuleCreateTransactionService, 'go').rejects()
+      })
 
-      expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToProcessChargeVersions)
-    })
-  })
+      it('sets the appropriate error code', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
 
-  describe('when attempting to generate the transaction lines fails', () => {
-    beforeEach(() => {
-      Sinon.stub(GenerateBillingTransactionsService, 'go').throws()
-    })
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
-    it('sets the appropriate error code', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
-
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
-
-      expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToPrepareTransactions)
-    })
-  })
-
-  describe('when attempting to create the transaction lines fails', () => {
-    beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateTransactionService, 'go').rejects()
+        expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToCreateCharge)
+      })
     })
 
-    it('sets the appropriate error code', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+    describe('no matter the reason', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchChargeVersionsService, 'go').rejects(expectedError)
+      })
 
-      const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+      it('handles the error', async () => {
+        await expect(ProcessBillingBatchService.go(billingBatch, billingPeriod)).not.to.reject()
+      })
 
-      expect(handlerArgs[1]).to.equal(BillingBatchModel.errorCodes.failedToCreateCharge)
+      it('sets the Billing Batch status to errored', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
+
+        expect(handlerArgs[0]).to.equal(billingBatch.billingBatchId)
+      })
+
+      it('logs the error', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+        const logDataArg = notifierStub.omfg.firstCall.args[1]
+
+        expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
+        expect(logDataArg.billingBatch).to.equal(billingBatch)
+        expect(logDataArg.error).to.equal({
+          name: expectedError.name,
+          message: expectedError.message,
+          stack: expectedError.stack
+        })
+      })
     })
   })
 })
