@@ -81,7 +81,7 @@ async function go (billingBatch, billingPeriod) {
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
   } catch (error) {
-    global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch, error })
+    _logError(billingBatch, error)
   }
 }
 
@@ -259,6 +259,19 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion, billingB
 
     throw error
   }
+}
+
+function _logError (billingBatch, error) {
+  global.GlobalNotifier.omfg(
+    'Billing Batch process errored',
+    {
+      billingBatch,
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      }
+    })
 }
 
 async function _updateStatus (billingBatchId, status) {
