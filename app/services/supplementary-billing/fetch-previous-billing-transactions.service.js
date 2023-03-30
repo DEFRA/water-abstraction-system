@@ -60,7 +60,6 @@ async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
           'bi.invoiceAccountId',
           'bi.invoiceAccountNumber'
         )
-        .max('bil.date_created as latest_date_created')
         .from('water.billingInvoiceLicences as bil')
         .innerJoin('water.billingInvoices as bi', 'bil.billingInvoiceId', 'bi.billingInvoiceId')
         .innerJoin('water.billingBatches as bb', 'bi.billingBatchId', 'bb.billingBatchId')
@@ -71,7 +70,8 @@ async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
           'bb.status': 'sent',
           'bb.scheme': 'sroc'
         })
-        .groupBy('bil.billingInvoiceLicenceId', 'bi.invoiceAccountId', 'bi.invoiceAccountNumber')
+        .orderBy('bil.dateCreated', 'desc')
+        .limit(1)
         .as('validBillingInvoices'),
       'bt.billingInvoiceLicenceId', 'validBillingInvoices.billingInvoiceLicenceId'
     )
