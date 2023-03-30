@@ -70,7 +70,7 @@ async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
           'bb.status': 'sent',
           'bb.scheme': 'sroc'
         })
-        .orderBy('bil.dateCreated', 'desc')
+        .orderBy('bb.dateCreated', 'desc')
         .limit(1)
         .as('validBillingInvoices'),
       'bt.billingInvoiceLicenceId', 'validBillingInvoices.billingInvoiceLicenceId'
