@@ -117,7 +117,11 @@ describe('Process billing batch service', () => {
 
       expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
       expect(logDataArg.billingBatch).to.equal(billingBatch)
-      expect(logDataArg.error).to.equal(expectedError)
+      expect(logDataArg.error).to.equal({
+        name: expectedError.name,
+        message: expectedError.message,
+        stack: expectedError.stack
+      })
     })
   })
 
