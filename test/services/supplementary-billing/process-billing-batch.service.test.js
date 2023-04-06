@@ -18,6 +18,7 @@ const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
+const LicenceModel = require('../../../app/models/water/licence.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
@@ -129,6 +130,14 @@ describe('Process billing batch service', () => {
             const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
             expect(result.status).to.equal('empty')
+          })
+
+          it('sets the includeInSrocSupplementaryBilling flag to false', async () => {
+            await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+            const result = await LicenceModel.query().findById(licence.licenceId)
+
+            expect(result.includeInSrocSupplementaryBilling).to.equal(false)
           })
         })
       })
