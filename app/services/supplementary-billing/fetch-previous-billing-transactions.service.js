@@ -14,7 +14,24 @@ async function go (billingInvoice, billingInvoiceLicence, financialYearEnding) {
     financialYearEnding
   )
 
-  return billingTransactions
+  return _cleanse(billingTransactions)
+}
+
+function _cleanse (billingTransactions) {
+  const credits = billingTransactions.filter((transaction) => transaction.isCredit)
+  const debits = billingTransactions.filter((transaction) => !transaction.isCredit)
+
+  for (const credit of credits) {
+    const debitIndex = debits.findIndex((debit) => {
+      return debit.billableDays === credit.billableDays && debit.chargeType === credit.chargeType
+    })
+
+    if (debitIndex > -1) {
+      debits.splice(debitIndex, 1)
+    }
+  }
+
+  return debits
 }
 
 async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
@@ -70,14 +87,9 @@ async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
           'bb.status': 'sent',
           'bb.scheme': 'sroc'
         })
-        .orderBy('bb.dateCreated', 'desc')
-        .limit(1)
         .as('validBillingInvoices'),
       'bt.billingInvoiceLicenceId', 'validBillingInvoices.billingInvoiceLicenceId'
     )
-    .where({
-      'bt.isCredit': false
-    })
 }
 
 module.exports = {
