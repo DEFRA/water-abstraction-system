@@ -10,8 +10,8 @@ const ChargeVersion = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 
 /**
- * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
- * billed
+ * Fetch all 'current' SROC charge versions linked to licences flagged for supplementary billing that are in the period
+ * being billed
  *
  * > This is not the final form of the service. It is a 'work in progress' as we implement tickets that gradually
  * > build up our understanding of SROC supplementary billing
