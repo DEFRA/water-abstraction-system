@@ -69,10 +69,15 @@ describe('Fetch Replaced Charge Versions service', () => {
       expect(result[0].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
     })
 
-    it('includes related licence', async () => {
+    it('includes related licence and region', async () => {
       const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
 
       expect(result[0].licence.licenceRef).to.equal(licenceDefaults.licenceRef)
+      expect(result[0].licence.isWaterUndertaker).to.equal(true)
+      expect(result[0].licence.historicalAreaCode).to.equal(licenceDefaults.regions.historicalAreaCode)
+      expect(result[0].licence.regionalChargeArea).to.equal(licenceDefaults.regions.regionalChargeArea)
+      expect(result[0].licence.region.regionId).to.equal(regionId)
+      expect(result[0].licence.region.chargeRegionId).to.equal(region.chargeRegionId)
     })
   })
 

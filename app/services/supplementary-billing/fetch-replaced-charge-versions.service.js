@@ -5,6 +5,8 @@
  * @module FetchReplacedChargeVersionsService
  */
 
+const { ref } = require('objection')
+
 const ChargeVersion = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 
@@ -52,7 +54,17 @@ async function _fetch (regionId, billingPeriod) {
     .modifyGraph('licence', builder => {
       builder.select([
         'licenceId',
-        'licenceRef'
+        'licenceRef',
+        'isWaterUndertaker',
+        ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
+        ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
+      ])
+    })
+    .withGraphFetched('licence.region')
+    .modifyGraph('licence.region', builder => {
+      builder.select([
+        'regionId',
+        'chargeRegionId'
       ])
     })
 
