@@ -8,6 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const ChargeVersionWorkflowHelper = require('../../support/helpers/water/charge-version-workflow.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
@@ -18,6 +19,7 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const FetchReplacedChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-replaced-charge-versions.service.js')
 
 describe('Fetch Replaced Charge Versions service', () => {
+  const billingBatchId = '245b47a3-69be-4b9d-aac3-04f1f7125385'
   const licenceDefaults = LicenceHelper.defaults()
 
   let testRecords
@@ -63,14 +65,14 @@ describe('Fetch Replaced Charge Versions service', () => {
     })
 
     it("returns only the 'superseded' SROC charge versions that are applicable", async () => {
-      const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+      const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
       expect(result.length).to.equal(1)
       expect(result[0].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
     })
 
     it('includes related licence and region', async () => {
-      const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+      const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
       expect(result[0].licence.licenceRef).to.equal(licenceDefaults.licenceRef)
       expect(result[0].licence.isWaterUndertaker).to.equal(true)
@@ -99,7 +101,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result.length).to.equal(0)
       })
@@ -124,7 +126,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result.length).to.equal(0)
       })
@@ -146,7 +148,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result.length).to.equal(0)
       })
@@ -170,7 +172,7 @@ describe('Fetch Replaced Charge Versions service', () => {
         })
 
         it('returns no applicable charge versions', async () => {
-          const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+          const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
           expect(result.length).to.equal(0)
         })
@@ -193,7 +195,7 @@ describe('Fetch Replaced Charge Versions service', () => {
         })
 
         it('returns no applicable charge versions', async () => {
-          const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+          const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
           expect(result.length).to.equal(0)
         })
@@ -219,7 +221,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result.length).to.equal(0)
       })
@@ -245,7 +247,34 @@ describe('Fetch Replaced Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
+
+        expect(result.length).to.equal(0)
+      })
+    })
+
+    describe('because the replaced charge versions invoice accounts have already been processed', () => {
+      beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
+        const chargeVersion = await ChargeVersionHelper.add(
+          { status: 'superseded' },
+          {
+            regionId,
+            includeInSrocSupplementaryBilling: true
+          }
+        )
+        const { invoiceAccountId } = chargeVersion
+        await BillingInvoiceHelper.add({ invoiceAccountId }, { billingBatchId })
+
+        testRecords = [chargeVersion]
+      })
+
+      it('returns no applicable charge versions', async () => {
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result.length).to.equal(0)
       })

@@ -7,6 +7,7 @@
 
 const { ref } = require('objection')
 
+const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
 const ChargeVersion = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 
@@ -19,13 +20,13 @@ const ChargeVersionWorkflow = require('../../models/water/charge-version-workflo
  *
  * @returns an array of Objects containing the relevant charge versions
  */
-async function go (regionId, billingPeriod) {
-  const chargeVersions = await _fetch(regionId, billingPeriod)
+async function go (regionId, billingPeriod, billingBatchId) {
+  const chargeVersions = await _fetch(regionId, billingPeriod, billingBatchId)
 
   return chargeVersions
 }
 
-async function _fetch (regionId, billingPeriod) {
+async function _fetch (regionId, billingPeriod, billingBatchId) {
   const chargeVersions = await ChargeVersion.query()
     .select([
       'chargeVersionId',
@@ -45,6 +46,12 @@ async function _fetch (regionId, billingPeriod) {
       ChargeVersionWorkflow.query()
         .select(1)
         .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
+    )
+    .whereNotIn(
+      'chargeVersions.invoiceAccountId',
+      BillingInvoiceModel.query()
+        .distinct('invoiceAccountId')
+        .where('billingBatchId', billingBatchId)
     )
     .orderBy([
       { column: 'chargeVersions.invoiceAccountId' },
