@@ -1,7 +1,8 @@
 'use strict'
 
 /**
- * Fetches the previously billed transactions that match the invoice, licence and year provided
+ * Fetches the previously billed transactions that match the invoice, licence and year provided, removing any debits
+ * which are cancelled out by previous credits.
  * @module FetchPreviousBillingTransactionsService
  */
 
@@ -17,6 +18,11 @@ async function go (billingInvoice, billingInvoiceLicence, financialYearEnding) {
   return _cleanse(billingTransactions)
 }
 
+/**
+ * Cleanse the billing transactions by cancelling out matching pairs of debits and credits, and return the remaining
+ * debits. We judge a pair of credits and debits to be matching if they have the same number of billable days and the
+ * same charge type.
+ */
 function _cleanse (billingTransactions) {
   const credits = billingTransactions.filter((transaction) => transaction.isCredit)
   const debits = billingTransactions.filter((transaction) => !transaction.isCredit)
