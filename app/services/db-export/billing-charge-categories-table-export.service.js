@@ -16,14 +16,12 @@ const { db } = require('../../../db/db.js')
  *
  * @returns An array of objects containing the data from the table.
  */
-
-async function getBillingChargeCategoriesTable () {
+async function go () {
   return db
     .select('*')
     .from('water.billing_charge_categories')
-    .then(rows => rows)
 }
 
 module.exports = {
-  getBillingChargeCategoriesTable
+  go
 }

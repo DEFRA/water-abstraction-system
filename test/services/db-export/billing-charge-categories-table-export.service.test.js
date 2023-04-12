@@ -12,9 +12,11 @@ const BillingChargeCategoryHelper = require('../../support/helpers/water/billing
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const { getBillingChargeCategoriesTable } = require('../../../app/services/db-export/billing-charge-categories-table-export.service.js')
+const BillingChargeCategoriesTableExportService = require('../../../app/services/db-export/billing-charge-categories-table-export.service.js')
 
-describe.only('Connecting to database', () => {
+// Dont destructure the function just bring in the service
+
+describe('Connecting to database', () => {
   let billingChargeCategory
 
   beforeEach(async () => {
@@ -24,11 +26,12 @@ describe.only('Connecting to database', () => {
   })
 
   it('confirms connection to the db by not throwing an error', async () => {
-    await expect(getBillingChargeCategoriesTable()).to.not.reject()
+    await expect(BillingChargeCategoriesTableExportService.go()).to.not.reject()
   })
 
   it('Returns the first row in the billing-charge-categories table', async () => {
-    const result = await getBillingChargeCategoriesTable()
+    const result = await BillingChargeCategoriesTableExportService.go()
     expect(result[0].billingChargeCategoryId).to.equal(billingChargeCategory.billingChargeCategoryId)
   })
+  // Check more columns
 })
