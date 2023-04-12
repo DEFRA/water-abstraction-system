@@ -15,6 +15,13 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const ProcessPreviousBillingTransactionsService = require('./process-previous-billing-transactions.service.js')
 
+/**
+ * TODO: Fill in these docs
+ *
+ * @param {*} billingBatch
+ * @param {*} billingPeriod
+ * @returns
+ */
 async function go (billingBatch, billingPeriod) {
   const currentBillingData = {
     isEmpty: true,
@@ -23,9 +30,9 @@ async function go (billingBatch, billingPeriod) {
     billingInvoiceLicence: null
   }
 
-  const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
+  const replacedChargeVersions = await _fetchReplacedChargeVersions(billingBatch, billingPeriod)
 
-  for (const chargeVersion of chargeVersions) {
+  for (const chargeVersion of replacedChargeVersions) {
     const { billingInvoice, billingInvoiceLicence } = await _generateInvoiceData(
       currentBillingData,
       billingBatch,
@@ -51,7 +58,7 @@ async function go (billingBatch, billingPeriod) {
   return currentBillingData.isEmpty
 }
 
-async function _fetchChargeVersions (billingBatch, billingPeriod) {
+async function _fetchReplacedChargeVersions (billingBatch, billingPeriod) {
   const { billingBatchId, regionId } = billingBatch
 
   return await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
@@ -89,6 +96,10 @@ async function _createBillingTransactions (currentBillingData, billingBatch, bil
   }
 }
 
+/**
+ * Reverses any debit transactions from the previous billing batch, creates them in the db, and persists the billing
+ * invoice and billing invoice licence as needed
+ */
 async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod, billingBatch) {
   // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
   // first place
@@ -96,16 +107,16 @@ async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod
     return
   }
 
-  const previousTransactions = await ProcessPreviousBillingTransactionsService.go(
+  const reversingPreviousTransactions = await ProcessPreviousBillingTransactionsService.go(
     currentBillingData.billingInvoice,
     currentBillingData.billingInvoiceLicence,
     billingPeriod
   )
 
-  if (previousTransactions.length > 0) {
+  if (reversingPreviousTransactions.length > 0) {
     currentBillingData.isEmpty = false
 
-    await _createBillingTransactions(currentBillingData, billingBatch, previousTransactions, billingPeriod)
+    await _createBillingTransactions(currentBillingData, billingBatch, reversingPreviousTransactions, billingPeriod)
     await _createBillingInvoiceLicence(currentBillingData)
   }
 }
