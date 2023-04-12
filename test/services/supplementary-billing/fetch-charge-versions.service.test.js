@@ -53,14 +53,14 @@ describe('Fetch Charge Versions service', () => {
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       const srocChargeVersion = await ChargeVersionHelper.add(
         { changeReasonId: changeReason.changeReasonId },
-        { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: 'yes' }
+        { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
       )
 
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       // with a status of 'superseded'
       const srocSupersededChargeVersion = await ChargeVersionHelper.add(
         { changeReasonId: changeReason.changeReasonId, status: 'superseded' },
-        { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: 'yes' }
+        { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
       )
 
       // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
@@ -167,11 +167,11 @@ describe('Fetch Charge Versions service', () => {
 
         const srocSupersededChargeVersion = await ChargeVersionHelper.add(
           { status: 'superseded' },
-          { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: 'yes' }
+          { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
         )
         const srocDraftChargeVersion = await ChargeVersionHelper.add(
           { status: 'draft' },
-          { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: 'yes' }
+          { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
         )
         testRecords = [srocSupersededChargeVersion, srocDraftChargeVersion]
       })
@@ -217,7 +217,7 @@ describe('Fetch Charge Versions service', () => {
           // picked up by a previous bill run
           const alcsChargeVersion = await ChargeVersionHelper.add(
             { startDate: new Date(2022, 2, 31) }, // 2022-03-01 - Months are zero indexed :-)
-            { includeInSrocSupplementaryBilling: 'yes' }
+            { includeInSrocSupplementaryBilling: true }
           )
           testRecords = [alcsChargeVersion]
         })
@@ -240,7 +240,7 @@ describe('Fetch Charge Versions service', () => {
           // next years bill runs
           const alcsChargeVersion = await ChargeVersionHelper.add(
             { startDate: new Date(2023, 3, 1) }, // 2023-04-01 - Months are zero indexed :-)
-            { includeInSrocSupplementaryBilling: 'yes' }
+            { includeInSrocSupplementaryBilling: true }
           )
           testRecords = [alcsChargeVersion]
         })
@@ -264,7 +264,7 @@ describe('Fetch Charge Versions service', () => {
         const otherRegionChargeVersion = await ChargeVersionHelper.add(
           {},
           {
-            includeInSrocSupplementaryBilling: 'yes',
+            includeInSrocSupplementaryBilling: true,
             regionId: 'e117b501-e3c1-4337-ad35-21c60ed9ad73'
           }
         )
@@ -288,7 +288,7 @@ describe('Fetch Charge Versions service', () => {
         const chargeVersion = await ChargeVersionHelper.add(
           {},
           {
-            includeInSrocSupplementaryBilling: 'yes',
+            includeInSrocSupplementaryBilling: true,
             regionId
           }
         )
