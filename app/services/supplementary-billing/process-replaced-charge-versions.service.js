@@ -55,7 +55,8 @@ async function go (billingBatch, billingPeriod) {
   }
   await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
 
-  return currentBillingData.isEmpty
+  // We return `true` if we generated any transactions and `false` if we didn't
+  return !currentBillingData.isEmpty
 }
 
 async function _fetchReplacedChargeVersions (billingBatch, billingPeriod) {

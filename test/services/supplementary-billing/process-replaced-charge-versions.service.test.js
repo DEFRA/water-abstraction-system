@@ -54,10 +54,10 @@ describe('Process replaced charge versions service', () => {
         Sinon.stub(FetchReplacedChargeVersionsService, 'go').resolves([])
       })
 
-      it('returns `true`', async () => {
+      it('returns `false`', async () => {
         const result = await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
 
-        expect(result).to.be.true()
+        expect(result).to.be.false()
       })
     })
 
@@ -98,10 +98,10 @@ describe('Process replaced charge versions service', () => {
         })
       })
 
-      it('returns `false`', async () => {
+      it('returns `true`', async () => {
         const result = await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
 
-        expect(result).to.be.false()
+        expect(result).to.be.true()
       })
 
       it('creates a new billingInvoice record', async () => {

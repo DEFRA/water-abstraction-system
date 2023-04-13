@@ -287,8 +287,8 @@ function _logError (billingBatch, error) {
 
 async function _processReplacedChargeVersions (currentBillingData, billingBatch, billingPeriod) {
   try {
-    const nothingGenerated = await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
-    if (!nothingGenerated) {
+    const anythingGenerated = await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
+    if (anythingGenerated) {
       currentBillingData.isEmpty = false
     }
   } catch (error) {
