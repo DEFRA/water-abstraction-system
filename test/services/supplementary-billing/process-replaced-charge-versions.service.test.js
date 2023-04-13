@@ -133,7 +133,7 @@ describe('Process replaced charge versions service', () => {
         const { billingTransactions } = billingInvoice.billingInvoiceLicences[0]
 
         expect(billingTransactions).to.have.length(1)
-        expect(billingTransactions[0].isCredit).to.equal(true)
+        expect(billingTransactions[0].isCredit).to.be.true()
         expect(billingTransactions[0].status).to.equal('charge_created')
         expect(billingTransactions[0].externalId).to.equal('7e752fa6-a19c-4779-b28c-6e536f028795')
         expect(billingTransactions[0].billableDays).to.equal(BillingTransactionHelper.defaults().billableDays)
