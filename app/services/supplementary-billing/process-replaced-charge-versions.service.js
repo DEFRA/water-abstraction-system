@@ -16,11 +16,12 @@ const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice
 const ProcessPreviousBillingTransactionsService = require('./process-previous-billing-transactions.service.js')
 
 /**
- * TODO: Fill in these docs
+ * Finds any replaced charge versions and creates any transactions required to cancel out the replaced transactions,
+ * plus any invoices they require, in both WRLS and the Charging Module API
  *
- * @param {*} billingBatch
- * @param {*} billingPeriod
- * @returns
+ * @param {module:BillingBatchModel} billingBatch The billing batch we need to process
+ * @param {Object} billingPeriod an object representing the financial year the transaction is for
+ * @returns {Boolean} Returns `true` if any transactions were generated, otherwise `false`
  */
 async function go (billingBatch, billingPeriod) {
   const currentBillingData = {
