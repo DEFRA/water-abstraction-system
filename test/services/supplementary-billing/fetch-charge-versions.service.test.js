@@ -86,7 +86,7 @@ describe('Fetch Charge Versions service', () => {
     it("returns only the 'current' SROC charge versions that are applicable", async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(result.length).to.equal(1)
+      expect(result).to.have.length(1)
       expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
     })
 
@@ -131,7 +131,7 @@ describe('Fetch Charge Versions service', () => {
         }]
       }
 
-      expect(result.length).to.equal(1)
+      expect(result).to.have.length(1)
       expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
       expect(result[0].chargeElements[0]).to.equal(expectedResult)
     })
@@ -154,7 +154,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result.length).to.equal(0)
+        expect(result).to.have.length(0)
       })
     })
 
@@ -179,7 +179,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result.length).to.equal(0)
+        expect(result).to.have.length(0)
       })
     })
 
@@ -201,7 +201,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result.length).to.equal(0)
+        expect(result).to.have.length(0)
       })
     })
 
@@ -225,7 +225,7 @@ describe('Fetch Charge Versions service', () => {
         it('returns no applicable charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result.length).to.equal(0)
+          expect(result).to.have.length(0)
         })
       })
 
@@ -248,7 +248,7 @@ describe('Fetch Charge Versions service', () => {
         it('returns no applicable charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result.length).to.equal(0)
+          expect(result).to.have.length(0)
         })
       })
     })
@@ -274,7 +274,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result.length).to.equal(0)
+        expect(result).to.have.length(0)
       })
     })
 
@@ -300,7 +300,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result.length).to.equal(0)
+        expect(result).to.have.length(0)
       })
     })
   })

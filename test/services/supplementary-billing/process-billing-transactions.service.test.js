@@ -123,7 +123,7 @@ describe('Process billing batch service', () => {
               billingPeriod
             )
 
-            expect(result.length).to.equal(1)
+            expect(result).to.have.length(1)
             expect(result[0]).to.equal(calculatedTransactions[2])
           })
         })
@@ -143,7 +143,7 @@ describe('Process billing batch service', () => {
               billingPeriod
             )
 
-            expect(result.length).to.equal(2)
+            expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
             expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
           })
@@ -164,7 +164,7 @@ describe('Process billing batch service', () => {
               billingPeriod
             )
 
-            expect(result.length).to.equal(0)
+            expect(result).to.have.length(0)
           })
         })
 
@@ -183,7 +183,7 @@ describe('Process billing batch service', () => {
               billingPeriod
             )
 
-            expect(result.length).to.equal(2)
+            expect(result).to.have.length(2)
 
             // NOTE: We know the text says 'I_WILL_BE_REMOVED' but in this scenario they won't be!
             expect(result[0].purposes).to.equal('I_WILL_BE_REMOVED_1')
@@ -206,7 +206,7 @@ describe('Process billing batch service', () => {
           billingPeriod
         )
 
-        expect(result.length).to.equal(3)
+        expect(result).to.have.length(3)
         expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_1')
         expect(result[1].purposes).to.equal('CALCULATED_TRANSACTION_2')
         expect(result[2].purposes).to.equal('CALCULATED_TRANSACTION_3')

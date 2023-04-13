@@ -35,7 +35,7 @@ describe('Billing Period service', () => {
     it('returns the expected date range', () => {
       const result = BillingPeriodService.go()
 
-      expect(result.length).to.equal(1)
+      expect(result).to.have.length(1)
       expect(result[0]).to.equal(expectedResult)
     })
   })
@@ -54,7 +54,7 @@ describe('Billing Period service', () => {
     it('returns the expected date range', () => {
       const result = BillingPeriodService.go()
 
-      expect(result.length).to.equal(1)
+      expect(result).to.have.length(1)
       expect(result[0]).to.equal(expectedResult)
     })
   })
@@ -75,7 +75,7 @@ describe('Billing Period service', () => {
     it('returns the expected date range', () => {
       const result = BillingPeriodService.go()
 
-      expect(result.length).to.equal(1)
+      expect(result).to.have.length(1)
       expect(result[0]).to.equal(expectedResult)
     })
   })
