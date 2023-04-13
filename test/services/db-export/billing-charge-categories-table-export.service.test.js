@@ -14,8 +14,6 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const BillingChargeCategoriesTableExportService = require('../../../app/services/db-export/billing-charge-categories-table-export.service.js')
 
-// Dont destructure the function just bring in the service
-
 describe('Connecting to database', () => {
   let billingChargeCategory
 
@@ -32,6 +30,6 @@ describe('Connecting to database', () => {
   it('Returns the first row in the billing-charge-categories table', async () => {
     const result = await BillingChargeCategoriesTableExportService.go()
     expect(result[0].billingChargeCategoryId).to.equal(billingChargeCategory.billingChargeCategoryId)
+    expect(result[0].subsistenceCharge).to.equal(billingChargeCategory.subsistenceCharge)
   })
-  // Check more columns
 })
