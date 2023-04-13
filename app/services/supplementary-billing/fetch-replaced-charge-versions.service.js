@@ -1,33 +1,32 @@
 'use strict'
 
-const { ref } = require('objection')
 /**
- * Fetches SROC charge versions that might be included in a supplementary bill run
- * @module FetchChargeVersionsService
+ * Fetches replaced SROC charge versions that have not already been included in the billing batch being processed
+ * @module FetchReplacedChargeVersionsService
  */
 
+const { ref } = require('objection')
+
+const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
 const ChargeVersion = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 
 /**
- * Fetch all 'current' SROC charge versions linked to licences flagged for supplementary billing that are in the period
- * being billed
- *
- * > This is not the final form of the service. It is a 'work in progress' as we implement tickets that gradually
- * > build up our understanding of SROC supplementary billing
+ * Fetch all 'replaced' (superseded) SROC charge versions linked to licences flagged for supplementary billing that are
+ * in the period being billed
  *
  * @param {string} regionId GUID of the region which the licences will be linked to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns an array of Objects containing the relevant charge versions
  */
-async function go (regionId, billingPeriod) {
-  const chargeVersions = await _fetch(regionId, billingPeriod)
+async function go (regionId, billingPeriod, billingBatchId) {
+  const chargeVersions = await _fetch(regionId, billingPeriod, billingBatchId)
 
   return chargeVersions
 }
 
-async function _fetch (regionId, billingPeriod) {
+async function _fetch (regionId, billingPeriod, billingBatchId) {
   const chargeVersions = await ChargeVersion.query()
     .select([
       'chargeVersionId',
@@ -40,13 +39,19 @@ async function _fetch (regionId, billingPeriod) {
     .where('scheme', 'sroc')
     .where('includeInSrocSupplementaryBilling', true)
     .where('regionId', regionId)
-    .where('chargeVersions.status', 'current')
+    .where('chargeVersions.status', 'superseded')
     .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .whereNotExists(
       ChargeVersionWorkflow.query()
         .select(1)
         .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
+    )
+    .whereNotIn(
+      'chargeVersions.invoiceAccountId',
+      BillingInvoiceModel.query()
+        .distinct('invoiceAccountId')
+        .where('billingBatchId', billingBatchId)
     )
     .orderBy([
       { column: 'chargeVersions.invoiceAccountId' },
@@ -67,41 +72,6 @@ async function _fetch (regionId, billingPeriod) {
       builder.select([
         'regionId',
         'chargeRegionId'
-      ])
-    })
-    .withGraphFetched('changeReason')
-    .modifyGraph('changeReason', builder => {
-      builder.select([
-        'triggersMinimumCharge'
-      ])
-    })
-    .withGraphFetched('chargeElements')
-    .modifyGraph('chargeElements', builder => {
-      builder.select([
-        'chargeElementId',
-        'source',
-        'loss',
-        'volume',
-        'adjustments',
-        'additionalCharges',
-        'description'
-      ])
-    })
-    .withGraphFetched('chargeElements.billingChargeCategory')
-    .modifyGraph('chargeElements.billingChargeCategory', builder => {
-      builder.select([
-        'reference',
-        'shortDescription'
-      ])
-    })
-    .withGraphFetched('chargeElements.chargePurposes')
-    .modifyGraph('chargeElements.chargePurposes', builder => {
-      builder.select([
-        'chargePurposeId',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth'
       ])
     })
 

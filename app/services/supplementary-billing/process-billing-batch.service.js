@@ -22,6 +22,7 @@ const HandleErroredBillingBatchService = require('./handle-errored-billing-batch
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const LicenceModel = require('../../models/water/licence.model.js')
 const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
+const ProcessReplacedChargeVersionsService = require('./process-replaced-charge-versions.service.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -76,6 +77,8 @@ async function go (billingBatch, billingPeriod) {
       currentBillingData.calculatedTransactions.push(...calculatedTransactions)
     }
     await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
+
+    await _processReplacedChargeVersions(currentBillingData, billingBatch, billingPeriod)
 
     await _finaliseBillingBatch(billingBatch, chargeVersions, currentBillingData.isEmpty)
 
@@ -280,6 +283,19 @@ function _logError (billingBatch, error) {
         stack: error.stack
       }
     })
+}
+
+async function _processReplacedChargeVersions (currentBillingData, billingBatch, billingPeriod) {
+  try {
+    const anythingGenerated = await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
+    if (anythingGenerated) {
+      currentBillingData.isEmpty = false
+    }
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+
+    throw error
+  }
 }
 
 async function _updateStatus (billingBatchId, status) {
