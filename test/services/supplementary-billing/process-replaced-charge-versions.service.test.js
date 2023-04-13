@@ -14,9 +14,6 @@ const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoic
 const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
 const BillingInvoiceModel = require('../../../app/models/water/billing-invoice.model.js')
 const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
-const ChangeReasonHelper = require('../../support/helpers/water/change-reason.helper.js')
-const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
-const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
@@ -30,26 +27,21 @@ const FetchReplacedChargeVersionsService = require('../../../app/services/supple
 // Thing under test
 const ProcessReplacedChargeVersionsService = require('../../../app/services/supplementary-billing/process-replaced-charge-versions.service.js')
 
-describe.only('Process replaced charge versions service', () => {
+describe('Process replaced charge versions service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
   }
 
   let licence
-  let changeReason
   let billingBatch
-  let regionId
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
     const region = await RegionHelper.add()
-    regionId = region.regionId
-    licence = await LicenceHelper.add({ includeInSrocSupplementaryBilling: true, regionId })
-    changeReason = await ChangeReasonHelper.add()
-
-    billingBatch = await BillingBatchHelper.add({ regionId })
+    licence = await LicenceHelper.add({ includeInSrocSupplementaryBilling: true, regionId: region.regionId })
+    billingBatch = await BillingBatchHelper.add({ regionId: region.regionId })
   })
 
   afterEach(() => {
@@ -82,24 +74,28 @@ describe.only('Process replaced charge versions service', () => {
 
         supersededInvoiceAccount = await InvoiceAccountHelper.add()
 
-        // This creates an SROC charge version linked to a licence marked for supplementary billing
-        // with a status of 'superseded'
-        const srocSupersededChargeVersion = await ChargeVersionHelper.add(
+        await ChargeVersionHelper.add(
           {
             endDate: new Date('2022-04-30'),
             status: 'superseded',
-            invoiceAccountId: supersededInvoiceAccount.invoiceAccountId,
-            changeReasonId: changeReason.changeReasonId
+            invoiceAccountId: supersededInvoiceAccount.invoiceAccountId
           },
           licence
         )
 
-        const supersededBllingBatch = await BillingBatchHelper.add({ regionId, status: 'sent' })
-        const supersededBillingInvoice = await BillingInvoiceHelper.add({ invoiceAccountId: supersededInvoiceAccount.invoiceAccountId }, supersededBllingBatch)
-        const supersededBillingInvoiceLicence = await BillingInvoiceLicenceHelper.add({}, licence, supersededBillingInvoice)
-        const { chargeElementId } = ChargeElementHelper.add({ chargeVersionId: srocSupersededChargeVersion.chargeVersionId })
-        await ChargePurposeHelper.add({ chargeElementId })
-        await BillingTransactionHelper.add({ billingInvoiceLicenceId: supersededBillingInvoiceLicence.billingInvoiceLicenceId, purposes: [] })
+        const supersededBillingInvoice = await BillingInvoiceHelper.add(
+          { invoiceAccountId: supersededInvoiceAccount.invoiceAccountId },
+          { status: 'sent' }
+        )
+        const supersededBillingInvoiceLicence = await BillingInvoiceLicenceHelper.add(
+          {},
+          licence,
+          supersededBillingInvoice
+        )
+        await BillingTransactionHelper.add({
+          billingInvoiceLicenceId: supersededBillingInvoiceLicence.billingInvoiceLicenceId,
+          purposes: []
+        })
       })
 
       it('returns `false`', async () => {
@@ -112,6 +108,7 @@ describe.only('Process replaced charge versions service', () => {
         await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
 
         const newBillingInvoice = await BillingInvoiceModel.query().where('billingBatchId', billingBatch.billingBatchId)
+
         expect(newBillingInvoice).to.have.length(1)
         expect(newBillingInvoice[0].invoiceAccountId).to.equal(supersededInvoiceAccount.invoiceAccountId)
       })
@@ -122,16 +119,19 @@ describe.only('Process replaced charge versions service', () => {
         const billingInvoice = await BillingInvoiceModel.query()
           .findOne('billingBatchId', billingBatch.billingBatchId)
           .withGraphFetched('billingInvoiceLicences')
+
         expect(billingInvoice.billingInvoiceLicences).to.have.length(1)
         expect(billingInvoice.billingInvoiceLicences[0].licenceId).to.equal(licence.licenceId)
       })
 
       it('creates a new billingTransaction record', async () => {
         await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
+
         const billingInvoice = await BillingInvoiceModel.query()
           .findOne('billingBatchId', billingBatch.billingBatchId)
           .withGraphFetched('billingInvoiceLicences.billingTransactions')
         const { billingTransactions } = billingInvoice.billingInvoiceLicences[0]
+
         expect(billingTransactions).to.have.length(1)
         expect(billingTransactions[0].isCredit).to.equal(true)
         expect(billingTransactions[0].status).to.equal('charge_created')
