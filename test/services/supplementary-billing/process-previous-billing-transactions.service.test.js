@@ -51,7 +51,7 @@ describe('Process previous billing transactions service', () => {
           billingPeriod
         )
 
-        expect(result.length).to.equal(1)
+        expect(result).to.have.length(1)
         expect(result[0].billingTransactionId).not.to.equal(previousTransaction.billingTransactionId)
         expect(result[0].isCredit).not.to.equal(previousTransaction.isCredit)
       })

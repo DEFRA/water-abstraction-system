@@ -30,7 +30,7 @@ describe('Reverse Billing Transactions service', () => {
     it('returns reversing transactions', () => {
       const result = ReverseBillingTransactionsService.go(transactions, billingInvoiceLicence)
 
-      expect(result.length).to.equal(transactions.length)
+      expect(result).to.have.length(transactions.length)
 
       expect(result[0].invoiceAccountId).not.to.exist()
       expect(result[0].invoiceAccountNumber).not.to.exist()
