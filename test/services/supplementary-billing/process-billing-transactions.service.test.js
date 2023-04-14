@@ -164,7 +164,7 @@ describe('Process billing batch service', () => {
               billingPeriod
             )
 
-            expect(result).to.have.length(0)
+            expect(result).to.be.empty()
           })
         })
 

@@ -154,7 +154,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -179,7 +179,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -201,7 +201,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -225,7 +225,7 @@ describe('Fetch Charge Versions service', () => {
         it('returns no applicable charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.have.length(0)
+          expect(result).to.be.empty()
         })
       })
 
@@ -248,7 +248,7 @@ describe('Fetch Charge Versions service', () => {
         it('returns no applicable charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.have.length(0)
+          expect(result).to.be.empty()
         })
       })
     })
@@ -274,7 +274,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -300,7 +300,7 @@ describe('Fetch Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
   })

@@ -103,7 +103,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -128,7 +128,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -150,7 +150,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -174,7 +174,7 @@ describe('Fetch Replaced Charge Versions service', () => {
         it('returns no applicable charge versions', async () => {
           const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-          expect(result).to.have.length(0)
+          expect(result).to.be.empty()
         })
       })
 
@@ -197,7 +197,7 @@ describe('Fetch Replaced Charge Versions service', () => {
         it('returns no applicable charge versions', async () => {
           const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-          expect(result).to.have.length(0)
+          expect(result).to.be.empty()
         })
       })
     })
@@ -223,7 +223,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -249,7 +249,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
 
@@ -276,7 +276,7 @@ describe('Fetch Replaced Charge Versions service', () => {
       it('returns no applicable charge versions', async () => {
         const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
-        expect(result).to.have.length(0)
+        expect(result).to.be.empty()
       })
     })
   })
