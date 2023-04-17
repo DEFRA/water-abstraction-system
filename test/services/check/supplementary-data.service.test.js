@@ -40,7 +40,7 @@ describe('Supplementary service', () => {
     it('always includes the current billing period', async () => {
       const result = await SupplementaryDataService.go(naldRegionId)
 
-      expect(result.billingPeriods.length).to.equal(1)
+      expect(result.billingPeriods).to.have.length(1)
       expect(result.billingPeriods[0]).to.equal(currentBillingPeriod)
     })
   })
@@ -62,7 +62,7 @@ describe('Supplementary service', () => {
       it('returns the matching charge versions', async () => {
         const result = await SupplementaryDataService.go(naldRegionId)
 
-        expect(result.chargeVersions.length).to.equal(1)
+        expect(result.chargeVersions).to.have.length(1)
         expect(result.chargeVersions[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
       })
     })

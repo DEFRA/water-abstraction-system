@@ -8,10 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
-const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
-const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
-const ChangeReasonHelper = require('../../support/helpers/water/change-reason.helper.js')
+const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const ChargeVersionWorkflowHelper = require('../../support/helpers/water/charge-version-workflow.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
@@ -19,9 +16,10 @@ const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Thing under test
-const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
+const FetchReplacedChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-replaced-charge-versions.service.js')
 
-describe('Fetch Charge Versions service', () => {
+describe('Fetch Replaced Charge Versions service', () => {
+  const billingBatchId = '245b47a3-69be-4b9d-aac3-04f1f7125385'
   const licenceDefaults = LicenceHelper.defaults()
 
   let testRecords
@@ -37,61 +35,44 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are licences to be included in supplementary billing', () => {
-    let billingChargeCategory
-    let chargeElement
-    let chargePurpose
-    let changeReason
-
     beforeEach(async () => {
       billingPeriod = {
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31')
       }
 
-      changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
-
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       const srocChargeVersion = await ChargeVersionHelper.add(
-        { changeReasonId: changeReason.changeReasonId },
-        { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
+        {},
+        { regionId, includeInSrocSupplementaryBilling: true }
       )
 
       // This creates an SROC charge version linked to a licence marked for supplementary billing
       // with a status of 'superseded'
       const srocSupersededChargeVersion = await ChargeVersionHelper.add(
-        { changeReasonId: changeReason.changeReasonId, status: 'superseded' },
+        { status: 'superseded' },
         { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
       )
 
       // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
+      // with a status of 'superseded'
       const alcsChargeVersion = await ChargeVersionHelper.add(
-        { scheme: 'alcs' },
+        { scheme: 'alcs', status: 'superseded' },
         { regionId, includeInSupplementaryBilling: 'yes' }
       )
 
       testRecords = [srocChargeVersion, srocSupersededChargeVersion, alcsChargeVersion]
-
-      billingChargeCategory = await BillingChargeCategoryHelper.add()
-
-      chargeElement = await ChargeElementHelper.add({
-        chargeVersionId: srocChargeVersion.chargeVersionId,
-        billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId
-      })
-
-      chargePurpose = await ChargePurposeHelper.add({
-        chargeElementId: chargeElement.chargeElementId
-      })
     })
 
-    it("returns only the 'current' SROC charge versions that are applicable", async () => {
-      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+    it("returns only the 'superseded' SROC charge versions that are applicable", async () => {
+      const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
       expect(result).to.have.length(1)
-      expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+      expect(result[0].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
     })
 
     it('includes related licence and region', async () => {
-      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+      const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
       expect(result[0].licence.licenceRef).to.equal(licenceDefaults.licenceRef)
       expect(result[0].licence.isWaterUndertaker).to.equal(true)
@@ -99,41 +80,6 @@ describe('Fetch Charge Versions service', () => {
       expect(result[0].licence.regionalChargeArea).to.equal(licenceDefaults.regions.regionalChargeArea)
       expect(result[0].licence.region.regionId).to.equal(regionId)
       expect(result[0].licence.region.chargeRegionId).to.equal(region.chargeRegionId)
-    })
-
-    it('includes related change reason', async () => {
-      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-      expect(result[0].changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
-    })
-
-    it('includes related charge elements, billing charge category and charge purposes', async () => {
-      const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-      const expectedResult = {
-        chargeElementId: chargeElement.chargeElementId,
-        source: chargeElement.source,
-        loss: chargeElement.loss,
-        volume: chargeElement.volume,
-        adjustments: chargeElement.adjustments,
-        additionalCharges: chargeElement.additionalCharges,
-        description: chargeElement.description,
-        billingChargeCategory: {
-          reference: billingChargeCategory.reference,
-          shortDescription: billingChargeCategory.shortDescription
-        },
-        chargePurposes: [{
-          chargePurposeId: chargePurpose.chargePurposeId,
-          abstractionPeriodStartDay: chargePurpose.abstractionPeriodStartDay,
-          abstractionPeriodStartMonth: chargePurpose.abstractionPeriodStartMonth,
-          abstractionPeriodEndDay: chargePurpose.abstractionPeriodEndDay,
-          abstractionPeriodEndMonth: chargePurpose.abstractionPeriodEndMonth
-        }]
-      }
-
-      expect(result).to.have.length(1)
-      expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
-      expect(result[0].chargeElements[0]).to.equal(expectedResult)
     })
   })
 
@@ -147,37 +93,40 @@ describe('Fetch Charge Versions service', () => {
 
         // This creates an SROC charge version linked to a licence. But the licence won't be marked for supplementary
         // billing
-        const srocChargeVersion = await ChargeVersionHelper.add()
-        testRecords = [srocChargeVersion]
+        const chargeVersion = await ChargeVersionHelper.add(
+          { status: 'superseded' },
+          { regionId, includeInSrocSupplementaryBilling: false }
+        )
+        testRecords = [chargeVersion]
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result).to.be.empty()
       })
     })
 
-    describe("because all the applicable charge versions do not have a 'current' status", () => {
+    describe("because all the applicable charge versions do not have a 'superseded' status", () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
           endDate: new Date('2023-03-31')
         }
 
-        const srocSupersededChargeVersion = await ChargeVersionHelper.add(
-          { status: 'superseded' },
+        const currentChargeVersion = await ChargeVersionHelper.add(
+          { status: 'current' },
           { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
         )
-        const srocDraftChargeVersion = await ChargeVersionHelper.add(
+        const draftChargeVersion = await ChargeVersionHelper.add(
           { status: 'draft' },
           { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
         )
-        testRecords = [srocSupersededChargeVersion, srocDraftChargeVersion]
+        testRecords = [currentChargeVersion, draftChargeVersion]
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result).to.be.empty()
       })
@@ -191,15 +140,15 @@ describe('Fetch Charge Versions service', () => {
         }
 
         // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
-        const alcsChargeVersion = await ChargeVersionHelper.add(
-          { scheme: 'alcs' },
-          { includeInSupplementaryBilling: 'yes' }
+        const chargeVersion = await ChargeVersionHelper.add(
+          { status: 'superseded', scheme: 'alcs' },
+          { regionId, includeInSrocSupplementaryBilling: true }
         )
-        testRecords = [alcsChargeVersion]
+        testRecords = [chargeVersion]
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result).to.be.empty()
       })
@@ -215,15 +164,15 @@ describe('Fetch Charge Versions service', () => {
 
           // This creates an SROC charge version with a start date before the billing period. This would have been
           // picked up by a previous bill run
-          const alcsChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date(2022, 2, 31) }, // 2022-03-01 - Months are zero indexed :-)
-            { includeInSrocSupplementaryBilling: true }
+          const chargeVersion = await ChargeVersionHelper.add(
+            { status: 'superseded', startDate: new Date(2022, 2, 31) }, // 2022-03-01 - Months are zero indexed :-)
+            { regionId, includeInSrocSupplementaryBilling: true }
           )
-          testRecords = [alcsChargeVersion]
+          testRecords = [chargeVersion]
         })
 
         it('returns no applicable charge versions', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+          const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
           expect(result).to.be.empty()
         })
@@ -238,15 +187,15 @@ describe('Fetch Charge Versions service', () => {
 
           // This creates an SROC charge version with a start date after the billing period. This will be picked in
           // next years bill runs
-          const alcsChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date(2023, 3, 1) }, // 2023-04-01 - Months are zero indexed :-)
-            { includeInSrocSupplementaryBilling: true }
+          const srocChargeVersion = await ChargeVersionHelper.add(
+            { status: 'superseded', startDate: new Date(2023, 3, 1) }, // 2023-04-01 - Months are zero indexed :-)
+            { regionId, includeInSrocSupplementaryBilling: true }
           )
-          testRecords = [alcsChargeVersion]
+          testRecords = [srocChargeVersion]
         })
 
         it('returns no applicable charge versions', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+          const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
           expect(result).to.be.empty()
         })
@@ -261,18 +210,18 @@ describe('Fetch Charge Versions service', () => {
         }
 
         // This creates an SROC charge version linked to a licence with an different region than selected
-        const otherRegionChargeVersion = await ChargeVersionHelper.add(
-          {},
+        const chargeVersion = await ChargeVersionHelper.add(
+          { status: 'superseded' },
           {
-            includeInSrocSupplementaryBilling: true,
-            regionId: 'e117b501-e3c1-4337-ad35-21c60ed9ad73'
+            regionId: 'e117b501-e3c1-4337-ad35-21c60ed9ad73',
+            includeInSrocSupplementaryBilling: true
           }
         )
-        testRecords = [otherRegionChargeVersion]
+        testRecords = [chargeVersion]
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result).to.be.empty()
       })
@@ -286,10 +235,10 @@ describe('Fetch Charge Versions service', () => {
         }
 
         const chargeVersion = await ChargeVersionHelper.add(
-          {},
+          { status: 'superseded' },
           {
-            includeInSrocSupplementaryBilling: true,
-            regionId
+            regionId,
+            includeInSrocSupplementaryBilling: true
           }
         )
         await ChargeVersionWorkflowHelper.add({ licenceId: chargeVersion.licenceId })
@@ -298,7 +247,34 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns no applicable charge versions', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
+
+        expect(result).to.be.empty()
+      })
+    })
+
+    describe('because the replaced charge versions invoice accounts have already been processed', () => {
+      beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
+        const chargeVersion = await ChargeVersionHelper.add(
+          { status: 'superseded' },
+          {
+            regionId,
+            includeInSrocSupplementaryBilling: true
+          }
+        )
+        const { invoiceAccountId } = chargeVersion
+        await BillingInvoiceHelper.add({ invoiceAccountId }, { billingBatchId })
+
+        testRecords = [chargeVersion]
+      })
+
+      it('returns no applicable charge versions', async () => {
+        const result = await FetchReplacedChargeVersionsService.go(regionId, billingPeriod, billingBatchId)
 
         expect(result).to.be.empty()
       })
