@@ -14,22 +14,22 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const BillingChargeCategoriesTableExportService = require('../../../app/services/db-export/billing-charge-categories-table-export.service.js')
 
-describe('Connecting to database', () => {
+describe('Billing charge categories table export service', () => {
   let billingChargeCategory
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
     billingChargeCategory = await BillingChargeCategoryHelper.add()
+    await BillingChargeCategoryHelper.add()
   })
 
-  it('confirms connection to the db by not throwing an error', async () => {
-    await expect(BillingChargeCategoriesTableExportService.go()).to.not.reject()
-  })
-
-  it('Returns the first row in the billing-charge-categories table', async () => {
-    const result = await BillingChargeCategoriesTableExportService.go()
-    expect(result[0].billingChargeCategoryId).to.equal(billingChargeCategory.billingChargeCategoryId)
-    expect(result[0].subsistenceCharge).to.equal(billingChargeCategory.subsistenceCharge)
+  describe('when we connect to the db', () => {
+    it('returns all records in the billing-charge-categories table', async () => {
+      const results = await BillingChargeCategoriesTableExportService.go()
+      expect(results[0].billingChargeCategoryId).to.equal(billingChargeCategory.billingChargeCategoryId)
+      expect(results[0].subsistenceCharge).to.equal(billingChargeCategory.subsistenceCharge)
+      expect(results).to.have.length(2)
+    })
   })
 })
