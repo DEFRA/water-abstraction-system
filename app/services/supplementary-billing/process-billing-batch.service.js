@@ -73,12 +73,14 @@ async function go (billingBatch, billingPeriod) {
       currentBillingData.billingInvoice = billingInvoice
       currentBillingData.billingInvoiceLicence = billingInvoiceLicence
 
-      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
-      currentBillingData.calculatedTransactions.push(...calculatedTransactions)
+      if (chargeVersion.status === 'current') {
+        const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
+        currentBillingData.calculatedTransactions.push(...calculatedTransactions)
+      }
     }
     await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
 
-    await _processReplacedChargeVersions(currentBillingData, billingBatch, billingPeriod)
+    // await _processReplacedChargeVersions(currentBillingData, billingBatch, billingPeriod)
 
     await _finaliseBillingBatch(billingBatch, chargeVersions, currentBillingData.isEmpty)
 
