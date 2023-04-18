@@ -24,7 +24,7 @@ describe('Billing charge categories table export service', () => {
     await BillingChargeCategoryHelper.add()
   })
 
-  describe.only('when we connect to the db', () => {
+  describe('when we connect to the db', () => {
     it('returns all records in the billing-charge-categories table', async () => {
       const results = await BillingChargeCategoriesTableExportService.go()
 
