@@ -1,8 +1,7 @@
 'use strict'
 
 /**
- * Used by the 'root.controller' currently to determine if we are pulling
- * the billing_charge_categories table correctly
+ * Fetch all records from the water.billing_charge_categories table
  * @module BillingChargeCategoriesTableExportService
  */
 

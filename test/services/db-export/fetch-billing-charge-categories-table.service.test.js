@@ -12,7 +12,7 @@ const BillingChargeCategoryHelper = require('../../support/helpers/water/billing
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const BillingChargeCategoriesTableExportService = require('../../../app/services/db-export/billing-charge-categories-table-export.service.js')
+const BillingChargeCategoriesTableExportService = require('../../../app/services/db-export/fetch-billing-charge-categories.service.js')
 
 describe('Billing charge categories table export service', () => {
   let billingChargeCategory
@@ -24,9 +24,10 @@ describe('Billing charge categories table export service', () => {
     await BillingChargeCategoryHelper.add()
   })
 
-  describe('when we connect to the db', () => {
+  describe.only('when we connect to the db', () => {
     it('returns all records in the billing-charge-categories table', async () => {
       const results = await BillingChargeCategoriesTableExportService.go()
+
       expect(results[0].billingChargeCategoryId).to.equal(billingChargeCategory.billingChargeCategoryId)
       expect(results[0].subsistenceCharge).to.equal(billingChargeCategory.subsistenceCharge)
       expect(results).to.have.length(2)
