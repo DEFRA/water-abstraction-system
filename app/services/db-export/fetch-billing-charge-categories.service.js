@@ -2,7 +2,7 @@
 
 /**
  * Fetch all records from the water.billing_charge_categories table
- * @module BillingChargeCategoriesTableExportService
+ * @module FetchBillingChargeCategoriesService
  */
 
 const { db } = require('../../../db/db.js')
