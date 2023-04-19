@@ -42,6 +42,7 @@ async function _fetch (regionId, billingPeriod) {
     .where('regionId', regionId)
     .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .whereNot('chargeVersions.status', 'draft')
     .whereNotExists(
       ChargeVersionWorkflow.query()
         .select(1)

@@ -164,22 +164,18 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe("because all the applicable charge versions do not have a 'current' status", () => {
+    describe("because all the applicable charge versions have a 'draft' status", () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
           endDate: new Date('2023-03-31')
         }
 
-        const srocSupersededChargeVersion = await ChargeVersionHelper.add(
-          { status: 'superseded' },
-          { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
-        )
         const srocDraftChargeVersion = await ChargeVersionHelper.add(
           { status: 'draft' },
           { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
         )
-        testRecords = [srocSupersededChargeVersion, srocDraftChargeVersion]
+        testRecords = [srocDraftChargeVersion]
       })
 
       it('returns no applicable charge versions', async () => {
