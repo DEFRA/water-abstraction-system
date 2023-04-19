@@ -90,11 +90,12 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    it("returns only the 'current' SROC charge versions that are applicable", async () => {
+    it("returns both 'current' and 'superseded' SROC charge versions that are applicable", async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(result).to.have.length(1)
+      expect(result).to.have.length(2)
       expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+      expect(result[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
     })
 
     it('includes the related licence and region', async () => {
@@ -138,8 +139,6 @@ describe('Fetch Charge Versions service', () => {
         }]
       }
 
-      expect(result).to.have.length(1)
-      expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
       expect(result[0].chargeElements[0]).to.equal(expectedResult)
     })
   })
