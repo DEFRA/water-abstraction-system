@@ -36,7 +36,7 @@ describe('Fetch Charge Versions service', () => {
     regionId = region.regionId
   })
 
-  describe('when there are licences to be included in supplementary billing', () => {
+  describe('when there are charge versions that should be considered for the next supplementary billing', () => {
     let billingChargeCategory
     let chargeElement
     let chargePurpose
@@ -48,29 +48,36 @@ describe('Fetch Charge Versions service', () => {
         endDate: new Date('2023-03-31')
       }
 
+      const { licenceId } = await LicenceHelper.add({
+        regionId,
+        isWaterUndertaker: true,
+        includeInSrocSupplementaryBilling: true,
+        includeInSupplementaryBilling: 'yes'
+      })
       changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
 
-      // This creates an SROC charge version linked to a licence marked for supplementary billing
+      // This creates a 'current' SROC charge version
       const srocChargeVersion = await ChargeVersionHelper.add(
         { changeReasonId: changeReason.changeReasonId },
-        { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
+        { licenceId }
       )
 
-      // This creates an SROC charge version linked to a licence marked for supplementary billing
-      // with a status of 'superseded'
+      // This creates a 'superseded' SROC charge version
       const srocSupersededChargeVersion = await ChargeVersionHelper.add(
         { changeReasonId: changeReason.changeReasonId, status: 'superseded' },
-        { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
+        { licenceId }
       )
 
-      // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
+      // This creates an ALCS (presroc) charge version
       const alcsChargeVersion = await ChargeVersionHelper.add(
         { scheme: 'alcs' },
-        { regionId, includeInSupplementaryBilling: 'yes' }
+        { licenceId }
       )
 
       testRecords = [srocChargeVersion, srocSupersededChargeVersion, alcsChargeVersion]
 
+      // We test that related data is returned in the results. So, we create and link it to the srocChargeVersion
+      // ready for testing
       billingChargeCategory = await BillingChargeCategoryHelper.add()
 
       chargeElement = await ChargeElementHelper.add({
@@ -83,14 +90,15 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    it("returns only the 'current' SROC charge versions that are applicable", async () => {
+    it("returns both 'current' and 'superseded' SROC charge versions that are applicable", async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(result).to.have.length(1)
+      expect(result).to.have.length(2)
       expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+      expect(result[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
     })
 
-    it('includes related licence and region', async () => {
+    it('includes the related licence and region', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       expect(result[0].licence.licenceRef).to.equal(licenceDefaults.licenceRef)
@@ -101,13 +109,13 @@ describe('Fetch Charge Versions service', () => {
       expect(result[0].licence.region.chargeRegionId).to.equal(region.chargeRegionId)
     })
 
-    it('includes related change reason', async () => {
+    it('includes the related change reason', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       expect(result[0].changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
     })
 
-    it('includes related charge elements, billing charge category and charge purposes', async () => {
+    it('includes the related charge elements, billing charge category and charge purposes', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       const expectedResult = {
@@ -131,14 +139,12 @@ describe('Fetch Charge Versions service', () => {
         }]
       }
 
-      expect(result).to.have.length(1)
-      expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
       expect(result[0].chargeElements[0]).to.equal(expectedResult)
     })
   })
 
-  describe('when there are no licences to be included in supplementary billing', () => {
-    describe("because none of them are marked 'includeInSrocSupplementaryBilling'", () => {
+  describe('when there are no charge versions that should be considered for the next supplementary billing', () => {
+    describe("because none of them are linked to a licence flagged 'includeInSrocSupplementaryBilling'", () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -158,22 +164,18 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe("because all the applicable charge versions do not have a 'current' status", () => {
+    describe("because all the applicable charge versions have a 'draft' status", () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
           endDate: new Date('2023-03-31')
         }
 
-        const srocSupersededChargeVersion = await ChargeVersionHelper.add(
-          { status: 'superseded' },
-          { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
-        )
         const srocDraftChargeVersion = await ChargeVersionHelper.add(
           { status: 'draft' },
           { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
         )
-        testRecords = [srocSupersededChargeVersion, srocDraftChargeVersion]
+        testRecords = [srocDraftChargeVersion]
       })
 
       it('returns no applicable charge versions', async () => {
@@ -183,7 +185,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe("because all the applicable charge versions are 'alcs' (presroc)", () => {
+    describe("because all of them are for the 'alcs' (presroc) scheme", () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -205,7 +207,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('because all the applicable charge versions have no `invoiceAccountId`', () => {
+    describe('because none of them have an `invoiceAccountId`', () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -227,7 +229,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('because there are no charge versions in the billing period', () => {
+    describe('because none of them are in the billing period', () => {
       describe('as they all have start dates before the billing period', () => {
         beforeEach(async () => {
           billingPeriod = {
@@ -275,7 +277,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('because there are no licences linked to the selected region', () => {
+    describe('because the licences flagged for supplementary billing are linked to a different region', () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -300,7 +302,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('because the licence is in workflow', () => {
+    describe('because they are all linked to licences in workflow', () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),

@@ -1,25 +1,23 @@
 'use strict'
 
-const { ref } = require('objection')
 /**
- * Fetches SROC charge versions that might be included in a supplementary bill run
+ * Fetches SROC charge versions linked to licences flagged for inclusion in next SROC supplementary billing
  * @module FetchChargeVersionsService
  */
+
+const { ref } = require('objection')
 
 const ChargeVersion = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 
 /**
- * Fetch all 'current' SROC charge versions linked to licences flagged for supplementary billing that are in the period
- * being billed
+ * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
+ * billed
  *
- * > This is not the final form of the service. It is a 'work in progress' as we implement tickets that gradually
- * > build up our understanding of SROC supplementary billing
- *
- * @param {string} regionId GUID of the region which the licences will be linked to
+ * @param {string} regionId UUID of the region being billed that the licences must be linked to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns an array of Objects containing the relevant charge versions
+ * @returns {Object[]} an array of matching charge versions
  */
 async function go (regionId, billingPeriod) {
   const chargeVersions = await _fetch(regionId, billingPeriod)
@@ -34,16 +32,17 @@ async function _fetch (regionId, billingPeriod) {
       'scheme',
       'chargeVersions.startDate',
       'chargeVersions.endDate',
-      'invoiceAccountId'
+      'invoiceAccountId',
+      'status'
     ])
     .innerJoinRelated('licence')
-    .where('scheme', 'sroc')
-    .whereNotNull('invoiceAccountId')
     .where('includeInSrocSupplementaryBilling', true)
     .where('regionId', regionId)
-    .where('chargeVersions.status', 'current')
+    .where('chargeVersions.scheme', 'sroc')
+    .whereNotNull('chargeVersions.invoiceAccountId')
     .where('chargeVersions.startDate', '>=', billingPeriod.startDate)
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .whereNot('chargeVersions.status', 'draft')
     .whereNotExists(
       ChargeVersionWorkflow.query()
         .select(1)
