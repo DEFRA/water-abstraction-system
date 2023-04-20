@@ -22,7 +22,6 @@ const HandleErroredBillingBatchService = require('./handle-errored-billing-batch
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const LicenceModel = require('../../models/water/licence.model.js')
 const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
-const ProcessReplacedChargeVersionsService = require('./process-replaced-charge-versions.service.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -73,12 +72,17 @@ async function go (billingBatch, billingPeriod) {
       currentBillingData.billingInvoice = billingInvoice
       currentBillingData.billingInvoiceLicence = billingInvoiceLicence
 
-      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
-      currentBillingData.calculatedTransactions.push(...calculatedTransactions)
+      // If the charge version has a status of 'current' (APPROVED) then it is likely to be something we have never
+      // billed previously so we need to calculate a debit line.
+      // Else the charge version has been 'superseded' (REPLACED). So, we won't be adding a new debit line to the bill
+      // for it. But we still need to process it to understand what, if anything, needs to be credited back or if our
+      // calculated debit line has already been billed.
+      if (chargeVersion.status === 'current') {
+        const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
+        currentBillingData.calculatedTransactions.push(...calculatedTransactions)
+      }
     }
     await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
-
-    await _processReplacedChargeVersions(currentBillingData, billingBatch, billingPeriod)
 
     await _finaliseBillingBatch(billingBatch, chargeVersions, currentBillingData.isEmpty)
 
@@ -283,19 +287,6 @@ function _logError (billingBatch, error) {
         stack: error.stack
       }
     })
-}
-
-async function _processReplacedChargeVersions (currentBillingData, billingBatch, billingPeriod) {
-  try {
-    const anythingGenerated = await ProcessReplacedChargeVersionsService.go(billingBatch, billingPeriod)
-    if (anythingGenerated) {
-      currentBillingData.isEmpty = false
-    }
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
-
-    throw error
-  }
 }
 
 async function _updateStatus (billingBatchId, status) {
