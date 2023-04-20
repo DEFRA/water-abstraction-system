@@ -6,8 +6,6 @@ const fs = require('fs').promises
  * @module ExportDataFilesService
 */
 
-const ConvertToCSVService = require('../db-export/convert-to-csv.service')
-
 /**
  * Asynchronously converts the provided data to CSV format using the ConvertToCsvService,
  * and writes it to a file.
@@ -15,9 +13,8 @@ const ConvertToCSVService = require('../db-export/convert-to-csv.service')
  * @returns {Promise} - A promise that resolves with the result of the file write operation.
  */
 async function go (data) {
-  const convertedToCsvData = await ConvertToCSVService.go(data)
   try {
-    await fs.writeFile('./app/services/db-export/Billing Charge Categories Table Export.csv', convertedToCsvData)
+    await fs.writeFile('./app/services/db-export/Billing Charge Categories Table Export.csv', data)
     console.log('File Written Successfully')
     return true
   } catch (error) {
