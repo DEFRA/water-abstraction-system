@@ -1,6 +1,6 @@
 'use strict'
 
-const fs = require('fs')
+const fs = require('fs').promises
 
 /**
  * @module ExportDataFilesService
@@ -16,13 +16,14 @@ const ConvertToCSVService = require('../db-export/convert-to-csv.service')
  */
 async function go (data) {
   const convertedToCsvData = await ConvertToCSVService.go(data)
-  return fs.writeFile('./app/services/db-export/Billing Charge Categories Table Export.csv', convertedToCsvData, (err) => {
-    if (err) {
-      console.log('Error!', err)
-    } else {
-      console.log('File Written Successfully')
-    }
-  })
+  try {
+    await fs.writeFile('./app/services/db-export/Billing Charge Categories Table Export.csv', convertedToCsvData)
+    console.log('File Written Successfully')
+    return true
+  } catch (error) {
+    console.log('Error!', error)
+    return false
+  }
 }
 
 module.exports = {
