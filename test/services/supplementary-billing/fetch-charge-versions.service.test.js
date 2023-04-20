@@ -205,6 +205,28 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
+    describe('because all the applicable charge versions have no `invoiceAccountId`', () => {
+      beforeEach(async () => {
+        billingPeriod = {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+
+        // This creates a charge version with no `invoiceAccountId`
+        const nullInvoiceAccountIdChargeVersion = await ChargeVersionHelper.add(
+          { invoiceAccountId: null },
+          { regionId, includeInSrocSupplementaryBilling: true }
+        )
+        testRecords = [nullInvoiceAccountIdChargeVersion]
+      })
+
+      it('returns no applicable charge versions', async () => {
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(result).to.be.empty()
+      })
+    })
+
     describe('because there are no charge versions in the billing period', () => {
       describe('as they all have start dates before the billing period', () => {
         beforeEach(async () => {

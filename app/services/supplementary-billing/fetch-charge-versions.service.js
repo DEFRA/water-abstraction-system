@@ -38,6 +38,7 @@ async function _fetch (regionId, billingPeriod) {
     ])
     .innerJoinRelated('licence')
     .where('scheme', 'sroc')
+    .whereNotNull('invoiceAccountId')
     .where('includeInSrocSupplementaryBilling', true)
     .where('regionId', regionId)
     .where('chargeVersions.status', 'current')
