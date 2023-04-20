@@ -107,7 +107,7 @@ const billingChargeCategoriescolumnInfo = {
   }
 }
 
-describe.only('Fetch billing charge categories column name service', () => {
+describe('Fetch billing charge categories column name service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
