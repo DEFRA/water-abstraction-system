@@ -4,8 +4,12 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
+
+// Test helpers
+const fs = require('fs')
+const path = require('path')
 
 // Thing under test
 const ExportDataFilesService = require('../../../app/services/db-export/export-data-files.service')
@@ -41,13 +45,33 @@ const csvValues = [
   '"0"',
   '"25002"'
 ]
+let filePath
+beforeEach(() => {
+  const fileName = 'Billing Charge Categories Table Export.csv'
+  const __dirname = '/home/repos/water-abstraction-system/app/services/db-export/'
+  filePath = path.join(__dirname, fileName)
+})
 
 describe('Export data files service', () => {
   it('should write the CSV data to a file', async () => {
     const data = csvHeader.join(',') + '\n' + csvValues.join(',')
+
+    await ExportDataFilesService.go(data)
+
+    expect(fs.existsSync(filePath)).to.equal(true)
+
+    // Delete the file
+    fs.unlinkSync(filePath)
+  })
+
+  it('should return true written successfully', async () => {
+    const data = csvHeader.join(',') + '\n' + csvValues.join(',')
     const result = await ExportDataFilesService.go(data)
 
     expect(result).to.equal(true)
+
+    // Delete the file
+    fs.unlinkSync(filePath)
   })
 
   it('should handle errors when the file cannot be written', async () => {

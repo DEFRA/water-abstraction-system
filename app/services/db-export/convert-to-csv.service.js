@@ -45,6 +45,16 @@ function transformValueToCsv (value) {
     return ''
   }
 
+  // Handles date objects to return them in a timestamp format
+  if (value instanceof Date) {
+    return value.toISOString()
+  }
+
+  // Handles numbers and booleans returning them in the same format
+  if (Number.isInteger(value) || typeof value === 'boolean') {
+    return `${value}`
+  }
+
   // Handle objects by serializing them to JSON
   if (typeof value === 'object') {
     return JSON.stringify(value)
