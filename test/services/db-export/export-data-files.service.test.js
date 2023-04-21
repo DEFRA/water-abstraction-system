@@ -53,22 +53,13 @@ beforeEach(() => {
 })
 
 describe('Export data files service', () => {
-  it('should write the CSV data to a file', async () => {
+  it('should write the CSV data to a file and return true', async () => {
     const data = csvHeader.join(',') + '\n' + csvValues.join(',')
 
-    await ExportDataFilesService.go(data)
+    const returnedResult = await ExportDataFilesService.go(data)
 
     expect(fs.existsSync(filePath)).to.equal(true)
-
-    // Delete the file
-    fs.unlinkSync(filePath)
-  })
-
-  it('should return true written successfully', async () => {
-    const data = csvHeader.join(',') + '\n' + csvValues.join(',')
-    const result = await ExportDataFilesService.go(data)
-
-    expect(result).to.equal(true)
+    expect(returnedResult).to.equal(true)
 
     // Delete the file
     fs.unlinkSync(filePath)
