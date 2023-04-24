@@ -14,10 +14,10 @@ const ChargeVersionWorkflow = require('../../models/water/charge-version-workflo
  * Fetch all SROC charge versions linked to licences flagged for supplementary billing that are in the period being
  * billed
  *
- * @param {string} regionId UUID of the region being billed that the licences must be linked to
+ * @param {String} regionId UUID of the region being billed that the licences must be linked to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Object[]} an array of matching charge versions
+ * @returns {Object[]} An array of matching charge versions
  */
 async function go (regionId, billingPeriod) {
   const chargeVersions = await _fetch(regionId, billingPeriod)

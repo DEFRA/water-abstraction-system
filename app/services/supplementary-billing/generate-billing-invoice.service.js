@@ -32,10 +32,10 @@ const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.j
  * @param {Object[]} generatedBillingInvoices An array of previously generated billing invoice objects
  * @param {String} invoiceAccountId UUID of the invoice account this billing invoice will be linked to if persisted
  * @param {String} billingBatchId UUID of the billing batch this billing invoice will be linked to if persisted
- * @param {Number} financialYearEnding a value that must exist in the persisted record
+ * @param {Number} financialYearEnding A value that must exist in the persisted record
  *
  * @returns {Object} A result object containing either the found or generated billing invoice object, and an array of
- * generated billing invoices which includes the one being returned
+ *  generated billing invoices which includes the one being returned
  */
 async function go (currentBillingInvoice, invoiceAccountId, billingBatchId, financialYearEnding) {
   if (currentBillingInvoice?.invoiceAccountId === invoiceAccountId) {

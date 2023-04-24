@@ -13,13 +13,13 @@ const ReverseBillingTransactionsService = require('./reverse-billing-transaction
  * then reverses them as credits
  *
  * @param {Object} billingInvoice A generated billing invoice that identifies the invoice account ID we need to match
- * against
+ *  against
  * @param {Object} billingInvoiceLicence A generated billing invoice licence that identifies the licence we need to
- * match against. Also, has the billing invoice licence ID we'll be linked our reversed transactions to
+ *  match against. Also, has the billing invoice licence ID we'll be linked our reversed transactions to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {Object[]} an array of matching Billing Transaction objects with new transaction IDs, the billing invoice
- * licence ID set to that passed in, and the `isCredit:` reversed to true
+ *  licence ID set to that passed in, and the `isCredit:` reversed to true
  */
 async function go (billingInvoice, billingInvoiceLicence, billingPeriod) {
   const previousTransactions = await _fetchPreviousTransactions(billingInvoice, billingInvoiceLicence, billingPeriod)

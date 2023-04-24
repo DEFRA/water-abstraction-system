@@ -14,10 +14,10 @@
  *
  * > Charge versions may not have an end date; in this case, we simply use the financial year end date.
  *
- * @param {module:ChargeVersionModel} chargeVersion the charge version being processed for billing
- * @param {number} financialYearEnding the year the financial billing period ends
+ * @param {module:ChargeVersionModel} chargeVersion The charge version being processed for billing
+ * @param {Number} financialYearEnding The year the financial billing period ends
  *
- * @returns {Object} the start and end date of the calculated charge period
+ * @returns {{startDate: Date, endDate: Date}} The start and end date of the calculated charge period
  */
 function go (chargeVersion, financialYearEnding) {
   const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
