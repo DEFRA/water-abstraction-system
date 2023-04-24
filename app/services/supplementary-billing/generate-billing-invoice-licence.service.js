@@ -30,7 +30,7 @@ const { randomUUID } = require('crypto')
  *  persisted
  * @param {module:LicenceModel} licence The licence this billing invoice licence will be linked to
  *
- * @returns {Object} The found or generated billing invoice licence object
+ * @returns {Object} The current or newly-generated billing invoice licence object
  */
 function go (currentBillingInvoiceLicence, billingInvoiceId, licence) {
   if (
