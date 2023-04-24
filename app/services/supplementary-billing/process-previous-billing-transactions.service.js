@@ -14,7 +14,7 @@ const ReverseBillingTransactionsService = require('./reverse-billing-transaction
  *
  * @param {Object} billingInvoice A generated billing invoice that identifies the invoice account ID we need to match
  * against
- * @param {Object} billingInvoiceLicence A generated billing invoice licence  that identifies the licence we need to
+ * @param {Object} billingInvoiceLicence A generated billing invoice licence that identifies the licence we need to
  * match against. Also, has the billing invoice licence ID we'll be linked our reversed transactions to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
