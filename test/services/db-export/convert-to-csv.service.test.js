@@ -3,21 +3,39 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
-
-// Things we need to stub
-const FetchBillingChargeCategoriesService = require('../../../app/services/db-export/fetch-billing-charge-categories.service')
 
 // Thing under test
 const ConvertToCSVService = require('../../../app/services/db-export/convert-to-csv.service')
 
-let transformedData
-let csvData
+/**
+ * billingChargeCategoriesTable has all data types we are testing for
+ * objects{Date} - dateCreated
+ * String - description
+ * String (with added quotes)- shortDescription
+ * Integer - maxVolume
+ * Null - lossFactor
+ * Undefined - modelTier
+ */
+const billingChargeCategoryRow = {
+  billingChargeCategoryId: '20146cdc-9b40-4769-aa78-b51c17080d56',
+  reference: '4.1.1',
+  subsistenceCharge: 9700,
+  description: 'Low loss tidal abstraction of water up to and "including" 25,002 megalitres a year where no model applies',
+  shortDescription: 'Low loss, tidal, up to and including 25,002 ML/yr',
+  dateCreated: new Date(2022, 11, 14, 18, 39, 45),
+  dateUpdated: new Date(2022, 11, 14, 18, 39, 45),
+  isTidal: true,
+  lossFactor: null,
+  modelTier: undefined,
+  isRestrictedSource: false,
+  minVolume: '',
+  maxVolume: 25002
+}
 
-const csvHeader = [
+const csvHeaders = [
   '"billingChargeCategoryId"',
   '"reference"',
   '"subsistenceCharge"',
@@ -31,33 +49,6 @@ const csvHeader = [
   '"maxVolume"',
   '"dateCreated"',
   '"dateUpdated"'
-]
-
-/**
- * billingChargeCategoriesTable has all data types we are testing for
- * objects{Date} - dateCreated
- * String - description
- * String (with added quotes)- shortDescription
- * Integer - maxVolume
- * Null - lossFactor
- * Undefined - modelTier
- */
-const billingChargeCategoriesTable = [
-  {
-    billingChargeCategoryId: '20146cdc-9b40-4769-aa78-b51c17080d56',
-    reference: '4.1.1',
-    subsistenceCharge: 9700,
-    description: 'Low loss tidal abstraction of water up to and "including" 25,002 megalitres a year where no model applies',
-    shortDescription: 'Low loss, tidal, up to and including 25,002 ML/yr',
-    dateCreated: new Date(2022, 11, 14, 18, 39, 45),
-    dateUpdated: new Date(2022, 11, 14, 18, 39, 45),
-    isTidal: true,
-    lossFactor: null,
-    modelTier: undefined,
-    isRestrictedSource: false,
-    minVolume: '',
-    maxVolume: 25002
-  }
 ]
 
 const csvValues = [
@@ -76,107 +67,46 @@ const csvValues = [
   '25002'
 ]
 
-describe('Convert to CSV service', () => {
-  describe('when given a table from the database', () => {
-    beforeEach(async () => {
-      Sinon.stub(FetchBillingChargeCategoriesService, 'go').resolves(billingChargeCategoriesTable)
-    })
-
-    afterEach(() => {
-      Sinon.restore()
-    })
-
+describe.only('Convert to CSV service', () => {
+  describe('when given data to convert', () => {
     describe('that only has one row of data', () => {
-      beforeEach(async () => {
-        transformedData = await ConvertToCSVService.go(billingChargeCategoriesTable)
-        csvData = _generateCSVData(csvValues)
-      })
-
-      describe('with values that are objects', () => {
-        it('maintains the date as a timestamp format', async () => {
-          expect(transformedData).to.equal(csvData)
-        })
-
-        it('converts the timestamp object into the iso8601 standard', async () => {
-          expect(transformedData).to.include('2022-12-14T18:39:45.000Z')
-        })
-      })
-
-      describe('with values that are integers', () => {
-        it('maintains number values as an integer type', async () => {
-          expect(transformedData).to.equal(csvData)
-        })
-      })
-
-      describe('with values that are boolean', () => {
-        it('maintains the true/false values as booleans', async () => {
-          expect(transformedData).to.equal(csvData)
-        })
-      })
-
-      describe('with values that are undefined or null', () => {
-        it('it converts it to an empty string', async () => {
-          expect(transformedData).to.equal(csvData)
-        })
-      })
-
-      describe('with values that are strings', () => {
-        describe('when the string does not have quotation marks', () => {
-          it('adds quotation marks to the start and end', async () => {
-            expect(transformedData).to.equal(csvData)
-          })
-        })
-
-        describe('when the string alread has quotation marks', () => {
-          it('escapes the quotation marks and adds them back in', async () => {
-            expect(transformedData).to.equal(csvData)
-          })
-        })
-      })
-
       it('has the table columns as headers', async () => {
-        expect(transformedData).to.startWith(`${csvHeader}`)
+        const result = await ConvertToCSVService.go([billingChargeCategoryRow])
+        const resultLines = result.split(/\r?\n/)
+
+        expect(resultLines[0]).to.equal(csvHeaders.join(','))
       })
 
       it('converts the data to a CSV format', async () => {
-        expect(transformedData).to.equal(csvData)
-      })
-    })
+        const result = await ConvertToCSVService.go([billingChargeCategoryRow])
+        const resultLines = result.split(/\r?\n/)
 
-    describe('that has no rows of data', () => {
-      let emptyBillingChargeCategoriesTable
-      beforeEach(() => {
-        emptyBillingChargeCategoriesTable = []
-      })
-
-      it('doesnt throw an error', () => {
-        expect(ConvertToCSVService.go(emptyBillingChargeCategoriesTable)).to.not.reject()
-      })
-
-      it('exports the table to CSV without any rows', async () => {
-        const transformedData = await ConvertToCSVService.go(emptyBillingChargeCategoriesTable)
-
-        expect(transformedData).to.equal(csvHeader.toString())
+        expect(resultLines[1]).to.equal(csvValues.join(','))
       })
     })
 
     describe('that has multiple rows of data', () => {
-      const multipleRowsbillingChargeCategoriesTable = billingChargeCategoriesTable
+      it('transforms all the rows to CSV', async () => {
+        const result = await ConvertToCSVService.go([billingChargeCategoryRow, billingChargeCategoryRow])
+        const resultLines = result.split(/\r?\n/)
 
-      beforeEach(() => {
-        multipleRowsbillingChargeCategoriesTable.push(billingChargeCategoriesTable[0])
-        csvData = csvHeader.join(',') + '\n' + csvValues.join(',') + '\n' + csvValues.join(',')
+        expect(resultLines[1]).to.equal(csvValues.join(','))
+        expect(resultLines[2]).to.equal(csvValues.join(','))
+      })
+    })
+  })
+
+  describe('when not given data to convert', () => {
+    describe('that has no rows of data', () => {
+      it('doesnt throw an error', () => {
+        expect(ConvertToCSVService.go([])).to.not.reject()
       })
 
-      it('transforms all the rows to CSV', async () => {
-        const transformedData = await ConvertToCSVService.go(multipleRowsbillingChargeCategoriesTable)
+      it('exports the table to CSV without any rows', async () => {
+        const result = await ConvertToCSVService.go([])
 
-        expect(transformedData).to.equal(csvData)
+        expect(result).to.equal(csvHeaders.toString())
       })
     })
   })
 })
-
-function _generateCSVData (data) {
-  return csvHeader.join(',') + '\n' + data.join(',')
-}

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -46,32 +46,36 @@ const csvValues = [
   '"25002"'
 ]
 let filePath
-beforeEach(() => {
-  const fileName = 'Billing Charge Categories Table Export.csv'
-  const __dirname = '/home/repos/water-abstraction-system/app/services/db-export/'
-  filePath = path.join(__dirname, fileName)
-})
 
 describe('Export data files service', () => {
-  it('should write the CSV data to a file and return true', async () => {
-    const data = csvHeader.join(',') + '\n' + csvValues.join(',')
+  describe('when successful', () => {
+    beforeEach(() => {
+      const fileName = 'Billing Charge Categories Table Export.csv'
+      const __dirname = '/home/repos/water-abstraction-system/app/services/db-export/'
+      filePath = path.join(__dirname, fileName)
+    })
 
-    const returnedResult = await ExportDataFilesService.go(data)
+    afterEach(() => {
+      // Delete the file
+      fs.unlinkSync(filePath)
+    })
 
-    expect(fs.existsSync(filePath)).to.equal(true)
-    expect(returnedResult).to.equal(true)
+    it('should write the CSV data to a file and return true', async () => {
+      const data = csvHeader.join(',') + '\n' + csvValues.join(',')
 
-    // Delete the file
-    fs.unlinkSync(filePath)
+      const returnedResult = await ExportDataFilesService.go(data)
+
+      expect(fs.existsSync(filePath)).to.equal(true)
+      expect(returnedResult).to.equal(true)
+    })
   })
 
-  it('should handle errors when the file cannot be written', async () => {
-    const data = null
+  describe('when unsuccessful', () => {
+    it('should handle errors and return false', async () => {
+      const data = null
+      const result = await ExportDataFilesService.go(data)
 
-    // introduce a bug by setting the file path to an invalid location
-    ExportDataFilesService.filePath = './invalid/path/Billing Charge Categories Table Export.csv'
-    const result = await ExportDataFilesService.go(data)
-
-    expect(result).to.equal(false)
+      expect(result).to.equal(false)
+    })
   })
 })
