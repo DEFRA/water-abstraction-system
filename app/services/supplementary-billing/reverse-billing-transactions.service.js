@@ -15,11 +15,11 @@ const { randomUUID } = require('crypto')
  * will reverse the original transactions, with their billing invoice licence id set to the id of the supplied billing
  * invoice licence.
  *
- * @param {Array[module:BillingTransactionModel]} transactions Array of transactions to be reversed
+ * @param {module:BillingTransactionModel[]} transactions Array of transactions to be reversed
  * @param {module:BillingInvoiceLicenceModel} billingInvoiceLicence The billing invoice licence these transactions are
  *  intended to be added to
  *
- * @returns {Array[Object]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
+ * @returns {Object[]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
  *  `billingInvoiceLicence`
  */
 function go (transactions, billingInvoiceLicence) {

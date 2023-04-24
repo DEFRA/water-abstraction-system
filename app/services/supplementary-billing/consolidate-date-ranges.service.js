@@ -44,10 +44,10 @@
  *   { startDate: 2023-11-01, endDate: 2023-12-01 }  // Range 4 unchanged
  * ]
  *
- * @param {Array.<{startDate: Date, endDate: Date}>} dateRanges Array containing a series of date ranges to be
+ * @param {{startDate: Date, endDate: Date}[]} dateRanges Array containing a series of date ranges to be
  *  consolidated, each of which is an Object containing startDate and endDate, both of which are Dates
  *
- * @returns {Array.<{startDate: Date, endDate: Date}>} An array of the consolidated date ranges
+ * @returns {{startDate: Date, endDate: Date}[]} An array of the consolidated date ranges
  */
 function go (dateRanges) {
   // We sort the date ranges by start date from earliest to latest to make life easier when consolidating them
