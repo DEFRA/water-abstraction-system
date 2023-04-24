@@ -51,7 +51,7 @@ describe('Export data files service', () => {
   describe('when successful', () => {
     beforeEach(() => {
       const fileName = 'Billing Charge Categories Table Export.csv'
-      const __dirname = '/home/repos/water-abstraction-system/app/services/db-export/'
+      const __dirname = '/tmp/'
       filePath = path.join(__dirname, fileName)
     })
 

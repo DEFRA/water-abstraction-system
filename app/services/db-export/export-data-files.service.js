@@ -1,6 +1,10 @@
 'use strict'
 
+const path = require('path')
+
 const fs = require('fs').promises
+
+const { temporaryFilePath } = require('../../../config/server.config')
 
 /**
  * @module ExportDataFilesService
@@ -14,13 +18,23 @@ const fs = require('fs').promises
  */
 async function go (data) {
   try {
-    await fs.writeFile('./app/services/db-export/Billing Charge Categories Table Export.csv', data)
+    console.log(_filenameWithPath('Billing Charge Categories Table Export.csv'))
+    await fs.writeFile(_filenameWithPath('Billing Charge Categories Table Export.csv'), data)
     console.log('File Written Successfully')
     return true
   } catch (error) {
     console.log('Error!', error)
     return false
   }
+}
+
+function _filenameWithPath (name) {
+  return path.normalize(
+    path.format({
+      dir: temporaryFilePath,
+      name
+    })
+  )
 }
 
 module.exports = {

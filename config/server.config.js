@@ -26,7 +26,8 @@ const config = {
       isCaseSensitive: false,
       stripTrailingSlash: true
     }
-  }
+  },
+  temporaryFilePath: process.env.TMPDIR || '/tmp/'
 }
 
 module.exports = config
