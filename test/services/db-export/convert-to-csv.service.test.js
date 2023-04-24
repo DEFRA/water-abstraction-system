@@ -67,7 +67,7 @@ const csvValues = [
   '25002'
 ]
 
-describe.only('Convert to CSV service', () => {
+describe('Convert to CSV service', () => {
   describe('when given data to convert', () => {
     describe('that only has one row of data', () => {
       it('has the table columns as headers', async () => {
