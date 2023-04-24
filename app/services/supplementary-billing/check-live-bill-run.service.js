@@ -14,8 +14,8 @@ const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
  *
  * We define "live" as having the status `processing`, `ready`, `review` or `queued`
  *
- * @param {*} regionId The id of the region to be checked
- * @param {*} financialYear The financial year to be checked
+ * @param {String} regionId The id of the region to be checked
+ * @param {Number} financialYear The financial year to be checked
  *
  * @returns {Boolean} Whether a "live" bill run exists
  */
