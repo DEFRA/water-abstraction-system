@@ -76,7 +76,7 @@ describe('Billing Batch model', () => {
 
         testBillingInvoices = []
         for (let i = 0; i < 2; i++) {
-          const billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: 2023 }, { billingBatchId })
+          const billingInvoice = await BillingInvoiceHelper.add({ financialYearEnding: 2023, billingBatchId })
           testBillingInvoices.push(billingInvoice)
         }
       })

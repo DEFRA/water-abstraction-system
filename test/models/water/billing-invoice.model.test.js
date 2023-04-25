@@ -44,7 +44,7 @@ describe('Billing Invoice model', () => {
 
       beforeEach(async () => {
         testBillingBatch = await BillingBatchHelper.add()
-        testRecord = await BillingInvoiceHelper.add({}, { billingBatchId: testBillingBatch.billingBatchId })
+        testRecord = await BillingInvoiceHelper.add({ billingBatchId: testBillingBatch.billingBatchId })
       })
 
       it('can successfully run a related query', async () => {
