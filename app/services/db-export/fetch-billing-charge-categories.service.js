@@ -8,18 +8,26 @@
 const { db } = require('../../../db/db.js')
 
 /**
- * Generates an array of the table billing_charge_categories
+ * Generates an array of the column names and data from the table billing_charge_categories
  *
  * This is a dump of running 'SELECT * FROM water.billing_charge_categories' for the database.
- * Its part of the full db schema export work.
  *
- * @returns An array of objects containing the data from the table.
+ * @returns An array of the tables column names and data
  */
 async function go () {
-  return await db
+  const data = [await _headers(), await _rows()]
+  return data
+}
+
+async function _rows () {
+  return db
     .withSchema('water')
     .select('*')
     .from('billingChargeCategories')
+}
+
+async function _headers () {
+  return db('billingChargeCategories').withSchema('water').columnInfo()
 }
 
 module.exports = {

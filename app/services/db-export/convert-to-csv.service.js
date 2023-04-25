@@ -5,24 +5,22 @@
  * @module ConvertToCSVService
  */
 
-const FetchBillingChargeCategoriesColumnNames = require('./fetch-billing-charge-categories-column-names.service.js')
-
 /**
- * Converts a table of data to a CSV- formatted string.
- * @param {Object[]} table - An array of objects representing the table data.
+ * Converts data to a CSV- formatted string.
+ * @param {Object[]} - An array of two items containing the column names and objects representing the tables data.
  * @returns {Promise<String>} - A promise that resolves with the CSV- formatted string.
  */
-async function go (table) {
-  // Fetch the column names from the table to create the headerRow of the csv
-  const headerRows = await FetchBillingChargeCategoriesColumnNames.go()
+async function go (data) {
+  const headerRows = data[0]
+  const dataRows = data[1]
 
-  // Returns just the column names if there are no rows of data
-  if (table.length === 0) {
+  // Returns just the column names formatted to CSV if there are no rows of data
+  if (!dataRows) {
     return _generateHeader(headerRows)
   }
 
   // Transform the table data to an array of arrays with only the values
-  const transformedValues = table.map((row) => {
+  const transformedValues = dataRows.map((row) => {
     return Object.values(row)
   })
 
@@ -67,7 +65,7 @@ function transformValueToCsv (value) {
 }
 
 /**
- * Generates a formatted header for the column names.
+ * Generates a header formatted to CSV for the column names.
  * @param {Object} columnNames - An object containing the column names.
  * @returns {String} - A string representing the formatted header for the column names
  */

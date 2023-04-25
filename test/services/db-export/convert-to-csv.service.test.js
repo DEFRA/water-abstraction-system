@@ -35,20 +35,114 @@ const billingChargeCategoryRow = {
   maxVolume: 25002
 }
 
+const billingChargeCategoriescolumnInfo = {
+  billingChargeCategoryId:
+    {
+      type: 'uuid',
+      maxLength: null,
+      nullable: false,
+      defaultValue: 'gen_random_uuid()'
+    },
+  reference:
+  {
+    type: 'character varying',
+    maxLength: 255,
+    nullable: true,
+    defaultValue: null
+  },
+  subsistenceCharge:
+  {
+    type: 'integer',
+    maxLength: null,
+    nullable: true,
+    defaultValue: null
+  },
+  description:
+  {
+    type: 'character varying',
+    maxLength: 255,
+    nullable: true,
+    defaultValue: null
+  },
+  shortDescription:
+  {
+    type: 'character varying',
+    maxLength: 255,
+    nullable: true,
+    defaultValue: null
+  },
+  dateCreated:
+  {
+    type: 'timestamp without time zone',
+    maxLength: null,
+    nullable: false,
+    defaultValue: null
+  },
+  dateUpdated:
+  {
+    type: 'timestamp without time zone',
+    maxLength: null,
+    nullable: true,
+    defaultValue: null
+  },
+  isTidal:
+  {
+    type: 'boolean',
+    maxLength: null,
+    nullable: true,
+    defaultValue: null
+  },
+  lossFactor:
+  {
+    type: 'character varying',
+    maxLength: 255,
+    nullable: true,
+    defaultValue: null
+  },
+  modelTier:
+  {
+    type: 'character varying',
+    maxLength: 255,
+    nullable: true,
+    defaultValue: null
+  },
+  isRestrictedSource:
+  {
+    type: 'boolean',
+    maxLength: null,
+    nullable: true,
+    defaultValue: null
+  },
+  minVolume:
+  {
+    type: 'bigint',
+    maxLength: null,
+    nullable: true,
+    defaultValue: null
+  },
+  maxVolume:
+  {
+    type: 'bigint',
+    maxLength: null,
+    nullable: true,
+    defaultValue: null
+  }
+}
+
 const csvHeaders = [
   '"billingChargeCategoryId"',
   '"reference"',
   '"subsistenceCharge"',
   '"description"',
   '"shortDescription"',
+  '"dateCreated"',
+  '"dateUpdated"',
   '"isTidal"',
   '"lossFactor"',
   '"modelTier"',
   '"isRestrictedSource"',
   '"minVolume"',
-  '"maxVolume"',
-  '"dateCreated"',
-  '"dateUpdated"'
+  '"maxVolume"'
 ]
 
 const csvValues = [
@@ -71,14 +165,14 @@ describe('Convert to CSV service', () => {
   describe('when given data to convert', () => {
     describe('that only has one row of data', () => {
       it('has the table columns as headers', async () => {
-        const result = await ConvertToCSVService.go([billingChargeCategoryRow])
+        const result = await ConvertToCSVService.go([billingChargeCategoriescolumnInfo, [billingChargeCategoryRow]])
         const resultLines = result.split(/\r?\n/)
 
         expect(resultLines[0]).to.equal(csvHeaders.join(','))
       })
 
       it('converts the data to a CSV format', async () => {
-        const result = await ConvertToCSVService.go([billingChargeCategoryRow])
+        const result = await ConvertToCSVService.go([billingChargeCategoriescolumnInfo, [billingChargeCategoryRow]])
         const resultLines = result.split(/\r?\n/)
 
         expect(resultLines[1]).to.equal(csvValues.join(','))
@@ -87,7 +181,7 @@ describe('Convert to CSV service', () => {
 
     describe('that has multiple rows of data', () => {
       it('transforms all the rows to CSV', async () => {
-        const result = await ConvertToCSVService.go([billingChargeCategoryRow, billingChargeCategoryRow])
+        const result = await ConvertToCSVService.go([billingChargeCategoriescolumnInfo, [billingChargeCategoryRow, billingChargeCategoryRow]])
         const resultLines = result.split(/\r?\n/)
 
         expect(resultLines[1]).to.equal(csvValues.join(','))
@@ -99,11 +193,11 @@ describe('Convert to CSV service', () => {
   describe('when not given data to convert', () => {
     describe('that has no rows of data', () => {
       it('doesnt throw an error', () => {
-        expect(ConvertToCSVService.go([])).to.not.reject()
+        expect(ConvertToCSVService.go([billingChargeCategoriescolumnInfo])).to.not.reject()
       })
 
       it('exports the table to CSV without any rows', async () => {
-        const result = await ConvertToCSVService.go([])
+        const result = await ConvertToCSVService.go([billingChargeCategoriescolumnInfo])
 
         expect(result).to.equal(csvHeaders.toString())
       })
