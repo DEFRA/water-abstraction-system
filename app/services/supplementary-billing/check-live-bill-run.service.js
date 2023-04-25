@@ -21,7 +21,7 @@ const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
  */
 async function go (regionId, financialYear) {
   const numberOfLiveBillRuns = await BillingBatchModel.query()
-    .select('billing_batch_id')
+    .select(1)
     .where({
       regionId,
       toFinancialYearEnding: financialYear,
