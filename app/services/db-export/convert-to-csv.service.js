@@ -1,6 +1,7 @@
 'use strict'
 
 /**
+ * Convert data to CSV format
  * @module ConvertToCSVService
  */
 
@@ -41,7 +42,7 @@ async function go (table) {
  */
 function transformValueToCsv (value) {
   // Returns an empty string for undefined or null values
-  if (value === undefined || value === null || value === '') {
+  if (!value && value !== false) {
     return ''
   }
 
@@ -67,8 +68,6 @@ function transformValueToCsv (value) {
 
 /**
  * Generates a formatted header for the column names.
- * @private
- * @function _generateHeader
  * @param {Object} columnNames - An object containing the column names.
  * @returns {String} - A string representing the formatted header for the column names
  */

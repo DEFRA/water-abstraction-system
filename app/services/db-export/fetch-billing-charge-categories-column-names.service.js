@@ -14,7 +14,7 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<Array<string>>} - An array containing the column names of the table
  */
 async function go () {
-  return await db('billingChargeCategories').withSchema('water').columnInfo()
+  return db('billingChargeCategories').withSchema('water').columnInfo()
 }
 
 module.exports = {

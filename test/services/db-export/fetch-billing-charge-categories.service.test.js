@@ -14,7 +14,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const FetchBillingChargeCategoriesService = require('../../../app/services/db-export/fetch-billing-charge-categories.service.js')
 
-describe('Fetch Billing charge categories table service', () => {
+describe('Fetch Billing charge categories service', () => {
   let billingChargeCategory
 
   beforeEach(async () => {

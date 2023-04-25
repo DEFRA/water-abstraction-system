@@ -7,6 +7,7 @@ const fs = require('fs').promises
 const { temporaryFilePath } = require('../../../config/server.config')
 
 /**
+ * Export converted data to a temporary file
  * @module ExportDataFilesService
 */
 
@@ -18,12 +19,11 @@ const { temporaryFilePath } = require('../../../config/server.config')
  */
 async function go (data) {
   try {
-    console.log(_filenameWithPath('Billing Charge Categories Table Export.csv'))
     await fs.writeFile(_filenameWithPath('Billing Charge Categories Table Export.csv'), data)
-    console.log('File Written Successfully')
+    global.GlobalNotifier.omg('Billing Charge Categories Table exported successfully')
     return true
   } catch (error) {
-    console.log('Error!', error)
+    global.GlobalNotifier.omfg('Billing Charge Categories Table Export request errored', error)
     return false
   }
 }
