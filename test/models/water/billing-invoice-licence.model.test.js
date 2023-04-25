@@ -20,7 +20,7 @@ const LicenceModel = require('../../../app/models/water/licence.model.js')
 // Thing under test
 const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
 
-describe.only('Billing Invoice Licence model', () => {
+describe('Billing Invoice Licence model', () => {
   let testRecord
 
   beforeEach(async () => {
