@@ -91,9 +91,9 @@ function _consolidateDates (dateRanges) {
       return [...acc, previousRange]
     }
 
-    // If the current range's start date is on or earlier than the previous end date then the current range overlaps (starting
-    // the same day as the previous one ends counts as overlapping) so we add a new date range to our ongoing acc array,
-    // starting when the previous range starts and ending when the current range end
+    // If the current range's start date is on or earlier than the previous end date then the current range overlaps
+    // (starting the same day as the previous one ends counts as overlapping) so we add a new date range to our ongoing
+    // acc array, starting when the previous range starts and ending when the current range ends
     if (currentRange.startDate <= previousRange.endDate) {
       return [...acc, { startDate: previousRange.startDate, endDate: currentRange.endDate }]
     }
