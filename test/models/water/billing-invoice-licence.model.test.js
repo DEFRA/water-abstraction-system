@@ -20,7 +20,7 @@ const LicenceModel = require('../../../app/models/water/licence.model.js')
 // Thing under test
 const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
 
-describe('Billing Invoice Licence model', () => {
+describe.only('Billing Invoice Licence model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -46,7 +46,7 @@ describe('Billing Invoice Licence model', () => {
         testBillingInvoice = await BillingInvoiceHelper.add()
 
         const { billingInvoiceId } = testBillingInvoice
-        testRecord = await BillingInvoiceLicenceHelper.add({}, {}, { billingInvoiceId })
+        testRecord = await BillingInvoiceLicenceHelper.add({ billingInvoiceId })
       })
 
       it('can successfully run a related query', async () => {
@@ -112,7 +112,7 @@ describe('Billing Invoice Licence model', () => {
         testLicence = await LicenceHelper.add()
 
         const { licenceId } = testLicence
-        testRecord = await BillingInvoiceLicenceHelper.add({}, { licenceId })
+        testRecord = await BillingInvoiceLicenceHelper.add({ licenceId })
       })
 
       it('can successfully run a related query', async () => {

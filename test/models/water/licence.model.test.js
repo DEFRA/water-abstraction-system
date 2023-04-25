@@ -114,7 +114,7 @@ describe('Licence model', () => {
 
         testBillingInvoiceLicences = []
         for (let i = 0; i < 2; i++) {
-          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ licenceRef }, { licenceId })
+          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ licenceRef, licenceId })
           testBillingInvoiceLicences.push(billingInvoiceLicence)
         }
       })

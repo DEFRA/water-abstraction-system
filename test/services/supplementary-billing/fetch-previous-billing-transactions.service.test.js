@@ -173,11 +173,7 @@ describe('Fetch Previous Billing Transactions service', () => {
 async function _createBillingBatchInvoiceAndLicence (invoiceAccountId, licenceId) {
   const { billingBatchId } = await BillingBatchHelper.add({ status: 'sent' })
   const { billingInvoiceId } = await BillingInvoiceHelper.add({ invoiceAccountId }, { billingBatchId })
-  const { billingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add(
-    {},
-    { licenceId },
-    { billingInvoiceId }
-  )
+  const { billingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({ billingInvoiceId, licenceId })
 
   return billingInvoiceLicenceId
 }
