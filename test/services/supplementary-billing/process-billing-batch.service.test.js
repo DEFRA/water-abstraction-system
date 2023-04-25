@@ -105,9 +105,7 @@ describe('Process billing batch service', () => {
             {
               changeReasonId: changeReason.changeReasonId,
               invoiceAccountId: invoiceAccount.invoiceAccountId,
-              startDate: new Date(2022, 7, 1, 9)
-            },
-            {
+              startDate: new Date(2022, 7, 1, 9),
               licenceId: licence.licenceId
             }
           )
@@ -171,10 +169,11 @@ describe('Process billing batch service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        const { chargeVersionId } = await ChargeVersionHelper.add(
-          { changeReasonId: changeReason.changeReasonId, invoiceAccountId: invoiceAccount.invoiceAccountId },
-          { licenceId: licence.licenceId }
-        )
+        const { chargeVersionId } = await ChargeVersionHelper.add({
+          changeReasonId: changeReason.changeReasonId,
+          invoiceAccountId: invoiceAccount.invoiceAccountId,
+          licenceId: licence.licenceId
+        })
         const { chargeElementId } = await ChargeElementHelper.add(
           { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
         )
@@ -194,10 +193,11 @@ describe('Process billing batch service', () => {
 
     describe('because creating the billing transactions', () => {
       beforeEach(async () => {
-        const { chargeVersionId } = await ChargeVersionHelper.add(
-          { changeReasonId: changeReason.changeReasonId, invoiceAccountId: invoiceAccount.invoiceAccountId },
-          { licenceId: licence.licenceId }
-        )
+        const { chargeVersionId } = await ChargeVersionHelper.add({
+          changeReasonId: changeReason.changeReasonId,
+          invoiceAccountId: invoiceAccount.invoiceAccountId,
+          licenceId: licence.licenceId
+        })
         const { chargeElementId } = await ChargeElementHelper.add(
           { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
         )

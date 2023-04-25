@@ -58,20 +58,17 @@ describe('Fetch Charge Versions service', () => {
 
       // This creates a 'current' SROC charge version
       const srocChargeVersion = await ChargeVersionHelper.add(
-        { changeReasonId: changeReason.changeReasonId },
-        { licenceId }
+        { changeReasonId: changeReason.changeReasonId, licenceId }
       )
 
       // This creates a 'superseded' SROC charge version
       const srocSupersededChargeVersion = await ChargeVersionHelper.add(
-        { changeReasonId: changeReason.changeReasonId, status: 'superseded' },
-        { licenceId }
+        { changeReasonId: changeReason.changeReasonId, status: 'superseded', licenceId }
       )
 
       // This creates an ALCS (presroc) charge version
       const alcsChargeVersion = await ChargeVersionHelper.add(
-        { scheme: 'alcs' },
-        { licenceId }
+        { scheme: 'alcs', licenceId }
       )
 
       testRecords = [srocChargeVersion, srocSupersededChargeVersion, alcsChargeVersion]
@@ -171,10 +168,13 @@ describe('Fetch Charge Versions service', () => {
           endDate: new Date('2023-03-31')
         }
 
-        const srocDraftChargeVersion = await ChargeVersionHelper.add(
-          { status: 'draft' },
-          { regionId, isWaterUndertaker: true, includeInSrocSupplementaryBilling: true }
-        )
+        const { licenceId } = await LicenceHelper.add({
+          regionId,
+          isWaterUndertaker: true,
+          includeInSrocSupplementaryBilling: true
+        })
+
+        const srocDraftChargeVersion = await ChargeVersionHelper.add({ status: 'draft', licenceId })
         testRecords = [srocDraftChargeVersion]
       })
 
@@ -192,11 +192,13 @@ describe('Fetch Charge Versions service', () => {
           endDate: new Date('2023-03-31')
         }
 
+        const { licenceId } = await LicenceHelper.add({
+          regionId,
+          includeInSupplementaryBilling: true
+        })
+
         // This creates an ALCS (presroc) charge version linked to a licence marked for supplementary billing
-        const alcsChargeVersion = await ChargeVersionHelper.add(
-          { scheme: 'alcs' },
-          { includeInSupplementaryBilling: 'yes' }
-        )
+        const alcsChargeVersion = await ChargeVersionHelper.add({ scheme: 'alcs', licenceId })
         testRecords = [alcsChargeVersion]
       })
 
@@ -214,11 +216,13 @@ describe('Fetch Charge Versions service', () => {
           endDate: new Date('2023-03-31')
         }
 
+        const { licenceId } = await LicenceHelper.add({
+          regionId,
+          includeInSrocSupplementaryBilling: true
+        })
+
         // This creates a charge version with no `invoiceAccountId`
-        const nullInvoiceAccountIdChargeVersion = await ChargeVersionHelper.add(
-          { invoiceAccountId: null },
-          { regionId, includeInSrocSupplementaryBilling: true }
-        )
+        const nullInvoiceAccountIdChargeVersion = await ChargeVersionHelper.add({ invoiceAccountId: null, licenceId })
         testRecords = [nullInvoiceAccountIdChargeVersion]
       })
 
@@ -237,11 +241,15 @@ describe('Fetch Charge Versions service', () => {
             endDate: new Date('2023-03-31')
           }
 
+          const { licenceId } = await LicenceHelper.add({
+            regionId,
+            includeInSrocSupplementaryBilling: true
+          })
+
           // This creates an SROC charge version with a start date before the billing period. This would have been
           // picked up by a previous bill run
           const alcsChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date(2022, 2, 31) }, // 2022-03-01 - Months are zero indexed :-)
-            { includeInSrocSupplementaryBilling: true }
+            { startDate: new Date(2022, 2, 31), licenceId } // 2022-03-01 - Months are zero indexed :-)
           )
           testRecords = [alcsChargeVersion]
         })
@@ -260,11 +268,15 @@ describe('Fetch Charge Versions service', () => {
             endDate: new Date('2023-03-31')
           }
 
+          const { licenceId } = await LicenceHelper.add({
+            regionId,
+            includeInSrocSupplementaryBilling: true
+          })
+
           // This creates an SROC charge version with a start date after the billing period. This will be picked in
           // next years bill runs
           const alcsChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date(2023, 3, 1) }, // 2023-04-01 - Months are zero indexed :-)
-            { includeInSrocSupplementaryBilling: true }
+            { startDate: new Date(2023, 3, 1), licenceId } // 2023-04-01 - Months are zero indexed :-)
           )
           testRecords = [alcsChargeVersion]
         })
@@ -284,14 +296,13 @@ describe('Fetch Charge Versions service', () => {
           endDate: new Date('2023-03-31')
         }
 
+        const { licenceId } = await LicenceHelper.add({
+          regionId: 'e117b501-e3c1-4337-ad35-21c60ed9ad73',
+          includeInSrocSupplementaryBilling: true
+        })
+
         // This creates an SROC charge version linked to a licence with an different region than selected
-        const otherRegionChargeVersion = await ChargeVersionHelper.add(
-          {},
-          {
-            includeInSrocSupplementaryBilling: true,
-            regionId: 'e117b501-e3c1-4337-ad35-21c60ed9ad73'
-          }
-        )
+        const otherRegionChargeVersion = await ChargeVersionHelper.add({ licenceId })
         testRecords = [otherRegionChargeVersion]
       })
 
@@ -309,14 +320,13 @@ describe('Fetch Charge Versions service', () => {
           endDate: new Date('2023-03-31')
         }
 
-        const chargeVersion = await ChargeVersionHelper.add(
-          {},
-          {
-            includeInSrocSupplementaryBilling: true,
-            regionId
-          }
-        )
-        await ChargeVersionWorkflowHelper.add({ licenceId: chargeVersion.licenceId })
+        const { licenceId } = await LicenceHelper.add({
+          regionId,
+          includeInSrocSupplementaryBilling: true
+        })
+
+        const chargeVersion = await ChargeVersionHelper.add({ licenceId })
+        await ChargeVersionWorkflowHelper.add({ licenceId })
 
         testRecords = [chargeVersion]
       })

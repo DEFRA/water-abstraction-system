@@ -46,7 +46,7 @@ describe('ChargeVersion model', () => {
         testLicence = await LicenceHelper.add()
 
         const { licenceId } = testLicence
-        testRecord = await ChargeVersionHelper.add({}, { licenceId })
+        testRecord = await ChargeVersionHelper.add({ licenceId })
       })
 
       it('can successfully run a related query', async () => {
