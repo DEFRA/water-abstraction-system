@@ -7,6 +7,8 @@
 
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
 
+const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
+
 /**
  * Returns the authorised and billable days for a given charge element based on its abstraction periods
  *
@@ -162,14 +164,11 @@ function _abstractionPeriods (referencePeriod, chargePurpose) {
  * @returns {number} the length of the period in days (inclusive)
  */
 function _calculateDays (abstractionOverlapPeriod) {
-  const DAY_IN_MILLISECONDS = (24 * 60 * 60 * 1000) // (24 hrs * 60 mins * 60 secs * 1000 msecs)
-
-  // difference in msecs
   const difference = abstractionOverlapPeriod.endDate.getTime() - abstractionOverlapPeriod.startDate.getTime()
 
   // ceil() always rounds up, even if the result is 1.1 (rounds to 2). We add 1 to make the calculation inclusive of
   // the last day
-  return Math.ceil(difference / DAY_IN_MILLISECONDS) + 1
+  return Math.ceil(difference / ONE_DAY_IN_MILLISECONDS) + 1
 }
 
 /**
