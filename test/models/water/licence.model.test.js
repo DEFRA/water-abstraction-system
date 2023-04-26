@@ -49,7 +49,7 @@ describe('Licence model', () => {
 
         testChargeVersions = []
         for (let i = 0; i < 2; i++) {
-          const chargeVersion = await ChargeVersionHelper.add({ licenceRef }, { licenceId })
+          const chargeVersion = await ChargeVersionHelper.add({ licenceRef, licenceId })
           testChargeVersions.push(chargeVersion)
         }
       })
@@ -114,7 +114,7 @@ describe('Licence model', () => {
 
         testBillingInvoiceLicences = []
         for (let i = 0; i < 2; i++) {
-          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ licenceRef }, { licenceId })
+          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ licenceRef, licenceId })
           testBillingInvoiceLicences.push(billingInvoiceLicence)
         }
       })
