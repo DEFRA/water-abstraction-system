@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -47,7 +48,20 @@ const csvValues = [
 ]
 
 describe('Export data files service', () => {
+  let notifierStub
+
+  beforeEach(() => {
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+    delete global.GlobalNotifier
+  })
+
   let filePath
+
   describe('when successful', () => {
     beforeEach(() => {
       const fileName = 'Billing Charge Categories Table Export.csv'
@@ -67,6 +81,7 @@ describe('Export data files service', () => {
 
       expect(fs.existsSync(filePath)).to.equal(true)
       expect(returnedResult).to.equal(true)
+      expect(notifierStub.omg.calledWith('Billing Charge Categories Table exported successfully')).to.be.true()
     })
   })
 
@@ -76,6 +91,7 @@ describe('Export data files service', () => {
       const result = await ExportDataFilesService.go(data)
 
       expect(result).to.equal(false)
+      expect(notifierStub.omfg.calledWith('Billing Charge Categories Table Export request errored')).to.be.true()
     })
   })
 })
