@@ -26,7 +26,9 @@ async function go (data) {
 
   // Transform each value to CSV format and join the values in each row with commas
   const csvRows = transformedValues.map((row) => {
-    return row.map(transformValueToCsv).join(',')
+    return row.map((value) => {
+      return transformValueToCsv(value)
+    }).join(',')
   })
 
   // Join the header row and the CSV rows with line breaks and return the CSV-formatted string
