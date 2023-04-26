@@ -3,8 +3,7 @@
 const path = require('path')
 
 const fs = require('fs').promises
-
-const { temporaryFilePath } = require('../../../config/server.config')
+const os = require('os')
 
 /**
  * Export converted data to a temporary file
@@ -29,6 +28,8 @@ async function go (data) {
 }
 
 function _filenameWithPath (name) {
+  const temporaryFilePath = os.tmpdir()
+
   return path.normalize(
     path.format({
       dir: temporaryFilePath,
