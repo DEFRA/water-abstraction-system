@@ -12,13 +12,13 @@
  * **IMPORTANT!** This service currently only handles SROC billing periods and only the 'current year'
  *
  * Using the current date at the time the service is called, it calculates the billing periods to use. We permit
- * changes to charge versions to be retroactively applied up to 5 years. So, a bill run generated in 2022 would need
- * to consider every financial year back to 2017.
+ * changes to charge versions to be retroactively applied up to 5 years. So, a bill run generated in 2022 would need to
+ * consider every financial year back to 2017.
  *
  * The exception to that is the change in charge scheme that happened in 2022, when we moved from ALCS (or PRESROC) to
  * SROC. Changes prior to 2022 would only apply to a ALCS bill run and vice versa.
  *
- * @returns {Object[]} an array of billing periods each containing a `startDate` and `endDate`.
+ * @returns {Object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
 function go () {
   // TODO: We have hardcoded the billing period this service returns to be 2022-23 the first year SROC went live. This

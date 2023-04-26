@@ -8,6 +8,18 @@
 
 const { db } = require('../../../db/db.js')
 
+/**
+ * Fetches the previously billed transactions that match the invoice, licence and year provided, removing any debits
+ * which are cancelled out by previous credits.
+ *
+ * @param {Object} billingInvoice A generated billing invoice that identifies the invoice account ID we need to match
+ *  against
+ * @param {Object} billingInvoiceLicence A generated billing invoice licence that identifies the licence we need to
+ *  match against
+ * @param {Number} financialYearEnding The year the financial billing period ends that we need to match against
+ *
+ * @returns {Object} The resulting matched billing transactions
+ */
 async function go (billingInvoice, billingInvoiceLicence, financialYearEnding) {
   const billingTransactions = await _fetch(
     billingInvoiceLicence.licenceId,
