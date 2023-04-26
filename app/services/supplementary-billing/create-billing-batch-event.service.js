@@ -12,9 +12,9 @@ const GeneralLib = require('../../lib/general.lib.js')
 /**
  * Create an event for when a new bill run is initialised
  *
- * @param {module:BillingBatchModel} [billingBatch] An instance of `BillingBatchModel` representing the initialised
- *   billing batch
- * @param {String} [issuer] The email address of the user triggering the event
+ * @param {module:BillingBatchModel} billingBatch An instance of `BillingBatchModel` representing the initialised
+ *  billing batch
+ * @param {String} issuer The email address of the user triggering the event
  *
  * @returns {Object} The newly created event record
  */

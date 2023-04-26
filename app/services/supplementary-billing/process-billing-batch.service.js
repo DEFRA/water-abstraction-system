@@ -29,7 +29,7 @@ const ProcessBillingTransactionsService = require('./process-billing-transaction
  * TODO: Currently a placeholder service. Proper implementation is coming
  *
  * @param {module:BillingBatchModel} billingBatch The newly created bill batch we need to process
- * @param {Object} billingPeriod an object representing the financial year the transaction is for
+ * @param {Object} billingPeriod An object representing the financial year the transaction is for
  */
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
@@ -94,15 +94,15 @@ async function go (billingBatch, billingPeriod) {
 }
 
 /**
-   * Log the time taken to process the billing batch
-   *
-   * If `notifier` is not set then it will do nothing. If it is set this will get the current time and then calculate the
-   * difference from `startTime`. This and the `billRunId` are then used to generate a log message.
-   *
-   * @param {string} billingBatchId Id of the billing batch currently being 'processed'
-   * @param {BigInt} startTime The time the generate process kicked off. It is expected to be the result of a call to
-   * `process.hrtime.bigint()`
-   */
+  * Log the time taken to process the billing batch
+  *
+  * If `notifier` is not set then it will do nothing. If it is set this will get the current time and then calculate the
+  * difference from `startTime`. This and the `billRunId` are then used to generate a log message.
+  *
+  * @param {string} billingBatchId Id of the billing batch currently being 'processed'
+  * @param {BigInt} startTime The time the generate process kicked off. It is expected to be the result of a call to
+  * `process.hrtime.bigint()`
+  */
 function _calculateAndLogTime (billingBatchId, startTime) {
   const endTime = process.hrtime.bigint()
   const timeTakenNs = endTime - startTime

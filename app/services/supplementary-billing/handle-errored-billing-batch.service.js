@@ -16,8 +16,8 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
  * Note that although this is async we would generally not call it asyncronously as the intent is you can call it and
  * continue with whatever error logging is required
  *
- * @param {string} billingBatchId UUID of the billing batch to be marked with `error` status
- * @param {number} [errorCode] Numeric error code as defined in BillingBatchModel. Defaults to `null`
+ * @param {String} billingBatchId UUID of the billing batch to be marked with `error` status
+ * @param {Number} [errorCode] Numeric error code as defined in BillingBatchModel. Defaults to `null`
  */
 async function go (billingBatchId, errorCode = null) {
   try {

@@ -24,11 +24,11 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  * They will then be returned in an array for further processing before being persisted to the DB as
  * `billing_transactions`.
  *
- * @param {Object} chargeElement the charge element the transaction generated from
- * @param {Object} billingPeriod a start and end date representing the billing period for the billing batch
- * @param {Object} chargePeriod a start and end date representing the charge period for the charge version
- * @param {boolean} isNewLicence whether the charge version is linked to a new licence
- * @param {boolean} isWaterUndertaker whether the charge version is linked to a water undertaker licence
+ * @param {Object} chargeElement The charge element the transaction generated from
+ * @param {Object} billingPeriod A start and end date representing the billing period for the billing batch
+ * @param {Object} chargePeriod A start and end date representing the charge period for the charge version
+ * @param {Boolean} isNewLicence Whether the charge version is linked to a new licence
+ * @param {Boolean} isWaterUndertaker Whether the charge version is linked to a water undertaker licence
  *
  * @returns {Object[]} an array of 0, 1 or 2 transaction objects
  */
@@ -64,6 +64,10 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
   return billingTransactions
 }
 
+/**
+ * Generates a compensation transaction by taking a standard transaction and overwriting it with the supplied billing id
+ * and the correct charge type and description for a compensation charge.
+ */
 function _compensationTransaction (billingTransactionId, standardTransaction) {
   return {
     ...standardTransaction,
@@ -103,6 +107,9 @@ function _generatePurposes (chargeElement) {
   return JSON.stringify(jsonChargePurposes)
 }
 
+/**
+ * Generates a standard transaction based on the supplied data, along with some default fields (eg. status)
+ */
 function _standardTransaction (
   billingTransactionId,
   authorisedDays,
