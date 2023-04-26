@@ -5,13 +5,9 @@
  */
 
 const ChargeVersionModel = require('../../../../app/models/water/charge-version.model.js')
-const LicenceHelper = require('./licence.helper.js')
 
 /**
  * Add a new charge version
- *
- * A charge version is always linked to a licence. So, creating a charge version will automatically create a new
- * licence and handle linking the two together by `licence_id`.
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -20,32 +16,18 @@ const LicenceHelper = require('./licence.helper.js')
  * - `startDate` - 2022-04-01
  * - `invoiceAccountId` - 01931031-4680-4950-87d6-50f8fe784f6d
  * - `status` - current
- *
- * See `LicenceHelper` for the licence defaults
+ * - `licenceId` - 4c9d2d86-fc88-4fb6-b49d-8a30f52f7997
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
- * @param {Object} [licence] Any licence data you want to use instead of the defaults used here or in the database
  *
  * @returns {module:ChargeVersionModel} The instance of the newly created record
  */
-async function add (data = {}, licence = {}) {
-  const licenceId = await _licenceId(licence)
-
-  const insertData = defaults({ ...data, licenceId })
+async function add (data = {}) {
+  const insertData = defaults(data)
 
   return ChargeVersionModel.query()
     .insert({ ...insertData })
     .returning('*')
-}
-
-async function _licenceId (providedLicence) {
-  if (providedLicence?.licenceId) {
-    return providedLicence.licenceId
-  }
-
-  const licence = await LicenceHelper.add(providedLicence)
-
-  return licence.licenceId
 }
 
 /**
@@ -62,7 +44,8 @@ function defaults (data = {}) {
     scheme: 'sroc',
     startDate: new Date('2022-04-01'),
     invoiceAccountId: '01931031-4680-4950-87d6-50f8fe784f6d',
-    status: 'current'
+    status: 'current',
+    licenceId: '4c9d2d86-fc88-4fb6-b49d-8a30f52f7997'
   }
 
   return {
