@@ -44,7 +44,7 @@ describe('Billing Invoice model', () => {
 
       beforeEach(async () => {
         testBillingBatch = await BillingBatchHelper.add()
-        testRecord = await BillingInvoiceHelper.add({}, { billingBatchId: testBillingBatch.billingBatchId })
+        testRecord = await BillingInvoiceHelper.add({ billingBatchId: testBillingBatch.billingBatchId })
       })
 
       it('can successfully run a related query', async () => {
@@ -76,7 +76,7 @@ describe('Billing Invoice model', () => {
 
         testBillingInvoiceLicences = []
         for (let i = 0; i < 2; i++) {
-          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({}, {}, { billingInvoiceId })
+          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ billingInvoiceId })
           testBillingInvoiceLicences.push(billingInvoiceLicence)
         }
       })
