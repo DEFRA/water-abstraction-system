@@ -30,7 +30,6 @@ function go (chargeVersion, financialYearEnding) {
   const triggersMinimumCharge = chargeVersion.changeReason?.triggersMinimumCharge ?? false
   const isFirstChargeOnNewLicence = isSharedStartDate && triggersMinimumCharge
 
-  // TODO: confirm whether legacy code is correct when it says return true if charge period starts on first april
   return isFirstChargeOnNewLicence
 }
 
