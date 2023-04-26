@@ -45,9 +45,9 @@ const csvValues = [
   '"0"',
   '"25002"'
 ]
-let filePath
 
 describe('Export data files service', () => {
+  let filePath
   describe('when successful', () => {
     beforeEach(() => {
       const fileName = 'Billing Charge Categories Table Export.csv'
