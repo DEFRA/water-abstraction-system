@@ -13,7 +13,7 @@
  * @returns {String} A CSV formatted string
  */
 function go (data) {
-  const transformedHeaders = _transformDataToCSV(data.headers)
+  const transformedHeaders = _transformDataToCSV([data.headers])[0]
 
   if (!data.rows) {
     return transformedHeaders
@@ -28,22 +28,21 @@ function go (data) {
 /**
  * Transforms each row to CSV format and joins the values with commas
  *
- * @param {Object} data The data to be transformed to CSV
+ * @param {Object} rows The data to be transformed to CSV
  *
  * @returns {Array} An array of transformed data
  */
-function _transformDataToCSV (data) {
-  if (Array.isArray(data[0])) {
-    return data.map((row) => {
-      return row.map((value) => {
-        return _transformValueToCSV(value)
-      }).join(',')
-    })
-  } else {
-    return data.map((value) => {
+function _transformDataToCSV (rows) {
+  const transformedRows = []
+
+  rows.forEach((row) => {
+    const transformedRow = row.map((value) => {
       return _transformValueToCSV(value)
     }).join(',')
-  }
+    transformedRows.push(transformedRow)
+  })
+
+  return transformedRows
 }
 
 /**
