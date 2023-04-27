@@ -42,17 +42,23 @@ describe('Fetch Billing charge categories service', () => {
 
   describe('when we connect to the db', () => {
     it('returns the table column names', async () => {
-      const results = await FetchBillingChargeCategoriesService.go()
+      const result = await FetchBillingChargeCategoriesService.go()
 
-      expect(results.headers).to.equal(billingChargeCategoriesColumnInfo)
+      expect(result.headers).to.equal(billingChargeCategoriesColumnInfo)
     })
 
     it('returns all records in the billing-charge-categories table', async () => {
-      const results = await FetchBillingChargeCategoriesService.go()
+      const result = await FetchBillingChargeCategoriesService.go()
 
-      expect(results.rows[0][0]).to.equal(billingChargeCategory.billingChargeCategoryId)
-      expect(results.rows[0][2]).to.equal(billingChargeCategory.subsistenceCharge)
-      expect(results.rows).to.have.length(2)
+      expect(result.rows[0][0]).to.equal(billingChargeCategory.billingChargeCategoryId)
+      expect(result.rows[0][2]).to.equal(billingChargeCategory.subsistenceCharge)
+      expect(result.rows).to.have.length(2)
+    })
+
+    it('returns the table name', async () => {
+      const result = await FetchBillingChargeCategoriesService.go()
+
+      expect(result.tableName).to.equal('billing_charge_categories')
     })
   })
 })

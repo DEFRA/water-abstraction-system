@@ -87,14 +87,14 @@ describe('Convert to CSV service', () => {
   describe('when given data to convert', () => {
     describe('that only has one row of data', () => {
       it('has the table columns as headers', () => {
-        const result = ConvertToCSVService.go({ headers: billingChargeCategoriesColumnInfo, rows: [billingChargeCategoryRow] })
+        const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [billingChargeCategoryRow])
         const resultLines = result.split(/\r?\n/)
 
         expect(resultLines[0]).to.equal(csvHeaders.join(','))
       })
 
       it('converts the data to a CSV format', () => {
-        const result = ConvertToCSVService.go({ headers: billingChargeCategoriesColumnInfo, rows: [billingChargeCategoryRow] })
+        const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [billingChargeCategoryRow])
         const resultLines = result.split(/\r?\n/)
 
         expect(resultLines[1]).to.equal(csvValues.join(','))
@@ -103,7 +103,7 @@ describe('Convert to CSV service', () => {
 
     describe('that has multiple rows of data', () => {
       it('transforms all the rows to CSV', () => {
-        const result = ConvertToCSVService.go({ headers: billingChargeCategoriesColumnInfo, rows: [billingChargeCategoryRow, billingChargeCategoryRow] })
+        const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [billingChargeCategoryRow, billingChargeCategoryRow])
         const resultLines = result.split(/\r?\n/)
 
         expect(resultLines[1]).to.equal(csvValues.join(','))
@@ -115,7 +115,7 @@ describe('Convert to CSV service', () => {
   describe('when not given data to convert', () => {
     describe('that has no rows of data', () => {
       it('exports the table to CSV without any rows', () => {
-        const result = ConvertToCSVService.go({ headers: billingChargeCategoriesColumnInfo })
+        const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [])
 
         expect(result).to.equal(csvHeaders.toString())
       })

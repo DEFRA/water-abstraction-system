@@ -48,6 +48,7 @@ const csvValues = [
 ]
 
 describe('Export data files service', () => {
+  const tableName = 'billing_charge_categories'
   let notifierStub
 
   beforeEach(() => {
@@ -64,7 +65,7 @@ describe('Export data files service', () => {
 
   describe('when successful', () => {
     beforeEach(() => {
-      const fileName = 'billing_charge_categories_table_export.csv'
+      const fileName = 'billing_charge_categories.csv'
       const __dirname = '/tmp/'
       filePath = path.join(__dirname, fileName)
     })
@@ -77,21 +78,21 @@ describe('Export data files service', () => {
     it('should write the CSV data to a file and return true', async () => {
       const data = csvHeader.join(',') + '\n' + csvValues.join(',')
 
-      const returnedResult = await ExportDataFilesService.go(data)
+      const returnedResult = await ExportDataFilesService.go(data, tableName)
 
       expect(fs.existsSync(filePath)).to.equal(true)
       expect(returnedResult).to.equal(true)
-      expect(notifierStub.omg.calledWith('Billing Charge Categories Table exported successfully')).to.be.true()
+      expect(notifierStub.omg.calledWith('billing_charge_categories exported successfully')).to.be.true()
     })
   })
 
   describe('when unsuccessful', () => {
     it('should handle errors and return false', async () => {
       const data = null
-      const result = await ExportDataFilesService.go(data)
+      const result = await ExportDataFilesService.go(data, tableName)
 
       expect(result).to.equal(false)
-      expect(notifierStub.omfg.calledWith('Billing Charge Categories Table Export request errored')).to.be.true()
+      expect(notifierStub.omfg.calledWith('billing_charge_categories Export request errored')).to.be.true()
     })
   })
 })

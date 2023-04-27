@@ -8,14 +8,15 @@
 const { db } = require('../../../db/db.js')
 
 /**
- * Retrieves headers and rows from the table in the db, and returns them as an object
+ * Retrieves headers, rows and the table name from the table in the db, and returns them as an object
  *
- * @returns {Object} The headers and rows from the table
+ * @returns {Object} The headers, rows and table name from the table
  */
 async function go () {
   const data = {
     headers: await _headers(),
-    rows: await _rows()
+    rows: await _rows(),
+    tableName: 'billing_charge_categories'
   }
 
   return data

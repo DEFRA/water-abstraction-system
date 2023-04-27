@@ -11,20 +11,21 @@ const fs = require('fs').promises
 const os = require('os')
 
 /**
- * Converts the provided data to CSV format using the ConvertToCsvService and writes it to a file
+ * Writes the converted data to a csv file
  *
- * @param {Object} data The data to be converted to CSV and written to the file
+ * @param {String} tableConvertedToCsv The converted data to be written to the csv file
+ * @param {String} tableName The name of the table
  *
  * @returns {Boolean} True if the file is written successfully and false if not
  */
-async function go (data) {
+async function go (tableConvertedToCsv, tableName) {
   try {
-    await fs.writeFile(_filenameWithPath('billing_charge_categories_table_export.csv'), data)
-    global.GlobalNotifier.omg('Billing Charge Categories Table exported successfully')
+    await fs.writeFile(_filenameWithPath(tableName), tableConvertedToCsv)
+    global.GlobalNotifier.omg(`${tableName} exported successfully`)
 
     return true
   } catch (error) {
-    global.GlobalNotifier.omfg('Billing Charge Categories Table Export request errored', error)
+    global.GlobalNotifier.omfg(`${tableName} Export request errored`, error)
 
     return false
   }
@@ -33,17 +34,17 @@ async function go (data) {
 /**
  * Returns a file path by joining the temp directory path with the given file name
  *
- * @param {String} name The name the file will be saved under
+ * @param {String} tableName The name the of the table
  *
- * @returns {String} The file path to save the file under
+ * @returns {String} The full file path
  */
-function _filenameWithPath (name) {
+function _filenameWithPath (tableName) {
   const temporaryFilePath = os.tmpdir()
 
   return path.normalize(
     path.format({
       dir: temporaryFilePath,
-      name
+      name: `${tableName}.csv`
     })
   )
 }

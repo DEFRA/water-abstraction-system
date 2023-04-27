@@ -8,18 +8,19 @@
 /**
  * Converts data to a CSV formatted string
  *
- * @param {Object} data An object containing the tables column names and the tables data
+ * @param {String[]} headers An array containing the column names
+ * @param {[[*]]} rows An array of arrays each representing a row from the table
  *
  * @returns {String} A CSV formatted string
  */
-function go (data) {
-  const transformedHeaders = _transformDataToCSV([data.headers])[0]
+function go (headers, rows) {
+  const transformedHeaders = _transformDataToCSV([headers])[0]
 
-  if (!data.rows) {
+  if (!rows) {
     return transformedHeaders
   }
 
-  const transformedRows = _transformDataToCSV(data.rows)
+  const transformedRows = _transformDataToCSV(rows)
   const dataToCSV = _joinHeaderAndRows(transformedHeaders, transformedRows)
 
   return dataToCSV
@@ -28,7 +29,7 @@ function go (data) {
 /**
  * Transforms each row to CSV format and joins the values with commas
  *
- * @param {Object} rows The data to be transformed to CSV
+ * @param {[*]} rows The data to be transformed to CSV
  *
  * @returns {String[]} An array of transformed data
  */
