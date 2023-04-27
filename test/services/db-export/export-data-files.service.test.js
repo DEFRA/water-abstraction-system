@@ -64,7 +64,7 @@ describe('Export data files service', () => {
 
   describe('when successful', () => {
     beforeEach(() => {
-      const fileName = 'Billing Charge Categories Table Export.csv'
+      const fileName = 'billing_charge_categories_table_export.csv'
       const __dirname = '/tmp/'
       filePath = path.join(__dirname, fileName)
     })
