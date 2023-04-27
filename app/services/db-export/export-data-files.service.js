@@ -1,14 +1,14 @@
 'use strict'
 
-const path = require('path')
-
-const fs = require('fs').promises
-const os = require('os')
-
 /**
  * Export converted data to a temporary file
  * @module ExportDataFilesService
 */
+
+const path = require('path')
+
+const fs = require('fs').promises
+const os = require('os')
 
 /**
  * Converts the provided data to CSV format using the ConvertToCsvService and writes it to a file

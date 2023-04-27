@@ -30,7 +30,7 @@ function go (data) {
  *
  * @param {Object} rows The data to be transformed to CSV
  *
- * @returns {Array} An array of transformed data
+ * @returns {String[]} An array of transformed data
  */
 function _transformDataToCSV (rows) {
   const transformedRows = []
@@ -50,7 +50,7 @@ function _transformDataToCSV (rows) {
  *
  * @param {*} value The value to transform
  *
- * @returns {String} The value transformed to CSV format
+ * @returns {*} The value transformed to CSV format
  */
 function _transformValueToCSV (value) {
   // Return empty string for undefined or null values
