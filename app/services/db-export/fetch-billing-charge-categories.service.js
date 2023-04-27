@@ -2,23 +2,44 @@
 
 /**
  * Fetch all records from the water.billing_charge_categories table
- * @module BillingChargeCategoriesTableExportService
+ * @module FetchBillingChargeCategoriesService
  */
 
 const { db } = require('../../../db/db.js')
 
 /**
- * Generates an array of the table billing_charge_categories
+ * Retrieves headers, rows and the table name from the table in the db, and returns them as an object
  *
- * This is a dump of running 'SELECT * FROM water.billing_charge_categories' for the database.
- * Its part of the full db schema export work.
- *
- * @returns An array of objects containing the data from the table.
+ * @returns {Object} The headers, rows and table name from the table
  */
 async function go () {
-  return db
+  const data = {
+    headers: await _headers(),
+    rows: await _rows(),
+    tableName: 'billing_charge_categories'
+  }
+
+  return data
+}
+
+async function _rows () {
+  // Retrieves all rows from the water.billingChargeCategories table
+  const rows = await db
+    .withSchema('water')
     .select('*')
-    .from('water.billing_charge_categories')
+    .from('billingChargeCategories')
+
+  // We are only interested in the values from the table
+  return rows.map((row) => {
+    return Object.values(row)
+  })
+}
+
+async function _headers () {
+  const columns = await db('billingChargeCategories').withSchema('water').columnInfo()
+
+  // We are only interested in the column names
+  return Object.keys(columns)
 }
 
 module.exports = {
