@@ -6,77 +6,82 @@
  */
 
 /**
- * Converts data to a CSV- formatted string.
- * @param {Object[]} - An array of two items containing the column names and objects representing the tables data.
- * @returns {Promise<String>} - A promise that resolves with the CSV- formatted string.
+ * Converts data to a CSV formatted string
+ *
+ * @param {Object} data An object containing the tables column names and the tables data
+ *
+ * @returns {String} A CSV formatted string
  */
-async function go (data) {
-  const headerRows = data[0]
-  const dataRows = data[1]
+function go (data) {
+  const transformedHeaders = _transformDataToCSV(data.headers)
 
-  // Returns just the column names formatted to CSV if there are no rows of data
-  if (!dataRows) {
-    return _generateHeader(headerRows)
+  if (!data.rows) {
+    return transformedHeaders
   }
 
-  // Transform the table data to an array of arrays with only the values
-  const transformedValues = dataRows.map((row) => {
-    return Object.values(row)
-  })
+  const transformedRows = _transformDataToCSV(data.rows)
+  const dataToCSV = _joinHeaderAndRows(transformedHeaders, transformedRows)
 
-  // Transform each value to CSV format and join the values in each row with commas
-  const csvRows = transformedValues.map((row) => {
-    return row.map((value) => {
-      return transformValueToCsv(value)
+  return dataToCSV
+}
+
+/**
+ * Transforms each row to CSV format and joins the values with commas
+ *
+ * @param {Object} data The data to be transformed to CSV
+ *
+ * @returns {Array} An array of transformed data
+ */
+function _transformDataToCSV (data) {
+  if (Array.isArray(data[0])) {
+    return data.map((row) => {
+      return row.map((value) => {
+        return _transformValueToCSV(value)
+      }).join(',')
+    })
+  } else {
+    return data.map((value) => {
+      return _transformValueToCSV(value)
     }).join(',')
-  })
-
-  // Join the header row and the CSV rows with line breaks and return the CSV-formatted string
-  return `${_generateHeader(headerRows)}\n${csvRows.join('\n')}`
+  }
 }
 
 /**
  * Transform a value to CSV format
- * @param {*} value - The value to transform
- * @returns {String} - The value transformed to CSV format
+ *
+ * @param {*} value The value to transform
+ *
+ * @returns {String} The value transformed to CSV format
  */
-function transformValueToCsv (value) {
-  // Returns an empty string for undefined or null values
+function _transformValueToCSV (value) {
+  // Return empty string for undefined or null values
   if (!value && value !== false) {
     return ''
   }
 
-  // Handles date objects to return them in a timestamp format
+  // Return ISO date if value is a date object
   if (value instanceof Date) {
     return value.toISOString()
   }
 
-  // Handles numbers and booleans returning them in the same format
+  // Return integers and booleans as they are (not converted to a string)
   if (Number.isInteger(value) || typeof value === 'boolean') {
     return `${value}`
   }
 
-  // Handle objects by serializing them to JSON
+  // Return objects by serializing them to JSON
   if (typeof value === 'object') {
     return JSON.stringify(value)
   }
 
-  // Handle strings by quoting them and escaping any double quotes
+  // Return strings by quoting them and escaping any double quotes
   const stringValue = value.toString().replace(/"/g, '""')
+
   return `"${stringValue}"`
 }
 
-/**
- * Generates a header formatted to CSV for the column names.
- * @param {Object} columnNames - An object containing the column names.
- * @returns {String} - A string representing the formatted header for the column names
- */
-function _generateHeader (columnNames) {
-  const columnNameArray = Object.keys(columnNames)
-  const formattedColumnNames = columnNameArray.map((column) => {
-    return `"${column}"`
-  })
-  return formattedColumnNames.join(',')
+function _joinHeaderAndRows (header, rows) {
+  return [header, ...rows].join('\n')
 }
 
 module.exports = {
