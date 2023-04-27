@@ -19,7 +19,7 @@ const os = require('os')
  */
 async function go (data) {
   try {
-    await fs.writeFile(_filenameWithPath('Billing Charge Categories Table Export.csv'), data)
+    await fs.writeFile(_filenameWithPath('billing_charge_categories_table_export.csv'), data)
     global.GlobalNotifier.omg('Billing Charge Categories Table exported successfully')
 
     return true
