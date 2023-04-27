@@ -5,8 +5,10 @@
  * @module DataController
  */
 
-async function tearDown (request, h) {
-  const result = 'Hi, I am the Tear Down endpoint'
+const TearDownService = require('../../services/data/tear-down.service.js')
+
+async function tearDown (_request, h) {
+  const result = await TearDownService.go()
 
   return h.response(result).code(200)
 }
