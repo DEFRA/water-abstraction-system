@@ -117,7 +117,7 @@ describe('Determine charge period service', () => {
       })
     })
 
-    describe('and the licence start date is inside the financial period', () => {
+    describe('and the licence start date is after the charge versions and inside the financial period', () => {
       beforeEach(() => {
         chargeVersion.licence = { startDate: new Date('2022-08-31') }
       })
