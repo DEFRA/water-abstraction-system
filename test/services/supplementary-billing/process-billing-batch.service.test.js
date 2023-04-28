@@ -99,7 +99,38 @@ describe('Process billing batch service', () => {
         })
       })
 
-      describe('but none of them are billable (billable days calculated as 0', () => {
+      describe('and some of them are billable', () => {
+        beforeEach(async () => {
+          const { chargeVersionId } = await ChargeVersionHelper.add(
+            {
+              changeReasonId: changeReason.changeReasonId,
+              invoiceAccountId: invoiceAccount.invoiceAccountId,
+              startDate: new Date(2022, 7, 1, 9),
+              licenceId: licence.licenceId
+            }
+          )
+          const { chargeElementId } = await ChargeElementHelper.add(
+            { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+          )
+          await ChargePurposeHelper.add({
+            chargeElementId,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3
+          })
+        })
+
+        it('sets the Billing Batch status to processing', async () => {
+          await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+          const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+          expect(result.status).to.equal('processing')
+        })
+      })
+
+      describe('but none of them are billable (billable days calculated as 0)', () => {
         beforeEach(async () => {
           const { chargeVersionId } = await ChargeVersionHelper.add(
             {
