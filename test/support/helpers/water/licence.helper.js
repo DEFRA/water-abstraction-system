@@ -13,6 +13,8 @@ const LicenceModel = require('../../../../app/models/water/licence.model.js')
  *
  * - `licenceRef` - 01/123
  * - `regionId` - bd114474-790f-4470-8ba4-7b0cc9c225d7
+ * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
+ * - `startDate` - new Date('2022-01-01')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -38,7 +40,8 @@ function defaults (data = {}) {
   const defaults = {
     licenceRef: '01/123',
     regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7',
-    regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
+    regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },
+    startDate: new Date('2022-01-01')
   }
 
   return {
