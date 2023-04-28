@@ -249,7 +249,7 @@ describe('Fetch Charge Versions service', () => {
           // This creates an SROC charge version with a start date before the billing period. This would have been
           // picked up by a previous bill run
           const alcsChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date(2022, 2, 31), licenceId } // 2022-03-01 - Months are zero indexed :-)
+            { startDate: new Date('2022-03-01'), licenceId }
           )
           testRecords = [alcsChargeVersion]
         })
@@ -276,7 +276,7 @@ describe('Fetch Charge Versions service', () => {
           // This creates an SROC charge version with a start date after the billing period. This will be picked in
           // next years bill runs
           const alcsChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date(2023, 3, 1), licenceId } // 2023-04-01 - Months are zero indexed :-)
+            { startDate: new Date('2023-04-01'), licenceId }
           )
           testRecords = [alcsChargeVersion]
         })
