@@ -59,7 +59,11 @@ async function _fetch (regionId, billingPeriod) {
         'licenceRef',
         'isWaterUndertaker',
         ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
-        ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
+        ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea'),
+        'startDate',
+        'expiredDate',
+        'lapsedDate',
+        'revokedDate'
       ])
     })
     .withGraphFetched('licence.region')
