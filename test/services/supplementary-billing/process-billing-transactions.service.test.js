@@ -116,8 +116,8 @@ describe.only('Process billing batch service', () => {
         describe('are empty', () => {
           beforeEach(() => {
             previousTransactions = [
-              _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
-              _generatePreviousTransaction('5.11.2', 265, 'I_WILL_BE_REMOVED_2')
+              _generatePreviousTransaction('4.10.1', 365, 'I_WILL_NOT_BE_REMOVED_1'),
+              _generatePreviousTransaction('5.11.2', 265, 'I_WILL_NOT_BE_REMOVED_2')
             ]
 
             Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
@@ -132,10 +132,8 @@ describe.only('Process billing batch service', () => {
             )
 
             expect(result).to.have.length(2)
-
-            // NOTE: We know the text says 'I_WILL_BE_REMOVED' but in this scenario they won't be!
-            expect(result[0].purposes).to.equal('I_WILL_BE_REMOVED_1')
-            expect(result[1].purposes).to.equal('I_WILL_BE_REMOVED_2')
+            expect(result[0].purposes).to.equal('I_WILL_NOT_BE_REMOVED_1')
+            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED_2')
           })
         })
       })
