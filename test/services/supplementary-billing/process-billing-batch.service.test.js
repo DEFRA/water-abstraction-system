@@ -132,43 +132,77 @@ describe('Process billing batch service', () => {
         })
       })
 
-      describe('but none of them are billable (billable days calculated as 0)', () => {
-        beforeEach(async () => {
-          const { chargeVersionId } = await ChargeVersionHelper.add(
-            {
-              changeReasonId: changeReason.changeReasonId,
-              invoiceAccountId: invoiceAccount.invoiceAccountId,
-              startDate: new Date(2022, 7, 1, 9),
-              licenceId: licence.licenceId
-            }
-          )
-          const { chargeElementId } = await ChargeElementHelper.add(
-            { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
-          )
-          await ChargePurposeHelper.add({
-            chargeElementId,
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 5
+      describe('but none of them are billable', () => {
+        describe('because the billable days calculated as 0', () => {
+          beforeEach(async () => {
+            const { chargeVersionId } = await ChargeVersionHelper.add(
+              {
+                changeReasonId: changeReason.changeReasonId,
+                invoiceAccountId: invoiceAccount.invoiceAccountId,
+                startDate: new Date(2022, 7, 1, 9),
+                licenceId: licence.licenceId
+              }
+            )
+            const { chargeElementId } = await ChargeElementHelper.add(
+              { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+            )
+            await ChargePurposeHelper.add({
+              chargeElementId,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 5
+            })
+          })
+
+          describe('and there are no previous billed transactions', () => {
+            it('sets the Billing Batch status to empty', async () => {
+              await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+              const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+              expect(result.status).to.equal('empty')
+            })
+
+            it('sets the includeInSrocSupplementaryBilling flag to false', async () => {
+              await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+
+              const result = await LicenceModel.query().findById(licence.licenceId)
+
+              expect(result.includeInSrocSupplementaryBilling).to.equal(false)
+            })
           })
         })
 
-        describe('and there are no previous billed transactions', () => {
+        describe('because the charge version status is `superseded`', () => {
+          beforeEach(async () => {
+            const { chargeVersionId } = await ChargeVersionHelper.add(
+              {
+                changeReasonId: changeReason.changeReasonId,
+                invoiceAccountId: invoiceAccount.invoiceAccountId,
+                startDate: new Date(2022, 7, 1, 9),
+                licenceId: licence.licenceId,
+                status: 'superseded'
+              }
+            )
+            const { chargeElementId } = await ChargeElementHelper.add(
+              { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+            )
+            await ChargePurposeHelper.add({
+              chargeElementId,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3
+            })
+          })
+
           it('sets the Billing Batch status to empty', async () => {
             await ProcessBillingBatchService.go(billingBatch, billingPeriod)
 
             const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
             expect(result.status).to.equal('empty')
-          })
-
-          it('sets the includeInSrocSupplementaryBilling flag to false', async () => {
-            await ProcessBillingBatchService.go(billingBatch, billingPeriod)
-
-            const result = await LicenceModel.query().findById(licence.licenceId)
-
-            expect(result.includeInSrocSupplementaryBilling).to.equal(false)
           })
         })
       })

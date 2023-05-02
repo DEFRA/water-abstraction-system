@@ -77,7 +77,7 @@ async function go (billingBatch, billingPeriod) {
       // Else the charge version has been 'superseded' (REPLACED). So, we won't be adding a new debit line to the bill
       // for it. But we still need to process it to understand what, if anything, needs to be credited back or if our
       // calculated debit line has already been billed.
-      if (chargeVersion.status === 'current') {
+      if (chargeVersion.status === 'current') { // NOT TESTED BUT TEST THIS -- WE WON'T WANT TO SEE CALCULATED TRANSACTIONS
         const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
         currentBillingData.calculatedTransactions.push(...calculatedTransactions)
       }
