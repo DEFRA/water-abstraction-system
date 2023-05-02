@@ -14,7 +14,7 @@ const FetchPreviousBillingTransactionsService = require('../../../app/services/s
 // Thing under test
 const ProcessBillingTransactionsService = require('../../../app/services/supplementary-billing/process-billing-transactions.service.js')
 
-describe.only('Process billing batch service', () => {
+describe('Process billing batch service', () => {
   const billingInvoice = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
   const billingInvoiceLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
 
@@ -217,6 +217,213 @@ describe.only('Process billing batch service', () => {
     describe('when the billable days differ', () => {
       beforeEach(() => {
         const previousTransactions = [_generatePreviousTransaction('4.10.1', 5, 'PREVIOUS_TRANSACTION')]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the abatement agreement (section 126) differs', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { section126Factor: 0.5 })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the two-part tariff agreement (section 127) differs', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { section127Agreement: true })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the canal and river trust agreement (section 130) differs', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { section130Agreement: true })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the aggregate differs', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { aggregateFactor: 0.5 })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the charge adjustment differs', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { adjustmentFactor: 0.5 })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the winter discount differs', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isWinterOnly: true })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when if it is a supported source differs (additional charge)', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isSupportedSource: true })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the supported source name differs (additional charge)', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { supportedSourceName: 'source name' })
+        ]
+
+        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+      })
+
+      it('does not match the transactions', async () => {
+        const result = await ProcessBillingTransactionsService.go(
+          calculatedTransactions,
+          billingInvoice,
+          billingInvoiceLicence,
+          billingPeriod
+        )
+
+        expect(result).to.have.length(2)
+        expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION')
+        expect(result[1].purposes).to.equal('PREVIOUS_TRANSACTION')
+      })
+    })
+
+    describe('when the water company flag differs (additional charge)', () => {
+      beforeEach(() => {
+        const previousTransactions = [
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isWaterCompanyCharge: true })
+        ]
 
         Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
       })
