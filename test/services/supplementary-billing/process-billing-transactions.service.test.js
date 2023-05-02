@@ -52,7 +52,7 @@ describe.only('Process billing batch service', () => {
             Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
           })
 
-          it('returns the uncanceled calculated transactions', async () => {
+          it('returns the matched calculated transactions', async () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
               billingInvoice,
@@ -123,7 +123,9 @@ describe.only('Process billing batch service', () => {
             Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
           })
 
-          it('returns the uncanceled calculated and reversed transactions', async () => {
+
+
+          it('returns the unmatched calculated transactions and previous transactions (reversed)', async () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
               billingInvoice,
@@ -134,6 +136,7 @@ describe.only('Process billing batch service', () => {
             expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
             expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
+            expect(result[1].isCredit).to.be.true()
           })
         })
       })
