@@ -252,18 +252,16 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion, billingB
     const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
     const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
-    const transactions = []
-    for (const chargeElement of chargeVersion.chargeElements) {
-      const result = GenerateBillingTransactionsService.go(
+    // We use flatMap as GenerateBillingTransactionsService returns an array of transactions
+    const transactions = chargeVersion.chargeElements.flatMap((chargeElement) => {
+      return GenerateBillingTransactionsService.go(
         chargeElement,
         billingPeriod,
         chargePeriod,
         isNewLicence,
         isWaterUndertaker
       )
-      result.billingInvoiceLicenceId = billingInvoiceLicence.billingInvoiceLicenceId
-      transactions.push(...result)
-    }
+    })
 
     return transactions
   } catch (error) {
