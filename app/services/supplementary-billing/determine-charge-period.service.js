@@ -27,12 +27,25 @@ function go (chargeVersion, financialYearEnding) {
     throw new Error(`Charge version is outside billing period ${financialYearEnding}`)
   }
 
-  const chargeVersionStartDate = chargeVersion.startDate
-  const latestStartDateTimestamp = Math.max(financialYearStartDate, chargeVersionStartDate)
+  const latestStartDateTimestamp = Math.max(
+    financialYearStartDate,
+    chargeVersion.startDate,
+    chargeVersion.licence.startDate
+  )
 
-  // If the charge version has no end date then use the financial year end date instead
+  // If the end date is null then use the financial year end date instead as Math.min() will count nulls as 0
   const chargeVersionEndDate = chargeVersion.endDate || financialYearEndDate
-  const earliestEndDateTimestamp = Math.min(financialYearEndDate, chargeVersionEndDate)
+  const licenceExpiredDate = chargeVersion.licence.expiredDate || financialYearEndDate
+  const licencelapsedDate = chargeVersion.licence.lapsedDate || financialYearEndDate
+  const licencerevokedDate = chargeVersion.licence.revokedDate || financialYearEndDate
+
+  const earliestEndDateTimestamp = Math.min(
+    financialYearEndDate,
+    chargeVersionEndDate,
+    licenceExpiredDate,
+    licencelapsedDate,
+    licencerevokedDate
+  )
 
   return {
     startDate: new Date(latestStartDateTimestamp),

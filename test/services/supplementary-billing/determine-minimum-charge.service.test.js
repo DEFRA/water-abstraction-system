@@ -32,6 +32,7 @@ describe('Determine minimum charge service', () => {
           changeReasonId: changeReason.changeReasonId
         })
         chargeVersion.changeReason = changeReason
+        chargeVersion.licence = { startDate: new Date('2022-01-01') }
       })
 
       it('returns true', async () => {
@@ -49,6 +50,7 @@ describe('Determine minimum charge service', () => {
           changeReasonId: changeReason.changeReasonId
         })
         chargeVersion.changeReason = changeReason
+        chargeVersion.licence = { startDate: new Date('2022-01-01') }
       })
 
       it('returns false', async () => {
@@ -67,6 +69,7 @@ describe('Determine minimum charge service', () => {
         changeReasonId: changeReason.changeReasonId
       })
       chargeVersion.changeReason = changeReason
+      chargeVersion.licence = { startDate: new Date('2022-01-01') }
     })
 
     it('returns false', async () => {
