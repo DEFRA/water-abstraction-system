@@ -65,31 +65,6 @@ describe.only('Process billing batch service', () => {
           })
         })
 
-        describe('partially match the previous transactions from the last billing batch', () => {
-          beforeEach(() => {
-            previousTransactions = [
-              _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
-              _generatePreviousTransaction('5.11.2', 265, 'I_WILL_BE_REMOVED_2'),
-              _generatePreviousTransaction('9.9.9', 180, 'I_WILL_NOT_BE_REMOVED')
-            ]
-
-            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
-          })
-
-          it('returns the uncanceled calculated and reversed transactions', async () => {
-            const result = await ProcessBillingTransactionsService.go(
-              calculatedTransactions,
-              billingInvoice,
-              billingInvoiceLicence,
-              billingPeriod
-            )
-
-            expect(result).to.have.length(2)
-            expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
-            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
-          })
-        })
-
         describe('are cancelled out by the previous transactions from the last billing batch', () => {
           beforeEach(() => {
             previousTransactions = [
@@ -134,6 +109,31 @@ describe.only('Process billing batch service', () => {
             expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal('I_WILL_NOT_BE_REMOVED_1')
             expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED_2')
+          })
+        })
+
+        describe('partially match the previous transactions from the last billing batch', () => {
+          beforeEach(() => {
+            previousTransactions = [
+              _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
+              _generatePreviousTransaction('5.11.2', 265, 'I_WILL_BE_REMOVED_2'),
+              _generatePreviousTransaction('9.9.9', 180, 'I_WILL_NOT_BE_REMOVED')
+            ]
+
+            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+          })
+
+          it('returns the uncanceled calculated and reversed transactions', async () => {
+            const result = await ProcessBillingTransactionsService.go(
+              calculatedTransactions,
+              billingInvoice,
+              billingInvoiceLicence,
+              billingPeriod
+            )
+
+            expect(result).to.have.length(2)
+            expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
+            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
           })
         })
       })
