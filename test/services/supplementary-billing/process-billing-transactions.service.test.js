@@ -42,7 +42,7 @@ describe.only('Process billing batch service', () => {
       describe('and the calculated transactions provided', () => {
         let previousTransactions
 
-        describe('completely cancel out the previous transactions from the last billing batch', () => {
+        describe('match all the previous transactions from the last billing batch', () => {
           beforeEach(() => {
             previousTransactions = [
               _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
@@ -65,7 +65,7 @@ describe.only('Process billing batch service', () => {
           })
         })
 
-        describe('partially cancel out the previous transactions from the last billing batch', () => {
+        describe('partially match the previous transactions from the last billing batch', () => {
           beforeEach(() => {
             previousTransactions = [
               _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
