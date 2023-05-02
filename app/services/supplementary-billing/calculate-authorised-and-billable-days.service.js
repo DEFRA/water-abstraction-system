@@ -61,10 +61,10 @@ function go (chargePeriod, billingPeriod, chargeElement) {
   const authorisedAbstractionPeriods = []
   const billableAbstractionPeriods = []
 
-  for (const chargePurpose of chargePurposes) {
+  chargePurposes.forEach((chargePurpose) => {
     authorisedAbstractionPeriods.push(..._abstractionPeriods(billingPeriod, chargePurpose))
     billableAbstractionPeriods.push(..._abstractionPeriods(chargePeriod, chargePurpose))
-  }
+  })
 
   return {
     authorisedDays: _consolidateAndCalculate(billingPeriod, authorisedAbstractionPeriods),
