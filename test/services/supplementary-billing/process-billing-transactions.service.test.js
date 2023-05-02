@@ -161,7 +161,7 @@ describe.only('Process billing batch service', () => {
     })
   })
 
-  describe.only('the service matches calculated to previous transactions', () => {
+  describe('the service matches calculated to previous transactions', () => {
     let calculatedTransactions
 
     beforeEach(() => {
@@ -292,6 +292,15 @@ function _generatePreviousTransaction (chargeCategoryCode, billableDays, testRef
     chargeType: 'standard',
     chargeCategoryCode,
     billableDays,
+    section126Factor: 1,
+    section127Agreement: false,
+    section130Agreement: false,
+    aggregateFactor: 1,
+    adjustmentFactor: 1,
+    isWinterOnly: false,
+    isSupportedSource: false,
+    supportedSourceName: null,
+    isWaterCompanyCharge: false,
     purposes: [testReference]
   }
 
