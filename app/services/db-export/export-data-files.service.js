@@ -23,7 +23,7 @@ async function go (tableConvertedToCsv, tableName) {
     await fs.writeFile(_filenameWithPath(tableName), tableConvertedToCsv)
     global.GlobalNotifier.omg(`${tableName} exported successfully`)
 
-    return true
+    return _filenameWithPath(tableName)
   } catch (error) {
     global.GlobalNotifier.omfg(`${tableName} Export request errored`, error)
 
