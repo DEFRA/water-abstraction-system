@@ -164,7 +164,11 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
     // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
     // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
     // This is why we are only passing through the first billing period; we know there is only one!
-    return await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
+    const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
+
+    // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillingBatchService if it
+    // fails
+    return chargeVersions
   } catch (error) {
     HandleErroredBillingBatchService.go(
       billingBatch.billingBatchId,
