@@ -19,11 +19,13 @@ const os = require('os')
  * @returns {Boolean} True if the file is written successfully and false if not
  */
 async function go (tableConvertedToCsv, tableName) {
+  const filePath = _filenameWithPath(tableName)
+
   try {
-    await fs.writeFile(_filenameWithPath(tableName), tableConvertedToCsv)
+    await fs.writeFile(filePath, tableConvertedToCsv)
     global.GlobalNotifier.omg(`${tableName} exported successfully`)
 
-    return _filenameWithPath(tableName)
+    return filePath
   } catch (error) {
     global.GlobalNotifier.omfg(`${tableName} Export request errored`, error)
 

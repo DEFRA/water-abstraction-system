@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Given the path of a file to compress it
+ * Compresses a file at a specified path using gzip
  * @module CompressFilesService
  */
 
@@ -33,9 +33,9 @@ async function go (filePath) {
 async function compressFile (filePath) {
   if (fs.existsSync(filePath)) {
     const readStream = fs.createReadStream(filePath)
-    const newFileName = filePath + '.gz'
-    const writeStream = fs.createWriteStream(newFileName)
+    const writeStream = fs.createWriteStream(`${filePath}.gz`)
     const compress = zlib.createGzip()
+
     const pipe = promisify(pipeline)
 
     await pipe(readStream, compress, writeStream)
