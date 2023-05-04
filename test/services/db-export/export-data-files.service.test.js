@@ -81,7 +81,7 @@ describe('Export data files service', () => {
       const returnedResult = await ExportDataFilesService.go(data, tableName)
 
       expect(fs.existsSync(filePath)).to.equal(true)
-      expect(returnedResult).to.equal(true)
+      expect(returnedResult).to.equal('/tmp/billing_charge_categories.csv')
       expect(notifierStub.omg.calledWith('billing_charge_categories exported successfully')).to.be.true()
     })
   })
