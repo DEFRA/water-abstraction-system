@@ -5,7 +5,7 @@
  * @module CompressFilesService
  */
 
-const fs = require('fs')
+const fs = require('node:fs')
 const { pipeline } = require('node:stream')
 const { promisify } = require('node:util')
 const zlib = require('node:zlib')
@@ -18,30 +18,26 @@ const zlib = require('node:zlib')
  * @returns {Boolean} True if the file is compressed successfully and false if not
  */
 async function go (filePath) {
-  try {
-    await compressFile(filePath)
-    global.GlobalNotifier.omg(`${filePath} successfully compressed to gzip.`)
-
-    return true
-  } catch (error) {
+  if (!fs.existsSync(filePath)) {
     global.GlobalNotifier.omfg(`ERROR: ${filePath} did not successfully compress to gzip.`)
 
     return false
   }
+
+  await _compressFile(filePath)
+  global.GlobalNotifier.omg(`${filePath} successfully compressed to gzip.`)
+
+  return true
 }
 
-async function compressFile (filePath) {
-  if (fs.existsSync(filePath)) {
-    const readStream = fs.createReadStream(filePath)
-    const writeStream = fs.createWriteStream(`${filePath}.gz`)
-    const compress = zlib.createGzip()
+async function _compressFile (filePath) {
+  const readStream = fs.createReadStream(filePath)
+  const writeStream = fs.createWriteStream(`${filePath}.gz`)
+  const compress = zlib.createGzip()
 
-    const pipe = promisify(pipeline)
+  const pipe = promisify(pipeline)
 
-    await pipe(readStream, compress, writeStream)
-  } else {
-    throw new Error('File to compress does not exist')
-  }
+  await pipe(readStream, compress, writeStream)
 }
 
 module.exports = {
