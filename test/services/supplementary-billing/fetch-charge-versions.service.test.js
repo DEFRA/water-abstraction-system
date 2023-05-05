@@ -55,7 +55,7 @@ describe('Fetch Charge Versions service', () => {
         includeInSrocSupplementaryBilling: true,
         includeInSupplementaryBilling: 'yes'
       })
-      const licenceId = licence.licenceId
+      const { licenceId } = licence
       changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
 
       // This creates a 'current' SROC charge version
