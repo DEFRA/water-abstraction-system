@@ -50,6 +50,7 @@ function defaults (data = {}) {
     isCredit: false,
     loss: 'medium',
     season: 'all year',
+    section130Agreement: 'false',
     scheme: 'sroc',
     source: 'non-tidal',
     volume: 11
