@@ -47,6 +47,7 @@ async function _fetch (regionId, billingPeriod) {
       ChargeVersionWorkflow.query()
         .select(1)
         .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
+        .whereNull('chargeVersionWorkflows.dateDeleted')
     )
     .orderBy([
       { column: 'chargeVersions.invoiceAccountId' },
