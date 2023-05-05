@@ -41,6 +41,7 @@ describe('Fetch Charge Versions service', () => {
     let chargeElement
     let chargePurpose
     let changeReason
+    let licence
 
     beforeEach(async () => {
       billingPeriod = {
@@ -48,12 +49,13 @@ describe('Fetch Charge Versions service', () => {
         endDate: new Date('2023-03-31')
       }
 
-      const { licenceId } = await LicenceHelper.add({
+      licence = await LicenceHelper.add({
         regionId,
         isWaterUndertaker: true,
         includeInSrocSupplementaryBilling: true,
         includeInSupplementaryBilling: 'yes'
       })
+      const licenceId = licence.licenceId
       changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
 
       // This creates a 'current' SROC charge version
@@ -84,6 +86,20 @@ describe('Fetch Charge Versions service', () => {
 
       chargePurpose = await ChargePurposeHelper.add({
         chargeElementId: chargeElement.chargeElementId
+      })
+    })
+
+    describe('including those linked to soft-deleted workflow records', () => {
+      beforeEach(async () => {
+        await ChargeVersionWorkflowHelper.add({ licenceId: licence.licenceId, dateDeleted: new Date('2022-04-01') })
+      })
+
+      it('returns the SROC charge versions that are applicable', async () => {
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(result).to.have.length(2)
+        expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+        expect(result[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
       })
     })
 
