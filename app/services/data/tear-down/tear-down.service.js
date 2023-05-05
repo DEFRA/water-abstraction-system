@@ -5,10 +5,10 @@
  * @module TearDownService
  */
 
-const { db } = require('../../../db/db.js')
+const { db } = require('../../../../db/db.js')
 
 async function go () {
-  // water schema
+  // billing data
   await _deleteBilling()
   await _deleteGaugingStations()
   await _deleteTestData('water.chargeElements')

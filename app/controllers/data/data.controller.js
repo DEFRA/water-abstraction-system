@@ -5,7 +5,7 @@
  * @module DataController
  */
 
-const TearDownService = require('../../services/data/tear-down.service.js')
+const TearDownService = require('../../services/data/tear-down/tear-down.service.js')
 
 async function tearDown (_request, h) {
   const result = await TearDownService.go()
