@@ -88,7 +88,7 @@ async function go (billingBatch, billingPeriod) {
 
 function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, billingInvoiceLicence, currentBillingData) {
   // If the charge version status isn't 'current' then we don't need to add any new debit lines to the bill
-  if (!chargeVersion.status === 'current') {
+  if (chargeVersion.status !== 'current') {
     return
   }
 
