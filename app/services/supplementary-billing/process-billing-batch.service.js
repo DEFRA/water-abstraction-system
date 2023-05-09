@@ -19,6 +19,7 @@ const GenerateBillingTransactionsService = require('./generate-billing-transacti
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
+const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const LicenceModel = require('../../models/water/licence.model.js')
 const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
@@ -50,13 +51,11 @@ async function go (billingBatch, billingPeriod) {
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
 
-    const billingInvoiceData = await _fetchAndGenerateInvoiceData(
-      billingBatch.billingBatchId,
-      billingPeriod, chargeVersions
-    )
+    const invoiceAccounts = await _fetchInvoiceData(chargeVersions)
 
     for (const chargeVersion of chargeVersions) {
-      const billingInvoice = _retrieveInvoiceData(billingInvoiceData, chargeVersion)
+      const billingInvoice = _generateInvoiceData(invoiceAccounts, chargeVersion, billingBatchId, billingPeriod)
+
       const billingInvoiceLicence = _generateInvoiceLicenceData(
         currentBillingData,
         billingBatch,
@@ -92,11 +91,22 @@ async function go (billingBatch, billingPeriod) {
   }
 }
 
-function _retrieveInvoiceData (billingInvoices, chargeVersion) {
-  return billingInvoices.find(billingInvoice => billingInvoice.invoiceAccountId === chargeVersion.invoiceAccountId)
+function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, billingPeriod) {
+  // Pull the invoice account from our previously-fetched accounts
+  const invoiceAccount = invoiceAccounts.find((invoiceAccount) => {
+    return invoiceAccount.invoiceAccountId === chargeVersion.invoiceAccountId
+  })
+
+  const billingInvoice = GenerateBillingInvoiceService.go(
+    invoiceAccount,
+    billingBatchId,
+    billingPeriod.endDate.getFullYear()
+  )
+
+  return billingInvoice
 }
 
-async function _fetchAndGenerateInvoiceData (billingBatchId, billingPeriod, chargeVersions) {
+async function _fetchInvoiceData (chargeVersions) {
   const allInvoiceAccountIds = chargeVersions.map((chargeVersion) => {
     return chargeVersion.invoiceAccountId
   })
@@ -104,19 +114,14 @@ async function _fetchAndGenerateInvoiceData (billingBatchId, billingPeriod, char
   // Creating a new Set from allInvoiceAccountIds gives us just the unique ids
   const uniqueInvoiceAccountIds = new Set(allInvoiceAccountIds)
 
-  const billingInvoices = []
+  const invoiceAccounts = []
 
   for (const invoiceAccountId of uniqueInvoiceAccountIds) {
-    const billingInvoice = await GenerateBillingInvoiceService.go(
-      { invoiceAccountId: null }, // temp hack to ensure we always generate a new billing invoice. TODO: fix this
-      invoiceAccountId,
-      billingBatchId,
-      billingPeriod.endDate.getFullYear()
-    )
-    billingInvoices.push(billingInvoice)
+    const invoiceAccount = await InvoiceAccountModel.query().findById(invoiceAccountId)
+    invoiceAccounts.push(invoiceAccount)
   }
 
-  return billingInvoices
+  return invoiceAccounts
 }
 
 function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, billingInvoiceLicence, currentBillingData) {
