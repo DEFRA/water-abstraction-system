@@ -50,12 +50,14 @@ async function go (billingBatch, billingPeriod) {
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
 
+    const billingInvoices = await _generateBillingInvoices(billingBatch, billingPeriod, chargeVersions)
+
     for (const chargeVersion of chargeVersions) {
-      const { billingInvoice, billingInvoiceLicence } = await _generateInvoiceData(
+      const { billingInvoice, billingInvoiceLicence } = _generateInvoiceData(
         currentBillingData,
         billingBatch,
         chargeVersion,
-        billingPeriod
+        billingInvoices
       )
 
       // If we've moved on to the next invoice licence then we need to finalise the previous one before we can continue
@@ -84,6 +86,29 @@ async function go (billingBatch, billingPeriod) {
   } catch (error) {
     _logError(billingBatch, error)
   }
+}
+
+async function _generateBillingInvoices (billingBatch, billingPeriod, chargeVersions) {
+  const allInvoiceAccountIds = chargeVersions.map((chargeVersion) => {
+    return chargeVersion.invoiceAccountId
+  })
+
+  // Creating a new Set from allInvoiceAccountIds gives us just the unique ids
+  const uniqueInvoiceAccountIds = new Set(allInvoiceAccountIds)
+
+  const billingInvoices = []
+
+  for (const invoiceAccountId of uniqueInvoiceAccountIds) {
+    const billingInvoice = await GenerateBillingInvoiceService.go(
+      { invoiceAccountId: null }, // temp hack to ensure we always generate a new billing invoice
+      invoiceAccountId,
+      billingBatch.billingBatchId,
+      billingPeriod.endDate.getFullYear()
+    )
+    billingInvoices.push(billingInvoice)
+  }
+
+  return billingInvoices
 }
 
 function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, billingInvoiceLicence, currentBillingData) {
@@ -255,13 +280,11 @@ async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod
   }
 }
 
-async function _generateInvoiceData (currentBillingData, billingBatch, chargeVersion, billingPeriod) {
+function _generateInvoiceData (currentBillingData, billingBatch, chargeVersion, billingInvoices) {
   try {
     const { invoiceAccountId, licence } = chargeVersion
-    const { billingBatchId } = billingBatch
-    const financialYearEnding = billingPeriod.endDate.getFullYear()
 
-    const billingInvoice = await GenerateBillingInvoiceService.go(currentBillingData.billingInvoice, invoiceAccountId, billingBatchId, financialYearEnding)
+    const billingInvoice = billingInvoices.find(billingInvoice => billingInvoice.invoiceAccountId === invoiceAccountId)
     const billingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(currentBillingData.billingInvoiceLicence, billingInvoice.billingInvoiceId, licence)
 
     return {
