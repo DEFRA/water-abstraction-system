@@ -39,7 +39,7 @@ function _cleanse (billingTransactions) {
   const credits = billingTransactions.filter((transaction) => transaction.isCredit)
   const debits = billingTransactions.filter((transaction) => !transaction.isCredit)
 
-  for (const credit of credits) {
+  credits.forEach((credit) => {
     const debitIndex = debits.findIndex((debit) => {
       return debit.billableDays === credit.billableDays && debit.chargeType === credit.chargeType
     })
@@ -47,7 +47,7 @@ function _cleanse (billingTransactions) {
     if (debitIndex > -1) {
       debits.splice(debitIndex, 1)
     }
-  }
+  })
 
   return debits
 }

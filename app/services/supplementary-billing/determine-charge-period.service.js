@@ -33,19 +33,16 @@ function go (chargeVersion, financialYearEnding) {
     chargeVersion.licence.startDate
   )
 
-  // If the end date is null then use the financial year end date instead as Math.min() will count nulls as 0
-  const chargeVersionEndDate = chargeVersion.endDate || financialYearEndDate
-  const licenceExpiredDate = chargeVersion.licence.expiredDate || financialYearEndDate
-  const licencelapsedDate = chargeVersion.licence.lapsedDate || financialYearEndDate
-  const licencerevokedDate = chargeVersion.licence.revokedDate || financialYearEndDate
-
-  const earliestEndDateTimestamp = Math.min(
+  // We use .filter() to remove any null timestamps, as Math.min() assumes a value of `0` for these
+  const endDateTimestamps = [
     financialYearEndDate,
-    chargeVersionEndDate,
-    licenceExpiredDate,
-    licencelapsedDate,
-    licencerevokedDate
-  )
+    chargeVersion.endDate,
+    chargeVersion.licence.expiredDate,
+    chargeVersion.licence.lapsedDate,
+    chargeVersion.licence.revokedDate
+  ].filter((timestamp) => timestamp)
+
+  const earliestEndDateTimestamp = Math.min(...endDateTimestamps)
 
   return {
     startDate: new Date(latestStartDateTimestamp),
