@@ -2,13 +2,12 @@
 
 /**
  * Removes all data created for acceptance tests from the water schema
- * @module TearDownService
+ * @module TearDownWaterSchemaService
  */
 
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  // billing data
   await _deleteBilling()
   await _deleteGaugingStations()
   await _deleteTestData('water.chargeElements')
