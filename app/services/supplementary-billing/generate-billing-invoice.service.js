@@ -7,9 +7,9 @@
 
 const { randomUUID } = require('crypto')
 
-const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.js')
-
 /**
+ * TODO: Update docs
+ *
  * Return either a new billing invoice object ready for persisting or an existing one if it exists
  *
  * This first checks whether the invoice account ID of `currentBillingInvoice` matches the one passed to this service.
@@ -34,17 +34,11 @@ const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.j
  *
  * @returns {Object} The current or newly-generated billing invoice object
  */
-async function go (currentBillingInvoice, invoiceAccountId, billingBatchId, financialYearEnding) {
-  if (currentBillingInvoice?.invoiceAccountId === invoiceAccountId) {
-    return currentBillingInvoice
-  }
-
-  const invoiceAccount = await InvoiceAccountModel.query().findById(invoiceAccountId)
-
+function go (invoiceAccount, billingBatchId, financialYearEnding) {
   const billingInvoice = {
     billingBatchId,
     financialYearEnding,
-    invoiceAccountId,
+    invoiceAccountId: invoiceAccount.invoiceAccountId,
     billingInvoiceId: randomUUID({ disableEntropyCache: true }),
     address: {}, // Address is set to an empty object for SROC billing invoices
     invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
