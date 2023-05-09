@@ -21,11 +21,13 @@ async function go () {
 }
 
 async function _deleteEntities () {
+  // Delete entityRoles
   await db
     .from('crm.entityRoles')
     .where('createdBy', 'acceptance-test-setup')
     .del()
 
+  // Delete entity
   await db
     .from('crm.entity')
     .whereLike('entityNm', 'acceptance-test.%')
@@ -36,6 +38,7 @@ async function _deleteEntities () {
 }
 
 async function _deleteInvoiceAccounts () {
+  // Delete invoiceAccountAddresses
   await db
     .from('crm_v2.invoiceAccountAddresses as iaa')
     .innerJoin('crm_v2.invoiceAccounts as ia', 'iaa.invoiceAccountId', 'ia.invoiceAccountId')
@@ -45,6 +48,7 @@ async function _deleteInvoiceAccounts () {
 
   await _deleteTestData('crm_v2.invoiceAccountAddresses')
 
+  // Delete invoiceAccounts
   await db
     .from('crm_v2.invoiceAccounts as ia')
     .innerJoin('crm_v2.companies as c', 'ia.companyId', 'c.companyId')
@@ -53,6 +57,7 @@ async function _deleteInvoiceAccounts () {
 }
 
 async function _deleteDocuments () {
+  // Delete documents
   await _deleteTestData('crm_v2.documents')
 
   await db
@@ -61,6 +66,7 @@ async function _deleteDocuments () {
     .where(db.raw("dh.metadata->>'dataType' = 'acceptance-test-setup'"))
     .del()
 
+  // Delete documentHeader
   await db
     .from('crm.documentHeader')
     .where(db.raw("metadata->>'dataType' = 'acceptance-test-setup'"))
