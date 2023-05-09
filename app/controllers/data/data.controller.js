@@ -8,9 +8,9 @@
 const TearDownService = require('../../services/data/tear-down/tear-down.service.js')
 
 async function tearDown (_request, h) {
-  const result = await TearDownService.go()
+  await TearDownService.go()
 
-  return h.response(result).code(200)
+  return h.response().code(204)
 }
 
 module.exports = {
