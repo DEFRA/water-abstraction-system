@@ -18,7 +18,7 @@ const IdmSchemaService = require('../../../../app/services/data/tear-down/idm-sc
 // Thing under test
 const TearDownService = require('../../../../app/services/data/tear-down/tear-down.service.js')
 
-describe.only('Tear down service', () => {
+describe('Tear down service', () => {
   let waterSchemaServiceStub
   let crmSchemaServiceStub
   let returnsSchemaServiceStub
