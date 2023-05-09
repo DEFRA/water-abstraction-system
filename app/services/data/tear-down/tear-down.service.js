@@ -25,12 +25,12 @@ async function go () {
   // crm schemas
   await _deleteTestData('crm_v2.documentRoles')
   await _deleteTestData('crm_v2.companyAddresses')
-  await _deleteEntity()
+  await _deleteEntities()
   await _deleteInvoiceAccounts()
   await _deleteTestData('crm_v2.companyContacts')
   await _deleteTestData('crm_v2.companies')
   await _deleteTestData('crm_v2.addresses')
-  await _deleteTestData('crm_v2.documents')
+  await _deleteDocuments()
   await _deleteTestData('crm_v2.contacts')
 
   // returns schema
@@ -40,6 +40,16 @@ async function go () {
   await _deleteTestData('water.purposesPrimary')
   await _deleteTestData('water.purposesSecondary')
   await _deleteTestData('water.purposesUses')
+
+  await _deleteNotifications()
+
+  // permit schema
+  await _deletePermit()
+
+  // idm schema
+  await _deleteUsers()
+
+  await _deleteSessions()
 
   return 'Data deleted'
 }
@@ -168,12 +178,18 @@ async function _deleteLicenceAgreements () {
   await _deleteTestData('water.licenceAgreements')
 }
 
-async function _deleteEntity () {
+async function _deleteEntities () {
+  await db
+    .from('crm.entityRoles')
+    .where('createdBy', 'acceptance-test-setup')
+    .del()
+
   await db
     .from('crm.entity')
     .whereLike('entityNm', 'acceptance-test.%')
     .orWhereLike('entityNm', '%@example.com')
     .orWhereLike('entityNm', 'regression.tests.%')
+    .orWhere('source', 'acceptance-test-setup')
     .del()
 }
 
@@ -194,6 +210,21 @@ async function _deleteInvoiceAccounts () {
     .del()
 }
 
+async function _deleteDocuments () {
+  await _deleteTestData('crm_v2.documents')
+
+  await db
+    .from('crm_v2.documents as d')
+    .innerJoin('crm.documentHeader as dh', 'd.documentRef', 'dh.systemExternalId')
+    .where(db.raw("dh.metadata->>'dataType' = 'acceptance-test-setup'"))
+    .del()
+
+  await db
+    .from('crm.documentHeader')
+    .where(db.raw("metadata->>'dataType' = 'acceptance-test-setup'"))
+    .del()
+}
+
 async function _deleteReturns () {
   await db
     .from('returns.lines as l')
@@ -209,6 +240,46 @@ async function _deleteReturns () {
     .del()
 
   await _deleteTestData('returns.returns')
+}
+
+async function _deleteNotifications () {
+  await db
+    .from('water.scheduledNotification')
+    .where('messageRef', 'test-ref')
+    .del()
+
+  await db
+    .from('water.scheduledNotification as sn')
+    .innerJoin('water.events as e', 'sn.eventId', 'e.eventId')
+    .whereLike('e.issuer', 'acceptance-test%')
+    .del()
+
+  await db
+    .from('water.events')
+    .whereLike('issuer', 'acceptance-test%')
+    .del()
+}
+
+async function _deletePermit () {
+  await db
+    .from('permit.licence')
+    .where(db.raw("metadata->>'source' = 'acceptance-test-setup'"))
+    .del()
+}
+
+async function _deleteUsers () {
+  await db
+    .from('idm.users')
+    .where(db.raw("user_data->>'source' = 'acceptance-test-setup'"))
+    .orWhereLike('userName', '%@example.com')
+    .del()
+}
+
+async function _deleteSessions () {
+  await db
+    .from('water.sessions')
+    .where(db.raw("session_data::jsonb->>'companyName' = 'acceptance-test-company'"))
+    .del()
 }
 
 async function _deleteTestData (tableName) {
