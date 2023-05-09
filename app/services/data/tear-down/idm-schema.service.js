@@ -2,7 +2,7 @@
 
 /**
  * Removes all data created for acceptance tests from the idm schema
- * @module TearDownIdmSchemaService
+ * @module IdmSchemaService
  */
 
 const { db } = require('../../../../db/db.js')

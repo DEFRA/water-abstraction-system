@@ -2,7 +2,7 @@
 
 /**
  * Removes all data created for acceptance tests from the crm schemas
- * @module TearDownCrmSchemaService
+ * @module CrmSchemaService
  */
 
 const { db } = require('../../../../db/db.js')

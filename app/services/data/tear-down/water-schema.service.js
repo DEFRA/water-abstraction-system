@@ -2,7 +2,7 @@
 
 /**
  * Removes all data created for acceptance tests from the water schema
- * @module TearDownWaterSchemaService
+ * @module WaterSchemaService
  */
 
 const { db } = require('../../../../db/db.js')

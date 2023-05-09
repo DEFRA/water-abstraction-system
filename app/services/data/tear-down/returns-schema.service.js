@@ -2,7 +2,7 @@
 
 /**
  * Removes all data created for acceptance tests from the returns schema
- * @module TearDownReturnsSchemaService
+ * @module ReturnsSchemaService
  */
 
 const { db } = require('../../../../db/db.js')
