@@ -6,14 +6,14 @@
  */
 
 const { db } = require('../../../../db/db.js')
-const TearDownWaterSchemaService = require('./tear-down-water-schema.service.js')
-const TearDownCrmSchemaService = require('./tear-down-crm-schema.service.js')
-const TearDownReturnsSchemaService = require('./tear-down-returns-schema.service.js')
+const WaterSchemaService = require('./water-schema.service.js')
+const CrmSchemaService = require('./crm-schema.service.js')
+const ReturnsSchemaService = require('./returns-schema.service.js')
 
 async function go () {
-  await TearDownWaterSchemaService.go()
-  await TearDownCrmSchemaService.go()
-  await TearDownReturnsSchemaService.go()
+  await WaterSchemaService.go()
+  await CrmSchemaService.go()
+  await ReturnsSchemaService.go()
 
   // permit schema
   await _deletePermit()
