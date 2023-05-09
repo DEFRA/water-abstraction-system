@@ -25,12 +25,8 @@ async function _deleteReturns () {
     .where('r.isTest', true)
     .del()
 
-  await _deleteTestData('returns.returns')
-}
-
-async function _deleteTestData (tableName) {
   await db
-    .from(tableName)
+    .from('returns.returns')
     .where('isTest', true)
     .del()
 }
