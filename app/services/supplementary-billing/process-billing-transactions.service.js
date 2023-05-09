@@ -112,11 +112,11 @@ function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
   // "cancelling pair" with it. If not then add the unpaired calculated transaction to our array of cleansed transaction
   // lines. Note that `reverseTransactions` will be mutated to remove any reverse transactions which form a cancelling
   // pair.
-  for (const calculatedTransactionLine of calculatedTransactions) {
+  calculatedTransactions.forEach((calculatedTransactionLine) => {
     if (!_cancelCalculatedTransaction(calculatedTransactionLine, reverseTransactions)) {
       cleansedTransactionLines.push(calculatedTransactionLine)
     }
-  }
+  })
 
   // Add the remaining reverse transactions (ie. those which didn't form a cancelling pair)
   cleansedTransactionLines.push(...reverseTransactions)

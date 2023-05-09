@@ -76,7 +76,7 @@ const services = {
  * @returns {Object} result.response The legacy service's response if successful or the error response if not.
  */
 async function get (serviceName, path, apiRequest = true) {
-  return await _sendRequest(RequestLib.get, serviceName, path, apiRequest)
+  return _sendRequest(RequestLib.get, serviceName, path, apiRequest)
 }
 
 /**
@@ -93,7 +93,7 @@ async function get (serviceName, path, apiRequest = true) {
  * @returns {Object} result.response The legacy service's response if successful or the error response if not.
  */
 async function post (serviceName, path, apiRequest = true, body = {}) {
-  return await _sendRequest(RequestLib.post, serviceName, path, apiRequest, body)
+  return _sendRequest(RequestLib.post, serviceName, path, apiRequest, body)
 }
 
 /**

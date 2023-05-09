@@ -31,15 +31,15 @@ const requestConfig = require('../../config/request.config.js')
  * @returns {Object} The result of the request; whether it succeeded and the response or error returned
  */
 async function get (url, additionalOptions = {}) {
-  return await _sendRequest('get', url, additionalOptions)
+  return _sendRequest('get', url, additionalOptions)
 }
 
 async function patch (url, additionalOptions = {}) {
-  return await _sendRequest('patch', url, additionalOptions)
+  return _sendRequest('patch', url, additionalOptions)
 }
 
 async function post (url, additionalOptions = {}) {
-  return await _sendRequest('post', url, additionalOptions)
+  return _sendRequest('post', url, additionalOptions)
 }
 
 async function _sendRequest (method, url, additionalOptions) {
