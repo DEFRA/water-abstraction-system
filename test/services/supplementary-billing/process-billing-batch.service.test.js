@@ -28,7 +28,6 @@ const ChargingModuleCreateTransactionService = require('../../../app/services/ch
 const ChargingModuleGenerateService = require('../../../app/services/charging-module/generate-bill-run.service.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 const FetchInvoiceAccountsService = require('../../../app/services/supplementary-billing/fetch-invoice-accounts.service.js')
-const GenerateBillingInvoiceService = require('../../../app/services/supplementary-billing/generate-billing-invoice.service.js')
 const GenerateBillingTransactionsService = require('../../../app/services/supplementary-billing/generate-billing-transactions.service.js')
 const HandleErroredBillingBatchService = require('../../../app/services/supplementary-billing/handle-errored-billing-batch.service.js')
 
@@ -313,32 +312,6 @@ describe.only('Process billing batch service', () => {
         Sinon.stub(BillingBatchModel, 'query').returns({
           findById: Sinon.stub().throws()
         })
-      })
-
-      it('sets no error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
-
-        const handlerArgs = handleErroredBillingBatchStub.firstCall.args
-
-        // Check that only the billing batch id was passed and not an error code as well
-        expect(handlerArgs).to.have.length(1)
-      })
-    })
-
-    // Temporarily skipping this test because our refactoring means we need to change it
-    describe.skip('because generating the invoice data fails', () => {
-      beforeEach(async () => {
-        const { chargeVersionId } = await ChargeVersionHelper.add({
-          changeReasonId: changeReason.changeReasonId,
-          invoiceAccountId: invoiceAccount.invoiceAccountId,
-          licenceId: licence.licenceId
-        })
-        const { chargeElementId } = await ChargeElementHelper.add(
-          { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
-        )
-        await ChargePurposeHelper.add({ chargeElementId })
-
-        Sinon.stub(GenerateBillingInvoiceService, 'go').rejects()
       })
 
       it('sets no error code', async () => {
