@@ -10,9 +10,9 @@ const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.j
 /**
  * Fetch all invoice accounts for the supplied charge versions
  *
- * @param {Object[]} chargeVersions An array of charge versions
+ * @param {module:ChargeVersionModel[]} chargeVersions An array of charge versions
  *
- * @returns {Object[]} An array of matching invoice accounts
+ * @returns {module:InvoiceAccountModel[]} An array of matching invoice accounts
  */
 async function go (chargeVersions) {
   const uniqueInvoiceAccountIds = _extractUniqueInvoiceAccountIds(chargeVersions)
