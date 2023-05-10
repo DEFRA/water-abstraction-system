@@ -14,7 +14,7 @@ const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-accou
 // Thing under test
 const GenerateBillingInvoiceService = require('../../../app/services/supplementary-billing/generate-billing-invoice.service.js')
 
-describe.only('Generate billing invoice service', () => {
+describe('Generate billing invoice service', () => {
   const billingBatchId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
   const financialYearEnding = 2023
 
