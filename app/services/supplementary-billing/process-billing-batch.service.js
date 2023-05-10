@@ -50,7 +50,6 @@ async function go (billingBatch, billingPeriod) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
-
     const invoiceAccounts = await _fetchInvoiceData(chargeVersions)
 
     for (const chargeVersion of chargeVersions) {
@@ -111,15 +110,11 @@ async function _fetchInvoiceData (chargeVersions) {
     return chargeVersion.invoiceAccountId
   })
 
-  // Creating a new Set from allInvoiceAccountIds gives us just the unique ids
+  // Creating a new set from allInvoiceAccountIds gives us just the unique ids
   const uniqueInvoiceAccountIds = new Set(allInvoiceAccountIds)
 
-  const invoiceAccounts = []
-
-  for (const invoiceAccountId of uniqueInvoiceAccountIds) {
-    const invoiceAccount = await InvoiceAccountModel.query().findById(invoiceAccountId)
-    invoiceAccounts.push(invoiceAccount)
-  }
+  // We spread our set of invoice ids into an array as .findByIds() will only accept an array
+  const invoiceAccounts = await InvoiceAccountModel.query().findByIds([...uniqueInvoiceAccountIds])
 
   return invoiceAccounts
 }
