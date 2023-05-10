@@ -92,9 +92,7 @@ async function go (billingBatch, billingPeriod) {
 
 function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, billingPeriod) {
   // Pull the invoice account from our previously-fetched accounts
-  const invoiceAccount = invoiceAccounts.find((invoiceAccount) => {
-    return invoiceAccount.invoiceAccountId === chargeVersion.invoiceAccountId
-  })
+  const invoiceAccount = invoiceAccounts[chargeVersion.invoiceAccountId]
 
   const billingInvoice = GenerateBillingInvoiceService.go(
     invoiceAccount,
@@ -109,9 +107,22 @@ async function _fetchInvoiceData (chargeVersions, billingBatchId) {
   try {
     // We don't just `return FetchInvoiceAccountsService.go()` as we need to call HandleErroredBillingBatchService if it
     // fails
-    const invoiceAccounts = await FetchInvoiceAccountsService.go(chargeVersions)
+    const invoiceAccountsArray = await FetchInvoiceAccountsService.go(chargeVersions)
 
-    return invoiceAccounts
+    // We create a keyed object from the array so we can quickly retrieve the required invoice account later. This will
+    // be in the format:
+    // {
+    //   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
+    //   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
+    // }
+    const invoiceAccountsObject = invoiceAccountsArray.reduce((acc, item) => {
+      return {
+        ...acc,
+        [item.invoiceAccountId]: item
+      }
+    }, {})
+
+    return invoiceAccountsObject
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatchId)
 
