@@ -50,7 +50,7 @@ async function go (billingBatch, billingPeriod) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
-    const invoiceAccounts = await _fetchInvoiceData(chargeVersions)
+    const invoiceAccounts = await _fetchInvoiceData(chargeVersions, billingBatch.billingBatchId)
 
     for (const chargeVersion of chargeVersions) {
       const billingInvoice = _generateInvoiceData(invoiceAccounts, chargeVersion, billingBatchId, billingPeriod)
@@ -105,18 +105,25 @@ function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, b
   return billingInvoice
 }
 
-async function _fetchInvoiceData (chargeVersions) {
-  const allInvoiceAccountIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.invoiceAccountId
-  })
+async function _fetchInvoiceData (chargeVersions, billingBatchId) {
+  try {
+    const allInvoiceAccountIds = chargeVersions.map((chargeVersion) => {
+      return chargeVersion.invoiceAccountId
+    })
 
-  // Creating a new set from allInvoiceAccountIds gives us just the unique ids
-  const uniqueInvoiceAccountIds = new Set(allInvoiceAccountIds)
+    // Creating a new set from allInvoiceAccountIds gives us just the unique ids
+    const uniqueInvoiceAccountIds = new Set(allInvoiceAccountIds)
 
-  // We spread our set of invoice ids into an array as .findByIds() will only accept an array
-  const invoiceAccounts = await InvoiceAccountModel.query().findByIds([...uniqueInvoiceAccountIds])
+    // We don't just `return InvoiceAccountModel.query()` as we need to call HandleErroredBillingBatchService if it
+    // fails. Note that we need to spread the invoice ids into an array as .findByIds() will not accept a set
+    const invoiceAccounts = await InvoiceAccountModel.query().findByIds([...uniqueInvoiceAccountIds])
 
-  return invoiceAccounts
+    return invoiceAccounts
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatchId)
+
+    throw error
+  }
 }
 
 function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, billingInvoiceLicence, currentBillingData) {
