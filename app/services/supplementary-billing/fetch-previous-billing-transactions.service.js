@@ -39,7 +39,7 @@ function _cleanse (billingTransactions) {
   const credits = billingTransactions.filter((transaction) => transaction.isCredit)
   const debits = billingTransactions.filter((transaction) => !transaction.isCredit)
 
-  for (const credit of credits) {
+  credits.forEach((credit) => {
     const debitIndex = debits.findIndex((debit) => {
       return debit.billableDays === credit.billableDays && debit.chargeType === credit.chargeType
     })
@@ -47,7 +47,7 @@ function _cleanse (billingTransactions) {
     if (debitIndex > -1) {
       debits.splice(debitIndex, 1)
     }
-  }
+  })
 
   return debits
 }
@@ -72,7 +72,12 @@ async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
       'bt.volume',
       'bt.section126Factor',
       'bt.section127Agreement',
-      'bt.section130Agreement',
+      // NOTE: The section130Agreement field is a varchar in the DB for historic reasons. It seems some early PRESROC
+      // transactions recorded values other than 'true' or 'false'. For SROC though, it will only ever be true/false. We
+      // generate our calculated billing transaction lines based on the Section130 flag against charge_elements which is
+      // always a boolean. So, to avoid issues when we need to compare the values we cast this to a boolean when
+      // fetching the data.
+      db.raw('bt.section_130_agreement::boolean'),
       'bt.isTwoPartSecondPartCharge',
       'bt.scheme',
       'bt.aggregateFactor',

@@ -58,30 +58,23 @@ async function go (billingBatch, billingPeriod) {
         billingPeriod
       )
 
-      // We need to deal with the very first iteration when currentBillingData is all nulls! So, we check both there is
-      // a billingInvoiceLicence and that its ID is different
-      if (
-        currentBillingData.billingInvoiceLicence &&
-        currentBillingData.billingInvoiceLicence.billingInvoiceLicenceId !== billingInvoiceLicence.billingInvoiceLicenceId
-      ) {
+      // If we've moved on to the next invoice licence then we need to finalise the previous one before we can continue
+      if (_thisIsADifferentBillingInvoiceLicence(currentBillingData, billingInvoiceLicence)) {
         await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
         currentBillingData.calculatedTransactions = []
       }
 
-      currentBillingData.licence = chargeVersion.licence
-      currentBillingData.billingInvoice = billingInvoice
-      currentBillingData.billingInvoiceLicence = billingInvoiceLicence
+      _updateCurrentBillingData(currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence)
 
-      // If the charge version has a status of 'current' (APPROVED) then it is likely to be something we have never
-      // billed previously so we need to calculate a debit line.
-      // Else the charge version has been 'superseded' (REPLACED). So, we won't be adding a new debit line to the bill
-      // for it. But we still need to process it to understand what, if anything, needs to be credited back or if our
-      // calculated debit line has already been billed.
-      if (chargeVersion.status === 'current') {
-        const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence)
-        currentBillingData.calculatedTransactions.push(...calculatedTransactions)
-      }
+      _generateTransactionsIfStatusIsCurrent(
+        chargeVersion,
+        billingPeriod,
+        billingBatchId,
+        billingInvoiceLicence,
+        currentBillingData
+      )
     }
+
     await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
 
     await _finaliseBillingBatch(billingBatch, chargeVersions, currentBillingData.isEmpty)
@@ -91,6 +84,39 @@ async function go (billingBatch, billingPeriod) {
   } catch (error) {
     _logError(billingBatch, error)
   }
+}
+
+function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, billingInvoiceLicence, currentBillingData) {
+  // If the charge version status isn't 'current' then we don't need to add any new debit lines to the bill
+  if (chargeVersion.status !== 'current') {
+    return
+  }
+
+  // Otherwise, it's likely to be something we have never billed previously so we need to calculate debit line(s)
+  const calculatedTransactions = _generateCalculatedTransactions(
+    billingPeriod,
+    chargeVersion,
+    billingBatchId,
+    billingInvoiceLicence
+  )
+  currentBillingData.calculatedTransactions.push(...calculatedTransactions)
+}
+
+function _updateCurrentBillingData (currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence) {
+  currentBillingData.licence = chargeVersion.licence
+  currentBillingData.billingInvoice = billingInvoice
+  currentBillingData.billingInvoiceLicence = billingInvoiceLicence
+}
+
+function _thisIsADifferentBillingInvoiceLicence (currentBillingData, billingInvoiceLicence) {
+  // If we don't yet have a billing invoice licence (which will be the case the first time we iterate over the charge
+  // versions) then simply return false straight away
+  if (!currentBillingData.billingInvoiceLicence) {
+    return false
+  }
+
+  // Otherwise we want to return true if the previous and current licence ids don't match, and false if they do match
+  return currentBillingData.billingInvoiceLicence.billingInvoiceLicenceId !== billingInvoiceLicence.billingInvoiceLicenceId
 }
 
 /**
@@ -164,7 +190,11 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
     // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
     // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
     // This is why we are only passing through the first billing period; we know there is only one!
-    return await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
+    const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
+
+    // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillingBatchService if it
+    // fails
+    return chargeVersions
   } catch (error) {
     HandleErroredBillingBatchService.go(
       billingBatch.billingBatchId,
@@ -252,18 +282,16 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion, billingB
     const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
     const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
-    const transactions = []
-    for (const chargeElement of chargeVersion.chargeElements) {
-      const result = GenerateBillingTransactionsService.go(
+    // We use flatMap as GenerateBillingTransactionsService returns an array of transactions
+    const transactions = chargeVersion.chargeElements.flatMap((chargeElement) => {
+      return GenerateBillingTransactionsService.go(
         chargeElement,
         billingPeriod,
         chargePeriod,
         isNewLicence,
         isWaterUndertaker
       )
-      result.billingInvoiceLicenceId = billingInvoiceLicence.billingInvoiceLicenceId
-      transactions.push(...result)
-    }
+    })
 
     return transactions
   } catch (error) {

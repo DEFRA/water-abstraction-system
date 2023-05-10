@@ -61,10 +61,10 @@ function go (chargePeriod, billingPeriod, chargeElement) {
   const authorisedAbstractionPeriods = []
   const billableAbstractionPeriods = []
 
-  for (const chargePurpose of chargePurposes) {
+  chargePurposes.forEach((chargePurpose) => {
     authorisedAbstractionPeriods.push(..._abstractionPeriods(billingPeriod, chargePurpose))
     billableAbstractionPeriods.push(..._abstractionPeriods(chargePeriod, chargePurpose))
-  }
+  })
 
   return {
     authorisedDays: _consolidateAndCalculate(billingPeriod, authorisedAbstractionPeriods),
@@ -207,13 +207,12 @@ function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod)
 function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
   const consolidatedAbstractionPeriods = ConsolidateDateRangesService.go(abstractionsPeriods)
 
-  let days = 0
-  for (const abstractionPeriod of consolidatedAbstractionPeriods) {
+  const totalDays = consolidatedAbstractionPeriods.reduce((acc, abstractionPeriod) => {
     const abstractionOverlapPeriod = _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod)
-    days += _calculateDays(abstractionOverlapPeriod)
-  }
+    return acc + _calculateDays(abstractionOverlapPeriod)
+  }, 0)
 
-  return days
+  return totalDays
 }
 
 /**

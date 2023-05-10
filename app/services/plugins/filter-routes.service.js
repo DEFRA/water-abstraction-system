@@ -42,7 +42,7 @@ function _protectedEnvironment (environment) {
 }
 
 function _filteredRoutes (routes) {
-  return routes.filter(route => !route?.options?.app?.excludeFromProd)
+  return routes.filter((route) => !route?.options?.app?.excludeFromProd)
 }
 
 module.exports = {
