@@ -15,11 +15,11 @@ const CreateBillingTransactionService = require('./create-billing-transaction.se
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchInvoiceAccountsService = require('./fetch-invoice-accounts.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
-const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const LicenceModel = require('../../models/water/licence.model.js')
 const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
@@ -107,16 +107,9 @@ function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, b
 
 async function _fetchInvoiceData (chargeVersions, billingBatchId) {
   try {
-    const allInvoiceAccountIds = chargeVersions.map((chargeVersion) => {
-      return chargeVersion.invoiceAccountId
-    })
-
-    // Creating a new set from allInvoiceAccountIds gives us just the unique ids
-    const uniqueInvoiceAccountIds = new Set(allInvoiceAccountIds)
-
-    // We don't just `return InvoiceAccountModel.query()` as we need to call HandleErroredBillingBatchService if it
-    // fails. Note that we need to spread the invoice ids into an array as .findByIds() will not accept a set
-    const invoiceAccounts = await InvoiceAccountModel.query().findByIds([...uniqueInvoiceAccountIds])
+    // We don't just `return FetchInvoiceAccountsService.go()` as we need to call HandleErroredBillingBatchService if it
+    // fails
+    const invoiceAccounts = await FetchInvoiceAccountsService.go(chargeVersions)
 
     return invoiceAccounts
   } catch (error) {
