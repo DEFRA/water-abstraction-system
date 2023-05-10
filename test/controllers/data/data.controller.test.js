@@ -14,28 +14,49 @@ const TearDownService = require('../../../app/services/data/tear-down/tear-down.
 // For running our service
 const { init } = require('../../../app/server.js')
 
-describe('Data controller: POST /data/tear-down', () => {
+describe('Data controller', () => {
   let server
+
+  const options = {
+    method: 'POST',
+    url: '/data/tear-down'
+  }
+
+  beforeEach(async () => {
+    // Create server before each test
+    server = await init()
+    Sinon.stub(server.logger, 'error')
+  })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  beforeEach(async () => {
-    // Create server before each test
-    server = await init()
+  describe('POST /data/tear-down', () => {
+    describe('when a request is valid', () => {
+      beforeEach(async () => {
+        Sinon.stub(TearDownService, 'go').resolves()
+      })
 
-    Sinon.stub(TearDownService, 'go').resolves()
-  })
+      it('returns a 204 status', async () => {
+        const response = await server.inject(options)
 
-  it('returns a 204 status', async () => {
-    const options = {
-      method: 'POST',
-      url: '/data/tear-down'
-    }
+        expect(response.statusCode).to.equal(204)
+      })
+    })
 
-    const response = await server.inject(options)
+    describe('when the request fails', () => {
+      describe('because the TearDownService errors', () => {
+        beforeEach(async () => {
+          Sinon.stub(TearDownService, 'go').rejects()
+        })
 
-    expect(response.statusCode).to.equal(204)
+        it('returns a 500 status', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(500)
+        })
+      })
+    })
   })
 })
