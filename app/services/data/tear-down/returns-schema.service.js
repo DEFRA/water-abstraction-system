@@ -8,10 +8,6 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  await _deleteReturns()
-}
-
-async function _deleteReturns () {
   await db
     .from('returns.lines as l')
     .innerJoin('returns.versions as v', 'l.versionId', 'v.versionId')
