@@ -15,7 +15,7 @@ const CreateBillingTransactionService = require('./create-billing-transaction.se
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const FetchInvoiceAccountsService = require('./fetch-invoice-accounts.service.js')
+const FetchInvoiceAccountNumbersService = require('./fetch-invoice-account-numbers.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
@@ -105,7 +105,7 @@ function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, b
 
 async function _fetchInvoiceData (chargeVersions, billingBatchId) {
   try {
-    const invoiceAccountsArray = await FetchInvoiceAccountsService.go(chargeVersions)
+    const invoiceAccountsArray = await FetchInvoiceAccountNumbersService.go(chargeVersions)
 
     // We create a keyed object from the array so we can quickly retrieve the required invoice account later. This will
     // be in the format:

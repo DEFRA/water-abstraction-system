@@ -27,7 +27,7 @@ const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-in
 const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
 const ChargingModuleGenerateService = require('../../../app/services/charging-module/generate-bill-run.service.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
-const FetchInvoiceAccountsService = require('../../../app/services/supplementary-billing/fetch-invoice-accounts.service.js')
+const FetchInvoiceAccountNumbersService = require('../../../app/services/supplementary-billing/fetch-invoice-account-numbers.service.js')
 const GenerateBillingTransactionsService = require('../../../app/services/supplementary-billing/generate-billing-transactions.service.js')
 const HandleErroredBillingBatchService = require('../../../app/services/supplementary-billing/handle-errored-billing-batch.service.js')
 
@@ -246,7 +246,7 @@ describe('Process billing batch service', () => {
 
     describe('because fetching the invoice accounts fails', () => {
       beforeEach(() => {
-        Sinon.stub(FetchInvoiceAccountsService, 'go').rejects()
+        Sinon.stub(FetchInvoiceAccountNumbersService, 'go').rejects()
       })
 
       it('sets no error code', async () => {
