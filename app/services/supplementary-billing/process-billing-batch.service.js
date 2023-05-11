@@ -105,8 +105,6 @@ function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, b
 
 async function _fetchInvoiceData (chargeVersions, billingBatchId) {
   try {
-    // We don't just `return FetchInvoiceAccountsService.go()` as we need to call HandleErroredBillingBatchService if it
-    // fails
     const invoiceAccountsArray = await FetchInvoiceAccountsService.go(chargeVersions)
 
     // We create a keyed object from the array so we can quickly retrieve the required invoice account later. This will
