@@ -19,17 +19,20 @@ const IdmSchemaService = require('../../../../app/services/data/tear-down/idm-sc
 const TearDownService = require('../../../../app/services/data/tear-down/tear-down.service.js')
 
 describe('Tear down service', () => {
+  let notifierStub
   let waterSchemaServiceStub
   let crmSchemaServiceStub
   let returnsSchemaServiceStub
   let permitSchemaServiceStub
   let idmSchemaServiceStub
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   beforeEach(async () => {
+    // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+
     waterSchemaServiceStub = Sinon.stub(WaterSchemaService, 'go').resolves()
     crmSchemaServiceStub = Sinon.stub(CrmSchemaService, 'go').resolves()
     returnsSchemaServiceStub = Sinon.stub(ReturnsSchemaService, 'go').resolves()
@@ -37,8 +40,16 @@ describe('Tear down service', () => {
     idmSchemaServiceStub = Sinon.stub(IdmSchemaService, 'go').resolves()
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   it('tears down the schemas', async () => {
     await TearDownService.go()
+
+    const logMessage = notifierStub.omg.firstCall.args[0]
+
+    expect(logMessage).to.startWith('Tear down: Time taken to process')
 
     expect(waterSchemaServiceStub.called).to.be.true()
     expect(crmSchemaServiceStub.called).to.be.true()
