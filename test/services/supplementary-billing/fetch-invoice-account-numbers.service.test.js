@@ -32,8 +32,14 @@ describe('Fetch Invoice Account Numbers service', () => {
       ])
 
       expectedResult = [
-        { invoiceAccountId: invoiceAccounts[0].invoiceAccountId, invoiceAccountNumber: invoiceAccounts[0].invoiceAccountNumber },
-        { invoiceAccountId: invoiceAccounts[1].invoiceAccountId, invoiceAccountNumber: invoiceAccounts[1].invoiceAccountNumber }
+        {
+          invoiceAccountId: invoiceAccounts[0].invoiceAccountId,
+          invoiceAccountNumber: invoiceAccounts[0].invoiceAccountNumber
+        },
+        {
+          invoiceAccountId: invoiceAccounts[1].invoiceAccountId,
+          invoiceAccountNumber: invoiceAccounts[1].invoiceAccountNumber
+        }
       ]
     })
 
