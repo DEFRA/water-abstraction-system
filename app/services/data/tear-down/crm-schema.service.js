@@ -6,6 +6,7 @@
  */
 
 const { db } = require('../../../../db/db.js')
+
 async function go () {
   await _deleteTestData('crm_v2.documentRoles')
   await _deleteTestData('crm_v2.companyAddresses')
