@@ -6,6 +6,7 @@
  */
 
 const Boom = require('@hapi/boom')
+
 const TearDownService = require('../../services/data/tear-down/tear-down.service.js')
 
 async function tearDown (_request, h) {
