@@ -21,11 +21,11 @@ const RootRoutes = require('../routes/root.routes.js')
 const AirbrakeConfig = require('../../config/airbrake.config.js')
 
 const routes = [
+  ...RootRoutes,
   ...AssetRoutes,
-  ...BillRunRoutes,
-  ...DataRoutes,
   ...HealthRoutes,
-  ...RootRoutes
+  ...BillRunRoutes,
+  ...DataRoutes
 ]
 
 const RouterPlugin = {
