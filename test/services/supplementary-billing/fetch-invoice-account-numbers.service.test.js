@@ -26,9 +26,9 @@ describe('Fetch Invoice Account Numbers service', () => {
     beforeEach(async () => {
       // We create three invoice accounts but we will only be fetching the first two
       invoiceAccounts = await Promise.all([
-        await InvoiceAccountHelper.add(),
-        await InvoiceAccountHelper.add(),
-        await InvoiceAccountHelper.add()
+        InvoiceAccountHelper.add(),
+        InvoiceAccountHelper.add(),
+        InvoiceAccountHelper.add()
       ])
 
       expectedResult = [
