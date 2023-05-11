@@ -8,7 +8,7 @@ const routes = [
     path: '/data/tear-down',
     handler: DataController.tearDown,
     options: {
-     description: 'Used to remove the acceptance test data from the database',
+      description: 'Used to remove the acceptance test data from the database',
       app: { excludeFromProd: true }
     }
   }
