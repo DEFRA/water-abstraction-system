@@ -125,6 +125,216 @@ describe('Fetch Previous Billing Transactions service', () => {
                 expect(results[0].isCredit).to.be.false()
               })
             })
+
+            describe('because the charge category code is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  chargeCategoryCode: '4.3.2',
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the abatement agreement (section 126) is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  section126Factor: 0.5,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the two-part tariff agreement (section 127) is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  section127Agreement: true,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the canal and river trust agreement (section 130) is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  section130Agreement: true,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the aggregate is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  aggregateFactor: 0.5,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the charge adjustment is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  adjustmentFactor: 0.5,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the winter discount is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  isWinterOnly: true,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the supported source differs (additional charge) is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  isSupportedSource: true,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the supported source name differs (additional charge) is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  supportedSourceName: 'source name',
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
+
+            describe('because the water company flag differs (additional charge) is different', () => {
+              beforeEach(async () => {
+                await BillingTransactionHelper.add({
+                  billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  isWaterCompanyCharge: true,
+                  isCredit: true
+                })
+              })
+
+              it('returns the debits', async () => {
+                const results = await FetchPreviousBillingTransactionsService.go(
+                  { invoiceAccountId },
+                  { licenceId },
+                  financialYearEnding
+                )
+
+                expect(results).to.have.length(1)
+                expect(results[0].isCredit).to.be.false()
+              })
+            })
           })
         })
 
