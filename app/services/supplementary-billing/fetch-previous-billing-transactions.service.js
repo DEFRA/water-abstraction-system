@@ -32,8 +32,10 @@ async function go (billingInvoice, billingInvoiceLicence, financialYearEnding) {
 
 /**
  * Cleanse the billing transactions by cancelling out matching pairs of debits and credits, and return the remaining
- * debits. We judge a pair of credits and debits to be matching if they have the same number of billable days and the
- * same charge type.
+ * debits.
+ *
+ * If a credit matches to a debit then its something that was dealt with in a previous supplementary bill run. We need
+ * to know only about debits that have not been credited.
  */
 function _cleanse (billingTransactions) {
   const credits = billingTransactions.filter((transaction) => transaction.isCredit)
@@ -41,7 +43,7 @@ function _cleanse (billingTransactions) {
 
   credits.forEach((credit) => {
     const debitIndex = debits.findIndex((debit) => {
-      return debit.billableDays === credit.billableDays && debit.chargeType === credit.chargeType
+      return _matchTransactions(debit, credit)
     })
 
     if (debitIndex > -1) {
@@ -50,6 +52,53 @@ function _cleanse (billingTransactions) {
   })
 
   return debits
+}
+
+/**
+ * Compares a debit transaction to a credit transaction
+ *
+ * We compare those properties which determine the charge value calculated by the charging module. If the debit
+ * transaction's properties matches the credit's we return true. This will tell the calling method
+ * to remove the debit from the service's final results.
+ *
+ * The key properties are charge type, category code, and billable days. But we also need to compare agreements and
+ * additional charges because if those have changed, we'll need to credit the previous transaction and calculate the
+ * new debit value. Because what we are checking does not match up to what you see in the UI we have this reference
+ *
+ * - Abatement agreement - section126Factor
+ * - Two-part tariff agreement - section127Agreement
+ * - Canal and River Trust agreement - section130Agreement
+ * - Aggregate - aggregateFactor
+ * - Charge Adjustment - adjustmentFactor
+ * - Winter discount - isWinterOnly
+ *
+ * - Additional charges - isSupportedSource
+ * - Additional charges - supportedSourceName
+ * - Additional charges - isWaterCompanyCharge
+ */
+function _matchTransactions (debit, credit) {
+  // TODO: This logic is a duplicate of what we are doing in
+  // app/services/supplementary-billing/process-billing-transactions.service.js. This also means we are running the
+  // same kind of unit tests on 2 places. We need to refactor this duplication in the code and the tests out.
+
+  // When we put together this matching logic our instincts were to try and do something 'better' than this long,
+  // chained && statement. But whatever we came up with was
+  // - more complex
+  // - less performant
+  // We found this easy to see what properties are being compared. Plus the moment something doesn't match we bail. So,
+  // much as it feels 'wrong', we are sticking with it!
+  return debit.chargeType === credit.chargeType &&
+    debit.chargeCategoryCode === credit.chargeCategoryCode &&
+    debit.billableDays === credit.billableDays &&
+    debit.section126Factor === credit.section126Factor &&
+    debit.section127Agreement === credit.section127Agreement &&
+    debit.section130Agreement === credit.section130Agreement &&
+    debit.aggregateFactor === credit.aggregateFactor &&
+    debit.adjustmentFactor === credit.adjustmentFactor &&
+    debit.isWinterOnly === credit.isWinterOnly &&
+    debit.isSupportedSource === credit.isSupportedSource &&
+    debit.supportedSourceName === credit.supportedSourceName &&
+    debit.isWaterCompanyCharge === credit.isWaterCompanyCharge
 }
 
 async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
