@@ -33,7 +33,7 @@ describe('Data controller', () => {
   })
 
   describe('POST /data/tear-down', () => {
-    describe('when a request is valid', () => {
+    describe('when the request succeeds', () => {
       beforeEach(async () => {
         Sinon.stub(TearDownService, 'go').resolves()
       })
