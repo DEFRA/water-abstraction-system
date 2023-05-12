@@ -41,36 +41,42 @@ describe('Send to S3 bucket service', () => {
     const fileName = path.basename(filePath)
 
     it('uploads a file to the S3 bucket', async () => {
-      const result = await SendToS3BucketService.go(filePath)
+      await SendToS3BucketService.go(filePath)
 
       // Test that the S3 Client was called once
       expect(s3Stub.calledOnce).to.be.true()
 
       // Get the first call and test that it was called with PutObjectCommand
       const calledCommand = s3Stub.getCall(0).firstArg
-      expect(calledCommand instanceof PutObjectCommand).to.be.true()
+      expect(calledCommand).to.be.an.instanceof(PutObjectCommand)
+    })
+
+    it('returns true', async () => {
+      const result = await SendToS3BucketService.go(filePath)
 
       expect(result).to.equal(true)
+    })
+
+    it('logs a success message', async () => {
+      await SendToS3BucketService.go(filePath)
+
       expect(notifierStub.omg.calledWith(`The file ${fileName} was uploaded successfully`)).to.be.true()
     })
   })
 
   describe('when unsuccessful', () => {
-    describe('an invalid file name is given', () => {
-      it('returns false', async () => {
-        const result = await SendToS3BucketService.go()
+    describe('because an invalid file name is given', () => {
+      const fileName = 'FakeFile'
 
-        expect(result).to.equal(false)
-      })
+      it('throws an error', async () => {
+        const result = await expect(SendToS3BucketService.go(fileName)).to.reject()
 
-      it('logs the error', async () => {
-        await SendToS3BucketService.go()
-
-        expect(notifierStub.omfg.calledWith('ERROR uploading file to S3 bucket. No file path given')).to.be.true()
+        expect(result).to.be.an.error()
+        expect(result.message).to.equal(`ENOENT: no such file or directory, open '${fileName}'`)
       })
     })
 
-    describe('there is an issue with the upload', () => {
+    describe('because there is an issue with the upload', () => {
       beforeEach(() => {
         // Stub the S3 Client's send method, which is used to run the 'put object' command
         s3Stub = Sinon.stub(S3Client.prototype, 'send').rejects()

@@ -5,11 +5,11 @@
  * @module SendToS3BucketService
  */
 
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
 const fs = require('fs')
-const S3Config = require('../../../config/s3.config')
 const path = require('path')
+const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
 
+const S3Config = require('../../../config/s3.config')
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives
  *
@@ -18,19 +18,13 @@ const path = require('path')
  * @returns {Boolean} True if the file is uploaded successfully and false if not
  */
 async function go (filePath) {
-  if (!filePath) {
-    global.GlobalNotifier.omfg('ERROR uploading file to S3 bucket. No file path given')
-    return false
-  }
-
   const bucketName = S3Config.s3.bucket
-  const folderName = 'export'
   const fileName = path.basename(filePath)
   const fileContent = fs.readFileSync(filePath)
 
   const params = {
     Bucket: bucketName,
-    Key: `${folderName}/${fileName}`,
+    Key: `export/${fileName}`,
     Body: fileContent
   }
 
