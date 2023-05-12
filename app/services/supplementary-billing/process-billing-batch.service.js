@@ -15,6 +15,7 @@ const CreateBillingTransactionService = require('./create-billing-transaction.se
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchInvoiceAccountNumbersService = require('./fetch-invoice-account-numbers.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
@@ -49,13 +50,16 @@ async function go (billingBatch, billingPeriod) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
+    const invoiceAccounts = await _fetchInvoiceData(chargeVersions, billingBatch.billingBatchId)
 
     for (const chargeVersion of chargeVersions) {
-      const { billingInvoice, billingInvoiceLicence } = await _generateInvoiceData(
+      const billingInvoice = _generateInvoiceData(invoiceAccounts, chargeVersion, billingBatchId, billingPeriod)
+
+      const billingInvoiceLicence = _generateInvoiceLicenceData(
         currentBillingData,
         billingBatch,
         chargeVersion,
-        billingPeriod
+        billingInvoice
       )
 
       // If we've moved on to the next invoice licence then we need to finalise the previous one before we can continue
@@ -83,6 +87,44 @@ async function go (billingBatch, billingPeriod) {
     _calculateAndLogTime(billingBatchId, startTime)
   } catch (error) {
     _logError(billingBatch, error)
+  }
+}
+
+function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, billingPeriod) {
+  // Pull the invoice account from our previously-fetched accounts
+  const invoiceAccount = invoiceAccounts[chargeVersion.invoiceAccountId]
+
+  const billingInvoice = GenerateBillingInvoiceService.go(
+    invoiceAccount,
+    billingBatchId,
+    billingPeriod.endDate.getFullYear()
+  )
+
+  return billingInvoice
+}
+
+async function _fetchInvoiceData (chargeVersions, billingBatchId) {
+  try {
+    const invoiceAccountsArray = await FetchInvoiceAccountNumbersService.go(chargeVersions)
+
+    // We create a keyed object from the array so we can quickly retrieve the required invoice account later. This will
+    // be in the format:
+    // {
+    //   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
+    //   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
+    // }
+    const invoiceAccountsObject = invoiceAccountsArray.reduce((acc, item) => {
+      return {
+        ...acc,
+        [item.invoiceAccountId]: item
+      }
+    }, {})
+
+    return invoiceAccountsObject
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatchId)
+
+    throw error
   }
 }
 
@@ -255,19 +297,15 @@ async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod
   }
 }
 
-async function _generateInvoiceData (currentBillingData, billingBatch, chargeVersion, billingPeriod) {
+function _generateInvoiceLicenceData (currentBillingData, billingBatch, chargeVersion, billingInvoice) {
   try {
-    const { invoiceAccountId, licence } = chargeVersion
-    const { billingBatchId } = billingBatch
-    const financialYearEnding = billingPeriod.endDate.getFullYear()
+    const billingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(
+      currentBillingData.billingInvoiceLicence,
+      billingInvoice.billingInvoiceId,
+      chargeVersion.licence
+    )
 
-    const billingInvoice = await GenerateBillingInvoiceService.go(currentBillingData.billingInvoice, invoiceAccountId, billingBatchId, financialYearEnding)
-    const billingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(currentBillingData.billingInvoiceLicence, billingInvoice.billingInvoiceId, licence)
-
-    return {
-      billingInvoice,
-      billingInvoiceLicence
-    }
+    return billingInvoiceLicence
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
 
