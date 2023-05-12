@@ -27,7 +27,7 @@ async function go (filePath) {
   await _compressFile(filePath)
   global.GlobalNotifier.omg(`${filePath} successfully compressed to gzip.`)
 
-  return true
+  return `${filePath}.gz`
 }
 
 async function _compressFile (filePath) {

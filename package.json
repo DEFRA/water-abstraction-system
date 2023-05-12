@@ -25,6 +25,7 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@airbrake/node": "^2.1.8",
+    "@aws-sdk/client-s3": "^3.331.0",
     "@hapi/boom": "^10.0.0",
     "@hapi/hapi": "^21.1.0",
     "@hapi/inert": "^7.0.0",
