@@ -172,15 +172,15 @@ describe('Generate billing transactions service', () => {
         isNewLicence = true
       })
 
-      it('returns `isNewLicence` as true on both transaction lines in the result', () => {
+      it('returns `isNewLicence` as true in the results', () => {
         const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
         expect(result[0].isNewLicence).to.be.true()
       })
     })
 
-    describe('returns `isNewLicence` as false on both transaction lines in the result', () => {
-      it('returns the expected data', () => {
+    describe('and is not a new licence', () => {
+      it('returns `isNewLicence` as false in the results', () => {
         const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
         expect(result[0].isNewLicence).to.be.false()
