@@ -50,10 +50,14 @@ async function go (billingBatch, billingPeriod) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
-    const invoiceAccounts = await _fetchInvoiceData(chargeVersions, billingBatch.billingBatchId)
+    const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatch.billingBatchId)
+
+    // We pre-generate our billing invoices ahead of time to ensure we have only one invoice per account id
+    const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatch.billingBatchId, billingPeriod)
 
     for (const chargeVersion of chargeVersions) {
-      const billingInvoice = _generateInvoiceData(invoiceAccounts, chargeVersion, billingBatchId, billingPeriod)
+      // Retrieve our previously-generated billing invoice for this charge version's invoice account
+      const billingInvoice = billingInvoices[chargeVersion.invoiceAccountId]
 
       const billingInvoiceLicence = _generateInvoiceLicenceData(
         currentBillingData,
@@ -90,22 +94,27 @@ async function go (billingBatch, billingPeriod) {
   }
 }
 
-function _generateInvoiceData (invoiceAccounts, chargeVersion, billingBatchId, billingPeriod) {
-  // Pull the invoice account from our previously-fetched accounts
-  const invoiceAccount = invoiceAccounts[chargeVersion.invoiceAccountId]
+async function _fetchInvoiceAccounts (chargeVersions, billingBatchId) {
+  try {
+    const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
 
-  const billingInvoice = GenerateBillingInvoiceService.go(
-    invoiceAccount,
-    billingBatchId,
-    billingPeriod.endDate.getFullYear()
-  )
+    return invoiceAccounts
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatchId)
 
-  return billingInvoice
+    throw error
+  }
 }
 
-async function _fetchInvoiceData (chargeVersions, billingBatchId) {
+function _generateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
   try {
-    const invoiceAccountsArray = await FetchInvoiceAccountNumbersService.go(chargeVersions)
+    const billingInvoices = invoiceAccounts.map((invoiceAccount) => {
+      return GenerateBillingInvoiceService.go(
+        invoiceAccount,
+        billingBatchId,
+        billingPeriod.endDate.getFullYear()
+      )
+    })
 
     // We create a keyed object from the array so we can quickly retrieve the required invoice account later. This will
     // be in the format:
@@ -113,14 +122,14 @@ async function _fetchInvoiceData (chargeVersions, billingBatchId) {
     //   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
     //   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
     // }
-    const invoiceAccountsObject = invoiceAccountsArray.reduce((acc, item) => {
+    const keyedBillingInvoices = billingInvoices.reduce((acc, item) => {
       return {
         ...acc,
         [item.invoiceAccountId]: item
       }
     }, {})
 
-    return invoiceAccountsObject
+    return keyedBillingInvoices
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatchId)
 
