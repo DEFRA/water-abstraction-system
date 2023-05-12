@@ -194,6 +194,32 @@ describe('Generate billing transactions service', () => {
         expect(result[0].isNewLicence).to.be.false()
       })
     })
+
+    describe('and a two-part tariff agreement (section 127)', () => {
+      beforeEach(() => {
+        isWaterUndertaker = false
+      })
+
+      describe('has not applied', () => {
+        it('returns the standard description', () => {
+          const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+          expect(result[0].description).to.equal(`Water abstraction charge: ${chargeElement.description}`)
+        })
+      })
+
+      describe('has been applied', () => {
+        beforeEach(() => {
+          chargeElement.adjustments.s127 = true
+        })
+
+        it('returns the two-part tariff prefixed description', () => {
+          const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+
+          expect(result[0].description).to.equal(`Two-part tariff basic water abstraction charge: ${chargeElement.description}`)
+        })
+      })
+    })
   })
 
   describe('when a charge element does not have billable days', () => {
