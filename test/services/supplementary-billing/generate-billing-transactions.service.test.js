@@ -56,6 +56,7 @@ describe('Generate billing transactions service', () => {
         startDate: new Date('2022-04-01'),
         endDate: new Date('2022-10-31')
       }
+      isWaterUndertaker = false
       isNewLicence = false
 
       expectedStandardChargeResult = {
@@ -123,10 +124,6 @@ describe('Generate billing transactions service', () => {
     })
 
     describe('and is not a water undertaker', () => {
-      beforeEach(() => {
-        isWaterUndertaker = false
-      })
-
       it('returns an array of two transactions containing the expected data', () => {
         const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
@@ -172,7 +169,6 @@ describe('Generate billing transactions service', () => {
     // worth adding unit tests for, if only to document it as something that the service expects
     describe('and is a new licence', () => {
       beforeEach(() => {
-        isWaterUndertaker = false
         isNewLicence = true
       })
 
@@ -184,10 +180,6 @@ describe('Generate billing transactions service', () => {
     })
 
     describe('returns `isNewLicence` as false on both transaction lines in the result', () => {
-      beforeEach(() => {
-        isWaterUndertaker = false
-      })
-
       it('returns the expected data', () => {
         const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
@@ -196,10 +188,6 @@ describe('Generate billing transactions service', () => {
     })
 
     describe('and a two-part tariff agreement (section 127)', () => {
-      beforeEach(() => {
-        isWaterUndertaker = false
-      })
-
       describe('has not applied', () => {
         it('returns the standard description', () => {
           const result = GenerateBillingTransactionsService.go(chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
@@ -228,8 +216,6 @@ describe('Generate billing transactions service', () => {
         startDate: new Date('2022-04-01'),
         endDate: new Date('2022-10-31')
       }
-      isNewLicence = false
-      isWaterUndertaker = false
 
       Sinon.stub(CalculateAuthorisedAndBillableDaysServiceService, 'go').returns({ authorisedDays: 365, billableDays: 0 })
     })
