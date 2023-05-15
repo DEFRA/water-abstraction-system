@@ -11,6 +11,15 @@ const routes = [
       description: 'Used to remove the acceptance test data from the database',
       app: { excludeFromProd: true }
     }
+  },
+  {
+    method: 'GET',
+    path: '/data/db-export',
+    handler: DataController.dbExport,
+    options: {
+      description: 'Used to export the database and upload the file to our AWS S3 bucket',
+      app: { excludeFromProd: true }
+    }
   }
 ]
 
