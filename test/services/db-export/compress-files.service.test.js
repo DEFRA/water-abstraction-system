@@ -12,7 +12,7 @@ const { expect } = Code
 const fs = require('fs')
 
 // Thing under test
-const CompressFilesService = require('../../../app/services/db-export/compress-files.service')
+const CompressFilesService = require('../../../app/services/db-export/compress-files.service.js')
 
 describe('Compress files service', () => {
   let notifierStub
@@ -41,7 +41,7 @@ describe('Compress files service', () => {
     it('compresses the csv file to a .gz file', async () => {
       const result = await CompressFilesService.go(filePath)
 
-      expect(result).to.equal(true)
+      expect(result).to.equal(`${filePath}.gz`)
       expect(fs.existsSync(`${filePath}.gz`)).to.equal(true)
       expect(notifierStub.omg.calledWith(`${filePath} successfully compressed to gzip.`)).to.be.true()
     })

@@ -77,6 +77,15 @@ function _compensationTransaction (billingTransactionId, standardTransaction) {
   }
 }
 
+function _description (chargeElement) {
+  // If the value is false, undefined, null or simply doesn't exist we return the standard description
+  if (!chargeElement.adjustments.s127) {
+    return `Water abstraction charge: ${chargeElement.description}`
+  }
+
+  return `Two-part tariff basic water abstraction charge: ${chargeElement.description}`
+}
+
 /**
  * Return a unique UUID to be used as an ID
  *
@@ -136,7 +145,7 @@ function _standardTransaction (
     authorisedQuantity: chargeElement.volume,
     billableQuantity: chargeElement.volume,
     status: 'candidate',
-    description: `Water abstraction charge: ${chargeElement.description}`,
+    description: _description(chargeElement),
     volume: chargeElement.volume,
     section126Factor: chargeElement.adjustments.s126 || 1,
     section127Agreement: !!chargeElement.adjustments.s127,
