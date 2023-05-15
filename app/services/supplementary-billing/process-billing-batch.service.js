@@ -50,10 +50,10 @@ async function go (billingBatch, billingPeriod) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
-    const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatch.billingBatchId)
+    const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatchId)
 
     // Pre-generate our required data
-    const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatch.billingBatchId, billingPeriod)
+    const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
     const billingInvoiceLicences = _generateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
 
     for (const chargeVersion of chargeVersions) {
