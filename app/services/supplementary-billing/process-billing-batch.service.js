@@ -122,7 +122,7 @@ async function _fetchInvoiceAccounts (chargeVersions, billingBatchId) {
   *
   * {
   *   'key-1': { billingInvoiceLicenceId: 'billing-invoice-licence-1', ... },
-  *   'key-2': { billingInvoiceLicenceId: 'billing-invoice-licence-2', ... },
+  *   'key-2': { billingInvoiceLicenceId: 'billing-invoice-licence-2', ... }
   * }
   */
 function _preGenerateBillingInvoiceLicences (chargeVersions, billingInvoices, billingBatch) {
@@ -156,27 +156,26 @@ function _billingInvoiceLicenceKey (billingInvoiceId, licenceId) {
   return `${billingInvoiceId}-${licenceId}`
 }
 
+/**
+  * We pre-generate billing invoices for every invoice account so that we don't need to fetch any data from the db
+  * during the main charge version processing loop. This function generates the required billing invoice licences and
+  * returns an object where each key is the invoice account id, and each value is the billing invoice, ie:
+  *
+  * {
+  *   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
+  *   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
+  * }
+  */
 function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
   try {
-    const billingInvoices = invoiceAccounts.map((invoiceAccount) => {
-      return GenerateBillingInvoiceService.go(
-        invoiceAccount,
-        billingBatchId,
-        billingPeriod.endDate.getFullYear()
-      )
-    })
-
-    // We create a keyed object from the array so we can quickly retrieve the required invoice account later. This will
-    // be in the format:
-    // {
-    //   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
-    //   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
-    // }
-    const keyedBillingInvoices = billingInvoices.reduce((acc, item) => {
-      const key = item.invoiceAccountId
+    const keyedBillingInvoices = invoiceAccounts.reduce((acc, invoiceAccount) => {
       return {
         ...acc,
-        [key]: item
+        [invoiceAccount.invoiceAccountId]: GenerateBillingInvoiceService.go(
+          invoiceAccount,
+          billingBatchId,
+          billingPeriod.endDate.getFullYear()
+        )
       }
     }, {})
 
