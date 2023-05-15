@@ -13,7 +13,7 @@ const fs = require('fs')
 const path = require('path')
 
 // Thing under test
-const ExportDataFilesService = require('../../../app/services/db-export/export-data-files.service')
+const ExportDataFilesService = require('../../../app/services/db-export/export-data-files.service.js')
 
 const csvHeader = [
   '"billingChargeCategoryId"',
