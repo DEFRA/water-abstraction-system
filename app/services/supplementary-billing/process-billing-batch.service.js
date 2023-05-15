@@ -37,12 +37,7 @@ async function go (billingBatch, billingPeriod) {
 
   let isEmpty = true
 
-  let currentBillingData = {
-    licence: null,
-    billingInvoice: null,
-    billingInvoiceLicence: null,
-    calculatedTransactions: []
-  }
+  const billingData = {}
 
   try {
     // Mark the start time for later logging
@@ -63,29 +58,29 @@ async function go (billingBatch, billingPeriod) {
         billingInvoiceLicences
       )
 
-      // If we've moved on to the next invoice licence then we need to finalise the previous one before we can continue
-      if (_thisIsADifferentBillingInvoiceLicence(currentBillingData, billingInvoiceLicence)) {
-        const emptyInvoiceLicence = await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
-        if (!emptyInvoiceLicence) {
-          isEmpty = false
-        }
-        currentBillingData.calculatedTransactions = []
-      }
+      const { billingInvoiceLicenceId } = billingInvoiceLicence
 
-      currentBillingData = _updateCurrentBillingData(currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence)
+      billingData[billingInvoiceLicenceId] = _updateBillingData(
+        billingData[billingInvoiceLicenceId],
+        chargeVersion,
+        billingInvoice,
+        billingInvoiceLicence
+      )
 
       const calculatedTransactions = _generateTransactionsIfStatusIsCurrent(
         chargeVersion,
         billingPeriod,
         billingBatchId,
-        currentBillingData
+        billingData[billingInvoiceLicenceId]
       )
-      currentBillingData.calculatedTransactions.push(...calculatedTransactions)
+      billingData[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 
-    const emptyInvoiceLicence = await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
-    if (!emptyInvoiceLicence) {
-      isEmpty = false
+    for (const currentBillingData of Object.values(billingData)) {
+      const emptyInvoiceLicence = await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
+      if (!emptyInvoiceLicence) {
+        isEmpty = false
+      }
     }
 
     await _finaliseBillingBatch(billingBatch, chargeVersions, isEmpty)
@@ -212,24 +207,13 @@ function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, b
   )
 }
 
-function _updateCurrentBillingData (currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence) {
+function _updateBillingData (currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence) {
   return {
-    ...currentBillingData,
-    licence: chargeVersion.licence,
-    billingInvoice,
-    billingInvoiceLicence
+    licence: chargeVersion.licence || null,
+    billingInvoice: billingInvoice || null,
+    billingInvoiceLicence: billingInvoiceLicence || null,
+    calculatedTransactions: currentBillingData?.calculatedTransactions || []
   }
-}
-
-function _thisIsADifferentBillingInvoiceLicence (currentBillingData, billingInvoiceLicence) {
-  // If we don't yet have a billing invoice licence (which will be the case the first time we iterate over the charge
-  // versions) then simply return false straight away
-  if (!currentBillingData.billingInvoiceLicence) {
-    return false
-  }
-
-  // Otherwise we want to return true if the previous and current licence ids don't match, and false if they do match
-  return currentBillingData.billingInvoiceLicence.billingInvoiceLicenceId !== billingInvoiceLicence.billingInvoiceLicenceId
 }
 
 /**
