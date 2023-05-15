@@ -35,8 +35,9 @@ const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.servic
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
 
-  const currentBillingData = {
-    isEmpty: true,
+  let isEmpty = true
+
+  let currentBillingData = {
     licence: null,
     billingInvoice: null,
     billingInvoiceLicence: null,
@@ -64,23 +65,30 @@ async function go (billingBatch, billingPeriod) {
 
       // If we've moved on to the next invoice licence then we need to finalise the previous one before we can continue
       if (_thisIsADifferentBillingInvoiceLicence(currentBillingData, billingInvoiceLicence)) {
-        await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
+        const emptyInvoiceLicence = await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
+        if (!emptyInvoiceLicence) {
+          isEmpty = false
+        }
         currentBillingData.calculatedTransactions = []
       }
 
-      _updateCurrentBillingData(currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence)
+      currentBillingData = _updateCurrentBillingData(currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence)
 
-      _generateTransactionsIfStatusIsCurrent(
+      const calculatedTransactions = _generateTransactionsIfStatusIsCurrent(
         chargeVersion,
         billingPeriod,
         billingBatchId,
         currentBillingData
       )
+      currentBillingData.calculatedTransactions.push(...calculatedTransactions)
     }
 
-    await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
+    const emptyInvoiceLicence = await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
+    if (!emptyInvoiceLicence) {
+      isEmpty = false
+    }
 
-    await _finaliseBillingBatch(billingBatch, chargeVersions, currentBillingData.isEmpty)
+    await _finaliseBillingBatch(billingBatch, chargeVersions, isEmpty)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -190,25 +198,27 @@ function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPe
   }
 }
 
-function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, currentBillingData) {
+function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId) {
   // If the charge version status isn't 'current' then we don't need to add any new debit lines to the bill
   if (chargeVersion.status !== 'current') {
-    return
+    return []
   }
 
   // Otherwise, it's likely to be something we have never billed previously so we need to calculate debit line(s)
-  const calculatedTransactions = _generateCalculatedTransactions(
+  return _generateCalculatedTransactions(
     billingPeriod,
     chargeVersion,
     billingBatchId
   )
-  currentBillingData.calculatedTransactions.push(...calculatedTransactions)
 }
 
 function _updateCurrentBillingData (currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence) {
-  currentBillingData.licence = chargeVersion.licence
-  currentBillingData.billingInvoice = billingInvoice
-  currentBillingData.billingInvoiceLicence = billingInvoiceLicence
+  return {
+    ...currentBillingData,
+    licence: chargeVersion.licence,
+    billingInvoice,
+    billingInvoiceLicence
+  }
 }
 
 function _thisIsADifferentBillingInvoiceLicence (currentBillingData, billingInvoiceLicence) {
@@ -336,7 +346,7 @@ async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod
     // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
     // first place
     if (!currentBillingData.billingInvoice) {
-      return
+      return true
     }
 
     const cleansedTransactions = await ProcessBillingTransactionsService.go(
@@ -347,11 +357,13 @@ async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod
     )
 
     if (cleansedTransactions.length > 0) {
-      currentBillingData.isEmpty = false
-
       await _createBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
       await _createBillingInvoiceLicence(currentBillingData, billingBatch)
+
+      return false
     }
+
+    return true
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
 
