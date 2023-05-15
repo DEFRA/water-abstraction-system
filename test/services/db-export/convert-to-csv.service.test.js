@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ConvertToCSVService = require('../../../app/services/db-export/convert-to-csv.service')
+const ConvertToCSVService = require('../../../app/services/db-export/convert-to-csv.service.js')
 
 /**
  * billingChargeCategoriesTable has all data types we are testing for
