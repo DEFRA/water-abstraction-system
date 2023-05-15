@@ -133,7 +133,8 @@ function _preGenerateBillingInvoiceLicences (chargeVersions, billingInvoices, bi
 
       const key = _billingInvoiceLicenceKey(billingInvoiceId, licence.licenceId)
 
-      // If the key already exists in our object then we don't need to generate another billing invoice licence for it
+      // The charge versions may contain a combination of billing invoice and licence multiple times, so we check to see
+      // if this combination has already had a billing invoice licence generated for it and return early if so
       if (acc.key) {
         return acc
       }
@@ -169,6 +170,8 @@ function _billingInvoiceLicenceKey (billingInvoiceId, licenceId) {
 function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
   try {
     const keyedBillingInvoices = invoiceAccounts.reduce((acc, invoiceAccount) => {
+      // Note that the array of invoice accounts will already have been deduped so we don't need to check whether a
+      // billing invoice licence already exists in the object before generating one
       return {
         ...acc,
         [invoiceAccount.invoiceAccountId]: GenerateBillingInvoiceService.go(
