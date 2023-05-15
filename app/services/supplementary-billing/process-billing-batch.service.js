@@ -50,10 +50,10 @@ async function go (billingBatch, billingPeriod) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
-    const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatch.billingBatchId)
+    const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatchId)
 
     // We pre-generate our billing invoices ahead of time to ensure we have only one invoice per account id
-    const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatch.billingBatchId, billingPeriod)
+    const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
 
     for (const chargeVersion of chargeVersions) {
       // Retrieve our previously-generated billing invoice for this charge version's invoice account
