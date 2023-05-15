@@ -12,7 +12,7 @@ const { expect } = Code
 const fs = require('fs')
 
 // Thing under test
-const CompressFilesService = require('../../../app/services/db-export/compress-files.service')
+const CompressFilesService = require('../../../app/services/db-export/compress-files.service.js')
 
 describe('Compress files service', () => {
   let notifierStub
