@@ -52,7 +52,7 @@ async function go (billingBatch, billingPeriod) {
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
     const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatch.billingBatchId)
 
-    // Pre-generate our required data.
+    // Pre-generate our required data
     const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatch.billingBatchId, billingPeriod)
     const billingInvoiceLicences = _generateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
 
@@ -121,10 +121,7 @@ function _generateBillingInvoiceLicences (chargeVersions, billingInvoices, billi
       const { licence } = chargeVersion
       const { billingInvoiceId } = billingInvoices[chargeVersion.invoiceAccountId]
 
-      // TODO: We pass {} as the first argument as we always want GenerateBillingInvoiceLicenceService to generate us a
-      // billing invoice licence. Once we've confirmed we're happy with our revised approach we will remove this
-      // functionality from the service.
-      return GenerateBillingInvoiceLicenceService.go({}, billingInvoiceId, licence)
+      return GenerateBillingInvoiceLicenceService.go(billingInvoiceId, licence)
     })
 
     // We create a keyed object from the array so we can quickly retrieve the required billing invoice licence later. This
