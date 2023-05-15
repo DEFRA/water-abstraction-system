@@ -52,13 +52,11 @@ async function go (billingBatch, billingPeriod) {
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
     const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatchId)
 
-    // Pre-generate our required data
-    const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
-    const billingInvoiceLicences = _generateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
+    const billingInvoices = _preGenerateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
+    const billingInvoiceLicences = _preGenerateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
 
     for (const chargeVersion of chargeVersions) {
-      // Retrieve our previously-generated data
-      const { billingInvoiceLicence, billingInvoice } = _retrieveGeneratedData(
+      const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
         chargeVersion,
         billingInvoices,
         billingInvoiceLicences
@@ -91,7 +89,7 @@ async function go (billingBatch, billingPeriod) {
   }
 }
 
-function _retrieveGeneratedData (chargeVersion, billingInvoices, billingInvoiceLicences) {
+function _retrievePreGeneratedData (chargeVersion, billingInvoices, billingInvoiceLicences) {
   const billingInvoice = billingInvoices[chargeVersion.invoiceAccountId]
 
   const billingInvoiceLicenceKey = _billingInvoiceLicenceKey(
@@ -115,7 +113,7 @@ async function _fetchInvoiceAccounts (chargeVersions, billingBatchId) {
   }
 }
 
-function _generateBillingInvoiceLicences (chargeVersions, billingInvoices, billingBatch) {
+function _preGenerateBillingInvoiceLicences (chargeVersions, billingInvoices, billingBatch) {
   try {
     const billingInvoiceLicences = chargeVersions.map((chargeVersion) => {
       const { licence } = chargeVersion
@@ -152,7 +150,7 @@ function _billingInvoiceLicenceKey (billingInvoiceId, licenceId) {
   return `${billingInvoiceId}-${licenceId}`
 }
 
-function _generateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
+function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
   try {
     const billingInvoices = invoiceAccounts.map((invoiceAccount) => {
       return GenerateBillingInvoiceService.go(
