@@ -12,7 +12,7 @@ const fs = require('fs')
  * @param {String} filePath The file path that we want to delete
  */
 async function go (filePath) {
-  await fs.unlinkSync(filePath)
+  fs.unlinkSync(filePath)
 }
 
 module.exports = {
