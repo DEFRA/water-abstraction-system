@@ -32,7 +32,6 @@ const LicenceModel = require('../../models/water/licence.model.js')
  */
 async function go (billingBatchId, chargeVersions) {
   const allLicenceIds = _extractUniqueLicenceIds(chargeVersions)
-  allLicenceIds.push('310f05c0-98d9-4e70-9857-71e5106e7559')
 
   return LicenceModel.query()
     .patch({ includeInSrocSupplementaryBilling: false })
