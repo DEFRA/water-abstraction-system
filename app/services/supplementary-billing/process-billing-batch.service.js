@@ -21,8 +21,8 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
-const LicenceModel = require('../../models/water/licence.model.js')
 const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
+const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -310,10 +310,11 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
 
 async function _finaliseBillingBatch (billingBatch, chargeVersions, isEmpty) {
   try {
+    await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
+
     // The bill run is considered empty. We just need to set the status to indicate this in the UI
     if (isEmpty) {
       await _updateStatus(billingBatch.billingBatchId, 'empty')
-      await _setSuppBillingFlagsToFalse(chargeVersions)
 
       return
     }
@@ -410,16 +411,6 @@ async function _updateStatus (billingBatchId, status) {
 
     throw error
   }
-}
-
-async function _setSuppBillingFlagsToFalse (chargeVersions) {
-  const licenceIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licence.licenceId
-  })
-
-  await LicenceModel.query()
-    .whereIn('licenceId', licenceIds)
-    .patch({ includeInSrocSupplementaryBilling: false })
 }
 
 module.exports = {
