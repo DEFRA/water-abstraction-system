@@ -113,28 +113,34 @@ async function _fetchInvoiceAccounts (chargeVersions, billingBatchId) {
   }
 }
 
+/**
+  * We pre-generate billing invoice licences for every combination of billing invoice and licence in the charge versions
+  * so that we don't need to fetch any data from the db during the main charge version processing loop. This function
+  * generates the required billing invoice licences and returns an object where each key is a concatenated billing
+  * invoice id and licence id, and each value is the billing invoice licence for that combination of billing invoice and
+  * licence, ie:
+  *
+  * {
+  *   'key-1': { billingInvoiceLicenceId: 'billing-invoice-licence-1', ... },
+  *   'key-2': { billingInvoiceLicenceId: 'billing-invoice-licence-2', ... },
+  * }
+  */
 function _preGenerateBillingInvoiceLicences (chargeVersions, billingInvoices, billingBatch) {
   try {
-    const billingInvoiceLicences = chargeVersions.map((chargeVersion) => {
-      const { licence } = chargeVersion
+    const keyedBillingInvoiceLicences = chargeVersions.reduce((acc, chargeVersion) => {
       const { billingInvoiceId } = billingInvoices[chargeVersion.invoiceAccountId]
+      const { licence } = chargeVersion
 
-      return GenerateBillingInvoiceLicenceService.go(billingInvoiceId, licence)
-    })
+      const key = _billingInvoiceLicenceKey(billingInvoiceId, licence.licenceId)
 
-    // We create a keyed object from the array so we can quickly retrieve the required billing invoice licence later. This
-    // will be in the format:
-    // {
-    //   'key-1': { billingInvoiceLicenceId: 'billing-invoice-licence-1', ... },
-    //   'key-2': { billingInvoiceLicenceId: 'billing-invoice-licence-2', ... },
-    // }
-    // We construct the key based on the billing invoice id and licence id, to ensure each combination has its own billing
-    // invoice licence
-    const keyedBillingInvoiceLicences = billingInvoiceLicences.reduce((acc, item) => {
-      const key = _billingInvoiceLicenceKey(item.billingInvoiceId, item.licenceId)
+      // If the key already exists in our object then we don't need to generate another billing invoice licence for it
+      if (acc.key) {
+        return acc
+      }
+
       return {
         ...acc,
-        [key]: item
+        [key]: GenerateBillingInvoiceLicenceService.go(billingInvoiceId, licence)
       }
     }, {})
 
