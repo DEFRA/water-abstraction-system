@@ -52,18 +52,14 @@ async function go (billingBatch, billingPeriod) {
     const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
     const invoiceAccounts = await _fetchInvoiceAccounts(chargeVersions, billingBatchId)
 
-    // We pre-generate our billing invoices ahead of time to ensure we have only one invoice per account id
-    const billingInvoices = _generateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
+    const billingInvoices = _preGenerateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
+    const billingInvoiceLicences = _preGenerateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
 
     for (const chargeVersion of chargeVersions) {
-      // Retrieve our previously-generated billing invoice for this charge version's invoice account
-      const billingInvoice = billingInvoices[chargeVersion.invoiceAccountId]
-
-      const billingInvoiceLicence = _generateInvoiceLicenceData(
-        currentBillingData,
-        billingBatch,
+      const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
         chargeVersion,
-        billingInvoice
+        billingInvoices,
+        billingInvoiceLicences
       )
 
       // If we've moved on to the next invoice licence then we need to finalise the previous one before we can continue
@@ -78,7 +74,6 @@ async function go (billingBatch, billingPeriod) {
         chargeVersion,
         billingPeriod,
         billingBatchId,
-        billingInvoiceLicence,
         currentBillingData
       )
     }
@@ -94,6 +89,18 @@ async function go (billingBatch, billingPeriod) {
   }
 }
 
+function _retrievePreGeneratedData (chargeVersion, billingInvoices, billingInvoiceLicences) {
+  const billingInvoice = billingInvoices[chargeVersion.invoiceAccountId]
+
+  const billingInvoiceLicenceKey = _billingInvoiceLicenceKey(
+    billingInvoice.billingInvoiceId,
+    chargeVersion.licence.licenceId
+  )
+  const billingInvoiceLicence = billingInvoiceLicences[billingInvoiceLicenceKey]
+
+  return { billingInvoice, billingInvoiceLicence }
+}
+
 async function _fetchInvoiceAccounts (chargeVersions, billingBatchId) {
   try {
     const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
@@ -106,26 +113,72 @@ async function _fetchInvoiceAccounts (chargeVersions, billingBatchId) {
   }
 }
 
-function _generateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
+/**
+  * We pre-generate billing invoice licences for every combination of billing invoice and licence in the charge versions
+  * so that we don't need to fetch any data from the db during the main charge version processing loop. This function
+  * generates the required billing invoice licences and returns an object where each key is a concatenated billing
+  * invoice id and licence id, and each value is the billing invoice licence for that combination of billing invoice and
+  * licence, ie:
+  *
+  * {
+  *   'key-1': { billingInvoiceLicenceId: 'billing-invoice-licence-1', ... },
+  *   'key-2': { billingInvoiceLicenceId: 'billing-invoice-licence-2', ... }
+  * }
+  */
+function _preGenerateBillingInvoiceLicences (chargeVersions, billingInvoices, billingBatch) {
   try {
-    const billingInvoices = invoiceAccounts.map((invoiceAccount) => {
-      return GenerateBillingInvoiceService.go(
-        invoiceAccount,
-        billingBatchId,
-        billingPeriod.endDate.getFullYear()
-      )
-    })
+    const keyedBillingInvoiceLicences = chargeVersions.reduce((acc, chargeVersion) => {
+      const { billingInvoiceId } = billingInvoices[chargeVersion.invoiceAccountId]
+      const { licence } = chargeVersion
 
-    // We create a keyed object from the array so we can quickly retrieve the required invoice account later. This will
-    // be in the format:
-    // {
-    //   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
-    //   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
-    // }
-    const keyedBillingInvoices = billingInvoices.reduce((acc, item) => {
+      const key = _billingInvoiceLicenceKey(billingInvoiceId, licence.licenceId)
+
+      // The charge versions may contain a combination of billing invoice and licence multiple times, so we check to see
+      // if this combination has already had a billing invoice licence generated for it and return early if so
+      if (acc.key) {
+        return acc
+      }
+
       return {
         ...acc,
-        [item.invoiceAccountId]: item
+        [key]: GenerateBillingInvoiceLicenceService.go(billingInvoiceId, licence)
+      }
+    }, {})
+
+    return keyedBillingInvoiceLicences
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+
+    throw error
+  }
+}
+
+function _billingInvoiceLicenceKey (billingInvoiceId, licenceId) {
+  return `${billingInvoiceId}-${licenceId}`
+}
+
+/**
+  * We pre-generate billing invoices for every invoice account so that we don't need to fetch any data from the db
+  * during the main charge version processing loop. This function generates the required billing invoice licences and
+  * returns an object where each key is the invoice account id, and each value is the billing invoice, ie:
+  *
+  * {
+  *   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
+  *   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
+  * }
+  */
+function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
+  try {
+    const keyedBillingInvoices = invoiceAccounts.reduce((acc, invoiceAccount) => {
+      // Note that the array of invoice accounts will already have been deduped so we don't need to check whether a
+      // billing invoice licence already exists in the object before generating one
+      return {
+        ...acc,
+        [invoiceAccount.invoiceAccountId]: GenerateBillingInvoiceService.go(
+          invoiceAccount,
+          billingBatchId,
+          billingPeriod.endDate.getFullYear()
+        )
       }
     }, {})
 
@@ -137,7 +190,7 @@ function _generateBillingInvoices (invoiceAccounts, billingBatchId, billingPerio
   }
 }
 
-function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, billingInvoiceLicence, currentBillingData) {
+function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId, currentBillingData) {
   // If the charge version status isn't 'current' then we don't need to add any new debit lines to the bill
   if (chargeVersion.status !== 'current') {
     return
@@ -147,8 +200,7 @@ function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, b
   const calculatedTransactions = _generateCalculatedTransactions(
     billingPeriod,
     chargeVersion,
-    billingBatchId,
-    billingInvoiceLicence
+    billingBatchId
   )
   currentBillingData.calculatedTransactions.push(...calculatedTransactions)
 }
@@ -307,23 +359,7 @@ async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod
   }
 }
 
-function _generateInvoiceLicenceData (currentBillingData, billingBatch, chargeVersion, billingInvoice) {
-  try {
-    const billingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(
-      currentBillingData.billingInvoiceLicence,
-      billingInvoice.billingInvoiceId,
-      chargeVersion.licence
-    )
-
-    return billingInvoiceLicence
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
-
-    throw error
-  }
-}
-
-function _generateCalculatedTransactions (billingPeriod, chargeVersion, billingBatchId, billingInvoiceLicence) {
+function _generateCalculatedTransactions (billingPeriod, chargeVersion, billingBatchId) {
   try {
     const financialYearEnding = billingPeriod.endDate.getFullYear()
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
