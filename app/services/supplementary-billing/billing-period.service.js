@@ -18,10 +18,12 @@
  * @returns {Object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
 function go () {
+  const SROC_FIRST_FIN_YEAR_END = 2023
+  const NO_OF_YEARS_TO_LOOK_BACK = 5
+
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
   const billingPeriod = []
-  const earliestSrocFinYearEnd = 2023
 
   // 01-APR to 31-MAR
   const financialPeriod = {
@@ -43,6 +45,8 @@ function go () {
     startYear = currentYear
     endYear = currentYear + 1
   }
+
+  const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, (endYear - NO_OF_YEARS_TO_LOOK_BACK))
 
   while (earliestSrocFinYearEnd <= endYear) {
     billingPeriod.push({
