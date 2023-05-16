@@ -80,6 +80,7 @@ describe('Data controller', () => {
         expect(payload.status).to.equal('successful')
       })
     })
+
     describe('when the service fails', () => {
       describe('because the DbExportService errors', () => {
         beforeEach(async () => {
