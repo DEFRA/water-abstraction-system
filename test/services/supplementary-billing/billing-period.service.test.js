@@ -59,15 +59,19 @@ describe('Billing Period service', () => {
     })
   })
 
-  // TODO: See notes in app/services/supplementary-billing/billing-period.service.js for reasons why this is skipped
-  // and needs to be unskipped someday!
-  describe.skip('when the date is in 2023 and falls within the 2023 financial year', () => {
+  describe('when the date is in 2023 and falls within the 2023 financial year', () => {
     beforeEach(async () => {
       testDate = new Date('2023-10-10')
-      expectedResult = {
-        startDate: new Date('2023-04-01'),
-        endDate: new Date('2024-03-31')
-      }
+      expectedResult = [
+        {
+          startDate: new Date('2023-04-01'),
+          endDate: new Date('2024-03-31')
+        },
+        {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2023-03-31')
+        }
+      ]
 
       clock = Sinon.useFakeTimers(testDate)
     })
@@ -75,8 +79,8 @@ describe('Billing Period service', () => {
     it('returns the expected date range', () => {
       const result = BillingPeriodService.go()
 
-      expect(result).to.have.length(1)
-      expect(result[0]).to.equal(expectedResult)
+      expect(result).to.have.length(2)
+      expect(result).to.equal(expectedResult)
     })
   })
 })
