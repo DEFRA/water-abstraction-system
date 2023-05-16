@@ -60,15 +60,11 @@ async function go (billingBatch, billingPeriod) {
         billingInvoices,
         billingInvoiceLicences
       )
-
       const { billingInvoiceLicenceId } = billingInvoiceLicence
 
-      billingData[billingInvoiceLicenceId] = _updateBillingData(
-        billingData[billingInvoiceLicenceId],
-        chargeVersion,
-        billingInvoice,
-        billingInvoiceLicence
-      )
+      if (!billingData[billingInvoiceLicenceId]) {
+        billingData[billingInvoiceLicenceId] = _initialBillingData(chargeVersion, billingInvoice, billingInvoiceLicence)
+      }
 
       const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId)
       billingData[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
@@ -225,12 +221,12 @@ function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPe
   }
 }
 
-function _updateBillingData (currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence) {
+function _initialBillingData (chargeVersion, billingInvoice, billingInvoiceLicence) {
   return {
-    licence: chargeVersion.licence || null,
-    billingInvoice: billingInvoice || null,
-    billingInvoiceLicence: billingInvoiceLicence || null,
-    calculatedTransactions: currentBillingData?.calculatedTransactions || []
+    licence: chargeVersion.licence,
+    billingInvoice,
+    billingInvoiceLicence,
+    calculatedTransactions: []
   }
 }
 
