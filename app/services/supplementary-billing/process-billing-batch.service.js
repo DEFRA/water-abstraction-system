@@ -35,8 +35,6 @@ const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.servic
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
 
-  let isEmpty = true
-
   const billingData = {}
 
   try {
@@ -85,8 +83,6 @@ async function go (billingBatch, billingPeriod) {
     for (const currentBillingData of Object.values(billingData)) {
       const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod, billingBatch)
       if (cleansedTransactions.length !== 0) {
-        isEmpty = false
-
         const billingTransactions = await _generateBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
         dataToPersist.transactions.push(...billingTransactions)
 
@@ -97,7 +93,9 @@ async function go (billingBatch, billingPeriod) {
 
     await _persistData(dataToPersist, billingBatch)
 
-    await _finaliseBillingBatch(billingBatch, chargeVersions, isEmpty)
+    const billingBatchIsEmpty = dataToPersist.billingInvoiceLicences.length === 0
+
+    await _finaliseBillingBatch(billingBatch, chargeVersions, billingBatchIsEmpty)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -325,12 +323,12 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
   }
 }
 
-async function _finaliseBillingBatch (billingBatch, chargeVersions, isEmpty) {
+async function _finaliseBillingBatch (billingBatch, chargeVersions, billingBatchIsEmpty) {
   try {
     await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
 
     // The bill run is considered empty. We just need to set the status to indicate this in the UI
-    if (isEmpty) {
+    if (billingBatchIsEmpty) {
       await _updateStatus(billingBatch.billingBatchId, 'empty')
 
       return
