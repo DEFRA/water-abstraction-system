@@ -77,9 +77,10 @@ async function go (billingBatch, billingPeriod) {
     }
 
     for (const currentBillingData of Object.values(billingData)) {
-      const emptyInvoiceLicence = await _finaliseCurrentInvoiceLicence(currentBillingData, billingPeriod, billingBatch)
-      if (!emptyInvoiceLicence) {
+      const cleansedTransactions = await _generateCleansedTransactions(currentBillingData, billingPeriod, billingBatch)
+      if (cleansedTransactions.length !== 0) {
         isEmpty = false
+        await _finaliseCurrentInvoiceLicence(currentBillingData, cleansedTransactions, billingPeriod, billingBatch)
       }
     }
 
@@ -325,12 +326,12 @@ async function _finaliseBillingBatch (billingBatch, chargeVersions, isEmpty) {
   }
 }
 
-async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod, billingBatch) {
+async function _generateCleansedTransactions (currentBillingData, billingPeriod, billingBatch) {
   try {
     // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
     // first place
     if (!currentBillingData.billingInvoice) {
-      return true
+      return []
     }
 
     const cleansedTransactions = await ProcessBillingTransactionsService.go(
@@ -340,14 +341,18 @@ async function _finaliseCurrentInvoiceLicence (currentBillingData, billingPeriod
       billingPeriod
     )
 
-    if (cleansedTransactions.length > 0) {
-      await _createBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
-      await _createBillingInvoiceLicence(currentBillingData, billingBatch)
+    return cleansedTransactions
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
 
-      return false
-    }
+    throw error
+  }
+}
 
-    return true
+async function _finaliseCurrentInvoiceLicence (currentBillingData, cleansedTransactions, billingPeriod, billingBatch) {
+  try {
+    await _createBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
+    await _createBillingInvoiceLicence(currentBillingData, billingBatch)
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
 
