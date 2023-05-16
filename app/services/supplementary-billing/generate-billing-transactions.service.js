@@ -147,15 +147,15 @@ function _standardTransaction (
     status: 'candidate',
     description: _description(chargeElement),
     volume: chargeElement.volume,
-    section126Factor: chargeElement.adjustments.s126 || 1,
+    section126Factor: Number(chargeElement.adjustments.s126) || 1,
     section127Agreement: !!chargeElement.adjustments.s127,
     section130Agreement: !!chargeElement.adjustments.s130,
     // NOTE: We do not currently support two part tariff bill runs. We set this to false until we implement that
     // functionality and understand what determines the flag
     isTwoPartSecondPartCharge: false,
     scheme: 'sroc',
-    aggregateFactor: chargeElement.adjustments.aggregate || 1,
-    adjustmentFactor: chargeElement.adjustments.charge || 1,
+    aggregateFactor: Number(chargeElement.adjustments.aggregate) || 1,
+    adjustmentFactor: Number(chargeElement.adjustments.charge) || 1,
     chargeCategoryCode: chargeElement.billingChargeCategory.reference,
     chargeCategoryDescription: chargeElement.billingChargeCategory.shortDescription,
     isSupportedSource: !!chargeElement.additionalCharges?.supportedSource?.name,
