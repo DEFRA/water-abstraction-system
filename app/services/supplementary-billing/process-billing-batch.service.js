@@ -93,9 +93,7 @@ async function go (billingBatch, billingPeriod) {
 
     await _persistData(dataToPersist, billingBatch)
 
-    const billingBatchIsEmpty = dataToPersist.billingInvoiceLicences.length === 0
-
-    await _finaliseBillingBatch(billingBatch, chargeVersions, billingBatchIsEmpty)
+    await _finaliseBillingBatch(billingBatch, chargeVersions, dataToPersist.billingInvoiceLicences)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -323,12 +321,13 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
   }
 }
 
-async function _finaliseBillingBatch (billingBatch, chargeVersions, billingBatchIsEmpty) {
+async function _finaliseBillingBatch (billingBatch, chargeVersions, billingInvoiceLicences) {
   try {
     await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
 
-    // The bill run is considered empty. We just need to set the status to indicate this in the UI
-    if (billingBatchIsEmpty) {
+    // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
+    // indicate this in the UI
+    if (billingInvoiceLicences.length === 0) {
       await _updateStatus(billingBatch.billingBatchId, 'empty')
 
       return
