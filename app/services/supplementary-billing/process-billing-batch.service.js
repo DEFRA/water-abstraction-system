@@ -50,6 +50,11 @@ async function go (billingBatch, billingPeriod) {
     const billingInvoiceLicences = _preGenerateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
 
     for (const chargeVersion of chargeVersions) {
+      // If the charge version status isn't `current` then we don't need to handle it so continue to the next one
+      if (chargeVersion.status !== 'current') {
+        continue
+      }
+
       const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
         chargeVersion,
         billingInvoices,
@@ -65,12 +70,7 @@ async function go (billingBatch, billingPeriod) {
         billingInvoiceLicence
       )
 
-      const calculatedTransactions = _generateTransactionsIfStatusIsCurrent(
-        chargeVersion,
-        billingPeriod,
-        billingBatchId,
-        billingData[billingInvoiceLicenceId]
-      )
+      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId)
       billingData[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 
@@ -223,20 +223,6 @@ function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPe
 
     throw error
   }
-}
-
-function _generateTransactionsIfStatusIsCurrent (chargeVersion, billingPeriod, billingBatchId) {
-  // If the charge version status isn't 'current' then we don't need to add any new debit lines to the bill
-  if (chargeVersion.status !== 'current') {
-    return []
-  }
-
-  // Otherwise, it's likely to be something we have never billed previously so we need to calculate debit line(s)
-  return _generateCalculatedTransactions(
-    billingPeriod,
-    chargeVersion,
-    billingBatchId
-  )
 }
 
 function _updateBillingData (currentBillingData, chargeVersion, billingInvoice, billingInvoiceLicence) {
