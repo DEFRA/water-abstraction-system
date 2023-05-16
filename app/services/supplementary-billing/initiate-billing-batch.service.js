@@ -26,8 +26,10 @@ const ProcessBillingBatchService = require('./process-billing-batch.service.js')
  */
 async function go (billRunRequestData) {
   // NOTE: It will be required in the future that we cater for a range of billing periods, as changes can be back dated
-  // up to 5 years. For now though, our delivery scope is only for the current billing period hence billingPeriods[0]
-  const billingPeriod = BillingPeriodService.go()[0]
+  // up to 5 years. For now though, our delivery scope is only for the 2022-2023 billing period so the final record is
+  // extracted from the `fullBillingPeriod` array which will currently always be for the 2022-2023 billing period.
+  const fullBillingPeriod = BillingPeriodService.go()
+  const billingPeriod = fullBillingPeriod[fullBillingPeriod.length - 1]
 
   const { region, scheme, type, user } = billRunRequestData
 
