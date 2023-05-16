@@ -8,10 +8,10 @@
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
 const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-licence.model.js')
+const BillingTransactionModel = require('../../models/water/billing-transaction.model.js')
 const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
 const ChargingModuleGenerateService = require('..//charging-module/generate-bill-run.service.js')
 const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
-const CreateBillingTransactionService = require('./create-billing-transaction.service.js')
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
@@ -76,13 +76,26 @@ async function go (billingBatch, billingPeriod) {
       billingData[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 
+    const dataToPersist = {
+      transactions: [],
+      billingInvoices: new Set(), // We use a Set as this ignores duplicates, ensuring each invoice is only added once
+      billingInvoiceLicences: []
+    }
+
     for (const currentBillingData of Object.values(billingData)) {
-      const cleansedTransactions = await _generateCleansedTransactions(currentBillingData, billingPeriod, billingBatch)
+      const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod, billingBatch)
       if (cleansedTransactions.length !== 0) {
         isEmpty = false
-        await _finaliseCurrentInvoiceLicence(currentBillingData, cleansedTransactions, billingPeriod, billingBatch)
+
+        const billingTransactions = await _generateBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
+        dataToPersist.transactions.push(...billingTransactions)
+
+        dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
+        dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
       }
     }
+
+    await _persistData(dataToPersist, billingBatch)
 
     await _finaliseBillingBatch(billingBatch, chargeVersions, isEmpty)
 
@@ -90,6 +103,28 @@ async function go (billingBatch, billingPeriod) {
     _calculateAndLogTime(billingBatchId, startTime)
   } catch (error) {
     _logError(billingBatch, error)
+  }
+}
+
+async function _persistData (dataToPersist, billingBatch) {
+  try {
+    if (dataToPersist.transactions.length !== 0) {
+      await BillingTransactionModel.query().insert(dataToPersist.transactions)
+    }
+
+    // Note that Sets have a size property rather than length
+    if (dataToPersist.billingInvoices.size !== 0) {
+      // We need to spread the Set into an array for Objection to accept it
+      await BillingInvoiceModel.query().insert([...dataToPersist.billingInvoices])
+    }
+
+    if (dataToPersist.billingInvoiceLicences.length !== 0) {
+      await BillingInvoiceLicenceModel.query().insert(dataToPersist.billingInvoiceLicences)
+    }
+  } catch (error) {
+    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
+
+    throw error
   }
 }
 
@@ -235,27 +270,12 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
 }
 
-async function _createBillingInvoiceLicence (currentBillingData, billingBatch) {
-  const { billingInvoice, billingInvoiceLicence } = currentBillingData
-
-  try {
-    if (!billingInvoice.persisted) {
-      await BillingInvoiceModel.query().insert(billingInvoice)
-      billingInvoice.persisted = true
-    }
-
-    await BillingInvoiceLicenceModel.query().insert(billingInvoiceLicence)
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
-
-    throw error
-  }
-}
-
-async function _createBillingTransactions (currentBillingData, billingBatch, billingTransactions, billingPeriod) {
+async function _generateBillingTransactions (currentBillingData, billingBatch, billingTransactions, billingPeriod) {
   const { licence, billingInvoice, billingInvoiceLicence } = currentBillingData
 
   try {
+    const generatedTransactions = []
+
     for (const transaction of billingTransactions) {
       const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
         transaction,
@@ -270,8 +290,10 @@ async function _createBillingTransactions (currentBillingData, billingBatch, bil
       transaction.externalId = chargingModuleResponse.response.body.transaction.id
       transaction.billingInvoiceLicenceId = billingInvoiceLicence.billingInvoiceLicenceId
 
-      await CreateBillingTransactionService.go(transaction)
+      generatedTransactions.push(transaction)
     }
+
+    return generatedTransactions
   } catch (error) {
     HandleErroredBillingBatchService.go(
       billingBatch.billingBatchId,
@@ -326,7 +348,7 @@ async function _finaliseBillingBatch (billingBatch, chargeVersions, isEmpty) {
   }
 }
 
-async function _generateCleansedTransactions (currentBillingData, billingPeriod, billingBatch) {
+async function _cleanseTransactions (currentBillingData, billingPeriod, billingBatch) {
   try {
     // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
     // first place
@@ -342,17 +364,6 @@ async function _generateCleansedTransactions (currentBillingData, billingPeriod,
     )
 
     return cleansedTransactions
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
-
-    throw error
-  }
-}
-
-async function _finaliseCurrentInvoiceLicence (currentBillingData, cleansedTransactions, billingPeriod, billingBatch) {
-  try {
-    await _createBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
-    await _createBillingInvoiceLicence(currentBillingData, billingBatch)
   } catch (error) {
     HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
 
