@@ -48,23 +48,7 @@ async function go (billingBatch, billingPeriod) {
     const billingInvoiceLicences = _preGenerateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
 
     const billingData = _constructBillingData(chargeVersions, billingInvoices, billingInvoiceLicences, billingPeriod, billingBatchId)
-
-    const dataToPersist = {
-      transactions: [],
-      billingInvoices: new Set(), // We use a Set as this ignores duplicates, ensuring each invoice is only added once
-      billingInvoiceLicences: []
-    }
-
-    for (const currentBillingData of Object.values(billingData)) {
-      const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod, billingBatch)
-      if (cleansedTransactions.length !== 0) {
-        const billingTransactions = await _generateBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
-        dataToPersist.transactions.push(...billingTransactions)
-
-        dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
-        dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
-      }
-    }
+    const dataToPersist = await _constructDataToPersist(billingData, billingPeriod, billingBatch)
 
     await _persistData(dataToPersist, billingBatch)
 
@@ -75,6 +59,26 @@ async function go (billingBatch, billingPeriod) {
   } catch (error) {
     _logError(billingBatch, error)
   }
+}
+
+async function _constructDataToPersist (billingData, billingPeriod, billingBatch) {
+  const dataToPersist = {
+    transactions: [],
+    billingInvoices: new Set(),
+    billingInvoiceLicences: []
+  }
+
+  for (const currentBillingData of Object.values(billingData)) {
+    const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod, billingBatch)
+    if (cleansedTransactions.length !== 0) {
+      const billingTransactions = await _generateBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
+      dataToPersist.transactions.push(...billingTransactions)
+
+      dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
+      dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
+    }
+  }
+  return dataToPersist
 }
 
 function _constructBillingData (chargeVersions, billingInvoices, billingInvoiceLicences, billingPeriod, billingBatchId) {
