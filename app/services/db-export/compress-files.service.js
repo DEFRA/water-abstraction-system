@@ -19,13 +19,10 @@ const zlib = require('node:zlib')
  */
 async function go (filePath) {
   if (!fs.existsSync(filePath)) {
-    global.GlobalNotifier.omfg(`ERROR: ${filePath} did not successfully compress to gzip.`)
-
     return false
   }
 
   await _compressFile(filePath)
-  global.GlobalNotifier.omg(`${filePath} successfully compressed to gzip.`)
 
   return `${filePath}.gz`
 }
