@@ -35,8 +35,6 @@ const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.servic
 async function go (billingBatch, billingPeriod) {
   const { billingBatchId } = billingBatch
 
-  const billingData = {}
-
   try {
     // Mark the start time for later logging
     const startTime = process.hrtime.bigint()
@@ -49,26 +47,7 @@ async function go (billingBatch, billingPeriod) {
     const billingInvoices = _preGenerateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
     const billingInvoiceLicences = _preGenerateBillingInvoiceLicences(chargeVersions, billingInvoices, billingBatch)
 
-    for (const chargeVersion of chargeVersions) {
-      // If the charge version status isn't `current` then we don't need to handle it so continue to the next one
-      if (chargeVersion.status !== 'current') {
-        continue
-      }
-
-      const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
-        chargeVersion,
-        billingInvoices,
-        billingInvoiceLicences
-      )
-      const { billingInvoiceLicenceId } = billingInvoiceLicence
-
-      if (!billingData[billingInvoiceLicenceId]) {
-        billingData[billingInvoiceLicenceId] = _initialBillingData(chargeVersion, billingInvoice, billingInvoiceLicence)
-      }
-
-      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId)
-      billingData[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
-    }
+    const billingData = _constructBillingData(chargeVersions, billingInvoices, billingInvoiceLicences, billingPeriod, billingBatchId)
 
     const dataToPersist = {
       transactions: [],
@@ -96,6 +75,31 @@ async function go (billingBatch, billingPeriod) {
   } catch (error) {
     _logError(billingBatch, error)
   }
+}
+
+function _constructBillingData (chargeVersions, billingInvoices, billingInvoiceLicences, billingPeriod, billingBatchId) {
+  return chargeVersions.reduce((acc, chargeVersion) => {
+    // If the charge version status isn't `current` then we don't need to handle it
+    if (chargeVersion.status !== 'current') {
+      return acc
+    }
+
+    const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
+      chargeVersion,
+      billingInvoices,
+      billingInvoiceLicences
+    )
+    const { billingInvoiceLicenceId } = billingInvoiceLicence
+
+    if (!acc[billingInvoiceLicenceId]) {
+      acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion, billingInvoice, billingInvoiceLicence)
+    }
+
+    const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId)
+    acc[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
+
+    return acc
+  }, {})
 }
 
 async function _persistData (dataToPersist, billingBatch) {
