@@ -6,7 +6,7 @@
  */
 
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
-const BillingPeriodService = require('./billing-period.service.js')
+const BillingPeriodsService = require('./billing-periods.service.js')
 const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
 const CreateBillingBatchPresenter = require('../../presenters/supplementary-billing/create-billing-batch.presenter.js')
@@ -26,8 +26,10 @@ const ProcessBillingBatchService = require('./process-billing-batch.service.js')
  */
 async function go (billRunRequestData) {
   // NOTE: It will be required in the future that we cater for a range of billing periods, as changes can be back dated
-  // up to 5 years. For now though, our delivery scope is only for the current billing period hence billingPeriods[0]
-  const billingPeriod = BillingPeriodService.go()[0]
+  // up to 5 years. For now though, our delivery scope is only for the 2022-2023 billing period so the final record is
+  // extracted from the `billingPeriods` array which will currently always be for the 2022-2023 billing period.
+  const billingPeriods = BillingPeriodsService.go()
+  const billingPeriod = billingPeriods[billingPeriods.length - 1]
 
   const { region, scheme, type, user } = billRunRequestData
 
