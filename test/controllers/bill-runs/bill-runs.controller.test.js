@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const InitiateBillingBatchService = require('../../../app/services/supplementary-billing/initiate-billing-batch.service.js')
+const Boom = require('@hapi/boom')
 
 // For running our service
 const { init } = require('../../../app/server.js')
@@ -33,7 +34,13 @@ describe('Bill Runs controller', () => {
   // Create server before each test
   beforeEach(async () => {
     server = await init()
+
+    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
+    // possible
     Sinon.stub(server.logger, 'error')
+
+    // We silence sending a notification to our Errbit instance using Airbrake
+    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
   })
 
   afterEach(() => {
@@ -76,6 +83,7 @@ describe('Bill Runs controller', () => {
 
       describe('because the billing batch could not be initiated', () => {
         beforeEach(async () => {
+          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
           Sinon.stub(InitiateBillingBatchService, 'go').rejects()
         })
 

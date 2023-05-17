@@ -5,14 +5,11 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, after, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // For running our service
 const { init } = require('../../../app/server.js')
-
-// Things we need to stub
-const Airbrake = require('@airbrake/node')
 
 describe('Airbrake controller: GET /status/airbrake', () => {
   let server, airbrakeStub
@@ -25,16 +22,15 @@ describe('Airbrake controller: GET /status/airbrake', () => {
   beforeEach(async () => {
     server = await init()
 
-    airbrakeStub = Sinon
-      .stub(Airbrake.Notifier.prototype, 'notify')
-      .resolves({ id: 1 })
+    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
+    // possible
+    Sinon.stub(server.logger, 'error')
+
+    // We silence sending a notification to our Errbit instance using Airbrake
+    airbrakeStub = Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
   })
 
   afterEach(() => {
-    airbrakeStub.restore()
-  })
-
-  after(() => {
     Sinon.restore()
   })
 
