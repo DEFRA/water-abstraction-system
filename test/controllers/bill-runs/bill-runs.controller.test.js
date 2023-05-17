@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const InitiateBillingBatchService = require('../../../app/services/supplementary-billing/initiate-billing-batch.service.js')
+const Boom = require('@hapi/boom')
 
 // For running our service
 const { init } = require('../../../app/server.js')
@@ -82,6 +83,7 @@ describe('Bill Runs controller', () => {
 
       describe('because the billing batch could not be initiated', () => {
         beforeEach(async () => {
+          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
           Sinon.stub(InitiateBillingBatchService, 'go').rejects()
         })
 
