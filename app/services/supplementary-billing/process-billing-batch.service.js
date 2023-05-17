@@ -95,9 +95,15 @@ async function _buildDataToPersist (billingData, billingPeriod, billingBatch) {
     const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod, billingBatch)
 
     if (cleansedTransactions.length !== 0) {
-      const billingTransactions = await _generateBillingTransactions(currentBillingData, billingBatch, cleansedTransactions, billingPeriod)
-      dataToPersist.transactions.push(...billingTransactions)
+      const billingTransactions = await _generateBillingTransactions(
+        currentBillingData,
+        billingBatch,
+        cleansedTransactions,
+        billingPeriod
+      )
 
+      dataToPersist.transactions.push(...billingTransactions)
+      // Note that Sets use add rather than push
       dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
       dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
     }
@@ -317,7 +323,10 @@ async function _generateBillingTransactions (currentBillingData, billingBatch, b
         licence
       )
 
-      const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(billingBatch.externalId, chargingModuleRequest)
+      const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(
+        billingBatch.externalId,
+        chargingModuleRequest
+      )
 
       transaction.status = 'charge_created'
       transaction.externalId = chargingModuleResponse.response.body.transaction.id
