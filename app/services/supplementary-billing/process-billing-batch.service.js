@@ -42,9 +42,9 @@ async function go (billingBatch, billingPeriod) {
     await _updateStatus(billingBatchId, 'processing')
 
     const fetchedData = await _fetchData(billingBatch, billingPeriod)
-    const emptyBillingData = _preGenerateData(fetchedData, billingBatchId, billingPeriod)
+    const preGeneratedData = _preGenerateData(fetchedData, billingBatchId, billingPeriod)
 
-    const billingData = _populateBillingDataWithTransactions(fetchedData, emptyBillingData, billingPeriod, billingBatchId)
+    const billingData = _buildBillingDataWithTransactions(fetchedData, preGeneratedData, billingPeriod, billingBatchId)
     const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billingBatch)
 
     await _persistData(dataToPersist, billingBatch)
@@ -107,18 +107,34 @@ async function _buildDataToPersist (billingData, billingPeriod, billingBatch) {
 }
 
 /**
- * Processes each charge version, calculating the required transactions and populating the empty billing data with them
+ * Processes each charge version and and returns an object where each key is a billing invoice id which exists in one or
+ * more charge versions and the key's value is an object containing the associated licence, billing invoice and billing
+ * invoice licence, along with any required transactions, eg:
+ *
+ * {
+ *   'billing-invoice-licence-id-1': {
+ *     billingInvoiceLicence: '...', // instance of the billing invoice licence
+ *     licence: '...', // instance of the licence for this billing invoice licence
+ *     billingInvoice: '...', // instance of the billing invoice for this billing invoice licence
+ *     transactions: [] // array of calculated transactions for this billing invoice licence
+ *   },
+ *   'billing-invoice-licence-id-2': {
+ *     // Same object structure as above
+ *   }
+ * }
  */
-function _populateBillingDataWithTransactions (fetchedData, emptyBillingData, billingPeriod, billingBatchId) {
+function _buildBillingDataWithTransactions (fetchedData, preGeneratedData, billingPeriod, billingBatchId) {
   const { chargeVersions } = fetchedData
 
+  // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
+  // charge version.
   return chargeVersions.reduce((acc, chargeVersion) => {
-    // If the charge version status isn't `current` then we don't need to handle it
+    // We only need to handle charge versions with a status of `current`
     if (chargeVersion.status !== 'current') {
       return acc
     }
 
-    const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(emptyBillingData, chargeVersion)
+    const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(preGeneratedData, chargeVersion)
     const { billingInvoiceLicenceId } = billingInvoiceLicence
 
     if (!acc[billingInvoiceLicenceId]) {
