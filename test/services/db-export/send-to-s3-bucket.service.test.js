@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const path = require('path')
-
 // Things we need to stub
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
 
@@ -19,17 +16,6 @@ const SendToS3BucketService = require('../../../app/services/db-export/send-to-s
 
 describe('Send to S3 bucket service', () => {
   let s3Stub
-  let notifierStub
-
-  beforeEach(() => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-    delete global.GlobalNotifier
-  })
 
   describe('when successful', () => {
     beforeEach(() => {
@@ -37,8 +23,11 @@ describe('Send to S3 bucket service', () => {
       s3Stub = Sinon.stub(S3Client.prototype, 'send')
     })
 
+    afterEach(() => {
+      Sinon.restore()
+    })
+
     const filePath = 'test/fixtures/compress-files.service.csv'
-    const fileName = path.basename(filePath)
 
     it('uploads a file to the S3 bucket', async () => {
       await SendToS3BucketService.go(filePath)
@@ -55,12 +44,6 @@ describe('Send to S3 bucket service', () => {
       const result = await SendToS3BucketService.go(filePath)
 
       expect(result).to.equal(true)
-    })
-
-    it('logs a success message', async () => {
-      await SendToS3BucketService.go(filePath)
-
-      expect(notifierStub.omg.calledWith(`The file ${fileName} was uploaded successfully`)).to.be.true()
     })
   })
 
@@ -88,12 +71,6 @@ describe('Send to S3 bucket service', () => {
         const result = await SendToS3BucketService.go(filePath)
 
         expect(result).to.equal(false)
-      })
-
-      it('logs the error', async () => {
-        await SendToS3BucketService.go(filePath)
-
-        expect(notifierStub.omfg.calledWith('ERROR uploading file: Error')).to.be.true()
       })
     })
   })

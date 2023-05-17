@@ -74,10 +74,8 @@ describe('Data controller', () => {
 
       it('displays the correct message', async () => {
         const response = await server.inject(options)
-        const payload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(200)
-        expect(payload.status).to.equal('successful')
+        expect(response.statusCode).to.equal(204)
       })
     })
 
@@ -89,10 +87,8 @@ describe('Data controller', () => {
 
         it('displays the error message', async () => {
           const response = await server.inject(options)
-          const payload = JSON.parse(response.payload)
 
-          expect(payload.status).to.equal('Error: Error')
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(500)
         })
       })
     })
