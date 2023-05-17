@@ -44,10 +44,9 @@ async function _uploadToBucket (params, fileName) {
 
   try {
     await s3Client.send(command)
-    global.GlobalNotifier.omg(`The file ${fileName} was uploaded successfully`)
+
     return true
   } catch (error) {
-    global.GlobalNotifier.omfg(`ERROR uploading file: ${error.message}`)
     return false
   }
 }

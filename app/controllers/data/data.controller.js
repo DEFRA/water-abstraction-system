@@ -23,17 +23,13 @@ async function tearDown (_request, h) {
 /**
  * Triggers export of all relevant tables to CSV and then uploads them to S3
  */
-async function dbExport (_request, _h) {
-  global.GlobalNotifier.omg('Starting db export service ')
-
+async function dbExport (_request, h) {
   try {
     await DbExportService.go()
 
-    global.GlobalNotifier.omg('Finished export service')
-    return { status: 'successful' }
+    return h.response().code(204)
   } catch (error) {
-    global.GlobalNotifier.omfg(`Error: ${error.message}`)
-    return { status: `Error: ${error.message}` }
+    return Boom.badImplementation(error.message)
   }
 }
 
