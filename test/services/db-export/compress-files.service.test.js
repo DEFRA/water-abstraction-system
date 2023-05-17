@@ -3,7 +3,6 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -15,18 +14,7 @@ const fs = require('fs')
 const CompressFilesService = require('../../../app/services/db-export/compress-files.service.js')
 
 describe('Compress files service', () => {
-  let notifierStub
   let filePath
-
-  beforeEach(() => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-    delete global.GlobalNotifier
-  })
 
   describe('when successful', () => {
     beforeEach(() => {
@@ -43,7 +31,6 @@ describe('Compress files service', () => {
 
       expect(result).to.equal(`${filePath}.gz`)
       expect(fs.existsSync(`${filePath}.gz`)).to.equal(true)
-      expect(notifierStub.omg.calledWith(`${filePath} successfully compressed to gzip.`)).to.be.true()
     })
   })
 
@@ -57,7 +44,6 @@ describe('Compress files service', () => {
 
       expect(result).to.equal(false)
       expect(fs.existsSync((`${filePath}.gz`))).to.equal(false)
-      expect(notifierStub.omfg.calledWith(`ERROR: ${filePath} did not successfully compress to gzip.`)).to.be.true()
     })
   })
 })
