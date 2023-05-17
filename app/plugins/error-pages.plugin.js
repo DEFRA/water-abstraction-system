@@ -26,7 +26,7 @@ const ErrorPagesPlugin = {
         const { errorPages: pluginSettings } = request.route.settings.plugins
 
         // Whether we purposely return a Boom error in our controllers or not, exceptions thrown by the controllers are
-        // wrapped as Boom errors. So, in this context `isBoom` can be read is `isError`.
+        // wrapped as Boom errors. So, in this context `isBoom` can be read as `isError`.
         if (response.isBoom && !pluginSettings?.plainOutput) {
           const { statusCode } = response.output
 
