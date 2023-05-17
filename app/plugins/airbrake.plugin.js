@@ -32,7 +32,9 @@ const AirbrakePlugin = {
       projectId: AirbrakeConfig.projectId,
       projectKey: AirbrakeConfig.projectKey,
       environment: AirbrakeConfig.environment,
-      performanceStats: false
+      errorNotifications: true,
+      performanceStats: false,
+      remoteConfig: false
     })
 
     // When Hapi emits a request event with an error we capture the details and use Airbrake to send a request to our

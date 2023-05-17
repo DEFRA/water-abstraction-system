@@ -20,8 +20,13 @@ const ErrorPagesPlugin = {
       server.ext('onPreResponse', (request, h) => {
         const { response } = request
 
+        // By adding `plugins: { errorPages: { plainOutput: true }}` to a route's `options:` property you can control
+        // whether we display our error handling pages or not. This is handy for API only where we would not want an
+        // error page to be returned as the response
         const { errorPages: pluginSettings } = request.route.settings.plugins
 
+        // Whether we purposely return a Boom error in our controllers or not, exceptions thrown by the controllers are
+        // wrapped as Boom errors. So, in this context `isBoom` can be read is `isError`.
         if (response.isBoom && !pluginSettings?.plainOutput) {
           const { statusCode } = response.output
 
@@ -29,11 +34,13 @@ const ErrorPagesPlugin = {
             return h.view('404').code(statusCode)
           }
 
-          server.logger.error({
-            statusCode,
-            message: response.message,
-            stack: response.data ? response.data.stack : response.stack
-          })
+          request.app.notifier.omfg(
+            response.message,
+            {
+              statusCode,
+              stack: response.data ? response.data.stack : response.stack
+            }
+          )
 
           return h.view('500').code(statusCode)
         }
