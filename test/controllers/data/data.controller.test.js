@@ -21,7 +21,13 @@ describe('Data controller', () => {
   beforeEach(async () => {
     // Create server before each test
     server = await init()
+
+    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
+    // possible
     Sinon.stub(server.logger, 'error')
+
+    // We silence sending a notification to our Errbit instance using Airbrake
+    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
   })
 
   afterEach(() => {
