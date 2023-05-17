@@ -15,7 +15,7 @@ const EventModel = require('../../../app/models/water/event.model.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
-const BillingPeriodService = require('../../../app/services/supplementary-billing/billing-period.service.js')
+const BillingPeriodsService = require('../../../app/services/supplementary-billing/billing-periods.service.js')
 const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('../../../app/services/supplementary-billing/check-live-bill-run.service.js')
 const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
@@ -41,7 +41,7 @@ describe('Initiate Billing Batch service', () => {
       user: 'test.user@defra.gov.uk'
     }
 
-    Sinon.stub(BillingPeriodService, 'go').returns([currentBillingPeriod])
+    Sinon.stub(BillingPeriodsService, 'go').returns([currentBillingPeriod])
     Sinon.stub(CheckLiveBillRunService, 'go').resolves(false)
 
     // The InitiateBillingBatch service does not await the call to the ProcessBillingBatchService. It is intended to
