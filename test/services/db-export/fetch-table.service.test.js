@@ -12,7 +12,7 @@ const BillingChargeCategoryHelper = require('../../support/helpers/water/billing
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const FetchBillingChargeCategoriesService = require('../../../app/services/db-export/fetch-billing-charge-categories.service.js')
+const FetchTableService = require('../../../app/services/db-export/fetch-table.service.js')
 
 const billingChargeCategoriesColumnInfo = [
   'billingChargeCategoryId',
@@ -30,7 +30,7 @@ const billingChargeCategoriesColumnInfo = [
   'dateUpdated'
 ]
 
-describe('Fetch Billing charge categories service', () => {
+describe('Fetch table service', () => {
   let billingChargeCategory
 
   beforeEach(async () => {
@@ -41,14 +41,17 @@ describe('Fetch Billing charge categories service', () => {
   })
 
   describe('when we connect to the db', () => {
+    const tableName = 'billing_charge_categories'
+    const schemaName = 'water'
+
     it('returns the table column names', async () => {
-      const result = await FetchBillingChargeCategoriesService.go()
+      const result = await FetchTableService.go(tableName, schemaName)
 
       expect(result.headers).to.equal(billingChargeCategoriesColumnInfo)
     })
 
     it('returns all records in the billing-charge-categories table', async () => {
-      const result = await FetchBillingChargeCategoriesService.go()
+      const result = await FetchTableService.go(tableName, schemaName)
 
       expect(result.rows[0][0]).to.equal(billingChargeCategory.billingChargeCategoryId)
       expect(result.rows[0][2]).to.equal(billingChargeCategory.subsistenceCharge)
@@ -56,7 +59,7 @@ describe('Fetch Billing charge categories service', () => {
     })
 
     it('returns the table name', async () => {
-      const result = await FetchBillingChargeCategoriesService.go()
+      const result = await FetchTableService.go(tableName, schemaName)
 
       expect(result.tableName).to.equal('billing_charge_categories')
     })
