@@ -29,12 +29,12 @@ async function go (billRunRequestData) {
   // up to 5 years. For now though, our delivery scope is only for the 2022-2023 billing period so the final record is
   // extracted from the `billingPeriods` array which will currently always be for the 2022-2023 billing period.
   const billingPeriods = BillingPeriodsService.go()
-  const billingPeriod = billingPeriods[billingPeriods.length - 1]
+  // const billingPeriod = billingPeriods[billingPeriods.length - 1]
 
   const { region, scheme, type, user } = billRunRequestData
 
-  const financialYear = billingPeriod.endDate.getFullYear()
-  const liveBillRunExists = await CheckLiveBillRunService.go(region, financialYear)
+  const currentFinancialYear = billingPeriods[0].endDate.getFullYear()
+  const liveBillRunExists = await CheckLiveBillRunService.go(region, currentFinancialYear)
 
   if (liveBillRunExists) {
     throw Error(`Batch already live for region ${region}`)
@@ -43,11 +43,11 @@ async function go (billRunRequestData) {
   const chargingModuleResult = await ChargingModuleCreateBillRunService.go(region, 'sroc')
 
   const billingBatchOptions = _billingBatchOptions(type, scheme, chargingModuleResult)
-  const billingBatch = await CreateBillingBatchService.go(region, billingPeriod, billingBatchOptions)
+  const billingBatch = await CreateBillingBatchService.go(region, billingPeriods, billingBatchOptions)
 
   await CreateBillingBatchEventService.go(billingBatch, user)
 
-  ProcessBillingBatchService.go(billingBatch, billingPeriod)
+  _processBillingBatch(billingBatch, billingPeriods)
 
   return _response(billingBatch)
 }
@@ -69,6 +69,12 @@ function _billingBatchOptions (type, scheme, chargingModuleResult) {
   options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
 
   return options
+}
+
+function _processBillingBatch (billingBatch, billingPeriods) {
+  billingPeriods.forEach(async (billingPeriod) => {
+    await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+  })
 }
 
 function _response (billingBatch) {

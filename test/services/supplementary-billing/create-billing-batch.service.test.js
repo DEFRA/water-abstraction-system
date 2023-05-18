@@ -17,7 +17,10 @@ const RegionModel = require('../../../app/models/water/region.model.js')
 const CreateBillingBatchService = require('../../../app/services/supplementary-billing/create-billing-batch.service.js')
 
 describe('Create Billing Batch service', () => {
-  const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+  const billingPeriod = [
+    { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
+    { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+  ]
   let region
 
   beforeEach(async () => {
@@ -33,7 +36,7 @@ describe('Create Billing Batch service', () => {
       expect(result).to.be.an.instanceOf(BillingBatchModel)
 
       expect(result.fromFinancialYearEnding).to.equal(2023)
-      expect(result.toFinancialYearEnding).to.equal(2023)
+      expect(result.toFinancialYearEnding).to.equal(2024)
       expect(result.batchType).to.equal('supplementary')
       expect(result.scheme).to.equal('sroc')
       expect(result.source).to.equal('wrls')
@@ -60,7 +63,7 @@ describe('Create Billing Batch service', () => {
       expect(result).to.be.an.instanceOf(BillingBatchModel)
 
       expect(result.fromFinancialYearEnding).to.equal(2023)
-      expect(result.toFinancialYearEnding).to.equal(2023)
+      expect(result.toFinancialYearEnding).to.equal(2024)
       expect(result.batchType).to.equal(batchType)
       expect(result.scheme).to.equal(scheme)
       expect(result.source).to.equal(source)
@@ -83,7 +86,7 @@ describe('Create Billing Batch service', () => {
       expect(result).to.be.an.instanceOf(BillingBatchModel)
 
       expect(result.fromFinancialYearEnding).to.equal(2023)
-      expect(result.toFinancialYearEnding).to.equal(2023)
+      expect(result.toFinancialYearEnding).to.equal(2024)
       expect(result.batchType).to.equal('supplementary')
       expect(result.scheme).to.equal('sroc')
       expect(result.source).to.equal('wrls')
