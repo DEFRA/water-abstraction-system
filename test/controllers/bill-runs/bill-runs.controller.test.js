@@ -63,9 +63,7 @@ describe('Bill Runs controller', () => {
 
       it('returns a 200 response including details of the new billing batch', async () => {
         const response = await server.inject(options())
-        console.log('🚀 ~ file: bill-runs.controller.test.js:66 ~ it ~ response:', response)
         const payload = JSON.parse(response.payload)
-        console.log('🚀 ~ file: bill-runs.controller.test.js:68 ~ it ~ payload:', payload)
 
         expect(response.statusCode).to.equal(200)
         expect(payload).to.equal(validResponse)

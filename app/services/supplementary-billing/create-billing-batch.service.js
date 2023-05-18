@@ -25,7 +25,7 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
  */
 async function go (regionId, financialYearEndings, options) {
   const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
-  const optionsData = optionsDefaults(options)
+  const optionsData = _defaultOptions(options)
 
   const billingBatch = await BillingBatchModel.query()
     .insert({
@@ -40,7 +40,7 @@ async function go (regionId, financialYearEndings, options) {
   return billingBatch
 }
 
-function optionsDefaults (data) {
+function _defaultOptions (option) {
   const defaults = {
     batchType: 'supplementary',
     scheme: 'sroc',
@@ -52,7 +52,7 @@ function optionsDefaults (data) {
 
   return {
     ...defaults,
-    ...data
+    ...option
   }
 }
 
