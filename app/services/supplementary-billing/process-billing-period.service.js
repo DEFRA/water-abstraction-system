@@ -29,6 +29,10 @@ const ProcessBillingTransactionsService = require('./process-billing-transaction
  * @param {Object} billingPeriod An object representing the financial year the transaction is for
  */
 async function go (billingBatch, billingPeriod, chargeVersions) {
+  if (chargeVersions.length === 0) {
+    return true
+  }
+
   const { billingBatchId } = billingBatch
 
   const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
@@ -40,7 +44,7 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
 
   await _persistData(dataToPersist)
 
-  return dataToPersist.billingInvoiceLicences.length !== 0
+  return dataToPersist.billingInvoiceLicences.length === 0
 }
 
 /**

@@ -19,11 +19,11 @@ const CreateBillingBatchEventService = require('./create-billing-batch-event.ser
  * along with a bill run record in the SROC Charging Module API.
  *
  * @param {String} regionId Id of the region the bill run is for
- * @param {String} user Email address of the user who initiated the bill run
+ * @param {String} userEmail Email address of the user who initiated the bill run
  *
  * @returns {module:BillingBatchModel} The newly created billing batch instance
  */
-async function go (financialYearEndings, regionId, user) {
+async function go (financialYearEndings, regionId, userEmail) {
   const liveBillRunExists = await CheckLiveBillRunService.go(regionId, financialYearEndings.toFinancialYearEnding)
 
   if (liveBillRunExists) {
@@ -35,7 +35,7 @@ async function go (financialYearEndings, regionId, user) {
   const billingBatchOptions = _billingBatchOptions(chargingModuleResult)
   const billingBatch = await CreateBillingBatchService.go(regionId, financialYearEndings, billingBatchOptions)
 
-  await CreateBillingBatchEventService.go(billingBatch, user)
+  await CreateBillingBatchEventService.go(billingBatch, userEmail)
 
   return billingBatch
 }

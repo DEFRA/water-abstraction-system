@@ -12,14 +12,14 @@ const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
-async function go (region, user) {
+async function go (regionId, userEmail) {
   // NOTE: It will be required in the future that we cater for a range of billing periods, as changes can be back dated
   // up to 5 years. For now though, our delivery scope is only for the 2022-2023 billing period so the final record is
   // extracted from the `billingPeriods` array which will currently always be for the 2022-2023 billing period.
   const billingPeriods = BillingPeriodsService.go()
   const financialYearEndings = _financialYearEndings(billingPeriods)
 
-  const billingBatch = await InitiateBillingBatchService.go(financialYearEndings, region, user)
+  const billingBatch = await InitiateBillingBatchService.go(financialYearEndings, regionId, userEmail)
 
   _process(billingBatch, billingPeriods)
 
@@ -44,10 +44,9 @@ async function _process (billingBatch, billingPeriods) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, currentBillingPeriod)
+    const isEmpty = await ProcessBillingPeriodService.go(billingBatch, currentBillingPeriod, chargeVersions)
 
-    const isPopulated = await ProcessBillingPeriodService.go(billingBatch, currentBillingPeriod, chargeVersions)
-
-    await _finaliseBillingBatch(billingBatch, chargeVersions, isPopulated)
+    await _finaliseBillingBatch(billingBatch, chargeVersions, isEmpty)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -77,10 +76,6 @@ function _calculateAndLogTime (billingBatchId, startTime) {
 
 async function _fetchChargeVersions (billingBatch, billingPeriod) {
   try {
-    // We know in the future we will be calculating multiple billing periods and so will have to iterate through each,
-    // generating bill runs and reviewing if there is anything to bill. For now, whilst our knowledge of the process
-    // is low we are focusing on just the current financial year, and intending to ship a working version for just it.
-    // This is why we are only passing through the first billing period; we know there is only one!
     const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
     // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillingBatchService if it
@@ -96,16 +91,14 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
  * process, and refreshes the billing batch locally. However if there were no resulting invoice licences then we simply
  * unflag the unbilled licences and mark the billing batch with `empty` status
  */
-async function _finaliseBillingBatch (billingBatch, chargeVersions, isPopulated) {
+async function _finaliseBillingBatch (billingBatch, chargeVersions, isEmpty) {
   try {
     await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
 
     // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
     // indicate this in the UI
-    if (!isPopulated) {
-      await _updateStatus(billingBatch.billingBatchId, 'empty')
-
-      return
+    if (isEmpty) {
+      return _updateStatus(billingBatch.billingBatchId, 'empty')
     }
 
     // We then need to tell the Charging Module to run its generate process. This is where the Charging module finalises
