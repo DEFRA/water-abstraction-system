@@ -32,9 +32,9 @@ const GenerateBillingTransactionsService = require('../../../app/services/supple
 const HandleErroredBillingBatchService = require('../../../app/services/supplementary-billing/handle-errored-billing-batch.service.js')
 
 // Thing under test
-const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
+const ProcessBillingPeriodService = require('../../../app/services/supplementary-billing/process-billing-period.service.js')
 
-describe('Process billing batch service', () => {
+describe('Process billing period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -79,7 +79,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets the Billing Batch status to empty', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
@@ -124,7 +124,7 @@ describe('Process billing batch service', () => {
         })
 
         it('sets the Billing Batch status to processing', async () => {
-          await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+          await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
           const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
@@ -157,7 +157,7 @@ describe('Process billing batch service', () => {
 
           describe('and there are no previous billed transactions', () => {
             it('sets the Billing Batch status to empty', async () => {
-              await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+              await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
               const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
@@ -165,7 +165,7 @@ describe('Process billing batch service', () => {
             })
 
             it('sets the includeInSrocSupplementaryBilling flag to false', async () => {
-              await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+              await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
               const result = await LicenceModel.query().findById(licence.licenceId)
 
@@ -199,7 +199,7 @@ describe('Process billing batch service', () => {
             })
 
             it('sets the Billing Batch status to empty', async () => {
-              await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+              await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
               const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
@@ -207,7 +207,7 @@ describe('Process billing batch service', () => {
             })
 
             it('sets the includeInSrocSupplementaryBilling flag to false', async () => {
-              await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+              await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
               const result = await LicenceModel.query().findById(licence.licenceId)
 
@@ -219,7 +219,7 @@ describe('Process billing batch service', () => {
     })
 
     it('logs the time taken to process the billing batch', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+      await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
       const logMessage = notifierStub.omg.firstCall.args[0]
 
@@ -236,7 +236,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets the appropriate error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -250,7 +250,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets no error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -275,7 +275,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets the appropriate error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -299,7 +299,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets the appropriate error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -315,7 +315,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets no error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -347,7 +347,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets no error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -381,7 +381,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets no error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -396,11 +396,11 @@ describe('Process billing batch service', () => {
       })
 
       it('handles the error', async () => {
-        await expect(ProcessBillingBatchService.go(billingBatch, billingPeriod)).not.to.reject()
+        await expect(ProcessBillingPeriodService.go(billingBatch, billingPeriod)).not.to.reject()
       })
 
       it('sets the Billing Batch status to errored', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -408,7 +408,7 @@ describe('Process billing batch service', () => {
       })
 
       it('logs the error', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriod)
+        await ProcessBillingPeriodService.go(billingBatch, billingPeriod)
 
         const logDataArg = notifierStub.omfg.firstCall.args[1]
 

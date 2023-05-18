@@ -15,7 +15,6 @@ const EventModel = require('../../../app/models/water/event.model.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
-const BillingPeriodsService = require('../../../app/services/supplementary-billing/billing-periods.service.js')
 const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('../../../app/services/supplementary-billing/check-live-bill-run.service.js')
 const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
@@ -24,24 +23,16 @@ const ProcessBillingBatchService = require('../../../app/services/supplementary-
 const InitiateBillingBatchService = require('../../../app//services/supplementary-billing/initiate-billing-batch.service.js')
 
 describe('Initiate Billing Batch service', () => {
-  const currentBillingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
-  }
-  let validatedRequestData
+  const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
+  const user = 'test.user@defra.gov.uk'
+  let regionId
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
     const region = await RegionHelper.add()
-    validatedRequestData = {
-      type: 'supplementary',
-      scheme: 'sroc',
-      region: region.regionId,
-      user: 'test.user@defra.gov.uk'
-    }
+    regionId = region.regionId
 
-    Sinon.stub(BillingPeriodsService, 'go').returns([currentBillingPeriod])
     Sinon.stub(CheckLiveBillRunService, 'go').resolves(false)
 
     // The InitiateBillingBatch service does not await the call to the ProcessBillingBatchService. It is intended to
@@ -76,7 +67,7 @@ describe('Initiate Billing Batch service', () => {
     })
 
     it('creates a new billing batch record', async () => {
-      await InitiateBillingBatchService.go(validatedRequestData)
+      await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
 
       const result = await BillingBatchModel.query().limit(1).first()
 
@@ -85,24 +76,24 @@ describe('Initiate Billing Batch service', () => {
     })
 
     it('creates a new event record', async () => {
-      await InitiateBillingBatchService.go(validatedRequestData)
+      await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
 
       const count = await EventModel.query().resultSize()
 
       expect(count).to.equal(1)
     })
 
-    it('returns a response', async () => {
-      const result = await InitiateBillingBatchService.go(validatedRequestData)
+    it('returns the new billing batch', async () => {
+      const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
 
       const billingBatch = await BillingBatchModel.query().first()
 
-      expect(result.id).to.equal(billingBatch.billingBatchId)
-      expect(result.region).to.equal(billingBatch.regionId)
+      expect(result.billingBatchId).to.equal(billingBatch.billingBatchId)
+      expect(result.regionId).to.equal(billingBatch.regionId)
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
       expect(result.status).to.equal('queued')
-      expect(result.errorCode).to.equal(null)
+      expect(result.errorCode).to.be.null()
     })
   })
 
@@ -127,12 +118,12 @@ describe('Initiate Billing Batch service', () => {
       })
 
       it('creates a bill run with `error` status and error code 50', async () => {
-        const result = await InitiateBillingBatchService.go(validatedRequestData)
+        const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
 
         const billingBatch = await BillingBatchModel.query().limit(1).first()
 
-        expect(result.id).to.equal(billingBatch.billingBatchId)
-        expect(result.region).to.equal(billingBatch.regionId)
+        expect(result.billingBatchId).to.equal(billingBatch.billingBatchId)
+        expect(result.regionId).to.equal(billingBatch.regionId)
         expect(result.scheme).to.equal('sroc')
         expect(result.batchType).to.equal('supplementary')
         expect(result.status).to.equal('error')
@@ -146,10 +137,10 @@ describe('Initiate Billing Batch service', () => {
       })
 
       it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(validatedRequestData)).to.reject()
+        const err = await expect(InitiateBillingBatchService.go(financialYearEndings, regionId, user)).to.reject()
 
         expect(err).to.be.an.error()
-        expect(err.message).to.equal(`Batch already live for region ${validatedRequestData.region}`)
+        expect(err.message).to.equal(`Batch already live for region ${regionId}`)
       })
     })
   })
