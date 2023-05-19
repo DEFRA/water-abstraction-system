@@ -8,6 +8,4 @@ class BillingBatchError extends Error {
   }
 }
 
-module.exports = {
-  BillingBatchError
-}
+module.exports = BillingBatchError
