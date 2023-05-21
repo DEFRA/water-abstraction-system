@@ -27,7 +27,7 @@ async function go (billingBatch, billingPeriods) {
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
   } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatchId, error.code)
+    await HandleErroredBillingBatchService.go(billingBatchId, error.code)
     _logError(billingBatch, error)
   }
 }
@@ -68,25 +68,19 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
  * unflag the unbilled licences and mark the billing batch with `empty` status
  */
 async function _finaliseBillingBatch (billingBatch, chargeVersions, isEmpty) {
-  try {
-    await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
+  await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
 
-    // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
-    // indicate this in the UI
-    if (isEmpty) {
-      return _updateStatus(billingBatch.billingBatchId, 'empty')
-    }
-
-    // We then need to tell the Charging Module to run its generate process. This is where the Charging module finalises
-    // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-    await ChargingModuleGenerateService.go(billingBatch.externalId)
-
-    await LegacyRequestLib.post('water', `billing/batches/${billingBatch.billingBatchId}/refresh`)
-  } catch (error) {
-    HandleErroredBillingBatchService.go(billingBatch.billingBatchId)
-
-    throw error
+  // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
+  // indicate this in the UI
+  if (isEmpty) {
+    return _updateStatus(billingBatch.billingBatchId, 'empty')
   }
+
+  // We then need to tell the Charging Module to run its generate process. This is where the Charging module finalises
+  // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
+  await ChargingModuleGenerateService.go(billingBatch.externalId)
+
+  await LegacyRequestLib.post('water', `billing/batches/${billingBatch.billingBatchId}/refresh`)
 }
 
 function _logError (billingBatch, error) {

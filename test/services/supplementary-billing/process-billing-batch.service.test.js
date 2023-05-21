@@ -199,7 +199,7 @@ describe('Process billing batch service', () => {
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
-        expect(handlerArgs).length(1)
+        expect(handlerArgs[1]).to.be.undefined()
       })
 
       it('logs the error', async () => {
