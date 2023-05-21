@@ -2,38 +2,14 @@
 
 const BillingBatchError = require('../../errors/billing-batch.error.js')
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
-const BillingPeriodsService = require('./billing-periods.service.js')
 const ChargingModuleGenerateService = require('../charging-module/generate-bill-run.service.js')
-const CreateBillingBatchPresenter = require('../../presenters/supplementary-billing/create-billing-batch.presenter.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
-const InitiateBillingBatchService = require('./initiate-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
-async function go (regionId, userEmail) {
-  // NOTE: It will be required in the future that we cater for a range of billing periods, as changes can be back dated
-  // up to 5 years. For now though, our delivery scope is only for the 2022-2023 billing period so the final record is
-  // extracted from the `billingPeriods` array which will currently always be for the 2022-2023 billing period.
-  const billingPeriods = BillingPeriodsService.go()
-  const financialYearEndings = _financialYearEndings(billingPeriods)
-
-  const billingBatch = await InitiateBillingBatchService.go(financialYearEndings, regionId, userEmail)
-
-  _process(billingBatch, billingPeriods)
-
-  return _response(billingBatch)
-}
-
-function _financialYearEndings (billingPeriods) {
-  return {
-    fromFinancialYearEnding: billingPeriods[billingPeriods.length - 1].endDate.getFullYear(),
-    toFinancialYearEnding: billingPeriods[0].endDate.getFullYear()
-  }
-}
-
-async function _process (billingBatch, billingPeriods) {
+async function go (billingBatch, billingPeriods) {
   const currentBillingPeriod = billingPeriods[billingPeriods.length - 1]
   const { billingBatchId } = billingBatch
 
@@ -125,10 +101,6 @@ function _logError (billingBatch, error) {
         code: error.code
       }
     })
-}
-
-function _response (billingBatch) {
-  return CreateBillingBatchPresenter.go(billingBatch)
 }
 
 async function _updateStatus (billingBatchId, status) {
