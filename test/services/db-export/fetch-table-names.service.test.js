@@ -26,7 +26,7 @@ const listOfTableNames = [
   'billing_charge_categories'
 ]
 
-describe.only('Fetch table names', () => {
+describe('Fetch table names', () => {
   describe('when given a schema name', () => {
     it('returns a list of the schemas table names', async () => {
       const result = await FetchTableNames.go('water')
@@ -36,10 +36,11 @@ describe.only('Fetch table names', () => {
   })
 
   describe('when not given a schema name', () => {
-    it('returns an empty array', async () => {
-      const result = await FetchTableNames.go()
+    it('throws an error', async () => {
+      const result = await expect(FetchTableNames.go()).to.reject()
 
-      expect(result).to.be.empty()
+      expect(result).to.be.an.error()
+      expect(result.message).to.equal('Error: Unable to fetch table names')
     })
   })
 })

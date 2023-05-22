@@ -16,8 +16,11 @@ const { db } = require('../../../db/db.js')
  */
 async function go (schemaName) {
   const tableData = await _fetchTableNames(schemaName)
-
   const tableNames = _pluckTableNames(tableData.rows)
+
+  if (tableNames.length === 0) {
+    throw new Error('Error: Unable to fetch table names')
+  }
 
   return tableNames
 }
