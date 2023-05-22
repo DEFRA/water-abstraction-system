@@ -11,7 +11,7 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
  * Create a new billing batch
  *
  * @param {Object} regionId The regionId for the selected region
- * @param {Object} billingPeriods The billing periods in the format [{ startDate: 2022-04-01, endDate: 2023-03-31 }]
+ * @param {Object} financialYearEndings Object that contains the from and to financial year endings
  * @param {Object} options Optional params to be overridden
  * @param {String} [options.batchType=supplementary] The type of billing batch to create. Defaults to 'supplementary'
  * @param {String} [options.scheme=sroc] The applicable charging scheme. Defaults to 'sroc'
@@ -23,14 +23,15 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
  *
  * @returns {module:BillingBatchModel} The newly created billing batch instance with the `.region` property populated
  */
-async function go (regionId, billingPeriods, options) {
-  const optionsData = optionsDefaults(options)
+async function go (regionId, financialYearEndings, options) {
+  const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
+  const optionsData = _defaultOptions(options)
 
   const billingBatch = await BillingBatchModel.query()
     .insert({
       regionId,
-      fromFinancialYearEnding: billingPeriods[billingPeriods.length - 1].endDate.getFullYear(),
-      toFinancialYearEnding: billingPeriods[0].endDate.getFullYear(),
+      fromFinancialYearEnding,
+      toFinancialYearEnding,
       ...optionsData
     })
     .returning('*')
@@ -39,7 +40,7 @@ async function go (regionId, billingPeriods, options) {
   return billingBatch
 }
 
-function optionsDefaults (data) {
+function _defaultOptions (option) {
   const defaults = {
     batchType: 'supplementary',
     scheme: 'sroc',
@@ -51,7 +52,7 @@ function optionsDefaults (data) {
 
   return {
     ...defaults,
-    ...data
+    ...option
   }
 }
 
