@@ -13,26 +13,26 @@ const ConvertToCSVService = require('../../../app/services/db-export/convert-to-
 const CompressFilesService = require('../../../app/services/db-export/compress-files.service.js')
 const DeleteFileService = require('../../../app/services/db-export/delete-file.service.js')
 const ExportDataFilesService = require('../../../app/services/db-export/export-data-files.service.js')
-const FetchBillingChargeCategoriesService = require('../../../app/services/db-export/fetch-billing-charge-categories.service.js')
+const FetchTableService = require('../../../app/services/db-export/fetch-table.service.js')
 const SendToS3BucketService = require('../../../app/services/db-export/send-to-s3-bucket.service.js')
 
 // Thing under test
-const DbExportService = require('../../../app/services/db-export/db-export.service.js')
+const TableExportService = require('../../../app/services/db-export/table-export.service.js')
 
-describe('Db Export service', () => {
+describe('Table Export service', () => {
   let notifierStub
   let convertToCSVServiceStub
   let compressFilesServiceStub
   let deleteFileServiceStub
   let exportDataFilesServiceStub
-  let fetchBillingChargeCategoriesServiceStub
+  let fetchTableServiceStub
   let sendToS3BucketServiceStub
 
   beforeEach(async () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    fetchBillingChargeCategoriesServiceStub = Sinon.stub(FetchBillingChargeCategoriesService, 'go').resolves({ headers: [], rows: [] })
+    fetchTableServiceStub = Sinon.stub(FetchTableService, 'go').resolves({ headers: [], rows: [] })
     convertToCSVServiceStub = Sinon.stub(ConvertToCSVService, 'go').resolves('csvData')
     exportDataFilesServiceStub = Sinon.stub(ExportDataFilesService, 'go').resolves('filePath')
     compressFilesServiceStub = Sinon.stub(CompressFilesService, 'go').resolves('compressedFilePath')
@@ -45,13 +45,13 @@ describe('Db Export service', () => {
   })
 
   it('runs the db export services', async () => {
-    await DbExportService.go()
+    await TableExportService.go()
 
     expect(convertToCSVServiceStub.called).to.be.true()
     expect(compressFilesServiceStub.called).to.be.true()
     expect(deleteFileServiceStub.called).to.be.true()
     expect(exportDataFilesServiceStub.called).to.be.true()
-    expect(fetchBillingChargeCategoriesServiceStub.called).to.be.true()
+    expect(fetchTableServiceStub.called).to.be.true()
     expect(sendToS3BucketServiceStub.called).to.be.true()
   })
 })
