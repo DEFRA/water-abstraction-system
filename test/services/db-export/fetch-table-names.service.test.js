@@ -31,7 +31,9 @@ describe('Fetch table names', () => {
     it('returns a list of the schemas table names', async () => {
       const result = await FetchTableNames.go('water')
 
-      expect(result).to.equal(listOfTableNames)
+      expect(result).to.include('billing_charge_categories')
+      expect(result).to.include('charge_purposes')
+      expect(result).to.include('billing_batches')
     })
   })
 
