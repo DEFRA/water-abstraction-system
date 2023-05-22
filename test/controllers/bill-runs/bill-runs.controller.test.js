@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const InitiateBillingBatchService = require('../../../app/services/supplementary-billing/initiate-billing-batch.service.js')
+const NewBillingBatchService = require('../../../app/services/supplementary-billing/new-billing-batch.service.js')
 const Boom = require('@hapi/boom')
 
 // For running our service
@@ -58,7 +58,7 @@ describe('Bill Runs controller', () => {
       }
 
       beforeEach(async () => {
-        Sinon.stub(InitiateBillingBatchService, 'go').resolves(validResponse)
+        Sinon.stub(NewBillingBatchService, 'go').resolves(validResponse)
       })
 
       it('returns a 200 response including details of the new billing batch', async () => {
@@ -84,7 +84,7 @@ describe('Bill Runs controller', () => {
       describe('because the billing batch could not be initiated', () => {
         beforeEach(async () => {
           Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-          Sinon.stub(InitiateBillingBatchService, 'go').rejects()
+          Sinon.stub(NewBillingBatchService, 'go').rejects()
         })
 
         it('returns an error response', async () => {
