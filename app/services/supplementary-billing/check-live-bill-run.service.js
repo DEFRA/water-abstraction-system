@@ -15,16 +15,16 @@ const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
  * We define "live" as having the status `processing`, `ready`, `review` or `queued`
  *
  * @param {String} regionId The id of the region to be checked
- * @param {Number} financialYear The financial year to be checked
+ * @param {Number} toFinancialYearEnding The financial year to be checked
  *
  * @returns {Boolean} Whether a "live" bill run exists
  */
-async function go (regionId, financialYear) {
+async function go (regionId, toFinancialYearEnding) {
   const numberOfLiveBillRuns = await BillingBatchModel.query()
     .select(1)
     .where({
       regionId,
-      toFinancialYearEnding: financialYear,
+      toFinancialYearEnding,
       scheme: 'sroc',
       batchType: 'supplementary'
     })
