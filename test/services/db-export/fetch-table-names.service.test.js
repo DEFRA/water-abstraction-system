@@ -10,22 +10,6 @@ const { expect } = Code
 // Thing under test
 const FetchTableNames = require('../../../app/services/db-export/fetch-table-names.service')
 
-const listOfTableNames = [
-  'charge_versions',
-  'billing_batches',
-  'licences',
-  'charge_elements',
-  'charge_version_workflows',
-  'change_reasons',
-  'regions',
-  'billing_invoice_licences',
-  'billing_transactions',
-  'charge_purposes',
-  'billing_invoices',
-  'events',
-  'billing_charge_categories'
-]
-
 describe('Fetch table names', () => {
   describe('when given a schema name', () => {
     it('returns a list of the schemas table names', async () => {

@@ -12,10 +12,12 @@ const { db } = require('../../../db/db.js')
  * @param schemaName The name of the schema from which to fetch the
  * table names
  *
- * @returns {Array} An array containing the table names for the specified schema
+ * @returns {String[]} Table names for the specified schema
  */
 async function go (schemaName) {
   const tableData = await _fetchTableNames(schemaName)
+
+  // tableData has information we do not need
   const tableNames = _pluckTableNames(tableData.rows)
 
   if (tableNames.length === 0) {
@@ -25,14 +27,6 @@ async function go (schemaName) {
   return tableNames
 }
 
-/**
- * fetchTableNames is connecting the the db and querying the schema for its information
- *
- * @param {*} schemaName The name of the schema from which we want to retrieve the table names
- *
- * @returns {Array} An array of objects containing both the table names and
- * additional information that is not relevant to our needs
- */
 async function _fetchTableNames (schemaName) {
   const query = `
       SELECT table_name
