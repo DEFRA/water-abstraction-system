@@ -16,6 +16,7 @@ async function go (regionId, userEmail) {
 
   const billingBatch = await InitiateBillingBatchService.go(financialYearEndings, regionId, userEmail)
 
+  // We do not `await` the billing batch being processed so we can leave it to run in the background while we return an immediate response
   ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
   return _response(billingBatch)
