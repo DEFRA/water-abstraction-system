@@ -19,7 +19,7 @@ const SendToS3BucketService = require('../../../app/services/db-export/send-to-s
 // Thing under test
 const TableExportService = require('../../../app/services/db-export/table-export.service.js')
 
-describe('Db Export service', () => {
+describe('Table Export service', () => {
   let notifierStub
   let convertToCSVServiceStub
   let compressFilesServiceStub

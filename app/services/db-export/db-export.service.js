@@ -14,7 +14,7 @@ async function go () {
   const tableName = 'billing_charge_categories'
   const schemaName = 'water'
 
-  return await TableExportService.go(tableName, schemaName)
+  await TableExportService.go(tableName, schemaName)
 }
 
 module.exports = {
