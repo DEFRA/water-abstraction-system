@@ -65,10 +65,10 @@ describe('Process billing period service', () => {
         chargeVersions = []
       })
 
-      it('returns true (bill run is empty)', async () => {
+      it('returns false (bill run is empty)', async () => {
         const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
-        expect(result).to.be.true()
+        expect(result).to.be.false()
       })
     })
 
@@ -108,10 +108,10 @@ describe('Process billing period service', () => {
           })
         })
 
-        it('returns false (bill run is not empty)', async () => {
+        it('returns true (bill run is not empty)', async () => {
           const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
-          expect(result).to.be.false()
+          expect(result).to.be.true()
         })
       })
 
@@ -141,10 +141,10 @@ describe('Process billing period service', () => {
           })
 
           describe('and there are no previous billed transactions', () => {
-            it('returns true (bill run is empty)', async () => {
+            it('returns false (bill run is empty)', async () => {
               const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
-              expect(result).to.be.true()
+              expect(result).to.be.false()
             })
           })
         })
@@ -173,10 +173,10 @@ describe('Process billing period service', () => {
               })
             })
 
-            it('returns true (bill run is empty)', async () => {
+            it('returns false (bill run is empty)', async () => {
               const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
-              expect(result).to.be.true()
+              expect(result).to.be.false()
             })
           })
         })

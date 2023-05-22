@@ -65,7 +65,7 @@ describe('Process billing batch service', () => {
 
     describe('and nothing is billed', () => {
       beforeEach(() => {
-        Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
+        Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
       })
 
       it('sets the Billing Batch status to empty', async () => {
@@ -79,7 +79,7 @@ describe('Process billing batch service', () => {
 
     describe('and some charge versions are billed', () => {
       beforeEach(() => {
-        Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
+        Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
       })
 
       it('sets the Billing Batch status to processing', async () => {

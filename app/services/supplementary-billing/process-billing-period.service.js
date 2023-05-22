@@ -28,11 +28,11 @@ const ProcessBillingTransactionsService = require('./process-billing-transaction
  * @param {module:BillingBatchModel} billingBatch The newly created bill batch we need to process
  * @param {Object} billingPeriod An object representing the financial year the transaction is for
  *
- * @returns {Boolean} true if the bill run is empty (no transactions to bill were generated) else false
+ * @returns {Boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
 async function go (billingBatch, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
-    return true
+    return false
   }
 
   const { billingBatchId } = billingBatch
@@ -46,7 +46,7 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
 
   await _persistData(dataToPersist)
 
-  return dataToPersist.billingInvoiceLicences.length === 0
+  return dataToPersist.billingInvoiceLicences.length >= 1
 }
 
 /**

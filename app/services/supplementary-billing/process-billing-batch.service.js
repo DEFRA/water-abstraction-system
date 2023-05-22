@@ -20,9 +20,9 @@ async function go (billingBatch, billingPeriods) {
     await _updateStatus(billingBatchId, 'processing')
 
     const chargeVersions = await _fetchChargeVersions(billingBatch, currentBillingPeriod)
-    const isEmpty = await ProcessBillingPeriodService.go(billingBatch, currentBillingPeriod, chargeVersions)
+    const isPopulated = await ProcessBillingPeriodService.go(billingBatch, currentBillingPeriod, chargeVersions)
 
-    await _finaliseBillingBatch(billingBatch, chargeVersions, isEmpty)
+    await _finaliseBillingBatch(billingBatch, chargeVersions, isPopulated)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -67,12 +67,12 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
  * process, and refreshes the billing batch locally. However if there were no resulting invoice licences then we simply
  * unflag the unbilled licences and mark the billing batch with `empty` status
  */
-async function _finaliseBillingBatch (billingBatch, chargeVersions, isEmpty) {
+async function _finaliseBillingBatch (billingBatch, chargeVersions, isPopulated) {
   await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
 
   // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
   // indicate this in the UI
-  if (isEmpty) {
+  if (!isPopulated) {
     return _updateStatus(billingBatch.billingBatchId, 'empty')
   }
 
