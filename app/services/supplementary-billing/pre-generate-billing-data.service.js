@@ -11,6 +11,8 @@ const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice
 /**
  * Pre-generates empty billing data which will be populated during billing processing
  *
+ * TODO: document and test this
+ *
  * @param {*} chargeVersions
  * @param {*} invoiceAccounts
  * @param {*} billingBatchId

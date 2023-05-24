@@ -97,10 +97,10 @@ async function _buildDataToPersist (billingData, billingPeriod, billingBatch) {
  *
  * {
  *   'billing-invoice-licence-id-1': {
- *     billingInvoiceLicence: '...', // instance of the billing invoice licence
- *     licence: '...', // instance of the licence for this billing invoice licence
- *     billingInvoice: '...', // instance of the billing invoice for this billing invoice licence
- *     transactions: [] // array of calculated transactions for this billing invoice licence
+ *     billingInvoiceLicence: '...',   // instance of the billing invoice licence
+ *     licence: '...',                 // instance of the licence for this billing invoice licence
+ *     billingInvoice: '...',          // instance of the billing invoice for this billing invoice licence
+ *     transactions: []                // array of calculated transactions for this billing invoice licence
  *   },
  *   'billing-invoice-licence-id-2': {
  *     // Same object structure as above
