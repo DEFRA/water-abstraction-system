@@ -120,7 +120,7 @@ function _buildBillingDataWithTransactions (fetchedData, preGeneratedData, billi
       acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion, billingInvoice, billingInvoiceLicence)
     }
 
-    const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion, billingBatchId)
+    const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
     acc[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
 
     return acc
@@ -222,7 +222,7 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
   return cleansedTransactions
 }
 
-function _generateCalculatedTransactions (billingPeriod, chargeVersion, billingBatchId) {
+function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
   try {
     const financialYearEnding = billingPeriod.endDate.getFullYear()
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
