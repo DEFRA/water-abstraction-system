@@ -40,8 +40,11 @@ async function _fetch (regionId, billingPeriod) {
     .where('regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
     .whereNotNull('chargeVersions.invoiceAccountId')
-    .where('chargeVersions.startDate', '>=', billingPeriod.startDate) // or where charge version end date is greater than the start date?
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .where(builder => {
+      builder.whereNull('chargeVersions.endDate')
+        .orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
+    })
     .whereNot('chargeVersions.status', 'draft')
     .whereNotExists(
       ChargeVersionWorkflow.query()
