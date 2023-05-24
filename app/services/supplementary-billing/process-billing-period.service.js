@@ -60,6 +60,7 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
 async function _buildDataToPersist (billingData, billingPeriod, billingBatch) {
   const dataToPersist = {
     transactions: [],
+    // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
     billingInvoices: new Set(),
     billingInvoiceLicences: []
   }
@@ -76,13 +77,17 @@ async function _buildDataToPersist (billingData, billingPeriod, billingBatch) {
       )
 
       dataToPersist.transactions.push(...billingTransactions)
-      // Note that Sets use add rather than push
+      // Note that sets use add rather than push
       dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
       dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
     }
   }
 
-  return dataToPersist
+  return {
+    ...dataToPersist,
+    // We revert the billingInvoices set to an array so we can handle it normally later
+    billingInvoices: [...dataToPersist.billingInvoices]
+  }
 }
 
 /**
@@ -135,10 +140,8 @@ async function _persistData (dataToPersist) {
     await BillingTransactionModel.query().insert(dataToPersist.transactions)
   }
 
-  // Note that Sets have a size property rather than length
-  if (dataToPersist.billingInvoices.size !== 0) {
-    // We need to spread the Set into an array for Objection to accept it
-    await BillingInvoiceModel.query().insert([...dataToPersist.billingInvoices])
+  if (dataToPersist.billingInvoices.length !== 0) {
+    await BillingInvoiceModel.query().insert(dataToPersist.billingInvoices)
   }
 
   if (dataToPersist.billingInvoiceLicences.length !== 0) {
