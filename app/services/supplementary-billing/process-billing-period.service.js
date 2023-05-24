@@ -45,7 +45,7 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
     billingPeriod
   )
 
-  const billingData = _buildBillingDataWithTransactions(fetchedData, preGeneratedData, billingPeriod, billingBatchId)
+  const billingData = _buildBillingDataWithTransactions(fetchedData, preGeneratedData, billingPeriod)
   const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billingBatch)
 
   await _persistData(dataToPersist)
@@ -102,7 +102,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billingBatch) {
  *   }
  * }
  */
-function _buildBillingDataWithTransactions (fetchedData, preGeneratedData, billingPeriod, billingBatchId) {
+function _buildBillingDataWithTransactions (fetchedData, preGeneratedData, billingPeriod) {
   const { chargeVersions } = fetchedData
 
   // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
