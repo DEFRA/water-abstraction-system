@@ -42,9 +42,9 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
   const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
   const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billingBatch.externalId)
 
-  await _persistData(dataToPersist)
+  const didWePersistData = await _persistData(dataToPersist)
 
-  return dataToPersist.billingInvoiceLicences.length >= 1
+  return didWePersistData
 }
 
 /**
@@ -135,17 +135,17 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
  * Persists the transaction, invoice and invoice licence records in the db
  */
 async function _persistData (dataToPersist) {
-  if (dataToPersist.transactions.length !== 0) {
-    await BillingTransactionModel.query().insert(dataToPersist.transactions)
+  // If we don't have any transactions to persist then we also won't have any invoices or invoice licences, so we
+  // simply return early
+  if (dataToPersist.transactions.length === 0) {
+    return false
   }
 
-  if (dataToPersist.billingInvoices.length !== 0) {
-    await BillingInvoiceModel.query().insert(dataToPersist.billingInvoices)
-  }
+  await BillingTransactionModel.query().insert(dataToPersist.transactions)
+  await BillingInvoiceModel.query().insert(dataToPersist.billingInvoices)
+  await BillingInvoiceLicenceModel.query().insert(dataToPersist.billingInvoiceLicences)
 
-  if (dataToPersist.billingInvoiceLicences.length !== 0) {
-    await BillingInvoiceLicenceModel.query().insert(dataToPersist.billingInvoiceLicences)
-  }
+  return true
 }
 
 function _retrievePreGeneratedData (preGeneratedData, invoiceAccountId, licence) {
