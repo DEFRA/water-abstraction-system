@@ -13,13 +13,15 @@ const path = require('path')
 const mockFs = require('mock-fs')
 
 // Thing under test
-const DeleteFileService = require('../../../app/services/db-export/delete-file.service.js')
+const DeleteFolderService = require('../../../app/services/db-export/delete-folder.service.js')
 
-describe('Delete File service', () => {
+describe('Delete Folder service', () => {
   let filenameWithPath
+  let folderNameWithPath
 
   beforeEach(() => {
     filenameWithPath = path.join('testFolder', 'testFile')
+    folderNameWithPath = 'testFolder'
 
     mockFs({
       testFolder: {
@@ -32,9 +34,16 @@ describe('Delete File service', () => {
     mockFs.restore()
   })
 
-  describe('When a valid file is specified', () => {
-    it('deletes the file', async () => {
-      await DeleteFileService.go(filenameWithPath)
+  describe('When a valid folder is specified', () => {
+    it('deletes the folder', async () => {
+      await DeleteFolderService.go(folderNameWithPath)
+
+      const folderExists = fs.existsSync(folderNameWithPath)
+      expect(folderExists).to.be.false()
+    })
+
+    it('deletes anything inside the folder', async () => {
+      await DeleteFolderService.go(folderNameWithPath)
 
       const fileExists = fs.existsSync(filenameWithPath)
       expect(fileExists).to.be.false()
@@ -43,12 +52,12 @@ describe('Delete File service', () => {
 
   describe('When an error occurs', () => {
     it('throws an error', async () => {
-      const fakeFile = 'FAKE_FILE'
+      const fakeFolder = 'FAKE_FILE'
 
-      const result = await expect(DeleteFileService.go(fakeFile)).to.reject()
+      const result = await expect(DeleteFolderService.go(fakeFolder)).to.reject()
 
       expect(result).to.be.an.error()
-      expect(result.message).to.equal(`ENOENT: no such file or directory, unlink '${fakeFile}'`)
+      expect(result.message).to.equal(`ENOENT: no such file or directory, scandir '${fakeFolder}'`)
     })
   })
 })
