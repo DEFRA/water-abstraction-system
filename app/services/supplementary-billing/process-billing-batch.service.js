@@ -10,19 +10,37 @@ const ProcessBillingPeriodService = require('./process-billing-period.service.js
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
 async function go (billingBatch, billingPeriods) {
-  const currentBillingPeriod = billingPeriods.at(-1)
+  // const currentBillingPeriod = billingPeriods.at(-1)
   const { billingBatchId } = billingBatch
 
   try {
     // Mark the start time for later logging
     const startTime = process.hrtime.bigint()
+    let isBatchPopulated = false
+    let accumulatedLicenceIds = []
 
     await _updateStatus(billingBatchId, 'processing')
 
-    const chargeVersions = await _fetchChargeVersions(billingBatch, currentBillingPeriod)
-    const isPopulated = await ProcessBillingPeriodService.go(billingBatch, currentBillingPeriod, chargeVersions)
+    for (const billingPeriod of billingPeriods) {
+      const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
+      const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
-    await _finaliseBillingBatch(billingBatch, chargeVersions, isPopulated)
+      const batchLicenceIds = _extractLicenceIds(chargeVersions)
+      const previousLicenceIds = accumulatedLicenceIds
+
+      accumulatedLicenceIds = previousLicenceIds.concat(batchLicenceIds)
+
+      if (isPeriodPopulated) {
+        isBatchPopulated = true
+      }
+    }
+
+    // Creating a new set from allLicenceIds gives us just the unique ids. Objection does not accept sets in
+    // .findByIds() so we spread it into an array
+    // return [...new Set(licenceIds)]
+    const licenceIds = [...new Set(accumulatedLicenceIds)]
+
+    await _finaliseBillingBatch(billingBatch, licenceIds, isBatchPopulated)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -50,6 +68,12 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
 }
 
+function _extractLicenceIds (chargeVersions) {
+  return chargeVersions.map((chargeVersion) => {
+    return chargeVersion.licence.licenceId
+  })
+}
+
 async function _fetchChargeVersions (billingBatch, billingPeriod) {
   try {
     const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
@@ -67,8 +91,8 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
  * process, and refreshes the billing batch locally. However if there were no resulting invoice licences then we simply
  * unflag the unbilled licences and mark the billing batch with `empty` status
  */
-async function _finaliseBillingBatch (billingBatch, chargeVersions, isPopulated) {
-  await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, chargeVersions)
+async function _finaliseBillingBatch (billingBatch, licenceIds, isPopulated) {
+  await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, licenceIds)
 
   // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
   // indicate this in the UI

@@ -30,27 +30,15 @@ const LicenceModel = require('../../models/water/licence.model.js')
  * @param {module:ChargeVersionModel[]} chargeVersions All charge versions being processed in the bill run
  * @returns {Number} count of records updated
  */
-async function go (billingBatchId, chargeVersions) {
-  const allLicenceIds = _extractUniqueLicenceIds(chargeVersions)
-
+async function go (billingBatchId, licenceIds) {
   return LicenceModel.query()
     .patch({ includeInSrocSupplementaryBilling: false })
-    .whereIn('licenceId', allLicenceIds)
+    .whereIn('licenceId', licenceIds)
     .whereNotExists(
       LicenceModel.relatedQuery('billingInvoiceLicences')
         .join('billingInvoices', 'billingInvoices.billingInvoiceId', '=', 'billingInvoiceLicences.billingInvoiceId')
         .where('billingInvoices.billingBatchId', '=', billingBatchId)
     )
-}
-
-function _extractUniqueLicenceIds (chargeVersions) {
-  const allLicenceIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licence.licenceId
-  })
-
-  // Creating a new set from allLicenceIds gives us just the unique ids. Objection does not accept sets in
-  // .findByIds() so we spread it into an array
-  return [...new Set(allLicenceIds)]
 }
 
 module.exports = {
