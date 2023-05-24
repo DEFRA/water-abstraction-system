@@ -12,7 +12,6 @@ const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-l
 const BillingTransactionModel = require('../../models/water/billing-transaction.model.js')
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
-const FetchInvoiceAccountNumbersService = require('./fetch-invoice-account-numbers.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
 const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
@@ -34,10 +33,8 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
     return false
   }
 
-  const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
-  const preGeneratedData = PreGenerateBillingDataService.go(
+  const preGeneratedData = await PreGenerateBillingDataService.go(
     chargeVersions,
-    invoiceAccounts,
     billingBatch.billingBatchId,
     billingPeriod
   )

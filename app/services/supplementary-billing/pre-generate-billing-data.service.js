@@ -5,6 +5,7 @@
  * @module PreGenerateBillingDataService
  */
 
+const FetchInvoiceAccountNumbersService = require('./fetch-invoice-account-numbers.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 
@@ -14,13 +15,14 @@ const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice
  * TODO: document and test this
  *
  * @param {*} chargeVersions
- * @param {*} invoiceAccounts
  * @param {*} billingBatchId
  * @param {*} billingPeriod
  *
  * @returns
  */
-function go (chargeVersions, invoiceAccounts, billingBatchId, billingPeriod) {
+async function go (chargeVersions, billingBatchId, billingPeriod) {
+  const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
+
   const billingInvoices = _preGenerateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
   const billingInvoiceLicences = _preGenerateBillingInvoiceLicences(chargeVersions, billingInvoices)
 
