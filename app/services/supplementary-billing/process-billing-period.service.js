@@ -25,7 +25,8 @@ const ProcessBillingTransactionsService = require('./process-billing-transaction
  * TODO: Currently a placeholder service. Proper implementation is coming
  *
  * @param {module:BillingBatchModel} billingBatch The newly created bill batch we need to process
- * @param {Object} billingPeriod An object representing the financial year the transaction is for
+ * @param {Object} billingPeriod An object representing the financial year the transactions are for
+ * @param {Object[]} chargeVersions The charge versions to create transactions for
  *
  * @returns {Boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
