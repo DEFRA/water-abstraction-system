@@ -10,14 +10,13 @@ const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
 const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-licence.model.js')
 const BillingTransactionModel = require('../../models/water/billing-transaction.model.js')
-const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
-const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const FetchInvoiceAccountNumbersService = require('./fetch-invoice-account-numbers.service.js')
 const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
 const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
+const SendBillingTransactionsService = require('./send-billing-transactions.service.js')
 
 /**
  * Creates the invoices and transactions in both WRLS and the Charging Module API
@@ -55,7 +54,7 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
  * Iterates over the populated billing data and builds an object of data to be persisted. This process includes sending
  * "create transaction" requests to the Charging Module as this data is needed to fully create our transaction records
  */
-async function _buildDataToPersist (billingData, billingPeriod, externalId) {
+async function _buildDataToPersist (billingData, billingPeriod, billingBatchExternalId) {
   const dataToPersist = {
     transactions: [],
     // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
@@ -67,9 +66,11 @@ async function _buildDataToPersist (billingData, billingPeriod, externalId) {
     const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod)
 
     if (cleansedTransactions.length !== 0) {
-      const billingTransactions = await _generateBillingTransactions(
-        currentBillingData,
-        externalId,
+      const billingTransactions = await SendBillingTransactionsService.go(
+        currentBillingData.licence,
+        currentBillingData.billingInvoice,
+        currentBillingData.billingInvoiceLicence,
+        billingBatchExternalId,
         cleansedTransactions,
         billingPeriod
       )
@@ -171,35 +172,6 @@ function _initialBillingData (licence, billingInvoice, billingInvoiceLicence) {
     billingInvoice,
     billingInvoiceLicence,
     calculatedTransactions: []
-  }
-}
-
-async function _generateBillingTransactions (currentBillingData, externalId, billingTransactions, billingPeriod) {
-  const { licence, billingInvoice, billingInvoiceLicence } = currentBillingData
-
-  try {
-    const generatedTransactions = []
-
-    for (const transaction of billingTransactions) {
-      const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
-        transaction,
-        billingPeriod,
-        billingInvoice.invoiceAccountNumber,
-        licence
-      )
-
-      const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(externalId, chargingModuleRequest)
-
-      transaction.status = 'charge_created'
-      transaction.externalId = chargingModuleResponse.response.body.transaction.id
-      transaction.billingInvoiceLicenceId = billingInvoiceLicence.billingInvoiceLicenceId
-
-      generatedTransactions.push(transaction)
-    }
-
-    return generatedTransactions
-  } catch (error) {
-    throw new BillingBatchError(error, BillingBatchModel.errorCodes.failedToCreateCharge)
   }
 }
 
