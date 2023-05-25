@@ -22,7 +22,7 @@ async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
   const filePath = _filenameWithPath(tableName, schemaFolderPath)
 
   try {
-    await fs.writeFileSync(filePath, tableConvertedToCsv)
+    fs.writeFileSync(filePath, tableConvertedToCsv)
 
     return filePath
   } catch (error) {
