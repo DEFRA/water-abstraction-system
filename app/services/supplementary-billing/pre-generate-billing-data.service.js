@@ -10,15 +10,18 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 
 /**
- * Pre-generates empty billing data which will be populated during billing processing
+ * Pre-generates empty billing data which will be populated during billing processing. Returns an object which comprises
+ * a keyed object of billing invoices and a keyed object of billing invoice licences. The billing invoices are keyed
+ * by the billing invoice id, and the billing invoice licences are keyed by the concatenated billing invoice id and
+ * licence id.
  *
- * TODO: document and test this
+ * TODO: write unit tests
  *
- * @param {*} chargeVersions
- * @param {*} billingBatchId
- * @param {*} billingPeriod
+ * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the invoice account ids and licences to use
+ * @param {String} billingBatchId The billing batch id to be added to the billing invoices
+ * @param {Object} billingPeriod The billing period of the billing invoices
  *
- * @returns
+ * @returns {Object} An object containing billingInvoices and billingInvoiceLicences objects
  */
 async function go (chargeVersions, billingBatchId, billingPeriod) {
   const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)

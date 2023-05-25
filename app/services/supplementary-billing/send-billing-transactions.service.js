@@ -15,16 +15,16 @@ const ChargingModuleCreateTransactionPresenter = require('../../presenters/charg
  * with a status of `charge_created`; the external id returned by the Charging Module; and the appropriate billing
  * invoice licence id
  *
- * TODO: document and test this
+ * TODO: write unit tests
  *
- * @param {*} licence
- * @param {*} billingInvoice
- * @param {*} billingInvoiceLicence
- * @param {*} billingBatchExternalId
- * @param {*} billingTransactions
- * @param {*} billingPeriod
+ * @param {module:LicenceModel} licence The licence that each transaction is linked to
+ * @param {module:BillingInvoiceModel} billingInvoice The billing invoice each transaction is to be linked to
+ * @param {module:BillingInvoiceLicenceModel} billingInvoiceLicence The billing invoice licence each transaction is to be linked to
+ * @param {string} billingBatchExternalId The Charging Module billing batch id that the transactions are to be created on
+ * @param {Object[]} billingTransactions The transactions to be sent to the Charging Module
+ * @param {Object} billingPeriod The billing period of the transactions
  *
- * @returns
+ * @returns {Object[]} Array of transactions which have been sent to the Charging Module
  */
 async function go (licence, billingInvoice, billingInvoiceLicence, billingBatchExternalId, billingTransactions, billingPeriod) {
   try {
