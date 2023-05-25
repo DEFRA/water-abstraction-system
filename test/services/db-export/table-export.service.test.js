@@ -14,29 +14,22 @@ const CompressFilesService = require('../../../app/services/db-export/compress-f
 const DeleteFileService = require('../../../app/services/db-export/delete-file.service.js')
 const ExportDataFilesService = require('../../../app/services/db-export/export-data-files.service.js')
 const FetchTableService = require('../../../app/services/db-export/fetch-table.service.js')
-const SendToS3BucketService = require('../../../app/services/db-export/send-to-s3-bucket.service.js')
 
 // Thing under test
 const TableExportService = require('../../../app/services/db-export/table-export.service.js')
 
 describe('Table Export service', () => {
-  let notifierStub
   let convertToCSVServiceStub
   let compressFilesServiceStub
   let deleteFileServiceStub
   let exportDataFilesServiceStub
   let fetchTableServiceStub
-  let sendToS3BucketServiceStub
 
   beforeEach(async () => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-
     fetchTableServiceStub = Sinon.stub(FetchTableService, 'go').resolves({ headers: [], rows: [] })
     convertToCSVServiceStub = Sinon.stub(ConvertToCSVService, 'go').resolves('csvData')
     exportDataFilesServiceStub = Sinon.stub(ExportDataFilesService, 'go').resolves('filePath')
     compressFilesServiceStub = Sinon.stub(CompressFilesService, 'go').resolves('compressedFilePath')
-    sendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go').resolves()
     deleteFileServiceStub = Sinon.stub(DeleteFileService, 'go').resolves()
   })
 
@@ -52,6 +45,5 @@ describe('Table Export service', () => {
     expect(deleteFileServiceStub.called).to.be.true()
     expect(exportDataFilesServiceStub.called).to.be.true()
     expect(fetchTableServiceStub.called).to.be.true()
-    expect(sendToS3BucketServiceStub.called).to.be.true()
   })
 })

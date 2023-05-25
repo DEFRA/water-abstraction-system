@@ -5,16 +5,19 @@
  * @module DbExportService
  */
 
-const TableExportService = require('../db-export/table-export.service.js')
+const SchemaExportService = require('../db-export/schema-export.service')
 
 /**
  * Calls TableExportsService giving it a tableName and schemaName
  */
 async function go () {
-  const tableName = 'billing_charge_categories'
-  const schemaName = 'water'
+  const schemaNames = ['water', 'returns', 'crm', 'crm_v2', 'idm', 'permit']
 
-  await TableExportService.go(tableName, schemaName)
+  // for (const schemaName of schemaNames) {
+  //   await SchemaExportService.go(schemaName)
+  // }
+
+  await SchemaExportService.go('water')
 }
 
 module.exports = {

@@ -50,12 +50,14 @@ describe('Export data files service', () => {
   const tableName = 'billing_charge_categories'
 
   let filePath
+  let schemaFolder
 
   describe('when successful', () => {
     beforeEach(() => {
       const fileName = 'billing_charge_categories.csv'
-      const __dirname = '/tmp/'
+      const __dirname = '/tmp/water'
       filePath = path.join(__dirname, fileName)
+      schemaFolder = '/tmp/water'
     })
 
     afterEach(() => {
@@ -66,17 +68,17 @@ describe('Export data files service', () => {
     it('should write the CSV data to a file and return true', async () => {
       const data = csvHeader.join(',') + '\n' + csvValues.join(',')
 
-      const returnedResult = await ExportDataFilesService.go(data, tableName)
+      const returnedResult = await ExportDataFilesService.go(data, tableName, schemaFolder)
 
       expect(fs.existsSync(filePath)).to.equal(true)
-      expect(returnedResult).to.equal('/tmp/billing_charge_categories.csv')
+      expect(returnedResult).to.equal('/tmp/water/billing_charge_categories.csv')
     })
   })
 
   describe('when unsuccessful', () => {
     it('should handle errors and return false', async () => {
       const data = null
-      const result = await ExportDataFilesService.go(data, tableName)
+      const result = await ExportDataFilesService.go(data, tableName, schemaFolder)
 
       expect(result).to.equal(false)
     })
