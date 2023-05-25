@@ -16,18 +16,16 @@ async function go (billingBatch, billingPeriods) {
     // Mark the start time for later logging
     const startTime = process.hrtime.bigint()
     let isBatchPopulated = false
-    let accumulatedLicenceIds = []
+    const accumulatedLicenceIds = []
 
     await _updateStatus(billingBatchId, 'processing')
 
     for (const billingPeriod of billingPeriods) {
       const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
       const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
-
       const licenceIdsForPeriod = _extractLicenceIds(chargeVersions)
-      const previousLicenceIds = accumulatedLicenceIds
 
-      accumulatedLicenceIds = previousLicenceIds.concat(licenceIdsForPeriod)
+      accumulatedLicenceIds.push(...licenceIdsForPeriod)
 
       if (isPeriodPopulated) {
         isBatchPopulated = true
