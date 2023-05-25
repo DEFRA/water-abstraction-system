@@ -27,13 +27,13 @@ const LicenceModel = require('../../models/water/licence.model.js')
  * do this because we know this service has handled anything that was unbilled and not represented.
  *
  * @param {*} billingBatchId The ID of the bill run (billing batch) being processed
- * @param {module:ChargeVersionModel[]} chargeVersions All charge versions being processed in the bill run
+ * @param {Array} allLicenceIds All licence IDs being processed in the bill run
  * @returns {Number} count of records updated
  */
-async function go (billingBatchId, licenceIds) {
+async function go (billingBatchId, allLicenceIds) {
   return LicenceModel.query()
     .patch({ includeInSrocSupplementaryBilling: false })
-    .whereIn('licenceId', licenceIds)
+    .whereIn('licenceId', allLicenceIds)
     .whereNotExists(
       LicenceModel.relatedQuery('billingInvoiceLicences')
         .join('billingInvoices', 'billingInvoices.billingInvoiceId', '=', 'billingInvoiceLicences.billingInvoiceId')

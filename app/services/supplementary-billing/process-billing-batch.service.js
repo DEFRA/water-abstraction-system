@@ -36,9 +36,9 @@ async function go (billingBatch, billingPeriods) {
 
     // Creating a new set from accumulatedLicenceIds gives us just the unique ids. Objection does not accept sets in
     // .findByIds() so we spread it into an array
-    const licenceIds = [...new Set(accumulatedLicenceIds)]
+    const allLicenceIds = [...new Set(accumulatedLicenceIds)]
 
-    await _finaliseBillingBatch(billingBatch, licenceIds, isBatchPopulated)
+    await _finaliseBillingBatch(billingBatch, allLicenceIds, isBatchPopulated)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -89,8 +89,8 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
  * process, and refreshes the billing batch locally. However if there were no resulting invoice licences then we simply
  * unflag the unbilled licences and mark the billing batch with `empty` status
  */
-async function _finaliseBillingBatch (billingBatch, licenceIds, isPopulated) {
-  await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, licenceIds)
+async function _finaliseBillingBatch (billingBatch, allLicenceIds, isPopulated) {
+  await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, allLicenceIds)
 
   // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
   // indicate this in the UI
