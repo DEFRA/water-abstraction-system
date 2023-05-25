@@ -250,11 +250,11 @@ describe('Fetch Charge Versions service', () => {
     })
 
     describe('because none of them are in the billing period', () => {
-      describe('as they all have start dates before the billing period', () => {
+      describe('as they all have end dates before the billing period', () => {
         beforeEach(async () => {
           billingPeriod = {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2023-03-31')
+            startDate: new Date('2023-04-01'),
+            endDate: new Date('2024-03-31')
           }
 
           const { licenceId } = await LicenceHelper.add({
@@ -262,12 +262,12 @@ describe('Fetch Charge Versions service', () => {
             includeInSrocSupplementaryBilling: true
           })
 
-          // This creates an SROC charge version with a start date before the billing period. This would have been
-          // picked up by a previous bill run
-          const alcsChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2022-03-01'), licenceId }
+          // This creates an SROC charge version with an end date before the billing period. This would have been
+          // picked up by a previous years bill run
+          const srocChargeVersion = await ChargeVersionHelper.add(
+            { startDate: new Date('2022-04-01'), endDate: new Date('2022-10-01'), licenceId }
           )
-          testRecords = [alcsChargeVersion]
+          testRecords = [srocChargeVersion]
         })
 
         it('returns no applicable charge versions', async () => {
@@ -291,10 +291,10 @@ describe('Fetch Charge Versions service', () => {
 
           // This creates an SROC charge version with a start date after the billing period. This will be picked in
           // next years bill runs
-          const alcsChargeVersion = await ChargeVersionHelper.add(
+          const srocChargeVersion = await ChargeVersionHelper.add(
             { startDate: new Date('2023-04-01'), licenceId }
           )
-          testRecords = [alcsChargeVersion]
+          testRecords = [srocChargeVersion]
         })
 
         it('returns no applicable charge versions', async () => {
