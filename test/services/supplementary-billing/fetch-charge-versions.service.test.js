@@ -36,7 +36,7 @@ describe('Fetch Charge Versions service', () => {
     regionId = region.regionId
   })
 
-  describe.only('when there are charge versions that should be considered for the next supplementary billing', () => {
+  describe('when there are charge versions that should be considered for the next supplementary billing', () => {
     let billingChargeCategory
     let chargeElement2024
     let chargePurpose2024
