@@ -27,7 +27,7 @@ const LicenceModel = require('../../models/water/licence.model.js')
  * do this because we know this service has handled anything that was unbilled and not represented.
  *
  * @param {*} billingBatchId The ID of the bill run (billing batch) being processed
- * @param {Array} allLicenceIds All licence IDs being processed in the bill run
+ * @param {String[]} allLicenceIds All licence IDs being processed in the bill run
  * @returns {Number} count of records updated
  */
 async function go (billingBatchId, allLicenceIds) {
