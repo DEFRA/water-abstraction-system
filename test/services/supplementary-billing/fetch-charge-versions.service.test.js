@@ -36,17 +36,19 @@ describe('Fetch Charge Versions service', () => {
     regionId = region.regionId
   })
 
-  describe('when there are charge versions that should be considered for the next supplementary billing', () => {
+  describe.only('when there are charge versions that should be considered for the next supplementary billing', () => {
     let billingChargeCategory
-    let chargeElement
-    let chargePurpose
+    let chargeElement2024
+    let chargePurpose2024
+    let chargeElement2023
+    let chargePurpose2023
     let changeReason
     let licence
 
     beforeEach(async () => {
       billingPeriod = {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2023-03-31')
+        startDate: new Date('2023-04-01'),
+        endDate: new Date('2024-03-31')
       }
 
       licence = await LicenceHelper.add({
@@ -58,9 +60,14 @@ describe('Fetch Charge Versions service', () => {
       const { licenceId } = licence
       changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
 
-      // This creates a 'current' SROC charge version
-      const srocChargeVersion = await ChargeVersionHelper.add(
-        { changeReasonId: changeReason.changeReasonId, licenceId }
+      // This creates a 'current' SROC charge version valid in FYE 2024
+      const sroc2024ChargeVersion = await ChargeVersionHelper.add(
+        { startDate: new Date('2023-11-01'), changeReasonId: changeReason.changeReasonId, licenceId }
+      )
+
+      // This creates a 'current' SROC charge version that ends on 2023-10-31
+      const sroc2023ChargeVersion = await ChargeVersionHelper.add(
+        { endDate: new Date('2023-10-31'), changeReasonId: changeReason.changeReasonId, licenceId }
       )
 
       // This creates a 'superseded' SROC charge version
@@ -73,19 +80,28 @@ describe('Fetch Charge Versions service', () => {
         { scheme: 'alcs', licenceId }
       )
 
-      testRecords = [srocChargeVersion, srocSupersededChargeVersion, alcsChargeVersion]
+      testRecords = [sroc2024ChargeVersion, sroc2023ChargeVersion, srocSupersededChargeVersion, alcsChargeVersion]
 
       // We test that related data is returned in the results. So, we create and link it to the srocChargeVersion
       // ready for testing
       billingChargeCategory = await BillingChargeCategoryHelper.add()
 
-      chargeElement = await ChargeElementHelper.add({
-        chargeVersionId: srocChargeVersion.chargeVersionId,
+      chargeElement2024 = await ChargeElementHelper.add({
+        chargeVersionId: sroc2024ChargeVersion.chargeVersionId,
         billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId
       })
 
-      chargePurpose = await ChargePurposeHelper.add({
-        chargeElementId: chargeElement.chargeElementId
+      chargePurpose2024 = await ChargePurposeHelper.add({
+        chargeElementId: chargeElement2024.chargeElementId
+      })
+
+      chargeElement2023 = await ChargeElementHelper.add({
+        chargeVersionId: sroc2023ChargeVersion.chargeVersionId,
+        billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId
+      })
+
+      chargePurpose2023 = await ChargePurposeHelper.add({
+        chargeElementId: chargeElement2023.chargeElementId
       })
     })
 
@@ -97,18 +113,20 @@ describe('Fetch Charge Versions service', () => {
       it('returns the SROC charge versions that are applicable', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(2)
+        expect(result).to.have.length(3)
         expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
         expect(result[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
+        expect(result[2].chargeVersionId).to.equal(testRecords[2].chargeVersionId)
       })
     })
 
     it("returns both 'current' and 'superseded' SROC charge versions that are applicable", async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(result).to.have.length(2)
+      expect(result).to.have.length(3)
       expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
       expect(result[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
+      expect(result[2].chargeVersionId).to.equal(testRecords[2].chargeVersionId)
     })
 
     it('includes the related licence and region', async () => {
@@ -131,28 +149,50 @@ describe('Fetch Charge Versions service', () => {
     it('includes the related charge elements, billing charge category and charge purposes', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      const expectedResult = {
-        chargeElementId: chargeElement.chargeElementId,
-        source: chargeElement.source,
-        loss: chargeElement.loss,
-        volume: chargeElement.volume,
-        adjustments: chargeElement.adjustments,
-        additionalCharges: chargeElement.additionalCharges,
-        description: chargeElement.description,
+      const expectedResult2024 = {
+        chargeElementId: chargeElement2024.chargeElementId,
+        source: chargeElement2024.source,
+        loss: chargeElement2024.loss,
+        volume: chargeElement2024.volume,
+        adjustments: chargeElement2024.adjustments,
+        additionalCharges: chargeElement2024.additionalCharges,
+        description: chargeElement2024.description,
         billingChargeCategory: {
           reference: billingChargeCategory.reference,
           shortDescription: billingChargeCategory.shortDescription
         },
         chargePurposes: [{
-          chargePurposeId: chargePurpose.chargePurposeId,
-          abstractionPeriodStartDay: chargePurpose.abstractionPeriodStartDay,
-          abstractionPeriodStartMonth: chargePurpose.abstractionPeriodStartMonth,
-          abstractionPeriodEndDay: chargePurpose.abstractionPeriodEndDay,
-          abstractionPeriodEndMonth: chargePurpose.abstractionPeriodEndMonth
+          chargePurposeId: chargePurpose2024.chargePurposeId,
+          abstractionPeriodStartDay: chargePurpose2024.abstractionPeriodStartDay,
+          abstractionPeriodStartMonth: chargePurpose2024.abstractionPeriodStartMonth,
+          abstractionPeriodEndDay: chargePurpose2024.abstractionPeriodEndDay,
+          abstractionPeriodEndMonth: chargePurpose2024.abstractionPeriodEndMonth
         }]
       }
 
-      expect(result[0].chargeElements[0]).to.equal(expectedResult)
+      const expectedResult2023 = {
+        chargeElementId: chargeElement2023.chargeElementId,
+        source: chargeElement2023.source,
+        loss: chargeElement2023.loss,
+        volume: chargeElement2023.volume,
+        adjustments: chargeElement2023.adjustments,
+        additionalCharges: chargeElement2023.additionalCharges,
+        description: chargeElement2023.description,
+        billingChargeCategory: {
+          reference: billingChargeCategory.reference,
+          shortDescription: billingChargeCategory.shortDescription
+        },
+        chargePurposes: [{
+          chargePurposeId: chargePurpose2023.chargePurposeId,
+          abstractionPeriodStartDay: chargePurpose2023.abstractionPeriodStartDay,
+          abstractionPeriodStartMonth: chargePurpose2023.abstractionPeriodStartMonth,
+          abstractionPeriodEndDay: chargePurpose2023.abstractionPeriodEndDay,
+          abstractionPeriodEndMonth: chargePurpose2023.abstractionPeriodEndMonth
+        }]
+      }
+
+      expect(result[0].chargeElements[0]).to.equal(expectedResult2024)
+      expect(result[1].chargeElements[0]).to.equal(expectedResult2023)
     })
   })
 
