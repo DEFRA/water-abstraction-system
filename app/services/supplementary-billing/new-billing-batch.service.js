@@ -24,8 +24,8 @@ async function go (regionId, userEmail) {
 
 function _financialYearEndings (billingPeriods) {
   return {
-    fromFinancialYearEnding: billingPeriods.at(-1).endDate.getFullYear(),
-    toFinancialYearEnding: billingPeriods.at(0).endDate.getFullYear()
+    fromFinancialYearEnding: billingPeriods[billingPeriods.length - 1].endDate.getFullYear(),
+    toFinancialYearEnding: billingPeriods[0].endDate.getFullYear()
   }
 }
 
