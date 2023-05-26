@@ -38,10 +38,10 @@ describe('Fetch Charge Versions service', () => {
 
   describe('when there are charge versions that should be considered for the next supplementary billing', () => {
     let billingChargeCategory
-    let chargeElement2024
-    let chargePurpose2024
     let chargeElement2023
+    let chargeElement2024
     let chargePurpose2023
+    let chargePurpose2024
     let changeReason
     let licence
 
