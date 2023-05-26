@@ -15,8 +15,9 @@ async function go (billingBatch, billingPeriods) {
   try {
     // Mark the start time for later logging
     const startTime = process.hrtime.bigint()
-    let isBatchPopulated = false
     const accumulatedLicenceIds = []
+    
+    let isBatchPopulated = false
 
     await _updateStatus(billingBatchId, 'processing')
 
