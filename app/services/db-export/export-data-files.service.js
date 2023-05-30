@@ -8,6 +8,7 @@
 const path = require('path')
 
 const fs = require('fs')
+const fsp = fs.promises
 
 /**
  * Writes the converted data to a csv file
@@ -22,7 +23,7 @@ async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
   const filePath = _filenameWithPath(tableName, schemaFolderPath)
 
   try {
-    fs.writeFileSync(filePath, tableConvertedToCsv)
+    await fsp.writeFile(filePath, tableConvertedToCsv)
 
     return filePath
   } catch (error) {
@@ -34,7 +35,7 @@ async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
  * Returns a file path by joining the schema folder path with the file name.
  * The schema path has already been created with the temporary directory
  *
- * @param {String} tableName The name the of the table
+ * @param {String} tableName The name of the table
  *
  * @returns {String} The full file path
  */

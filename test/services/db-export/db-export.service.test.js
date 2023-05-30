@@ -30,11 +30,10 @@ describe('Db Export Service', () => {
 
     await DbExportService.go()
 
-    expect(SchemaExportServiceStub.callCount).to.equal(schemaNames.length)
+    const allArgs = SchemaExportServiceStub.getCalls().flatMap((call) => {
+      return call.args
+    })
 
-    for (let i = 0; i < schemaNames.length; i++) {
-      const [schemaName] = SchemaExportServiceStub.getCall(i).args
-      expect(schemaName).to.equal(schemaNames[i])
-    }
+    expect(allArgs).to.equal(schemaNames)
   })
 })

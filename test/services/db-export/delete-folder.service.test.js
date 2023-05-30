@@ -20,8 +20,8 @@ describe('Delete Folder service', () => {
   let folderNameWithPath
 
   beforeEach(() => {
-    filenameWithPath = path.join('testFolder', 'testFile')
     folderNameWithPath = 'testFolder'
+    filenameWithPath = path.join(folderNameWithPath, 'testFile')
 
     mockFs({
       testFolder: {

@@ -43,7 +43,7 @@ describe('Send to S3 bucket service', () => {
     it('returns true', async () => {
       const result = await SendToS3BucketService.go(folderPath)
 
-      expect(result).to.equal(true)
+      expect(result).to.be.true()
     })
   })
 
@@ -70,7 +70,7 @@ describe('Send to S3 bucket service', () => {
       it('returns false', async () => {
         const result = await SendToS3BucketService.go(folderPath)
 
-        expect(result).to.equal(false)
+        expect(result).to.be.false()
       })
     })
   })

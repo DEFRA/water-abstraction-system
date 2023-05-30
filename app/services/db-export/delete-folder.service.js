@@ -14,7 +14,7 @@ const fs = require('fs')
 async function go (folderPath) {
   const filesInFolder = fs.readdirSync(folderPath)
 
-  filesInFolder.forEach(file => {
+  filesInFolder.forEach((file) => {
     const filePath = `${folderPath}/${file}`
     fs.unlinkSync(filePath)
   })

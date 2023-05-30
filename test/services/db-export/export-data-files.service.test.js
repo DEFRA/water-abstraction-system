@@ -70,7 +70,7 @@ describe('Export data files service', () => {
 
       const returnedResult = await ExportDataFilesService.go(data, tableName, schemaFolder)
 
-      expect(fs.existsSync(filePath)).to.equal(true)
+      expect(fs.existsSync(filePath)).to.be.true()
       expect(returnedResult).to.equal('/tmp/water/billing_charge_categories.csv')
     })
   })
@@ -80,7 +80,7 @@ describe('Export data files service', () => {
       const data = null
       const result = await ExportDataFilesService.go(data, tableName, schemaFolder)
 
-      expect(result).to.equal(false)
+      expect(result).to.be.false()
     })
   })
 })
