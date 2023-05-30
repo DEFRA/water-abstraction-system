@@ -135,6 +135,7 @@ async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
       'bt.chargeCategoryDescription',
       'bt.isSupportedSource',
       'bt.supportedSourceName',
+      'bt.isNewLicence',
       'bt.isWaterCompanyCharge',
       'bt.isWinterOnly',
       'bt.purposes',

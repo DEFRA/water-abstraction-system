@@ -10,7 +10,7 @@ const ProcessBillingPeriodService = require('./process-billing-period.service.js
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
 async function go (billingBatch, billingPeriods) {
-  const currentBillingPeriod = billingPeriods.at(-1)
+  const currentBillingPeriod = billingPeriods[billingPeriods.length - 1]
   const { billingBatchId } = billingBatch
 
   try {
