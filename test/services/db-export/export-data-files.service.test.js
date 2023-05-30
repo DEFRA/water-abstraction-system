@@ -65,22 +65,13 @@ describe('Export data files service', () => {
       fs.unlinkSync(filePath)
     })
 
-    it('should write the CSV data to a file and return true', async () => {
+    it('should write the CSV data to a file and return the file path', async () => {
       const data = csvHeader.join(',') + '\n' + csvValues.join(',')
 
       const returnedResult = await ExportDataFilesService.go(data, tableName, schemaFolder)
 
       expect(fs.existsSync(filePath)).to.be.true()
       expect(returnedResult).to.equal('/tmp/water/billing_charge_categories.csv')
-    })
-  })
-
-  describe('when unsuccessful', () => {
-    it('should handle errors and return false', async () => {
-      const data = null
-      const result = await ExportDataFilesService.go(data, tableName, schemaFolder)
-
-      expect(result).to.be.false()
     })
   })
 })

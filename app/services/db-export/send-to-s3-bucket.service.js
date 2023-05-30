@@ -69,13 +69,7 @@ async function _uploadToBucket (bucketName, folderName, filePath) {
   const s3Client = new S3Client()
   const command = new PutObjectCommand(params)
 
-  try {
-    await s3Client.send(command)
-
-    return true
-  } catch (error) {
-    throw new Error()
-  }
+  await s3Client.send(command)
 }
 
 module.exports = {

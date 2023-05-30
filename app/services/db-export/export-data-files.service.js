@@ -17,18 +17,14 @@ const fsp = fs.promises
  * @param {String} tableName The name of the table
  * @param {String} schemaFolderPath The path for the schema folder
  *
- * @returns {Boolean} True if the file is written successfully and false if not
+ * @returns {String} Returns the file path of the newly written file
  */
 async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
   const filePath = _filenameWithPath(tableName, schemaFolderPath)
 
-  try {
-    await fsp.writeFile(filePath, tableConvertedToCsv)
+  await fsp.writeFile(filePath, tableConvertedToCsv)
 
-    return filePath
-  } catch (error) {
-    return false
-  }
+  return filePath
 }
 
 /**
