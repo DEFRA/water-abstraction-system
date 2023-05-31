@@ -5,7 +5,7 @@
  * @module SendToS3BucketService
  */
 
-const fs = require('fs')
+const fsPromises = require('fs').promises
 const path = require('path')
 const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
 
@@ -42,7 +42,9 @@ async function go (folderPath) {
  * @returns {[]} An array of file paths within the folder
  */
 async function _getFilesFromFolder (folderPath) {
-  return fs.readdirSync(folderPath).map((file) => {
+  const files = await fsPromises.readdir(folderPath)
+
+  return files.map((file) => {
     return path.join(folderPath, file)
   })
 }
@@ -58,7 +60,7 @@ async function _getFilesFromFolder (folderPath) {
  */
 async function _uploadToBucket (bucketName, folderName, filePath) {
   const fileName = path.basename(filePath)
-  const fileContent = fs.readFileSync(filePath)
+  const fileContent = await fsPromises.readFile(filePath)
 
   const params = {
     Bucket: bucketName,

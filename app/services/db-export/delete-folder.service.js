@@ -4,7 +4,7 @@
  * @module DeleteFolderService
  */
 
-const fs = require('fs')
+const fsPromises = require('fs').promises
 
 /**
  * Deleting a folder and its content
@@ -12,14 +12,14 @@ const fs = require('fs')
  * @param {String} folderPath The folder path that we want to delete
  */
 async function go (folderPath) {
-  const filesInFolder = fs.readdirSync(folderPath)
+  const filesInFolder = await fsPromises.readdir(folderPath)
 
-  filesInFolder.forEach((file) => {
+  filesInFolder.forEach(async (file) => {
     const filePath = `${folderPath}/${file}`
-    fs.unlinkSync(filePath)
+    await fsPromises.unlink(filePath)
   })
 
-  fs.rmdirSync(folderPath)
+  await fsPromises.rmdir(folderPath)
 }
 
 module.exports = {

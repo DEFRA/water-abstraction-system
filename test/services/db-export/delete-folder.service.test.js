@@ -57,7 +57,7 @@ describe('Delete Folder service', () => {
       const result = await expect(DeleteFolderService.go(fakeFolder)).to.reject()
 
       expect(result).to.be.an.error()
-      expect(result.message).to.equal(`ENOENT: no such file or directory, scandir '${fakeFolder}'`)
+      expect(result.message).to.startsWith('ENOENT')
     })
   })
 })

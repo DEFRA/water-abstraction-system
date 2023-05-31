@@ -9,9 +9,9 @@ const path = require('path')
 const os = require('os')
 
 const DeleteFolderService = require('./delete-folder.service.js')
+const ExportCompressedTableService = require('./export-compressed-table.service.js')
 const FetchTableNames = require('../db-export/fetch-table-names.service.js')
 const SendToS3BucketService = require('../db-export/send-to-s3-bucket.service.js')
-const ExportCompressedTableService = require('./export-compressed-table.service.js')
 
 /**
  * Exports the specific schema by fetching table names, exporting each table,

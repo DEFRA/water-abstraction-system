@@ -5,10 +5,9 @@
  * @module ExportDataFilesService
 */
 
-const path = require('path')
-
 const fs = require('fs')
-const fsp = fs.promises
+const fsPromises = fs.promises
+const path = require('path')
 
 /**
  * Writes the converted data to a csv file
@@ -20,9 +19,9 @@ const fsp = fs.promises
  * @returns {String} Returns the file path of the newly written file
  */
 async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
-  const filePath = _filenameWithPath(tableName, schemaFolderPath)
+  const filePath = await _filenameWithPath(tableName, schemaFolderPath)
 
-  await fsp.writeFile(filePath, tableConvertedToCsv)
+  await fsPromises.writeFile(filePath, tableConvertedToCsv)
 
   return filePath
 }
@@ -35,11 +34,11 @@ async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
  *
  * @returns {String} The full file path
  */
-function _filenameWithPath (tableName, schemaFolderPath) {
+async function _filenameWithPath (tableName, schemaFolderPath) {
   const schemaFolderExists = fs.existsSync(schemaFolderPath)
 
   if (!schemaFolderExists) {
-    fs.mkdirSync(schemaFolderPath)
+    fsPromises.mkdir(schemaFolderPath)
   }
 
   return path.normalize(
