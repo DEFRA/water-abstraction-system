@@ -41,7 +41,8 @@
     "nunjucks": "^3.2.3",
     "objection": "^3.0.1",
     "pg": "^8.8.0",
-    "sass": "^1.56.2"
+    "sass": "^1.56.2",
+    "tar": "^6.1.15"
   },
   "devDependencies": {
     "@hapi/code": "^9.0.2",

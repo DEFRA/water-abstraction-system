@@ -1,15 +1,12 @@
 'use strict'
 
 /**
- * Exports a table from the db, converts it to CSV and compresses it. The CSV file
- * is then deleted whilst the compressed file remains, ready to be sent to our S3 bucket
+ * Exports a table from the db, converts it to CSV format and saves it to a file
  *
  * @module ExportCompressedTableService
  */
 
 const ConvertToCSVService = require('./convert-to-csv.service.js')
-const CompressFilesService = require('./compress-files.service.js')
-const DeleteFileService = require('./delete-file.service.js')
 const ExportDataFilesService = require('./export-data-files.service.js')
 const FetchTableService = require('./fetch-table.service.js')
 
@@ -26,11 +23,7 @@ async function go (tableName, schemaFolderPath, schemaName) {
 
   const tableConvertedToCsv = ConvertToCSVService.go(data.headers, data.rows)
 
-  const filePath = await ExportDataFilesService.go(tableConvertedToCsv, data.tableName, schemaFolderPath)
-
-  await CompressFilesService.go(filePath)
-
-  await DeleteFileService.go(filePath)
+  await ExportDataFilesService.go(tableConvertedToCsv, data.tableName, schemaFolderPath)
 }
 
 module.exports = {
