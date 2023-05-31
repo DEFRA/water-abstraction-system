@@ -5,8 +5,7 @@
  * @module ExportDataFilesService
 */
 
-const fs = require('fs')
-const fsPromises = fs.promises
+const fsPromises = require('fs').promises
 const path = require('path')
 
 /**
@@ -35,11 +34,7 @@ async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
  * @returns {String} The full file path
  */
 async function _filenameWithPath (tableName, schemaFolderPath) {
-  const schemaFolderExists = fs.existsSync(schemaFolderPath)
-
-  if (!schemaFolderExists) {
-    fsPromises.mkdir(schemaFolderPath)
-  }
+  await fsPromises.mkdir(schemaFolderPath, { recursive: true })
 
   return path.normalize(
     path.format({
