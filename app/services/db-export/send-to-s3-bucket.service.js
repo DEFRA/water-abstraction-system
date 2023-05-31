@@ -27,7 +27,7 @@ async function go (filePath) {
     Body: fileContent
   }
 
-  return _uploadToBucket(params, fileName)
+  return _uploadToBucket(params)
 }
 
 /**

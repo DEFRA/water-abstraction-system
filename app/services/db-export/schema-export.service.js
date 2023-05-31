@@ -29,7 +29,7 @@ async function go (schemaName) {
     await ExportCompressedTableService.go(tableName, schemaFolderPath, schemaName)
   }
 
-  const tarSchemaPath = await _createTarFile(schemaName, schemaFolderPath)
+  const tarSchemaPath = await _createTarFile(schemaFolderPath)
 
   await SendToS3BucketService.go(tarSchemaPath)
 
