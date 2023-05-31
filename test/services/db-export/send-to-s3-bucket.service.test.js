@@ -27,10 +27,10 @@ describe('Send to S3 bucket service', () => {
       Sinon.restore()
     })
 
-    const folderPath = 'test/fixtures'
+    const filePath = 'test/fixtures/compress-files.service.csv'
 
     it('uploads a file to the S3 bucket', async () => {
-      await SendToS3BucketService.go(folderPath)
+      await SendToS3BucketService.go(filePath)
 
       // Test that the S3 Client was called once
       expect(s3Stub.calledOnce).to.be.true()
@@ -41,21 +41,21 @@ describe('Send to S3 bucket service', () => {
     })
 
     it('returns true', async () => {
-      const result = await SendToS3BucketService.go(folderPath)
+      const result = await SendToS3BucketService.go(filePath)
 
       expect(result).to.be.true()
     })
   })
 
   describe('when unsuccessful', () => {
-    describe('because an invalid folder name is given', () => {
-      const folderName = 'FakeFolder'
+    describe('because an invalid file name is given', () => {
+      const fileName = 'FakeFolder'
 
       it('throws an error', async () => {
-        const result = await expect(SendToS3BucketService.go(folderName)).to.reject()
+        const result = await expect(SendToS3BucketService.go(fileName)).to.reject()
 
         expect(result).to.be.an.error()
-        expect(result.message).to.equal(`ENOENT: no such file or directory, scandir '${folderName}'`)
+        expect(result.message).to.startWith('ENOENT')
       })
     })
 
@@ -65,10 +65,10 @@ describe('Send to S3 bucket service', () => {
         s3Stub = Sinon.stub(S3Client.prototype, 'send').rejects()
       })
 
-      const folderPath = 'test/fixtures'
+      const filePath = 'test/fixtures/compress-files.service.csv'
 
       it('returns false', async () => {
-        const result = await SendToS3BucketService.go(folderPath)
+        const result = await SendToS3BucketService.go(filePath)
 
         expect(result).to.be.false()
       })
