@@ -139,7 +139,7 @@ describe('Process billing period service', () => {
           })
         })
 
-        it.only('returns true (bill run is not empty)', async () => {
+        it('returns true (bill run is not empty)', async () => {
           const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
           expect(result).to.be.true()
