@@ -23,7 +23,7 @@ async function go (schemaFolderPath) {
     },
     [schemaFolderPath]
   )
-  return `${schemaFolderPath}.tgz`
+  return file
 }
 
 module.exports = {

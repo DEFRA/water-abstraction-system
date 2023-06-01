@@ -14,7 +14,7 @@ const tar = require('tar')
 // Thing under test
 const CompressSchemaFolderService = require('../../../app/services/db-export/compress-schema-folder.service.js')
 
-describe('Compressed schema folder service', () => {
+describe('Compress schema folder service', () => {
   let tarCreateStub
 
   beforeEach(() => {
