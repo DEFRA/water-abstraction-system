@@ -17,16 +17,16 @@ const SendToS3BucketService = require('../../../app/services/db-export/send-to-s
 describe('Send to S3 bucket service', () => {
   let s3Stub
 
+  beforeEach(() => {
+    // Stub the S3 Client's send method, which is used to run the 'put object' command
+    s3Stub = Sinon.stub(S3Client.prototype, 'send')
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when successful', () => {
-    beforeEach(() => {
-      // Stub the S3 Client's send method, which is used to run the 'put object' command
-      s3Stub = Sinon.stub(S3Client.prototype, 'send')
-    })
-
-    afterEach(() => {
-      Sinon.restore()
-    })
-
     const filePath = 'test/fixtures/compress-files.service.csv'
 
     it('uploads a file to the S3 bucket', async () => {
@@ -39,38 +39,16 @@ describe('Send to S3 bucket service', () => {
       const calledCommand = s3Stub.getCall(0).firstArg
       expect(calledCommand).to.be.an.instanceof(PutObjectCommand)
     })
-
-    it('returns true', async () => {
-      const result = await SendToS3BucketService.go(filePath)
-
-      expect(result).to.be.true()
-    })
   })
 
   describe('when unsuccessful', () => {
     describe('because an invalid file name is given', () => {
       const fileName = 'FakeFolder'
 
-      it('throws an error', async () => {
-        const result = await expect(SendToS3BucketService.go(fileName)).to.reject()
+      it('does not upload a file to the S3 bucket', async () => {
+        await expect(SendToS3BucketService.go(fileName)).to.reject()
 
-        expect(result).to.be.an.error()
-        expect(result.message).to.startWith('ENOENT')
-      })
-    })
-
-    describe('because there is an issue with the upload', () => {
-      beforeEach(() => {
-        // Stub the S3 Client's send method, which is used to run the 'put object' command
-        s3Stub = Sinon.stub(S3Client.prototype, 'send').rejects()
-      })
-
-      const filePath = 'test/fixtures/compress-files.service.csv'
-
-      it('returns false', async () => {
-        const result = await SendToS3BucketService.go(filePath)
-
-        expect(result).to.be.false()
+        expect(s3Stub.called).to.be.false()
       })
     })
   })

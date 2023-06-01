@@ -41,14 +41,11 @@ describe('Delete File service', () => {
     })
   })
 
-  describe('When an error occurs', () => {
-    it('throws an error', async () => {
+  describe('When a file does not exist', () => {
+    it('returns without throwing an error', async () => {
       const fakeFile = 'FAKE_FILE'
 
-      const result = await expect(DeleteFileService.go(fakeFile)).to.reject()
-
-      expect(result).to.be.an.error()
-      expect(result.message).to.equal(`ENOENT: no such file or directory, unlink '${fakeFile}'`)
+      await expect(DeleteFileService.go(fakeFile)).not.to.reject()
     })
   })
 })

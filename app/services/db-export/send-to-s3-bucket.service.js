@@ -5,7 +5,8 @@
  * @module SendToS3BucketService
  */
 
-const fsPromises = require('fs').promises
+const fs = require('fs')
+const fsPromises = fs.promises
 const path = require('path')
 const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
 
@@ -19,6 +20,10 @@ const S3Config = require('../../../config/s3.config.js')
  * @returns {Boolean} True if the file is uploaded successfully and false if not
  */
 async function go (filePath) {
+  if (!fs.existsSync(filePath)) {
+    throw new Error()
+  }
+
   const bucketName = S3Config.s3.bucket
   const fileName = path.basename(filePath)
   const fileContent = await fsPromises.readFile(filePath)

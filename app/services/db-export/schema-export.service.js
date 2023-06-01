@@ -22,9 +22,11 @@ const SendToS3BucketService = require('../db-export/send-to-s3-bucket.service.js
  * @param {String} schemaName The name of the database to export
  */
 async function go (schemaName) {
+  const schemaFolderPath = _folderToUpload(schemaName)
+  let tarSchemaPath
+
   try {
     const tableNames = await FetchTableNamesService.go(schemaName)
-    const schemaFolderPath = _folderToUpload(schemaName)
 
     for (const tableName of tableNames) {
       await ExportTableService.go(tableName, schemaFolderPath, schemaName)
