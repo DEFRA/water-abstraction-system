@@ -53,7 +53,7 @@ function _preGenerateBillingInvoiceLicences (chargeVersions, billingInvoices) {
 
     // The charge versions may contain a combination of billing invoice and licence multiple times, so we check to see
     // if this combination has already had a billing invoice licence generated for it and return early if so
-    if (acc.key) {
+    if (acc[key]) {
       return acc
     }
 
