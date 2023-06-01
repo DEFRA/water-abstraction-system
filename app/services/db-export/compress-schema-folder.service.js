@@ -23,6 +23,7 @@ async function go (schemaFolderPath) {
     },
     [schemaFolderPath]
   )
+
   return file
 }
 

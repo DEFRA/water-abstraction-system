@@ -9,6 +9,7 @@ const path = require('path')
 const os = require('os')
 
 const CompressSchemaFolderService = require('../db-export/compress-schema-folder.service.js')
+const DeleteFileService = require('./delete-file.service.js')
 const DeleteFolderService = require('./delete-folder.service.js')
 const ExportTableService = require('./export-table.service.js')
 const FetchTableNamesService = require('../db-export/fetch-table-names.service.js')
@@ -21,19 +22,22 @@ const SendToS3BucketService = require('../db-export/send-to-s3-bucket.service.js
  * @param {String} schemaName The name of the database to export
  */
 async function go (schemaName) {
-  const tableNames = await FetchTableNamesService.go(schemaName)
+  try {
+    const tableNames = await FetchTableNamesService.go(schemaName)
+    const schemaFolderPath = _folderToUpload(schemaName)
 
-  const schemaFolderPath = _folderToUpload(schemaName)
+    for (const tableName of tableNames) {
+      await ExportTableService.go(tableName, schemaFolderPath, schemaName)
+    }
 
-  for (const tableName of tableNames) {
-    await ExportTableService.go(tableName, schemaFolderPath, schemaName)
+    const tarSchemaPath = await CompressSchemaFolderService.go(schemaFolderPath)
+    await SendToS3BucketService.go(tarSchemaPath)
+  } catch (error) {
+    global.GlobalNotifier.omfg(`Error: Failed to export schema ${schemaName}`, error.message)
   }
 
-  const tarSchemaPath = await CompressSchemaFolderService.go(schemaFolderPath)
-
-  await SendToS3BucketService.go(tarSchemaPath)
-
   await DeleteFolderService.go(schemaFolderPath)
+  await DeleteFileService.go(tarSchemaPath)
 }
 
 /**

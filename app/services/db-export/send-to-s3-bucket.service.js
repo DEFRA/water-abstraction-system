@@ -28,7 +28,7 @@ async function go (filePath) {
     Body: fileContent
   }
 
-  return await _uploadToBucket(params)
+  await _uploadToBucket(params)
 }
 
 /**
@@ -43,14 +43,9 @@ async function _uploadToBucket (params) {
   const s3Client = new S3Client()
   const command = new PutObjectCommand(params)
 
-  try {
-    await s3Client.send(command)
-
-    return true
-  } catch (error) {
-    return false
-  }
+  await s3Client.send(command)
 }
+
 module.exports = {
   go
 }
