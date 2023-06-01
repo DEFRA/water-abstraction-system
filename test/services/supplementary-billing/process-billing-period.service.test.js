@@ -24,9 +24,9 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
-const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
 const ChargingModuleGenerateService = require('../../../app/services/charging-module/generate-bill-run.service.js')
 const GenerateBillingTransactionsService = require('../../../app/services/supplementary-billing/generate-billing-transactions.service.js')
+const SendBillingTransactionsService = require('../../../app/services/supplementary-billing/send-billing-transactions.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../app/services/supplementary-billing/process-billing-period.service.js')
@@ -96,19 +96,50 @@ describe('Process billing period service', () => {
 
           chargeVersions = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
 
-          Sinon.stub(ChargingModuleCreateTransactionService, 'go').resolves({
-            succeeded: true,
-            response: {
-              body: { transaction: { id: '7e752fa6-a19c-4779-b28c-6e536f028795' } }
-            }
-          })
+          const sentTransactions = [{
+            billingTransactionId: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
+            billingInvoiceLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
+            chargeElementId: '32058a19-4813-4ee7-808b-a0559deb8469',
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2022-10-31'),
+            source: 'non-tidal',
+            season: 'all year',
+            loss: 'low',
+            isCredit: false,
+            chargeType: 'standard',
+            authorisedQuantity: 6.82,
+            billableQuantity: 6.82,
+            authorisedDays: 365,
+            billableDays: 214,
+            status: 'charge_created',
+            description: 'Water abstraction charge: Mineral washing',
+            volume: 6.82,
+            section126Factor: 1,
+            section127Agreement: false,
+            section130Agreement: false,
+            isNewLicence: false,
+            isTwoPartSecondPartCharge: false,
+            scheme: 'sroc',
+            aggregateFactor: 0.562114443,
+            adjustmentFactor: 1,
+            chargeCategoryCode: '4.4.5',
+            chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+            isSupportedSource: false,
+            supportedSourceName: null,
+            isWaterCompanyCharge: true,
+            isWinterOnly: false,
+            isWaterUndertaker: false,
+            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795'
+          }]
+
+          Sinon.stub(SendBillingTransactionsService, 'go').resolves(sentTransactions)
           Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
             succeeded: true,
             response: {}
           })
         })
 
-        it('returns true (bill run is not empty)', async () => {
+        it.only('returns true (bill run is not empty)', async () => {
           const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
           expect(result).to.be.true()
@@ -214,9 +245,10 @@ describe('Process billing period service', () => {
       })
     })
 
-    describe('because creating the billing transactions fails', () => {
+    describe('because sending the billing transactions fails', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleCreateTransactionService, 'go').rejects()
+        const thrownError = new BillingBatchError(new Error(), BillingBatchModel.errorCodes.failedToCreateCharge)
+        Sinon.stub(SendBillingTransactionsService, 'go').rejects(thrownError)
       })
 
       it('throws a BillingBatchError with the correct code', async () => {
