@@ -12,9 +12,9 @@ const { expect } = Code
 const tar = require('tar')
 
 // Thing under test
-const CompressedTarBallService = require('../../../app/services/db-export/compressed-tarball.service')
+const CompressSchemaFolderService = require('../../../app/services/db-export/compress-schema-folder.service.js')
 
-describe('Compressed tarball service', () => {
+describe('Compressed schema folder service', () => {
   let tarCreateStub
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('Compressed tarball service', () => {
     const schemaFolderPath = '/tmp/water'
     const expectedTarballPath = '/tmp/water.tgz'
 
-    const result = await CompressedTarBallService.go(schemaFolderPath)
+    const result = await CompressSchemaFolderService.go(schemaFolderPath)
 
     expect(tarCreateStub.calledOnce).to.be.true()
     expect(result).to.equal(expectedTarballPath)

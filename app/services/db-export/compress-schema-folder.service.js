@@ -2,7 +2,7 @@
 
 /**
  * Creates a compressed tarball (.tgz) from a given schema folder
- * @module CompressedTarballService
+ * @module CompressSchemaFolderService
  */
 
 const tar = require('tar')
@@ -14,10 +14,12 @@ const tar = require('tar')
  * @returns {String} The path to the created tarball file
  */
 async function go (schemaFolderPath) {
+  const file = `${schemaFolderPath}.tgz`
+
   await tar.create(
     {
       gzip: true,
-      file: `${schemaFolderPath}.tgz`
+      file
     },
     [schemaFolderPath]
   )

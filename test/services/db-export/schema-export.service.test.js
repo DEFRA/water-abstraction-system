@@ -9,9 +9,9 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const CompressedTarBallService = require('../../../app/services/db-export/compressed-tarball.service.js')
+const CompressSchemaFolderService = require('../../../app/services/db-export/compress-schema-folder.service.js')
 const DeleteFolderService = require('../../../app/services/db-export/delete-folder.service.js')
-const ExportCompressedTableService = require('../../../app/services/db-export/export-compressed-table.service.js')
+const ExportTableService = require('../../../app/services/db-export/export-table.service.js')
 const FetchTableNamesService = require('../../../app/services/db-export/fetch-table-names.service.js')
 const SendToS3BucketService = require('../../../app/services/db-export/send-to-s3-bucket.service.js')
 
@@ -20,17 +20,17 @@ const SchemaExportService = require('../../../app/services/db-export/schema-expo
 
 describe('Schema export service', () => {
   let FetchTableNamesServiceStub
-  let CompressedTarballServiceStub
+  let CompressSchemaFolderServiceStub
   let SendToS3BucketServiceStub
   let DeleteFolderServiceStub
-  let ExportCompressedTableServiceStub
+  let ExportTableServiceStub
 
   beforeEach(() => {
     FetchTableNamesServiceStub = Sinon.stub(FetchTableNamesService, 'go').resolves([])
-    CompressedTarballServiceStub = Sinon.stub(CompressedTarBallService, 'go').resolves('/tmp/water')
+    CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go').resolves('/tmp/water')
     SendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go').resolves()
     DeleteFolderServiceStub = Sinon.stub(DeleteFolderService, 'go').resolves()
-    ExportCompressedTableServiceStub = Sinon.stub(ExportCompressedTableService, 'go').resolves()
+    ExportTableServiceStub = Sinon.stub(ExportTableService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -41,17 +41,17 @@ describe('Schema export service', () => {
     await SchemaExportService.go('water')
 
     expect(FetchTableNamesServiceStub.called).to.be.true()
-    expect(CompressedTarballServiceStub.called).to.be.true()
+    expect(CompressSchemaFolderServiceStub.called).to.be.true()
     expect(SendToS3BucketServiceStub.called).to.be.true()
     expect(DeleteFolderServiceStub.called).to.be.true()
   })
 
-  it('calls the ExportCompressedTableService with the different table names as arguments', async () => {
+  it('calls the ExportTableService with the different table names as arguments', async () => {
     const tableNames = []
 
     await SchemaExportService.go('water')
 
-    const allArgs = ExportCompressedTableServiceStub.getCalls().flatMap((call) => {
+    const allArgs = ExportTableServiceStub.getCalls().flatMap((call) => {
       return call.args
     })
 

@@ -5,7 +5,7 @@
  * @module SendToS3BucketService
  */
 
-const fs = require('fs')
+const fsPromises = require('fs').promises
 const path = require('path')
 const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
 const S3Config = require('../../../config/s3.config.js')
@@ -20,14 +20,14 @@ const S3Config = require('../../../config/s3.config.js')
 async function go (filePath) {
   const bucketName = S3Config.s3.bucket
   const fileName = path.basename(filePath)
-  const fileContent = fs.readFileSync(filePath)
+  const fileContent = await fsPromises.readFile(filePath)
   const params = {
     Bucket: bucketName,
     Key: `export/${fileName}`,
     Body: fileContent
   }
 
-  return _uploadToBucket(params)
+  return await _uploadToBucket(params)
 }
 
 /**

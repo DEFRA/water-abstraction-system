@@ -8,9 +8,9 @@
 const path = require('path')
 const os = require('os')
 
-const CompressedTarballService = require('../db-export/compressed-tarball.service.js')
+const CompressSchemaFolderService = require('../db-export/compress-schema-folder.service.js')
 const DeleteFolderService = require('./delete-folder.service.js')
-const ExportCompressedTableService = require('./export-compressed-table.service.js')
+const ExportTableService = require('./export-table.service.js')
 const FetchTableNamesService = require('../db-export/fetch-table-names.service.js')
 const SendToS3BucketService = require('../db-export/send-to-s3-bucket.service.js')
 
@@ -26,10 +26,10 @@ async function go (schemaName) {
   const schemaFolderPath = _folderToUpload(schemaName)
 
   for (const tableName of tableNames) {
-    await ExportCompressedTableService.go(tableName, schemaFolderPath, schemaName)
+    await ExportTableService.go(tableName, schemaFolderPath, schemaName)
   }
 
-  const tarSchemaPath = await CompressedTarballService.go(schemaFolderPath)
+  const tarSchemaPath = await CompressSchemaFolderService.go(schemaFolderPath)
 
   await SendToS3BucketService.go(tarSchemaPath)
 

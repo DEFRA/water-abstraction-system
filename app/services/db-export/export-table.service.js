@@ -3,7 +3,7 @@
 /**
  * Exports a table from the db, converts it to CSV format and saves it to a file
  *
- * @module ExportCompressedTableService
+ * @module ExportTableService
  */
 
 const ConvertToCSVService = require('./convert-to-csv.service.js')

@@ -14,7 +14,7 @@ const ExportDataFilesService = require('../../../app/services/db-export/export-d
 const FetchTableService = require('../../../app/services/db-export/fetch-table.service.js')
 
 // Thing under test
-const ExportCompressedTableService = require('../../../app/services/db-export/export-compressed-table.service.js')
+const ExportTableService = require('../../../app/services/db-export/export-table.service.js')
 
 describe('Table Export service', () => {
   let convertToCSVServiceStub
@@ -32,7 +32,7 @@ describe('Table Export service', () => {
   })
 
   it('runs the db export services', async () => {
-    await ExportCompressedTableService.go()
+    await ExportTableService.go()
 
     expect(convertToCSVServiceStub.called).to.be.true()
     expect(exportDataFilesServiceStub.called).to.be.true()
