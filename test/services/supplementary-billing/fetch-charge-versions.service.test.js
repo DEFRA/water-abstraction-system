@@ -60,12 +60,12 @@ describe('Fetch Charge Versions service', () => {
       const { licenceId } = licence
       changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
 
-      // This creates a 'current' SROC charge version valid in FYE 2024
+      // This creates a 'current' SROC charge version valid only FYE 2024
       const sroc2024ChargeVersion = await ChargeVersionHelper.add(
         { startDate: new Date('2023-11-01'), changeReasonId: changeReason.changeReasonId, licenceId }
       )
 
-      // This creates a 'current' SROC charge version that ends on 2023-10-31
+      // This creates a 'current' SROC charge version valid in both FYE 2023 and 2024
       const sroc2023ChargeVersion = await ChargeVersionHelper.add(
         { endDate: new Date('2023-10-31'), changeReasonId: changeReason.changeReasonId, licenceId }
       )
