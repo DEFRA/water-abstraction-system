@@ -50,14 +50,11 @@ describe('Delete Folder service', () => {
     })
   })
 
-  describe('When an error occurs', () => {
-    it('throws an error', async () => {
+  describe('When a folder does not exist', () => {
+    it('returns without throwing an error', async () => {
       const fakeFolder = 'FAKE_FILE'
 
-      const result = await expect(DeleteFolderService.go(fakeFolder)).to.reject()
-
-      expect(result).to.be.an.error()
-      expect(result.message).to.startsWith('ENOENT')
+      await expect(DeleteFolderService.go(fakeFolder)).not.to.reject()
     })
   })
 })
