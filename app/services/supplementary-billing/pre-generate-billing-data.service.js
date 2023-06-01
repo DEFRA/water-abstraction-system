@@ -14,9 +14,7 @@ const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice
  * a keyed object of billing invoices and a keyed object of billing invoice licences. The billing invoices are keyed
  * by the billing invoice id, and the billing invoice licences are keyed by the concatenated billing invoice id and
  * licence id.
- *
- * TODO: write unit tests
- *
+ * *
  * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the invoice account ids and licences to use
  * @param {String} billingBatchId The billing batch id to be added to the billing invoices
  * @param {Object} billingPeriod The billing period of the billing invoices

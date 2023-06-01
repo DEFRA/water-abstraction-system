@@ -15,8 +15,6 @@ const ChargingModuleCreateTransactionPresenter = require('../../presenters/charg
  * with a status of `charge_created`; the external id returned by the Charging Module; and the appropriate billing
  * invoice licence id
  *
- * TODO: write unit tests
- *
  * @param {module:LicenceModel} licence The licence that each transaction is linked to
  * @param {module:BillingInvoiceModel} billingInvoice The billing invoice each transaction is to be linked to
  * @param {module:BillingInvoiceLicenceModel} billingInvoiceLicence The billing invoice licence each transaction is to be linked to
