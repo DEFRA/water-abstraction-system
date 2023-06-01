@@ -16,8 +16,9 @@ const FetchTableNamesService = require('../db-export/fetch-table-names.service.j
 const SendToS3BucketService = require('../db-export/send-to-s3-bucket.service.js')
 
 /**
- * Exports the specific schema by fetching table names, exporting each table,
- * uploading the schema folder to an S3 bucket and finally deleting the folder
+ * Exports the specific schema by fetching table names, exporting each table to a schema folder
+ * converting the folder into a compressed tarball file and uploading this to the S3 bucket
+ * Finally deleting the schema folder and the schema.tgz file
  *
  * @param {String} schemaName The name of the database to export
  */
