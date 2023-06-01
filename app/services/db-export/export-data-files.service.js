@@ -5,44 +5,40 @@
  * @module ExportDataFilesService
 */
 
+const fsPromises = require('fs').promises
 const path = require('path')
-
-const fs = require('fs').promises
-const os = require('os')
 
 /**
  * Writes the converted data to a csv file
  *
  * @param {String} tableConvertedToCsv The converted data to be written to the csv file
  * @param {String} tableName The name of the table
+ * @param {String} schemaFolderPath The path for the schema folder
  *
- * @returns {Boolean} True if the file is written successfully and false if not
+ * @returns {String} Returns the file path of the newly written file
  */
-async function go (tableConvertedToCsv, tableName) {
-  const filePath = _filenameWithPath(tableName)
+async function go (tableConvertedToCsv, tableName, schemaFolderPath) {
+  const filePath = await _filenameWithPath(tableName, schemaFolderPath)
 
-  try {
-    await fs.writeFile(filePath, tableConvertedToCsv)
+  await fsPromises.writeFile(filePath, tableConvertedToCsv)
 
-    return filePath
-  } catch (error) {
-    return false
-  }
+  return filePath
 }
 
 /**
- * Returns a file path by joining the temp directory path with the given file name
+ * Returns a file path by joining the schema folder path with the file name.
+ * The schema path has already been created with the temporary directory
  *
- * @param {String} tableName The name the of the table
+ * @param {String} tableName The name of the table
  *
  * @returns {String} The full file path
  */
-function _filenameWithPath (tableName) {
-  const temporaryFilePath = os.tmpdir()
+async function _filenameWithPath (tableName, schemaFolderPath) {
+  await fsPromises.mkdir(schemaFolderPath, { recursive: true })
 
   return path.normalize(
     path.format({
-      dir: temporaryFilePath,
+      dir: schemaFolderPath,
       name: `${tableName}.csv`
     })
   )
