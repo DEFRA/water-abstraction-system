@@ -55,6 +55,7 @@ describe('Process billing batch service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the service is called', () => {

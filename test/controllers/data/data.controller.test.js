@@ -84,19 +84,5 @@ describe('Data controller', () => {
         expect(response.statusCode).to.equal(204)
       })
     })
-
-    describe('when the service fails', () => {
-      describe('because the DbExportService errors', () => {
-        beforeEach(async () => {
-          Sinon.stub(DbExportService, 'go').rejects()
-        })
-
-        it('displays the error message', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(500)
-        })
-      })
-    })
   })
 })
