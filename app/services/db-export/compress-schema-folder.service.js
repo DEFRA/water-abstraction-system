@@ -9,6 +9,7 @@ const tar = require('tar')
 
 /**
  * Create a compressed tarball (.tgz) from a given schema folder
+ *
  * @param {String} schemaFolderPath
  *
  * @returns {String} The path to the created tarball file

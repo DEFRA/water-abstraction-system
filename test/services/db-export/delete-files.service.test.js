@@ -13,9 +13,9 @@ const path = require('path')
 const mockFs = require('mock-fs')
 
 // Thing under test
-const DeleteFolderService = require('../../../app/services/db-export/delete-folder.service.js')
+const DeleteFilesService = require('../../../app/services/db-export/delete-files.service.js')
 
-describe('Delete Folder service', () => {
+describe('Delete Files service', () => {
   let filenameWithPath
   let folderNameWithPath
 
@@ -36,14 +36,14 @@ describe('Delete Folder service', () => {
 
   describe('When a valid folder is specified', () => {
     it('deletes the folder', async () => {
-      await DeleteFolderService.go(folderNameWithPath)
+      await DeleteFilesService.go(folderNameWithPath)
 
       const folderExists = fs.existsSync(folderNameWithPath)
       expect(folderExists).to.be.false()
     })
 
     it('deletes anything inside the folder', async () => {
-      await DeleteFolderService.go(folderNameWithPath)
+      await DeleteFilesService.go(folderNameWithPath)
 
       const fileExists = fs.existsSync(filenameWithPath)
       expect(fileExists).to.be.false()
@@ -54,7 +54,24 @@ describe('Delete Folder service', () => {
     it('returns without throwing an error', async () => {
       const fakeFolder = 'FAKE_FILE'
 
-      await expect(DeleteFolderService.go(fakeFolder)).not.to.reject()
+      await expect(DeleteFilesService.go(fakeFolder)).not.to.reject()
+    })
+  })
+
+  describe('When a valid file is specified', () => {
+    it('deletes the file', async () => {
+      await DeleteFilesService.go(filenameWithPath)
+
+      const fileExists = fs.existsSync(filenameWithPath)
+      expect(fileExists).to.be.false()
+    })
+  })
+
+  describe('When a file does not exist', () => {
+    it('returns without throwing an error', async () => {
+      const fakeFile = 'FAKE_FILE'
+
+      await expect(DeleteFilesService.go(fakeFile)).not.to.reject()
     })
   })
 })

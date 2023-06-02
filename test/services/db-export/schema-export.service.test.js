@@ -10,8 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const CompressSchemaFolderService = require('../../../app/services/db-export/compress-schema-folder.service.js')
-const DeleteFileService = require('../../../app/services/db-export/delete-file.service.js')
-const DeleteFolderService = require('../../../app/services/db-export/delete-folder.service.js')
+const DeleteFilesService = require('../../../app/services/db-export/delete-files.service.js')
 const ExportTableService = require('../../../app/services/db-export/export-table.service.js')
 const FetchTableNamesService = require('../../../app/services/db-export/fetch-table-names.service.js')
 const SendToS3BucketService = require('../../../app/services/db-export/send-to-s3-bucket.service.js')
@@ -23,18 +22,16 @@ describe('Schema export service', () => {
   let FetchTableNamesServiceStub
   let CompressSchemaFolderServiceStub
   let SendToS3BucketServiceStub
-  let DeleteFolderServiceStub
+  let DeleteFilesServiceStub
   let ExportTableServiceStub
-  let DeleteFileServiceStub
 
   describe('when successful', () => {
     beforeEach(() => {
       FetchTableNamesServiceStub = Sinon.stub(FetchTableNamesService, 'go').resolves([])
       CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go').resolves('/tmp/water')
       SendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go').resolves()
-      DeleteFolderServiceStub = Sinon.stub(DeleteFolderService, 'go').resolves()
+      DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
       ExportTableServiceStub = Sinon.stub(ExportTableService, 'go').resolves()
-      DeleteFileServiceStub = Sinon.stub(DeleteFileService, 'go').resolves()
     })
 
     afterEach(() => {
@@ -47,8 +44,7 @@ describe('Schema export service', () => {
       expect(FetchTableNamesServiceStub.called).to.be.true()
       expect(CompressSchemaFolderServiceStub.called).to.be.true()
       expect(SendToS3BucketServiceStub.called).to.be.true()
-      expect(DeleteFolderServiceStub.called).to.be.true()
-      expect(DeleteFileServiceStub.called).to.be.true()
+      expect(DeleteFilesServiceStub.called).to.be.true()
     })
 
     it('calls the ExportTableService with the different table names as arguments', async () => {
@@ -87,8 +83,7 @@ describe('Schema export service', () => {
       FetchTableNamesServiceStub = Sinon.stub(FetchTableNamesService, 'go')
       SendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go')
       CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go')
-      DeleteFileServiceStub = Sinon.stub(DeleteFileService, 'go').resolves()
-      DeleteFolderServiceStub = Sinon.stub(DeleteFolderService, 'go').resolves()
+      DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
     })
 
     afterEach(() => {
@@ -109,8 +104,7 @@ describe('Schema export service', () => {
     it('cleans up the files', async () => {
       await SchemaExportService.go('water')
 
-      expect(DeleteFileServiceStub.called).to.be.true()
-      expect(DeleteFolderServiceStub.called).to.be.true()
+      expect(DeleteFilesServiceStub.called).to.be.true()
     })
   })
 })

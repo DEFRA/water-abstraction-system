@@ -25,7 +25,7 @@ async function tearDown (_request, h) {
  */
 async function dbExport (_request, h) {
   try {
-    await DbExportService.go()
+    DbExportService.go()
 
     return h.response().code(204)
   } catch (error) {
