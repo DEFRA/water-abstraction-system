@@ -14,8 +14,8 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  * @param {String} invoiceId The Charging Module UUID of the invoice
  *
  * @returns {Object} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the bill run creation request was successful
- * @returns {Object} result.response Details of the created bill run if successful; or the error response if not
+ * @returns {boolean} result.succeeded Whether the request was successful
+ * @returns {Object} result.response CM response if the request was successful; or the error response if it wasn't
 */
 async function go (billingBatchId, invoiceId) {
   const path = `v3/wrls/bill-runs/${billingBatchId}/invoices/${invoiceId}`
