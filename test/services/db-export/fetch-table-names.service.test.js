@@ -8,12 +8,12 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const FetchTableNames = require('../../../app/services/db-export/fetch-table-names.service')
+const FetchTableNamesService = require('../../../app/services/db-export/fetch-table-names.service')
 
 describe('Fetch table names', () => {
   describe('when given a schema name', () => {
     it('returns a list of the schemas table names', async () => {
-      const result = await FetchTableNames.go('water')
+      const result = await FetchTableNamesService.go('water')
 
       expect(result).to.include('billing_charge_categories')
       expect(result).to.include('charge_purposes')
@@ -23,7 +23,7 @@ describe('Fetch table names', () => {
 
   describe('when not given a schema name', () => {
     it('throws an error', async () => {
-      const result = await expect(FetchTableNames.go()).to.reject()
+      const result = await expect(FetchTableNamesService.go()).to.reject()
 
       expect(result).to.be.an.error()
       expect(result.message).to.equal('Error: Unable to fetch table names')

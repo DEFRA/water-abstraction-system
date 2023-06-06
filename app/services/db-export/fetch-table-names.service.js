@@ -2,7 +2,7 @@
 
 /**
  * Fetches all the table names from a given schema
- * @module FetchTableNames
+ * @module FetchTableNamesService
  */
 
 const { db } = require('../../../db/db.js')
