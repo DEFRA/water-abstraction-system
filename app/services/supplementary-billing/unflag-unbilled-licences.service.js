@@ -27,12 +27,10 @@ const LicenceModel = require('../../models/water/licence.model.js')
  * do this because we know this service has handled anything that was unbilled and not represented.
  *
  * @param {*} billingBatchId The ID of the bill run (billing batch) being processed
- * @param {module:ChargeVersionModel[]} chargeVersions All charge versions being processed in the bill run
+ * @param {String[]} allLicenceIds All licence IDs being processed in the bill run
  * @returns {Number} count of records updated
  */
-async function go (billingBatchId, chargeVersions) {
-  const allLicenceIds = _extractUniqueLicenceIds(chargeVersions)
-
+async function go (billingBatchId, allLicenceIds) {
   return LicenceModel.query()
     .patch({ includeInSrocSupplementaryBilling: false })
     .whereIn('licenceId', allLicenceIds)
@@ -41,16 +39,6 @@ async function go (billingBatchId, chargeVersions) {
         .join('billingInvoices', 'billingInvoices.billingInvoiceId', '=', 'billingInvoiceLicences.billingInvoiceId')
         .where('billingInvoices.billingBatchId', '=', billingBatchId)
     )
-}
-
-function _extractUniqueLicenceIds (chargeVersions) {
-  const allLicenceIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licence.licenceId
-  })
-
-  // Creating a new set from allLicenceIds gives us just the unique ids. Objection does not accept sets in
-  // .findByIds() so we spread it into an array
-  return [...new Set(allLicenceIds)]
 }
 
 module.exports = {
