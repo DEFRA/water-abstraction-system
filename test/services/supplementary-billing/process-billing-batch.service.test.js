@@ -25,7 +25,7 @@ const UnflagUnbilledLicencesService = require('../../../app/services/supplementa
 // Thing under test
 const ProcessBillingBatchService = require('../../../app/services/supplementary-billing/process-billing-batch.service.js')
 
-describe('Process billing batch service', () => {
+describe.only('Process billing batch service', () => {
   const billingPeriods = [
     { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
     { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
