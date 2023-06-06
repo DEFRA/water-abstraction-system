@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Processes a new billing batch
+ * @module ProcessBillingBatchService
+ */
+
 const BillingBatchError = require('../../errors/billing-batch.error.js')
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const ChargingModuleGenerateService = require('../charging-module/generate-bill-run.service.js')
@@ -9,6 +14,12 @@ const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
+/**
+ * Creates the invoices and transactions in both WRLS and the Charging Module API
+ *
+ * @param {module:BillingBatchModel} billingBatch The newly created billing batch we need to process
+ * @param {Object[]} billingPeriod An array of objects representing the financial years the transaction is for
+ */
 async function go (billingBatch, billingPeriods) {
   const { billingBatchId } = billingBatch
 
