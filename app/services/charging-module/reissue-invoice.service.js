@@ -1,17 +1,18 @@
 'use strict'
 
 /**
- * Connects with the Charging Module to rebill an invoice
- * @module RebillInvoiceService
+ * Connects with the Charging Module to reissue an invoice
+ * @module ReissueInvoiceService
  */
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 
 /**
- * Sends a request to the Charging Module to rebill an invoice (used when reissuing) and returns the result
+ * Sends a request to the Charging Module rebill endpoint to reissue an invoice (used when reissuing) and returns the
+ * result
  *
  * @param {String} billingBatchId The Charging Module UUID of the bill run the new invoices will be assigned to
- * @param {String} invoiceId The Charging Module UUID of the invoice to be rebilled/reissued
+ * @param {String} invoiceId The Charging Module UUID of the invoice to be reissued
  *
  * @returns {Object} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful

@@ -12,9 +12,9 @@ const { expect } = Code
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
 
 // Thing under test
-const ChargingModuleRebillInvoiceService = require('../../../app/services/charging-module/rebill-invoice.service.js')
+const ChargingModuleReissueInvoiceService = require('../../../app/services/charging-module/reissue-invoice.service.js')
 
-describe('Charge module rebill invoice service', () => {
+describe('Charge module reissue invoice service', () => {
   const invoiceId = '45ddee2c-c423-4382-8abe-a6a9f284f829'
   const billRunId = 'db82bf38-638a-44d3-b1b3-1ae8524d9c38'
 
@@ -22,7 +22,7 @@ describe('Charge module rebill invoice service', () => {
     Sinon.restore()
   })
 
-  describe('when the service can rebill an invoice', () => {
+  describe('when the service can reissue an invoice', () => {
     beforeEach(async () => {
       Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
         succeeded: true,
@@ -49,20 +49,20 @@ describe('Charge module rebill invoice service', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await ChargingModuleRebillInvoiceService.go(billRunId, invoiceId)
+      await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
       const endpoint = ChargingModuleRequestLib.patch.firstCall.firstArg
 
       expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${invoiceId}/rebill`)
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleRebillInvoiceService.go(billRunId, invoiceId)
+      const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the invoice in the `response`', async () => {
-      const result = await ChargingModuleRebillInvoiceService.go(billRunId, invoiceId)
+      const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
 
       expect(result.response.body.invoices[0].id).to.equal('f62faabc-d65e-4242-a106-9777c1d57db7')
       expect(result.response.body.invoices[0].rebilledType).to.equal('C')
@@ -93,13 +93,13 @@ describe('Charge module rebill invoice service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleRebillInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleRebillInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -116,13 +116,13 @@ describe('Charge module rebill invoice service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleRebillInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleRebillInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()
