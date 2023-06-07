@@ -107,11 +107,6 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
   // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
   // charge version.
   return chargeVersions.reduce((acc, chargeVersion) => {
-    // We only need to handle charge versions with a status of `current`
-    if (chargeVersion.status !== 'current') {
-      return acc
-    }
-
     const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
       preGeneratedData,
       chargeVersion.invoiceAccountId,
@@ -124,8 +119,12 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
       acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion.licence, billingInvoice, billingInvoiceLicence)
     }
 
-    const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
-    acc[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
+    // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
+    // We fetch the previous transactions for `superseded` (REPLACED) charge versions later in the process
+    if (chargeVersion.status === 'current') {
+      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
+      acc[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
+    }
 
     return acc
   }, {})
