@@ -244,7 +244,7 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [srocDraftChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result.chargeVersions).to.be.empty()
@@ -269,7 +269,7 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [alcsChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result.chargeVersions).to.be.empty()
@@ -327,7 +327,7 @@ describe('Fetch Charge Versions service', () => {
           testRecords = [srocChargeVersion]
         })
 
-        it('returns no applicable charge versions', async () => {
+        it('returns no applicable licenceIds or charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result.chargeVersions).to.be.empty()
@@ -355,7 +355,7 @@ describe('Fetch Charge Versions service', () => {
           testRecords = [srocChargeVersion]
         })
 
-        it('returns no applicable charge versions', async () => {
+        it('returns no applicable licenceIds or charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result.chargeVersions).to.be.empty()
@@ -381,7 +381,7 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [otherRegionChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result.chargeVersions).to.be.empty()
@@ -407,7 +407,7 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [chargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result.chargeVersions).to.be.empty()
