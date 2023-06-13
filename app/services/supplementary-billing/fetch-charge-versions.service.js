@@ -20,13 +20,13 @@ const ChargeVersionWorkflow = require('../../models/water/charge-version-workflo
  * @returns {Object[]} An array of matching charge versions
  */
 async function go (regionId, billingPeriod) {
-  const chargeVersions = await _fetch(regionId, billingPeriod)
+  const uncleansedChargeVersions = await _fetch(regionId, billingPeriod)
 
-  return chargeVersions
+  return _extractLicencesAndCleanseChargeVersions(uncleansedChargeVersions)
 }
 
 async function _fetch (regionId, billingPeriod) {
-  const chargeVersions = await ChargeVersion.query()
+  const uncleansedChargeVersions = await ChargeVersion.query()
     .select([
       'chargeVersionId',
       'scheme',
@@ -39,7 +39,6 @@ async function _fetch (regionId, billingPeriod) {
     .where('includeInSrocSupplementaryBilling', true)
     .where('regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
-    .whereNotNull('chargeVersions.invoiceAccountId')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where(builder => {
       builder.whereNull('chargeVersions.endDate')
@@ -113,7 +112,22 @@ async function _fetch (regionId, billingPeriod) {
       ])
     })
 
-  return chargeVersions
+  return uncleansedChargeVersions
+}
+
+function _extractLicencesAndCleanseChargeVersions (uncleansedChargeVersions) {
+  const licenceIdsForPeriod = []
+  const chargeVersions = []
+
+  for (const chargeVersion of uncleansedChargeVersions) {
+    licenceIdsForPeriod.push(chargeVersion.licence.licenceId)
+
+    if (chargeVersion.invoiceAccountId) {
+      chargeVersions.push(chargeVersion)
+    }
+  }
+
+  return { chargeVersions, licenceIdsForPeriod }
 }
 
 module.exports = {
