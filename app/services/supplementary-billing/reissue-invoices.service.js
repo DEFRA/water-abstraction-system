@@ -80,6 +80,7 @@ async function go (originalBillingBatch, reissueBillingBatch) {
     const cmReissueResponses = await _sendReissueRequest(originalBillingBatch.externalId, sourceInvoice.externalId)
 
     for (const cmReissueResponse of cmReissueResponses) {
+      const isCancellingInvoice = _isCancellingInvoice(cmReissueResponse)
 
       const cmReissueInvoice = await _sendViewInvoiceRequest(originalBillingBatch, cmReissueResponse)
 
@@ -94,7 +95,7 @@ async function go (originalBillingBatch, reissueBillingBatch) {
 
         for (const sourceTransaction of sourceInvoiceLicence.billingTransactions) {
           const cmTransaction = _retrieveCMTransaction(cmLicence, sourceTransaction.externalId)
-          const reissueTransaction = _generateReissueTransaction(cmTransaction, sourceTransaction, reissueInvoiceLicence.billingInvoiceLicenceId)
+          const reissueTransaction = _generateReissueTransaction(cmTransaction, sourceTransaction, reissueInvoiceLicence.billingInvoiceLicenceId, isCancellingInvoice)
           dataToPersist.reissueTransactions.push(reissueTransaction)
         }
       }
@@ -109,34 +110,33 @@ async function go (originalBillingBatch, reissueBillingBatch) {
   return true
 }
 
+function _isCancellingInvoice (cmReissueResponse) {
+  return cmReissueResponse.rebilledType === 'C'
+}
+
 async function _persistData (dataToPersist) {
   await BillingInvoiceLicenceModel.query().insert(dataToPersist.reissueBillingInvoiceLicences)
   await BillingInvoiceModel.query().insert(dataToPersist.reissueBillingInvoices)
   await BillingTransactionModel.query().insert(dataToPersist.reissueTransactions)
 }
 
-function _generateReissueTransaction (cmTransaction, sourceTransaction, billingInvoiceLicenceId) {
-  // TODO: Going by SendBillingTransactionsService I believe the only fields we need to overwrite with cm detail are:
-  // - status
-  // - externalId
-  // - billingInvoiceLicenceId
+function _generateReissueTransaction (cmTransaction, sourceTransaction, billingInvoiceLicenceId, isCancellingInvoice) {
   const reissuedBillingTransactionId = randomUUID({ disableEntropyCache: true })
 
   return {
     ...sourceTransaction,
+    isCredit: _determineIsCredit(sourceTransaction.isCredit, isCancellingInvoice),
     billingTransactionId: reissuedBillingTransactionId,
-    // TODO: Check if this is correct. Legacy code maps the transaction status but from studying the code it only
-    // converts `unbilled` status to `charge_created` -- any other status returns `undefined`:
-    // https://github.com/DEFRA/water-abstraction-service/blob/main/src/modules/billing/mappers/transaction.js#L371
-    // HOWEVER I can't see where this status comes from? Even searching `unbilled` in the service only finds this bit
-    // of code, and it doesn't appear to come from the CM? (can't see it in the CM code) Perhaps we need to hardcode it
-    // as 'charge_created'?
-    status: cmTransaction.transactionStatus === 'unbilled' ? 'charge_created' : undefined,
     externalId: cmTransaction.id,
     billingInvoiceLicenceId
   }
 }
 
+function _determineIsCredit (originalIsCredit, isCancellingInvoice) {
+  // If this is a cancelling invoice then we invert isCredit so it cancels out the original transaction; otherwise, we
+  // use the original value
+  return isCancellingInvoice ? !originalIsCredit : originalIsCredit
+}
 function _retrieveCMTransaction (cmLicence, id) {
   return cmLicence.transactions.find((cmTransaction) => {
     return cmTransaction.rebilledTransactionId === id
