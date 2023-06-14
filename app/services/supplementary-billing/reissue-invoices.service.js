@@ -7,8 +7,8 @@
 const { randomUUID } = require('crypto')
 
 const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js')
-const BillingTransactionModel = require('../../models/water/billing-transaction.model.js')
 const BillingInvoiceLicenceModel = require('../../models/water/billing-invoice-licence.model.js')
+const BillingTransactionModel = require('../../models/water/billing-transaction.model.js')
 const ChargingModuleReissueInvoiceService = require('../charging-module/reissue-invoice.service.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
@@ -101,7 +101,7 @@ async function go (originalBillingBatch, reissueBillingBatch) {
       }
     }
 
-    // Now that we've handled the invoice, we update its record
+    // Update the invoice's record now that we've handled it
     await _updateInvoiceRecord(sourceInvoice)
   }
 
@@ -137,6 +137,7 @@ function _determineIsCredit (originalIsCredit, isCancellingInvoice) {
   // use the original value
   return isCancellingInvoice ? !originalIsCredit : originalIsCredit
 }
+
 function _retrieveCMTransaction (cmLicence, id) {
   return cmLicence.transactions.find((cmTransaction) => {
     return cmTransaction.rebilledTransactionId === id
@@ -188,7 +189,6 @@ function _retrieveOrGenerateBillingInvoice (dataToPersist, sourceInvoice, reissu
     reissueBillingInvoice = {
       ...translatedCMInvoice,
       ...generatedBillingInvoice,
-      // TODO: check if this is originalInvoiceId or originalBillingInvoiceId
       originalBillingInvoiceId: sourceInvoice.billingInvoiceId
     }
 
@@ -221,7 +221,6 @@ function _retrieveOrGenerateBillingInvoiceLicence (dataToPersist, sourceInvoice,
 async function _getInvoicesToReissue (regionId) {
   const result = await BillingInvoiceModel.query()
     .joinRelated('billingBatch')
-    // TODO: update test to create a billing invoice licence and some transactions
     // TODO: optimise this to only return what we need from the billing invoice licences and the transactions
     .withGraphFetched('billingInvoiceLicences.billingTransactions')
     .where({
@@ -242,10 +241,11 @@ async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
 }
 
 async function _updateInvoiceRecord (invoice) {
-  // Set `rebilling_state` to `rebilled`
+  // TODO: Set `rebilling_state` to `rebilled`
 
-  // Set `original_billing_invoice_id` to EITHER the existing value of `original_billing_invoice_id` if there is one,
-  // or `invoice_id` if there isn't [double-check if still needed and that we haven't already done this previously?]
+  // TODO: Set `original_billing_invoice_id` to EITHER the existing value of `original_billing_invoice_id` if there is
+  // one, or `invoice_id` if there isn't [double-check if still needed and that we haven't already done this
+  // previously?]
 }
 
 module.exports = {
