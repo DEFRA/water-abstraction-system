@@ -113,37 +113,46 @@ describe('Fetch Charge Versions service', () => {
       it('returns the SROC charge versions that are applicable', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(3)
-        expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
-        expect(result[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
-        expect(result[2].chargeVersionId).to.equal(testRecords[2].chargeVersionId)
+        expect(result.chargeVersions).to.have.length(3)
+        expect(result.chargeVersions[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+        expect(result.chargeVersions[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
+        expect(result.chargeVersions[2].chargeVersionId).to.equal(testRecords[2].chargeVersionId)
+      })
+
+      it('returns the licenceIds from SROC charge versions that are applicable', async () => {
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(result.licenceIdsForPeriod).to.have.length(3)
+        expect(result.licenceIdsForPeriod[0]).to.equal(licence.licenceId)
+        expect(result.licenceIdsForPeriod[1]).to.equal(licence.licenceId)
+        expect(result.licenceIdsForPeriod[2]).to.equal(licence.licenceId)
       })
     })
 
     it("returns both 'current' and 'superseded' SROC charge versions that are applicable", async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(result).to.have.length(3)
-      expect(result[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
-      expect(result[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
-      expect(result[2].chargeVersionId).to.equal(testRecords[2].chargeVersionId)
+      expect(result.chargeVersions).to.have.length(3)
+      expect(result.chargeVersions[0].chargeVersionId).to.equal(testRecords[0].chargeVersionId)
+      expect(result.chargeVersions[1].chargeVersionId).to.equal(testRecords[1].chargeVersionId)
+      expect(result.chargeVersions[2].chargeVersionId).to.equal(testRecords[2].chargeVersionId)
     })
 
     it('includes the related licence and region', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(result[0].licence.licenceRef).to.equal(licenceDefaults.licenceRef)
-      expect(result[0].licence.isWaterUndertaker).to.equal(true)
-      expect(result[0].licence.historicalAreaCode).to.equal(licenceDefaults.regions.historicalAreaCode)
-      expect(result[0].licence.regionalChargeArea).to.equal(licenceDefaults.regions.regionalChargeArea)
-      expect(result[0].licence.region.regionId).to.equal(regionId)
-      expect(result[0].licence.region.chargeRegionId).to.equal(region.chargeRegionId)
+      expect(result.chargeVersions[0].licence.licenceRef).to.equal(licenceDefaults.licenceRef)
+      expect(result.chargeVersions[0].licence.isWaterUndertaker).to.equal(true)
+      expect(result.chargeVersions[0].licence.historicalAreaCode).to.equal(licenceDefaults.regions.historicalAreaCode)
+      expect(result.chargeVersions[0].licence.regionalChargeArea).to.equal(licenceDefaults.regions.regionalChargeArea)
+      expect(result.chargeVersions[0].licence.region.regionId).to.equal(regionId)
+      expect(result.chargeVersions[0].licence.region.chargeRegionId).to.equal(region.chargeRegionId)
     })
 
     it('includes the related change reason', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(result[0].changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
+      expect(result.chargeVersions[0].changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
     })
 
     it('includes the related charge elements, billing charge category and charge purposes', async () => {
@@ -191,8 +200,8 @@ describe('Fetch Charge Versions service', () => {
         }]
       }
 
-      expect(result[0].chargeElements[0]).to.equal(expectedResult2024)
-      expect(result[1].chargeElements[0]).to.equal(expectedResult2023)
+      expect(result.chargeVersions[0].chargeElements[0]).to.equal(expectedResult2024)
+      expect(result.chargeVersions[1].chargeElements[0]).to.equal(expectedResult2023)
     })
   })
 
@@ -210,10 +219,11 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [srocChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.be.empty()
+        expect(result.chargeVersions).to.be.empty()
+        expect(result.licenceIdsForPeriod).to.be.empty()
       })
     })
 
@@ -234,10 +244,11 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [srocDraftChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.be.empty()
+        expect(result.chargeVersions).to.be.empty()
+        expect(result.licenceIdsForPeriod).to.be.empty()
       })
     })
 
@@ -258,34 +269,40 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [alcsChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.be.empty()
+        expect(result.chargeVersions).to.be.empty()
+        expect(result.licenceIdsForPeriod).to.be.empty()
       })
     })
 
     describe('because none of them have an `invoiceAccountId`', () => {
+      let licenceId
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
           endDate: new Date('2023-03-31')
         }
 
-        const { licenceId } = await LicenceHelper.add({
+        const licence = await LicenceHelper.add({
           regionId,
           includeInSrocSupplementaryBilling: true
         })
+
+        licenceId = licence.licenceId
 
         // This creates a charge version with no `invoiceAccountId`
         const nullInvoiceAccountIdChargeVersion = await ChargeVersionHelper.add({ invoiceAccountId: null, licenceId })
         testRecords = [nullInvoiceAccountIdChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns the licenceId but no applicable charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.be.empty()
+        expect(result.chargeVersions).to.be.empty()
+        expect(result.licenceIdsForPeriod).to.have.length(1)
+        expect(result.licenceIdsForPeriod[0]).to.equal(licenceId)
       })
     })
 
@@ -310,10 +327,11 @@ describe('Fetch Charge Versions service', () => {
           testRecords = [srocChargeVersion]
         })
 
-        it('returns no applicable charge versions', async () => {
+        it('returns no applicable licenceIds or charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.be.empty()
+          expect(result.chargeVersions).to.be.empty()
+          expect(result.licenceIdsForPeriod).to.be.empty()
         })
       })
 
@@ -337,10 +355,11 @@ describe('Fetch Charge Versions service', () => {
           testRecords = [srocChargeVersion]
         })
 
-        it('returns no applicable charge versions', async () => {
+        it('returns no applicable licenceIds or charge versions', async () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.be.empty()
+          expect(result.chargeVersions).to.be.empty()
+          expect(result.licenceIdsForPeriod).to.be.empty()
         })
       })
     })
@@ -362,10 +381,11 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [otherRegionChargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.be.empty()
+        expect(result.chargeVersions).to.be.empty()
+        expect(result.licenceIdsForPeriod).to.be.empty()
       })
     })
 
@@ -387,10 +407,11 @@ describe('Fetch Charge Versions service', () => {
         testRecords = [chargeVersion]
       })
 
-      it('returns no applicable charge versions', async () => {
+      it('returns no applicable licenceIds or charge versions', async () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.be.empty()
+        expect(result.chargeVersions).to.be.empty()
+        expect(result.licenceIdsForPeriod).to.be.empty()
       })
     })
   })

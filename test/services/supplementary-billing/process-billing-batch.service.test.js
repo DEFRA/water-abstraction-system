@@ -60,7 +60,7 @@ describe('Process billing batch service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
+      Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
       Sinon.stub(UnflagUnbilledLicencesService, 'go')
     })
 
@@ -157,7 +157,7 @@ describe('Process billing batch service', () => {
         beforeEach(() => {
           thrownError = new BillingBatchError(new Error(), BillingBatchModel.errorCodes.failedToPrepareTransactions)
 
-          Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
+          Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
           Sinon.stub(ProcessBillingPeriodService, 'go').rejects(thrownError)
         })
 
@@ -190,7 +190,7 @@ describe('Process billing batch service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
         Sinon.stub(UnflagUnbilledLicencesService, 'go').rejects(thrownError)
       })

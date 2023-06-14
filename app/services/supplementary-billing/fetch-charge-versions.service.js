@@ -20,13 +20,13 @@ const ChargeVersionWorkflow = require('../../models/water/charge-version-workflo
  * @returns {Object[]} An array of matching charge versions
  */
 async function go (regionId, billingPeriod) {
-  const chargeVersions = await _fetch(regionId, billingPeriod)
+  const uncleansedChargeVersions = await _fetch(regionId, billingPeriod)
 
-  return chargeVersions
+  return _extractLicencesAndCleanseChargeVersions(uncleansedChargeVersions)
 }
 
 async function _fetch (regionId, billingPeriod) {
-  const chargeVersions = await ChargeVersion.query()
+  const uncleansedChargeVersions = await ChargeVersion.query()
     .select([
       'chargeVersionId',
       'scheme',
@@ -39,7 +39,6 @@ async function _fetch (regionId, billingPeriod) {
     .where('includeInSrocSupplementaryBilling', true)
     .where('regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
-    .whereNotNull('chargeVersions.invoiceAccountId')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where(builder => {
       builder.whereNull('chargeVersions.endDate')
@@ -113,7 +112,30 @@ async function _fetch (regionId, billingPeriod) {
       ])
     })
 
-  return chargeVersions
+  return uncleansedChargeVersions
+}
+
+/**
+ * Extract the `licence_id`s from the charge versions before removing charge versions that have no `invoice_account_id`
+ *
+ * When a licence is made "non-chargeable" the supplementary billing flag gets set and a charge version created that has
+ * no `invoice_account_id`. For the purpose of billing we are not interested in charge versions with no
+ * `invoice_account_id` as these will not be charged. We are however interested in the associated licences to ensure
+ * that "non-chargeable" licences have their supplementary billing flag un-set.
+ */
+function _extractLicencesAndCleanseChargeVersions (uncleansedChargeVersions) {
+  const licenceIdsForPeriod = []
+  const chargeVersions = []
+
+  for (const chargeVersion of uncleansedChargeVersions) {
+    licenceIdsForPeriod.push(chargeVersion.licence.licenceId)
+
+    if (chargeVersion.invoiceAccountId) {
+      chargeVersions.push(chargeVersion)
+    }
+  }
+
+  return { chargeVersions, licenceIdsForPeriod }
 }
 
 module.exports = {

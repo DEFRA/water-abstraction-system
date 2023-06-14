@@ -22,9 +22,8 @@ async function go (billingBatch, billingPeriods) {
     await _updateStatus(billingBatchId, 'processing')
 
     for (const billingPeriod of billingPeriods) {
-      const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
+      const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billingBatch, billingPeriod)
       const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
-      const licenceIdsForPeriod = _extractLicenceIds(chargeVersions)
 
       accumulatedLicenceIds.push(...licenceIdsForPeriod)
 
@@ -65,19 +64,13 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
 }
 
-function _extractLicenceIds (chargeVersions) {
-  return chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licence.licenceId
-  })
-}
-
 async function _fetchChargeVersions (billingBatch, billingPeriod) {
   try {
-    const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
+    const chargeVersionData = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
     // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillingBatchService if it
     // fails
-    return chargeVersions
+    return chargeVersionData
   } catch (error) {
     throw new BillingBatchError(error, BillingBatchModel.errorCodes.failedToProcessChargeVersions)
   }
