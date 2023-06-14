@@ -50,14 +50,14 @@ const ChargingModuleViewInvoiceService = require('../charging-module/view-invoic
  *
  * TODO: full docs
  */
-async function go (billingBatch) {
+async function go (originalBillingBatch, reissueBillingBatch) {
   let sourceInvoices
 
   // TODO: delete this, we only keep it here so we can ensure it isn't silently swallowed if it errors in the try-catch
-  sourceInvoices = await _getInvoicesToReissue(billingBatch.regionId)
+  sourceInvoices = await _getInvoicesToReissue(originalBillingBatch.regionId)
 
   try {
-    sourceInvoices = await _getInvoicesToReissue(billingBatch.regionId)
+    sourceInvoices = await _getInvoicesToReissue(originalBillingBatch.regionId)
 
     // If we have no invoices to reissue then return false
     if (sourceInvoices.length === 0) {
@@ -77,13 +77,14 @@ async function go (billingBatch) {
   }
 
   for (const sourceInvoice of sourceInvoices) {
-    const cmReissueResponses = await _sendReissueRequest(billingBatch.externalId, sourceInvoice.externalId)
+    const cmReissueResponses = await _sendReissueRequest(originalBillingBatch.externalId, sourceInvoice.externalId)
 
     for (const cmReissueResponse of cmReissueResponses) {
-      const cmReissueInvoice = await _sendViewInvoiceRequest(billingBatch, cmReissueResponse)
+
+      const cmReissueInvoice = await _sendViewInvoiceRequest(originalBillingBatch, cmReissueResponse)
 
       // TODO: Refactor to pre-generate this data
-      const reissueInvoice = _retrieveOrGenerateBillingInvoice(dataToPersist, sourceInvoice, billingBatch, cmReissueInvoice)
+      const reissueInvoice = _retrieveOrGenerateBillingInvoice(dataToPersist, sourceInvoice, reissueBillingBatch, cmReissueInvoice)
 
       for (const sourceInvoiceLicence of sourceInvoice.billingInvoiceLicences) {
         // TODO: Refactor to pre-generate this data
@@ -175,14 +176,14 @@ async function _sendViewInvoiceRequest (billingBatch, reissueInvoice) {
   }
 }
 
-function _retrieveOrGenerateBillingInvoice (dataToPersist, sourceInvoice, billingBatch, cmReissueInvoice) {
+function _retrieveOrGenerateBillingInvoice (dataToPersist, sourceInvoice, reissueBillingBatch, cmReissueInvoice) {
   let reissueBillingInvoice
 
   const existingBillingInvoice = dataToPersist.reissueBillingInvoices.find(inv => inv.invoiceAccountId === sourceInvoice.invoiceAccountId)
 
   if (!existingBillingInvoice) {
     const translatedCMInvoice = _translateCMInvoice(cmReissueInvoice)
-    const generatedBillingInvoice = GenerateBillingInvoiceService.go(sourceInvoice, billingBatch.billingBatchId, sourceInvoice.financialYearEnding)
+    const generatedBillingInvoice = GenerateBillingInvoiceService.go(sourceInvoice, reissueBillingBatch.billingBatchId, sourceInvoice.financialYearEnding)
 
     reissueBillingInvoice = {
       ...translatedCMInvoice,
