@@ -44,62 +44,26 @@ const CHARGING_MODULE_REISSUE_INVOICE_RESPONSE = {
   ]
 }
 
-function _generateCMTransaction (chargeValue, credit, rebilledTransactionId) {
-  return {
-    // TODO: remove fields we don't require for testing
-    id: randomUUID({ disableEntropyCache: true }),
-    chargeValue,
-    credit,
-    rebilledTransactionId,
-    clientId: null,
-    lineDescription: 'LINE_DESCRIPTION',
-    periodStart: '2022-04-01T00:00:00.000Z',
-    periodEnd: '2023-03-31T00:00:00.000Z',
-    compensationCharge: false,
-    section130Factor: 0.5,
-    section127Factor: null,
-    winterOnlyFactor: null,
-    calculation: {
-      // cut for brevity
-    }
-  }
-}
-
-const invoiceCommonFields = {
-  billRunId: BILLING_BATCH_EXTERNAL_ID,
-  ruleset: 'sroc',
-  customerReference: 'CUSTOMER_REF',
-  financialYear: 2022,
-  deminimisInvoice: false,
-  zeroValueInvoice: false,
-  transactionReference: null,
-  rebilledInvoiceId: INVOICE_EXTERNAL_ID
-}
-
 const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
   credit: {
     invoice: {
-      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices.find(invoice => invoice.rebilledType === 'C').id,
-      ...invoiceCommonFields,
-      creditLineValue: 13200,
-      debitLineValue: 0,
-      netTotal: -13200,
+      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id,
+      billRunId: BILLING_BATCH_EXTERNAL_ID,
+      rebilledInvoiceId: INVOICE_EXTERNAL_ID,
       rebilledType: 'C',
       licences: [
         {
           id: 'fb79cde3-c684-4078-b08f-be6f06eb51a0',
           licenceNumber: 'FIRST_LICENCE',
-          netTotal: -6600,
           transactions: [
-            _generateCMTransaction(6600, true, 'a844ec8e-7ee1-4771-b645-a2459045a31a')
+            _generateCMTransaction(true, 'a844ec8e-7ee1-4771-b645-a2459045a31a')
           ]
         },
         {
           id: '5449e9cf-b0f0-4601-91f7-cac674b8351c',
           licenceNumber: 'SECOND_LICENCE',
-          netTotal: -6600,
           transactions: [
-            _generateCMTransaction(6600, true, '5410a73f-bd2c-4565-b70b-af36956c093a')
+            _generateCMTransaction(true, '5410a73f-bd2c-4565-b70b-af36956c093a')
           ]
         }
       ]
@@ -107,27 +71,23 @@ const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
   },
   reissue: {
     invoice: {
-      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices.find(invoice => invoice.rebilledType === 'R').id,
-      ...invoiceCommonFields,
-      creditLineValue: 0,
-      debitLineValue: 13200,
-      netTotal: 13200,
+      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
+      billRunId: BILLING_BATCH_EXTERNAL_ID,
+      rebilledInvoiceId: INVOICE_EXTERNAL_ID,
       rebilledType: 'R',
       licences: [
         {
           id: 'c11c33e2-bbb0-46e6-a6be-707ae57762de',
           licenceNumber: 'FIRST_LICENCE',
-          netTotal: 6600,
           transactions: [
-            _generateCMTransaction(6600, false, 'a844ec8e-7ee1-4771-b645-a2459045a31a')
+            _generateCMTransaction(false, 'a844ec8e-7ee1-4771-b645-a2459045a31a')
           ]
         },
         {
           id: 'c11c33e2-bbb0-46e6-a6be-707ae57762de',
           licenceNumber: 'SECOND_LICENCE',
-          netTotal: 6600,
           transactions: [
-            _generateCMTransaction(6600, false, '5410a73f-bd2c-4565-b70b-af36956c093a')
+            _generateCMTransaction(false, '5410a73f-bd2c-4565-b70b-af36956c093a')
           ]
         }
       ]
@@ -280,3 +240,11 @@ describe.only('Reissue invoices service', () => {
     })
   })
 })
+
+function _generateCMTransaction (credit, rebilledTransactionId) {
+  return {
+    id: randomUUID({ disableEntropyCache: true }),
+    credit,
+    rebilledTransactionId
+  }
+}
