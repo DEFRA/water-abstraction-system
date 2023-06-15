@@ -26,6 +26,7 @@ const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 // Thing under test
 const ReissueInvoicesService = require('../../../app/services/supplementary-billing/reissue-invoices.service.js')
 const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
+const BillingInvoiceModel = require('../../../app/models/water/billing-invoice.model.js')
 
 const BILLING_BATCH_EXTERNAL_ID = 'f68fedc4-bb26-43b9-9c69-504ba7d2ca18'
 const INVOICE_EXTERNAL_ID = '1699fe7c-c4ff-4b4b-a1b8-3026b83a00a1'
@@ -135,8 +136,8 @@ const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
 }
 
 describe.only('Reissue invoices service', () => {
+  let billingInvoiceToReissue
   let billingTransactionToReissue
-  let invoiceToReissue
   let chargingModuleReissueInvoiceServiceStub
   let chargingModuleViewInvoiceServiceStub
   let legacyRequestLibStub
@@ -201,7 +202,7 @@ describe.only('Reissue invoices service', () => {
 
     describe('and there are invoices to reissue', () => {
       beforeEach(async () => {
-        const billingInvoiceToReissue = await BillingInvoiceHelper.add({ financialYearEnding: 2023, billingBatchId: originalBillingBatch.billingBatchId, isFlaggedForRebilling: true, externalId: INVOICE_EXTERNAL_ID })
+        billingInvoiceToReissue = await BillingInvoiceHelper.add({ financialYearEnding: 2023, billingBatchId: originalBillingBatch.billingBatchId, isFlaggedForRebilling: true, externalId: INVOICE_EXTERNAL_ID })
 
         const billingInvoiceLicencesToReissue = await Promise.all([
           BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoiceToReissue.billingInvoiceId, licenceRef: 'FIRST_LICENCE' }),
@@ -246,6 +247,35 @@ describe.only('Reissue invoices service', () => {
         const billingInvoiceLicences = await BillingInvoiceLicenceModel.query()
 
         expect(billingInvoiceLicences).to.have.length(2)
+      })
+
+      it('sets the source invoice rebilling state to `rebilled`', async () => {
+        await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+
+        // Re-query the billing invoice to refresh it
+        billingInvoiceToReissue = await billingInvoiceToReissue.$query()
+
+        expect(billingInvoiceToReissue.rebillingState).to.equal('rebilled')
+      })
+
+      describe('sets the original billing invoice id', () => {
+        it('to its own id if `null`', async () => {
+          await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+
+          billingInvoiceToReissue = await billingInvoiceToReissue.$query()
+
+          expect(billingInvoiceToReissue.originalBillingInvoiceId).to.equal(billingInvoiceToReissue.billingInvoiceId)
+        })
+
+        it("to the existing value if it's populated", async () => {
+          await billingInvoiceToReissue.$query().patch({ originalBillingInvoiceId: '7decbddc-4b17-4eeb-9124-5d1e75c3d79a' })
+
+          await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+
+          billingInvoiceToReissue = await billingInvoiceToReissue.$query()
+
+          expect(billingInvoiceToReissue.originalBillingInvoiceId).to.equal('7decbddc-4b17-4eeb-9124-5d1e75c3d79a')
+        })
       })
     })
   })

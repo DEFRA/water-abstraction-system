@@ -101,8 +101,7 @@ async function go (originalBillingBatch, reissueBillingBatch) {
       }
     }
 
-    // Update the invoice's record now that we've handled it
-    await _updateInvoiceRecord(sourceInvoice)
+    await _markSourceInvoiceAsRebilled(sourceInvoice)
   }
 
   await _persistData(dataToPersist)
@@ -240,12 +239,15 @@ async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
   }
 }
 
-async function _updateInvoiceRecord (invoice) {
-  // TODO: Set `rebilling_state` to `rebilled`
-
-  // TODO: Set `original_billing_invoice_id` to EITHER the existing value of `original_billing_invoice_id` if there is
-  // one, or `invoice_id` if there isn't [double-check if still needed and that we haven't already done this
-  // previously?]
+async function _markSourceInvoiceAsRebilled (sourceInvoice) {
+  await sourceInvoice.$query().patch({
+    rebillingState: 'rebilled',
+    // If the source invoice's originalBillingInvoiceId field is `null` then we update it with the invoice's id;
+    // otherwise, we use its existing value. This ensures that if we reissue an invoice, then reissue that reissuing
+    // invoice, every invoice in the chain will have originalBillingInvoiceId pointing back to the very first invoice in
+    // the chain
+    originalBillingInvoiceId: sourceInvoice.originalBillingInvoiceId ?? sourceInvoice.billingInvoiceId
+  })
 }
 
 module.exports = {
