@@ -53,9 +53,6 @@ const ChargingModuleViewInvoiceService = require('../charging-module/view-invoic
 async function go (originalBillingBatch, reissueBillingBatch) {
   let sourceInvoices
 
-  // TODO: delete this, we only keep it here so we can ensure it isn't silently swallowed if it errors in the try-catch
-  sourceInvoices = await _getInvoicesToReissue(originalBillingBatch.regionId)
-
   try {
     sourceInvoices = await _getInvoicesToReissue(originalBillingBatch.regionId)
 
@@ -66,6 +63,8 @@ async function go (originalBillingBatch, reissueBillingBatch) {
   } catch (_error) {
     // If getting invoices errors then we simply return; we haven't yet modified the db so we can still process the rest
     // of the billing batch without needing to mark it as failed
+
+    // TODO: add logging
     return false
   }
 
