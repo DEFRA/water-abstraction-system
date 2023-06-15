@@ -176,39 +176,38 @@ async function _sendViewInvoiceRequest (billingBatch, reissueInvoice) {
 }
 
 function _retrieveOrGenerateBillingInvoice (dataToPersist, sourceInvoice, reissueBillingBatch, cmReissueInvoice) {
-  let reissueBillingInvoice
+  // Because we have nested iteration of source invoice and Charging Module reissue invoice, we need to ensure we have
+  // a billing invoice for every combination of these, hence we search by both of their ids
+  const existingBillingInvoice = dataToPersist.reissueBillingInvoices.find(inv => inv.invoiceAccountId === sourceInvoice.invoiceAccountId && inv.externalId === cmReissueInvoice.id)
 
-  const existingBillingInvoice = dataToPersist.reissueBillingInvoices.find(inv => inv.invoiceAccountId === sourceInvoice.invoiceAccountId)
+  if (existingBillingInvoice) {
+    return existingBillingInvoice
+  }
 
-  if (!existingBillingInvoice) {
     const translatedCMInvoice = _translateCMInvoice(cmReissueInvoice)
     const generatedBillingInvoice = GenerateBillingInvoiceService.go(sourceInvoice, reissueBillingBatch.billingBatchId, sourceInvoice.financialYearEnding)
 
-    reissueBillingInvoice = {
+  const reissueBillingInvoice = {
       ...translatedCMInvoice,
       ...generatedBillingInvoice,
       originalBillingInvoiceId: sourceInvoice.billingInvoiceId
     }
 
     dataToPersist.reissueBillingInvoices.push(reissueBillingInvoice)
-  } else {
-    reissueBillingInvoice = existingBillingInvoice
-  }
 
   return reissueBillingInvoice
 }
 
 function _retrieveOrGenerateBillingInvoiceLicence (dataToPersist, sourceInvoice, billingInvoiceId, sourceInvoiceLicence) {
-  let reissueBillingInvoiceLicence
-
   const existingBillingInvoiceLicence = dataToPersist.reissueBillingInvoiceLicences.find(inv => inv.invoiceAccountId === sourceInvoice.invoiceAccountId)
 
-  if (!existingBillingInvoiceLicence) {
-    reissueBillingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(billingInvoiceId, sourceInvoiceLicence)
-    dataToPersist.reissueBillingInvoiceLicences.push(reissueBillingInvoiceLicence)
-  } else {
-    reissueBillingInvoiceLicence = existingBillingInvoiceLicence
+  if (existingBillingInvoiceLicence) {
+    return existingBillingInvoiceLicence
   }
+
+  const reissueBillingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(billingInvoiceId, sourceInvoiceLicence)
+
+    dataToPersist.reissueBillingInvoiceLicences.push(reissueBillingInvoiceLicence)
 
   return reissueBillingInvoiceLicence
 }
