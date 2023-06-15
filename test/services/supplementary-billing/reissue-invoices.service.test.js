@@ -28,17 +28,38 @@ const ReissueInvoicesService = require('../../../app/services/supplementary-bill
 const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
 const BillingInvoiceModel = require('../../../app/models/water/billing-invoice.model.js')
 
-const BILLING_BATCH_EXTERNAL_ID = 'f68fedc4-bb26-43b9-9c69-504ba7d2ca18'
-const INVOICE_EXTERNAL_ID = '1699fe7c-c4ff-4b4b-a1b8-3026b83a00a1'
+const BILLING_BATCH_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
+
+const INVOICE_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
+const INVOICE_EXTERNAL_ID_2 = randomUUID({ disableEntropyCache: true })
+
+const INVOICE_1_LICENCE_1_TRANSACTION_1_ID = randomUUID({ disableEntropyCache: true })
+const INVOICE_1_LICENCE_2_TRANSACTION_1_ID = randomUUID({ disableEntropyCache: true })
+
+const INVOICE_2_LICENCE_1_TRANSACTION_1_ID = randomUUID({ disableEntropyCache: true })
+const INVOICE_2_LICENCE_2_TRANSACTION_1_ID = randomUUID({ disableEntropyCache: true })
 
 const CHARGING_MODULE_REISSUE_INVOICE_RESPONSE = {
   invoices: [
     {
-      id: 'f62faabc-d65e-4242-a106-9777c1d57db7',
+      id: randomUUID({ disableEntropyCache: true }),
       rebilledType: 'C'
     },
     {
-      id: 'db82bf38-638a-44d3-b1b3-1ae8524d9c38',
+      id: randomUUID({ disableEntropyCache: true }),
+      rebilledType: 'R'
+    }
+  ]
+}
+
+const CHARGING_MODULE_REISSUE_INVOICE_RESPONSE_2 = {
+  invoices: [
+    {
+      id: randomUUID({ disableEntropyCache: true }),
+      rebilledType: 'C'
+    },
+    {
+      id: randomUUID({ disableEntropyCache: true }),
       rebilledType: 'R'
     }
   ]
@@ -53,17 +74,17 @@ const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
       rebilledType: 'C',
       licences: [
         {
-          id: 'fb79cde3-c684-4078-b08f-be6f06eb51a0',
-          licenceNumber: 'FIRST_LICENCE',
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_1_LICENCE_1',
           transactions: [
-            _generateCMTransaction(true, 'a844ec8e-7ee1-4771-b645-a2459045a31a')
+            _generateCMTransaction(true, INVOICE_1_LICENCE_1_TRANSACTION_1_ID)
           ]
         },
         {
-          id: '5449e9cf-b0f0-4601-91f7-cac674b8351c',
-          licenceNumber: 'SECOND_LICENCE',
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_1_LICENCE_2',
           transactions: [
-            _generateCMTransaction(true, '5410a73f-bd2c-4565-b70b-af36956c093a')
+            _generateCMTransaction(true, INVOICE_1_LICENCE_2_TRANSACTION_1_ID)
           ]
         }
       ]
@@ -77,17 +98,68 @@ const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
       rebilledType: 'R',
       licences: [
         {
-          id: 'c11c33e2-bbb0-46e6-a6be-707ae57762de',
-          licenceNumber: 'FIRST_LICENCE',
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_1_LICENCE_1',
           transactions: [
-            _generateCMTransaction(false, 'a844ec8e-7ee1-4771-b645-a2459045a31a')
+            _generateCMTransaction(false, INVOICE_1_LICENCE_1_TRANSACTION_1_ID)
           ]
         },
         {
-          id: 'c11c33e2-bbb0-46e6-a6be-707ae57762de',
-          licenceNumber: 'SECOND_LICENCE',
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_1_LICENCE_2',
           transactions: [
-            _generateCMTransaction(false, '5410a73f-bd2c-4565-b70b-af36956c093a')
+            _generateCMTransaction(false, INVOICE_1_LICENCE_2_TRANSACTION_1_ID)
+          ]
+        }
+      ]
+    }
+  }
+}
+
+const CHARGING_MODULE_VIEW_INVOICE_RESPONSES_2 = {
+  credit: {
+    invoice: {
+      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE_2.invoices[0].id,
+      billRunId: BILLING_BATCH_EXTERNAL_ID,
+      rebilledInvoiceId: INVOICE_EXTERNAL_ID_2,
+      rebilledType: 'C',
+      licences: [
+        {
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_2_LICENCE_1',
+          transactions: [
+            _generateCMTransaction(true, INVOICE_2_LICENCE_1_TRANSACTION_1_ID)
+          ]
+        },
+        {
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_2_LICENCE_2',
+          transactions: [
+            _generateCMTransaction(true, INVOICE_2_LICENCE_2_TRANSACTION_1_ID)
+          ]
+        }
+      ]
+    }
+  },
+  reissue: {
+    invoice: {
+      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE_2.invoices[1].id,
+      billRunId: BILLING_BATCH_EXTERNAL_ID,
+      rebilledInvoiceId: INVOICE_EXTERNAL_ID_2,
+      rebilledType: 'R',
+      licences: [
+        {
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_2_LICENCE_1',
+          transactions: [
+            _generateCMTransaction(false, INVOICE_2_LICENCE_1_TRANSACTION_1_ID)
+          ]
+        },
+        {
+          id: randomUUID({ disableEntropyCache: true }),
+          licenceNumber: 'INVOICE_2_LICENCE_2',
+          transactions: [
+            _generateCMTransaction(false, INVOICE_2_LICENCE_2_TRANSACTION_1_ID)
           ]
         }
       ]
@@ -97,6 +169,7 @@ const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
 
 describe.only('Reissue invoices service', () => {
   let billingInvoiceToReissue
+  let billingInvoiceToReissue2
   let billingTransactionToReissue
   let chargingModuleReissueInvoiceServiceStub
   let chargingModuleViewInvoiceServiceStub
@@ -108,16 +181,19 @@ describe.only('Reissue invoices service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    reissueBillingBatch = await BillingBatchHelper.add()
-
     originalBillingBatch = await BillingBatchHelper.add({ externalId: BILLING_BATCH_EXTERNAL_ID })
-    await BillingInvoiceHelper.add({ financialYearEnding: 2023, billingBatchId: originalBillingBatch.billingBatchId })
+    reissueBillingBatch = await BillingBatchHelper.add()
 
     chargingModuleReissueInvoiceServiceStub = Sinon.stub(ChargingModuleReissueInvoiceService, 'go')
       .withArgs(BILLING_BATCH_EXTERNAL_ID, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE
+      })
+      .withArgs(BILLING_BATCH_EXTERNAL_ID, INVOICE_EXTERNAL_ID_2)
+      .resolves({
+        succeeded: true,
+        response: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE_2
       })
 
     chargingModuleViewInvoiceServiceStub = Sinon.stub(ChargingModuleViewInvoiceService, 'go')
@@ -130,6 +206,16 @@ describe.only('Reissue invoices service', () => {
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue
+      })
+      .withArgs(BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES_2.credit.invoice.id)
+      .resolves({
+        succeeded: true,
+        response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES_2.credit
+      })
+      .withArgs(BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES_2.reissue.invoice.id)
+      .resolves({
+        succeeded: true,
+        response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES_2.reissue
       })
 
     legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'post')
@@ -163,14 +249,23 @@ describe.only('Reissue invoices service', () => {
     describe('and there are invoices to reissue', () => {
       beforeEach(async () => {
         billingInvoiceToReissue = await BillingInvoiceHelper.add({ financialYearEnding: 2023, billingBatchId: originalBillingBatch.billingBatchId, isFlaggedForRebilling: true, externalId: INVOICE_EXTERNAL_ID })
+        billingInvoiceToReissue2 = await BillingInvoiceHelper.add({ financialYearEnding: 2023, billingBatchId: originalBillingBatch.billingBatchId, isFlaggedForRebilling: true, externalId: INVOICE_EXTERNAL_ID_2 })
 
         const billingInvoiceLicencesToReissue = await Promise.all([
-          BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoiceToReissue.billingInvoiceId, licenceRef: 'FIRST_LICENCE' }),
-          BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoiceToReissue.billingInvoiceId, licenceRef: 'SECOND_LICENCE' })
+          BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoiceToReissue.billingInvoiceId, licenceRef: 'INVOICE_1_LICENCE_1' }),
+          BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoiceToReissue.billingInvoiceId, licenceRef: 'INVOICE_1_LICENCE_2' })
         ])
 
-        await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicencesToReissue[0].billingInvoiceLicenceId, externalId: 'a844ec8e-7ee1-4771-b645-a2459045a31a', description: 'FIRST_TRANSACTION' })
-        await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicencesToReissue[1].billingInvoiceLicenceId, externalId: '5410a73f-bd2c-4565-b70b-af36956c093a', description: 'SECOND_TRANSACTION' })
+        await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicencesToReissue[0].billingInvoiceLicenceId, externalId: INVOICE_1_LICENCE_1_TRANSACTION_1_ID, description: 'INVOICE_1_LICENCE_1_TRANSACTION_1' })
+        await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicencesToReissue[1].billingInvoiceLicenceId, externalId: INVOICE_1_LICENCE_2_TRANSACTION_1_ID, description: 'INVOICE_1_LICENCE_2_TRANSACTION_1' })
+
+        const billingInvoiceLicencesToReissue2 = await Promise.all([
+          BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoiceToReissue2.billingInvoiceId, licenceRef: 'INVOICE_2_LICENCE_1' }),
+          BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoiceToReissue2.billingInvoiceId, licenceRef: 'INVOICE_2_LICENCE_2' })
+        ])
+
+        await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicencesToReissue2[0].billingInvoiceLicenceId, externalId: INVOICE_2_LICENCE_1_TRANSACTION_1_ID, description: 'INVOICE_2_LICENCE_1_TRANSACTION_1' })
+        await BillingTransactionHelper.add({ billingInvoiceLicenceId: billingInvoiceLicencesToReissue2[1].billingInvoiceLicenceId, externalId: INVOICE_2_LICENCE_2_TRANSACTION_1_ID, description: 'INVOICE_2_LICENCE_2_TRANSACTION_1' })
       })
 
       it('returns `true`', async () => {
@@ -188,7 +283,7 @@ describe.only('Reissue invoices service', () => {
 
         const result = transactions.filter(t => t.isCredit === true)
 
-        expect(result).to.have.length(2)
+        expect(result).to.have.length(4)
       })
 
       it('persists replacement transactions', async () => {
@@ -200,13 +295,36 @@ describe.only('Reissue invoices service', () => {
 
         const result = transactions.filter(t => t.isCredit === false)
 
-        expect(result).to.have.length(2)
+        expect(result).to.have.length(4)
       })
 
-      it('persists one billing invoice licences per source invoice licence', async () => {
-        const billingInvoiceLicences = await BillingInvoiceLicenceModel.query()
+      it('persists two billing invoices per source invoice (one cancelling, one reissuing)', async () => {
+        await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
 
-        expect(billingInvoiceLicences).to.have.length(2)
+        const billingInvoices = await BillingInvoiceModel.query()
+          .where({ billingBatchId: reissueBillingBatch.billingBatchId })
+
+        expect(billingInvoices).to.have.length(4)
+      })
+
+      it('persists two billing invoice licences per source invoice licence (once cancelling, one reissuing)', async () => {
+        await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+
+        const billingInvoiceLicences = await BillingInvoiceLicenceModel.query()
+          .joinRelated('billingInvoice')
+          .where('billingInvoice.billingBatchId', reissueBillingBatch.billingBatchId)
+
+        expect(billingInvoiceLicences).to.have.length(8)
+      })
+
+      it('persists two billing transactions per source transaction (once cancelling, one reissuing)', async () => {
+        await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+
+        const transactions = await BillingTransactionModel.query()
+          .joinRelated('billingInvoiceLicence.billingInvoice')
+          .where('billingInvoiceLicence:billingInvoice.billingBatchId', reissueBillingBatch.billingBatchId)
+
+        expect(transactions).to.have.length(8)
       })
 
       it('sets the source invoice rebilling state to `rebilled`', async () => {
