@@ -28,7 +28,6 @@ const ChargingModuleViewInvoiceService = require('../charging-module/view-invoic
 async function go (originalBillingBatch, reissueBillingBatch) {
   const sourceInvoices = await _fetchInvoicesToReissue(originalBillingBatch.regionId)
 
-  // If we have no invoices to reissue then return false
   if (sourceInvoices.length === 0) {
     return false
   }
@@ -41,57 +40,61 @@ async function go (originalBillingBatch, reissueBillingBatch) {
   }
 
   for (const sourceInvoice of sourceInvoices) {
-    const chargingModuleReissueResponses = await _sendReissueRequest(
-      originalBillingBatch.externalId,
-      sourceInvoice.externalId
-    )
-
-    for (const chargingModuleReissueResponse of chargingModuleReissueResponses) {
-      const chargingModuleReissueInvoice = await _sendViewInvoiceRequest(
-        originalBillingBatch,
-        chargingModuleReissueResponse
-      )
-
-      const reissueBillingInvoice = _retrieveOrGenerateBillingInvoice(
-        dataToPersist,
-        sourceInvoice,
-        reissueBillingBatch,
-        chargingModuleReissueInvoice
-      )
-
-      for (const sourceInvoiceLicence of sourceInvoice.billingInvoiceLicences) {
-        const reissueInvoiceLicence = _retrieveOrGenerateBillingInvoiceLicence(
-          dataToPersist,
-          sourceInvoice,
-          reissueBillingInvoice.billingInvoiceId,
-          sourceInvoiceLicence
-        )
-
-        const cmLicence = _retrieveCMLicence(chargingModuleReissueInvoice, sourceInvoiceLicence.licenceRef)
-
-        for (const sourceTransaction of sourceInvoiceLicence.billingTransactions) {
-          const isCancellingInvoice = _isCancellingInvoice(chargingModuleReissueResponse)
-
-          const chargingModuleTransaction = _retrieveChargingModuleTransaction(cmLicence, sourceTransaction.externalId)
-
-          const reissueTransaction = _generateReissueTransaction(
-            chargingModuleTransaction,
-            sourceTransaction,
-            reissueInvoiceLicence.billingInvoiceLicenceId,
-            isCancellingInvoice
-          )
-
-          dataToPersist.reissueTransactions.push(reissueTransaction)
-        }
-      }
-    }
-
-    await _markSourceInvoiceAsRebilled(sourceInvoice)
+    await _handleSourceInvoice(sourceInvoice, dataToPersist, originalBillingBatch, reissueBillingBatch)
   }
 
   await _persistData(dataToPersist)
 
   return true
+}
+
+async function _handleSourceInvoice (sourceInvoice, dataToPersist, originalBillingBatch, reissueBillingBatch) {
+  const chargingModuleReissueResponses = await _sendReissueRequest(
+    originalBillingBatch.externalId,
+    sourceInvoice.externalId
+  )
+
+  for (const chargingModuleReissueResponse of chargingModuleReissueResponses) {
+    const chargingModuleReissueInvoice = await _sendViewInvoiceRequest(
+      originalBillingBatch,
+      chargingModuleReissueResponse
+    )
+
+    const reissueBillingInvoice = _retrieveOrGenerateBillingInvoice(
+      dataToPersist,
+      sourceInvoice,
+      reissueBillingBatch,
+      chargingModuleReissueInvoice
+    )
+
+    for (const sourceInvoiceLicence of sourceInvoice.billingInvoiceLicences) {
+      const reissueInvoiceLicence = _retrieveOrGenerateBillingInvoiceLicence(
+        dataToPersist,
+        sourceInvoice,
+        reissueBillingInvoice.billingInvoiceId,
+        sourceInvoiceLicence
+      )
+
+      const cmLicence = _retrieveCMLicence(chargingModuleReissueInvoice, sourceInvoiceLicence.licenceRef)
+
+      for (const sourceTransaction of sourceInvoiceLicence.billingTransactions) {
+        const isCancellingInvoice = _isCancellingInvoice(chargingModuleReissueResponse)
+
+        const chargingModuleTransaction = _retrieveChargingModuleTransaction(cmLicence, sourceTransaction.externalId)
+
+        const reissueTransaction = _generateReissueTransaction(
+          chargingModuleTransaction,
+          sourceTransaction,
+          reissueInvoiceLicence.billingInvoiceLicenceId,
+          isCancellingInvoice
+        )
+
+        dataToPersist.reissueTransactions.push(reissueTransaction)
+      }
+    }
+  }
+
+  await _markSourceInvoiceAsRebilled(sourceInvoice)
 }
 
 function _isCancellingInvoice (chargingModuleReissueResponse) {
@@ -165,7 +168,7 @@ function _retrieveOrGenerateBillingInvoice (dataToPersist, sourceInvoice, reissu
   // a billing invoice for every combination of these, hence we search by both of their ids
   const existingBillingInvoice = dataToPersist.reissueBillingInvoices.find((invoice) => {
     return invoice.invoiceAccountId === sourceInvoice.invoiceAccountId &&
-     invoice.externalId === chargingModuleReissueInvoice.id
+      invoice.externalId === chargingModuleReissueInvoice.id
   })
 
   if (existingBillingInvoice) {
