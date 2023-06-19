@@ -125,6 +125,29 @@ class BaseNotifierLib {
   }
 
   /**
+   * Serializes an error into a POJO
+   *
+   * We have found to consistently log errors with hapi-pino we need to serialize them to a POJO first. All errors have
+   * a message and stack property. We use `Object.getOwnPropertyNames()` to extract any additional properties that
+   * have been added if we dealing with a custom error object.
+   *
+   * @param {Error} error instance of the error to be serialized
+   *
+   * @returns the instance of the error serialized for logging
+   */
+  _serializeError (error) {
+    if (!(error instanceof Error)) {
+      return error
+    }
+
+    return Object.getOwnPropertyNames(error).reduce((serializedError, propertyName) => {
+      serializedError[propertyName] = error[propertyName]
+
+      return serializedError
+    }, {})
+  }
+
+  /**
    * Return the 'logger' instance
    *
    * Returns an instance of {@link https://github.com/pinojs/pino|Pino} the logger our dependency Hapi-pino brings in.
