@@ -41,10 +41,11 @@ class BaseNotifierLib {
    * The message will be added as an `INFO` level log message.
    *
    * @param {string} message Message to add to the log (INFO)
-   * @param {Object} data Any params or values, for example, a bill run ID to be included with the log message
+   * @param {Object} [data={}] An object containing any values to be logged, for example, a bill run ID to be included with
+   *  the log message. Defaults to an empty object
    */
   omg (message, data = {}) {
-    this._logger.info(this._formatLogPacket(message, data))
+    this._logger.info(this._formatLogPacket(data), message)
   }
 
   /**
@@ -107,12 +108,13 @@ class BaseNotifierLib {
   }
 
   /**
-   * Used to format the 'packet' of information sent to the log
+   * Used to format the 'mergingObject' passed to pino to be included in the log
    *
-   * **Must be overridden by extending class**
+   * This is a default implementation which can be overridden by notifiers which need to inject additional information.
+   * It simply returns whatever is passed in.
    */
-  _formatLogPacket (_message, _data) {
-    throw new Error("Extending class must implement '_formatLogPacket()'")
+  _formatLogPacket (data) {
+    return data
   }
 
   /**
@@ -122,29 +124,6 @@ class BaseNotifierLib {
    */
   _formatNotifyPacket (_message, _data) {
     throw new Error("Extending class must implement '_formatNotifyPacket()'")
-  }
-
-  /**
-   * Serializes an error into a POJO
-   *
-   * We have found to consistently log errors with hapi-pino we need to serialize them to a POJO first. All errors have
-   * a message and stack property. We use `Object.getOwnPropertyNames()` to extract any additional properties that
-   * have been added if we dealing with a custom error object.
-   *
-   * @param {Error} error instance of the error to be serialized
-   *
-   * @returns the instance of the error serialized for logging
-   */
-  _serializeError (error) {
-    if (!(error instanceof Error)) {
-      return error
-    }
-
-    return Object.getOwnPropertyNames(error).reduce((serializedError, propertyName) => {
-      serializedError[propertyName] = error[propertyName]
-
-      return serializedError
-    }, {})
   }
 
   /**

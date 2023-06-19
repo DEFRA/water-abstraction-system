@@ -34,18 +34,25 @@ describe('BaseNotifierLib class', () => {
       Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
 
       // Stub _formatLogPacket to simulate a child class which has provided an override
-      Sinon.stub(BaseNotifierLib.prototype, '_formatLogPacket').returns({ message, id })
+      // Sinon.stub(BaseNotifierLib.prototype, '_formatLogPacket').returns({ message, id })
     })
 
-    it("logs an 'info' message", () => {
-      const expectedArgs = {
-        message,
-        id
-      }
-      const testNotifier = new BaseNotifierLib()
-      testNotifier.omg(message, { id })
+    describe('when just a message is logged', () => {
+      it("logs a correctly formatted 'info' level entry", () => {
+        const testNotifier = new BaseNotifierLib()
+        testNotifier.omg(message)
 
-      expect(pinoFake.info.calledOnceWith(expectedArgs)).to.be.true()
+        expect(pinoFake.info.calledOnceWith({}, message)).to.be.true()
+      })
+    })
+
+    describe('when a message and some data is to be logged', () => {
+      it("logs a correctly formatted 'info' level entry", () => {
+        const testNotifier = new BaseNotifierLib()
+        testNotifier.omg(message, { id })
+
+        expect(pinoFake.info.calledOnceWith({ id }, message)).to.be.true()
+      })
     })
 
     it("does not send a notification to 'Errbit'", () => {
@@ -198,14 +205,6 @@ describe('BaseNotifierLib class', () => {
       testNotifier.flush()
 
       expect(airbrakeFake.flush.called).to.be.true()
-    })
-  })
-
-  describe('#_formatLogPacket()', () => {
-    it("throws an error if '_formatLogPacket' is not overridden", async () => {
-      const testNotifier = new BaseNotifierLib()
-
-      expect(() => testNotifier.omg('Oops')).to.throw("Extending class must implement '_formatLogPacket()'")
     })
   })
 
