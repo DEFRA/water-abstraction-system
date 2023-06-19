@@ -14,31 +14,6 @@ const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 const ChargingModuleViewInvoiceService = require('../charging-module/view-invoice.service.js')
 
-// LEGACY PROCESS IS AS FOLLOWS:
-//
-// * For each `sourceInvoice` in `batch` to be reissued:
-//     * Send a rebill request to the CM
-//     * This returns 2 invoice ids
-//     * For each id:
-//         * Fetch `cmReissueInvoice` from the CM
-//         * Map this to `reissueInvoice` as per https://github.com/DEFRA/water-abstraction-service/blob/main/src/lib/mappers/invoice.js#L172
-//         * Set `reissueInvoice.originalInvoiceId` to be `sourceInvoice.billingInvoiceId`
-//         * Set `reissueInvoice.billingBatchId` to be `batch.billingBatchId`
-//         * Set `reissueInvoice.invoiceAccountId` to be `sourceInvoice.invoiceAccountId`
-//         * Set `reissueInvoice.financialYearEnding` to be `sourceInvoice.financialYearEnding`
-//         * Persist `reissueInvoice`
-//         * For each `sourceInvoiceLicence` in `sourceInvoice`:
-//             * Retrieve `cmLicence` from `cmReissueInvoice`, where `cmLicence.licenceNumber` === `sourceInvoiceLicence.licenceNumber`
-//             * Create a new `reissueInvoiceLicence`:
-//                 * `reissueInvoiceLicence.billingInvoiceId` = `reissueInvoice.billingInvoiceId`
-//                 * `reissueInvoiceLicence.licenceRef` = `sourceInvoiceLicence.licenceNumber`
-//                 * `reissueInvoiceLicence.licenceId` = `sourceInvoiceLicence.licenceId`
-//             * Upsert `reissueInvoiceLicence`
-//             * For each `sourceTransaction` in `sourceInvoiceLicence`:
-//                 * Retrieve `cmTransaction` from `cmLicence`, where `cmTransaction.rebilledTransactionId` === `sourceTransaction.externalId`
-//                 * Map `sourceTransaction` and `cmTransaction` to `reissueTransaction` as per https://github.com/DEFRA/water-abstraction-service/blob/main/src/modules/billing/mappers/transaction.js#L378 [we basically take `sourceTransaction` and overwrite certain parts with data from `cmTransaction`]
-//                 * Persist `reissueTransaction`
-
 /**
  * Handles the reissuing of invoices
  *
@@ -76,25 +51,46 @@ async function go (originalBillingBatch, reissueBillingBatch) {
   }
 
   for (const sourceInvoice of sourceInvoices) {
-    const cmReissueResponses = await _sendReissueRequest(originalBillingBatch.externalId, sourceInvoice.externalId)
+    const chargingModuleReissueResponses = await _sendReissueRequest(
+      originalBillingBatch.externalId,
+      sourceInvoice.externalId
+    )
 
-    for (const cmReissueResponse of cmReissueResponses) {
-      const isCancellingInvoice = _isCancellingInvoice(cmReissueResponse)
+    for (const chargingModuleReissueResponse of chargingModuleReissueResponses) {
+      const chargingModuleReissueInvoice = await _sendViewInvoiceRequest(
+        originalBillingBatch,
+        chargingModuleReissueResponse
+      )
 
-      const cmReissueInvoice = await _sendViewInvoiceRequest(originalBillingBatch, cmReissueResponse)
-
-      // TODO: Refactor to pre-generate this data
-      const reissueInvoice = _retrieveOrGenerateBillingInvoice(dataToPersist, sourceInvoice, reissueBillingBatch, cmReissueInvoice)
+      const reissueBillingInvoice = _retrieveOrGenerateBillingInvoice(
+        dataToPersist,
+        sourceInvoice,
+        reissueBillingBatch,
+        chargingModuleReissueInvoice
+      )
 
       for (const sourceInvoiceLicence of sourceInvoice.billingInvoiceLicences) {
-        // TODO: Refactor to pre-generate this data
-        const reissueInvoiceLicence = _retrieveOrGenerateBillingInvoiceLicence(dataToPersist, sourceInvoice, reissueInvoice.billingInvoiceId, sourceInvoiceLicence)
+        const reissueInvoiceLicence = _retrieveOrGenerateBillingInvoiceLicence(
+          dataToPersist,
+          sourceInvoice,
+          reissueBillingInvoice.billingInvoiceId,
+          sourceInvoiceLicence
+        )
 
-        const cmLicence = _retrieveCMLicence(cmReissueInvoice, sourceInvoiceLicence.licenceRef)
+        const cmLicence = _retrieveCMLicence(chargingModuleReissueInvoice, sourceInvoiceLicence.licenceRef)
 
         for (const sourceTransaction of sourceInvoiceLicence.billingTransactions) {
-          const cmTransaction = _retrieveCMTransaction(cmLicence, sourceTransaction.externalId)
-          const reissueTransaction = _generateReissueTransaction(cmTransaction, sourceTransaction, reissueInvoiceLicence.billingInvoiceLicenceId, isCancellingInvoice)
+          const isCancellingInvoice = _isCancellingInvoice(chargingModuleReissueResponse)
+
+          const chargingModuleTransaction = _retrieveChargingModuleTransaction(cmLicence, sourceTransaction.externalId)
+
+          const reissueTransaction = _generateReissueTransaction(
+            chargingModuleTransaction,
+            sourceTransaction,
+            reissueInvoiceLicence.billingInvoiceLicenceId,
+            isCancellingInvoice
+          )
+
           dataToPersist.reissueTransactions.push(reissueTransaction)
         }
       }
@@ -108,24 +104,24 @@ async function go (originalBillingBatch, reissueBillingBatch) {
   return true
 }
 
-function _isCancellingInvoice (cmReissueResponse) {
-  return cmReissueResponse.rebilledType === 'C'
+function _isCancellingInvoice (chargingModuleReissueResponse) {
+  return chargingModuleReissueResponse.rebilledType === 'C'
 }
 
 async function _persistData (dataToPersist) {
-  await BillingInvoiceLicenceModel.query().insert(dataToPersist.reissueBillingInvoiceLicences)
   await BillingInvoiceModel.query().insert(dataToPersist.reissueBillingInvoices)
+  await BillingInvoiceLicenceModel.query().insert(dataToPersist.reissueBillingInvoiceLicences)
   await BillingTransactionModel.query().insert(dataToPersist.reissueTransactions)
 }
 
-function _generateReissueTransaction (cmTransaction, sourceTransaction, billingInvoiceLicenceId, isCancellingInvoice) {
+function _generateReissueTransaction (chargingModuleTransaction, sourceTransaction, billingInvoiceLicenceId, isCancellingInvoice) {
   const reissuedBillingTransactionId = randomUUID({ disableEntropyCache: true })
 
   return {
     ...sourceTransaction,
     isCredit: _determineIsCredit(sourceTransaction.isCredit, isCancellingInvoice),
     billingTransactionId: reissuedBillingTransactionId,
-    externalId: cmTransaction.id,
+    externalId: chargingModuleTransaction.id,
     billingInvoiceLicenceId
   }
 }
@@ -136,33 +132,32 @@ function _determineIsCredit (originalIsCredit, isCancellingInvoice) {
   return isCancellingInvoice ? !originalIsCredit : originalIsCredit
 }
 
-function _retrieveCMTransaction (cmLicence, id) {
-  return cmLicence.transactions.find((cmTransaction) => {
-    return cmTransaction.rebilledTransactionId === id
+function _retrieveChargingModuleTransaction (chargingModuleLicence, id) {
+  return chargingModuleLicence.transactions.find((transaction) => {
+    return transaction.rebilledTransactionId === id
   })
 }
 
-function _retrieveCMLicence (cmInvoice, licenceRef) {
-  return cmInvoice.licences.find((cmLicence) => {
-    return cmLicence.licenceNumber === licenceRef
+function _retrieveCMLicence (chargingModuleInvoice, licenceRef) {
+  return chargingModuleInvoice.licences.find((licence) => {
+    return licence.licenceNumber === licenceRef
   })
 }
 
-function _translateCMInvoice (cmInvoice) {
-  const cmRebilledTypes = new Map()
+function _translateChargingModuleInvoice (chargingModuleInvoice) {
+  const chargingModuleRebilledTypes = new Map()
     .set('C', 'reversal')
     .set('R', 'rebill')
     .set('O', null)
 
   return {
-    // TODO: check that these are the actual fields and not just some weird interim ones
-    externalId: cmInvoice.id,
-    netAmount: cmInvoice.netTotal,
-    isDeMinimis: cmInvoice.deminimisInvoice,
-    invoiceValue: cmInvoice.debitLineValue,
+    externalId: chargingModuleInvoice.id,
+    netAmount: chargingModuleInvoice.netTotal,
+    isDeMinimis: chargingModuleInvoice.deminimisInvoice,
+    invoiceValue: chargingModuleInvoice.debitLineValue,
     // As per legacy code we invert the sign of creditLineValue
-    creditNoteValue: -cmInvoice.creditLineValue,
-    rebillingState: cmRebilledTypes.get(cmInvoice.rebilledType)
+    creditNoteValue: -chargingModuleInvoice.creditLineValue,
+    rebillingState: chargingModuleRebilledTypes.get(chargingModuleInvoice.rebilledType)
   }
 }
 
@@ -175,31 +170,40 @@ async function _sendViewInvoiceRequest (billingBatch, reissueInvoice) {
   }
 }
 
-function _retrieveOrGenerateBillingInvoice (dataToPersist, sourceInvoice, reissueBillingBatch, cmReissueInvoice) {
+function _retrieveOrGenerateBillingInvoice (dataToPersist, sourceInvoice, reissueBillingBatch, chargingModuleReissueInvoice) {
   // Because we have nested iteration of source invoice and Charging Module reissue invoice, we need to ensure we have
   // a billing invoice for every combination of these, hence we search by both of their ids
-  const existingBillingInvoice = dataToPersist.reissueBillingInvoices.find(inv => inv.invoiceAccountId === sourceInvoice.invoiceAccountId && inv.externalId === cmReissueInvoice.id)
+  const existingBillingInvoice = dataToPersist.reissueBillingInvoices.find((invoice) => {
+    return invoice.invoiceAccountId === sourceInvoice.invoiceAccountId &&
+     invoice.externalId === chargingModuleReissueInvoice.id
+  })
 
   if (existingBillingInvoice) {
     return existingBillingInvoice
   }
 
-    const translatedCMInvoice = _translateCMInvoice(cmReissueInvoice)
-    const generatedBillingInvoice = GenerateBillingInvoiceService.go(sourceInvoice, reissueBillingBatch.billingBatchId, sourceInvoice.financialYearEnding)
+  const translatedChargingModuleInvoice = _translateChargingModuleInvoice(chargingModuleReissueInvoice)
+  const generatedBillingInvoice = GenerateBillingInvoiceService.go(
+    sourceInvoice,
+    reissueBillingBatch.billingBatchId,
+    sourceInvoice.financialYearEnding
+  )
 
   const reissueBillingInvoice = {
-      ...translatedCMInvoice,
-      ...generatedBillingInvoice,
-      originalBillingInvoiceId: sourceInvoice.billingInvoiceId
-    }
+    ...translatedChargingModuleInvoice,
+    ...generatedBillingInvoice,
+    originalBillingInvoiceId: sourceInvoice.billingInvoiceId
+  }
 
-    dataToPersist.reissueBillingInvoices.push(reissueBillingInvoice)
+  dataToPersist.reissueBillingInvoices.push(reissueBillingInvoice)
 
   return reissueBillingInvoice
 }
 
 function _retrieveOrGenerateBillingInvoiceLicence (dataToPersist, sourceInvoice, billingInvoiceId, sourceInvoiceLicence) {
-  const existingBillingInvoiceLicence = dataToPersist.reissueBillingInvoiceLicences.find(inv => inv.invoiceAccountId === sourceInvoice.invoiceAccountId)
+  const existingBillingInvoiceLicence = dataToPersist.reissueBillingInvoiceLicences.find((invoice) => {
+    return invoice.invoiceAccountId === sourceInvoice.invoiceAccountId
+  })
 
   if (existingBillingInvoiceLicence) {
     return existingBillingInvoiceLicence
@@ -207,7 +211,7 @@ function _retrieveOrGenerateBillingInvoiceLicence (dataToPersist, sourceInvoice,
 
   const reissueBillingInvoiceLicence = GenerateBillingInvoiceLicenceService.go(billingInvoiceId, sourceInvoiceLicence)
 
-    dataToPersist.reissueBillingInvoiceLicences.push(reissueBillingInvoiceLicence)
+  dataToPersist.reissueBillingInvoiceLicences.push(reissueBillingInvoiceLicence)
 
   return reissueBillingInvoiceLicence
 }
