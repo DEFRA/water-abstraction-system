@@ -26,20 +26,10 @@ const ChargingModuleViewInvoiceService = require('../charging-module/view-invoic
  * TODO: full docs
  */
 async function go (originalBillingBatch, reissueBillingBatch) {
-  let sourceInvoices
+  const sourceInvoices = await _fetchInvoicesToReissue(originalBillingBatch.regionId)
 
-  try {
-    sourceInvoices = await _getInvoicesToReissue(originalBillingBatch.regionId)
-
-    // If we have no invoices to reissue then return false
-    if (sourceInvoices.length === 0) {
-      return false
-    }
-  } catch (_error) {
-    // If getting invoices errors then we simply return; we haven't yet modified the db so we can still process the rest
-    // of the billing batch without needing to mark it as failed
-
-    // TODO: add logging
+  // If we have no invoices to reissue then return false
+  if (sourceInvoices.length === 0) {
     return false
   }
 
@@ -219,17 +209,25 @@ function _retrieveOrGenerateBillingInvoiceLicence (dataToPersist, sourceInvoice,
 /**
  * Get billing invoices marked for rebilling for the specified region and their transactions
  */
-async function _getInvoicesToReissue (regionId) {
-  const result = await BillingInvoiceModel.query()
-    .joinRelated('billingBatch')
+async function _fetchInvoicesToReissue (regionId) {
+  try {
     // TODO: optimise this to only return what we need from the billing invoice licences and the transactions
-    .withGraphFetched('billingInvoiceLicences.billingTransactions')
-    .where({
-      'billingBatch.regionId': regionId,
-      isFlaggedForRebilling: true
-    })
+    const result = await BillingInvoiceModel.query()
+      .joinRelated('billingBatch')
+      .withGraphFetched('billingInvoiceLicences.billingTransactions')
+      .where({
+        'billingBatch.regionId': regionId,
+        isFlaggedForRebilling: true
+      })
 
-  return result
+    return result
+  } catch (_error) {
+    // If getting invoices errors then we log the error and return an empty array; the db hasn't yet been modified at
+    // this stage so we can simply move on to the next stage of processing the billing batch.
+
+    // TODO: add logging
+    return []
+  }
 }
 
 async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
