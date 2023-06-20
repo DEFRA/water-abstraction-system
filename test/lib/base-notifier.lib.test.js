@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const BaseNotifierLib = require('../../app/lib/base-notifier.lib.js')
 
-describe.only('BaseNotifierLib class', () => {
+describe('BaseNotifierLib class', () => {
   const id = '1234567890'
   const message = 'say what test'
 
