@@ -63,8 +63,14 @@ function go (chargeVersion, financialYearEnding) {
  * @returns {boolean} true if invalid else false
  */
 function _periodIsInvalid (chargeVersion, financialYearStartDate, financialYearEndDate) {
+  // `chargeVersionEndToCheck` added because if a licence was charged in 2024 FY but then later ended in the 2023 FY due
+  // to a Billing contact change. When the supplementary is re-run, the charge made to the original contact in 2024
+  // would not be taken into account, as the endDate on the CV would be prior to the start of the 2024 FY. So we need to
+  // take into account when the CV was last billed up to so credits can be made to the original contact if required.
+  const chargeVersionEndToCheck = chargeVersion.billedUptoDate ? chargeVersion.billedUptoDate : chargeVersion.endDate
+
   const chargeVersionStartsAfterFinancialYear = chargeVersion.startDate > financialYearEndDate
-  const chargeVersionEndsBeforeFinancialYear = chargeVersion.endDate && chargeVersion.endDate < financialYearStartDate
+  const chargeVersionEndsBeforeFinancialYear = chargeVersion.endDate && chargeVersionEndToCheck < financialYearStartDate
 
   return chargeVersionStartsAfterFinancialYear || chargeVersionEndsBeforeFinancialYear
 }

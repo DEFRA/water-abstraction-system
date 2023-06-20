@@ -32,6 +32,7 @@ async function _fetch (regionId, billingPeriod) {
       'scheme',
       'chargeVersions.startDate',
       'chargeVersions.endDate',
+      'chargeVersions.billedUptoDate',
       'invoiceAccountId',
       'status'
     ])
@@ -43,6 +44,7 @@ async function _fetch (regionId, billingPeriod) {
     .where(builder => {
       builder.whereNull('chargeVersions.endDate')
         .orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
+        .orWhere('chargeVersions.billedUptoDate', '>=', billingPeriod.startDate)
     })
     .whereNot('chargeVersions.status', 'draft')
     .whereNotExists(
