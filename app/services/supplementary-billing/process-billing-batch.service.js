@@ -61,7 +61,7 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
+  global.GlobalNotifier.omg('Process billing batch complete', { billingBatchId, timeTakenMs })
 }
 
 async function _fetchChargeVersions (billingBatch, billingPeriod) {
