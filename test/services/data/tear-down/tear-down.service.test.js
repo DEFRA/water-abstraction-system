@@ -47,9 +47,10 @@ describe('Tear down service', () => {
   it('tears down the schemas', async () => {
     await TearDownService.go()
 
-    const logMessage = notifierStub.omg.firstCall.args[0]
+    const args = notifierStub.omg.firstCall.args
 
-    expect(logMessage).to.startWith('Tear down: Time taken to process')
+    expect(args[0]).to.equal('Tear down complete')
+    expect(args[1].timeTakenMs).to.exist()
 
     expect(waterSchemaServiceStub.called).to.be.true()
     expect(crmSchemaServiceStub.called).to.be.true()
