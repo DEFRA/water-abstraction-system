@@ -98,17 +98,7 @@ async function _finaliseBillingBatch (billingBatch, allLicenceIds, isPopulated) 
 }
 
 function _logError (billingBatch, error) {
-  global.GlobalNotifier.omfg(
-    'Billing Batch process errored',
-    {
-      billingBatch,
-      error: {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-        code: error.code
-      }
-    })
+  global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch }, error)
 }
 
 async function _updateStatus (billingBatchId, status) {
