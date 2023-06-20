@@ -27,7 +27,7 @@ const ReissueInvoiceService = require('../../../app/services/supplementary-billi
 // Thing under test
 const ReissueInvoicesService = require('../../../app/services/supplementary-billing/reissue-invoices.service.js')
 
-describe.only('Reissue invoices service', () => {
+describe('Reissue invoices service', () => {
   let notifierStub
   let reissueBillingBatch
   let originalBillingBatch
@@ -66,7 +66,7 @@ describe.only('Reissue invoices service', () => {
 
     describe('and there are invoices to reissue', () => {
       beforeEach(async () => {
-        // Two dummy invoices to ensure we iterate 3x
+        // Three dummy invoices to ensure we iterate 3x
         Sinon.stub(FetchInvoicesToBeReissuedService, 'go').resolves([
           { id: randomUUID({ disableEntropyCache: true }) },
           { id: randomUUID({ disableEntropyCache: true }) },

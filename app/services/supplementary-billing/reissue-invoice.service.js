@@ -125,6 +125,7 @@ function _translateChargingModuleInvoice (chargingModuleInvoice) {
     isDeMinimis: chargingModuleInvoice.deminimisInvoice,
     invoiceValue: chargingModuleInvoice.debitLineValue,
     // As per legacy code we invert the sign of creditLineValue
+    // TODO: CONFIRM IF THIS IS ACTUALLY CORRECT, do we really store local creditNoteValue as a negative?
     creditNoteValue: -chargingModuleInvoice.creditLineValue,
     rebillingState: chargingModuleRebilledTypes.get(chargingModuleInvoice.rebilledType)
   }
