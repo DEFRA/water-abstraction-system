@@ -36,7 +36,7 @@ class RequestNotifierLib extends BaseNotifierLib {
   }
 
   /**
-   * Used to format the 'packet' of information sent to the log
+   * Override the base class's _formatLogPacket to decorate the data object with the request ID
    *
    * We don't just want the log output to include the request ID. We want it to output it in the same structure as the
    * Hapi request is logged, for example
@@ -54,21 +54,21 @@ class RequestNotifierLib extends BaseNotifierLib {
    * { $.req.id = "1617655289640:533c1e381364:1671:kn526tbx:10000" }
    * ```
    */
-  _formatLogPacket (message, data) {
-    return {
-      message,
+  _formatLogPacket (data, error) {
+    const dataWithRequestId = {
       ...data,
       req: {
         id: this._id
       }
     }
+
+    return super._formatLogPacket(dataWithRequestId, error)
   }
 
   /**
-   * Used to format the 'packet' of information sent to Errbit
+   * Override the base class's _formatNotifyPacket to decorate the data object with the request ID
    *
-   * This will format the packet so that Errbit displays the information correctly. It also adds the request ID so we
-   * can tie it back to the original request that raised the notification
+   * We add the request ID so we can tie the Errbit entry back to the original request that raised the notification
    *
    * This means we can then locate the request in the log entries in AWS Cloudwatch by using
    * {@link https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html|Metric Filters}
@@ -77,16 +77,15 @@ class RequestNotifierLib extends BaseNotifierLib {
    * { $.req.id = "1617655289640:533c1e381364:1671:kn526tbx:10000" }
    * ```
    */
-  _formatNotifyPacket (message, data) {
-    return {
-      message,
-      session: {
-        ...data,
-        req: {
-          id: this._id
-        }
+  _formatNotifyPacket (data, error, message) {
+    const dataWithRequestId = {
+      ...data,
+      req: {
+        id: this._id
       }
     }
+
+    return super._formatNotifyPacket(dataWithRequestId, error, message)
   }
 }
 

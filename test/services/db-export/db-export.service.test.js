@@ -44,8 +44,9 @@ describe('Db Export Service', () => {
   it('logs the time taken to export the db', async () => {
     await DbExportService.go()
 
-    const logMessage = notifierStub.omg.firstCall.args[0]
+    const args = notifierStub.omg.firstCall.args
 
-    expect(logMessage).to.startWith('Time taken to export the db: ')
+    expect(args[0]).to.equal('DB export complete')
+    expect(args[1].timeTakenMs).to.exist()
   })
 })

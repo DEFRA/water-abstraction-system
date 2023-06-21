@@ -30,7 +30,7 @@ function _calculateAndLogTime (startTime) {
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg(`Tear down: Time taken to process ${timeTakenMs}ms`)
+  global.GlobalNotifier.omg('Tear down complete', { timeTakenMs })
 }
 
 module.exports = {

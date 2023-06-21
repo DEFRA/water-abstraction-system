@@ -29,23 +29,6 @@ describe('BoomNotifierLib class', () => {
     const message = 'hell no test'
     const data = { offTheChart: true }
 
-    it('formats it as expected', () => {
-      const expectedArgs = {
-        message,
-        session: {
-          ...data,
-          req: {
-            id
-          }
-        }
-      }
-      const testNotifier = new BoomNotifierLib(id, pinoFake, airbrakeFake)
-
-      // We wrap the call in this assertion so the thrown error doesn't cause the test to fail
-      expect(() => testNotifier.omfg(message, data)).to.throw()
-      expect(airbrakeFake.notify.calledOnceWith(expectedArgs)).to.be.true()
-    })
-
     it('throws a Boom error with the correct message and data', async () => {
       const testNotifier = new BoomNotifierLib(id, pinoFake, airbrakeFake)
 

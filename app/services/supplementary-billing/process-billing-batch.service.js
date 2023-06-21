@@ -61,7 +61,7 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
+  global.GlobalNotifier.omg('Process billing batch complete', { billingBatchId, timeTakenMs })
 }
 
 async function _fetchChargeVersions (billingBatch, billingPeriod) {
@@ -98,17 +98,7 @@ async function _finaliseBillingBatch (billingBatch, allLicenceIds, isPopulated) 
 }
 
 function _logError (billingBatch, error) {
-  global.GlobalNotifier.omfg(
-    'Billing Batch process errored',
-    {
-      billingBatch,
-      error: {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-        code: error.code
-      }
-    })
+  global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch }, error)
 }
 
 async function _updateStatus (billingBatchId, status) {
