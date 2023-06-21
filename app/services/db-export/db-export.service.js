@@ -29,7 +29,7 @@ function _calculateAndLogTime (startTime) {
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg(`Time taken to export the db: ${timeTakenMs}ms`)
+  global.GlobalNotifier.omg('DB export complete', { timeTakenMs })
 }
 
 module.exports = {

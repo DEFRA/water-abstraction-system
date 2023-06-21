@@ -107,9 +107,11 @@ describe('Process billing batch service', () => {
     it('logs the time taken to process the billing batch', async () => {
       await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
-      const logMessage = notifierStub.omg.firstCall.args[0]
+      const args = notifierStub.omg.firstCall.args
 
-      expect(logMessage).to.startWith(`Time taken to process billing batch ${billingBatch.billingBatchId}:`)
+      expect(args[0]).to.equal('Process billing batch complete')
+      expect(args[1].timeTakenMs).to.exist()
+      expect(args[1].billingBatchId).to.equal(billingBatch.billingBatchId)
     })
   })
 
@@ -134,21 +136,14 @@ describe('Process billing batch service', () => {
       it('logs the error', async () => {
         await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
-        const logDataArg = notifierStub.omfg.firstCall.args[1]
+        const args = notifierStub.omfg.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
-        expect(logDataArg.billingBatch).to.equal(billingBatch)
-
-        // We can't do a direct comparison of the error object as in other tests. This is because when `thrownError`
-        // is caught in a try catch it is passed to a `new BillingBatchError()` call. That causes the stack trace to
-        // be rewritten which means they'll always differ. So, we have to skip it in the comparison
-        expect(logDataArg.error).to.equal({
-          name: thrownError.name,
-          message: `Error: ${thrownError.message}`,
-          code: BillingBatchModel.errorCodes.failedToProcessChargeVersions
-        },
-        { skip: 'stack' }
-        )
+        expect(args[0]).to.equal('Billing Batch process errored')
+        expect(args[1].billingBatch.billingBatchId).to.equal(billingBatch.billingBatchId)
+        expect(args[2]).to.be.an.error()
+        expect(args[2].name).to.equal(thrownError.name)
+        expect(args[2].message).to.equal(`Error: ${thrownError.message}`)
+        expect(args[2].code).to.equal(BillingBatchModel.errorCodes.failedToProcessChargeVersions)
       })
     })
 
@@ -172,16 +167,14 @@ describe('Process billing batch service', () => {
         it('logs the error', async () => {
           await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
-          const logDataArg = notifierStub.omfg.firstCall.args[1]
+          const args = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
-          expect(logDataArg.billingBatch).to.equal(billingBatch)
-          expect(logDataArg.error).to.equal({
-            name: thrownError.name,
-            message: thrownError.message,
-            stack: thrownError.stack,
-            code: BillingBatchModel.errorCodes.failedToPrepareTransactions
-          })
+          expect(args[0]).to.equal('Billing Batch process errored')
+          expect(args[1].billingBatch.billingBatchId).to.equal(billingBatch.billingBatchId)
+          expect(args[2]).to.be.an.error()
+          expect(args[2].name).to.equal(thrownError.name)
+          expect(args[2].message).to.equal(thrownError.message)
+          expect(args[2].code).to.equal(BillingBatchModel.errorCodes.failedToPrepareTransactions)
         })
       })
     })
@@ -206,16 +199,14 @@ describe('Process billing batch service', () => {
       it('logs the error', async () => {
         await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
-        const logDataArg = notifierStub.omfg.firstCall.args[1]
+        const args = notifierStub.omfg.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Billing Batch process errored')).to.be.true()
-        expect(logDataArg.billingBatch).to.equal(billingBatch)
-        expect(logDataArg.error).to.equal({
-          name: thrownError.name,
-          message: thrownError.message,
-          stack: thrownError.stack,
-          code: undefined
-        })
+        expect(args[0]).to.equal('Billing Batch process errored')
+        expect(args[1].billingBatch.billingBatchId).to.equal(billingBatch.billingBatchId)
+        expect(args[2]).to.be.an.error()
+        expect(args[2].name).to.equal(thrownError.name)
+        expect(args[2].message).to.equal(thrownError.message)
+        expect(args[2].code).to.be.undefined()
       })
     })
   })
