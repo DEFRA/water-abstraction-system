@@ -28,7 +28,7 @@ const SendBillingTransactionsService = require('./send-billing-transactions.serv
  *
  * @returns {Boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go (billingBatch, billingPeriod, chargeVersions) {
+async function go (billingBatch, billingPeriod, chargeVersions, accumulatedCVsLastBilled) {
   if (chargeVersions.length === 0) {
     return false
   }
@@ -40,23 +40,30 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
   )
 
   const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
-  const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billingBatch.externalId)
+  const dataToPersist = await _buildDataToPersist(
+    billingData,
+    billingPeriod,
+    billingBatch.externalId,
+    accumulatedCVsLastBilled
+  )
+  const { chargeVersionsLastBilled } = dataToPersist
 
   const didWePersistData = await _persistData(dataToPersist)
 
-  return didWePersistData
+  return { didWePersistData, chargeVersionsLastBilled }
 }
 
 /**
  * Iterates over the populated billing data and builds an object of data to be persisted. This process includes sending
  * "create transaction" requests to the Charging Module as this data is needed to fully create our transaction records
  */
-async function _buildDataToPersist (billingData, billingPeriod, billingBatchExternalId) {
+async function _buildDataToPersist (billingData, billingPeriod, billingBatchExternalId, accumulatedCVsLastBilled) {
   const dataToPersist = {
     transactions: [],
     // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
     billingInvoices: new Set(),
-    billingInvoiceLicences: []
+    billingInvoiceLicences: [],
+    chargeVersionsLastBilled: []
   }
 
   for (const currentBillingData of Object.values(billingData)) {
@@ -76,6 +83,16 @@ async function _buildDataToPersist (billingData, billingPeriod, billingBatchExte
       // Note that sets use add rather than push
       dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
       dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
+
+      const { chargeVersionLastBilled } = currentBillingData
+
+      if (chargeVersionLastBilled.chargeVersionId) {
+        if (!accumulatedCVsLastBilled.some(
+          accumulatedCVLastBilled => accumulatedCVLastBilled.chargeVersionId === chargeVersionLastBilled.chargeVersionId
+        )) {
+          dataToPersist.chargeVersionsLastBilled.push(chargeVersionLastBilled)
+        }
+      }
     }
   }
 
@@ -122,8 +139,9 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
     // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
     // We fetch the previous transactions for `superseded` (REPLACED) charge versions later in the process
     if (chargeVersion.status === 'current') {
-      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
+      const { calculatedTransactions, chargeVersionLastBilled } = _generateCalculatedTransactions(billingPeriod, chargeVersion)
       acc[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
+      acc[billingInvoiceLicenceId].chargeVersionLastBilled = chargeVersionLastBilled
     }
 
     return acc
@@ -167,7 +185,8 @@ function _initialBillingData (licence, billingInvoice, billingInvoiceLicence) {
     licence,
     billingInvoice,
     billingInvoiceLicence,
-    calculatedTransactions: []
+    calculatedTransactions: [],
+    chargeVersionLastBilled: {}
   }
 }
 
@@ -195,8 +214,10 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
     const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
     const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
+    let chargeVersionLastBilled = {}
+
     // We use flatMap as GenerateBillingTransactionsService returns an array of transactions
-    const transactions = chargeVersion.chargeElements.flatMap((chargeElement) => {
+    const calculatedTransactions = chargeVersion.chargeElements.flatMap((chargeElement) => {
       return GenerateBillingTransactionsService.go(
         chargeElement,
         billingPeriod,
@@ -206,7 +227,14 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
       )
     })
 
-    return transactions
+    if (calculatedTransactions.length > 0) {
+      chargeVersionLastBilled = {
+        chargeVersionId: chargeVersion.chargeVersionId,
+        billedUptoDate: chargePeriod.endDate
+      }
+    }
+
+    return { calculatedTransactions, chargeVersionLastBilled }
   } catch (error) {
     throw new BillingBatchError(error, BillingBatchModel.errorCodes.failedToPrepareTransactions)
   }

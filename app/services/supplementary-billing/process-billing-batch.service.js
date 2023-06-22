@@ -3,6 +3,7 @@
 const BillingBatchError = require('../../errors/billing-batch.error.js')
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const ChargingModuleGenerateService = require('../charging-module/generate-bill-run.service.js')
+const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
@@ -16,6 +17,7 @@ async function go (billingBatch, billingPeriods) {
     // Mark the start time for later logging
     const startTime = process.hrtime.bigint()
     const accumulatedLicenceIds = []
+    const accumulatedCVsLastBilled = []
 
     let isBatchPopulated = false
 
@@ -23,9 +25,16 @@ async function go (billingBatch, billingPeriods) {
 
     for (const billingPeriod of billingPeriods) {
       const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billingBatch, billingPeriod)
-      const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
+      const {
+        didWePersistData: isPeriodPopulated,
+        chargeVersionsLastBilled
+      } = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions, accumulatedCVsLastBilled)
 
       accumulatedLicenceIds.push(...licenceIdsForPeriod)
+
+      if (chargeVersionsLastBilled) {
+        accumulatedCVsLastBilled.push(...chargeVersionsLastBilled)
+      }
 
       if (isPeriodPopulated) {
         isBatchPopulated = true
@@ -36,7 +45,7 @@ async function go (billingBatch, billingPeriods) {
     // .findByIds() so we spread it into an array
     const allLicenceIds = [...new Set(accumulatedLicenceIds)]
 
-    await _finaliseBillingBatch(billingBatch, allLicenceIds, isBatchPopulated)
+    await _finaliseBillingBatch(billingBatch, allLicenceIds, accumulatedCVsLastBilled, isBatchPopulated)
 
     // Log how long the process took
     _calculateAndLogTime(billingBatchId, startTime)
@@ -81,7 +90,7 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
  * process, and refreshes the billing batch locally. However if there were no resulting invoice licences then we simply
  * unflag the unbilled licences and mark the billing batch with `empty` status
  */
-async function _finaliseBillingBatch (billingBatch, allLicenceIds, isPopulated) {
+async function _finaliseBillingBatch (billingBatch, allLicenceIds, accumulatedCVsLastBilled, isPopulated) {
   await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, allLicenceIds)
 
   // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
@@ -94,6 +103,10 @@ async function _finaliseBillingBatch (billingBatch, allLicenceIds, isPopulated) 
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 
+  if (accumulatedCVsLastBilled.length > 0) {
+    await _updateBilledUptoDate(accumulatedCVsLastBilled)
+  }
+
   await LegacyRequestLib.post('water', `billing/batches/${billingBatch.billingBatchId}/refresh`)
 }
 
@@ -105,6 +118,14 @@ async function _updateStatus (billingBatchId, status) {
   await BillingBatchModel.query()
     .findById(billingBatchId)
     .patch({ status })
+}
+
+async function _updateBilledUptoDate (accumulatedCVsLastBilled) {
+  for (const accumulatedCVLastBilled of accumulatedCVsLastBilled) {
+    await ChargeVersionModel.query()
+      .findById(accumulatedCVLastBilled.chargeVersionId)
+      .patch({ billedUptoDate: accumulatedCVLastBilled.billedUptoDate })
+  }
 }
 
 module.exports = {
