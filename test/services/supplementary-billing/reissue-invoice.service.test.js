@@ -105,9 +105,13 @@ describe('Reissue invoice service', () => {
   beforeEach(async () => {
     originalBillingBatch = BillingBatchModel.fromJson({
       ...BillingBatchHelper.defaults(),
+      billingBatchId: randomUUID({ disableEntropyCache: true }),
       externalId: BILLING_BATCH_EXTERNAL_ID
     })
-    reissueBillingBatch = BillingBatchModel.fromJson({ ...BillingBatchHelper.defaults() })
+    reissueBillingBatch = BillingBatchModel.fromJson({
+      ...BillingBatchHelper.defaults(),
+      billingBatchId: randomUUID({ disableEntropyCache: true })
+    })
 
     Sinon.stub(ChargingModuleReissueInvoiceService, 'go')
       .withArgs(BILLING_BATCH_EXTERNAL_ID, INVOICE_EXTERNAL_ID)
@@ -140,6 +144,7 @@ describe('Reissue invoice service', () => {
         BillingInvoiceLicenceModel.fromJson({
           billingInvoiceId: SOURCE_BILLING_INVOICE_ID,
           licenceRef: 'INVOICE_LICENCE_1',
+          licenceId: 'INVOICE_LICENCE_ID_1',
           billingTransactions: [
             BillingTransactionModel.fromJson({
               ...BillingTransactionHelper.defaults(),
@@ -150,6 +155,7 @@ describe('Reissue invoice service', () => {
         BillingInvoiceLicenceModel.fromJson({
           billingInvoiceId: SOURCE_BILLING_INVOICE_ID,
           licenceRef: 'INVOICE_LICENCE_2',
+          licenceId: 'INVOICE_LICENCE_ID_2',
           billingTransactions: [
             BillingTransactionModel.fromJson({
               ...BillingTransactionHelper.defaults(),
@@ -169,19 +175,19 @@ describe('Reissue invoice service', () => {
     it('returns two billing invoices per source invoice (one cancelling, one reissuing)', async () => {
       const result = await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
 
-      expect(result.reissueBillingInvoices).to.have.length(2)
+      expect(result.billingInvoices).to.have.length(2)
     })
 
     it('returns two billing invoice licences per source invoice licence (once cancelling, one reissuing)', async () => {
       const result = await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
 
-      expect(result.reissueBillingInvoiceLicences).to.have.length(4)
+      expect(result.billingInvoiceLicences).to.have.length(4)
     })
 
     it('persists two transactions per source transaction (once cancelling, one reissuing)', async () => {
       const result = await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
 
-      expect(result.reissueTransactions).to.have.length(4)
+      expect(result.transactions).to.have.length(4)
     })
 
     it('sets the source invoice rebilling state to `rebilled`', async () => {

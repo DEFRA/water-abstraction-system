@@ -75,9 +75,9 @@ describe('Reissue invoices service', () => {
 
         // This stub will result in one new invoice, invoice licence and transaction for each dummy invoice
         Sinon.stub(ReissueInvoiceService, 'go').resolves({
-          reissueBillingInvoices: [BillingInvoiceModel.fromJson(BillingInvoiceHelper.defaults())],
-          reissueBillingInvoiceLicences: [BillingInvoiceLicenceModel.fromJson(BillingInvoiceLicenceHelper.defaults())],
-          reissueTransactions: [BillingTransactionModel.fromJson(BillingTransactionHelper.defaults())]
+          billingInvoices: [BillingInvoiceModel.fromJson(BillingInvoiceHelper.defaults())],
+          billingInvoiceLicences: [BillingInvoiceLicenceModel.fromJson(BillingInvoiceLicenceHelper.defaults())],
+          transactions: [BillingTransactionModel.fromJson(BillingTransactionHelper.defaults())]
         })
       })
 

@@ -32,9 +32,9 @@ async function go (originalBillingBatch, reissueBillingBatch) {
   }
 
   const dataToPersist = {
-    reissueBillingInvoices: [],
-    reissueBillingInvoiceLicences: [],
-    reissueTransactions: []
+    billingInvoices: [],
+    billingInvoiceLicences: [],
+    transactions: []
   }
 
   for (const sourceInvoice of sourceInvoices) {
@@ -58,9 +58,9 @@ function _addNewDataToDataToPersist (dataToPersist, newData) {
 }
 
 async function _persistData (dataToPersist) {
-  await BillingInvoiceModel.query().insert(dataToPersist.reissueBillingInvoices)
-  await BillingInvoiceLicenceModel.query().insert(dataToPersist.reissueBillingInvoiceLicences)
-  await BillingTransactionModel.query().insert(dataToPersist.reissueTransactions)
+  await BillingInvoiceModel.query().insert(dataToPersist.billingInvoices)
+  await BillingInvoiceLicenceModel.query().insert(dataToPersist.billingInvoiceLicences)
+  await BillingTransactionModel.query().insert(dataToPersist.transactions)
 }
 
 module.exports = {
