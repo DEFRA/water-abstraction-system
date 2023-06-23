@@ -23,7 +23,7 @@ function go (chargeVersion, financialYearEnding) {
   const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
   const financialYearEndDate = new Date(financialYearEnding, 2, 31)
 
-  if (_periodIsInvalid(chargeVersion, financialYearStartDate, financialYearEndDate)) {
+  if (_periodIsInvalid(chargeVersion, financialYearEndDate)) {
     throw new Error(`Charge version is outside billing period ${financialYearEnding}`)
   }
 
@@ -50,6 +50,7 @@ function go (chargeVersion, financialYearEnding) {
   }
 }
 
+// TODO: Update documentation
 /**
  * Determine if the charge version starts after or ends before the billing period
  *
@@ -57,16 +58,12 @@ function go (chargeVersion, financialYearEnding) {
  * nonsense and all possible scenarios are covered in our tests 😁
  *
  * @param {Object} chargeVersion chargeVersion being billed
- * @param {Date} financialYearStartDate billing period (financial year) start date
  * @param {Date} financialYearEndDate billing period (financial year) end date
  *
  * @returns {boolean} true if invalid else false
  */
-function _periodIsInvalid (chargeVersion, financialYearStartDate, financialYearEndDate) {
-  const chargeVersionStartsAfterFinancialYear = chargeVersion.startDate > financialYearEndDate
-  const chargeVersionEndsBeforeFinancialYear = chargeVersion.endDate && chargeVersion.endDate < financialYearStartDate
-
-  return chargeVersionStartsAfterFinancialYear || chargeVersionEndsBeforeFinancialYear
+function _periodIsInvalid (chargeVersion, financialYearEndDate) {
+  return chargeVersion.startDate > financialYearEndDate
 }
 
 module.exports = {
