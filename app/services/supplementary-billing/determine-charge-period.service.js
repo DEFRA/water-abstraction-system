@@ -50,12 +50,19 @@ function go (chargeVersion, financialYearEnding) {
   }
 }
 
-// TODO: Update documentation
 /**
- * Determine if the charge version starts after or ends before the billing period
+ * Determine if the charge version is valid for the billing period billing period
  *
- * We never expect a charge version outside the financial period but we do this just to ensure we never return
- * nonsense and all possible scenarios are covered in our tests 😁
+ * With having to support multi-year charging the only way a charge version could be invalid is when it's start date
+ * is after the billing period.
+ *
+ * Any that start before _might_ be valid. For example, assume the billing period is 2023-24
+ *
+ * - a charge version that starts on 2023-04-01 is valid
+ * - a charge version that starts on 2022-04-01 is valid (with no end date it applies to 2023-24)
+ * - a charge version that starts on 2022-04-01 and ends on 2022-06-01 is valid (the charge period will be determined
+ *   as outside the billing period. But we still need to process these charge versions in case they have any previous
+ *   transactions that need crediting)
  *
  * @param {Object} chargeVersion chargeVersion being billed
  * @param {Date} financialYearEndDate billing period (financial year) end date
