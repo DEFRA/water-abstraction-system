@@ -39,16 +39,16 @@ async function go (regionId, billingPeriod) {
 async function _fetch (regionId, billingPeriod) {
   const allChargeVersions = await ChargeVersion.query()
     .select([
-      'chargeVersions.chargeVersionId',
-      'chargeVersions.scheme',
+      'chargeVersionId',
+      'scheme',
       'chargeVersions.startDate',
       'chargeVersions.endDate',
-      'chargeVersions.invoiceAccountId',
-      'chargeVersions.status'
+      'invoiceAccountId',
+      'status'
     ])
     .innerJoinRelated('licence')
-    .where('licences.includeInSrocSupplementaryBilling', true)
-    .where('licences.regionId', regionId)
+    .where('includeInSrocSupplementaryBilling', true)
+    .where('regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .whereNot('chargeVersions.status', 'draft')
