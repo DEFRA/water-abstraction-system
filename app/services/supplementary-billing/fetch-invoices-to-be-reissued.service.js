@@ -16,13 +16,22 @@ const BillingInvoiceModel = require('../../models/water/billing-invoice.model.js
  */
 async function go (regionId) {
   try {
-    // TODO: optimise this to only return what we need from the billing invoice licences and the transactions
     const result = await BillingInvoiceModel.query()
+      .select(
+        'billingInvoices.externalId',
+        'invoiceAccountId',
+        'invoiceAccountNumber',
+        'originalBillingInvoiceId'
+      )
+      .where('isFlaggedForRebilling', true)
       .joinRelated('billingBatch')
+      .where('billingBatch.regionId', regionId)
       .withGraphFetched('billingInvoiceLicences.billingTransactions')
-      .where({
-        'billingBatch.regionId': regionId,
-        isFlaggedForRebilling: true
+      .modifyGraph('billingInvoiceLicences', (builder) => {
+        builder.select(
+          'licenceRef',
+          'licenceId'
+        )
       })
 
     return result
