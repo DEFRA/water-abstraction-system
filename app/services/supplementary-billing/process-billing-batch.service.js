@@ -1,10 +1,5 @@
 'use strict'
 
-/**
- * Processes a new billing batch
- * @module ProcessBillingBatchService
- */
-
 const BillingBatchError = require('../../errors/billing-batch.error.js')
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const ChargingModuleGenerateService = require('../charging-module/generate-bill-run.service.js')
@@ -14,35 +9,28 @@ const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
-/**
- * Creates the invoices and transactions in both WRLS and the Charging Module API
- *
- * @param {module:BillingBatchModel} billingBatch The newly created billing batch we need to process
- * @param {Object[]} billingPeriod An array of objects representing the financial years the transaction is for
- */
 async function go (billingBatch, billingPeriods) {
   const { billingBatchId } = billingBatch
 
   try {
+    // Mark the start time for later logging
+    const startTime = process.hrtime.bigint()
     const accumulatedLicenceIds = []
-    const resultsOfProcessing = []
+
+    let isBatchPopulated = false
 
     await _updateStatus(billingBatchId, 'processing')
 
-    // Mark the start time for later logging
-    const startTime = process.hrtime.bigint()
-
     for (const billingPeriod of billingPeriods) {
-      const chargeVersions = await _fetchChargeVersions(billingBatch, billingPeriod)
-      const licenceIdsForPeriod = _extractLicenceIds(chargeVersions)
+      const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billingBatch, billingPeriod)
       const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
       accumulatedLicenceIds.push(...licenceIdsForPeriod)
-      resultsOfProcessing.push(isPeriodPopulated)
-    }
 
-    // We set `isBatchPopulated` to `true` if at least one result was truthy
-    const isBatchPopulated = resultsOfProcessing.some(result => result)
+      if (isPeriodPopulated) {
+        isBatchPopulated = true
+      }
+    }
 
     // Creating a new set from accumulatedLicenceIds gives us just the unique ids. Objection does not accept sets in
     // .findByIds() so we spread it into an array
@@ -73,22 +61,16 @@ function _calculateAndLogTime (billingBatchId, startTime) {
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg(`Time taken to process billing batch ${billingBatchId}: ${timeTakenMs}ms`)
-}
-
-function _extractLicenceIds (chargeVersions) {
-  return chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licence.licenceId
-  })
+  global.GlobalNotifier.omg('Process billing batch complete', { billingBatchId, timeTakenMs })
 }
 
 async function _fetchChargeVersions (billingBatch, billingPeriod) {
   try {
-    const chargeVersions = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
+    const chargeVersionData = await FetchChargeVersionsService.go(billingBatch.regionId, billingPeriod)
 
     // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillingBatchService if it
     // fails
-    return chargeVersions
+    return chargeVersionData
   } catch (error) {
     throw new BillingBatchError(error, BillingBatchModel.errorCodes.failedToProcessChargeVersions)
   }
@@ -116,17 +98,7 @@ async function _finaliseBillingBatch (billingBatch, allLicenceIds, isPopulated) 
 }
 
 function _logError (billingBatch, error) {
-  global.GlobalNotifier.omfg(
-    'Billing Batch process errored',
-    {
-      billingBatch,
-      error: {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-        code: error.code
-      }
-    })
+  global.GlobalNotifier.omfg('Billing Batch process errored', { billingBatch }, error)
 }
 
 async function _updateStatus (billingBatchId, status) {
