@@ -15,7 +15,9 @@ const config = {
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.POSTGRES_PORT,
   database: process.env.POSTGRES_DB,
-  testDatabase: process.env.POSTGRES_DB_TEST
+  testDatabase: process.env.POSTGRES_DB_TEST,
+  // Only used when seeding our dev/test user records
+  defaultUserPassword: process.env.DEFAULT_USER_PASSWORD
 }
 
 module.exports = config
