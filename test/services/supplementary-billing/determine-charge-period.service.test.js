@@ -202,7 +202,7 @@ describe('Determine charge period service', () => {
     })
   })
 
-  describe.only('neither period overlaps', () => {
+  describe('neither period overlaps', () => {
     describe('because the charge version start date is after the financial period', () => {
       beforeEach(() => {
         chargeVersion = {
