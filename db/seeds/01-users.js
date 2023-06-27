@@ -58,6 +58,17 @@ async function seed (knex) {
   await _insertUserGroupsWhereNotExists(knex)
 }
 
+function _generateHashedPassword () {
+  const salt = bcrypt.genSaltSync(10)
+
+  return bcrypt.hashSync(DatabaseConfig.defaultUserPassword, salt)
+}
+
+async function _groups (knex) {
+  return knex('idm.groups')
+    .select('groupId', 'group')
+}
+
 async function _insertUsersWhereNotExists (knex) {
   const password = _generateHashedPassword()
 
@@ -99,17 +110,6 @@ async function _insertUserGroupsWhereNotExists (knex) {
         })
     }
   }
-}
-
-function _generateHashedPassword () {
-  const salt = bcrypt.genSaltSync(10)
-
-  return bcrypt.hashSync(DatabaseConfig.defaultUserPassword, salt)
-}
-
-async function _groups (knex) {
-  return knex('idm.groups')
-    .select('groupId', 'group')
 }
 
 async function _updateSeedUsersWithUserIdAndGroupId (knex) {
