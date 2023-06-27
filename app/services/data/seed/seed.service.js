@@ -11,7 +11,7 @@ const { db } = require('../../../../db/db.js')
  * Triggers the Knex seed process programmatically
  *
  * This is the same as calling `knex seed:run` on the command line. Only we pull in `db.js` because that is our file
- * which setups up Knex with the right config and all our 'tweaks'.
+ * which sets up Knex with the right config and all our 'tweaks'.
  *
  * In this context you can read `db.seed.run()` as `knex.seed.run()`.
  *
