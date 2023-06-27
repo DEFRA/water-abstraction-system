@@ -53,20 +53,7 @@ const seedUsers = [
 async function seed (knex) {
   await _insertUsersWhereNotExists(knex)
 
-  const users = await _users(knex)
-  const groups = await _groups(knex)
-
-  seedUsers.forEach((seedUser) => {
-    const user = users.find(({ userName }) => {
-      return userName === seedUser.userName
-    })
-    seedUser.userId = user.userId
-
-    if (seedUser.group) {
-      const userGroup = groups.find(({ group }) => group === seedUser.group)
-      seedUser.groupId = userGroup.groupId
-    }
-  })
+  await _updateSeedUsersWithUserIdAndGroupId(knex)
 
   await _insertUserGroupsWhereNotExists(knex)
 }
@@ -123,6 +110,23 @@ function _generateHashedPassword () {
 async function _groups (knex) {
   return knex('idm.groups')
     .select('groupId', 'group')
+}
+
+async function _updateSeedUsersWithUserIdAndGroupId (knex) {
+  const users = await _users(knex)
+  const groups = await _groups(knex)
+
+  seedUsers.forEach((seedUser) => {
+    const user = users.find(({ userName }) => {
+      return userName === seedUser.userName
+    })
+    seedUser.userId = user.userId
+
+    if (seedUser.group) {
+      const userGroup = groups.find(({ group }) => group === seedUser.group)
+      seedUser.groupId = userGroup.groupId
+    }
+  })
 }
 
 async function _users (knex) {
