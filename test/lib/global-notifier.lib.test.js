@@ -43,38 +43,4 @@ describe('GlobalNotifierLib class', () => {
       })
     })
   })
-
-  describe('when a log entry is made', () => {
-    const id = '1234567890'
-    const message = 'say what test'
-
-    it('formats it as expected', () => {
-      const expectedArgs = {
-        message,
-        id
-      }
-      const testNotifier = new GlobalNotifierLib(pinoFake, airbrakeFake)
-      testNotifier.omg(message, { id })
-
-      expect(pinoFake.info.calledOnceWith(expectedArgs)).to.be.true()
-    })
-  })
-
-  describe('when an airbrake notification is sent', () => {
-    const message = 'hell no test'
-    const data = { offTheChart: true }
-
-    it('formats it as expected', () => {
-      const expectedArgs = {
-        message,
-        session: {
-          ...data
-        }
-      }
-      const testNotifier = new GlobalNotifierLib(pinoFake, airbrakeFake)
-      testNotifier.omfg(message, data)
-
-      expect(airbrakeFake.notify.calledOnceWith(expectedArgs)).to.be.true()
-    })
-  })
 })

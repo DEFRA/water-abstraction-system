@@ -35,7 +35,7 @@ async function go (schemaName) {
     compressedSchemaPath = await CompressSchemaFolderService.go(schemaFolderPath)
     await SendToS3BucketService.go(compressedSchemaPath)
   } catch (error) {
-    global.GlobalNotifier.omfg(`Error: Failed to export schema ${schemaName}`, error.message)
+    global.GlobalNotifier.omfg(`Error: Failed to export schema ${schemaName}`, null, error)
   } finally {
     await DeleteFilesService.go(schemaFolderPath)
     await DeleteFilesService.go(compressedSchemaPath)

@@ -94,7 +94,8 @@ describe('Process billing period service', () => {
             abstractionPeriodEndMonth: 3
           })
 
-          chargeVersions = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+          const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+          chargeVersions = chargeVersionData.chargeVersions
 
           const sentTransactions = [{
             billingTransactionId: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
@@ -168,7 +169,8 @@ describe('Process billing period service', () => {
               abstractionPeriodEndMonth: 5
             })
 
-            chargeVersions = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+            const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+            chargeVersions = chargeVersionData.chargeVersions
           })
 
           describe('and there are no previous billed transactions', () => {
@@ -227,7 +229,8 @@ describe('Process billing period service', () => {
       )
       await ChargePurposeHelper.add({ chargeElementId })
 
-      chargeVersions = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+      const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+      chargeVersions = chargeVersionData.chargeVersions
     })
 
     describe('because generating the calculated transactions fails', () => {
