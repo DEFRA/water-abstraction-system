@@ -135,4 +135,6 @@ async function _users (knex) {
     .whereJsonPath('userData', '$.source', '=', 'Seeded')
 }
 
-module.exports.seed = seed
+module.exports = {
+  seed
+}
