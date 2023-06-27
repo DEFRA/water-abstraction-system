@@ -75,23 +75,22 @@ async function _insertUsersWhereNotExists (knex) {
   const password = _generateHashedPassword()
 
   for (const seedUser of seedUsers) {
-    await knex('idm.users')
-      .select('userId')
+    const existingUser = await knex('idm.users')
+      .first('userId')
       .where('userName', seedUser.userName)
       .andWhere('application', seedUser.application)
-      .then(async (results) => {
-        if (results.length === 0) {
-          await knex('idm.users')
-            .insert({
-              userName: seedUser.userName,
-              application: seedUser.application,
-              password,
-              userData: '{ "source": "Seeded" }',
-              resetRequired: 0,
-              badLogins: 0
-            })
-        }
-      })
+
+    if (!existingUser) {
+      await knex('idm.users')
+        .insert({
+          userName: seedUser.userName,
+          application: seedUser.application,
+          password,
+          userData: '{ "source": "Seeded" }',
+          resetRequired: 0,
+          badLogins: 0
+        })
+    }
   }
 }
 
@@ -99,20 +98,19 @@ async function _insertUserGroupsWhereNotExists (knex) {
   const seedUsersWithGroups = seedUsers.filter((seedData) => seedData.group)
 
   for (const seedUser of seedUsersWithGroups) {
-    await knex('idm.userGroups')
+    const existingUserGroup = await knex('idm.userGroups')
       .select('userGroupId')
       .where('userId', seedUser.userId)
       .andWhere('groupId', seedUser.groupId)
-      .then(async (results) => {
-        if (results.length === 0) {
-          await knex('idm.userGroups')
-            .insert({
-              userGroupId: randomUUID({ disableEntropyCache: true }),
-              userId: seedUser.userId,
-              groupId: seedUser.groupId
-            })
-        }
-      })
+
+    if (!existingUserGroup) {
+      await knex('idm.userGroups')
+        .insert({
+          userGroupId: randomUUID({ disableEntropyCache: true }),
+          userId: seedUser.userId,
+          groupId: seedUser.groupId
+        })
+    }
   }
 }
 
