@@ -35,11 +35,20 @@ async function go (regionId) {
       })
 
     return result
-  } catch (_error) {
+  } catch (error) {
     // If getting invoices errors then we log the error and return an empty array; the db hasn't yet been modified at
     // this stage so we can simply move on to the next stage of processing the billing batch.
 
-    // TODO: add logging
+    global.GlobalNotifier.omfg('Could not fetch reissue invoices', {
+      region: regionId,
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        code: error.code
+      }
+    })
+
     return []
   }
 }

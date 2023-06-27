@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -18,7 +19,7 @@ const BillingTransactionHelper = require('../../support/helpers/water/billing-tr
 // Thing under test
 const FetchInvoicesToBeReissuedService = require('../../../app/services/supplementary-billing/fetch-invoices-to-be-reissued.service.js')
 
-describe.only('Fetch Invoices To Be Reissued service', () => {
+describe('Fetch Invoices To Be Reissued service', () => {
   let billingBatch
   let billingInvoice
 
@@ -39,14 +40,13 @@ describe.only('Fetch Invoices To Be Reissued service', () => {
     })
   })
 
-  describe.only('when there are billing invoices to be reissued', () => {
+  describe('when there are billing invoices to be reissued', () => {
     beforeEach(async () => {
       await billingInvoice.$query().patch({ isFlaggedForRebilling: true })
     })
 
     it('returns results', async () => {
       const result = await FetchInvoicesToBeReissuedService.go(billingBatch.regionId)
-      console.log('🚀 ~ file: fetch-invoices-to-be-reissued.service.test.js:53 ~ it ~ result:', result)
 
       expect(result).to.have.length(1)
       expect(result[0]).to.be.an.instanceOf(BillingInvoiceModel)
@@ -78,6 +78,33 @@ describe.only('Fetch Invoices To Be Reissued service', () => {
         'licenceId',
         'billingTransactions'
       ])
+    })
+  })
+
+  describe('when fetching from the db fails', () => {
+    let notifierStub
+
+    beforeEach(() => {
+      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      global.GlobalNotifier = notifierStub
+    })
+
+    afterEach(() => {
+      delete global.GlobalNotifier
+      Sinon.restore()
+    })
+
+    it('logs an error', async () => {
+      // Force an error by calling the service with an invalid uuid
+      await FetchInvoicesToBeReissuedService.go('NOT_A_UUID')
+
+      expect(notifierStub.omfg.calledWith('Could not fetch reissue invoices')).to.be.true()
+    })
+
+    it('returns an empty array', async () => {
+      const result = await FetchInvoicesToBeReissuedService.go(billingBatch.regionId)
+
+      expect(result).to.be.empty()
     })
   })
 })
