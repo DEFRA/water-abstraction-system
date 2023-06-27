@@ -14,19 +14,19 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/data/tear-down',
-    handler: DataController.tearDown,
+    path: '/data/seed',
+    handler: DataController.seed,
     options: {
-      description: 'Used to remove the acceptance test data from the database',
+      description: 'Used to seed test data in the database',
       app: { excludeFromProd: true }
     }
   },
   {
     method: 'POST',
-    path: '/data/seed',
-    handler: DataController.seed,
+    path: '/data/tear-down',
+    handler: DataController.tearDown,
     options: {
-      description: 'Used to seed test data in the database',
+      description: 'Used to remove the acceptance test data from the database',
       app: { excludeFromProd: true }
     }
   }
