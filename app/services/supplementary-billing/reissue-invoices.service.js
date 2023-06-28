@@ -16,7 +16,7 @@ const ReissueInvoiceService = require('./reissue-invoice.service.js')
  *
  * We receive the billing batch that the reissued invoices are to be created on and infer from this the region to be
  * reissued. We check this region for invoices marked for reissuing. For each one of these we call
- * `ReissueInvoiceService` which handles the actual reissuing of an inoice and collect the returned invoice, invoice
+ * `ReissueInvoiceService` which handles the actual reissuing of an invoice and collects the returned invoice, invoice
  * licence and transaction data which we batch persist once all invoices have been reissued. Finally we return a boolean
  * to indicate whether or not any invoices were reissued.
  *
