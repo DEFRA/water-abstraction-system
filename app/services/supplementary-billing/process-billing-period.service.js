@@ -192,6 +192,11 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
   try {
     const financialYearEnding = billingPeriod.endDate.getFullYear()
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
+
+    if (!chargePeriod.startDate) {
+      return []
+    }
+
     const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
     const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
