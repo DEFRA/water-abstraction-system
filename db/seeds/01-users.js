@@ -117,9 +117,7 @@ async function _updateSeedUsersWithUserIdAndGroupId (knex) {
   const groups = await _groups(knex)
 
   seedUsers.forEach((seedUser) => {
-    const user = users.find(({ userName }) => {
-      return userName === seedUser.userName
-    })
+    const user = users.find(({ userName }) => userName === seedUser.userName)
     seedUser.userId = user.userId
 
     if (seedUser.group) {
