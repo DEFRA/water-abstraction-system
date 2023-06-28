@@ -29,8 +29,7 @@ const ReissueInvoicesService = require('../../../app/services/supplementary-bill
 
 describe('Reissue invoices service', () => {
   let notifierStub
-  let reissueBillingBatch
-  let originalBillingBatch
+  const reissueBillingBatch = { regionId: randomUUID({ disableEntropyCache: true }) }
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -42,8 +41,6 @@ describe('Reissue invoices service', () => {
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
-
-    originalBillingBatch = randomUUID({ disableEntropyCache: true })
   })
 
   afterEach(() => {
@@ -58,7 +55,7 @@ describe('Reissue invoices service', () => {
       })
 
       it('returns `false`', async () => {
-        const result = await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+        const result = await ReissueInvoicesService.go(reissueBillingBatch)
 
         expect(result).to.be.false()
       })
@@ -82,13 +79,13 @@ describe('Reissue invoices service', () => {
       })
 
       it('returns `true`', async () => {
-        const result = await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+        const result = await ReissueInvoicesService.go(reissueBillingBatch)
 
         expect(result).to.be.true()
       })
 
       it('persists all billing invoices', async () => {
-        await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+        await ReissueInvoicesService.go(reissueBillingBatch)
 
         const result = await BillingInvoiceModel.query()
 
@@ -96,7 +93,7 @@ describe('Reissue invoices service', () => {
       })
 
       it('persists all billing invoice licences', async () => {
-        await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+        await ReissueInvoicesService.go(reissueBillingBatch)
 
         const result = await BillingInvoiceLicenceModel.query()
 
@@ -104,7 +101,7 @@ describe('Reissue invoices service', () => {
       })
 
       it('persists all transactions', async () => {
-        await ReissueInvoicesService.go(originalBillingBatch, reissueBillingBatch)
+        await ReissueInvoicesService.go(reissueBillingBatch)
 
         const result = await BillingTransactionModel.query()
 

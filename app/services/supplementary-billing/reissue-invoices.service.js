@@ -14,18 +14,19 @@ const ReissueInvoiceService = require('./reissue-invoice.service.js')
 /**
  * Handles the reissuing of invoices
  *
- * We get all invoices to be reissued for the given billing batch (ie. same region, and marked for reissuing). For each
- * one of these we call `ReissueInvoiceService` which handles the actual reissuing process and collect the returned
- * invoice, invoice licence and transaction data which we batch persist one all invoices have been reissued
+ * We receive the billing batch that the reissued invoices are to be created on and infer from this the region to be
+ * reissued. We check this region for invoices marked for reissuing. For each one of these we call
+ * `ReissueInvoiceService` which handles the actual reissuing of an inoice and collect the returned invoice, invoice
+ * licence and transaction data which we batch persist once all invoices have been reissued. Finally we return a boolean
+ * to indicate whether or not any invoices were reissued.
  *
- * @param {module:BillingBatchModel} originalBillingBatch The billing batch to check for invoices to be reissued
  * @param {module:BillingBatchModel} reissueBillingBatch The billing batch that the reissued invoices will be created on
  *
  * @returns {Boolean} `true` if any invoices were reissued; `false` if not
 */
 
-async function go (originalBillingBatch, reissueBillingBatch) {
-  const sourceInvoices = await FetchInvoicesToBeReissuedService.go(originalBillingBatch.regionId)
+async function go (reissueBillingBatch) {
+  const sourceInvoices = await FetchInvoicesToBeReissuedService.go(reissueBillingBatch.regionId)
 
   if (sourceInvoices.length === 0) {
     return false
@@ -38,7 +39,7 @@ async function go (originalBillingBatch, reissueBillingBatch) {
   }
 
   for (const sourceInvoice of sourceInvoices) {
-    const newData = await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
+    const newData = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
     _addNewDataToDataToPersist(dataToPersist, newData)
   }

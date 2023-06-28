@@ -40,7 +40,7 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
  * @returns {Object[]} dataToReturn.transactions Array of transactions
  */
 
-async function go (sourceInvoice, originalBillingBatch, reissueBillingBatch) {
+async function go (sourceInvoice, reissueBillingBatch) {
   const dataToReturn = {
     billingInvoices: [],
     billingInvoiceLicences: [],
@@ -57,7 +57,7 @@ async function go (sourceInvoice, originalBillingBatch, reissueBillingBatch) {
   for (const chargingModuleReissueResponse of chargingModuleReissueResponses) {
     // Because we only have the CM invoice's id we now need to fetch its details via the "view invoice" endpoint
     const chargingModuleReissueInvoice = await _sendViewInvoiceRequest(
-      originalBillingBatch,
+      reissueBillingBatch,
       chargingModuleReissueResponse
     )
 

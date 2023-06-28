@@ -123,12 +123,12 @@ describe('Reissue invoice service', () => {
       })
 
     Sinon.stub(ChargingModuleViewInvoiceService, 'go')
-      .withArgs(ORIGINAL_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit.invoice.id)
+      .withArgs(REISSUE_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit.invoice.id)
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit
       })
-      .withArgs(ORIGINAL_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue.invoice.id)
+      .withArgs(REISSUE_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue.invoice.id)
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue
@@ -175,32 +175,32 @@ describe('Reissue invoice service', () => {
 
   describe('when the service is called', () => {
     it('returns two billing invoices per source invoice (one cancelling, one reissuing)', async () => {
-      const result = await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
+      const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
       expect(result.billingInvoices).to.have.length(2)
     })
 
     it('returns two billing invoice licences per source invoice licence (once cancelling, one reissuing)', async () => {
-      const result = await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
+      const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
       expect(result.billingInvoiceLicences).to.have.length(4)
     })
 
     it('persists two transactions per source transaction (once cancelling, one reissuing)', async () => {
-      const result = await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
+      const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
       expect(result.transactions).to.have.length(4)
     })
 
     it('sets the source invoice rebilling state to `rebilled`', async () => {
-      await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
+      await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
       expect(sourceInvoice.rebillingState).to.equal('rebilled')
     })
 
     describe('sets the original billing invoice id', () => {
       it('to its own id if `null`', async () => {
-        await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
+        await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
         expect(sourceInvoice.originalBillingInvoiceId).to.equal(sourceInvoice.billingInvoiceId)
       })
@@ -209,7 +209,7 @@ describe('Reissue invoice service', () => {
         const ORIGINAL_BILLING_INVOICE_ID = randomUUID({ disableEntropyCache: true })
         await sourceInvoice.$query().patch({ originalBillingInvoiceId: ORIGINAL_BILLING_INVOICE_ID })
 
-        await ReissueInvoiceService.go(sourceInvoice, originalBillingBatch, reissueBillingBatch)
+        await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
         expect(sourceInvoice.originalBillingInvoiceId).to.equal(ORIGINAL_BILLING_INVOICE_ID)
       })
