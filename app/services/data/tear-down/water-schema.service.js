@@ -69,9 +69,12 @@ async function _deleteBilling () {
     .whereIn('billingBatchId', billingBatchIds)
     .del()
 
+  // Just deleting the `biilingBatches` based on the `billingBatchIds` does not always remove all test records so the
+  // Test Region is used to identify the records for deletion
   await db
-    .from('water.billingBatches')
-    .whereIn('billingBatchId', billingBatchIds)
+    .from('water.billingBatches as bb')
+    .innerJoin('water.regions as r', 'bb.regionId', 'r.regionId')
+    .where('r.isTest', true)
     .del()
 }
 
