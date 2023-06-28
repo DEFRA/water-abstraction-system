@@ -211,8 +211,11 @@ describe('Determine charge period service', () => {
         }
       })
 
-      it('throws an error', () => {
-        expect(() => DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)).to.throw()
+      it('returns null values for the dates', () => {
+        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+        expect(result.startDate).to.be.null()
+        expect(result.endDate).to.be.null()
       })
     })
 
@@ -220,12 +223,16 @@ describe('Determine charge period service', () => {
       beforeEach(() => {
         chargeVersion = {
           startDate: new Date('2021-05-01'),
-          endDate: new Date('2021-05-31')
+          endDate: new Date('2021-05-31'),
+          licence: { startDate: new Date('2018-01-01') }
         }
       })
 
-      it('throws an error', () => {
-        expect(() => DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)).to.throw()
+      it('returns null values for the dates', () => {
+        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+        expect(result.startDate).to.be.null()
+        expect(result.endDate).to.be.null()
       })
     })
   })

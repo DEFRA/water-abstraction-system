@@ -23,8 +23,11 @@ function go (chargeVersion, financialYearEnding) {
   const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
   const financialYearEndDate = new Date(financialYearEnding, 2, 31)
 
-  if (_periodIsInvalid(chargeVersion, financialYearEndDate)) {
-    throw new Error(`Charge version is outside billing period ${financialYearEnding}`)
+  if (_periodIsIncompatible(chargeVersion, financialYearStartDate, financialYearEndDate)) {
+    return {
+      startDate: null,
+      endDate: null
+    }
   }
 
   const latestStartDateTimestamp = Math.max(
@@ -51,26 +54,46 @@ function go (chargeVersion, financialYearEnding) {
 }
 
 /**
- * Determine if the charge version is valid for the billing period billing period
+ * Determine if the charge version is irrelevant for the billing period
  *
- * With having to support multi-year charging the only way a charge version could be invalid is when it's start date
- * is after the billing period.
+ * To support multi-year billing our service FetchChargeVersionsService has to pull _all_ charge versions that start
+ * before the billing period period ends, for example, even if the billing period is 2023-24 charge versions that start
+ * in 2022 need to be included.
  *
- * Any that start before _might_ be valid. For example, assume the billing period is 2023-24
+ * This is to cover scenarios where a charge version with a start date in 2022-23 would have resulted in a debit in
+ * both 2022-23 and 2023-24 (continuing our example). Then a new charge version is added that starts in 2022-23. The old
+ * one is still valid, but the 2023-24 debit for it needs to be credited. We only know to do that by fetching it when
+ * running the `ProcessBillingPeriodService` for 2023-24 because `ProcessBillingTransactionsService` will fetch
+ * the previous transactions for it.
  *
- * - a charge version that starts on 2023-04-01 is valid
- * - a charge version that starts on 2022-04-01 is valid (with no end date it applies to 2023-24)
- * - a charge version that starts on 2022-04-01 and ends on 2022-06-01 is valid (the charge period will be determined
- *   as outside the billing period. But we still need to process these charge versions in case they have any previous
- *   transactions that need crediting)
+ * What does all this mean? It means this service will be given a charge version and a financial year ending that are
+ * incompatible.
+ *
+ * Our logic in `go()` is based on working out the latest start date and earliest end date to determine the 'charge
+ * period'. In our scenario that would result in
+ *
+ * ```javascript
+ * {
+ *   startDate: new Date(2023-04-01),
+ *   endDate: new Date(2022-06-01)
+ * }
+ * ```
+ *
+ * So, our billing engine still needs to process the charge version to see if any previous transactions for the current
+ * billing period need crediting. But there is no point in trying to determine the charge period and this function tells
+ * us when that is the case.
  *
  * @param {Object} chargeVersion chargeVersion being billed
+ * @param {Date} financialYearStartDate billing period (financial year) end date
  * @param {Date} financialYearEndDate billing period (financial year) end date
  *
  * @returns {boolean} true if invalid else false
  */
-function _periodIsInvalid (chargeVersion, financialYearEndDate) {
-  return chargeVersion.startDate > financialYearEndDate
+function _periodIsIncompatible (chargeVersion, financialYearStartDate, financialYearEndDate) {
+  const chargeVersionStartsAfterFinancialYear = chargeVersion.startDate > financialYearEndDate
+  const chargeVersionEndsBeforeFinancialYear = chargeVersion.endDate && (chargeVersion.endDate < financialYearStartDate)
+
+  return chargeVersionStartsAfterFinancialYear || chargeVersionEndsBeforeFinancialYear
 }
 
 module.exports = {
