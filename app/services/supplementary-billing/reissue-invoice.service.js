@@ -50,7 +50,7 @@ async function go (sourceInvoice, originalBillingBatch, reissueBillingBatch) {
   // When a reissue request is sent to the Charging Module, it creates 2 new invoices (one to cancel out the original
   // invoice and one to be the new version of it) and returns their ids
   const chargingModuleReissueResponses = await _sendReissueRequest(
-    originalBillingBatch.externalId,
+    reissueBillingBatch.externalId,
     sourceInvoice.externalId
   )
 

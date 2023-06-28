@@ -26,7 +26,8 @@ const ChargingModuleViewInvoiceService = require('../../../app/services/charging
 // Thing under test
 const ReissueInvoiceService = require('../../../app/services/supplementary-billing/reissue-invoice.service.js')
 
-const BILLING_BATCH_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
+const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
+const REISSUE_BILLING_BATCH_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
 const INVOICE_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
 const INVOICE_LICENCE_1_TRANSACTION_ID = randomUUID({ disableEntropyCache: true })
 const INVOICE_LICENCE_2_TRANSACTION_ID = randomUUID({ disableEntropyCache: true })
@@ -42,7 +43,7 @@ const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
   credit: {
     invoice: {
       id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id,
-      billRunId: BILLING_BATCH_EXTERNAL_ID,
+      billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
       rebilledInvoiceId: INVOICE_EXTERNAL_ID,
       rebilledType: 'C',
       netTotal: -2000,
@@ -70,7 +71,7 @@ const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
   reissue: {
     invoice: {
       id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
-      billRunId: BILLING_BATCH_EXTERNAL_ID,
+      billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
       rebilledInvoiceId: INVOICE_EXTERNAL_ID,
       rebilledType: 'R',
       netTotal: 2000,
@@ -106,27 +107,28 @@ describe('Reissue invoice service', () => {
     originalBillingBatch = BillingBatchModel.fromJson({
       ...BillingBatchHelper.defaults(),
       billingBatchId: randomUUID({ disableEntropyCache: true }),
-      externalId: BILLING_BATCH_EXTERNAL_ID
+      externalId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID
     })
     reissueBillingBatch = BillingBatchModel.fromJson({
       ...BillingBatchHelper.defaults(),
-      billingBatchId: randomUUID({ disableEntropyCache: true })
+      billingBatchId: randomUUID({ disableEntropyCache: true }),
+      externalId: REISSUE_BILLING_BATCH_EXTERNAL_ID
     })
 
     Sinon.stub(ChargingModuleReissueInvoiceService, 'go')
-      .withArgs(BILLING_BATCH_EXTERNAL_ID, INVOICE_EXTERNAL_ID)
+      .withArgs(REISSUE_BILLING_BATCH_EXTERNAL_ID, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE
       })
 
     Sinon.stub(ChargingModuleViewInvoiceService, 'go')
-      .withArgs(BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit.invoice.id)
+      .withArgs(ORIGINAL_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit.invoice.id)
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit
       })
-      .withArgs(BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue.invoice.id)
+      .withArgs(ORIGINAL_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue.invoice.id)
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue
@@ -137,7 +139,7 @@ describe('Reissue invoice service', () => {
     sourceInvoice = BillingInvoiceModel.fromJson({
       ...BillingInvoiceHelper.defaults(),
       billingInvoiceId: SOURCE_BILLING_INVOICE_ID,
-      billingBatchId: BILLING_BATCH_EXTERNAL_ID,
+      billingBatchId: originalBillingBatch.billingBatchId,
       externalId: INVOICE_EXTERNAL_ID,
       isFlaggedForRebilling: true,
       billingInvoiceLicences: [
