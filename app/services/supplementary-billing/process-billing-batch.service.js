@@ -35,7 +35,6 @@ async function go (billingBatch, billingPeriods) {
 
     const reissueInvoicesStartTime = process.hrtime.bigint()
 
-    // TODO: stub this in unit tests
     const resultOfReissuing = await ReissueInvoicesService.go()
     resultsOfProcessing.push(resultOfReissuing)
 
