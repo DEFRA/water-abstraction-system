@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Process a given billing batch for the given billing periods
+ * @module ProcessBillingBatchService
+ */
+
 const BillingBatchError = require('../../errors/billing-batch.error.js')
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 const ChargingModuleGenerateService = require('../charging-module/generate-bill-run.service.js')
@@ -9,6 +14,15 @@ const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
+/**
+ * Process a given billing batch for the given billing periods. In this case, "process" means that we create the
+ * required invoices and transactions for it in both this service and the Charging Module.
+ *
+ * TODO: flesh out these docs
+ *
+ * @param {*} billingBatch
+ * @param {*} billingPeriods
+ */
 async function go (billingBatch, billingPeriods) {
   const { billingBatchId } = billingBatch
 
