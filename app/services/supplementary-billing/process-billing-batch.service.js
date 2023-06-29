@@ -12,6 +12,7 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const HandleErroredBillingBatchService = require('./handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
+const ReissueInvoicesService = require('./reissue-invoices.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
 /**
@@ -34,6 +35,11 @@ async function go (billingBatch, billingPeriods) {
     const resultsOfProcessing = []
 
     await _updateStatus(billingBatchId, 'processing')
+
+
+    // TODO: stub this in unit tests
+    const resultOfReissuing = await ReissueInvoicesService.go()
+    resultsOfProcessing.push(resultOfReissuing)
 
     for (const billingPeriod of billingPeriods) {
       const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billingBatch, billingPeriod)
