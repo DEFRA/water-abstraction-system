@@ -29,9 +29,9 @@ async function go (billingBatch, billingPeriods) {
   try {
     // Mark the start time for later logging
     const startTime = process.hrtime.bigint()
-    const accumulatedLicenceIds = []
 
-    let isBatchPopulated = false
+    const accumulatedLicenceIds = []
+    const resultsOfProcessing = []
 
     await _updateStatus(billingBatchId, 'processing')
 
@@ -40,15 +40,15 @@ async function go (billingBatch, billingPeriods) {
       const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
       accumulatedLicenceIds.push(...licenceIdsForPeriod)
-
-      if (isPeriodPopulated) {
-        isBatchPopulated = true
-      }
+      resultsOfProcessing.push(isPeriodPopulated)
     }
 
     // Creating a new set from accumulatedLicenceIds gives us just the unique ids. Objection does not accept sets in
     // .findByIds() so we spread it into an array
     const allLicenceIds = [...new Set(accumulatedLicenceIds)]
+
+    // We set `isBatchPopulated` to `true` if at least one processing result was truthy
+    const isBatchPopulated = resultsOfProcessing.some(result => result)
 
     await _finaliseBillingBatch(billingBatch, allLicenceIds, isBatchPopulated)
 
