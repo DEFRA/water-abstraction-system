@@ -104,10 +104,20 @@ describe('Process billing batch service', () => {
       })
     })
 
-    it('logs the time taken to process the billing batch', async () => {
+    it('logs the time taken to reissue invoices', async () => {
       await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
       const args = notifierStub.omg.firstCall.args
+
+      expect(args[0]).to.equal('Reissue invoices complete')
+      expect(args[1].timeTakenMs).to.exist()
+      expect(args[1].billingBatchId).to.equal(billingBatch.billingBatchId)
+    })
+
+    it('logs the time taken to process the billing batch', async () => {
+      await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+
+      const args = notifierStub.omg.secondCall.args
 
       expect(args[0]).to.equal('Process billing batch complete')
       expect(args[1].timeTakenMs).to.exist()
