@@ -20,6 +20,7 @@ const FetchChargeVersionsService = require('../../../app/services/supplementary-
 const HandleErroredBillingBatchService = require('../../../app/services/supplementary-billing/handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('../../../app/services/supplementary-billing/process-billing-period.service.js')
+const ReissueInvoicesService = require('../../../app/services/supplementary-billing/reissue-invoices.service.js')
 const UnflagUnbilledLicencesService = require('../../../app/services/supplementary-billing/unflag-unbilled-licences.service.js')
 
 // Thing under test
@@ -69,12 +70,32 @@ describe('Process billing batch service', () => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
       })
 
-      it('sets the Billing Batch status to empty', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+      describe('and there are no invoices to reissue', () => {
+        beforeEach(() => {
+          Sinon.stub(ReissueInvoicesService, 'go').resolves(false)
+        })
 
-        const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+        it('sets the Billing Batch status to empty', async () => {
+          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
-        expect(result.status).to.equal('empty')
+          const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+          expect(result.status).to.equal('empty')
+        })
+      })
+
+      describe('and there are invoices to reissue', () => {
+        beforeEach(() => {
+          Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
+        })
+
+        it('sets the Billing Batch status to processing', async () => {
+          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+
+          const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+          expect(result.status).to.equal('processing')
+        })
       })
     })
 
