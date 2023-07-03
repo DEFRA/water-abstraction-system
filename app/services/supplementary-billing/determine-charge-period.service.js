@@ -45,6 +45,12 @@
  * - end dates: charge version not set, Licence 2023-01-11, Billing period 2024-03-31
  * - result: **incompatible!** start date 2023-04-01 to end date 2023-01-11
  *
+ * ### An expired licence
+ *
+ * - start dates: charge version 2023-10-01, Licence 2017-10-14, Billing period 2023-04-01
+ * - end dates: charge version not set, Licence 2023-08-11, Billing period 2024-03-31
+ * - result: **incompatible!** start date 2023-10-01 to end date 2023-08-01
+ *
  * When this happens we return an Object with `null` start and end dates. Calling services then know there is no valid
  * charge period and to avoid trying to calculate any billable days.
  *
@@ -90,8 +96,9 @@ function go (chargeVersion, billingPeriod) {
 function _periodIsIncompatible (startDate, endDate, billingPeriod) {
   const startsAfterBillingPeriod = startDate > billingPeriod.endDate
   const endsBeforeBillingPeriod = endDate < billingPeriod.startDate
+  const startsAfterItEnds = startDate > endDate
 
-  return startsAfterBillingPeriod || endsBeforeBillingPeriod
+  return startsAfterBillingPeriod || endsBeforeBillingPeriod || startsAfterItEnds
 }
 
 module.exports = {
