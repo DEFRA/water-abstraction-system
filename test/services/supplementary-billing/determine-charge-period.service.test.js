@@ -130,42 +130,87 @@ describe('Determine charge period service', () => {
       })
     })
 
-    describe('and the licence revoked date is inside the financial period', () => {
-      beforeEach(() => {
-        chargeVersion.licence = { startDate: new Date('2023-01-01'), revokedDate: new Date('2023-08-01') }
+    describe('and the licence revoked date', () => {
+      describe('is inside the financial period', () => {
+        beforeEach(() => {
+          chargeVersion.licence = { startDate: new Date('2023-01-01'), revokedDate: new Date('2023-08-01') }
+        })
+
+        it('returns the financial start and licence revoked end date', () => {
+          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+          expect(result.startDate).to.equal(financialYear.startDate)
+          expect(result.endDate).to.equal(chargeVersion.licence.revokedDate)
+        })
       })
 
-      it('returns the financial start and licence revoked end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+      describe('is before the financial period', () => {
+        beforeEach(() => {
+          chargeVersion.licence = { startDate: new Date('2023-01-01'), revokedDate: new Date('2023-02-01') }
+        })
 
-        expect(result.startDate).to.equal(financialYear.startDate)
-        expect(result.endDate).to.equal(chargeVersion.licence.revokedDate)
+        it('returns null values for the dates', () => {
+          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+          expect(result.startDate).to.be.null()
+          expect(result.endDate).to.be.null()
+        })
       })
     })
 
-    describe('and the licence lapsed date is inside the financial period', () => {
-      beforeEach(() => {
-        chargeVersion.licence = { startDate: new Date('2023-01-01'), lapsedDate: new Date('2023-08-31') }
+    describe('and the licence lapsed date', () => {
+      describe('is inside the financial period', () => {
+        beforeEach(() => {
+          chargeVersion.licence = { startDate: new Date('2023-01-01'), lapsedDate: new Date('2023-08-31') }
+        })
+
+        it('returns the financial start and licence lapsed end date', () => {
+          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+          expect(result.startDate).to.equal(financialYear.startDate)
+          expect(result.endDate).to.equal(chargeVersion.licence.lapsedDate)
+        })
       })
 
-      it('returns the financial start and licence lapsed end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+      describe('is before the financial period', () => {
+        beforeEach(() => {
+          chargeVersion.licence = { startDate: new Date('2023-01-01'), lapsedDate: new Date('2023-02-31') }
+        })
 
-        expect(result.startDate).to.equal(financialYear.startDate)
-        expect(result.endDate).to.equal(chargeVersion.licence.lapsedDate)
+        it('returns null values for the dates', () => {
+          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+          expect(result.startDate).to.be.null()
+          expect(result.endDate).to.be.null()
+        })
       })
     })
 
-    describe('and the licence expired date is inside the financial period', () => {
-      beforeEach(() => {
-        chargeVersion.licence = { startDate: new Date('2023-01-01'), expiredDate: new Date('2023-07-01') }
+    describe('and the licence expired date', () => {
+      describe('is inside the financial period', () => {
+        beforeEach(() => {
+          chargeVersion.licence = { startDate: new Date('2023-01-01'), expiredDate: new Date('2023-07-01') }
+        })
+
+        it('returns the financial start and licence expired end date', () => {
+          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+          expect(result.startDate).to.equal(financialYear.startDate)
+          expect(result.endDate).to.equal(chargeVersion.licence.expiredDate)
+        })
       })
 
-      it('returns the financial start and licence expired end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+      describe('is before the financial period', () => {
+        beforeEach(() => {
+          chargeVersion.licence = { startDate: new Date('2023-01-01'), lapsedDate: new Date('2023-02-31') }
+        })
 
-        expect(result.startDate).to.equal(financialYear.startDate)
-        expect(result.endDate).to.equal(chargeVersion.licence.expiredDate)
+        it('returns null values for the dates', () => {
+          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+
+          expect(result.startDate).to.be.null()
+          expect(result.endDate).to.be.null()
+        })
       })
     })
   })
