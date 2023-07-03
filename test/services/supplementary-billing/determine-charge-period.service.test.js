@@ -252,7 +252,8 @@ describe('Determine charge period service', () => {
       beforeEach(() => {
         chargeVersion = {
           startDate: new Date('2024-05-01'),
-          endDate: null
+          endDate: null,
+          licence: { startDate: new Date('2018-01-01') }
         }
       })
 

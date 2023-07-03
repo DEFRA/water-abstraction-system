@@ -23,13 +23,6 @@ function go (chargeVersion, financialYearEnding) {
   const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
   const financialYearEndDate = new Date(financialYearEnding, 2, 31)
 
-  if (_periodIsIncompatible(chargeVersion, financialYearStartDate, financialYearEndDate)) {
-    return {
-      startDate: null,
-      endDate: null
-    }
-  }
-
   const latestStartDateTimestamp = Math.max(
     financialYearStartDate,
     chargeVersion.startDate,
@@ -47,9 +40,19 @@ function go (chargeVersion, financialYearEnding) {
 
   const earliestEndDateTimestamp = Math.min(...endDateTimestamps)
 
+  const startDate = new Date(latestStartDateTimestamp)
+  const endDate = new Date(earliestEndDateTimestamp)
+
+  if (_periodIsIncompatible(startDate, endDate, financialYearStartDate, financialYearEndDate)) {
+    return {
+      startDate: null,
+      endDate: null
+    }
+  }
+
   return {
-    startDate: new Date(latestStartDateTimestamp),
-    endDate: new Date(earliestEndDateTimestamp)
+    startDate,
+    endDate
   }
 }
 
@@ -89,11 +92,11 @@ function go (chargeVersion, financialYearEnding) {
  *
  * @returns {boolean} true if invalid else false
  */
-function _periodIsIncompatible (chargeVersion, financialYearStartDate, financialYearEndDate) {
-  const chargeVersionStartsAfterFinancialYear = chargeVersion.startDate > financialYearEndDate
-  const chargeVersionEndsBeforeFinancialYear = chargeVersion.endDate && (chargeVersion.endDate < financialYearStartDate)
+function _periodIsIncompatible (startDate, endDate, financialYearStartDate, financialYearEndDate) {
+  const startsAfterFinancialYear = startDate > financialYearEndDate
+  const endsBeforeFinancialYear = endDate < financialYearStartDate
 
-  return chargeVersionStartsAfterFinancialYear || chargeVersionEndsBeforeFinancialYear
+  return startsAfterFinancialYear || endsBeforeFinancialYear
 }
 
 module.exports = {
