@@ -54,18 +54,18 @@
  * @returns {Object} The start and end date of the calculated charge period
  */
 function go (chargeVersion, financialYearEnding) {
-  const financialYearStartDate = new Date(financialYearEnding - 1, 3, 1)
-  const financialYearEndDate = new Date(financialYearEnding, 2, 31)
+  const billingPeriodStartDate = new Date(financialYearEnding - 1, 3, 1)
+  const billingPeriodEndDate = new Date(financialYearEnding, 2, 31)
 
   const latestStartDateTimestamp = Math.max(
-    financialYearStartDate,
+    billingPeriodStartDate,
     chargeVersion.startDate,
     chargeVersion.licence.startDate
   )
 
   // We use .filter() to remove any null timestamps, as Math.min() assumes a value of `0` for these
   const endDateTimestamps = [
-    financialYearEndDate,
+    billingPeriodEndDate,
     chargeVersion.endDate,
     chargeVersion.licence.expiredDate,
     chargeVersion.licence.lapsedDate,
@@ -77,7 +77,7 @@ function go (chargeVersion, financialYearEnding) {
   const startDate = new Date(latestStartDateTimestamp)
   const endDate = new Date(earliestEndDateTimestamp)
 
-  if (_periodIsIncompatible(startDate, endDate, financialYearStartDate, financialYearEndDate)) {
+  if (_periodIsIncompatible(startDate, endDate, billingPeriodStartDate, billingPeriodEndDate)) {
     return {
       startDate: null,
       endDate: null
@@ -90,11 +90,11 @@ function go (chargeVersion, financialYearEnding) {
   }
 }
 
-function _periodIsIncompatible (startDate, endDate, financialYearStartDate, financialYearEndDate) {
-  const startsAfterFinancialYear = startDate > financialYearEndDate
-  const endsBeforeFinancialYear = endDate < financialYearStartDate
+function _periodIsIncompatible (startDate, endDate, billingPeriodStartDate, billingPeriodEndDate) {
+  const startsAfterBillingPeriod = startDate > billingPeriodEndDate
+  const endsBeforeBillingPeriod = endDate < billingPeriodStartDate
 
-  return startsAfterFinancialYear || endsBeforeFinancialYear
+  return startsAfterBillingPeriod || endsBeforeBillingPeriod
 }
 
 module.exports = {
