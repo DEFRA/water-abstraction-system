@@ -248,6 +248,26 @@ describe('Determine charge period service', () => {
         expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
+
+    describe('and the licence expired date', () => {
+      describe("is inside the billing period before the charge version's start date", () => {
+        beforeEach(() => {
+          chargeVersion = {
+            startDate: new Date('2023-10-01'),
+            endDate: null,
+            licence: { startDate: new Date('2023-01-01'), expiredDate: new Date('2023-06-01') }
+          }
+        })
+
+        it('returns null values for the dates', () => {
+          const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+          console.log('🚀 ~ file: determine-charge-period.service.test.js:264 ~ it ~ result:', result)
+
+          expect(result.startDate).to.be.null()
+          expect(result.endDate).to.be.null()
+        })
+      })
+    })
   })
 
   describe('the charge version starts after the billing period', () => {
