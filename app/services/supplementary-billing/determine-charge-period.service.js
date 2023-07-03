@@ -8,7 +8,7 @@
 /**
  * Returns a charge period, which is an object comprising `startDate` and `endDate`
  *
- * The charge period is determined as the overlap between the charge version and licence's, and the billing period (determined from the financial year). So,
+ * The charge period is determined as the overlap between the charge version and licence's, and the billing period. So,
  * to determine the charge period we look for
  *
  * - the latest start date amongst the charge version, licence and billing period
@@ -49,23 +49,20 @@
  * charge period and to avoid trying to calculate any billable days.
  *
  * @param {module:ChargeVersionModel} chargeVersion The charge version being processed for billing
- * @param {Number} financialYearEnding The year the financial billing period ends
+ * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {Object} The start and end date of the calculated charge period
  */
-function go (chargeVersion, financialYearEnding) {
-  const billingPeriodStartDate = new Date(financialYearEnding - 1, 3, 1)
-  const billingPeriodEndDate = new Date(financialYearEnding, 2, 31)
-
+function go (chargeVersion, billingPeriod) {
   const latestStartDateTimestamp = Math.max(
-    billingPeriodStartDate,
+    billingPeriod.startDate,
     chargeVersion.startDate,
     chargeVersion.licence.startDate
   )
 
   // We use .filter() to remove any null timestamps, as Math.min() assumes a value of `0` for these
   const endDateTimestamps = [
-    billingPeriodEndDate,
+    billingPeriod.endDate,
     chargeVersion.endDate,
     chargeVersion.licence.expiredDate,
     chargeVersion.licence.lapsedDate,
@@ -77,7 +74,7 @@ function go (chargeVersion, financialYearEnding) {
   const startDate = new Date(latestStartDateTimestamp)
   const endDate = new Date(earliestEndDateTimestamp)
 
-  if (_periodIsIncompatible(startDate, endDate, billingPeriodStartDate, billingPeriodEndDate)) {
+  if (_periodIsIncompatible(startDate, endDate, billingPeriod)) {
     return {
       startDate: null,
       endDate: null
@@ -90,9 +87,9 @@ function go (chargeVersion, financialYearEnding) {
   }
 }
 
-function _periodIsIncompatible (startDate, endDate, billingPeriodStartDate, billingPeriodEndDate) {
-  const startsAfterBillingPeriod = startDate > billingPeriodEndDate
-  const endsBeforeBillingPeriod = endDate < billingPeriodStartDate
+function _periodIsIncompatible (startDate, endDate, billingPeriod) {
+  const startsAfterBillingPeriod = startDate > billingPeriod.endDate
+  const endsBeforeBillingPeriod = endDate < billingPeriod.startDate
 
   return startsAfterBillingPeriod || endsBeforeBillingPeriod
 }

@@ -191,7 +191,7 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
 function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
   try {
     const financialYearEnding = billingPeriod.endDate.getFullYear()
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
+    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
     if (!chargePeriod.startDate) {
       return []

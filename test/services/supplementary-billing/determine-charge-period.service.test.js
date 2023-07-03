@@ -11,10 +11,9 @@ const { expect } = Code
 const DetermineChargePeriodService = require('../../../app/services/supplementary-billing/determine-charge-period.service.js')
 
 describe('Determine charge period service', () => {
-  const financialYear = {
+  const billingPeriod = {
     startDate: new Date('2023-04-01'),
-    endDate: new Date('2024-03-31'),
-    yearEnding: 2024
+    endDate: new Date('2024-03-31')
   }
   let chargeVersion
 
@@ -33,7 +32,7 @@ describe('Determine charge period service', () => {
       })
 
       it('returns the charge version start and end dates', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
         expect(result.startDate).to.equal(chargeVersion.startDate)
         expect(result.endDate).to.equal(chargeVersion.endDate)
@@ -42,10 +41,10 @@ describe('Determine charge period service', () => {
 
     describe('and the charge version does not have an end date', () => {
       it('returns the charge version start date and financial year end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
         expect(result.startDate).to.equal(chargeVersion.startDate)
-        expect(result.endDate).to.equal(financialYear.endDate)
+        expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
   })
@@ -65,19 +64,19 @@ describe('Determine charge period service', () => {
       })
 
       it('returns the financial start and end dates', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-        expect(result.startDate).to.equal(financialYear.startDate)
-        expect(result.endDate).to.equal(financialYear.endDate)
+        expect(result.startDate).to.equal(billingPeriod.startDate)
+        expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
 
     describe('and the charge version does not have an end date', () => {
       it('returns the financial start and end dates', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-        expect(result.startDate).to.equal(financialYear.startDate)
-        expect(result.endDate).to.equal(financialYear.endDate)
+        expect(result.startDate).to.equal(billingPeriod.startDate)
+        expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
   })
@@ -97,9 +96,9 @@ describe('Determine charge period service', () => {
       })
 
       it('returns the financial start and charge version end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-        expect(result.startDate).to.equal(financialYear.startDate)
+        expect(result.startDate).to.equal(billingPeriod.startDate)
         expect(result.endDate).to.equal(chargeVersion.endDate)
       })
     })
@@ -110,10 +109,10 @@ describe('Determine charge period service', () => {
       })
 
       it('returns the financial start and end dates', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-        expect(result.startDate).to.equal(financialYear.startDate)
-        expect(result.endDate).to.equal(financialYear.endDate)
+        expect(result.startDate).to.equal(billingPeriod.startDate)
+        expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
 
@@ -123,10 +122,10 @@ describe('Determine charge period service', () => {
       })
 
       it('returns the licence start and financial end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
         expect(result.startDate).to.equal(chargeVersion.licence.startDate)
-        expect(result.endDate).to.equal(financialYear.endDate)
+        expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
 
@@ -137,9 +136,9 @@ describe('Determine charge period service', () => {
         })
 
         it('returns the financial start and licence revoked end date', () => {
-          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+          const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-          expect(result.startDate).to.equal(financialYear.startDate)
+          expect(result.startDate).to.equal(billingPeriod.startDate)
           expect(result.endDate).to.equal(chargeVersion.licence.revokedDate)
         })
       })
@@ -150,7 +149,7 @@ describe('Determine charge period service', () => {
         })
 
         it('returns null values for the dates', () => {
-          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+          const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
           expect(result.startDate).to.be.null()
           expect(result.endDate).to.be.null()
@@ -165,9 +164,9 @@ describe('Determine charge period service', () => {
         })
 
         it('returns the financial start and licence lapsed end date', () => {
-          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+          const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-          expect(result.startDate).to.equal(financialYear.startDate)
+          expect(result.startDate).to.equal(billingPeriod.startDate)
           expect(result.endDate).to.equal(chargeVersion.licence.lapsedDate)
         })
       })
@@ -178,7 +177,7 @@ describe('Determine charge period service', () => {
         })
 
         it('returns null values for the dates', () => {
-          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+          const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
           expect(result.startDate).to.be.null()
           expect(result.endDate).to.be.null()
@@ -193,9 +192,9 @@ describe('Determine charge period service', () => {
         })
 
         it('returns the financial start and licence expired end date', () => {
-          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+          const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-          expect(result.startDate).to.equal(financialYear.startDate)
+          expect(result.startDate).to.equal(billingPeriod.startDate)
           expect(result.endDate).to.equal(chargeVersion.licence.expiredDate)
         })
       })
@@ -206,7 +205,7 @@ describe('Determine charge period service', () => {
         })
 
         it('returns null values for the dates', () => {
-          const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+          const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
           expect(result.startDate).to.be.null()
           expect(result.endDate).to.be.null()
@@ -230,19 +229,19 @@ describe('Determine charge period service', () => {
       })
 
       it('returns the charge version start date and financial period end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
         expect(result.startDate).to.equal(chargeVersion.startDate)
-        expect(result.endDate).to.equal(financialYear.endDate)
+        expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
 
     describe('and the charge version does not have an end date', () => {
       it('returns the charge version start date and financial period end date', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
         expect(result.startDate).to.equal(chargeVersion.startDate)
-        expect(result.endDate).to.equal(financialYear.endDate)
+        expect(result.endDate).to.equal(billingPeriod.endDate)
       })
     })
   })
@@ -258,7 +257,7 @@ describe('Determine charge period service', () => {
       })
 
       it('returns null values for the dates', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
         expect(result.startDate).to.be.null()
         expect(result.endDate).to.be.null()
@@ -275,7 +274,7 @@ describe('Determine charge period service', () => {
       })
 
       it('returns null values for the dates', () => {
-        const result = DetermineChargePeriodService.go(chargeVersion, financialYear.yearEnding)
+        const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
         expect(result.startDate).to.be.null()
         expect(result.endDate).to.be.null()
