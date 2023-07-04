@@ -245,21 +245,31 @@ function _retrieveOrGenerateBillingInvoiceLicence (dataToReturn, sourceInvoice, 
 }
 
 async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
-  try {
-    const result = await ChargingModuleReissueInvoiceService.go(billingBatchExternalId, invoiceExternalId)
-    return result.response.invoices
-  } catch (error) {
-    throw new Error(`Charging Module reissue request failed: ${error.message}`)
+  const result = await ChargingModuleReissueInvoiceService.go(billingBatchExternalId, invoiceExternalId)
+
+  if (!result.succeeded) {
+    const error = new Error('Charging Module reissue request failed')
+    error.billingBatchExternalId = billingBatchExternalId
+    error.invoiceExternalId = invoiceExternalId
+
+    throw error
   }
+
+  return result.response.invoices
 }
 
 async function _sendViewInvoiceRequest (billingBatch, reissueInvoice) {
-  try {
-    const result = await ChargingModuleViewInvoiceService.go(billingBatch.externalId, reissueInvoice.id)
-    return result.response.invoice
-  } catch (error) {
-    throw new Error(`Charging Module view invoice request failed: ${error.message}`)
+  const result = await ChargingModuleViewInvoiceService.go(billingBatch.externalId, reissueInvoice.id)
+
+  if (!result.succeeded) {
+    const error = new Error('Charging Module view invoice request failed')
+    error.billingBatchExternalId = billingBatch.externalId
+    error.reissueInvoiceExternalId = reissueInvoice.id
+
+    throw error
   }
+
+  return result.response.invoice
 }
 
 module.exports = {

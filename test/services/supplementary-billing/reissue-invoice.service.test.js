@@ -215,6 +215,48 @@ describe('Reissue invoice service', () => {
       })
     })
   })
+
+  describe('and the Charging Module returns an error', () => {
+    describe('when sending the reissue request', () => {
+      beforeEach(() => {
+        ChargingModuleReissueInvoiceService.go.restore()
+        Sinon.stub(ChargingModuleReissueInvoiceService, 'go').resolves({ succeeded: false })
+      })
+
+      it('throws an error', async () => {
+        await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch))
+          .to.reject(Error, 'Charging Module reissue request failed')
+      })
+
+      it('includes the billing batch and source invoice external ids', async () => {
+        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
+
+        expect(errorResult.billingBatchExternalId).to.equal(reissueBillingBatch.externalId)
+        expect(errorResult.invoiceExternalId).to.equal(sourceInvoice.externalId)
+      })
+    })
+
+    describe('when viewing an invoice', () => {
+      beforeEach(() => {
+        ChargingModuleViewInvoiceService.go.restore()
+        Sinon.stub(ChargingModuleViewInvoiceService, 'go').resolves({ succeeded: false })
+      })
+
+      it('throws an error', async () => {
+        await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch))
+          .to.reject(Error, 'Charging Module view invoice request failed')
+      })
+
+      it('includes the billing batch and reissue invoice external ids', async () => {
+        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
+
+        expect(errorResult.billingBatchExternalId).to.equal(reissueBillingBatch.externalId)
+        // The error will be thrown on the first iteration over the invoices so we hardcode the check for the first
+        // element's id
+        expect(errorResult.reissueInvoiceExternalId).to.equal(CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id)
+      })
+    })
+  })
 })
 
 function _generateCMTransaction (credit, rebilledTransactionId) {
