@@ -261,7 +261,6 @@ describe('Determine charge period service', () => {
 
         it('returns null values for the dates', () => {
           const result = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
-          console.log('🚀 ~ file: determine-charge-period.service.test.js:264 ~ it ~ result:', result)
 
           expect(result.startDate).to.be.null()
           expect(result.endDate).to.be.null()
