@@ -31,7 +31,6 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
  * directly to the original source invoice.
  *
  * @param {module:BillingInvoiceModel} sourceInvoice The invoice to be reissued
- * @param {module:BillingBatchModel} originalBillingBatch The billing batch that the original invoice belongs to
  * @param {module:BillingBatchModel} reissueBillingBatch The billing batch that the new invoices should belong to
  *
  * @returns {Object} dataToReturn Data that has been generated while reissuing the invoice
