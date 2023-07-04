@@ -5,8 +5,6 @@
  * @module DetermineMinimumChargeService
  */
 
-const DetermineChargePeriodService = require('./determine-charge-period.service.js')
-
 /**
  * Checks if minimum charge applies to a charge version for the given billing period
  *
@@ -16,12 +14,11 @@ const DetermineChargePeriodService = require('./determine-charge-period.service.
  * If either of those tests is false then the service will return false.
  *
  * @param {module:ChargeVersionModel} chargeVersion The charge version being checked for minimum charge
- * @param {Number} financialYearEnding The year the financial billing period ends
+ * @param {Object} chargePeriod Object with a `startDate` and `endDate` property representing the chargeable period
  *
  * @returns {Boolean} true if minimum charge applies else false
  */
-function go (chargeVersion, financialYearEnding) {
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
+function go (chargeVersion, chargePeriod) {
   const chargePeriodStartTimestamp = chargePeriod.startDate.getTime()
   const chargeVersionStartTimestamp = chargeVersion.startDate.getTime()
 
