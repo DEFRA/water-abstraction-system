@@ -48,16 +48,16 @@ async function go (sourceInvoice, reissueBillingBatch) {
 
   // When a reissue request is sent to the Charging Module, it creates 2 new invoices (one to cancel out the original
   // invoice and one to be the new version of it) and returns their ids
-  const chargingModuleReissueResponses = await _sendReissueRequest(
+  const chargingModuleReissueResponse = await _sendReissueRequest(
     reissueBillingBatch.externalId,
     sourceInvoice.externalId
   )
 
-  for (const chargingModuleReissueResponse of chargingModuleReissueResponses) {
+  for (const chargingModuleReissueInvoiceInfo of chargingModuleReissueResponse) {
     // Because we only have the CM invoice's id we now need to fetch its details via the "view invoice" endpoint
     const chargingModuleReissueInvoice = await _sendViewInvoiceRequest(
       reissueBillingBatch,
-      chargingModuleReissueResponse
+      chargingModuleReissueInvoiceInfo
     )
 
     const reissueBillingInvoice = _retrieveOrGenerateBillingInvoice(
@@ -91,7 +91,7 @@ async function go (sourceInvoice, reissueBillingBatch) {
 
         // We need to know if this is an invoice which is cancelling out the original so we can create our transactions
         // accordingly (ie. creating credit transactions to cancel out debits and vice-versa)
-        const isCancellingInvoice = _isCancellingInvoice(chargingModuleReissueResponse)
+        const isCancellingInvoice = _isCancellingInvoice(chargingModuleReissueInvoiceInfo)
 
         const reissueTransaction = _generateTransaction(
           chargingModuleReissueTransaction.id,
