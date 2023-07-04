@@ -8,8 +8,8 @@
 /**
  * Returns a charge period, which is an object comprising `startDate` and `endDate`
  *
- * The charge period is determined as the overlap between the charge version and licence's, and the billing period. So,
- * to determine the charge period we look for
+ * The charge period is determined as the overlap between the charge version and licence's start and end dates, and the
+ * billing period. So, to determine the charge period we look for
  *
  * - the latest start date amongst the charge version, licence and billing period
  * - the earliest end date amongst the charge version, licence and billing period
@@ -27,8 +27,8 @@
  * This is to cover scenarios where a charge version with a start date in 2022-23 would have resulted in a debit in both
  * 2022-23 and 2023-24. Then a new charge version is added that starts in 2022-23. The old one is still valid, but the
  * 2023-24 debit for it needs to be credited. We only know to do that by fetching it when running the
- * `ProcessBillingPeriodService` for 2023-24 so `ProcessBillingTransactionsService` will fetch the previous
- * transactions for it.
+ * `ProcessBillingPeriodService` for 2023-24 so `ProcessBillingTransactionsService` will fetch the previous transactions
+ * for it.
  *
  * Add to that licences that end before the charge version or billing period and you get scenarios where the start and
  * end date are incompatible
