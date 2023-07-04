@@ -77,26 +77,25 @@ function go (chargeVersion, billingPeriod) {
 
   const earliestEndDateTimestamp = Math.min(...endDateTimestamps)
 
-  const startDate = new Date(latestStartDateTimestamp)
-  const endDate = new Date(earliestEndDateTimestamp)
+  const chargePeriod = {
+    startDate: new Date(latestStartDateTimestamp),
+    endDate: new Date(earliestEndDateTimestamp)
+  }
 
-  if (_periodIsIncompatible(startDate, endDate, billingPeriod)) {
+  if (_periodIsIncompatible(chargePeriod, billingPeriod)) {
     return {
       startDate: null,
       endDate: null
     }
   }
 
-  return {
-    startDate,
-    endDate
-  }
+  return chargePeriod
 }
 
-function _periodIsIncompatible (startDate, endDate, billingPeriod) {
-  const startsAfterBillingPeriod = startDate > billingPeriod.endDate
-  const endsBeforeBillingPeriod = endDate < billingPeriod.startDate
-  const startsAfterItEnds = startDate > endDate
+function _periodIsIncompatible (chargePeriod, billingPeriod) {
+  const startsAfterBillingPeriod = chargePeriod.startDate > billingPeriod.endDate
+  const endsBeforeBillingPeriod = chargePeriod.endDate < billingPeriod.startDate
+  const startsAfterItEnds = chargePeriod.startDate > chargePeriod.endDate
 
   return startsAfterBillingPeriod || endsBeforeBillingPeriod || startsAfterItEnds
 }
