@@ -189,7 +189,7 @@ describe('Reissue invoice service', () => {
     it('persists two transactions per source transaction (once cancelling, one reissuing)', async () => {
       const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
-      expect(result.transactions).to.have.length(4)
+      expect(result.billingTransactions).to.have.length(4)
     })
 
     it('sets the source invoice rebilling state to `rebilled`', async () => {

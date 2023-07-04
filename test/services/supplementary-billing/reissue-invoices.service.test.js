@@ -74,7 +74,7 @@ describe('Reissue invoices service', () => {
         Sinon.stub(ReissueInvoiceService, 'go').resolves({
           billingInvoices: [BillingInvoiceModel.fromJson(BillingInvoiceHelper.defaults())],
           billingInvoiceLicences: [BillingInvoiceLicenceModel.fromJson(BillingInvoiceLicenceHelper.defaults())],
-          transactions: [BillingTransactionModel.fromJson(BillingTransactionHelper.defaults())]
+          billingTransactions: [BillingTransactionModel.fromJson(BillingTransactionHelper.defaults())]
         })
       })
 

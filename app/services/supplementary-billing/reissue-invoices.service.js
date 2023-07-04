@@ -35,7 +35,7 @@ async function go (reissueBillingBatch) {
   const dataToPersist = {
     billingInvoices: [],
     billingInvoiceLicences: [],
-    transactions: []
+    billingTransactions: []
   }
 
   for (const sourceInvoice of sourceInvoices) {
@@ -53,6 +53,7 @@ async function go (reissueBillingBatch) {
  * Iterate over each key in `dataToPersist` and add to it the corresponding data in `newData`
  */
 function _addNewDataToDataToPersist (dataToPersist, newData) {
+  console.log('🚀 ~ file: reissue-invoices.service.js:56 ~ _addNewDataToDataToPersist ~ dataToPersist:', dataToPersist)
   Object.keys(dataToPersist).forEach((key) => {
     dataToPersist[key].push(...newData[key])
   })
@@ -61,7 +62,7 @@ function _addNewDataToDataToPersist (dataToPersist, newData) {
 async function _persistData (dataToPersist) {
   await BillingInvoiceModel.query().insert(dataToPersist.billingInvoices)
   await BillingInvoiceLicenceModel.query().insert(dataToPersist.billingInvoiceLicences)
-  await BillingTransactionModel.query().insert(dataToPersist.transactions)
+  await BillingTransactionModel.query().insert(dataToPersist.billingTransactions)
 }
 
 module.exports = {

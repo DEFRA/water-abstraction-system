@@ -44,7 +44,7 @@ async function go (sourceInvoice, reissueBillingBatch) {
   const dataToReturn = {
     billingInvoices: [],
     billingInvoiceLicences: [],
-    transactions: []
+    billingTransactions: []
   }
 
   // When a reissue request is sent to the Charging Module, it creates 2 new invoices (one to cancel out the original
@@ -101,7 +101,7 @@ async function go (sourceInvoice, reissueBillingBatch) {
           isCancellingInvoice
         )
 
-        dataToReturn.transactions.push(reissueTransaction)
+        dataToReturn.billingTransactions.push(reissueTransaction)
       }
     }
   }
