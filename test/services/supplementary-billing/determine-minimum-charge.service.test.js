@@ -16,7 +16,10 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const DetermineMinimumChargeService = require('../../../app/services/supplementary-billing/determine-minimum-charge.service.js')
 
 describe('Determine minimum charge service', () => {
-  const financialYearEnding = 2023
+  const chargePeriod = {
+    startDate: new Date('2023-04-01'),
+    endDate: new Date('2024-03-31')
+  }
   let chargeVersion
 
   afterEach(async () => {
@@ -28,7 +31,7 @@ describe('Determine minimum charge service', () => {
       beforeEach(async () => {
         const changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
         chargeVersion = await ChargeVersionHelper.add({
-          startDate: new Date('2022-05-01'),
+          startDate: new Date('2023-04-01'),
           changeReasonId: changeReason.changeReasonId
         })
         chargeVersion.changeReason = changeReason
@@ -36,7 +39,7 @@ describe('Determine minimum charge service', () => {
       })
 
       it('returns true', async () => {
-        const result = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+        const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
         expect(result).to.be.true()
       })
@@ -54,7 +57,7 @@ describe('Determine minimum charge service', () => {
       })
 
       it('returns false', async () => {
-        const result = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+        const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
         expect(result).to.be.false()
       })
@@ -73,7 +76,7 @@ describe('Determine minimum charge service', () => {
     })
 
     it('returns false', async () => {
-      const result = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+      const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
       expect(result).to.be.false()
     })
