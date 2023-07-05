@@ -36,7 +36,7 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
  * @returns {Object} dataToReturn Data that has been generated while reissuing the invoice
  * @returns {Object[]} dataToReturn.billingInvoices Array of billing invoices
  * @returns {Object[]} dataToReturn.billingInvoiceLicences Array of billing invoice licences
- * @returns {Object[]} dataToReturn.transactions Array of transactions
+ * @returns {Object[]} dataToReturn.billingTransactions Array of transactions
  */
 
 async function go (sourceInvoice, reissueBillingBatch) {
