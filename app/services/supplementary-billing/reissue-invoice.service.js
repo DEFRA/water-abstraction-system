@@ -30,7 +30,8 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
  * invoice is reissued, and that reissuing invoice is itself reissued, then `originalBillingInvoiceId` will still point
  * directly to the original source invoice.
  *
- * @param {module:BillingInvoiceModel} sourceInvoice The invoice to be reissued
+ * @param {module:BillingInvoiceModel} sourceInvoice The invoice to be reissued. Note that we expect it to include the
+ * billing invoice licences and transactions
  * @param {module:BillingBatchModel} reissueBillingBatch The billing batch that the new invoices should belong to
  *
  * @returns {Object} dataToReturn Data that has been generated while reissuing the invoice
@@ -48,16 +49,16 @@ async function go (sourceInvoice, reissueBillingBatch) {
 
   // When a reissue request is sent to the Charging Module, it creates 2 new invoices (one to cancel out the original
   // invoice and one to be the new version of it) and returns their ids
-  const chargingModuleReissueResponse = await _sendReissueRequest(
+  const chargingModuleReissueInvoiceIds = await _sendReissueRequest(
     reissueBillingBatch.externalId,
     sourceInvoice.externalId
   )
 
-  for (const chargingModuleReissueInvoiceInfo of chargingModuleReissueResponse) {
+  for (const chargingModuleReissueInvoiceId of chargingModuleReissueInvoiceIds) {
     // Because we only have the CM invoice's id we now need to fetch its details via the "view invoice" endpoint
     const chargingModuleReissueInvoice = await _sendViewInvoiceRequest(
       reissueBillingBatch,
-      chargingModuleReissueInvoiceInfo
+      chargingModuleReissueInvoiceId
     )
 
     const reissueBillingInvoice = _retrieveOrGenerateBillingInvoice(
@@ -89,15 +90,10 @@ async function go (sourceInvoice, reissueBillingBatch) {
           sourceTransaction.externalId
         )
 
-        // We need to know if this is an invoice which is cancelling out the original so we can create our transactions
-        // accordingly (ie. creating credit transactions to cancel out debits and vice-versa)
-        const isCancellingInvoice = _isCancellingInvoice(chargingModuleReissueInvoiceInfo)
-
         const reissueTransaction = _generateTransaction(
-          chargingModuleReissueTransaction.id,
+          chargingModuleReissueTransaction,
           sourceTransaction,
-          reissueInvoiceLicence.billingInvoiceLicenceId,
-          isCancellingInvoice
+          reissueInvoiceLicence.billingInvoiceLicenceId
         )
 
         dataToReturn.billingTransactions.push(reissueTransaction)
@@ -111,34 +107,27 @@ async function go (sourceInvoice, reissueBillingBatch) {
 }
 
 /**
- * Provides an `isCredit` value based on an original `isCredit` value and whether this is a cancelling invoice.
- */
-function _determineIsCredit (originalIsCredit, isCancellingInvoice) {
-  // If this is a cancelling invoice then we invert isCredit so it cancels out the original transaction; otherwise, we
-  // use the original value
-  return isCancellingInvoice ? !originalIsCredit : originalIsCredit
-}
-
-/**
  * Generates a new transaction using sourceTransaction as a base and amending properties as appropriate
  */
-function _generateTransaction (externalId, sourceTransaction, billingInvoiceLicenceId, isCancellingInvoice) {
-  const reissuedBillingTransactionId = randomUUID({ disableEntropyCache: true })
-
+function _generateTransaction (chargingModuleReissueTransaction, sourceTransaction, billingInvoiceLicenceId) {
   return {
     ...sourceTransaction,
-    isCredit: _determineIsCredit(sourceTransaction.isCredit, isCancellingInvoice),
-    billingTransactionId: reissuedBillingTransactionId,
-    externalId,
+    billingTransactionId: randomUUID({ disableEntropyCache: true }),
+    externalId: chargingModuleReissueTransaction.id,
+    isCredit: chargingModuleReissueTransaction.credit,
+    netAmount: _determineSignOfNetAmount(
+      chargingModuleReissueTransaction.chargeValue,
+      chargingModuleReissueTransaction.credit
+    ),
     billingInvoiceLicenceId
   }
 }
 
-/**
- * Returns `true` if the provided CM reissue response is a cancelling invoice
- */
-function _isCancellingInvoice (chargingModuleReissueResponse) {
-  return chargingModuleReissueResponse.rebilledType === 'C'
+// The Charging Module always returns a positive value for net amount whereas our db has a positive amount for debits
+// and a negative value for credits. We therefore use the CM charge value and credit flag to determine whether our net
+// amount should be positive or negative
+function _determineSignOfNetAmount (chargeValue, credit) {
+  return credit ? -chargeValue : chargeValue
 }
 
 /**
@@ -254,16 +243,19 @@ async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
     throw error
   }
 
-  return result.response.invoices
+  // The CM returns a few bits of info but we only need the id
+  return result.response.invoices.map((invoice) => {
+    return invoice.id
+  })
 }
 
-async function _sendViewInvoiceRequest (billingBatch, reissueInvoice) {
-  const result = await ChargingModuleViewInvoiceService.go(billingBatch.externalId, reissueInvoice.id)
+async function _sendViewInvoiceRequest (billingBatch, reissueInvoiceId) {
+  const result = await ChargingModuleViewInvoiceService.go(billingBatch.externalId, reissueInvoiceId)
 
   if (!result.succeeded) {
     const error = new Error('Charging Module view invoice request failed')
     error.billingBatchExternalId = billingBatch.externalId
-    error.reissueInvoiceExternalId = reissueInvoice.id
+    error.reissueInvoiceExternalId = reissueInvoiceId
 
     throw error
   }
