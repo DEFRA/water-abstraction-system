@@ -81,7 +81,7 @@ async function go (sourceInvoice, reissueBillingBatch) {
         sourceInvoiceLicence.licenceRef
       )
 
-      // The invoice licence we are re-creating will have one or more transactions on it which we also need to re-craete
+      // The invoice licence we are re-creating will have one or more transactions on it which we also need to re-create
       for (const sourceTransaction of sourceInvoiceLicence.billingTransactions) {
         // Get the original transaction from the charging module data so we can create our new one
         const chargingModuleReissueTransaction = _retrieveChargingModuleTransaction(
