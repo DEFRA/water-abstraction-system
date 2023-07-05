@@ -11,13 +11,10 @@ const { expect } = Code
 const { randomUUID } = require('crypto')
 
 // Test helpers
-const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
-const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
 const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
-const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
-const BillingInvoiceModel = require('../../../app/models/water/billing-invoice.model.js')
+const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
 const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
-const BillingTransactionModel = require('../../../app/models/water/billing-transaction.model.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Things we need to stub
 const ChargingModuleReissueInvoiceService = require('../../../app/services/charging-module/reissue-invoice.service.js')
@@ -27,7 +24,6 @@ const ChargingModuleViewInvoiceService = require('../../../app/services/charging
 const ReissueInvoiceService = require('../../../app/services/supplementary-billing/reissue-invoice.service.js')
 
 const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
-const REISSUE_BILLING_BATCH_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
 const INVOICE_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
 const INVOICE_LICENCE_1_TRANSACTION_ID = randomUUID({ disableEntropyCache: true })
 const INVOICE_LICENCE_2_TRANSACTION_ID = randomUUID({ disableEntropyCache: true })
@@ -39,134 +35,115 @@ const CHARGING_MODULE_REISSUE_INVOICE_RESPONSE = {
   ]
 }
 
-const CHARGING_MODULE_VIEW_INVOICE_RESPONSES = {
-  credit: {
-    invoice: {
-      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id,
-      billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
-      rebilledInvoiceId: INVOICE_EXTERNAL_ID,
-      rebilledType: 'C',
-      netTotal: -2000,
-      deminimisInvoice: false,
-      debitLineValue: 0,
-      creditLineValue: 2000,
-      licences: [
-        {
-          id: randomUUID({ disableEntropyCache: true }),
-          licenceNumber: 'INVOICE_LICENCE_1',
-          transactions: [
-            _generateCMTransaction(true, INVOICE_LICENCE_1_TRANSACTION_ID)
-          ]
-        },
-        {
-          id: randomUUID({ disableEntropyCache: true }),
-          licenceNumber: 'INVOICE_LICENCE_2',
-          transactions: [
-            _generateCMTransaction(true, INVOICE_LICENCE_2_TRANSACTION_ID)
-          ]
-        }
-      ]
-    }
-  },
-  reissue: {
-    invoice: {
-      id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
-      billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
-      rebilledInvoiceId: INVOICE_EXTERNAL_ID,
-      rebilledType: 'R',
-      netTotal: 2000,
-      deminimisInvoice: false,
-      debitLineValue: 2000,
-      creditLineValue: 0,
-      licences: [
-        {
-          id: randomUUID({ disableEntropyCache: true }),
-          licenceNumber: 'INVOICE_LICENCE_1',
-          transactions: [
-            _generateCMTransaction(false, INVOICE_LICENCE_1_TRANSACTION_ID)
-          ]
-        },
-        {
-          id: randomUUID({ disableEntropyCache: true }),
-          licenceNumber: 'INVOICE_LICENCE_2',
-          transactions: [
-            _generateCMTransaction(false, INVOICE_LICENCE_2_TRANSACTION_ID)
-          ]
-        }
-      ]
-    }
+const CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE = {
+  invoice: {
+    id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id,
+    billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
+    rebilledInvoiceId: INVOICE_EXTERNAL_ID,
+    rebilledType: 'C',
+    netTotal: -2000,
+    deminimisInvoice: false,
+    debitLineValue: 0,
+    creditLineValue: 2000,
+    licences: [
+      {
+        id: randomUUID({ disableEntropyCache: true }),
+        licenceNumber: 'INVOICE_LICENCE_1',
+        transactions: [_generateCMTransaction(true, INVOICE_LICENCE_1_TRANSACTION_ID)]
+      },
+      {
+        id: randomUUID({ disableEntropyCache: true }),
+        licenceNumber: 'INVOICE_LICENCE_2',
+        transactions: [_generateCMTransaction(true, INVOICE_LICENCE_2_TRANSACTION_ID)]
+      }
+    ]
   }
+}
+
+const CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
+  invoice: {
+    id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
+    billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
+    rebilledInvoiceId: INVOICE_EXTERNAL_ID,
+    rebilledType: 'R',
+    netTotal: 2000,
+    deminimisInvoice: false,
+    debitLineValue: 2000,
+    creditLineValue: 0,
+    licences: [
+      {
+        id: randomUUID({ disableEntropyCache: true }),
+        licenceNumber: 'INVOICE_LICENCE_1',
+        transactions: [_generateCMTransaction(false, INVOICE_LICENCE_1_TRANSACTION_ID)]
+      },
+      {
+        id: randomUUID({ disableEntropyCache: true }),
+        licenceNumber: 'INVOICE_LICENCE_2',
+        transactions: [_generateCMTransaction(false, INVOICE_LICENCE_2_TRANSACTION_ID)]
+      }
+    ]
+  }
+
 }
 
 describe('Reissue invoice service', () => {
   let reissueBillingBatch
-  let originalBillingBatch
   let sourceInvoice
 
   beforeEach(async () => {
-    originalBillingBatch = BillingBatchModel.fromJson({
-      ...BillingBatchHelper.defaults(),
-      billingBatchId: randomUUID({ disableEntropyCache: true }),
-      externalId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID
-    })
-    reissueBillingBatch = BillingBatchModel.fromJson({
-      ...BillingBatchHelper.defaults(),
-      billingBatchId: randomUUID({ disableEntropyCache: true }),
-      externalId: REISSUE_BILLING_BATCH_EXTERNAL_ID
-    })
+    await DatabaseHelper.clean()
+
+    reissueBillingBatch = { externalId: randomUUID({ disableEntropyCache: true }) }
 
     Sinon.stub(ChargingModuleReissueInvoiceService, 'go')
-      .withArgs(REISSUE_BILLING_BATCH_EXTERNAL_ID, INVOICE_EXTERNAL_ID)
+      .withArgs(reissueBillingBatch.externalId, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
         response: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE
       })
 
     Sinon.stub(ChargingModuleViewInvoiceService, 'go')
-      .withArgs(REISSUE_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit.invoice.id)
+      .withArgs(reissueBillingBatch.externalId, CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
-        response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES.credit
+        response: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE
       })
-      .withArgs(REISSUE_BILLING_BATCH_EXTERNAL_ID, CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue.invoice.id)
+      .withArgs(reissueBillingBatch.externalId, CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
-        response: CHARGING_MODULE_VIEW_INVOICE_RESPONSES.reissue
+        response: CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE
       })
 
-    const SOURCE_BILLING_INVOICE_ID = randomUUID({ disableEntropyCache: true })
-
-    sourceInvoice = BillingInvoiceModel.fromJson({
-      ...BillingInvoiceHelper.defaults(),
-      billingInvoiceId: SOURCE_BILLING_INVOICE_ID,
-      billingBatchId: originalBillingBatch.billingBatchId,
+    sourceInvoice = await BillingInvoiceHelper.add({
       externalId: INVOICE_EXTERNAL_ID,
-      isFlaggedForRebilling: true,
-      billingInvoiceLicences: [
-        BillingInvoiceLicenceModel.fromJson({
-          billingInvoiceId: SOURCE_BILLING_INVOICE_ID,
-          licenceRef: 'INVOICE_LICENCE_1',
-          licenceId: 'INVOICE_LICENCE_ID_1',
-          billingTransactions: [
-            BillingTransactionModel.fromJson({
-              ...BillingTransactionHelper.defaults(),
-              externalId: INVOICE_LICENCE_1_TRANSACTION_ID
-            })
-          ]
-        }),
-        BillingInvoiceLicenceModel.fromJson({
-          billingInvoiceId: SOURCE_BILLING_INVOICE_ID,
-          licenceRef: 'INVOICE_LICENCE_2',
-          licenceId: 'INVOICE_LICENCE_ID_2',
-          billingTransactions: [
-            BillingTransactionModel.fromJson({
-              ...BillingTransactionHelper.defaults(),
-              externalId: INVOICE_LICENCE_2_TRANSACTION_ID
-            })
-          ]
-        })
-      ]
+      isFlaggedForRebilling: true
     })
+
+    const sourceInvoiceLicences = await Promise.all([
+      BillingInvoiceLicenceHelper.add({
+        billingInvoiceId: sourceInvoice.billingInvoiceId,
+        licenceId: randomUUID({ disableEntropyCache: true }),
+        licenceRef: 'INVOICE_LICENCE_1'
+      }),
+      BillingInvoiceLicenceHelper.add({
+        billingInvoiceId: sourceInvoice.billingInvoiceId,
+        licenceId: randomUUID({ disableEntropyCache: true }),
+        licenceRef: 'INVOICE_LICENCE_2'
+      })
+    ])
+
+    await BillingTransactionHelper.add({
+      billingInvoiceLicenceId: sourceInvoiceLicences[0].billingInvoiceLicenceId,
+      externalId: INVOICE_LICENCE_1_TRANSACTION_ID
+    })
+
+    await BillingTransactionHelper.add({
+      billingInvoiceLicenceId: sourceInvoiceLicences[1].billingInvoiceLicenceId,
+      externalId: INVOICE_LICENCE_2_TRANSACTION_ID
+    })
+
+    // Refresh sourceInvoice to include billing invoice licences and transactions, as expected by the service
+    sourceInvoice = await sourceInvoice.$query().withGraphFetched('billingInvoiceLicences.billingTransactions')
   })
 
   afterEach(() => {
@@ -180,13 +157,13 @@ describe('Reissue invoice service', () => {
       expect(result.billingInvoices).to.have.length(2)
     })
 
-    it('returns two billing invoice licences per source invoice licence (once cancelling, one reissuing)', async () => {
+    it('returns two billing invoice licences per source invoice licence (one cancelling, one reissuing)', async () => {
       const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
       expect(result.billingInvoiceLicences).to.have.length(4)
     })
 
-    it('persists two transactions per source transaction (once cancelling, one reissuing)', async () => {
+    it('persists two transactions per source transaction (one cancelling, one reissuing)', async () => {
       const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
       expect(result.billingTransactions).to.have.length(4)
@@ -212,6 +189,28 @@ describe('Reissue invoice service', () => {
         await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
         expect(sourceInvoice.originalBillingInvoiceId).to.equal(ORIGINAL_BILLING_INVOICE_ID)
+      })
+    })
+
+    describe('sets the transaction net amount to the charge value returned by the CM', () => {
+      it('negative for credits', async () => {
+        const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
+
+        const credits = result.billingTransactions.filter(transaction => transaction.isCredit)
+
+        credits.forEach((transaction) => {
+          expect(transaction.netAmount).to.be.below(0)
+        })
+      })
+
+      it('positive for credits', async () => {
+        const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
+
+        const debits = result.billingTransactions.filter(transaction => !transaction.isCredit)
+
+        debits.forEach((transaction) => {
+          expect(transaction.netAmount).to.be.above(0)
+        })
       })
     })
   })
@@ -262,6 +261,7 @@ describe('Reissue invoice service', () => {
 function _generateCMTransaction (credit, rebilledTransactionId) {
   return {
     id: randomUUID({ disableEntropyCache: true }),
+    chargeValue: 1000,
     credit,
     rebilledTransactionId
   }
