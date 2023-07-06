@@ -140,7 +140,8 @@ describe('Initiate Billing Batch service', () => {
         const err = await expect(InitiateBillingBatchService.go(financialYearEndings, regionId, user)).to.reject()
 
         expect(err).to.be.an.error()
-        expect(err.message).to.equal(`Batch already live for region ${regionId}`)
+        expect(err.message).to.equal('Batch already live for region')
+        expect(err.regionId).to.equal(regionId)
       })
     })
   })
