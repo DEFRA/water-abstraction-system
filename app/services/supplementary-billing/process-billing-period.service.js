@@ -190,9 +190,13 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
 
 function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
   try {
-    const financialYearEnding = billingPeriod.endDate.getFullYear()
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, financialYearEnding)
-    const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, financialYearEnding)
+    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+
+    if (!chargePeriod.startDate) {
+      return []
+    }
+
+    const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
     const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
     // We use flatMap as GenerateBillingTransactionsService returns an array of transactions
