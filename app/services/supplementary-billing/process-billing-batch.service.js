@@ -35,7 +35,7 @@ async function go (billingBatch, billingPeriods) {
 
     const reissueInvoicesStartTime = process.hrtime.bigint()
 
-    const resultOfReissuing = await ReissueInvoicesService.go()
+    const resultOfReissuing = await ReissueInvoicesService.go(billingBatch)
     resultsOfProcessing.push(resultOfReissuing)
 
     _calculateAndLogTime(
