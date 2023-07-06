@@ -8,6 +8,7 @@ const { randomUUID } = require('crypto')
 
 const ChargingModuleReissueInvoiceService = require('../charging-module/reissue-invoice.service.js')
 const ChargingModuleViewInvoiceService = require('../charging-module/view-invoice.service.js')
+const ExpandedError = require('../../errors/expanded.error.js')
 const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice-licence.service.js')
 const GenerateBillingInvoiceService = require('./generate-billing-invoice.service.js')
 
@@ -236,9 +237,10 @@ async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
   const result = await ChargingModuleReissueInvoiceService.go(billingBatchExternalId, invoiceExternalId)
 
   if (!result.succeeded) {
-    const error = new Error('Charging Module reissue request failed')
-    error.billingBatchExternalId = billingBatchExternalId
-    error.invoiceExternalId = invoiceExternalId
+    const error = new ExpandedError(
+      'Charging Module reissue request failed',
+      { billingBatchExternalId, invoiceExternalId }
+    )
 
     throw error
   }
@@ -253,9 +255,10 @@ async function _sendViewInvoiceRequest (billingBatch, reissueInvoiceId) {
   const result = await ChargingModuleViewInvoiceService.go(billingBatch.externalId, reissueInvoiceId)
 
   if (!result.succeeded) {
-    const error = new Error('Charging Module view invoice request failed')
-    error.billingBatchExternalId = billingBatch.externalId
-    error.reissueInvoiceExternalId = reissueInvoiceId
+    const error = new ExpandedError(
+      'Charging Module view invoice request failed',
+      { billingBatchExternalId: billingBatch.externalId, reissueInvoiceExternalId: reissueInvoiceId }
+    )
 
     throw error
   }
