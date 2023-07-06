@@ -203,7 +203,7 @@ describe('Reissue invoice service', () => {
         })
       })
 
-      it('positive for credits', async () => {
+      it('positive for debits', async () => {
         const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
 
         const debits = result.billingTransactions.filter(transaction => !transaction.isCredit)
