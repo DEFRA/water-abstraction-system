@@ -102,6 +102,7 @@ describe('Process billing batch service', () => {
     describe('and some charge versions are billed', () => {
       beforeEach(() => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
+        Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
       })
 
       it('sets the Billing Batch status to processing', async () => {
@@ -125,7 +126,12 @@ describe('Process billing batch service', () => {
       })
     })
 
-    it('logs the time taken to reissue invoices', async () => {
+    describe('it logs the time taken', () => {
+      beforeEach(() => {
+        Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
+      })
+
+      it('to reissue invoices', async () => {
       await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
       const args = notifierStub.omg.firstCall.args
@@ -135,7 +141,7 @@ describe('Process billing batch service', () => {
       expect(args[1].billingBatchId).to.equal(billingBatch.billingBatchId)
     })
 
-    it('logs the time taken to process the billing batch', async () => {
+      it('to process the billing batch', async () => {
       await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
       const args = notifierStub.omg.secondCall.args
@@ -143,11 +149,16 @@ describe('Process billing batch service', () => {
       expect(args[0]).to.equal('Process billing batch complete')
       expect(args[1].timeTakenMs).to.exist()
       expect(args[1].billingBatchId).to.equal(billingBatch.billingBatchId)
+      })
     })
   })
 
   describe('when the service errors', () => {
     let thrownError
+
+    beforeEach(() => {
+      Sinon.stub(ReissueInvoicesService, 'go')
+    })
 
     describe('because fetching the charge versions fails', () => {
       beforeEach(() => {
