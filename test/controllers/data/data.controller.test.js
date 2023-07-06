@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const DbExportService = require('../../../app/services/db-export/db-export.service')
+const SeedService = require('../../../app/services/data/seed/seed.service.js')
 const TearDownService = require('../../../app/services/data/tear-down/tear-down.service.js')
 
 // For running our service
@@ -32,6 +33,58 @@ describe('Data controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('GET /data/db-export', () => {
+    const options = {
+      method: 'GET',
+      url: '/data/db-export'
+    }
+
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(DbExportService, 'go').resolves()
+      })
+
+      it('displays the correct message', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(204)
+      })
+    })
+  })
+
+  describe('POST /data/seed', () => {
+    const options = {
+      method: 'POST',
+      url: '/data/seed'
+    }
+
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(SeedService, 'go').resolves()
+      })
+
+      it('displays the correct message', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(204)
+      })
+    })
+
+    describe('when the request fails', () => {
+      describe('because the SeedService errors', () => {
+        beforeEach(async () => {
+          Sinon.stub(SeedService, 'go').rejects()
+        })
+
+        it('returns a 500 status', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(500)
+        })
+      })
+    })
   })
 
   describe('POST /data/tear-down', () => {
@@ -63,25 +116,6 @@ describe('Data controller', () => {
 
           expect(response.statusCode).to.equal(500)
         })
-      })
-    })
-  })
-
-  describe('GET /data/db-export', () => {
-    const options = {
-      method: 'GET',
-      url: '/data/db-export'
-    }
-
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(DbExportService, 'go').resolves()
-      })
-
-      it('displays the correct message', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(204)
       })
     })
   })
