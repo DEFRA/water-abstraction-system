@@ -28,50 +28,48 @@ async function go (billingBatch, billingPeriods) {
   const { billingBatchId } = billingBatch
 
   try {
-    const accumulatedLicenceIds = []
-    const resultsOfProcessing = []
-
     await _updateStatus(billingBatchId, 'processing')
 
-    const reissueInvoicesStartTime = process.hrtime.bigint()
+    const resultOfReissuing = await _reissueInvoices(billingBatch)
 
-    const resultOfReissuing = await ReissueInvoicesService.go(billingBatch)
-    resultsOfProcessing.push(resultOfReissuing)
-
-    _calculateAndLogTime(
-      'Reissue invoices complete',
-      billingBatchId,
-      reissueInvoicesStartTime
-    )
-
-    const processBillingPeriodStartTime = process.hrtime.bigint()
-
-    for (const billingPeriod of billingPeriods) {
-      const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billingBatch, billingPeriod)
-      const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
-
-      accumulatedLicenceIds.push(...licenceIdsForPeriod)
-      resultsOfProcessing.push(isPeriodPopulated)
-    }
-
-    // Creating a new set from accumulatedLicenceIds gives us just the unique ids. Objection does not accept sets in
-    // .findByIds() so we spread it into an array
-    const allLicenceIds = [...new Set(accumulatedLicenceIds)]
-
-    // We set `isBatchPopulated` to `true` if at least one processing result was truthy
-    const isBatchPopulated = resultsOfProcessing.some(result => result)
-
-    await _finaliseBillingBatch(billingBatch, allLicenceIds, isBatchPopulated)
-
-    _calculateAndLogTime(
-      'Process billing batch complete',
-      billingBatchId,
-      processBillingPeriodStartTime
-    )
+    await _processBillingPeriods(billingPeriods, billingBatch, billingBatchId, resultOfReissuing)
   } catch (error) {
     await HandleErroredBillingBatchService.go(billingBatchId, error.code)
     _logError(billingBatch, error)
   }
+}
+
+async function _processBillingPeriods (billingPeriods, billingBatch, billingBatchId, resultOfReissuing) {
+  const accumulatedLicenceIds = []
+
+  // We use `results` to check if any db changes have been made (which is indicated by a billing period being processed
+  // and returning `true`). We populate it with the result of reissuing as this also indicates whether db changes have
+  // been made.
+  const results = [resultOfReissuing]
+
+  const processBillingPeriodStartTime = process.hrtime.bigint()
+
+  for (const billingPeriod of billingPeriods) {
+    const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billingBatch, billingPeriod)
+    const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
+
+    accumulatedLicenceIds.push(...licenceIdsForPeriod)
+    results.push(isPeriodPopulated)
+  }
+
+  await _finaliseBillingBatch(billingBatch, accumulatedLicenceIds, results)
+
+  _calculateAndLogTime('Process billing batch complete', billingBatchId, processBillingPeriodStartTime)
+}
+
+async function _reissueInvoices (billingBatch) {
+  const reissueInvoicesStartTime = process.hrtime.bigint()
+
+  const result = await ReissueInvoicesService.go()
+
+  _calculateAndLogTime('Reissue invoices complete', billingBatch.billingBatchId, reissueInvoicesStartTime)
+
+  return result
 }
 
 /**
@@ -111,16 +109,24 @@ async function _fetchChargeVersions (billingBatch, billingPeriod) {
  * process, and refreshes the billing batch locally. However if there were no resulting invoice licences then we simply
  * unflag the unbilled licences and mark the billing batch with `empty` status
  */
-async function _finaliseBillingBatch (billingBatch, allLicenceIds, isPopulated) {
+async function _finaliseBillingBatch (billingBatch, accumulatedLicenceIds, resultsOfProcessing) {
+  // Creating a new set from accumulatedLicenceIds gives us just the unique ids. Objection does not accept sets in
+  // .findByIds() so we spread it into an array
+  const allLicenceIds = [...new Set(accumulatedLicenceIds)]
+
   await UnflagUnbilledLicencesService.go(billingBatch.billingBatchId, allLicenceIds)
+
+  // We set `isPopulated` to `true` if at least one processing result was truthy
+  const isPopulated = resultsOfProcessing.some(result => result)
 
   // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
   // indicate this in the UI
   if (!isPopulated) {
-    return _updateStatus(billingBatch.billingBatchId, 'empty')
+    await _updateStatus(billingBatch.billingBatchId, 'empty')
+    return
   }
 
-  // We then need to tell the Charging Module to run its generate process. This is where the Charging module finalises
+  // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
   await ChargingModuleGenerateService.go(billingBatch.externalId)
 

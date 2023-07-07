@@ -29,6 +29,10 @@ const LicenceModel = require('../../models/water/licence.model.js')
  * @param {*} billingBatchId The ID of the bill run (billing batch) being processed
  * @param {String[]} allLicenceIds All licence IDs being processed in the bill run
  * @returns {Number} count of records updated
+ *
+ * TODO: The return here isn't quite right -- it returns an Objection query, which will itself return a number once it's
+ * run -- but we don't run it here. So we can either change the docs to match the code, or change the code to match the
+ * docs -- something to check with Alan.
  */
 async function go (billingBatchId, allLicenceIds) {
   return LicenceModel.query()
