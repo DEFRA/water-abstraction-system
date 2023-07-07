@@ -6,11 +6,11 @@
  */
 
 const BillingBatchModel = require('../../models/water/billing-batch.model.js')
-
 const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
 const CreateBillingBatchService = require('./create-billing-batch.service.js')
 const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
+const ExpandedError = require('../../errors/expanded.error.js')
 
 /**
  * Initiate a new billing batch
@@ -27,7 +27,7 @@ async function go (financialYearEndings, regionId, userEmail) {
   const liveBillRunExists = await CheckLiveBillRunService.go(regionId, financialYearEndings.toFinancialYearEnding)
 
   if (liveBillRunExists) {
-    throw Error(`Batch already live for region ${regionId}`)
+    throw new ExpandedError('Batch already live for region', { regionId })
   }
 
   const chargingModuleResult = await ChargingModuleCreateBillRunService.go(regionId, 'sroc')
