@@ -26,16 +26,12 @@ const LicenceModel = require('../../models/water/licence.model.js')
  * The query we run during the **SEND** process unflags only those which are linked to the bill run being sent. We can
  * do this because we know this service has handled anything that was unbilled and not represented.
  *
- * @param {*} billingBatchId The ID of the bill run (billing batch) being processed
+ * @param {String} billingBatchId The ID of the bill run (billing batch) being processed
  * @param {String[]} allLicenceIds All licence IDs being processed in the bill run
  * @returns {Number} count of records updated
- *
- * TODO: The return here isn't quite right -- it returns an Objection query, which will itself return a number once it's
- * run -- but we don't run it here. So we can either change the docs to match the code, or change the code to match the
- * docs -- something to check with Alan.
  */
 async function go (billingBatchId, allLicenceIds) {
-  return LicenceModel.query()
+  const result = await LicenceModel.query()
     .patch({ includeInSrocSupplementaryBilling: false })
     .whereIn('licenceId', allLicenceIds)
     .whereNotExists(
@@ -43,6 +39,8 @@ async function go (billingBatchId, allLicenceIds) {
         .join('billingInvoices', 'billingInvoices.billingInvoiceId', '=', 'billingInvoiceLicences.billingInvoiceId')
         .where('billingInvoices.billingBatchId', '=', billingBatchId)
     )
+
+  return result
 }
 
 module.exports = {
