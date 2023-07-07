@@ -128,27 +128,11 @@ describe('Process billing batch service', () => {
 
         expect(legacyRequestLibStub.called).to.be.true()
       })
-    })
 
-    describe('it logs the time taken', () => {
-      beforeEach(() => {
-        Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
-      })
-
-      it('to reissue invoices', async () => {
+      it('it logs the time taken', async () => {
         await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         const args = notifierStub.omg.firstCall.args
-
-        expect(args[0]).to.equal('Reissue invoices complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].billingBatchId).to.equal(billingBatch.billingBatchId)
-      })
-
-      it('to process the billing batch', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
-
-        const args = notifierStub.omg.secondCall.args
 
         expect(args[0]).to.equal('Process billing batch complete')
         expect(args[1].timeTakenMs).to.exist()

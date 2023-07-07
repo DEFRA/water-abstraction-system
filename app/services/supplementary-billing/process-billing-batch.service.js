@@ -30,11 +30,15 @@ async function go (billingBatch, billingPeriods) {
   const { billingBatchId } = billingBatch
 
   try {
+    const startTime = process.hrtime.bigint()
+
     await _updateStatus(billingBatchId, 'processing')
 
     const resultOfReissuing = await _reissueInvoices(billingBatch)
 
     await _processBillingPeriods(billingPeriods, billingBatch, billingBatchId, resultOfReissuing)
+
+    _calculateAndLogTime(billingBatchId, startTime)
   } catch (error) {
     await HandleErroredBillingBatchService.go(billingBatchId, error.code)
     _logError(billingBatch, error)
@@ -49,8 +53,6 @@ async function _processBillingPeriods (billingPeriods, billingBatch, billingBatc
   // been made.
   const results = [resultOfReissuing]
 
-  const processBillingPeriodStartTime = process.hrtime.bigint()
-
   for (const billingPeriod of billingPeriods) {
     const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billingBatch, billingPeriod)
     const isPeriodPopulated = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
@@ -60,8 +62,6 @@ async function _processBillingPeriods (billingPeriods, billingBatch, billingBatc
   }
 
   await _finaliseBillingBatch(billingBatch, accumulatedLicenceIds, results)
-
-  _calculateAndLogTime('Process billing batch complete', billingBatchId, processBillingPeriodStartTime)
 }
 
 /**
@@ -74,33 +74,27 @@ async function _reissueInvoices (billingBatch) {
     return false
   }
 
-  const reissueInvoicesStartTime = process.hrtime.bigint()
-
-  const result = await ReissueInvoicesService.go()
-
-  _calculateAndLogTime('Reissue invoices complete', billingBatch.billingBatchId, reissueInvoicesStartTime)
+  const result = await ReissueInvoicesService.go(billingBatch)
 
   return result
 }
 
 /**
-  * Log the time taken to run part of the billing batch process
+  * Log the time taken to process the billing batch
   *
   * If `notifier` is not set then it will do nothing. If it is set this will get the current time and then calculate the
-  * difference from `startTime`. This, the `billRunId` and the provided `message` are then used to generate a log
-  * message.
+  * difference from `startTime`. This and the `billRunId` are then used to generate a log message.
   *
-  * @param {string} message Message to be logged
   * @param {string} billingBatchId Id of the billing batch currently being 'processed'
   * @param {BigInt} startTime The time the generate process kicked off. It is expected to be the result of a call to
   * `process.hrtime.bigint()`
   */
-function _calculateAndLogTime (message, billingBatchId, startTime) {
+function _calculateAndLogTime (billingBatchId, startTime) {
   const endTime = process.hrtime.bigint()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg(message, { billingBatchId, timeTakenMs })
+  global.GlobalNotifier.omg('Process billing batch complete', { billingBatchId, timeTakenMs })
 }
 
 async function _fetchChargeVersions (billingBatch, billingPeriod) {
