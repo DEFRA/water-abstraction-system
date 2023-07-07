@@ -16,10 +16,12 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../app/services/charging-module/generate-bill-run.service.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 const HandleErroredBillingBatchService = require('../../../app/services/supplementary-billing/handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('../../../app/services/supplementary-billing/process-billing-period.service.js')
+const ReissueInvoicesService = require('../../../app/services/supplementary-billing/reissue-invoices.service.js')
 const UnflagUnbilledLicencesService = require('../../../app/services/supplementary-billing/unflag-unbilled-licences.service.js')
 
 // Thing under test
@@ -51,6 +53,9 @@ describe('Process billing batch service', () => {
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
+
+    // We set the `enableReissuingBillingBatches` feature flag to `true` to ensure that we always perform reissuing
+    Sinon.replace(FeatureFlagsConfig, 'enableReissuingBillingBatches', true)
   })
 
   afterEach(() => {
@@ -69,18 +74,39 @@ describe('Process billing batch service', () => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
       })
 
-      it('sets the Billing Batch status to empty', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+      describe('and there are no invoices to reissue', () => {
+        beforeEach(() => {
+          Sinon.stub(ReissueInvoicesService, 'go').resolves(false)
+        })
 
-        const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+        it('sets the Billing Batch status to empty', async () => {
+          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
-        expect(result.status).to.equal('empty')
+          const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+          expect(result.status).to.equal('empty')
+        })
+      })
+
+      describe('and there are invoices to reissue', () => {
+        beforeEach(() => {
+          Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
+        })
+
+        it('sets the Billing Batch status to processing', async () => {
+          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+
+          const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
+
+          expect(result.status).to.equal('processing')
+        })
       })
     })
 
     describe('and some charge versions are billed', () => {
       beforeEach(() => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
+        Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
       })
 
       it('sets the Billing Batch status to processing', async () => {
@@ -102,21 +128,25 @@ describe('Process billing batch service', () => {
 
         expect(legacyRequestLibStub.called).to.be.true()
       })
-    })
 
-    it('logs the time taken to process the billing batch', async () => {
-      await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+      it('it logs the time taken', async () => {
+        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
 
-      const args = notifierStub.omg.firstCall.args
+        const args = notifierStub.omg.firstCall.args
 
-      expect(args[0]).to.equal('Process billing batch complete')
-      expect(args[1].timeTakenMs).to.exist()
-      expect(args[1].billingBatchId).to.equal(billingBatch.billingBatchId)
+        expect(args[0]).to.equal('Process billing batch complete')
+        expect(args[1].timeTakenMs).to.exist()
+        expect(args[1].billingBatchId).to.equal(billingBatch.billingBatchId)
+      })
     })
   })
 
   describe('when the service errors', () => {
     let thrownError
+
+    beforeEach(() => {
+      Sinon.stub(ReissueInvoicesService, 'go')
+    })
 
     describe('because fetching the charge versions fails', () => {
       beforeEach(() => {
