@@ -15,6 +15,8 @@ const ProcessBillingPeriodService = require('./process-billing-period.service.js
 const ReissueInvoicesService = require('./reissue-invoices.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Process a given billing batch for the given billing periods. In this case, "process" means that we create the
  * required invoices and transactions for it in both this service and the Charging Module.
@@ -62,8 +64,15 @@ async function _processBillingPeriods (billingPeriods, billingBatch, billingBatc
   _calculateAndLogTime('Process billing batch complete', billingBatchId, processBillingPeriodStartTime)
 }
 
+/**
+ * Call `ReissueInvoicesService` and log the time taken. We return `true` if any invoices have been reissued (which will
+ * have resulted in db changes), otherwise we return `false` (to indicate there have been no db changes)
+ */
 async function _reissueInvoices (billingBatch) {
-  // TODO: include feature flag here?
+  // If reissuing isn't enabled then simply return `false` to indicate no db change has been made
+  if (!FeatureFlagsConfig.enableReissuingBillingBatches) {
+    return false
+  }
 
   const reissueInvoicesStartTime = process.hrtime.bigint()
 

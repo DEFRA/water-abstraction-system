@@ -16,6 +16,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../app/services/charging-module/generate-bill-run.service.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../app/services/supplementary-billing/fetch-charge-versions.service.js')
 const HandleErroredBillingBatchService = require('../../../app/services/supplementary-billing/handle-errored-billing-batch.service.js')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
@@ -52,6 +53,9 @@ describe('Process billing batch service', () => {
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
+
+    // We set the `enableReissuingBillingBatches` feature flag to `true` to ensure that we always perform reissuing
+    Sinon.replace(FeatureFlagsConfig, 'enableReissuingBillingBatches', true)
   })
 
   afterEach(() => {
