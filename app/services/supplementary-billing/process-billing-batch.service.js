@@ -21,8 +21,8 @@ const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.servic
  *
  * TODO: flesh out these docs
  *
- * @param {*} billingBatch
- * @param {*} billingPeriods
+ * @param {module:BillingBatchModel} billingBatch
+ * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`
  */
 async function go (billingBatch, billingPeriods) {
   const { billingBatchId } = billingBatch
@@ -63,6 +63,8 @@ async function _processBillingPeriods (billingPeriods, billingBatch, billingBatc
 }
 
 async function _reissueInvoices (billingBatch) {
+  // TODO: include feature flag here?
+
   const reissueInvoicesStartTime = process.hrtime.bigint()
 
   const result = await ReissueInvoicesService.go()
