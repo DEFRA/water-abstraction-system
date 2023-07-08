@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ConvertToCSVService = require('../../../app/services/db-export/convert-to-csv.service.js')
-const ExportDataFilesService = require('../../../app/services/db-export/export-data-files.service.js')
-const FetchTableService = require('../../../app/services/db-export/fetch-table.service.js')
+const ConvertToCSVService = require('../../../../app/services/data/export/convert-to-csv.service.js')
+const ExportDataFilesService = require('../../../../app/services/data/export/export-data-files.service.js')
+const FetchTableService = require('../../../../app/services/data/export/fetch-table.service.js')
 
 // Thing under test
-const ExportTableService = require('../../../app/services/db-export/export-table.service.js')
+const ExportTableService = require('../../../../app/services/data/export/export-table.service.js')
 
 describe('Table Export service', () => {
   let convertToCSVServiceStub

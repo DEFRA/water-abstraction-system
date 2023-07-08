@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const DbExportService = require('../../../app/services/db-export/db-export.service')
+const ExportService = require('../../../app/services/data/export/export.service')
 const SeedService = require('../../../app/services/data/seed/seed.service.js')
 const TearDownService = require('../../../app/services/data/tear-down/tear-down.service.js')
 
@@ -35,15 +35,15 @@ describe('Data controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /data/db-export', () => {
+  describe('GET /data/export', () => {
     const options = {
       method: 'GET',
-      url: '/data/db-export'
+      url: '/data/export'
     }
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(DbExportService, 'go').resolves()
+        Sinon.stub(ExportService, 'go').resolves()
       })
 
       it('displays the correct message', async () => {

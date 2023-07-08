@@ -5,7 +5,7 @@
  * @module FetchTableNamesService
  */
 
-const { db } = require('../../../db/db.js')
+const { db } = require('../../../../db/db.js')
 
 /**
  * Retrieves the table names for a specific schema

@@ -8,11 +8,11 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
+const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
-const FetchTableService = require('../../../app/services/db-export/fetch-table.service.js')
+const FetchTableService = require('../../../../app/services/data/export/fetch-table.service.js')
 
 const billingChargeCategoriesColumnInfo = [
   'billingChargeCategoryId',

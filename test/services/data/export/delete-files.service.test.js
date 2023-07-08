@@ -13,7 +13,7 @@ const path = require('path')
 const mockFs = require('mock-fs')
 
 // Thing under test
-const DeleteFilesService = require('../../../app/services/db-export/delete-files.service.js')
+const DeleteFilesService = require('../../../../app/services/data/export/delete-files.service.js')
 
 describe('Delete Files service', () => {
   let filenameWithPath

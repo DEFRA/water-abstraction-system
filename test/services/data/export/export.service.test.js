@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const SchemaExportService = require('../../../app/services/db-export/schema-export.service.js')
+const SchemaExportService = require('../../../../app/services/data/export/schema-export.service.js')
 
 // Thing under test
-const DbExportService = require('../../../app/services/db-export/db-export.service.js')
+const ExportService = require('../../../../app/services/data/export/export.service.js')
 
-describe('Db Export Service', () => {
+describe('Export Service', () => {
   let SchemaExportServiceStub
   let notifierStub
 
@@ -32,7 +32,7 @@ describe('Db Export Service', () => {
   it('calls the SchemaExportService with the different schema names', async () => {
     const schemaNames = ['water', 'returns', 'crm', 'crm_v2', 'idm', 'permit']
 
-    await DbExportService.go()
+    await ExportService.go()
 
     const allArgs = SchemaExportServiceStub.getCalls().flatMap((call) => {
       return call.args
@@ -42,7 +42,7 @@ describe('Db Export Service', () => {
   })
 
   it('logs the time taken to export the db', async () => {
-    await DbExportService.go()
+    await ExportService.go()
 
     const args = notifierStub.omg.firstCall.args
 
