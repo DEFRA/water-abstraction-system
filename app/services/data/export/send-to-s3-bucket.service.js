@@ -9,7 +9,7 @@ const fsPromises = require('fs').promises
 const path = require('path')
 const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
 
-const S3Config = require('../../../config/s3.config.js')
+const S3Config = require('../../../../config/s3.config.js')
 
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives

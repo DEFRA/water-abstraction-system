@@ -12,7 +12,7 @@ const { expect } = Code
 const tar = require('tar')
 
 // Thing under test
-const CompressSchemaFolderService = require('../../../app/services/db-export/compress-schema-folder.service.js')
+const CompressSchemaFolderService = require('../../../../app/services/data/export/compress-schema-folder.service.js')
 
 describe('Compress schema folder service', () => {
   let tarCreateStub

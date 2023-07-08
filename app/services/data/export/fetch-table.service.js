@@ -5,7 +5,7 @@
  * @module FetchTableService
  */
 
-const { db } = require('../../../db/db.js')
+const { db } = require('../../../../db/db.js')
 
 /**
  * Retrieves headers, rows and the table name from the table in the db, and returns them as an object

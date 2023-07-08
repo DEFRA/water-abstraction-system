@@ -9,14 +9,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const CompressSchemaFolderService = require('../../../app/services/db-export/compress-schema-folder.service.js')
-const DeleteFilesService = require('../../../app/services/db-export/delete-files.service.js')
-const ExportTableService = require('../../../app/services/db-export/export-table.service.js')
-const FetchTableNamesService = require('../../../app/services/db-export/fetch-table-names.service.js')
-const SendToS3BucketService = require('../../../app/services/db-export/send-to-s3-bucket.service.js')
+const CompressSchemaFolderService = require('../../../../app/services/data/export/compress-schema-folder.service.js')
+const DeleteFilesService = require('../../../../app/services/data/export/delete-files.service.js')
+const ExportTableService = require('../../../../app/services/data/export/export-table.service.js')
+const FetchTableNamesService = require('../../../../app/services/data/export/fetch-table-names.service.js')
+const SendToS3BucketService = require('../../../../app/services/data/export/send-to-s3-bucket.service.js')
 
 // Thing under test
-const SchemaExportService = require('../../../app/services/db-export/schema-export.service.js')
+const SchemaExportService = require('../../../../app/services/data/export/schema-export.service.js')
 
 describe('Schema export service', () => {
   let FetchTableNamesServiceStub

@@ -5,7 +5,7 @@
  * @module DbExportService
  */
 
-const SchemaExportService = require('../db-export/schema-export.service.js')
+const SchemaExportService = require('./schema-export.service.js')
 
 /**
  * Calls SchemaExportService giving it a schemaName
