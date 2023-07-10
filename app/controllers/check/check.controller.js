@@ -7,11 +7,11 @@
 
 const Boom = require('@hapi/boom')
 
-const TwoPartService = require('../../services/check/two-part.service.js')
+const CheckTwoPartService = require('../../services/check/two-part.service.js')
 
 async function twoPart (request, h) {
   try {
-    const result = await TwoPartService.go(request.params.naldRegionId)
+    const result = await CheckTwoPartService.go(request.params.naldRegionId)
 
     return h.response(result).code(200)
   } catch (error) {
