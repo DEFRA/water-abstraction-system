@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const NewBillingBatchService = require('../../../app/services/supplementary-billing/new-billing-batch.service.js')
+const NewBillingBatchService = require('../../../app/services/billing/supplementary/new-billing-batch.service.js')
 const Boom = require('@hapi/boom')
 
 // For running our service
