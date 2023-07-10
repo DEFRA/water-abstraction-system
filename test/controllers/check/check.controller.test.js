@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Things we need to stub
+const TwoPartService = require('../../../app/services/check/two-part.service.js')
+
 // For running our service
 const { init } = require('../../../app/server.js')
 
@@ -30,17 +33,38 @@ describe('Check controller', () => {
     Sinon.restore()
   })
 
-  describe('POST /check/two-part', () => {
+  describe('GET /check/two-part', () => {
     const options = {
-      method: 'POST',
-      url: '/check/two-part'
+      method: 'GET',
+      url: '/check/two-part/9'
     }
 
     describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(TwoPartService, 'go').resolves({ regionName: 'Fantasia' })
+      })
+
       it('displays the correct message', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(204)
+        const responsePayload = JSON.parse(response.payload)
+
+        expect(response.statusCode).to.equal(200)
+        expect(responsePayload).to.equal({ regionName: 'Fantasia' })
+      })
+    })
+
+    describe('when the request fails', () => {
+      describe('because the TwoPartService errors', () => {
+        beforeEach(async () => {
+          Sinon.stub(TwoPartService, 'go').rejects()
+        })
+
+        it('returns a 500 status', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(500)
+        })
       })
     })
   })
