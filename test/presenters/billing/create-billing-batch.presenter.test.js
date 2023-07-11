@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CreateBillingBatchPresenter = require('../../../app/presenters/supplementary-billing/create-billing-batch.presenter.js')
+const CreateBillingBatchPresenter = require('../../../app/presenters/billing/create-billing-batch.presenter.js')
 
 describe('Create Billing Batch presenter', () => {
   let data

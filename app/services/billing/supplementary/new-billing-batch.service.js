@@ -6,7 +6,7 @@
  */
 
 const BillingPeriodsService = require('./billing-periods.service.js')
-const CreateBillingBatchPresenter = require('../../../presenters/supplementary-billing/create-billing-batch.presenter.js')
+const CreateBillingBatchPresenter = require('../../../presenters/billing/create-billing-batch.presenter.js')
 const InitiateBillingBatchService = require('./initiate-billing-batch.service.js')
 const ProcessBillingBatchService = require('./process-billing-batch.service.js')
 

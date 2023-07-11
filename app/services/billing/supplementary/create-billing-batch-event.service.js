@@ -5,7 +5,7 @@
  * @module CreateBillingBatchEventService
  */
 
-const CreateBillingBatchEventPresenter = require('../../../presenters/supplementary-billing/create-billing-batch-event.presenter.js')
+const CreateBillingBatchEventPresenter = require('../../../presenters/billing/create-billing-batch-event.presenter.js')
 const EventModel = require('../../../models/water/event.model.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 
