@@ -5,13 +5,13 @@
  * @module NewBillingBatchService
  */
 
-const BillingPeriodsService = require('./billing-periods.service.js')
+const DetermineBillingPeriodsService = require('../determine-billing-periods.service.js')
 const CreateBillingBatchPresenter = require('../../../presenters/billing/create-billing-batch.presenter.js')
 const InitiateBillingBatchService = require('./initiate-billing-batch.service.js')
 const ProcessBillingBatchService = require('./process-billing-batch.service.js')
 
 async function go (regionId, userEmail) {
-  const billingPeriods = BillingPeriodsService.go()
+  const billingPeriods = DetermineBillingPeriodsService.go()
   const financialYearEndings = _financialYearEndings(billingPeriods)
 
   const billingBatch = await InitiateBillingBatchService.go(financialYearEndings, regionId, userEmail)

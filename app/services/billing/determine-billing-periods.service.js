@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Calculates billing periods needed when generating a SROC supplementary bill run
- * @module BillingPeriodsService
+ * Determine the billing periods needed when generating an SROC supplementary bill run
+ * @module DetermineBillingPeriodsService
  */
 
 /**
- * Returns the billing periods needed when generating a SROC supplementary bill run
+ * Returns the billing periods needed when generating an SROC supplementary bill run
  *
  * Using the current date at the time the service is called, it calculates the billing periods to use. As we permit
  * changes to charge versions to be retroactively applied for up to 5 years. This service will calculate the billing

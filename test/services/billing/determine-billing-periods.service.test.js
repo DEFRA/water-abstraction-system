@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const BillingPeriodsService = require('../../../../app/services/billing/supplementary/billing-periods.service.js')
+const DetermineBillingPeriodsService = require('../../../app/services/billing/determine-billing-periods.service.js')
 
 describe('Billing Periods service', () => {
   let clock
@@ -33,7 +33,7 @@ describe('Billing Periods service', () => {
     })
 
     it('returns the expected date range', () => {
-      const result = BillingPeriodsService.go()
+      const result = DetermineBillingPeriodsService.go()
 
       expect(result).to.have.length(1)
       expect(result[0]).to.equal(expectedResult)
@@ -52,7 +52,7 @@ describe('Billing Periods service', () => {
     })
 
     it('returns the expected date range', () => {
-      const result = BillingPeriodsService.go()
+      const result = DetermineBillingPeriodsService.go()
 
       expect(result).to.have.length(1)
       expect(result[0]).to.equal(expectedResult)
@@ -77,7 +77,7 @@ describe('Billing Periods service', () => {
     })
 
     it('returns the expected date range', () => {
-      const result = BillingPeriodsService.go()
+      const result = DetermineBillingPeriodsService.go()
 
       expect(result).to.have.length(2)
       expect(result).to.equal(expectedResult)
@@ -118,7 +118,7 @@ describe('Billing Periods service', () => {
     })
 
     it('returns the expected date range', () => {
-      const result = BillingPeriodsService.go()
+      const result = DetermineBillingPeriodsService.go()
 
       expect(result).to.have.length(6)
       expect(result).to.equal(expectedResult)

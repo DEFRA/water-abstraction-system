@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const BillingPeriodsService = require('../../../../app/services/billing/supplementary/billing-periods.service.js')
+const DetermineBillingPeriodsService = require('../../../../app/services/billing/determine-billing-periods.service.js')
 const InitiateBillingBatchService = require('../../../../app/services/billing/supplementary/initiate-billing-batch.service.js')
 const ProcessBillingBatchService = require('../../../../app/services/billing/supplementary/process-billing-batch.service.js')
 
@@ -49,7 +49,7 @@ describe('New billing batch service', () => {
         { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
       ]
 
-      Sinon.stub(BillingPeriodsService, 'go').returns(billingPeriods)
+      Sinon.stub(DetermineBillingPeriodsService, 'go').returns(billingPeriods)
     })
 
     it('initiates a new billing batch', async () => {
@@ -81,7 +81,7 @@ describe('New billing batch service', () => {
 
   describe('when calling the service fails', () => {
     beforeEach(() => {
-      Sinon.stub(BillingPeriodsService, 'go').throws()
+      Sinon.stub(DetermineBillingPeriodsService, 'go').throws()
     })
 
     it('throws an error', async () => {
