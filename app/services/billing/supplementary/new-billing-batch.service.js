@@ -7,14 +7,14 @@
 
 const DetermineBillingPeriodsService = require('../determine-billing-periods.service.js')
 const CreateBillingBatchPresenter = require('../../../presenters/billing/create-billing-batch.presenter.js')
-const InitiateBillingBatchService = require('./initiate-billing-batch.service.js')
+const InitiateBillingBatchService = require('../initiate-billing-batch.service.js')
 const ProcessBillingBatchService = require('./process-billing-batch.service.js')
 
 async function go (regionId, userEmail) {
   const billingPeriods = DetermineBillingPeriodsService.go()
   const financialYearEndings = _financialYearEndings(billingPeriods)
 
-  const billingBatch = await InitiateBillingBatchService.go(financialYearEndings, regionId, userEmail)
+  const billingBatch = await InitiateBillingBatchService.go(financialYearEndings, regionId, 'supplementary', userEmail)
 
   // We do not `await` the billing batch being processed so we can leave it to run in the background while we return an immediate response
   ProcessBillingBatchService.go(billingBatch, billingPeriods)

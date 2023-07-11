@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const DetermineBillingPeriodsService = require('../../../../app/services/billing/determine-billing-periods.service.js')
-const InitiateBillingBatchService = require('../../../../app/services/billing/supplementary/initiate-billing-batch.service.js')
+const InitiateBillingBatchService = require('../../../../app/services/billing/initiate-billing-batch.service.js')
 const ProcessBillingBatchService = require('../../../../app/services/billing/supplementary/process-billing-batch.service.js')
 
 // Thing under test

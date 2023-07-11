@@ -5,12 +5,12 @@
  * @module InitiateBillingBatchService
  */
 
-const BillingBatchModel = require('../../../models/water/billing-batch.model.js')
-const ChargingModuleCreateBillRunService = require('../../charging-module/create-bill-run.service.js')
-const CheckLiveBillRunService = require('../check-live-bill-run.service.js')
-const CreateBillingBatchService = require('../create-billing-batch.service.js')
-const CreateBillingBatchEventService = require('../create-billing-batch-event.service.js')
-const ExpandedError = require('../../../errors/expanded.error.js')
+const BillingBatchModel = require('../../models/water/billing-batch.model.js')
+const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
+const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
+const CreateBillingBatchService = require('./create-billing-batch.service.js')
+const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
+const ExpandedError = require('../../errors/expanded.error.js')
 
 /**
  * Initiate a new billing batch
@@ -18,13 +18,15 @@ const ExpandedError = require('../../../errors/expanded.error.js')
  * Initiating a new billing batch means creating both the `billing_batch` and `event` record with the appropriate data,
  * along with a bill run record in the SROC Charging Module API.
  *
+ * @param {Object} financialYearEndings Object that contains the from and to financial year endings
  * @param {String} regionId Id of the region the bill run is for
+ * @param {String} batchType Type of bill run, for example, supplementary
  * @param {String} userEmail Email address of the user who initiated the bill run
  *
  * @returns {module:BillingBatchModel} The newly created billing batch instance
  */
-async function go (financialYearEndings, regionId, userEmail) {
-  const liveBillRunExists = await CheckLiveBillRunService.go(regionId, financialYearEndings.toFinancialYearEnding, 'supplementary')
+async function go (financialYearEndings, regionId, batchType, userEmail) {
+  const liveBillRunExists = await CheckLiveBillRunService.go(regionId, financialYearEndings.toFinancialYearEnding, batchType)
 
   if (liveBillRunExists) {
     throw new ExpandedError('Batch already live for region', { regionId })
@@ -32,7 +34,7 @@ async function go (financialYearEndings, regionId, userEmail) {
 
   const chargingModuleResult = await ChargingModuleCreateBillRunService.go(regionId, 'sroc')
 
-  const billingBatchOptions = _billingBatchOptions(chargingModuleResult)
+  const billingBatchOptions = _billingBatchOptions(chargingModuleResult, batchType)
   const billingBatch = await CreateBillingBatchService.go(regionId, financialYearEndings, billingBatchOptions)
 
   await CreateBillingBatchEventService.go(billingBatch, userEmail)
@@ -40,10 +42,10 @@ async function go (financialYearEndings, regionId, userEmail) {
   return billingBatch
 }
 
-function _billingBatchOptions (chargingModuleResult) {
+function _billingBatchOptions (chargingModuleResult, batchType) {
   const options = {
-    scheme: 'sroc',
-    batchType: 'supplementary'
+    batchType,
+    scheme: 'sroc'
   }
 
   if (chargingModuleResult.succeeded) {
