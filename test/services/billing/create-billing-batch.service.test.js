@@ -8,13 +8,13 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchModel = require('../../../../app/models/water/billing-batch.model.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const RegionHelper = require('../../../support/helpers/water/region.helper.js')
-const RegionModel = require('../../../../app/models/water/region.model.js')
+const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const RegionHelper = require('../../support/helpers/water/region.helper.js')
+const RegionModel = require('../../../app/models/water/region.model.js')
 
 // Thing under test
-const CreateBillingBatchService = require('../../../../app/services/billing/supplementary/create-billing-batch.service.js')
+const CreateBillingBatchService = require('../../../app/services/billing/create-billing-batch.service.js')
 
 describe('Create Billing Batch service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }

@@ -5,7 +5,7 @@
  * @module CreateBillingBatchService
  */
 
-const BillingBatchModel = require('../../../models/water/billing-batch.model.js')
+const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 
 /**
  * Create a new billing batch
