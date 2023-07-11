@@ -16,7 +16,7 @@ const RegionHelper = require('../../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleCreateBillRunService = require('../../../../app/services/charging-module/create-bill-run.service.js')
-const CheckLiveBillRunService = require('../../../../app/services/billing/supplementary/check-live-bill-run.service.js')
+const CheckLiveBillRunService = require('../../../../app/services/billing/check-live-bill-run.service.js')
 const ProcessBillingBatchService = require('../../../../app/services/billing/supplementary/process-billing-batch.service.js')
 
 // Thing under test
@@ -131,7 +131,7 @@ describe('Initiate Billing Batch service', () => {
       })
     })
 
-    describe('because a bill run already exists for this region and financial year', () => {
+    describe('because a bill run already exists for this region, financial year and type', () => {
       beforeEach(() => {
         CheckLiveBillRunService.go.resolves(true)
       })

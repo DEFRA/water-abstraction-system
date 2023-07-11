@@ -5,7 +5,7 @@
  * @module CheckLiveBillRunService
  */
 
-const BillingBatchModel = require('../../../models/water/billing-batch.model.js')
+const BillingBatchModel = require('../../models/water/billing-batch.model.js')
 
 const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
 
@@ -16,17 +16,18 @@ const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
  *
  * @param {String} regionId The id of the region to be checked
  * @param {Number} toFinancialYearEnding The financial year to be checked
+ * @param {String} batchType The billing batch type to be checked
  *
  * @returns {Boolean} Whether a "live" bill run exists
  */
-async function go (regionId, toFinancialYearEnding) {
+async function go (regionId, toFinancialYearEnding, batchType) {
   const numberOfLiveBillRuns = await BillingBatchModel.query()
     .select(1)
     .where({
       regionId,
       toFinancialYearEnding,
-      scheme: 'sroc',
-      batchType: 'supplementary'
+      batchType,
+      scheme: 'sroc'
     })
     .whereIn('status', LIVE_STATUSES)
     .resultSize()
