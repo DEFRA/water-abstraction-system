@@ -9,20 +9,21 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchModel = require('../../../../app/models/water/billing-batch.model.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const EventModel = require('../../../../app/models/water/event.model.js')
-const RegionHelper = require('../../../support/helpers/water/region.helper.js')
+const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const EventModel = require('../../../app/models/water/event.model.js')
+const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
-const ChargingModuleCreateBillRunService = require('../../../../app/services/charging-module/create-bill-run.service.js')
-const CheckLiveBillRunService = require('../../../../app/services/billing/supplementary/check-live-bill-run.service.js')
-const ProcessBillingBatchService = require('../../../../app/services/billing/supplementary/process-billing-batch.service.js')
+const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
+const CheckLiveBillRunService = require('../../../app/services/billing/check-live-bill-run.service.js')
+const ProcessBillingBatchService = require('../../../app/services/billing/supplementary/process-billing-batch.service.js')
 
 // Thing under test
-const InitiateBillingBatchService = require('../../../../app/services/billing/supplementary/initiate-billing-batch.service.js')
+const InitiateBillingBatchService = require('../../../app/services/billing/initiate-billing-batch.service.js')
 
 describe('Initiate Billing Batch service', () => {
+  const batchType = 'supplementary'
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
   const user = 'test.user@defra.gov.uk'
   let regionId
@@ -67,7 +68,7 @@ describe('Initiate Billing Batch service', () => {
     })
 
     it('creates a new billing batch record', async () => {
-      await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
+      await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
 
       const result = await BillingBatchModel.query().limit(1).first()
 
@@ -76,7 +77,7 @@ describe('Initiate Billing Batch service', () => {
     })
 
     it('creates a new event record', async () => {
-      await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
+      await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
 
       const count = await EventModel.query().resultSize()
 
@@ -84,7 +85,7 @@ describe('Initiate Billing Batch service', () => {
     })
 
     it('returns the new billing batch', async () => {
-      const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
+      const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
 
       const billingBatch = await BillingBatchModel.query().first()
 
@@ -118,7 +119,7 @@ describe('Initiate Billing Batch service', () => {
       })
 
       it('creates a bill run with `error` status and error code 50', async () => {
-        const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, user)
+        const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
 
         const billingBatch = await BillingBatchModel.query().limit(1).first()
 
@@ -131,13 +132,13 @@ describe('Initiate Billing Batch service', () => {
       })
     })
 
-    describe('because a bill run already exists for this region and financial year', () => {
+    describe('because a bill run already exists for this region, financial year and type', () => {
       beforeEach(() => {
         CheckLiveBillRunService.go.resolves(true)
       })
 
       it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(financialYearEndings, regionId, user)).to.reject()
+        const err = await expect(InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)).to.reject()
 
         expect(err).to.be.an.error()
         expect(err.message).to.equal('Batch already live for region')

@@ -5,7 +5,7 @@
  * @module SupplementaryDataService
  */
 
-const FetchRegionService = require('../billing/supplementary/fetch-region.service.js')
+const FetchRegionService = require('../billing/fetch-region.service.js')
 
 async function go (naldRegionId) {
   const region = await FetchRegionService.go(naldRegionId)

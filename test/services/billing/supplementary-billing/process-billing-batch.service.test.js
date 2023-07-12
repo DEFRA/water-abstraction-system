@@ -25,9 +25,9 @@ const ReissueInvoicesService = require('../../../../app/services/billing/supplem
 const UnflagUnbilledLicencesService = require('../../../../app/services/billing/supplementary/unflag-unbilled-licences.service.js')
 
 // Thing under test
-const ProcessBillingBatchService = require('../../../../app/services/billing/supplementary/process-billing-batch.service.js')
+const SupplementaryProcessBillingBatchService = require('../../../../app/services/billing/supplementary/process-billing-batch.service.js')
 
-describe('Process billing batch service', () => {
+describe('Supplementary Process billing batch service', () => {
   const billingPeriods = [
     { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
     { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
@@ -80,7 +80,7 @@ describe('Process billing batch service', () => {
         })
 
         it('sets the Billing Batch status to empty', async () => {
-          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+          await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
           const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
@@ -94,7 +94,7 @@ describe('Process billing batch service', () => {
         })
 
         it('sets the Billing Batch status to processing', async () => {
-          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+          await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
           const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
@@ -110,7 +110,7 @@ describe('Process billing batch service', () => {
       })
 
       it('sets the Billing Batch status to processing', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         const result = await BillingBatchModel.query().findById(billingBatch.billingBatchId)
 
@@ -118,19 +118,19 @@ describe('Process billing batch service', () => {
       })
 
       it("tells the charging module API to 'generate' the bill run", async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         expect(chargingModuleGenerateServiceStub.called).to.be.true()
       })
 
       it('tells the legacy service to start its refresh job', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         expect(legacyRequestLibStub.called).to.be.true()
       })
 
       it('it logs the time taken', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -156,7 +156,7 @@ describe('Process billing batch service', () => {
       })
 
       it('calls HandleErroredBillingBatchService with appropriate error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -164,7 +164,7 @@ describe('Process billing batch service', () => {
       })
 
       it('logs the error', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -187,7 +187,7 @@ describe('Process billing batch service', () => {
         })
 
         it('calls HandleErroredBillingBatchService with the error code', async () => {
-          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+          await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
           const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -195,7 +195,7 @@ describe('Process billing batch service', () => {
         })
 
         it('logs the error', async () => {
-          await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+          await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
           const args = notifierStub.omfg.firstCall.args
 
@@ -219,7 +219,7 @@ describe('Process billing batch service', () => {
       })
 
       it('calls HandleErroredBillingBatchService without an error code', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         const handlerArgs = handleErroredBillingBatchStub.firstCall.args
 
@@ -227,7 +227,7 @@ describe('Process billing batch service', () => {
       })
 
       it('logs the error', async () => {
-        await ProcessBillingBatchService.go(billingBatch, billingPeriods)
+        await SupplementaryProcessBillingBatchService.go(billingBatch, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 
