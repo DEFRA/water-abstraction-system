@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Process a given billing batch for the given billing periods
+ * Process a given supplementary billing batch for the given billing periods
  * @module ProcessBillingBatchService
  */
 
