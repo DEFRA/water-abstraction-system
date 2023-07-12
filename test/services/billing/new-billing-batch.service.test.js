@@ -9,12 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const DetermineBillingPeriodsService = require('../../../../app/services/billing/determine-billing-periods.service.js')
-const InitiateBillingBatchService = require('../../../../app/services/billing/initiate-billing-batch.service.js')
-const ProcessBillingBatchService = require('../../../../app/services/billing/supplementary/process-billing-batch.service.js')
+const DetermineBillingPeriodsService = require('../../../app/services/billing/determine-billing-periods.service.js')
+const InitiateBillingBatchService = require('../../../app/services/billing/initiate-billing-batch.service.js')
+const SupplementaryProcessBillingBatchService = require('../../../app/services/billing/supplementary/process-billing-batch.service.js')
+const TwoPartTariffProcessBillingBatchService = require('../../../app/services/billing/two-part-tariff/process-billing-batch.service.js')
 
 // Thing under test
-const NewBillingBatchService = require('../../../../app/services/billing/supplementary/new-billing-batch.service.js')
+const NewBillingBatchService = require('../../../app/services/billing/new-billing-batch.service.js')
 
 describe('New billing batch service', () => {
   const regionId = '3b24cc01-19c5-4654-8ef6-24ddb4c8dcdf'
@@ -30,13 +31,7 @@ describe('New billing batch service', () => {
     errorCode: null
   }
 
-  let initiateBillingBatchStub
-  let processBillingBatchStub
-
-  beforeEach(async () => {
-    initiateBillingBatchStub = Sinon.stub(InitiateBillingBatchService, 'go').resolves(billingBatch)
-    processBillingBatchStub = Sinon.stub(ProcessBillingBatchService, 'go')
-  })
+  let batchType
 
   afterEach(async () => {
     Sinon.restore()
@@ -52,30 +47,84 @@ describe('New billing batch service', () => {
       Sinon.stub(DetermineBillingPeriodsService, 'go').returns(billingPeriods)
     })
 
-    it('initiates a new billing batch', async () => {
-      await NewBillingBatchService.go(regionId, userEmail)
+    describe("and the bill batch type is 'supplementary'", () => {
+      beforeEach(async () => {
+        batchType = 'supplementary'
 
-      const financialYearEndings = initiateBillingBatchStub.firstCall.args[0]
+        const supplementaryBillingBatch = {
+          ...billingBatch,
+          batchType
+        }
+        Sinon.stub(InitiateBillingBatchService, 'go').resolves(supplementaryBillingBatch)
 
-      expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+        Sinon.stub(SupplementaryProcessBillingBatchService, 'go')
+      })
+
+      it('initiates a new billing batch', async () => {
+        await NewBillingBatchService.go(regionId, batchType, userEmail)
+
+        const financialYearEndings = InitiateBillingBatchService.go.firstCall.args[0]
+
+        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+      })
+
+      it('returns a response containing details of the new billing batch', async () => {
+        const result = await NewBillingBatchService.go(regionId, userEmail)
+
+        expect(result.id).to.equal(billingBatch.billingBatchId)
+        expect(result.region).to.equal(billingBatch.regionId)
+        expect(result.scheme).to.equal(billingBatch.scheme)
+        expect(result.batchType).to.equal(batchType)
+        expect(result.status).to.equal(billingBatch.status)
+        expect(result.externalId).to.equal(billingBatch.externalId)
+        expect(result.errorCode).to.equal(billingBatch.errorCode)
+      })
+
+      it('starts processing the batch', async () => {
+        await NewBillingBatchService.go(regionId, userEmail)
+
+        expect(SupplementaryProcessBillingBatchService.go.called).to.be.true()
+      })
     })
 
-    it('starts processing the batch', async () => {
-      await NewBillingBatchService.go(regionId, userEmail)
+    describe("and the bill batch type is 'two part tariff'", () => {
+      beforeEach(async () => {
+        batchType = 'two_part_tariff'
 
-      expect(processBillingBatchStub.called).to.be.true()
-    })
+        const twoPartTariffBillingBatch = {
+          ...billingBatch,
+          batchType
+        }
+        Sinon.stub(InitiateBillingBatchService, 'go').resolves(twoPartTariffBillingBatch)
 
-    it('returns a response containing details of the new billing batch', async () => {
-      const result = await NewBillingBatchService.go(regionId, userEmail)
+        Sinon.stub(TwoPartTariffProcessBillingBatchService, 'go')
+      })
 
-      expect(result.id).to.equal(billingBatch.billingBatchId)
-      expect(result.region).to.equal(billingBatch.regionId)
-      expect(result.scheme).to.equal(billingBatch.scheme)
-      expect(result.batchType).to.equal(billingBatch.batchType)
-      expect(result.status).to.equal(billingBatch.status)
-      expect(result.externalId).to.equal(billingBatch.externalId)
-      expect(result.errorCode).to.equal(billingBatch.errorCode)
+      it('initiates a new billing batch', async () => {
+        await NewBillingBatchService.go(regionId, userEmail)
+
+        const financialYearEndings = InitiateBillingBatchService.go.firstCall.args[0]
+
+        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+      })
+
+      it('returns a response containing details of the new billing batch', async () => {
+        const result = await NewBillingBatchService.go(regionId, batchType, userEmail)
+
+        expect(result.id).to.equal(billingBatch.billingBatchId)
+        expect(result.region).to.equal(billingBatch.regionId)
+        expect(result.scheme).to.equal(billingBatch.scheme)
+        expect(result.batchType).to.equal(batchType)
+        expect(result.status).to.equal(billingBatch.status)
+        expect(result.externalId).to.equal(billingBatch.externalId)
+        expect(result.errorCode).to.equal(billingBatch.errorCode)
+      })
+
+      it('starts processing the batch', async () => {
+        await NewBillingBatchService.go(regionId, userEmail)
+
+        expect(TwoPartTariffProcessBillingBatchService.go.called).to.be.true()
+      })
     })
   })
 
