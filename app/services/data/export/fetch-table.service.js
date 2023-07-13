@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Fetch all records from the table provided
+ * Fetch the table headers and returns them alongside a db knex query to retrieve a full table
  * @module FetchTableService
  */
 
-const { db } = require('../../../../db/db.js')
+const { db } = require('../../../db/db.js')
 
 /**
- * Retrieves headers, rows and the table name from the table in the db, and returns them as an object
+ * Retrieves headers, a knex query for the table rows and the table name from the table in the db, and returns them as an object
  * @param {String} tableName The name of the table to retrieve
  * @param {string} schemaName The schema that the table belongs to
  *
- * @returns {Object} The headers, rows and table name from the table
+ * @returns {Object} The headers, query and table name from the table
  */
 async function go (tableName, schemaName) {
   const data = {
@@ -25,16 +25,12 @@ async function go (tableName, schemaName) {
 }
 
 async function _rows (tableName, schemaName) {
-  // Retrieves all rows from the table
-  const rows = await db
+  // Retrieves the input streams query
+  return db
     .withSchema(schemaName)
     .select('*')
     .from(tableName)
-
-  // We are only interested in the values from the table
-  return rows.map((row) => {
-    return Object.values(row)
-  })
+    .stream()
 }
 
 async function _headers (tableName, schemaName) {
