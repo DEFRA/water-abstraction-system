@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Streams data to a file transforming it to CSV format in the process
+ * Export converted data to a temporary file
  * @module WriteStreamToFileService
  */
 
@@ -15,7 +15,8 @@ const ConvertToCSVService = require('./convert-to-csv.service')
 
 /**
  * Converts data into CSV format and writes it to a file
- * @param {*} data The knex query to fetch the table
+ *
+ * @param {Object} data The knex query to fetch the table
  * @param {String} schemaFolderPath The folder path of the schema
  */
 async function go (data, schemaFolderPath) {
