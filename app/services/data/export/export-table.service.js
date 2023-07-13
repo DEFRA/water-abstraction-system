@@ -6,7 +6,7 @@
  */
 
 const FetchTableService = require('./fetch-table.service.js')
-const WriteStreamToFileService = require('./stream-data-to-file.service.js')
+const WriteStreamToFileService = require('./write-stream-to-file.service.js')
 
 /**
  * Exports a database table
