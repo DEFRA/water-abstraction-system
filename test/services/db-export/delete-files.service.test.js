@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -18,10 +19,13 @@ const DeleteFilesService = require('../../../app/services/db-export/delete-files
 describe('Delete Files service', () => {
   let filenameWithPath
   let folderNameWithPath
+  let notifierStub
 
   beforeEach(() => {
     folderNameWithPath = 'testFolder'
     filenameWithPath = path.join(folderNameWithPath, 'testFile')
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
 
     mockFs({
       testFolder: {
@@ -32,6 +36,8 @@ describe('Delete Files service', () => {
 
   afterEach(() => {
     mockFs.restore()
+    Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('When a valid folder is specified', () => {
@@ -72,6 +78,15 @@ describe('Delete Files service', () => {
       const fakeFile = 'FAKE_FILE'
 
       await expect(DeleteFilesService.go(fakeFile)).not.to.reject()
+    })
+  })
+
+  describe('When no file name is given', () => {
+    it('throws an error', async () => {
+      const noFile = false
+      await DeleteFilesService.go(noFile)
+
+      expect(notifierStub.omfg.calledWith(('Delete file service errored'))).to.be.true()
     })
   })
 })

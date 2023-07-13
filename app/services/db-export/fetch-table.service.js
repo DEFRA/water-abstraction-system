@@ -25,16 +25,12 @@ async function go (tableName, schemaName) {
 }
 
 async function _rows (tableName, schemaName) {
-  // Retrieves all rows from the table
-  const rows = await db
+  // Retrieves the input streams query
+  return db
     .withSchema(schemaName)
     .select('*')
     .from(tableName)
-
-  // We are only interested in the values from the table
-  return rows.map((row) => {
-    return Object.values(row)
-  })
+    .stream()
 }
 
 async function _headers (tableName, schemaName) {

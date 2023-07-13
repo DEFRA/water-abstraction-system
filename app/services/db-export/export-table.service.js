@@ -5,9 +5,8 @@
  * @module ExportTableService
  */
 
-const ConvertToCSVService = require('./convert-to-csv.service.js')
-const ExportDataFilesService = require('./export-data-files.service.js')
 const FetchTableService = require('./fetch-table.service.js')
+const StreamDataToFileService = require('./stream-data-to-file.service.js')
 
 /**
  * Exports a database table
@@ -21,9 +20,8 @@ const FetchTableService = require('./fetch-table.service.js')
  */
 async function go (tableName, schemaFolderPath, schemaName) {
   const data = await FetchTableService.go(tableName, schemaName)
-  const tableConvertedToCSV = ConvertToCSVService.go(data.headers, data.rows)
 
-  await ExportDataFilesService.go(tableConvertedToCSV, data.tableName, schemaFolderPath)
+  await StreamDataToFileService.go(data, schemaFolderPath)
 }
 
 module.exports = {

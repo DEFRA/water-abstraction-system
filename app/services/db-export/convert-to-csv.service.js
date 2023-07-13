@@ -13,17 +13,12 @@
  *
  * @returns {String} A CSV formatted string
  */
-function go (headers, rows) {
-  const transformedHeaders = _transformDataToCSV([headers])[0]
-
-  if (!rows) {
-    return transformedHeaders
+function go (data) {
+  if (!data) {
+    return
   }
 
-  const transformedRows = _transformDataToCSV(rows)
-  const dataToCSV = _joinHeaderAndRows(transformedHeaders, transformedRows)
-
-  return dataToCSV
+  return _transformDataToCSV(data)
 }
 
 /**
@@ -33,17 +28,12 @@ function go (headers, rows) {
  *
  * @returns {String[]} An array of transformed data
  */
-function _transformDataToCSV (rows) {
-  const transformedRows = []
+function _transformDataToCSV (row) {
+  const transformedRow = row.map((value) => {
+    return _transformValueToCSV(value)
+  }).join(',')
 
-  rows.forEach((row) => {
-    const transformedRow = row.map((value) => {
-      return _transformValueToCSV(value)
-    }).join(',')
-    transformedRows.push(transformedRow)
-  })
-
-  return transformedRows
+  return transformedRow + '\n'
 }
 
 /**
@@ -71,17 +61,19 @@ function _transformValueToCSV (value) {
 
   // Return objects by serializing them to JSON
   if (typeof value === 'object') {
-    return JSON.stringify(value)
+    const objectToString = JSON.stringify(value)
+
+    const escapedObjectToString = objectToString.replace(/"/g, '""')
+      .replace(/:/g, ': ')
+      .replace(/,/g, ', ')
+
+    return `"${escapedObjectToString}"`
   }
 
   // Return strings by quoting them and escaping any double quotes
   const stringValue = value.toString().replace(/"/g, '""')
 
   return `"${stringValue}"`
-}
-
-function _joinHeaderAndRows (header, rows) {
-  return [header, ...rows].join('\n')
 }
 
 module.exports = {
