@@ -17,6 +17,7 @@ const BillingTransactionHelper = require('../../../support/helpers/water/billing
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Things we need to stub
+const ChargingModuleBillRunStatusService = require('../../../../app/services/charging-module/bill-run-status.service.js')
 const ChargingModuleReissueInvoiceService = require('../../../../app/services/charging-module/reissue-invoice.service.js')
 const ChargingModuleViewInvoiceService = require('../../../../app/services/charging-module/view-invoice.service.js')
 
@@ -112,6 +113,15 @@ describe('Reissue invoice service', () => {
         succeeded: true,
         response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
       })
+
+    Sinon.stub(ChargingModuleBillRunStatusService, 'go').resolves({
+      succeeded: true,
+      response: {
+        body: {
+          status: 'initialised'
+        }
+      }
+    })
 
     sourceInvoice = await BillingInvoiceHelper.add({
       externalId: INVOICE_EXTERNAL_ID,

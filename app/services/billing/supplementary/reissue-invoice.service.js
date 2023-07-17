@@ -6,6 +6,7 @@
  */
 const { randomUUID } = require('crypto')
 
+const ChargingModuleBillRunStatusService = require('../../charging-module/bill-run-status.service.js')
 const ChargingModuleReissueInvoiceService = require('../../charging-module/reissue-invoice.service.js')
 const ChargingModuleViewInvoiceService = require('../../charging-module/view-invoice.service.js')
 const ExpandedError = require('../../../errors/expanded.error.js')
@@ -54,6 +55,10 @@ async function go (sourceInvoice, reissueBillingBatch) {
     reissueBillingBatch.externalId,
     sourceInvoice.externalId
   )
+
+  // We can't get the reissue invoices right away as the CM might be busy reissuing so we wait until the status
+  // indicated that it's ready for us to proceed
+  await _pauseUntilNotPending(reissueBillingBatch.externalId)
 
   for (const chargingModuleReissueInvoiceId of chargingModuleReissueInvoiceIds) {
     // Because we only have the CM invoice's id we now need to fetch its details via the "view invoice" endpoint
@@ -105,6 +110,41 @@ async function go (sourceInvoice, reissueBillingBatch) {
   await _markSourceInvoiceAsRebilled(sourceInvoice)
 
   return dataToReturn
+}
+
+/**
+ * Once a reissue request is sent, we need to wait until it's completed before we can proceed. The CM indicates that
+ * it's busy by setting the status `pending` on a bill run. Once the status is no longer `pending`, the CM has finished
+ * its task.
+ *
+ * This service sends "view status" requests to the CM (every second to avoid bombarding it) until the status is not
+ * `pending`, at which point it returns.
+ */
+async function _pauseUntilNotPending (billingBatchExternalId) {
+  // TODO: Do more complete unit testing for this
+  let status
+
+  do {
+    // If status is set then we know that we've already sent a request, so we wait for a second to ensure we aren't
+    // bombarding the CM with requests
+    if (status) {
+      // Create a new promise that resolves after 1000ms and wait until it's resolved before continuing
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+
+    const result = await ChargingModuleBillRunStatusService.go(billingBatchExternalId)
+
+    if (!result.succeeded) {
+      const error = new ExpandedError(
+        'Charging Module reissue request failed',
+        { billingBatchExternalId }
+      )
+
+      throw error
+    }
+
+    status = result.response.body.status
+  } while (status === 'pending')
 }
 
 /**
