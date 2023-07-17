@@ -164,9 +164,11 @@ function _generateTransaction (chargingModuleReissueTransaction, sourceTransacti
   }
 }
 
-// The Charging Module always returns a positive value for net amount whereas our db has a positive amount for debits
-// and a negative value for credits. We therefore use the CM charge value and credit flag to determine whether our net
-// amount should be positive or negative
+/**
+ * The Charging Module always returns a positive value for net amount whereas our db has a positive amount for debits
+ * and a negative value for credits. We therefore use the CM charge value and credit flag to determine whether our net
+ * amount should be positive or negative
+ */
 function _determineSignOfNetAmount (chargeValue, credit) {
   return credit ? -chargeValue : chargeValue
 }
