@@ -143,12 +143,14 @@ describe('Reissue invoice service', () => {
 
     await BillingTransactionHelper.add({
       billingInvoiceLicenceId: sourceInvoiceLicences[0].billingInvoiceLicenceId,
-      externalId: INVOICE_LICENCE_1_TRANSACTION_ID
+      externalId: INVOICE_LICENCE_1_TRANSACTION_ID,
+      purposes: { test: 'TEST' }
     })
 
     await BillingTransactionHelper.add({
       billingInvoiceLicenceId: sourceInvoiceLicences[1].billingInvoiceLicenceId,
-      externalId: INVOICE_LICENCE_2_TRANSACTION_ID
+      externalId: INVOICE_LICENCE_2_TRANSACTION_ID,
+      purposes: { test: 'TEST' }
     })
 
     // Refresh sourceInvoice to include billing invoice licences and transactions, as expected by the service
