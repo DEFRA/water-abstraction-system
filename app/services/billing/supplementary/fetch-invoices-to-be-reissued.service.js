@@ -20,6 +20,7 @@ async function go (regionId) {
       .select(
         'billingInvoiceId',
         'billingInvoices.externalId',
+        'financialYearEnding',
         'invoiceAccountId',
         'invoiceAccountNumber',
         'originalBillingInvoiceId'
