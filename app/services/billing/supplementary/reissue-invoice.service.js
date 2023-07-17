@@ -246,7 +246,7 @@ async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
   }
 
   // The CM returns a few bits of info but we only need the id
-  return result.response.invoices.map((invoice) => {
+  return result.response.body.invoices.map((invoice) => {
     return invoice.id
   })
 }
@@ -263,7 +263,7 @@ async function _sendViewInvoiceRequest (billingBatch, reissueInvoiceId) {
     throw error
   }
 
-  return result.response.invoice
+  return result.response.body.invoice
 }
 
 module.exports = {

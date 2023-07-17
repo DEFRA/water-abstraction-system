@@ -60,7 +60,7 @@ const CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE = {
   }
 }
 
-const CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
+const CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
   invoice: {
     id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
     billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
@@ -83,7 +83,6 @@ const CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
       }
     ]
   }
-
 }
 
 describe('Reissue invoice service', () => {
@@ -99,19 +98,19 @@ describe('Reissue invoice service', () => {
       .withArgs(reissueBillingBatch.externalId, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
-        response: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE
+        response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
       })
 
     Sinon.stub(ChargingModuleViewInvoiceService, 'go')
       .withArgs(reissueBillingBatch.externalId, CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
-        response: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE
+        response: { body: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE }
       })
-      .withArgs(reissueBillingBatch.externalId, CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE.invoice.id)
+      .withArgs(reissueBillingBatch.externalId, CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
-        response: CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE
+        response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
       })
 
     sourceInvoice = await BillingInvoiceHelper.add({
