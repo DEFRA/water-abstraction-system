@@ -110,5 +110,22 @@ describe('Billing Transaction model', () => {
         })
       ).to.not.reject()
     })
+
+    it('returns an object from a json field regardless of whether the inserted object was stringified first', async () => {
+      const objectTransaction = await BillingTransactionModel.query().insert({
+        ...BillingTransactionHelper.defaults(),
+        purposes: [{ test: 'TEST' }]
+      })
+      const stringifyTransaction = await BillingTransactionModel.query().insert({
+        ...BillingTransactionHelper.defaults(),
+        purposes: JSON.stringify([{ test: 'TEST' }])
+      })
+
+      const objectResult = await BillingTransactionModel.query().findById(objectTransaction.billingTransactionId)
+      const stringifyResult = await BillingTransactionModel.query().findById(stringifyTransaction.billingTransactionId)
+
+      expect(objectResult.purposes).to.equal([{ test: 'TEST' }])
+      expect(stringifyResult.purposes).to.equal([{ test: 'TEST' }])
+    })
   })
 })
