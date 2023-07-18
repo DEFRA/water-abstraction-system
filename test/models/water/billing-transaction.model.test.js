@@ -97,4 +97,35 @@ describe('Billing Transaction model', () => {
       })
     })
   })
+
+  describe('Inserting', () => {
+    // Objection doesn't normally allow us to insert an object directly into a json field unless we stringify it first.
+    // However if we define jsonAttributes in our model with the json fields then we don't need to stringify the object.
+    // This test is therefore to check whether jsonAttributes is correctly working.
+    it('can insert an object directly into a json field', async () => {
+      await expect(
+        BillingTransactionModel.query().insert({
+          ...BillingTransactionHelper.defaults(),
+          purposes: [{ test: 'TEST' }]
+        })
+      ).to.not.reject()
+    })
+
+    it('returns an object from a json field regardless of whether the inserted object was stringified first', async () => {
+      const objectTransaction = await BillingTransactionModel.query().insert({
+        ...BillingTransactionHelper.defaults(),
+        purposes: [{ test: 'TEST' }]
+      })
+      const stringifyTransaction = await BillingTransactionModel.query().insert({
+        ...BillingTransactionHelper.defaults(),
+        purposes: JSON.stringify([{ test: 'TEST' }])
+      })
+
+      const objectResult = await BillingTransactionModel.query().findById(objectTransaction.billingTransactionId)
+      const stringifyResult = await BillingTransactionModel.query().findById(stringifyTransaction.billingTransactionId)
+
+      expect(objectResult.purposes).to.equal([{ test: 'TEST' }])
+      expect(stringifyResult.purposes).to.equal([{ test: 'TEST' }])
+    })
+  })
 })

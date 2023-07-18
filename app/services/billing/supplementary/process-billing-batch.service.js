@@ -36,7 +36,7 @@ async function go (billingBatch, billingPeriods) {
 
     const resultOfReissuing = await _reissueInvoices(billingBatch)
 
-    await _processBillingPeriods(billingPeriods, billingBatch, billingBatchId, resultOfReissuing)
+    await _processBillingPeriods(billingPeriods, billingBatch, resultOfReissuing)
 
     _calculateAndLogTime(billingBatchId, startTime)
   } catch (error) {
@@ -45,7 +45,7 @@ async function go (billingBatch, billingPeriods) {
   }
 }
 
-async function _processBillingPeriods (billingPeriods, billingBatch, billingBatchId, resultOfReissuing) {
+async function _processBillingPeriods (billingPeriods, billingBatch, resultOfReissuing) {
   const accumulatedLicenceIds = []
 
   // We use `results` to check if any db changes have been made (which is indicated by a billing period being processed

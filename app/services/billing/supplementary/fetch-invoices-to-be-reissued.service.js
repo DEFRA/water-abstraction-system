@@ -18,7 +18,9 @@ async function go (regionId) {
   try {
     const result = await BillingInvoiceModel.query()
       .select(
+        'billingInvoiceId',
         'billingInvoices.externalId',
+        'financialYearEnding',
         'invoiceAccountId',
         'invoiceAccountNumber',
         'originalBillingInvoiceId'

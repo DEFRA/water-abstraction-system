@@ -58,7 +58,9 @@ describe('Fetch Invoices To Be Reissued service', () => {
       const result = Object.keys(billingInvoice[0])
 
       expect(result).to.only.include([
+        'billingInvoiceId',
         'externalId',
+        'financialYearEnding',
         'invoiceAccountId',
         'invoiceAccountNumber',
         'billingInvoiceLicences',

@@ -17,6 +17,7 @@ const BillingTransactionHelper = require('../../../support/helpers/water/billing
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Things we need to stub
+const ChargingModuleBillRunStatusService = require('../../../../app/services/charging-module/bill-run-status.service.js')
 const ChargingModuleReissueInvoiceService = require('../../../../app/services/charging-module/reissue-invoice.service.js')
 const ChargingModuleViewInvoiceService = require('../../../../app/services/charging-module/view-invoice.service.js')
 
@@ -60,7 +61,7 @@ const CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE = {
   }
 }
 
-const CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
+const CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
   invoice: {
     id: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[1].id,
     billRunId: ORIGINAL_BILLING_BATCH_EXTERNAL_ID,
@@ -83,7 +84,6 @@ const CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
       }
     ]
   }
-
 }
 
 describe('Reissue invoice service', () => {
@@ -99,20 +99,29 @@ describe('Reissue invoice service', () => {
       .withArgs(reissueBillingBatch.externalId, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
-        response: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE
+        response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
       })
 
     Sinon.stub(ChargingModuleViewInvoiceService, 'go')
       .withArgs(reissueBillingBatch.externalId, CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
-        response: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE
+        response: { body: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE }
       })
-      .withArgs(reissueBillingBatch.externalId, CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE.invoice.id)
+      .withArgs(reissueBillingBatch.externalId, CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
-        response: CHARING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE
+        response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
       })
+
+    Sinon.stub(ChargingModuleBillRunStatusService, 'go').resolves({
+      succeeded: true,
+      response: {
+        body: {
+          status: 'initialised'
+        }
+      }
+    })
 
     sourceInvoice = await BillingInvoiceHelper.add({
       externalId: INVOICE_EXTERNAL_ID,
@@ -134,12 +143,14 @@ describe('Reissue invoice service', () => {
 
     await BillingTransactionHelper.add({
       billingInvoiceLicenceId: sourceInvoiceLicences[0].billingInvoiceLicenceId,
-      externalId: INVOICE_LICENCE_1_TRANSACTION_ID
+      externalId: INVOICE_LICENCE_1_TRANSACTION_ID,
+      purposes: { test: 'TEST' }
     })
 
     await BillingTransactionHelper.add({
       billingInvoiceLicenceId: sourceInvoiceLicences[1].billingInvoiceLicenceId,
-      externalId: INVOICE_LICENCE_2_TRANSACTION_ID
+      externalId: INVOICE_LICENCE_2_TRANSACTION_ID,
+      purposes: { test: 'TEST' }
     })
 
     // Refresh sourceInvoice to include billing invoice licences and transactions, as expected by the service
@@ -211,6 +222,29 @@ describe('Reissue invoice service', () => {
         debits.forEach((transaction) => {
           expect(transaction.netAmount).to.be.above(0)
         })
+      })
+    })
+
+    describe("and the Charging Module's bill run status is `pending`", () => {
+      let billRunStatusStub
+
+      beforeEach(() => {
+        ChargingModuleBillRunStatusService.go.restore()
+
+        billRunStatusStub = Sinon
+          .stub(ChargingModuleBillRunStatusService, 'go')
+          .onFirstCall().resolves({
+            succeeded: true, response: { body: { status: 'pending' } }
+          })
+          .onSecondCall().resolves({
+            succeeded: true, response: { body: { status: 'initialised' } }
+          })
+      })
+
+      it("retries until it's no longer `pending`", async () => {
+        await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
+
+        expect(billRunStatusStub.callCount).to.equal(2)
       })
     })
   })
