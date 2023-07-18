@@ -224,6 +224,29 @@ describe('Reissue invoice service', () => {
         })
       })
     })
+
+    describe("and the Charging Module's bill run status is `pending`", () => {
+      let billRunStatusStub
+
+      beforeEach(() => {
+        ChargingModuleBillRunStatusService.go.restore()
+
+        billRunStatusStub = Sinon
+          .stub(ChargingModuleBillRunStatusService, 'go')
+          .onFirstCall().resolves({
+            succeeded: true, response: { body: { status: 'pending' } }
+          })
+          .onSecondCall().resolves({
+            succeeded: true, response: { body: { status: 'initialised' } }
+          })
+      })
+
+      it("retries until it's no longer `pending`", async () => {
+        await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
+
+        expect(billRunStatusStub.callCount).to.equal(2)
+      })
+    })
   })
 
   describe('and the Charging Module returns an error', () => {

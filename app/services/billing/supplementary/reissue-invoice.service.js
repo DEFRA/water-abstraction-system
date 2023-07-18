@@ -121,7 +121,6 @@ async function go (sourceInvoice, reissueBillingBatch) {
  * `pending`, at which point it returns.
  */
 async function _pauseUntilNotPending (billingBatchExternalId) {
-  // TODO: Do more complete unit testing for this
   let status
 
   do {
@@ -129,7 +128,7 @@ async function _pauseUntilNotPending (billingBatchExternalId) {
     // bombarding the CM with requests
     if (status) {
       // Create a new promise that resolves after 1000ms and wait until it's resolved before continuing
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
     const result = await ChargingModuleBillRunStatusService.go(billingBatchExternalId)
