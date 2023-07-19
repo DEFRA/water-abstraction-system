@@ -101,6 +101,7 @@ describe('Fetch Invoices To Be Reissued service', () => {
         const result = await FetchInvoicesToBeReissuedService.go(billingBatch.regionId)
 
         expect(result).to.have.length(1)
+        expect(result[0].billingInvoiceId).to.equal(billingInvoice.billingInvoiceId)
       })
     })
   })
