@@ -22,6 +22,7 @@ const FetchInvoicesToBeReissuedService = require('../../../../app/services/billi
 describe('Fetch Invoices To Be Reissued service', () => {
   let billingBatch
   let billingInvoice
+  let alcsBillingInvoice
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -30,6 +31,15 @@ describe('Fetch Invoices To Be Reissued service', () => {
     billingInvoice = await BillingInvoiceHelper.add({ billingBatchId: billingBatch.billingBatchId })
     const { billingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoice.billingInvoiceId })
     await BillingTransactionHelper.add({ billingInvoiceLicenceId })
+
+    // Set up a separate billing batch which we will manually patch to be alcs
+    const alcsBillingBatch = await BillingBatchHelper.add()
+    alcsBillingInvoice = await BillingInvoiceHelper.add({ billingBatchId: alcsBillingBatch.billingBatchId })
+    const { billingInvoiceLicenceId: alcsBillingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({
+      billingInvoiceId: alcsBillingInvoice.billingInvoiceId
+    })
+    await BillingTransactionHelper.add({ billingInvoiceLicenceId: alcsBillingInvoiceLicenceId })
+    await alcsBillingBatch.$query().patch({ scheme: 'alcs' })
   })
 
   describe('when there are no billing invoices to be reissued', () => {
@@ -80,6 +90,18 @@ describe('Fetch Invoices To Be Reissued service', () => {
         'licenceId',
         'billingTransactions'
       ])
+    })
+
+    describe('and there are alcs billing invoices to be reissued', () => {
+      beforeEach(async () => {
+        await alcsBillingInvoice.$query().patch({ isFlaggedForRebilling: true })
+      })
+
+      it('returns only sroc billing invoices', async () => {
+        const result = await FetchInvoicesToBeReissuedService.go(billingBatch.regionId)
+
+        expect(result).to.have.length(1)
+      })
     })
   })
 
