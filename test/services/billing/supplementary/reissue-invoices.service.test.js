@@ -74,7 +74,16 @@ describe('Reissue invoices service', () => {
         Sinon.stub(ReissueInvoiceService, 'go').resolves({
           billingInvoices: [BillingInvoiceModel.fromJson(BillingInvoiceHelper.defaults())],
           billingInvoiceLicences: [BillingInvoiceLicenceModel.fromJson(BillingInvoiceLicenceHelper.defaults())],
-          billingTransactions: [BillingTransactionModel.fromJson(BillingTransactionHelper.defaults())]
+          billingTransactions: [BillingTransactionModel.fromJson({
+            ...BillingTransactionHelper.defaults(),
+            purposes: [{
+              chargePurposeId: '01adfc33-4ba9-4215-bbe0-97014730991b',
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4
+            }]
+          })]
         })
       })
 

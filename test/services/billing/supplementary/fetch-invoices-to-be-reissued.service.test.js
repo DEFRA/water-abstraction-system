@@ -58,7 +58,9 @@ describe('Fetch Invoices To Be Reissued service', () => {
       const result = Object.keys(billingInvoice[0])
 
       expect(result).to.only.include([
+        'billingInvoiceId',
         'externalId',
+        'financialYearEnding',
         'invoiceAccountId',
         'invoiceAccountNumber',
         'billingInvoiceLicences',
@@ -78,6 +80,27 @@ describe('Fetch Invoices To Be Reissued service', () => {
         'licenceId',
         'billingTransactions'
       ])
+    })
+
+    describe('and there are alcs billing invoices to be reissued', () => {
+      beforeEach(async () => {
+        const alcsBillingBatch = await BillingBatchHelper.add({ scheme: 'alcs' })
+        const alcsBillingInvoice = await BillingInvoiceHelper.add({
+          billingBatchId: alcsBillingBatch.billingBatchId,
+          isFlaggedForRebilling: true
+        })
+        const { billingInvoiceLicenceId: alcsBillingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({
+          billingInvoiceId: alcsBillingInvoice.billingInvoiceId
+        })
+        await BillingTransactionHelper.add({ billingInvoiceLicenceId: alcsBillingInvoiceLicenceId })
+      })
+
+      it('returns only sroc billing invoices', async () => {
+        const result = await FetchInvoicesToBeReissuedService.go(billingBatch.regionId)
+
+        expect(result).to.have.length(1)
+        expect(result[0].billingInvoiceId).to.equal(billingInvoice.billingInvoiceId)
+      })
     })
   })
 

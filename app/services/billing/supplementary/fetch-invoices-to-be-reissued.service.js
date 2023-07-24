@@ -8,7 +8,7 @@
 const BillingInvoiceModel = require('../../../models/water/billing-invoice.model.js')
 
 /**
- * Takes a region and fetches billing invoices in that region marked for reissuing, along with their transactions
+ * Takes a region and fetches sroc billing invoices in that region marked for reissuing, along with their transactions
  *
  * @param {String} regionId The uuid of the region
  *
@@ -18,7 +18,9 @@ async function go (regionId) {
   try {
     const result = await BillingInvoiceModel.query()
       .select(
+        'billingInvoiceId',
         'billingInvoices.externalId',
+        'financialYearEnding',
         'invoiceAccountId',
         'invoiceAccountNumber',
         'originalBillingInvoiceId'
@@ -26,6 +28,7 @@ async function go (regionId) {
       .where('isFlaggedForRebilling', true)
       .joinRelated('billingBatch')
       .where('billingBatch.regionId', regionId)
+      .where('billingBatch.scheme', 'sroc')
       .withGraphFetched('billingInvoiceLicences.billingTransactions')
       .modifyGraph('billingInvoiceLicences', (builder) => {
         builder.select(
