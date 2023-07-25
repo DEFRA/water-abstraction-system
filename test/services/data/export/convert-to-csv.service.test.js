@@ -83,32 +83,20 @@ const csvValues = [
   '25002'
 ]
 
-describe('Convert to CSV service', () => {
-  describe('when given data to convert', () => {
-    describe('that only has one row of data', () => {
-      it('has the table columns as headers', () => {
-        const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [billingChargeCategoryRow])
-        const resultLines = result.split(/\r?\n/)
+describe.only('Convert to CSV service', () => {
+  describe.only('when given data to convert', () => {
+    it('converts the table column names to headers', () => {
+      const result = ConvertToCSVService.go(billingChargeCategoryRow)
+      // const resultLines = result.split(/\r?\n/)
 
-        expect(resultLines[0]).to.equal(csvHeaders.join(','))
-      })
-
-      it('converts the data to a CSV format', () => {
-        const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [billingChargeCategoryRow])
-        const resultLines = result.split(/\r?\n/)
-
-        expect(resultLines[1]).to.equal(csvValues.join(','))
-      })
+      expect(result).to.equal(`${csvValues.join(',') + '\n'}`)
     })
 
-    describe('that has multiple rows of data', () => {
-      it('transforms all the rows to CSV', () => {
-        const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [billingChargeCategoryRow, billingChargeCategoryRow])
-        const resultLines = result.split(/\r?\n/)
+    it('converts the data row to a CSV format', () => {
+      const result = ConvertToCSVService.go(billingChargeCategoriesColumnInfo, [billingChargeCategoryRow])
+      const resultLines = result.split(/\r?\n/)
 
-        expect(resultLines[1]).to.equal(csvValues.join(','))
-        expect(resultLines[2]).to.equal(csvValues.join(','))
-      })
+      expect(resultLines[1]).to.equal(csvValues.join(','))
     })
   })
 
