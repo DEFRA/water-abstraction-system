@@ -9,22 +9,19 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ConvertToCSVService = require('../../../../app/services/data/export/convert-to-csv.service.js')
-const ExportDataFilesService = require('../../../../app/services/data/export/export-data-files.service.js')
 const FetchTableService = require('../../../../app/services/data/export/fetch-table.service.js')
+const WriteStreamToFileService = require('../../../../app/services/data/export/write-stream-to-file.service.js')
 
 // Thing under test
 const ExportTableService = require('../../../../app/services/data/export/export-table.service.js')
 
 describe('Table Export service', () => {
-  let convertToCSVServiceStub
-  let exportDataFilesServiceStub
   let fetchTableServiceStub
+  let writeStreamToFileServiceStub
 
   beforeEach(async () => {
     fetchTableServiceStub = Sinon.stub(FetchTableService, 'go').resolves({ headers: [], rows: [] })
-    convertToCSVServiceStub = Sinon.stub(ConvertToCSVService, 'go').resolves('csvData')
-    exportDataFilesServiceStub = Sinon.stub(ExportDataFilesService, 'go').resolves('filePath')
+    writeStreamToFileServiceStub = Sinon.stub(WriteStreamToFileService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -34,8 +31,7 @@ describe('Table Export service', () => {
   it('runs the db export services', async () => {
     await ExportTableService.go()
 
-    expect(convertToCSVServiceStub.called).to.be.true()
-    expect(exportDataFilesServiceStub.called).to.be.true()
+    expect(writeStreamToFileServiceStub.called).to.be.true()
     expect(fetchTableServiceStub.called).to.be.true()
   })
 })

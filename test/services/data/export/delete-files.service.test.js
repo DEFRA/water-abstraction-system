@@ -16,7 +16,7 @@ const mockFs = require('mock-fs')
 // Thing under test
 const DeleteFilesService = require('../../../../app/services/data/export/delete-files.service.js')
 
-describe.only('Delete Files service', () => {
+describe('Delete Files service', () => {
   let filenameWithPath
   let folderNameWithPath
   let notifierStub
