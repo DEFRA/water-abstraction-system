@@ -253,7 +253,9 @@ describe('Reissue invoice service', () => {
     describe('when sending the reissue request', () => {
       beforeEach(() => {
         ChargingModuleReissueInvoiceService.go.restore()
-        Sinon.stub(ChargingModuleReissueInvoiceService, 'go').resolves({ succeeded: false })
+        Sinon.stub(ChargingModuleReissueInvoiceService, 'go').resolves({
+          succeeded: false, response: { body: 'RESPONSE_BODY' }
+        })
       })
 
       it('throws an error', async () => {
@@ -261,18 +263,21 @@ describe('Reissue invoice service', () => {
           .to.reject(Error, 'Charging Module reissue request failed')
       })
 
-      it('includes the billing batch and source invoice external ids', async () => {
+      it('includes the billing batch and source invoice external ids and CM response body', async () => {
         const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
 
         expect(errorResult.billingBatchExternalId).to.equal(reissueBillingBatch.externalId)
         expect(errorResult.invoiceExternalId).to.equal(sourceInvoice.externalId)
+        expect(errorResult.responseBody).to.equal('RESPONSE_BODY')
       })
     })
 
     describe('when viewing an invoice', () => {
       beforeEach(() => {
         ChargingModuleViewInvoiceService.go.restore()
-        Sinon.stub(ChargingModuleViewInvoiceService, 'go').resolves({ succeeded: false })
+        Sinon.stub(ChargingModuleViewInvoiceService, 'go').resolves({
+          succeeded: false, response: { body: 'RESPONSE_BODY' }
+        })
       })
 
       it('throws an error', async () => {
@@ -280,13 +285,14 @@ describe('Reissue invoice service', () => {
           .to.reject(Error, 'Charging Module view invoice request failed')
       })
 
-      it('includes the billing batch and reissue invoice external ids', async () => {
+      it('includes the billing batch and reissue invoice external ids and CM response body', async () => {
         const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
 
         expect(errorResult.billingBatchExternalId).to.equal(reissueBillingBatch.externalId)
         // The error will be thrown on the first iteration over the invoices so we hardcode the check for the first
         // element's id
         expect(errorResult.reissueInvoiceExternalId).to.equal(CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id)
+        expect(errorResult.responseBody).to.equal('RESPONSE_BODY')
       })
     })
   })

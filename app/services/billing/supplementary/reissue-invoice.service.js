@@ -136,7 +136,7 @@ async function _pauseUntilNotPending (billingBatchExternalId) {
     if (!result.succeeded) {
       const error = new ExpandedError(
         'Charging Module reissue request failed',
-        { billingBatchExternalId }
+        { billingBatchExternalId, responseBody: result.response.body }
       )
 
       throw error
@@ -280,7 +280,11 @@ async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
   if (!result.succeeded) {
     const error = new ExpandedError(
       'Charging Module reissue request failed',
-      { billingBatchExternalId, invoiceExternalId }
+      {
+        billingBatchExternalId,
+        invoiceExternalId,
+        responseBody: result.response.body
+      }
     )
 
     throw error
@@ -298,7 +302,11 @@ async function _sendViewInvoiceRequest (billingBatch, reissueInvoiceId) {
   if (!result.succeeded) {
     const error = new ExpandedError(
       'Charging Module view invoice request failed',
-      { billingBatchExternalId: billingBatch.externalId, reissueInvoiceExternalId: reissueInvoiceId }
+      {
+        billingBatchExternalId: billingBatch.externalId,
+        reissueInvoiceExternalId: reissueInvoiceId,
+        responseBody: result.response.body
+      }
     )
 
     throw error
