@@ -254,7 +254,14 @@ describe('Reissue invoice service', () => {
       beforeEach(() => {
         ChargingModuleReissueInvoiceService.go.restore()
         Sinon.stub(ChargingModuleReissueInvoiceService, 'go').resolves({
-          succeeded: false, response: { body: 'RESPONSE_BODY' }
+          succeeded: false,
+          response: {
+            body: {
+              error: 'Conflict',
+              message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
+              statusCode: 409
+            }
+          }
         })
       })
 
@@ -263,12 +270,19 @@ describe('Reissue invoice service', () => {
           .to.reject(Error, 'Charging Module reissue request failed')
       })
 
-      it('includes the billing batch and source invoice external ids and CM response body', async () => {
+      it('includes the billing batch and source invoice external ids', async () => {
         const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
 
         expect(errorResult.billingBatchExternalId).to.equal(reissueBillingBatch.externalId)
         expect(errorResult.invoiceExternalId).to.equal(sourceInvoice.externalId)
-        expect(errorResult.responseBody).to.equal('RESPONSE_BODY')
+      })
+
+      it('includes the Charging Module response body', async () => {
+        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
+
+        expect(errorResult.responseBody.error).to.equal('Conflict')
+        expect(errorResult.responseBody.message).to.equal('Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.')
+        expect(errorResult.responseBody.statusCode).to.equal(409)
       })
     })
 
@@ -276,7 +290,14 @@ describe('Reissue invoice service', () => {
       beforeEach(() => {
         ChargingModuleViewInvoiceService.go.restore()
         Sinon.stub(ChargingModuleViewInvoiceService, 'go').resolves({
-          succeeded: false, response: { body: 'RESPONSE_BODY' }
+          succeeded: false,
+          response: {
+            body: {
+              error: 'Conflict',
+              message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
+              statusCode: 409
+            }
+          }
         })
       })
 
@@ -285,14 +306,21 @@ describe('Reissue invoice service', () => {
           .to.reject(Error, 'Charging Module view invoice request failed')
       })
 
-      it('includes the billing batch and reissue invoice external ids and CM response body', async () => {
+      it('includes the billing batch and reissue invoice external ids', async () => {
         const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
 
         expect(errorResult.billingBatchExternalId).to.equal(reissueBillingBatch.externalId)
         // The error will be thrown on the first iteration over the invoices so we hardcode the check for the first
         // element's id
         expect(errorResult.reissueInvoiceExternalId).to.equal(CHARGING_MODULE_REISSUE_INVOICE_RESPONSE.invoices[0].id)
-        expect(errorResult.responseBody).to.equal('RESPONSE_BODY')
+      })
+
+      it('includes the Charging Module response body', async () => {
+        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)).to.reject()
+
+        expect(errorResult.responseBody.error).to.equal('Conflict')
+        expect(errorResult.responseBody.message).to.equal('Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.')
+        expect(errorResult.responseBody.statusCode).to.equal(409)
       })
     })
   })
