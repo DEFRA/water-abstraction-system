@@ -24,7 +24,7 @@ async function go (naldRegionId) {
     .where('isSection127AgreementEnabled', true)
     .whereNot('status', 'draft')
 
-  return [region.name, billingPeriods[1], licenceRefs]
+  return [region.name, billingPeriod, licenceRefs]
 }
 
 module.exports = {
