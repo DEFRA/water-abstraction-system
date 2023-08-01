@@ -36,7 +36,7 @@
     "dotenv": "^16.0.3",
     "got": "^12.5.3",
     "govuk-frontend": "^4.4.1",
-    "hapi-pino": "^11.0.1",
+    "hapi-pino": "^12.1.0",
     "hpagent": "^1.2.0",
     "joi": "^17.7.0",
     "knex": "^2.3.0",
