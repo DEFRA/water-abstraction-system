@@ -20,10 +20,11 @@ const ConvertToCSVService = require('./convert-to-csv.service.js')
  */
 async function go (data, schemaFolderPath) {
   const filePath = await _filenameWithPath(data.tableName, schemaFolderPath)
-  const writeToFileStream = fs.createWriteStream(filePath)
+  const writeToFileStream = fs.createWriteStream(filePath, { flags: 'a' })
   const promisifiedPipeline = util.promisify(pipeline)
 
   const inputStream = data.rows
+
   const transformDataStream = new Transform({
 
     objectMode: true,
