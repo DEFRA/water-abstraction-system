@@ -32,9 +32,9 @@ const billingChargeCategoriesColumnInfo = [
 ]
 
 const inputStream = db
-  .withSchema('billing_charge_categories')
+  .withSchema('water')
   .select('*')
-  .from('water')
+  .from('billing_charge_categories')
   .stream()
 
 describe('Fetch table service', () => {
