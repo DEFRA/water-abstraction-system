@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   await knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.jsonb('licences')
       // Legacy timestamps
       table.timestamp('created', { precision: 0, useTz: false }).alter()
@@ -31,7 +31,7 @@ exports.down = async function (knex) {
   return knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.dropColumns('licences')
       // Legacy timestamps
       table.timestamp('created', { precision: 0, useTz: false }).alter().notNullable().defaultTo(knex.fn.now())

@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   await knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.string('external_id')
     })
 }
@@ -15,7 +15,7 @@ exports.down = async function (knex) {
   await knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.dropColumn('external_id')
     })
 }

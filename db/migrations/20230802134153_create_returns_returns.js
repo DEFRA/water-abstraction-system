@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   await knex
     .schema
     .withSchema('returns')
-    .createTable(tableName, table => {
+    .createTable(tableName, (table) => {
       // Primary Key
       table.string('return_id').primary()
 

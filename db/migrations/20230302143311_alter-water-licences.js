@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   await knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.boolean('is_water_undertaker')
       table.jsonb('regions')
       table.date('start_date')
@@ -21,7 +21,7 @@ exports.down = async function (knex) {
   return knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.dropColumns(
         'is_water_undertaker',
         'regions',

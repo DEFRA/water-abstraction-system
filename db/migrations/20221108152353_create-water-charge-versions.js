@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   await knex
     .schema
     .withSchema('water')
-    .createTable(tableName, table => {
+    .createTable(tableName, (table) => {
       // Primary Key
       table.uuid('charge_version_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
