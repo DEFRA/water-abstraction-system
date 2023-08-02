@@ -66,7 +66,7 @@ const csvHeaders = '"billingChargeCategoryId",' +
 '"minVolume",' +
 '"maxVolume"\n'
 
-describe.only('Write stream to file service', () => {
+describe('Write stream to file service', () => {
   let filePath
 
   describe('when successful', () => {
