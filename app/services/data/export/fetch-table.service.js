@@ -17,7 +17,7 @@ const { db } = require('../../../../db/db.js')
 async function go (tableName, schemaName) {
   const data = {
     headers: await _headers(tableName, schemaName),
-    rows: await _rows(tableName, schemaName),
+    rows: _rows(tableName, schemaName),
     tableName
   }
 
