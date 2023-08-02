@@ -20,7 +20,7 @@ async function go (naldRegionId) {
     .where('chargeVersions.regionCode', naldRegionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .where('chargeVersions:chargeElements.isSection127AgreementEnabled', true)
+    .whereJsonPath('chargeVersions:chargeElements.adjustments', '$.s127', '=', true)
     .whereNot('chargeVersions.status', 'draft')
     .withGraphFetched('chargeVersions.chargeElements.chargePurposes')
 
