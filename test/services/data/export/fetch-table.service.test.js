@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const { db } = require('../../../../db/db.js')
 
 // Thing under test
 const FetchTableService = require('../../../../app/services/data/export/fetch-table.service.js')
@@ -30,12 +29,6 @@ const billingChargeCategoriesColumnInfo = [
   'dateCreated',
   'dateUpdated'
 ]
-
-const inputStream = db
-  .withSchema('water')
-  .select('*')
-  .from('billing_charge_categories')
-  .stream()
 
 describe('Fetch table service', () => {
   beforeEach(async () => {
@@ -57,7 +50,7 @@ describe('Fetch table service', () => {
     it('returns the query to fetch the billing-charge-categories table', async () => {
       const result = await FetchTableService.go(tableName, schemaName)
 
-      expect(result.rows).to.equal(inputStream)
+      expect(result.rows).to.be.an.instanceof(Promise)
     })
 
     it('returns the table name', async () => {
