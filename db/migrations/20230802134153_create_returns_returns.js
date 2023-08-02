@@ -20,8 +20,6 @@ exports.up = async function (knex) {
       table.string('status')
       table.string('source')
       table.jsonb('metadata')
-      table.timestamp('created_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-      table.timestamp('updated_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.date('received_date')
       table.string('return_requirement')
       table.date('due_date')
@@ -29,6 +27,10 @@ exports.up = async function (knex) {
       table.string('under_query_comment')
       table.boolean('is_test')
       table.uuid('return_cycle_id')
+
+      // Legacy timestamps
+      table.timestamp('created_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+      table.timestamp('updated_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
     })
 }
 
