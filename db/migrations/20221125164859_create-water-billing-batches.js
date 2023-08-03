@@ -2,11 +2,11 @@
 
 const tableName = 'billing_batches'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('water')
-    .createTable(tableName, table => {
+    .createTable(tableName, (table) => {
       // Primary Key
       table.uuid('billing_batch_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
