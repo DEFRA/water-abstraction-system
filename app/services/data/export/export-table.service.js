@@ -6,7 +6,7 @@
  */
 
 const FetchTableService = require('./fetch-table.service.js')
-const WriteStreamToFileService = require('./write-stream-to-file.service.js')
+const WriteTableToFileService = require('./write-table-to-file.service.js')
 
 /**
  * Exports a database table
@@ -21,7 +21,7 @@ const WriteStreamToFileService = require('./write-stream-to-file.service.js')
 async function go (tableName, schemaFolderPath, schemaName) {
   const data = await FetchTableService.go(tableName, schemaName)
 
-  await WriteStreamToFileService.go(data, schemaFolderPath, tableName)
+  await WriteTableToFileService.go(data, schemaFolderPath, tableName)
 }
 
 module.exports = {

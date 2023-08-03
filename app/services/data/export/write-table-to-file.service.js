@@ -2,7 +2,7 @@
 
 /**
  * Export converted data to a temporary file
- * @module WriteStreamToFileService
+ * @module WriteTableToFileService
  */
 
 const fs = require('fs')

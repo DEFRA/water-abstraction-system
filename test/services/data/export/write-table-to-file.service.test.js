@@ -16,7 +16,7 @@ const fs = require('fs')
 const path = require('path')
 
 // Thing under test
-const WriteStreamToFileService = require('../../../../app/services/data/export/write-stream-to-file.service.js')
+const WriteTableToFileService = require('../../../../app/services/data/export/write-table-to-file.service.js')
 
 const tableName = 'billing_charge_categories'
 const schemaName = 'water'
@@ -98,7 +98,7 @@ describe('Write stream to file service', () => {
         rows: inputStreamTest
       }
 
-      await WriteStreamToFileService.go(dataTest, schemaFolderPath, tableName)
+      await WriteTableToFileService.go(dataTest, schemaFolderPath, tableName)
 
       expect(fs.existsSync(filePath)).to.be.true()
     })
@@ -115,7 +115,7 @@ describe('Write stream to file service', () => {
         rows: inputStreamTest
       }
 
-      await WriteStreamToFileService.go(dataTest, schemaFolderPath, tableName)
+      await WriteTableToFileService.go(dataTest, schemaFolderPath, tableName)
       const file = fs.readFileSync(filePath, 'utf-8')
 
       expect(file).to.equal(csvHeaders + csvValues)
