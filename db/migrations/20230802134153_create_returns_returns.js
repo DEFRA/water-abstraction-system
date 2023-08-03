@@ -2,11 +2,11 @@
 
 const tableName = 'returns'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('returns')
-    .createTable(tableName, table => {
+    .createTable(tableName, (table) => {
       // Primary Key
       table.string('return_id').primary()
 

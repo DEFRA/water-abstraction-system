@@ -2,11 +2,11 @@
 
 const tableName = 'invoice_accounts'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('crm_v2')
-    .createTable(tableName, table => {
+    .createTable(tableName, (table) => {
       // Primary Key
       table.uuid('invoice_account_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
