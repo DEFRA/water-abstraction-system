@@ -31,7 +31,7 @@ class PurposesUseModel extends WaterBaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'charge-purpose.model',
         join: {
-          from: 'purposeUses.purposeUseId',
+          from: 'purposesUses.purposeUseId',
           to: 'chargePurposes.purposeUseId'
         }
       }
