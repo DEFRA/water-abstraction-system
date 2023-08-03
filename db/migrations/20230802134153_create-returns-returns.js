@@ -23,7 +23,7 @@ exports.up = async function (knex) {
       table.date('received_date')
       table.string('return_requirement').notNullable()
       table.date('due_date').notNullable()
-      table.boolean('under_query').notNullable()
+      table.boolean('under_query').notNullable().defaultTo(false)
       table.string('under_query_comment')
       table.boolean('is_test').notNullable().defaultTo(false)
       table.uuid('return_cycle_id')
