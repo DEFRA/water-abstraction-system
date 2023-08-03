@@ -204,6 +204,9 @@ describe('Process billing period service', () => {
                 abstractionPeriodEndDay: 31,
                 abstractionPeriodEndMonth: 3
               })
+
+              const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+              chargeVersions = chargeVersionData.chargeVersions
             })
 
             it('returns false (bill run is empty)', async () => {
