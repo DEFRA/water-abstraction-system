@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 async function go () {
   await db
     .from('idm.users')
-    .where(db.raw("user_data->>'source' = 'acceptance-test-setup'"))
+    .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')
     .orWhereLike('userName', '%@example.com')
     .del()
 }

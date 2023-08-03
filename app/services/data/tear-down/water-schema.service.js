@@ -69,7 +69,7 @@ async function _deleteBilling () {
     .whereIn('billingBatchId', billingBatchIds)
     .del()
 
-  // Just deleting the `biilingBatches` based on the `billingBatchIds` does not always remove all test records so the
+  // Just deleting the `billingBatches` based on the `billingBatchIds` does not always remove all test records so the
   // Test Region is used to identify the records for deletion
   await db
     .from('water.billingBatches as bb')
@@ -161,6 +161,8 @@ async function _deleteNotifications () {
 async function _deleteSessions () {
   await db
     .from('water.sessions')
+    // NOTE: Normally we would use whereJsonPath() when working with JSONB fields in PostgreSQL. However, the previous
+    // team opted to create 'session_data' as a varchar field and dump JSON into it. So, we are unable to in this case.
     .where(db.raw("session_data::jsonb->>'companyName' = 'acceptance-test-company'"))
     .del()
 }

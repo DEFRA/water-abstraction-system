@@ -57,12 +57,12 @@ async function _deleteDocuments () {
   await db
     .from('crm_v2.documents as d')
     .innerJoin('crm.documentHeader as dh', 'd.documentRef', 'dh.systemExternalId')
-    .where(db.raw("dh.metadata->>'dataType' = 'acceptance-test-setup'"))
+    .whereJsonPath('dh.metadata', '$.dataType', '=', 'acceptance-test-setup')
     .del()
 
   await db
     .from('crm.documentHeader')
-    .where(db.raw("metadata->>'dataType' = 'acceptance-test-setup'"))
+    .whereJsonPath('metadata', '$.dataType', '=', 'acceptance-test-setup')
     .del()
 }
 
