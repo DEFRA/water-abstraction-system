@@ -16,7 +16,7 @@ const PurposesUseHelper = require('../../support/helpers/water/purposes-use.help
 // Thing under test
 const PurposesUseModel = require('../../../app/models/water/purposes-use.model.js')
 
-describe.only('Purposes Use model', () => {
+describe('Purposes Use model', () => {
   let testRecord
 
   beforeEach(async () => {
