@@ -2,8 +2,8 @@
 
 const tableName = 'regions'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('water')
     .createTable(tableName, (table) => {
@@ -20,14 +20,15 @@ exports.up = async function (knex) {
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
     })
-
-  await knex.raw(`
-    CREATE TRIGGER update_timestamp
-    BEFORE UPDATE
-    ON water.${tableName}
-    FOR EACH ROW
-    EXECUTE PROCEDURE update_timestamp();
-  `)
+    .then(() => {
+      knex.raw(`
+        CREATE TRIGGER update_timestamp
+        BEFORE UPDATE
+        ON water.${tableName}
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_timestamp();
+      `)
+    })
 }
 
 exports.down = function (knex) {
