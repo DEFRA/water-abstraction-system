@@ -2,8 +2,8 @@
 
 const tableName = 'billing_batches'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('water')
     .createTable(tableName, (table) => {

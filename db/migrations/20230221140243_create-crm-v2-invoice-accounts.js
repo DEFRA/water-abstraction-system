@@ -2,8 +2,8 @@
 
 const tableName = 'invoice_accounts'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('crm_v2')
     .createTable(tableName, (table) => {

@@ -2,8 +2,8 @@
 
 const tableName = 'charge_elements'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('water')
     .alterTable(tableName, (table) => {

@@ -2,8 +2,8 @@
 
 const tableName = 'returns'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('returns')
     .createTable(tableName, (table) => {
