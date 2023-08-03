@@ -14,7 +14,7 @@ const PurposesUseModel = require('../../../../app/models/water/purposes-use.mode
  * - `legacyId` - 420
  * - `description` - Spray Irrigation - Storage
  * - `lossFactor` - high
- * - `isTwoPartTarrif` - true
+ * - `isTwoPartTariff` - true
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -41,7 +41,7 @@ function defaults (data = {}) {
     legacyId: '420',
     description: 'Spray Irrigation - Storage',
     lossFactor: 'high',
-    isTwoPartTarrif: true
+    isTwoPartTariff: true
   }
 
   return {
