@@ -14,7 +14,7 @@
  */
 function go (data) {
   if (!data) {
-    return
+    return undefined
   }
 
   return _transformDataToCSV(data)

@@ -52,11 +52,5 @@ describe('Fetch table service', () => {
 
       expect(result.rows).to.be.an.instanceof(Promise)
     })
-
-    it('returns the table name', async () => {
-      const result = await FetchTableService.go(tableName, schemaName)
-
-      expect(result.tableName).to.equal('billing_charge_categories')
-    })
   })
 })

@@ -87,37 +87,35 @@ describe('Write stream to file service', () => {
     })
 
     it('should write the data to the correct file path', async () => {
-      const inputStreamTest1 = db
+      const inputStreamTest = db
         .withSchema(schemaName)
         .select('*')
         .from(tableName)
         .stream()
 
-      const dataTest1 = {
+      const dataTest = {
         headers,
-        rows: inputStreamTest1, // Use the new stream for test 1
-        tableName
+        rows: inputStreamTest
       }
 
-      await WriteStreamToFileService.go(dataTest1, schemaFolderPath)
+      await WriteStreamToFileService.go(dataTest, schemaFolderPath, tableName)
 
       expect(fs.existsSync(filePath)).to.be.true()
     })
 
     it('should write the correct data to the file', async () => {
-      const inputStreamTest2 = db
+      const inputStreamTest = db
         .withSchema(schemaName)
         .select('*')
         .from(tableName)
         .stream()
 
-      const dataTest2 = {
+      const dataTest = {
         headers,
-        rows: inputStreamTest2, // Use the new stream for test 2
-        tableName
+        rows: inputStreamTest
       }
 
-      await WriteStreamToFileService.go(dataTest2, schemaFolderPath)
+      await WriteStreamToFileService.go(dataTest, schemaFolderPath, tableName)
       const file = fs.readFileSync(filePath, 'utf-8')
 
       expect(file).to.equal(csvHeaders + csvValues)

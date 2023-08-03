@@ -21,7 +21,7 @@ const WriteStreamToFileService = require('./write-stream-to-file.service.js')
 async function go (tableName, schemaFolderPath, schemaName) {
   const data = await FetchTableService.go(tableName, schemaName)
 
-  await WriteStreamToFileService.go(data, schemaFolderPath)
+  await WriteStreamToFileService.go(data, schemaFolderPath, tableName)
 }
 
 module.exports = {
