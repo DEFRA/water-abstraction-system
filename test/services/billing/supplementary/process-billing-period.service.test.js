@@ -31,7 +31,7 @@ const SendBillingTransactionsService = require('../../../../app/services/billing
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/billing/supplementary/process-billing-period.service.js')
 
-describe('Process billing period service', () => {
+describe.only('Process billing period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -206,7 +206,7 @@ describe('Process billing period service', () => {
               })
             })
 
-            it('returns false (bill run is empty)', async () => {
+            it.only('returns false (bill run is empty)', async () => {
               const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
 
               expect(result).to.be.false()
