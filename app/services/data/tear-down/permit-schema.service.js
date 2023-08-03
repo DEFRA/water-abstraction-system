@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 async function go () {
   await db
     .from('permit.licence')
-    .where(db.raw("metadata->>'source' = 'acceptance-test-setup'"))
+    .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')
     .del()
 }
 
