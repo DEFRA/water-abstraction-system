@@ -31,12 +31,9 @@ const billingChargeCategoriesColumnInfo = [
 ]
 
 describe('Fetch table service', () => {
-  let billingChargeCategory
-
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    billingChargeCategory = await BillingChargeCategoryHelper.add()
     await BillingChargeCategoryHelper.add()
   })
 
@@ -50,18 +47,10 @@ describe('Fetch table service', () => {
       expect(result.headers).to.equal(billingChargeCategoriesColumnInfo)
     })
 
-    it('returns all records in the billing-charge-categories table', async () => {
+    it('returns the query to fetch the billing-charge-categories table', async () => {
       const result = await FetchTableService.go(tableName, schemaName)
 
-      expect(result.rows[0][0]).to.equal(billingChargeCategory.billingChargeCategoryId)
-      expect(result.rows[0][2]).to.equal(billingChargeCategory.subsistenceCharge)
-      expect(result.rows).to.have.length(2)
-    })
-
-    it('returns the table name', async () => {
-      const result = await FetchTableService.go(tableName, schemaName)
-
-      expect(result.tableName).to.equal('billing_charge_categories')
+      expect(result.rows).to.be.an.instanceof(Promise)
     })
   })
 })
