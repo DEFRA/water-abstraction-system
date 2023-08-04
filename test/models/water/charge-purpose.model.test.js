@@ -12,6 +12,8 @@ const ChargeElementHelper = require('../../support/helpers/water/charge-element.
 const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const PurposesUseModel = require('../../../app/models/water/purposes-use.model.js')
+const PurposesUseHelper = require('../../support/helpers/water/purposes-use.helper.js')
 
 // Thing under test
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
@@ -62,6 +64,36 @@ describe('Charge Purpose model', () => {
 
         expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
         expect(result.chargeElement).to.equal(testChargeElement)
+      })
+    })
+
+    describe('when linking to purposes use', () => {
+      let testPurposesUse
+
+      beforeEach(async () => {
+        testPurposesUse = await PurposesUseHelper.add()
+
+        const { purposeUseId } = testPurposesUse
+        testRecord = await ChargePurposeHelper.add({ purposeUseId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargePurposeModel.query()
+          .innerJoinRelated('purposesUse')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the purposes use', async () => {
+        const result = await ChargePurposeModel.query()
+          .findById(testRecord.chargePurposeId)
+          .withGraphFetched('purposesUse')
+
+        expect(result).to.be.instanceOf(ChargePurposeModel)
+        expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
+
+        expect(result.purposesUse).to.be.an.instanceOf(PurposesUseModel)
+        expect(result.purposesUse).to.equal(testPurposesUse)
       })
     })
   })

@@ -34,6 +34,14 @@ class ChargePurposeModel extends WaterBaseModel {
           from: 'chargePurposes.chargeElementId',
           to: 'chargeElements.chargeElementId'
         }
+      },
+      purposesUse: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'purposes-use.model',
+        join: {
+          from: 'chargePurposes.purposeUseId',
+          to: 'purposesUses.purposeUseId'
+        }
       }
     }
   }
