@@ -1,19 +1,18 @@
 'use strict'
 
 /**
- * Exports a table from the db, converts it to CSV format and saves it to a file
+ * Exports a individual table to CSV format
  * @module ExportTableService
  */
 
-const ConvertToCSVService = require('./convert-to-csv.service.js')
-const ExportDataFilesService = require('./export-data-files.service.js')
 const FetchTableService = require('./fetch-table.service.js')
+const WriteTableToFileService = require('./write-table-to-file.service.js')
 
 /**
  * Exports a database table
  *
- * Exports the specific database table by fetching its data, converting it to CSV format, and exporting the data files
- * to the provided schema folder path
+ * Exports the specific database table by fetching the database query (input stream) and passing it to a write stream
+ * service which transforms the data to a CSV format
  *
  * @param {String} tableName The name of the database table to export
  * @param {String} schemaFolderPath The folder path where the schema files are stored
@@ -21,9 +20,8 @@ const FetchTableService = require('./fetch-table.service.js')
  */
 async function go (tableName, schemaFolderPath, schemaName) {
   const data = await FetchTableService.go(tableName, schemaName)
-  const tableConvertedToCSV = ConvertToCSVService.go(data.headers, data.rows)
 
-  await ExportDataFilesService.go(tableConvertedToCSV, data.tableName, schemaFolderPath)
+  await WriteTableToFileService.go(data.headers, data.rows, schemaFolderPath, tableName)
 }
 
 module.exports = {
