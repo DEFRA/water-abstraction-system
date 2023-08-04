@@ -32,7 +32,9 @@ async function _tableNames (schema) {
     .select('tablename')
     .where('schemaname', schema)
 
-  return result.map((table) => `"${schema}".${table.tablename}`)
+  return result.map((table) => {
+    return `"${schema}".${table.tablename}`
+  })
 }
 
 module.exports = {
