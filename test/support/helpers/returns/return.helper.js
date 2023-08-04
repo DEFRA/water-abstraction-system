@@ -50,6 +50,7 @@ function defaults (data = {}) {
     returnId: 'v1:1:9/99/99/99/9999:10021668:2022-04-01:2023-03-31',
     regime: 'water',
     licenceType: 'abstraction',
+    licenceRef: '9/99/99/99/9999',
     startDate: '2022-04-01',
     endDate: '2023-03-31',
     returnsFrequency: 'month',

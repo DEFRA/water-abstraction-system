@@ -2,20 +2,20 @@
 
 const tableName = 'billing_batches'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.string('external_id')
     })
 }
 
-exports.down = async function (knex) {
-  await knex
+exports.down = function (knex) {
+  return knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.dropColumn('external_id')
     })
 }

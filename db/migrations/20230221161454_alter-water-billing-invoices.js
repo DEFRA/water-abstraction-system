@@ -2,11 +2,11 @@
 
 const tableName = 'billing_invoices'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.uuid('invoice_account_id')
       table.jsonb('address')
       table.string('invoice_account_number')
@@ -29,7 +29,7 @@ exports.down = async function (knex) {
   return knex
     .schema
     .withSchema('water')
-    .alterTable(tableName, table => {
+    .alterTable(tableName, (table) => {
       table.dropColumns(
         'invoice_account_id',
         'address',
