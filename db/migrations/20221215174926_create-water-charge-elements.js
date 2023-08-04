@@ -2,11 +2,11 @@
 
 const tableName = 'charge_elements'
 
-exports.up = async function (knex) {
-  await knex
+exports.up = function (knex) {
+  return knex
     .schema
     .withSchema('water')
-    .createTable(tableName, table => {
+    .createTable(tableName, (table) => {
       // Primary Key
       table.uuid('charge_element_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
