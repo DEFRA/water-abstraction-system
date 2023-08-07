@@ -6,7 +6,7 @@
  */
 
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
-const LicenceModel = require('../../models/water/licence.model.js')
+const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 
 async function go (naldRegionId) {
@@ -14,36 +14,74 @@ async function go (naldRegionId) {
 
   const billingPeriod = billingPeriods[1]
 
-  const licences = await LicenceModel.query()
-    .select('licences.licenceRef', 'licences.licenceId')
-    .innerJoinRelated('chargeVersions.chargeElements')
+  const chargeVersions = await _fetchChargeVersions(billingPeriod, naldRegionId)
+  await _fetchAndApplyReturns(billingPeriod, chargeVersions)
+
+  return _response(chargeVersions)
+}
+
+async function _fetchChargeVersions (billingPeriod, naldRegionId) {
+  const chargeVersions = await ChargeVersionModel.query()
+    .select([
+      'chargeVersions.chargeVersionId',
+      'chargeVersions.startDate',
+      'chargeVersions.endDate',
+      'chargeVersions.status',
+      'chargeVersions.licenceId',
+      'chargeVersions.licenceRef'
+    ])
+    .innerJoinRelated('chargeElements')
     .where('chargeVersions.regionCode', naldRegionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .whereJsonPath('chargeVersions:chargeElements.adjustments', '$.s127', '=', true)
     .whereNot('chargeVersions.status', 'draft')
-    .withGraphFetched('chargeVersions.chargeElements.chargePurposes')
-    .modifyGraph('chargeVersions', builder => {
-      builder.where('chargeVersions.scheme', 'sroc')
-        .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-        .whereNot('chargeVersions.status', 'draft')
-    })
-    .modifyGraph('chargeVersions.chargeElements', builder => {
+    .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+    .withGraphFetched('chargeElements')
+    .modifyGraph('chargeVersions.chargeElements', (builder) => {
       builder.whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
     })
+    .withGraphFetched('chargeElements.chargePurposes')
 
-  for (const licence of licences) {
-    licence.returns = await ReturnModel.query()
-      .select('returnId', 'returnRequirement', 'startDate', 'endDate', 'metadata')
-      .where('licenceRef', licence.licenceRef)
-      // used in the service to filter out old returns here `src/lib/services/returns/api-connector.js`
+  return chargeVersions
+}
+
+async function _fetchAndApplyReturns (billingPeriod, chargeVersions) {
+  for (const chargeVersion of chargeVersions) {
+    chargeVersion.returns = await ReturnModel.query()
+      .select([
+        'returnId',
+        'returnRequirement',
+        'startDate',
+        'endDate',
+        'metadata'
+      ])
+      .where('licenceRef', chargeVersion.licenceRef)
+      // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
       .where('startDate', '>=', '2008-04-01')
       .where('startDate', '<=', billingPeriod.endDate)
       .where('endDate', '>=', billingPeriod.startDate)
       .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
   }
+}
 
-  return { billingPeriod, licences }
+function _response (chargeVersions) {
+  const allLicenceIds = chargeVersions.map((chargeVersion) => {
+    return chargeVersion.licenceId
+  })
+
+  const uniqueLicenceIds = [...new Set(allLicenceIds)]
+
+  return uniqueLicenceIds.map((uniqueLicenceId) => {
+    const matchedChargeVersions = chargeVersions.filter((chargeVersion) => {
+      return chargeVersion.licenceId === uniqueLicenceId
+    })
+
+    return {
+      licenceId: uniqueLicenceId,
+      licenceRef: matchedChargeVersions[0].licenceRef,
+      chargeVersions: matchedChargeVersions
+    }
+  })
 }
 
 module.exports = {
