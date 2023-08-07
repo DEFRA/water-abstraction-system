@@ -23,18 +23,27 @@ async function go (naldRegionId) {
     .whereJsonPath('chargeVersions:chargeElements.adjustments', '$.s127', '=', true)
     .whereNot('chargeVersions.status', 'draft')
     .withGraphFetched('chargeVersions.chargeElements.chargePurposes')
+    .modifyGraph('chargeVersions', builder => {
+      builder.where('chargeVersions.scheme', 'sroc')
+        .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+        .whereNot('chargeVersions.status', 'draft')
+    })
+    .modifyGraph('chargeVersions.chargeElements', builder => {
+      builder.whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+    })
 
   for (const licence of licences) {
     licence.returns = await ReturnModel.query()
-      .select('returnId', 'returnRequirement', 'startDate', 'endDate')
+      .select('returnId', 'returnRequirement', 'startDate', 'endDate', 'metadata')
       .where('licenceRef', licence.licenceRef)
       // used in the service to filter out old returns here `src/lib/services/returns/api-connector.js`
       .where('startDate', '>=', '2008-04-01')
       .where('startDate', '<=', billingPeriod.endDate)
       .where('endDate', '>=', billingPeriod.startDate)
+      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
   }
 
-  return licences
+  return { billingPeriod, licences }
 }
 
 module.exports = {
