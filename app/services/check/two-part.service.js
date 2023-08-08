@@ -5,8 +5,11 @@
  * @module TwoPartService
  */
 
-const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
+const { ref } = require('objection')
+
+const ChargeElementModel = require('../../models/water/charge-element.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
+const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 
 async function go (naldRegionId) {
@@ -15,7 +18,10 @@ async function go (naldRegionId) {
   const billingPeriod = billingPeriods[1]
 
   const chargeVersions = await _fetchChargeVersions(billingPeriod, naldRegionId)
-  await _fetchAndApplyReturns(billingPeriod, chargeVersions)
+
+  for (const chargeVersion of chargeVersions) {
+    await _fetchAndApplyReturns(billingPeriod, chargeVersion.licenceRef, chargeVersion.chargeElements)
+  }
 
   return _response(chargeVersions)
 }
@@ -30,24 +36,30 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
       'chargeVersions.licenceId',
       'chargeVersions.licenceRef'
     ])
-    .innerJoinRelated('chargeElements')
     .where('chargeVersions.regionCode', naldRegionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .whereNot('chargeVersions.status', 'draft')
-    .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+    .whereExists(
+      ChargeElementModel.query()
+        .select(1)
+        .whereColumn('chargeVersions.chargeVersionId', 'chargeElements.chargeVersionId')
+        .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+    )
     .withGraphFetched('chargeElements')
     .modifyGraph('chargeVersions.chargeElements', (builder) => {
       builder.whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
     })
-    .withGraphFetched('chargeElements.chargePurposes')
+    .withGraphFetched('chargeElements.chargePurposes.purposesUse')
 
   return chargeVersions
 }
 
-async function _fetchAndApplyReturns (billingPeriod, chargeVersions) {
-  for (const chargeVersion of chargeVersions) {
-    chargeVersion.returns = await ReturnModel.query()
+async function _fetchAndApplyReturns (billingPeriod, licenceRef, chargeElements) {
+  for (const chargeElement of chargeElements) {
+    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
+
+    chargeElement.returns = await ReturnModel.query()
       .select([
         'returnId',
         'returnRequirement',
@@ -55,13 +67,21 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersions) {
         'endDate',
         'metadata'
       ])
-      .where('licenceRef', chargeVersion.licenceRef)
+      .jsonExtract('metadata', '$.purposes[0].tertiary.code', 'justWork')
+      .where('licenceRef', licenceRef)
       // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
       .where('startDate', '>=', '2008-04-01')
       .where('startDate', '<=', billingPeriod.endDate)
       .where('endDate', '>=', billingPeriod.startDate)
-      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
+      .whereJsonSupersetOf('metadata', { isTwoPartTariff: true })
+      .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
   }
+}
+
+function _extractPurposeUseLegacyIds (chargeElement) {
+  return chargeElement.chargePurposes.flatMap((chargePurpose) => {
+    return chargePurpose.purposesUse.legacyId
+  })
 }
 
 function _response (chargeVersions) {
