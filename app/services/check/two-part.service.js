@@ -31,6 +31,7 @@ async function go (naldRegionId, format = 'friendly') {
     case 'raw':
       return matchedChargeVersions
     default:
+      // TODO: consider throwing a Boom error here
       return { error: `Unknown format type ${format}` }
   }
 }
