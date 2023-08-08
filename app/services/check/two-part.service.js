@@ -20,7 +20,7 @@ async function go (naldRegionId) {
   const chargeVersions = await _fetchChargeVersions(billingPeriod, naldRegionId)
 
   for (const chargeVersion of chargeVersions) {
-    await _fetchAndApplyReturns(billingPeriod, chargeVersion.licenceRef, chargeVersion.chargeElements)
+    await _fetchAndApplyReturns(billingPeriod, chargeVersion)
   }
 
   return _response(chargeVersions)
@@ -44,6 +44,9 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
       ChargeElementModel.query()
         .select(1)
         .whereColumn('chargeVersions.chargeVersionId', 'chargeElements.chargeVersionId')
+        // NOTE: We can make withJsonSuperset() work which looks nicer, but only if we don't have anything camel case
+        // in the table/column name. Camel case mappers don't work with whereJsonSuperset() or whereJsonSubset(). So,
+        // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
         .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
     )
     .withGraphFetched('chargeElements')
@@ -55,7 +58,9 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
   return chargeVersions
 }
 
-async function _fetchAndApplyReturns (billingPeriod, licenceRef, chargeElements) {
+async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
+  const { licenceRef, chargeElements } = chargeVersion
+
   for (const chargeElement of chargeElements) {
     const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
 
@@ -67,19 +72,18 @@ async function _fetchAndApplyReturns (billingPeriod, licenceRef, chargeElements)
         'endDate',
         'metadata'
       ])
-      .jsonExtract('metadata', '$.purposes[0].tertiary.code', 'justWork')
       .where('licenceRef', licenceRef)
       // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
       .where('startDate', '>=', '2008-04-01')
       .where('startDate', '<=', billingPeriod.endDate)
       .where('endDate', '>=', billingPeriod.startDate)
-      .whereJsonSupersetOf('metadata', { isTwoPartTariff: true })
+      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
       .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
   }
 }
 
 function _extractPurposeUseLegacyIds (chargeElement) {
-  return chargeElement.chargePurposes.flatMap((chargePurpose) => {
+  return chargeElement.chargePurposes.map((chargePurpose) => {
     return chargePurpose.purposesUse.legacyId
   })
 }
