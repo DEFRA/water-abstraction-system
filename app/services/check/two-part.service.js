@@ -32,7 +32,7 @@ async function go (naldRegionId, format = 'friendly') {
       return matchedChargeVersions
     default:
       // TODO: consider throwing a Boom error here
-      return { error: `Unknown format type ${format}` }
+      return { error: `Invalid format ${format}` }
   }
 }
 
