@@ -12,7 +12,7 @@ const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 
-async function go (naldRegionId) {
+async function go (naldRegionId, format = 'friendly') {
   const billingPeriods = DetermineBillingPeriodsService.go()
 
   const billingPeriod = billingPeriods[1]
@@ -23,7 +23,17 @@ async function go (naldRegionId) {
     await _fetchAndApplyReturns(billingPeriod, chargeVersion)
   }
 
-  return _response(chargeVersions)
+  const matchedChargeVersions = _matchChargeVersions(chargeVersions)
+
+  switch (format) {
+    case 'friendly':
+      return _friendlyResponse(matchedChargeVersions)
+    case 'raw':
+      return matchedChargeVersions
+    default:
+      // TODO: consider throwing a Boom error here
+      return { error: `Invalid format ${format}` }
+  }
 }
 
 async function _fetchChargeVersions (billingPeriod, naldRegionId) {
@@ -95,7 +105,7 @@ function _extractPurposeUseLegacyIds (chargeElement) {
   })
 }
 
-function _response (chargeVersions) {
+function _matchChargeVersions (chargeVersions) {
   const allLicenceIds = chargeVersions.map((chargeVersion) => {
     return chargeVersion.licenceId
   })
@@ -113,6 +123,10 @@ function _response (chargeVersions) {
       chargeVersions: matchedChargeVersions
     }
   })
+}
+
+function _friendlyResponse (_matchedChargeVersions) {
+  return { hello: 'world' }
 }
 
 module.exports = {
