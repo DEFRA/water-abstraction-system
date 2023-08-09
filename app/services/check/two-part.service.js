@@ -13,6 +13,8 @@ const DetermineBillingPeriodsService = require('../billing/determine-billing-per
 const ReturnModel = require('../../models/returns/return.model.js')
 
 async function go (naldRegionId, format = 'friendly') {
+  const startTime = process.hrtime.bigint()
+
   const billingPeriods = DetermineBillingPeriodsService.go()
 
   const billingPeriod = billingPeriods[1]
@@ -24,6 +26,8 @@ async function go (naldRegionId, format = 'friendly') {
   }
 
   const matchedChargeVersions = _matchChargeVersions(chargeVersions)
+
+  _calculateAndLogTime(startTime)
 
   switch (format) {
     case 'friendly':
@@ -127,6 +131,14 @@ function _matchChargeVersions (chargeVersions) {
 
 function _friendlyResponse (_matchedChargeVersions) {
   return { hello: 'world' }
+}
+
+function _calculateAndLogTime (startTime) {
+  const endTime = process.hrtime.bigint()
+  const timeTakenNs = endTime - startTime
+  const timeTakenMs = timeTakenNs / 1000000n
+
+  global.GlobalNotifier.omg('Two part tariff matching complete', { timeTakenMs })
 }
 
 module.exports = {
