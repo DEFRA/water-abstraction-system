@@ -8,6 +8,7 @@
 const Boom = require('@hapi/boom')
 
 const ExportService = require('../../services/data/export/export.service.js')
+const MockService = require('../../services/data/mock/mock.service.js')
 const SeedService = require('../../services/data/seed/seed.service.js')
 const TearDownService = require('../../services/data/tear-down/tear-down.service.js')
 
@@ -20,6 +21,17 @@ async function exportDb (_request, h) {
   ExportService.go()
 
   return h.response().code(204)
+}
+
+async function mock (request, h) {
+  try {
+    const { type, id } = request.params
+    const mockData = await MockService.go(type, id)
+
+    return h.response(mockData)
+  } catch (error) {
+    return Boom.badImplementation(error.message)
+  }
 }
 
 async function seed (_request, h) {
@@ -44,6 +56,7 @@ async function tearDown (_request, h) {
 
 module.exports = {
   exportDb,
+  mockData: mock,
   seed,
   tearDown
 }
