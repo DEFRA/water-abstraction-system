@@ -5,6 +5,8 @@
  * @module MockService
  */
 
+const GenerateBillRunService = require('./generate-bill-run.service.js')
+
 const types = {
   'bill-run': _billRun
 }
@@ -29,8 +31,8 @@ function _validateParams (type, id) {
   }
 }
 
-function _billRun (id) {
-  return { billRun: id }
+async function _billRun (id) {
+  return GenerateBillRunService.go(id)
 }
 
 module.exports = {
