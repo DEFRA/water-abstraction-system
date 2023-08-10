@@ -60,11 +60,11 @@ function _mapBillingInvoices (billingInvoices) {
     const {
       billingInvoiceLicences,
       creditNoteValue,
+      invoiceAccountNumber,
+      invoiceNumber,
       invoiceValue,
       netAmount,
-      billingInvoiceId: id,
-      invoiceAccountNumber: account,
-      invoiceNumber: number
+      billingInvoiceId: id
     } = billingInvoice
 
     const {
@@ -74,8 +74,8 @@ function _mapBillingInvoices (billingInvoices) {
 
     return {
       id,
-      account,
-      number,
+      account: _maskInvoiceAccountNumber(invoiceAccountNumber),
+      number: _maskInvoiceNumber(invoiceNumber),
       accountAddress,
       contact,
       isWaterCompany: billingInvoiceLicences[0].licence.isWaterUndertaker,
@@ -85,6 +85,20 @@ function _mapBillingInvoices (billingInvoices) {
       licences: _mapBillingInvoiceLicences(billingInvoiceLicences)
     }
   })
+}
+
+/**
+ * Masks an invoice account number by replacing the first 3 digits, for example, T88898349A becomes Z11898349A
+ */
+function _maskInvoiceAccountNumber (invoiceAccountNumber) {
+  return `Z11${invoiceAccountNumber.substring(3)}`
+}
+
+/**
+ * Masks an invoice number by replacing the first 2 digits, for example, TAI0000011T becomes ZZI0000011T
+ */
+function _maskInvoiceNumber (invoiceNumber) {
+  return `ZZ${invoiceNumber.substring(2)}`
 }
 
 function _mapBillingInvoiceLicences (billingInvoiceLicences) {
