@@ -1,0 +1,205 @@
+'use strict'
+
+/**
+ * Formats the response for the GET `/data/mock/{bill-run}` endpoint
+ * @module MockBillRunPresenter
+ */
+
+const { formatAbstractionPeriod, formatLongDate, formatNumberAsMoney } = require('../base.presenter.js')
+
+function go (billingBatch) {
+  const {
+    billingInvoices,
+    billRunNumber,
+    createdAt,
+    fromFinancialYearEnding,
+    netTotal,
+    region,
+    status,
+    scheme,
+    toFinancialYearEnding,
+    batchType: type,
+    transactionFileReference: transactionFile
+  } = billingBatch
+
+  return {
+    dateCreated: formatLongDate(createdAt),
+    status,
+    region: region.name,
+    type,
+    chargeScheme: scheme === 'sroc' ? 'Current' : 'Old',
+    transactionFile,
+    billRunNumber,
+    financialYear: `${fromFinancialYearEnding} to ${toFinancialYearEnding}`,
+    debit: formatNumberAsMoney(netTotal),
+    bills: _formatBillingInvoices(billingInvoices)
+  }
+}
+
+function _formatAdditionalCharges (transaction) {
+  const formattedData = []
+
+  const { grossValuesCalculated, isWaterCompanyCharge, supportedSourceName } = transaction
+
+  if (supportedSourceName) {
+    const formattedSupportedSourceCharge = formatNumberAsMoney(grossValuesCalculated.supportedSourceCharge, true)
+    formattedData.push(`Supported source ${supportedSourceName} (${formattedSupportedSourceCharge})`)
+  }
+
+  if (isWaterCompanyCharge) {
+    formattedData.push('Public Water Supply')
+  }
+
+  return formattedData
+}
+
+function _formatAdjustments (chargeElement) {
+  const formattedData = []
+
+  if (!chargeElement.adjustments) {
+    return formattedData
+  }
+
+  const { aggregate, charge, s126, s127, s130, winter } = chargeElement.adjustments
+
+  if (aggregate) {
+    formattedData.push(`Aggregate factor (${aggregate})`)
+  }
+
+  if (charge) {
+    formattedData.push(`Adjustment factor (${charge})`)
+  }
+
+  if (s126) {
+    formattedData.push(`Abatement factor (${s126})`)
+  }
+
+  if (s127) {
+    formattedData.push('Two-part tariff (0.5)')
+  }
+
+  if (s130) {
+    formattedData.push('Canal and River Trust (0.5)')
+  }
+
+  if (winter) {
+    formattedData.push('Winter discount (0.5)')
+  }
+
+  return formattedData
+}
+
+function _formatBillingInvoices (billingInvoices) {
+  return billingInvoices.map((billingInvoice) => {
+    const {
+      account,
+      accountAddress,
+      billingInvoiceLicences,
+      contact,
+      creditNoteValue,
+      invoiceValue,
+      netAmount,
+      number,
+      billingInvoiceId: id
+    } = billingInvoice
+
+    return {
+      id,
+      account,
+      number,
+      accountAddress,
+      contact,
+      isWaterCompany: billingInvoiceLicences[0].licence.isWaterUndertaker,
+      credit: formatNumberAsMoney(creditNoteValue),
+      debit: formatNumberAsMoney(invoiceValue),
+      netTotal: formatNumberAsMoney(netAmount),
+      licences: _formatBillingInvoiceLicences(billingInvoiceLicences)
+    }
+  })
+}
+
+function _formatBillingInvoiceLicences (billingInvoiceLicences) {
+  return billingInvoiceLicences.map((billingInvoiceLicence) => {
+    const {
+      billingTransactions,
+      credit,
+      debit,
+      netTotal,
+      licenceHolder,
+      billingInvoiceLicenceId: id,
+      licenceRef: licence
+    } = billingInvoiceLicence
+
+    return {
+      id,
+      licence,
+      licenceStartDate: billingInvoiceLicence.licence.startDate,
+      licenceHolder,
+      credit: formatNumberAsMoney(credit),
+      debit: formatNumberAsMoney(debit),
+      netTotal: formatNumberAsMoney(netTotal),
+      transactions: _formatBillingTransactions(billingTransactions)
+    }
+  })
+}
+
+function _formatBillingTransactions (billingTransactions) {
+  return billingTransactions.map((billingTransaction) => {
+    const {
+      authorisedDays,
+      billableDays,
+      chargeCategoryCode,
+      chargeElement,
+      chargeType,
+      endDate,
+      grossValuesCalculated,
+      isCredit,
+      netAmount,
+      startDate,
+      billableQuantity: chargeQuantity,
+      chargeCategoryDescription: chargeDescription,
+      description: lineDescription
+    } = billingTransaction
+
+    return {
+      type: chargeType === 'standard' ? 'Water abstraction charge' : 'Compensation charge',
+      lineDescription,
+      billableDays,
+      authorisedDays,
+      chargeQuantity,
+      credit: isCredit ? formatNumberAsMoney(netAmount) : '0.00',
+      debit: isCredit ? '0.00' : formatNumberAsMoney(netAmount),
+      chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
+      chargeRefNumber: `${chargeCategoryCode} (${formatNumberAsMoney(grossValuesCalculated.baselineCharge, true)})`,
+      chargeDescription,
+      addCharges: _formatAdditionalCharges(billingTransaction),
+      adjustments: _formatAdjustments(chargeElement),
+      elements: _formatChargePurposes(chargeElement.chargePurposes)
+    }
+  })
+}
+
+function _formatChargePurposes (chargePurposes) {
+  return chargePurposes.map((chargePurpose) => {
+    const {
+      purposesUse,
+      abstractionPeriodStartDay: startDay,
+      abstractionPeriodStartMonth: startMonth,
+      abstractionPeriodEndDay: endDay,
+      abstractionPeriodEndMonth: endMonth,
+      authorisedAnnualQuantity: authorisedQuantity,
+      chargePurposeId: id
+    } = chargePurpose
+
+    return {
+      id,
+      purpose: purposesUse.description,
+      abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
+      authorisedQuantity
+    }
+  })
+}
+
+module.exports = {
+  go
+}
