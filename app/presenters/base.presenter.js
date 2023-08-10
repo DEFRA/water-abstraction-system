@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Converts a date into the format required by output files, eg 25/03/2021 becomes 25-MAR-2021
+ * Converts a date into the format required by the Charging Module, eg 25/03/2021 becomes 25-MAR-2021
  *
- * @param {Date} date The date value to format to a string
+ * @param {Date} date The date to be formatted
  *
  * @returns {string} The date formatted as a 'DD-MMM-YYYY' string
  */
-function formatDate (date) {
+function formatChargingModuleDate (date) {
   // The output date format of methods such as toLocaleString() are based on the Unicode CLDR which is subject to
   // change and cannot be relied on to be consistent: https://github.com/nodejs/node/issues/42030. We therefore
   // generate the formatted date ourselves.
@@ -27,7 +27,7 @@ function formatDate (date) {
  *
  * @param {Date} date The date to be formatted
  *
- * @returns {string} the formatted date
+ * @returns {string} The date formatted as a 'DD MMMM YYYY' string
  */
 function formatLongDate (date) {
   return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -48,7 +48,7 @@ function leftPadZeroes (number, length) {
 }
 
 module.exports = {
-  formatDate,
+  formatChargingModuleDate,
   formatLongDate,
   leftPadZeroes
 }
