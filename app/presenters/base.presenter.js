@@ -1,6 +1,20 @@
 'use strict'
 
 /**
+ * Converts a number which represents pence into pounds by dividing it by 100
+ *
+ * This is such a simply calculation it could be done in place. But by having it as a named method we make it clear
+ * what we are doing rather than those that follow having to derive the intent.
+ *
+ * @param {Number} value
+ *
+ * @returns {Number} the value divided by 100
+ */
+function convertPenceToPounds (value) {
+  return value / 100
+}
+
+/**
  * Formats an abstraction day and month into its string variant, for example, 1 and 4 becomes '1 April'
  *
  * @param {Number} abstractionDay
@@ -81,6 +95,7 @@ function leftPadZeroes (number, length) {
 }
 
 module.exports = {
+  convertPenceToPounds,
   formatAbstractionDate,
   formatAbstractionPeriod,
   formatChargingModuleDate,

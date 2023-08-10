@@ -4,13 +4,41 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
 describe('Base presenter', () => {
+  describe('#convertPenceToPounds()', () => {
+    let valueInPence
+
+    describe('when the value divides evenly', () => {
+      beforeEach(() => {
+        valueInPence = 114900
+      })
+
+      it('correctly returns the value in pounds, for example, 1149', async () => {
+        const result = BasePresenter.convertPenceToPounds(valueInPence)
+
+        expect(result).to.equal(1149)
+      })
+    })
+
+    describe('when the value does not divide evenly', () => {
+      beforeEach(() => {
+        valueInPence = 114901
+      })
+
+      it('correctly returns the value in pounds, for example, 1149.01', async () => {
+        const result = BasePresenter.convertPenceToPounds(valueInPence)
+
+        expect(result).to.equal(1149.01)
+      })
+    })
+  })
+
   describe('#formatAbstractionDate()', () => {
     const day = 12
     const month = 9
