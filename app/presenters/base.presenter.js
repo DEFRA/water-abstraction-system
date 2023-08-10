@@ -1,6 +1,22 @@
 'use strict'
 
 /**
+ * Formats an abstraction day and month into its string variant, for example, 1 and 4 becomes '1 April'
+ *
+ * @param {Number} abstractionDay
+ * @param {Number} abstractionMonth Note: the index starts at 1, for example, 4 would be April
+ *
+ * @returns {string} The abstraction date formatted as a 'DD MMMM' string
+ */
+function formatAbstractionDate (abstractionDay, abstractionMonth) {
+  // NOTE: Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
+  // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
+  const abstractionDate = new Date(1970, abstractionMonth - 1, abstractionDay)
+
+  return abstractionDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
+}
+
+/**
  * Converts a date into the format required by the Charging Module, eg 25/03/2021 becomes 25-MAR-2021
  *
  * @param {Date} date The date to be formatted
@@ -48,6 +64,7 @@ function leftPadZeroes (number, length) {
 }
 
 module.exports = {
+  formatAbstractionDate,
   formatChargingModuleDate,
   formatLongDate,
   leftPadZeroes

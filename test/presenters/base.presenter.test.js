@@ -11,6 +11,17 @@ const { expect } = Code
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
 describe('Base presenter', () => {
+  describe('#formatAbstractionDate()', () => {
+    const day = 12
+    const month = 9
+
+    it('correctly formats the given date, for example, 12 September', async () => {
+      const result = BasePresenter.formatAbstractionDate(day, month)
+
+      expect(result).to.equal('12 September')
+    })
+  })
+
   describe('#formatChargingModuleDate()', () => {
     it('correctly formats the given date, for example, 12-SEP-2021', async () => {
       // We check an array of dates, one for each month, to ensure that every month is formatted correctly
