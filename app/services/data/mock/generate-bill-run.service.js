@@ -178,6 +178,18 @@ function _mapChargePurposes (chargePurposes) {
   })
 }
 
+/**
+ * Calculate the totals for a licence based on the transaction values
+ *
+ * We don't hold totals in the `billing_invoice_licence` record. But the UI shows them. We found it is calculating
+ * these on the fly in the UI code so we need to replicate the same behaviour.
+ *
+ * Another thing to note is that if a transaction is flagged as a credit, then `netAmount` will be held as a signed
+ * value, for example -213.40. This is why it might look confusing we are always adding on each iteration but the
+ * calculation will be correct.
+ * @param {*} transactions
+ * @returns
+ */
 function _transactionTotals (transactions) {
   const values = {
     debit: 0,
@@ -295,13 +307,75 @@ async function _fetchBillingBatch (id) {
   return BillingBatchModel.query()
     .findById(id)
     .withGraphFetched('region')
+    .modifyGraph('region', (builder) => {
+      builder.select([
+        'name'
+      ])
+    })
     .withGraphFetched('billingInvoices')
+    .modifyGraph('billingInvoices', (builder) => {
+      builder.select([
+        'billingInvoiceId',
+        'creditNoteValue',
+        'invoiceAccountNumber',
+        'invoiceNumber',
+        'invoiceValue',
+        'netAmount'
+      ])
+    })
     .withGraphFetched('billingInvoices.billingInvoiceLicences')
+    .modifyGraph('billingInvoices.billingInvoiceLicences', (builder) => {
+      builder.select([
+        'billingInvoiceLicenceId',
+        'licenceRef'
+      ])
+    })
     .withGraphFetched('billingInvoices.billingInvoiceLicences.licence')
+    .modifyGraph('billingInvoices.billingInvoiceLicences.licence', (builder) => {
+      builder.select([
+        'isWaterUndertaker'
+      ])
+    })
     .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions')
+    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions', (builder) => {
+      builder.select([
+        'chargeType',
+        'billableDays',
+        'authorisedDays',
+        'isCredit',
+        'netAmount',
+        'billableQuantity',
+        'description',
+        'startDate',
+        'endDate',
+        'chargeCategoryCode',
+        'grossValuesCalculated',
+        'chargeCategoryDescription'
+      ])
+    })
     .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement')
+    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement', (builder) => {
+      builder.select([
+        'adjustments'
+      ])
+    })
     .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes')
+    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes', (builder) => {
+      builder.select([
+        'chargePurposeId',
+        'abstractionPeriodStartDay',
+        'abstractionPeriodStartMonth',
+        'abstractionPeriodEndDay',
+        'abstractionPeriodEndMonth',
+        'authorisedAnnualQuantity'
+      ])
+    })
     .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse')
+    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse', (builder) => {
+      builder.select([
+        'description'
+      ])
+    })
 }
 
 module.exports = {
