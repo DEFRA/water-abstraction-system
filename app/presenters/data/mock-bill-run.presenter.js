@@ -5,7 +5,7 @@
  * @module MockBillRunPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, formatNumberAsMoney } = require('../base.presenter.js')
+const { convertPenceToPounds, formatAbstractionPeriod, formatLongDate, formatNumberAsMoney } = require('../base.presenter.js')
 
 function go (billingBatch) {
   const {
@@ -31,7 +31,7 @@ function go (billingBatch) {
     transactionFile,
     billRunNumber,
     financialYear: `${fromFinancialYearEnding} to ${toFinancialYearEnding}`,
-    debit: formatNumberAsMoney(netTotal),
+    debit: formatNumberAsMoney(convertPenceToPounds(netTotal)),
     bills: _formatBillingInvoices(billingInvoices)
   }
 }
@@ -110,9 +110,9 @@ function _formatBillingInvoices (billingInvoices) {
       accountAddress,
       contact,
       isWaterCompany: billingInvoiceLicences[0].licence.isWaterUndertaker,
-      credit: formatNumberAsMoney(creditNoteValue),
-      debit: formatNumberAsMoney(invoiceValue),
-      netTotal: formatNumberAsMoney(netAmount),
+      credit: formatNumberAsMoney(convertPenceToPounds(creditNoteValue)),
+      debit: formatNumberAsMoney(convertPenceToPounds(invoiceValue)),
+      netTotal: formatNumberAsMoney(convertPenceToPounds(netAmount)),
       licences: _formatBillingInvoiceLicences(billingInvoiceLicences)
     }
   })
@@ -135,9 +135,9 @@ function _formatBillingInvoiceLicences (billingInvoiceLicences) {
       licence,
       licenceStartDate: billingInvoiceLicence.licence.startDate,
       licenceHolder,
-      credit: formatNumberAsMoney(credit),
-      debit: formatNumberAsMoney(debit),
-      netTotal: formatNumberAsMoney(netTotal),
+      credit: formatNumberAsMoney(convertPenceToPounds(credit)),
+      debit: formatNumberAsMoney(convertPenceToPounds(debit)),
+      netTotal: formatNumberAsMoney(convertPenceToPounds(netTotal)),
       transactions: _formatBillingTransactions(billingTransactions)
     }
   })
@@ -167,8 +167,8 @@ function _formatBillingTransactions (billingTransactions) {
       billableDays,
       authorisedDays,
       chargeQuantity,
-      credit: isCredit ? formatNumberAsMoney(netAmount) : '0.00',
-      debit: isCredit ? '0.00' : formatNumberAsMoney(netAmount),
+      credit: isCredit ? formatNumberAsMoney(convertPenceToPounds(netAmount)) : '0.00',
+      debit: isCredit ? '0.00' : formatNumberAsMoney(convertPenceToPounds(netAmount)),
       chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       chargeRefNumber: `${chargeCategoryCode} (${formatNumberAsMoney(grossValuesCalculated.baselineCharge, true)})`,
       chargeDescription,
