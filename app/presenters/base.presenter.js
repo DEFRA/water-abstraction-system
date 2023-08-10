@@ -23,6 +23,17 @@ function formatDate (date) {
 }
 
 /**
+ * Formats a date into a human readable day, month and year string, for example, '12 September 2021'
+ *
+ * @param {Date} date The date to be formatted
+ *
+ * @returns {string} the formatted date
+ */
+function formatLongDate (date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+/**
  * Pads a number to a given length with leading zeroes and returns the result as a string
  *
  * @param {Number} number The number to be padded
@@ -38,5 +49,6 @@ function leftPadZeroes (number, length) {
 
 module.exports = {
   formatDate,
+  formatLongDate,
   leftPadZeroes
 }
