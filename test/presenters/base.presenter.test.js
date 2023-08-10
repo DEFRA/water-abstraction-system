@@ -106,6 +106,26 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatNumberAsMoney()', () => {
+    const valueInPence = 1149.5
+
+    describe('when no £ symbol is requested', () => {
+      it('correctly returns the value as a money string with no symbol, for example, 1149.50', async () => {
+        const result = BasePresenter.formatNumberAsMoney(valueInPence)
+
+        expect(result).to.equal('1149.50')
+      })
+    })
+
+    describe('when the £ symbol is requested', () => {
+      it('correctly returns the value as a money string with a symbol, for example, £1149.50', async () => {
+        const result = BasePresenter.formatNumberAsMoney(valueInPence, true)
+
+        expect(result).to.equal('£1149.50')
+      })
+    })
+  })
+
   describe('#leftPadZeroes()', () => {
     it('correctly pads numbers', async () => {
       const number = 123

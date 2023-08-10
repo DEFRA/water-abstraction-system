@@ -81,6 +81,20 @@ function formatLongDate (date) {
 }
 
 /**
+ * Formats a number which represents a value in pounds as a money string, for example, 1149 as '1149.00'
+ *
+ * @param {Number} value The value to display as currency. Assumed to be in pounds
+ * @param {Boolean} includeSymbol Whether to add the £ symbol to the start of the returned string
+ *
+ * @returns {string} The value formatted as a money string with optional currency symbol
+ */
+function formatNumberAsMoney (value, includeSymbol = false) {
+  const symbol = includeSymbol ? '£' : ''
+
+  return `${symbol}${value.toFixed(2)}`
+}
+
+/**
  * Pads a number to a given length with leading zeroes and returns the result as a string
  *
  * @param {Number} number The number to be padded
@@ -100,5 +114,6 @@ module.exports = {
   formatAbstractionPeriod,
   formatChargingModuleDate,
   formatLongDate,
+  formatNumberAsMoney,
   leftPadZeroes
 }
