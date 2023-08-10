@@ -22,6 +22,19 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatAbstractionPeriod()', () => {
+    const startDay = 1
+    const startMonth = 4
+    const endDay = 12
+    const endMonth = 9
+
+    it('correctly formats the given period, for example, 1 April to 12 September', async () => {
+      const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
+
+      expect(result).to.equal('1 April to 12 September')
+    })
+  })
+
   describe('#formatChargingModuleDate()', () => {
     it('correctly formats the given date, for example, 12-SEP-2021', async () => {
       // We check an array of dates, one for each month, to ensure that every month is formatted correctly

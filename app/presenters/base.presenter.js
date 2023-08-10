@@ -17,6 +17,23 @@ function formatAbstractionDate (abstractionDay, abstractionMonth) {
 }
 
 /**
+ * Formats an abstraction period into its string variant, for example, '1 April to 31 October'
+ *
+ * @param {Number} startDay
+ * @param {Number} startMonth
+ * @param {Number} endDay
+ * @param {Number} endMonth
+ *
+ * @returns {string} The abstraction period formatted as a 'DD MMMM to DD MMMM' string
+ */
+function formatAbstractionPeriod (startDay, startMonth, endDay, endMonth) {
+  const startDate = formatAbstractionDate(startDay, startMonth)
+  const endDate = formatAbstractionDate(endDay, endMonth)
+
+  return `${startDate} to ${endDate}`
+}
+
+/**
  * Converts a date into the format required by the Charging Module, eg 25/03/2021 becomes 25-MAR-2021
  *
  * @param {Date} date The date to be formatted
@@ -65,6 +82,7 @@ function leftPadZeroes (number, length) {
 
 module.exports = {
   formatAbstractionDate,
+  formatAbstractionPeriod,
   formatChargingModuleDate,
   formatLongDate,
   leftPadZeroes
