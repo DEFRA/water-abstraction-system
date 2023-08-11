@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const ExpandedError = require('../../../../app/errors/expanded.error.js')
+
 // Things we need to stub
 const GenerateBillRunService = require('../../../../app/services/data/mock/generate-bill-run.service.js')
 
@@ -51,7 +54,10 @@ describe('Mock service', () => {
         const error = await expect(MockService.go()).to.reject()
 
         expect(error).to.be.an.error()
-        expect(error.message).to.equal('Nothing')
+        expect(error).to.be.an.instanceOf(ExpandedError)
+        expect(error.message).to.equal('Both type and ID are required for the mocking')
+        expect(error.type).to.be.undefined()
+        expect(error.id).to.be.undefined()
       })
     })
 
@@ -60,7 +66,10 @@ describe('Mock service', () => {
         const error = await expect(MockService.go('bill-run')).to.reject()
 
         expect(error).to.be.an.error()
-        expect(error.message).to.equal('Nothing')
+        expect(error).to.be.an.instanceOf(ExpandedError)
+        expect(error.message).to.equal('Both type and ID are required for the mocking')
+        expect(error.type).to.equal('bill-run')
+        expect(error.id).to.be.undefined()
       })
     })
 
@@ -69,7 +78,10 @@ describe('Mock service', () => {
         const error = await expect(MockService.go('INVALID_TYPE', billRunId)).to.reject()
 
         expect(error).to.be.an.error()
-        expect(error.message).to.equal('Dunno')
+        expect(error).to.be.an.instanceOf(ExpandedError)
+        expect(error.message).to.equal('Mocking is not supported for this type')
+        expect(error.type).to.equal('INVALID_TYPE')
+        expect(error.id).to.equal(billRunId)
       })
     })
   })

@@ -5,6 +5,7 @@
  * @module MockService
  */
 
+const ExpandedError = require('../../../errors/expanded.error.js')
 const GenerateBillRunService = require('./generate-bill-run.service.js')
 
 const types = {
@@ -20,14 +21,12 @@ async function go (type, id) {
 function _validateParams (type, id) {
   // Validate that a type and id have been provided
   if (!type || !id) {
-    // TODO: better error
-    throw Error('Nothing')
+    throw new ExpandedError('Both type and ID are required for the mocking', { type, id })
   }
 
   // Validate that the provided type is supported
   if (!Object.keys(types).includes(type)) {
-    // TODO: better error
-    throw Error('Dunno')
+    throw new ExpandedError('Mocking is not supported for this type', { type, id })
   }
 }
 
