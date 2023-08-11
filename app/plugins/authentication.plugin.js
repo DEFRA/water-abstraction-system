@@ -42,6 +42,7 @@ const AuthenticationPlugin = {
 
     server.route({
       method: 'GET',
+      // TODO: pick a better path
       path: '/auth-test',
       handler: (request, _h) => {
         return { auth: request.auth }
