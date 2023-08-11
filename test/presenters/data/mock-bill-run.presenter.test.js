@@ -30,6 +30,10 @@ describe('Mock Bill Run presenter', () => {
       const { bills: results } = MockBillRunPresenter.go(mockedBillingBatch)
 
       expect(results[0].id).to.equal('86e5841a-81a9-4207-97ce-cee0917c0975')
+      expect(results[0].account).to.equal('Z11895994A')
+      expect(results[0].number).to.equal('ZZI0000013T')
+      expect(results[0].accountAddress).to.be.an.array()
+      expect(results[0].accountAddress[0]).to.be.a.string()
       expect(results[0].contact).to.be.a.string()
       expect(results[0].isWaterCompany).to.be.false()
       expect(results[0].credit).to.equal('0.00')
@@ -195,7 +199,7 @@ const mockedBillingBatch = {
           netTotal: 84000
         }
       ],
-      address: [
+      accountAddress: [
         '2 Fake Street',
         'Fakechester',
         'XM53 3UX'

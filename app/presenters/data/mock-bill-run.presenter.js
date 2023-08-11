@@ -92,15 +92,15 @@ function _formatAdjustments (chargeElement) {
 function _formatBillingInvoices (billingInvoices) {
   return billingInvoices.map((billingInvoice) => {
     const {
-      account,
       accountAddress,
       billingInvoiceLicences,
       contact,
       creditNoteValue,
       invoiceValue,
       netAmount,
-      number,
-      billingInvoiceId: id
+      billingInvoiceId: id,
+      invoiceAccountNumber: account,
+      invoiceNumber: number
     } = billingInvoice
 
     return {
