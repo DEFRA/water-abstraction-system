@@ -10,20 +10,32 @@ const GenerateMockDataService = require('./generate-mock-data.service.js')
 const MockBillRunPresenter = require('../../../presenters/data/mock-bill-run.presenter.js')
 
 async function go (id) {
-  const realBillingBatch = await _fetchBillingBatch(id)
+  const billingBatch = await _fetchBillingBatch(id)
 
-  if (!realBillingBatch) {
+  if (!billingBatch) {
     throw new Error('No matching bill run exists')
   }
 
-  const mockedBillingBatch = _mockBillingBatch(realBillingBatch)
+  _mockBillingInvoices(billingBatch.billingInvoices)
 
-  return _response(mockedBillingBatch)
+  return _response(billingBatch)
 }
 
 async function _fetchBillingBatch (id) {
   return BillingBatchModel.query()
     .findById(id)
+    .select([
+      'billingBatchId',
+      'batchType',
+      'billRunNumber',
+      'dateCreated',
+      'fromFinancialYearEnding',
+      'netTotal',
+      'scheme',
+      'status',
+      'toFinancialYearEnding',
+      'transactionFileReference'
+    ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select([
@@ -57,18 +69,19 @@ async function _fetchBillingBatch (id) {
     .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions')
     .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions', (builder) => {
       builder.select([
-        'chargeType',
-        'billableDays',
         'authorisedDays',
+        'billableDays',
+        'billableQuantity',
+        'chargeCategoryCode',
+        'chargeCategoryDescription',
+        'chargeType',
+        'description',
+        'endDate',
+        'grossValuesCalculated',
         'isCredit',
         'netAmount',
-        'billableQuantity',
-        'description',
         'startDate',
-        'endDate',
-        'chargeCategoryCode',
-        'grossValuesCalculated',
-        'chargeCategoryDescription'
+        'supportedSourceName'
       ])
     })
     .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement')
@@ -110,19 +123,12 @@ function _maskInvoiceNumber (invoiceNumber) {
   return `ZZ${invoiceNumber.substring(2)}`
 }
 
-function _mockBillingBatch (billingBatch) {
-  _mockBillingInvoices(billingBatch.billingInvoices)
-}
-
 function _mockBillingInvoices (billingInvoices) {
   billingInvoices.forEach((billingInvoice) => {
-    const {
-      address: accountAddress,
-      name: contact
-    } = GenerateMockDataService.go()
+    const { address, name } = GenerateMockDataService.go()
 
-    billingInvoice.address = accountAddress
-    billingInvoice.contact = contact
+    billingInvoice.accountAddress = address
+    billingInvoice.contact = name
 
     billingInvoice.invoiceAccountNumber = _maskInvoiceAccountNumber(billingInvoice.invoiceAccountNumber)
     billingInvoice.invoiceNumber = _maskInvoiceNumber(billingInvoice.invoiceNumber)
@@ -133,13 +139,13 @@ function _mockBillingInvoices (billingInvoices) {
 
 function _mockBillingInvoiceLicences (billingInvoiceLicences) {
   billingInvoiceLicences.forEach((billingInvoiceLicence) => {
-    const { name: licenceHolder } = GenerateMockDataService.go()
-    const transactionTotals = _transactionTotals(billingInvoiceLicence.billingTransactions)
+    const { name } = GenerateMockDataService.go()
+    const { credit, debit, netTotal } = _transactionTotals(billingInvoiceLicence.billingTransactions)
 
-    billingInvoiceLicence.licenceHolder = licenceHolder
-    billingInvoiceLicence.credit = transactionTotals.credit
-    billingInvoiceLicence.debit = transactionTotals.debit
-    billingInvoiceLicence.netTotal = transactionTotals.netTotal
+    billingInvoiceLicence.licenceHolder = name
+    billingInvoiceLicence.credit = credit
+    billingInvoiceLicence.debit = debit
+    billingInvoiceLicence.netTotal = netTotal
   })
 }
 
