@@ -39,23 +39,24 @@ const AuthenticationPlugin = {
         }
       })
 
-      // TODO: confirm if we want to use this to enable user authentication on ALL routes by default, so we would need
-      // to add `auth: false` to the config of each route that doesn't need authentication
+      // We set up our route in the dependency callback as we can't set authentcation before the strategy is registered
+      server.route({
+        method: 'GET',
+        // TODO: pick a better path
+        path: '/auth-test',
+        handler: (request, _h) => {
+          return { auth: request.auth }
+        },
+        options: {
+          description: 'Test that authentication is working',
+          app: { excludeFromProd: true },
+          auth: 'session'
+        }
+      })
+
+      // NOTE: If we wa
       //
       // server.auth.default('session')
-    })
-
-    server.route({
-      method: 'GET',
-      // TODO: pick a better path
-      path: '/auth-test',
-      handler: (request, _h) => {
-        return { auth: request.auth }
-      },
-      options: {
-        description: 'Test that authentication is working',
-        app: { excludeFromProd: true }
-      }
     })
   }
 }
