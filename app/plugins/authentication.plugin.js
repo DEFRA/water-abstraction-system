@@ -53,10 +53,6 @@ const AuthenticationPlugin = {
           auth: 'session'
         }
       })
-
-      // NOTE: If we wa
-      //
-      // server.auth.default('session')
     })
   }
 }
