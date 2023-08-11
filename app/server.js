@@ -22,6 +22,7 @@ const registerPlugins = async (server) => {
   await server.register(StopPlugin)
   await server.register(require('@hapi/inert'))
   await server.register(AuthenticationPlugin)
+  await server.register(require('@hapi/cookie'))
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin())
   await server.register(AirbrakePlugin)

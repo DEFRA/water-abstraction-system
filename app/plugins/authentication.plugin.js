@@ -20,24 +20,29 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 const AuthenticationPlugin = {
   name: 'authentication',
   register: async (server, _options) => {
-    // TODO: Set @hapi/cookie as a dependency instead
-    await server.register(require('@hapi/cookie'))
+    // We wait for @hapi/cookie to be registered before setting up the authentication strategy
+    server.dependency('@hapi/cookie', async (server) => {
+      server.auth.strategy('session', 'cookie', {
+        cookie: {
+          name: 'sid',
+          password: process.env.COOKIE_SECRET,
+          isSecure: false,
+          isSameSite: 'Lax',
+          ttl: TWO_HOURS_IN_MS,
+          isHttpOnly: true
+        },
+        redirectTo: '/signIn',
+        validate: async (_request, session) => {
+          const { userId } = session
+          // TODO: Look up userId in the IDM to ensure user exists. Also get user role and add to `credentials`
+          return { isValid: !!userId, credentials: { userId } }
+        }
+      })
 
-    server.auth.strategy('session', 'cookie', {
-      cookie: {
-        name: 'sid',
-        password: process.env.COOKIE_SECRET,
-        isSecure: false,
-        isSameSite: 'Lax',
-        ttl: TWO_HOURS_IN_MS,
-        isHttpOnly: true
-      },
-      redirectTo: '/signIn',
-      validate: async (_request, session) => {
-        const { userId } = session
-        // TODO: Look up userId in the IDM to ensure user exists. Also get user role and add to `credentials`
-        return { isValid: !!userId, credentials: { userId } }
-      }
+      // TODO: confirm if we want to use this to enable user authentication on ALL routes by default, so we would need
+      // to add `auth: false` to the config of each route that doesn't need authentication
+      //
+      // server.auth.default('session')
     })
 
     server.route({
@@ -52,11 +57,6 @@ const AuthenticationPlugin = {
         app: { excludeFromProd: true }
       }
     })
-
-    // TODO: confirm if we want to use this to enable user authentication on ALL routes by default, so we would need to
-    // add `auth: false` to the config of each route that doesn't need authentication
-    //
-    // server.auth.default('session')
   }
 }
 
