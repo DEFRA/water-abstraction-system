@@ -54,7 +54,7 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .where('chargeVersions.regionCode', naldRegionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .whereNot('chargeVersions.status', 'draft')
+    .where('chargeVersions.status', 'current')
     .whereNotExists(
       ChargeVersionWorkflow.query()
         .select(1)
