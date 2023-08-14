@@ -9,7 +9,10 @@ const routes = [
     handler: DataController.exportDb,
     options: {
       description: 'Used to export the database and upload the file to our AWS S3 bucket',
-      app: { excludeFromProd: true }
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      }
     }
   },
   {
@@ -18,7 +21,10 @@ const routes = [
     handler: DataController.seed,
     options: {
       description: 'Used to seed test data in the database',
-      app: { excludeFromProd: true }
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      }
     }
   },
   {
@@ -27,7 +33,10 @@ const routes = [
     handler: DataController.tearDown,
     options: {
       description: 'Used to remove the acceptance test data from the database',
-      app: { excludeFromProd: true }
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      }
     }
   }
 ]
