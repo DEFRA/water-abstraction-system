@@ -9,6 +9,7 @@ const { ref } = require('objection')
 
 const ChargeElementModel = require('../../models/water/charge-element.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
+const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 
@@ -54,6 +55,12 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .whereNot('chargeVersions.status', 'draft')
+    .whereNotExists(
+      ChargeVersionWorkflow.query()
+        .select(1)
+        .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
+        .whereNull('chargeVersionWorkflows.dateDeleted')
+    )
     .whereExists(
       ChargeElementModel.query()
         .select(1)
