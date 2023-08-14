@@ -9,10 +9,8 @@ const routes = [
     handler: BillRunsController.create,
     options: {
       description: 'Used to create a bill run',
-      plugins: {
-        errorPages: {
-          plainOutput: true
-        }
+      app: {
+        plainOutput: true
       }
     }
   }
