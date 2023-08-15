@@ -46,33 +46,6 @@ function _beforeRetryHook (error, retryCount) {
   global.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
 }
 
-async function _sendRequest (method, url, additionalOptions) {
-  const got = await _importGot()
-  const result = {
-    succeeded: false,
-    response: null
-  }
-
-  try {
-    const options = _requestOptions(additionalOptions)
-
-    result.response = await got[method](url, options)
-
-    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
-    // property
-    result.succeeded = result.response.ok
-  } catch (error) {
-    // If it's a network error, for example 'ETIMEDOUT', we'll end up here
-    result.response = error
-  }
-
-  if (!result.succeeded) {
-    _logFailure(method.toUpperCase(), result, url, additionalOptions)
-  }
-
-  return result
-}
-
 async function _importGot () {
   // As of v12, the got dependency no longer supports CJS modules. This causes us a problem as we are locked into
   // using these for the time being. Some workarounds are provided here:
@@ -173,6 +146,33 @@ function _requestOptions (additionalOptions) {
   }
 
   return { ...defaultOptions, ...additionalOptions }
+}
+
+async function _sendRequest (method, url, additionalOptions) {
+  const got = await _importGot()
+  const result = {
+    succeeded: false,
+    response: null
+  }
+
+  try {
+    const options = _requestOptions(additionalOptions)
+
+    result.response = await got[method](url, options)
+
+    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
+    // property
+    result.succeeded = result.response.ok
+  } catch (error) {
+    // If it's a network error, for example 'ETIMEDOUT', we'll end up here
+    result.response = error
+  }
+
+  if (!result.succeeded) {
+    _logFailure(method.toUpperCase(), result, url, additionalOptions)
+  }
+
+  return result
 }
 
 module.exports = {
