@@ -42,6 +42,10 @@ async function post (url, additionalOptions = {}) {
   return _sendRequest('post', url, additionalOptions)
 }
 
+function _beforeRetryHook (error, retryCount) {
+  global.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
+}
+
 async function _sendRequest (method, url, additionalOptions) {
   const got = await _importGot()
   const result = {
@@ -163,10 +167,7 @@ function _requestOptions (additionalOptions) {
     },
     hooks: {
       beforeRetry: [
-        (error, retryCount) => {
-          // console.log(retryCount, error)
-          global.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
-        }
+        _beforeRetryHook
       ]
     }
   }
