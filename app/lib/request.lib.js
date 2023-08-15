@@ -145,6 +145,8 @@ function _requestOptions (additionalOptions) {
     // preference is to only retry in the event of a timeout on assumption the destination server might be busy but has
     // a chance to succeed when attempted again
     retry: {
+      // The default is also 2 retries before erroring. We specify it to make this fact visible
+      limit: 2,
       // We ensure that the only network errors Got retries are timeout errors
       errorCodes: ['ETIMEDOUT'],
       // By default, Got does not retry PATCH and POST requests. As we only retry timeouts there is no risk in retrying
@@ -158,6 +160,14 @@ function _requestOptions (additionalOptions) {
     // > It is a good practice to set a timeout to prevent hanging requests. By default, there is no timeout set.
     timeout: {
       request: requestConfig.timeout
+    },
+    hooks: {
+      beforeRetry: [
+        (error, retryCount) => {
+          // console.log(retryCount, error)
+          global.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
+        }
+      ]
     }
   }
 
