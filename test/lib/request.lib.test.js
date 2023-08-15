@@ -147,6 +147,13 @@ describe('RequestLib', () => {
               .persist()
           })
 
+          it('logs when a retry has happened', async () => {
+            await RequestLib.get(testDomain)
+
+            expect(notifierStub.omg.callCount).to.equal(2)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
               const result = await RequestLib.get(testDomain)
@@ -173,6 +180,13 @@ describe('RequestLib', () => {
               .reply(200, { data: 'hello world' })
               .get(() => true)
               .reply(200, { data: 'delayed hello world' })
+          })
+
+          it('logs when a retry has happened', async () => {
+            await RequestLib.get(testDomain)
+
+            expect(notifierStub.omg.callCount).to.equal(1)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -342,6 +356,13 @@ describe('RequestLib', () => {
               .persist()
           })
 
+          it('logs when a retry has happened', async () => {
+            await RequestLib.patch(testDomain)
+
+            expect(notifierStub.omg.callCount).to.equal(2)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
               const result = await RequestLib.patch(testDomain)
@@ -368,6 +389,13 @@ describe('RequestLib', () => {
               .reply(200, { data: 'hello world' })
               .patch(() => true)
               .reply(200, { data: 'delayed hello world' })
+          })
+
+          it('logs when a retry has happened', async () => {
+            await RequestLib.patch(testDomain)
+
+            expect(notifierStub.omg.callCount).to.equal(1)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -537,6 +565,13 @@ describe('RequestLib', () => {
               .persist()
           })
 
+          it('logs when a retry has happened', async () => {
+            await RequestLib.post(testDomain)
+
+            expect(notifierStub.omg.callCount).to.equal(2)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
               const result = await RequestLib.post(testDomain)
@@ -563,6 +598,13 @@ describe('RequestLib', () => {
               .reply(200, { data: 'hello world' })
               .post(() => true)
               .reply(200, { data: 'delayed hello world' })
+          })
+
+          it('logs when a retry has happened', async () => {
+            await RequestLib.post(testDomain)
+
+            expect(notifierStub.omg.callCount).to.equal(1)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
