@@ -22,14 +22,10 @@ async function exportDb (_request, h) {
 }
 
 async function mock (request, h) {
-  try {
-    const { type, id } = request.params
-    const mockData = await MockService.go(type, id)
+  const { type, id } = request.params
+  const mockData = await MockService.go(type, id)
 
-    return h.response(mockData)
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
+  return h.response(mockData)
 }
 
 async function seed (_request, h) {
