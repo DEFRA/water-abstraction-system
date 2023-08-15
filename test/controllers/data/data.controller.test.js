@@ -9,7 +9,8 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ExportService = require('../../../app/services/data/export/export.service')
+const ExportService = require('../../../app/services/data/export/export.service.js')
+const MockService = require('../../../app/services/data/mock/mock.service.js')
 const SeedService = require('../../../app/services/data/seed/seed.service.js')
 const TearDownService = require('../../../app/services/data/tear-down/tear-down.service.js')
 
@@ -50,6 +51,40 @@ describe('Data controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(204)
+      })
+    })
+  })
+
+  describe('GET /data/mock', () => {
+    const options = {
+      method: 'GET',
+      url: '/data/mock/licence/32055e54-a17d-4629-837d-5da51390bb47'
+    }
+
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(MockService, 'go').resolves({ data: 'mock' })
+      })
+
+      it('displays the correct message', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        // TODO: test the response object
+      })
+    })
+
+    describe('when the request fails', () => {
+      describe('because the MockService errors', () => {
+        beforeEach(async () => {
+          Sinon.stub(MockService, 'go').rejects()
+        })
+
+        it('returns a 500 status', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(500)
+        })
       })
     })
   })

@@ -5,9 +5,8 @@
  * @module DataController
  */
 
-const Boom = require('@hapi/boom')
-
 const ExportService = require('../../services/data/export/export.service.js')
+const MockService = require('../../services/data/mock/mock.service.js')
 const SeedService = require('../../services/data/seed/seed.service.js')
 const TearDownService = require('../../services/data/tear-down/tear-down.service.js')
 
@@ -22,28 +21,28 @@ async function exportDb (_request, h) {
   return h.response().code(204)
 }
 
-async function seed (_request, h) {
-  try {
-    await SeedService.go()
+async function mock (request, h) {
+  const { type, id } = request.params
+  const mockData = await MockService.go(type, id)
 
-    return h.response().code(204)
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
+  return h.response(mockData)
+}
+
+async function seed (_request, h) {
+  await SeedService.go()
+
+  return h.response().code(204)
 }
 
 async function tearDown (_request, h) {
-  try {
-    await TearDownService.go()
+  await TearDownService.go()
 
-    return h.response().code(204)
-  } catch (error) {
-    return Boom.badImplementation(error.message)
-  }
+  return h.response().code(204)
 }
 
 module.exports = {
   exportDb,
+  mockData: mock,
   seed,
   tearDown
 }

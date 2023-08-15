@@ -9,7 +9,10 @@ const routes = [
     handler: CheckController.twoPart,
     options: {
       description: 'Used by the delivery team to check the SROC 2PT billing logic',
-      app: { excludeFromProd: true }
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      }
     }
   }
 ]
