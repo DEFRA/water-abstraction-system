@@ -91,14 +91,17 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
 
   for (const chargeElement of chargeElements) {
     const { chargePurposes } = chargeElement
+
     for (const chargePurpose of chargePurposes) {
       const legacyId = chargePurpose.purposesUse.legacyId
+
       chargePurpose.returns = await ReturnModel.query()
         .select([
           'returnId',
           'returnRequirement',
           'startDate',
           'endDate',
+          'status',
           'metadata'
         ])
         .where('licenceRef', licenceRef)
@@ -108,6 +111,10 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
         .where('endDate', '>=', billingPeriod.startDate)
         .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
         .where(ref('metadata:purposes[0].tertiary.code').castInt(), legacyId)
+
+      chargePurpose.returnStatus = chargePurpose.returns.map((matchedReturn) => {
+        return matchedReturn.status
+      })
     }
   }
 }
