@@ -118,7 +118,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
     cumulativeReturnStatuses.push(...chargeElementReturnStatuses)
   }
 
-  chargeVersion.returnStatus = [...new Set(cumulativeReturnStatuses)]
+  chargeVersion.returnStatuses = [...new Set(cumulativeReturnStatuses)]
 }
 
 function _extractPurposeUseLegacyIds (chargeElement) {
