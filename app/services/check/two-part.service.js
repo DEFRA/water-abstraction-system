@@ -10,6 +10,7 @@ const { ref } = require('objection')
 const ChargeElementModel = require('../../models/water/charge-element.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
+const FriendlyResponseService = require('./friendly-response.service.js')
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 
@@ -32,7 +33,7 @@ async function go (naldRegionId, format = 'friendly') {
 
   switch (format) {
     case 'friendly':
-      return _friendlyResponse(matchedChargeVersions)
+      return FriendlyResponseService.go(billingPeriod, matchedChargeVersions)
     case 'raw':
       return matchedChargeVersions
     default:
@@ -137,10 +138,6 @@ function _matchChargeVersions (chargeVersions) {
       chargeVersions: matchedChargeVersions
     }
   })
-}
-
-function _friendlyResponse (_matchedChargeVersions) {
-  return { hello: 'world' }
 }
 
 function _calculateAndLogTime (startTime) {
