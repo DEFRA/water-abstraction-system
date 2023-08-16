@@ -27,6 +27,13 @@ async function go (filePath) {
   await _uploadType(buffer, bucketName, key)
 }
 
+/**
+ * Uploads a file based on its size to the specified S3 bucket
+ *
+ * @param {Buffer} buffer The file content as a buffer object
+ * @param {String} bucketName Name of the S3 bucket to upload the file to
+ * @param {String} key The path under which the file will be stored in the bucket
+ */
 async function _uploadType (buffer, bucketName, key) {
   if (buffer.length <= 5 * 1024 * 1024) {
     await _uploadSingleFile(bucketName, key, buffer)
@@ -35,6 +42,13 @@ async function _uploadType (buffer, bucketName, key) {
   }
 }
 
+/**
+ * Uploads a single file content to the specified S3 bucket with the provided key
+ *
+ * @param {Buffer} buffer The file content as a buffer object
+ * @param {String} bucketName Name of the S3 bucket to upload the file to
+ * @param {String} key The path under which the file will be stored in the bucket
+ */
 async function _uploadSingleFile (bucketName, key, buffer) {
   const s3Client = new S3Client()
 
@@ -52,9 +66,11 @@ async function _uploadSingleFile (bucketName, key, buffer) {
 }
 
 /**
- * Uploads a file to an Amazon S3 bucket using the given parameters
+ * Uploads a file in multiple parts to the specified S3 bucket with the provided key
  *
- * @param {Object} params The parameters to use when uploading the file
+ * @param {Buffer} buffer The file content as a buffer object
+ * @param {String} bucketName Name of the S3 bucket to upload the file to
+ * @param {String} key The path under which the file will be stored in the bucket
  */
 async function _uploadToBucket (bucketName, key, buffer) {
   const s3Client = new S3Client({})
