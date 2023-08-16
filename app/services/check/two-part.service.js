@@ -90,30 +90,26 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   const { licenceRef, chargeElements } = chargeVersion
 
   for (const chargeElement of chargeElements) {
-    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
-
-    chargeElement.returns = await ReturnModel.query()
-      .select([
-        'returnId',
-        'returnRequirement',
-        'startDate',
-        'endDate',
-        'metadata'
-      ])
-      .where('licenceRef', licenceRef)
-      // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
-      .where('startDate', '>=', '2008-04-01')
-      .where('startDate', '<=', billingPeriod.endDate)
-      .where('endDate', '>=', billingPeriod.startDate)
-      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
-      .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
+    const { chargePurposes } = chargeElement
+    for (const chargePurpose of chargePurposes) {
+      const legacyId = chargePurpose.purposesUse.legacyId
+      chargePurpose.returns = await ReturnModel.query()
+        .select([
+          'returnId',
+          'returnRequirement',
+          'startDate',
+          'endDate',
+          'metadata'
+        ])
+        .where('licenceRef', licenceRef)
+        // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
+        .where('startDate', '>=', '2008-04-01')
+        .where('startDate', '<=', billingPeriod.endDate)
+        .where('endDate', '>=', billingPeriod.startDate)
+        .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
+        .where(ref('metadata:purposes[0].tertiary.code').castInt(), legacyId)
+    }
   }
-}
-
-function _extractPurposeUseLegacyIds (chargeElement) {
-  return chargeElement.chargePurposes.map((chargePurpose) => {
-    return chargePurpose.purposesUse.legacyId
-  })
 }
 
 function _matchChargeVersions (chargeVersions) {
