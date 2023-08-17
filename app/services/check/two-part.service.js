@@ -10,6 +10,7 @@ const { ref } = require('objection')
 const ChargeElementModel = require('../../models/water/charge-element.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
+const FriendlyResponseService = require('./friendly-response.service.js')
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 
@@ -32,7 +33,7 @@ async function go (naldRegionId, format = 'friendly') {
 
   switch (format) {
     case 'friendly':
-      return _friendlyResponse(matchedChargeVersions)
+      return FriendlyResponseService.go(billingPeriod, matchedChargeVersions)
     case 'raw':
       return matchedChargeVersions
     default:
@@ -88,28 +89,42 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
 
 async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   const { licenceRef, chargeElements } = chargeVersion
+  const cumulativeReturnStatuses = []
 
   for (const chargeElement of chargeElements) {
-    const { chargePurposes } = chargeElement
-    for (const chargePurpose of chargePurposes) {
-      const legacyId = chargePurpose.purposesUse.legacyId
-      chargePurpose.returns = await ReturnModel.query()
-        .select([
-          'returnId',
-          'returnRequirement',
-          'startDate',
-          'endDate',
-          'metadata'
-        ])
-        .where('licenceRef', licenceRef)
-        // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
-        .where('startDate', '>=', '2008-04-01')
-        .where('startDate', '<=', billingPeriod.endDate)
-        .where('endDate', '>=', billingPeriod.startDate)
-        .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
-        .where(ref('metadata:purposes[0].tertiary.code').castInt(), legacyId)
-    }
+    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
+
+    chargeElement.returns = await ReturnModel.query()
+      .select([
+        'returnId',
+        'returnRequirement',
+        'startDate',
+        'endDate',
+        'status',
+        'metadata'
+      ])
+      .where('licenceRef', licenceRef)
+      // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
+      .where('startDate', '>=', '2008-04-01')
+      .where('startDate', '<=', billingPeriod.endDate)
+      .where('endDate', '>=', billingPeriod.startDate)
+      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
+      .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
+
+    const chargeElementReturnStatuses = chargeElement.returns.map((matchedReturn) => {
+      return matchedReturn.status
+    })
+
+    cumulativeReturnStatuses.push(...chargeElementReturnStatuses)
   }
+
+  chargeVersion.returnStatuses = [...new Set(cumulativeReturnStatuses)]
+}
+
+function _extractPurposeUseLegacyIds (chargeElement) {
+  return chargeElement.chargePurposes.map((chargePurpose) => {
+    return chargePurpose.purposesUse.legacyId
+  })
 }
 
 function _matchChargeVersions (chargeVersions) {
@@ -130,10 +145,6 @@ function _matchChargeVersions (chargeVersions) {
       chargeVersions: matchedChargeVersions
     }
   })
-}
-
-function _friendlyResponse (_matchedChargeVersions) {
-  return { hello: 'world' }
 }
 
 function _calculateAndLogTime (startTime) {
