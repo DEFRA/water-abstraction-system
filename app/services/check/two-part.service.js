@@ -90,6 +90,7 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
 async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   const { licenceRef, chargeElements } = chargeVersion
   const cumulativeReturnStatuses = []
+  let returnsUnderQuery
 
   for (const chargeElement of chargeElements) {
     const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
@@ -101,6 +102,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
         'startDate',
         'endDate',
         'status',
+        'underQuery',
         'metadata'
       ])
       .where('licenceRef', licenceRef)
@@ -112,6 +114,10 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
 
     const chargeElementReturnStatuses = chargeElement.returns.map((matchedReturn) => {
+      if (matchedReturn.underQuery) {
+        returnsUnderQuery = true
+      }
+
       return matchedReturn.status
     })
 
@@ -119,6 +125,12 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   }
 
   chargeVersion.returnStatuses = [...new Set(cumulativeReturnStatuses)]
+
+  if (chargeVersion.returnStatuses.includes('completed', 'due') && !returnsUnderQuery) {
+    chargeVersion.returnsMatchingStatus = 'ready'
+  } else {
+    chargeVersion.returnsMatchingStatus = 'error'
+  }
 }
 
 function _extractPurposeUseLegacyIds (chargeElement) {
