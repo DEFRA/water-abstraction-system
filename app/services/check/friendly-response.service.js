@@ -147,7 +147,7 @@ function _formatFriendlyReturns (returns, matchedReturns) {
     const friendlyReturn = {
       id: returnId,
       siteDescription: _titleCaseAllWords(metadata.description),
-      purpose: _titleCaseAllWords(metadata.purposes[0].alias),
+      purpose: _formatPurpose(metadata.purposes[0]),
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
       twoPartTariff: metadata.isTwoPartTariff,
@@ -212,17 +212,12 @@ function _formatAdjustments (adjustments) {
   return friendlyAdjustments
 }
 
-function _titleCaseAllWords (stringToBeTitleCased) {
-  const lowercaseWords = stringToBeTitleCased.toLowerCase().split(' ')
+function _formatPurpose (purpose) {
+  if (purpose.alias) {
+    return _titleCaseAllWords(purpose.alias)
+  }
 
-  const titleCaseWords = lowercaseWords.reduce((words, lowercaseWord) => {
-    const titleCasedWord = `${lowercaseWord[0].toUpperCase()}${lowercaseWord.slice(1)}`
-    words.push(titleCasedWord)
-
-    return words
-  }, [])
-
-  return titleCaseWords.join(' ')
+  return _titleCaseAllWords(purpose.tertiary.description)
 }
 
 function _formatTimeLimit (startDate, endDate) {
@@ -239,6 +234,19 @@ function _formatWaterAvailability (isRestrictedSource) {
   }
 
   return 'Available'
+}
+
+function _titleCaseAllWords (stringToBeTitleCased) {
+  const lowercaseWords = stringToBeTitleCased.toLowerCase().split(' ')
+
+  const titleCaseWords = lowercaseWords.reduce((words, lowercaseWord) => {
+    const titleCasedWord = `${lowercaseWord[0].toUpperCase()}${lowercaseWord.slice(1)}`
+    words.push(titleCasedWord)
+
+    return words
+  }, [])
+
+  return titleCaseWords.join(' ')
 }
 
 module.exports = {
