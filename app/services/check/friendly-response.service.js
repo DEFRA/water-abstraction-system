@@ -9,6 +9,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../presenters/ba
 
 function go (billingPeriod, matchedChargeVersions) {
   const response = {
+    note: 'This response aims to match the UI. Note this means the entity names and structure DO NOT match what is in the DB.',
     billingPeriod: {
       startDate: formatLongDate(billingPeriod.startDate),
       endDate: formatLongDate(billingPeriod.endDate)
