@@ -9,6 +9,7 @@ const { formatAbstractionPeriod, formatLongDate } = require('../../presenters/ba
 
 function go (billingPeriod, matchedChargeVersions) {
   const response = {
+    note: 'This response aims to match the UI. Note this means the entity names and structure DO NOT match what is in the DB.',
     billingPeriod: {
       startDate: formatLongDate(billingPeriod.startDate),
       endDate: formatLongDate(billingPeriod.endDate)
@@ -28,6 +29,7 @@ function _formatFriendlyLicences (licences, matchedChargeVersions) {
     const friendlyLicence = {
       id: licenceId,
       licenceRef,
+      returnsStatuses: chargeVersions[0].returnStatuses,
       chargeInformations: []
     }
 
@@ -66,6 +68,7 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
       eiucRegion,
       isRestrictedSource,
       loss,
+      returns,
       source,
       volume,
       waterModel
@@ -89,9 +92,11 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
       eiucRegion,
       additionalCharges: formattedAdditionalCharges,
       adjustments: formattedAdjustments,
-      chargeElements: []
+      chargeElements: [],
+      returns: []
     }
 
+    _formatFriendlyReturns(friendlyChargeReference.returns, returns)
     _formatFriendlyChargeElements(friendlyChargeReference.chargeElements, chargePurposes)
 
     chargeReferences.push(friendlyChargeReference)
@@ -107,7 +112,6 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
       isSection127AgreementEnabled,
       loss,
       purposesUse,
-      returnStatus,
       timeLimitedStartDate,
       timeLimitedEndDate,
       abstractionPeriodEndDay: endDay,
@@ -129,10 +133,6 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
     }
 
     friendlyChargeElement.legacyId = purposesUse.legacyId
-    friendlyChargeElement.returnStatuses = returnStatus
-    friendlyChargeElement.returns = []
-
-    _formatFriendlyReturns(friendlyChargeElement.returns, chargePurpose.returns)
 
     chargeElements.push(friendlyChargeElement)
   })
