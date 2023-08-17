@@ -89,35 +89,42 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
 
 async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   const { licenceRef, chargeElements } = chargeVersion
+  const cumulativeReturnStatuses = []
 
   for (const chargeElement of chargeElements) {
-    const { chargePurposes } = chargeElement
+    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
 
-    for (const chargePurpose of chargePurposes) {
-      const legacyId = chargePurpose.purposesUse.legacyId
+    chargeElement.returns = await ReturnModel.query()
+      .select([
+        'returnId',
+        'returnRequirement',
+        'startDate',
+        'endDate',
+        'status',
+        'metadata'
+      ])
+      .where('licenceRef', licenceRef)
+      // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
+      .where('startDate', '>=', '2008-04-01')
+      .where('startDate', '<=', billingPeriod.endDate)
+      .where('endDate', '>=', billingPeriod.startDate)
+      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
+      .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
 
-      chargePurpose.returns = await ReturnModel.query()
-        .select([
-          'returnId',
-          'returnRequirement',
-          'startDate',
-          'endDate',
-          'status',
-          'metadata'
-        ])
-        .where('licenceRef', licenceRef)
-        // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
-        .where('startDate', '>=', '2008-04-01')
-        .where('startDate', '<=', billingPeriod.endDate)
-        .where('endDate', '>=', billingPeriod.startDate)
-        .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
-        .where(ref('metadata:purposes[0].tertiary.code').castInt(), legacyId)
+    const chargeElementReturnStatuses = chargeElement.returns.map((matchedReturn) => {
+      return matchedReturn.status
+    })
 
-      chargePurpose.returnStatus = chargePurpose.returns.map((matchedReturn) => {
-        return matchedReturn.status
-      })
-    }
+    cumulativeReturnStatuses.push(...chargeElementReturnStatuses)
   }
+
+  chargeVersion.returnStatuses = [...new Set(cumulativeReturnStatuses)]
+}
+
+function _extractPurposeUseLegacyIds (chargeElement) {
+  return chargeElement.chargePurposes.map((chargePurpose) => {
+    return chargePurpose.purposesUse.legacyId
+  })
 }
 
 function _matchChargeVersions (chargeVersions) {
