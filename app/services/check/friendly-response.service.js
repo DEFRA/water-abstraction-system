@@ -28,6 +28,7 @@ function _formatFriendlyLicences (licences, matchedChargeVersions) {
     const friendlyLicence = {
       id: licenceId,
       licenceRef,
+      returnsStatuses: chargeVersions[0].returnStatuses,
       chargeInformations: []
     }
 
@@ -110,7 +111,6 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
       isSection127AgreementEnabled,
       loss,
       purposesUse,
-      returnStatus,
       timeLimitedStartDate,
       timeLimitedEndDate,
       abstractionPeriodEndDay: endDay,
@@ -132,7 +132,6 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
     }
 
     friendlyChargeElement.legacyId = purposesUse.legacyId
-    friendlyChargeElement.returnStatuses = returnStatus
 
     chargeElements.push(friendlyChargeElement)
   })
