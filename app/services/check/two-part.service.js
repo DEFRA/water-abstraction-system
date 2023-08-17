@@ -151,9 +151,22 @@ function _matchChargeVersions (chargeVersions) {
       return chargeVersion.licenceId === uniqueLicenceId
     })
 
+    const chargeVersionreturnStatuses = []
+    let returnsMatchingStatus = 'error'
+
+    for (const matchedChargeVersion of matchedChargeVersions) {
+      chargeVersionreturnStatuses.push(...matchedChargeVersion.returnStatuses)
+
+      if (matchedChargeVersion.returnsMatchingStatus === 'ready') {
+        returnsMatchingStatus = 'ready'
+      }
+    }
+
     return {
       licenceId: uniqueLicenceId,
       licenceRef: matchedChargeVersions[0].licenceRef,
+      returnsMatchingStatus,
+      returnStatuses: [...new Set(chargeVersionreturnStatuses)],
       chargeVersions: matchedChargeVersions
     }
   })
