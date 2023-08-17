@@ -5,15 +5,17 @@
  * @module SendToS3BucketService
  */
 
-// const fs = require('fs')
-const fsPromises = require('fs').promises
-const path = require('path')
 const { CreateMultipartUploadCommand, UploadPartCommand, CompleteMultipartUploadCommand, S3Client, AbortMultipartUploadCommand, PutObjectCommand } = require('@aws-sdk/client-s3')
+const fsPromises = require('fs').promises
+const { HttpsProxyAgent, HttpProxyAgent } = require('hpagent')
+const { NodeHttpHandler } = require('@smithy/node-http-handler')
+const path = require('path')
 
+const requestConfig = require('../../../../config/request.config.js')
 const S3Config = require('../../../../config/s3.config.js')
 
 /**
- * Sends a file to our AWS S3 Bucket using the filePath that it receives
+ * Sends a file to our AWS S3 Bucket using the filePath that it receives and setting the config
  *
  * @param {String} filePath A string containing the path of the file to send to the S3 bucket
  */
@@ -24,7 +26,21 @@ async function go (filePath) {
   const file = await fsPromises.readFile(filePath)
   const buffer = Buffer.from(file, 'utf8')
 
-  await _uploadType(buffer, bucketName, key)
+  const customConfig = {
+    requestHandler: new NodeHttpHandler({
+      // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread operator to
+      // bring the result back into the top level of the `defaultOptions` object.
+      ...(requestConfig.httpProxy
+        ? {
+            httpsAgent: new HttpsProxyAgent({ proxy: requestConfig.httpProxy }),
+            httpAgent: new HttpProxyAgent({ proxy: requestConfig.httpProxy })
+          }
+        : {}),
+      connectionTimeout: 10000
+    })
+  }
+
+  await _uploadType(buffer, bucketName, key, customConfig)
 }
 
 /**
@@ -34,11 +50,11 @@ async function go (filePath) {
  * @param {String} bucketName Name of the S3 bucket to upload the file to
  * @param {String} key The path under which the file will be stored in the bucket
  */
-async function _uploadType (buffer, bucketName, key) {
+async function _uploadType (buffer, bucketName, key, customConfig) {
   if (buffer.length <= 5 * 1024 * 1024) {
-    await _uploadSingleFile(bucketName, key, buffer)
+    await _uploadSingleFile(bucketName, key, buffer, customConfig)
   } else {
-    await _uploadToBucket(bucketName, key, buffer)
+    await _uploadToBucket(bucketName, key, buffer, customConfig)
   }
 }
 
@@ -49,8 +65,8 @@ async function _uploadType (buffer, bucketName, key) {
  * @param {String} bucketName Name of the S3 bucket to upload the file to
  * @param {String} key The path under which the file will be stored in the bucket
  */
-async function _uploadSingleFile (bucketName, key, buffer) {
-  const s3Client = new S3Client()
+async function _uploadSingleFile (bucketName, key, buffer, customConfig) {
+  const s3Client = new S3Client(customConfig)
 
   try {
     return await s3Client.send(
@@ -72,8 +88,8 @@ async function _uploadSingleFile (bucketName, key, buffer) {
  * @param {String} bucketName Name of the S3 bucket to upload the file to
  * @param {String} key The path under which the file will be stored in the bucket
  */
-async function _uploadToBucket (bucketName, key, buffer) {
-  const s3Client = new S3Client({})
+async function _uploadToBucket (bucketName, key, buffer, customConfig) {
+  const s3Client = new S3Client(customConfig)
   let uploadId
 
   try {
