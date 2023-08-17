@@ -40,6 +40,7 @@ async function go (filePath) {
     })
   }
 
+  console.log('Exporting Schema :', filePath)
   await _uploadType(buffer, bucketName, key, customConfig)
 }
 
