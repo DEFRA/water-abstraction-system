@@ -126,10 +126,14 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
 
   chargeVersion.returnStatuses = [...new Set(cumulativeReturnStatuses)]
 
-  if (chargeVersion.returnStatuses.includes('completed', 'due') && !returnsUnderQuery) {
-    chargeVersion.returnsMatchingStatus = 'ready'
-  } else {
+  if (
+    chargeVersion.returnStatuses.includes('received', 'void') |
+    returnsUnderQuery |
+    chargeVersion.returnStatuses.length === 0
+  ) {
     chargeVersion.returnsMatchingStatus = 'error'
+  } else {
+    chargeVersion.returnsMatchingStatus = 'ready'
   }
 }
 
