@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ExportService = require('../../../app/services/data/export/export.service.js')
-const MockService = require('../../../app/services/data/mock/mock.service.js')
-const SeedService = require('../../../app/services/data/seed/seed.service.js')
-const TearDownService = require('../../../app/services/data/tear-down/tear-down.service.js')
+const ExportService = require('../../app/services/data/export/export.service.js')
+const MockService = require('../../app/services/data/mock/mock.service.js')
+const SeedService = require('../../app/services/data/seed/seed.service.js')
+const TearDownService = require('../../app/services/data/tear-down/tear-down.service.js')
 
 // For running our service
-const { init } = require('../../../app/server.js')
+const { init } = require('../../app/server.js')
 
 describe('Data controller', () => {
   let server
