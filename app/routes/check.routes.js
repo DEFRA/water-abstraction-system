@@ -1,6 +1,6 @@
 'use strict'
 
-const CheckController = require('../controllers/check/check.controller.js')
+const CheckController = require('../controllers/check.controller.js')
 
 const routes = [
   {
