@@ -89,7 +89,7 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
 
 async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   const { licenceRef, chargeElements } = chargeVersion
-  const cumulativeReturnStatuses = []
+  const cumulativeReturnsStatuses = []
   let returnsUnderQuery
 
   for (const chargeElement of chargeElements) {
@@ -113,7 +113,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
       .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
 
-    const chargeElementReturnStatuses = chargeElement.returns.map((matchedReturn) => {
+    const chargeElementReturnsStatuses = chargeElement.returns.map((matchedReturn) => {
       if (matchedReturn.underQuery) {
         returnsUnderQuery = true
       }
@@ -121,11 +121,21 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       return matchedReturn.status
     })
 
-    cumulativeReturnStatuses.push(...chargeElementReturnStatuses)
+    cumulativeReturnsStatuses.push(...chargeElementReturnsStatuses)
   }
 
-  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnStatuses)]
+  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
 
+  _calculateReturnsReady(chargeVersion, returnsUnderQuery)
+}
+
+function _extractPurposeUseLegacyIds (chargeElement) {
+  return chargeElement.chargePurposes.map((chargePurpose) => {
+    return chargePurpose.purposesUse.legacyId
+  })
+}
+
+function _calculateReturnsReady (chargeVersion, returnsUnderQuery) {
   if (
     chargeVersion.returnsStatuses.includes('received', 'void') |
     returnsUnderQuery |
@@ -135,12 +145,6 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   } else {
     chargeVersion.returnsReady = true
   }
-}
-
-function _extractPurposeUseLegacyIds (chargeElement) {
-  return chargeElement.chargePurposes.map((chargePurpose) => {
-    return chargePurpose.purposesUse.legacyId
-  })
 }
 
 function _matchChargeVersions (chargeVersions) {
