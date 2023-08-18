@@ -9,7 +9,8 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
+const { S3Client, PutObjectCommand, CreateMultipartUploadCommand } = require('@aws-sdk/client-s3')
+const UploadTypeService = require('../../../../app/services/data/export/upload-type.service.js')
 
 // Thing under test
 const SendToS3BucketService = require('../../../../app/services/data/export/send-to-s3-bucket.service.js')
@@ -28,16 +29,37 @@ describe('Send to S3 bucket service', () => {
 
   describe('when successful', () => {
     const filePath = 'test/fixtures/compress-files.service.csv'
+    describe('and the file is larger then 5MB', () => {
+      beforeEach(() => {
+        Sinon.stub(UploadTypeService, 'go').returns('multipart upload')
+      })
 
-    it('uploads a file to the S3 bucket', async () => {
-      await SendToS3BucketService.go(filePath)
+      it('uploads the file to the S3 bucket', async () => {
+        await SendToS3BucketService.go(filePath)
 
-      // Test that the S3 Client was called once
-      expect(s3Stub.calledOnce).to.be.true()
+        // Test that the S3 Client was called once
+        expect(s3Stub.calledOnce).to.be.true()
 
-      // Get the first call and test that it was called with PutObjectCommand
-      const calledCommand = s3Stub.getCall(0).firstArg
-      expect(calledCommand).to.be.an.instanceof(PutObjectCommand)
+        // Get the first call and test that it was called with PutObjectCommand
+        const calledCommand = s3Stub.getCall(0).firstArg
+        expect(calledCommand).to.be.an.instanceof(CreateMultipartUploadCommand)
+      })
+    })
+    describe('and the file is less than 5MB', () => {
+      beforeEach(() => {
+        Sinon.stub(UploadTypeService, 'go').returns('single upload')
+      })
+
+      it('uploads the file to the S3 bucket', async () => {
+        await SendToS3BucketService.go(filePath)
+
+        // Test that the S3 Client was called once
+        expect(s3Stub.calledOnce).to.be.true()
+
+        // Get the first call and test that it was called with PutObjectCommand
+        const calledCommand = s3Stub.getCall(0).firstArg
+        expect(calledCommand).to.be.an.instanceof(PutObjectCommand)
+      })
     })
   })
 

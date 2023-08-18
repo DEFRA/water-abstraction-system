@@ -13,6 +13,7 @@ const path = require('path')
 
 const requestConfig = require('../../../../config/request.config.js')
 const S3Config = require('../../../../config/s3.config.js')
+const UploadTypeService = require('../export/upload-type.service.js')
 
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives and setting the config
@@ -40,19 +41,7 @@ async function go (filePath) {
     })
   }
 
-  console.log('Exporting Schema :', filePath)
-  await _uploadType(buffer, bucketName, key, customConfig)
-}
-
-/**
- * Uploads a file based on its size to the specified S3 bucket
- *
- * @param {Buffer} buffer The file content as a buffer object
- * @param {String} bucketName Name of the S3 bucket to upload the file to
- * @param {String} key The path under which the file will be stored in the bucket
- */
-async function _uploadType (buffer, bucketName, key, customConfig) {
-  if (buffer.length <= 5 * 1024 * 1024) {
+  if (UploadTypeService.go(buffer) === 'single upload') {
     await _uploadSingleFile(bucketName, key, buffer, customConfig)
   } else {
     await _uploadToBucket(bucketName, key, buffer, customConfig)
