@@ -1,6 +1,6 @@
 'use strict'
 
-const DataController = require('../controllers/data/data.controller.js')
+const DataController = require('../controllers/data.controller.js')
 
 const routes = [
   {

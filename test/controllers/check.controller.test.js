@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const TwoPartService = require('../../../app/services/check/two-part.service.js')
+const TwoPartService = require('../../app/services/check/two-part.service.js')
 
 // For running our service
-const { init } = require('../../../app/server.js')
+const { init } = require('../../app/server.js')
 
 describe('Check controller', () => {
   let server

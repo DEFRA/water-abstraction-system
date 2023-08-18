@@ -5,10 +5,10 @@
  * @module DataController
  */
 
-const ExportService = require('../../services/data/export/export.service.js')
-const MockService = require('../../services/data/mock/mock.service.js')
-const SeedService = require('../../services/data/seed/seed.service.js')
-const TearDownService = require('../../services/data/tear-down/tear-down.service.js')
+const ExportService = require('../services/data/export/export.service.js')
+const MockService = require('../services/data/mock/mock.service.js')
+const SeedService = require('../services/data/seed/seed.service.js')
+const TearDownService = require('../services/data/tear-down/tear-down.service.js')
 
 /**
  * Triggers export of all relevant tables to CSV and then uploads them to S3

@@ -5,7 +5,7 @@
  * @module CheckController
  */
 
-const CheckTwoPartService = require('../../services/check/two-part.service.js')
+const CheckTwoPartService = require('../services/check/two-part.service.js')
 
 async function twoPart (request, h) {
   const result = await CheckTwoPartService.go(request.params.naldRegionId, request.params.format)
