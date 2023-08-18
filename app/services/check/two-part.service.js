@@ -89,7 +89,8 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
 
 async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   const { licenceRef, chargeElements } = chargeVersion
-  const cumulativeReturnStatuses = []
+  const cumulativeReturnsStatuses = []
+  let returnsUnderQuery
 
   for (const chargeElement of chargeElements) {
     const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
@@ -101,6 +102,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
         'startDate',
         'endDate',
         'status',
+        'underQuery',
         'metadata'
       ])
       .where('licenceRef', licenceRef)
@@ -111,20 +113,38 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
       .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
 
-    const chargeElementReturnStatuses = chargeElement.returns.map((matchedReturn) => {
+    const chargeElementReturnsStatuses = chargeElement.returns.map((matchedReturn) => {
+      if (matchedReturn.underQuery) {
+        returnsUnderQuery = true
+      }
+
       return matchedReturn.status
     })
 
-    cumulativeReturnStatuses.push(...chargeElementReturnStatuses)
+    cumulativeReturnsStatuses.push(...chargeElementReturnsStatuses)
   }
 
-  chargeVersion.returnStatuses = [...new Set(cumulativeReturnStatuses)]
+  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
+
+  _calculateReturnsReady(chargeVersion, returnsUnderQuery)
 }
 
 function _extractPurposeUseLegacyIds (chargeElement) {
   return chargeElement.chargePurposes.map((chargePurpose) => {
     return chargePurpose.purposesUse.legacyId
   })
+}
+
+function _calculateReturnsReady (chargeVersion, returnsUnderQuery) {
+  if (
+    chargeVersion.returnsStatuses.includes('received', 'void') |
+    returnsUnderQuery |
+    chargeVersion.returnsStatuses.length === 0
+  ) {
+    chargeVersion.returnsReady = false
+  } else {
+    chargeVersion.returnsReady = true
+  }
 }
 
 function _matchChargeVersions (chargeVersions) {
@@ -139,9 +159,22 @@ function _matchChargeVersions (chargeVersions) {
       return chargeVersion.licenceId === uniqueLicenceId
     })
 
+    const chargeVersionReturnsStatuses = []
+    let returnsReady = false
+
+    for (const matchedChargeVersion of matchedChargeVersions) {
+      chargeVersionReturnsStatuses.push(...matchedChargeVersion.returnsStatuses)
+
+      if (matchedChargeVersion.returnsReady) {
+        returnsReady = true
+      }
+    }
+
     return {
       licenceId: uniqueLicenceId,
       licenceRef: matchedChargeVersions[0].licenceRef,
+      returnsReady,
+      returnsStatuses: [...new Set(chargeVersionReturnsStatuses)],
       chargeVersions: matchedChargeVersions
     }
   })
