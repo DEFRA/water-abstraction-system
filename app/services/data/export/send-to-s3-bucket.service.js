@@ -67,7 +67,7 @@ async function _uploadSingleFile (bucketName, key, buffer, customConfig) {
       })
     )
   } catch (error) {
-    console.log(error)
+    global.GlobalNotifier.omfg('Send to S3 errored', error)
   }
 }
 
@@ -132,7 +132,7 @@ async function _uploadToBucket (bucketName, key, buffer, customConfig) {
       })
     )
   } catch (error) {
-    console.error(error)
+    global.GlobalNotifier.omfg('Send to S3 errored', error)
 
     if (uploadId) {
       const abortCommand = new AbortMultipartUploadCommand({
