@@ -124,16 +124,16 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
     cumulativeReturnStatuses.push(...chargeElementReturnStatuses)
   }
 
-  chargeVersion.returnStatuses = [...new Set(cumulativeReturnStatuses)]
+  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnStatuses)]
 
   if (
-    chargeVersion.returnStatuses.includes('received', 'void') |
+    chargeVersion.returnsStatuses.includes('received', 'void') |
     returnsUnderQuery |
-    chargeVersion.returnStatuses.length === 0
+    chargeVersion.returnsStatuses.length === 0
   ) {
-    chargeVersion.returnsMatchingStatus = 'error'
+    chargeVersion.returnsReady = false
   } else {
-    chargeVersion.returnsMatchingStatus = 'ready'
+    chargeVersion.returnsReady = true
   }
 }
 
@@ -155,22 +155,22 @@ function _matchChargeVersions (chargeVersions) {
       return chargeVersion.licenceId === uniqueLicenceId
     })
 
-    const chargeVersionreturnStatuses = []
-    let returnsMatchingStatus = 'error'
+    const chargeVersionReturnsStatuses = []
+    let returnsReady = false
 
     for (const matchedChargeVersion of matchedChargeVersions) {
-      chargeVersionreturnStatuses.push(...matchedChargeVersion.returnStatuses)
+      chargeVersionReturnsStatuses.push(...matchedChargeVersion.returnsStatuses)
 
-      if (matchedChargeVersion.returnsMatchingStatus === 'ready') {
-        returnsMatchingStatus = 'ready'
+      if (matchedChargeVersion.returnsReady) {
+        returnsReady = true
       }
     }
 
     return {
       licenceId: uniqueLicenceId,
       licenceRef: matchedChargeVersions[0].licenceRef,
-      returnsMatchingStatus,
-      returnStatuses: [...new Set(chargeVersionreturnStatuses)],
+      returnsReady,
+      returnsStatuses: [...new Set(chargeVersionReturnsStatuses)],
       chargeVersions: matchedChargeVersions
     }
   })
