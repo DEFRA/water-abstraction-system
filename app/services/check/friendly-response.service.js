@@ -24,12 +24,13 @@ function go (billingPeriod, matchedChargeVersions) {
 
 function _formatFriendlyLicences (licences, matchedChargeVersions) {
   matchedChargeVersions.forEach((matchedChargeVersion) => {
-    const { licenceId, licenceRef, chargeVersions } = matchedChargeVersion
+    const { licenceId, licenceRef, chargeVersions, returnsStatuses, returnsReady } = matchedChargeVersion
 
     const friendlyLicence = {
       id: licenceId,
       licenceRef,
-      returnsStatuses: chargeVersions[0].returnStatuses,
+      returnsStatuses,
+      returnsReady,
       chargeInformations: []
     }
 
