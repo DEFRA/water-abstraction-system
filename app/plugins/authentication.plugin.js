@@ -5,8 +5,7 @@
  * @module AuthenticationPlugin
  */
 
-// TODO: use a config file instead
-require('dotenv').config()
+const AuthenticationConfigConfig = require('../../config/authentication.config.js')
 
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
@@ -25,7 +24,7 @@ const AuthenticationPlugin = {
       server.auth.strategy('session', 'cookie', {
         cookie: {
           name: 'sid',
-          password: process.env.COOKIE_SECRET,
+          password: AuthenticationConfigConfig.password,
           isSecure: false,
           isSameSite: 'Lax',
           ttl: TWO_HOURS_IN_MS,
