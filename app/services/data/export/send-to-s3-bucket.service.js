@@ -13,7 +13,6 @@ const path = require('path')
 
 const requestConfig = require('../../../../config/request.config.js')
 const S3Config = require('../../../../config/s3.config.js')
-const UploadTypeService = require('../export/upload-type.service.js')
 
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives and setting the config
@@ -41,10 +40,10 @@ async function go (filePath) {
     })
   }
 
-  if (UploadTypeService.go(buffer) === 'single upload') {
+  if (_singleUpload(buffer) === true) {
     await _uploadSingleFile(bucketName, key, buffer, customConfig)
   } else {
-    await _uploadToBucket(bucketName, key, buffer, customConfig)
+    await _uploadMultipartFile(bucketName, key, buffer, customConfig)
   }
 }
 
@@ -78,7 +77,7 @@ async function _uploadSingleFile (bucketName, key, buffer, customConfig) {
  * @param {String} bucketName Name of the S3 bucket to upload the file to
  * @param {String} key The path under which the file will be stored in the bucket
  */
-async function _uploadToBucket (bucketName, key, buffer, customConfig) {
+async function _uploadMultipartFile (bucketName, key, buffer, customConfig) {
   const s3Client = new S3Client(customConfig)
   let uploadId
 
@@ -143,6 +142,28 @@ async function _uploadToBucket (bucketName, key, buffer, customConfig) {
       await S3Client.send(abortCommand)
     }
   }
+}
+
+/**
+ * Returns the upload type based on its size to the specified S3 bucket
+ *
+ * AWS S3 bucket have conditions on using multi-part uploads. One of these conditions is the file has to be over 5 MB.
+ * Anything under 5MB must be a single upload. By isolating the service in its own file, we can create a stub for
+ * testing upload types with the "send-to-S3-bucket" service.
+ * {@link https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html S3 multipart upload limits}
+ *
+ * @param {Buffer} buffer The file content as a buffer object
+ *
+ * @returns {Boolean} True if the buffer is smaller than 5 MB else false
+ */
+function _singleUpload (buffer) {
+  const FIVE_MEGA_BYTES = 524288
+
+  if (buffer.length <= FIVE_MEGA_BYTES) {
+    return true
+  }
+
+  return false
 }
 
 module.exports = {
