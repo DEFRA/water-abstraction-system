@@ -18,7 +18,7 @@ const { S3Client, PutObjectCommand, CreateMultipartUploadCommand, UploadPartComm
 // Thing under test
 const SendToS3BucketService = require('../../../../app/services/data/export/send-to-s3-bucket.service.js')
 
-describe.only('Send to S3 bucket service', () => {
+describe('Send to S3 bucket service', () => {
   let largeFilePath
   let folderNameWithPath
   let s3Stub
