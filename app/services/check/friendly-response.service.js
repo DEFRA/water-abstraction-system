@@ -241,8 +241,11 @@ function _titleCaseAllWords (stringToBeTitleCased) {
   const lowercaseWords = stringToBeTitleCased.toLowerCase().split(' ')
 
   const titleCaseWords = lowercaseWords.reduce((words, lowercaseWord) => {
-    const titleCasedWord = `${lowercaseWord[0].toUpperCase()}${lowercaseWord.slice(1)}`
-    words.push(titleCasedWord)
+    // If stringToBeTitleCased contains a double space it will cause the title casing to crash
+    if (!lowercaseWord.trim() === '') {
+      const titleCasedWord = `${lowercaseWord[0].toUpperCase()}${lowercaseWord.slice(1)}`
+      words.push(titleCasedWord)
+    }
 
     return words
   }, [])
