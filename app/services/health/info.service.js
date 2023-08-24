@@ -10,6 +10,7 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
+const { createClient } = require('@redis/client')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
@@ -61,11 +62,20 @@ async function _getVirusScannerData () {
 }
 
 async function _getRedisConnectivityData () {
+  const client = createClient({
+    socket: {
+      host: 'redis'
+    }
+  })
+
   try {
-    const { stdout, stderr } = await exec('redis-server --version')
-    return stderr ? `ERROR: ${stderr}` : stdout
+    await client.connect()
+    await client.ping()
+    await client.disconnect()
+
+    return 'Connected'
   } catch (error) {
-    return `ERROR: ${error.message}`
+    return 'Error connecting to Redis'
   }
 }
 
