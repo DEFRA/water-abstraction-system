@@ -5,6 +5,8 @@
  * @module AddressModel
  */
 
+const { Model } = require('objection')
+
 const CrmV2BaseModel = require('./crm-v2-base.model.js')
 
 class AddressModel extends CrmV2BaseModel {
@@ -21,6 +23,19 @@ class AddressModel extends CrmV2BaseModel {
       { database: 'dateCreated', model: 'createdAt' },
       { database: 'dateUpdated', model: 'updatedAt' }
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      invoiceAccountAddresses: {
+        relation: Model.HasManyRelation,
+        modelClass: 'invoice-account-address.model',
+        join: {
+          from: 'addresses.addressId',
+          to: 'invoiceAccountAddresses.addressId'
+        }
+      }
+    }
   }
 }
 
