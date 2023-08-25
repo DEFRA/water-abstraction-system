@@ -62,18 +62,17 @@ async function _getVirusScannerData () {
 }
 
 async function _getRedisConnectivityData () {
-  const client = createClient({
-    socket: {
-      host: 'redis'
-    }
-  })
-
   try {
+    const client = createClient({
+      socket: {
+        host: 'redis'
+      }
+    })
+
     await client.connect()
-    await client.ping()
     await client.disconnect()
 
-    return 'Connected'
+    return 'Up and running'
   } catch (error) {
     return 'Error connecting to Redis'
   }
