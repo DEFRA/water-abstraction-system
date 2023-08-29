@@ -7,8 +7,8 @@ exports.up = function (knex) {
     .schema
     .withSchema('idm')
     .createTable(tableName, (table) => {
-      // Primary Key
-      table.integer('user_id').primary().notNullable()
+      // Primary Key -- note `.increments()` is implicitly the primary key but we add `primary()` to make it explicit
+      table.increments('user_id').primary()
 
       // Data
       table.string('user_name').notNullable()
