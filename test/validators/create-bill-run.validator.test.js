@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CreateBillRunValidator = require('../../../app/validators/bill-runs/create-bill-run.validator.js')
+const CreateBillRunValidator = require('../../app/validators/create-bill-run.validator.js')
 
 describe('Create Bill Run validator', () => {
   describe('when valid data is provided', () => {
