@@ -1,21 +1,21 @@
 'use strict'
 
 /**
- * Model for invoiceAccounts
- * @module InvoiceAccountModel
+ * Model for company
+ * @module CompanyModel
  */
 
 const { Model } = require('objection')
 
 const CrmV2BaseModel = require('./crm-v2-base.model.js')
 
-class InvoiceAccountModel extends CrmV2BaseModel {
+class CompanyModel extends CrmV2BaseModel {
   static get tableName () {
-    return 'invoiceAccounts'
+    return 'companies'
   }
 
   static get idColumn () {
-    return 'invoiceAccountId'
+    return 'companyId'
   }
 
   static get translations () {
@@ -27,24 +27,24 @@ class InvoiceAccountModel extends CrmV2BaseModel {
 
   static get relationMappings () {
     return {
-      company: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'company.model',
+      invoiceAccounts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'invoice-account.model',
         join: {
-          from: 'invoiceAccounts.companyId',
-          to: 'companies.companyId'
+          from: 'companies.companyId',
+          to: 'invoiceAccounts.companyId'
         }
       },
       invoiceAccountAddresses: {
         relation: Model.HasManyRelation,
         modelClass: 'invoice-account-address.model',
         join: {
-          from: 'invoiceAccounts.invoiceAccountId',
-          to: 'invoiceAccountAddresses.invoiceAccountId'
+          from: 'companies.companyId',
+          to: 'invoiceAccountAddresses.agentCompanyId'
         }
       }
     }
   }
 }
 
-module.exports = InvoiceAccountModel
+module.exports = CompanyModel
