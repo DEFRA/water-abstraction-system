@@ -14,6 +14,7 @@ const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const redis = require('@redis/client')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 const RequestLib = require('../../../app/lib/request.lib.js')
 
@@ -40,11 +41,13 @@ describe('Info service', () => {
   let chargingModuleRequestLibStub
   let legacyRequestLibStub
   let requestLibStub
+  let redisStub
 
   beforeEach(() => {
     chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
     legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'get')
     requestLibStub = Sinon.stub(RequestLib, 'get')
+    redisStub = Sinon.stub(redis, 'createClient')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
@@ -61,6 +64,8 @@ describe('Info service', () => {
     chargingModuleRequestLibStub
       .withArgs('status')
       .resolves(goodRequestResults.chargingModule)
+
+    // redisStub.returns({ connect: Sinon.fake().resolves(), disconnect: Sinon.fake().resolves() })
   })
 
   afterEach(() => {
@@ -88,14 +93,10 @@ describe('Info service', () => {
           stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
           stderror: null
         })
-      execStub
-        .withArgs('redis-server --version')
-        .resolves({
-          stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n',
-          stderror: null
-        })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+
+      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })
 
     it('returns details on each', async () => {
@@ -106,16 +107,62 @@ describe('Info service', () => {
       ])
 
       expect(result.appData).to.have.length(10)
+
+      expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+      expect(result.redisConnectivityData).to.equal('Up and running')
     })
   })
 
-  describe('when a service we check via the shell', () => {
+  describe('when Redis', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       requestLibStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
       legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+
+      const execStub = Sinon
+        .stub()
+        .withArgs('clamdscan --version')
+        .resolves({
+          stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
+          stderror: null
+        })
+      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+    })
+
+    describe('is not running', () => {
+      beforeEach(async () => {
+        redisStub.returns({
+          connect: Sinon.stub().throwsException(new Error('Redis check went boom')),
+          disconnect: Sinon.stub().resolves()
+        })
+      })
+
+      it('handles the error and still returns a result for the other services', async () => {
+        const result = await InfoService.go()
+
+        expect(result).to.include([
+          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        ])
+        expect(result.appData).to.have.length(10)
+
+        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+        expect(result.redisConnectivityData).to.equal('Error connecting to Redis')
+      })
+    })
+  })
+
+  describe('when ClamAV', () => {
+    beforeEach(async () => {
+      // In these scenarios everything is hunky-dory so we return 2xx responses from these services
+      requestLibStub
+        .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+        .resolves(goodRequestResults.addressFacade)
+      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+
+      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })
 
     describe('is not running', () => {
@@ -129,12 +176,6 @@ describe('Info service', () => {
             stdout: null,
             stderr: 'Could not connect to clamd'
           })
-        execStub
-          .withArgs('redis-server --version')
-          .resolves({
-            stdout: null,
-            stderr: 'Could not connect to Redis'
-          })
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
         InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
@@ -148,7 +189,7 @@ describe('Info service', () => {
         expect(result.appData).to.have.length(10)
 
         expect(result.virusScannerData).to.startWith('ERROR:')
-        expect(result.redisConnectivityData).to.startWith('ERROR:')
+        expect(result.redisConnectivityData).to.equal('Up and running')
       })
     })
 
@@ -160,9 +201,6 @@ describe('Info service', () => {
           .stub()
           .withArgs('clamdscan --version')
           .throwsException(new Error('ClamAV check went boom'))
-        execStub
-          .withArgs('redis-server --version')
-          .throwsException(new Error('Redis check went boom'))
         const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
         InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
@@ -176,7 +214,7 @@ describe('Info service', () => {
         expect(result.appData).to.have.length(10)
 
         expect(result.virusScannerData).to.startWith('ERROR:')
-        expect(result.redisConnectivityData).to.startWith('ERROR:')
+        expect(result.redisConnectivityData).to.equal('Up and running')
       })
     })
   })
@@ -191,14 +229,10 @@ describe('Info service', () => {
           stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
           stderror: null
         })
-      execStub
-        .withArgs('redis-server --version')
-        .resolves({
-          stdout: 'Redis server v=9.99.9 sha=00000000:0 malloc=jemalloc-5.2.1 bits=64 build=66bd629f924ac924\n',
-          stderror: null
-        })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+
+      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })
 
     describe('cannot be reached because of a network error', () => {
@@ -221,6 +255,9 @@ describe('Info service', () => {
 
         expect(result.addressFacadeData).to.startWith('ERROR:')
         expect(result.appData[0].version).to.startWith('ERROR:')
+
+        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+        expect(result.redisConnectivityData).to.equal('Up and running')
       })
     })
 
@@ -244,6 +281,9 @@ describe('Info service', () => {
 
         expect(result.addressFacadeData).to.startWith('ERROR:')
         expect(result.appData[0].version).to.startWith('ERROR:')
+
+        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+        expect(result.redisConnectivityData).to.equal('Up and running')
       })
     })
   })
