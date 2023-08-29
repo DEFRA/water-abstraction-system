@@ -192,11 +192,7 @@ async function _completeMultipartUploadCommand (s3Client, bucketName, key, uploa
 function _singleUpload (buffer) {
   const FIVE_MEGA_BYTES = 524288
 
-  if (buffer.length <= FIVE_MEGA_BYTES) {
-    return true
-  }
-
-  return false
+  return buffer.length <= FIVE_MEGA_BYTES
 }
 
 /**
