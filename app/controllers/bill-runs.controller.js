@@ -7,7 +7,7 @@
 
 const Boom = require('@hapi/boom')
 
-const CreateBillRunValidator = require('../validators/bill-runs/create-bill-run.validator.js')
+const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const NewBillingBatchService = require('../services/billing/new-billing-batch.service.js')
 
 async function create (request, h) {

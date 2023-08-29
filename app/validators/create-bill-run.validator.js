@@ -6,7 +6,7 @@
 
 const Joi = require('joi')
 
-const StaticLookupsLib = require('../../lib/static-lookups.lib.js')
+const StaticLookupsLib = require('../lib/static-lookups.lib.js')
 
 /**
  * Checks that the payload of a `create bill run` request is valid
