@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const ContactHelper = require('../../support/helpers/crm-v2/contact.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
+const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
 
 // Thing under test
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
@@ -29,6 +31,44 @@ describe('Contact model', () => {
 
       expect(result).to.be.an.instanceOf(ContactModel)
       expect(result.contactId).to.equal(testRecord.contactId)
+    })
+  })
+
+  describe('Relationships', () => {
+    describe('when linking to invoice account addresses', () => {
+      let testInvoiceAccountAddresses
+
+      beforeEach(async () => {
+        testRecord = await ContactHelper.add()
+        const { contactId } = testRecord
+
+        testInvoiceAccountAddresses = []
+        for (let i = 0; i < 2; i++) {
+          const invoiceAccountAddress = await InvoiceAccountAddressHelper.add({ contactId })
+          testInvoiceAccountAddresses.push(invoiceAccountAddress)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ContactModel.query()
+          .innerJoinRelated('invoiceAccountAddresses')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the invoice account addresses', async () => {
+        const result = await ContactModel.query()
+          .findById(testRecord.contactId)
+          .withGraphFetched('invoiceAccountAddresses')
+
+        expect(result).to.be.instanceOf(ContactModel)
+        expect(result.contactId).to.equal(testRecord.contactId)
+
+        expect(result.invoiceAccountAddresses).to.be.an.array()
+        expect(result.invoiceAccountAddresses[0]).to.be.an.instanceOf(InvoiceAccountAddressModel)
+        expect(result.invoiceAccountAddresses).to.include(testInvoiceAccountAddresses[0])
+        expect(result.invoiceAccountAddresses).to.include(testInvoiceAccountAddresses[1])
+      })
     })
   })
 
