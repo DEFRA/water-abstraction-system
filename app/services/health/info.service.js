@@ -10,7 +10,7 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
-const { createClient } = require('@redis/client')
+const redis = require('@redis/client')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const RedisConfig = require('../../../config/redis.config.js')
 const RequestLib = require('../../lib/request.lib.js')
@@ -64,7 +64,7 @@ async function _getVirusScannerData () {
 
 async function _getRedisConnectivityData () {
   try {
-    const client = createClient({
+    const client = redis.createClient({
       socket: {
         host: RedisConfig.host,
         port: RedisConfig.port
