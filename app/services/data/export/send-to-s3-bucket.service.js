@@ -26,19 +26,7 @@ async function go (filePath) {
   const file = await fsPromises.readFile(filePath)
   const buffer = Buffer.from(file, 'utf8')
 
-  const customConfig = {
-    requestHandler: new NodeHttpHandler({
-      // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread operator to
-      // bring the result back into the top level of the `defaultOptions` object.
-      ...(requestConfig.httpProxy
-        ? {
-            httpsAgent: new HttpsProxyAgent({ proxy: requestConfig.httpProxy }),
-            httpAgent: new HttpProxyAgent({ proxy: requestConfig.httpProxy })
-          }
-        : {}),
-      connectionTimeout: 10000
-    })
-  }
+  const customConfig = _setCustomConfig()
 
   if (_singleUpload(buffer) === true) {
     await _uploadSingleFile(bucketName, key, buffer, customConfig)
@@ -82,54 +70,11 @@ async function _uploadMultipartFile (bucketName, key, buffer, customConfig) {
   let uploadId
 
   try {
-    const multipartUpload = await s3Client.send(
-      new CreateMultipartUploadCommand({
-        Bucket: bucketName,
-        Key: key
-      })
-    )
+    const uploadId = await _createMultipartUpload(s3Client, bucketName, key)
 
-    uploadId = multipartUpload.UploadId
+    const uploadResults = await _uploadPartCommand(s3Client, bucketName, key, buffer, uploadId)
 
-    const uploadPromises = []
-    const partSize = 5 * 1024 * 1024
-    const totalParts = Math.ceil(buffer.length / partSize)
-
-    for (let i = 0; i < totalParts; i++) {
-      const start = i * partSize
-      const end = Math.min(start + partSize, buffer.length)
-      uploadPromises.push(
-        s3Client
-          .send(
-            new UploadPartCommand({
-              Bucket: bucketName,
-              Key: key,
-              UploadId: uploadId,
-              Body: buffer.subarray(start, end),
-              PartNumber: i + 1
-            })
-          )
-          .then((d) => {
-            return d
-          })
-      )
-    }
-
-    const uploadResults = await Promise.all(uploadPromises)
-
-    return await s3Client.send(
-      new CompleteMultipartUploadCommand({
-        Bucket: bucketName,
-        Key: key,
-        UploadId: uploadId,
-        MultipartUpload: {
-          Parts: uploadResults.map(({ ETag }, i) => ({
-            ETag,
-            PartNumber: i + 1
-          }))
-        }
-      })
-    )
+    await _completeMultipartUploadCommand(s3Client, bucketName, key, uploadId, uploadResults)
   } catch (error) {
     global.GlobalNotifier.omfg('Send to S3 errored', error)
 
@@ -142,6 +87,94 @@ async function _uploadMultipartFile (bucketName, key, buffer, customConfig) {
       await S3Client.send(abortCommand)
     }
   }
+}
+
+/**
+ * Creates a multipart upload in our Amazon s3 bucket
+ *
+ * @param {*} s3Client The AWS S3 Client instance used to interact with the service
+ * @param {String} bucketName The name of the bucket where the object will be stored
+ * @param {String} key The key (path) of the object within the bucket
+ *
+ * @returns {String} The uploadId associated with the created multipart upload
+ */
+async function _createMultipartUpload (s3Client, bucketName, key) {
+  const multipartUpload = await s3Client.send(
+    new CreateMultipartUploadCommand({
+      Bucket: bucketName,
+      Key: key
+    })
+  )
+
+  return multipartUpload.UploadId
+}
+
+/**
+ * Uploads a buffer as parts in a multipart upload to an Amazon s3 bucket
+ *
+ * @param {*} s3Client The AWS S3 Client instance used to interact with the service
+ * @param {String} bucketName The name of the bucket where the object will be stored
+ * @param {String} key The key (path) of the object within the bucket
+ * @param {Buffer} buffer The buffer containing the data to be uploaded in parts
+ * @param {String} uploadId The uploadId associated with the created multipart upload
+ *
+ * @returns An array of responses from the upload promises for each part.
+ */
+async function _uploadPartCommand (s3Client, bucketName, key, buffer, uploadId) {
+  const uploadPromises = []
+  // Each part size needs to be a minimum of 5MB to use multipart upload
+  const partSize = 5 * 1024 * 1024
+  // Calculating how many parts there will be depending on the size of the buffer
+  const totalParts = Math.ceil(buffer.length / partSize)
+
+  // Looping through uploading each individual part
+  for (let i = 0; i < totalParts; i++) {
+    const start = i * partSize
+    const end = Math.min(start + partSize, buffer.length)
+    uploadPromises.push(
+      s3Client
+        .send(
+          new UploadPartCommand({
+            Bucket: bucketName,
+            Key: key,
+            UploadId: uploadId,
+            Body: buffer.subarray(start, end),
+            PartNumber: i + 1
+          })
+        )
+        .then((response) => {
+          // Once the promise is resolved return the response metadata (this includes the ETag)
+          return response
+        })
+    )
+  }
+
+  return await Promise.all(uploadPromises)
+}
+
+/**
+ * Completes the multipart upload for the Amazon s3 bucket
+ *
+ * @param {*} s3Client The AWS s3 client instance used to interact with the service
+ * @param {*} bucketName The name of the bucket where the object will be stored
+ * @param {*} key The key (path) of the object within the bucket
+ * @param {*} uploadId The uploadId associated with the created multipart upload
+ * @param {*} uploadResults An array of upload results containing ETag and part number
+ */
+async function _completeMultipartUploadCommand (s3Client, bucketName, key, uploadId, uploadResults) {
+  await s3Client.send(
+    new CompleteMultipartUploadCommand({
+      Bucket: bucketName,
+      Key: key,
+      UploadId: uploadId,
+      MultipartUpload: {
+        Parts: uploadResults.map(({ ETag }, i) => ({
+          ETag,
+          PartNumber: i + 1
+        }))
+      }
+    })
+  )
 }
 
 /**
@@ -164,6 +197,29 @@ function _singleUpload (buffer) {
   }
 
   return false
+}
+
+/**
+ * Sets the configuration settings for the S3 bucket
+ *
+ * If the environment has a proxy then we set that here as well. Setting the connectionTimeout to be less than the 10 seconds
+ * 6 minute standard.
+ * @returns {} Custom configuration settings
+ */
+function _setCustomConfig () {
+  return {
+    requestHandler: new NodeHttpHandler({
+    // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread operator to
+    // bring the result back into the top level of the `defaultOptions` object.
+      ...(requestConfig.httpProxy
+        ? {
+            httpsAgent: new HttpsProxyAgent({ proxy: requestConfig.httpProxy }),
+            httpAgent: new HttpProxyAgent({ proxy: requestConfig.httpProxy })
+          }
+        : {}),
+      connectionTimeout: 10000
+    })
+  }
 }
 
 module.exports = {
