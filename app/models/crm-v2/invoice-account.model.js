@@ -5,6 +5,8 @@
  * @module InvoiceAccountModel
  */
 
+const { Model } = require('objection')
+
 const CrmV2BaseModel = require('./crm-v2-base.model.js')
 
 class InvoiceAccountModel extends CrmV2BaseModel {
@@ -21,6 +23,27 @@ class InvoiceAccountModel extends CrmV2BaseModel {
       { database: 'dateCreated', model: 'createdAt' },
       { database: 'dateUpdated', model: 'updatedAt' }
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      company: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'company.model',
+        join: {
+          from: 'invoiceAccounts.companyId',
+          to: 'companies.companyId'
+        }
+      },
+      invoiceAccountAddresses: {
+        relation: Model.HasManyRelation,
+        modelClass: 'invoice-account-address.model',
+        join: {
+          from: 'invoiceAccounts.invoiceAccountId',
+          to: 'invoiceAccountAddresses.invoiceAccountId'
+        }
+      }
+    }
   }
 }
 
