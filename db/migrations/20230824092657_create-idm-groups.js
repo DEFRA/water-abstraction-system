@@ -11,7 +11,7 @@ exports.up = function (knex) {
       table.string('group_id').primary().notNullable()
 
       // Data
-      table.string('application') // TODO: confirm what application_name datatype is
+      table.string('application')
       table.string('group').notNullable()
       table.string('description').notNullable()
 

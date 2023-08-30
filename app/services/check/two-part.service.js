@@ -9,6 +9,8 @@ const { ref } = require('objection')
 
 const ChargeElementModel = require('../../models/water/charge-element.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
+const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
+const FriendlyResponseService = require('./friendly-response.service.js')
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 
@@ -31,7 +33,7 @@ async function go (naldRegionId, format = 'friendly') {
 
   switch (format) {
     case 'friendly':
-      return _friendlyResponse(matchedChargeVersions)
+      return FriendlyResponseService.go(billingPeriod, matchedChargeVersions)
     case 'raw':
       return matchedChargeVersions
     default:
@@ -53,7 +55,13 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .where('chargeVersions.regionCode', naldRegionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .whereNot('chargeVersions.status', 'draft')
+    .where('chargeVersions.status', 'current')
+    .whereNotExists(
+      ChargeVersionWorkflow.query()
+        .select(1)
+        .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
+        .whereNull('chargeVersionWorkflows.dateDeleted')
+    )
     .whereExists(
       ChargeElementModel.query()
         .select(1)
@@ -81,6 +89,8 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
 
 async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   const { licenceRef, chargeElements } = chargeVersion
+  const cumulativeReturnsStatuses = []
+  let returnsUnderQuery
 
   for (const chargeElement of chargeElements) {
     const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
@@ -91,6 +101,8 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
         'returnRequirement',
         'startDate',
         'endDate',
+        'status',
+        'underQuery',
         'metadata'
       ])
       .where('licenceRef', licenceRef)
@@ -100,13 +112,39 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       .where('endDate', '>=', billingPeriod.startDate)
       .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
       .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
+
+    const chargeElementReturnsStatuses = chargeElement.returns.map((matchedReturn) => {
+      if (matchedReturn.underQuery) {
+        returnsUnderQuery = true
+      }
+
+      return matchedReturn.status
+    })
+
+    cumulativeReturnsStatuses.push(...chargeElementReturnsStatuses)
   }
+
+  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
+
+  _calculateReturnsReady(chargeVersion, returnsUnderQuery)
 }
 
 function _extractPurposeUseLegacyIds (chargeElement) {
   return chargeElement.chargePurposes.map((chargePurpose) => {
     return chargePurpose.purposesUse.legacyId
   })
+}
+
+function _calculateReturnsReady (chargeVersion, returnsUnderQuery) {
+  if (
+    chargeVersion.returnsStatuses.includes('received', 'void') |
+    returnsUnderQuery |
+    chargeVersion.returnsStatuses.length === 0
+  ) {
+    chargeVersion.returnsReady = false
+  } else {
+    chargeVersion.returnsReady = true
+  }
 }
 
 function _matchChargeVersions (chargeVersions) {
@@ -121,16 +159,25 @@ function _matchChargeVersions (chargeVersions) {
       return chargeVersion.licenceId === uniqueLicenceId
     })
 
+    const chargeVersionReturnsStatuses = []
+    let returnsReady = false
+
+    for (const matchedChargeVersion of matchedChargeVersions) {
+      chargeVersionReturnsStatuses.push(...matchedChargeVersion.returnsStatuses)
+
+      if (matchedChargeVersion.returnsReady) {
+        returnsReady = true
+      }
+    }
+
     return {
       licenceId: uniqueLicenceId,
       licenceRef: matchedChargeVersions[0].licenceRef,
+      returnsReady,
+      returnsStatuses: [...new Set(chargeVersionReturnsStatuses)],
       chargeVersions: matchedChargeVersions
     }
   })
-}
-
-function _friendlyResponse (_matchedChargeVersions) {
-  return { hello: 'world' }
 }
 
 function _calculateAndLogTime (startTime) {

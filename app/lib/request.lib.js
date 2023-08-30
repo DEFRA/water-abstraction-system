@@ -42,31 +42,8 @@ async function post (url, additionalOptions = {}) {
   return _sendRequest('post', url, additionalOptions)
 }
 
-async function _sendRequest (method, url, additionalOptions) {
-  const got = await _importGot()
-  const result = {
-    succeeded: false,
-    response: null
-  }
-
-  try {
-    const options = _requestOptions(additionalOptions)
-
-    result.response = await got[method](url, options)
-
-    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
-    // property
-    result.succeeded = result.response.ok
-  } catch (error) {
-    // If it's a network error, for example 'ETIMEDOUT', we'll end up here
-    result.response = error
-  }
-
-  if (!result.succeeded) {
-    _logFailure(method.toUpperCase(), result, url, additionalOptions)
-  }
-
-  return result
+function _beforeRetryHook (error, retryCount) {
+  global.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
 }
 
 async function _importGot () {
@@ -145,6 +122,8 @@ function _requestOptions (additionalOptions) {
     // preference is to only retry in the event of a timeout on assumption the destination server might be busy but has
     // a chance to succeed when attempted again
     retry: {
+      // The default is also 2 retries before erroring. We specify it to make this fact visible
+      limit: 2,
       // We ensure that the only network errors Got retries are timeout errors
       errorCodes: ['ETIMEDOUT'],
       // By default, Got does not retry PATCH and POST requests. As we only retry timeouts there is no risk in retrying
@@ -158,10 +137,42 @@ function _requestOptions (additionalOptions) {
     // > It is a good practice to set a timeout to prevent hanging requests. By default, there is no timeout set.
     timeout: {
       request: requestConfig.timeout
+    },
+    hooks: {
+      beforeRetry: [
+        _beforeRetryHook
+      ]
     }
   }
 
   return { ...defaultOptions, ...additionalOptions }
+}
+
+async function _sendRequest (method, url, additionalOptions) {
+  const got = await _importGot()
+  const result = {
+    succeeded: false,
+    response: null
+  }
+
+  try {
+    const options = _requestOptions(additionalOptions)
+
+    result.response = await got[method](url, options)
+
+    // If the result is not 2xx or 3xx Got will mark the result as unsuccessful using the response object's `ok:`
+    // property
+    result.succeeded = result.response.ok
+  } catch (error) {
+    // If it's a network error, for example 'ETIMEDOUT', we'll end up here
+    result.response = error
+  }
+
+  if (!result.succeeded) {
+    _logFailure(method.toUpperCase(), result, url, additionalOptions)
+  }
+
+  return result
 }
 
 module.exports = {

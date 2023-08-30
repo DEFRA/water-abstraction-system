@@ -23,7 +23,11 @@ const routes = [
     path: '/status',
     handler: RootController.index,
     options: {
-      auth: false
+      auth: false,
+      description: 'Used by the AWS load balancers to confirm the service is running',
+      app: {
+        plainOutput: true
+      }
     }
   }
 ]

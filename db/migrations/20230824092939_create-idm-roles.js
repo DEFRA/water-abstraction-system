@@ -8,10 +8,10 @@ exports.up = function (knex) {
     .withSchema('idm')
     .createTable(tableName, (table) => {
       // Primary Key
-      table.integer('role_id').primary()
+      table.string('role_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.string('application') // TODO: confirm what application_name datatype is
+      table.string('application')
       table.string('role').notNullable()
       table.string('description').notNullable()
 

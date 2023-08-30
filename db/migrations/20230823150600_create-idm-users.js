@@ -7,8 +7,8 @@ exports.up = function (knex) {
     .schema
     .withSchema('idm')
     .createTable(tableName, (table) => {
-      // Primary Key
-      table.integer('user_id').primary().notNullable()
+      // Primary Key -- note `.increments()` is implicitly the primary key but we add `primary()` to make it explicit
+      table.increments('user_id').primary()
 
       // Data
       table.string('user_name').notNullable()
@@ -19,7 +19,7 @@ exports.up = function (knex) {
 
       table.timestamp('last_login')
       table.bigint('bad_logins')
-      table.string('application') // TODO: confirm what application_name datatype is
+      table.string('application')
       table.jsonb('role')
       table.string('external_id')
       table.timestamp('reset_guid_date_created')
