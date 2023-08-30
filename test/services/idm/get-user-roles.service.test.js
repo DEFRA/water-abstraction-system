@@ -9,17 +9,38 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const GroupHelper = require('../../support/helpers/idm/group.helper.js')
+const GroupRoleHelper = require('../../support/helpers/idm/group-role.helper.js')
+const RoleHelper = require('../../support/helpers/idm/role.helper.js')
+const UserGroupHelper = require('../../support/helpers/idm/user-group.helper.js')
 const UserHelper = require('../../support/helpers/idm/user.helper.js')
+const UserRoleHelper = require('../../support/helpers/idm/user-role.helper.js')
 
 // Thing under test
 const GetUserRolesService = require('../../../app/services/idm/get-user-roles.service.js')
 
 describe('Get User Roles service', () => {
+  let testRoleForUser
+  let testRoleForGroup
   let testUser
+  let testGroup
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
     testUser = await UserHelper.add()
+
+    // Create a role and assign it directly to the user
+    testRoleForUser = await RoleHelper.add({ role: 'role_for_user' })
+    await UserRoleHelper.add({ userId: testUser.userId, roleId: testRoleForUser.roleId })
+
+    // Create a role and assign it to the user via a group
+    testRoleForGroup = await RoleHelper.add({ role: 'role_for_group' })
+    testGroup = await GroupHelper.add()
+    await GroupRoleHelper.add({ groupId: testGroup.groupId, roleId: testRoleForGroup.roleId })
+    await UserGroupHelper.add({ userId: testUser.userId, groupId: testGroup.groupId })
+
+    // TODO: We're not sure if this scenario will ever arise but let's ensure that if a user is assigned a role, and
+    // also gets that role via a group, then the role is only returned once
   })
 
   describe('when the user exists', () => {
@@ -29,18 +50,22 @@ describe('Get User Roles service', () => {
       expect(result.userId).to.equal(testUser.userId)
     })
 
-    // TODO: test that we actually return an array of groups
     it("returns the user's groups", async () => {
       const result = await GetUserRolesService.go(testUser.userId)
 
-      expect(result.groups).to.equal([])
+      const groups = result.groups.map(group => group.group)
+
+      expect(groups).to.have.length(1)
+      expect(groups).to.equal(['wirs'])
     })
 
-    // TODO: test that we actually return an array of roles
     it("returns the user's roles", async () => {
       const result = await GetUserRolesService.go(testUser.userId)
 
-      expect(result.roles).to.equal([])
+      const roles = result.roles.map(role => role.role)
+
+      expect(roles).to.have.length(2)
+      expect(roles).to.include(['role_for_user', 'role_for_group'])
     })
   })
 })
