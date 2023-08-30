@@ -123,7 +123,7 @@ function _setCustomConfig () {
  * @returns {Boolean} True if the buffer is smaller than 5 MB else false
  */
 function _singleUpload (buffer) {
-  const FIVE_MEGA_BYTES = 524288
+  const FIVE_MEGA_BYTES = 5242880
 
   return buffer.length <= FIVE_MEGA_BYTES
 }
@@ -173,7 +173,7 @@ async function _uploadMultipartFile (bucketName, key, buffer, customConfig) {
 async function _uploadPartCommand (s3Client, bucketName, key, buffer, uploadId) {
   const uploadPromises = []
   // Each part size needs to be a minimum of 5MB to use multipart upload
-  const PART_SIZE = 524288
+  const PART_SIZE = 5242880
   // Calculating how many parts there will be depending on the size of the buffer
   const totalParts = Math.ceil(buffer.length / PART_SIZE)
 
