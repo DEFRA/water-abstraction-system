@@ -9,11 +9,17 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const path = require('path')
 const mockFs = require('mock-fs')
+const path = require('path')
 
 // Things we need to stub
-const { S3Client, PutObjectCommand, CreateMultipartUploadCommand, UploadPartCommand, CompleteMultipartUploadCommand } = require('@aws-sdk/client-s3')
+const {
+  S3Client,
+  PutObjectCommand,
+  CreateMultipartUploadCommand,
+  UploadPartCommand,
+  CompleteMultipartUploadCommand
+} = require('@aws-sdk/client-s3')
 
 // Thing under test
 const SendToS3BucketService = require('../../../../app/services/data/export/send-to-s3-bucket.service.js')
