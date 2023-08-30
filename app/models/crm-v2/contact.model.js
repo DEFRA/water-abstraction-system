@@ -9,6 +9,34 @@ const { Model } = require('objection')
 
 const CrmV2BaseModel = require('./crm-v2-base.model.js')
 
+/**
+ * Objection model that represents a `contact` in the `crm_v2.contacts` table
+ *
+ * ### Notes
+ *
+ * Whilst working with this table we have learnt the following;
+ *
+ * When the `dataSource` is 'nald'
+ *
+ * - `contactType` is always null
+ * - `department` is always null
+ * - `middleInitials` is always null
+ * - `suffix` is always null
+ * - `lastName` is always set
+ * - `externalId` is always set
+ *
+ * When the `dataSource` is 'wrls'
+ *
+ * - `contactType` is always set
+ * - `initials` is always null
+ * - `externalId` is always null
+ * - if `middleInitials` is set then `firstName` is always set
+ * - a 'person' always has `firstName` and `lastName` set
+ * - a 'person' can have `department` populated
+ * - a 'department' will only have `department` populated
+ * - as of 2023-08-01 there were 6 contacts with `suffix` populated out of 42,827 (1,621 WRLS)
+ *
+ */
 class ContactModel extends CrmV2BaseModel {
   static get tableName () {
     return 'contacts'
@@ -48,26 +76,6 @@ class ContactModel extends CrmV2BaseModel {
    * We have to send a derived name when sending customer changes to the Charging Module API as it accepts only a
    * single `customerName` value. What we have implemented here replicates what the legacy code was doing to derive
    * what that name should be.
-   *
-   * Along the way we learnt the following about `crm_v2.contacts`
-   *
-   * ### NALD
-   * - `contactType` is always null
-   * - `department` is always null
-   * - `middleInitials` is always null
-   * - `suffix` is always null
-   * - `lastName` is always set
-   * - `externalId` is always set
-   *
-   * ### WRLS
-   * - `contactType` is always set
-   * - `initials` is always null
-   * - `externalId` is always null
-   * - if `middleInitials` is set then `firstName` is always set
-   * - a 'person' always has `firstName` and `lastName` set
-   * - a 'person' can have `department` populated
-   * - a 'department' will only have `department` populated
-   * - as of 2023-08-01 there were 6 contacts with `suffix` populated out of 42,827 (1,621 WRLS)
    *
    * @returns {String} The name for the contact derived from its various parts
    */
