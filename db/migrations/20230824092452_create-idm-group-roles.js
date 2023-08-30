@@ -8,7 +8,7 @@ exports.up = function (knex) {
     .withSchema('idm')
     .createTable(tableName, (table) => {
       // Primary Key
-      table.string('group_role_id').primary().notNullable()
+      table.string('group_role_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
       table.string('group_id').notNullable()
