@@ -38,7 +38,7 @@ const AuthenticationPlugin = {
         }
       })
 
-      // We set up our route in the dependency callback as we can't set authentcation before the strategy is registered
+      // We set up our route in the dependency callback as we can't set authentication before the strategy is registered
       server.route({
         method: 'GET',
         // TODO: pick a better path
