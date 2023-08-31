@@ -5,11 +5,6 @@
  * @module GetUserRolesService
  */
 
-const GroupRoleModel = require('../../models/idm/group-role.model.js')
-const GroupModel = require('../../models/idm/group.model.js')
-const RoleModel = require('../../models/idm/role.model.js')
-const UserGroupModel = require('../../models/idm/user-group.model.js')
-const UserRoleModel = require('../../models/idm/user-role.model.js')
 const UserModel = require('../../models/idm/user.model.js')
 
 /**
@@ -20,35 +15,50 @@ const UserModel = require('../../models/idm/user.model.js')
  * @returns
  */
 async function go (userId) {
-  const user = await UserModel.query().findById(userId)
+  const user = await UserModel.query()
+    .findById(userId)
+    .withGraphFetched('[roles, groups.roles]')
 
-  // TODO: bail early, maybe with an error, if user is not found
-
-  // TODO: make this a single query
-  // Find all the roles the user has and extract their role ids
-  const userRoles = await UserRoleModel.query().where({ userId: user.userId })
-  const userRoleIds = userRoles.map(userRole => userRole.roleId)
-  // Look up the roles by the ids
-  const rolesForUser = await RoleModel.query().findByIds(userRoleIds)
-
-  // Find all the groups the user is a member of and extract their group ids
-  const userGroups = await UserGroupModel.query().where({ userId: user.userId })
-  const userGroupIds = userGroups.map(userGroup => userGroup.groupId)
-  // Get all the groups associated with the group ids and extract the role ids
-  const groups = await GroupModel.query().findByIds(userGroupIds)
-  const groupIds = groups.map(group => group.groupId)
-  // Get all the roles associated with the groups
-  const groupRoles = await GroupRoleModel.query().whereIn('groupId', groupIds)
-  const groupRoleIds = groupRoles.map(groupRole => groupRole.roleId)
-  // Look up the roles by the ids
-  const rolesForGroups = await RoleModel.query().findByIds(groupRoleIds)
+  const { groups, roles } = user
+  const rolesFromGroups = _extractRolesFromGroups(groups)
+  const combinedAndDedupedRoles = _combineAndDedupeRoles(roles, rolesFromGroups)
 
   return {
     userId: user.userId,
     groups,
-    // TODO: dedupe roles if necessary
-    roles: [...rolesForUser, ...rolesForGroups]
+    roles: combinedAndDedupedRoles
   }
+}
+
+/**
+ * The roles that the user is assigned to via groups are returned from our main query within the user's Group objects.
+ * We want to extract the roles and remove them from the groups in order to keep the Group objects clean and avoid
+ * duplication in the object returned by the service. This function returns a flat array of all the group Roles objects,
+ * deleting them from the Group objects in the process
+ */
+function _extractRolesFromGroups (groups) {
+  return groups.flatMap((group) => {
+    const { roles } = group
+    delete group.roles
+    return roles
+  })
+}
+
+function _combineAndDedupeRoles (roles, rolesFromGroups) {
+  const combinedRolesArray = [...roles, ...rolesFromGroups]
+
+  // Our usual method of deduping arrays (putting the array into a new Set and then spreading it back into an array)
+  // doesn't work here as the role objects are not considered to be equal when doing this. We therefore use reduce to
+  // dedupe by going through each role and only adding it to the accumulated results array if a role with the same id
+  // isn't already in the array
+  const dedupedArray = combinedRolesArray.reduce((acc, current) => {
+    if (!acc.find((item) => item.roleId === current.roleId)) {
+      acc.push(current)
+    }
+    return acc
+  }, [])
+
+  return dedupedArray
 }
 
 module.exports = {
