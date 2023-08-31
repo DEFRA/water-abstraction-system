@@ -172,7 +172,7 @@ async function _uploadPart (uploadPromises, buffer, totalParts, bucketName, s3Cl
 }
 
 /**
- * Uploads a buffer as parts in a multipart upload to an Amazon s3 bucket
+ * Splits the buffer into upload parts and sends them to be uploaded
  *
  * @returns An array of responses from the upload promises for each part.
  */
