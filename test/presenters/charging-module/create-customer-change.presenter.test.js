@@ -109,7 +109,6 @@ describe('Charging Module Create Transaction presenter', () => {
   describe('addressLine1:', () => {
     describe("when the 'contact'", () => {
       beforeEach(() => {
-        address = AddressModel.fromJson({ ...standardAddress })
         company = CompanyModel.fromJson({})
       })
 
@@ -118,10 +117,31 @@ describe('Charging Module Create Transaction presenter', () => {
           contact = ContactModel.fromJson({ firstName: 'Margherita', lastName: 'Villar' })
         })
 
-        it('returns the contact name as an FAO for addressLine1', () => {
-          const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+        describe('and the address has all 4 lines populated', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({
+              ...standardAddress,
+              address4: 'COLLEGE GREEN'
+            })
+          })
 
-          expect(result.addressLine1).to.equal('FAO Margherita Villar')
+          it('returns the contact name as an FAO and address1 for addressLine1', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine1).to.equal('FAO Margherita Villar, ENVIRONMENT AGENCY')
+          })
+        })
+
+        describe('and not all 4 lines in the address are populated', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({ ...standardAddress })
+          })
+
+          it('returns the contact name as an FAO only for addressLine1', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine1).to.equal('FAO Margherita Villar')
+          })
         })
       })
 
@@ -130,10 +150,145 @@ describe('Charging Module Create Transaction presenter', () => {
           contact = ContactModel.fromJson({})
         })
 
-        it('returns address 1 for addressLine1', () => {
-          const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+        describe('and address1 is populated', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({ ...standardAddress })
+          })
 
-          expect(result.addressLine1).to.equal('ENVIRONMENT AGENCY')
+          it('returns address1 for addressLine1', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine1).to.equal('ENVIRONMENT AGENCY')
+          })
+        })
+
+        describe('and address1 is not populated', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({
+              ...standardAddress,
+              address1: null
+            })
+          })
+
+          it('returns the first populated address property for addressLine1', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine1).to.equal('HORIZON HOUSE')
+          })
+        })
+      })
+    })
+  })
+
+  describe('addressLine2: to addressLine4:', () => {
+    describe("when the 'contact'", () => {
+      beforeEach(() => {
+        company = CompanyModel.fromJson({})
+      })
+
+      describe('has been set', () => {
+        beforeEach(() => {
+          contact = ContactModel.fromJson({ firstName: 'Margherita', lastName: 'Villar' })
+        })
+
+        describe('and the address has all 4 lines populated', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({
+              ...standardAddress,
+              address4: 'COLLEGE GREEN'
+            })
+          })
+
+          it('returns address2 to address4 for addressLine2 to addressLine4', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine2).to.equal('HORIZON HOUSE')
+            expect(result.addressLine3).to.equal('DEANERY ROAD')
+            expect(result.addressLine4).to.equal('COLLEGE GREEN')
+          })
+        })
+
+        describe('and the address only has address4 populated', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({
+              ...standardAddress,
+              address1: null,
+              address2: null,
+              address3: null,
+              address4: 'COLLEGE GREEN'
+            })
+          })
+
+          it('returns address4 for addressLine2 and null for the rest', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine2).to.equal('COLLEGE GREEN')
+            expect(result.addressLine3).to.be.null()
+            expect(result.addressLine4).to.be.null()
+          })
+        })
+      })
+
+      describe('has not been set', () => {
+        beforeEach(() => {
+          contact = ContactModel.fromJson({})
+        })
+
+        describe('and all 4 address properties are set', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({
+              ...standardAddress,
+              address4: 'COLLEGE GREEN'
+            })
+          })
+
+          it('returns address2 to address4 for addressLine2 to addressLine4', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine2).to.equal('HORIZON HOUSE')
+            expect(result.addressLine3).to.equal('DEANERY ROAD')
+            expect(result.addressLine4).to.equal('COLLEGE GREEN')
+          })
+        })
+
+        describe('and only 2 address properties are set', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({
+              ...standardAddress,
+              address1: null,
+              address2: null,
+              address3: 'DEANERY ROAD',
+              address4: 'COLLEGE GREEN'
+            })
+          })
+
+          it('returns the second property as addressLine2 and addressLine3 to addressLine4 are null', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine2).to.equal('COLLEGE GREEN')
+            expect(result.addressLine3).to.be.null()
+            expect(result.addressLine4).to.be.null()
+          })
+        })
+
+        describe('and only 1 address property is set', () => {
+          beforeEach(() => {
+            address = AddressModel.fromJson({
+              ...standardAddress,
+              address1: null,
+              address2: null,
+              address3: null,
+              address4: 'COLLEGE GREEN'
+            })
+          })
+
+          it('returns null for addressLine2 to addressLine4', () => {
+            const result = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+
+            expect(result.addressLine2).to.be.null()
+            expect(result.addressLine3).to.be.null()
+            expect(result.addressLine4).to.be.null()
+          })
         })
       })
     })
