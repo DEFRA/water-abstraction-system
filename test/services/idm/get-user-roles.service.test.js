@@ -38,9 +38,6 @@ describe('Get User Roles service', () => {
     testGroup = await GroupHelper.add()
     await GroupRoleHelper.add({ groupId: testGroup.groupId, roleId: testRoleForGroup.roleId })
     await UserGroupHelper.add({ userId: testUser.userId, groupId: testGroup.groupId })
-
-    // TODO: We're not sure if this scenario will ever arise but let's ensure that if a user is assigned a role, and
-    // also gets that role via a group, then the role is only returned once
   })
 
   describe('when the user exists', () => {
@@ -66,6 +63,21 @@ describe('Get User Roles service', () => {
 
       expect(roles).to.have.length(2)
       expect(roles).to.include(['role_for_user', 'role_for_group'])
+    })
+
+    describe('and the user is assigned a role they also have through a group', () => {
+      beforeEach(async () => {
+        await UserRoleHelper.add({ userId: testUser.userId, roleId: testRoleForGroup.roleId })
+      })
+
+      it('returns only one instance of the role', async () => {
+        const result = await GetUserRolesService.go(testUser.userId)
+
+        const roles = result.roles.map(role => role.role)
+
+        expect(roles).to.have.length(2)
+        expect(roles).to.include(['role_for_user', 'role_for_group'])
+      })
     })
   })
 })
