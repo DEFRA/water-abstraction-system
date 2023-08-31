@@ -5,6 +5,8 @@
  * @module UserGroupModel
  */
 
+const { Model } = require('objection')
+
 const IDMBaseModel = require('./idm-base.model.js')
 
 class UserGroupModel extends IDMBaseModel {
@@ -21,6 +23,19 @@ class UserGroupModel extends IDMBaseModel {
       { database: 'dateCreated', model: 'createdAt' },
       { database: 'dateUpdated', model: 'updatedAt' }
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      group: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'group.model',
+        join: {
+          from: 'userGroups.groupId',
+          to: 'groups.groupId'
+        }
+      }
+    }
   }
 }
 

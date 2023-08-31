@@ -5,6 +5,8 @@
  * @module GroupRoleModel
  */
 
+const { Model } = require('objection')
+
 const IDMBaseModel = require('./idm-base.model.js')
 
 class GroupRoleModel extends IDMBaseModel {
@@ -21,6 +23,19 @@ class GroupRoleModel extends IDMBaseModel {
       { database: 'dateCreated', model: 'createdAt' },
       { database: 'dateUpdated', model: 'updatedAt' }
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      roles: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'role.model',
+        join: {
+          from: 'groupRoles.roleId',
+          to: 'roles.roleId'
+        }
+      }
+    }
   }
 }
 
