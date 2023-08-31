@@ -69,6 +69,22 @@ function go (invoiceAccount, address, company, contact) {
   }
 }
 
+function _addressLine6 (county, country) {
+  if (!county && !country) {
+    return ''
+  }
+
+  if (county && country) {
+    return `${county}, ${country}`
+  }
+
+  if (county) {
+    return county
+  }
+
+  return country
+}
+
 function _customerName (invoiceAccount, company) {
   if (company.name) {
     return company.name
@@ -120,22 +136,6 @@ function _formattedAddress (address, contact) {
     addressLine6: _truncate(_addressLine6(county, country), 60),
     postcode: _truncate(postcode, 60)
   }
-}
-
-function _addressLine6 (county, country) {
-  if (!county && !country) {
-    return ''
-  }
-
-  if (county && country) {
-    return `${county}, ${country}`
-  }
-
-  if (county) {
-    return county
-  }
-
-  return country
 }
 
 /**
