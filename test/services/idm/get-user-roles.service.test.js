@@ -41,12 +41,6 @@ describe('Get User Roles service', () => {
   })
 
   describe('when the user exists', () => {
-    it("returns the user's id", async () => {
-      const result = await GetUserRolesService.go(testUser.userId)
-
-      expect(result.userId).to.equal(testUser.userId)
-    })
-
     it("returns the user's groups", async () => {
       const result = await GetUserRolesService.go(testUser.userId)
 

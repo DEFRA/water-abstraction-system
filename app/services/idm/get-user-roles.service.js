@@ -24,7 +24,6 @@ async function go (userId) {
   const combinedAndDedupedRoles = _combineAndDedupeRoles(roles, rolesFromGroups)
 
   return {
-    userId: user.userId,
     groups,
     roles: combinedAndDedupedRoles
   }
