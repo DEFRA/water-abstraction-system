@@ -14,7 +14,7 @@ const CrmV2BaseModel = require('./crm-v2-base.model.js')
  *
  * ### Notes
  *
- * Whilst working with this table we have learnt the following;
+ * For all records `lastName` is always set
  *
  * When the `dataSource` is 'nald'
  *
@@ -22,7 +22,6 @@ const CrmV2BaseModel = require('./crm-v2-base.model.js')
  * - `department` is always null
  * - `middleInitials` is always null
  * - `suffix` is always null
- * - `lastName` is always set
  * - `externalId` is always set
  *
  * When the `dataSource` is 'wrls'
