@@ -21,6 +21,8 @@ const path = require('path')
 const requestConfig = require('../../../../config/request.config.js')
 const S3Config = require('../../../../config/s3.config.js')
 
+const FIVE_MB_IN_BYTES = 5242880
+
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives and setting the config
  *
@@ -29,33 +31,27 @@ const S3Config = require('../../../../config/s3.config.js')
 async function go (filePath) {
   const bucketName = S3Config.s3.bucket
   const fileName = path.basename(filePath)
-  const key = `export/${fileName}`
+  const bucketPath = `export/${fileName}`
   const file = await fsPromises.readFile(filePath)
   const buffer = Buffer.from(file, 'utf8')
 
   const customConfig = _setCustomConfig()
 
-  if (_singleUpload(buffer) === true) {
-    await _uploadSingleFile(bucketName, key, buffer, customConfig)
+  if (_singleUpload(buffer)) {
+    await _uploadSingleFile(bucketName, bucketPath, buffer, customConfig)
   } else {
-    await _uploadMultipartFile(bucketName, key, buffer, customConfig)
+    await _uploadMultipartFile(bucketName, bucketPath, buffer, customConfig)
   }
 }
 
 /**
  * Completes the multipart upload for the Amazon s3 bucket
- *
- * @param {*} s3Client The AWS s3 client instance used to interact with the service
- * @param {*} bucketName The name of the bucket where the object will be stored
- * @param {*} key The key (path) of the object within the bucket
- * @param {*} uploadId The uploadId associated with the created multipart upload
- * @param {*} uploadResults An array of upload results containing ETag and part number
  */
-async function _completeMultipartUploadCommand (s3Client, bucketName, key, uploadId, uploadResults) {
-  await s3Client.send(
+async function _completeMultipartUploadCommand (s3Client, bucketName, bucketPath, uploadId, uploadResults) {
+  return s3Client.send(
     new CompleteMultipartUploadCommand({
       Bucket: bucketName,
-      Key: key,
+      Key: bucketPath,
       UploadId: uploadId,
       MultipartUpload: {
         Parts: uploadResults.map(({ ETag }, i) => ({
@@ -70,17 +66,13 @@ async function _completeMultipartUploadCommand (s3Client, bucketName, key, uploa
 /**
  * Creates a multipart upload in our Amazon s3 bucket
  *
- * @param {*} s3Client The AWS S3 Client instance used to interact with the service
- * @param {String} bucketName The name of the bucket where the object will be stored
- * @param {String} key The key (path) of the object within the bucket
- *
  * @returns {String} The uploadId associated with the created multipart upload
  */
-async function _createMultipartUpload (s3Client, bucketName, key) {
+async function _createMultipartUpload (s3Client, bucketName, bucketPath) {
   const multipartUpload = await s3Client.send(
     new CreateMultipartUploadCommand({
       Bucket: bucketName,
-      Key: key
+      Key: bucketPath
     })
   )
 
@@ -90,15 +82,16 @@ async function _createMultipartUpload (s3Client, bucketName, key) {
 /**
  * Sets the configuration settings for the S3 bucket
  *
- * If the environment has a proxy then we set that here as well. Setting the connectionTimeout to be less than the 10
- * seconds 6 minute standard.
+ * If the environment has a proxy then we set that here. The default timeout is 6 minutes but we believe that is far too
+ * long to wait. So, we set 'connectionTimeout' to be 10 seconds.
+ *
  * @returns {} Custom configuration settings
  */
 function _setCustomConfig () {
   return {
     requestHandler: new NodeHttpHandler({
     // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread
-    // operator to bring the result back into the top level of the `defaultOptions` object.
+    // operator to bring the result back into the top level of the `customConfig` object.
       ...(requestConfig.httpProxy
         ? {
             httpsAgent: new HttpsProxyAgent({ proxy: requestConfig.httpProxy }),
@@ -123,70 +116,48 @@ function _setCustomConfig () {
  * @returns {Boolean} True if the buffer is smaller than 5 MB else false
  */
 function _singleUpload (buffer) {
-  const FIVE_MEGA_BYTES = 5242880
-
-  return buffer.length <= FIVE_MEGA_BYTES
+  return buffer.length <= FIVE_MB_IN_BYTES
 }
 
 /**
  * Uploads a file in multiple parts to the specified S3 bucket with the provided key
- *
- * @param {Buffer} buffer The file content as a buffer object
- * @param {String} bucketName Name of the S3 bucket to upload the file to
- * @param {String} key The path under which the file will be stored in the bucket
  */
-async function _uploadMultipartFile (bucketName, key, buffer, customConfig) {
+async function _uploadMultipartFile (bucketName, bucketPath, buffer, customConfig) {
   const s3Client = new S3Client(customConfig)
   let uploadId
 
   try {
-    const uploadId = await _createMultipartUpload(s3Client, bucketName, key)
+    const uploadId = await _createMultipartUpload(s3Client, bucketName, bucketPath)
 
-    const uploadResults = await _uploadPartCommand(s3Client, bucketName, key, buffer, uploadId)
+    const uploadResults = await _splitIntoPartsAndUpload(s3Client, bucketName, bucketPath, buffer, uploadId)
 
-    await _completeMultipartUploadCommand(s3Client, bucketName, key, uploadId, uploadResults)
+    await _completeMultipartUploadCommand(s3Client, bucketName, bucketPath, uploadId, uploadResults)
   } catch (error) {
     global.GlobalNotifier.omfg('Send to S3 errored', error)
 
     if (uploadId) {
       const abortCommand = new AbortMultipartUploadCommand({
         Bucket: bucketName,
-        Key: key,
+        Key: bucketPath,
         UploadId: uploadId
       })
       await S3Client.send(abortCommand)
     }
   }
 }
-
 /**
- * Uploads a buffer as parts in a multipart upload to an Amazon s3 bucket
- *
- * @param {*} s3Client The AWS S3 Client instance used to interact with the service
- * @param {String} bucketName The name of the bucket where the object will be stored
- * @param {String} key The key (path) of the object within the bucket
- * @param {Buffer} buffer The buffer containing the data to be uploaded in parts
- * @param {String} uploadId The uploadId associated with the created multipart upload
- *
- * @returns An array of responses from the upload promises for each part.
+ * Upload all the parts to the AWS s3 bucket
  */
-async function _uploadPartCommand (s3Client, bucketName, key, buffer, uploadId) {
-  const uploadPromises = []
-  // Each part size needs to be a minimum of 5MB to use multipart upload
-  const PART_SIZE = 5242880
-  // Calculating how many parts there will be depending on the size of the buffer
-  const totalParts = Math.ceil(buffer.length / PART_SIZE)
-
-  // Looping through uploading each individual part
+async function _uploadPart (uploadPromises, buffer, totalParts, bucketName, s3Client, bucketPath, uploadId) {
   for (let i = 0; i < totalParts; i++) {
-    const start = i * PART_SIZE
-    const end = Math.min(start + PART_SIZE, buffer.length)
+    const start = i * FIVE_MB_IN_BYTES
+    const end = Math.min(start + FIVE_MB_IN_BYTES, buffer.length)
     uploadPromises.push(
       s3Client
         .send(
           new UploadPartCommand({
             Bucket: bucketName,
-            Key: key,
+            Key: bucketPath,
             UploadId: uploadId,
             Body: buffer.subarray(start, end),
             PartNumber: i + 1
@@ -198,25 +169,35 @@ async function _uploadPartCommand (s3Client, bucketName, key, buffer, uploadId) 
         })
     )
   }
-
-  return await Promise.all(uploadPromises)
 }
 
 /**
- * Uploads a single file content to the specified S3 bucket with the provided key
+ * Uploads a buffer as parts in a multipart upload to an Amazon s3 bucket
  *
- * @param {Buffer} buffer The file content as a buffer object
- * @param {String} bucketName Name of the S3 bucket to upload the file to
- * @param {String} key The path under which the file will be stored in the bucket
+ * @returns An array of responses from the upload promises for each part.
  */
-async function _uploadSingleFile (bucketName, key, buffer, customConfig) {
+async function _splitIntoPartsAndUpload (s3Client, bucketName, bucketPath, buffer, uploadId) {
+  const uploadPromises = []
+  // Each part size needs to be a minimum of 5MB to use multipart upload
+  // Calculating how many parts there will be depending on the size of the buffer
+  const totalParts = Math.ceil(buffer.length / FIVE_MB_IN_BYTES)
+
+  await _uploadPart(uploadPromises, buffer, totalParts, bucketName, s3Client, bucketPath, uploadId)
+
+  return Promise.all(uploadPromises)
+}
+
+/**
+ * Uploads a single file content to the specified S3 bucket with the provided bucket path
+ */
+async function _uploadSingleFile (bucketName, bucketPath, buffer, customConfig) {
   const s3Client = new S3Client(customConfig)
 
   try {
     return await s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
-        Key: key,
+        Key: bucketPath,
         Body: buffer
       })
     )
