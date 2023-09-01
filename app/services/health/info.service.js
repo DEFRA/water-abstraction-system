@@ -191,6 +191,18 @@ async function _getVirusScannerData () {
   }
 }
 
+function _mapArrayToTextCells (rows) {
+  return rows.map(row => {
+    return [
+      ...[{ text: row.name }],
+      ...[{ text: row.completedCount }],
+      ...[{ text: row.failedCount }],
+      ...[{ text: row.activeCount }],
+      ...[{ text: row.maxCompletedonDate ? row.maxCompletedonDate.toLocaleString() : '-' }]
+    ]
+  })
+}
+
 function _parseFailedRequestResult (result) {
   if (result.response.statusCode) {
     return `ERROR: ${result.response.statusCode} - ${result.response.body}`
