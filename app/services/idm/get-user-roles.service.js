@@ -21,7 +21,7 @@ async function go (userId) {
 
   const { groups, roles } = user
   const rolesFromGroups = _extractRolesFromGroups(groups)
-  const combinedAndDedupedRoles = _combineAndDedupeRoles(roles, rolesFromGroups)
+  const combinedAndDedupedRoles = _combineAndDedupeRoles([...roles, ...rolesFromGroups])
 
   return {
     groups,
@@ -43,17 +43,20 @@ function _extractRolesFromGroups (groups) {
   })
 }
 
-function _combineAndDedupeRoles (roles, rolesFromGroups) {
-  const combinedRolesArray = [...roles, ...rolesFromGroups]
-
+function _combineAndDedupeRoles (rolesArrayToDedupe) {
   // Our usual method of deduping arrays (putting the array into a new Set and then spreading it back into an array)
-  // doesn't work here as the role objects are not considered to be equal when doing this. We therefore use reduce to
-  // dedupe by going through each role and only adding it to the accumulated results array if a role with the same id
-  // isn't already in the array
-  const dedupedArray = combinedRolesArray.reduce((acc, current) => {
-    if (!acc.find((item) => item.roleId === current.roleId)) {
+  // doesn't work here as the Role objects are not considered to be equal when doing this. We therefore use reduce to
+  // dedupe by going through each Role object in the original array and only adding it to the accumulated results array
+  // if a Role object with the same id isn't already in it
+  const dedupedArray = rolesArrayToDedupe.reduce((acc, current) => {
+    const roleIsAlreadyInAcc = acc.find((item) => {
+      return item.roleId === current.roleId
+    })
+
+    if (!roleIsAlreadyInAcc) {
       acc.push(current)
     }
+
     return acc
   }, [])
 
