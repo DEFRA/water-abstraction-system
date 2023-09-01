@@ -29,6 +29,7 @@ const FIVE_MB_IN_BYTES = 5242880
  * @param {String} filePath A string containing the path of the file to send to the S3 bucket
  */
 async function go (filePath) {
+  console.log('Uploading to S3 bucket')
   const bucketName = S3Config.s3.bucket
   const fileName = path.basename(filePath)
   const bucketPath = `export/${fileName}`
@@ -36,12 +37,13 @@ async function go (filePath) {
   const buffer = Buffer.from(file, 'utf8')
 
   const customConfig = _setCustomConfig()
+  await _uploadSingleFile(bucketName, bucketPath, buffer, customConfig)
 
-  if (_singleUpload(buffer)) {
-    await _uploadSingleFile(bucketName, bucketPath, buffer, customConfig)
-  } else {
-    await _uploadMultipartFile(bucketName, bucketPath, buffer, customConfig)
-  }
+  // if (_singleUpload(buffer)) {
+  //   await _uploadSingleFile(bucketName, bucketPath, buffer, customConfig)
+  // } else {
+  //   await _uploadMultipartFile(bucketName, bucketPath, buffer, customConfig)
+  // }
 }
 
 /**
@@ -191,10 +193,11 @@ async function _uploadPart (uploadPromises, buffer, totalParts, bucketName, s3Cl
  * Uploads a single file content to the specified S3 bucket with the provided bucket path
  */
 async function _uploadSingleFile (bucketName, bucketPath, buffer, customConfig) {
+  console.log('Single Upload')
   const s3Client = new S3Client(customConfig)
 
   try {
-    return await s3Client.send(
+    return s3Client.send(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: bucketPath,
