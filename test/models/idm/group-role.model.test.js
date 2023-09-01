@@ -23,8 +23,6 @@ describe('Group Role model', () => {
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
-
-    testRecord = await GroupRoleHelper.add()
   })
 
   describe('Basic query', () => {
