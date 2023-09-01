@@ -10,6 +10,7 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
+const { db } = require('../../../db/db.js')
 const redis = require('@redis/client')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const RedisConfig = require('../../../config/redis.config.js')
@@ -47,9 +48,13 @@ async function go () {
  */
 function _mapArrayToTextCells (rows) {
   return rows.map(row => {
-    return row.map(cell => {
-      return { text: cell }
-    })
+    return [
+      ...[{ text: row.name }],
+      ...[{ text: row.completedCount }],
+      ...[{ text: row.failedCount }],
+      ...[{ text: row.activeCount }],
+      ...[{ text: row.maxCompletedonDate ? row.maxCompletedonDate.toLocaleString() : '-' }]
+    ]
   })
 }
 
@@ -102,33 +107,26 @@ async function _getChargingModuleData () {
   return _parseFailedRequestResult(result)
 }
 
-function _getImportJobsData () {
-  return _mapArrayToTextCells([
-    [
-      'Cell 1.1',
-      'Cell 1.2'
-    ],
-    [
-      'Cell 2.1',
-      'Cell 2.2'
-    ]
-  ])
+async function _getImportJobsData () {
+  const importJobs = await _fetchImportJobs()
+
+  return _mapArrayToTextCells(importJobs)
 }
 
 async function _getAppData () {
   const healthInfoPath = 'health/info'
 
   const services = [
-    { name: 'Service - foreground', serviceName: 'water' },
-    { name: 'Service - background', serviceName: 'background' },
-    { name: 'Reporting', serviceName: 'reporting' },
     { name: 'Import', serviceName: 'import' },
-    { name: 'Tactical CRM', serviceName: 'crm' },
     { name: 'External UI', serviceName: 'external' },
     { name: 'Internal UI', serviceName: 'internal' },
+    { name: 'Service - foreground', serviceName: 'water' },
+    { name: 'Service - background', serviceName: 'background' },
+    { name: 'Returns', serviceName: 'returns' },
+    { name: 'Tactical CRM', serviceName: 'crm' },
     { name: 'Tactical IDM', serviceName: 'idm' },
-    { name: 'Permit repository', serviceName: 'permits' },
-    { name: 'Returns', serviceName: 'returns' }
+    { name: 'Reporting', serviceName: 'reporting' },
+    { name: 'Permit repository', serviceName: 'permits' }
   ]
 
   for (const service of services) {
@@ -137,7 +135,7 @@ async function _getAppData () {
     if (result.succeeded) {
       service.version = result.response.body.version
       service.commit = result.response.body.commit
-      service.jobs = service.name === 'Import' ? _getImportJobsData() : []
+      service.jobs = service.name === 'Import' ? await _getImportJobsData() : []
     } else {
       service.version = _parseFailedRequestResult(result)
       service.commit = ''
@@ -153,6 +151,66 @@ function _parseFailedRequestResult (result) {
   }
 
   return `ERROR: ${result.response.name} - ${result.response.message}`
+}
+
+async function _fetchImportJobs () {
+  const PGBOSS_JOBS_ARRAY = [
+    'nald-import.queue-licences',
+    'nald-import.import-licence',
+    'nald-import.s3-download',
+    'nald-import.delete-removed-documents',
+    'licence-import.queue-licences',
+    'licence-import.queue-companies',
+    'licence-import.import-licence',
+    'licence-import.import-company',
+    'licence-import.import-purpose-condition-types',
+    'licence-import.delete-removed-documents',
+    'import.charge-versions',
+    'import.charging-data',
+    'import.bill-runs',
+    'import.tracker'
+  ]
+
+  return db
+    .select('name')
+    .count({ completedCount: db.raw("CASE WHEN state = 'completed' THEN 1 END") })
+    .count({ failedCount: db.raw("CASE WHEN state = 'failed' THEN 1 END") })
+    .count({ activeCount: db.raw("CASE WHEN state IN ('active', 'created') THEN 1 END") })
+    .max('completedon as maxCompletedonDate')
+    .from(
+      (db
+        .select(
+          'name',
+          'state',
+          'completedon'
+        )
+        .from('water_import.job')
+        .whereIn('state', ['failed', 'completed', 'active', 'created'])
+        .whereIn('name', PGBOSS_JOBS_ARRAY)
+        .where((builder) =>
+          builder
+            .where(db.raw("createdon > now() - interval '3 days'"))
+            .orWhere(db.raw("completedon > now() - interval '3 days'"))
+        )
+        .unionAll(
+          db
+            .select(
+              'name',
+              'state',
+              'completedon'
+            )
+            .from('water_import.archive')
+            .whereIn('state', ['failed', 'completed', 'active', 'created'])
+            .whereIn('name', PGBOSS_JOBS_ARRAY)
+            .where((builder) =>
+              builder
+                .where(db.raw("createdon > now() - interval '3 days'"))
+                .orWhere(db.raw("completedon > now() - interval '3 days'"))
+            )
+        ))
+        .as('jobs')
+    )
+    .groupBy('name')
 }
 
 module.exports = {
