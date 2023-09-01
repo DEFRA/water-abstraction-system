@@ -14,10 +14,10 @@ const redis = require('@redis/client')
 
 const { db } = require('../../../db/db.js')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
-const RedisConfig = require('../../../config/redis.config.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
+const RedisConfig = require('../../../config/redis.config.js')
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
