@@ -120,6 +120,22 @@ function _singleUpload (buffer) {
 }
 
 /**
+ * Splits the buffer into upload parts and sends them to be uploaded
+ *
+ * @returns An array of responses from the upload promises for each part.
+ */
+async function _splitIntoPartsAndUpload (s3Client, bucketName, bucketPath, buffer, uploadId) {
+  const uploadPromises = []
+  // Each part size needs to be a minimum of 5MB to use multipart upload
+  // Calculating how many parts there will be depending on the size of the buffer
+  const totalParts = Math.ceil(buffer.length / FIVE_MB_IN_BYTES)
+
+  await _uploadPart(uploadPromises, buffer, totalParts, bucketName, s3Client, bucketPath, uploadId)
+
+  return Promise.all(uploadPromises)
+}
+
+/**
  * Uploads a file in multiple parts to the specified S3 bucket with the provided key
  */
 async function _uploadMultipartFile (bucketName, bucketPath, buffer, customConfig) {
@@ -169,22 +185,6 @@ async function _uploadPart (uploadPromises, buffer, totalParts, bucketName, s3Cl
         })
     )
   }
-}
-
-/**
- * Splits the buffer into upload parts and sends them to be uploaded
- *
- * @returns An array of responses from the upload promises for each part.
- */
-async function _splitIntoPartsAndUpload (s3Client, bucketName, bucketPath, buffer, uploadId) {
-  const uploadPromises = []
-  // Each part size needs to be a minimum of 5MB to use multipart upload
-  // Calculating how many parts there will be depending on the size of the buffer
-  const totalParts = Math.ceil(buffer.length / FIVE_MB_IN_BYTES)
-
-  await _uploadPart(uploadPromises, buffer, totalParts, bucketName, s3Client, bucketPath, uploadId)
-
-  return Promise.all(uploadPromises)
 }
 
 /**
