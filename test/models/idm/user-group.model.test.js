@@ -11,9 +11,9 @@ const { expect } = Code
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const GroupModel = require('../../../app/models/idm/group.model.js')
 const GroupHelper = require('../../support/helpers/idm/group.helper.js')
+const UserGroupHelper = require('../../support/helpers/idm/user-group.helper.js')
 const UserModel = require('../../../app/models/idm/user.model.js')
 const UserHelper = require('../../support/helpers/idm/user.helper.js')
-const UserGroupHelper = require('../../support/helpers/idm/user-group.helper.js')
 
 // Thing under test
 const UserGroupModel = require('../../../app/models/idm/user-group.model.js')
