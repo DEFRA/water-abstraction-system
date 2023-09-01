@@ -12,6 +12,7 @@ const { expect } = Code
 const { init } = require('../../app/server.js')
 
 describe('Billing Accounts controller', () => {
+  let options
   let server
 
   // Create server before each test
@@ -30,17 +31,51 @@ describe('Billing Accounts controller', () => {
     Sinon.restore()
   })
 
-  describe('POST /bill-runs', () => {
-    const options = {
-      method: 'POST',
-      url: '/billing-accounts/7fa2f044-b29e-483a-99b6-e16db0db0f58/change-address'
-    }
+  describe('POST /billing-accounts/{invoiceAccountId}/change-address', () => {
+    beforeEach(() => {
+      options = {
+        method: 'POST',
+        url: '/billing-accounts/7fa2f044-b29e-483a-99b6-e16db0db0f58/change-address'
+      }
+    })
 
-    describe('when the request succeeds', () => {
+    describe('when a request is valid', () => {
+      beforeEach(() => {
+        // Though the ChangeAddressValidator accepts a payload with an empty address PayLoadCleanerPlugin will strip it
+        // out. So, we need at least one property to get through the cleaner.
+        options.payload = {
+          address: {
+            addressLine1: 'Building 12'
+          }
+        }
+      })
+
       it('returns a 201 status', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(201)
+      })
+    })
+
+    describe('when the request fails', () => {
+      describe('because the request is invalid', () => {
+        beforeEach(() => {
+          // This payload is invalid because it does not have an address property, which is required by
+          // ChangeAddressValidator
+          options.payload = {
+            contact: {
+              type: 'person'
+            }
+          }
+        })
+
+        it('returns an error response', async () => {
+          const response = await server.inject(options)
+          const payload = JSON.parse(response.payload)
+
+          expect(response.statusCode).to.equal(400)
+          expect(payload.message).to.equal('"address" is required')
+        })
       })
     })
   })
