@@ -29,7 +29,6 @@ async function go (schemaName) {
     const tableNames = await FetchTableNamesService.go(schemaName)
 
     for (const tableName of tableNames) {
-      console.log('Exporting table :', tableName)
       await ExportTableService.go(tableName, schemaFolderPath, schemaName)
     }
 

@@ -17,7 +17,6 @@ async function go () {
   const schemaNames = ['water', 'returns', 'crm', 'crm_v2', 'idm', 'permit']
 
   for (const schemaName of schemaNames) {
-    console.log('Exporting schema :', schemaName)
     await SchemaExportService.go(schemaName)
   }
 
