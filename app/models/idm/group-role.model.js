@@ -27,12 +27,20 @@ class GroupRoleModel extends IDMBaseModel {
 
   static get relationMappings () {
     return {
-      roles: {
+      role: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'role.model',
         join: {
           from: 'groupRoles.roleId',
           to: 'roles.roleId'
+        }
+      },
+      group: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'group.model',
+        join: {
+          from: 'groupRoles.groupId',
+          to: 'groups.groupId'
         }
       }
     }

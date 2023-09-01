@@ -34,6 +34,14 @@ class UserGroupModel extends IDMBaseModel {
           from: 'userGroups.groupId',
           to: 'groups.groupId'
         }
+      },
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'userGroups.userId',
+          to: 'users.userId'
+        }
       }
     }
   }

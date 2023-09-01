@@ -46,6 +46,14 @@ class GroupModel extends IDMBaseModel {
           },
           to: 'roles.roleId'
         }
+      },
+      userGroups: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-group.model',
+        join: {
+          from: 'groups.groupId',
+          to: 'userGroups.groupId'
+        }
       }
     }
   }

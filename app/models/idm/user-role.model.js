@@ -34,6 +34,14 @@ class UserRoleModel extends IDMBaseModel {
           from: 'userRoles.roleId',
           to: 'roles.roleId'
         }
+      },
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'userRoles.userId',
+          to: 'users.userId'
+        }
       }
     }
   }
