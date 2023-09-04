@@ -20,7 +20,7 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  *
  * Behind the scenes a new `crm_v2.invoice_account_address` record is created that links to the `crm_v2.address`,
  * `crm_v2.company` and `crm_v2.contact` records. It will also be linked to the `crm_v2.invoice_account` which
- * represents the billing account being amended (hence the flipping between billing/invoice account!).
+ * represents the billing account being amended.
  *
  * It won't have an end date, which marks it as the 'current' address. The previous `invoice_account_address` will get
  * its `end_date` updated. The legacy service then knows that address is no longer current.
@@ -49,19 +49,31 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * @param {Object} [agentCompany] The validated agent company details
  * @param {Object} [contact] The validated contact details
  *
- * @returns {Object} contains a copy of the persisted address, and agent company and contact if they were also changed
+ * @returns {Object} contains a copy of the persisted address, agent company and contact if they were also changed
  */
 async function go (invoiceAccountId, address, agentCompany, contact) {
   const invoiceAccount = await _fetchInvoiceAccount(invoiceAccountId)
 
   // We use the same timestamp for all date created/updated values. We then have something to tie together all the
-  // changes we'll apply
+  // changes we apply
   const timestamp = new Date()
 
+  // NOTE: The presenter in `SendCustomerChangeService` relies on being able to call `$name()` on the contact instance.
+  // This is implemented in the `ContactModel`, which means we need to transform the validated contact data into an
+  // instance of `ContactModel`. So, we thought if we are doing it for contact why not do it for the rest? This way
+  // any subsequent functions/services can handle all 3 in a consistent way.
   const addressInstance = _transformAddress(timestamp, address)
   const companyInstance = _transformCompany(timestamp, agentCompany)
   const contactInstance = _transformContact(timestamp, contact)
 
+  // NOTE: The order we let the Charging Module know about the change and persist the data to our own DB is important.
+  // In the legacy code we updated our DB first then let the Charging Module know. But if the CHA request failed it
+  // would appear to the user all was well; the address is updated in our service.
+  //
+  // Now we attempt to update the CHA first. We only attempt to update our DB if it succeeded (it will throw an error if
+  // it doesn't). If the CHA fails the user will know. If the CHA succeeds but our update fails the user will still see
+  // an error and try again. It matters not that we send the same information to the CHA; either way it will overwrite
+  // what is either in it or SOP. But this way the user is never left believing all is well when something has failed.
   await SendCustomerChangeService.go(invoiceAccount, addressInstance, companyInstance, contactInstance)
 
   return _persist(timestamp, invoiceAccount, addressInstance, companyInstance, contactInstance)
@@ -78,6 +90,29 @@ async function _fetchInvoiceAccount (invoiceAccountId) {
     })
 }
 
+/**
+ * Persist the changes to the WRLS database
+ *
+ * Any changes that need to be made to the WRLS DB are done here. We do them in a
+ * {@link https://vincit.github.io/objection.js/guide/transactions.html | transaction} object to ensure they either
+ * all get applied, or none do (no partial updates here!)
+ *
+ * We persist the address, company and contact first because we need their IDs in order to create the new
+ * `crm_v2.invoice_account_address` record. When we create that record we also need to apply an end date to any existing
+ * invoice account addresses with a null end date. This is how the service determines which address details are current
+ * (end date is null).
+ *
+ * The object we return has all 3 entities whether they were persisted or not. This gets passed back to the UI via
+ * the controller and is what it needs to then be able to redirect the user to the correct page.
+ *
+ * @param {Date} timestamp the timestamp to be used for any date created or updated values when persisting
+ * @param {module:InvoiceAccountModel} invoiceAccount the invoice (billing) account having its address changed
+ * @param {module:AddressModel} address the new address to be persisted (expected to be populated)
+ * @param {module:CompanyModel} company the new agent company to be persisted (not expected to be populated)
+ * @param {module:ContactModel} contact the new contact to be persisted (not expected to be populated)
+ *
+ * @returns {Object} a single object that contains the persisted address, plus the agent company and contact
+ */
 async function _persist (timestamp, invoiceAccount, address, company, contact) {
   const persistedData = {}
 
@@ -95,21 +130,39 @@ async function _persist (timestamp, invoiceAccount, address, company, contact) {
       endDate: null
     })
 
-    await _patchInvoiceAccountAddress(trx, invoiceAccount.invoiceAccountId, timestamp)
+    await _patchExistingInvoiceAccountAddressEndDate(trx, invoiceAccount.invoiceAccountId, timestamp)
     persistedData.invoiceAccountAddress = await _persistInvoiceAccountAddress(trx, invoiceAccountAddress)
   })
 
   return persistedData
 }
 
-async function _patchInvoiceAccountAddress (trx, invoiceAccountId, endDate) {
+async function _patchExistingInvoiceAccountAddressEndDate (trx, invoiceAccountId, timestamp) {
+  // The timestamp represents the current date and time we're making this change, i.e. today. So, the new invoice
+  // account address will start from today. To show that the old record is no longer current, we need to set its
+  // `endDate` to be today - 1 (yesterday). The following works it all out even if we're over a month or year boundary
+  // and no moment() in sight! Thanks to https://stackoverflow.com/a/1296374 for how to do this
+  const endDate = new Date()
+  endDate.setDate(timestamp.getDate() - 1)
+
   return InvoiceAccountAddressModel.query(trx)
     .patch({
       endDate
     })
     .where('invoiceAccountId', invoiceAccountId)
+    .whereNull('endDate')
 }
 
+/**
+ * Persist the new invoice account address
+ *
+ * The legacy code included logic to handle a situation where the start date and invoice account ID are the same. This
+ * could happen if you make a change to a billing account's address more than once on the same day. It would first
+ * SELECT any records where that was the case and then DELETE them.
+ *
+ * We can get the same result with a single query by using `onConflict()`. If we get a match we just overwrite the
+ * existing record with our new data.
+ */
 async function _persistInvoiceAccountAddress (trx, invoiceAccountAddress) {
   return invoiceAccountAddress.$query(trx)
     .insert()
@@ -129,27 +182,21 @@ async function _persistInvoiceAccountAddress (trx, invoiceAccountAddress) {
  * If the address has an `id:` we assume it was an existing address selected during the journey. So, the address is
  * already persisted hence we just return `address`.
  *
- * Else we attempt to insert a new address record. If the address has a `uprn:` it will be an one selected from the
+ * Else we attempt to insert a new address record. If the address has a `uprn:` it will be one selected from the
  * address lookup page. The previous team also added a unique constraint on UPRN in the table so we cannot insert 2
  * records with matching UPRNs. But we use this to our advantage. Using `onConflict()` and `merge()` we can have
- * Objection JS update the existing address record if one with a matching UPRN exists.
+ * Objection JS update the existing address record if a matching UPRN exists.
  *
  * Because either INSERT or UPDATE gets fired `returning()` will kick in and return the all important `addressId` which
- * we'll need later in the service. It will also return the fields specified in the INSERT/UPDATE hence we get a
- * 'complete' address back that we can return to the calling function.
+ * we'll need later for the invoice account address. It will also return the fields specified in the INSERT/UPDATE hence
+ * we get a 'complete' address back that we can return to the calling function.
  *
- * > We are aware that the existing DB design means multiple billing accounts may refer to the same address record. By
- * > updating an address record we could be updating the address for multiple records. This is why the existing DB
- * > design is _bad_! Ideally, billing accounts should have their own address records and we don't worry about
- * > duplication. This then avoids the problem. But until we can amend the DB design it is better that where a record
- * > in our DB is locked to OS Places, it should reflect whatever OS Places currently returns, not what it returned
- * > when first added.
- *
- * @param {Object} trx Objection database
- *   {@link https://vincit.github.io/objection.js/guide/transactions.html | transaction} object to be used in the query
- * @param {Object} address the address to be persisted
- *
- * @returns {Object} The persisted address
+ * > NOTE: We are aware that the existing DB design means multiple billing accounts may refer to the same address
+ * > record. By updating an address record we could be updating the address for multiple records. This is why the
+ * > existing DB design is _bad_! Ideally, billing accounts should have their own address records and we don't worry
+ * > about duplication. This then avoids the problem. But until we can amend the DB design it is better that where a
+ * > record in our DB is locked to OS Places, it should reflect whatever OS Places currently returns, not what it
+ * > returned when first added.
  */
 async function _persistAddress (trx, address) {
   if (address.addressId) {
@@ -177,36 +224,30 @@ async function _persistAddress (trx, address) {
 }
 
 /**
- * Persist the company entered during the change address process
+ * Persist the company (Agent) entered during the change address process
  *
- * If the company is not set then the user has opted not to change the agent in the journey. So, we just return the
- * empty company.
+ * If the company name is not set then the user has opted not to change the agent in the journey. So, we just return the
+ * empty `CompanyModel` instance.
  *
  * Else we attempt to insert a new company record. If the company has a `companyNumber:` it will either be an existing
  * company record selected by the user, or they will have been required to enter the company number. The previous team
  * added a unique constraint on `company_number` in the table so we cannot insert 2 records records with matching
  * numbers. But we use this to our advantage. Using `onConflict()` and `merge()` we can have Objection JS update the
- * existing company record if one with a matching company number exists.
+ * existing company record if a matching company number.
  *
  * Because either INSERT or UPDATE gets fired `returning()` will kick in and return the all important `companyId` which
- * we'll need later in the service. It will also return the fields specified in the INSERT/UPDATE hence we get a
- * 'complete' company back that we can return in the response we eventually send back.
+ * we'll need later for the invoice account address. It will also return the fields specified in the INSERT/UPDATE hence
+ * we get a 'complete' company back that we can return to the calling function.
  *
- * > We are aware that the existing DB design means multiple billing accounts may refer to the same company record. By
- * > updating a company record we could be updating the company for multiple records. This is why the existing DB design
- * > is _bad_! Ideally, billing accounts should have their own company records and you don't worry about duplication.
- * > This then avoids the problem. But until we can amend the DB design it is better that where a record in our DB is
- * > locked to Companies House, it should reflect whatever Companies House currently returns, not what it returned when
- * > first added.
- *
- * @param {Object} trx Objection database
- * {@link https://vincit.github.io/objection.js/guide/transactions.html | transaction} object to be used in the query
- * @param {Object} company the company to be persisted
- *
- * @returns {Object} The persisted company
+ * > NOTE: We are aware that the existing DB design means multiple billing accounts may refer to the same company
+ * > record. By updating a company record we could be updating the company for multiple records. This is why the
+ * > existing DB design is _bad_! Ideally, billing accounts should have their own company records and you don't worry
+ * > about duplication. This then avoids the problem. But until we can amend the DB design it is better that where a
+ * > record in our DB is locked to Companies House, it should reflect whatever Companies House currently returns, not
+ * > what it returned when first added.
  */
 async function _persistCompany (trx, company) {
-  if (!company) {
+  if (!company.name) {
     return company
   }
 
@@ -223,8 +264,14 @@ async function _persistCompany (trx, company) {
     ])
 }
 
+/**
+ * Persist the contact (FAO) entered during the change address process
+ *
+ * If the contact type is not set then the user has opted not to apply an FAO in the journey. So, we just return the
+ * empty `ContactModel` instance.
+ */
 async function _persistContact (trx, contact) {
-  if (!contact) {
+  if (!contact.type) {
     return contact
   }
 
@@ -238,19 +285,17 @@ async function _persistContact (trx, contact) {
 }
 
 function _transformAddress (timestamp, address) {
-  const { id: addressId, addressLine1: address1, addressLine2: address2, addressLine3: address3, addressLine4: address4, town, county, country, postcode, uprn } = address
-
   return AddressModel.fromJson({
-    addressId,
-    address1,
-    address2,
-    address3,
-    address4,
-    town,
-    county,
-    country,
-    postcode,
-    uprn,
+    id: address.addressId,
+    address1: address.addressLine1,
+    address2: address.addressLine2,
+    address3: address.addressLine3,
+    address4: address.addressLine4,
+    town: address.town,
+    county: address.county,
+    country: address.country,
+    postcode: address.postcode,
+    uprn: address.uprn,
     dataSource: 'wrls',
     dateCreated: timestamp,
     dateUpdated: timestamp
@@ -258,28 +303,24 @@ function _transformAddress (timestamp, address) {
 }
 
 function _transformCompany (timestamp, company) {
-  const { type, name, companyNumber } = company
-
   return CompanyModel.fromJson({
-    type,
-    name,
-    companyNumber,
+    type: company.type,
+    name: company.name,
+    companyNumber: company.companyNumber,
     dateCreated: timestamp,
     dateUpdated: timestamp
   })
 }
 
 function _transformContact (timestamp, contact) {
-  const { type: contactType, salutation, firstName, middleInitials, lastName, suffix, department } = contact
-
   return ContactModel.fromJson({
-    contactType,
-    salutation,
-    firstName,
-    middleInitials,
-    lastName,
-    suffix,
-    department,
+    contactType: contact.type,
+    salutation: contact.salutation,
+    firstName: contact.firstName,
+    middleInitials: contact.middleInitials,
+    lastName: contact.lastName,
+    suffix: contact.suffix,
+    department: contact.department,
     dataSource: 'wrls',
     dateCreated: timestamp,
     dateUpdated: timestamp
