@@ -106,6 +106,14 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatLongDateTime()', () => {
+    it('correctly formats the given date, for example, 12 September 2021 at 14:41:10', async () => {
+      const result = BasePresenter.formatLongDateTime(new Date('2021-09-12T14:41:10.511Z'))
+
+      expect(result).to.equal('12 September 2021 at 14:41:10')
+    })
+  })
+
   describe('#formatNumberAsMoney()', () => {
     const valueInPence = 1149.5
 

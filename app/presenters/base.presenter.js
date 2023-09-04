@@ -81,6 +81,20 @@ function formatLongDate (date) {
 }
 
 /**
+ * Formats a date into a human readable day, month, year and time string, for example, '12 September 2021 at 21:43:44'
+ *
+ * @param {Date} date The date to be formatted
+ *
+ * @returns {string} The date formatted as a 'DD MMMM YYYY at HH:MM:SS' string
+ */
+function formatLongDateTime (date) {
+  return date.toLocaleDateString(
+    'en-GB',
+    { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }
+  )
+}
+
+/**
  * Formats a number which represents a value in pounds as a money string, for example, 1149 as '1149.00'
  *
  * @param {Number} value The value to display as currency. Assumed to be in pounds
@@ -114,6 +128,7 @@ module.exports = {
   formatAbstractionPeriod,
   formatChargingModuleDate,
   formatLongDate,
+  formatLongDateTime,
   formatNumberAsMoney,
   leftPadZeroes
 }
