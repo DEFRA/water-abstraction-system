@@ -51,7 +51,7 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  *
  * @returns {Object} contains a copy of the persisted address, agent company and contact if they were also changed
  */
-async function go (invoiceAccountId, address, agentCompany, contact) {
+async function go (invoiceAccountId, address, agentCompany = {}, contact = {}) {
   const invoiceAccount = await _fetchInvoiceAccount(invoiceAccountId)
 
   // We use the same timestamp for all date created/updated values. We then have something to tie together all the
@@ -111,7 +111,8 @@ async function _fetchInvoiceAccount (invoiceAccountId) {
  * @param {module:CompanyModel} company the new agent company to be persisted (not expected to be populated)
  * @param {module:ContactModel} contact the new contact to be persisted (not expected to be populated)
  *
- * @returns {Object} a single object that contains the persisted address, plus the agent company and contact
+ * @returns {Object} a single object that contains the persisted invoiceAccountAddress, plus address, agent company and
+ * contact
  */
 async function _persist (timestamp, invoiceAccount, address, company, contact) {
   const persistedData = {}
@@ -127,7 +128,9 @@ async function _persist (timestamp, invoiceAccount, address, company, contact) {
       agentCompanyId: persistedData.agentCompany.companyId,
       contactId: persistedData.contact.contactId,
       startDate: timestamp,
-      endDate: null
+      endDate: null,
+      createdAt: timestamp,
+      updatedAt: timestamp
     })
 
     await _patchExistingInvoiceAccountAddressEndDate(trx, invoiceAccount.invoiceAccountId, timestamp)
@@ -147,7 +150,8 @@ async function _patchExistingInvoiceAccountAddressEndDate (trx, invoiceAccountId
 
   return InvoiceAccountAddressModel.query(trx)
     .patch({
-      endDate
+      endDate,
+      updatedAt: timestamp
     })
     .where('invoiceAccountId', invoiceAccountId)
     .whereNull('endDate')
@@ -172,15 +176,16 @@ async function _persistInvoiceAccountAddress (trx, invoiceAccountAddress) {
       'addressId',
       'agentCompanyId',
       'contactId',
-      'endDate'
+      'endDate',
+      'dateUpdated'
     ])
 }
 
 /**
  * Persist the address entered during the change address process
  *
- * If the address has an `id:` we assume it was an existing address selected during the journey. So, the address is
- * already persisted hence we just return `address`.
+ * If the address has an `addressId:` we assume it was an existing address selected during the journey. So, the address
+ * is already persisted hence we just return `address`.
  *
  * Else we attempt to insert a new address record. If the address has a `uprn:` it will be one selected from the
  * address lookup page. The previous team also added a unique constraint on UPRN in the table so we cannot insert 2
@@ -226,8 +231,9 @@ async function _persistAddress (trx, address) {
 /**
  * Persist the company (Agent) entered during the change address process
  *
- * If the company name is not set then the user has opted not to change the agent in the journey. So, we just return the
- * empty `CompanyModel` instance.
+ * If the company has a `companyId:` we assume it was an existing company selected during the journey. So, the company
+ * is already persisted hence we just return `company`. If the company name is not set then the user has opted not to
+ * change the agent in the journey. So, we just return the empty `CompanyModel` instance.
  *
  * Else we attempt to insert a new company record. If the company has a `companyNumber:` it will either be an existing
  * company record selected by the user, or they will have been required to enter the company number. The previous team
@@ -247,7 +253,7 @@ async function _persistAddress (trx, address) {
  * > what it returned when first added.
  */
 async function _persistCompany (trx, company) {
-  if (!company.name) {
+  if (company.companyId || !company.name) {
     return company
   }
 
@@ -271,7 +277,7 @@ async function _persistCompany (trx, company) {
  * empty `ContactModel` instance.
  */
 async function _persistContact (trx, contact) {
-  if (!contact.type) {
+  if (!contact.contactType) {
     return contact
   }
 
@@ -286,7 +292,7 @@ async function _persistContact (trx, contact) {
 
 function _transformAddress (timestamp, address) {
   return AddressModel.fromJson({
-    id: address.addressId,
+    addressId: address.addressId,
     address1: address.addressLine1,
     address2: address.addressLine2,
     address3: address.addressLine3,
@@ -297,18 +303,20 @@ function _transformAddress (timestamp, address) {
     postcode: address.postcode,
     uprn: address.uprn,
     dataSource: 'wrls',
-    dateCreated: timestamp,
-    dateUpdated: timestamp
+    createdAt: timestamp,
+    updatedAt: timestamp
   })
 }
 
 function _transformCompany (timestamp, company) {
   return CompanyModel.fromJson({
+    companyId: company.companyId,
     type: company.type,
     name: company.name,
     companyNumber: company.companyNumber,
-    dateCreated: timestamp,
-    dateUpdated: timestamp
+    organisationType: company.organisationType,
+    createdAt: timestamp,
+    updatedAt: timestamp
   })
 }
 
@@ -322,8 +330,8 @@ function _transformContact (timestamp, contact) {
     suffix: contact.suffix,
     department: contact.department,
     dataSource: 'wrls',
-    dateCreated: timestamp,
-    dateUpdated: timestamp
+    createdAt: timestamp,
+    updatedAt: timestamp
   })
 }
 
