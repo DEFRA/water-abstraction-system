@@ -101,9 +101,9 @@ async function _getImportJobsData () {
     const importJobs = await FetchImportJobs.go()
 
     return _mapArrayToTextCells(importJobs)
-    } catch (error) {
-      return []
-    }
+  } catch (error) {
+    return []
+  }
 }
 
 async function _getRedisConnectivityData () {

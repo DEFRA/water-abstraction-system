@@ -62,9 +62,9 @@ async function go () {
             .whereIn('name', PGBOSS_JOBS_ARRAY)
             .where((builder) =>
               builder
-              .where('createdon', '>', currentDateMinusOneDay)
-              .orWhere('completedon', '>', currentDateMinusOneDay)
-              )
+                .where('createdon', '>', currentDateMinusOneDay)
+                .orWhere('completedon', '>', currentDateMinusOneDay)
+            )
         ))
         .as('jobs')
     )
@@ -78,7 +78,7 @@ async function go () {
  *
  * @returns {Date} The current date minus the number days passed to the function
  */
-function _subtractDaysFromCurrentDate(days) {
+function _subtractDaysFromCurrentDate (days) {
   const date = new Date()
   date.setDate(date.getDate() - days)
 
