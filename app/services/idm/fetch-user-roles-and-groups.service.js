@@ -2,7 +2,7 @@
 
 /**
  * Looks up a user in the `idm` schema and returns the roles and groups assigned to them
- * @module GetUserRolesAndGroupsService
+ * @module FetchUserRolesAndGroupsService
  */
 
 const UserModel = require('../../models/idm/user.model.js')
