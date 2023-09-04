@@ -19,7 +19,7 @@ const UserRoleHelper = require('../../support/helpers/idm/user-role.helper.js')
 // Thing under test
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
 
-describe.only('Fetch User Roles And Groups service', () => {
+describe('Fetch User Roles And Groups service', () => {
   let testRoleForUser
   let testRoleForGroup
   let testUser
