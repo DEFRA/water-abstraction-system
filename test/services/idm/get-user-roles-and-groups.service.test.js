@@ -19,7 +19,7 @@ const UserRoleHelper = require('../../support/helpers/idm/user-role.helper.js')
 // Thing under test
 const GetUserRolesAndGroupsService = require('../../../app/services/idm/get-user-roles-and-groups.service.js')
 
-describe('Get User Roles And Groups service', () => {
+describe.only('Get User Roles And Groups service', () => {
   let testRoleForUser
   let testRoleForGroup
   let testUser
@@ -41,15 +41,6 @@ describe('Get User Roles And Groups service', () => {
   })
 
   describe('when the user exists', () => {
-    it("returns the user's groups", async () => {
-      const result = await GetUserRolesAndGroupsService.go(testUser.userId)
-
-      const groups = result.groups.map(group => group.group)
-
-      expect(groups).to.have.length(1)
-      expect(groups).to.equal(['wirs'])
-    })
-
     it("returns the user's roles", async () => {
       const result = await GetUserRolesAndGroupsService.go(testUser.userId)
 
@@ -57,6 +48,15 @@ describe('Get User Roles And Groups service', () => {
 
       expect(roles).to.have.length(2)
       expect(roles).to.include(['role_for_user', 'role_for_group'])
+    })
+
+    it("returns the user's groups", async () => {
+      const result = await GetUserRolesAndGroupsService.go(testUser.userId)
+
+      const groups = result.groups.map(group => group.group)
+
+      expect(groups).to.have.length(1)
+      expect(groups).to.equal(['wirs'])
     })
 
     describe('and the user is assigned a role they also have through a group', () => {
@@ -72,6 +72,20 @@ describe('Get User Roles And Groups service', () => {
         expect(roles).to.have.length(2)
         expect(roles).to.include(['role_for_user', 'role_for_group'])
       })
+    })
+  })
+
+  describe('when the user does not exist', () => {
+    it('returns an empty roles array', async () => {
+      const result = await GetUserRolesAndGroupsService.go(0)
+
+      expect(result.roles).to.be.empty()
+    })
+
+    it('returns an empty groups array', async () => {
+      const result = await GetUserRolesAndGroupsService.go(0)
+
+      expect(result.groups).to.be.empty()
     })
   })
 })

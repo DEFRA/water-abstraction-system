@@ -29,6 +29,13 @@ async function go (userId) {
     .findById(userId)
     .withGraphFetched('[roles, groups.roles]')
 
+  if (!user) {
+    return {
+      roles: [],
+      groups: []
+    }
+  }
+
   const { groups, roles } = user
   const rolesFromGroups = _extractRolesFromGroups(groups)
   const combinedAndDedupedRoles = _combineAndDedupeRoles([...roles, ...rolesFromGroups])
