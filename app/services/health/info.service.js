@@ -11,8 +11,6 @@ const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 const redis = require('@redis/client')
 
-const redis = require('@redis/client')
-
 const { db } = require('../../../db/db.js')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const RequestLib = require('../../lib/request.lib.js')
@@ -167,10 +165,10 @@ async function _getRedisConnectivityData () {
   try {
     const client = redis.createClient({
       socket: {
-        host: RedisConfig.host,
-        port: RedisConfig.port
+        host: redisConfig.host,
+        port: redisConfig.port
       },
-      password: RedisConfig.password
+      password: redisConfig.password
     })
 
     await client.connect()
