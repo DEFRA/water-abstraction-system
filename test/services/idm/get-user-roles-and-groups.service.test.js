@@ -17,9 +17,9 @@ const UserHelper = require('../../support/helpers/idm/user.helper.js')
 const UserRoleHelper = require('../../support/helpers/idm/user-role.helper.js')
 
 // Thing under test
-const GetUserRolesService = require('../../../app/services/idm/get-user-roles.service.js')
+const GetUserRolesAndGroupsService = require('../../../app/services/idm/get-user-roles-and-groups.service.js')
 
-describe('Get User Roles service', () => {
+describe('Get User Roles And Groups service', () => {
   let testRoleForUser
   let testRoleForGroup
   let testUser
@@ -42,7 +42,7 @@ describe('Get User Roles service', () => {
 
   describe('when the user exists', () => {
     it("returns the user's groups", async () => {
-      const result = await GetUserRolesService.go(testUser.userId)
+      const result = await GetUserRolesAndGroupsService.go(testUser.userId)
 
       const groups = result.groups.map(group => group.group)
 
@@ -51,7 +51,7 @@ describe('Get User Roles service', () => {
     })
 
     it("returns the user's roles", async () => {
-      const result = await GetUserRolesService.go(testUser.userId)
+      const result = await GetUserRolesAndGroupsService.go(testUser.userId)
 
       const roles = result.roles.map(role => role.role)
 
@@ -65,7 +65,7 @@ describe('Get User Roles service', () => {
       })
 
       it('returns only one instance of the role', async () => {
-        const result = await GetUserRolesService.go(testUser.userId)
+        const result = await GetUserRolesAndGroupsService.go(testUser.userId)
 
         const roles = result.roles.map(role => role.role)
 

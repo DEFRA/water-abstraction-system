@@ -1,31 +1,51 @@
 'use strict'
 
 /**
- * Looks up a user's roles in the `idm` schema and returns the roles and groups assigned to them
- * @module GetUserRolesService
+ * Looks up a user in the `idm` schema and returns the roles and groups assigned to them
+ * @module GetUserRolesAndGroupsService
  */
 
 const UserModel = require('../../models/idm/user.model.js')
 
 /**
- * TODO: Document service
+ * A user can have roles assigned to them in two ways:
  *
- * @param {*} userId
+ * - By directly assigning roles to the user;
+ * - By adding the user to a group, and assigning roles to the group.
  *
- * @returns
+ * This service looks up the user in the `idm` (identity management) schema and returns a combined array of all roles
+ * (deduped in case the user is given the same role multiple times; for example, by being assigned a role directly, then
+ * later added to a group which also includes that role). It also returns an array of groups that the user is a member
+ * of.
+ *
+ * @param {Number} userId The user id to get roles and groups for
+ *
+ * @returns {Object} result The resulting roles and groups
+ * @returns {RoleModel[]} result.roles An array of RoleModel objects representing the roles the user has
+ * @returns {GroupModel[]} result.groups An array of GroupModel objects representing the groups the user is a member of
  */
 async function go (userId) {
   const user = await UserModel.query()
     .findById(userId)
     .withGraphFetched('[roles, groups.roles]')
 
+  const { roles, groups } = _determineRolesAndGroups(user)
+
+  return { roles, groups }
+}
+
+function _determineRolesAndGroups (user) {
+  if (!user) {
+    return { roles: [], groups: [] }
+  }
+
   const { groups, roles } = user
   const rolesFromGroups = _extractRolesFromGroups(groups)
   const combinedAndDedupedRoles = _combineAndDedupeRoles([...roles, ...rolesFromGroups])
 
   return {
-    groups,
-    roles: combinedAndDedupedRoles
+    roles: combinedAndDedupedRoles,
+    groups
   }
 }
 
