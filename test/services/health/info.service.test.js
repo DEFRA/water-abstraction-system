@@ -16,6 +16,7 @@ const servicesConfig = require('../../../config/services.config.js')
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
 const redis = require('@redis/client')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
+const redis = require('@redis/client')
 const RequestLib = require('../../../app/lib/request.lib.js')
 
 // Thing under test

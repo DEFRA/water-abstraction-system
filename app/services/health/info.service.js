@@ -9,6 +9,7 @@
 const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
+const redis = require('@redis/client')
 
 const redis = require('@redis/client')
 
@@ -17,7 +18,7 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
-const RedisConfig = require('../../../config/redis.config.js')
+const redisConfig = require('../../../config/redis.config.js')
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
