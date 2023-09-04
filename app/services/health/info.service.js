@@ -11,8 +11,8 @@ const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 const redis = require('@redis/client')
 
-const { db } = require('../../../db/db.js')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const FetchImportJobs = require('./fetchImportJobs.service.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
@@ -40,66 +40,6 @@ async function go () {
     redisConnectivityData,
     virusScannerData
   }
-}
-
-async function _fetchImportJobs () {
-  const PGBOSS_JOBS_ARRAY = [
-    'import.bill-runs',
-    'import.charge-versions',
-    'import.charging-data',
-    'import.tracker',
-    'licence-import.delete-removed-documents',
-    'licence-import.import-company',
-    'licence-import.import-licence',
-    'licence-import.import-purpose-condition-types',
-    'licence-import.queue-companies',
-    'licence-import.queue-licences',
-    'nald-import.delete-removed-documents',
-    'nald-import.import-licence',
-    'nald-import.queue-licences',
-    'nald-import.s3-download'
-  ]
-
-  return db
-    .select('name')
-    .count({ completedCount: db.raw("CASE WHEN state = 'completed' THEN 1 END") })
-    .count({ failedCount: db.raw("CASE WHEN state = 'failed' THEN 1 END") })
-    .count({ activeCount: db.raw("CASE WHEN state IN ('active', 'created') THEN 1 END") })
-    .max('completedon as maxCompletedonDate')
-    .from(
-      (db
-        .select(
-          'name',
-          'state',
-          'completedon'
-        )
-        .from('water_import.job')
-        .whereIn('state', ['failed', 'completed', 'active', 'created'])
-        .whereIn('name', PGBOSS_JOBS_ARRAY)
-        .where((builder) =>
-          builder
-            .where(db.raw("createdon > now() - interval '3 days'"))
-            .orWhere(db.raw("completedon > now() - interval '3 days'"))
-        )
-        .unionAll(
-          db
-            .select(
-              'name',
-              'state',
-              'completedon'
-            )
-            .from('water_import.archive')
-            .whereIn('state', ['failed', 'completed', 'active', 'created'])
-            .whereIn('name', PGBOSS_JOBS_ARRAY)
-            .where((builder) =>
-              builder
-                .where(db.raw("createdon > now() - interval '3 days'"))
-                .orWhere(db.raw("completedon > now() - interval '3 days'"))
-            )
-        ))
-        .as('jobs')
-    )
-    .groupBy('name')
 }
 
 async function _getAddressFacadeData () {
@@ -156,7 +96,7 @@ async function _getChargingModuleData () {
 }
 
 async function _getImportJobsData () {
-  const importJobs = await _fetchImportJobs()
+  const importJobs = await FetchImportJobs.go()
 
   return _mapArrayToTextCells(importJobs)
 }
