@@ -6,6 +6,7 @@
  */
 
 const { hashSync } = require('bcryptjs')
+const { Model } = require('objection')
 
 const IDMBaseModel = require('./idm-base.model.js')
 
@@ -31,6 +32,51 @@ class UserModel extends IDMBaseModel {
       'userData',
       'role'
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      userGroups: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-group.model',
+        join: {
+          from: 'users.userId',
+          to: 'userGroups.userId'
+        }
+      },
+      userRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-role.model',
+        join: {
+          from: 'users.userId',
+          to: 'userRoles.userId'
+        }
+      },
+      roles: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'role.model',
+        join: {
+          from: 'users.userId',
+          through: {
+            from: 'userRoles.userId',
+            to: 'userRoles.roleId'
+          },
+          to: 'roles.roleId'
+        }
+      },
+      groups: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'group.model',
+        join: {
+          from: 'users.userId',
+          through: {
+            from: 'userGroups.userId',
+            to: 'userGroups.groupId'
+          },
+          to: 'groups.groupId'
+        }
+      }
+    }
   }
 
   static generateHashedPassword (password) {

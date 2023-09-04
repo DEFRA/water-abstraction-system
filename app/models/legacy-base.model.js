@@ -26,7 +26,8 @@ class LegacyBaseModel extends BaseModel {
       currentPath,
       path.join(currentPath, 'returns'),
       path.join(currentPath, 'water'),
-      path.join(currentPath, 'crm-v2')
+      path.join(currentPath, 'crm-v2'),
+      path.join(currentPath, 'idm')
     ]
   }
 
