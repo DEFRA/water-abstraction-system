@@ -54,6 +54,18 @@ class GroupModel extends IDMBaseModel {
           from: 'groups.groupId',
           to: 'userGroups.groupId'
         }
+      },
+      users: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'groups.groupId',
+          through: {
+            from: 'userGroups.groupId',
+            to: 'userGroups.userId'
+          },
+          to: 'users.userId'
+        }
       }
     }
   }

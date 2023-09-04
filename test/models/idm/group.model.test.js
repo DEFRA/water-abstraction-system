@@ -16,6 +16,8 @@ const RoleHelper = require('../../support/helpers/idm/role.helper.js')
 const RoleModel = require('../../../app/models/idm/role.model.js')
 const UserGroupHelper = require('../../support/helpers/idm/user-group.helper.js')
 const UserGroupModel = require('../../../app/models/idm/user-group.model.js')
+const UserHelper = require('../../support/helpers/idm/user.helper.js')
+const UserModel = require('../../../app/models/idm/user.model.js')
 
 // Thing under test
 const GroupModel = require('../../../app/models/idm/group.model.js')
@@ -129,6 +131,37 @@ describe('Group model', () => {
         expect(result.userGroups).to.have.length(1)
         expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
         expect(result.userGroups[0]).to.equal(testUserGroup)
+      })
+    })
+
+    describe('when linking through user groups to users', () => {
+      let testUser
+
+      beforeEach(async () => {
+        testRecord = await GroupHelper.add()
+        testUser = await UserHelper.add()
+        await UserGroupHelper.add({ userId: testUser.userId, groupId: testRecord.groupId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await GroupModel.query()
+          .innerJoinRelated('users')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the roles', async () => {
+        const result = await GroupModel.query()
+          .findById(testRecord.groupId)
+          .withGraphFetched('users')
+
+        expect(result).to.be.instanceOf(GroupModel)
+        expect(result.groupId).to.equal(testRecord.groupId)
+
+        expect(result.users).to.be.an.array()
+        expect(result.users).to.have.length(1)
+        expect(result.users[0]).to.be.an.instanceOf(UserModel)
+        expect(result.users[0]).to.equal(testUser)
       })
     })
   })
