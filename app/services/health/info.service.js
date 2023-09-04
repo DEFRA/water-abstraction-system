@@ -97,9 +97,13 @@ async function _getChargingModuleData () {
 }
 
 async function _getImportJobsData () {
-  const importJobs = await FetchImportJobs.go()
+  try {
+    const importJobs = await FetchImportJobs.go()
 
-  return _mapArrayToTextCells(importJobs)
+    return _mapArrayToTextCells(importJobs)
+    } catch (error) {
+      return []
+    }
 }
 
 async function _getRedisConnectivityData () {
