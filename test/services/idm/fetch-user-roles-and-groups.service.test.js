@@ -38,6 +38,12 @@ describe('Fetch User Roles And Groups service', () => {
     testGroup = await GroupHelper.add()
     await GroupRoleHelper.add({ groupId: testGroup.groupId, roleId: testRoleForGroup.roleId })
     await UserGroupHelper.add({ userId: testUser.userId, groupId: testGroup.groupId })
+
+    // Create things that we don't assign to the user to test that they aren't returned
+    await RoleHelper.add({ role: 'not_assigned_role' })
+    const notAssignedGroup = await GroupHelper.add({ group: 'not_assigned' })
+    const notAssignedGroupRole = await RoleHelper.add({ role: 'not_assigned_group_role' })
+    await GroupRoleHelper.add({ groupId: notAssignedGroup.groupId, roleId: notAssignedGroupRole.roleId })
   })
 
   describe('when the user exists', () => {
@@ -47,7 +53,7 @@ describe('Fetch User Roles And Groups service', () => {
       const roles = result.roles.map(role => role.role)
 
       expect(roles).to.have.length(2)
-      expect(roles).to.include(['role_for_user', 'role_for_group'])
+      expect(roles).to.only.include(['role_for_user', 'role_for_group'])
     })
 
     it("returns the user's groups", async () => {
@@ -70,7 +76,7 @@ describe('Fetch User Roles And Groups service', () => {
         const roles = result.roles.map(role => role.role)
 
         expect(roles).to.have.length(2)
-        expect(roles).to.include(['role_for_user', 'role_for_group'])
+        expect(roles).to.only.include(['role_for_user', 'role_for_group'])
       })
     })
   })
