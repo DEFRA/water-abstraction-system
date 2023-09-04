@@ -13,6 +13,7 @@ const redis = require('@redis/client')
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const FetchImportJobs = require('./fetchImportJobs.service.js')
+const { formatLongDateTime } = require('../../presenters/base.presenter.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
@@ -137,7 +138,7 @@ function _mapArrayToTextCells (rows) {
       ...[{ text: row.completedCount }],
       ...[{ text: row.failedCount }],
       ...[{ text: row.activeCount }],
-      ...[{ text: row.maxCompletedonDate ? row.maxCompletedonDate.toLocaleString() : '-' }]
+      ...[{ text: row.maxCompletedonDate ? formatLongDateTime(row.maxCompletedonDate) : '-' }]
     ]
   })
 }
