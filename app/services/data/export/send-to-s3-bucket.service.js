@@ -5,10 +5,13 @@
  * @module SendToS3BucketService
  */
 
-const fsPromises = require('fs').promises
-const path = require('path')
 const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
+const fsPromises = require('fs').promises
+const { HttpsProxyAgent, HttpProxyAgent } = require('hpagent')
+const { NodeHttpHandler } = require('@smithy/node-http-handler')
+const path = require('path')
 
+const requestConfig = require('../../../../config/request.config.js')
 const S3Config = require('../../../../config/s3.config.js')
 
 /**
@@ -26,16 +29,34 @@ async function go (filePath) {
     Body: fileContent
   }
 
-  await _uploadToBucket(params)
+  await _uploadFileToS3Bucket(params)
 }
 
 /**
- * Uploads a file to an Amazon S3 bucket using the given parameters
+ * Sets the configuration settings for the S3 client
  *
- * @param {Object} params The parameters to use when uploading the file
+ * If the environment has a proxy then we set that here. The default timeout is 6 minutes but we believe that is far too
+ * long to wait. So, we set 'connectionTimeout' to be 10 seconds.
  */
-async function _uploadToBucket (params) {
-  const s3Client = new S3Client()
+function _customConfig () {
+  return {
+    requestHandler: new NodeHttpHandler({
+    // This uses the ternary operator to give either an `http/httpsAgent` object or an empty object, and the spread
+    // operator to bring the result back into the top level of the `customConfig` object.
+      ...(requestConfig.httpProxy
+        ? {
+            httpsAgent: new HttpsProxyAgent({ proxy: requestConfig.httpProxy }),
+            httpAgent: new HttpProxyAgent({ proxy: requestConfig.httpProxy })
+          }
+        : {}),
+      connectionTimeout: 10000
+    })
+  }
+}
+
+async function _uploadFileToS3Bucket (params) {
+  const customConfig = _customConfig()
+  const s3Client = new S3Client(customConfig)
   const command = new PutObjectCommand(params)
 
   await s3Client.send(command)
