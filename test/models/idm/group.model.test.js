@@ -150,7 +150,7 @@ describe('Group model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the roles', async () => {
+      it('can eager load the users', async () => {
         const result = await GroupModel.query()
           .findById(testRecord.groupId)
           .withGraphFetched('users')
