@@ -19,7 +19,7 @@ const UserRoleHelper = require('../../support/helpers/idm/user-role.helper.js')
 // Thing under test
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
 
-describe('Fetch User Roles And Groups service', () => {
+describe.only('Fetch User Roles And Groups service', () => {
   let testRoleForUser
   let testRoleForGroup
   let testUser
@@ -47,6 +47,12 @@ describe('Fetch User Roles And Groups service', () => {
   })
 
   describe('when the user exists', () => {
+    it('returns `true` for `userFound`', async () => {
+      const result = await FetchUserRolesAndGroupsService.go(testUser.userId)
+
+      expect(result.userFound).to.be.true()
+    })
+
     it("returns the user's roles", async () => {
       const result = await FetchUserRolesAndGroupsService.go(testUser.userId)
 
@@ -82,6 +88,12 @@ describe('Fetch User Roles And Groups service', () => {
   })
 
   describe('when the user does not exist', () => {
+    it('returns `false` for `userFound`', async () => {
+      const result = await FetchUserRolesAndGroupsService.go(0)
+
+      expect(result.userFound).to.be.false()
+    })
+
     it('returns an empty roles array', async () => {
       const result = await FetchUserRolesAndGroupsService.go(0)
 

@@ -16,11 +16,12 @@ const UserModel = require('../../models/idm/user.model.js')
  * This service looks up the user in the `idm` (identity management) schema and returns a combined array of all roles
  * (deduped in case the user is given the same role multiple times; for example, by being assigned a role directly, then
  * later added to a group which also includes that role). It also returns an array of groups that the user is a member
- * of.
+ * of, along with `userFound` to explicitly indicate whether or not the user id exists.
  *
  * @param {Number} userId The user id to get roles and groups for
  *
  * @returns {Object} result The resulting roles and groups
+ * @returns {Boolean} result.userFound Returns `true` if the user could be found in the `users` table
  * @returns {RoleModel[]} result.roles An array of RoleModel objects representing the roles the user has
  * @returns {GroupModel[]} result.groups An array of GroupModel objects representing the groups the user is a member of
  */
@@ -31,6 +32,7 @@ async function go (userId) {
 
   if (!user) {
     return {
+      userFound: false,
       roles: [],
       groups: []
     }
@@ -41,6 +43,7 @@ async function go (userId) {
   const combinedAndDedupedRoles = _combineAndDedupeRoles([...roles, ...rolesFromGroups])
 
   return {
+    userFound: true,
     roles: combinedAndDedupedRoles,
     groups
   }
