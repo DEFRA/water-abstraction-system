@@ -41,7 +41,7 @@ function defaults (data = {}) {
     licenceId: '1acfbded-9cd4-4933-8e98-04cd9e92d884',
     status: 'to_setup',
     data: { chargeVersion: null },
-    // INFO: The change_reasons table does not have a default for the date_created column. But it is set as
+    // INFO: The charge_version_workflows table does not have a default for the date_created column. But it is set as
     // 'not nullable'! So, we need to ensure we set it when creating a new record, something we'll never actually need
     // to do because it's a static table. Also, we can't use Date.now() because Javascript returns the time since the
     // epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold the seconds since the epoch. Pass it
