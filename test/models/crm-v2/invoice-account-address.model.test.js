@@ -27,11 +27,13 @@ describe('Invoice Account Address model', () => {
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
-
-    testRecord = await InvoiceAccountAddressHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await InvoiceAccountAddressHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await InvoiceAccountAddressModel.query().findById(testRecord.invoiceAccountAddressId)
 
