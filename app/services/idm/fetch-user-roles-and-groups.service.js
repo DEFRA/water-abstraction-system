@@ -21,7 +21,7 @@ const UserModel = require('../../models/idm/user.model.js')
  * @param {Number} userId The user id to get roles and groups for
  *
  * @returns {Object} result The resulting roles and groups
- * @returns {Boolean} result.userFound Returns `true` if the user could be found in the `users` table
+ * @returns {UseModel[]} result.user Returns the UserModel representing the user, or `null` if the user is not found
  * @returns {RoleModel[]} result.roles An array of RoleModel objects representing the roles the user has
  * @returns {GroupModel[]} result.groups An array of GroupModel objects representing the groups the user is a member of
  */
@@ -32,21 +32,34 @@ async function go (userId) {
 
   if (!user) {
     return {
-      userFound: false,
+      user: null,
       roles: [],
       groups: []
     }
   }
 
-  const { groups, roles } = user
+  const { roles, groups } = _extractRolesAndGroupsFromUser(user)
   const rolesFromGroups = _extractRolesFromGroups(groups)
   const combinedAndDedupedRoles = _combineAndDedupeRoles([...roles, ...rolesFromGroups])
 
   return {
-    userFound: true,
+    user,
     roles: combinedAndDedupedRoles,
     groups
   }
+}
+
+/**
+ * The user object we get back from the query has the roles and groups attached to it. The service returns the user,
+ * roles and groups separately so we remove the roles and groups from the user object so we aren't returning the same
+ * data twice.
+ */
+function _extractRolesAndGroupsFromUser (user) {
+  const { roles, groups } = user
+  delete user.roles
+  delete user.groups
+
+  return { roles, groups }
 }
 
 /**

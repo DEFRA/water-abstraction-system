@@ -47,10 +47,10 @@ describe('Fetch User Roles And Groups service', () => {
   })
 
   describe('when the user exists', () => {
-    it('returns `true` for `userFound`', async () => {
+    it('returns the user', async () => {
       const result = await FetchUserRolesAndGroupsService.go(testUser.userId)
 
-      expect(result.userFound).to.be.true()
+      expect(result.user).to.equal(testUser)
     })
 
     it("returns the user's roles", async () => {
@@ -88,10 +88,10 @@ describe('Fetch User Roles And Groups service', () => {
   })
 
   describe('when the user does not exist', () => {
-    it('returns `false` for `userFound`', async () => {
+    it('returns `null` for `user`', async () => {
       const result = await FetchUserRolesAndGroupsService.go(0)
 
-      expect(result.userFound).to.be.false()
+      expect(result.user).to.be.null()
     })
 
     it('returns an empty roles array', async () => {
