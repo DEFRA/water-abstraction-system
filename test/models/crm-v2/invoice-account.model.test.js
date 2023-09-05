@@ -23,11 +23,13 @@ describe('Invoice Account model', () => {
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
-
-    testRecord = await InvoiceAccountHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await InvoiceAccountHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await InvoiceAccountModel.query().findById(testRecord.invoiceAccountId)
 
@@ -74,7 +76,10 @@ describe('Invoice Account model', () => {
 
         testInvoiceAccountAddresses = []
         for (let i = 0; i < 2; i++) {
-          const invoiceAccountAddress = await InvoiceAccountAddressHelper.add({ invoiceAccountId })
+          // NOTE: A constraint in the invoice_account_addresses table means you cannot have 2 records with the same
+          // invoiceAccountId and start date
+          const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
+          const invoiceAccountAddress = await InvoiceAccountAddressHelper.add({ startDate, invoiceAccountId })
           testInvoiceAccountAddresses.push(invoiceAccountAddress)
         }
       })

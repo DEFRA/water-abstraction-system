@@ -51,15 +51,15 @@ function defaults (data = {}) {
     regime: 'water',
     licenceType: 'abstraction',
     licenceRef: '9/99/99/99/9999',
-    startDate: '2022-04-01',
-    endDate: '2023-03-31',
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31'),
     returnsFrequency: 'month',
     status: 'completed',
     source: 'NALD',
     metadata: {},
-    receivedDate: '2023-04-12',
+    receivedDate: new Date('2023-04-12'),
     returnRequirement: '99999',
-    dueDate: '2023-04-28',
+    dueDate: new Date('2023-04-28'),
     returnCycleId: '2eb314fe-da45-4ae9-b418-7d89a8c49c51'
   }
 
