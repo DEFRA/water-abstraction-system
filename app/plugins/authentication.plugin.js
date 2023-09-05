@@ -59,42 +59,6 @@ const AuthenticationPlugin = {
           return AuthenticationService.go(session.userId)
         }
       })
-
-      // We set up our route in the dependency callback as we can't set authentication before the strategy is registered
-      server.route({
-        method: 'GET',
-        path: '/auth-test',
-        handler: (request, _h) => {
-          return { auth: request.auth }
-        },
-        options: {
-          description: 'Test that authentication is working',
-          app: { excludeFromProd: true },
-          auth: {
-            strategy: 'session'
-          }
-        }
-      })
-
-      // We don't use an option path param (ie. `{role?}`) as this doesn't work with dynamic scope; not entering a role
-      // would mean that the scope is empty and therefore nobody can access it
-      server.route({
-        method: 'GET',
-        path: '/auth-test/{role}',
-        handler: (request, _h) => {
-          return { auth: request.auth }
-        },
-        options: {
-          description: 'Test that authentication is working',
-          app: { excludeFromProd: true },
-          auth: {
-            strategy: 'session',
-            access: {
-              scope: ['{params.role}']
-            }
-          }
-        }
-      })
     })
   }
 }
