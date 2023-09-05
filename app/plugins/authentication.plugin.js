@@ -30,7 +30,7 @@ const AuthenticationPlugin = {
           ttl: TWO_HOURS_IN_MS,
           isHttpOnly: true
         },
-        redirectTo: '/signIn',
+        redirectTo: '/signin',
         validate: async (_request, session) => {
           const { userId } = session
           // TODO: Look up userId in the IDM to ensure user exists. Also get user role and add to `credentials`
