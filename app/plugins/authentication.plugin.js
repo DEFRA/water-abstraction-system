@@ -7,6 +7,8 @@
 
 const AuthenticationConfig = require('../../config/authentication.config.js')
 
+const FetchUserRolesAndGroupsService = require('../services/idm/fetch-user-roles-and-groups.service.js')
+
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
 /**
@@ -33,8 +35,16 @@ const AuthenticationPlugin = {
         redirectTo: '/signin',
         validate: async (_request, session) => {
           const { userId } = session
-          // TODO: Look up userId in the IDM to ensure user exists. Also get user role and add to `credentials`
-          return { isValid: !!userId, credentials: { userId } }
+
+          const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
+
+          // We put each role's name into the scope array; if a path has a `scope` option (which is an array of strings)
+          // then the user's scope array must contain at least one of those strings for the request to be authorised
+          const scope = roles.map((role) => {
+            return role.role
+          })
+
+          return { isValid: !!user, credentials: { user, roles, groups, scope } }
         }
       })
 
