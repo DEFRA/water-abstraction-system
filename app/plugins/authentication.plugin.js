@@ -25,7 +25,7 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
  * We also take the role names and add them to an array request.auth.credentials.scope. This scope array is used for
  * authorisation.
  *
- * Routes can have 'scope' added to them via their options.auth.strategy.scope. This is an array of strings. If a route
+ * Routes can have 'scope' added to them via their options.auth.access.scope. This is an array of strings. If a route
  * has a scope array then Hapi will check that request.auth.credentials.scope contains at least one of those strings,
  * and reject the request with a 403 error if it doesn't. In other words, if we add a role name to a route's scope, we
  * can ensure that only users with that role can access the route.
