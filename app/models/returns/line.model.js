@@ -5,6 +5,8 @@
  * @module LineModel
  */
 
+const { Model } = require('objection')
+
 const ReturnsBaseModel = require('./returns-base.model.js')
 
 class LineModel extends ReturnsBaseModel {
@@ -25,6 +27,19 @@ class LineModel extends ReturnsBaseModel {
     return [
       'metadata'
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      version: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'version.model',
+        join: {
+          from: 'lines.versionId',
+          to: 'versions.versionId'
+        }
+      }
+    }
   }
 }
 
