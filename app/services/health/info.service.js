@@ -12,7 +12,7 @@ const exec = util.promisify(ChildProcess.exec)
 const redis = require('@redis/client')
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
-const FetchImportJobs = require('./fetchImportJobs.service.js')
+const FetchImportJobs = require('./fetch-import-jobs.service.js')
 const { formatLongDateTime } = require('../../presenters/base.presenter.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
