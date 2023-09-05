@@ -14,7 +14,7 @@ const ChargeVersionWorkflowModel = require('../../../../app/models/water/charge-
  * - `licenceId` - 1acfbded-9cd4-4933-8e98-04cd9e92d884
  * - `status` - to_setup - Other possible values are: changes_requested & review
  * - `data` - { chargeVersion: null },
- * - `createdAt` - 2022-02-23
+ * - `createdAt` - the current date and time
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -47,7 +47,7 @@ function defaults (data = {}) {
     // epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold the seconds since the epoch. Pass it
     // an ISO string though ('2022-02-23 09:19:39.953') and PostgreSQL can do the conversion
     // https://stackoverflow.com/a/61912776/6117745
-    createdAt: new Date('2022-02-23 09:19:39.953').toISOString()
+    createdAt: new Date().toISOString()
   }
 
   return {
