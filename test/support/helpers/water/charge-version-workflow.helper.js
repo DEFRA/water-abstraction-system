@@ -41,7 +41,13 @@ function defaults (data = {}) {
     licenceId: '1acfbded-9cd4-4933-8e98-04cd9e92d884',
     status: 'to_setup',
     data: { chargeVersion: null },
-    createdAt: new Date()
+    // INFO: The change_reasons table does not have a default for the date_created column. But it is set as
+    // 'not nullable'! So, we need to ensure we set it when creating a new record, something we'll never actually need
+    // to do because it's a static table. Also, we can't use Date.now() because Javascript returns the time since the
+    // epoch in milliseconds, whereas a PostgreSQL timestamp field can only hold the seconds since the epoch. Pass it
+    // an ISO string though ('2022-02-23 09:19:39.953') and PostgreSQL can do the conversion
+    // https://stackoverflow.com/a/61912776/6117745
+    createdAt: new Date('2022-02-23 09:19:39.953').toISOString()
   }
 
   return {
