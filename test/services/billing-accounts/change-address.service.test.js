@@ -299,8 +299,6 @@ describe('Change address service', () => {
     })
 
     describe("and the 'current' invoice account address", () => {
-      const testDate = new Date(Date.UTC(2023, 8, 4, 10, 31, 57))
-
       let clock
       let existingInvoiceAccountAddress
 
