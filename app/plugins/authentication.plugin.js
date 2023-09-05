@@ -7,7 +7,7 @@
 
 const AuthenticationConfig = require('../../config/authentication.config.js')
 
-const FetchUserRolesAndGroupsService = require('../services/idm/fetch-user-roles-and-groups.service.js')
+const AuthenticationService = require('../services/plugins/authentication.service.js')
 
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
@@ -18,11 +18,9 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
  * relying on an authenticated cookie being passed on by the UI. A request that is not authenticated is automatically
  * redirected to the sign-in page.
  *
- * If the request is authenticated then we look up the user in the IDM using FetchUserRolesAndGroupsService. This gives
- * us a UserModel object, along with RoleModel and GroupModel objects representing the roles and groups the user is
- * assigned to. These are all added to the request under request.auth.credentials. We add the user to the credentials
- * as controllers and services may need user info such as the email address. The roles and groups are "nice to have" at
- * this stage.
+ * If the request is authenticated then we pass the user id along to AuthenticationService. This will give us a
+ * UserModel object, along with RoleModel and GroupModel objects representing the roles and groups the user is assigned
+ * to. These are all added to the request under request.auth.credentials.
  *
  * We also take the role names and add them to an array request.auth.credentials.scope. This scope array is used for
  * authorisation.
@@ -51,16 +49,7 @@ const AuthenticationPlugin = {
         },
         redirectTo: '/signin',
         validate: async (_request, session) => {
-          const { userId } = session
-
-          const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
-
-          // We put each role's name into the scope array for hapi to use for its scope authorisation
-          const scope = roles.map((role) => {
-            return role.role
-          })
-
-          return { isValid: !!user, credentials: { user, roles, groups, scope } }
+          return AuthenticationService.go(session.userId)
         }
       })
 
