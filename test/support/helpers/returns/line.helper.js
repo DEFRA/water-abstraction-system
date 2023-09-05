@@ -27,7 +27,7 @@ const LineModel = require('../../../../app/models/returns/line.model.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:ReturnModel} The instance of the newly created record
+ * @returns {module:LineModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
