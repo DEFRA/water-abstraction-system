@@ -12,10 +12,27 @@ const FetchUserRolesAndGroupsService = require('../services/idm/fetch-user-roles
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
 /**
- * Some of our routes serve up pages, and are intended to be called from the UI rather than being hit directly. We do
- * not rely on the UI authenticating requests first as there are some pages which we do not wish to have authentication
- * on (eg. service status pages). We therefore authenticate pages on the System side, relying on an authenticated cookie
- * being passed on by the UI.
+ * Some of our routes serve up pages, and are intended to be called from the UI via its `/system/` proxy path rather
+ * than being hit directly. We do not rely on the proxy authenticating requests first as there are some pages which we
+ * do not wish to have authentication on (eg. service status pages). We therefore authenticate pages on the System side,
+ * relying on an authenticated cookie being passed on by the UI. A request that is not authenticated is automatically
+ * redirected to the sign-in page.
+ *
+ * If the request is authenticated then we look up the user in the IDM using FetchUserRolesAndGroupsService. This gives
+ * us a UserModel object, along with RoleModel and GroupModel objects representing the roles and groups the user is
+ * assigned to. These are all added to the request under request.auth.credentials. We add the user to the credentials
+ * as controllers and services may need user info such as the email address. The roles and groups are "nice to have" at
+ * this stage.
+ *
+ * We also take the role names and add them to an array request.auth.credentials.scope. This scope array is used for
+ * authorisation.
+ *
+ * Routes can have 'scope' added to them via their options.auth.strategy.scope. This is an array of strings. If a route
+ * has a scope array then Hapi will check that request.auth.credentials.scope contains at least one of those strings,
+ * and reject the request with a 403 error if it doesn't. In other words, if we add a role name to a route's scope, we
+ * can ensure that only users with that role can access the route.
+ *
+ * More info on authorisation and scope can be found at https://hapi.dev/api/?v=21.3.2#-routeoptionsauthaccessscope
  */
 
 const AuthenticationPlugin = {
@@ -38,8 +55,7 @@ const AuthenticationPlugin = {
 
           const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
 
-          // We put each role's name into the scope array; if a path has a `scope` option (which is an array of strings)
-          // then the user's scope array must contain at least one of those strings for the request to be authorised
+          // We put each role's name into the scope array for hapi to use for its scope authorisation
           const scope = roles.map((role) => {
             return role.role
           })
