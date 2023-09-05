@@ -36,7 +36,7 @@ describe('Line model', () => {
     })
   })
 
-  describe.only('Relationships', () => {
+  describe('Relationships', () => {
     describe('when linking to version', () => {
       let testVersion
 
