@@ -14,6 +14,7 @@ const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const FetchImportJobs = require('../../../app/services/health/fetch-import-jobs.service.js')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 const redis = require('@redis/client')
 const RequestLib = require('../../../app/lib/request.lib.js')
@@ -38,13 +39,33 @@ describe('Info service', () => {
     },
     app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
+
+  const goodFetchImportJobsResults = [
+    {
+      name: 'import.charging-data',
+      completedCount: 1,
+      failedCount: 0,
+      activeCount: 0,
+      maxCompletedonDate: new Date('2023-09-04T14:00:10.758Z')
+    },
+    {
+      name: 'licence-import.import-company',
+      completedCount: 52963,
+      failedCount: 1,
+      activeCount: 123,
+      maxCompletedonDate: new Date('2023-09-04T10:43:44.503Z')
+    }
+  ]
+
   let chargingModuleRequestLibStub
+  let fetchImportJobsStub
   let legacyRequestLibStub
   let requestLibStub
   let redisStub
 
   beforeEach(() => {
     chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
+    fetchImportJobsStub = Sinon.stub(FetchImportJobs, 'go')
     legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'get')
     requestLibStub = Sinon.stub(RequestLib, 'get')
     redisStub = Sinon.stub(redis, 'createClient')
@@ -64,8 +85,6 @@ describe('Info service', () => {
     chargingModuleRequestLibStub
       .withArgs('status')
       .resolves(goodRequestResults.chargingModule)
-
-    // redisStub.returns({ connect: Sinon.fake().resolves(), disconnect: Sinon.fake().resolves() })
   })
 
   afterEach(() => {
@@ -74,6 +93,9 @@ describe('Info service', () => {
 
   describe('when all the services are running', () => {
     beforeEach(async () => {
+      fetchImportJobsStub.resolves(goodFetchImportJobsResults)
+      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       requestLibStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
@@ -95,8 +117,6 @@ describe('Info service', () => {
         })
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
-
-      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })
 
     it('returns details on each', async () => {
@@ -107,14 +127,37 @@ describe('Info service', () => {
       ])
 
       expect(result.appData).to.have.length(10)
+      expect(result.appData[0].name).to.equal('Import')
+      expect(result.appData[0].serviceName).to.equal('import')
+      expect(result.appData[0].version).to.equal('9.0.99')
+      expect(result.appData[0].commit).to.equal('99d0e8c')
+      expect(result.appData[0].jobs).to.equal([
+        [
+          { text: 'import.charging-data' },
+          { text: 1 },
+          { text: 0 },
+          { text: 0 },
+          { text: '4 September 2023 at 14:00:10' }
+        ],
+        [
+          { text: 'licence-import.import-company' },
+          { text: 52963 },
+          { text: 1 },
+          { text: 123 },
+          { text: '4 September 2023 at 10:43:44' }
+        ]
+      ])
+      expect(result.appData[1].jobs).to.equal([])
 
-      expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
       expect(result.redisConnectivityData).to.equal('Up and running')
+      expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
     })
   })
 
   describe('when Redis', () => {
     beforeEach(async () => {
+      fetchImportJobsStub.resolves(goodFetchImportJobsResults)
+
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       requestLibStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
@@ -147,22 +190,25 @@ describe('Info service', () => {
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
         expect(result.appData).to.have.length(10)
+        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(result.appData[0].jobs).to.have.length(2)
 
-        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
         expect(result.redisConnectivityData).to.equal('Error connecting to Redis')
+        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
       })
     })
   })
 
   describe('when ClamAV', () => {
     beforeEach(async () => {
+      fetchImportJobsStub.resolves(goodFetchImportJobsResults)
+      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       requestLibStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
       legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
-
-      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })
 
     describe('is not running', () => {
@@ -187,9 +233,11 @@ describe('Info service', () => {
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
         expect(result.appData).to.have.length(10)
+        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(result.appData[0].jobs).to.have.length(2)
 
-        expect(result.virusScannerData).to.startWith('ERROR:')
         expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.virusScannerData).to.startWith('ERROR:')
       })
     })
 
@@ -212,6 +260,8 @@ describe('Info service', () => {
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
         expect(result.appData).to.have.length(10)
+        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(result.appData[0].jobs).to.have.length(2)
 
         expect(result.virusScannerData).to.startWith('ERROR:')
         expect(result.redisConnectivityData).to.equal('Up and running')
@@ -219,8 +269,72 @@ describe('Info service', () => {
     })
   })
 
+  describe('when FetchImportJobs service', () => {
+    beforeEach(async () => {
+      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+
+      // In this scenario everything is hunky-dory so we return 2xx responses from these services
+      requestLibStub
+        .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
+        .resolves(goodRequestResults.addressFacade)
+      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+
+      const execStub = Sinon
+        .stub()
+        .withArgs('clamdscan --version')
+        .resolves({
+          stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
+          stderror: null
+        })
+      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+    })
+
+    describe('returns no results', () => {
+      beforeEach(async () => {
+        fetchImportJobsStub.resolves([])
+      })
+
+      it('jobs are empty and still returns a result for the other services', async () => {
+        const result = await InfoService.go()
+
+        expect(result).to.include([
+          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        ])
+        expect(result.appData).to.have.length(10)
+        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(result.appData[0].jobs).to.have.length(0)
+
+        expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+      })
+    })
+
+    describe('throws an exception', () => {
+      beforeEach(async () => {
+        fetchImportJobsStub.throwsException(new Error('FetchImportJobs went boom'))
+      })
+
+      it('handles the error and still returns a result for the other services', async () => {
+        const result = await InfoService.go()
+
+        expect(result).to.include([
+          'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
+        ])
+        expect(result.appData).to.have.length(10)
+        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(result.appData[0].jobs).to.have.length(0)
+
+        expect(result.redisConnectivityData).to.equal('Up and running')
+        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+      })
+    })
+  })
+
   describe('when a service we check via http request', () => {
     beforeEach(async () => {
+      fetchImportJobsStub.resolves(goodFetchImportJobsResults)
+
       // In these scenarios everything is hunky-dory with clamav and redis. So, we go back to our original stubbing
       const execStub = Sinon
         .stub()
@@ -252,9 +366,10 @@ describe('Info service', () => {
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
         expect(result.appData).to.have.length(10)
+        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(result.appData[0].jobs).to.have.length(2)
 
         expect(result.addressFacadeData).to.startWith('ERROR:')
-        expect(result.appData[0].version).to.startWith('ERROR:')
 
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
         expect(result.redisConnectivityData).to.equal('Up and running')
@@ -278,9 +393,10 @@ describe('Info service', () => {
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
         expect(result.appData).to.have.length(10)
+        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(result.appData[0].jobs).to.have.length(2)
 
         expect(result.addressFacadeData).to.startWith('ERROR:')
-        expect(result.appData[0].version).to.startWith('ERROR:')
 
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
         expect(result.redisConnectivityData).to.equal('Up and running')
