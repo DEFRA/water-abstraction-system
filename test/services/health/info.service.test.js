@@ -14,7 +14,7 @@ const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
-const FetchImportJobs = require('../../../app/services/health/fetchImportJobs.service.js')
+const FetchImportJobs = require('../../../app/services/health/fetch-import-jobs.service.js')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 const redis = require('@redis/client')
 const RequestLib = require('../../../app/lib/request.lib.js')
