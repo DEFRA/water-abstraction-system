@@ -17,10 +17,7 @@ class LineModel extends ReturnsBaseModel {
   }
 
   static get translations () {
-    return [
-      { database: 'dateCreated', model: 'createdAt' },
-      { database: 'dateUpdated', model: 'updatedAt' }
-    ]
+    return []
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
