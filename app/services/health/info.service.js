@@ -9,15 +9,14 @@
 const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
-const Redis = require('ioredis')
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const CreateRedisClient = require('./create-redis-client.service.js')
 const FetchImportJobs = require('./fetch-import-jobs.service.js')
 const { formatLongDateTime } = require('../../presenters/base.presenter.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
-const redisConfig = require('../../../config/redis.config.js')
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
@@ -110,13 +109,7 @@ async function _getRedisConnectivityData () {
   let redis
 
   try {
-    redis = new Redis({
-      host: redisConfig.host,
-      port: redisConfig.port,
-      password: redisConfig.password,
-      ...(redisConfig.disableTls ? {} : { tls: {} }),
-      maxRetriesPerRequest: 0
-    })
+    redis = await CreateRedisClient.go()
 
     await redis.ping()
 
