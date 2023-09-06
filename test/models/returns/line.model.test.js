@@ -57,7 +57,6 @@ describe('Line model', () => {
           .findById(testRecord.lineId)
           .withGraphFetched('version')
 
-        console.log('Result :', result)
         expect(result).to.be.instanceOf(LineModel)
         expect(result.lineId).to.equal(testRecord.lineId)
 

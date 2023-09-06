@@ -5,6 +5,8 @@
  * @module ReturnModel
  */
 
+const { Model } = require('objection')
+
 const ReturnsBaseModel = require('./returns-base.model.js')
 
 class ReturnModel extends ReturnsBaseModel {
@@ -25,6 +27,19 @@ class ReturnModel extends ReturnsBaseModel {
     return [
       'metadata'
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      versions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'version.model',
+        join: {
+          from: 'returns.returnId',
+          to: 'versions.returnId'
+        }
+      }
+    }
   }
 }
 
