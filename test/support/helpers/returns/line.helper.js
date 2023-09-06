@@ -4,6 +4,8 @@
  * @module LineHelper
  */
 
+const { randomUUID } = require('crypto')
+
 const LineModel = require('../../../../app/models/returns/line.model.js')
 
 /**
@@ -11,7 +13,6 @@ const LineModel = require('../../../../app/models/returns/line.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `lineId` - bbd30368-6a49-4566-b305-f6ae33157f91
  * - `versionId` - 8ca74383-08fd-4ca8-93f0-21c21247cb22
  * - `substance` - water
  * - `quantity` - 4380
@@ -47,7 +48,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    lineId: 'bbd30368-6a49-4566-b305-f6ae33157f91',
+    lineId: randomUUID({ disableEntropyCache: true }),
     versionId: '8ca74383-08fd-4ca8-93f0-21c21247cb22',
     substance: 'water',
     quantity: 4380,

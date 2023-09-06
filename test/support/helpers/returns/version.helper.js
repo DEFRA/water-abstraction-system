@@ -4,6 +4,8 @@
  * @module VersionHelper
  */
 
+const { randomUUID } = require('crypto')
+
 const VersionModel = require('../../../../app/models/returns/version.model.js')
 
 /**
@@ -11,7 +13,6 @@ const VersionModel = require('../../../../app/models/returns/version.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * `versionId` - 10571688-8903-433d-81f0-d9f87312a24d
  * `returnId` - v1:2:03/28/78/0033:10025289:2021-11-01:2022-10-31
  * `userId` - admin-internal@wrls.gov.uk
  * `userType` - internal
@@ -44,7 +45,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    versionId: '10571688-8903-433d-81f0-d9f87312a24d',
+    versionId: randomUUID({ disableEntropyCache: true }),
     returnId: 'v1:2:03/28/78/0033:10025289:2021-11-01:2022-10-31',
     userId: 'admin-internal@wrls.gov.uk',
     userType: 'internal',

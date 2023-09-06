@@ -76,7 +76,10 @@ describe('Version model', () => {
 
         testLines = []
         for (let i = 0; i < 2; i++) {
-          const line = await LineHelper.add({ versionId })
+          // NOTE: A constraint in the lines table means you cannot have 2 records with the same versionId, substance,
+          // startDate and endDate
+          const substance = i === 0 ? 'water' : 'dirt'
+          const line = await LineHelper.add({ versionId, substance })
           testLines.push(line)
         }
       })
