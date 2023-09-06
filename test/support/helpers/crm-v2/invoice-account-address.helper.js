@@ -39,7 +39,7 @@ function defaults (data = {}) {
   const defaults = {
     invoiceAccountId: 'b16efa32-9271-4333-aecf-b9358ba42892',
     addressId: '9570acde-752e-456a-a895-7b46a3c923a3',
-    startDate: new Date(2023, 9, 18)
+    startDate: new Date('2023-08-18')
   }
 
   return {
