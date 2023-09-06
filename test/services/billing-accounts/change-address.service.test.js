@@ -63,6 +63,23 @@ describe('Change address service', () => {
       Sinon.stub(SendCustomerChangeService, 'go').resolves()
     })
 
+    describe('and only an address is provided', () => {
+      beforeEach(() => {
+        address = { ...addressFromManual }
+      })
+
+      it('creates the invoice account address and address records and handles the null agent and contact', async () => {
+        const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
+
+        const newAddress = await AddressModel.query().first()
+
+        expect(result.invoiceAccountAddress.addressId).to.equal(newAddress.addressId)
+        expect(result.address.address1).to.equal('62 High St')
+        expect(result.agentCompany).to.be.null()
+        expect(result.contact).to.be.null()
+      })
+    })
+
     describe('and the address provided', () => {
       describe('was selected from OS Places results (has a UPRN)', () => {
         beforeEach(() => {

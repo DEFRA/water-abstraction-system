@@ -76,7 +76,9 @@ async function go (invoiceAccountId, address, agentCompany = {}, contact = {}) {
   // what is either in it or SOP. But this way the user is never left believing all is well when something has failed.
   await SendCustomerChangeService.go(invoiceAccount, addressInstance, companyInstance, contactInstance)
 
-  return _persist(timestamp, invoiceAccount, addressInstance, companyInstance, contactInstance)
+  const persistedData = await _persist(timestamp, invoiceAccount, addressInstance, companyInstance, contactInstance)
+
+  return _response(persistedData)
 }
 
 async function _fetchInvoiceAccount (invoiceAccountId) {
@@ -124,13 +126,13 @@ async function _persist (timestamp, invoiceAccount, address, company, contact) {
 
   await InvoiceAccountModel.transaction(async (trx) => {
     persistedData.address = await _persistAddress(trx, address)
-    persistedData.agentCompany = await _persistCompany(trx, company)
+    persistedData.company = await _persistCompany(trx, company)
     persistedData.contact = await _persistContact(trx, contact)
 
     const invoiceAccountAddress = InvoiceAccountAddressModel.fromJson({
       invoiceAccountId: invoiceAccount.invoiceAccountId,
       addressId: persistedData.address.addressId,
-      agentCompanyId: persistedData.agentCompany.companyId,
+      agentCompanyId: persistedData.company.companyId,
       contactId: persistedData.contact.contactId,
       startDate: timestamp,
       endDate: null,
@@ -293,6 +295,30 @@ async function _persistContact (trx, contact) {
     .returning([
       'contactId'
     ])
+}
+
+/**
+ * Format the model instances we persisted into a 'clean' response
+ *
+ * If there was a problem with the Address or the InvoiceAccountAddress when persisting we wouldn't get here. So, we can
+ * always assume they are populated.
+ *
+ * The same cannot be said for company and contact. If null data was passed into the service these will be empty model
+ * instances in `persistedData`. Rather than return these empty instances we return null reflecting what was originally
+ * passed in.
+ *
+ * Finally, where we do have populated instances we destructure them. This transforms the model instances into POJO's
+ * again just making things cleaner.
+ */
+function _response (persistedData) {
+  const { address, company, contact, invoiceAccountAddress } = persistedData
+
+  return {
+    invoiceAccountAddress: { ...invoiceAccountAddress },
+    address: { ...address },
+    agentCompany: company.companyId ? { ...company } : null,
+    contact: contact.contactId ? { ...contact } : null
+  }
 }
 
 function _transformAddress (timestamp, address) {
