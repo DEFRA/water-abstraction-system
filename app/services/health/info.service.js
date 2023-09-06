@@ -9,7 +9,7 @@
 const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
-const redis = require('@redis/client')
+const Redis = require('ioredis')
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 const FetchImportJobs = require('./fetch-import-jobs.service.js')
@@ -107,22 +107,26 @@ async function _getImportJobsData () {
 }
 
 async function _getRedisConnectivityData () {
+  let redis
+
   try {
-    const client = redis.createClient({
-      socket: {
-        host: redisConfig.host,
-        port: redisConfig.port
-      },
-      password: redisConfig.password
+    redis = new Redis({
+      host: redisConfig.host,
+      port: redisConfig.port,
+      password: redisConfig.password,
+      ...(redisConfig.disableTls ? {} : { tls: {} }),
+      maxRetriesPerRequest: 0
     })
 
-    await client.connect()
-    await client.disconnect()
+    await redis.ping()
 
     return 'Up and running'
   } catch (error) {
-    // `error` value not returned for security reasons as it gives out the IP address and port of Redis
-    return 'Error connecting to Redis'
+    return `ERROR: ${error.message}`
+  } finally {
+    if (redis) {
+      await redis.disconnect()
+    }
   }
 }
 
