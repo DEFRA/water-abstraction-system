@@ -94,16 +94,21 @@ async function _fetchInvoiceAccount (invoiceAccountId) {
  * Persist the changes to the WRLS database
  *
  * Any changes that need to be made to the WRLS DB are done here. We do them in a
- * {@link https://vincit.github.io/objection.js/guide/transactions.html | transaction} object to ensure they either
- * all get applied, or none do (no partial updates here!)
+ * {@link https://vincit.github.io/objection.js/guide/transactions.html | transaction} object to ensure they either all
+ * get applied, or none do (no partial updates here!)
  *
- * We persist the address, company and contact first because we need their IDs in order to create the new
- * `crm_v2.invoice_account_address` record. When we create that record we also need to apply an end date to any existing
- * invoice account addresses with a null end date. This is how the service determines which address details are current
- * (end date is null).
+ * When a user changes a billing account address we expect as a minimum that an 'address' will be passed to this
+ * service. Agent company and contact can be null though. But before the service calls this method it will transform all
+ * 3 into their respective model instances. So, address will always be populated, but company and contact might be empty
+ * instances.
  *
- * The object we return has all 3 entities whether they were persisted or not. This gets passed back to the UI via
- * the controller and is what it needs to then be able to redirect the user to the correct page.
+ * We attempt to persist the address, company and contact model instances first because we need their IDs in order to
+ * create the new `crm_v2.invoice_account_address` record. When we create that record we also need to apply an end date
+ * to any existing invoice account addresses with a null end date. This is how the service determines which address
+ * details are current (end date is null).
+ *
+ * The object we return has all 3 entities whether they were persisted or not. This gets passed back to the UI via the
+ * controller and is what it needs to then be able to redirect the user to the correct page.
  *
  * @param {Date} timestamp the timestamp to be used for any date created or updated values when persisting
  * @param {module:InvoiceAccountModel} invoiceAccount the invoice (billing) account having its address changed
