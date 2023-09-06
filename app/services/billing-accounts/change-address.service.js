@@ -148,7 +148,7 @@ async function _patchExistingInvoiceAccountAddressEndDate (trx, invoiceAccountId
   const endDate = new Date()
   endDate.setDate(timestamp.getDate() - 1)
 
-  return InvoiceAccountAddressModel.query(trx)
+  await InvoiceAccountAddressModel.query(trx)
     .patch({
       endDate,
       updatedAt: timestamp
