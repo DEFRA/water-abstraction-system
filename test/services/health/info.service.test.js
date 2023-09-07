@@ -14,9 +14,9 @@ const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const CreateRedisClient = require('../../../app/services/health/create-redis-client.service.js')
 const FetchImportJobs = require('../../../app/services/health/fetch-import-jobs.service.js')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
-const redis = require('@redis/client')
 const RequestLib = require('../../../app/lib/request.lib.js')
 
 // Thing under test
@@ -68,7 +68,7 @@ describe('Info service', () => {
     fetchImportJobsStub = Sinon.stub(FetchImportJobs, 'go')
     legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'get')
     requestLibStub = Sinon.stub(RequestLib, 'get')
-    redisStub = Sinon.stub(redis, 'createClient')
+    redisStub = Sinon.stub(CreateRedisClient, 'go')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
@@ -94,7 +94,7 @@ describe('Info service', () => {
   describe('when all the services are running', () => {
     beforeEach(async () => {
       fetchImportJobsStub.resolves(goodFetchImportJobsResults)
-      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+      redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       requestLibStub
@@ -178,7 +178,7 @@ describe('Info service', () => {
     describe('is not running', () => {
       beforeEach(async () => {
         redisStub.returns({
-          connect: Sinon.stub().throwsException(new Error('Redis check went boom')),
+          ping: Sinon.stub().throwsException(new Error('Redis check went boom')),
           disconnect: Sinon.stub().resolves()
         })
       })
@@ -193,7 +193,7 @@ describe('Info service', () => {
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(2)
 
-        expect(result.redisConnectivityData).to.equal('Error connecting to Redis')
+        expect(result.redisConnectivityData).to.equal('ERROR: Redis check went boom')
         expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
       })
     })
@@ -202,7 +202,7 @@ describe('Info service', () => {
   describe('when ClamAV', () => {
     beforeEach(async () => {
       fetchImportJobsStub.resolves(goodFetchImportJobsResults)
-      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+      redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       requestLibStub
@@ -271,7 +271,7 @@ describe('Info service', () => {
 
   describe('when FetchImportJobs service', () => {
     beforeEach(async () => {
-      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+      redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       requestLibStub
@@ -346,7 +346,7 @@ describe('Info service', () => {
       const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
 
-      redisStub.returns({ connect: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+      redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })
 
     describe('cannot be reached because of a network error', () => {
