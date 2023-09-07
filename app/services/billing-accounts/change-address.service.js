@@ -244,9 +244,9 @@ async function _persistAddress (trx, address) {
  *
  * Else we attempt to insert a new company record. If the company has a `companyNumber:` it will either be an existing
  * company record selected by the user, or they will have been required to enter the company number. The previous team
- * added a unique constraint on `company_number` in the table so we cannot insert 2 records records with matching
- * numbers. But we use this to our advantage. Using `onConflict()` and `merge()` we can have Objection JS update the
- * existing company record if a matching company number.
+ * added a unique constraint on `company_number` in the table so we cannot insert 2 records with matching numbers. But
+ * we use this to our advantage. Using `onConflict()` and `merge()` we can have Objection JS update the existing company
+ * record if a matching company number.
  *
  * Because either INSERT or UPDATE gets fired `returning()` will kick in and return the all important `companyId` which
  * we'll need later for the invoice account address. It will also return the fields specified in the INSERT/UPDATE hence
