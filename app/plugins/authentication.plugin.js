@@ -31,13 +31,6 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
  * can ensure that only users with that role can access the route.
  *
  * More info on authorisation and scope can be found at https://hapi.dev/api/?v=21.3.2#-routeoptionsauthaccessscope
- *
- * TODO: Add a line to the plugin to set `session` as the default auth strategy, ie:
- *
- * server.auth.default('session')
- *
- * Since this is applied to all routes by default, any routes which don't require authentication (eg. service status)
- * will need to have its options.auth.strategy set to `false`.
  */
 
 const AuthenticationPlugin = {
