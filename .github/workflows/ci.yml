@@ -38,6 +38,7 @@ jobs:
       POSTGRES_DB: wabs_system_test
       POSTGRES_DB_TEST: wabs_system_test
       ENVIRONMENT: dev
+      COOKIE_SECRET: cookiesecret
 
 
     # Service containers to run with `runner-job`

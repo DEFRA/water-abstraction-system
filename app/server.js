@@ -3,6 +3,7 @@
 const Hapi = require('@hapi/hapi')
 
 const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
+const AuthenticationPlugin = require('./plugins/authentication.plugin.js')
 const BlippPlugin = require('./plugins/blipp.plugin.js')
 const ChargingModuleTokenCachePlugin = require('./plugins/charging-module-token-cache.plugin.js')
 const ErrorPagesPlugin = require('./plugins/error-pages.plugin.js')
@@ -21,6 +22,8 @@ const registerPlugins = async (server) => {
   // Register the remaining plugins
   await server.register(StopPlugin)
   await server.register(require('@hapi/inert'))
+  await server.register(AuthenticationPlugin)
+  await server.register(require('@hapi/cookie'))
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin())
   await server.register(AirbrakePlugin)
