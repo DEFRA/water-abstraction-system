@@ -10,7 +10,7 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
 /**
  * This service is intended to be used by our `AuthenticationPlugin` to authenticate and authorise users.
  *
- * We take a user id and look it up in the `idm` table using `FetchUserRolesAndGroupsService`. This gives us a user
+ * We take a user id and look it up in the `idm` schema using `FetchUserRolesAndGroupsService`. This gives us a user
  * object along with arrays of role objects and group objects that the user has been assigned to.
  *
  * We return an object that indicates whether the user is valid (based on whether the user exists), along with user
