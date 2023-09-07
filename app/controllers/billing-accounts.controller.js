@@ -7,6 +7,7 @@
 
 const Boom = require('@hapi/boom')
 
+const ChangeAddressService = require('../services/billing-accounts/change-address.service.js')
 const ChangeAddressValidator = require('../validators/change-address.validator.js')
 
 async function changeAddress (request, h) {
@@ -16,7 +17,16 @@ async function changeAddress (request, h) {
     return _formattedValidationError(validatedData.error)
   }
 
-  return h.response().code(201)
+  const { address, agentCompany, contact } = validatedData.value
+
+  const result = await ChangeAddressService.go(
+    request.params.invoiceAccountId,
+    address,
+    agentCompany,
+    contact
+  )
+
+  return h.response(result).code(201)
 }
 
 /**

@@ -8,10 +8,22 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Things we need to stub
+const Boom = require('@hapi/boom')
+const ChangeAddressService = require('../../app/services/billing-accounts/change-address.service.js')
+
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Billing Accounts controller', () => {
+  // Though the ChangeAddressValidator accepts a payload with an empty address PayLoadCleanerPlugin will strip it
+  // out. So, we need at least one property to get through the cleaner.
+  const validPayload = {
+    address: {
+      addressLine1: 'Building 12'
+    }
+  }
+
   let options
   let server
 
@@ -40,20 +52,25 @@ describe('Billing Accounts controller', () => {
     })
 
     describe('when a request is valid', () => {
+      const validResponse = {
+        invoiceAccountAddress: {},
+        address: {},
+        agentCompany: {},
+        contact: {}
+      }
+
       beforeEach(() => {
-        // Though the ChangeAddressValidator accepts a payload with an empty address PayLoadCleanerPlugin will strip it
-        // out. So, we need at least one property to get through the cleaner.
-        options.payload = {
-          address: {
-            addressLine1: 'Building 12'
-          }
-        }
+        options.payload = { ...validPayload }
+
+        Sinon.stub(ChangeAddressService, 'go').resolves(validResponse)
       })
 
       it('returns a 201 status', async () => {
         const response = await server.inject(options)
+        const payload = JSON.parse(response.payload)
 
         expect(response.statusCode).to.equal(201)
+        expect(payload).to.equal(validResponse)
       })
     })
 
@@ -75,6 +92,23 @@ describe('Billing Accounts controller', () => {
 
           expect(response.statusCode).to.equal(400)
           expect(payload.message).to.equal('"address" is required')
+        })
+      })
+
+      describe('because the address could not be changed', () => {
+        beforeEach(async () => {
+          options.payload = { ...validPayload }
+
+          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+          Sinon.stub(ChangeAddressService, 'go').rejects()
+        })
+
+        it('returns an error response', async () => {
+          const response = await server.inject(options)
+          const payload = JSON.parse(response.payload)
+
+          expect(response.statusCode).to.equal(500)
+          expect(payload.message).to.equal('An internal server error occurred')
         })
       })
     })

@@ -1,21 +1,21 @@
 'use strict'
 
 /**
- * Model for return
- * @module ReturnModel
+ * Model for line
+ * @module LineModel
  */
 
 const { Model } = require('objection')
 
 const ReturnsBaseModel = require('./returns-base.model.js')
 
-class ReturnModel extends ReturnsBaseModel {
+class LineModel extends ReturnsBaseModel {
   static get tableName () {
-    return 'returns'
+    return 'lines'
   }
 
   static get idColumn () {
-    return 'returnId'
+    return 'lineId'
   }
 
   static get translations () {
@@ -31,16 +31,16 @@ class ReturnModel extends ReturnsBaseModel {
 
   static get relationMappings () {
     return {
-      versions: {
-        relation: Model.HasManyRelation,
+      version: {
+        relation: Model.BelongsToOneRelation,
         modelClass: 'version.model',
         join: {
-          from: 'returns.returnId',
-          to: 'versions.returnId'
+          from: 'lines.versionId',
+          to: 'versions.versionId'
         }
       }
     }
   }
 }
 
-module.exports = ReturnModel
+module.exports = LineModel

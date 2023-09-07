@@ -9,15 +9,14 @@
 const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
-const redis = require('@redis/client')
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const CreateRedisClient = require('./create-redis-client.service.js')
 const FetchImportJobs = require('./fetch-import-jobs.service.js')
 const { formatLongDateTime } = require('../../presenters/base.presenter.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
 
-const redisConfig = require('../../../config/redis.config.js')
 const servicesConfig = require('../../../config/services.config.js')
 
 /**
@@ -107,22 +106,20 @@ async function _getImportJobsData () {
 }
 
 async function _getRedisConnectivityData () {
-  try {
-    const client = redis.createClient({
-      socket: {
-        host: redisConfig.host,
-        port: redisConfig.port
-      },
-      password: redisConfig.password
-    })
+  let redis
 
-    await client.connect()
-    await client.disconnect()
+  try {
+    redis = await CreateRedisClient.go()
+
+    await redis.ping()
 
     return 'Up and running'
   } catch (error) {
-    // `error` value not returned for security reasons as it gives out the IP address and port of Redis
-    return 'Error connecting to Redis'
+    return `ERROR: ${error.message}`
+  } finally {
+    if (redis) {
+      await redis.disconnect()
+    }
   }
 }
 
