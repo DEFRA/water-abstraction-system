@@ -13,7 +13,7 @@ const GeneralLib = require('../../app/lib/general.lib.js')
 
 describe('RequestLib', () => {
   describe('#generateUUID', () => {
-    // NOTE: generateUUID() only calls crypton.randomUUID(); it does nothing else. So, there is nothing really to test
+    // NOTE: generateUUID() only calls crypto.randomUUID(); it does nothing else. So, there is nothing really to test
     // and certainly, testing the UUID is really unique is beyond the scope of this project! But this test at least
     // serves as documentation and means no one will get confused by the lack of a test :-)
     it('returns a Universally unique identifier (UUID)', () => {
