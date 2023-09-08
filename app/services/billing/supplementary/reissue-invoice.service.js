@@ -4,7 +4,8 @@
  * Handles the reissuing of a single invoice
  * @module ReissueInvoiceService
  */
-const { randomUUID } = require('crypto')
+
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 const ChargingModuleBillRunStatusService = require('../../charging-module/bill-run-status.service.js')
 const ChargingModuleReissueInvoiceService = require('../../charging-module/reissue-invoice.service.js')
@@ -152,7 +153,7 @@ async function _pauseUntilNotPending (billingBatchExternalId) {
 function _generateTransaction (chargingModuleReissueTransaction, sourceTransaction, billingInvoiceLicenceId) {
   return {
     ...sourceTransaction,
-    billingTransactionId: randomUUID({ disableEntropyCache: true }),
+    billingTransactionId: generateUUID(),
     externalId: chargingModuleReissueTransaction.id,
     isCredit: chargingModuleReissueTransaction.credit,
     netAmount: _determineSignOfNetAmount(

@@ -8,13 +8,12 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-const { randomUUID } = require('crypto')
-
 // Test helpers
 const BillingInvoiceHelper = require('../../../support/helpers/water/billing-invoice.helper.js')
 const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const ChargingModuleBillRunStatusService = require('../../../../app/services/charging-module/bill-run-status.service.js')
@@ -24,15 +23,15 @@ const ChargingModuleViewInvoiceService = require('../../../../app/services/charg
 // Thing under test
 const ReissueInvoiceService = require('../../../../app/services/billing/supplementary/reissue-invoice.service.js')
 
-const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
-const INVOICE_EXTERNAL_ID = randomUUID({ disableEntropyCache: true })
-const INVOICE_LICENCE_1_TRANSACTION_ID = randomUUID({ disableEntropyCache: true })
-const INVOICE_LICENCE_2_TRANSACTION_ID = randomUUID({ disableEntropyCache: true })
+const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = generateUUID()
+const INVOICE_EXTERNAL_ID = generateUUID()
+const INVOICE_LICENCE_1_TRANSACTION_ID = generateUUID()
+const INVOICE_LICENCE_2_TRANSACTION_ID = generateUUID()
 
 const CHARGING_MODULE_REISSUE_INVOICE_RESPONSE = {
   invoices: [
-    { id: randomUUID({ disableEntropyCache: true }), rebilledType: 'C' },
-    { id: randomUUID({ disableEntropyCache: true }), rebilledType: 'R' }
+    { id: generateUUID(), rebilledType: 'C' },
+    { id: generateUUID(), rebilledType: 'R' }
   ]
 }
 
@@ -48,12 +47,12 @@ const CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE = {
     creditLineValue: 2000,
     licences: [
       {
-        id: randomUUID({ disableEntropyCache: true }),
+        id: generateUUID(),
         licenceNumber: 'INVOICE_LICENCE_1',
         transactions: [_generateCMTransaction(true, INVOICE_LICENCE_1_TRANSACTION_ID)]
       },
       {
-        id: randomUUID({ disableEntropyCache: true }),
+        id: generateUUID(),
         licenceNumber: 'INVOICE_LICENCE_2',
         transactions: [_generateCMTransaction(true, INVOICE_LICENCE_2_TRANSACTION_ID)]
       }
@@ -73,12 +72,12 @@ const CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
     creditLineValue: 0,
     licences: [
       {
-        id: randomUUID({ disableEntropyCache: true }),
+        id: generateUUID(),
         licenceNumber: 'INVOICE_LICENCE_1',
         transactions: [_generateCMTransaction(false, INVOICE_LICENCE_1_TRANSACTION_ID)]
       },
       {
-        id: randomUUID({ disableEntropyCache: true }),
+        id: generateUUID(),
         licenceNumber: 'INVOICE_LICENCE_2',
         transactions: [_generateCMTransaction(false, INVOICE_LICENCE_2_TRANSACTION_ID)]
       }
@@ -93,7 +92,7 @@ describe('Reissue invoice service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    reissueBillingBatch = { externalId: randomUUID({ disableEntropyCache: true }) }
+    reissueBillingBatch = { externalId: generateUUID() }
 
     Sinon.stub(ChargingModuleReissueInvoiceService, 'go')
       .withArgs(reissueBillingBatch.externalId, INVOICE_EXTERNAL_ID)
@@ -131,12 +130,12 @@ describe('Reissue invoice service', () => {
     const sourceInvoiceLicences = await Promise.all([
       BillingInvoiceLicenceHelper.add({
         billingInvoiceId: sourceInvoice.billingInvoiceId,
-        licenceId: randomUUID({ disableEntropyCache: true }),
+        licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_1'
       }),
       BillingInvoiceLicenceHelper.add({
         billingInvoiceId: sourceInvoice.billingInvoiceId,
-        licenceId: randomUUID({ disableEntropyCache: true }),
+        licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_2'
       })
     ])
@@ -194,7 +193,7 @@ describe('Reissue invoice service', () => {
       })
 
       it("to the existing value if it's populated", async () => {
-        const ORIGINAL_BILLING_INVOICE_ID = randomUUID({ disableEntropyCache: true })
+        const ORIGINAL_BILLING_INVOICE_ID = generateUUID()
         await sourceInvoice.$query().patch({ originalBillingInvoiceId: ORIGINAL_BILLING_INVOICE_ID })
 
         await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
@@ -328,7 +327,7 @@ describe('Reissue invoice service', () => {
 
 function _generateCMTransaction (credit, rebilledTransactionId) {
   return {
-    id: randomUUID({ disableEntropyCache: true }),
+    id: generateUUID(),
     chargeValue: 1000,
     credit,
     rebilledTransactionId

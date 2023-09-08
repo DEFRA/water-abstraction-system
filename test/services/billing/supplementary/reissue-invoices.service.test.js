@@ -8,8 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-const { randomUUID } = require('crypto')
-
 // Test helpers
 const BillingInvoiceHelper = require('../../../support/helpers/water/billing-invoice.helper.js')
 const BillingInvoiceModel = require('../../../../app/models/water/billing-invoice.model.js')
@@ -18,6 +16,7 @@ const BillingInvoiceLicenceModel = require('../../../../app/models/water/billing
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const BillingTransactionModel = require('../../../../app/models/water/billing-transaction.model.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
@@ -29,7 +28,7 @@ const ReissueInvoicesService = require('../../../../app/services/billing/supplem
 
 describe('Reissue invoices service', () => {
   let notifierStub
-  const reissueBillingBatch = { regionId: randomUUID({ disableEntropyCache: true }) }
+  const reissueBillingBatch = { regionId: generateUUID() }
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -65,9 +64,9 @@ describe('Reissue invoices service', () => {
       beforeEach(async () => {
         // Three dummy invoices to ensure we iterate 3x
         Sinon.stub(FetchInvoicesToBeReissuedService, 'go').resolves([
-          { id: randomUUID({ disableEntropyCache: true }) },
-          { id: randomUUID({ disableEntropyCache: true }) },
-          { id: randomUUID({ disableEntropyCache: true }) }
+          { id: generateUUID() },
+          { id: generateUUID() },
+          { id: generateUUID() }
         ])
 
         // This stub will result in one new invoice, invoice licence and transaction for each dummy invoice

@@ -5,7 +5,7 @@
  * @module GenerateBillingTransactionsService
  */
 
-const { randomUUID } = require('crypto')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-authorised-and-billable-days.service.js')
 
@@ -46,7 +46,7 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
   }
 
   const standardTransaction = _standardTransaction(
-    _generateUuid(),
+    generateUUID(),
     authorisedDays,
     billableDays,
     chargeElement,
@@ -57,7 +57,7 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
   billingTransactions.push(standardTransaction)
 
   if (!isWaterUndertaker) {
-    const compensationTransaction = _compensationTransaction(_generateUuid(), standardTransaction)
+    const compensationTransaction = _compensationTransaction(generateUUID(), standardTransaction)
     billingTransactions.push(compensationTransaction)
   }
 
@@ -84,25 +84,6 @@ function _description (chargeElement) {
   }
 
   return `Two-part tariff basic water abstraction charge: ${chargeElement.description}`
-}
-
-/**
- * Return a unique UUID to be used as an ID
- *
- * We only intend to persist the transaction and associated billing invoice and licence if there is something to bill!
- * But we have to provide the charging module with the ID of our transaction so it can protect against duplicates.
- *
- * So, we generate our transaction ID's in the code and avoid having to send a DB insert just to get back an ID to use.
- *
- * @returns {string} a unique UUID
- */
-function _generateUuid () {
-  // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
-  // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
-  // disabling this cache is a rounding error in comparison to the rest of the process.
-  //
-  // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
-  return randomUUID({ disableEntropyCache: true })
 }
 
 /**

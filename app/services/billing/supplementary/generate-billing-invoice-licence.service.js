@@ -5,7 +5,7 @@
  * @module GenerateBillingInvoiceLicenceService
  */
 
-const { randomUUID } = require('crypto')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Return a billing invoice licence object ready for persisting
@@ -19,7 +19,7 @@ const { randomUUID } = require('crypto')
 function go (billingInvoiceId, licence) {
   const billingInvoiceLicence = {
     billingInvoiceId,
-    billingInvoiceLicenceId: randomUUID({ disableEntropyCache: true }),
+    billingInvoiceLicenceId: generateUUID(),
     licenceRef: licence.licenceRef,
     licenceId: licence.licenceId
   }

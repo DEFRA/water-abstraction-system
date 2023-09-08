@@ -5,7 +5,7 @@
  * @module ReverseBillingTransactionsService
  */
 
-const { randomUUID } = require('crypto')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Takes an array of transactions and returns an array of transactions which will reverse them.
@@ -44,7 +44,7 @@ function _reverseTransactions (transactions, billingInvoiceLicence) {
 
     return {
       ...propertiesToKeep,
-      billingTransactionId: _generateUuid(),
+      billingTransactionId: generateUUID(),
       billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
       isCredit: true,
       status: 'candidate',
@@ -55,15 +55,6 @@ function _reverseTransactions (transactions, billingInvoiceLicence) {
       purposes: transaction.purposes[0]
     }
   })
-}
-
-function _generateUuid () {
-  // We set `disableEntropyCache` to `false` as normally, for performance reasons node caches enough random data to
-  // generate up to 128 UUIDs. We disable this as we may need to generate more than this and the performance hit in
-  // disabling this cache is a rounding error in comparison to the rest of the process.
-  //
-  // https://nodejs.org/api/crypto.html#cryptorandomuuidoptions
-  return randomUUID({ disableEntropyCache: true })
 }
 
 module.exports = {

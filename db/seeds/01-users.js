@@ -1,7 +1,8 @@
 'use strict'
 
 const bcrypt = require('bcryptjs')
-const { randomUUID } = require('crypto')
+
+const { generateUUID } = require('../../app/lib/general.lib.js')
 
 const DatabaseConfig = require('../../config/database.config.js')
 
@@ -107,7 +108,7 @@ async function _insertUserGroupsWhereNotExists (knex) {
     if (!existingUserGroup) {
       await knex('idm.userGroups')
         .insert({
-          userGroupId: randomUUID({ disableEntropyCache: true }),
+          userGroupId: generateUUID(),
           userId: seedUser.userId,
           groupId: seedUser.groupId
         })
