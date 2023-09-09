@@ -41,18 +41,18 @@ async function _deleteBilling () {
     return billingInvoiceLicence.billingInvoiceLicenceId
   })
 
-  const billingInvoices = await db
+  const bills = await db
     .from('water.billingInvoiceLicences')
     .whereIn('billingInvoiceLicenceId', billingInvoiceLicenceIds)
     .del(['billingInvoiceId'])
 
-  const billingInvoiceIds = billingInvoices.map((billingInvoice) => {
-    return billingInvoice.billingInvoiceId
+  const billIds = bills.map((bill) => {
+    return bill.billingInvoiceId
   })
 
   const billRuns = await db
     .from('water.billingInvoices')
-    .whereIn('billingInvoiceId', billingInvoiceIds)
+    .whereIn('billingInvoiceId', billIds)
     .del(['billingBatchId'])
 
   const billRunIds = billRuns.map((billRun) => {

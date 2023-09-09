@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingInvoiceHelper = require('../../../support/helpers/water/billing-invoice.helper.js')
-const BillingInvoiceModel = require('../../../../app/models/water/billing-invoice.model.js')
+const BillHelper = require('../../../support/helpers/water/bill.helper.js')
+const BillModel = require('../../../../app/models/water/bill.model.js')
 const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
 const BillingInvoiceLicenceModel = require('../../../../app/models/water/billing-invoice-licence.model.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
@@ -20,13 +20,13 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
-const FetchInvoicesToBeReissuedService = require('../../../../app/services/billing/supplementary/fetch-invoices-to-be-reissued.service.js')
-const ReissueInvoiceService = require('../../../../app/services/billing/supplementary/reissue-invoice.service.js')
+const FetchBillsToBeReissuedService = require('../../../../app/services/billing/supplementary/fetch-bills-to-be-reissued.service.js')
+const ReissueBillService = require('../../../../app/services/billing/supplementary/reissue-bill.service.js')
 
 // Thing under test
-const ReissueInvoicesService = require('../../../../app/services/billing/supplementary/reissue-invoices.service.js')
+const ReissueBillsService = require('../../../../app/services/billing/supplementary/reissue-bills.service.js')
 
-describe('Reissue invoices service', () => {
+describe('Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }
 
   let notifierStub
@@ -49,30 +49,30 @@ describe('Reissue invoices service', () => {
   })
 
   describe('when the service is called', () => {
-    describe('and there are no invoices to reissue', () => {
+    describe('and there are no bills to reissue', () => {
       beforeEach(() => {
-        Sinon.stub(FetchInvoicesToBeReissuedService, 'go').resolves([])
+        Sinon.stub(FetchBillsToBeReissuedService, 'go').resolves([])
       })
 
       it('returns `false`', async () => {
-        const result = await ReissueInvoicesService.go(reissueBillRun)
+        const result = await ReissueBillsService.go(reissueBillRun)
 
         expect(result).to.be.false()
       })
     })
 
-    describe('and there are invoices to reissue', () => {
+    describe('and there are bills to reissue', () => {
       beforeEach(async () => {
         // Three dummy invoices to ensure we iterate 3x
-        Sinon.stub(FetchInvoicesToBeReissuedService, 'go').resolves([
+        Sinon.stub(FetchBillsToBeReissuedService, 'go').resolves([
           { id: generateUUID() },
           { id: generateUUID() },
           { id: generateUUID() }
         ])
 
-        // This stub will result in one new invoice, invoice licence and transaction for each dummy invoice
-        Sinon.stub(ReissueInvoiceService, 'go').resolves({
-          billingInvoices: [BillingInvoiceModel.fromJson(BillingInvoiceHelper.defaults())],
+        // This stub will result in one new bill, invoice licence and transaction for each dummy invoice
+        Sinon.stub(ReissueBillService, 'go').resolves({
+          bills: [BillModel.fromJson(BillHelper.defaults())],
           billingInvoiceLicences: [BillingInvoiceLicenceModel.fromJson(BillingInvoiceLicenceHelper.defaults())],
           billingTransactions: [BillingTransactionModel.fromJson({
             ...BillingTransactionHelper.defaults(),
@@ -88,21 +88,21 @@ describe('Reissue invoices service', () => {
       })
 
       it('returns `true`', async () => {
-        const result = await ReissueInvoicesService.go(reissueBillRun)
+        const result = await ReissueBillsService.go(reissueBillRun)
 
         expect(result).to.be.true()
       })
 
-      it('persists all billing invoices', async () => {
-        await ReissueInvoicesService.go(reissueBillRun)
+      it('persists all bills', async () => {
+        await ReissueBillsService.go(reissueBillRun)
 
-        const result = await BillingInvoiceModel.query()
+        const result = await BillModel.query()
 
         expect(result).to.have.length(3)
       })
 
       it('persists all billing invoice licences', async () => {
-        await ReissueInvoicesService.go(reissueBillRun)
+        await ReissueBillsService.go(reissueBillRun)
 
         const result = await BillingInvoiceLicenceModel.query()
 
@@ -110,7 +110,7 @@ describe('Reissue invoices service', () => {
       })
 
       it('persists all transactions', async () => {
-        await ReissueInvoicesService.go(reissueBillRun)
+        await ReissueBillsService.go(reissueBillRun)
 
         const result = await BillingTransactionModel.query()
 

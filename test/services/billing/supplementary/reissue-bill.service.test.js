@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingInvoiceHelper = require('../../../support/helpers/water/billing-invoice.helper.js')
+const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
@@ -17,11 +17,11 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const ChargingModuleBillRunStatusService = require('../../../../app/services/charging-module/bill-run-status.service.js')
-const ChargingModuleReissueInvoiceService = require('../../../../app/services/charging-module/reissue-invoice.service.js')
-const ChargingModuleViewInvoiceService = require('../../../../app/services/charging-module/view-invoice.service.js')
+const ChargingModuleReissueBillService = require('../../../../app/services/charging-module/reissue-bill.service.js')
+const ChargingModuleViewBillService = require('../../../../app/services/charging-module/view-bill.service.js')
 
 // Thing under test
-const ReissueInvoiceService = require('../../../../app/services/billing/supplementary/reissue-invoice.service.js')
+const ReissueBillService = require('../../../../app/services/billing/supplementary/reissue-bill.service.js')
 
 const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = generateUUID()
 const INVOICE_EXTERNAL_ID = generateUUID()
@@ -85,23 +85,23 @@ const CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE = {
   }
 }
 
-describe('Reissue invoice service', () => {
+describe('Reissue Bill service', () => {
   let reissueBillRun
-  let sourceInvoice
+  let sourceBill
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
     reissueBillRun = { externalId: generateUUID() }
 
-    Sinon.stub(ChargingModuleReissueInvoiceService, 'go')
+    Sinon.stub(ChargingModuleReissueBillService, 'go')
       .withArgs(reissueBillRun.externalId, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
         response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
       })
 
-    Sinon.stub(ChargingModuleViewInvoiceService, 'go')
+    Sinon.stub(ChargingModuleViewBillService, 'go')
       .withArgs(reissueBillRun.externalId, CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
@@ -122,19 +122,19 @@ describe('Reissue invoice service', () => {
       }
     })
 
-    sourceInvoice = await BillingInvoiceHelper.add({
+    sourceBill = await BillHelper.add({
       externalId: INVOICE_EXTERNAL_ID,
       isFlaggedForRebilling: true
     })
 
     const sourceInvoiceLicences = await Promise.all([
       BillingInvoiceLicenceHelper.add({
-        billingInvoiceId: sourceInvoice.billingInvoiceId,
+        billingInvoiceId: sourceBill.billingInvoiceId,
         licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_1'
       }),
       BillingInvoiceLicenceHelper.add({
-        billingInvoiceId: sourceInvoice.billingInvoiceId,
+        billingInvoiceId: sourceBill.billingInvoiceId,
         licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_2'
       })
@@ -152,8 +152,8 @@ describe('Reissue invoice service', () => {
       purposes: { test: 'TEST' }
     })
 
-    // Refresh sourceInvoice to include billing invoice licences and transactions, as expected by the service
-    sourceInvoice = await sourceInvoice.$query().withGraphFetched('billingInvoiceLicences.billingTransactions')
+    // Refresh sourceBill to include billing invoice licences and transactions, as expected by the service
+    sourceBill = await sourceBill.$query().withGraphFetched('billingInvoiceLicences.billingTransactions')
   })
 
   afterEach(() => {
@@ -161,50 +161,50 @@ describe('Reissue invoice service', () => {
   })
 
   describe('when the service is called', () => {
-    it('returns two billing invoices per source invoice (one cancelling, one reissuing)', async () => {
-      const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+    it('returns two bills per source bill (one cancelling, one reissuing)', async () => {
+      const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-      expect(result.billingInvoices).to.have.length(2)
+      expect(result.bills).to.have.length(2)
     })
 
     it('returns two billing invoice licences per source invoice licence (one cancelling, one reissuing)', async () => {
-      const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+      const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
       expect(result.billingInvoiceLicences).to.have.length(4)
     })
 
     it('persists two transactions per source transaction (one cancelling, one reissuing)', async () => {
-      const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+      const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
       expect(result.billingTransactions).to.have.length(4)
     })
 
-    it('sets the source invoice rebilling state to `rebilled`', async () => {
-      await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+    it('sets the source bill rebilling state to `rebilled`', async () => {
+      await ReissueBillService.go(sourceBill, reissueBillRun)
 
-      expect(sourceInvoice.rebillingState).to.equal('rebilled')
+      expect(sourceBill.rebillingState).to.equal('rebilled')
     })
 
-    describe('sets the original billing invoice id', () => {
+    describe('sets the original bill id', () => {
       it('to its own id if `null`', async () => {
-        await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+        await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        expect(sourceInvoice.originalBillingInvoiceId).to.equal(sourceInvoice.billingInvoiceId)
+        expect(sourceBill.originalBillingInvoiceId).to.equal(sourceBill.billingInvoiceId)
       })
 
       it("to the existing value if it's populated", async () => {
         const ORIGINAL_BILLING_INVOICE_ID = generateUUID()
-        await sourceInvoice.$query().patch({ originalBillingInvoiceId: ORIGINAL_BILLING_INVOICE_ID })
+        await sourceBill.$query().patch({ originalBillingInvoiceId: ORIGINAL_BILLING_INVOICE_ID })
 
-        await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+        await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        expect(sourceInvoice.originalBillingInvoiceId).to.equal(ORIGINAL_BILLING_INVOICE_ID)
+        expect(sourceBill.originalBillingInvoiceId).to.equal(ORIGINAL_BILLING_INVOICE_ID)
       })
     })
 
     describe('sets the transaction net amount to the charge value returned by the CM', () => {
       it('negative for credits', async () => {
-        const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+        const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
         const credits = result.billingTransactions.filter(transaction => transaction.isCredit)
 
@@ -214,7 +214,7 @@ describe('Reissue invoice service', () => {
       })
 
       it('positive for debits', async () => {
-        const result = await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+        const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
         const debits = result.billingTransactions.filter(transaction => !transaction.isCredit)
 
@@ -241,7 +241,7 @@ describe('Reissue invoice service', () => {
       })
 
       it("retries until it's no longer `pending`", async () => {
-        await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
+        await ReissueBillService.go(sourceBill, reissueBillRun)
 
         expect(billRunStatusStub.callCount).to.equal(2)
       })
@@ -251,8 +251,8 @@ describe('Reissue invoice service', () => {
   describe('and the Charging Module returns an error', () => {
     describe('when sending the reissue request', () => {
       beforeEach(() => {
-        ChargingModuleReissueInvoiceService.go.restore()
-        Sinon.stub(ChargingModuleReissueInvoiceService, 'go').resolves({
+        ChargingModuleReissueBillService.go.restore()
+        Sinon.stub(ChargingModuleReissueBillService, 'go').resolves({
           succeeded: false,
           response: {
             body: {
@@ -265,19 +265,19 @@ describe('Reissue invoice service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillRun))
+        await expect(ReissueBillService.go(sourceBill, reissueBillRun))
           .to.reject(Error, 'Charging Module reissue request failed')
       })
 
-      it('includes the bill run and source invoice external ids', async () => {
-        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillRun)).to.reject()
+      it('includes the bill run and source bill external ids', async () => {
+        const errorResult = await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject()
 
         expect(errorResult.billRunExternalId).to.equal(reissueBillRun.externalId)
-        expect(errorResult.invoiceExternalId).to.equal(sourceInvoice.externalId)
+        expect(errorResult.billExternalId).to.equal(sourceBill.externalId)
       })
 
       it('includes the Charging Module response body', async () => {
-        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillRun)).to.reject()
+        const errorResult = await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject()
 
         expect(errorResult.responseBody.error).to.equal('Conflict')
         expect(errorResult.responseBody.message).to.equal('Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.')
@@ -287,8 +287,8 @@ describe('Reissue invoice service', () => {
 
     describe('when viewing an invoice', () => {
       beforeEach(() => {
-        ChargingModuleViewInvoiceService.go.restore()
-        Sinon.stub(ChargingModuleViewInvoiceService, 'go').resolves({
+        ChargingModuleViewBillService.go.restore()
+        Sinon.stub(ChargingModuleViewBillService, 'go').resolves({
           succeeded: false,
           response: {
             body: {
@@ -301,13 +301,12 @@ describe('Reissue invoice service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillRun))
+        await expect(ReissueBillService.go(sourceBill, reissueBillRun))
           .to.reject(Error, 'Charging Module view invoice request failed')
       })
 
       it('includes the bill run and reissue invoice external ids', async () => {
-        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillRun)).to.reject()
-        console.log('🚀 ~ file: reissue-invoice.service.test.js:311 ~ it.only ~ errorResult:', errorResult)
+        const errorResult = await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject()
 
         expect(errorResult.billRunExternalId).to.equal(reissueBillRun.externalId)
         // The error will be thrown on the first iteration over the invoices so we hardcode the check for the first
@@ -316,7 +315,7 @@ describe('Reissue invoice service', () => {
       })
 
       it('includes the Charging Module response body', async () => {
-        const errorResult = await expect(ReissueInvoiceService.go(sourceInvoice, reissueBillRun)).to.reject()
+        const errorResult = await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject()
 
         expect(errorResult.responseBody.error).to.equal('Conflict')
         expect(errorResult.responseBody.message).to.equal('Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.')

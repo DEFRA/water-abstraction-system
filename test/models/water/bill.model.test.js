@@ -9,16 +9,16 @@ const { expect } = Code
 
 // Test helpers
 const BillRunModel = require('../../../app/models/water/bill-run.model.js')
-const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
+const BillHelper = require('../../support/helpers/water/bill.helper.js')
 const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
 const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
 const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const BillingInvoiceModel = require('../../../app/models/water/billing-invoice.model.js')
+const BillModel = require('../../../app/models/water/bill.model.js')
 
-describe('Billing Invoice model', () => {
+describe('Bill model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -27,13 +27,13 @@ describe('Billing Invoice model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await BillingInvoiceHelper.add()
+      testRecord = await BillHelper.add()
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await BillingInvoiceModel.query().findById(testRecord.billingInvoiceId)
+      const result = await BillModel.query().findById(testRecord.billingInvoiceId)
 
-      expect(result).to.be.an.instanceOf(BillingInvoiceModel)
+      expect(result).to.be.an.instanceOf(BillModel)
       expect(result.billingInvoiceId).to.equal(testRecord.billingInvoiceId)
     })
   })
@@ -44,22 +44,22 @@ describe('Billing Invoice model', () => {
 
       beforeEach(async () => {
         testBillRun = await BillRunHelper.add()
-        testRecord = await BillingInvoiceHelper.add({ billingBatchId: testBillRun.billingBatchId })
+        testRecord = await BillHelper.add({ billingBatchId: testBillRun.billingBatchId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillingInvoiceModel.query()
+        const query = await BillModel.query()
           .innerJoinRelated('billRun')
 
         expect(query).to.exist()
       })
 
       it('can eager load the bill run', async () => {
-        const result = await BillingInvoiceModel.query()
+        const result = await BillModel.query()
           .findById(testRecord.billingInvoiceId)
           .withGraphFetched('billRun')
 
-        expect(result).to.be.instanceOf(BillingInvoiceModel)
+        expect(result).to.be.instanceOf(BillModel)
         expect(result.billingInvoiceId).to.equal(testRecord.billingInvoiceId)
 
         expect(result.billRun).to.be.an.instanceOf(BillRunModel)
@@ -71,7 +71,7 @@ describe('Billing Invoice model', () => {
       let testBillingInvoiceLicences
 
       beforeEach(async () => {
-        testRecord = await BillingInvoiceHelper.add()
+        testRecord = await BillHelper.add()
         const { billingInvoiceId } = testRecord
 
         testBillingInvoiceLicences = []
@@ -82,18 +82,18 @@ describe('Billing Invoice model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillingInvoiceModel.query()
+        const query = await BillModel.query()
           .innerJoinRelated('billingInvoiceLicences')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing invoice licences', async () => {
-        const result = await BillingInvoiceModel.query()
+        const result = await BillModel.query()
           .findById(testRecord.billingInvoiceId)
           .withGraphFetched('billingInvoiceLicences')
 
-        expect(result).to.be.instanceOf(BillingInvoiceModel)
+        expect(result).to.be.instanceOf(BillModel)
         expect(result.billingInvoiceId).to.equal(testRecord.billingInvoiceId)
 
         expect(result.billingInvoiceLicences).to.be.an.array()

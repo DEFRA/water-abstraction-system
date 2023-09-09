@@ -12,19 +12,19 @@ const { expect } = Code
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
 
 // Thing under test
-const ChargingModuleReissueInvoiceService = require('../../../app/services/charging-module/reissue-invoice.service.js')
+const ChargingModuleViewBillService = require('../../../app/services/charging-module/view-bill.service.js')
 
-describe('Charge module reissue invoice service', () => {
-  const invoiceId = '45ddee2c-c423-4382-8abe-a6a9f284f829'
+describe('Charging Module View Bill service', () => {
+  const billId = '45ddee2c-c423-4382-8abe-a6a9f284f829'
   const billRunId = 'db82bf38-638a-44d3-b1b3-1ae8524d9c38'
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the service can reissue an invoice', () => {
+  describe('when the service can view an invoice', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+      Sinon.stub(ChargingModuleRequestLib, 'get').resolves({
         succeeded: true,
         response: {
           info: {
@@ -33,48 +33,41 @@ describe('Charge module reissue invoice service', () => {
           },
           statusCode: 200,
           body: {
-            invoices: [
-              {
-                id: 'f62faabc-d65e-4242-a106-9777c1d57db7',
-                rebilledType: 'C'
-              },
-              {
-                id: 'db82bf38-638a-44d3-b1b3-1ae8524d9c38',
-                rebilledType: 'R'
-              }
-            ]
+            // truncated invoice, see CM docs for full invoice https://defra.github.io/sroc-charging-module-api-docs
+            invoice: {
+              id: billId,
+              billRunId
+            }
           }
         }
       })
     })
 
     it('hits the correct endpoint', async () => {
-      await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
-      const endpoint = ChargingModuleRequestLib.patch.firstCall.firstArg
+      await ChargingModuleViewBillService.go(billRunId, billId)
+      const endpoint = ChargingModuleRequestLib.get.firstCall.firstArg
 
-      expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${invoiceId}/rebill`)
+      expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}`)
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
+      const result = await ChargingModuleViewBillService.go(billRunId, billId)
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the invoice in the `response`', async () => {
-      const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
+    it('returns the bill in the `response`', async () => {
+      const result = await ChargingModuleViewBillService.go(billRunId, billId)
 
-      expect(result.response.body.invoices[0].id).to.equal('f62faabc-d65e-4242-a106-9777c1d57db7')
-      expect(result.response.body.invoices[0].rebilledType).to.equal('C')
-      expect(result.response.body.invoices[1].id).to.equal('db82bf38-638a-44d3-b1b3-1ae8524d9c38')
-      expect(result.response.body.invoices[1].rebilledType).to.equal('R')
+      expect(result.response.body.invoice.id).to.equal(billId)
+      expect(result.response.body.invoice.billRunId).to.equal(billRunId)
     })
   })
 
   describe('when the service cannot create a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+        Sinon.stub(ChargingModuleRequestLib, 'get').resolves({
           succeeded: false,
           response: {
             info: {
@@ -93,13 +86,13 @@ describe('Charge module reissue invoice service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleViewBillService.go(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleViewBillService.go(billRunId, billId)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -109,20 +102,20 @@ describe('Charge module reissue invoice service', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+        Sinon.stub(ChargingModuleRequestLib, 'get').resolves({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleViewBillService.go(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleReissueInvoiceService.go(billRunId, invoiceId)
+        const result = await ChargingModuleViewBillService.go(billRunId, billId)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

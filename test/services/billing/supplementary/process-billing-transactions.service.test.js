@@ -15,7 +15,7 @@ const FetchPreviousBillingTransactionsService = require('../../../../app/service
 const ProcessBillingTransactionsService = require('../../../../app/services/billing/supplementary/process-billing-transactions.service.js')
 
 describe('Process Billing Transactions service', () => {
-  const billingInvoice = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
+  const bill = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
   const billingInvoiceLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
 
   const billingPeriod = {
@@ -27,7 +27,7 @@ describe('Process Billing Transactions service', () => {
     Sinon.restore()
   })
 
-  describe('when the billing invoice, licence and period', () => {
+  describe('when the bill, licence and period', () => {
     let calculatedTransactions
 
     beforeEach(() => {
@@ -55,7 +55,7 @@ describe('Process Billing Transactions service', () => {
           it('returns the matched calculated transactions', async () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
-              billingInvoice,
+              bill,
               billingInvoiceLicence,
               billingPeriod
             )
@@ -79,7 +79,7 @@ describe('Process Billing Transactions service', () => {
           it('returns no transactions', async () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
-              billingInvoice,
+              bill,
               billingInvoiceLicence,
               billingPeriod
             )
@@ -101,7 +101,7 @@ describe('Process Billing Transactions service', () => {
           it('returns only the previous transactions', async () => {
             const result = await ProcessBillingTransactionsService.go(
               [],
-              billingInvoice,
+              bill,
               billingInvoiceLicence,
               billingPeriod
             )
@@ -126,7 +126,7 @@ describe('Process Billing Transactions service', () => {
           it('returns the unmatched calculated transactions and previous transactions (reversed)', async () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
-              billingInvoice,
+              bill,
               billingInvoiceLicence,
               billingPeriod
             )
@@ -148,7 +148,7 @@ describe('Process Billing Transactions service', () => {
       it('returns the calculated transactions unchanged', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -182,7 +182,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -203,7 +203,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -224,7 +224,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -247,7 +247,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -270,7 +270,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -293,7 +293,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -316,7 +316,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -339,7 +339,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -362,7 +362,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -385,7 +385,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -408,7 +408,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -431,7 +431,7 @@ describe('Process Billing Transactions service', () => {
       it('does not match the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )
@@ -452,7 +452,7 @@ describe('Process Billing Transactions service', () => {
       it('matches the transactions', async () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billingPeriod
         )

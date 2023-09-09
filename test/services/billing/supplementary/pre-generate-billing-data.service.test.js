@@ -55,16 +55,16 @@ describe('Pre-generate billing data service', () => {
       Sinon.stub(FetchInvoiceAccountNumbersService, 'go').resolves(invoiceAccounts)
     })
 
-    describe('returns an object with a billingInvoices property', () => {
+    describe('returns an object with a bills property', () => {
       it('has one key per invoice account', async () => {
-        const { billingInvoices: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.keys(result)
         expect(keys).to.have.length(2)
       })
 
       it('is keyed with the invoice account id', async () => {
-        const { billingInvoices: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 
@@ -74,7 +74,7 @@ describe('Pre-generate billing data service', () => {
       })
 
       it('has the correct data for each key', async () => {
-        const { billingInvoices: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 

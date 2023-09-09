@@ -9,53 +9,53 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
-const BillingInvoiceHelper = require('../../../support/helpers/water/billing-invoice.helper.js')
+const BillHelper = require('../../../support/helpers/water/bill.helper.js')
+const BillModel = require('../../../../app/models/water/bill.model.js')
 const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
-const BillingInvoiceModel = require('../../../../app/models/water/billing-invoice.model.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
+const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
+const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
-const FetchInvoicesToBeReissuedService = require('../../../../app/services/billing/supplementary/fetch-invoices-to-be-reissued.service.js')
+const FetchBillsToBeReissuedService = require('../../../../app/services/billing/supplementary/fetch-bills-to-be-reissued.service.js')
 
-describe('Fetch Invoices To Be Reissued service', () => {
+describe('Fetch Bills To Be Reissued service', () => {
   let billRun
-  let billingInvoice
+  let bill
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
     billRun = await BillRunHelper.add()
-    billingInvoice = await BillingInvoiceHelper.add({ billingBatchId: billRun.billingBatchId })
-    const { billingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({ billingInvoiceId: billingInvoice.billingInvoiceId })
+    bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId })
+    const { billingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId })
     await BillingTransactionHelper.add({ billingInvoiceLicenceId })
   })
 
-  describe('when there are no billing invoices to be reissued', () => {
+  describe('when there are no bills to be reissued', () => {
     it('returns no results', async () => {
-      const result = await FetchInvoicesToBeReissuedService.go(billRun.regionId)
+      const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
       expect(result).to.be.empty()
     })
   })
 
-  describe('when there are billing invoices to be reissued', () => {
+  describe('when there are bills to be reissued', () => {
     beforeEach(async () => {
-      await billingInvoice.$query().patch({ isFlaggedForRebilling: true })
+      await bill.$query().patch({ isFlaggedForRebilling: true })
     })
 
     it('returns results', async () => {
-      const result = await FetchInvoicesToBeReissuedService.go(billRun.regionId)
+      const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
       expect(result).to.have.length(1)
-      expect(result[0]).to.be.an.instanceOf(BillingInvoiceModel)
+      expect(result[0]).to.be.an.instanceOf(BillModel)
     })
 
-    it('returns only the required billing invoice fields', async () => {
-      const billingInvoice = await FetchInvoicesToBeReissuedService.go(billRun.regionId)
+    it('returns only the required bill fields', async () => {
+      const bill = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
-      const result = Object.keys(billingInvoice[0])
+      const result = Object.keys(bill[0])
 
       expect(result).to.only.include([
         'billingInvoiceId',
@@ -69,9 +69,9 @@ describe('Fetch Invoices To Be Reissued service', () => {
     })
 
     it('returns only the required billing invoice licence fields', async () => {
-      const billingInvoice = await FetchInvoicesToBeReissuedService.go(billRun.regionId)
+      const bill = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
-      const { billingInvoiceLicences } = billingInvoice[0]
+      const { billingInvoiceLicences } = bill[0]
 
       const result = Object.keys(billingInvoiceLicences[0])
 
@@ -82,24 +82,24 @@ describe('Fetch Invoices To Be Reissued service', () => {
       ])
     })
 
-    describe('and there are alcs billing invoices to be reissued', () => {
+    describe('and there are alcs bills to be reissued', () => {
       beforeEach(async () => {
         const alcsBillRun = await BillRunHelper.add({ scheme: 'alcs' })
-        const alcsBillingInvoice = await BillingInvoiceHelper.add({
+        const alcsBill = await BillHelper.add({
           billingBatchId: alcsBillRun.billingBatchId,
           isFlaggedForRebilling: true
         })
         const { billingInvoiceLicenceId: alcsBillingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({
-          billingInvoiceId: alcsBillingInvoice.billingInvoiceId
+          billingInvoiceId: alcsBill.billingInvoiceId
         })
         await BillingTransactionHelper.add({ billingInvoiceLicenceId: alcsBillingInvoiceLicenceId })
       })
 
-      it('returns only sroc billing invoices', async () => {
-        const result = await FetchInvoicesToBeReissuedService.go(billRun.regionId)
+      it('returns only sroc bills', async () => {
+        const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
         expect(result).to.have.length(1)
-        expect(result[0].billingInvoiceId).to.equal(billingInvoice.billingInvoiceId)
+        expect(result[0].billingInvoiceId).to.equal(bill.billingInvoiceId)
       })
     })
   })
@@ -119,13 +119,13 @@ describe('Fetch Invoices To Be Reissued service', () => {
 
     it('logs an error', async () => {
       // Force an error by calling the service with an invalid uuid
-      await FetchInvoicesToBeReissuedService.go('NOT_A_UUID')
+      await FetchBillsToBeReissuedService.go('NOT_A_UUID')
 
-      expect(notifierStub.omfg.calledWith('Could not fetch reissue invoices')).to.be.true()
+      expect(notifierStub.omfg.calledWith('Could not fetch reissue bills')).to.be.true()
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchInvoicesToBeReissuedService.go(billRun.regionId)
+      const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
       expect(result).to.be.empty()
     })

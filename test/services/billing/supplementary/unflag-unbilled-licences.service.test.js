@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingInvoiceHelper = require('../../../support/helpers/water/billing-invoice.helper.js')
+const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const LicenceModel = require('../../../../app/models/water/licence.model.js')
@@ -53,7 +53,7 @@ describe('Unflag unbilled licences service', () => {
 
       describe('which were billed', () => {
         beforeEach(async () => {
-          const { billingInvoiceId } = await BillingInvoiceHelper.add({ billingBatchId: billRunId })
+          const { billingInvoiceId } = await BillHelper.add({ billingBatchId: billRunId })
           await BillingInvoiceLicenceHelper.add({ billingInvoiceId, licenceId: licences.billedInBillRun.licenceId })
         })
 

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the previously billed transactions that match the invoice, licence and year provided, removing any debits
+ * Fetches the previously billed transactions that match the bill, licence and year provided, removing any debits
  * which are cancelled out by previous credits.
  * @module FetchPreviousBillingTransactionsService
  */
@@ -9,10 +9,10 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the previously billed transactions that match the invoice, licence and year provided, removing any debits
+ * Fetches the previously billed transactions that match the bill, licence and year provided, removing any debits
  * which are cancelled out by previous credits.
  *
- * @param {Object} billingInvoice A generated billing invoice that identifies the invoice account ID we need to match
+ * @param {Object} bill A generated bill that identifies the invoice account ID we need to match
  *  against
  * @param {Object} billingInvoiceLicence A generated billing invoice licence that identifies the licence we need to
  *  match against
@@ -20,10 +20,10 @@ const { db } = require('../../../../db/db.js')
  *
  * @returns {Object} The resulting matched billing transactions
  */
-async function go (billingInvoice, billingInvoiceLicence, financialYearEnding) {
+async function go (bill, billingInvoiceLicence, financialYearEnding) {
   const billingTransactions = await _fetch(
     billingInvoiceLicence.licenceId,
-    billingInvoice.invoiceAccountId,
+    bill.invoiceAccountId,
     financialYearEnding
   )
 

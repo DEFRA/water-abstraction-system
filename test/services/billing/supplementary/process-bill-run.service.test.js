@@ -21,7 +21,7 @@ const FetchChargeVersionsService = require('../../../../app/services/billing/sup
 const HandleErroredBillRunService = require('../../../../app/services/billing/supplementary/handle-errored-bill-run.service.js')
 const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('../../../../app/services/billing/supplementary/process-billing-period.service.js')
-const ReissueInvoicesService = require('../../../../app/services/billing/supplementary/reissue-invoices.service.js')
+const ReissueBillsService = require('../../../../app/services/billing/supplementary/reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('../../../../app/services/billing/supplementary/unflag-unbilled-licences.service.js')
 
 // Thing under test
@@ -76,7 +76,7 @@ describe('Supplementary Process Bill Run service', () => {
 
       describe('and there are no invoices to reissue', () => {
         beforeEach(() => {
-          Sinon.stub(ReissueInvoicesService, 'go').resolves(false)
+          Sinon.stub(ReissueBillsService, 'go').resolves(false)
         })
 
         it('sets the Bill Run status to empty', async () => {
@@ -90,7 +90,7 @@ describe('Supplementary Process Bill Run service', () => {
 
       describe('and there are invoices to reissue', () => {
         beforeEach(() => {
-          Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
+          Sinon.stub(ReissueBillsService, 'go').resolves(true)
         })
 
         it('sets the Bill Run status to processing', async () => {
@@ -106,7 +106,7 @@ describe('Supplementary Process Bill Run service', () => {
     describe('and some charge versions are billed', () => {
       beforeEach(() => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
-        Sinon.stub(ReissueInvoicesService, 'go').resolves(true)
+        Sinon.stub(ReissueBillsService, 'go').resolves(true)
       })
 
       it('sets the Bill Run status to processing', async () => {
@@ -145,7 +145,7 @@ describe('Supplementary Process Bill Run service', () => {
     let thrownError
 
     beforeEach(() => {
-      Sinon.stub(ReissueInvoicesService, 'go')
+      Sinon.stub(ReissueBillsService, 'go')
     })
 
     describe('because fetching the charge versions fails', () => {

@@ -20,7 +20,7 @@ const SendBillingTransactionsService = require('../../../../app/services/billing
 
 describe('Send billing transactions service', () => {
   const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
-  const billingInvoice = { invoiceAccountNumber: 'ABC123' }
+  const bill = { invoiceAccountNumber: 'ABC123' }
   const billingInvoiceLicence = { billingInvoiceLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a' }
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
@@ -89,7 +89,7 @@ describe('Send billing transactions service', () => {
     it('updates the transactions with the responses from the Charging Module API', async () => {
       const results = await SendBillingTransactionsService.go(
         licence,
-        billingInvoice,
+        bill,
         billingInvoiceLicence,
         billRunExternalId,
         billingTransactions,
@@ -112,7 +112,7 @@ describe('Send billing transactions service', () => {
       const error = await expect(
         SendBillingTransactionsService.go(
           licence,
-          billingInvoice,
+          bill,
           billingInvoiceLicence,
           billRunExternalId,
           billingTransactions,

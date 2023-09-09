@@ -16,7 +16,7 @@ async function go (id) {
     throw new Error('No matching bill run exists')
   }
 
-  _mockBillingInvoices(billRun.billingInvoices)
+  _mockBills(billRun.bills)
 
   return _response(billRun)
 }
@@ -42,8 +42,8 @@ async function _fetchBillRun (id) {
         'name'
       ])
     })
-    .withGraphFetched('billingInvoices')
-    .modifyGraph('billingInvoices', (builder) => {
+    .withGraphFetched('bills')
+    .modifyGraph('bills', (builder) => {
       builder.select([
         'billingInvoiceId',
         'creditNoteValue',
@@ -53,21 +53,21 @@ async function _fetchBillRun (id) {
         'netAmount'
       ])
     })
-    .withGraphFetched('billingInvoices.billingInvoiceLicences')
-    .modifyGraph('billingInvoices.billingInvoiceLicences', (builder) => {
+    .withGraphFetched('bills.billingInvoiceLicences')
+    .modifyGraph('bills.billingInvoiceLicences', (builder) => {
       builder.select([
         'billingInvoiceLicenceId',
         'licenceRef'
       ])
     })
-    .withGraphFetched('billingInvoices.billingInvoiceLicences.licence')
-    .modifyGraph('billingInvoices.billingInvoiceLicences.licence', (builder) => {
+    .withGraphFetched('bills.billingInvoiceLicences.licence')
+    .modifyGraph('bills.billingInvoiceLicences.licence', (builder) => {
       builder.select([
         'isWaterUndertaker'
       ])
     })
-    .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions')
-    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions', (builder) => {
+    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions')
+    .modifyGraph('bills.billingInvoiceLicences.billingTransactions', (builder) => {
       builder.select([
         'authorisedDays',
         'billableDays',
@@ -84,14 +84,14 @@ async function _fetchBillRun (id) {
         'supportedSourceName'
       ])
     })
-    .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement')
-    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement', (builder) => {
+    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions.chargeElement')
+    .modifyGraph('bills.billingInvoiceLicences.billingTransactions.chargeElement', (builder) => {
       builder.select([
         'adjustments'
       ])
     })
-    .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes')
-    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes', (builder) => {
+    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes')
+    .modifyGraph('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes', (builder) => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',
@@ -101,8 +101,8 @@ async function _fetchBillRun (id) {
         'authorisedAnnualQuantity'
       ])
     })
-    .withGraphFetched('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse')
-    .modifyGraph('billingInvoices.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse', (builder) => {
+    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse')
+    .modifyGraph('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse', (builder) => {
       builder.select([
         'description'
       ])
@@ -123,17 +123,17 @@ function _maskInvoiceNumber (invoiceNumber) {
   return `ZZ${invoiceNumber.substring(2)}`
 }
 
-function _mockBillingInvoices (billingInvoices) {
-  billingInvoices.forEach((billingInvoice) => {
+function _mockBills (bills) {
+  bills.forEach((bill) => {
     const { address, name } = GenerateMockDataService.go()
 
-    billingInvoice.accountAddress = address
-    billingInvoice.contact = name
+    bill.accountAddress = address
+    bill.contact = name
 
-    billingInvoice.invoiceAccountNumber = _maskInvoiceAccountNumber(billingInvoice.invoiceAccountNumber)
-    billingInvoice.invoiceNumber = _maskInvoiceNumber(billingInvoice.invoiceNumber)
+    bill.invoiceAccountNumber = _maskInvoiceAccountNumber(bill.invoiceAccountNumber)
+    bill.invoiceNumber = _maskInvoiceNumber(bill.invoiceNumber)
 
-    _mockBillingInvoiceLicences(billingInvoice.billingInvoiceLicences)
+    _mockBillingInvoiceLicences(bill.billingInvoiceLicences)
   })
 }
 

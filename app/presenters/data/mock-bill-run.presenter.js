@@ -9,7 +9,7 @@ const { convertPenceToPounds, formatAbstractionPeriod, formatLongDate, formatNum
 
 function go (billRun) {
   const {
-    billingInvoices,
+    bills,
     billRunNumber,
     createdAt,
     fromFinancialYearEnding,
@@ -32,7 +32,7 @@ function go (billRun) {
     billRunNumber,
     financialYear: `${fromFinancialYearEnding} to ${toFinancialYearEnding}`,
     debit: formatNumberAsMoney(convertPenceToPounds(netTotal)),
-    bills: _formatBillingInvoices(billingInvoices)
+    bills: _formatBills(bills)
   }
 }
 
@@ -89,8 +89,8 @@ function _formatAdjustments (chargeElement) {
   return formattedData
 }
 
-function _formatBillingInvoices (billingInvoices) {
-  return billingInvoices.map((billingInvoice) => {
+function _formatBills (bills) {
+  return bills.map((bill) => {
     const {
       accountAddress,
       billingInvoiceLicences,
@@ -101,7 +101,7 @@ function _formatBillingInvoices (billingInvoices) {
       billingInvoiceId: id,
       invoiceAccountNumber: account,
       invoiceNumber: number
-    } = billingInvoice
+    } = bill
 
     return {
       id,

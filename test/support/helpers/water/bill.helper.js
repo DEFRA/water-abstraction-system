@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * @module BillingInvoiceHelper
+ * @module BillingHelper
  */
 
-const BillingInvoiceModel = require('../../../../app/models/water/billing-invoice.model.js')
+const BillModel = require('../../../../app/models/water/bill.model.js')
 
 /**
- * Add a new billing invoice
+ * Add a new bill
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -19,18 +19,18 @@ const BillingInvoiceModel = require('../../../../app/models/water/billing-invoic
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:BillingInvoiceModel} The instance of the newly created record
+ * @returns {module:BillModel} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return BillingInvoiceModel.query()
+  return BillModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
 
 /**
- * Returns the defaults used when creating a new billing invoice
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.

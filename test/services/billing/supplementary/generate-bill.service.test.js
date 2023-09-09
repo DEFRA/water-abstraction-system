@@ -12,10 +12,10 @@ const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
 
 // Thing under test
-const GenerateBillingInvoiceService = require('../../../../app/services/billing/supplementary/generate-billing-invoice.service.js')
+const GenerateBillService = require('../../../../app/services/billing/supplementary/generate-bill.service.js')
 
-describe('Generate billing invoice service', () => {
-  const billingBatchId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
+describe('Generate Bill service', () => {
+  const billRunId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
   const financialYearEnding = 2023
 
   let expectedResult
@@ -30,17 +30,17 @@ describe('Generate billing invoice service', () => {
       invoiceAccountId: invoiceAccount.invoiceAccountId,
       address: {},
       invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
-      billingBatchId,
+      billingBatchId: billRunId,
       financialYearEnding,
       isCredit: false
     }
   })
 
   describe('when called', () => {
-    it('returns a new billing invoice with the provided values', () => {
-      const result = GenerateBillingInvoiceService.go(
+    it('returns a new bill with the provided values', () => {
+      const result = GenerateBillService.go(
         invoiceAccount,
-        billingBatchId,
+        billRunId,
         financialYearEnding
       )
 

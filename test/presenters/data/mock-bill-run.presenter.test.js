@@ -94,7 +94,7 @@ const mockedBillRun = {
   region: {
     name: 'Thames'
   },
-  billingInvoices: [
+  bills: [
     {
       billingInvoiceId: '86e5841a-81a9-4207-97ce-cee0917c0975',
       creditNoteValue: 0,

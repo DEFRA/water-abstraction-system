@@ -16,7 +16,7 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  * invoice licence id
  *
  * @param {module:LicenceModel} licence The licence that each transaction is linked to
- * @param {module:BillingInvoiceModel} billingInvoice The billing invoice each transaction is to be linked to
+ * @param {module:BillModel} bill The bill each transaction is to be linked to
  * @param {module:BillingInvoiceLicenceModel} billingInvoiceLicence The billing invoice licence each transaction is to be linked to
  * @param {string} billRunExternalId The Charging Module bill run id that the transactions are to be created on
  * @param {Object[]} billingTransactions The transactions to be sent to the Charging Module
@@ -24,7 +24,7 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  *
  * @returns {Object[]} Array of transactions which have been sent to the Charging Module
  */
-async function go (licence, billingInvoice, billingInvoiceLicence, billRunExternalId, billingTransactions, billingPeriod) {
+async function go (licence, bill, billingInvoiceLicence, billRunExternalId, billingTransactions, billingPeriod) {
   try {
     const sentTransactions = []
 
@@ -32,7 +32,7 @@ async function go (licence, billingInvoice, billingInvoiceLicence, billRunExtern
       const chargingModuleResponse = await _sendTransactionToChargingModule(
         transaction,
         billingPeriod,
-        billingInvoice,
+        bill,
         licence,
         billRunExternalId
       )
@@ -48,11 +48,11 @@ async function go (licence, billingInvoice, billingInvoiceLicence, billRunExtern
   }
 }
 
-async function _sendTransactionToChargingModule (transaction, billingPeriod, billingInvoice, licence, billRunExternalId) {
+async function _sendTransactionToChargingModule (transaction, billingPeriod, bill, licence, billRunExternalId) {
   const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
     transaction,
     billingPeriod,
-    billingInvoice.invoiceAccountNumber,
+    bill.invoiceAccountNumber,
     licence
   )
 

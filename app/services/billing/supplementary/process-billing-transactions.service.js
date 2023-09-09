@@ -17,7 +17,7 @@ const ReverseBillingTransactionsService = require('./reverse-billing-transaction
  * each other out are removed. Any remaining reversed credits and calculated debits are returned.
  *
  * @param {Object[]} calculatedTransactions The calculated transactions to be processed
- * @param {Object} billingInvoice A generated billing invoice that identifies the invoice account ID we need to match
+ * @param {Object} bill A generated bill that identifies the invoice account ID we need to match
  *  against
  * @param {Object} billingInvoiceLicence A generated billing invoice licence that identifies the licence we need to
  *  match against
@@ -26,8 +26,8 @@ const ReverseBillingTransactionsService = require('./reverse-billing-transaction
  * @returns {Object[]} An array of the remaining calculated transactions (ie. those which were not cancelled out by a
  *  previous matching credit)
  */
-async function go (calculatedTransactions, billingInvoice, billingInvoiceLicence, billingPeriod) {
-  const previousTransactions = await _fetchPreviousTransactions(billingInvoice, billingInvoiceLicence, billingPeriod)
+async function go (calculatedTransactions, bill, billingInvoiceLicence, billingPeriod) {
+  const previousTransactions = await _fetchPreviousTransactions(bill, billingInvoiceLicence, billingPeriod)
 
   if (previousTransactions.length === 0) {
     return calculatedTransactions

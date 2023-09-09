@@ -7,7 +7,7 @@
 
 const BillRunError = require('../../../errors/bill-run.error.js')
 const BillRunModel = require('../../../models/water/bill-run.model.js')
-const BillingInvoiceModel = require('../../../models/water/billing-invoice.model.js')
+const BillModel = require('../../../models/water/bill.model.js')
 const BillingInvoiceLicenceModel = require('../../../models/water/billing-invoice-licence.model.js')
 const BillingTransactionModel = require('../../../models/water/billing-transaction.model.js')
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
@@ -18,9 +18,7 @@ const ProcessBillingTransactionsService = require('./process-billing-transaction
 const SendBillingTransactionsService = require('./send-billing-transactions.service.js')
 
 /**
- * Creates the invoices and transactions in both WRLS and the Charging Module API
- *
- * TODO: Currently a placeholder service. Proper implementation is coming
+ * Creates the bills and transactions in both WRLS and the Charging Module API
  *
  * @param {module:BillRunModel} billRun The newly created bill run we need to process
  * @param {Object} billingPeriod An object representing the financial year the transactions are for
@@ -55,7 +53,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
   const dataToPersist = {
     transactions: [],
     // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
-    billingInvoices: new Set(),
+    bills: new Set(),
     billingInvoiceLicences: []
   }
 
@@ -65,7 +63,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
     if (cleansedTransactions.length !== 0) {
       const billingTransactions = await SendBillingTransactionsService.go(
         currentBillingData.licence,
-        currentBillingData.billingInvoice,
+        currentBillingData.bill,
         currentBillingData.billingInvoiceLicence,
         billRunExternalId,
         cleansedTransactions,
@@ -74,28 +72,28 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
 
       dataToPersist.transactions.push(...billingTransactions)
       // Note that sets use add rather than push
-      dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
+      dataToPersist.bills.add(currentBillingData.bill)
       dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
     }
   }
 
   return {
     ...dataToPersist,
-    // We revert the billingInvoices set to an array so we can handle it normally later
-    billingInvoices: [...dataToPersist.billingInvoices]
+    // We revert the bills set to an array so we can handle it normally later
+    bills: [...dataToPersist.bills]
   }
 }
 
 /**
- * Processes each charge version and and returns an object where each key is a billing invoice id which exists in one or
- * more charge versions and the key's value is an object containing the associated licence, billing invoice and billing
+ * Processes each charge version and and returns an object where each key is a bill id which exists in one or
+ * more charge versions and the key's value is an object containing the associated licence, bill and billing
  * invoice licence, along with any required transactions, eg:
  *
  * {
  *   'billing-invoice-licence-id-1': {
  *     billingInvoiceLicence: '...',   // instance of the billing invoice licence
  *     licence: '...',                 // instance of the licence for this billing invoice licence
- *     billingInvoice: '...',          // instance of the billing invoice for this billing invoice licence
+ *     bill: '...',                    // instance of the bill for this billing invoice licence
  *     transactions: []                // array of calculated transactions for this billing invoice licence
  *   },
  *   'billing-invoice-licence-id-2': {
@@ -107,7 +105,7 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
   // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
   // charge version.
   return chargeVersions.reduce((acc, chargeVersion) => {
-    const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
+    const { billingInvoiceLicence, bill } = _retrievePreGeneratedData(
       preGeneratedData,
       chargeVersion.invoiceAccountId,
       chargeVersion.licence
@@ -116,7 +114,7 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
     const { billingInvoiceLicenceId } = billingInvoiceLicence
 
     if (!acc[billingInvoiceLicenceId]) {
-      acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion.licence, billingInvoice, billingInvoiceLicence)
+      acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion.licence, bill, billingInvoiceLicence)
     }
 
     // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
@@ -141,31 +139,31 @@ async function _persistData (dataToPersist) {
   }
 
   await BillingTransactionModel.query().insert(dataToPersist.transactions)
-  await BillingInvoiceModel.query().insert(dataToPersist.billingInvoices)
+  await BillModel.query().insert(dataToPersist.bills)
   await BillingInvoiceLicenceModel.query().insert(dataToPersist.billingInvoiceLicences)
 
   return true
 }
 
 function _retrievePreGeneratedData (preGeneratedData, invoiceAccountId, licence) {
-  const { billingInvoices, billingInvoiceLicences } = preGeneratedData
+  const { bills, billingInvoiceLicences } = preGeneratedData
 
-  const billingInvoice = billingInvoices[invoiceAccountId]
+  const bill = bills[invoiceAccountId]
 
-  const billingInvoiceLicenceKey = _billingInvoiceLicenceKey(billingInvoice.billingInvoiceId, licence.licenceId)
+  const billingInvoiceLicenceKey = _billingInvoiceLicenceKey(bill.billingInvoiceId, licence.licenceId)
   const billingInvoiceLicence = billingInvoiceLicences[billingInvoiceLicenceKey]
 
-  return { billingInvoice, billingInvoiceLicence }
+  return { bill, billingInvoiceLicence }
 }
 
 function _billingInvoiceLicenceKey (billingInvoiceId, licenceId) {
   return `${billingInvoiceId}-${licenceId}`
 }
 
-function _initialBillingData (licence, billingInvoice, billingInvoiceLicence) {
+function _initialBillingData (licence, bill, billingInvoiceLicence) {
   return {
     licence,
-    billingInvoice,
+    bill,
     billingInvoiceLicence,
     calculatedTransactions: []
   }
@@ -174,13 +172,13 @@ function _initialBillingData (licence, billingInvoice, billingInvoiceLicence) {
 async function _cleanseTransactions (currentBillingData, billingPeriod) {
   // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
   // first place
-  if (!currentBillingData.billingInvoice) {
+  if (!currentBillingData.bill) {
     return []
   }
 
   const cleansedTransactions = await ProcessBillingTransactionsService.go(
     currentBillingData.calculatedTransactions,
-    currentBillingData.billingInvoice,
+    currentBillingData.bill,
     currentBillingData.billingInvoiceLicence,
     billingPeriod
   )

@@ -12,16 +12,14 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const HandleErroredBillRunService = require('./handle-errored-bill-run.service.js')
 const LegacyRequestLib = require('../../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
-const ReissueInvoicesService = require('./reissue-invoices.service.js')
+const ReissueBillsService = require('./reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
  * Process a given bill run for the given billing periods. In this case, "process" means that we create the
- * required invoices and transactions for it in both this service and the Charging Module.
- *
- * TODO: flesh out these docs
+ * required bills and transactions for it in both this service and the Charging Module.
  *
  * @param {module:BillRunModel} billRun
  * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`
@@ -34,7 +32,7 @@ async function go (billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    const resultOfReissuing = await _reissueInvoices(billRun)
+    const resultOfReissuing = await _reissueBills(billRun)
 
     await _processBillingPeriods(billingPeriods, billRun, resultOfReissuing)
 
@@ -65,16 +63,16 @@ async function _processBillingPeriods (billingPeriods, billRun, resultOfReissuin
 }
 
 /**
- * Call `ReissueInvoicesService` and log the time taken. We return `true` if any invoices have been reissued (which will
+ * Call `ReissueBillsService` and log the time taken. We return `true` if any bills have been reissued (which will
  * have resulted in db changes), otherwise we return `false` (to indicate there have been no db changes)
  */
-async function _reissueInvoices (billRun) {
+async function _reissueBills (billRun) {
   // If reissuing isn't enabled then simply return `false` to indicate no db change has been made
   if (!FeatureFlagsConfig.enableReissuingBillingBatches) {
     return false
   }
 
-  const result = await ReissueInvoicesService.go(billRun)
+  const result = await ReissueBillsService.go(billRun)
 
   return result
 }
