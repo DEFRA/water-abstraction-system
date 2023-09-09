@@ -18,7 +18,7 @@ const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const UnflagUnbilledLicencesService = require('../../../../app/services/billing/supplementary/unflag-unbilled-licences.service.js')
 
 describe('Unflag unbilled licences service', () => {
-  const billingBatchId = '42e7a42b-8a9a-42b4-b527-2baaedf952f2'
+  const billRunId = '42e7a42b-8a9a-42b4-b527-2baaedf952f2'
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -43,7 +43,7 @@ describe('Unflag unbilled licences service', () => {
     describe('those licences in the current bill run', () => {
       describe('which were not billed', () => {
         it('are unflagged (include_in_sroc_supplementary_billing set to false)', async () => {
-          await UnflagUnbilledLicencesService.go(billingBatchId, allLicenceIds)
+          await UnflagUnbilledLicencesService.go(billRunId, allLicenceIds)
 
           const licenceToBeChecked = await LicenceModel.query().findById(licences.notBilledInBillRun.licenceId)
 
@@ -53,12 +53,12 @@ describe('Unflag unbilled licences service', () => {
 
       describe('which were billed', () => {
         beforeEach(async () => {
-          const { billingInvoiceId } = await BillingInvoiceHelper.add({ billingBatchId })
+          const { billingInvoiceId } = await BillingInvoiceHelper.add({ billingBatchId: billRunId })
           await BillingInvoiceLicenceHelper.add({ billingInvoiceId, licenceId: licences.billedInBillRun.licenceId })
         })
 
         it('are left flagged (include_in_sroc_supplementary_billing still true)', async () => {
-          await UnflagUnbilledLicencesService.go(billingBatchId, allLicenceIds)
+          await UnflagUnbilledLicencesService.go(billRunId, allLicenceIds)
 
           const licenceToBeChecked = await LicenceModel.query().findById(licences.billedInBillRun.licenceId)
 
@@ -69,7 +69,7 @@ describe('Unflag unbilled licences service', () => {
 
     describe('those licences not in the current bill run', () => {
       it('leaves flagged (include_in_sroc_supplementary_billing still true)', async () => {
-        await UnflagUnbilledLicencesService.go(billingBatchId, allLicenceIds)
+        await UnflagUnbilledLicencesService.go(billRunId, allLicenceIds)
 
         const licenceToBeChecked = await LicenceModel.query().findById(licences.notInBillRun.licenceId)
 

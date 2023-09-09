@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the matching debit billing transactions from a previous billing batch and reverses them as credits; removes
+ * Fetches the matching debit billing transactions from a previous bill run and reverses them as credits; removes
  * any which would be cancelled out by the supplied calculated debit transactions; combines the remaining transactions
  * and returns them all
  * @module ProcessBillingTransactionsService
@@ -11,7 +11,7 @@ const FetchPreviousBillingTransactionsService = require('./fetch-previous-billin
 const ReverseBillingTransactionsService = require('./reverse-billing-transactions.service.js')
 
 /**
- * Fetches debit-only billing transactions from the previous billing batch for the invoice account and licence provided
+ * Fetches debit-only billing transactions from the previous bill run for the invoice account and licence provided
  * and reverses them as credits. These credits are compared with the supplied calculated debit transactions (ie. debit
  * transactions which are to be sent to the Charging Module) and any matching pairs of transactions which would cancel
  * each other out are removed. Any remaining reversed credits and calculated debits are returned.

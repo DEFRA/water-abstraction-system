@@ -2,10 +2,10 @@
 
 /**
  * Formats the response for the POST `/bill-runs` endpoint
- * @module CreateBillingBatchPresenter
+ * @module CreateBillRunPresenter
  */
 
-function go (billingBatch) {
+function go (billRun) {
   const {
     billingBatchId: id,
     regionId: region,
@@ -14,7 +14,7 @@ function go (billingBatch) {
     status,
     externalId,
     errorCode
-  } = billingBatch
+  } = billRun
 
   return {
     id,

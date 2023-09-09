@@ -1,21 +1,21 @@
 'use strict'
 
 /**
- * Handles initiating a new billing batch
- * @module InitiateBillingBatchService
+ * Handles initiating a new bill run
+ * @module InitiateBillRunService
  */
 
-const BillingBatchModel = require('../../models/water/billing-batch.model.js')
+const BillRunModel = require('../../models/water/bill-run.model.js')
 const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
-const CreateBillingBatchService = require('./create-billing-batch.service.js')
-const CreateBillingBatchEventService = require('./create-billing-batch-event.service.js')
+const CreateBillRunService = require('./create-bill-run.service.js')
+const CreateBillRunEventService = require('./create-bill-run-event.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
 
 /**
- * Initiate a new billing batch
+ * Initiate a new bill run
  *
- * Initiating a new billing batch means creating both the `billing_batch` and `event` record with the appropriate data,
+ * Initiating a new bill run means creating both the `billing_batch` and `event` record with the appropriate data,
  * along with a bill run record in the SROC Charging Module API.
  *
  * @param {Object} financialYearEndings Object that contains the from and to financial year endings
@@ -23,7 +23,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
  * @param {String} batchType Type of bill run, for example, supplementary
  * @param {String} userEmail Email address of the user who initiated the bill run
  *
- * @returns {module:BillingBatchModel} The newly created billing batch instance
+ * @returns {module:BillRunModel} The newly created bill run instance
  */
 async function go (financialYearEndings, regionId, batchType, userEmail) {
   const liveBillRunExists = await CheckLiveBillRunService.go(regionId, financialYearEndings.toFinancialYearEnding, batchType)
@@ -34,15 +34,15 @@ async function go (financialYearEndings, regionId, batchType, userEmail) {
 
   const chargingModuleResult = await ChargingModuleCreateBillRunService.go(regionId, 'sroc')
 
-  const billingBatchOptions = _billingBatchOptions(chargingModuleResult, batchType)
-  const billingBatch = await CreateBillingBatchService.go(regionId, financialYearEndings, billingBatchOptions)
+  const billRunOptions = _billRunOptions(chargingModuleResult, batchType)
+  const billRun = await CreateBillRunService.go(regionId, financialYearEndings, billRunOptions)
 
-  await CreateBillingBatchEventService.go(billingBatch, userEmail)
+  await CreateBillRunEventService.go(billRun, userEmail)
 
-  return billingBatch
+  return billRun
 }
 
-function _billingBatchOptions (chargingModuleResult, batchType) {
+function _billRunOptions (chargingModuleResult, batchType) {
   const options = {
     batchType,
     scheme: 'sroc'
@@ -56,7 +56,7 @@ function _billingBatchOptions (chargingModuleResult, batchType) {
   }
 
   options.status = 'error'
-  options.errorCode = BillingBatchModel.errorCodes.failedToCreateBillRun
+  options.errorCode = BillRunModel.errorCodes.failedToCreateBillRun
 
   return options
 }

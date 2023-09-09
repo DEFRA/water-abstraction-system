@@ -7,7 +7,7 @@
 
 const { convertPenceToPounds, formatAbstractionPeriod, formatLongDate, formatNumberAsMoney } = require('../base.presenter.js')
 
-function go (billingBatch) {
+function go (billRun) {
   const {
     billingInvoices,
     billRunNumber,
@@ -20,7 +20,7 @@ function go (billingBatch) {
     toFinancialYearEnding,
     batchType: type,
     transactionFileReference: transactionFile
-  } = billingBatch
+  } = billRun
 
   return {
     dateCreated: formatLongDate(createdAt),

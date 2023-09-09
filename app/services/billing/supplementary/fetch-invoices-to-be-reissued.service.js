@@ -26,9 +26,9 @@ async function go (regionId) {
         'originalBillingInvoiceId'
       )
       .where('isFlaggedForRebilling', true)
-      .joinRelated('billingBatch')
-      .where('billingBatch.regionId', regionId)
-      .where('billingBatch.scheme', 'sroc')
+      .joinRelated('billRun')
+      .where('billRun.regionId', regionId)
+      .where('billRun.scheme', 'sroc')
       .withGraphFetched('billingInvoiceLicences.billingTransactions')
       .modifyGraph('billingInvoiceLicences', (builder) => {
         builder.select(
@@ -40,7 +40,7 @@ async function go (regionId) {
     return result
   } catch (error) {
     // If getting invoices errors then we log the error and return an empty array; the db hasn't yet been modified at
-    // this stage so we can simply move on to the next stage of processing the billing batch.
+    // this stage so we can simply move on to the next stage of processing the bill run.
 
     global.GlobalNotifier.omfg(
       'Could not fetch reissue invoices',

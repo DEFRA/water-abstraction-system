@@ -27,8 +27,9 @@ const ReissueInvoiceService = require('../../../../app/services/billing/suppleme
 const ReissueInvoicesService = require('../../../../app/services/billing/supplementary/reissue-invoices.service.js')
 
 describe('Reissue invoices service', () => {
+  const reissueBillRun = { regionId: generateUUID() }
+
   let notifierStub
-  const reissueBillingBatch = { regionId: generateUUID() }
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -54,7 +55,7 @@ describe('Reissue invoices service', () => {
       })
 
       it('returns `false`', async () => {
-        const result = await ReissueInvoicesService.go(reissueBillingBatch)
+        const result = await ReissueInvoicesService.go(reissueBillRun)
 
         expect(result).to.be.false()
       })
@@ -87,13 +88,13 @@ describe('Reissue invoices service', () => {
       })
 
       it('returns `true`', async () => {
-        const result = await ReissueInvoicesService.go(reissueBillingBatch)
+        const result = await ReissueInvoicesService.go(reissueBillRun)
 
         expect(result).to.be.true()
       })
 
       it('persists all billing invoices', async () => {
-        await ReissueInvoicesService.go(reissueBillingBatch)
+        await ReissueInvoicesService.go(reissueBillRun)
 
         const result = await BillingInvoiceModel.query()
 
@@ -101,7 +102,7 @@ describe('Reissue invoices service', () => {
       })
 
       it('persists all billing invoice licences', async () => {
-        await ReissueInvoicesService.go(reissueBillingBatch)
+        await ReissueInvoicesService.go(reissueBillRun)
 
         const result = await BillingInvoiceLicenceModel.query()
 
@@ -109,7 +110,7 @@ describe('Reissue invoices service', () => {
       })
 
       it('persists all transactions', async () => {
-        await ReissueInvoicesService.go(reissueBillingBatch)
+        await ReissueInvoicesService.go(reissueBillRun)
 
         const result = await BillingTransactionModel.query()
 

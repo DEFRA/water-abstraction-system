@@ -16,15 +16,15 @@ const GenerateBillingInvoiceLicenceService = require('./generate-billing-invoice
  * licence id.
  * *
  * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the invoice account ids and licences to use
- * @param {String} billingBatchId The billing batch id to be added to the billing invoices
+ * @param {String} billRunId The bill run id to be added to the billing invoices
  * @param {Object} billingPeriod The billing period of the billing invoices
  *
  * @returns {Object} An object containing billingInvoices and billingInvoiceLicences objects
  */
-async function go (chargeVersions, billingBatchId, billingPeriod) {
+async function go (chargeVersions, billRunId, billingPeriod) {
   const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
 
-  const billingInvoices = _preGenerateBillingInvoices(invoiceAccounts, billingBatchId, billingPeriod)
+  const billingInvoices = _preGenerateBillingInvoices(invoiceAccounts, billRunId, billingPeriod)
   const billingInvoiceLicences = _preGenerateBillingInvoiceLicences(chargeVersions, billingInvoices)
 
   return { billingInvoices, billingInvoiceLicences }
@@ -78,7 +78,7 @@ function _billingInvoiceLicenceKey (billingInvoiceId, licenceId) {
   *   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
   * }
   */
-function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPeriod) {
+function _preGenerateBillingInvoices (invoiceAccounts, billRunId, billingPeriod) {
   const keyedBillingInvoices = invoiceAccounts.reduce((acc, invoiceAccount) => {
     // Note that the array of invoice accounts will already have been deduped so we don't need to check whether a
     // billing invoice licence already exists in the object before generating one
@@ -86,7 +86,7 @@ function _preGenerateBillingInvoices (invoiceAccounts, billingBatchId, billingPe
       ...acc,
       [invoiceAccount.invoiceAccountId]: GenerateBillingInvoiceService.go(
         invoiceAccount,
-        billingBatchId,
+        billRunId,
         billingPeriod.endDate.getFullYear()
       )
     }

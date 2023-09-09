@@ -27,9 +27,9 @@ class BillingInvoiceModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      billingBatch: {
+      billRun: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'billing-batch.model',
+        modelClass: 'bill-run.model',
         join: {
           from: 'billingInvoices.billingBatchId',
           to: 'billingBatches.billingBatchId'

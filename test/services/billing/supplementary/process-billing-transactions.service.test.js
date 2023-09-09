@@ -14,7 +14,7 @@ const FetchPreviousBillingTransactionsService = require('../../../../app/service
 // Thing under test
 const ProcessBillingTransactionsService = require('../../../../app/services/billing/supplementary/process-billing-transactions.service.js')
 
-describe('Process billing batch service', () => {
+describe('Process Billing Transactions service', () => {
   const billingInvoice = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
   const billingInvoiceLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
 
@@ -38,11 +38,11 @@ describe('Process billing batch service', () => {
       ]
     })
 
-    describe('match to transactions on a previous billing batch', () => {
+    describe('match to transactions on a previous bill run', () => {
       describe('and the calculated transactions provided', () => {
         let previousTransactions
 
-        describe('match all the previous transactions from the last billing batch', () => {
+        describe('match all the previous transactions from the last bill run', () => {
           beforeEach(() => {
             previousTransactions = [
               _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
@@ -65,7 +65,7 @@ describe('Process billing batch service', () => {
           })
         })
 
-        describe('are cancelled out by the previous transactions from the last billing batch', () => {
+        describe('are cancelled out by the previous transactions from the last bill run', () => {
           beforeEach(() => {
             previousTransactions = [
               _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
@@ -112,7 +112,7 @@ describe('Process billing batch service', () => {
           })
         })
 
-        describe('partially match the previous transactions from the last billing batch', () => {
+        describe('partially match the previous transactions from the last bill run', () => {
           beforeEach(() => {
             previousTransactions = [
               _generatePreviousTransaction('4.10.1', 365, 'I_WILL_BE_REMOVED_1'),
@@ -140,7 +140,7 @@ describe('Process billing batch service', () => {
       })
     })
 
-    describe('do not match to transactions on a previous billing batch', () => {
+    describe('do not match to transactions on a previous bill run', () => {
       beforeEach(() => {
         Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves([])
       })

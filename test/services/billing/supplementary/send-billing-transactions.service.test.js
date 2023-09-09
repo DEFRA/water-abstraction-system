@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchError = require('../../../../app/errors/billing-batch.error.js')
-const BillingBatchModel = require('../../../../app/models/water/billing-batch.model.js')
+const BillRunError = require('../../../../app/errors/bill-run.error.js')
+const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
 
 // Things we need to stub
 const ChargingModuleCreateTransactionService = require('../../../../app/services/charging-module/create-transaction.service.js')
@@ -19,7 +19,7 @@ const ChargingModuleCreateTransactionService = require('../../../../app/services
 const SendBillingTransactionsService = require('../../../../app/services/billing/supplementary/send-billing-transactions.service.js')
 
 describe('Send billing transactions service', () => {
-  const billingBatchExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
+  const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
   const billingInvoice = { invoiceAccountNumber: 'ABC123' }
   const billingInvoiceLicence = { billingInvoiceLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a' }
   const billingPeriod = {
@@ -91,7 +91,7 @@ describe('Send billing transactions service', () => {
         licence,
         billingInvoice,
         billingInvoiceLicence,
-        billingBatchExternalId,
+        billRunExternalId,
         billingTransactions,
         billingPeriod
       )
@@ -108,13 +108,13 @@ describe('Send billing transactions service', () => {
       Sinon.stub(ChargingModuleCreateTransactionService, 'go').rejects()
     })
 
-    it('throws a BillingBatchError with the correct code', async () => {
+    it('throws a BillRunError with the correct code', async () => {
       const error = await expect(
         SendBillingTransactionsService.go(
           licence,
           billingInvoice,
           billingInvoiceLicence,
-          billingBatchExternalId,
+          billRunExternalId,
           billingTransactions,
           billingPeriod
         )
@@ -122,8 +122,8 @@ describe('Send billing transactions service', () => {
         .to
         .reject()
 
-      expect(error).to.be.an.instanceOf(BillingBatchError)
-      expect(error.code).to.equal(BillingBatchModel.errorCodes.failedToCreateCharge)
+      expect(error).to.be.an.instanceOf(BillRunError)
+      expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
     })
   })
 })

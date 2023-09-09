@@ -14,19 +14,19 @@ const ReissueInvoiceService = require('./reissue-invoice.service.js')
 /**
  * Handles the reissuing of invoices
  *
- * We receive the billing batch that the reissued invoices are to be created on and infer from this the region to be
+ * We receive the bill run that the reissued invoices are to be created on and infer from this the region to be
  * reissued. We check this region for invoices marked for reissuing. For each one of these we call
  * `ReissueInvoiceService` which handles the actual reissuing of an invoice and collects the returned invoice, invoice
  * licence and transaction data which we batch persist once all invoices have been reissued. Finally we return a boolean
  * to indicate whether or not any invoices were reissued.
  *
- * @param {module:BillingBatchModel} reissueBillingBatch The billing batch that the reissued invoices will be created on
+ * @param {module:BillRunModel} reissueBillRun The bill run that the reissued invoices will be created on
  *
  * @returns {Boolean} `true` if any invoices were reissued; `false` if not
 */
 
-async function go (reissueBillingBatch) {
-  const sourceInvoices = await FetchInvoicesToBeReissuedService.go(reissueBillingBatch.regionId)
+async function go (reissueBillRun) {
+  const sourceInvoices = await FetchInvoicesToBeReissuedService.go(reissueBillRun.regionId)
 
   if (sourceInvoices.length === 0) {
     return false
@@ -39,7 +39,7 @@ async function go (reissueBillingBatch) {
   }
 
   for (const sourceInvoice of sourceInvoices) {
-    const newData = await ReissueInvoiceService.go(sourceInvoice, reissueBillingBatch)
+    const newData = await ReissueInvoiceService.go(sourceInvoice, reissueBillRun)
 
     _addNewDataToDataToPersist(dataToPersist, newData)
   }

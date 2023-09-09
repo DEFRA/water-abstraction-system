@@ -50,23 +50,23 @@ async function _deleteBilling () {
     return billingInvoice.billingInvoiceId
   })
 
-  const billingBatches = await db
+  const billRuns = await db
     .from('water.billingInvoices')
     .whereIn('billingInvoiceId', billingInvoiceIds)
     .del(['billingBatchId'])
 
-  const billingBatchIds = billingBatches.map((billingBatch) => {
-    return billingBatch.billingBatchId
+  const billRunIds = billRuns.map((billRun) => {
+    return billRun.billingBatchId
   })
 
   await db
     .from('water.billingBatchChargeVersionYears')
-    .whereIn('billingBatchId', billingBatchIds)
+    .whereIn('billingBatchId', billRunIds)
     .del()
 
   await db
     .from('water.billingVolumes')
-    .whereIn('billingBatchId', billingBatchIds)
+    .whereIn('billingBatchId', billRunIds)
     .del()
 
   // Just deleting the `billingBatches` based on the `billingBatchIds` does not always remove all test records so the

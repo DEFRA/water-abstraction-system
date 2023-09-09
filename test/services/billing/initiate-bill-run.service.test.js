@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
+const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const EventModel = require('../../../app/models/water/event.model.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
@@ -17,12 +17,12 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 // Things we need to stub
 const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('../../../app/services/billing/check-live-bill-run.service.js')
-const ProcessBillingBatchService = require('../../../app/services/billing/supplementary/process-billing-batch.service.js')
+const SupplementaryProcessBillRunService = require('../../../app/services/billing/supplementary/process-bill-run.service.js')
 
 // Thing under test
-const InitiateBillingBatchService = require('../../../app/services/billing/initiate-billing-batch.service.js')
+const InitiateBillRunService = require('../../../app/services/billing/initiate-bill-run.service.js')
 
-describe('Initiate Billing Batch service', () => {
+describe('Initiate Bill Run service', () => {
   const batchType = 'supplementary'
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
   const user = 'test.user@defra.gov.uk'
@@ -36,16 +36,16 @@ describe('Initiate Billing Batch service', () => {
 
     Sinon.stub(CheckLiveBillRunService, 'go').resolves(false)
 
-    // The InitiateBillingBatch service does not await the call to the ProcessBillingBatchService. It is intended to
+    // The InitiateBillRun service does not await the call to the ProcessBillRunService. It is intended to
     // kick of the process and then move on. This is why we simply stub it in the tests.
-    Sinon.stub(ProcessBillingBatchService, 'go')
+    Sinon.stub(SupplementaryProcessBillRunService, 'go')
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when initiating a billing batch succeeds', () => {
+  describe('when initiating a bill run succeeds', () => {
     const responseBody = {
       billRun: {
         id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
@@ -67,30 +67,30 @@ describe('Initiate Billing Batch service', () => {
       })
     })
 
-    it('creates a new billing batch record', async () => {
-      await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
+    it('creates a new bill run record', async () => {
+      await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      const result = await BillingBatchModel.query().limit(1).first()
+      const result = await BillRunModel.query().limit(1).first()
 
       expect(result.externalId).to.equal(responseBody.billRun.id)
       expect(result.billRunNumber).to.equal(responseBody.billRun.billRunNumber)
     })
 
     it('creates a new event record', async () => {
-      await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
+      await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
       const count = await EventModel.query().resultSize()
 
       expect(count).to.equal(1)
     })
 
-    it('returns the new billing batch', async () => {
-      const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
+    it('returns the new bill run', async () => {
+      const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      const billingBatch = await BillingBatchModel.query().first()
+      const billRun = await BillRunModel.query().first()
 
-      expect(result.billingBatchId).to.equal(billingBatch.billingBatchId)
-      expect(result.regionId).to.equal(billingBatch.regionId)
+      expect(result.billingBatchId).to.equal(billRun.billingBatchId)
+      expect(result.regionId).to.equal(billRun.regionId)
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
       expect(result.status).to.equal('queued')
@@ -98,7 +98,7 @@ describe('Initiate Billing Batch service', () => {
     })
   })
 
-  describe('when initiating a billing batch fails', () => {
+  describe('when initiating a bill run fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
         Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
@@ -119,12 +119,12 @@ describe('Initiate Billing Batch service', () => {
       })
 
       it('creates a bill run with `error` status and error code 50', async () => {
-        const result = await InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)
+        const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-        const billingBatch = await BillingBatchModel.query().limit(1).first()
+        const billRun = await BillRunModel.query().limit(1).first()
 
-        expect(result.billingBatchId).to.equal(billingBatch.billingBatchId)
-        expect(result.regionId).to.equal(billingBatch.regionId)
+        expect(result.billingBatchId).to.equal(billRun.billingBatchId)
+        expect(result.regionId).to.equal(billRun.regionId)
         expect(result.scheme).to.equal('sroc')
         expect(result.batchType).to.equal('supplementary')
         expect(result.status).to.equal('error')
@@ -138,7 +138,7 @@ describe('Initiate Billing Batch service', () => {
       })
 
       it('rejects with an appropriate error', async () => {
-        const err = await expect(InitiateBillingBatchService.go(financialYearEndings, regionId, batchType, user)).to.reject()
+        const err = await expect(InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)).to.reject()
 
         expect(err).to.be.an.error()
         expect(err.message).to.equal('Batch already live for region')

@@ -1,6 +1,6 @@
 'use strict'
 
-class BillingBatchError extends Error {
+class BillRunError extends Error {
   constructor (error, code = null) {
     super(error)
 
@@ -8,4 +8,4 @@ class BillingBatchError extends Error {
   }
 }
 
-module.exports = BillingBatchError
+module.exports = BillRunError

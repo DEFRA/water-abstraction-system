@@ -11,9 +11,9 @@ const { expect } = Code
 const MockBillRunPresenter = require('../../../app/presenters//data/mock-bill-run.presenter.js')
 
 describe('Mock Bill Run presenter', () => {
-  describe('when provided with a mocked billing batch', () => {
-    it('correctly presents the billing batch', () => {
-      const result = MockBillRunPresenter.go(mockedBillingBatch)
+  describe('when provided with a mocked bill run', () => {
+    it('correctly presents the bill run', () => {
+      const result = MockBillRunPresenter.go(mockedBillRun)
 
       expect(result.dateCreated).to.equal('9 August 2023')
       expect(result.status).to.equal('sent')
@@ -27,7 +27,7 @@ describe('Mock Bill Run presenter', () => {
     })
 
     it('correctly presents a billing invoice', () => {
-      const { bills: results } = MockBillRunPresenter.go(mockedBillingBatch)
+      const { bills: results } = MockBillRunPresenter.go(mockedBillRun)
 
       expect(results[0].id).to.equal('86e5841a-81a9-4207-97ce-cee0917c0975')
       expect(results[0].account).to.equal('Z11895994A')
@@ -42,7 +42,7 @@ describe('Mock Bill Run presenter', () => {
     })
 
     it('correctly presents a billing invoice licence', () => {
-      const { licences: results } = MockBillRunPresenter.go(mockedBillingBatch).bills[0]
+      const { licences: results } = MockBillRunPresenter.go(mockedBillRun).bills[0]
 
       expect(results[0].id).to.equal('bedd5971-4491-4c6f-a8cd-b75592ab4328')
       expect(results[0].licence).to.equal('TH/037/0051/002')
@@ -53,7 +53,7 @@ describe('Mock Bill Run presenter', () => {
     })
 
     it('correctly presents a billing transaction', () => {
-      const { transactions: results } = MockBillRunPresenter.go(mockedBillingBatch).bills[0].licences[0]
+      const { transactions: results } = MockBillRunPresenter.go(mockedBillRun).bills[0].licences[0]
 
       expect(results[0].type).to.equal('Water abstraction charge')
       expect(results[0].lineDescription).to.equal('Water abstraction charge: Chris data thingy')
@@ -70,7 +70,7 @@ describe('Mock Bill Run presenter', () => {
     })
 
     it('correctly presents a charge purpose', () => {
-      const { elements: results } = MockBillRunPresenter.go(mockedBillingBatch).bills[0].licences[0].transactions[0]
+      const { elements: results } = MockBillRunPresenter.go(mockedBillRun).bills[0].licences[0].transactions[0]
 
       expect(results[0].id).to.equal('30c31312-59ef-4818-8e78-20ac115c39f7')
       expect(results[0].purpose).to.equal('Make-Up Or Top Up Water')
@@ -80,7 +80,7 @@ describe('Mock Bill Run presenter', () => {
   })
 })
 
-const mockedBillingBatch = {
+const mockedBillRun = {
   billingBatchId: '6e9eb9f6-cf4d-40ea-929c-e8a915d84ef5',
   batchType: 'supplementary',
   billRunNumber: 10029,

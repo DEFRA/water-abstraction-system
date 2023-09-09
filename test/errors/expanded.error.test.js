@@ -16,7 +16,7 @@ describe('ExpandedError', () => {
 
     beforeEach(() => {
       additionalData = {
-        billingBatchId: '37f2871b-e0a7-471f-902b-1e55b09d6d88',
+        billRunId: '37f2871b-e0a7-471f-902b-1e55b09d6d88',
         details: {
           type: 'supplementary',
           status: 'errored'
@@ -28,7 +28,7 @@ describe('ExpandedError', () => {
       const result = new ExpandedError('My test error', additionalData)
 
       expect(result.message).to.equal('My test error')
-      expect(result.billingBatchId).to.equal(additionalData.billingBatchId)
+      expect(result.billRunId).to.equal(additionalData.billRunId)
       expect(result.details).to.equal(additionalData.details)
     })
   })

@@ -35,9 +35,9 @@ class RegionModel extends WaterBaseModel {
           to: 'licences.regionId'
         }
       },
-      billingBatches: {
+      billRuns: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-batch.model',
+        modelClass: 'bill-run.model',
         join: {
           from: 'regions.regionId',
           to: 'billingBatches.regionId'

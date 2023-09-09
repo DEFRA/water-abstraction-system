@@ -35,7 +35,7 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
  *
  * @param {module:BillingInvoiceModel} sourceInvoice The invoice to be reissued. Note that we expect it to include the
  * billing invoice licences and transactions
- * @param {module:BillingBatchModel} reissueBillingBatch The billing batch that the new invoices should belong to
+ * @param {module:BillRunModel} reissueBillRun The bill run that the new invoices should belong to
  *
  * @returns {Object} dataToReturn Data that has been generated while reissuing the invoice
  * @returns {Object[]} dataToReturn.billingInvoices Array of billing invoices
@@ -43,7 +43,7 @@ const GenerateBillingInvoiceService = require('./generate-billing-invoice.servic
  * @returns {Object[]} dataToReturn.billingTransactions Array of transactions
  */
 
-async function go (sourceInvoice, reissueBillingBatch) {
+async function go (sourceInvoice, reissueBillRun) {
   const dataToReturn = {
     billingInvoices: [],
     billingInvoiceLicences: [],
@@ -53,25 +53,25 @@ async function go (sourceInvoice, reissueBillingBatch) {
   // When a reissue request is sent to the Charging Module, it creates 2 new invoices (one to cancel out the original
   // invoice and one to be the new version of it) and returns their ids
   const chargingModuleReissueInvoiceIds = await _sendReissueRequest(
-    reissueBillingBatch.externalId,
+    reissueBillRun.externalId,
     sourceInvoice.externalId
   )
 
   // We can't get the reissue invoices right away as the CM might be busy reissuing so we wait until the status
   // indicated that it's ready for us to proceed
-  await _pauseUntilNotPending(reissueBillingBatch.externalId)
+  await _pauseUntilNotPending(reissueBillRun.externalId)
 
   for (const chargingModuleReissueInvoiceId of chargingModuleReissueInvoiceIds) {
     // Because we only have the CM invoice's id we now need to fetch its details via the "view invoice" endpoint
     const chargingModuleReissueInvoice = await _sendViewInvoiceRequest(
-      reissueBillingBatch,
+      reissueBillRun,
       chargingModuleReissueInvoiceId
     )
 
     const reissueBillingInvoice = _retrieveOrGenerateBillingInvoice(
       dataToReturn,
       sourceInvoice,
-      reissueBillingBatch,
+      reissueBillRun,
       chargingModuleReissueInvoice
     )
 
@@ -121,7 +121,7 @@ async function go (sourceInvoice, reissueBillingBatch) {
  * This service sends "view status" requests to the CM (every second to avoid bombarding it) until the status is not
  * `pending`, at which point it returns.
  */
-async function _pauseUntilNotPending (billingBatchExternalId) {
+async function _pauseUntilNotPending (billRunExternalId) {
   let status
 
   do {
@@ -132,12 +132,12 @@ async function _pauseUntilNotPending (billingBatchExternalId) {
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
-    const result = await ChargingModuleBillRunStatusService.go(billingBatchExternalId)
+    const result = await ChargingModuleBillRunStatusService.go(billRunExternalId)
 
     if (!result.succeeded) {
       const error = new ExpandedError(
         'Charging Module reissue request failed',
-        { billingBatchExternalId, responseBody: result.response.body }
+        { billRunExternalId, responseBody: result.response.body }
       )
 
       throw error
@@ -223,7 +223,7 @@ function _retrieveChargingModuleLicence (chargingModuleInvoice, licenceRef) {
  * If a billing invoice exists for this combination of source invoice and CM reissue invoice then return it; otherwise,
  * generate it, store it and then return it.
  */
-function _retrieveOrGenerateBillingInvoice (dataToReturn, sourceInvoice, reissueBillingBatch, chargingModuleReissueInvoice) {
+function _retrieveOrGenerateBillingInvoice (dataToReturn, sourceInvoice, reissueBillRun, chargingModuleReissueInvoice) {
   // Because we have nested iteration of source invoice and Charging Module reissue invoice, we need to ensure we have
   // a billing invoice for every combination of these, hence we search by both of their ids
   const existingBillingInvoice = dataToReturn.billingInvoices.find((invoice) => {
@@ -238,7 +238,7 @@ function _retrieveOrGenerateBillingInvoice (dataToReturn, sourceInvoice, reissue
   const translatedChargingModuleInvoice = _mapChargingModuleInvoice(chargingModuleReissueInvoice)
   const generatedBillingInvoice = GenerateBillingInvoiceService.go(
     sourceInvoice,
-    reissueBillingBatch.billingBatchId,
+    reissueBillRun.billingBatchId,
     sourceInvoice.financialYearEnding
   )
 
@@ -275,14 +275,14 @@ function _retrieveOrGenerateBillingInvoiceLicence (dataToReturn, sourceInvoice, 
   return newBillingInvoiceLicence
 }
 
-async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
-  const result = await ChargingModuleReissueInvoiceService.go(billingBatchExternalId, invoiceExternalId)
+async function _sendReissueRequest (billRunExternalId, invoiceExternalId) {
+  const result = await ChargingModuleReissueInvoiceService.go(billRunExternalId, invoiceExternalId)
 
   if (!result.succeeded) {
     const error = new ExpandedError(
       'Charging Module reissue request failed',
       {
-        billingBatchExternalId,
+        billRunExternalId,
         invoiceExternalId,
         responseBody: result.response.body
       }
@@ -297,14 +297,14 @@ async function _sendReissueRequest (billingBatchExternalId, invoiceExternalId) {
   })
 }
 
-async function _sendViewInvoiceRequest (billingBatch, reissueInvoiceId) {
-  const result = await ChargingModuleViewInvoiceService.go(billingBatch.externalId, reissueInvoiceId)
+async function _sendViewInvoiceRequest (billRun, reissueInvoiceId) {
+  const result = await ChargingModuleViewInvoiceService.go(billRun.externalId, reissueInvoiceId)
 
   if (!result.succeeded) {
     const error = new ExpandedError(
       'Charging Module view invoice request failed',
       {
-        billingBatchExternalId: billingBatch.externalId,
+        billRunExternalId: billRun.externalId,
         reissueInvoiceExternalId: reissueInvoiceId,
         responseBody: result.response.body
       }

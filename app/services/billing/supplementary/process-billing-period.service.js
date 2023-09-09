@@ -5,8 +5,8 @@
  * @module ProcessBillingPeriodService
  */
 
-const BillingBatchError = require('../../../errors/billing-batch.error.js')
-const BillingBatchModel = require('../../../models/water/billing-batch.model.js')
+const BillRunError = require('../../../errors/bill-run.error.js')
+const BillRunModel = require('../../../models/water/bill-run.model.js')
 const BillingInvoiceModel = require('../../../models/water/billing-invoice.model.js')
 const BillingInvoiceLicenceModel = require('../../../models/water/billing-invoice-licence.model.js')
 const BillingTransactionModel = require('../../../models/water/billing-transaction.model.js')
@@ -22,25 +22,25 @@ const SendBillingTransactionsService = require('./send-billing-transactions.serv
  *
  * TODO: Currently a placeholder service. Proper implementation is coming
  *
- * @param {module:BillingBatchModel} billingBatch The newly created bill batch we need to process
+ * @param {module:BillRunModel} billRun The newly created bill run we need to process
  * @param {Object} billingPeriod An object representing the financial year the transactions are for
  * @param {module:ChargeVersionModel[]} chargeVersions The charge versions to create transactions for
  *
  * @returns {Boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go (billingBatch, billingPeriod, chargeVersions) {
+async function go (billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
     return false
   }
 
   const preGeneratedData = await PreGenerateBillingDataService.go(
     chargeVersions,
-    billingBatch.billingBatchId,
+    billRun.billingBatchId,
     billingPeriod
   )
 
   const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
-  const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billingBatch.externalId)
+  const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billRun.externalId)
 
   const didWePersistData = await _persistData(dataToPersist)
 
@@ -51,7 +51,7 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
  * Iterates over the populated billing data and builds an object of data to be persisted. This process includes sending
  * "create transaction" requests to the Charging Module as this data is needed to fully create our transaction records
  */
-async function _buildDataToPersist (billingData, billingPeriod, billingBatchExternalId) {
+async function _buildDataToPersist (billingData, billingPeriod, billRunExternalId) {
   const dataToPersist = {
     transactions: [],
     // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
@@ -67,7 +67,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billingBatchExte
         currentBillingData.licence,
         currentBillingData.billingInvoice,
         currentBillingData.billingInvoiceLicence,
-        billingBatchExternalId,
+        billRunExternalId,
         cleansedTransactions,
         billingPeriod
       )
@@ -212,7 +212,7 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
 
     return transactions
   } catch (error) {
-    throw new BillingBatchError(error, BillingBatchModel.errorCodes.failedToPrepareTransactions)
+    throw new BillRunError(error, BillRunModel.errorCodes.failedToPrepareTransactions)
   }
 }
 

@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for billingBatches
- * @module BillingBatchModel
+ * Model for billing_batches
+ * @module BillRunModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class BillingBatchModel extends WaterBaseModel {
+class BillRunModel extends WaterBaseModel {
   static get tableName () {
     return 'billingBatches'
   }
@@ -61,4 +61,4 @@ class BillingBatchModel extends WaterBaseModel {
   }
 }
 
-module.exports = BillingBatchModel
+module.exports = BillRunModel

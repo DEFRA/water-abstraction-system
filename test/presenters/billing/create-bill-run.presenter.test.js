@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CreateBillingBatchPresenter = require('../../../app/presenters/billing/create-billing-batch.presenter.js')
+const CreateBillRunPresenter = require('../../../app/presenters/billing/create-bill-run.presenter.js')
 
-describe('Create Billing Batch presenter', () => {
+describe('Create Bill Run presenter', () => {
   let data
 
-  describe('when provided with a populated billing batch', () => {
+  describe('when provided with a populated bill run', () => {
     beforeEach(() => {
       data = {
         billingBatchId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
@@ -26,7 +26,7 @@ describe('Create Billing Batch presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateBillingBatchPresenter.go(data)
+      const result = CreateBillRunPresenter.go(data)
 
       expect(result.id).to.equal(data.billingBatchId)
       expect(result.region).to.equal(data.regionId)
@@ -37,7 +37,7 @@ describe('Create Billing Batch presenter', () => {
     })
   })
 
-  describe('when provided with unpopulated billing batch', () => {
+  describe('when provided with unpopulated bill run', () => {
     beforeEach(() => {
       data = {
         billingBatchId: null,
@@ -50,7 +50,7 @@ describe('Create Billing Batch presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateBillingBatchPresenter.go(data)
+      const result = CreateBillRunPresenter.go(data)
 
       expect(result.id).to.be.null()
       expect(result.region).to.be.null()

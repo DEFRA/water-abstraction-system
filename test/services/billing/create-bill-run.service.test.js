@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
+const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const RegionModel = require('../../../app/models/water/region.model.js')
 
 // Thing under test
-const CreateBillingBatchService = require('../../../app/services/billing/create-billing-batch.service.js')
+const CreateBillRunService = require('../../../app/services/billing/create-bill-run.service.js')
 
-describe('Create Billing Batch service', () => {
+describe('Create Bill Run service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
   let region
 
@@ -27,10 +27,10 @@ describe('Create Billing Batch service', () => {
   })
 
   describe('when the defaults are not overridden', () => {
-    it('returns the new billing batch instance containing the defaults', async () => {
-      const result = await CreateBillingBatchService.go(region.regionId, financialYearEndings)
+    it('returns the new bill run instance containing the defaults', async () => {
+      const result = await CreateBillRunService.go(region.regionId, financialYearEndings)
 
-      expect(result).to.be.an.instanceOf(BillingBatchModel)
+      expect(result).to.be.an.instanceOf(BillRunModel)
 
       expect(result.fromFinancialYearEnding).to.equal(2023)
       expect(result.toFinancialYearEnding).to.equal(2024)
@@ -54,10 +54,10 @@ describe('Create Billing Batch service', () => {
     const status = 'error'
     const errorCode = 50
 
-    it('returns the new billing batch instance containing the provided values', async () => {
-      const result = await CreateBillingBatchService.go(region.regionId, financialYearEndings, { batchType, scheme, source, externalId, status, errorCode })
+    it('returns the new bill run instance containing the provided values', async () => {
+      const result = await CreateBillRunService.go(region.regionId, financialYearEndings, { batchType, scheme, source, externalId, status, errorCode })
 
-      expect(result).to.be.an.instanceOf(BillingBatchModel)
+      expect(result).to.be.an.instanceOf(BillRunModel)
 
       expect(result.fromFinancialYearEnding).to.equal(2023)
       expect(result.toFinancialYearEnding).to.equal(2024)
@@ -77,10 +77,10 @@ describe('Create Billing Batch service', () => {
     const externalId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
     const status = 'error'
 
-    it('returns the new billing batch instance containing the provided values', async () => {
-      const result = await CreateBillingBatchService.go(region.regionId, financialYearEndings, { externalId, status })
+    it('returns the new bill run instance containing the provided values', async () => {
+      const result = await CreateBillRunService.go(region.regionId, financialYearEndings, { externalId, status })
 
-      expect(result).to.be.an.instanceOf(BillingBatchModel)
+      expect(result).to.be.an.instanceOf(BillRunModel)
 
       expect(result.fromFinancialYearEnding).to.equal(2023)
       expect(result.toFinancialYearEnding).to.equal(2024)

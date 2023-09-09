@@ -9,16 +9,16 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
-const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
+const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const EventModel = require('../../../app/models/water/event.model.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Thing under test
-const CreateBillingBatchEventService = require('../../../app/services/billing/create-billing-batch-event.service.js')
+const CreateBillRunEventService = require('../../../app/services/billing/create-bill-run-event.service.js')
 
-describe('Create Event service', () => {
+describe('Create Bill Run Event service', () => {
   let clock
   let testDate
 
@@ -34,26 +34,27 @@ describe('Create Event service', () => {
     Sinon.restore()
   })
 
-  describe('when a BillingBatchModel instance is provided', () => {
+  describe('when a BillRunModel instance is provided', () => {
     const issuer = 'test.user@defra.gov.uk'
-    let billingBatch
+
+    let billRun
 
     beforeEach(async () => {
       const region = await RegionHelper.add()
-      const testBillingBatch = await BillingBatchHelper.add({ regionId: region.regionId })
+      const testBillRun = await BillRunHelper.add({ regionId: region.regionId })
 
-      billingBatch = await BillingBatchModel.query()
-        .findById(testBillingBatch.billingBatchId)
+      billRun = await BillRunModel.query()
+        .findById(testBillRun.billingBatchId)
         .withGraphFetched('region')
     })
 
     it('creates an event record', async () => {
-      const result = await CreateBillingBatchEventService.go(billingBatch, issuer)
+      const result = await CreateBillRunEventService.go(billRun, issuer)
 
       expect(result).to.be.an.instanceOf(EventModel)
 
       expect(result.type).to.equal('billing-batch')
-      expect(result.subtype).to.equal(billingBatch.batchType)
+      expect(result.subtype).to.equal(billRun.batchType)
       expect(result.issuer).to.equal(issuer)
       expect(result.licences).to.equal([])
       expect(result.status).to.equal('start')
@@ -61,7 +62,7 @@ describe('Create Event service', () => {
       expect(result.updatedAt).to.equal(testDate)
 
       expect(result.metadata).to.exist()
-      expect(result.metadata.batch.id).to.equal(billingBatch.billingBatchId)
+      expect(result.metadata.batch.id).to.equal(billRun.billingBatchId)
     })
   })
 })

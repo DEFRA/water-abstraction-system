@@ -5,8 +5,8 @@
  * @module SendBillingTransactionsService
  */
 
-const BillingBatchError = require('../../../errors/billing-batch.error.js')
-const BillingBatchModel = require('../../../models/water/billing-batch.model.js')
+const BillRunError = require('../../../errors/bill-run.error.js')
+const BillRunModel = require('../../../models/water/bill-run.model.js')
 const ChargingModuleCreateTransactionService = require('../../charging-module/create-transaction.service.js')
 const ChargingModuleCreateTransactionPresenter = require('../../../presenters/charging-module/create-transaction.presenter.js')
 
@@ -18,13 +18,13 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  * @param {module:LicenceModel} licence The licence that each transaction is linked to
  * @param {module:BillingInvoiceModel} billingInvoice The billing invoice each transaction is to be linked to
  * @param {module:BillingInvoiceLicenceModel} billingInvoiceLicence The billing invoice licence each transaction is to be linked to
- * @param {string} billingBatchExternalId The Charging Module billing batch id that the transactions are to be created on
+ * @param {string} billRunExternalId The Charging Module bill run id that the transactions are to be created on
  * @param {Object[]} billingTransactions The transactions to be sent to the Charging Module
  * @param {Object} billingPeriod The billing period of the transactions
  *
  * @returns {Object[]} Array of transactions which have been sent to the Charging Module
  */
-async function go (licence, billingInvoice, billingInvoiceLicence, billingBatchExternalId, billingTransactions, billingPeriod) {
+async function go (licence, billingInvoice, billingInvoiceLicence, billRunExternalId, billingTransactions, billingPeriod) {
   try {
     const sentTransactions = []
 
@@ -34,7 +34,7 @@ async function go (licence, billingInvoice, billingInvoiceLicence, billingBatchE
         billingPeriod,
         billingInvoice,
         licence,
-        billingBatchExternalId
+        billRunExternalId
       )
 
       _updateTransaction(transaction, chargingModuleResponse, billingInvoiceLicence)
@@ -44,11 +44,11 @@ async function go (licence, billingInvoice, billingInvoiceLicence, billingBatchE
 
     return sentTransactions
   } catch (error) {
-    throw new BillingBatchError(error, BillingBatchModel.errorCodes.failedToCreateCharge)
+    throw new BillRunError(error, BillRunModel.errorCodes.failedToCreateCharge)
   }
 }
 
-async function _sendTransactionToChargingModule (transaction, billingPeriod, billingInvoice, licence, billingBatchExternalId) {
+async function _sendTransactionToChargingModule (transaction, billingPeriod, billingInvoice, licence, billRunExternalId) {
   const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
     transaction,
     billingPeriod,
@@ -56,7 +56,7 @@ async function _sendTransactionToChargingModule (transaction, billingPeriod, bil
     licence
   )
 
-  return ChargingModuleCreateTransactionService.go(billingBatchExternalId, chargingModuleRequest)
+  return ChargingModuleCreateTransactionService.go(billRunExternalId, chargingModuleRequest)
 }
 
 function _updateTransaction (transaction, chargingModuleResponse, billingInvoiceLicence) {

@@ -11,14 +11,14 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * Return a billing invoice object ready for persisting
  *
  * @param {module:InvoiceAccountModel} invoiceAccount The invoice account this billing invoice will be linked to
- * @param {String} billingBatchId UUID of the billing batch this billing invoice will be linked to
+ * @param {String} billRunId UUID of the bill run this billing invoice will be linked to
  * @param {Number} financialYearEnding A value that must exist in the persisted record
  *
  * @returns {Object} The billing invoice object ready to be persisted
  */
-function go (invoiceAccount, billingBatchId, financialYearEnding) {
+function go (invoiceAccount, billRunId, financialYearEnding) {
   const billingInvoice = {
-    billingBatchId,
+    billingBatchId: billRunId,
     financialYearEnding,
     invoiceAccountId: invoiceAccount.invoiceAccountId,
     billingInvoiceId: generateUUID(),

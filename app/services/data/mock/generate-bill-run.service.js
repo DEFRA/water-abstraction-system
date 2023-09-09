@@ -5,24 +5,24 @@
  * @module GenerateBillRunService
  */
 
-const BillingBatchModel = require('../../../models/water/billing-batch.model.js')
+const BillBunModel = require('../../../models/water/bill-run.model.js')
 const GenerateMockDataService = require('./generate-mock-data.service.js')
 const MockBillRunPresenter = require('../../../presenters/data/mock-bill-run.presenter.js')
 
 async function go (id) {
-  const billingBatch = await _fetchBillingBatch(id)
+  const billRun = await _fetchBillRun(id)
 
-  if (!billingBatch) {
+  if (!billRun) {
     throw new Error('No matching bill run exists')
   }
 
-  _mockBillingInvoices(billingBatch.billingInvoices)
+  _mockBillingInvoices(billRun.billingInvoices)
 
-  return _response(billingBatch)
+  return _response(billRun)
 }
 
-async function _fetchBillingBatch (id) {
-  return BillingBatchModel.query()
+async function _fetchBillRun (id) {
+  return BillBunModel.query()
     .findById(id)
     .select([
       'billingBatchId',
@@ -149,8 +149,8 @@ function _mockBillingInvoiceLicences (billingInvoiceLicences) {
   })
 }
 
-function _response (mockedBillingBatch) {
-  return MockBillRunPresenter.go(mockedBillingBatch)
+function _response (mockedBillRun) {
+  return MockBillRunPresenter.go(mockedBillRun)
 }
 
 /**

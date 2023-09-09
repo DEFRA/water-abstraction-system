@@ -8,17 +8,17 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
 const BillingInvoiceHelper = require('../../support/helpers/water/billing-invoice.helper.js')
 const BillingInvoiceModel = require('../../../app/models/water/billing-invoice.model.js')
+const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const RegionModel = require('../../../app/models/water/region.model.js')
 
 // Thing under test
-const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
+const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 
-describe('Billing Batch model', () => {
+describe('Bill Run model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -27,13 +27,13 @@ describe('Billing Batch model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await BillingBatchHelper.add()
+      testRecord = await BillRunHelper.add()
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await BillingBatchModel.query().findById(testRecord.billingBatchId)
+      const result = await BillRunModel.query().findById(testRecord.billingBatchId)
 
-      expect(result).to.be.an.instanceOf(BillingBatchModel)
+      expect(result).to.be.an.instanceOf(BillRunModel)
       expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
     })
   })
@@ -44,22 +44,22 @@ describe('Billing Batch model', () => {
 
       beforeEach(async () => {
         testRegion = await RegionHelper.add()
-        testRecord = await BillingBatchHelper.add({ regionId: testRegion.regionId })
+        testRecord = await BillRunHelper.add({ regionId: testRegion.regionId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillingBatchModel.query()
+        const query = await BillRunModel.query()
           .innerJoinRelated('region')
 
         expect(query).to.exist()
       })
 
       it('can eager load the region', async () => {
-        const result = await BillingBatchModel.query()
+        const result = await BillRunModel.query()
           .findById(testRecord.billingBatchId)
           .withGraphFetched('region')
 
-        expect(result).to.be.instanceOf(BillingBatchModel)
+        expect(result).to.be.instanceOf(BillRunModel)
         expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
@@ -71,7 +71,7 @@ describe('Billing Batch model', () => {
       let testBillingInvoices
 
       beforeEach(async () => {
-        testRecord = await BillingBatchHelper.add()
+        testRecord = await BillRunHelper.add()
         const { billingBatchId } = testRecord
 
         testBillingInvoices = []
@@ -82,18 +82,18 @@ describe('Billing Batch model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillingBatchModel.query()
+        const query = await BillRunModel.query()
           .innerJoinRelated('billingInvoices')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing invoices', async () => {
-        const result = await BillingBatchModel.query()
+        const result = await BillRunModel.query()
           .findById(testRecord.billingBatchId)
           .withGraphFetched('billingInvoices')
 
-        expect(result).to.be.instanceOf(BillingBatchModel)
+        expect(result).to.be.instanceOf(BillRunModel)
         expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
 
         expect(result.billingInvoices).to.be.an.array()
@@ -107,7 +107,7 @@ describe('Billing Batch model', () => {
   describe('Static getters', () => {
     describe('Error codes', () => {
       it('returns the requested error code', async () => {
-        const result = BillingBatchModel.errorCodes.failedToCreateBillRun
+        const result = BillRunModel.errorCodes.failedToCreateBillRun
 
         expect(result).to.equal(50)
       })
