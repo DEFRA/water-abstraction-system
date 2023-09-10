@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
-const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const LicenceModel = require('../../../../app/models/water/licence.model.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
@@ -54,7 +54,7 @@ describe('Unflag unbilled licences service', () => {
       describe('which were billed', () => {
         beforeEach(async () => {
           const { billingInvoiceId } = await BillHelper.add({ billingBatchId: billRunId })
-          await BillingInvoiceLicenceHelper.add({ billingInvoiceId, licenceId: licences.billedInBillRun.licenceId })
+          await BillLicenceHelper.add({ billingInvoiceId, licenceId: licences.billedInBillRun.licenceId })
         })
 
         it('are left flagged (include_in_sroc_supplementary_billing still true)', async () => {

@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
-const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillLicenceModel = require('../../../app/models/water/bill-licence.model.js')
+const BillLicenceHelper = require('../../support/helpers/water/bill-licence.helper.js')
 const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
@@ -37,33 +37,33 @@ describe('Billing Transaction model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to billing invoice licence', () => {
-      let testBillingInvoiceLicence
+    describe('when linking to bill licence', () => {
+      let testBillLicence
 
       beforeEach(async () => {
-        testBillingInvoiceLicence = await BillingInvoiceLicenceHelper.add()
+        testBillLicence = await BillLicenceHelper.add()
 
-        const { billingInvoiceLicenceId } = testBillingInvoiceLicence
+        const { billingInvoiceLicenceId } = testBillLicence
         testRecord = await BillingTransactionHelper.add({ billingInvoiceLicenceId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await BillingTransactionModel.query()
-          .innerJoinRelated('billingInvoiceLicence')
+          .innerJoinRelated('billLicence')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the billing invoice licence', async () => {
+      it('can eager load the bill licence', async () => {
         const result = await BillingTransactionModel.query()
           .findById(testRecord.billingTransactionId)
-          .withGraphFetched('billingInvoiceLicence')
+          .withGraphFetched('billLicence')
 
         expect(result).to.be.instanceOf(BillingTransactionModel)
         expect(result.billingTransactionId).to.equal(testRecord.billingTransactionId)
 
-        expect(result.billingInvoiceLicence).to.be.an.instanceOf(BillingInvoiceLicenceModel)
-        expect(result.billingInvoiceLicence).to.equal(testBillingInvoiceLicence)
+        expect(result.billLicence).to.be.an.instanceOf(BillLicenceModel)
+        expect(result.billLicence).to.equal(testBillLicence)
       })
     })
 

@@ -21,7 +21,7 @@ const SendBillingTransactionsService = require('../../../../app/services/billing
 describe('Send billing transactions service', () => {
   const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
   const bill = { invoiceAccountNumber: 'ABC123' }
-  const billingInvoiceLicence = { billingInvoiceLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a' }
+  const billLicence = { billingInvoiceLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a' }
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -90,7 +90,7 @@ describe('Send billing transactions service', () => {
       const results = await SendBillingTransactionsService.go(
         licence,
         bill,
-        billingInvoiceLicence,
+        billLicence,
         billRunExternalId,
         billingTransactions,
         billingPeriod
@@ -99,7 +99,7 @@ describe('Send billing transactions service', () => {
       expect(results).length(1)
       expect(results[0].status).to.equal('charge_created')
       expect(results[0].externalId).to.equal('7e752fa6-a19c-4779-b28c-6e536f028795')
-      expect(results[0].billingInvoiceLicenceId).to.equal(billingInvoiceLicence.billingInvoiceLicenceId)
+      expect(results[0].billingInvoiceLicenceId).to.equal(billLicence.billingInvoiceLicenceId)
     })
   })
 
@@ -113,7 +113,7 @@ describe('Send billing transactions service', () => {
         SendBillingTransactionsService.go(
           licence,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billRunExternalId,
           billingTransactions,
           billingPeriod

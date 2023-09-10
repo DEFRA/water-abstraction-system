@@ -41,7 +41,7 @@ describe('Mock Bill Run presenter', () => {
       expect(results[0].netTotal).to.equal('840.00')
     })
 
-    it('correctly presents a billing invoice licence', () => {
+    it('correctly presents a bill licence', () => {
       const { licences: results } = MockBillRunPresenter.go(mockedBillRun).bills[0]
 
       expect(results[0].id).to.equal('bedd5971-4491-4c6f-a8cd-b75592ab4328')
@@ -102,7 +102,7 @@ const mockedBillRun = {
       invoiceNumber: 'ZZI0000013T',
       invoiceValue: 84000,
       netAmount: 84000,
-      billingInvoiceLicences: [
+      billLicences: [
         {
           billingInvoiceLicenceId: 'bedd5971-4491-4c6f-a8cd-b75592ab4328',
           licenceRef: 'TH/037/0051/002',

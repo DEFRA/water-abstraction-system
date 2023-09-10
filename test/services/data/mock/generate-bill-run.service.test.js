@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
-const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const ChargeElement = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargePurpose = require('../../../support/helpers/water/charge-purpose.helper.js')
@@ -60,9 +60,9 @@ describe('Generate Bill Run service', () => {
       await ChargePurpose.add({ chargeElementId: chargeElement.chargeElementId, purposeUseId: purposesUse.purposeUseId })
       const billRun = await BillRunHelper.add({ billRunNumber: 10029, regionId: region.regionId })
       const bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId, invoiceNumber: 'TAI0000013T' })
-      const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId, licenceId: licence.licenceId })
+      const billLicence = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId, licenceId: licence.licenceId })
       await BillingTransactionHelper.add({
-        billingInvoiceLicenceId: billingInvoiceLicence.billingInvoiceLicenceId,
+        billingInvoiceLicenceId: billLicence.billingInvoiceLicenceId,
         chargeElementId: chargeElement.chargeElementId,
         endDate: new Date(2023, 2, 31, 2),
         netAmount: 4200,

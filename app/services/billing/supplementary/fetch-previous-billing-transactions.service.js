@@ -14,15 +14,15 @@ const { db } = require('../../../../db/db.js')
  *
  * @param {Object} bill A generated bill that identifies the invoice account ID we need to match
  *  against
- * @param {Object} billingInvoiceLicence A generated billing invoice licence that identifies the licence we need to
+ * @param {Object} billLicence A generated bill licence that identifies the licence we need to
  *  match against
  * @param {Number} financialYearEnding The year the financial billing period ends that we need to match against
  *
  * @returns {Object} The resulting matched billing transactions
  */
-async function go (bill, billingInvoiceLicence, financialYearEnding) {
+async function go (bill, billLicence, financialYearEnding) {
   const billingTransactions = await _fetch(
-    billingInvoiceLicence.licenceId,
+    billLicence.licenceId,
     bill.invoiceAccountId,
     financialYearEnding
   )

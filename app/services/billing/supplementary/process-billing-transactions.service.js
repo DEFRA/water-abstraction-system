@@ -17,23 +17,21 @@ const ReverseBillingTransactionsService = require('./reverse-billing-transaction
  * each other out are removed. Any remaining reversed credits and calculated debits are returned.
  *
  * @param {Object[]} calculatedTransactions The calculated transactions to be processed
- * @param {Object} bill A generated bill that identifies the invoice account ID we need to match
- *  against
- * @param {Object} billingInvoiceLicence A generated billing invoice licence that identifies the licence we need to
- *  match against
+ * @param {Object} bill A generated bill that identifies the invoice account ID we need to match against
+ * @param {Object} billLicence A generated bill licence that identifies the licence we need to match against
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
  * @returns {Object[]} An array of the remaining calculated transactions (ie. those which were not cancelled out by a
  *  previous matching credit)
  */
-async function go (calculatedTransactions, bill, billingInvoiceLicence, billingPeriod) {
-  const previousTransactions = await _fetchPreviousTransactions(bill, billingInvoiceLicence, billingPeriod)
+async function go (calculatedTransactions, bill, billLicence, billingPeriod) {
+  const previousTransactions = await _fetchPreviousTransactions(bill, billLicence, billingPeriod)
 
   if (previousTransactions.length === 0) {
     return calculatedTransactions
   }
 
-  const reversedTransactions = ReverseBillingTransactionsService.go(previousTransactions, billingInvoiceLicence)
+  const reversedTransactions = ReverseBillingTransactionsService.go(previousTransactions, billLicence)
 
   return _cleanseTransactions(calculatedTransactions, reversedTransactions)
 }
@@ -101,9 +99,9 @@ function _cancelCalculatedTransaction (calculatedTransaction, reversedTransactio
 
 /**
  * Remove any "cancelling pairs" of transaction lines. We define a "cancelling pair" as a pair of transactions belonging
- * to the same billing invoice licence which would send the same data to the Charging Module (and therefore return the
- * same values) but with opposing credit flags -- in other words, a credit and a debit which cancel each other out. All
- * remaining transactions (both calculated transactions and reverse transactions) are returned.
+ * to the same bill licence which would send the same data to the Charging Module (and therefore return the same values)
+ * but with opposing credit flags -- in other words, a credit and a debit which cancel each other out. All remaining
+ * transactions (both calculated transactions and reverse transactions) are returned.
  */
 function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
   const cleansedTransactionLines = []
@@ -124,10 +122,10 @@ function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
   return cleansedTransactionLines
 }
 
-async function _fetchPreviousTransactions (billingInvoice, billingInvoiceLicence, billingPeriod) {
+async function _fetchPreviousTransactions (bill, billLicence, billingPeriod) {
   const financialYearEnding = billingPeriod.endDate.getFullYear()
 
-  const transactions = await FetchPreviousBillingTransactionsService.go(billingInvoice, billingInvoiceLicence, financialYearEnding)
+  const transactions = await FetchPreviousBillingTransactionsService.go(bill, billLicence, financialYearEnding)
 
   return transactions
 }

@@ -35,8 +35,8 @@ async function go (billRunId, allLicenceIds) {
     .patch({ includeInSrocSupplementaryBilling: false })
     .whereIn('licenceId', allLicenceIds)
     .whereNotExists(
-      LicenceModel.relatedQuery('billingInvoiceLicences')
-        .join('billingInvoices', 'billingInvoices.billingInvoiceId', '=', 'billingInvoiceLicences.billingInvoiceId')
+      LicenceModel.relatedQuery('billLicences')
+        .join('billingInvoices', 'billingInvoices.billingInvoiceId', '=', 'billLicences.billingInvoiceId')
         .where('billingInvoices.billingBatchId', '=', billRunId)
     )
 

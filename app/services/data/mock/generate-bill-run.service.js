@@ -53,21 +53,21 @@ async function _fetchBillRun (id) {
         'netAmount'
       ])
     })
-    .withGraphFetched('bills.billingInvoiceLicences')
-    .modifyGraph('bills.billingInvoiceLicences', (builder) => {
+    .withGraphFetched('bills.billLicences')
+    .modifyGraph('bills.billLicences', (builder) => {
       builder.select([
         'billingInvoiceLicenceId',
         'licenceRef'
       ])
     })
-    .withGraphFetched('bills.billingInvoiceLicences.licence')
-    .modifyGraph('bills.billingInvoiceLicences.licence', (builder) => {
+    .withGraphFetched('bills.billLicences.licence')
+    .modifyGraph('bills.billLicences.licence', (builder) => {
       builder.select([
         'isWaterUndertaker'
       ])
     })
-    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions')
-    .modifyGraph('bills.billingInvoiceLicences.billingTransactions', (builder) => {
+    .withGraphFetched('bills.billLicences.billingTransactions')
+    .modifyGraph('bills.billLicences.billingTransactions', (builder) => {
       builder.select([
         'authorisedDays',
         'billableDays',
@@ -84,14 +84,14 @@ async function _fetchBillRun (id) {
         'supportedSourceName'
       ])
     })
-    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions.chargeElement')
-    .modifyGraph('bills.billingInvoiceLicences.billingTransactions.chargeElement', (builder) => {
+    .withGraphFetched('bills.billLicences.billingTransactions.chargeElement')
+    .modifyGraph('bills.billLicences.billingTransactions.chargeElement', (builder) => {
       builder.select([
         'adjustments'
       ])
     })
-    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes')
-    .modifyGraph('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes', (builder) => {
+    .withGraphFetched('bills.billLicences.billingTransactions.chargeElement.chargePurposes')
+    .modifyGraph('bills.billLicences.billingTransactions.chargeElement.chargePurposes', (builder) => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',
@@ -101,8 +101,8 @@ async function _fetchBillRun (id) {
         'authorisedAnnualQuantity'
       ])
     })
-    .withGraphFetched('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse')
-    .modifyGraph('bills.billingInvoiceLicences.billingTransactions.chargeElement.chargePurposes.purposesUse', (builder) => {
+    .withGraphFetched('bills.billLicences.billingTransactions.chargeElement.chargePurposes.purposesUse')
+    .modifyGraph('bills.billLicences.billingTransactions.chargeElement.chargePurposes.purposesUse', (builder) => {
       builder.select([
         'description'
       ])
@@ -133,19 +133,19 @@ function _mockBills (bills) {
     bill.invoiceAccountNumber = _maskInvoiceAccountNumber(bill.invoiceAccountNumber)
     bill.invoiceNumber = _maskInvoiceNumber(bill.invoiceNumber)
 
-    _mockBillingInvoiceLicences(bill.billingInvoiceLicences)
+    _mockBillLicences(bill.billLicences)
   })
 }
 
-function _mockBillingInvoiceLicences (billingInvoiceLicences) {
-  billingInvoiceLicences.forEach((billingInvoiceLicence) => {
+function _mockBillLicences (billLicences) {
+  billLicences.forEach((billLicence) => {
     const { name } = GenerateMockDataService.go()
-    const { credit, debit, netTotal } = _transactionTotals(billingInvoiceLicence.billingTransactions)
+    const { credit, debit, netTotal } = _transactionTotals(billLicence.billingTransactions)
 
-    billingInvoiceLicence.licenceHolder = name
-    billingInvoiceLicence.credit = credit
-    billingInvoiceLicence.debit = debit
-    billingInvoiceLicence.netTotal = netTotal
+    billLicence.licenceHolder = name
+    billLicence.credit = credit
+    billLicence.debit = debit
+    billLicence.netTotal = netTotal
   })
 }
 

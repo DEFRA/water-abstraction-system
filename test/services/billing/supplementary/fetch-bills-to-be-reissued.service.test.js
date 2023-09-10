@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillModel = require('../../../../app/models/water/bill.model.js')
-const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
@@ -28,7 +28,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
     billRun = await BillRunHelper.add()
     bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId })
-    const { billingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId })
+    const { billingInvoiceLicenceId } = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId })
     await BillingTransactionHelper.add({ billingInvoiceLicenceId })
   })
 
@@ -63,17 +63,17 @@ describe('Fetch Bills To Be Reissued service', () => {
         'financialYearEnding',
         'invoiceAccountId',
         'invoiceAccountNumber',
-        'billingInvoiceLicences',
+        'billLicences',
         'originalBillingInvoiceId'
       ])
     })
 
-    it('returns only the required billing invoice licence fields', async () => {
+    it('returns only the required bill licence fields', async () => {
       const bill = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
-      const { billingInvoiceLicences } = bill[0]
+      const { billLicences } = bill[0]
 
-      const result = Object.keys(billingInvoiceLicences[0])
+      const result = Object.keys(billLicences[0])
 
       expect(result).to.only.include([
         'licenceRef',
@@ -89,7 +89,7 @@ describe('Fetch Bills To Be Reissued service', () => {
           billingBatchId: alcsBillRun.billingBatchId,
           isFlaggedForRebilling: true
         })
-        const { billingInvoiceLicenceId: alcsBillingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({
+        const { billingInvoiceLicenceId: alcsBillingInvoiceLicenceId } = await BillLicenceHelper.add({
           billingInvoiceId: alcsBill.billingInvoiceId
         })
         await BillingTransactionHelper.add({ billingInvoiceLicenceId: alcsBillingInvoiceLicenceId })

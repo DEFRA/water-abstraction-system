@@ -93,7 +93,7 @@ function _formatBills (bills) {
   return bills.map((bill) => {
     const {
       accountAddress,
-      billingInvoiceLicences,
+      billLicences,
       contact,
       creditNoteValue,
       invoiceValue,
@@ -109,17 +109,17 @@ function _formatBills (bills) {
       number,
       accountAddress,
       contact,
-      isWaterCompany: billingInvoiceLicences[0].licence.isWaterUndertaker,
+      isWaterCompany: billLicences[0].licence.isWaterUndertaker,
       credit: formatNumberAsMoney(convertPenceToPounds(creditNoteValue)),
       debit: formatNumberAsMoney(convertPenceToPounds(invoiceValue)),
       netTotal: formatNumberAsMoney(convertPenceToPounds(netAmount)),
-      licences: _formatBillingInvoiceLicences(billingInvoiceLicences)
+      licences: _formatBillLicences(billLicences)
     }
   })
 }
 
-function _formatBillingInvoiceLicences (billingInvoiceLicences) {
-  return billingInvoiceLicences.map((billingInvoiceLicence) => {
+function _formatBillLicences (billLicences) {
+  return billLicences.map((billLicence) => {
     const {
       billingTransactions,
       credit,
@@ -128,12 +128,12 @@ function _formatBillingInvoiceLicences (billingInvoiceLicences) {
       licenceHolder,
       billingInvoiceLicenceId: id,
       licenceRef: licence
-    } = billingInvoiceLicence
+    } = billLicence
 
     return {
       id,
       licence,
-      licenceStartDate: billingInvoiceLicence.licence.startDate,
+      licenceStartDate: billLicence.licence.startDate,
       licenceHolder,
       credit: formatNumberAsMoney(convertPenceToPounds(credit)),
       debit: formatNumberAsMoney(convertPenceToPounds(debit)),

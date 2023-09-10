@@ -16,7 +16,7 @@ const ProcessBillingTransactionsService = require('../../../../app/services/bill
 
 describe('Process Billing Transactions service', () => {
   const bill = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
-  const billingInvoiceLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
+  const billLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
 
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
@@ -56,7 +56,7 @@ describe('Process Billing Transactions service', () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
               bill,
-              billingInvoiceLicence,
+              billLicence,
               billingPeriod
             )
 
@@ -80,7 +80,7 @@ describe('Process Billing Transactions service', () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
               bill,
-              billingInvoiceLicence,
+              billLicence,
               billingPeriod
             )
 
@@ -102,7 +102,7 @@ describe('Process Billing Transactions service', () => {
             const result = await ProcessBillingTransactionsService.go(
               [],
               bill,
-              billingInvoiceLicence,
+              billLicence,
               billingPeriod
             )
 
@@ -127,7 +127,7 @@ describe('Process Billing Transactions service', () => {
             const result = await ProcessBillingTransactionsService.go(
               calculatedTransactions,
               bill,
-              billingInvoiceLicence,
+              billLicence,
               billingPeriod
             )
 
@@ -149,7 +149,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -183,7 +183,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -204,7 +204,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -225,7 +225,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -248,7 +248,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -271,7 +271,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -294,7 +294,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -317,7 +317,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -340,7 +340,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -363,7 +363,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -386,7 +386,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -409,7 +409,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -432,7 +432,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 
@@ -453,7 +453,7 @@ describe('Process Billing Transactions service', () => {
         const result = await ProcessBillingTransactionsService.go(
           calculatedTransactions,
           bill,
-          billingInvoiceLicence,
+          billLicence,
           billingPeriod
         )
 

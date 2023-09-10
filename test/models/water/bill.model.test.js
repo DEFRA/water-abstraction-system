@@ -10,8 +10,8 @@ const { expect } = Code
 // Test helpers
 const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const BillHelper = require('../../support/helpers/water/bill.helper.js')
-const BillingInvoiceLicenceHelper = require('../../support/helpers/water/billing-invoice-licence.helper.js')
-const BillingInvoiceLicenceModel = require('../../../app/models/water/billing-invoice-licence.model.js')
+const BillLicenceHelper = require('../../support/helpers/water/bill-licence.helper.js')
+const BillLicenceModel = require('../../../app/models/water/bill-licence.model.js')
 const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
@@ -67,39 +67,39 @@ describe('Bill model', () => {
       })
     })
 
-    describe('when linking to billing invoice licences', () => {
-      let testBillingInvoiceLicences
+    describe('when linking to bill licences', () => {
+      let testBillLicences
 
       beforeEach(async () => {
         testRecord = await BillHelper.add()
         const { billingInvoiceId } = testRecord
 
-        testBillingInvoiceLicences = []
+        testBillLicences = []
         for (let i = 0; i < 2; i++) {
-          const billingInvoiceLicence = await BillingInvoiceLicenceHelper.add({ billingInvoiceId })
-          testBillingInvoiceLicences.push(billingInvoiceLicence)
+          const billLicence = await BillLicenceHelper.add({ billingInvoiceId })
+          testBillLicences.push(billLicence)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await BillModel.query()
-          .innerJoinRelated('billingInvoiceLicences')
+          .innerJoinRelated('billLicences')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the billing invoice licences', async () => {
+      it('can eager load the bill licences', async () => {
         const result = await BillModel.query()
           .findById(testRecord.billingInvoiceId)
-          .withGraphFetched('billingInvoiceLicences')
+          .withGraphFetched('billLicences')
 
         expect(result).to.be.instanceOf(BillModel)
         expect(result.billingInvoiceId).to.equal(testRecord.billingInvoiceId)
 
-        expect(result.billingInvoiceLicences).to.be.an.array()
-        expect(result.billingInvoiceLicences[0]).to.be.an.instanceOf(BillingInvoiceLicenceModel)
-        expect(result.billingInvoiceLicences).to.include(testBillingInvoiceLicences[0])
-        expect(result.billingInvoiceLicences).to.include(testBillingInvoiceLicences[1])
+        expect(result.billLicences).to.be.an.array()
+        expect(result.billLicences[0]).to.be.an.instanceOf(BillLicenceModel)
+        expect(result.billLicences).to.include(testBillLicences[0])
+        expect(result.billLicences).to.include(testBillLicences[1])
       })
     })
   })

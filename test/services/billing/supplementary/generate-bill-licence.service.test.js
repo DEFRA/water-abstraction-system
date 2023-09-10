@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const GenerateBillingInvoiceLicenceService = require('../../../../app/services/billing/supplementary/generate-billing-invoice-licence.service.js')
+const GenerateBillLicenceService = require('../../../../app/services/billing/supplementary/generate-bill-licence.service.js')
 
-describe('Generate billing invoice licence service', () => {
+describe('Generate Bill Licence service', () => {
   const licence = {
     licenceId: 'bfd93113-0ca7-4218-bff7-e685af360df4',
     licenceRef: '01/TEST/02'
@@ -30,8 +30,8 @@ describe('Generate billing invoice licence service', () => {
       }
     })
 
-    it('returns a new billing invoice licence with the provided values', () => {
-      const result = GenerateBillingInvoiceLicenceService.go(billingInvoiceId, licence)
+    it('returns a new bill licence with the provided values', () => {
+      const result = GenerateBillLicenceService.go(billingInvoiceId, licence)
 
       expect(result).to.equal(expectedResult, { skip: 'billingInvoiceLicenceId' })
     })

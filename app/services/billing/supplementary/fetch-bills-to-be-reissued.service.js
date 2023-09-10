@@ -29,8 +29,8 @@ async function go (regionId) {
       .joinRelated('billRun')
       .where('billRun.regionId', regionId)
       .where('billRun.scheme', 'sroc')
-      .withGraphFetched('billingInvoiceLicences.billingTransactions')
-      .modifyGraph('billingInvoiceLicences', (builder) => {
+      .withGraphFetched('billLicences.billingTransactions')
+      .modifyGraph('billLicences', (builder) => {
         builder.select(
           'licenceRef',
           'licenceId'

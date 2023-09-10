@@ -109,7 +109,7 @@ async function _fetchChargeVersions (billRun, billingPeriod) {
 
 /**
  * Finalises the bill run by unflagging all unbilled licences, requesting the Charging Module run its generate
- * process, and refreshes the bill run locally. However if there were no resulting invoice licences then we simply
+ * process, and refreshes the bill run locally. However if there were no resulting bill licences then we simply
  * unflag the unbilled licences and mark the bill run with `empty` status
  */
 async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProcessing) {
@@ -122,8 +122,8 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   // We set `isPopulated` to `true` if at least one processing result was truthy
   const isPopulated = resultsOfProcessing.some(result => result)
 
-  // If there are no billing invoice licences then the bill run is considered empty. We just need to set the status to
-  // indicate this in the UI
+  // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
+  // this in the UI
   if (!isPopulated) {
     await _updateStatus(billRun.billingBatchId, 'empty')
     return

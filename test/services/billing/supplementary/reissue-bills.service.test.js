@@ -11,8 +11,8 @@ const { expect } = Code
 // Test helpers
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillModel = require('../../../../app/models/water/bill.model.js')
-const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
-const BillingInvoiceLicenceModel = require('../../../../app/models/water/billing-invoice-licence.model.js')
+const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
+const BillLicenceModel = require('../../../../app/models/water/bill-licence.model.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const BillingTransactionModel = require('../../../../app/models/water/billing-transaction.model.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
@@ -70,10 +70,10 @@ describe('Reissue Bills service', () => {
           { id: generateUUID() }
         ])
 
-        // This stub will result in one new bill, invoice licence and transaction for each dummy invoice
+        // This stub will result in one new bill, bill licence and transaction for each dummy invoice
         Sinon.stub(ReissueBillService, 'go').resolves({
           bills: [BillModel.fromJson(BillHelper.defaults())],
-          billingInvoiceLicences: [BillingInvoiceLicenceModel.fromJson(BillingInvoiceLicenceHelper.defaults())],
+          billLicences: [BillLicenceModel.fromJson(BillLicenceHelper.defaults())],
           billingTransactions: [BillingTransactionModel.fromJson({
             ...BillingTransactionHelper.defaults(),
             purposes: [{
@@ -101,10 +101,10 @@ describe('Reissue Bills service', () => {
         expect(result).to.have.length(3)
       })
 
-      it('persists all billing invoice licences', async () => {
+      it('persists all bill licences', async () => {
         await ReissueBillsService.go(reissueBillRun)
 
-        const result = await BillingInvoiceLicenceModel.query()
+        const result = await BillLicenceModel.query()
 
         expect(result).to.have.length(3)
       })

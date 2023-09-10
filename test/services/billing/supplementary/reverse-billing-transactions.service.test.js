@@ -22,13 +22,13 @@ describe('Reverse Billing Transactions service', () => {
     }
   ]
 
-  const billingInvoiceLicence = {
+  const billLicence = {
     billingInvoiceLicenceId: '8affaa71-c185-4b6c-9814-4c615c235611'
   }
 
   describe('when the service is called', () => {
     it('returns reversing transactions', () => {
-      const result = ReverseBillingTransactionsService.go(transactions, billingInvoiceLicence)
+      const result = ReverseBillingTransactionsService.go(transactions, billLicence)
 
       expect(result).to.have.length(transactions.length)
 
@@ -38,7 +38,7 @@ describe('Reverse Billing Transactions service', () => {
       expect(result[0].name).to.equal('DEBIT')
       expect(result[0].isCredit).to.be.true()
       expect(result[0].status).to.equal('candidate')
-      expect(result[0].billingInvoiceLicenceId).to.equal(billingInvoiceLicence.billingInvoiceLicenceId)
+      expect(result[0].billingInvoiceLicenceId).to.equal(billLicence.billingInvoiceLicenceId)
       expect(result[0].billingTransactionId).to.exist().and.to.be.a.string()
       expect(result[0].purposes).to.equal('foo')
     })

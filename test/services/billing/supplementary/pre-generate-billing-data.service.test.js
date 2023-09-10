@@ -87,16 +87,16 @@ describe('Pre-generate billing data service', () => {
       })
     })
 
-    describe('returns an object with a billingInvoiceLicences property', () => {
+    describe('returns an object with a billLicences property', () => {
       it('has one key per combination of billing invoice id and licence id', async () => {
-        const { billingInvoiceLicences: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { billLicences: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.entries(result)
         expect(keys).to.have.length(3)
       })
 
-      it('is keyed with the billing invoice id and licence id', async () => {
-        const { billingInvoiceLicences: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+      it('is keyed with the bill id and licence id', async () => {
+        const { billLicences: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 
@@ -106,7 +106,7 @@ describe('Pre-generate billing data service', () => {
       })
 
       it('has the correct data for each key', async () => {
-        const { billingInvoiceLicences: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
+        const { billLicences: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
 

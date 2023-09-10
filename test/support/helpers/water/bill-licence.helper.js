@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * @module BillingInvoiceLicenceHelper
+ * @module BillLicenceHelper
  */
 
-const BillingInvoiceLicenceModel = require('../../../../app/models/water/billing-invoice-licence.model.js')
+const BillLicenceModel = require('../../../../app/models/water/bill-licence.model.js')
 
 /**
- * Add a new billing invoice licence
+ * Add a new bill licence
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -17,18 +17,18 @@ const BillingInvoiceLicenceModel = require('../../../../app/models/water/billing
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:BillingInvoiceLicenceModel} The instance of the newly created record
+ * @returns {module:BillLicenceModel} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return BillingInvoiceLicenceModel.query()
+  return BillLicenceModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
 
 /**
- * Returns the defaults used when creating a new billing invoice licence
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.

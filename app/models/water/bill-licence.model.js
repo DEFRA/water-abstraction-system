@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for billingInvoiceLicences
- * @module BillingInvoiceLicenceModel
+ * Model for billing_invoice_licences
+ * @module BillLicenceModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class BillingInvoiceLicenceModel extends WaterBaseModel {
+class BillLicenceModel extends WaterBaseModel {
   static get tableName () {
     return 'billingInvoiceLicences'
   }
@@ -55,4 +55,4 @@ class BillingInvoiceLicenceModel extends WaterBaseModel {
   }
 }
 
-module.exports = BillingInvoiceLicenceModel
+module.exports = BillLicenceModel

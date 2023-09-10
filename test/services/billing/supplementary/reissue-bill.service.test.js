@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
-const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -127,13 +127,13 @@ describe('Reissue Bill service', () => {
       isFlaggedForRebilling: true
     })
 
-    const sourceInvoiceLicences = await Promise.all([
-      BillingInvoiceLicenceHelper.add({
+    const sourceBillLicences = await Promise.all([
+      BillLicenceHelper.add({
         billingInvoiceId: sourceBill.billingInvoiceId,
         licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_1'
       }),
-      BillingInvoiceLicenceHelper.add({
+      BillLicenceHelper.add({
         billingInvoiceId: sourceBill.billingInvoiceId,
         licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_2'
@@ -141,19 +141,19 @@ describe('Reissue Bill service', () => {
     ])
 
     await BillingTransactionHelper.add({
-      billingInvoiceLicenceId: sourceInvoiceLicences[0].billingInvoiceLicenceId,
+      billingInvoiceLicenceId: sourceBillLicences[0].billingInvoiceLicenceId,
       externalId: INVOICE_LICENCE_1_TRANSACTION_ID,
       purposes: { test: 'TEST' }
     })
 
     await BillingTransactionHelper.add({
-      billingInvoiceLicenceId: sourceInvoiceLicences[1].billingInvoiceLicenceId,
+      billingInvoiceLicenceId: sourceBillLicences[1].billingInvoiceLicenceId,
       externalId: INVOICE_LICENCE_2_TRANSACTION_ID,
       purposes: { test: 'TEST' }
     })
 
-    // Refresh sourceBill to include billing invoice licences and transactions, as expected by the service
-    sourceBill = await sourceBill.$query().withGraphFetched('billingInvoiceLicences.billingTransactions')
+    // Refresh sourceBill to include bill licences and transactions, as expected by the service
+    sourceBill = await sourceBill.$query().withGraphFetched('billLicences.billingTransactions')
   })
 
   afterEach(() => {
@@ -167,10 +167,10 @@ describe('Reissue Bill service', () => {
       expect(result.bills).to.have.length(2)
     })
 
-    it('returns two billing invoice licences per source invoice licence (one cancelling, one reissuing)', async () => {
+    it('returns two bill licences per source bill licence (one cancelling, one reissuing)', async () => {
       const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-      expect(result.billingInvoiceLicences).to.have.length(4)
+      expect(result.billLicences).to.have.length(4)
     })
 
     it('persists two transactions per source transaction (one cancelling, one reissuing)', async () => {
@@ -285,7 +285,7 @@ describe('Reissue Bill service', () => {
       })
     })
 
-    describe('when viewing an invoice', () => {
+    describe('when viewing an bill', () => {
       beforeEach(() => {
         ChargingModuleViewBillService.go.restore()
         Sinon.stub(ChargingModuleViewBillService, 'go').resolves({
@@ -302,10 +302,10 @@ describe('Reissue Bill service', () => {
 
       it('throws an error', async () => {
         await expect(ReissueBillService.go(sourceBill, reissueBillRun))
-          .to.reject(Error, 'Charging Module view invoice request failed')
+          .to.reject(Error, 'Charging Module view bill request failed')
       })
 
-      it('includes the bill run and reissue invoice external ids', async () => {
+      it('includes the bill run and reissue bill external ids', async () => {
         const errorResult = await expect(ReissueBillService.go(sourceBill, reissueBillRun)).to.reject()
 
         expect(errorResult.billRunExternalId).to.equal(reissueBillRun.externalId)

@@ -35,9 +35,9 @@ class BillModel extends WaterBaseModel {
           to: 'billingBatches.billingBatchId'
         }
       },
-      billingInvoiceLicences: {
+      billLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-invoice-licence.model',
+        modelClass: 'bill-licence.model',
         join: {
           from: 'billingInvoices.billingInvoiceId',
           to: 'billingInvoiceLicences.billingInvoiceId'

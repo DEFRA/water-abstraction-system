@@ -11,7 +11,7 @@ const { expect } = Code
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
-const BillingInvoiceLicenceHelper = require('../../../support/helpers/water/billing-invoice-licence.helper.js')
+const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
 const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 
 // Thing under test
@@ -41,7 +41,7 @@ describe('Fetch Previous Billing Transactions service', () => {
   describe('when there is a bill run', () => {
     describe('for the same licence and invoice account', () => {
       beforeEach(async () => {
-        const billingInvoiceLicenceId = await _createBillRunBillAndLicence(invoiceAccountId, licenceId)
+        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(invoiceAccountId, licenceId)
         await BillingTransactionHelper.add({ billingInvoiceLicenceId })
       })
 
@@ -60,7 +60,7 @@ describe('Fetch Previous Billing Transactions service', () => {
         let followUpBillingInvoiceLicenceId
 
         beforeEach(async () => {
-          followUpBillingInvoiceLicenceId = await _createBillRunBillAndLicence(invoiceAccountId, licenceId)
+          followUpBillingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(invoiceAccountId, licenceId)
         })
 
         describe('which only contains a credit', () => {
@@ -394,7 +394,7 @@ describe('Fetch Previous Billing Transactions service', () => {
 
     describe('but for a different licence', () => {
       beforeEach(async () => {
-        const billingInvoiceLicenceId = await _createBillRunBillAndLicence(invoiceAccountId, '66498337-e6a6-4a2a-9fb7-e39f43410f80')
+        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(invoiceAccountId, '66498337-e6a6-4a2a-9fb7-e39f43410f80')
         await BillingTransactionHelper.add({ billingInvoiceLicenceId })
       })
 
@@ -411,7 +411,7 @@ describe('Fetch Previous Billing Transactions service', () => {
 
     describe('but for a different invoice account', () => {
       beforeEach(async () => {
-        const billingInvoiceLicenceId = await _createBillRunBillAndLicence(
+        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(
           'b0b75e7a-e80a-4c28-9ac9-33b3a850722b',
           licenceId
         )
@@ -431,10 +431,10 @@ describe('Fetch Previous Billing Transactions service', () => {
   })
 })
 
-async function _createBillRunBillAndLicence (invoiceAccountId, licenceId) {
+async function _createBillRunAndBillAndBillLicence (invoiceAccountId, licenceId) {
   const { billingBatchId } = await BillRunHelper.add({ status: 'sent' })
   const { billingInvoiceId } = await BillHelper.add({ invoiceAccountId, billingBatchId })
-  const { billingInvoiceLicenceId } = await BillingInvoiceLicenceHelper.add({ billingInvoiceId, licenceId })
+  const { billingInvoiceLicenceId } = await BillLicenceHelper.add({ billingInvoiceId, licenceId })
 
   return billingInvoiceLicenceId
 }
