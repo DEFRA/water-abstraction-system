@@ -56,9 +56,9 @@ function _billableAbstractionPeriods (billingPeriod, returnData) {
   })
 }
 
-function _calculateAbstractionOverlapPeriod (referencePeriod, abstractionPeriod) {
-  const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, referencePeriod.startDate)
-  const earliestEndDateTimestamp = Math.min(abstractionPeriod.endDate, referencePeriod.endDate)
+function _calculateAbstractionOverlapPeriod (billingPeriod, abstractionPeriod) {
+  const latestStartDateTimestamp = Math.max(abstractionPeriod.startDate, billingPeriod.startDate)
+  const earliestEndDateTimestamp = Math.min(abstractionPeriod.endDate, billingPeriod.endDate)
 
   return {
     startDate: new Date(latestStartDateTimestamp),
