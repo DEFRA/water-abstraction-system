@@ -5,7 +5,7 @@
  * @module GenerateBillingInvoiceService
  */
 
-const { randomUUID } = require('crypto')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Return a billing invoice object ready for persisting
@@ -21,7 +21,7 @@ function go (invoiceAccount, billingBatchId, financialYearEnding) {
     billingBatchId,
     financialYearEnding,
     invoiceAccountId: invoiceAccount.invoiceAccountId,
-    billingInvoiceId: randomUUID({ disableEntropyCache: true }),
+    billingInvoiceId: generateUUID(),
     address: {}, // Address is set to an empty object for SROC billing invoices
     invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
     isCredit: false
