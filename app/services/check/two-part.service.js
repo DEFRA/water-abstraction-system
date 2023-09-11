@@ -7,6 +7,7 @@
 
 const { ref } = require('objection')
 
+const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
 const ChargeElementModel = require('../../models/water/charge-element.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
@@ -112,6 +113,16 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       .where('endDate', '>=', billingPeriod.startDate)
       .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
       .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
+      .withGraphFetched('versions')
+      .modifyGraph('versions', builder => {
+        builder.where('versions.current', true)
+      })
+      .withGraphFetched('versions.lines')
+      .modifyGraph('versions.lines', builder => {
+        builder.where('lines.quantity', '>', 0)
+      })
+
+    CalculateReturnsVolumes.go(billingPeriod, chargeElement.returns)
 
     const chargeElementReturnsStatuses = chargeElement.returns.map((matchedReturn) => {
       if (matchedReturn.underQuery) {

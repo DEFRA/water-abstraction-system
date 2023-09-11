@@ -141,7 +141,7 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
 
 function _formatFriendlyReturns (returns, matchedReturns) {
   matchedReturns.forEach((matchedReturn) => {
-    const { returnId, endDate, metadata, startDate, status } = matchedReturn
+    const { returnId, endDate, metadata, startDate, status, volumes } = matchedReturn
 
     const { periodEndDay, periodEndMonth, periodStartDay, periodStartMonth } = metadata.nald
 
@@ -153,7 +153,8 @@ function _formatFriendlyReturns (returns, matchedReturns) {
       abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
       twoPartTariff: metadata.isTwoPartTariff,
       status,
-      code: metadata.purposes[0].tertiary.code
+      code: metadata.purposes[0].tertiary.code,
+      volumes
     }
 
     returns.push(friendlyReturn)
