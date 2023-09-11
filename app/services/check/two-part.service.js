@@ -7,7 +7,7 @@
 
 const { ref } = require('objection')
 
-const CalculateAbstractionVolume = require('./calculate-abstraction-volume.service.js')
+const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
 const ChargeElementModel = require('../../models/water/charge-element.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
@@ -57,7 +57,6 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
-    .where('chargeVersions.chargeVersionId', '38576470-7fbd-4a46-a161-c9e6f1d50a0a')
     .whereNotExists(
       ChargeVersionWorkflow.query()
         .select(1)
@@ -76,7 +75,6 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .withGraphFetched('chargeElements')
     .modifyGraph('chargeVersions.chargeElements', (builder) => {
       builder.whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
-        .where('chargeElements.chargeElementId', '80799ade-8fa3-4bc7-8005-12bb2853a310')
     })
     .withGraphFetched('chargeElements.billingChargeCategory')
     .modifyGraph('chargeElements.billingChargeCategory', (builder) => {
@@ -124,7 +122,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
         builder.where('lines.quantity', '>', 0)
       })
 
-    CalculateAbstractionVolume.go(billingPeriod, chargeElement.returns)
+    CalculateReturnsVolumes.go(billingPeriod, chargeElement.returns)
 
     const chargeElementReturnsStatuses = chargeElement.returns.map((matchedReturn) => {
       if (matchedReturn.underQuery) {
