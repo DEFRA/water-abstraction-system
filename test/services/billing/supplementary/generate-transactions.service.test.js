@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
@@ -33,13 +33,13 @@ describe('Generate Transactions service', () => {
   }
 
   beforeEach(async () => {
-    const billingChargeCategory = await BillingChargeCategoryHelper.add()
-    const { billingChargeCategoryId } = billingChargeCategory
+    const chargeCategory = await ChargeCategoryHelper.add()
+    const { billingChargeCategoryId } = chargeCategory
 
     const baseChargeElement = await ChargeElementHelper.add({ billingChargeCategoryId })
     chargePurpose = await ChargePurposeHelper.add({ chargeElementId: baseChargeElement.chargeElementId })
     chargeElement = await baseChargeElement.$query()
-      .withGraphFetched('billingChargeCategory')
+      .withGraphFetched('chargeCategory')
       .withGraphFetched('chargePurposes')
   })
 

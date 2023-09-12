@@ -8,28 +8,28 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
+const ChargeCategoryHelper = require('../../support/helpers/water/charge-category.helper.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const BillingChargeCategoryModel = require('../../../app/models/water/billing-charge-category.model.js')
+const ChargeCategoryModel = require('../../../app/models/water/charge-category.model.js')
 
-describe('Billing Charge Category model', () => {
+describe('Charge Category model', () => {
   let testRecord
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    testRecord = await BillingChargeCategoryHelper.add()
+    testRecord = await ChargeCategoryHelper.add()
   })
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await BillingChargeCategoryModel.query().findById(testRecord.billingChargeCategoryId)
+      const result = await ChargeCategoryModel.query().findById(testRecord.billingChargeCategoryId)
 
-      expect(result).to.be.an.instanceOf(BillingChargeCategoryModel)
+      expect(result).to.be.an.instanceOf(ChargeCategoryModel)
       expect(result.billingChargeCategoryId).to.equal(testRecord.billingChargeCategoryId)
     })
   })
@@ -49,18 +49,18 @@ describe('Billing Charge Category model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await BillingChargeCategoryModel.query()
+        const query = await ChargeCategoryModel.query()
           .innerJoinRelated('chargeElements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge elements', async () => {
-        const result = await BillingChargeCategoryModel.query()
+        const result = await ChargeCategoryModel.query()
           .findById(testRecord.billingChargeCategoryId)
           .withGraphFetched('chargeElements')
 
-        expect(result).to.be.instanceOf(BillingChargeCategoryModel)
+        expect(result).to.be.instanceOf(ChargeCategoryModel)
         expect(result.billingChargeCategoryId).to.equal(testRecord.billingChargeCategoryId)
 
         expect(result.chargeElements).to.be.an.array()

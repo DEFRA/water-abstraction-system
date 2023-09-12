@@ -62,7 +62,7 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
     const {
       additionalCharges,
       adjustments,
-      billingChargeCategory,
+      chargeCategory,
       chargeElementId,
       chargePurposes,
       description,
@@ -80,8 +80,8 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
 
     const friendlyChargeReference = {
       id: chargeElementId,
-      chargeReference: billingChargeCategory.reference,
-      chargeDescription: billingChargeCategory.shortDescription,
+      chargeReference: chargeCategory.reference,
+      chargeDescription: chargeCategory.shortDescription,
       description,
       source,
       loss,

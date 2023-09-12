@@ -35,9 +35,9 @@ class ChargeElementModel extends WaterBaseModel {
           to: 'chargeVersions.chargeVersionId'
         }
       },
-      billingChargeCategory: {
+      chargeCategory: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'billing-charge-category.model',
+        modelClass: 'charge-category.model',
         join: {
           from: 'chargeElements.billingChargeCategoryId',
           to: 'billingChargeCategories.billingChargeCategoryId'

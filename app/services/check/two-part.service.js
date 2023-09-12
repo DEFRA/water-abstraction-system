@@ -76,8 +76,8 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .modifyGraph('chargeVersions.chargeElements', (builder) => {
       builder.whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
     })
-    .withGraphFetched('chargeElements.billingChargeCategory')
-    .modifyGraph('chargeElements.billingChargeCategory', (builder) => {
+    .withGraphFetched('chargeElements.chargeCategory')
+    .modifyGraph('chargeElements.chargeCategory', (builder) => {
       builder.select([
         'reference',
         'shortDescription'

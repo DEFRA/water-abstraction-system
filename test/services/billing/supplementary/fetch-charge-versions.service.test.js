@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
@@ -37,7 +37,7 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are charge versions that should be considered for the next supplementary billing', () => {
-    let billingChargeCategory
+    let chargeCategory
     let chargeElement2023
     let chargeElement2023And24
     let chargeElement2024
@@ -97,11 +97,11 @@ describe('Fetch Charge Versions service', () => {
 
       // We test that related data is returned in the results. So, we create and link it to the srocChargeVersion
       // ready for testing
-      billingChargeCategory = await BillingChargeCategoryHelper.add()
+      chargeCategory = await ChargeCategoryHelper.add()
 
       chargeElement2024 = await ChargeElementHelper.add({
         chargeVersionId: sroc2024ChargeVersion.chargeVersionId,
-        billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId
+        billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
       chargePurpose2024 = await ChargePurposeHelper.add({
@@ -110,7 +110,7 @@ describe('Fetch Charge Versions service', () => {
 
       chargeElement2023And24 = await ChargeElementHelper.add({
         chargeVersionId: sroc2023And24ChargeVersion.chargeVersionId,
-        billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId
+        billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
       chargePurpose2023And24 = await ChargePurposeHelper.add({
@@ -119,7 +119,7 @@ describe('Fetch Charge Versions service', () => {
 
       chargeElement2023 = await ChargeElementHelper.add({
         chargeVersionId: sroc2023ChargeVersion.chargeVersionId,
-        billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId
+        billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
       chargePurpose2023 = await ChargePurposeHelper.add({
@@ -191,9 +191,9 @@ describe('Fetch Charge Versions service', () => {
         adjustments: chargeElement2024.adjustments,
         additionalCharges: chargeElement2024.additionalCharges,
         description: chargeElement2024.description,
-        billingChargeCategory: {
-          reference: billingChargeCategory.reference,
-          shortDescription: billingChargeCategory.shortDescription
+        chargeCategory: {
+          reference: chargeCategory.reference,
+          shortDescription: chargeCategory.shortDescription
         },
         chargePurposes: [{
           chargePurposeId: chargePurpose2024.chargePurposeId,
@@ -212,9 +212,9 @@ describe('Fetch Charge Versions service', () => {
         adjustments: chargeElement2023And24.adjustments,
         additionalCharges: chargeElement2023And24.additionalCharges,
         description: chargeElement2023And24.description,
-        billingChargeCategory: {
-          reference: billingChargeCategory.reference,
-          shortDescription: billingChargeCategory.shortDescription
+        chargeCategory: {
+          reference: chargeCategory.reference,
+          shortDescription: chargeCategory.shortDescription
         },
         chargePurposes: [{
           chargePurposeId: chargePurpose2023And24.chargePurposeId,
@@ -233,9 +233,9 @@ describe('Fetch Charge Versions service', () => {
         adjustments: chargeElement2023.adjustments,
         additionalCharges: chargeElement2023.additionalCharges,
         description: chargeElement2023.description,
-        billingChargeCategory: {
-          reference: billingChargeCategory.reference,
-          shortDescription: billingChargeCategory.shortDescription
+        chargeCategory: {
+          reference: chargeCategory.reference,
+          shortDescription: chargeCategory.shortDescription
         },
         chargePurposes: [{
           chargePurposeId: chargePurpose2023.chargePurposeId,

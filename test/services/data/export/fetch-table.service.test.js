@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
@@ -34,7 +34,7 @@ describe('Fetch table service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    await BillingChargeCategoryHelper.add()
+    await ChargeCategoryHelper.add()
   })
 
   describe('when we connect to the db', () => {

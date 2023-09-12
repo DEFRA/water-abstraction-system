@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for billingChargeCategories
- * @module BillingChargeCategoryModel
+ * Model for billing_charge_categories
+ * @module ChargeCategoryModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class BillingChargeCategoryModel extends WaterBaseModel {
+class ChargeCategoryModel extends WaterBaseModel {
   static get tableName () {
     return 'billingChargeCategories'
   }
@@ -39,4 +39,4 @@ class BillingChargeCategoryModel extends WaterBaseModel {
   }
 }
 
-module.exports = BillingChargeCategoryModel
+module.exports = ChargeCategoryModel

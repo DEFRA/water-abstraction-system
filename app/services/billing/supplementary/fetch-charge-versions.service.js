@@ -101,8 +101,8 @@ async function _fetch (regionId, billingPeriod) {
         'description'
       ])
     })
-    .withGraphFetched('chargeElements.billingChargeCategory')
-    .modifyGraph('chargeElements.billingChargeCategory', builder => {
+    .withGraphFetched('chargeElements.chargeCategory')
+    .modifyGraph('chargeElements.chargeCategory', builder => {
       builder.select([
         'reference',
         'shortDescription'

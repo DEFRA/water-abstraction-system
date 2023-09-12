@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
-const BillingChargeCategoryModel = require('../../../app/models/water/billing-charge-category.model.js')
+const ChargeCategoryHelper = require('../../support/helpers/water/charge-category.helper.js')
+const ChargeCategoryModel = require('../../../app/models/water/charge-category.model.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
@@ -41,33 +41,33 @@ describe('Charge Element model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to billing charge category', () => {
-      let testBillingChargeCategory
+    describe('when linking to charge category', () => {
+      let testChargeCategory
 
       beforeEach(async () => {
-        testBillingChargeCategory = await BillingChargeCategoryHelper.add()
+        testChargeCategory = await ChargeCategoryHelper.add()
 
-        const { billingChargeCategoryId } = testBillingChargeCategory
+        const { billingChargeCategoryId } = testChargeCategory
         testRecord = await ChargeElementHelper.add({ billingChargeCategoryId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query()
-          .innerJoinRelated('billingChargeCategory')
+          .innerJoinRelated('chargeCategory')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the billing charge category', async () => {
+      it('can eager load the charge category', async () => {
         const result = await ChargeElementModel.query()
           .findById(testRecord.chargeElementId)
-          .withGraphFetched('billingChargeCategory')
+          .withGraphFetched('chargeCategory')
 
         expect(result).to.be.instanceOf(ChargeElementModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
-        expect(result.billingChargeCategory).to.be.an.instanceOf(BillingChargeCategoryModel)
-        expect(result.billingChargeCategory).to.equal(testBillingChargeCategory)
+        expect(result.chargeCategory).to.be.an.instanceOf(ChargeCategoryModel)
+        expect(result.chargeCategory).to.equal(testChargeCategory)
       })
     })
 

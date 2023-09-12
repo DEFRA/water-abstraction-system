@@ -1,19 +1,20 @@
 'use strict'
 
 /**
- * @module BillingChargeCategoryHelper
+ * @module ChargeCategoryHelper
  */
 
-const BillingChargeCategoryModel = require('../../../../app/models/water/billing-charge-category.model.js')
+const ChargeCategoryModel = require('../../../../app/models/water/charge-category.model.js')
 
 /**
- * Add a new billing charge category
+ * Add a new charge category
  *
  * If no `data` is provided, default values will be used. These are
  *
  * - `reference` - 4.4.5
  * - `subsistenceCharge` - 12000
- * - `description` - Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year, where a Tier 1 model applies.
+ * - `description` - Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year,
+ *    where a Tier 1 model applies.
  * - `shortDescription` - Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model
  * - `isTidal` - false
  * - `lossFactor` - low
@@ -25,18 +26,18 @@ const BillingChargeCategoryModel = require('../../../../app/models/water/billing
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:BillingChargeCategoryModel} The instance of the newly created record
+ * @returns {module:ChargeCategoryModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return BillingChargeCategoryModel.query()
+  return ChargeCategoryModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
 
 /**
- * Returns the defaults used when creating a new billing charge category
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.

@@ -12,8 +12,8 @@ const { expect } = Code
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
-const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/water/charge-version.helper.js')
@@ -37,7 +37,7 @@ describe('Process billing period service', () => {
     endDate: new Date('2023-03-31')
   }
 
-  let billingChargeCategory
+  let chargeCategory
   let billRun
   let changeReason
   let chargeVersions
@@ -51,7 +51,7 @@ describe('Process billing period service', () => {
     licence = await LicenceHelper.add({ includeInSrocSupplementaryBilling: true, regionId })
     changeReason = await ChangeReasonHelper.add()
     invoiceAccount = await InvoiceAccountHelper.add()
-    billingChargeCategory = await BillingChargeCategoryHelper.add()
+    chargeCategory = await ChargeCategoryHelper.add()
 
     billRun = await BillRunHelper.add({ regionId })
   })
@@ -85,7 +85,7 @@ describe('Process billing period service', () => {
             }
           )
           const { chargeElementId } = await ChargeElementHelper.add(
-            { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+            { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
           )
           await ChargePurposeHelper.add({
             chargeElementId,
@@ -160,7 +160,7 @@ describe('Process billing period service', () => {
               }
             )
             const { chargeElementId } = await ChargeElementHelper.add(
-              { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+              { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
             )
             await ChargePurposeHelper.add({
               chargeElementId,
@@ -196,7 +196,7 @@ describe('Process billing period service', () => {
                 }
               )
               const { chargeElementId } = await ChargeElementHelper.add(
-                { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+                { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
               )
               await ChargePurposeHelper.add({
                 chargeElementId,
@@ -229,7 +229,7 @@ describe('Process billing period service', () => {
         licenceId: licence.licenceId
       })
       const { chargeElementId } = await ChargeElementHelper.add(
-        { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+        { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
       )
       await ChargePurposeHelper.add({ chargeElementId })
 
