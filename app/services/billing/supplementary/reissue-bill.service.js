@@ -40,14 +40,14 @@ const GenerateBillService = require('./generate-bill.service.js')
  * @returns {Object} dataToReturn Data that has been generated while reissuing the invoice
  * @returns {Object[]} dataToReturn.bills Array of billing invoices
  * @returns {Object[]} dataToReturn.billLicences Array of bill licences
- * @returns {Object[]} dataToReturn.billingTransactions Array of transactions
+ * @returns {Object[]} dataToReturn.transactions Array of transactions
  */
 
 async function go (sourceBill, reissueBillRun) {
   const dataToReturn = {
     bills: [],
     billLicences: [],
-    billingTransactions: []
+    transactions: []
   }
 
   // When a reissue request is sent to the Charging Module, it creates 2 new invoices (one to cancel out the original
@@ -90,7 +90,7 @@ async function go (sourceBill, reissueBillRun) {
       )
 
       // The bill licence we are re-creating will have one or more transactions on it which we also need to re-create
-      for (const sourceTransaction of sourceBillLicence.billingTransactions) {
+      for (const sourceTransaction of sourceBillLicence.transactions) {
         // Get the original transaction from the charging module data so we can create our new one
         const chargingModuleReissueTransaction = _retrieveChargingModuleTransaction(
           chargingModuleLicence,
@@ -103,7 +103,7 @@ async function go (sourceBill, reissueBillRun) {
           reissueBillLicence.billingInvoiceLicenceId
         )
 
-        dataToReturn.billingTransactions.push(reissueTransaction)
+        dataToReturn.transactions.push(reissueTransaction)
       }
     }
   }

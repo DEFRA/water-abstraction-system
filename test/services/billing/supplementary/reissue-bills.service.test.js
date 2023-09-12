@@ -13,10 +13,10 @@ const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillModel = require('../../../../app/models/water/bill.model.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
 const BillLicenceModel = require('../../../../app/models/water/bill-licence.model.js')
-const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
-const BillingTransactionModel = require('../../../../app/models/water/billing-transaction.model.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
+const TransactionModel = require('../../../../app/models/water/transaction.model.js')
 
 // Things we need to stub
 const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
@@ -74,8 +74,8 @@ describe('Reissue Bills service', () => {
         Sinon.stub(ReissueBillService, 'go').resolves({
           bills: [BillModel.fromJson(BillHelper.defaults())],
           billLicences: [BillLicenceModel.fromJson(BillLicenceHelper.defaults())],
-          billingTransactions: [BillingTransactionModel.fromJson({
-            ...BillingTransactionHelper.defaults(),
+          transactions: [TransactionModel.fromJson({
+            ...TransactionHelper.defaults(),
             purposes: [{
               chargePurposeId: '01adfc33-4ba9-4215-bbe0-97014730991b',
               abstractionPeriodEndDay: 31,
@@ -112,7 +112,7 @@ describe('Reissue Bills service', () => {
       it('persists all transactions', async () => {
         await ReissueBillsService.go(reissueBillRun)
 
-        const result = await BillingTransactionModel.query()
+        const result = await TransactionModel.query()
 
         expect(result).to.have.length(3)
       })

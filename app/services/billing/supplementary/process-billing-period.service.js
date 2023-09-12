@@ -9,13 +9,13 @@ const BillRunError = require('../../../errors/bill-run.error.js')
 const BillRunModel = require('../../../models/water/bill-run.model.js')
 const BillModel = require('../../../models/water/bill.model.js')
 const BillLicenceModel = require('../../../models/water/bill-licence.model.js')
-const BillingTransactionModel = require('../../../models/water/billing-transaction.model.js')
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
-const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
+const GenerateTransactionsService = require('./generate-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
-const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
-const SendBillingTransactionsService = require('./send-billing-transactions.service.js')
+const ProcessTransactionsService = require('./process-transactions.service.js')
+const SendTransactionsService = require('./send-transactions.service.js')
+const TransactionModel = require('../../../models/water/transaction.model.js')
 
 /**
  * Creates the bills and transactions in both WRLS and the Charging Module API
@@ -61,7 +61,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
     const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod)
 
     if (cleansedTransactions.length !== 0) {
-      const billingTransactions = await SendBillingTransactionsService.go(
+      const transactions = await SendTransactionsService.go(
         currentBillingData.licence,
         currentBillingData.bill,
         currentBillingData.billLicence,
@@ -70,7 +70,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
         billingPeriod
       )
 
-      dataToPersist.transactions.push(...billingTransactions)
+      dataToPersist.transactions.push(...transactions)
       // Note that sets use add rather than push
       dataToPersist.bills.add(currentBillingData.bill)
       dataToPersist.billLicences.push(currentBillingData.billLicence)
@@ -138,7 +138,7 @@ async function _persistData (dataToPersist) {
     return false
   }
 
-  await BillingTransactionModel.query().insert(dataToPersist.transactions)
+  await TransactionModel.query().insert(dataToPersist.transactions)
   await BillModel.query().insert(dataToPersist.bills)
   await BillLicenceModel.query().insert(dataToPersist.billLicences)
 
@@ -176,7 +176,7 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
     return []
   }
 
-  const cleansedTransactions = await ProcessBillingTransactionsService.go(
+  const cleansedTransactions = await ProcessTransactionsService.go(
     currentBillingData.calculatedTransactions,
     currentBillingData.bill,
     currentBillingData.billLicence,
@@ -197,9 +197,9 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
     const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
     const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
-    // We use flatMap as GenerateBillingTransactionsService returns an array of transactions
+    // We use flatMap as GenerateTransactionsService returns an array of transactions
     const transactions = chargeVersion.chargeElements.flatMap((chargeElement) => {
-      return GenerateBillingTransactionsService.go(
+      return GenerateTransactionsService.go(
         chargeElement,
         billingPeriod,
         chargePeriod,

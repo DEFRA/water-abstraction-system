@@ -25,8 +25,8 @@ const RegionHelper = require('../../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
-const GenerateBillingTransactionsService = require('../../../../app/services/billing/supplementary/generate-billing-transactions.service.js')
-const SendBillingTransactionsService = require('../../../../app/services/billing/supplementary/send-billing-transactions.service.js')
+const GenerateTransactionsService = require('../../../../app/services/billing/supplementary/generate-transactions.service.js')
+const SendTransactionsService = require('../../../../app/services/billing/supplementary/send-transactions.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/billing/supplementary/process-billing-period.service.js')
@@ -134,7 +134,7 @@ describe('Process billing period service', () => {
             externalId: '7e752fa6-a19c-4779-b28c-6e536f028795'
           }]
 
-          Sinon.stub(SendBillingTransactionsService, 'go').resolves(sentTransactions)
+          Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
           Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
             succeeded: true,
             response: {}
@@ -239,7 +239,7 @@ describe('Process billing period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateBillingTransactionsService, 'go').throws()
+        Sinon.stub(GenerateTransactionsService, 'go').throws()
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -252,10 +252,10 @@ describe('Process billing period service', () => {
       })
     })
 
-    describe('because sending the billing transactions fails', () => {
+    describe('because sending the transactions fails', () => {
       beforeEach(async () => {
         const thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToCreateCharge)
-        Sinon.stub(SendBillingTransactionsService, 'go').rejects(thrownError)
+        Sinon.stub(SendTransactionsService, 'go').rejects(thrownError)
       })
 
       it('throws a BillRunError with the correct code', async () => {

@@ -66,8 +66,8 @@ async function _fetchBillRun (id) {
         'isWaterUndertaker'
       ])
     })
-    .withGraphFetched('bills.billLicences.billingTransactions')
-    .modifyGraph('bills.billLicences.billingTransactions', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions')
+    .modifyGraph('bills.billLicences.transactions', (builder) => {
       builder.select([
         'authorisedDays',
         'billableDays',
@@ -84,14 +84,14 @@ async function _fetchBillRun (id) {
         'supportedSourceName'
       ])
     })
-    .withGraphFetched('bills.billLicences.billingTransactions.chargeElement')
-    .modifyGraph('bills.billLicences.billingTransactions.chargeElement', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeElement')
+    .modifyGraph('bills.billLicences.transactions.chargeElement', (builder) => {
       builder.select([
         'adjustments'
       ])
     })
-    .withGraphFetched('bills.billLicences.billingTransactions.chargeElement.chargePurposes')
-    .modifyGraph('bills.billLicences.billingTransactions.chargeElement.chargePurposes', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeElement.chargePurposes')
+    .modifyGraph('bills.billLicences.transactions.chargeElement.chargePurposes', (builder) => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',
@@ -101,8 +101,8 @@ async function _fetchBillRun (id) {
         'authorisedAnnualQuantity'
       ])
     })
-    .withGraphFetched('bills.billLicences.billingTransactions.chargeElement.chargePurposes.purposesUse')
-    .modifyGraph('bills.billLicences.billingTransactions.chargeElement.chargePurposes.purposesUse', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeElement.chargePurposes.purposesUse')
+    .modifyGraph('bills.billLicences.transactions.chargeElement.chargePurposes.purposesUse', (builder) => {
       builder.select([
         'description'
       ])
@@ -140,7 +140,7 @@ function _mockBills (bills) {
 function _mockBillLicences (billLicences) {
   billLicences.forEach((billLicence) => {
     const { name } = GenerateMockDataService.go()
-    const { credit, debit, netTotal } = _transactionTotals(billLicence.billingTransactions)
+    const { credit, debit, netTotal } = _transactionTotals(billLicence.transactions)
 
     billLicence.licenceHolder = name
     billLicence.credit = credit

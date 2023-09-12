@@ -11,9 +11,9 @@ const { expect } = Code
 // Test helpers
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
-const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
 
 // Things we need to stub
 const ChargingModuleBillRunStatusService = require('../../../../app/services/charging-module/bill-run-status.service.js')
@@ -140,20 +140,20 @@ describe('Reissue Bill service', () => {
       })
     ])
 
-    await BillingTransactionHelper.add({
+    await TransactionHelper.add({
       billingInvoiceLicenceId: sourceBillLicences[0].billingInvoiceLicenceId,
       externalId: INVOICE_LICENCE_1_TRANSACTION_ID,
       purposes: { test: 'TEST' }
     })
 
-    await BillingTransactionHelper.add({
+    await TransactionHelper.add({
       billingInvoiceLicenceId: sourceBillLicences[1].billingInvoiceLicenceId,
       externalId: INVOICE_LICENCE_2_TRANSACTION_ID,
       purposes: { test: 'TEST' }
     })
 
     // Refresh sourceBill to include bill licences and transactions, as expected by the service
-    sourceBill = await sourceBill.$query().withGraphFetched('billLicences.billingTransactions')
+    sourceBill = await sourceBill.$query().withGraphFetched('billLicences.transactions')
   })
 
   afterEach(() => {
@@ -176,7 +176,7 @@ describe('Reissue Bill service', () => {
     it('persists two transactions per source transaction (one cancelling, one reissuing)', async () => {
       const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-      expect(result.billingTransactions).to.have.length(4)
+      expect(result.transactions).to.have.length(4)
     })
 
     it('sets the source bill rebilling state to `rebilled`', async () => {
@@ -206,7 +206,7 @@ describe('Reissue Bill service', () => {
       it('negative for credits', async () => {
         const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        const credits = result.billingTransactions.filter(transaction => transaction.isCredit)
+        const credits = result.transactions.filter(transaction => transaction.isCredit)
 
         credits.forEach((transaction) => {
           expect(transaction.netAmount).to.be.below(0)
@@ -216,7 +216,7 @@ describe('Reissue Bill service', () => {
       it('positive for debits', async () => {
         const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        const debits = result.billingTransactions.filter(transaction => !transaction.isCredit)
+        const debits = result.transactions.filter(transaction => !transaction.isCredit)
 
         debits.forEach((transaction) => {
           expect(transaction.netAmount).to.be.above(0)
@@ -285,7 +285,7 @@ describe('Reissue Bill service', () => {
       })
     })
 
-    describe('when viewing an bill', () => {
+    describe('when viewing a bill', () => {
       beforeEach(() => {
         ChargingModuleViewBillService.go.restore()
         Sinon.stub(ChargingModuleViewBillService, 'go').resolves({

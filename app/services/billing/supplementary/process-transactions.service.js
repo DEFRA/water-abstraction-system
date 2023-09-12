@@ -1,20 +1,22 @@
 'use strict'
 
 /**
- * Fetches the matching debit billing transactions from a previous bill run and reverses them as credits; removes
- * any which would be cancelled out by the supplied calculated debit transactions; combines the remaining transactions
- * and returns them all
- * @module ProcessBillingTransactionsService
+ * Fetches the matching debit transactions from a previous bill run and reverses them as credits; removes any which
+ * would be cancelled out by the supplied calculated debit transactions; combines the remaining transactions and returns
+ * them all
+ * @module ProcessTransactionsService
  */
 
-const FetchPreviousBillingTransactionsService = require('./fetch-previous-billing-transactions.service.js')
-const ReverseBillingTransactionsService = require('./reverse-billing-transactions.service.js')
+const FetchPreviousTransactionsService = require('./fetch-previous-transactions.service.js')
+const ReverseTransactionsService = require('./reverse-transactions.service.js')
 
 /**
- * Fetches debit-only billing transactions from the previous bill run for the invoice account and licence provided
- * and reverses them as credits. These credits are compared with the supplied calculated debit transactions (ie. debit
- * transactions which are to be sent to the Charging Module) and any matching pairs of transactions which would cancel
- * each other out are removed. Any remaining reversed credits and calculated debits are returned.
+ * Fetches debit-only transactions from the previous bill run for the invoice account and licence provided and reverses
+ * them as credits.
+ *
+ * These credits are compared with the supplied calculated debit transactions (ie. debit transactions which are to be
+ * sent to the Charging Module) and any matching pairs of transactions which would cancel each other out are removed.
+ * Any remaining reversed credits and calculated debits are returned.
  *
  * @param {Object[]} calculatedTransactions The calculated transactions to be processed
  * @param {Object} bill A generated bill that identifies the invoice account ID we need to match against
@@ -31,7 +33,7 @@ async function go (calculatedTransactions, bill, billLicence, billingPeriod) {
     return calculatedTransactions
   }
 
-  const reversedTransactions = ReverseBillingTransactionsService.go(previousTransactions, billLicence)
+  const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicence)
 
   return _cleanseTransactions(calculatedTransactions, reversedTransactions)
 }
@@ -125,7 +127,7 @@ function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
 async function _fetchPreviousTransactions (bill, billLicence, billingPeriod) {
   const financialYearEnding = billingPeriod.endDate.getFullYear()
 
-  const transactions = await FetchPreviousBillingTransactionsService.go(bill, billLicence, financialYearEnding)
+  const transactions = await FetchPreviousTransactionsService.go(bill, billLicence, financialYearEnding)
 
   return transactions
 }

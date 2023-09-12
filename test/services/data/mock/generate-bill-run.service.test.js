@@ -12,13 +12,13 @@ const { expect } = Code
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
-const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const ChargeElement = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargePurpose = require('../../../support/helpers/water/charge-purpose.helper.js')
+const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const PurposesUseHelper = require('../../../support/helpers/water/purposes-use.helper.js')
 const RegionHelper = require('../../../support/helpers/water/region.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
 
 // Things we need to stub
 const GenerateMockDataService = require('../../../../app/services/data/mock/generate-mock-data.service.js')
@@ -61,7 +61,7 @@ describe('Generate Bill Run service', () => {
       const billRun = await BillRunHelper.add({ billRunNumber: 10029, regionId: region.regionId })
       const bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId, invoiceNumber: 'TAI0000013T' })
       const billLicence = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId, licenceId: licence.licenceId })
-      await BillingTransactionHelper.add({
+      await TransactionHelper.add({
         billingInvoiceLicenceId: billLicence.billingInvoiceLicenceId,
         chargeElementId: chargeElement.chargeElementId,
         endDate: new Date(2023, 2, 31, 2),

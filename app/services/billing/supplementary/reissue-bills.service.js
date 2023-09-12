@@ -7,9 +7,9 @@
 
 const BillModel = require('../../../models/water/bill.model.js')
 const BillLicenceModel = require('../../../models/water/bill-licence.model.js')
-const BillingTransactionModel = require('../../../models/water/billing-transaction.model.js')
 const FetchBillsToBeReissuedService = require('./fetch-bills-to-be-reissued.service.js')
 const ReissueBillService = require('./reissue-bill.service.js')
+const TransactionModel = require('../../../models/water/transaction.model.js')
 
 /**
  * Handles the reissuing of bills
@@ -35,7 +35,7 @@ async function go (reissueBillRun) {
   const dataToPersist = {
     bills: [],
     billLicences: [],
-    billingTransactions: []
+    transactions: []
   }
 
   for (const sourceBill of sourceBills) {
@@ -55,13 +55,13 @@ async function go (reissueBillRun) {
 function _addNewDataToDataToPersist (dataToPersist, newData) {
   dataToPersist.bills.push(...newData.bills)
   dataToPersist.billLicences.push(...newData.billLicences)
-  dataToPersist.billingTransactions.push(...newData.billingTransactions)
+  dataToPersist.transactions.push(...newData.transactions)
 }
 
 async function _persistData (dataToPersist) {
   await BillModel.query().insert(dataToPersist.bills)
   await BillLicenceModel.query().insert(dataToPersist.billLicences)
-  await BillingTransactionModel.query().insert(dataToPersist.billingTransactions)
+  await TransactionModel.query().insert(dataToPersist.transactions)
 }
 
 module.exports = {

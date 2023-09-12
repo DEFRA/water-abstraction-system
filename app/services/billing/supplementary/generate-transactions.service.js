@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Generate billing transaction data from the the charge element and other information passed in
- * @module GenerateBillingTransactionsService
+ * Generate transaction data from the the charge element and other information passed in
+ * @module GenerateTransactionsService
  */
 
 const { generateUUID } = require('../../../lib/general.lib.js')
@@ -39,10 +39,10 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
     chargeElement
   )
 
-  const billingTransactions = []
+  const transactions = []
 
   if (billableDays === 0) {
-    return billingTransactions
+    return transactions
   }
 
   const standardTransaction = _standardTransaction(
@@ -54,24 +54,24 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
     isNewLicence,
     isWaterUndertaker
   )
-  billingTransactions.push(standardTransaction)
+  transactions.push(standardTransaction)
 
   if (!isWaterUndertaker) {
     const compensationTransaction = _compensationTransaction(generateUUID(), standardTransaction)
-    billingTransactions.push(compensationTransaction)
+    transactions.push(compensationTransaction)
   }
 
-  return billingTransactions
+  return transactions
 }
 
 /**
  * Generates a compensation transaction by taking a standard transaction and overwriting it with the supplied billing id
  * and the correct charge type and description for a compensation charge.
  */
-function _compensationTransaction (billingTransactionId, standardTransaction) {
+function _compensationTransaction (transactionId, standardTransaction) {
   return {
     ...standardTransaction,
-    billingTransactionId,
+    billingTransactionId: transactionId,
     chargeType: 'compensation',
     description: 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
   }
@@ -101,7 +101,7 @@ function _generatePurposes (chargeElement) {
  * Generates a standard transaction based on the supplied data, along with some default fields (eg. status)
  */
 function _standardTransaction (
-  billingTransactionId,
+  transactionId,
   authorisedDays,
   billableDays,
   chargeElement,
@@ -110,7 +110,7 @@ function _standardTransaction (
   isWaterUndertaker
 ) {
   return {
-    billingTransactionId,
+    billingTransactionId: transactionId,
     authorisedDays,
     billableDays,
     isNewLicence,

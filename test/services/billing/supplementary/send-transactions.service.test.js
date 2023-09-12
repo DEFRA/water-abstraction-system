@@ -16,9 +16,9 @@ const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
 const ChargingModuleCreateTransactionService = require('../../../../app/services/charging-module/create-transaction.service.js')
 
 // Thing under test
-const SendBillingTransactionsService = require('../../../../app/services/billing/supplementary/send-billing-transactions.service.js')
+const SendTransactionsService = require('../../../../app/services/billing/supplementary/send-transactions.service.js')
 
-describe('Send billing transactions service', () => {
+describe('Send Transactions service', () => {
   const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
   const bill = { invoiceAccountNumber: 'ABC123' }
   const billLicence = { billingInvoiceLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a' }
@@ -66,10 +66,10 @@ describe('Send billing transactions service', () => {
     isWaterUndertaker: false
   }
 
-  let billingTransactions
+  let transactions
 
   beforeEach(() => {
-    billingTransactions = [transaction]
+    transactions = [transaction]
   })
 
   afterEach(() => {
@@ -87,12 +87,12 @@ describe('Send billing transactions service', () => {
     })
 
     it('updates the transactions with the responses from the Charging Module API', async () => {
-      const results = await SendBillingTransactionsService.go(
+      const results = await SendTransactionsService.go(
         licence,
         bill,
         billLicence,
         billRunExternalId,
-        billingTransactions,
+        transactions,
         billingPeriod
       )
 
@@ -110,12 +110,12 @@ describe('Send billing transactions service', () => {
 
     it('throws a BillRunError with the correct code', async () => {
       const error = await expect(
-        SendBillingTransactionsService.go(
+        SendTransactionsService.go(
           licence,
           bill,
           billLicence,
           billRunExternalId,
-          billingTransactions,
+          transactions,
           billingPeriod
         )
       )

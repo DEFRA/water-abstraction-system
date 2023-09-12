@@ -3,7 +3,7 @@
 /**
  * Fetches the previously billed transactions that match the bill, licence and year provided, removing any debits
  * which are cancelled out by previous credits.
- * @module FetchPreviousBillingTransactionsService
+ * @module FetchPreviousTransactionsService
  */
 
 const { db } = require('../../../../db/db.js')
@@ -18,28 +18,27 @@ const { db } = require('../../../../db/db.js')
  *  match against
  * @param {Number} financialYearEnding The year the financial billing period ends that we need to match against
  *
- * @returns {Object} The resulting matched billing transactions
+ * @returns {Object} The resulting matched transactions
  */
 async function go (bill, billLicence, financialYearEnding) {
-  const billingTransactions = await _fetch(
+  const transactions = await _fetch(
     billLicence.licenceId,
     bill.invoiceAccountId,
     financialYearEnding
   )
 
-  return _cleanse(billingTransactions)
+  return _cleanse(transactions)
 }
 
 /**
- * Cleanse the billing transactions by cancelling out matching pairs of debits and credits, and return the remaining
- * debits.
+ * Cleanse the transactions by cancelling out matching pairs of debits and credits, and return the remaining debits.
  *
  * If a credit matches to a debit then its something that was dealt with in a previous supplementary bill run. We need
  * to know only about debits that have not been credited.
  */
-function _cleanse (billingTransactions) {
-  const credits = billingTransactions.filter((transaction) => transaction.isCredit)
-  const debits = billingTransactions.filter((transaction) => !transaction.isCredit)
+function _cleanse (transactions) {
+  const credits = transactions.filter((transaction) => transaction.isCredit)
+  const debits = transactions.filter((transaction) => !transaction.isCredit)
 
   credits.forEach((credit) => {
     const debitIndex = debits.findIndex((debit) => {
@@ -78,13 +77,15 @@ function _cleanse (billingTransactions) {
  */
 function _matchTransactions (debit, credit) {
   // TODO: This logic is a duplicate of what we are doing in
-  // app/services/supplementary-billing/process-billing-transactions.service.js. This also means we are running the
+  // app/services/supplementary-billing/process-transactions.service.js. This also means we are running the
   // same kind of unit tests on 2 places. We need to refactor this duplication in the code and the tests out.
 
-  // When we put together this matching logic our instincts were to try and do something 'better' than this long,
+  // When we put together this matching logic our instincts was to try and do something 'better' than this long,
   // chained && statement. But whatever we came up with was
+  //
   // - more complex
   // - less performant
+  //
   // We found this easy to see what properties are being compared. Plus the moment something doesn't match we bail. So,
   // much as it feels 'wrong', we are sticking with it!
   return debit.chargeType === credit.chargeType &&

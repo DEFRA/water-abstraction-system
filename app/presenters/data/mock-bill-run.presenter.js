@@ -121,7 +121,7 @@ function _formatBills (bills) {
 function _formatBillLicences (billLicences) {
   return billLicences.map((billLicence) => {
     const {
-      billingTransactions,
+      transactions,
       credit,
       debit,
       netTotal,
@@ -138,13 +138,13 @@ function _formatBillLicences (billLicences) {
       credit: formatNumberAsMoney(convertPenceToPounds(credit)),
       debit: formatNumberAsMoney(convertPenceToPounds(debit)),
       netTotal: formatNumberAsMoney(convertPenceToPounds(netTotal)),
-      transactions: _formatBillingTransactions(billingTransactions)
+      transactions: _formatTransactions(transactions)
     }
   })
 }
 
-function _formatBillingTransactions (billingTransactions) {
-  return billingTransactions.map((billingTransaction) => {
+function _formatTransactions (transactions) {
+  return transactions.map((transaction) => {
     const {
       authorisedDays,
       billableDays,
@@ -159,7 +159,7 @@ function _formatBillingTransactions (billingTransactions) {
       billableQuantity: chargeQuantity,
       chargeCategoryDescription: chargeDescription,
       description: lineDescription
-    } = billingTransaction
+    } = transaction
 
     return {
       type: chargeType === 'standard' ? 'Water abstraction charge' : 'Compensation charge',
@@ -172,7 +172,7 @@ function _formatBillingTransactions (billingTransactions) {
       chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       chargeRefNumber: `${chargeCategoryCode} (${formatNumberAsMoney(grossValuesCalculated.baselineCharge, true)})`,
       chargeDescription,
-      addCharges: _formatAdditionalCharges(billingTransaction),
+      addCharges: _formatAdditionalCharges(transaction),
       adjustments: _formatAdjustments(chargeElement),
       elements: _formatChargePurposes(chargeElement.chargePurposes)
     }

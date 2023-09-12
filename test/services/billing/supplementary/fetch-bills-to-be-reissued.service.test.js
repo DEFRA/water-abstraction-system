@@ -12,9 +12,9 @@ const { expect } = Code
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillModel = require('../../../../app/models/water/bill.model.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
-const BillingTransactionHelper = require('../../../support/helpers/water/billing-transaction.helper.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
 
 // Thing under test
 const FetchBillsToBeReissuedService = require('../../../../app/services/billing/supplementary/fetch-bills-to-be-reissued.service.js')
@@ -29,7 +29,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     billRun = await BillRunHelper.add()
     bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId })
     const { billingInvoiceLicenceId } = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId })
-    await BillingTransactionHelper.add({ billingInvoiceLicenceId })
+    await TransactionHelper.add({ billingInvoiceLicenceId })
   })
 
   describe('when there are no bills to be reissued', () => {
@@ -78,7 +78,7 @@ describe('Fetch Bills To Be Reissued service', () => {
       expect(result).to.only.include([
         'licenceRef',
         'licenceId',
-        'billingTransactions'
+        'transactions'
       ])
     })
 
@@ -92,7 +92,7 @@ describe('Fetch Bills To Be Reissued service', () => {
         const { billingInvoiceLicenceId: alcsBillingInvoiceLicenceId } = await BillLicenceHelper.add({
           billingInvoiceId: alcsBill.billingInvoiceId
         })
-        await BillingTransactionHelper.add({ billingInvoiceLicenceId: alcsBillingInvoiceLicenceId })
+        await TransactionHelper.add({ billingInvoiceLicenceId: alcsBillingInvoiceLicenceId })
       })
 
       it('returns only sroc bills', async () => {

@@ -2,14 +2,14 @@
 
 /**
  * Model for billing_transactions
- * @module BillingTransactionModel
+ * @module TransactionModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class BillingTransactionModel extends WaterBaseModel {
+class TransactionModel extends WaterBaseModel {
   static get tableName () {
     return 'billingTransactions'
   }
@@ -57,4 +57,4 @@ class BillingTransactionModel extends WaterBaseModel {
   }
 }
 
-module.exports = BillingTransactionModel
+module.exports = TransactionModel

@@ -2,7 +2,7 @@
 
 /**
  * Sends transactions to the Charging Module
- * @module SendBillingTransactionsService
+ * @module SendTransactionsService
  */
 
 const BillRunError = require('../../../errors/bill-run.error.js')
@@ -19,16 +19,16 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  * @param {module:BillModel} bill The bill each transaction is to be linked to
  * @param {module:BillLicenceModel} billLicence The bill licence each transaction is to be linked to
  * @param {string} billRunExternalId The Charging Module bill run id that the transactions are to be created on
- * @param {Object[]} billingTransactions The transactions to be sent to the Charging Module
+ * @param {Object[]} transactions The transactions to be sent to the Charging Module
  * @param {Object} billingPeriod The billing period of the transactions
  *
  * @returns {Object[]} Array of transactions which have been sent to the Charging Module
  */
-async function go (licence, bill, billLicence, billRunExternalId, billingTransactions, billingPeriod) {
+async function go (licence, bill, billLicence, billRunExternalId, transactions, billingPeriod) {
   try {
     const sentTransactions = []
 
-    for (const transaction of billingTransactions) {
+    for (const transaction of transactions) {
       const chargingModuleResponse = await _sendTransactionToChargingModule(
         transaction,
         billingPeriod,

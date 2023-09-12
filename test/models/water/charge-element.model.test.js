@@ -10,14 +10,14 @@ const { expect } = Code
 // Test helpers
 const BillingChargeCategoryHelper = require('../../support/helpers/water/billing-charge-category.helper.js')
 const BillingChargeCategoryModel = require('../../../app/models/water/billing-charge-category.model.js')
-const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
-const BillingTransactionModel = require('../../../app/models/water/billing-transaction.model.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const ChargeVersionModel = require('../../../app/models/water/charge-version.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const TransactionHelper = require('../../support/helpers/water/transaction.helper.js')
+const TransactionModel = require('../../../app/models/water/transaction.model.js')
 
 // Thing under test
 const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
@@ -106,38 +106,38 @@ describe('Charge Element model', () => {
       })
     })
 
-    describe('when linking to billing transactions', () => {
-      let testBillingTransactions
+    describe('when linking to transactions', () => {
+      let testTransactions
 
       beforeEach(async () => {
         const { chargeElementId } = testRecord
 
-        testBillingTransactions = []
+        testTransactions = []
         for (let i = 0; i < 2; i++) {
-          const billingTransaction = await BillingTransactionHelper.add({ description: `TEST BILLING TRANSACTION ${i}`, chargeElementId })
-          testBillingTransactions.push(billingTransaction)
+          const transaction = await TransactionHelper.add({ description: `TEST TRANSACTION ${i}`, chargeElementId })
+          testTransactions.push(transaction)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query()
-          .innerJoinRelated('billingTransactions')
+          .innerJoinRelated('transactions')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the billing transactions', async () => {
+      it('can eager load the transactions', async () => {
         const result = await ChargeElementModel.query()
           .findById(testRecord.chargeElementId)
-          .withGraphFetched('billingTransactions')
+          .withGraphFetched('transactions')
 
         expect(result).to.be.instanceOf(ChargeElementModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
-        expect(result.billingTransactions).to.be.an.array()
-        expect(result.billingTransactions[0]).to.be.an.instanceOf(BillingTransactionModel)
-        expect(result.billingTransactions).to.include(testBillingTransactions[0])
-        expect(result.billingTransactions).to.include(testBillingTransactions[1])
+        expect(result.transactions).to.be.an.array()
+        expect(result.transactions[0]).to.be.an.instanceOf(TransactionModel)
+        expect(result.transactions).to.include(testTransactions[0])
+        expect(result.transactions).to.include(testTransactions[1])
       })
     })
 

@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchPreviousBillingTransactionsService = require('../../../../app/services/billing/supplementary/fetch-previous-billing-transactions.service.js')
+const FetchPreviousTransactionsService = require('../../../../app/services/billing/supplementary/fetch-previous-transactions.service.js')
 
 // Thing under test
-const ProcessBillingTransactionsService = require('../../../../app/services/billing/supplementary/process-billing-transactions.service.js')
+const ProcessTransactionsService = require('../../../../app/services/billing/supplementary/process-transactions.service.js')
 
-describe('Process Billing Transactions service', () => {
+describe('Process Transactions service', () => {
   const bill = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
   const billLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
 
@@ -49,11 +49,11 @@ describe('Process Billing Transactions service', () => {
               _generatePreviousTransaction('5.11.2', 265, 'I_WILL_BE_REMOVED_2')
             ]
 
-            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns the matched calculated transactions', async () => {
-            const result = await ProcessBillingTransactionsService.go(
+            const result = await ProcessTransactionsService.go(
               calculatedTransactions,
               bill,
               billLicence,
@@ -73,11 +73,11 @@ describe('Process Billing Transactions service', () => {
               _generatePreviousTransaction('6.12.3', 100, 'I_WILL_BE_REMOVED_3')
             ]
 
-            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns no transactions', async () => {
-            const result = await ProcessBillingTransactionsService.go(
+            const result = await ProcessTransactionsService.go(
               calculatedTransactions,
               bill,
               billLicence,
@@ -95,11 +95,11 @@ describe('Process Billing Transactions service', () => {
               _generatePreviousTransaction('5.11.2', 265, 'I_WILL_NOT_BE_REMOVED_2')
             ]
 
-            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns only the previous transactions', async () => {
-            const result = await ProcessBillingTransactionsService.go(
+            const result = await ProcessTransactionsService.go(
               [],
               bill,
               billLicence,
@@ -120,11 +120,11 @@ describe('Process Billing Transactions service', () => {
               _generatePreviousTransaction('9.9.9', 180, 'I_WILL_NOT_BE_REMOVED')
             ]
 
-            Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+            Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
           })
 
           it('returns the unmatched calculated transactions and previous transactions (reversed)', async () => {
-            const result = await ProcessBillingTransactionsService.go(
+            const result = await ProcessTransactionsService.go(
               calculatedTransactions,
               bill,
               billLicence,
@@ -142,11 +142,11 @@ describe('Process Billing Transactions service', () => {
 
     describe('do not match to transactions on a previous bill run', () => {
       beforeEach(() => {
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves([])
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves([])
       })
 
       it('returns the calculated transactions unchanged', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -176,11 +176,11 @@ describe('Process Billing Transactions service', () => {
           )
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -197,11 +197,11 @@ describe('Process Billing Transactions service', () => {
       beforeEach(() => {
         const previousTransactions = [_generatePreviousTransaction('5.10.1', 365, 'PREVIOUS_TRANSACTION')]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -218,11 +218,11 @@ describe('Process Billing Transactions service', () => {
       beforeEach(() => {
         const previousTransactions = [_generatePreviousTransaction('4.10.1', 5, 'PREVIOUS_TRANSACTION')]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -241,11 +241,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { section126Factor: 0.5 })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -264,11 +264,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { section127Agreement: true })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -287,11 +287,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { section130Agreement: true })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -310,11 +310,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { aggregateFactor: 0.5 })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -333,11 +333,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { adjustmentFactor: 0.5 })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -356,11 +356,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isWinterOnly: true })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -379,11 +379,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isSupportedSource: true })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -402,11 +402,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { supportedSourceName: 'source name' })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -425,11 +425,11 @@ describe('Process Billing Transactions service', () => {
           _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isWaterCompanyCharge: true })
         ]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('does not match the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,
@@ -446,11 +446,11 @@ describe('Process Billing Transactions service', () => {
       beforeEach(() => {
         const previousTransactions = [_generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION')]
 
-        Sinon.stub(FetchPreviousBillingTransactionsService, 'go').resolves(previousTransactions)
+        Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
       })
 
       it('matches the transactions', async () => {
-        const result = await ProcessBillingTransactionsService.go(
+        const result = await ProcessTransactionsService.go(
           calculatedTransactions,
           bill,
           billLicence,

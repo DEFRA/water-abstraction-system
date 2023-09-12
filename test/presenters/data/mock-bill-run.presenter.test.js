@@ -109,7 +109,7 @@ const mockedBillRun = {
           licence: {
             isWaterUndertaker: false
           },
-          billingTransactions: [
+          transactions: [
             {
               authorisedDays: 151,
               billableDays: 151,

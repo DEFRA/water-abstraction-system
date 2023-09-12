@@ -51,9 +51,9 @@ class ChargeElementModel extends WaterBaseModel {
           to: 'chargePurposes.chargeElementId'
         }
       },
-      billingTransactions: {
+      transactions: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-transaction.model',
+        modelClass: 'transaction.model',
         join: {
           from: 'chargeElements.chargeElementId',
           to: 'billingTransactions.chargeElementId'

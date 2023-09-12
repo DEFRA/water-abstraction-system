@@ -2,7 +2,7 @@
 
 /**
  * Takes previously billed transactions and returns reversed and cleansed versions of them
- * @module ReverseBillingTransactionsService
+ * @module ReverseTransactionsService
  */
 
 const { generateUUID } = require('../../../lib/general.lib.js')
@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * This service takes an array of transactions and a bill licence, and returns an array of transactions which
  * will reverse the original transactions, with their bill licence id set to the id of the supplied billing licence.
  *
- * @param {module:BillingTransactionModel[]} transactions Array of transactions to be reversed
+ * @param {module:TransactionModel[]} transactions Array of transactions to be reversed
  * @param {module:BillLicenceModel} billLicence The bill licence these transactions are intended to be added to
  *
  * @returns {Object[]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
@@ -32,12 +32,12 @@ function go (transactions, billLicence) {
  */
 function _reverseTransactions (transactions, billLicence) {
   return transactions.map((transaction) => {
-    // TODO: The FetchBillingTransactionsService which we use to get the transactions to reverse adds the invoice
-    // account ID and number to each transaction returned. This is a performance measure to avoid an extra query to the
-    // DB. But if we don't strip them from the result when we try to persist our reversed versions, they fail because
-    // the billing_transactions table doesn't have these fields. We do the stripping here to avoid iterating through
-    // the collection multiple times. Ideally, we'd look to return a result from FetchBillingTransactionsService that
-    // avoids us having to do this.
+    // TODO: The FetchTransactionsService which we use to get the transactions to reverse adds the invoice account ID
+    // and number to each transaction returned. This is a performance measure to avoid an extra query to the DB. But if
+    // we don't strip them from the result when we try to persist our reversed versions, they fail because the
+    // billing_transactions table doesn't have these fields. We do the stripping here to avoid iterating through the
+    // collection multiple times. Ideally, we'd look to return a result from FetchTransactionsService that avoids us
+    // having to do this.
     const { invoiceAccountId, invoiceAccountNumber, ...propertiesToKeep } = transaction
 
     return {
