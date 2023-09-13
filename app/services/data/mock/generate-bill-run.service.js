@@ -84,14 +84,14 @@ async function _fetchBillRun (id) {
         'supportedSourceName'
       ])
     })
-    .withGraphFetched('bills.billLicences.transactions.chargeElement')
-    .modifyGraph('bills.billLicences.transactions.chargeElement', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeReference')
+    .modifyGraph('bills.billLicences.transactions.chargeReference', (builder) => {
       builder.select([
         'adjustments'
       ])
     })
-    .withGraphFetched('bills.billLicences.transactions.chargeElement.chargePurposes')
-    .modifyGraph('bills.billLicences.transactions.chargeElement.chargePurposes', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargePurposes')
+    .modifyGraph('bills.billLicences.transactions.chargeReference.chargePurposes', (builder) => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',
@@ -101,8 +101,8 @@ async function _fetchBillRun (id) {
         'authorisedAnnualQuantity'
       ])
     })
-    .withGraphFetched('bills.billLicences.transactions.chargeElement.chargePurposes.purposesUse')
-    .modifyGraph('bills.billLicences.transactions.chargeElement.chargePurposes.purposesUse', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargePurposes.purposesUse')
+    .modifyGraph('bills.billLicences.transactions.chargeReference.chargePurposes.purposesUse', (builder) => {
       builder.select([
         'description'
       ])

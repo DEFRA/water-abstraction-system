@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Generate transaction data from the the charge element and other information passed in
+ * Generate transaction data from the the charge reference and other information passed in
  * @module GenerateTransactionsService
  */
 
@@ -12,7 +12,7 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
 /**
  * Generates an array of transactions ready to be persisted as `billing_transactions`
  *
- * The service first uses the charge element and period data to determine if there are any billable days. If there are
+ * The service first uses the charge reference and period data to determine if there are any billable days. If there are
  * none, it returns an empty array. With nothing to bill there is no point in generating any transaction line objects.
  *
  * If there are billable days, it will generate a transaction object where the `chargeType` is 'standard'.
@@ -24,7 +24,7 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  * They will then be returned in an array for further processing before being persisted to the DB as
  * `billing_transactions`.
  *
- * @param {Object} chargeElement The charge element the transaction generated from
+ * @param {Object} chargeReference The charge reference the transaction generated from
  * @param {Object} billingPeriod A start and end date representing the billing period for the bill run
  * @param {Object} chargePeriod A start and end date representing the charge period for the charge version
  * @param {Boolean} isNewLicence Whether the charge version is linked to a new licence
@@ -32,11 +32,11 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * @returns {Object[]} an array of 0, 1 or 2 transaction objects
  */
-function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker) {
+function go (chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker) {
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
     chargePeriod,
     billingPeriod,
-    chargeElement
+    chargeReference
   )
 
   const transactions = []
@@ -49,7 +49,7 @@ function go (chargeElement, billingPeriod, chargePeriod, isNewLicence, isWaterUn
     generateUUID(),
     authorisedDays,
     billableDays,
-    chargeElement,
+    chargeReference,
     chargePeriod,
     isNewLicence,
     isWaterUndertaker
@@ -77,20 +77,20 @@ function _compensationTransaction (transactionId, standardTransaction) {
   }
 }
 
-function _description (chargeElement) {
+function _description (chargeReference) {
   // If the value is false, undefined, null or simply doesn't exist we return the standard description
-  if (!chargeElement.adjustments.s127) {
-    return `Water abstraction charge: ${chargeElement.description}`
+  if (!chargeReference.adjustments.s127) {
+    return `Water abstraction charge: ${chargeReference.description}`
   }
 
-  return `Two-part tariff basic water abstraction charge: ${chargeElement.description}`
+  return `Two-part tariff basic water abstraction charge: ${chargeReference.description}`
 }
 
 /**
  * Returns a json representation of all charge purposes in a charge element
  */
-function _generatePurposes (chargeElement) {
-  const jsonChargePurposes = chargeElement.chargePurposes.map((chargePurpose) => {
+function _generatePurposes (chargeReference) {
+  const jsonChargePurposes = chargeReference.chargePurposes.map((chargePurpose) => {
     return chargePurpose.toJSON()
   })
 
@@ -104,7 +104,7 @@ function _standardTransaction (
   transactionId,
   authorisedDays,
   billableDays,
-  chargeElement,
+  chargeReference,
   chargePeriod,
   isNewLicence,
   isWaterUndertaker
@@ -115,35 +115,35 @@ function _standardTransaction (
     billableDays,
     isNewLicence,
     isWaterUndertaker,
-    chargeElementId: chargeElement.chargeElementId,
+    chargeElementId: chargeReference.chargeElementId,
     startDate: chargePeriod.startDate,
     endDate: chargePeriod.endDate,
-    source: chargeElement.source,
+    source: chargeReference.source,
     season: 'all year',
-    loss: chargeElement.loss,
+    loss: chargeReference.loss,
     isCredit: false,
     chargeType: 'standard',
-    authorisedQuantity: chargeElement.volume,
-    billableQuantity: chargeElement.volume,
+    authorisedQuantity: chargeReference.volume,
+    billableQuantity: chargeReference.volume,
     status: 'candidate',
-    description: _description(chargeElement),
-    volume: chargeElement.volume,
-    section126Factor: Number(chargeElement.adjustments.s126) || 1,
-    section127Agreement: !!chargeElement.adjustments.s127,
-    section130Agreement: !!chargeElement.adjustments.s130,
+    description: _description(chargeReference),
+    volume: chargeReference.volume,
+    section126Factor: Number(chargeReference.adjustments.s126) || 1,
+    section127Agreement: !!chargeReference.adjustments.s127,
+    section130Agreement: !!chargeReference.adjustments.s130,
     // NOTE: We do not currently support two part tariff bill runs. We set this to false until we implement that
     // functionality and understand what determines the flag
     isTwoPartSecondPartCharge: false,
     scheme: 'sroc',
-    aggregateFactor: Number(chargeElement.adjustments.aggregate) || 1,
-    adjustmentFactor: Number(chargeElement.adjustments.charge) || 1,
-    chargeCategoryCode: chargeElement.chargeCategory.reference,
-    chargeCategoryDescription: chargeElement.chargeCategory.shortDescription,
-    isSupportedSource: !!chargeElement.additionalCharges?.supportedSource?.name,
-    supportedSourceName: chargeElement.additionalCharges?.supportedSource?.name || null,
-    isWaterCompanyCharge: !!chargeElement.additionalCharges?.isSupplyPublicWater,
-    isWinterOnly: !!chargeElement.adjustments.winter,
-    purposes: _generatePurposes(chargeElement)
+    aggregateFactor: Number(chargeReference.adjustments.aggregate) || 1,
+    adjustmentFactor: Number(chargeReference.adjustments.charge) || 1,
+    chargeCategoryCode: chargeReference.chargeCategory.reference,
+    chargeCategoryDescription: chargeReference.chargeCategory.shortDescription,
+    isSupportedSource: !!chargeReference.additionalCharges?.supportedSource?.name,
+    supportedSourceName: chargeReference.additionalCharges?.supportedSource?.name || null,
+    isWaterCompanyCharge: !!chargeReference.additionalCharges?.isSupplyPublicWater,
+    isWinterOnly: !!chargeReference.adjustments.winter,
+    purposes: _generatePurposes(chargeReference)
   }
 }
 

@@ -8,7 +8,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
@@ -30,10 +30,10 @@ describe('Calculate Authorised and Billable days service', () => {
     endDate: new Date('2023-03-31')
   }
   let chargePeriod
-  let chargeElement
+  let chargeReference
 
   beforeEach(async () => {
-    chargeElement = await ChargeElementHelper.add()
+    chargeReference = await ChargeReferenceHelper.add()
   })
 
   afterEach(async () => {
@@ -44,13 +44,13 @@ describe('Calculate Authorised and Billable days service', () => {
     describe('and the abstraction period is 01-JAN to 31-DEC (in-year)', () => {
       beforeEach(async () => {
         const chargePurpose = await ChargePurposeHelper.add({
-          chargeElementId: chargeElement.chargeElementId,
+          chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 1,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 12
         })
-        chargeElement.chargePurposes = [chargePurpose]
+        chargeReference.chargePurposes = [chargePurpose]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -62,7 +62,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 365 for authorised days and 61 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(365)
           expect(result.billableDays).to.equal(61)
@@ -78,7 +78,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 365 for authorised days and 62 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(365)
           expect(result.billableDays).to.equal(62)
@@ -94,7 +94,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 365 for authorised days 59 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(365)
           expect(result.billableDays).to.equal(59)
@@ -105,13 +105,13 @@ describe('Calculate Authorised and Billable days service', () => {
     describe('and the abstraction period is 01-JAN to 30-JUN (in-year)', () => {
       beforeEach(async () => {
         const chargePurpose = await ChargePurposeHelper.add({
-          chargeElementId: chargeElement.chargeElementId,
+          chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 1,
           abstractionPeriodEndDay: 30,
           abstractionPeriodEndMonth: 6
         })
-        chargeElement.chargePurposes = [chargePurpose]
+        chargeReference.chargePurposes = [chargePurpose]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -123,7 +123,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 181 for authorised days and 0 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(181)
           expect(result.billableDays).to.equal(0)
@@ -139,7 +139,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 181 for authorised days and 31 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(181)
           expect(result.billableDays).to.equal(31)
@@ -155,7 +155,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 181 for authorised days and 59 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(181)
           expect(result.billableDays).to.equal(59)
@@ -166,13 +166,13 @@ describe('Calculate Authorised and Billable days service', () => {
     describe('and the abstraction period is 01-OCT to 31-MAR (out-year)', () => {
       beforeEach(async () => {
         const chargePurpose = await ChargePurposeHelper.add({
-          chargeElementId: chargeElement.chargeElementId,
+          chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 10,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3
         })
-        chargeElement.chargePurposes = [chargePurpose]
+        chargeReference.chargePurposes = [chargePurpose]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -184,7 +184,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 61 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(182)
           expect(result.billableDays).to.equal(61)
@@ -200,7 +200,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 62 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(182)
           expect(result.billableDays).to.equal(62)
@@ -216,7 +216,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 59 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(182)
           expect(result.billableDays).to.equal(59)
@@ -232,7 +232,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 0 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(182)
           expect(result.billableDays).to.equal(0)
@@ -245,20 +245,20 @@ describe('Calculate Authorised and Billable days service', () => {
     describe('and the abstraction periods are 01-OCT to 30-NOV and 01-FEB to 31-MAR', () => {
       beforeEach(async () => {
         const firstChargePurpose = await ChargePurposeHelper.add({
-          chargeElementId: chargeElement.chargeElementId,
+          chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 10,
           abstractionPeriodEndDay: 30,
           abstractionPeriodEndMonth: 11
         })
         const secondChargePurpose = await ChargePurposeHelper.add({
-          chargeElementId: chargeElement.chargeElementId,
+          chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 2,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3
         })
-        chargeElement.chargePurposes = [firstChargePurpose, secondChargePurpose]
+        chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -270,7 +270,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 120 for authorised days and 30 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(120)
           expect(result.billableDays).to.equal(30)
@@ -286,7 +286,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 120 for authorised days and 0 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(120)
           expect(result.billableDays).to.equal(0)
@@ -302,7 +302,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 120 for authorised days and 28 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(120)
           expect(result.billableDays).to.equal(28)
@@ -319,24 +319,24 @@ describe('Calculate Authorised and Billable days service', () => {
       describe('and the abstraction periods overlap (01-OCT to 28-FEB and 01-SEP to 31-NOV)', () => {
         beforeEach(async () => {
           const firstChargePurpose = await ChargePurposeHelper.add({
-            chargeElementId: chargeElement.chargeElementId,
+            chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 10,
             abstractionPeriodEndDay: 28,
             abstractionPeriodEndMonth: 2
           })
           const secondChargePurpose = await ChargePurposeHelper.add({
-            chargeElementId: chargeElement.chargeElementId,
+            chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 9,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 11
           })
-          chargeElement.chargePurposes = [firstChargePurpose, secondChargePurpose]
+          chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
         })
 
         it('returns 181 for authorised days and 181 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(181)
           expect(result.billableDays).to.equal(181)
@@ -346,24 +346,24 @@ describe('Calculate Authorised and Billable days service', () => {
       describe('and the abstraction periods overlap (01-OCT to 28-FEB and 01-NOV to 31-JAN)', () => {
         beforeEach(async () => {
           const firstChargePurpose = await ChargePurposeHelper.add({
-            chargeElementId: chargeElement.chargeElementId,
+            chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 10,
             abstractionPeriodEndDay: 28,
             abstractionPeriodEndMonth: 2
           })
           const secondChargePurpose = await ChargePurposeHelper.add({
-            chargeElementId: chargeElement.chargeElementId,
+            chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 11,
             abstractionPeriodEndDay: 1,
             abstractionPeriodEndMonth: 1
           })
-          chargeElement.chargePurposes = [firstChargePurpose, secondChargePurpose]
+          chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
         })
 
         it('returns 151 for authorised days and 151 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(151)
           expect(result.billableDays).to.equal(151)
@@ -373,24 +373,24 @@ describe('Calculate Authorised and Billable days service', () => {
       describe('and the abstraction periods overlap (01-OCT to 28-FEB and 01-JAN to 31-MAR)', () => {
         beforeEach(async () => {
           const firstChargePurpose = await ChargePurposeHelper.add({
-            chargeElementId: chargeElement.chargeElementId,
+            chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 10,
             abstractionPeriodEndDay: 28,
             abstractionPeriodEndMonth: 2
           })
           const secondChargePurpose = await ChargePurposeHelper.add({
-            chargeElementId: chargeElement.chargeElementId,
+            chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 1,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3
           })
-          chargeElement.chargePurposes = [firstChargePurpose, secondChargePurpose]
+          chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
         })
 
         it('returns 182 for authorised days and 182 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeElement)
+          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).to.equal(182)
           expect(result.billableDays).to.equal(182)

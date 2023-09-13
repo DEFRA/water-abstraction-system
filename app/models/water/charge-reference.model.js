@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for chargeElements
- * @module ChargeElementModel
+ * Model for charge_elements
+ * @module ChargeReferenceModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class ChargeElementModel extends WaterBaseModel {
+class ChargeReferenceModel extends WaterBaseModel {
   static get tableName () {
     return 'chargeElements'
   }
@@ -63,4 +63,4 @@ class ChargeElementModel extends WaterBaseModel {
   }
 }
 
-module.exports = ChargeElementModel
+module.exports = ChargeReferenceModel

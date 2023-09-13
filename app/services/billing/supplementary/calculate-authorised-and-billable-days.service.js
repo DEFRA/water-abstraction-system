@@ -47,16 +47,16 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *  version's start and end dates, and the billing period's (financial year) start and end dates. So, when the charge
  *  version and billing period are compared the charge period's start date is the latest of the two, and the end date is
  *  the earliest of their end dates
- * @param {{startDate: Date, endDate: Date}} billingPeriod The period a bill run is being calculated for.
- *  Currently, this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
- * @param {module:ChargeElementModel} chargeElement Referred to as the 'charge reference' in the UI, for example,
- *  4.1.10. A charge version can have multiple charge elements, though each will have a different reference. Each
- *  element can have multiple charge purposes and it's these that hold the abstraction period data
+ * @param {{startDate: Date, endDate: Date}} billingPeriod The period a bill run is being calculated for. Currently,
+ *  this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
+ * @param {module:ChargeReferenceModel} chargeReference A charge information can have multiple charge reference, though
+ *  each will have a different reference, for example, 4.1.10. Each reference can have multiple charge purposes and it's
+ *  these that hold the abstraction period data
  *
  * @returns {Object} An object containing an `authorisedDays` and `billableDays` property
  */
-function go (chargePeriod, billingPeriod, chargeElement) {
-  const { chargePurposes } = chargeElement
+function go (chargePeriod, billingPeriod, chargeReference) {
+  const { chargePurposes } = chargeReference
 
   const authorisedAbstractionPeriods = []
   const billableAbstractionPeriods = []

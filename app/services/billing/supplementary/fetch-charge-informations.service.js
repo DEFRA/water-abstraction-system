@@ -89,8 +89,8 @@ async function _fetch (regionId, billingPeriod) {
         'triggersMinimumCharge'
       ])
     })
-    .withGraphFetched('chargeElements')
-    .modifyGraph('chargeElements', builder => {
+    .withGraphFetched('chargeReferences')
+    .modifyGraph('chargeReferences', builder => {
       builder.select([
         'chargeElementId',
         'source',
@@ -101,15 +101,15 @@ async function _fetch (regionId, billingPeriod) {
         'description'
       ])
     })
-    .withGraphFetched('chargeElements.chargeCategory')
-    .modifyGraph('chargeElements.chargeCategory', builder => {
+    .withGraphFetched('chargeReferences.chargeCategory')
+    .modifyGraph('chargeReferences.chargeCategory', builder => {
       builder.select([
         'reference',
         'shortDescription'
       ])
     })
-    .withGraphFetched('chargeElements.chargePurposes')
-    .modifyGraph('chargeElements.chargePurposes', builder => {
+    .withGraphFetched('chargeReferences.chargePurposes')
+    .modifyGraph('chargeReferences.chargePurposes', builder => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',

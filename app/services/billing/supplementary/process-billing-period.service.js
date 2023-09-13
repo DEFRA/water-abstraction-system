@@ -198,9 +198,9 @@ function _generateCalculatedTransactions (billingPeriod, chargeInformation) {
     const isWaterUndertaker = chargeInformation.licence.isWaterUndertaker
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions
-    const transactions = chargeInformation.chargeElements.flatMap((chargeElement) => {
+    const transactions = chargeInformation.chargeReferences.flatMap((chargeReference) => {
       return GenerateTransactionsService.go(
-        chargeElement,
+        chargeReference,
         billingPeriod,
         chargePeriod,
         isNewLicence,

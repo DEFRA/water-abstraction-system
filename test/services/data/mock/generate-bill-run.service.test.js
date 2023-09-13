@@ -12,7 +12,7 @@ const { expect } = Code
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
-const ChargeElement = require('../../../support/helpers/water/charge-element.helper.js')
+const ChargeReference = require('../../../support/helpers/water/charge-reference.helper.js')
 const ChargePurpose = require('../../../support/helpers/water/charge-purpose.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
@@ -54,16 +54,16 @@ describe('Generate Bill Run service', () => {
       const region = await RegionHelper.add()
       const licence = await LicenceHelper.add({ regionId: region.regionId })
       const purposesUse = await PurposesUseHelper.add()
-      const chargeElement = await ChargeElement.add({
+      const chargeReference = await ChargeReference.add({
         adjustments: { s126: null, s127: false, s130: false, charge: null, winter: true, aggregate: null }
       })
-      await ChargePurpose.add({ chargeElementId: chargeElement.chargeElementId, purposeUseId: purposesUse.purposeUseId })
+      await ChargePurpose.add({ chargeElementId: chargeReference.chargeElementId, purposeUseId: purposesUse.purposeUseId })
       const billRun = await BillRunHelper.add({ billRunNumber: 10029, regionId: region.regionId })
       const bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId, invoiceNumber: 'TAI0000013T' })
       const billLicence = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId, licenceId: licence.licenceId })
       await TransactionHelper.add({
         billingInvoiceLicenceId: billLicence.billingInvoiceLicenceId,
-        chargeElementId: chargeElement.chargeElementId,
+        chargeElementId: chargeReference.chargeElementId,
         endDate: new Date(2023, 2, 31, 2),
         netAmount: 4200,
         startDate: new Date(2022, 3, 1, 2),

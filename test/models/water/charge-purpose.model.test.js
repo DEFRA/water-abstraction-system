@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
-const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
+const ChargeReferenceHelper = require('../../support/helpers/water/charge-reference.helper.js')
+const ChargeReferenceModel = require('../../../app/models/water/charge-reference.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const PurposesUseModel = require('../../../app/models/water/purposes-use.model.js')
 const PurposesUseHelper = require('../../support/helpers/water/purposes-use.helper.js')
@@ -37,33 +37,33 @@ describe('Charge Purpose model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge element', () => {
-      let testChargeElement
+    describe('when linking to charge reference', () => {
+      let testChargeReference
 
       beforeEach(async () => {
-        testChargeElement = await ChargeElementHelper.add()
+        testChargeReference = await ChargeReferenceHelper.add()
 
-        const { chargeElementId } = testChargeElement
+        const { chargeElementId } = testChargeReference
         testRecord = await ChargePurposeHelper.add({ chargeElementId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargePurposeModel.query()
-          .innerJoinRelated('chargeElement')
+          .innerJoinRelated('chargeReference')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the charge element', async () => {
+      it('can eager load the charge reference', async () => {
         const result = await ChargePurposeModel.query()
           .findById(testRecord.chargePurposeId)
-          .withGraphFetched('chargeElement')
+          .withGraphFetched('chargeReference')
 
         expect(result).to.be.instanceOf(ChargePurposeModel)
         expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
 
-        expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
-        expect(result.chargeElement).to.equal(testChargeElement)
+        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
+        expect(result.chargeReference).to.equal(testChargeReference)
       })
     })
 

@@ -10,32 +10,32 @@ const { expect } = Code
 // Test helpers
 const ChargeCategoryHelper = require('../../support/helpers/water/charge-category.helper.js')
 const ChargeCategoryModel = require('../../../app/models/water/charge-category.model.js')
-const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargeInformationHelper = require('../../support/helpers/water/charge-information.helper.js')
 const ChargeInformationModel = require('../../../app/models/water/charge-information.model.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
+const ChargeReferenceHelper = require('../../support/helpers/water/charge-reference.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const TransactionHelper = require('../../support/helpers/water/transaction.helper.js')
 const TransactionModel = require('../../../app/models/water/transaction.model.js')
 
 // Thing under test
-const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
+const ChargeReferenceModel = require('../../../app/models/water/charge-reference.model.js')
 
-describe('Charge Element model', () => {
+describe('Charge Reference model', () => {
   let testRecord
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    testRecord = await ChargeElementHelper.add()
+    testRecord = await ChargeReferenceHelper.add()
   })
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await ChargeElementModel.query().findById(testRecord.chargeElementId)
+      const result = await ChargeReferenceModel.query().findById(testRecord.chargeElementId)
 
-      expect(result).to.be.an.instanceOf(ChargeElementModel)
+      expect(result).to.be.an.instanceOf(ChargeReferenceModel)
       expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
     })
   })
@@ -48,22 +48,22 @@ describe('Charge Element model', () => {
         testChargeCategory = await ChargeCategoryHelper.add()
 
         const { billingChargeCategoryId } = testChargeCategory
-        testRecord = await ChargeElementHelper.add({ billingChargeCategoryId })
+        testRecord = await ChargeReferenceHelper.add({ billingChargeCategoryId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeElementModel.query()
+        const query = await ChargeReferenceModel.query()
           .innerJoinRelated('chargeCategory')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge category', async () => {
-        const result = await ChargeElementModel.query()
+        const result = await ChargeReferenceModel.query()
           .findById(testRecord.chargeElementId)
           .withGraphFetched('chargeCategory')
 
-        expect(result).to.be.instanceOf(ChargeElementModel)
+        expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
         expect(result.chargeCategory).to.be.an.instanceOf(ChargeCategoryModel)
@@ -85,18 +85,18 @@ describe('Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeElementModel.query()
+        const query = await ChargeReferenceModel.query()
           .innerJoinRelated('chargePurposes')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge purposes', async () => {
-        const result = await ChargeElementModel.query()
+        const result = await ChargeReferenceModel.query()
           .findById(testRecord.chargeElementId)
           .withGraphFetched('chargePurposes')
 
-        expect(result).to.be.instanceOf(ChargeElementModel)
+        expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
         expect(result.chargePurposes).to.be.an.array()
@@ -120,18 +120,18 @@ describe('Charge Element model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeElementModel.query()
+        const query = await ChargeReferenceModel.query()
           .innerJoinRelated('transactions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the transactions', async () => {
-        const result = await ChargeElementModel.query()
+        const result = await ChargeReferenceModel.query()
           .findById(testRecord.chargeElementId)
           .withGraphFetched('transactions')
 
-        expect(result).to.be.instanceOf(ChargeElementModel)
+        expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
         expect(result.transactions).to.be.an.array()
@@ -148,22 +148,22 @@ describe('Charge Element model', () => {
         testChargeInformation = await ChargeInformationHelper.add()
 
         const { chargeVersionId } = testChargeInformation
-        testRecord = await ChargeElementHelper.add({ chargeVersionId })
+        testRecord = await ChargeReferenceHelper.add({ chargeVersionId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ChargeElementModel.query()
+        const query = await ChargeReferenceModel.query()
           .innerJoinRelated('chargeInformation')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the charge version', async () => {
-        const result = await ChargeElementModel.query()
+      it('can eager load the charge information', async () => {
+        const result = await ChargeReferenceModel.query()
           .findById(testRecord.chargeElementId)
           .withGraphFetched('chargeInformation')
 
-        expect(result).to.be.instanceOf(ChargeElementModel)
+        expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
         expect(result.chargeInformation).to.be.an.instanceOf(ChargeInformationModel)

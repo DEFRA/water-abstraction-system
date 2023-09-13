@@ -27,9 +27,9 @@ class TransactionModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      chargeElement: {
+      chargeReference: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-element.model',
+        modelClass: 'charge-reference.model',
         join: {
           from: 'billingTransactions.chargeElementId',
           to: 'chargeElements.chargeElementId'

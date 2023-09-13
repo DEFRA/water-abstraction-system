@@ -53,14 +53,14 @@ function _formatAdditionalCharges (transaction) {
   return formattedData
 }
 
-function _formatAdjustments (chargeElement) {
+function _formatAdjustments (chargeReference) {
   const formattedData = []
 
-  if (!chargeElement.adjustments) {
+  if (!chargeReference.adjustments) {
     return formattedData
   }
 
-  const { aggregate, charge, s126, s127, s130, winter } = chargeElement.adjustments
+  const { aggregate, charge, s126, s127, s130, winter } = chargeReference.adjustments
 
   if (aggregate) {
     formattedData.push(`Aggregate factor (${aggregate})`)
@@ -149,7 +149,7 @@ function _formatTransactions (transactions) {
       authorisedDays,
       billableDays,
       chargeCategoryCode,
-      chargeElement,
+      chargeReference,
       chargeType,
       endDate,
       grossValuesCalculated,
@@ -173,8 +173,8 @@ function _formatTransactions (transactions) {
       chargeRefNumber: `${chargeCategoryCode} (${formatNumberAsMoney(grossValuesCalculated.baselineCharge, true)})`,
       chargeDescription,
       addCharges: _formatAdditionalCharges(transaction),
-      adjustments: _formatAdjustments(chargeElement),
-      elements: _formatChargePurposes(chargeElement.chargePurposes)
+      adjustments: _formatAdjustments(chargeReference),
+      elements: _formatChargePurposes(chargeReference.chargePurposes)
     }
   })
 }

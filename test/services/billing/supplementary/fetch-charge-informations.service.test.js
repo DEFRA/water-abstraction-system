@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
 const ChargeInformationHelper = require('../../../support/helpers/water/charge-information.helper.js')
 const ChargeVersionWorkflowHelper = require('../../../support/helpers/water/charge-version-workflow.helper.js')
@@ -38,9 +38,9 @@ describe('Fetch Charge Informations service', () => {
 
   describe('when there are charge informations that should be considered for the next supplementary billing', () => {
     let chargeCategory
-    let chargeElement2023
-    let chargeElement2023And24
-    let chargeElement2024
+    let chargeReference2023
+    let chargeReference2023And24
+    let chargeReference2024
     let chargePurpose2023
     let chargePurpose2023And24
     let chargePurpose2024
@@ -99,31 +99,31 @@ describe('Fetch Charge Informations service', () => {
       // ready for testing
       chargeCategory = await ChargeCategoryHelper.add()
 
-      chargeElement2024 = await ChargeElementHelper.add({
+      chargeReference2024 = await ChargeReferenceHelper.add({
         chargeVersionId: sroc2024ChargeInformation.chargeVersionId,
         billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
       chargePurpose2024 = await ChargePurposeHelper.add({
-        chargeElementId: chargeElement2024.chargeElementId
+        chargeElementId: chargeReference2024.chargeElementId
       })
 
-      chargeElement2023And24 = await ChargeElementHelper.add({
+      chargeReference2023And24 = await ChargeReferenceHelper.add({
         chargeVersionId: sroc2023And24ChargeInformation.chargeVersionId,
         billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
       chargePurpose2023And24 = await ChargePurposeHelper.add({
-        chargeElementId: chargeElement2023And24.chargeElementId
+        chargeElementId: chargeReference2023And24.chargeElementId
       })
 
-      chargeElement2023 = await ChargeElementHelper.add({
+      chargeReference2023 = await ChargeReferenceHelper.add({
         chargeVersionId: sroc2023ChargeInformation.chargeVersionId,
         billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
       chargePurpose2023 = await ChargePurposeHelper.add({
-        chargeElementId: chargeElement2023.chargeElementId
+        chargeElementId: chargeReference2023.chargeElementId
       })
     })
 
@@ -184,13 +184,13 @@ describe('Fetch Charge Informations service', () => {
       const result = await FetchChargeInformationsService.go(regionId, billingPeriod)
 
       const expectedResult2024 = {
-        chargeElementId: chargeElement2024.chargeElementId,
-        source: chargeElement2024.source,
-        loss: chargeElement2024.loss,
-        volume: chargeElement2024.volume,
-        adjustments: chargeElement2024.adjustments,
-        additionalCharges: chargeElement2024.additionalCharges,
-        description: chargeElement2024.description,
+        chargeElementId: chargeReference2024.chargeElementId,
+        source: chargeReference2024.source,
+        loss: chargeReference2024.loss,
+        volume: chargeReference2024.volume,
+        adjustments: chargeReference2024.adjustments,
+        additionalCharges: chargeReference2024.additionalCharges,
+        description: chargeReference2024.description,
         chargeCategory: {
           reference: chargeCategory.reference,
           shortDescription: chargeCategory.shortDescription
@@ -205,13 +205,13 @@ describe('Fetch Charge Informations service', () => {
       }
 
       const expectedResult2023And24 = {
-        chargeElementId: chargeElement2023And24.chargeElementId,
-        source: chargeElement2023And24.source,
-        loss: chargeElement2023And24.loss,
-        volume: chargeElement2023And24.volume,
-        adjustments: chargeElement2023And24.adjustments,
-        additionalCharges: chargeElement2023And24.additionalCharges,
-        description: chargeElement2023And24.description,
+        chargeElementId: chargeReference2023And24.chargeElementId,
+        source: chargeReference2023And24.source,
+        loss: chargeReference2023And24.loss,
+        volume: chargeReference2023And24.volume,
+        adjustments: chargeReference2023And24.adjustments,
+        additionalCharges: chargeReference2023And24.additionalCharges,
+        description: chargeReference2023And24.description,
         chargeCategory: {
           reference: chargeCategory.reference,
           shortDescription: chargeCategory.shortDescription
@@ -226,13 +226,13 @@ describe('Fetch Charge Informations service', () => {
       }
 
       const expectedResult2023 = {
-        chargeElementId: chargeElement2023.chargeElementId,
-        source: chargeElement2023.source,
-        loss: chargeElement2023.loss,
-        volume: chargeElement2023.volume,
-        adjustments: chargeElement2023.adjustments,
-        additionalCharges: chargeElement2023.additionalCharges,
-        description: chargeElement2023.description,
+        chargeElementId: chargeReference2023.chargeElementId,
+        source: chargeReference2023.source,
+        loss: chargeReference2023.loss,
+        volume: chargeReference2023.volume,
+        adjustments: chargeReference2023.adjustments,
+        additionalCharges: chargeReference2023.additionalCharges,
+        description: chargeReference2023.description,
         chargeCategory: {
           reference: chargeCategory.reference,
           shortDescription: chargeCategory.shortDescription
@@ -246,9 +246,9 @@ describe('Fetch Charge Informations service', () => {
         }]
       }
 
-      expect(result.chargeInformations[0].chargeElements[0]).to.equal(expectedResult2024)
-      expect(result.chargeInformations[1].chargeElements[0]).to.equal(expectedResult2023And24)
-      expect(result.chargeInformations[2].chargeElements[0]).to.equal(expectedResult2023)
+      expect(result.chargeInformations[0].chargeReferences[0]).to.equal(expectedResult2024)
+      expect(result.chargeInformations[1].chargeReferences[0]).to.equal(expectedResult2023And24)
+      expect(result.chargeInformations[2].chargeReferences[0]).to.equal(expectedResult2023)
     })
   })
 

@@ -10,15 +10,15 @@ const { expect } = Code
 // Test helpers
 const BillLicenceModel = require('../../../app/models/water/bill-licence.model.js')
 const BillLicenceHelper = require('../../support/helpers/water/bill-licence.helper.js')
-const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
-const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
+const ChargeReferenceHelper = require('../../support/helpers/water/charge-reference.helper.js')
+const ChargeReferenceModel = require('../../../app/models/water/charge-reference.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const TransactionHelper = require('../../support/helpers/water/transaction.helper.js')
 
 // Thing under test
 const TransactionModel = require('../../../app/models/water/transaction.model.js')
 
-describe('Billing Transaction model', () => {
+describe('Transaction model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -67,33 +67,33 @@ describe('Billing Transaction model', () => {
       })
     })
 
-    describe('when linking to charge element', () => {
-      let testChargeElement
+    describe('when linking to charge reference', () => {
+      let testChargeReference
 
       beforeEach(async () => {
-        testChargeElement = await ChargeElementHelper.add()
+        testChargeReference = await ChargeReferenceHelper.add()
 
-        const { chargeElementId } = testChargeElement
+        const { chargeElementId } = testChargeReference
         testRecord = await TransactionHelper.add({ chargeElementId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await TransactionModel.query()
-          .innerJoinRelated('chargeElement')
+          .innerJoinRelated('chargeReference')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the charge element', async () => {
+      it('can eager load the charge reference', async () => {
         const result = await TransactionModel.query()
           .findById(testRecord.billingTransactionId)
-          .withGraphFetched('chargeElement')
+          .withGraphFetched('chargeReference')
 
         expect(result).to.be.instanceOf(TransactionModel)
         expect(result.billingTransactionId).to.equal(testRecord.billingTransactionId)
 
-        expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
-        expect(result.chargeElement).to.equal(testChargeElement)
+        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
+        expect(result.chargeReference).to.equal(testChargeReference)
       })
     })
   })

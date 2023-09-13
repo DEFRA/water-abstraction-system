@@ -57,8 +57,8 @@ function _formatFriendlyChargeInformation (friendlyChargeInformations, chargeInf
   })
 }
 
-function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
-  chargeElements.forEach((chargeElement) => {
+function _formatFriendlyChargeReferences (friendlyChargeReferences, chargeReferences) {
+  chargeReferences.forEach((chargeReference) => {
     const {
       additionalCharges,
       adjustments,
@@ -73,7 +73,7 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
       source,
       volume,
       waterModel
-    } = chargeElement
+    } = chargeReference
 
     const formattedAdditionalCharges = _formatAdditionalCharges(additionalCharges)
     const formattedAdjustments = _formatAdjustments(adjustments)
@@ -100,7 +100,7 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
     _formatFriendlyReturns(friendlyChargeReference.returns, returns)
     _formatFriendlyChargeElements(friendlyChargeReference.chargeElements, chargePurposes)
 
-    chargeReferences.push(friendlyChargeReference)
+    friendlyChargeReferences.push(friendlyChargeReference)
   })
 }
 

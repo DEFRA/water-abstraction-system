@@ -14,9 +14,9 @@ const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js
 const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargeInformationHelper = require('../../../support/helpers/water/charge-information.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const FetchChargeInformationsService = require('../../../../app/services/billing/supplementary/fetch-charge-informations.service.js')
 const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
@@ -84,7 +84,7 @@ describe('Process billing period service', () => {
               licenceId: licence.licenceId
             }
           )
-          const { chargeElementId } = await ChargeElementHelper.add(
+          const { chargeElementId } = await ChargeReferenceHelper.add(
             { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
           )
           await ChargePurposeHelper.add({
@@ -159,7 +159,7 @@ describe('Process billing period service', () => {
                 licenceId: licence.licenceId
               }
             )
-            const { chargeElementId } = await ChargeElementHelper.add(
+            const { chargeElementId } = await ChargeReferenceHelper.add(
               { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
             )
             await ChargePurposeHelper.add({
@@ -195,7 +195,7 @@ describe('Process billing period service', () => {
                   status: 'superseded'
                 }
               )
-              const { chargeElementId } = await ChargeElementHelper.add(
+              const { chargeElementId } = await ChargeReferenceHelper.add(
                 { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
               )
               await ChargePurposeHelper.add({
@@ -228,7 +228,7 @@ describe('Process billing period service', () => {
         invoiceAccountId: invoiceAccount.invoiceAccountId,
         licenceId: licence.licenceId
       })
-      const { chargeElementId } = await ChargeElementHelper.add(
+      const { chargeElementId } = await ChargeReferenceHelper.add(
         { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
       )
       await ChargePurposeHelper.add({ chargeElementId })

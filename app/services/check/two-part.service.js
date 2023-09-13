@@ -8,7 +8,7 @@
 const { ref } = require('objection')
 
 const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
-const ChargeElementModel = require('../../models/water/charge-element.model.js')
+const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
 const ChargeInformationModel = require('../../models/water/charge-information.model.js')
 const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 const FriendlyResponseService = require('./friendly-response.service.js')
@@ -64,7 +64,7 @@ async function _fetchChargeInformations (billingPeriod, naldRegionId) {
         .whereNull('chargeVersionWorkflows.dateDeleted')
     )
     .whereExists(
-      ChargeElementModel.query()
+      ChargeReferenceModel.query()
         .select(1)
         .whereColumn('chargeVersions.chargeVersionId', 'chargeElements.chargeVersionId')
         // NOTE: We can make withJsonSuperset() work which looks nicer, but only if we don't have anything camel case
@@ -72,31 +72,31 @@ async function _fetchChargeInformations (billingPeriod, naldRegionId) {
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
         .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
     )
-    .withGraphFetched('chargeElements')
-    .modifyGraph('chargeVersions.chargeElements', (builder) => {
-      builder.whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+    .withGraphFetched('chargeReferences')
+    .modifyGraph('chargeInformations.chargeReferences', (builder) => {
+      builder.whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     })
-    .withGraphFetched('chargeElements.chargeCategory')
-    .modifyGraph('chargeElements.chargeCategory', (builder) => {
+    .withGraphFetched('chargeReferences.chargeCategory')
+    .modifyGraph('chargeReferences.chargeCategory', (builder) => {
       builder.select([
         'reference',
         'shortDescription'
       ])
     })
-    .withGraphFetched('chargeElements.chargePurposes.purposesUse')
+    .withGraphFetched('chargeReferences.chargePurposes.purposesUse')
 
   return chargeInformations
 }
 
 async function _fetchAndApplyReturns (billingPeriod, chargeInformation) {
-  const { licenceRef, chargeElements } = chargeInformation
+  const { licenceRef, chargeReferences } = chargeInformation
   const cumulativeReturnsStatuses = []
   let returnsUnderQuery
 
-  for (const chargeElement of chargeElements) {
-    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
+  for (const chargeReference of chargeReferences) {
+    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeReference)
 
-    chargeElement.returns = await ReturnModel.query()
+    chargeReference.returns = await ReturnModel.query()
       .select([
         'returnId',
         'returnRequirement',
@@ -122,9 +122,9 @@ async function _fetchAndApplyReturns (billingPeriod, chargeInformation) {
         builder.where('lines.quantity', '>', 0)
       })
 
-    CalculateReturnsVolumes.go(billingPeriod, chargeElement.returns)
+    CalculateReturnsVolumes.go(billingPeriod, chargeReference.returns)
 
-    const chargeElementReturnsStatuses = chargeElement.returns.map((matchedReturn) => {
+    const chargeReferenceReturnsStatuses = chargeReference.returns.map((matchedReturn) => {
       if (matchedReturn.underQuery) {
         returnsUnderQuery = true
       }
@@ -132,7 +132,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeInformation) {
       return matchedReturn.status
     })
 
-    cumulativeReturnsStatuses.push(...chargeElementReturnsStatuses)
+    cumulativeReturnsStatuses.push(...chargeReferenceReturnsStatuses)
   }
 
   chargeInformation.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
@@ -140,8 +140,8 @@ async function _fetchAndApplyReturns (billingPeriod, chargeInformation) {
   _calculateReturnsReady(chargeInformation, returnsUnderQuery)
 }
 
-function _extractPurposeUseLegacyIds (chargeElement) {
-  return chargeElement.chargePurposes.map((chargePurpose) => {
+function _extractPurposeUseLegacyIds (chargeReference) {
+  return chargeReference.chargePurposes.map((chargePurpose) => {
     return chargePurpose.purposesUse.legacyId
   })
 }

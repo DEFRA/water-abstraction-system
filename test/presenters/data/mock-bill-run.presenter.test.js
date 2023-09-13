@@ -127,7 +127,7 @@ const mockedBillRun = {
               netAmount: 84000,
               startDate: new Date(2022, 3, 1, 2),
               supportedSourceName: 'Thames',
-              chargeElement: {
+              chargeReference: {
                 adjustments: {
                   s126: null,
                   s127: false,
@@ -168,7 +168,7 @@ const mockedBillRun = {
               netAmount: 0,
               startDate: new Date(2022, 3, 1, 2),
               supportedSourceName: 'Thames',
-              chargeElement: {
+              chargeReference: {
                 adjustments: {
                   s126: null,
                   s127: false,

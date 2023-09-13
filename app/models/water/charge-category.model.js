@@ -27,9 +27,9 @@ class ChargeCategoryModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      chargeElements: {
+      chargeReferences: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-element.model',
+        modelClass: 'charge-reference.model',
         join: {
           from: 'billingChargeCategories.billingChargeCategoryId',
           to: 'chargeElements.billingChargeCategoryId'
