@@ -14,37 +14,37 @@ const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
  * a keyed object of bills and a keyed object of bill licences. The bills are keyed by the bill ID, and the bill
  * licences are keyed by the concatenated bill id and licence id.
  * *
- * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the invoice account ids
- * and licences to use
+ * @param {module:ChargeInformationModel[]} chargeInformations Array of charge informations which provide the invoice
+ * account ids and licences to use
  * @param {String} billRunId The bill run id to be added to the billing invoices
  * @param {Object} billingPeriod The billing period of the billing invoices
  *
  * @returns {Object} An object containing bills and billLicences objects
  */
-async function go (chargeVersions, billRunId, billingPeriod) {
-  const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
+async function go (chargeInformations, billRunId, billingPeriod) {
+  const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeInformations)
 
   const bills = _preGenerateBills(invoiceAccounts, billRunId, billingPeriod)
-  const billLicences = _preGenerateBillLicences(chargeVersions, bills)
+  const billLicences = _preGenerateBillLicences(chargeInformations, bills)
 
   return { bills, billLicences }
 }
 
 /**
-  * We pre-generate bill licences for every combination of bill and licence in the charge versions so that we don't need
-  * to fetch any data from the db during the main charge version processing loop. This function generates the required
-  * bill licences and returns an object where each key is a concatenated bill id and licence id, and each value is the
-  * bill licence for that combination of bill and licence, ie:
+  * We pre-generate bill licences for every combination of bill and licence in the charge informations so that we don't
+  * need to fetch any data from the db during the main charge information processing loop. This function generates the
+  * required bill licences and returns an object where each key is a concatenated bill id and licence id, and each value
+  * is the bill licence for that combination of bill and licence, ie:
   *
   * {
   *   'key-1': { billingInvoiceLicenceId: 'bill-licence-1', ... },
   *   'key-2': { billingInvoiceLicenceId: 'bill-licence-2', ... }
   * }
   */
-function _preGenerateBillLicences (chargeVersions, bills) {
-  const keyedBillingInvoiceLicences = chargeVersions.reduce((acc, chargeVersion) => {
-    const { billingInvoiceId: billId } = bills[chargeVersion.invoiceAccountId]
-    const { licence } = chargeVersion
+function _preGenerateBillLicences (chargeInformations, bills) {
+  const keyedBillingInvoiceLicences = chargeInformations.reduce((acc, chargeInformation) => {
+    const { billingInvoiceId: billId } = bills[chargeInformation.invoiceAccountId]
+    const { licence } = chargeInformation
 
     const key = _billLicenceKey(billId, licence.licenceId)
 
@@ -69,8 +69,8 @@ function _billLicenceKey (billId, licenceId) {
 
 /**
   * We pre-generate bills for every invoice account so that we don't need to fetch any data from the db during the main
-  * charge version processing loop. This function generates the required bill licences and returns an object where each
-  * key is the invoice account id, and each value is the bill, ie:
+  * charge information processing loop. This function generates the required bill licences and returns an object where
+  * each key is the invoice account id, and each value is the bill, ie:
   *
   * {
   *   'uuid-1': { invoiceAccountId: 'uuid-1', ... },

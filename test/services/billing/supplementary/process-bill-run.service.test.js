@@ -17,7 +17,7 @@ const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
-const FetchChargeVersionsService = require('../../../../app/services/billing/supplementary/fetch-charge-versions.service.js')
+const FetchChargeInformationsService = require('../../../../app/services/billing/supplementary/fetch-charge-informations.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/billing/supplementary/handle-errored-bill-run.service.js')
 const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('../../../../app/services/billing/supplementary/process-billing-period.service.js')
@@ -65,7 +65,7 @@ describe('Supplementary Process Bill Run service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
+      Sinon.stub(FetchChargeInformationsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
       Sinon.stub(UnflagUnbilledLicencesService, 'go')
     })
 
@@ -152,7 +152,7 @@ describe('Supplementary Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchChargeVersionsService, 'go').rejects(thrownError)
+        Sinon.stub(FetchChargeInformationsService, 'go').rejects(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
@@ -160,7 +160,7 @@ describe('Supplementary Process Bill Run service', () => {
 
         const handlerArgs = handleErroredBillRunStub.firstCall.args
 
-        expect(handlerArgs[1]).to.equal(BillRunModel.errorCodes.failedToProcessChargeVersions)
+        expect(handlerArgs[1]).to.equal(BillRunModel.errorCodes.failedToProcessChargeInformations)
       })
 
       it('logs the error', async () => {
@@ -173,7 +173,7 @@ describe('Supplementary Process Bill Run service', () => {
         expect(args[2]).to.be.an.error()
         expect(args[2].name).to.equal(thrownError.name)
         expect(args[2].message).to.equal(`Error: ${thrownError.message}`)
-        expect(args[2].code).to.equal(BillRunModel.errorCodes.failedToProcessChargeVersions)
+        expect(args[2].code).to.equal(BillRunModel.errorCodes.failedToProcessChargeInformations)
       })
     })
 
@@ -182,7 +182,7 @@ describe('Supplementary Process Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
+          Sinon.stub(FetchChargeInformationsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
           Sinon.stub(ProcessBillingPeriodService, 'go').rejects(thrownError)
         })
 
@@ -213,7 +213,7 @@ describe('Supplementary Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
+        Sinon.stub(FetchChargeInformationsService, 'go').resolves({ chargeVersions: [], licenceIdsForPeriod: [] })
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
         Sinon.stub(UnflagUnbilledLicencesService, 'go').rejects(thrownError)
       })

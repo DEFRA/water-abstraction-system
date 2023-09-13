@@ -7,9 +7,9 @@
 
 const { formatAbstractionPeriod, formatLongDate } = require('../../presenters/base.presenter.js')
 
-function go (billingPeriod, matchedChargeVersions) {
+function go (billingPeriod, responseData) {
   const response = {
-    note: 'This response aims to match the UI. Note this means the entity names and structure DO NOT match what is in the DB.',
+    note: 'This response aims to match the UI. Note this means the structure DOES NOT match what is in the DB.',
     billingPeriod: {
       startDate: formatLongDate(billingPeriod.startDate),
       endDate: formatLongDate(billingPeriod.endDate)
@@ -17,14 +17,14 @@ function go (billingPeriod, matchedChargeVersions) {
     licences: []
   }
 
-  _formatFriendlyLicences(response.licences, matchedChargeVersions)
+  _formatFriendlyLicences(response.licences, responseData)
 
   return response
 }
 
-function _formatFriendlyLicences (licences, matchedChargeVersions) {
-  matchedChargeVersions.forEach((matchedChargeVersion) => {
-    const { licenceId, licenceRef, chargeVersions, returnsStatuses, returnsReady } = matchedChargeVersion
+function _formatFriendlyLicences (licences, responseData) {
+  responseData.forEach((licence) => {
+    const { licenceId, licenceRef, chargeInformations, returnsStatuses, returnsReady } = licence
 
     const friendlyLicence = {
       id: licenceId,
@@ -34,15 +34,15 @@ function _formatFriendlyLicences (licences, matchedChargeVersions) {
       chargeInformations: []
     }
 
-    _formatFriendlyChargeInformation(friendlyLicence.chargeInformations, chargeVersions)
+    _formatFriendlyChargeInformation(friendlyLicence.chargeInformations, chargeInformations)
 
     licences.push(friendlyLicence)
   })
 }
 
-function _formatFriendlyChargeInformation (chargeInformations, chargeVersions) {
-  chargeVersions.forEach((chargeVersion) => {
-    const { chargeVersionId, status, startDate, endDate, chargeElements } = chargeVersion
+function _formatFriendlyChargeInformation (friendlyChargeInformations, chargeInformations) {
+  chargeInformations.forEach((chargeInformation) => {
+    const { chargeVersionId, status, startDate, endDate, chargeElements } = chargeInformation
     const friendlyChargeInformation = {
       id: chargeVersionId,
       status,
@@ -53,7 +53,7 @@ function _formatFriendlyChargeInformation (chargeInformations, chargeVersions) {
 
     _formatFriendlyChargeReferences(friendlyChargeInformation.chargeReferences, chargeElements)
 
-    chargeInformations.push(friendlyChargeInformation)
+    friendlyChargeInformations.push(friendlyChargeInformation)
   })
 }
 

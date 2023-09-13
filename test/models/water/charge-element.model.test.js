@@ -11,10 +11,10 @@ const { expect } = Code
 const ChargeCategoryHelper = require('../../support/helpers/water/charge-category.helper.js')
 const ChargeCategoryModel = require('../../../app/models/water/charge-category.model.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
+const ChargeInformationHelper = require('../../support/helpers/water/charge-information.helper.js')
+const ChargeInformationModel = require('../../../app/models/water/charge-information.model.js')
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
-const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
-const ChargeVersionModel = require('../../../app/models/water/charge-version.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const TransactionHelper = require('../../support/helpers/water/transaction.helper.js')
 const TransactionModel = require('../../../app/models/water/transaction.model.js')
@@ -141,19 +141,19 @@ describe('Charge Element model', () => {
       })
     })
 
-    describe('when linking to charge version', () => {
-      let testChargeVersion
+    describe('when linking to charge information', () => {
+      let testChargeInformation
 
       beforeEach(async () => {
-        testChargeVersion = await ChargeVersionHelper.add()
+        testChargeInformation = await ChargeInformationHelper.add()
 
-        const { chargeVersionId } = testChargeVersion
+        const { chargeVersionId } = testChargeInformation
         testRecord = await ChargeElementHelper.add({ chargeVersionId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query()
-          .innerJoinRelated('chargeVersion')
+          .innerJoinRelated('chargeInformation')
 
         expect(query).to.exist()
       })
@@ -161,13 +161,13 @@ describe('Charge Element model', () => {
       it('can eager load the charge version', async () => {
         const result = await ChargeElementModel.query()
           .findById(testRecord.chargeElementId)
-          .withGraphFetched('chargeVersion')
+          .withGraphFetched('chargeInformation')
 
         expect(result).to.be.instanceOf(ChargeElementModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
-        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersion).to.equal(testChargeVersion)
+        expect(result.chargeInformation).to.be.an.instanceOf(ChargeInformationModel)
+        expect(result.chargeInformation).to.equal(testChargeInformation)
       })
     })
   })

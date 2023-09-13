@@ -15,9 +15,9 @@ const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
+const ChargeInformationHelper = require('../../../support/helpers/water/charge-information.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/water/charge-version.helper.js')
-const FetchChargeVersionsService = require('../../../../app/services/billing/supplementary/fetch-charge-versions.service.js')
+const FetchChargeInformationsService = require('../../../../app/services/billing/supplementary/fetch-charge-informations.service.js')
 const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
@@ -40,7 +40,7 @@ describe('Process billing period service', () => {
   let chargeCategory
   let billRun
   let changeReason
-  let chargeVersions
+  let chargeInformations
   let invoiceAccount
   let licence
 
@@ -61,22 +61,22 @@ describe('Process billing period service', () => {
   })
 
   describe('when the service is called', () => {
-    describe('and there are no charge versions to process', () => {
+    describe('and there are no charge informations to process', () => {
       beforeEach(() => {
-        chargeVersions = []
+        chargeInformations = []
       })
 
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeInformations)
 
         expect(result).to.be.false()
       })
     })
 
-    describe('and there are charge versions to process', () => {
+    describe('and there are charge informations to process', () => {
       describe('and they are billable', () => {
         beforeEach(async () => {
-          const { chargeVersionId } = await ChargeVersionHelper.add(
+          const { chargeVersionId } = await ChargeInformationHelper.add(
             {
               changeReasonId: changeReason.changeReasonId,
               invoiceAccountId: invoiceAccount.invoiceAccountId,
@@ -95,8 +95,8 @@ describe('Process billing period service', () => {
             abstractionPeriodEndMonth: 3
           })
 
-          const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-          chargeVersions = chargeVersionData.chargeVersions
+          const chargeInformationData = await FetchChargeInformationsService.go(licence.regionId, billingPeriod)
+          chargeInformations = chargeInformationData.chargeInformations
 
           const sentTransactions = [{
             billingTransactionId: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
@@ -142,7 +142,7 @@ describe('Process billing period service', () => {
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeInformations)
 
           expect(result).to.be.true()
         })
@@ -151,7 +151,7 @@ describe('Process billing period service', () => {
       describe('but none of them are billable', () => {
         describe('because the billable days calculated as 0', () => {
           beforeEach(async () => {
-            const { chargeVersionId } = await ChargeVersionHelper.add(
+            const { chargeVersionId } = await ChargeInformationHelper.add(
               {
                 changeReasonId: changeReason.changeReasonId,
                 invoiceAccountId: invoiceAccount.invoiceAccountId,
@@ -170,13 +170,13 @@ describe('Process billing period service', () => {
               abstractionPeriodEndMonth: 5
             })
 
-            const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-            chargeVersions = chargeVersionData.chargeVersions
+            const chargeVersionData = await FetchChargeInformationsService.go(licence.regionId, billingPeriod)
+            chargeInformations = chargeVersionData.chargeInformations
           })
 
           describe('and there are no previous billed transactions', () => {
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeInformations)
 
               expect(result).to.be.false()
             })
@@ -186,7 +186,7 @@ describe('Process billing period service', () => {
         describe('because the charge version status is `superseded`', () => {
           describe('and there are no previously billed transactions', () => {
             beforeEach(async () => {
-              const { chargeVersionId } = await ChargeVersionHelper.add(
+              const { chargeVersionId } = await ChargeInformationHelper.add(
                 {
                   changeReasonId: changeReason.changeReasonId,
                   invoiceAccountId: invoiceAccount.invoiceAccountId,
@@ -206,12 +206,12 @@ describe('Process billing period service', () => {
                 abstractionPeriodEndMonth: 3
               })
 
-              const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-              chargeVersions = chargeVersionData.chargeVersions
+              const chargeVersionData = await FetchChargeInformationsService.go(licence.regionId, billingPeriod)
+              chargeInformations = chargeVersionData.chargeInformations
             })
 
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeInformations)
 
               expect(result).to.be.false()
             })
@@ -223,7 +223,7 @@ describe('Process billing period service', () => {
 
   describe('when the service errors', () => {
     beforeEach(async () => {
-      const { chargeVersionId } = await ChargeVersionHelper.add({
+      const { chargeVersionId } = await ChargeInformationHelper.add({
         changeReasonId: changeReason.changeReasonId,
         invoiceAccountId: invoiceAccount.invoiceAccountId,
         licenceId: licence.licenceId
@@ -233,8 +233,8 @@ describe('Process billing period service', () => {
       )
       await ChargePurposeHelper.add({ chargeElementId })
 
-      const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-      chargeVersions = chargeVersionData.chargeVersions
+      const chargeInformationData = await FetchChargeInformationsService.go(licence.regionId, billingPeriod)
+      chargeInformations = chargeInformationData.chargeInformations
     })
 
     describe('because generating the calculated transactions fails', () => {
@@ -243,7 +243,7 @@ describe('Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeInformations))
           .to
           .reject()
 
@@ -259,7 +259,7 @@ describe('Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeInformations))
           .to
           .reject()
 

@@ -37,7 +37,7 @@ describe('Charging Module Create Transaction presenter', () => {
       const region = await RegionHelper.add()
 
       // NOTE: In the context the presenter is used it is from a Licence instance returned by
-      // FetchChargeVersionsService. We recreate how that instance is formed here, including extracting some of the
+      // FetchChargeInformationsService. We recreate how that instance is formed here, including extracting some of the
       // values as distinct properties from the licence's `regions` JSONb field.
       const tempLicence = await LicenceHelper.add({
         regionId: region.regionId,

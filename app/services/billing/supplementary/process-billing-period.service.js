@@ -22,22 +22,22 @@ const TransactionModel = require('../../../models/water/transaction.model.js')
  *
  * @param {module:BillRunModel} billRun The newly created bill run we need to process
  * @param {Object} billingPeriod An object representing the financial year the transactions are for
- * @param {module:ChargeVersionModel[]} chargeVersions The charge versions to create transactions for
+ * @param {module:ChargeInformationModel[]} chargeInformations The charge informations to create transactions for
  *
  * @returns {Boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go (billRun, billingPeriod, chargeVersions) {
-  if (chargeVersions.length === 0) {
+async function go (billRun, billingPeriod, chargeInformations) {
+  if (chargeInformations.length === 0) {
     return false
   }
 
   const preGeneratedData = await PreGenerateBillingDataService.go(
-    chargeVersions,
+    chargeInformations,
     billRun.billingBatchId,
     billingPeriod
   )
 
-  const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
+  const billingData = _buildBillingDataWithTransactions(chargeInformations, preGeneratedData, billingPeriod)
   const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billRun.externalId)
 
   const didWePersistData = await _persistData(dataToPersist)
@@ -85,8 +85,8 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
 }
 
 /**
- * Processes each charge version and and returns an object where each key is a bill id which exists in one or
- * more charge versions and the key's value is an object containing the associated licence, bill and bill
+ * Processes each charge information and and returns an object where each key is a bill id which exists in one or
+ * more charge informations and the key's value is an object containing the associated licence, bill and bill
  * licence, along with any required transactions, eg:
  *
  * {
@@ -101,26 +101,26 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
  *   }
  * }
  */
-function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, billingPeriod) {
+function _buildBillingDataWithTransactions (chargeInformations, preGeneratedData, billingPeriod) {
   // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
-  // charge version.
-  return chargeVersions.reduce((acc, chargeVersion) => {
+  // charge information.
+  return chargeInformations.reduce((acc, chargeInformation) => {
     const { billLicence, bill } = _retrievePreGeneratedData(
       preGeneratedData,
-      chargeVersion.invoiceAccountId,
-      chargeVersion.licence
+      chargeInformation.invoiceAccountId,
+      chargeInformation.licence
     )
 
     const { billingInvoiceLicenceId } = billLicence
 
     if (!acc[billingInvoiceLicenceId]) {
-      acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion.licence, bill, billLicence)
+      acc[billingInvoiceLicenceId] = _initialBillingData(chargeInformation.licence, bill, billLicence)
     }
 
-    // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
-    // We fetch the previous transactions for `superseded` (REPLACED) charge versions later in the process
-    if (chargeVersion.status === 'current') {
-      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
+    // We only need to calculate the transactions for charge informations with a status of `current` (APPROVED).
+    // We fetch the previous transactions for `superseded` (REPLACED) charge informations later in the process
+    if (chargeInformation.status === 'current') {
+      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeInformation)
       acc[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 
@@ -186,19 +186,19 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
   return cleansedTransactions
 }
 
-function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
+function _generateCalculatedTransactions (billingPeriod, chargeInformation) {
   try {
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+    const chargePeriod = DetermineChargePeriodService.go(chargeInformation, billingPeriod)
 
     if (!chargePeriod.startDate) {
       return []
     }
 
-    const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
-    const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
+    const isNewLicence = DetermineMinimumChargeService.go(chargeInformation, chargePeriod)
+    const isWaterUndertaker = chargeInformation.licence.isWaterUndertaker
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions
-    const transactions = chargeVersion.chargeElements.flatMap((chargeElement) => {
+    const transactions = chargeInformation.chargeElements.flatMap((chargeElement) => {
       return GenerateTransactionsService.go(
         chargeElement,
         billingPeriod,

@@ -48,8 +48,8 @@ class BillRunModel extends WaterBaseModel {
 
   static get errorCodes () {
     return {
-      failedToPopulateChargeVersions: 10,
-      failedToProcessChargeVersions: 20,
+      failedToPopulateChargeInformations: 10,
+      failedToProcessChargeInformations: 20,
       failedToPrepareTransactions: 30,
       failedToCreateCharge: 40,
       failedToCreateBillRun: 50,

@@ -8,7 +8,7 @@
 const BillRunModel = require('../../../models/water/bill-run.model.js')
 const BillRunError = require('../../../errors/bill-run.error.js')
 const ChargingModuleGenerateService = require('../../charging-module/generate-bill-run.service.js')
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchChargeInformationsService = require('./fetch-charge-informations.service.js')
 const HandleErroredBillRunService = require('./handle-errored-bill-run.service.js')
 const LegacyRequestLib = require('../../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
@@ -52,8 +52,8 @@ async function _processBillingPeriods (billingPeriods, billRun, resultOfReissuin
   const results = [resultOfReissuing]
 
   for (const billingPeriod of billingPeriods) {
-    const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billRun, billingPeriod)
-    const isPeriodPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+    const { chargeInformations, licenceIdsForPeriod } = await _fetchChargeInformations(billRun, billingPeriod)
+    const isPeriodPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeInformations)
 
     accumulatedLicenceIds.push(...licenceIdsForPeriod)
     results.push(isPeriodPopulated)
@@ -95,15 +95,15 @@ function _calculateAndLogTime (billRunId, startTime) {
   global.GlobalNotifier.omg('Process bill run complete', { billRunId, timeTakenMs })
 }
 
-async function _fetchChargeVersions (billRun, billingPeriod) {
+async function _fetchChargeInformations (billRun, billingPeriod) {
   try {
-    const chargeVersionData = await FetchChargeVersionsService.go(billRun.regionId, billingPeriod)
+    const chargeInformationsData = await FetchChargeInformationsService.go(billRun.regionId, billingPeriod)
 
-    // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillRunService if it
+    // We don't just `return FetchChargeInformationsService.go()` as we need to call HandleErroredBillRunService if it
     // fails
-    return chargeVersionData
+    return chargeInformationsData
   } catch (error) {
-    throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeVersions)
+    throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeInformations)
   }
 }
 
