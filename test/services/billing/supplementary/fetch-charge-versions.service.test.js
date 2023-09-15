@@ -180,7 +180,7 @@ describe('Fetch Charge Versions service', () => {
       expect(result.chargeVersions[0].changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
     })
 
-    it('includes the related charge elements, billing charge category and charge purposes', async () => {
+    it('includes the related charge references, charge category and charge purposes', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       const expectedResult2024 = {

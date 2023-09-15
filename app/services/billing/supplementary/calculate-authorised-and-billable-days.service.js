@@ -10,7 +10,7 @@ const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
 /**
- * Returns the authorised and billable days for a given charge element based on its abstraction periods
+ * Returns the authorised and billable days for a given charge reference based on its abstraction periods
  *
  * In WRLS the charge purpose, linked to a charge version via the charge reference, holds the abstraction period
  * information. The abstraction period is the time when a licensee is permitted to abstract water. They are held as a
@@ -21,9 +21,9 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  * much of the charge period overlaps with the abstraction period (see params for explanations of billable and charge
  * periods).
  *
- * Calculating these values is complicated by the fact a charge element may have multiple abstraction periods. Added to
- * that abstraction periods do not intersect nicely with billing or charge periods. The abstraction period might start
- * or end outside of the billing period, and so apply twice! For example, 1 Jan to 30 Jun intersects twice with a
+ * Calculating these values is complicated by the fact a charge reference may have multiple abstraction periods. Added
+ * to that abstraction periods do not intersect nicely with billing or charge periods. The abstraction period might
+ * start or end outside of the billing period, and so apply twice! For example, 1 Jan to 30 Jun intersects twice with a
  * billing period of 2022-04-01 to 2023-03-31.
  *
  * - **1 Jan 2022 to 30 Jun 2022** intersects as 1 Apr 2022 to 30 Jun 2022
@@ -39,9 +39,9 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  * They overlap 1 May to 30 Jun. To get our days we summate the result for each abstraction period and have to ensure we
  * only count this once.
  *
- * So, a charge purpose's abstraction dates might result in 2 relevant abstraction periods. A charge element might have
- * multiple charge purposes. But we must return a single **Authorised** and **Billable** days calculation. This problem
- * is what this service tackles.
+ * So, a charge purpose's abstraction dates might result in 2 relevant abstraction periods. A charge reference might
+ * have multiple charge purposes. But we must return a single **Authorised** and **Billable** days calculation. This
+ * problem is what this service tackles.
  *
  * @param {{startDate: Date, endDate: Date}} chargePeriod Charge period is determined as the overlap between a charge
  *  version's start and end dates, and the billing period's (financial year) start and end dates. So, when the charge
