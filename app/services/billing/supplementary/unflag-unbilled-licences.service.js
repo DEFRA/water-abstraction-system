@@ -11,7 +11,7 @@ const LicenceModel = require('../../../models/water/licence.model.js')
  * Unflag any licences that were not billed as part of a bill run
  *
  * Some licences will not result in an invoice (`billing_invoice_licence`) being created. For example, you could add a
- * new charge information that does nothing but change the description of the previous one. In isolation, this would
+ * new charge version that does nothing but change the description of the previous one. In isolation, this would
  * result in an `EMPTY` bill run. If others are being processed at the same time, it would just mean no records are
  * added to the bill run for this licence.
  *

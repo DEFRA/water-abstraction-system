@@ -10,8 +10,8 @@ const { expect } = Code
 // Test helpers
 const BillLicenceHelper = require('../../support/helpers/water/bill-licence.helper.js')
 const BillLicenceModel = require('../../../app/models/water/bill-licence.model.js')
-const ChargeInformationHelper = require('../../support/helpers/water/charge-information.helper.js')
-const ChargeInformationModel = require('../../../app/models/water/charge-information.model.js')
+const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
+const ChargeVersionModel = require('../../../app/models/water/charge-version.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
@@ -41,38 +41,38 @@ describe('Licence model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge informations', () => {
-      let testChargeInformations
+    describe('when linking to charge versions', () => {
+      let testChargeVersions
 
       beforeEach(async () => {
         const { licenceId, licenceRef } = testRecord
 
-        testChargeInformations = []
+        testChargeVersions = []
         for (let i = 0; i < 2; i++) {
-          const chargeInformation = await ChargeInformationHelper.add({ licenceRef, licenceId })
-          testChargeInformations.push(chargeInformation)
+          const chargeVersion = await ChargeVersionHelper.add({ licenceRef, licenceId })
+          testChargeVersions.push(chargeVersion)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query()
-          .innerJoinRelated('chargeInformations')
+          .innerJoinRelated('chargeVersions')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the charge informations', async () => {
+      it('can eager load the charge versions', async () => {
         const result = await LicenceModel.query()
           .findById(testRecord.licenceId)
-          .withGraphFetched('chargeInformations')
+          .withGraphFetched('chargeVersions')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.licenceId).to.equal(testRecord.licenceId)
 
-        expect(result.chargeInformations).to.be.an.array()
-        expect(result.chargeInformations[0]).to.be.an.instanceOf(ChargeInformationModel)
-        expect(result.chargeInformations).to.include(testChargeInformations[0])
-        expect(result.chargeInformations).to.include(testChargeInformations[1])
+        expect(result.chargeVersions).to.be.an.array()
+        expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersions).to.include(testChargeVersions[0])
+        expect(result.chargeVersions).to.include(testChargeVersions[1])
       })
     })
 

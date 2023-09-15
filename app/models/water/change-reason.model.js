@@ -27,9 +27,9 @@ class ChangeReasonModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      chargeInformations: {
+      chargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-information.model',
+        modelClass: 'charge-version.model',
         join: {
           from: 'changeReasons.changeReasonId',
           to: 'chargeVersions.changeReasonId'

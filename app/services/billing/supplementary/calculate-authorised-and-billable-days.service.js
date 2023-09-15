@@ -12,7 +12,7 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 /**
  * Returns the authorised and billable days for a given charge element based on its abstraction periods
  *
- * In WRLS the charge purpose, linked to a charge information via the charge reference, holds the abstraction period
+ * In WRLS the charge purpose, linked to a charge version via the charge reference, holds the abstraction period
  * information. The abstraction period is the time when a licensee is permitted to abstract water. They are held as a
  * start and end day and month, for example 1 Apr to 31 Oct. They do not have years because the intent is they are the
  * same period no matter what year it is.
@@ -49,7 +49,7 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *  the earliest of their end dates
  * @param {{startDate: Date, endDate: Date}} billingPeriod The period a bill run is being calculated for. Currently,
  *  this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
- * @param {module:ChargeReferenceModel} chargeReference A charge information can have multiple charge reference, though
+ * @param {module:ChargeReferenceModel} chargeReference A charge version can have multiple charge references, though
  *  each will have a different reference, for example, 4.1.10. Each reference can have multiple charge purposes and it's
  *  these that hold the abstraction period data
  *

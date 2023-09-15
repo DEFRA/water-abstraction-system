@@ -24,26 +24,26 @@ function go (billingPeriod, responseData) {
 
 function _formatFriendlyLicences (licences, responseData) {
   responseData.forEach((licence) => {
-    const { licenceId, licenceRef, chargeInformations, returnsStatuses, returnsReady } = licence
+    const { licenceId, licenceRef, chargeVersions, returnsStatuses, returnsReady } = licence
 
     const friendlyLicence = {
       id: licenceId,
       licenceRef,
       returnsStatuses,
       returnsReady,
-      chargeInformations: []
+      chargeVersions: []
     }
 
-    _formatFriendlyChargeInformation(friendlyLicence.chargeInformations, chargeInformations)
+    _formatFriendlyChargeVersion(friendlyLicence.chargeVersions, chargeVersions)
 
     licences.push(friendlyLicence)
   })
 }
 
-function _formatFriendlyChargeInformation (friendlyChargeInformations, chargeInformations) {
-  chargeInformations.forEach((chargeInformation) => {
-    const { chargeVersionId, status, startDate, endDate, chargeElements } = chargeInformation
-    const friendlyChargeInformation = {
+function _formatFriendlyChargeVersion (friendlyChargeVersions, chargeVersions) {
+  chargeVersions.forEach((chargeVersion) => {
+    const { chargeVersionId, status, startDate, endDate, chargeElements } = chargeVersion
+    const friendlyChargeVersion = {
       id: chargeVersionId,
       status,
       startDate,
@@ -51,9 +51,9 @@ function _formatFriendlyChargeInformation (friendlyChargeInformations, chargeInf
       chargeReferences: []
     }
 
-    _formatFriendlyChargeReferences(friendlyChargeInformation.chargeReferences, chargeElements)
+    _formatFriendlyChargeReferences(friendlyChargeVersion.chargeReferences, chargeElements)
 
-    friendlyChargeInformations.push(friendlyChargeInformation)
+    friendlyChargeVersions.push(friendlyChargeVersion)
   })
 }
 

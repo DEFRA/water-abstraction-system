@@ -1,19 +1,19 @@
 'use strict'
 
 /**
- * Fetches SROC charge informations linked to licences flagged for inclusion in next SROC supplementary billing
- * @module FetchChargeInformationsService
+ * Fetches SROC charge versions linked to licences flagged for inclusion in next SROC supplementary billing
+ * @module FetchChargeVersionsService
  */
 
 const { ref } = require('objection')
 
-const ChargeInformation = require('../../../models/water/charge-information.model.js')
+const ChargeVersionModel = require('../../../models/water/charge-version.model.js')
 const Workflow = require('../../../models/water/workflow.model.js')
 
 /**
- * Fetch all SROC charge informations to be processed as part of supplementary billing
+ * Fetch all SROC charge versions to be processed as part of supplementary billing
  *
- * To be selected for billing charge informations must
+ * To be selected for billing charge versions must
  *
  * - be linked to a licence flagged for supplementary billing
  * - be linked to a licence which is linked to the selected region
@@ -28,16 +28,16 @@ const Workflow = require('../../../models/water/workflow.model.js')
  * @param {String} regionId UUID of the region being billed that the licences must be linked to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Object} Contains an array of unique licence IDs and array of charge informations to be processed
+ * @returns {Object} Contains an array of unique licence IDs and array of charge versions to be processed
  */
 async function go (regionId, billingPeriod) {
-  const allChargeInformations = await _fetch(regionId, billingPeriod)
+  const allChargeVersions = await _fetch(regionId, billingPeriod)
 
-  return _extractLicenceIdsThenRemoveNonChargeableChargeInformations(allChargeInformations)
+  return _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersions)
 }
 
 async function _fetch (regionId, billingPeriod) {
-  const allChargeInformations = await ChargeInformation.query()
+  const allChargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersionId',
       'scheme',
@@ -119,29 +119,29 @@ async function _fetch (regionId, billingPeriod) {
       ])
     })
 
-  return allChargeInformations
+  return allChargeVersions
 }
 
 /**
- * Extract the `licenceId`s from all the charge informations before removing non-chargeable charge informations
+ * Extract the `licenceId`s from all the charge versions before removing non-chargeable charge versions
  *
- * When a licence is made "non-chargeable" the supplementary billing flag gets set and a charge information created that
- * has no `invoice_account_id`. For the purpose of billing we are not interested in non-chargeable charge informations.
+ * When a licence is made "non-chargeable" the supplementary billing flag gets set and a charge version created that
+ * has no `invoice_account_id`. For the purpose of billing we are not interested in non-chargeable charge versions.
  * We are interested in the associated licences to ensure that their supplementary billing flag is unset.
  */
-function _extractLicenceIdsThenRemoveNonChargeableChargeInformations (allChargeInformations) {
+function _extractLicenceIdsThenRemoveNonChargeableChargeVersions (allChargeVersions) {
   const licenceIdsForPeriod = []
-  const chargeInformations = []
+  const chargeVersions = []
 
-  for (const chargeInformation of allChargeInformations) {
-    licenceIdsForPeriod.push(chargeInformation.licence.licenceId)
+  for (const chargeVersion of allChargeVersions) {
+    licenceIdsForPeriod.push(chargeVersion.licence.licenceId)
 
-    if (chargeInformation.invoiceAccountId) {
-      chargeInformations.push(chargeInformation)
+    if (chargeVersion.invoiceAccountId) {
+      chargeVersions.push(chargeVersion)
     }
   }
 
-  return { chargeInformations, licenceIdsForPeriod }
+  return { chargeVersions, licenceIdsForPeriod }
 }
 
 module.exports = {

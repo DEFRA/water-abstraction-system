@@ -27,9 +27,9 @@ class ChargeReferenceModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      chargeInformation: {
+      chargeVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-information.model',
+        modelClass: 'charge-version.model',
         join: {
           from: 'chargeElements.chargeVersionId',
           to: 'chargeVersions.chargeVersionId'

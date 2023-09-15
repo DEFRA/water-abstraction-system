@@ -9,11 +9,11 @@ const { ref } = require('objection')
 
 const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
 const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
-const ChargeInformationModel = require('../../models/water/charge-information.model.js')
-const Workflow = require('../../models/water/workflow.model.js')
+const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const FriendlyResponseService = require('./friendly-response.service.js')
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
+const Workflow = require('../../models/water/workflow.model.js')
 
 async function go (naldRegionId, format = 'friendly') {
   const startTime = process.hrtime.bigint()
@@ -22,13 +22,13 @@ async function go (naldRegionId, format = 'friendly') {
 
   const billingPeriod = billingPeriods[1]
 
-  const chargeInformations = await _fetchChargeInformations(billingPeriod, naldRegionId)
+  const chargeVersions = await _fetchChargeVersions(billingPeriod, naldRegionId)
 
-  for (const chargeInformation of chargeInformations) {
-    await _fetchAndApplyReturns(billingPeriod, chargeInformation)
+  for (const chargeVersion of chargeVersions) {
+    await _fetchAndApplyReturns(billingPeriod, chargeVersion)
   }
 
-  const responseData = _responseData(chargeInformations)
+  const responseData = _responseData(chargeVersions)
 
   _calculateAndLogTime(startTime)
 
@@ -43,8 +43,8 @@ async function go (naldRegionId, format = 'friendly') {
   }
 }
 
-async function _fetchChargeInformations (billingPeriod, naldRegionId) {
-  const chargeInformations = await ChargeInformationModel.query()
+async function _fetchChargeVersions (billingPeriod, naldRegionId) {
+  const chargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.chargeVersionId',
       'chargeVersions.startDate',
@@ -73,7 +73,7 @@ async function _fetchChargeInformations (billingPeriod, naldRegionId) {
         .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
     )
     .withGraphFetched('chargeReferences')
-    .modifyGraph('chargeInformations.chargeReferences', (builder) => {
+    .modifyGraph('chargeVersions.chargeReferences', (builder) => {
       builder.whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     })
     .withGraphFetched('chargeReferences.chargeCategory')
@@ -85,11 +85,11 @@ async function _fetchChargeInformations (billingPeriod, naldRegionId) {
     })
     .withGraphFetched('chargeReferences.chargePurposes.purposesUse')
 
-  return chargeInformations
+  return chargeVersions
 }
 
-async function _fetchAndApplyReturns (billingPeriod, chargeInformation) {
-  const { licenceRef, chargeReferences } = chargeInformation
+async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
+  const { licenceRef, chargeReferences } = chargeVersion
   const cumulativeReturnsStatuses = []
   let returnsUnderQuery
 
@@ -135,9 +135,9 @@ async function _fetchAndApplyReturns (billingPeriod, chargeInformation) {
     cumulativeReturnsStatuses.push(...chargeReferenceReturnsStatuses)
   }
 
-  chargeInformation.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
+  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
 
-  _calculateReturnsReady(chargeInformation, returnsUnderQuery)
+  _calculateReturnsReady(chargeVersion, returnsUnderQuery)
 }
 
 function _extractPurposeUseLegacyIds (chargeReference) {
@@ -146,47 +146,47 @@ function _extractPurposeUseLegacyIds (chargeReference) {
   })
 }
 
-function _calculateReturnsReady (chargeInformation, returnsUnderQuery) {
+function _calculateReturnsReady (chargeVersion, returnsUnderQuery) {
   if (
-    chargeInformation.returnsStatuses.includes('received', 'void') |
+    chargeVersion.returnsStatuses.includes('received', 'void') |
     returnsUnderQuery |
-    chargeInformation.returnsStatuses.length === 0
+    chargeVersion.returnsStatuses.length === 0
   ) {
-    chargeInformation.returnsReady = false
+    chargeVersion.returnsReady = false
   } else {
-    chargeInformation.returnsReady = true
+    chargeVersion.returnsReady = true
   }
 }
 
-function _responseData (chargeInformations) {
-  const allLicenceIds = chargeInformations.map((chargeInformation) => {
-    return chargeInformation.licenceId
+function _responseData (chargeVersions) {
+  const allLicenceIds = chargeVersions.map((chargeVersion) => {
+    return chargeVersion.licenceId
   })
 
   const uniqueLicenceIds = [...new Set(allLicenceIds)]
 
   return uniqueLicenceIds.map((uniqueLicenceId) => {
-    const licenceChargeInformations = chargeInformations.filter((chargeInformation) => {
-      return chargeInformation.licenceId === uniqueLicenceId
+    const licenceChargeVersions = chargeVersions.filter((chargeVersion) => {
+      return chargeVersion.licenceId === uniqueLicenceId
     })
 
-    const chargeInformationReturnsStatuses = []
+    const chargeVersionReturnsStatuses = []
     let returnsReady = false
 
-    for (const chargeInformation of licenceChargeInformations) {
-      chargeInformationReturnsStatuses.push(...chargeInformation.returnsStatuses)
+    for (const chargeVersion of licenceChargeVersions) {
+      chargeVersionReturnsStatuses.push(...chargeVersion.returnsStatuses)
 
-      if (chargeInformation.returnsReady) {
+      if (chargeVersion.returnsReady) {
         returnsReady = true
       }
     }
 
     return {
       licenceId: uniqueLicenceId,
-      licenceRef: licenceChargeInformations[0].licenceRef,
+      licenceRef: licenceChargeVersions[0].licenceRef,
       returnsReady,
-      returnsStatuses: [...new Set(chargeInformationReturnsStatuses)],
-      chargeInformations: licenceChargeInformations
+      returnsStatuses: [...new Set(chargeVersionReturnsStatuses)],
+      chargeVersions: licenceChargeVersions
     }
   })
 }

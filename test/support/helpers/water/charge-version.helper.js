@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * @module ChargeInformationHelper
+ * @module ChargeVersionHelper
  */
 
-const ChargeInformationModel = require('../../../../app/models/water/charge-information.model.js')
+const ChargeVersionModel = require('../../../../app/models/water/charge-version.model.js')
 
 /**
- * Add a new charge information
+ * Add a new charge version
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -20,12 +20,12 @@ const ChargeInformationModel = require('../../../../app/models/water/charge-info
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:ChargeInformationModel} The instance of the newly created record
+ * @returns {module:ChargeVersionModel} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return ChargeInformationModel.query()
+  return ChargeVersionModel.query()
     .insert({ ...insertData })
     .returning('*')
 }

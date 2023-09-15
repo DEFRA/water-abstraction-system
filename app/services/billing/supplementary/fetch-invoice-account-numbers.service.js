@@ -1,21 +1,21 @@
 'use strict'
 
 /**
- * Fetches all invoice account numbers for the supplied charge informations
+ * Fetches all invoice account numbers for the supplied charge versions
  * @module FetchInvoiceAccountNumbersService
  */
 
 const InvoiceAccountModel = require('../../../models/crm-v2/invoice-account.model.js')
 
 /**
- * Fetch all invoice account numbers for the supplied charge informations
+ * Fetch all invoice account numbers for the supplied charge versions
  *
- * @param {module:ChargeInformationModel[]} chargeInformations An array of charge informations
+ * @param {module:ChargeVersionModel[]} chargeVersions An array of charge versions
  *
  * @returns {Object[]} Array of objects in the format { invoiceAccountId: '...', invoiceAccountNumber: '...' }
  */
-async function go (chargeInformations) {
-  const uniqueInvoiceAccountIds = _extractUniqueInvoiceAccountIds(chargeInformations)
+async function go (chargeVersions) {
+  const uniqueInvoiceAccountIds = _extractUniqueInvoiceAccountIds(chargeVersions)
   const invoiceAccountModels = await _fetch(uniqueInvoiceAccountIds)
 
   // The results come back from Objection as InvoiceAccountModels. Since we want to be clear that these are not
@@ -25,9 +25,9 @@ async function go (chargeInformations) {
   return invoiceAccountObjects
 }
 
-function _extractUniqueInvoiceAccountIds (chargeInformations) {
-  const allInvoiceAccountIds = chargeInformations.map((chargeInformation) => {
-    return chargeInformation.invoiceAccountId
+function _extractUniqueInvoiceAccountIds (chargeVersions) {
+  const allInvoiceAccountIds = chargeVersions.map((chargeVersion) => {
+    return chargeVersion.invoiceAccountId
   })
 
   // Creating a new set from allInvoiceAccountIds gives us just the unique ids. Objection does not accept sets in

@@ -2,14 +2,14 @@
 
 /**
  * Model for charge_versions
- * @module ChargeInformationModel
+ * @module ChargeVersionModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class ChargeInformationModel extends WaterBaseModel {
+class ChargeVersionModel extends WaterBaseModel {
   static get tableName () {
     return 'chargeVersions'
   }
@@ -55,4 +55,4 @@ class ChargeInformationModel extends WaterBaseModel {
   }
 }
 
-module.exports = ChargeInformationModel
+module.exports = ChargeVersionModel

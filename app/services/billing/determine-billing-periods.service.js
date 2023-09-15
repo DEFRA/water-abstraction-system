@@ -9,7 +9,7 @@
  * Returns the billing periods needed when generating an SROC supplementary bill run
  *
  * Using the current date at the time the service is called, it calculates the billing periods to use. As we permit
- * changes to charge informations to be retroactively applied for up to 5 years. This service will calculate the billing
+ * changes to charge versions to be retroactively applied for up to 5 years. This service will calculate the billing
  * periods for the current year plus a maximum of the previous 5 years. Or to the earliest possible `endYear` for SROC
  * which is 2023, whichever is the greatest.
  *

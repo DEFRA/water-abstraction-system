@@ -27,9 +27,9 @@ class LicenceModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      chargeInformations: {
+      chargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-information.model',
+        modelClass: 'charge-version.model',
         join: {
           from: 'licences.licenceId',
           to: 'chargeVersions.licenceId'
