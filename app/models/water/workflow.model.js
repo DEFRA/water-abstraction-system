@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for chargeVersionWorkflows
- * @module ChargeVersionWorkflowModel
+ * Model for charge_version_workflows
+ * @module WorkflowModel
  */
 
 const { Model } = require('objection')
 
 const WaterBaseModel = require('./water-base.model.js')
 
-class ChargeVersionWorkflowModel extends WaterBaseModel {
+class WorkflowModel extends WaterBaseModel {
   static get tableName () {
     return 'chargeVersionWorkflows'
   }
@@ -39,4 +39,4 @@ class ChargeVersionWorkflowModel extends WaterBaseModel {
   }
 }
 
-module.exports = ChargeVersionWorkflowModel
+module.exports = WorkflowModel

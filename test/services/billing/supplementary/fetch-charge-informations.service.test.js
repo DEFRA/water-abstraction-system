@@ -13,7 +13,7 @@ const ChargeCategoryHelper = require('../../../support/helpers/water/charge-cate
 const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
 const ChargeInformationHelper = require('../../../support/helpers/water/charge-information.helper.js')
-const ChargeVersionWorkflowHelper = require('../../../support/helpers/water/charge-version-workflow.helper.js')
+const WorkflowHelper = require('../../../support/helpers/water/workflow.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/water/region.helper.js')
@@ -129,7 +129,7 @@ describe('Fetch Charge Informations service', () => {
 
     describe('including those linked to soft-deleted workflow records', () => {
       beforeEach(async () => {
-        await ChargeVersionWorkflowHelper.add({ licenceId: licence.licenceId, dateDeleted: new Date('2022-04-01') })
+        await WorkflowHelper.add({ licenceId: licence.licenceId, dateDeleted: new Date('2022-04-01') })
       })
 
       it('returns the SROC charge informations that are applicable', async () => {
@@ -339,7 +339,7 @@ describe('Fetch Charge Informations service', () => {
 
         licenceId = licence.licenceId
 
-        // This creates a charge version with no `invoiceAccountId`
+        // This creates a charge information with no `invoiceAccountId`
         const nullInvoiceAccountIdChargeInformation = await ChargeInformationHelper
           .add({ invoiceAccountId: null, licenceId })
         testRecords = [nullInvoiceAccountIdChargeInformation]
@@ -420,12 +420,12 @@ describe('Fetch Charge Informations service', () => {
         })
 
         const chargeInformation = await ChargeInformationHelper.add({ licenceId })
-        await ChargeVersionWorkflowHelper.add({ licenceId })
+        await WorkflowHelper.add({ licenceId })
 
         testRecords = [chargeInformation]
       })
 
-      it('returns no applicable licenceIds or charge versions', async () => {
+      it('returns no applicable licenceIds or charge informations', async () => {
         const result = await FetchChargeInformationsService.go(regionId, billingPeriod)
 
         expect(result.chargeInformations).to.be.empty()

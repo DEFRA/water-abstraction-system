@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Processes the charge versions for a given billing period
+ * Processes the charge informations for a given billing period
  * @module ProcessBillingPeriodService
  */
 
@@ -170,8 +170,8 @@ function _initialBillingData (licence, bill, billLicence) {
 }
 
 async function _cleanseTransactions (currentBillingData, billingPeriod) {
-  // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
-  // first place
+  // Guard clause which is most likely to hit in the event that no charge informations were 'fetched' to be billed in
+  // the first place
   if (!currentBillingData.bill) {
     return []
   }

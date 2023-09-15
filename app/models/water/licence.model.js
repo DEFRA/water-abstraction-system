@@ -51,9 +51,9 @@ class LicenceModel extends WaterBaseModel {
           to: 'billingInvoiceLicences.licenceId'
         }
       },
-      chargeVersionWorkflows: {
+      workflows: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-version-workflow.model',
+        modelClass: 'workflow.model',
         join: {
           from: 'licences.licenceId',
           to: 'chargeVersionWorkflows.licenceId'

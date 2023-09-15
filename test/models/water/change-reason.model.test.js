@@ -55,7 +55,7 @@ describe('Change Reason model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the charge versions', async () => {
+      it('can eager load the charge informations', async () => {
         const result = await ChangeReasonModel.query()
           .findById(testRecord.changeReasonId)
           .withGraphFetched('chargeInformations')

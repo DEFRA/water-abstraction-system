@@ -19,7 +19,7 @@ describe('Fetch Invoice Account Numbers service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when the service is called with an array of charge versions', () => {
+  describe('when the service is called with an array of charge informations', () => {
     let expectedResult
     let invoiceAccounts
 
@@ -43,7 +43,7 @@ describe('Fetch Invoice Account Numbers service', () => {
       ]
     })
 
-    it('fetches the invoice accounts that the charge versions link to', async () => {
+    it('fetches the invoice accounts that the charge informations link to', async () => {
       const result = await FetchInvoiceAccountNumbersService.go([
         { invoiceAccountId: invoiceAccounts[0].invoiceAccountId },
         { invoiceAccountId: invoiceAccounts[1].invoiceAccountId }

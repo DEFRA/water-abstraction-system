@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Determines what the charge period is for a charge version in a given billing period
+ * Determines what the charge period is for a charge information in a given billing period
  * @module DetermineChargePeriodService
  */
 
@@ -20,9 +20,9 @@
  * If the licence expires on 2028-05-01, and the charge information has no end date then the current billing period
  * would determine the end date; 2024-03-31.
  *
- * To support multi-year billing the service FetchChargeInformationsService has to pull _all_ charge versions that start
- * before the billing period period ends, for example, even if the billing period is 2023-24 charge versions that start
- * in 2022 need to be included.
+ * To support multi-year billing the service FetchChargeInformationsService has to pull _all_ charge informations that
+ * start before the billing period period ends, for example, even if the billing period is 2023-24 charge informations
+ * that start in 2022 need to be included.
  *
  * This is to cover scenarios where a charge information with a start date in 2022-23 would have resulted in a debit in
  * both 2022-23 and 2023-24. Then a new charge information is added that starts in 2022-23. The old one is still valid,

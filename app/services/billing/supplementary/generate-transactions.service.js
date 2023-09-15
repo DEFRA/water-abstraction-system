@@ -26,9 +26,9 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * @param {Object} chargeReference The charge reference the transaction generated from
  * @param {Object} billingPeriod A start and end date representing the billing period for the bill run
- * @param {Object} chargePeriod A start and end date representing the charge period for the charge version
- * @param {Boolean} isNewLicence Whether the charge version is linked to a new licence
- * @param {Boolean} isWaterUndertaker Whether the charge version is linked to a water undertaker licence
+ * @param {Object} chargePeriod A start and end date representing the charge period for the charge information
+ * @param {Boolean} isNewLicence Whether the charge information is linked to a new licence
+ * @param {Boolean} isWaterUndertaker Whether the charge information is linked to a water undertaker licence
  *
  * @returns {Object[]} an array of 0, 1 or 2 transaction objects
  */

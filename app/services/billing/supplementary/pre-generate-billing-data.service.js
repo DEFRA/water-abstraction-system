@@ -48,7 +48,7 @@ function _preGenerateBillLicences (chargeInformations, bills) {
 
     const key = _billLicenceKey(billId, licence.licenceId)
 
-    // The charge versions may contain a combination of bill and licence multiple times, so we check to see if this
+    // The charge informations may contain a combination of bill and licence multiple times, so we check to see if this
     // combination has already had a bill licence generated for it and return early if so
     if (acc[key]) {
       return acc

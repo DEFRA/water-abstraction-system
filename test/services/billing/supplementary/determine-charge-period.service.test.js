@@ -17,7 +17,7 @@ describe('Determine charge period service', () => {
   }
   let chargeInformation
 
-  describe('the charge version starts before the billing period', () => {
+  describe('the charge information starts before the billing period', () => {
     describe('and has an end date that is inside the billing period', () => {
       beforeEach(() => {
         chargeInformation = {
@@ -27,7 +27,7 @@ describe('Determine charge period service', () => {
         }
       })
 
-      it('returns the billing period start and charge version end dates', () => {
+      it('returns the billing period start and charge information end dates', () => {
         const result = DetermineChargePeriodService.go(chargeInformation, billingPeriod)
 
         expect(result.startDate).to.equal(billingPeriod.startDate)
@@ -69,7 +69,7 @@ describe('Determine charge period service', () => {
       })
     })
 
-    describe("and the licence start date is after the charge version's and inside the billing period", () => {
+    describe("and the licence start date is after the charge information's and inside the billing period", () => {
       beforeEach(() => {
         chargeInformation = {
           startDate: new Date('2023-03-01'),
@@ -195,7 +195,7 @@ describe('Determine charge period service', () => {
     })
   })
 
-  describe('the charge version starts inside the billing period', () => {
+  describe('the charge information starts inside the billing period', () => {
     describe('and has an end date', () => {
       describe('that is inside the billing period', () => {
         beforeEach(() => {
@@ -206,7 +206,7 @@ describe('Determine charge period service', () => {
           }
         })
 
-        it('returns the charge version start and end dates', () => {
+        it('returns the charge information start and end dates', () => {
           const result = DetermineChargePeriodService.go(chargeInformation, billingPeriod)
 
           expect(result.startDate).to.equal(chargeInformation.startDate)
@@ -223,7 +223,7 @@ describe('Determine charge period service', () => {
           }
         })
 
-        it('returns the charge version start and billing period end dates', () => {
+        it('returns the charge information start and billing period end dates', () => {
           const result = DetermineChargePeriodService.go(chargeInformation, billingPeriod)
 
           expect(result.startDate).to.equal(chargeInformation.startDate)
@@ -241,7 +241,7 @@ describe('Determine charge period service', () => {
         }
       })
 
-      it('returns the charge version start and billing period end dates', () => {
+      it('returns the charge information start and billing period end dates', () => {
         const result = DetermineChargePeriodService.go(chargeInformation, billingPeriod)
 
         expect(result.startDate).to.equal(chargeInformation.startDate)
@@ -250,7 +250,7 @@ describe('Determine charge period service', () => {
     })
 
     describe('and the licence expired date', () => {
-      describe("is inside the billing period before the charge version's start date", () => {
+      describe("is inside the billing period before the charge information's start date", () => {
         beforeEach(() => {
           chargeInformation = {
             startDate: new Date('2023-10-01'),
@@ -269,7 +269,7 @@ describe('Determine charge period service', () => {
     })
   })
 
-  describe('the charge version starts after the billing period', () => {
+  describe('the charge information starts after the billing period', () => {
     beforeEach(() => {
       chargeInformation = {
         startDate: new Date('2024-05-01'),

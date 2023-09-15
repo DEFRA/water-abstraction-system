@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Calculates authorised and billable days for a given charge element
+ * Calculates authorised and billable days for a given charge reference
  * @module CalculateAuthorisedAndBillableDaysService
  */
 
@@ -12,7 +12,7 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 /**
  * Returns the authorised and billable days for a given charge element based on its abstraction periods
  *
- * In WRLS the charge purpose, linked to a charge version via the charge element, holds the abstraction period
+ * In WRLS the charge purpose, linked to a charge information via the charge reference, holds the abstraction period
  * information. The abstraction period is the time when a licensee is permitted to abstract water. They are held as a
  * start and end day and month, for example 1 Apr to 31 Oct. They do not have years because the intent is they are the
  * same period no matter what year it is.

@@ -8,7 +8,7 @@
 const { ref } = require('objection')
 
 const ChargeInformation = require('../../../models/water/charge-information.model.js')
-const ChargeVersionWorkflow = require('../../../models/water/charge-version-workflow.model.js')
+const Workflow = require('../../../models/water/workflow.model.js')
 
 /**
  * Fetch all SROC charge informations to be processed as part of supplementary billing
@@ -53,7 +53,7 @@ async function _fetch (regionId, billingPeriod) {
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .whereNot('chargeVersions.status', 'draft')
     .whereNotExists(
-      ChargeVersionWorkflow.query()
+      Workflow.query()
         .select(1)
         .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
         .whereNull('chargeVersionWorkflows.dateDeleted')

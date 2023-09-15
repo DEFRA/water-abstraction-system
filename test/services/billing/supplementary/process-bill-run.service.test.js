@@ -103,7 +103,7 @@ describe('Supplementary Process Bill Run service', () => {
       })
     })
 
-    describe('and some charge versions are billed', () => {
+    describe('and some charge informations are billed', () => {
       beforeEach(() => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
         Sinon.stub(ReissueBillsService, 'go').resolves(true)
@@ -148,7 +148,7 @@ describe('Supplementary Process Bill Run service', () => {
       Sinon.stub(ReissueBillsService, 'go')
     })
 
-    describe('because fetching the charge versions fails', () => {
+    describe('because fetching the charge informations fails', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
