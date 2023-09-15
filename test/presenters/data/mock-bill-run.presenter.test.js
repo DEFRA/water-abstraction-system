@@ -144,7 +144,7 @@ const mockedBillRun = {
                     abstractionPeriodEndDay: 31,
                     abstractionPeriodEndMonth: 3,
                     authorisedAnnualQuantity: 10.22,
-                    purposesUse: {
+                    purpose: {
                       description: 'Make-Up Or Top Up Water'
                     }
                   }
@@ -185,7 +185,7 @@ const mockedBillRun = {
                     abstractionPeriodEndDay: 31,
                     abstractionPeriodEndMonth: 3,
                     authorisedAnnualQuantity: 10.22,
-                    purposesUse: {
+                    purpose: {
                       description: 'Make-Up Or Top Up Water'
                     }
                   }

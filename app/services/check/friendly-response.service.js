@@ -112,7 +112,7 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
       description,
       isSection127AgreementEnabled,
       loss,
-      purposesUse,
+      purpose,
       timeLimitedStartDate,
       timeLimitedEndDate,
       abstractionPeriodEndDay: endDay,
@@ -133,7 +133,7 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
       friendlyChargeElement.twoPartTariffAgreementsApply = 'Yes, two-part tariff agreements should apply to this element'
     }
 
-    friendlyChargeElement.legacyId = purposesUse.legacyId
+    friendlyChargeElement.legacyId = purpose.legacyId
 
     chargeElements.push(friendlyChargeElement)
   })

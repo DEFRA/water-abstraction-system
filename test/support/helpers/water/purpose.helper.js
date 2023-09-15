@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * @module PurposesUseHelper
+ * @module PurposeHelper
  */
 
-const PurposesUseModel = require('../../../../app/models/water/purposes-use.model.js')
+const PurposeModel = require('../../../../app/models/water/purpose.model.js')
 
 /**
- * Add a new purposes use
+ * Add a new purpose
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -18,18 +18,18 @@ const PurposesUseModel = require('../../../../app/models/water/purposes-use.mode
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:PurposesUseModel} The instance of the newly created record
+ * @returns {module:PurposeModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return PurposesUseModel.query()
+  return PurposeModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
 
 /**
- * Returns the defaults used when creating a new purposes use
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.

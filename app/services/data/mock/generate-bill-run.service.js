@@ -101,8 +101,8 @@ async function _fetchBillRun (id) {
         'authorisedAnnualQuantity'
       ])
     })
-    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargePurposes.purposesUse')
-    .modifyGraph('bills.billLicences.transactions.chargeReference.chargePurposes.purposesUse', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargePurposes.purpose')
+    .modifyGraph('bills.billLicences.transactions.chargeReference.chargePurposes.purpose', (builder) => {
       builder.select([
         'description'
       ])

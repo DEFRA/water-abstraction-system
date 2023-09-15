@@ -12,8 +12,8 @@ const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.
 const ChargeReferenceHelper = require('../../support/helpers/water/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../../app/models/water/charge-reference.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const PurposesUseModel = require('../../../app/models/water/purposes-use.model.js')
-const PurposesUseHelper = require('../../support/helpers/water/purposes-use.helper.js')
+const PurposeModel = require('../../../app/models/water/purpose.model.js')
+const PurposeHelper = require('../../support/helpers/water/purpose.helper.js')
 
 // Thing under test
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
@@ -67,19 +67,19 @@ describe('Charge Purpose model', () => {
       })
     })
 
-    describe('when linking to purposes use', () => {
-      let testPurposesUse
+    describe('when linking to purpose', () => {
+      let testPurpose
 
       beforeEach(async () => {
-        testPurposesUse = await PurposesUseHelper.add()
+        testPurpose = await PurposeHelper.add()
 
-        const { purposeUseId } = testPurposesUse
+        const { purposeUseId } = testPurpose
         testRecord = await ChargePurposeHelper.add({ purposeUseId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargePurposeModel.query()
-          .innerJoinRelated('purposesUse')
+          .innerJoinRelated('purpose')
 
         expect(query).to.exist()
       })
@@ -87,13 +87,13 @@ describe('Charge Purpose model', () => {
       it('can eager load the purposes use', async () => {
         const result = await ChargePurposeModel.query()
           .findById(testRecord.chargePurposeId)
-          .withGraphFetched('purposesUse')
+          .withGraphFetched('purpose')
 
         expect(result).to.be.instanceOf(ChargePurposeModel)
         expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
 
-        expect(result.purposesUse).to.be.an.instanceOf(PurposesUseModel)
-        expect(result.purposesUse).to.equal(testPurposesUse)
+        expect(result.purpose).to.be.an.instanceOf(PurposeModel)
+        expect(result.purpose).to.equal(testPurpose)
       })
     })
   })

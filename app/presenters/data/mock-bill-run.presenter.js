@@ -182,7 +182,7 @@ function _formatTransactions (transactions) {
 function _formatChargePurposes (chargePurposes) {
   return chargePurposes.map((chargePurpose) => {
     const {
-      purposesUse,
+      purpose,
       abstractionPeriodStartDay: startDay,
       abstractionPeriodStartMonth: startMonth,
       abstractionPeriodEndDay: endDay,
@@ -193,7 +193,7 @@ function _formatChargePurposes (chargePurposes) {
 
     return {
       id,
-      purpose: purposesUse.description,
+      purpose: purpose.description,
       abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
       authorisedQuantity
     }

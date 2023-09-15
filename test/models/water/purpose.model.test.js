@@ -11,25 +11,25 @@ const { expect } = Code
 const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
 const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const PurposesUseHelper = require('../../support/helpers/water/purposes-use.helper.js')
+const PurposeHelper = require('../../support/helpers/water/purpose.helper.js')
 
 // Thing under test
-const PurposesUseModel = require('../../../app/models/water/purposes-use.model.js')
+const PurposeModel = require('../../../app/models/water/purpose.model.js')
 
-describe('Purposes Use model', () => {
+describe('Purpose model', () => {
   let testRecord
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    testRecord = await PurposesUseHelper.add()
+    testRecord = await PurposeHelper.add()
   })
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await PurposesUseModel.query().findById(testRecord.purposeUseId)
+      const result = await PurposeModel.query().findById(testRecord.purposeUseId)
 
-      expect(result).to.be.an.instanceOf(PurposesUseModel)
+      expect(result).to.be.an.instanceOf(PurposeModel)
       expect(result.purposeUseId).to.equal(testRecord.purposeUseId)
     })
   })
@@ -45,18 +45,18 @@ describe('Purposes Use model', () => {
       })
 
       it('can successfully run a related query', async () => {
-        const query = await PurposesUseModel.query()
+        const query = await PurposeModel.query()
           .innerJoinRelated('chargePurpose')
 
         expect(query).to.exist()
       })
 
       it('can eager load the charge purpose', async () => {
-        const result = await PurposesUseModel.query()
+        const result = await PurposeModel.query()
           .findById(testRecord.purposeUseId)
           .withGraphFetched('chargePurpose')
 
-        expect(result).to.be.instanceOf(PurposesUseModel)
+        expect(result).to.be.instanceOf(PurposeModel)
         expect(result.purposeUseId).to.equal(testRecord.purposeUseId)
 
         expect(result.chargePurpose).to.be.an.instanceOf(ChargePurposeModel)
