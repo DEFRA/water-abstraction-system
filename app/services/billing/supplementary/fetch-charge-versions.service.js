@@ -108,8 +108,8 @@ async function _fetch (regionId, billingPeriod) {
         'shortDescription'
       ])
     })
-    .withGraphFetched('chargeReferences.chargePurposes')
-    .modifyGraph('chargeReferences.chargePurposes', builder => {
+    .withGraphFetched('chargeReferences.chargeElements')
+    .modifyGraph('chargeReferences.chargeElements', builder => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',

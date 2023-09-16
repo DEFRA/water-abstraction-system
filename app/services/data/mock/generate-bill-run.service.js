@@ -90,8 +90,8 @@ async function _fetchBillRun (id) {
         'adjustments'
       ])
     })
-    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargePurposes')
-    .modifyGraph('bills.billLicences.transactions.chargeReference.chargePurposes', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargeElements')
+    .modifyGraph('bills.billLicences.transactions.chargeReference.chargeElements', (builder) => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',
@@ -101,8 +101,8 @@ async function _fetchBillRun (id) {
         'authorisedAnnualQuantity'
       ])
     })
-    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargePurposes.purpose')
-    .modifyGraph('bills.billLicences.transactions.chargeReference.chargePurposes.purpose', (builder) => {
+    .withGraphFetched('bills.billLicences.transactions.chargeReference.chargeElements.purpose')
+    .modifyGraph('bills.billLicences.transactions.chargeReference.chargeElements.purpose', (builder) => {
       builder.select([
         'description'
       ])

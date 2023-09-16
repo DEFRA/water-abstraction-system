@@ -174,13 +174,13 @@ function _formatTransactions (transactions) {
       chargeDescription,
       addCharges: _formatAdditionalCharges(transaction),
       adjustments: _formatAdjustments(chargeReference),
-      elements: _formatChargePurposes(chargeReference.chargePurposes)
+      elements: _formatChargeElements(chargeReference.chargeElements)
     }
   })
 }
 
-function _formatChargePurposes (chargePurposes) {
-  return chargePurposes.map((chargePurpose) => {
+function _formatChargeElements (chargeElements) {
+  return chargeElements.map((chargeElement) => {
     const {
       purpose,
       abstractionPeriodStartDay: startDay,
@@ -189,7 +189,7 @@ function _formatChargePurposes (chargePurposes) {
       abstractionPeriodEndMonth: endMonth,
       authorisedAnnualQuantity: authorisedQuantity,
       chargePurposeId: id
-    } = chargePurpose
+    } = chargeElement
 
     return {
       id,

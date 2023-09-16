@@ -69,7 +69,7 @@ describe('Mock Bill Run presenter', () => {
       expect(results[0].adjustments).to.equal(['Winter discount (0.5)'])
     })
 
-    it('correctly presents a charge purpose', () => {
+    it('correctly presents a charge element', () => {
       const { elements: results } = MockBillRunPresenter.go(mockedBillRun).bills[0].licences[0].transactions[0]
 
       expect(results[0].id).to.equal('30c31312-59ef-4818-8e78-20ac115c39f7')
@@ -136,7 +136,7 @@ const mockedBillRun = {
                   winter: true,
                   aggregate: null
                 },
-                chargePurposes: [
+                chargeElements: [
                   {
                     chargePurposeId: '30c31312-59ef-4818-8e78-20ac115c39f7',
                     abstractionPeriodStartDay: 1,
@@ -177,7 +177,7 @@ const mockedBillRun = {
                   winter: true,
                   aggregate: null
                 },
-                chargePurposes: [
+                chargeElements: [
                   {
                     chargePurposeId: '30c31312-59ef-4818-8e78-20ac115c39f7',
                     abstractionPeriodStartDay: 1,

@@ -64,7 +64,7 @@ function _formatFriendlyChargeReferences (friendlyChargeReferences, chargeRefere
       adjustments,
       chargeCategory,
       chargeElementId,
-      chargePurposes,
+      chargeElements,
       description,
       eiucRegion,
       isRestrictedSource,
@@ -98,14 +98,14 @@ function _formatFriendlyChargeReferences (friendlyChargeReferences, chargeRefere
     }
 
     _formatFriendlyReturns(friendlyChargeReference.returns, returns)
-    _formatFriendlyChargeElements(friendlyChargeReference.chargeElements, chargePurposes)
+    _formatFriendlyChargeElements(friendlyChargeReference.chargeElements, chargeElements)
 
     friendlyChargeReferences.push(friendlyChargeReference)
   })
 }
 
-function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
-  chargePurposes.forEach((chargePurpose) => {
+function _formatFriendlyChargeElements (friendlyChargeElements, chargeElements) {
+  chargeElements.forEach((chargeElement) => {
     const {
       authorisedAnnualQuantity,
       chargePurposeId,
@@ -119,7 +119,7 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
       abstractionPeriodEndMonth: endMonth,
       abstractionPeriodStartDay: startDay,
       abstractionPeriodStartMonth: startMonth
-    } = chargePurpose
+    } = chargeElement
     const friendlyChargeElement = {
       id: chargePurposeId,
       description,
@@ -135,7 +135,7 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
 
     friendlyChargeElement.legacyId = purpose.legacyId
 
-    chargeElements.push(friendlyChargeElement)
+    friendlyChargeElements.push(friendlyChargeElement)
   })
 }
 

@@ -25,6 +25,10 @@ class ChargeReferenceModel extends WaterBaseModel {
     ]
   }
 
+  static get alias () {
+    return 'chargeReferences'
+  }
+
   static get relationMappings () {
     return {
       chargeVersion: {
@@ -43,9 +47,9 @@ class ChargeReferenceModel extends WaterBaseModel {
           to: 'billingChargeCategories.billingChargeCategoryId'
         }
       },
-      chargePurposes: {
+      chargeElements: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-purpose.model',
+        modelClass: 'charge-element.model',
         join: {
           from: 'chargeElements.chargeElementId',
           to: 'chargePurposes.chargeElementId'

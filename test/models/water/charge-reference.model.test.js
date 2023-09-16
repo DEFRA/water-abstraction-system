@@ -10,8 +10,8 @@ const { expect } = Code
 // Test helpers
 const ChargeCategoryHelper = require('../../support/helpers/water/charge-category.helper.js')
 const ChargeCategoryModel = require('../../../app/models/water/charge-category.model.js')
-const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
-const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
+const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
+const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/water/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/water/charge-version.helper.js')
 const ChargeVersionModel = require('../../../app/models/water/charge-version.model.js')
@@ -71,38 +71,38 @@ describe('Charge Reference model', () => {
       })
     })
 
-    describe('when linking to charge purposes', () => {
-      let testChargePurposes
+    describe('when linking to charge elements', () => {
+      let testChargeElements
 
       beforeEach(async () => {
         const { chargeElementId } = testRecord
 
-        testChargePurposes = []
+        testChargeElements = []
         for (let i = 0; i < 2; i++) {
-          const chargePurpose = await ChargePurposeHelper.add({ description: `CP ${i}`, chargeElementId })
-          testChargePurposes.push(chargePurpose)
+          const chargeElement = await ChargeElementHelper.add({ description: `CP ${i}`, chargeElementId })
+          testChargeElements.push(chargeElement)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query()
-          .innerJoinRelated('chargePurposes')
+          .innerJoinRelated('chargeElements')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the charge purposes', async () => {
+      it('can eager load the charge elements', async () => {
         const result = await ChargeReferenceModel.query()
           .findById(testRecord.chargeElementId)
-          .withGraphFetched('chargePurposes')
+          .withGraphFetched('chargeElements')
 
         expect(result).to.be.instanceOf(ChargeReferenceModel)
         expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
 
-        expect(result.chargePurposes).to.be.an.array()
-        expect(result.chargePurposes[0]).to.be.an.instanceOf(ChargePurposeModel)
-        expect(result.chargePurposes).to.include(testChargePurposes[0])
-        expect(result.chargePurposes).to.include(testChargePurposes[1])
+        expect(result.chargeElements).to.be.an.array()
+        expect(result.chargeElements[0]).to.be.an.instanceOf(ChargeElementModel)
+        expect(result.chargeElements).to.include(testChargeElements[0])
+        expect(result.chargeElements).to.include(testChargeElements[1])
       })
     })
 

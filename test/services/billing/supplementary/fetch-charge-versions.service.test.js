@@ -10,8 +10,8 @@ const { expect } = Code
 // Test helpers
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
-const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/water/charge-version.helper.js')
 const WorkflowHelper = require('../../../support/helpers/water/workflow.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
@@ -41,9 +41,9 @@ describe('Fetch Charge Versions service', () => {
     let chargeReference2023
     let chargeReference2023And24
     let chargeReference2024
-    let chargePurpose2023
-    let chargePurpose2023And24
-    let chargePurpose2024
+    let chargeElement2023
+    let chargeElement2023And24
+    let chargeElement2024
     let changeReason
     let licence
 
@@ -104,7 +104,7 @@ describe('Fetch Charge Versions service', () => {
         billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
-      chargePurpose2024 = await ChargePurposeHelper.add({
+      chargeElement2024 = await ChargeElementHelper.add({
         chargeElementId: chargeReference2024.chargeElementId
       })
 
@@ -113,7 +113,7 @@ describe('Fetch Charge Versions service', () => {
         billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
-      chargePurpose2023And24 = await ChargePurposeHelper.add({
+      chargeElement2023And24 = await ChargeElementHelper.add({
         chargeElementId: chargeReference2023And24.chargeElementId
       })
 
@@ -122,7 +122,7 @@ describe('Fetch Charge Versions service', () => {
         billingChargeCategoryId: chargeCategory.billingChargeCategoryId
       })
 
-      chargePurpose2023 = await ChargePurposeHelper.add({
+      chargeElement2023 = await ChargeElementHelper.add({
         chargeElementId: chargeReference2023.chargeElementId
       })
     })
@@ -180,7 +180,7 @@ describe('Fetch Charge Versions service', () => {
       expect(result.chargeVersions[0].changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
     })
 
-    it('includes the related charge references, charge category and charge purposes', async () => {
+    it('includes the related charge references, charge category and charge elements', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       const expectedResult2024 = {
@@ -195,12 +195,12 @@ describe('Fetch Charge Versions service', () => {
           reference: chargeCategory.reference,
           shortDescription: chargeCategory.shortDescription
         },
-        chargePurposes: [{
-          chargePurposeId: chargePurpose2024.chargePurposeId,
-          abstractionPeriodStartDay: chargePurpose2024.abstractionPeriodStartDay,
-          abstractionPeriodStartMonth: chargePurpose2024.abstractionPeriodStartMonth,
-          abstractionPeriodEndDay: chargePurpose2024.abstractionPeriodEndDay,
-          abstractionPeriodEndMonth: chargePurpose2024.abstractionPeriodEndMonth
+        chargeElements: [{
+          chargePurposeId: chargeElement2024.chargePurposeId,
+          abstractionPeriodStartDay: chargeElement2024.abstractionPeriodStartDay,
+          abstractionPeriodStartMonth: chargeElement2024.abstractionPeriodStartMonth,
+          abstractionPeriodEndDay: chargeElement2024.abstractionPeriodEndDay,
+          abstractionPeriodEndMonth: chargeElement2024.abstractionPeriodEndMonth
         }]
       }
 
@@ -216,12 +216,12 @@ describe('Fetch Charge Versions service', () => {
           reference: chargeCategory.reference,
           shortDescription: chargeCategory.shortDescription
         },
-        chargePurposes: [{
-          chargePurposeId: chargePurpose2023And24.chargePurposeId,
-          abstractionPeriodStartDay: chargePurpose2023And24.abstractionPeriodStartDay,
-          abstractionPeriodStartMonth: chargePurpose2023And24.abstractionPeriodStartMonth,
-          abstractionPeriodEndDay: chargePurpose2023And24.abstractionPeriodEndDay,
-          abstractionPeriodEndMonth: chargePurpose2023And24.abstractionPeriodEndMonth
+        chargeElements: [{
+          chargePurposeId: chargeElement2023And24.chargePurposeId,
+          abstractionPeriodStartDay: chargeElement2023And24.abstractionPeriodStartDay,
+          abstractionPeriodStartMonth: chargeElement2023And24.abstractionPeriodStartMonth,
+          abstractionPeriodEndDay: chargeElement2023And24.abstractionPeriodEndDay,
+          abstractionPeriodEndMonth: chargeElement2023And24.abstractionPeriodEndMonth
         }]
       }
 
@@ -237,12 +237,12 @@ describe('Fetch Charge Versions service', () => {
           reference: chargeCategory.reference,
           shortDescription: chargeCategory.shortDescription
         },
-        chargePurposes: [{
-          chargePurposeId: chargePurpose2023.chargePurposeId,
-          abstractionPeriodStartDay: chargePurpose2023.abstractionPeriodStartDay,
-          abstractionPeriodStartMonth: chargePurpose2023.abstractionPeriodStartMonth,
-          abstractionPeriodEndDay: chargePurpose2023.abstractionPeriodEndDay,
-          abstractionPeriodEndMonth: chargePurpose2023.abstractionPeriodEndMonth
+        chargeElements: [{
+          chargePurposeId: chargeElement2023.chargePurposeId,
+          abstractionPeriodStartDay: chargeElement2023.abstractionPeriodStartDay,
+          abstractionPeriodStartMonth: chargeElement2023.abstractionPeriodStartMonth,
+          abstractionPeriodEndDay: chargeElement2023.abstractionPeriodEndDay,
+          abstractionPeriodEndMonth: chargeElement2023.abstractionPeriodEndMonth
         }]
       }
 

@@ -12,8 +12,8 @@ const { expect } = Code
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
-const ChargeReference = require('../../../support/helpers/water/charge-reference.helper.js')
-const ChargePurpose = require('../../../support/helpers/water/charge-purpose.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const PurposeHelper = require('../../../support/helpers/water/purpose.helper.js')
@@ -54,10 +54,10 @@ describe('Generate Bill Run service', () => {
       const region = await RegionHelper.add()
       const licence = await LicenceHelper.add({ regionId: region.regionId })
       const purpose = await PurposeHelper.add()
-      const chargeReference = await ChargeReference.add({
+      const chargeReference = await ChargeReferenceHelper.add({
         adjustments: { s126: null, s127: false, s130: false, charge: null, winter: true, aggregate: null }
       })
-      await ChargePurpose.add({ chargeElementId: chargeReference.chargeElementId, purposeUseId: purpose.purposeUseId })
+      await ChargeElementHelper.add({ chargeElementId: chargeReference.chargeElementId, purposeUseId: purpose.purposeUseId })
       const billRun = await BillRunHelper.add({ billRunNumber: 10029, regionId: region.regionId })
       const bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId, invoiceNumber: 'TAI0000013T' })
       const billLicence = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId, licenceId: licence.licenceId })

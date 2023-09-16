@@ -83,7 +83,7 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
         'shortDescription'
       ])
     })
-    .withGraphFetched('chargeReferences.chargePurposes.purpose')
+    .withGraphFetched('chargeReferences.chargeElements.purpose')
 
   return chargeVersions
 }
@@ -141,8 +141,8 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
 }
 
 function _extractPurposeUseLegacyIds (chargeReference) {
-  return chargeReference.chargePurposes.map((chargePurpose) => {
-    return chargePurpose.purpose.legacyId
+  return chargeReference.chargeElements.map((chargeElement) => {
+    return chargeElement.purpose.legacyId
   })
 }
 

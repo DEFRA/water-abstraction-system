@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
-const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
@@ -40,17 +40,17 @@ describe('Calculate Authorised and Billable days service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when there is a single abstraction period (charge purpose)', () => {
+  describe('when there is a single abstraction period (charge element)', () => {
     describe('and the abstraction period is 01-JAN to 31-DEC (in-year)', () => {
       beforeEach(async () => {
-        const chargePurpose = await ChargePurposeHelper.add({
+        const chargeElement = await ChargeElementHelper.add({
           chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 1,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 12
         })
-        chargeReference.chargePurposes = [chargePurpose]
+        chargeReference.chargeElements = [chargeElement]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -104,14 +104,14 @@ describe('Calculate Authorised and Billable days service', () => {
 
     describe('and the abstraction period is 01-JAN to 30-JUN (in-year)', () => {
       beforeEach(async () => {
-        const chargePurpose = await ChargePurposeHelper.add({
+        const chargeElement = await ChargeElementHelper.add({
           chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 1,
           abstractionPeriodEndDay: 30,
           abstractionPeriodEndMonth: 6
         })
-        chargeReference.chargePurposes = [chargePurpose]
+        chargeReference.chargeElements = [chargeElement]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -165,14 +165,14 @@ describe('Calculate Authorised and Billable days service', () => {
 
     describe('and the abstraction period is 01-OCT to 31-MAR (out-year)', () => {
       beforeEach(async () => {
-        const chargePurpose = await ChargePurposeHelper.add({
+        const chargeElement = await ChargeElementHelper.add({
           chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 10,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3
         })
-        chargeReference.chargePurposes = [chargePurpose]
+        chargeReference.chargeElements = [chargeElement]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -241,24 +241,24 @@ describe('Calculate Authorised and Billable days service', () => {
     })
   })
 
-  describe('where there are multiple abstraction periods (charge purposes)', () => {
+  describe('where there are multiple abstraction periods (charge elements)', () => {
     describe('and the abstraction periods are 01-OCT to 30-NOV and 01-FEB to 31-MAR', () => {
       beforeEach(async () => {
-        const firstChargePurpose = await ChargePurposeHelper.add({
+        const firstChargeElement = await ChargeElementHelper.add({
           chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 10,
           abstractionPeriodEndDay: 30,
           abstractionPeriodEndMonth: 11
         })
-        const secondChargePurpose = await ChargePurposeHelper.add({
+        const secondChargeElement = await ChargeElementHelper.add({
           chargeElementId: chargeReference.chargeElementId,
           abstractionPeriodStartDay: 1,
           abstractionPeriodStartMonth: 2,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3
         })
-        chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
+        chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
       })
 
       describe('and the charge period is 01-NOV-2022 to 31-DEC-2022 (starts and ends first year)', () => {
@@ -318,21 +318,21 @@ describe('Calculate Authorised and Billable days service', () => {
 
       describe('and the abstraction periods overlap (01-OCT to 28-FEB and 01-SEP to 31-NOV)', () => {
         beforeEach(async () => {
-          const firstChargePurpose = await ChargePurposeHelper.add({
+          const firstChargeElement = await ChargeElementHelper.add({
             chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 10,
             abstractionPeriodEndDay: 28,
             abstractionPeriodEndMonth: 2
           })
-          const secondChargePurpose = await ChargePurposeHelper.add({
+          const secondChargeElement = await ChargeElementHelper.add({
             chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 9,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 11
           })
-          chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
+          chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
         })
 
         it('returns 181 for authorised days and 181 for billable days', () => {
@@ -345,21 +345,21 @@ describe('Calculate Authorised and Billable days service', () => {
 
       describe('and the abstraction periods overlap (01-OCT to 28-FEB and 01-NOV to 31-JAN)', () => {
         beforeEach(async () => {
-          const firstChargePurpose = await ChargePurposeHelper.add({
+          const firstChargeElement = await ChargeElementHelper.add({
             chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 10,
             abstractionPeriodEndDay: 28,
             abstractionPeriodEndMonth: 2
           })
-          const secondChargePurpose = await ChargePurposeHelper.add({
+          const secondChargeElement = await ChargeElementHelper.add({
             chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 11,
             abstractionPeriodEndDay: 1,
             abstractionPeriodEndMonth: 1
           })
-          chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
+          chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
         })
 
         it('returns 151 for authorised days and 151 for billable days', () => {
@@ -372,21 +372,21 @@ describe('Calculate Authorised and Billable days service', () => {
 
       describe('and the abstraction periods overlap (01-OCT to 28-FEB and 01-JAN to 31-MAR)', () => {
         beforeEach(async () => {
-          const firstChargePurpose = await ChargePurposeHelper.add({
+          const firstChargeElement = await ChargeElementHelper.add({
             chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 10,
             abstractionPeriodEndDay: 28,
             abstractionPeriodEndMonth: 2
           })
-          const secondChargePurpose = await ChargePurposeHelper.add({
+          const secondChargeElement = await ChargeElementHelper.add({
             chargeElementId: chargeReference.chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 1,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3
           })
-          chargeReference.chargePurposes = [firstChargePurpose, secondChargePurpose]
+          chargeReference.chargeElements = [firstChargeElement, secondChargeElement]
         })
 
         it('returns 182 for authorised days and 182 for billable days', () => {

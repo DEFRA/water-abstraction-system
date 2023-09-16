@@ -87,14 +87,14 @@ function _description (chargeReference) {
 }
 
 /**
- * Returns a json representation of all charge purposes in a charge element
+ * Returns a json representation of all charge elements in a charge reference
  */
-function _generatePurposes (chargeReference) {
-  const jsonChargePurposes = chargeReference.chargePurposes.map((chargePurpose) => {
-    return chargePurpose.toJSON()
+function _generateElements (chargeReference) {
+  const jsonChargeElements = chargeReference.chargeElements.map((chargeElement) => {
+    return chargeElement.toJSON()
   })
 
-  return JSON.stringify(jsonChargePurposes)
+  return JSON.stringify(jsonChargeElements)
 }
 
 /**
@@ -143,7 +143,7 @@ function _standardTransaction (
     supportedSourceName: chargeReference.additionalCharges?.supportedSource?.name || null,
     isWaterCompanyCharge: !!chargeReference.additionalCharges?.isSupplyPublicWater,
     isWinterOnly: !!chargeReference.adjustments.winter,
-    purposes: _generatePurposes(chargeReference)
+    purposes: _generateElements(chargeReference)
   }
 }
 

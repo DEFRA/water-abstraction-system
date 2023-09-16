@@ -14,7 +14,7 @@ const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js
 const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
-const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/water/charge-version.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/billing/supplementary/fetch-charge-versions.service.js')
@@ -87,7 +87,7 @@ describe('Process billing period service', () => {
           const { chargeElementId } = await ChargeReferenceHelper.add(
             { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
           )
-          await ChargePurposeHelper.add({
+          await ChargeElementHelper.add({
             chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
@@ -162,7 +162,7 @@ describe('Process billing period service', () => {
             const { chargeElementId } = await ChargeReferenceHelper.add(
               { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
             )
-            await ChargePurposeHelper.add({
+            await ChargeElementHelper.add({
               chargeElementId,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 4,
@@ -198,7 +198,7 @@ describe('Process billing period service', () => {
               const { chargeElementId } = await ChargeReferenceHelper.add(
                 { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
               )
-              await ChargePurposeHelper.add({
+              await ChargeElementHelper.add({
                 chargeElementId,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 4,
@@ -231,7 +231,7 @@ describe('Process billing period service', () => {
       const { chargeElementId } = await ChargeReferenceHelper.add(
         { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
       )
-      await ChargePurposeHelper.add({ chargeElementId })
+      await ChargeElementHelper.add({ chargeElementId })
 
       const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
       chargeVersions = chargeVersionData.chargeVersions

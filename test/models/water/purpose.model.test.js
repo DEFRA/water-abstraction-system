@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargePurposeHelper = require('../../support/helpers/water/charge-purpose.helper.js')
-const ChargePurposeModel = require('../../../app/models/water/charge-purpose.model.js')
+const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
+const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const PurposeHelper = require('../../support/helpers/water/purpose.helper.js')
 
@@ -35,32 +35,32 @@ describe('Purpose model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge purpose', () => {
-      let testChargePurpose
+    describe('when linking to charge element', () => {
+      let testChargeElement
 
       beforeEach(async () => {
         const { purposeUseId } = testRecord
 
-        testChargePurpose = await ChargePurposeHelper.add({ purposeUseId })
+        testChargeElement = await ChargeElementHelper.add({ purposeUseId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query()
-          .innerJoinRelated('chargePurpose')
+          .innerJoinRelated('chargeElement')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the charge purpose', async () => {
+      it('can eager load the charge element', async () => {
         const result = await PurposeModel.query()
           .findById(testRecord.purposeUseId)
-          .withGraphFetched('chargePurpose')
+          .withGraphFetched('chargeElement')
 
         expect(result).to.be.instanceOf(PurposeModel)
         expect(result.purposeUseId).to.equal(testRecord.purposeUseId)
 
-        expect(result.chargePurpose).to.be.an.instanceOf(ChargePurposeModel)
-        expect(result.chargePurpose).to.equal(testChargePurpose)
+        expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
+        expect(result.chargeElement).to.equal(testChargeElement)
       })
     })
   })

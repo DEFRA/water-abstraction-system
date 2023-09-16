@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
-const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
@@ -22,7 +22,7 @@ const GenerateTransactionsService = require('../../../../app/services/billing/su
 
 describe('Generate Transactions service', () => {
   let chargePeriod
-  let chargePurpose
+  let chargeElement
   let chargeReference
   let isNewLicence
   let isWaterUndertaker
@@ -37,10 +37,10 @@ describe('Generate Transactions service', () => {
     const { billingChargeCategoryId } = chargeCategory
 
     const baseChargeReference = await ChargeReferenceHelper.add({ billingChargeCategoryId })
-    chargePurpose = await ChargePurposeHelper.add({ chargeElementId: baseChargeReference.chargeElementId })
+    chargeElement = await ChargeElementHelper.add({ chargeElementId: baseChargeReference.chargeElementId })
     chargeReference = await baseChargeReference.$query()
       .withGraphFetched('chargeCategory')
-      .withGraphFetched('chargePurposes')
+      .withGraphFetched('chargeElements')
   })
 
   afterEach(async () => {
@@ -114,12 +114,12 @@ describe('Generate Transactions service', () => {
         )
       })
 
-      it('returns the charge purpose as JSON in the transaction line `purposes` property', () => {
+      it('returns the charge element as JSON in the transaction line `purposes` property', () => {
         const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
-        const parsedPurposes = JSON.parse(results[0].purposes)
+        const parsedElements = JSON.parse(results[0].purposes)
 
-        expect(parsedPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
+        expect(parsedElements[0].chargePurposeId).to.equal(chargeElement.chargePurposeId)
       })
     })
 
@@ -153,14 +153,14 @@ describe('Generate Transactions service', () => {
         )
       })
 
-      it('returns the charge purpose as JSON in both transaction lines `purposes` property', () => {
+      it('returns the charge element as JSON in both transaction lines `purposes` property', () => {
         const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
 
-        const parsedStandardPurposes = JSON.parse(results[0].purposes)
-        const parsedCompensationPurposes = JSON.parse(results[1].purposes)
+        const parsedStandardElements = JSON.parse(results[0].purposes)
+        const parsedCompensationElements = JSON.parse(results[1].purposes)
 
-        expect(parsedStandardPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
-        expect(parsedCompensationPurposes[0].chargePurposeId).to.equal(chargePurpose.chargePurposeId)
+        expect(parsedStandardElements[0].chargePurposeId).to.equal(chargeElement.chargePurposeId)
+        expect(parsedCompensationElements[0].chargePurposeId).to.equal(chargeElement.chargePurposeId)
       })
     })
 
