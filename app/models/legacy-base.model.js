@@ -5,10 +5,10 @@
  * @module LegacyBaseModel
  */
 
-const { QueryBuilder } = require('objection')
 const path = require('path')
 
 const BaseModel = require('./base.model.js')
+const LegacyQueryBuilder = require('./legacy.query-builder.js')
 
 class LegacyBaseModel extends BaseModel {
   /**
@@ -36,10 +36,10 @@ class LegacyBaseModel extends BaseModel {
    *
    * See `schema()` for further details.
    *
-   * @returns {Object} a custom Objection `QueryBuilder`
+   * @returns {module:LegacyQueryBuilder} a custom Objection `QueryBuilder`
    */
   static get QueryBuilder () {
-    return SchemaQueryBuilder
+    return LegacyQueryBuilder
   }
 
   /**
@@ -220,13 +220,6 @@ class LegacyBaseModel extends BaseModel {
     }
 
     return json
-  }
-}
-
-class SchemaQueryBuilder extends QueryBuilder {
-  constructor (modelClass) {
-    super(modelClass)
-    this.withSchema(modelClass.schema)
   }
 }
 
