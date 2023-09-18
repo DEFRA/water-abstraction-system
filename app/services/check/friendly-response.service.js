@@ -42,7 +42,7 @@ function _formatFriendlyLicences (licences, responseData) {
 
 function _formatFriendlyChargeVersion (friendlyChargeVersions, chargeVersions) {
   chargeVersions.forEach((chargeVersion) => {
-    const { chargeVersionId, status, startDate, endDate, chargeElements } = chargeVersion
+    const { chargeVersionId, status, startDate, endDate, chargeReferences } = chargeVersion
     const friendlyChargeVersion = {
       id: chargeVersionId,
       status,
@@ -51,7 +51,7 @@ function _formatFriendlyChargeVersion (friendlyChargeVersions, chargeVersions) {
       chargeReferences: []
     }
 
-    _formatFriendlyChargeReferences(friendlyChargeVersion.chargeReferences, chargeElements)
+    _formatFriendlyChargeReferences(friendlyChargeVersion.chargeReferences, chargeReferences)
 
     friendlyChargeVersions.push(friendlyChargeVersion)
   })

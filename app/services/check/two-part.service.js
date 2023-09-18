@@ -66,11 +66,11 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .whereExists(
       ChargeReferenceModel.query()
         .select(1)
-        .whereColumn('chargeVersions.chargeVersionId', 'chargeElements.chargeVersionId')
+        .whereColumn('chargeVersions.chargeVersionId', 'chargeReferences.chargeVersionId')
         // NOTE: We can make withJsonSuperset() work which looks nicer, but only if we don't have anything camel case
         // in the table/column name. Camel case mappers don't work with whereJsonSuperset() or whereJsonSubset(). So,
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
-        .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+        .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeVersions.chargeReferences', (builder) => {
