@@ -18,7 +18,7 @@ const ChargingModuleCreateCustomerChangeService = require('../../../app/services
 // Thing under test
 const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
 
-describe('Send billing transactions service', () => {
+describe('Send Transactions service', () => {
   const invoiceAccount = { invoiceAccountId: '3b53f101-d256-40f8-a6be-ddefb5f9647c' }
 
   beforeEach(() => {

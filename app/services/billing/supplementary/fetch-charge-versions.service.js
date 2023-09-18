@@ -7,8 +7,8 @@
 
 const { ref } = require('objection')
 
-const ChargeVersion = require('../../../models/water/charge-version.model.js')
-const ChargeVersionWorkflow = require('../../../models/water/charge-version-workflow.model.js')
+const ChargeVersionModel = require('../../../models/water/charge-version.model.js')
+const Workflow = require('../../../models/water/workflow.model.js')
 
 /**
  * Fetch all SROC charge versions to be processed as part of supplementary billing
@@ -37,7 +37,7 @@ async function go (regionId, billingPeriod) {
 }
 
 async function _fetch (regionId, billingPeriod) {
-  const allChargeVersions = await ChargeVersion.query()
+  const allChargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersionId',
       'scheme',
@@ -53,7 +53,7 @@ async function _fetch (regionId, billingPeriod) {
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .whereNot('chargeVersions.status', 'draft')
     .whereNotExists(
-      ChargeVersionWorkflow.query()
+      Workflow.query()
         .select(1)
         .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
         .whereNull('chargeVersionWorkflows.dateDeleted')
@@ -89,8 +89,8 @@ async function _fetch (regionId, billingPeriod) {
         'triggersMinimumCharge'
       ])
     })
-    .withGraphFetched('chargeElements')
-    .modifyGraph('chargeElements', builder => {
+    .withGraphFetched('chargeReferences')
+    .modifyGraph('chargeReferences', builder => {
       builder.select([
         'chargeElementId',
         'source',
@@ -101,15 +101,15 @@ async function _fetch (regionId, billingPeriod) {
         'description'
       ])
     })
-    .withGraphFetched('chargeElements.billingChargeCategory')
-    .modifyGraph('chargeElements.billingChargeCategory', builder => {
+    .withGraphFetched('chargeReferences.chargeCategory')
+    .modifyGraph('chargeReferences.chargeCategory', builder => {
       builder.select([
         'reference',
         'shortDescription'
       ])
     })
-    .withGraphFetched('chargeElements.chargePurposes')
-    .modifyGraph('chargeElements.chargePurposes', builder => {
+    .withGraphFetched('chargeReferences.chargeElements')
+    .modifyGraph('chargeReferences.chargeElements', builder => {
       builder.select([
         'chargePurposeId',
         'abstractionPeriodStartDay',
@@ -125,9 +125,9 @@ async function _fetch (regionId, billingPeriod) {
 /**
  * Extract the `licenceId`s from all the charge versions before removing non-chargeable charge versions
  *
- * When a licence is made "non-chargeable" the supplementary billing flag gets set and a charge version created that has
- * no `invoice_account_id`. For the purpose of billing we are not interested in non-chargeable charge versions. We are
- * interested in the associated licences to ensure that their supplementary billing flag is unset.
+ * When a licence is made "non-chargeable" the supplementary billing flag gets set and a charge version created that
+ * has no `invoice_account_id`. For the purpose of billing we are not interested in non-chargeable charge versions.
+ * We are interested in the associated licences to ensure that their supplementary billing flag is unset.
  */
 function _extractLicenceIdsThenRemoveNonChargeableChargeVersions (allChargeVersions) {
   const licenceIdsForPeriod = []

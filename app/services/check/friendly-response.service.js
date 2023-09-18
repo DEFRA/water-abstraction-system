@@ -7,9 +7,9 @@
 
 const { formatAbstractionPeriod, formatLongDate } = require('../../presenters/base.presenter.js')
 
-function go (billingPeriod, matchedChargeVersions) {
+function go (billingPeriod, responseData) {
   const response = {
-    note: 'This response aims to match the UI. Note this means the entity names and structure DO NOT match what is in the DB.',
+    note: 'This response aims to match the UI. Note this means the structure DOES NOT match what is in the DB.',
     billingPeriod: {
       startDate: formatLongDate(billingPeriod.startDate),
       endDate: formatLongDate(billingPeriod.endDate)
@@ -17,33 +17,33 @@ function go (billingPeriod, matchedChargeVersions) {
     licences: []
   }
 
-  _formatFriendlyLicences(response.licences, matchedChargeVersions)
+  _formatFriendlyLicences(response.licences, responseData)
 
   return response
 }
 
-function _formatFriendlyLicences (licences, matchedChargeVersions) {
-  matchedChargeVersions.forEach((matchedChargeVersion) => {
-    const { licenceId, licenceRef, chargeVersions, returnsStatuses, returnsReady } = matchedChargeVersion
+function _formatFriendlyLicences (licences, responseData) {
+  responseData.forEach((licence) => {
+    const { licenceId, licenceRef, chargeVersions, returnsStatuses, returnsReady } = licence
 
     const friendlyLicence = {
       id: licenceId,
       licenceRef,
       returnsStatuses,
       returnsReady,
-      chargeInformations: []
+      chargeVersions: []
     }
 
-    _formatFriendlyChargeInformation(friendlyLicence.chargeInformations, chargeVersions)
+    _formatFriendlyChargeVersion(friendlyLicence.chargeVersions, chargeVersions)
 
     licences.push(friendlyLicence)
   })
 }
 
-function _formatFriendlyChargeInformation (chargeInformations, chargeVersions) {
+function _formatFriendlyChargeVersion (friendlyChargeVersions, chargeVersions) {
   chargeVersions.forEach((chargeVersion) => {
-    const { chargeVersionId, status, startDate, endDate, chargeElements } = chargeVersion
-    const friendlyChargeInformation = {
+    const { chargeVersionId, status, startDate, endDate, chargeReferences } = chargeVersion
+    const friendlyChargeVersion = {
       id: chargeVersionId,
       status,
       startDate,
@@ -51,20 +51,20 @@ function _formatFriendlyChargeInformation (chargeInformations, chargeVersions) {
       chargeReferences: []
     }
 
-    _formatFriendlyChargeReferences(friendlyChargeInformation.chargeReferences, chargeElements)
+    _formatFriendlyChargeReferences(friendlyChargeVersion.chargeReferences, chargeReferences)
 
-    chargeInformations.push(friendlyChargeInformation)
+    friendlyChargeVersions.push(friendlyChargeVersion)
   })
 }
 
-function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
-  chargeElements.forEach((chargeElement) => {
+function _formatFriendlyChargeReferences (friendlyChargeReferences, chargeReferences) {
+  chargeReferences.forEach((chargeReference) => {
     const {
       additionalCharges,
       adjustments,
-      billingChargeCategory,
+      chargeCategory,
       chargeElementId,
-      chargePurposes,
+      chargeElements,
       description,
       eiucRegion,
       isRestrictedSource,
@@ -73,15 +73,15 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
       source,
       volume,
       waterModel
-    } = chargeElement
+    } = chargeReference
 
     const formattedAdditionalCharges = _formatAdditionalCharges(additionalCharges)
     const formattedAdjustments = _formatAdjustments(adjustments)
 
     const friendlyChargeReference = {
       id: chargeElementId,
-      chargeReference: billingChargeCategory.reference,
-      chargeDescription: billingChargeCategory.shortDescription,
+      chargeReference: chargeCategory.reference,
+      chargeDescription: chargeCategory.shortDescription,
       description,
       source,
       loss,
@@ -98,28 +98,28 @@ function _formatFriendlyChargeReferences (chargeReferences, chargeElements) {
     }
 
     _formatFriendlyReturns(friendlyChargeReference.returns, returns)
-    _formatFriendlyChargeElements(friendlyChargeReference.chargeElements, chargePurposes)
+    _formatFriendlyChargeElements(friendlyChargeReference.chargeElements, chargeElements)
 
-    chargeReferences.push(friendlyChargeReference)
+    friendlyChargeReferences.push(friendlyChargeReference)
   })
 }
 
-function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
-  chargePurposes.forEach((chargePurpose) => {
+function _formatFriendlyChargeElements (friendlyChargeElements, chargeElements) {
+  chargeElements.forEach((chargeElement) => {
     const {
       authorisedAnnualQuantity,
       chargePurposeId,
       description,
       isSection127AgreementEnabled,
       loss,
-      purposesUse,
+      purpose,
       timeLimitedStartDate,
       timeLimitedEndDate,
       abstractionPeriodEndDay: endDay,
       abstractionPeriodEndMonth: endMonth,
       abstractionPeriodStartDay: startDay,
       abstractionPeriodStartMonth: startMonth
-    } = chargePurpose
+    } = chargeElement
     const friendlyChargeElement = {
       id: chargePurposeId,
       description,
@@ -133,9 +133,9 @@ function _formatFriendlyChargeElements (chargeElements, chargePurposes) {
       friendlyChargeElement.twoPartTariffAgreementsApply = 'Yes, two-part tariff agreements should apply to this element'
     }
 
-    friendlyChargeElement.legacyId = purposesUse.legacyId
+    friendlyChargeElement.legacyId = purpose.legacyId
 
-    chargeElements.push(friendlyChargeElement)
+    friendlyChargeElements.push(friendlyChargeElement)
   })
 }
 

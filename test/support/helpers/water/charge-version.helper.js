@@ -31,7 +31,7 @@ async function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new charge version
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.

@@ -19,7 +19,7 @@ describe('Fetch Invoice Account Numbers service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when the service is called with an array of charge versions', () => {
+  describe('when the service is called with an array of charge version', () => {
     let expectedResult
     let invoiceAccounts
 

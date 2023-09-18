@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Calculates authorised and billable days for a given charge element
+ * Calculates authorised and billable days for a given charge reference
  * @module CalculateAuthorisedAndBillableDaysService
  */
 
@@ -10,9 +10,9 @@ const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
 /**
- * Returns the authorised and billable days for a given charge element based on its abstraction periods
+ * Returns the authorised and billable days for a given charge reference based on its abstraction periods
  *
- * In WRLS the charge purpose, linked to a charge version via the charge element, holds the abstraction period
+ * In WRLS the charge element, linked to a charge version via the charge reference, holds the abstraction period
  * information. The abstraction period is the time when a licensee is permitted to abstract water. They are held as a
  * start and end day and month, for example 1 Apr to 31 Oct. They do not have years because the intent is they are the
  * same period no matter what year it is.
@@ -21,49 +21,49 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  * much of the charge period overlaps with the abstraction period (see params for explanations of billable and charge
  * periods).
  *
- * Calculating these values is complicated by the fact a charge element may have multiple abstraction periods. Added to
- * that abstraction periods do not intersect nicely with billing or charge periods. The abstraction period might start
- * or end outside of the billing period, and so apply twice! For example, 1 Jan to 30 Jun intersects twice with a
+ * Calculating these values is complicated by the fact a charge reference may have multiple abstraction periods. Added
+ * to that abstraction periods do not intersect nicely with billing or charge periods. The abstraction period might
+ * start or end outside of the billing period, and so apply twice! For example, 1 Jan to 30 Jun intersects twice with a
  * billing period of 2022-04-01 to 2023-03-31.
  *
  * - **1 Jan 2022 to 30 Jun 2022** intersects as 1 Apr 2022 to 30 Jun 2022
  * - **1 Jan 2023 to 30 Jun 2023** intersects as 1 Jan 2023 to 31 Mar 2023
  *
  * The number of days the abstraction period intersects either the billing or charge period is where we get our 'days'
- * from. The final complication is we cannot double count. If 2 charge purposes have abstraction periods that overlap we
+ * from. The final complication is we cannot double count. If 2 charge elements have abstraction periods that overlap we
  * must only count one of them. For example
  *
- * - charge purpose 1 has **1 Jan to 30 Jun**
- * - charge purpose 2 has **1 May to 31 Oct**
+ * - charge element 1 has **1 Jan to 30 Jun**
+ * - charge element 2 has **1 May to 31 Oct**
  *
  * They overlap 1 May to 30 Jun. To get our days we summate the result for each abstraction period and have to ensure we
  * only count this once.
  *
- * So, a charge purpose's abstraction dates might result in 2 relevant abstraction periods. A charge element might have
- * multiple charge purposes. But we must return a single **Authorised** and **Billable** days calculation. This problem
- * is what this service tackles.
+ * So, a charge element's abstraction dates might result in 2 relevant abstraction periods. A charge reference might
+ * have multiple charge elements. But we must return a single **Authorised** and **Billable** days calculation. This
+ * problem is what this service tackles.
  *
  * @param {{startDate: Date, endDate: Date}} chargePeriod Charge period is determined as the overlap between a charge
  *  version's start and end dates, and the billing period's (financial year) start and end dates. So, when the charge
  *  version and billing period are compared the charge period's start date is the latest of the two, and the end date is
  *  the earliest of their end dates
- * @param {{startDate: Date, endDate: Date}} billingPeriod The period a billing batch is being calculated for.
- *  Currently, this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
- * @param {module:ChargeElementModel} chargeElement Referred to as the 'charge reference' in the UI, for example,
- *  4.1.10. A charge version can have multiple charge elements, though each will have a different reference. Each
- *  element can have multiple charge purposes and it's these that hold the abstraction period data
+ * @param {{startDate: Date, endDate: Date}} billingPeriod The period a bill run is being calculated for. Currently,
+ *  this always equates to a financial year, for example, 2022-04-01 to 2023-03-31
+ * @param {module:ChargeReferenceModel} chargeReference A charge version can have multiple charge references, though
+ *  each will have a different reference, for example, 4.1.10. Each reference can have multiple charge elements and it's
+ *  these that hold the abstraction period data
  *
  * @returns {Object} An object containing an `authorisedDays` and `billableDays` property
  */
-function go (chargePeriod, billingPeriod, chargeElement) {
-  const { chargePurposes } = chargeElement
+function go (chargePeriod, billingPeriod, chargeReference) {
+  const { chargeElements } = chargeReference
 
   const authorisedAbstractionPeriods = []
   const billableAbstractionPeriods = []
 
-  chargePurposes.forEach((chargePurpose) => {
-    authorisedAbstractionPeriods.push(..._abstractionPeriods(billingPeriod, chargePurpose))
-    billableAbstractionPeriods.push(..._abstractionPeriods(chargePeriod, chargePurpose))
+  chargeElements.forEach((chargeElement) => {
+    authorisedAbstractionPeriods.push(..._abstractionPeriods(billingPeriod, chargeElement))
+    billableAbstractionPeriods.push(..._abstractionPeriods(chargePeriod, chargeElement))
   })
 
   return {
@@ -73,10 +73,10 @@ function go (chargePeriod, billingPeriod, chargeElement) {
 }
 
 /**
- * Calculate from a charge purpose's abstraction data the relevant abstraction periods
+ * Calculate from a charge element's abstraction data the relevant abstraction periods
  *
  * Before we can calculate the days and whether a period should be considered, we have to assign actual years to the
- * charge purpose's abstraction start and end values.
+ * charge element's abstraction start and end values.
  *
  * ## In-year
  *
@@ -104,18 +104,18 @@ function go (chargePeriod, billingPeriod, chargeElement) {
  * results.
  *
  * @param {Object} referencePeriod either the billing period or charge period
- * @param {module:ChargePurposeModel} chargePurpose holds the abstraction start and end day and month values
+ * @param {module:ChargeElementModel} chargeElement holds the abstraction start and end day and month values
  *
  * @returns {Object[]} An array of abstraction periods each containing a start and end date
  */
-function _abstractionPeriods (referencePeriod, chargePurpose) {
+function _abstractionPeriods (referencePeriod, chargeElement) {
   const periodStartYear = referencePeriod.startDate.getFullYear()
   const {
     abstractionPeriodStartDay: startDay,
     abstractionPeriodStartMonth: startMonth,
     abstractionPeriodEndDay: endDay,
     abstractionPeriodEndMonth: endMonth
-  } = chargePurpose
+  } = chargeElement
 
   // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
   // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.

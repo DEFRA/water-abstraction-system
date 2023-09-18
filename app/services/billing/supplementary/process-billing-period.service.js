@@ -5,42 +5,40 @@
  * @module ProcessBillingPeriodService
  */
 
-const BillingBatchError = require('../../../errors/billing-batch.error.js')
-const BillingBatchModel = require('../../../models/water/billing-batch.model.js')
-const BillingInvoiceModel = require('../../../models/water/billing-invoice.model.js')
-const BillingInvoiceLicenceModel = require('../../../models/water/billing-invoice-licence.model.js')
-const BillingTransactionModel = require('../../../models/water/billing-transaction.model.js')
+const BillRunError = require('../../../errors/bill-run.error.js')
+const BillRunModel = require('../../../models/water/bill-run.model.js')
+const BillModel = require('../../../models/water/bill.model.js')
+const BillLicenceModel = require('../../../models/water/bill-licence.model.js')
 const DetermineChargePeriodService = require('./determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
-const GenerateBillingTransactionsService = require('./generate-billing-transactions.service.js')
+const GenerateTransactionsService = require('./generate-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
-const ProcessBillingTransactionsService = require('./process-billing-transactions.service.js')
-const SendBillingTransactionsService = require('./send-billing-transactions.service.js')
+const ProcessTransactionsService = require('./process-transactions.service.js')
+const SendTransactionsService = require('./send-transactions.service.js')
+const TransactionModel = require('../../../models/water/transaction.model.js')
 
 /**
- * Creates the invoices and transactions in both WRLS and the Charging Module API
+ * Creates the bills and transactions in both WRLS and the Charging Module API
  *
- * TODO: Currently a placeholder service. Proper implementation is coming
- *
- * @param {module:BillingBatchModel} billingBatch The newly created bill batch we need to process
+ * @param {module:BillRunModel} billRun The newly created bill run we need to process
  * @param {Object} billingPeriod An object representing the financial year the transactions are for
  * @param {module:ChargeVersionModel[]} chargeVersions The charge versions to create transactions for
  *
  * @returns {Boolean} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go (billingBatch, billingPeriod, chargeVersions) {
+async function go (billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
     return false
   }
 
   const preGeneratedData = await PreGenerateBillingDataService.go(
     chargeVersions,
-    billingBatch.billingBatchId,
+    billRun.billingBatchId,
     billingPeriod
   )
 
   const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
-  const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billingBatch.externalId)
+  const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billRun.externalId)
 
   const didWePersistData = await _persistData(dataToPersist)
 
@@ -51,54 +49,54 @@ async function go (billingBatch, billingPeriod, chargeVersions) {
  * Iterates over the populated billing data and builds an object of data to be persisted. This process includes sending
  * "create transaction" requests to the Charging Module as this data is needed to fully create our transaction records
  */
-async function _buildDataToPersist (billingData, billingPeriod, billingBatchExternalId) {
+async function _buildDataToPersist (billingData, billingPeriod, billRunExternalId) {
   const dataToPersist = {
     transactions: [],
     // We use a set as this won't create an additional entry if we try to add a billing invoice already in it
-    billingInvoices: new Set(),
-    billingInvoiceLicences: []
+    bills: new Set(),
+    billLicences: []
   }
 
   for (const currentBillingData of Object.values(billingData)) {
     const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod)
 
     if (cleansedTransactions.length !== 0) {
-      const billingTransactions = await SendBillingTransactionsService.go(
+      const transactions = await SendTransactionsService.go(
         currentBillingData.licence,
-        currentBillingData.billingInvoice,
-        currentBillingData.billingInvoiceLicence,
-        billingBatchExternalId,
+        currentBillingData.bill,
+        currentBillingData.billLicence,
+        billRunExternalId,
         cleansedTransactions,
         billingPeriod
       )
 
-      dataToPersist.transactions.push(...billingTransactions)
+      dataToPersist.transactions.push(...transactions)
       // Note that sets use add rather than push
-      dataToPersist.billingInvoices.add(currentBillingData.billingInvoice)
-      dataToPersist.billingInvoiceLicences.push(currentBillingData.billingInvoiceLicence)
+      dataToPersist.bills.add(currentBillingData.bill)
+      dataToPersist.billLicences.push(currentBillingData.billLicence)
     }
   }
 
   return {
     ...dataToPersist,
-    // We revert the billingInvoices set to an array so we can handle it normally later
-    billingInvoices: [...dataToPersist.billingInvoices]
+    // We revert the bills set to an array so we can handle it normally later
+    bills: [...dataToPersist.bills]
   }
 }
 
 /**
- * Processes each charge version and and returns an object where each key is a billing invoice id which exists in one or
- * more charge versions and the key's value is an object containing the associated licence, billing invoice and billing
- * invoice licence, along with any required transactions, eg:
+ * Processes each charge version and and returns an object where each key is a bill id which exists in one or
+ * more charge versions and the key's value is an object containing the associated licence, bill and bill
+ * licence, along with any required transactions, eg:
  *
  * {
- *   'billing-invoice-licence-id-1': {
- *     billingInvoiceLicence: '...',   // instance of the billing invoice licence
- *     licence: '...',                 // instance of the licence for this billing invoice licence
- *     billingInvoice: '...',          // instance of the billing invoice for this billing invoice licence
- *     transactions: []                // array of calculated transactions for this billing invoice licence
+ *   'bill-licence-id-1': {
+ *     billLicence: '...',     // instance of the bill licence
+ *     licence: '...',         // instance of the licence for this bill licence
+ *     bill: '...',            // instance of the bill for this bill licence
+ *     transactions: []        // array of calculated transactions for this bill licence
  *   },
- *   'billing-invoice-licence-id-2': {
+ *   'bill-licence-id-2': {
  *     // Same object structure as above
  *   }
  * }
@@ -107,16 +105,16 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
   // We use reduce to build up the object as this allows us to start with an empty object and populate it with each
   // charge version.
   return chargeVersions.reduce((acc, chargeVersion) => {
-    const { billingInvoiceLicence, billingInvoice } = _retrievePreGeneratedData(
+    const { billLicence, bill } = _retrievePreGeneratedData(
       preGeneratedData,
       chargeVersion.invoiceAccountId,
       chargeVersion.licence
     )
 
-    const { billingInvoiceLicenceId } = billingInvoiceLicence
+    const { billingInvoiceLicenceId } = billLicence
 
     if (!acc[billingInvoiceLicenceId]) {
-      acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion.licence, billingInvoice, billingInvoiceLicence)
+      acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion.licence, bill, billLicence)
     }
 
     // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
@@ -131,57 +129,57 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
 }
 
 /**
- * Persists the transaction, invoice and invoice licence records in the db
+ * Persists the transaction, bill and bill licence records in the db
  */
 async function _persistData (dataToPersist) {
-  // If we don't have any transactions to persist then we also won't have any invoices or invoice licences, so we
+  // If we don't have any transactions to persist then we also won't have any bills or bill licences, so we
   // simply return early
   if (dataToPersist.transactions.length === 0) {
     return false
   }
 
-  await BillingTransactionModel.query().insert(dataToPersist.transactions)
-  await BillingInvoiceModel.query().insert(dataToPersist.billingInvoices)
-  await BillingInvoiceLicenceModel.query().insert(dataToPersist.billingInvoiceLicences)
+  await TransactionModel.query().insert(dataToPersist.transactions)
+  await BillModel.query().insert(dataToPersist.bills)
+  await BillLicenceModel.query().insert(dataToPersist.billLicences)
 
   return true
 }
 
 function _retrievePreGeneratedData (preGeneratedData, invoiceAccountId, licence) {
-  const { billingInvoices, billingInvoiceLicences } = preGeneratedData
+  const { bills, billLicences } = preGeneratedData
 
-  const billingInvoice = billingInvoices[invoiceAccountId]
+  const bill = bills[invoiceAccountId]
 
-  const billingInvoiceLicenceKey = _billingInvoiceLicenceKey(billingInvoice.billingInvoiceId, licence.licenceId)
-  const billingInvoiceLicence = billingInvoiceLicences[billingInvoiceLicenceKey]
+  const billLicenceKey = _billLicenceKey(bill.billingInvoiceId, licence.licenceId)
+  const billLicence = billLicences[billLicenceKey]
 
-  return { billingInvoice, billingInvoiceLicence }
+  return { bill, billLicence }
 }
 
-function _billingInvoiceLicenceKey (billingInvoiceId, licenceId) {
-  return `${billingInvoiceId}-${licenceId}`
+function _billLicenceKey (billId, licenceId) {
+  return `${billId}-${licenceId}`
 }
 
-function _initialBillingData (licence, billingInvoice, billingInvoiceLicence) {
+function _initialBillingData (licence, bill, billLicence) {
   return {
     licence,
-    billingInvoice,
-    billingInvoiceLicence,
+    bill,
+    billLicence,
     calculatedTransactions: []
   }
 }
 
 async function _cleanseTransactions (currentBillingData, billingPeriod) {
-  // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in the
-  // first place
-  if (!currentBillingData.billingInvoice) {
+  // Guard clause which is most likely to hit in the event that no charge versions were 'fetched' to be billed in
+  // the first place
+  if (!currentBillingData.bill) {
     return []
   }
 
-  const cleansedTransactions = await ProcessBillingTransactionsService.go(
+  const cleansedTransactions = await ProcessTransactionsService.go(
     currentBillingData.calculatedTransactions,
-    currentBillingData.billingInvoice,
-    currentBillingData.billingInvoiceLicence,
+    currentBillingData.bill,
+    currentBillingData.billLicence,
     billingPeriod
   )
 
@@ -199,10 +197,10 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
     const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
     const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
 
-    // We use flatMap as GenerateBillingTransactionsService returns an array of transactions
-    const transactions = chargeVersion.chargeElements.flatMap((chargeElement) => {
-      return GenerateBillingTransactionsService.go(
-        chargeElement,
+    // We use flatMap as GenerateTransactionsService returns an array of transactions
+    const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
+      return GenerateTransactionsService.go(
+        chargeReference,
         billingPeriod,
         chargePeriod,
         isNewLicence,
@@ -212,7 +210,7 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
 
     return transactions
   } catch (error) {
-    throw new BillingBatchError(error, BillingBatchModel.errorCodes.failedToPrepareTransactions)
+    throw new BillRunError(error, BillRunModel.errorCodes.failedToPrepareTransactions)
   }
 }
 

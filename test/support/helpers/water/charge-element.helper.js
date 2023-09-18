@@ -11,23 +11,22 @@ const ChargeElementModel = require('../../../../app/models/water/charge-element.
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `chargeVersionId` - b033e8d1-3ad4-4782-930b-c1e10cb9110e
- * - `source` - non-tidal
- * - `loss` - low
- * - `description` - Mineral washing
- * - `isSection127AgreementEnabled` - true
- * - `scheme` - sroc
- * - `isRestrictedSource` - true
- * - `waterModel` - no model
- * - `volume` - 6.819
- * - `billingChargeCategoryId` - cd9ca44d-2ddb-4d5d-ac62-79883176bdec
- * - `additionalCharges` - { isSupplyPublicWater: true }
- * - `adjustments` - { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: 0.562114443 }
- * - `eiucRegion` - Anglian
+ * - `chargeElementId` - 090f42a0-7718-453e-bc6a-d57ef8d65417
  * - `abstractionPeriodStartDay` - 1
- * - `abstractionPeriodStartMonth` - 1
+ * - `abstractionPeriodStartMonth` - 4
  * - `abstractionPeriodEndDay` - 31
- * - `abstractionPeriodEndMonth` - 12
+ * - `abstractionPeriodEndMonth` - 3
+ * - `authorisedAnnualQuantity` - 200
+ * - `loss` - low
+ * - `factorsOverridden` - true
+ * - `billableAnnualQuantity` - 4.55
+ * - `timeLimitedStartDate` - 2022-04-01
+ * - `timeLimitedEndDate` - 2030-03-30
+ * - `description` - Trickle Irrigation - Direct
+ * - `purposePrimaryId` - 383ab43e-6d0b-4be0-b5d2-4226f333f1d7
+ * - `purposeSecondaryId` - 0e92d79a-f17f-4364-955f-443360ebddb2
+ * - `purposeUseId` - cc9f412c-22c6-483a-93b0-b955a3a644dc
+ * - `isSection127AgreementEnabled` - true
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -42,7 +41,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new charge element
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -51,23 +50,22 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    chargeVersionId: 'b033e8d1-3ad4-4782-930b-c1e10cb9110e',
-    source: 'non-tidal',
-    loss: 'low',
-    description: 'Mineral washing',
-    isSection127AgreementEnabled: true,
-    scheme: 'sroc',
-    isRestrictedSource: true,
-    waterModel: 'no model',
-    volume: 6.819,
-    billingChargeCategoryId: 'cd9ca44d-2ddb-4d5d-ac62-79883176bdec',
-    additionalCharges: { isSupplyPublicWater: true },
-    adjustments: { s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443' },
-    eiucRegion: 'Anglian',
+    chargeElementId: '090f42a0-7718-453e-bc6a-d57ef8d65417',
     abstractionPeriodStartDay: 1,
-    abstractionPeriodStartMonth: 1,
+    abstractionPeriodStartMonth: 4,
     abstractionPeriodEndDay: 31,
-    abstractionPeriodEndMonth: 12
+    abstractionPeriodEndMonth: 3,
+    authorisedAnnualQuantity: 200,
+    loss: 'low',
+    factorsOverridden: true,
+    billableAnnualQuantity: 4.55,
+    timeLimitedStartDate: new Date('2022-04-01'),
+    timeLimitedEndDate: new Date('2030-03-30'),
+    description: 'Trickle Irrigation - Direct',
+    purposePrimaryId: '383ab43e-6d0b-4be0-b5d2-4226f333f1d7',
+    purposeSecondaryId: '0e92d79a-f17f-4364-955f-443360ebddb2',
+    purposeUseId: 'cc9f412c-22c6-483a-93b0-b955a3a644dc',
+    isSection127AgreementEnabled: true
   }
 
   return {

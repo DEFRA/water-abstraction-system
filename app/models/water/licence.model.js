@@ -43,17 +43,17 @@ class LicenceModel extends WaterBaseModel {
           to: 'regions.regionId'
         }
       },
-      billingInvoiceLicences: {
+      billLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-invoice-licence.model',
+        modelClass: 'bill-licence.model',
         join: {
           from: 'licences.licenceId',
           to: 'billingInvoiceLicences.licenceId'
         }
       },
-      chargeVersionWorkflows: {
+      workflows: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-version-workflow.model',
+        modelClass: 'workflow.model',
         join: {
           from: 'licences.licenceId',
           to: 'chargeVersionWorkflows.licenceId'

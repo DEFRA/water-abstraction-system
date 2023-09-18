@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
-const BillingBatchModel = require('../../../app/models/water/billing-batch.model.js')
+const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 const LicenceModel = require('../../../app/models/water/licence.model.js')
@@ -37,38 +37,38 @@ describe('Region model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to billing batches', () => {
-      let testBillingBatches
+    describe('when linking to bill runs', () => {
+      let testBillRuns
 
       beforeEach(async () => {
         const { regionId } = testRecord
 
-        testBillingBatches = []
+        testBillRuns = []
         for (let i = 0; i < 2; i++) {
-          const billingBatch = await BillingBatchHelper.add({ regionId })
-          testBillingBatches.push(billingBatch)
+          const billRun = await BillRunHelper.add({ regionId })
+          testBillRuns.push(billRun)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await RegionModel.query()
-          .innerJoinRelated('billingBatches')
+          .innerJoinRelated('billRuns')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the billing batches', async () => {
+      it('can eager load the bill runs', async () => {
         const result = await RegionModel.query()
           .findById(testRecord.regionId)
-          .withGraphFetched('billingBatches')
+          .withGraphFetched('billRuns')
 
         expect(result).to.be.instanceOf(RegionModel)
         expect(result.regionId).to.equal(testRecord.regionId)
 
-        expect(result.billingBatches).to.be.an.array()
-        expect(result.billingBatches[0]).to.be.an.instanceOf(BillingBatchModel)
-        expect(result.billingBatches).to.include(testBillingBatches[0])
-        expect(result.billingBatches).to.include(testBillingBatches[1])
+        expect(result.billRuns).to.be.an.array()
+        expect(result.billRuns[0]).to.be.an.instanceOf(BillRunModel)
+        expect(result.billRuns).to.include(testBillRuns[0])
+        expect(result.billRuns).to.include(testBillRuns[1])
       })
     })
 

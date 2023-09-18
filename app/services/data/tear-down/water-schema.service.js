@@ -28,7 +28,7 @@ async function go () {
 }
 
 async function _deleteBilling () {
-  const billingInvoiceLicences = await db
+  const billLicences = await db
     .from('water.billingTransactions as bt')
     .innerJoin('water.billingInvoiceLicences as bil', 'bt.billingInvoiceLicenceId', 'bil.billingInvoiceLicenceId')
     .innerJoin('water.billingInvoices as bi', 'bil.billingInvoiceId', 'bi.billingInvoiceId')
@@ -37,36 +37,36 @@ async function _deleteBilling () {
     .where('r.isTest', true)
     .del(['bt.billingInvoiceLicenceId'])
 
-  const billingInvoiceLicenceIds = billingInvoiceLicences.map((billingInvoiceLicence) => {
-    return billingInvoiceLicence.billingInvoiceLicenceId
+  const billLicenceIds = billLicences.map((billLicence) => {
+    return billLicence.billingInvoiceLicenceId
   })
 
-  const billingInvoices = await db
+  const bills = await db
     .from('water.billingInvoiceLicences')
-    .whereIn('billingInvoiceLicenceId', billingInvoiceLicenceIds)
+    .whereIn('billingInvoiceLicenceId', billLicenceIds)
     .del(['billingInvoiceId'])
 
-  const billingInvoiceIds = billingInvoices.map((billingInvoice) => {
-    return billingInvoice.billingInvoiceId
+  const billIds = bills.map((bill) => {
+    return bill.billingInvoiceId
   })
 
-  const billingBatches = await db
+  const billRuns = await db
     .from('water.billingInvoices')
-    .whereIn('billingInvoiceId', billingInvoiceIds)
+    .whereIn('billingInvoiceId', billIds)
     .del(['billingBatchId'])
 
-  const billingBatchIds = billingBatches.map((billingBatch) => {
-    return billingBatch.billingBatchId
+  const billRunIds = billRuns.map((billRun) => {
+    return billRun.billingBatchId
   })
 
   await db
     .from('water.billingBatchChargeVersionYears')
-    .whereIn('billingBatchId', billingBatchIds)
+    .whereIn('billingBatchId', billRunIds)
     .del()
 
   await db
     .from('water.billingVolumes')
-    .whereIn('billingBatchId', billingBatchIds)
+    .whereIn('billingBatchId', billRunIds)
     .del()
 
   // Just deleting the `billingBatches` based on the `billingBatchIds` does not always remove all test records so the

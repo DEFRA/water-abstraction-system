@@ -15,7 +15,7 @@ const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 // Thing under test
 const DetermineMinimumChargeService = require('../../../../app/services/billing/supplementary/determine-minimum-charge.service.js')
 
-describe('Determine minimum charge service', () => {
+describe('Determine Minimum Charge service', () => {
   const chargePeriod = {
     startDate: new Date('2023-04-01'),
     endDate: new Date('2024-03-31')

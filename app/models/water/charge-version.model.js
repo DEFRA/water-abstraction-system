@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for chargeVersions
+ * Model for charge_versions
  * @module ChargeVersionModel
  */
 
@@ -43,9 +43,9 @@ class ChargeVersionModel extends WaterBaseModel {
           to: 'changeReasons.changeReasonId'
         }
       },
-      chargeElements: {
+      chargeReferences: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-element.model',
+        modelClass: 'charge-reference.model',
         join: {
           from: 'chargeVersions.chargeVersionId',
           to: 'chargeElements.chargeVersionId'

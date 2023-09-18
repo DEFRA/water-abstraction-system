@@ -15,7 +15,7 @@ const ChargingModuleRequestLib = require('../../../app/lib/charging-module-reque
 const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
 
 describe('Charge module create transaction service', () => {
-  const billingBatchId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
+  const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
   const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
 
   afterEach(() => {
@@ -43,13 +43,13 @@ describe('Charge module create transaction service', () => {
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
+      const result = await ChargingModuleCreateTransactionService.go(billRunId, transactionData)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the CM transaction ID and our ID in the `response`', async () => {
-      const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
+      const result = await ChargingModuleCreateTransactionService.go(billRunId, transactionData)
 
       expect(result.response.body.transaction.id).to.equal('fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3')
       expect(result.response.body.transaction.clientId).to.equal(transactionData.billingTransactionId)
@@ -78,13 +78,13 @@ describe('Charge module create transaction service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
+        const result = await ChargingModuleCreateTransactionService.go(billRunId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
+        const result = await ChargingModuleCreateTransactionService.go(billRunId, transactionData)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -101,13 +101,13 @@ describe('Charge module create transaction service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
+        const result = await ChargingModuleCreateTransactionService.go(billRunId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateTransactionService.go(billingBatchId, transactionData)
+        const result = await ChargingModuleCreateTransactionService.go(billRunId, transactionData)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

@@ -8,7 +8,7 @@
 const Boom = require('@hapi/boom')
 
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
-const NewBillingBatchService = require('../services/billing/new-billing-batch.service.js')
+const StartBillRunProcessService = require('../services/billing/start-bill-run-process.service.js')
 
 async function create (request, h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
@@ -19,11 +19,11 @@ async function create (request, h) {
 
   try {
     const { region, type, user } = validatedData.value
-    const result = await NewBillingBatchService.go(region, type, user)
+    const result = await StartBillRunProcessService.go(region, type, user)
 
     return h.response(result).code(200)
   } catch (error) {
-    return _formattedInitiateBillingBatchError(error)
+    return _formattedInitiateBillRunError(error)
   }
 }
 
@@ -37,7 +37,7 @@ function _formattedValidationError (error) {
 /**
  * Takes an error thrown during operation and returns a suitable Boom error
  */
-function _formattedInitiateBillingBatchError (error) {
+function _formattedInitiateBillRunError (error) {
   return Boom.badImplementation(error.message)
 }
 

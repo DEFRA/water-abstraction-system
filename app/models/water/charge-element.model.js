@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for chargeElements
+ * Model for charge_purposes
  * @module ChargeElementModel
  */
 
@@ -11,11 +11,11 @@ const WaterBaseModel = require('./water-base.model.js')
 
 class ChargeElementModel extends WaterBaseModel {
   static get tableName () {
-    return 'chargeElements'
+    return 'chargePurposes'
   }
 
   static get idColumn () {
-    return 'chargeElementId'
+    return 'chargePurposeId'
   }
 
   static get translations () {
@@ -27,36 +27,20 @@ class ChargeElementModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      chargeVersion: {
+      chargeReference: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-version.model',
+        modelClass: 'charge-reference.model',
         join: {
-          from: 'chargeElements.chargeVersionId',
-          to: 'chargeVersions.chargeVersionId'
+          from: 'chargePurposes.chargeElementId',
+          to: 'chargeElements.chargeElementId'
         }
       },
-      billingChargeCategory: {
+      purpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'billing-charge-category.model',
+        modelClass: 'purpose.model',
         join: {
-          from: 'chargeElements.billingChargeCategoryId',
-          to: 'billingChargeCategories.billingChargeCategoryId'
-        }
-      },
-      chargePurposes: {
-        relation: Model.HasManyRelation,
-        modelClass: 'charge-purpose.model',
-        join: {
-          from: 'chargeElements.chargeElementId',
-          to: 'chargePurposes.chargeElementId'
-        }
-      },
-      billingTransactions: {
-        relation: Model.HasManyRelation,
-        modelClass: 'billing-transaction.model',
-        join: {
-          from: 'chargeElements.chargeElementId',
-          to: 'billingTransactions.chargeElementId'
+          from: 'chargePurposes.purposeUseId',
+          to: 'purposesUses.purposeUseId'
         }
       }
     }

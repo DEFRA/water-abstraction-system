@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { db } = require('../../../../db/db.js')
 const fs = require('fs')
@@ -73,7 +73,7 @@ describe('Write stream to file service', () => {
     beforeEach(async () => {
       await DatabaseHelper.clean()
 
-      await BillingChargeCategoryHelper.add({ createdAt: date, billingChargeCategoryId })
+      await ChargeCategoryHelper.add({ createdAt: date, billingChargeCategoryId })
 
       const fileName = 'billing_charge_categories.csv'
       const __dirname = '/tmp/water'

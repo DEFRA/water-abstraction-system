@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchHelper = require('../../support/helpers/water/billing-batch.helper.js')
+const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
@@ -26,7 +26,7 @@ describe('Check Live Bill Run service', () => {
   describe('when an sroc supplementary bill run exists for this region and financial year', () => {
     describe('with a status considered to be "live"', () => {
       beforeEach(async () => {
-        billRun = await BillingBatchHelper.add()
+        billRun = await BillRunHelper.add()
       })
 
       it('returns `true`', async () => {
@@ -38,7 +38,7 @@ describe('Check Live Bill Run service', () => {
 
     describe('with a status not considered to be "live"', () => {
       beforeEach(async () => {
-        billRun = await BillingBatchHelper.add({ status: 'sent' })
+        billRun = await BillRunHelper.add({ status: 'sent' })
       })
 
       it('returns `false`', async () => {
@@ -52,7 +52,7 @@ describe('Check Live Bill Run service', () => {
   describe('when an sroc bill run does not exist', () => {
     describe('for this region', () => {
       beforeEach(async () => {
-        billRun = await BillingBatchHelper.add()
+        billRun = await BillRunHelper.add()
       })
 
       it('returns `false`', async () => {
@@ -64,7 +64,7 @@ describe('Check Live Bill Run service', () => {
 
     describe('for this financialYear', () => {
       beforeEach(async () => {
-        billRun = await BillingBatchHelper.add({ fromFinancialYearEnding: 2024, toFinancialYearEnding: 2024 })
+        billRun = await BillRunHelper.add({ fromFinancialYearEnding: 2024, toFinancialYearEnding: 2024 })
       })
 
       it('returns `false`', async () => {
@@ -76,7 +76,7 @@ describe('Check Live Bill Run service', () => {
 
     describe('for this batch type', () => {
       beforeEach(async () => {
-        billRun = await BillingBatchHelper.add({ batchType: 'annual' })
+        billRun = await BillRunHelper.add({ batchType: 'annual' })
       })
 
       it('returns `false`', async () => {

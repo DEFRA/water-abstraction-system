@@ -7,9 +7,9 @@
 
 const { convertPenceToPounds, formatAbstractionPeriod, formatLongDate, formatNumberAsMoney } = require('../base.presenter.js')
 
-function go (billingBatch) {
+function go (billRun) {
   const {
-    billingInvoices,
+    bills,
     billRunNumber,
     createdAt,
     fromFinancialYearEnding,
@@ -20,7 +20,7 @@ function go (billingBatch) {
     toFinancialYearEnding,
     batchType: type,
     transactionFileReference: transactionFile
-  } = billingBatch
+  } = billRun
 
   return {
     dateCreated: formatLongDate(createdAt),
@@ -32,7 +32,7 @@ function go (billingBatch) {
     billRunNumber,
     financialYear: `${fromFinancialYearEnding} to ${toFinancialYearEnding}`,
     debit: formatNumberAsMoney(convertPenceToPounds(netTotal)),
-    bills: _formatBillingInvoices(billingInvoices)
+    bills: _formatBills(bills)
   }
 }
 
@@ -53,14 +53,14 @@ function _formatAdditionalCharges (transaction) {
   return formattedData
 }
 
-function _formatAdjustments (chargeElement) {
+function _formatAdjustments (chargeReference) {
   const formattedData = []
 
-  if (!chargeElement.adjustments) {
+  if (!chargeReference.adjustments) {
     return formattedData
   }
 
-  const { aggregate, charge, s126, s127, s130, winter } = chargeElement.adjustments
+  const { aggregate, charge, s126, s127, s130, winter } = chargeReference.adjustments
 
   if (aggregate) {
     formattedData.push(`Aggregate factor (${aggregate})`)
@@ -89,11 +89,11 @@ function _formatAdjustments (chargeElement) {
   return formattedData
 }
 
-function _formatBillingInvoices (billingInvoices) {
-  return billingInvoices.map((billingInvoice) => {
+function _formatBills (bills) {
+  return bills.map((bill) => {
     const {
       accountAddress,
-      billingInvoiceLicences,
+      billLicences,
       contact,
       creditNoteValue,
       invoiceValue,
@@ -101,7 +101,7 @@ function _formatBillingInvoices (billingInvoices) {
       billingInvoiceId: id,
       invoiceAccountNumber: account,
       invoiceNumber: number
-    } = billingInvoice
+    } = bill
 
     return {
       id,
@@ -109,47 +109,47 @@ function _formatBillingInvoices (billingInvoices) {
       number,
       accountAddress,
       contact,
-      isWaterCompany: billingInvoiceLicences[0].licence.isWaterUndertaker,
+      isWaterCompany: billLicences[0].licence.isWaterUndertaker,
       credit: formatNumberAsMoney(convertPenceToPounds(creditNoteValue)),
       debit: formatNumberAsMoney(convertPenceToPounds(invoiceValue)),
       netTotal: formatNumberAsMoney(convertPenceToPounds(netAmount)),
-      licences: _formatBillingInvoiceLicences(billingInvoiceLicences)
+      licences: _formatBillLicences(billLicences)
     }
   })
 }
 
-function _formatBillingInvoiceLicences (billingInvoiceLicences) {
-  return billingInvoiceLicences.map((billingInvoiceLicence) => {
+function _formatBillLicences (billLicences) {
+  return billLicences.map((billLicence) => {
     const {
-      billingTransactions,
+      transactions,
       credit,
       debit,
       netTotal,
       licenceHolder,
       billingInvoiceLicenceId: id,
       licenceRef: licence
-    } = billingInvoiceLicence
+    } = billLicence
 
     return {
       id,
       licence,
-      licenceStartDate: billingInvoiceLicence.licence.startDate,
+      licenceStartDate: billLicence.licence.startDate,
       licenceHolder,
       credit: formatNumberAsMoney(convertPenceToPounds(credit)),
       debit: formatNumberAsMoney(convertPenceToPounds(debit)),
       netTotal: formatNumberAsMoney(convertPenceToPounds(netTotal)),
-      transactions: _formatBillingTransactions(billingTransactions)
+      transactions: _formatTransactions(transactions)
     }
   })
 }
 
-function _formatBillingTransactions (billingTransactions) {
-  return billingTransactions.map((billingTransaction) => {
+function _formatTransactions (transactions) {
+  return transactions.map((transaction) => {
     const {
       authorisedDays,
       billableDays,
       chargeCategoryCode,
-      chargeElement,
+      chargeReference,
       chargeType,
       endDate,
       grossValuesCalculated,
@@ -159,7 +159,7 @@ function _formatBillingTransactions (billingTransactions) {
       billableQuantity: chargeQuantity,
       chargeCategoryDescription: chargeDescription,
       description: lineDescription
-    } = billingTransaction
+    } = transaction
 
     return {
       type: chargeType === 'standard' ? 'Water abstraction charge' : 'Compensation charge',
@@ -172,28 +172,28 @@ function _formatBillingTransactions (billingTransactions) {
       chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       chargeRefNumber: `${chargeCategoryCode} (${formatNumberAsMoney(grossValuesCalculated.baselineCharge, true)})`,
       chargeDescription,
-      addCharges: _formatAdditionalCharges(billingTransaction),
-      adjustments: _formatAdjustments(chargeElement),
-      elements: _formatChargePurposes(chargeElement.chargePurposes)
+      addCharges: _formatAdditionalCharges(transaction),
+      adjustments: _formatAdjustments(chargeReference),
+      elements: _formatChargeElements(chargeReference.chargeElements)
     }
   })
 }
 
-function _formatChargePurposes (chargePurposes) {
-  return chargePurposes.map((chargePurpose) => {
+function _formatChargeElements (chargeElements) {
+  return chargeElements.map((chargeElement) => {
     const {
-      purposesUse,
+      purpose,
       abstractionPeriodStartDay: startDay,
       abstractionPeriodStartMonth: startMonth,
       abstractionPeriodEndDay: endDay,
       abstractionPeriodEndMonth: endMonth,
       authorisedAnnualQuantity: authorisedQuantity,
       chargePurposeId: id
-    } = chargePurpose
+    } = chargeElement
 
     return {
       id,
-      purpose: purposesUse.description,
+      purpose: purpose.description,
       abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
       authorisedQuantity
     }

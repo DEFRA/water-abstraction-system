@@ -7,8 +7,8 @@
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 
-async function go (billingBatchId, transactionData) {
-  const path = `v3/wrls/bill-runs/${billingBatchId}/transactions`
+async function go (billRunId, transactionData) {
+  const path = `v3/wrls/bill-runs/${billRunId}/transactions`
   const result = await ChargingModuleRequestLib.post(path, transactionData)
 
   return result

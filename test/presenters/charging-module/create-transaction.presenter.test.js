@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingTransactionHelper = require('../../support/helpers/water/billing-transaction.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 const LicenceModel = require('../../../app/models/water/licence.model.js')
 const { ref } = require('objection')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
+const TransactionHelper = require('../../support/helpers/water/transaction.helper.js')
 
 // Thing under test
 const CreateTransactionPresenter = require('../../../app/presenters/charging-module/create-transaction.presenter.js')
@@ -25,14 +25,14 @@ describe('Charging Module Create Transaction presenter', () => {
   }
   const invoiceAccountNumber = 'A51542397A'
 
-  let billingTransaction
+  let transaction
   let licence
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when provided with a Billing Transaction and Licence instance', () => {
+  describe('when provided with a Transaction and Licence instance', () => {
     beforeEach(async () => {
       const region = await RegionHelper.add()
 
@@ -60,19 +60,19 @@ describe('Charging Module Create Transaction presenter', () => {
         })
 
       // NOTE: The transaction object the presenter expects is what `FormatSrocTransactionLineService` returns rather
-      // than a simple instance of `BillingTransactionModel`. But to test the presenter, we just need to _represent_
-      // what the service returns whilst avoiding over complicating our tests with the additional setup it needs. So,
-      // we create a standard transaction instance and amend some of the properties to match what
-      // FormatSrocTransactionLineService does.
-      billingTransaction = await BillingTransactionHelper.add()
-      billingTransaction.section127Agreement = false
-      billingTransaction.section130Agreement = false
+      // than a simple instance of `TransactionModel`. But to test the presenter, we just need to _represent_ what the
+      // service returns whilst avoiding over complicating our tests with the additional setup it needs. So, we create a
+      // standard transaction instance and amend some of the properties to match what FormatSrocTransactionLineService
+      // does.
+      transaction = await TransactionHelper.add()
+      transaction.section127Agreement = false
+      transaction.section130Agreement = false
     })
 
     it('correctly presents the data', () => {
-      const result = CreateTransactionPresenter.go(billingTransaction, billingPeriod, invoiceAccountNumber, licence)
+      const result = CreateTransactionPresenter.go(transaction, billingPeriod, invoiceAccountNumber, licence)
 
-      expect(result.clientId).to.equal(billingTransaction.billingTransactionId)
+      expect(result.clientId).to.equal(transaction.billingTransactionId)
       expect(result.ruleset).to.equal('sroc')
       expect(result.periodStart).to.equal('01-APR-2022')
       expect(result.periodEnd).to.equal('31-MAR-2023')

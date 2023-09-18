@@ -8,12 +8,12 @@
 const { ref } = require('objection')
 
 const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
-const ChargeElementModel = require('../../models/water/charge-element.model.js')
+const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
-const ChargeVersionWorkflow = require('../../models/water/charge-version-workflow.model.js')
 const FriendlyResponseService = require('./friendly-response.service.js')
 const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
+const Workflow = require('../../models/water/workflow.model.js')
 
 async function go (naldRegionId, format = 'friendly') {
   const startTime = process.hrtime.bigint()
@@ -28,15 +28,15 @@ async function go (naldRegionId, format = 'friendly') {
     await _fetchAndApplyReturns(billingPeriod, chargeVersion)
   }
 
-  const matchedChargeVersions = _matchChargeVersions(chargeVersions)
+  const responseData = _responseData(chargeVersions)
 
   _calculateAndLogTime(startTime)
 
   switch (format) {
     case 'friendly':
-      return FriendlyResponseService.go(billingPeriod, matchedChargeVersions)
+      return FriendlyResponseService.go(billingPeriod, responseData)
     case 'raw':
-      return matchedChargeVersions
+      return responseData
     default:
       // TODO: consider throwing a Boom error here
       return { error: `Invalid format ${format}` }
@@ -58,45 +58,45 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
     .whereNotExists(
-      ChargeVersionWorkflow.query()
+      Workflow.query()
         .select(1)
         .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
         .whereNull('chargeVersionWorkflows.dateDeleted')
     )
     .whereExists(
-      ChargeElementModel.query()
+      ChargeReferenceModel.query()
         .select(1)
-        .whereColumn('chargeVersions.chargeVersionId', 'chargeElements.chargeVersionId')
+        .whereColumn('chargeVersions.chargeVersionId', 'chargeReferences.chargeVersionId')
         // NOTE: We can make withJsonSuperset() work which looks nicer, but only if we don't have anything camel case
         // in the table/column name. Camel case mappers don't work with whereJsonSuperset() or whereJsonSubset(). So,
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
-        .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+        .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
-    .withGraphFetched('chargeElements')
-    .modifyGraph('chargeVersions.chargeElements', (builder) => {
-      builder.whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+    .withGraphFetched('chargeReferences')
+    .modifyGraph('chargeVersions.chargeReferences', (builder) => {
+      builder.whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     })
-    .withGraphFetched('chargeElements.billingChargeCategory')
-    .modifyGraph('chargeElements.billingChargeCategory', (builder) => {
+    .withGraphFetched('chargeReferences.chargeCategory')
+    .modifyGraph('chargeReferences.chargeCategory', (builder) => {
       builder.select([
         'reference',
         'shortDescription'
       ])
     })
-    .withGraphFetched('chargeElements.chargePurposes.purposesUse')
+    .withGraphFetched('chargeReferences.chargeElements.purpose')
 
   return chargeVersions
 }
 
 async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
-  const { licenceRef, chargeElements } = chargeVersion
+  const { licenceRef, chargeReferences } = chargeVersion
   const cumulativeReturnsStatuses = []
   let returnsUnderQuery
 
-  for (const chargeElement of chargeElements) {
-    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeElement)
+  for (const chargeReference of chargeReferences) {
+    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeReference)
 
-    chargeElement.returns = await ReturnModel.query()
+    chargeReference.returns = await ReturnModel.query()
       .select([
         'returnId',
         'returnRequirement',
@@ -122,9 +122,9 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
         builder.where('lines.quantity', '>', 0)
       })
 
-    CalculateReturnsVolumes.go(billingPeriod, chargeElement.returns)
+    CalculateReturnsVolumes.go(billingPeriod, chargeReference.returns)
 
-    const chargeElementReturnsStatuses = chargeElement.returns.map((matchedReturn) => {
+    const chargeReferenceReturnsStatuses = chargeReference.returns.map((matchedReturn) => {
       if (matchedReturn.underQuery) {
         returnsUnderQuery = true
       }
@@ -132,7 +132,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       return matchedReturn.status
     })
 
-    cumulativeReturnsStatuses.push(...chargeElementReturnsStatuses)
+    cumulativeReturnsStatuses.push(...chargeReferenceReturnsStatuses)
   }
 
   chargeVersion.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
@@ -140,9 +140,9 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   _calculateReturnsReady(chargeVersion, returnsUnderQuery)
 }
 
-function _extractPurposeUseLegacyIds (chargeElement) {
-  return chargeElement.chargePurposes.map((chargePurpose) => {
-    return chargePurpose.purposesUse.legacyId
+function _extractPurposeUseLegacyIds (chargeReference) {
+  return chargeReference.chargeElements.map((chargeElement) => {
+    return chargeElement.purpose.legacyId
   })
 }
 
@@ -158,7 +158,7 @@ function _calculateReturnsReady (chargeVersion, returnsUnderQuery) {
   }
 }
 
-function _matchChargeVersions (chargeVersions) {
+function _responseData (chargeVersions) {
   const allLicenceIds = chargeVersions.map((chargeVersion) => {
     return chargeVersion.licenceId
   })
@@ -166,27 +166,27 @@ function _matchChargeVersions (chargeVersions) {
   const uniqueLicenceIds = [...new Set(allLicenceIds)]
 
   return uniqueLicenceIds.map((uniqueLicenceId) => {
-    const matchedChargeVersions = chargeVersions.filter((chargeVersion) => {
+    const licenceChargeVersions = chargeVersions.filter((chargeVersion) => {
       return chargeVersion.licenceId === uniqueLicenceId
     })
 
     const chargeVersionReturnsStatuses = []
     let returnsReady = false
 
-    for (const matchedChargeVersion of matchedChargeVersions) {
-      chargeVersionReturnsStatuses.push(...matchedChargeVersion.returnsStatuses)
+    for (const chargeVersion of licenceChargeVersions) {
+      chargeVersionReturnsStatuses.push(...chargeVersion.returnsStatuses)
 
-      if (matchedChargeVersion.returnsReady) {
+      if (chargeVersion.returnsReady) {
         returnsReady = true
       }
     }
 
     return {
       licenceId: uniqueLicenceId,
-      licenceRef: matchedChargeVersions[0].licenceRef,
+      licenceRef: licenceChargeVersions[0].licenceRef,
       returnsReady,
       returnsStatuses: [...new Set(chargeVersionReturnsStatuses)],
-      chargeVersions: matchedChargeVersions
+      chargeVersions: licenceChargeVersions
     }
   })
 }

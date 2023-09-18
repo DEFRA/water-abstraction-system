@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingBatchError = require('../../../../app/errors/billing-batch.error.js')
-const BillingBatchHelper = require('../../../support/helpers/water/billing-batch.helper.js')
-const BillingBatchModel = require('../../../../app/models/water/billing-batch.model.js')
-const BillingChargeCategoryHelper = require('../../../support/helpers/water/billing-charge-category.helper.js')
+const BillRunError = require('../../../../app/errors/bill-run.error.js')
+const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
+const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
-const ChargePurposeHelper = require('../../../support/helpers/water/charge-purpose.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/water/charge-version.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/billing/supplementary/fetch-charge-versions.service.js')
 const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
@@ -25,8 +25,8 @@ const RegionHelper = require('../../../support/helpers/water/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
-const GenerateBillingTransactionsService = require('../../../../app/services/billing/supplementary/generate-billing-transactions.service.js')
-const SendBillingTransactionsService = require('../../../../app/services/billing/supplementary/send-billing-transactions.service.js')
+const GenerateTransactionsService = require('../../../../app/services/billing/supplementary/generate-transactions.service.js')
+const SendTransactionsService = require('../../../../app/services/billing/supplementary/send-transactions.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/billing/supplementary/process-billing-period.service.js')
@@ -36,12 +36,13 @@ describe('Process billing period service', () => {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
   }
-  let licence
+
+  let chargeCategory
+  let billRun
   let changeReason
-  let invoiceAccount
-  let billingChargeCategory
-  let billingBatch
   let chargeVersions
+  let invoiceAccount
+  let licence
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -50,9 +51,9 @@ describe('Process billing period service', () => {
     licence = await LicenceHelper.add({ includeInSrocSupplementaryBilling: true, regionId })
     changeReason = await ChangeReasonHelper.add()
     invoiceAccount = await InvoiceAccountHelper.add()
-    billingChargeCategory = await BillingChargeCategoryHelper.add()
+    chargeCategory = await ChargeCategoryHelper.add()
 
-    billingBatch = await BillingBatchHelper.add({ regionId })
+    billRun = await BillRunHelper.add({ regionId })
   })
 
   afterEach(() => {
@@ -66,7 +67,7 @@ describe('Process billing period service', () => {
       })
 
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
+        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
         expect(result).to.be.false()
       })
@@ -83,10 +84,10 @@ describe('Process billing period service', () => {
               licenceId: licence.licenceId
             }
           )
-          const { chargeElementId } = await ChargeElementHelper.add(
-            { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+          const { chargeElementId } = await ChargeReferenceHelper.add(
+            { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
           )
-          await ChargePurposeHelper.add({
+          await ChargeElementHelper.add({
             chargeElementId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
@@ -133,7 +134,7 @@ describe('Process billing period service', () => {
             externalId: '7e752fa6-a19c-4779-b28c-6e536f028795'
           }]
 
-          Sinon.stub(SendBillingTransactionsService, 'go').resolves(sentTransactions)
+          Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
           Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
             succeeded: true,
             response: {}
@@ -141,7 +142,7 @@ describe('Process billing period service', () => {
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
+          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
           expect(result).to.be.true()
         })
@@ -158,10 +159,10 @@ describe('Process billing period service', () => {
                 licenceId: licence.licenceId
               }
             )
-            const { chargeElementId } = await ChargeElementHelper.add(
-              { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+            const { chargeElementId } = await ChargeReferenceHelper.add(
+              { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
             )
-            await ChargePurposeHelper.add({
+            await ChargeElementHelper.add({
               chargeElementId,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 4,
@@ -175,7 +176,7 @@ describe('Process billing period service', () => {
 
           describe('and there are no previous billed transactions', () => {
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
               expect(result).to.be.false()
             })
@@ -194,10 +195,10 @@ describe('Process billing period service', () => {
                   status: 'superseded'
                 }
               )
-              const { chargeElementId } = await ChargeElementHelper.add(
-                { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+              const { chargeElementId } = await ChargeReferenceHelper.add(
+                { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
               )
-              await ChargePurposeHelper.add({
+              await ChargeElementHelper.add({
                 chargeElementId,
                 abstractionPeriodStartDay: 1,
                 abstractionPeriodStartMonth: 4,
@@ -210,7 +211,7 @@ describe('Process billing period service', () => {
             })
 
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
               expect(result).to.be.false()
             })
@@ -227,10 +228,10 @@ describe('Process billing period service', () => {
         invoiceAccountId: invoiceAccount.invoiceAccountId,
         licenceId: licence.licenceId
       })
-      const { chargeElementId } = await ChargeElementHelper.add(
-        { billingChargeCategoryId: billingChargeCategory.billingChargeCategoryId, chargeVersionId }
+      const { chargeElementId } = await ChargeReferenceHelper.add(
+        { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
       )
-      await ChargePurposeHelper.add({ chargeElementId })
+      await ChargeElementHelper.add({ chargeElementId })
 
       const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
       chargeVersions = chargeVersionData.chargeVersions
@@ -238,32 +239,32 @@ describe('Process billing period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateBillingTransactionsService, 'go').throws()
+        Sinon.stub(GenerateTransactionsService, 'go').throws()
       })
 
-      it('throws a BillingBatchError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions))
+      it('throws a BillRunError with the correct code', async () => {
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
           .to
           .reject()
 
-        expect(error).to.be.an.instanceOf(BillingBatchError)
-        expect(error.code).to.equal(BillingBatchModel.errorCodes.failedToPrepareTransactions)
+        expect(error).to.be.an.instanceOf(BillRunError)
+        expect(error.code).to.equal(BillRunModel.errorCodes.failedToPrepareTransactions)
       })
     })
 
-    describe('because sending the billing transactions fails', () => {
+    describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        const thrownError = new BillingBatchError(new Error(), BillingBatchModel.errorCodes.failedToCreateCharge)
-        Sinon.stub(SendBillingTransactionsService, 'go').rejects(thrownError)
+        const thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToCreateCharge)
+        Sinon.stub(SendTransactionsService, 'go').rejects(thrownError)
       })
 
-      it('throws a BillingBatchError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billingBatch, billingPeriod, chargeVersions))
+      it('throws a BillRunError with the correct code', async () => {
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
           .to
           .reject()
 
-        expect(error).to.be.an.instanceOf(BillingBatchError)
-        expect(error.code).to.equal(BillingBatchModel.errorCodes.failedToCreateCharge)
+        expect(error).to.be.an.instanceOf(BillRunError)
+        expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
       })
     })
   })
