@@ -1,12 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
+const Sinon = require('sinon')
 
 // Things we need to stub
 const TwoPartService = require('../../app/services/check/two-part.service.js')
@@ -49,8 +45,8 @@ describe('Check controller', () => {
 
         const responsePayload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(200)
-        expect(responsePayload).to.equal({ regionName: 'Fantasia' })
+        expect(response.statusCode).toEqual(200)
+        expect(responsePayload).toEqual({ regionName: 'Fantasia' })
       })
     })
 
@@ -63,7 +59,7 @@ describe('Check controller', () => {
         it('returns a 500 status', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).toEqual(500)
         })
       })
     })
