@@ -1,16 +1,10 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const Boom = require('@hapi/boom')
 const StartBillRunProcessService = require('../../app/services/billing/start-bill-run-process.service.js')
+var sinon = require("sinon");
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -37,14 +31,14 @@ describe('Bill Runs controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    sinon.stub(server.logger, 'error')
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    sinon.stub(server.app.airbrake, 'notify').resolvesThis()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    sinon.restore()
   })
 
   describe('POST /bill-runs', () => {
@@ -58,15 +52,15 @@ describe('Bill Runs controller', () => {
       }
 
       beforeEach(async () => {
-        Sinon.stub(StartBillRunProcessService, 'go').resolves(validResponse)
+        sinon.stub(StartBillRunProcessService, 'go').resolves(validResponse)
       })
 
       it('returns a 200 response including details of the new bill run', async () => {
         const response = await server.inject(options())
         const payload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(200)
-        expect(payload).to.equal(validResponse)
+        expect(response.statusCode).toEqual(200)
+        expect(payload).toEqual(validResponse)
       })
     })
 
@@ -76,23 +70,23 @@ describe('Bill Runs controller', () => {
           const response = await server.inject(options('INVALID'))
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(400)
-          expect(payload.message).to.startWith('"scheme" must be')
+          expect(response.statusCode).toEqual(400)
+          expect(payload.message).toMatch('"scheme" must be')
         })
       })
 
       describe('because the bill run could not be initiated', () => {
         beforeEach(async () => {
-          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-          Sinon.stub(StartBillRunProcessService, 'go').rejects()
+          sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+          sinon.stub(StartBillRunProcessService, 'go').rejects()
         })
 
         it('returns an error response', async () => {
           const response = await server.inject(options())
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(500)
-          expect(payload.message).to.equal('An internal server error occurred')
+          expect(response.statusCode).toEqual(500)
+          expect(payload.message).toEqual('An internal server error occurred')
         })
       })
     })

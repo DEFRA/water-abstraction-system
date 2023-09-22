@@ -1,12 +1,9 @@
 'use strict'
 
+
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
@@ -69,8 +66,8 @@ describe('Billing Accounts controller', () => {
         const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(201)
-        expect(payload).to.equal(validResponse)
+        expect(response.statusCode).toEqual(201)
+        expect(payload).toEqual(validResponse)
       })
     })
 
@@ -90,8 +87,8 @@ describe('Billing Accounts controller', () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(400)
-          expect(payload.message).to.equal('"address" is required')
+          expect(response.statusCode).toEqual(400)
+          expect(payload.message).toEqual('"address" is required')
         })
       })
 
@@ -107,8 +104,8 @@ describe('Billing Accounts controller', () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(500)
-          expect(payload.message).to.equal('An internal server error occurred')
+          expect(response.statusCode).toEqual(500)
+          expect(payload.message).toEqual('An internal server error occurred')
         })
       })
     })
