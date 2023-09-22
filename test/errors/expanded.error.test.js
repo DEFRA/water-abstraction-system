@@ -1,13 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
-
-// Thing under test
 const ExpandedError = require('../../app/errors/expanded.error.js')
 
 describe('ExpandedError', () => {
@@ -24,12 +16,12 @@ describe('ExpandedError', () => {
       }
     })
 
-    it('will assign those to the error instance', () => {
+    test('will assign those to the error instance', () => {
       const result = new ExpandedError('My test error', additionalData)
 
-      expect(result.message).to.equal('My test error')
-      expect(result.billRunId).to.equal(additionalData.billRunId)
-      expect(result.details).to.equal(additionalData.details)
+      expect(result.message).toEqual('My test error')
+      expect(result.billRunId).toEqual(additionalData.billRunId)
+      expect(result.details).toEqual(additionalData.details)
     })
   })
 })
