@@ -119,7 +119,10 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       })
       .withGraphFetched('versions.lines')
       .modifyGraph('versions.lines', builder => {
-        builder.where('lines.quantity', '>', 0)
+        builder
+          .where('lines.quantity', '>', 0)
+          .where('lines.startDate', '<=', billingPeriod.endDate)
+          .where('lines.endDate', '>=', billingPeriod.startDate)
       })
 
     CalculateReturnsVolumes.go(billingPeriod, chargeReference.returns)
