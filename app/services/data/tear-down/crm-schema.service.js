@@ -17,6 +17,15 @@ async function go () {
   await _deleteTestData('crm_v2.addresses')
   await _deleteDocuments()
   await _deleteTestData('crm_v2.contacts')
+
+  await _deleteCompanies()
+}
+
+async function _deleteCompanies () {
+  await db
+    .from('crm_v2.companies')
+    .whereLike('name', 'Big Farm Co Ltd%')
+    .del()
 }
 
 async function _deleteEntities () {
@@ -30,6 +39,7 @@ async function _deleteEntities () {
     .whereLike('entityNm', 'acceptance-test.%')
     .orWhereLike('entityNm', '%@example.com')
     .orWhereLike('entityNm', 'regression.tests.%')
+    .orWhereLike('entityNm', 'Big Farm Co Ltd%')
     .orWhere('source', 'acceptance-test-setup')
     .del()
 }
