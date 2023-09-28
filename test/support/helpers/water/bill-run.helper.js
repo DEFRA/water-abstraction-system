@@ -5,13 +5,14 @@
  */
 
 const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 /**
  * Add a new bill run
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `regionId` - bd114474-790f-4470-8ba4-7b0cc9c225d7
+ * - `regionId` - [random UUID]
  * - `batchType` - supplementary
  * - `fromFinancialYearEnding` - 2023
  * - `toFinancialYearEnding` - 2023
@@ -41,7 +42,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7',
+    regionId: generateUUID(),
     batchType: 'supplementary',
     fromFinancialYearEnding: 2023,
     toFinancialYearEnding: 2023,

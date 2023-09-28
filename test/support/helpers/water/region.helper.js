@@ -4,6 +4,7 @@
  * @module RegionHelper
  */
 
+const { randomInteger } = require('../general.helper.js')
 const RegionModel = require('../../../../app/models/water/region.model.js')
 
 /**
@@ -11,10 +12,10 @@ const RegionModel = require('../../../../app/models/water/region.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `chargeRegionId` - S
- * - `naldRegionId` - 9
- * - `name` - Sroc Supplementary Bill (Test)
- * - `displayName` - Sroc Test
+ * - `chargeRegionId` - [selected based on randomly generated naldRegionId]
+ * - `naldRegionId` - [randomly generated - 8]
+ * - `name` - Kingdom of Avalon
+ * - `displayName` - Avalon
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -29,7 +30,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new region
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -37,17 +38,24 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const naldRegionId = randomInteger(1, 8)
   const defaults = {
-    chargeRegionId: 'S',
-    naldRegionId: 9,
-    name: 'Sroc Supplementary Bill (Test)',
-    displayName: 'Sroc Test'
+    chargeRegionId: _chargeRegionId(naldRegionId),
+    naldRegionId,
+    name: 'Kingdom of Avalon',
+    displayName: 'Avalon'
   }
 
   return {
     ...defaults,
     ...data
   }
+}
+
+function _chargeRegionId (naldRegionId) {
+  const chargeRegionIds = ['A', 'B', 'Y', 'N', 'E', 'S', 'T', 'W']
+
+  return chargeRegionIds[naldRegionId - 1]
 }
 
 module.exports = {
