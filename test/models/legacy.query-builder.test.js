@@ -1,14 +1,5 @@
 'use strict'
 
-'use strict'
-
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Test helpers
 const LegacyBaseModel = require('../../app/models/legacy-base.model.js')
 
@@ -34,7 +25,7 @@ describe('Legacy Base model', () => {
     it('adds the schema name to the table in the queries it generates', () => {
       const result = SchemaLegacyModel.query().toKnexQuery().toQuery()
 
-      expect(result).to.endWith('from "water"."schema_table"')
+      expect(result).toMatch(/from "water"\."schema_table"$/)
     })
   })
 
@@ -60,7 +51,7 @@ describe('Legacy Base model', () => {
     it('aliases the table in the queries it generates', () => {
       const result = AliasLegacyModel.query().toKnexQuery().toQuery()
 
-      expect(result).to.endWith('from "water"."alias_table" as "charge_references"')
+      expect(result).toMatch(/from "water"\."alias_table" as "charge_references"$/)
     })
   })
 })
