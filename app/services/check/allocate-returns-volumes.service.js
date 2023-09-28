@@ -18,7 +18,9 @@ function go (chargeReference) {
         // Check to see if any of the return's volume can be allocated to the chargeElement
         if (chargeElement.billableAnnualQuantity < chargeElement.authorisedAnnualQuantity) {
           // Allocate all of the Return's volume to the element if possible
-          if ((chargeElement.billableAnnualQuantity + returnVolumeInMegalitres) <= chargeElement.authorisedAnnualQuantity) {
+          if (
+            (chargeElement.billableAnnualQuantity + returnVolumeInMegalitres) <= chargeElement.authorisedAnnualQuantity
+          ) {
             chargeElement.billableAnnualQuantity = chargeElement.billableAnnualQuantity + returnVolumeInMegalitres
             returnVolumeInMegalitres = 0
           } else {
