@@ -1,7 +1,7 @@
 'use strict'
+/* global describe beforeEach test expect */
 
 const ExpandedError = require('../../app/errors/expanded.error.js')
-
 describe('ExpandedError', () => {
   describe('when instantiated with additional data properties', () => {
     let additionalData
