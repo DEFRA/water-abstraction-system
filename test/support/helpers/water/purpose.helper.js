@@ -5,13 +5,14 @@
  */
 
 const PurposeModel = require('../../../../app/models/water/purpose.model.js')
+const { randomInteger } = require('../general.helper.js')
 
 /**
  * Add a new purpose
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `legacyId` - 420
+ * - `legacyId` - [randomly generated - 420]
  * - `description` - Spray Irrigation - Storage
  * - `lossFactor` - high
  * - `isTwoPartTariff` - true
@@ -38,7 +39,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    legacyId: '420',
+    legacyId: generateLegacyId(),
     description: 'Spray Irrigation - Storage',
     lossFactor: 'high',
     isTwoPartTariff: true
@@ -48,6 +49,12 @@ function defaults (data = {}) {
     ...defaults,
     ...data
   }
+}
+
+function generateLegacyId () {
+  const numbering = randomInteger(10, 99)
+
+  return `${numbering}0`
 }
 
 module.exports = {

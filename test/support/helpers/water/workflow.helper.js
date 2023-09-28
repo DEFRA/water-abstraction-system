@@ -4,6 +4,7 @@
  * @module WorkflowHelper
  */
 
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const WorkflowModel = require('../../../../app/models/water/workflow.model.js')
 
 /**
@@ -11,7 +12,7 @@ const WorkflowModel = require('../../../../app/models/water/workflow.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceId` - 1acfbded-9cd4-4933-8e98-04cd9e92d884
+ * - `licenceId` - [random UUID]
  * - `status` - to_setup - Other possible values are: changes_requested & review
  * - `data` - { chargeVersion: null },
  * - `createdAt` - the current date and time
@@ -38,7 +39,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    licenceId: '1acfbded-9cd4-4933-8e98-04cd9e92d884',
+    licenceId: generateUUID(),
     status: 'to_setup',
     data: { chargeVersion: null },
     // INFO: The charge_version_workflows table does not have a default for the date_created column. But it is set as

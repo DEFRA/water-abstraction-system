@@ -4,6 +4,7 @@
  * @module InvoiceAccountAddressHelper
  */
 
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const InvoiceAccountAddressModel = require('../../../../app/models/crm-v2/invoice-account-address.model.js')
 
 /**
@@ -11,8 +12,8 @@ const InvoiceAccountAddressModel = require('../../../../app/models/crm-v2/invoic
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `invoiceAccountId` - b16efa32-9271-4333-aecf-b9358ba42892
- * - `addressId` - 9570acde-752e-456a-a895-7b46a3c923a3
+ * - `invoiceAccountId` - [random UUID]
+ * - `addressId` - [random UUID]
  * - `startDate` - 2023-08-18
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -37,8 +38,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    invoiceAccountId: 'b16efa32-9271-4333-aecf-b9358ba42892',
-    addressId: '9570acde-752e-456a-a895-7b46a3c923a3',
+    invoiceAccountId: generateUUID(),
+    addressId: generateUUID(),
     startDate: new Date('2023-08-18')
   }
 

@@ -5,6 +5,7 @@
  */
 
 const CompanyModel = require('../../../../app/models/crm-v2/company.model.js')
+const { randomInteger } = require('../general.helper.js')
 
 /**
  * Add a new company
@@ -13,7 +14,7 @@ const CompanyModel = require('../../../../app/models/crm-v2/company.model.js')
  *
  * - `name` - Example Trading Ltd
  * - `type` - organisation
- * - `companyNumber` - 04296934
+ * - `companyNumber` - [randomly generated - 24296934]
  * - `organisationType` - limitedCompany
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -29,7 +30,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new company
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -40,7 +41,7 @@ function defaults (data = {}) {
   const defaults = {
     name: 'Example Trading Ltd',
     type: 'organisation',
-    companyNumber: '04296934',
+    companyNumber: randomInteger(1000000, 9999999).toString(),
     organisationType: 'limitedCompany'
   }
 

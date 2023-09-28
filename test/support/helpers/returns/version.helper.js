@@ -5,6 +5,7 @@
  */
 
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateReturnId } = require('./return.helper.js')
 const VersionModel = require('../../../../app/models/returns/version.model.js')
 
 /**
@@ -12,7 +13,7 @@ const VersionModel = require('../../../../app/models/returns/version.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * `returnId` - v1:2:03/28/78/0033:10025289:2021-11-01:2022-10-31
+ * `returnId` - [randomly generated - v1:1:03/28/78/0033:10025289:2022-04-01:2023-03-31]
  * `userId` - admin-internal@wrls.gov.uk
  * `userType` - internal
  * `versionNumber` - 1
@@ -35,7 +36,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new line
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -45,7 +46,7 @@ function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     versionId: generateUUID(),
-    returnId: 'v1:2:03/28/78/0033:10025289:2021-11-01:2022-10-31',
+    returnId: generateReturnId(),
     userId: 'admin-internal@wrls.gov.uk',
     userType: 'internal',
     versionNumber: 1,
