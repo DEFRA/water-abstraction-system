@@ -7,6 +7,7 @@
 
 const { ref } = require('objection')
 
+const AllocateReturnsVolumes = require('./allocate-returns-volumes.service.js')
 const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
 const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
@@ -126,6 +127,7 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       })
 
     CalculateReturnsVolumes.go(billingPeriod, chargeReference.returns)
+    AllocateReturnsVolumes.go(chargeReference)
 
     const chargeReferenceReturnsStatuses = chargeReference.returns.map((matchedReturn) => {
       if (matchedReturn.underQuery) {
