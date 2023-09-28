@@ -19,7 +19,7 @@ function go (chargeReference) {
         if (chargeElement.billableAnnualQuantity < chargeElement.authorisedAnnualQuantity) {
           // Allocate all of the Return's volume to the element if possible
           if ((chargeElement.billableAnnualQuantity + returnVolumeInMegalitres) <= chargeElement.authorisedAnnualQuantity) {
-            chargeElement.billableAnnualQuantity = returnVolumeInMegalitres
+            chargeElement.billableAnnualQuantity = chargeElement.billableAnnualQuantity + returnVolumeInMegalitres
             returnVolumeInMegalitres = 0
           } else {
             // If not possible to add all the Return's volume add as much as possible up to the authorised amount
