@@ -14,7 +14,7 @@
     "rollback:db:test": "NODE_ENV=test knex migrate:rollback --all",
     "seed:db": "knex seed:run --knexfile knexfile.application.js",
     "lint": "standard",
-    "test": "jest",
+    "test": "jest --silent=false --detectOpenHandles",
     "postinstall": "npm run build",
     "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"
   },
