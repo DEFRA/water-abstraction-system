@@ -1,14 +1,6 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Test helpers
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const GroupModel = require('../../../app/models/idm/group.model.js')
 const GroupHelper = require('../../support/helpers/idm/group.helper.js')
 const UserGroupHelper = require('../../support/helpers/idm/user-group.helper.js')
@@ -19,39 +11,33 @@ const UserHelper = require('../../support/helpers/idm/user.helper.js')
 const UserGroupModel = require('../../../app/models/idm/user-group.model.js')
 
 describe('User Group model', () => {
+  let testGroup
   let testRecord
+  let testUser
 
-  beforeEach(async () => {
-    await DatabaseHelper.clean()
+  beforeAll(async () => {
+    testGroup = await GroupHelper.add()
+    testUser = await UserHelper.add()
+
+    testRecord = await UserGroupHelper.add({ groupId: testGroup.groupId, userId: testUser.userId })
   })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await UserGroupHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await UserGroupModel.query().findById(testRecord.userGroupId)
 
-      expect(result).to.be.an.instanceOf(UserGroupModel)
-      expect(result.userGroupId).to.equal(testRecord.userGroupId)
+      expect(result).toBeInstanceOf(UserGroupModel)
+      expect(result.userGroupId).toBe(testRecord.userGroupId)
     })
   })
 
   describe('Relationships', () => {
     describe('when linking to group', () => {
-      let testGroup
-
-      beforeEach(async () => {
-        testGroup = await GroupHelper.add()
-        testRecord = await UserGroupHelper.add({ groupId: testGroup.groupId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query()
           .innerJoinRelated('group')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the group', async () => {
@@ -59,27 +45,20 @@ describe('User Group model', () => {
           .findById(testRecord.userGroupId)
           .withGraphFetched('group')
 
-        expect(result).to.be.instanceOf(UserGroupModel)
-        expect(result.userGroupId).to.equal(testRecord.userGroupId)
+        expect(result).toBeInstanceOf(UserGroupModel)
+        expect(result.userGroupId).toBe(testRecord.userGroupId)
 
-        expect(result.group).to.be.an.instanceOf(GroupModel)
-        expect(result.group).to.equal(testGroup)
+        expect(result.group).toBeInstanceOf(GroupModel)
+        expect(result.group).toEqual(testGroup)
       })
     })
 
     describe('when linking to user', () => {
-      let testUser
-
-      beforeEach(async () => {
-        testUser = await UserHelper.add()
-        testRecord = await UserGroupHelper.add({ userId: testUser.userId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query()
           .innerJoinRelated('user')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the user', async () => {
@@ -87,11 +66,11 @@ describe('User Group model', () => {
           .findById(testRecord.userGroupId)
           .withGraphFetched('user')
 
-        expect(result).to.be.instanceOf(UserGroupModel)
-        expect(result.userGroupId).to.equal(testRecord.userGroupId)
+        expect(result).toBeInstanceOf(UserGroupModel)
+        expect(result.userGroupId).toBe(testRecord.userGroupId)
 
-        expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser)
+        expect(result.user).toBeInstanceOf(UserModel)
+        expect(result.user).toEqual(testUser)
       })
     })
   })

@@ -56,6 +56,7 @@ describe('Bill Runs controller', () => {
       })
 
       it('returns a 200 response including details of the new bill run', async () => {
+        console.log('BOO')
         const response = await server.inject(options())
         const payload = JSON.parse(response.payload)
 
