@@ -108,6 +108,7 @@ function _formatFriendlyChargeElements (friendlyChargeElements, chargeElements) 
   chargeElements.forEach((chargeElement) => {
     const {
       authorisedAnnualQuantity,
+      billableAnnualQuantity,
       chargePurposeId,
       description,
       isSection127AgreementEnabled,
@@ -124,7 +125,8 @@ function _formatFriendlyChargeElements (friendlyChargeElements, chargeElements) 
       id: chargePurposeId,
       description,
       abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
-      annualQuantities: authorisedAnnualQuantity,
+      authorisedAnnualQuantity,
+      billableAnnualQuantity,
       timeLimit: _formatTimeLimit(timeLimitedStartDate, timeLimitedEndDate),
       loss
     }
