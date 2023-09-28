@@ -1,9 +1,7 @@
 'use strict'
-
-
+/* global describe beforeEach afterEach it expect */
 // Test framework dependencies
 const Sinon = require('sinon')
-
 
 // Things we need to stub
 const Boom = require('@hapi/boom')

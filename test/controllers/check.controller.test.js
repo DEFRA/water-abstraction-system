@@ -10,6 +10,8 @@ const TwoPartService = require('../../app/services/check/two-part.service.js')
 // For running our service
 const { init } = require('../../app/server.js')
 
+const { describe, beforeEach, afterEach, it, expect } = require('jest') // Importing from Jest
+
 describe('Check controller', () => {
   let server
 

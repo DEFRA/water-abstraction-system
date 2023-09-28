@@ -1,10 +1,10 @@
 'use strict'
-
+/* global describe beforeEach it afterEach expect */
 // Test framework dependencies
 // Things we need to stub
 const Boom = require('@hapi/boom')
 const StartBillRunProcessService = require('../../app/services/billing/start-bill-run-process.service.js')
-var sinon = require("sinon");
+const sinon = require('sinon')
 
 // For running our service
 const { init } = require('../../app/server.js')
