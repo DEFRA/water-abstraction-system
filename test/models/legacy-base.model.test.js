@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Test helpers
 const { DBError } = require('objection')
 const EventModel = require('../../app/models/water/event.model.js')
@@ -24,7 +17,7 @@ describe('Legacy Base model', () => {
       }
 
       it('throws an error when called', () => {
-        expect(() => BadModel.query()).to.throw()
+        expect(() => BadModel.query()).toThrow()
       })
     })
 
@@ -40,7 +33,7 @@ describe('Legacy Base model', () => {
       }
 
       it('does not throw an error when called', () => {
-        expect(() => GoodModel.query()).not.to.throw()
+        expect(() => GoodModel.query()).not.toThrow()
       })
     })
   })
@@ -55,7 +48,7 @@ describe('Legacy Base model', () => {
 
       it('throws an error when called', () => {
         const instance = new BadModel()
-        expect(() => instance.$toJson()).not.to.throw()
+        expect(() => instance.$toJson()).not.toThrow()
       })
     })
 
@@ -72,7 +65,7 @@ describe('Legacy Base model', () => {
 
       it('does not throw an error when called', () => {
         const instance = new GoodModel()
-        expect(() => instance.$toJson()).not.to.throw()
+        expect(() => instance.$toJson()).not.toThrow()
       })
     })
   })
@@ -109,7 +102,7 @@ describe('Legacy Base model', () => {
           // in. That would break subsequent tests
           const result = yeOldeBilling.$parseDatabaseJson({ ...dummyDatabaseJson })
 
-          expect(result).to.equal(dummyModelJson)
+          expect(result).toEqual(dummyModelJson)
         })
 
         it('ignores any translations that do not exist', () => {
@@ -117,7 +110,7 @@ describe('Legacy Base model', () => {
 
           const result = yeOldeBilling.$parseDatabaseJson({ ...dummyDatabaseJson })
 
-          expect(result.notHere).not.to.exist()
+          expect(result.notHere).toBeFalsy()
         })
       })
 
@@ -132,7 +125,7 @@ describe('Legacy Base model', () => {
           // in. That would break subsequent tests
           const result = yeOldeBilling.$formatDatabaseJson({ ...dummyModelJson })
 
-          expect(result).to.equal(dummyDatabaseJson)
+          expect(result).toEqual(dummyDatabaseJson)
         })
 
         it('ignores any translations that do not exist', () => {
@@ -140,7 +133,7 @@ describe('Legacy Base model', () => {
 
           const result = yeOldeBilling.$formatDatabaseJson({ ...dummyModelJson })
 
-          expect(result.doesNotExist).not.to.exist()
+          expect(result.doesNotExist).toBeFalsy()
         })
       })
     })
@@ -151,8 +144,7 @@ describe('Legacy Base model', () => {
       it('throws an error when a query uses the standard model property name', async () => {
         const timeNow = new Date().toISOString()
 
-        const error = await expect(EventModel.query().where('createdAt', '<', timeNow)).to.reject()
-        expect(error).to.be.an.instanceOf(DBError)
+        await expect(() => EventModel.query().where('createdAt', '<', timeNow)).rejects.toThrow(DBError)
       })
     })
   })

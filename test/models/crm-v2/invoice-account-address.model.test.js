@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
 const AddressModel = require('../../../app/models/crm-v2/address.model.js')
@@ -14,7 +7,6 @@ const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
 const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
 const ContactHelper = require('../../support/helpers/crm-v2/contact.helper.js')
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
 const InvoiceAccountModel = require('../../../app/models/crm-v2/invoice-account.model.js')
 const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
@@ -23,39 +15,42 @@ const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoic
 const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
 
 describe('Invoice Account Address model', () => {
+  let testAddress
+  let testCompany
+  let testContact
+  let testInvoiceAccount
   let testRecord
 
-  beforeEach(async () => {
-    await DatabaseHelper.clean()
+  beforeAll(async () => {
+    testAddress = await AddressHelper.add()
+    testCompany = await CompanyHelper.add()
+    testContact = await ContactHelper.add()
+    testInvoiceAccount = await InvoiceAccountHelper.add()
+
+    testRecord = await InvoiceAccountAddressHelper.add({
+      addressId: testAddress.addressId,
+      agentCompanyId: testCompany.companyId,
+      contactId: testContact.contactId,
+      invoiceAccountId: testInvoiceAccount.invoiceAccountId
+    })
   })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await InvoiceAccountAddressHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await InvoiceAccountAddressModel.query().findById(testRecord.invoiceAccountAddressId)
 
-      expect(result).to.be.an.instanceOf(InvoiceAccountAddressModel)
-      expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
+      expect(result).toBeInstanceOf(InvoiceAccountAddressModel)
+      expect(result.invoiceAccountAddressId).toBe(testRecord.invoiceAccountAddressId)
     })
   })
 
   describe('Relationships', () => {
     describe('when linking to address', () => {
-      let testAddress
-
-      beforeEach(async () => {
-        testAddress = await AddressHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ addressId: testAddress.addressId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await InvoiceAccountAddressModel.query()
           .innerJoinRelated('address')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the address', async () => {
@@ -63,27 +58,20 @@ describe('Invoice Account Address model', () => {
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('address')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
-        expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
+        expect(result).toBeInstanceOf(InvoiceAccountAddressModel)
+        expect(result.invoiceAccountAddressId).toBe(testRecord.invoiceAccountAddressId)
 
-        expect(result.address).to.be.an.instanceOf(AddressModel)
-        expect(result.address).to.equal(testAddress)
+        expect(result.address).toBeInstanceOf(AddressModel)
+        expect(result.address).toEqual(testAddress)
       })
     })
 
     describe('when linking to company', () => {
-      let testCompany
-
-      beforeEach(async () => {
-        testCompany = await CompanyHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ agentCompanyId: testCompany.companyId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await InvoiceAccountAddressModel.query()
           .innerJoinRelated('company')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the company', async () => {
@@ -91,27 +79,20 @@ describe('Invoice Account Address model', () => {
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('company')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
-        expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
+        expect(result).toBeInstanceOf(InvoiceAccountAddressModel)
+        expect(result.invoiceAccountAddressId).toBe(testRecord.invoiceAccountAddressId)
 
-        expect(result.company).to.be.an.instanceOf(CompanyModel)
-        expect(result.company).to.equal(testCompany)
+        expect(result.company).toBeInstanceOf(CompanyModel)
+        expect(result.company).toEqual(testCompany)
       })
     })
 
     describe('when linking to contact', () => {
-      let testContact
-
-      beforeEach(async () => {
-        testContact = await ContactHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ contactId: testContact.contactId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await InvoiceAccountAddressModel.query()
           .innerJoinRelated('contact')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the contact', async () => {
@@ -119,27 +100,20 @@ describe('Invoice Account Address model', () => {
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('contact')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
-        expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
+        expect(result).toBeInstanceOf(InvoiceAccountAddressModel)
+        expect(result.invoiceAccountAddressId).toBe(testRecord.invoiceAccountAddressId)
 
-        expect(result.contact).to.be.an.instanceOf(ContactModel)
-        expect(result.contact).to.equal(testContact)
+        expect(result.contact).toBeInstanceOf(ContactModel)
+        expect(result.contact).toEqual(testContact)
       })
     })
 
     describe('when linking to invoice account', () => {
-      let testInvoiceAccount
-
-      beforeEach(async () => {
-        testInvoiceAccount = await InvoiceAccountHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ invoiceAccountId: testInvoiceAccount.invoiceAccountId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await InvoiceAccountAddressModel.query()
           .innerJoinRelated('invoiceAccount')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the region', async () => {
@@ -147,11 +121,11 @@ describe('Invoice Account Address model', () => {
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('invoiceAccount')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
-        expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
+        expect(result).toBeInstanceOf(InvoiceAccountAddressModel)
+        expect(result.invoiceAccountAddressId).toBe(testRecord.invoiceAccountAddressId)
 
-        expect(result.invoiceAccount).to.be.an.instanceOf(InvoiceAccountModel)
-        expect(result.invoiceAccount).to.equal(testInvoiceAccount)
+        expect(result.invoiceAccount).toBeInstanceOf(InvoiceAccountModel)
+        expect(result.invoiceAccount).toEqual(testInvoiceAccount)
       })
     })
   })

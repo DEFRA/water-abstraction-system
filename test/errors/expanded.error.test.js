@@ -19,9 +19,9 @@ describe('ExpandedError', () => {
     test('will assign those to the error instance', () => {
       const result = new ExpandedError('My test error', additionalData)
 
-      expect(result.message).toEqual('My test error')
-      expect(result.billRunId).toEqual(additionalData.billRunId)
-      expect(result.details).toEqual(additionalData.details)
+      expect(result.message).toBe('My test error')
+      expect(result.billRunId).toBe(additionalData.billRunId)
+      expect(result.details).toBe(additionalData.details)
     })
   })
 })
