@@ -18,7 +18,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const BillRunVolumeModel = require('../../../app/models/water/bill-run-volume.model.js')
 
-describe('Bill Run Volume model', () => {
+describe.only('Bill Run Volume model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -106,6 +106,32 @@ describe('Bill Run Volume model', () => {
         const result = BillRunVolumeModel.twoPartTariffStatuses.noReturnsSubmitted
 
         expect(result).to.equal(10)
+      })
+    })
+  })
+
+  describe('$twoPartTariffStatus', () => {
+    describe('when the two-part tariff status is set', () => {
+      beforeEach(async () => {
+        testRecord = await BillRunVolumeHelper.add({ twoPartTariffStatus: 90 })
+      })
+
+      it('returns the status', () => {
+        const result = testRecord.$twoPartTariffStatus()
+
+        expect(result).to.equal('returnLineOverlapsChargePeriod')
+      })
+    })
+
+    describe('when the two-part tariff status is not set', () => {
+      beforeEach(async () => {
+        testRecord = await BillRunVolumeHelper.add()
+      })
+
+      it('returns null', () => {
+        const result = testRecord.$twoPartTariffStatus()
+
+        expect(result).to.be.null()
       })
     })
   })

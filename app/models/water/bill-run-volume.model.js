@@ -60,11 +60,13 @@ class BillRunVolumeModel extends WaterBaseModel {
   }
 
   $twoPartTariffStatus () {
-    Object.entries(BillRunVolumeModel.twoPartTariffStatuses).forEach(([key, value]) => {
-      if (value === this.twoPartTariffStatus) {
-        return key
-      }
+    const index = Object.values(BillRunVolumeModel.twoPartTariffStatuses).findIndex((value) => {
+      return value === this.twoPartTariffStatus
     })
+
+    if (index) {
+      return Object.keys(BillRunVolumeModel.twoPartTariffStatuses)[index]
+    }
 
     return null
   }
