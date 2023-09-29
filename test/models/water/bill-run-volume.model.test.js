@@ -18,7 +18,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 // Thing under test
 const BillRunVolumeModel = require('../../../app/models/water/bill-run-volume.model.js')
 
-describe.only('Bill Run Volume model', () => {
+describe('Bill Run Volume model', () => {
   let testRecord
 
   beforeEach(async () => {
