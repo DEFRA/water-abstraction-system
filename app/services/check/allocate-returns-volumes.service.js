@@ -53,8 +53,6 @@ function _matchReturnToElement (returnMetadata, chargeElement) {
   ) {
     return true
   }
-
-  return false
 }
 
 module.exports = {
