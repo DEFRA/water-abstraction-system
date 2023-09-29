@@ -11,6 +11,8 @@ const { expect } = Code
 const BillHelper = require('../../support/helpers/water/bill.helper.js')
 const BillModel = require('../../../app/models/water/bill.model.js')
 const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
+const BillRunVolumeHelper = require('../../support/helpers/water/bill-run-volume.helper.js')
+const BillRunVolumeModel = require('../../../app/models/water/bill-run-volume.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const RegionModel = require('../../../app/models/water/region.model.js')
@@ -100,6 +102,42 @@ describe('Bill Run model', () => {
         expect(result.bills[0]).to.be.an.instanceOf(BillModel)
         expect(result.bills).to.include(testBills[0])
         expect(result.bills).to.include(testBills[1])
+      })
+    })
+
+    describe('when linking to bill run volumes', () => {
+      let testBillRunVolumes
+
+      beforeEach(async () => {
+        testRecord = await BillRunHelper.add()
+        const { billingBatchId } = testRecord
+
+        testBillRunVolumes = []
+        for (let i = 0; i < 2; i++) {
+          const billRunVolume = await BillRunVolumeHelper.add({ billingBatchId })
+          testBillRunVolumes.push(billRunVolume)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await BillRunModel.query()
+          .innerJoinRelated('billRunVolumes')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the bills', async () => {
+        const result = await BillRunModel.query()
+          .findById(testRecord.billingBatchId)
+          .withGraphFetched('billRunVolumes')
+
+        expect(result).to.be.instanceOf(BillRunModel)
+        expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
+
+        expect(result.billRunVolumes).to.be.an.array()
+        expect(result.billRunVolumes[0]).to.be.an.instanceOf(BillRunVolumeModel)
+        expect(result.billRunVolumes).to.include(testBillRunVolumes[0])
+        expect(result.billRunVolumes).to.include(testBillRunVolumes[1])
       })
     })
   })

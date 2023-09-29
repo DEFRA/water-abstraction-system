@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillRunVolumeHelper = require('../../support/helpers/water/bill-run-volume.helper.js')
+const BillRunVolumeModel = require('../../../app/models/water/bill-run-volume.model.js')
 const ChargeCategoryHelper = require('../../support/helpers/water/charge-category.helper.js')
 const ChargeCategoryModel = require('../../../app/models/water/charge-category.model.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
@@ -41,6 +43,42 @@ describe('Charge Reference model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to bill run volumes', () => {
+      let testBillRunVolumes
+
+      beforeEach(async () => {
+        testRecord = await ChargeReferenceHelper.add()
+        const { chargeElementId } = testRecord
+
+        testBillRunVolumes = []
+        for (let i = 0; i < 2; i++) {
+          const billRunVolume = await BillRunVolumeHelper.add({ chargeElementId })
+          testBillRunVolumes.push(billRunVolume)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeReferenceModel.query()
+          .innerJoinRelated('billRunVolumes')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the bills', async () => {
+        const result = await ChargeReferenceModel.query()
+          .findById(testRecord.chargeElementId)
+          .withGraphFetched('billRunVolumes')
+
+        expect(result).to.be.instanceOf(ChargeReferenceModel)
+        expect(result.chargeElementId).to.equal(testRecord.chargeElementId)
+
+        expect(result.billRunVolumes).to.be.an.array()
+        expect(result.billRunVolumes[0]).to.be.an.instanceOf(BillRunVolumeModel)
+        expect(result.billRunVolumes).to.include(testBillRunVolumes[0])
+        expect(result.billRunVolumes).to.include(testBillRunVolumes[1])
+      })
+    })
+
     describe('when linking to charge category', () => {
       let testChargeCategory
 

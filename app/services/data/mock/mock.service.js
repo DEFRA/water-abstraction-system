@@ -7,9 +7,11 @@
 
 const ExpandedError = require('../../../errors/expanded.error.js')
 const GenerateBillRunService = require('./generate-bill-run.service.js')
+const GenerateReturnsReviewService = require('./generate-returns-review.service.js')
 
 const types = {
-  'bill-run': _billRun
+  'bill-run': _billRun,
+  'returns-review': _returnsReview
 }
 
 async function go (type, id) {
@@ -32,6 +34,10 @@ function _validateParams (type, id) {
 
 async function _billRun (id) {
   return GenerateBillRunService.go(id)
+}
+
+async function _returnsReview (id) {
+  return GenerateReturnsReviewService.go(id)
 }
 
 module.exports = {
