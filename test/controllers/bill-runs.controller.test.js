@@ -1,10 +1,9 @@
 'use strict'
-/* global describe beforeEach it afterEach expect */
+/* global describe beforeEach it expect */
 // Test framework dependencies
 // Things we need to stub
 const Boom = require('@hapi/boom')
 const StartBillRunProcessService = require('../../app/services/billing/start-bill-run-process.service.js')
-const sinon = require('sinon')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -31,14 +30,9 @@ describe('Bill Runs controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    sinon.stub(server.logger, 'error')
-
+    server.logger.error = jest.fn().mockResolvedValue()
     // We silence sending a notification to our Errbit instance using Airbrake
-    sinon.stub(server.app.airbrake, 'notify').resolvesThis()
-  })
-
-  afterEach(() => {
-    sinon.restore()
+    server.app.airbrake.notify = jest.fn().mockResolvedValue()
   })
 
   describe('POST /bill-runs', () => {
@@ -52,7 +46,7 @@ describe('Bill Runs controller', () => {
       }
 
       beforeEach(async () => {
-        sinon.stub(StartBillRunProcessService, 'go').resolves(validResponse)
+        jest.spyOn(StartBillRunProcessService, 'go').mockResolvedValue(validResponse)
       })
 
       it('returns a 200 response including details of the new bill run', async () => {
@@ -78,8 +72,8 @@ describe('Bill Runs controller', () => {
 
       describe('because the bill run could not be initiated', () => {
         beforeEach(async () => {
-          sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-          sinon.stub(StartBillRunProcessService, 'go').rejects()
+          jest.spyOn(StartBillRunProcessService, 'go').mockRejectedValue()
+          jest.spyOn(Boom, 'badImplementation').mockReturnValue(new Boom.Boom('Bang', { statusCode: 500 }))
         })
 
         it('returns an error response', async () => {
