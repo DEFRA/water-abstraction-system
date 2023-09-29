@@ -14,7 +14,13 @@ function go (chargeReference) {
     // Loop through each chargeElement
     chargeReference.chargeElements.forEach((chargeElement) => {
       // Match the Return's purpose to the chargeElements
-      if (returnData.metadata.purposes[0].tertiary.code === chargeElement.purpose.legacyId) {
+      if (
+        returnData.metadata.purposes[0].tertiary.code === chargeElement.purpose.legacyId &&
+        returnData.metadata.nald.periodStartDay === chargeElement.abstractionPeriodStartDay.toString() &&
+        returnData.metadata.nald.periodStartMonth === chargeElement.abstractionPeriodStartMonth.toString() &&
+        returnData.metadata.nald.periodEndDay === chargeElement.abstractionPeriodEndDay.toString() &&
+        returnData.metadata.nald.periodEndMonth === chargeElement.abstractionPeriodEndMonth.toString()
+      ) {
         // Check to see if any of the return's volume can be allocated to the chargeElement
         if (chargeElement.billableAnnualQuantity < chargeElement.authorisedAnnualQuantity) {
           // Allocate all of the Return's volume to the element if possible
