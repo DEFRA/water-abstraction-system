@@ -64,7 +64,7 @@ class BillRunVolumeModel extends WaterBaseModel {
       return value === this.twoPartTariffStatus
     })
 
-    if (index) {
+    if (index !== -1) {
       return Object.keys(BillRunVolumeModel.twoPartTariffStatuses)[index]
     }
 
