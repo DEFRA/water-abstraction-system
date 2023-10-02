@@ -13,23 +13,19 @@ function go (chargeReference) {
     returnVolumeInMegalitres = returnData.volumes.total / 1000
     // Loop through each charge element
     chargeReference.chargeElements.forEach((chargeElement) => {
-      // Check if the return's purpose and abstraction period match the charge element
-      if (_matchReturnToElement(returnData.metadata, chargeElement)) {
-        // Check to see if any of the return's volume can be allocated to the charge element
-        if (chargeElement.billableAnnualQuantity < chargeElement.authorisedAnnualQuantity) {
-          // Allocate all of the return's volume to the charge element if possible
-          if (
-            (chargeElement.billableAnnualQuantity + returnVolumeInMegalitres) <= chargeElement.authorisedAnnualQuantity
-          ) {
-            chargeElement.billableAnnualQuantity = chargeElement.billableAnnualQuantity + returnVolumeInMegalitres
-            returnVolumeInMegalitres = 0
-          } else {
-            // If not possible to add all the return's volume add as much as possible up to the authorised amount
-            const volumeToDeduct = chargeElement.authorisedAnnualQuantity - chargeElement.billableAnnualQuantity
-            chargeElement.billableAnnualQuantity = chargeElement.authorisedAnnualQuantity
-            // Update the volume remaining on the return
-            returnVolumeInMegalitres = returnVolumeInMegalitres - volumeToDeduct
+      // Check the chargeElement is not already fully allocated
+      if (chargeElement.billableAnnualQuantity < chargeElement.authorisedAnnualQuantity) {
+        // Check if the return's purpose and abstraction period match the charge element
+        if (_matchReturnToElement(returnData.metadata, chargeElement)) {
+          // Calculate how much is left to allocated to the ChargeElement from the return
+          let volumeLeftToAllocate = chargeElement.authorisedAnnualQuantity - chargeElement.billableAnnualQuantity
+          // Check for the case that the return does not cover the full allocation
+          if (returnVolumeInMegalitres < volumeLeftToAllocate) {
+            volumeLeftToAllocate = returnVolumeInMegalitres
           }
+
+          chargeElement.billableAnnualQuantity += volumeLeftToAllocate
+          returnVolumeInMegalitres -= volumeLeftToAllocate
         }
       }
     })
@@ -42,7 +38,6 @@ function go (chargeReference) {
     }
   })
 }
-
 function _matchReturnToElement (returnMetadata, chargeElement) {
   if (
     returnMetadata.purposes[0].tertiary.code === chargeElement.purpose.legacyId &&
