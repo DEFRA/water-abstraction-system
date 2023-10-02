@@ -20,7 +20,7 @@ function go (chargeReference) {
           // Calculate how much is left to allocated to the ChargeElement from the return
           let volumeLeftToAllocate = chargeElement.authorisedAnnualQuantity - chargeElement.billableAnnualQuantity
           // Check for the case that the return does not cover the full allocation
-          if (returnVolumeInMegalitres < volumeLeftToAllocate) {
+          if (returnVolumeInMegalitres <= volumeLeftToAllocate) {
             volumeLeftToAllocate = returnVolumeInMegalitres
           }
 
