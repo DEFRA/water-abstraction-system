@@ -38,9 +38,14 @@ function _calculateReturnLinesVolumes (lines, billableAbstractionPeriods) {
     }
   })
 
+  const inPeriod = _totalLineQuantities(inPeriodLines)
+  const outsidePeriod = _totalLineQuantities(outsidePeriodLines)
+  const total = inPeriod + outsidePeriod
+
   return {
-    inPeriod: _totalLineQuantities(inPeriodLines),
-    outsidePeriod: _totalLineQuantities(outsidePeriodLines)
+    inPeriod,
+    outsidePeriod,
+    total
   }
 }
 
