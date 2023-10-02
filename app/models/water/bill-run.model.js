@@ -42,6 +42,14 @@ class BillRunModel extends WaterBaseModel {
           from: 'billingBatches.billingBatchId',
           to: 'billingInvoices.billingBatchId'
         }
+      },
+      billRunVolumes: {
+        relation: Model.HasManyRelation,
+        modelClass: 'bill-run-volume.model',
+        join: {
+          from: 'billingBatches.billingBatchId',
+          to: 'billingVolumes.billingBatchId'
+        }
       }
     }
   }

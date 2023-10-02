@@ -31,6 +31,14 @@ class ChargeReferenceModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
+      billRunVolumes: {
+        relation: Model.HasManyRelation,
+        modelClass: 'bill-run-volume.model',
+        join: {
+          from: 'chargeElements.chargeElementId',
+          to: 'billingVolumes.chargeElementId'
+        }
+      },
       chargeVersion: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'charge-version.model',
