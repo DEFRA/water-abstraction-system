@@ -1,13 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const ExportService = require('../../app/services/data/export/export.service.js')
 const MockService = require('../../app/services/data/mock/mock.service.js')
@@ -26,14 +18,9 @@ describe('Data controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
-
+    server.logger.error = jest.fn().mockResolvedValue()
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
-  })
-
-  afterEach(() => {
-    Sinon.restore()
+    server.app.airbrake.notify = jest.fn().mockResolvedValue()
   })
 
   describe('GET /data/export', () => {
@@ -44,13 +31,13 @@ describe('Data controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(ExportService, 'go').resolves()
+        jest.spyOn(ExportService, 'go').mockResolvedValue()
       })
 
       it('displays the correct message', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(204)
+        expect(response.statusCode).toEqual(204)
       })
     })
   })
@@ -63,13 +50,13 @@ describe('Data controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(MockService, 'go').resolves({ data: 'mock' })
+        jest.spyOn(MockService, 'go').mockResolvedValue({ data: 'mock' })
       })
 
       it('displays the correct message', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).toEqual(200)
         // TODO: test the response object
       })
     })
@@ -77,13 +64,13 @@ describe('Data controller', () => {
     describe('when the request fails', () => {
       describe('because the MockService errors', () => {
         beforeEach(async () => {
-          Sinon.stub(MockService, 'go').rejects()
+          jest.spyOn(MockService, 'go').mockRejectedValue()
         })
 
         it('returns a 500 status', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).toEqual(500)
         })
       })
     })
@@ -97,26 +84,25 @@ describe('Data controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(SeedService, 'go').resolves()
+        jest.spyOn(SeedService, 'go').mockResolvedValue()
       })
 
       it('displays the correct message', async () => {
         const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(204)
+        expect(response.statusCode).toEqual(204)
       })
     })
 
     describe('when the request fails', () => {
       describe('because the SeedService errors', () => {
         beforeEach(async () => {
-          Sinon.stub(SeedService, 'go').rejects()
+          jest.spyOn(SeedService, 'go').mockRejectedValue()
         })
 
         it('returns a 500 status', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).toEqual(500)
         })
       })
     })
@@ -130,26 +116,26 @@ describe('Data controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(TearDownService, 'go').resolves()
+        jest.spyOn(TearDownService, 'go').mockResolvedValue()
       })
 
       it('returns a 204 status', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(204)
+        expect(response.statusCode).toEqual(204)
       })
     })
 
     describe('when the request fails', () => {
       describe('because the TearDownService errors', () => {
         beforeEach(async () => {
-          Sinon.stub(TearDownService, 'go').rejects()
+          jest.spyOn(TearDownService, 'go').mockRejectedValue()
         })
 
         it('returns a 500 status', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).toEqual(500)
         })
       })
     })

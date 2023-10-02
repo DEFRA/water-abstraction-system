@@ -1,16 +1,11 @@
 'use strict'
 
 // Test framework dependencies
-
-const Sinon = require('sinon')
-
 // Things we need to stub
 const TwoPartService = require('../../app/services/check/two-part.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
-
-const { describe, beforeEach, afterEach, it, expect } = require('jest') // Importing from Jest
 
 describe('Check controller', () => {
   let server
@@ -21,16 +16,11 @@ describe('Check controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    server.logger.error = jest.fn().mockResolvedValue()
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    server.app.airbrake.notify = jest.fn().mockResolvedValue()
   })
-
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('GET /check/two-part', () => {
     const options = {
       method: 'GET',
@@ -39,7 +29,7 @@ describe('Check controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(TwoPartService, 'go').resolves({ regionName: 'Fantasia' })
+        jest.spyOn(TwoPartService, 'go').mockResolvedValue({ regionName: 'Fantasia' })
       })
 
       it('displays the correct message', async () => {
@@ -55,7 +45,7 @@ describe('Check controller', () => {
     describe('when the request fails', () => {
       describe('because the TwoPartService errors', () => {
         beforeEach(async () => {
-          Sinon.stub(TwoPartService, 'go').rejects()
+          jest.spyOn(TwoPartService, 'go').mockRejectedValue()
         })
 
         it('returns a 500 status', async () => {

@@ -1,13 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const DatabaseHealthCheckService = require('../../app/services/health/database-health-check.service.js')
 const InfoService = require('../../app/services/health/info.service.js')
@@ -25,14 +17,10 @@ describe('Health controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    server.logger.error = jest.fn().mockResolvedValue()
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    airbrakeStub = Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
-  })
-
-  afterEach(() => {
-    Sinon.restore()
+    airbrakeStub = jest.spyOn(server.app.airbrake, 'notify').mockResolvedValue(true)
   })
 
   describe('GET /health/airbrake', () => {
@@ -44,13 +32,13 @@ describe('Health controller', () => {
     it('returns a 500 error', async () => {
       const response = await server.inject(options)
 
-      expect(response.statusCode).to.equal(500)
+      expect(response.statusCode).toEqual(500)
     })
 
     it('causes Airbrake to send a notification', async () => {
       await server.inject(options)
 
-      expect(airbrakeStub.called).to.equal(true)
+      expect(airbrakeStub).toHaveBeenCalled()
     })
   })
 
@@ -62,13 +50,13 @@ describe('Health controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(DatabaseHealthCheckService, 'go').resolves()
+        jest.spyOn(DatabaseHealthCheckService, 'go').mockResolvedValue()
       })
 
       it('returns stats about each table', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).toEqual(200)
       })
     })
   })
@@ -81,7 +69,7 @@ describe('Health controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(InfoService, 'go').resolves({
+        jest.spyOn(InfoService, 'go').mockResolvedValue({
           virusScannerData: 'ClamAV 0.103.6/26738/Fri Dec 2 11:12:06 2022',
           redisConnectivityData: 'ERROR: Command failed: redis-server --version /bin/sh: 1: redis-server: not found',
           addressFacadeData: 'hola',
@@ -98,7 +86,7 @@ describe('Health controller', () => {
       it('returns stats about each table', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).toEqual(200)
       })
     })
   })
