@@ -38,16 +38,15 @@ function go (chargeReference) {
     }
   })
 }
+
 function _matchReturnToElement (returnMetadata, chargeElement) {
-  if (
+  return (
     returnMetadata.purposes[0].tertiary.code === chargeElement.purpose.legacyId &&
     returnMetadata.nald.periodStartDay === chargeElement.abstractionPeriodStartDay.toString() &&
     returnMetadata.nald.periodStartMonth === chargeElement.abstractionPeriodStartMonth.toString() &&
     returnMetadata.nald.periodEndDay === chargeElement.abstractionPeriodEndDay.toString() &&
     returnMetadata.nald.periodEndMonth === chargeElement.abstractionPeriodEndMonth.toString()
-  ) {
-    return true
-  }
+  )
 }
 
 module.exports = {
