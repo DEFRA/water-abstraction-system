@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // For running our service
 const { init } = require('../../app/server.js')
 
@@ -27,7 +20,7 @@ describe('Root controller: GET /', () => {
     const response = await server.inject(options)
     const payload = JSON.parse(response.payload)
 
-    expect(response.statusCode).to.equal(200)
-    expect(payload.status).to.equal('alive')
+    expect(response.statusCode).toEqual(200)
+    expect(payload.status).toEqual('alive')
   })
 })
