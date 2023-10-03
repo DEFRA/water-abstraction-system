@@ -107,8 +107,8 @@ function _formatFriendlyChargeReferences (friendlyChargeReferences, chargeRefere
 function _formatFriendlyChargeElements (friendlyChargeElements, chargeElements) {
   chargeElements.forEach((chargeElement) => {
     const {
+      allocatedReturnVolume,
       authorisedAnnualQuantity,
-      billableAnnualQuantity,
       chargePurposeId,
       description,
       isSection127AgreementEnabled,
@@ -126,7 +126,7 @@ function _formatFriendlyChargeElements (friendlyChargeElements, chargeElements) 
       description,
       abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
       authorisedAnnualQuantity,
-      billableAnnualQuantity,
+      allocatedReturnVolume,
       timeLimit: _formatTimeLimit(timeLimitedStartDate, timeLimitedEndDate),
       loss
     }
