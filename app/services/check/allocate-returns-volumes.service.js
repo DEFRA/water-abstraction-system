@@ -13,18 +13,21 @@ function go (chargeReference) {
     returnVolumeInMegalitres = returnData.volumes.total / 1000
     // Loop through each charge element
     chargeReference.chargeElements.forEach((chargeElement) => {
+      if (!chargeElement.allocatedReturnVolume) {
+        chargeElement.allocatedReturnVolume = 0
+      }
       // Check the chargeElement is not already fully allocated
-      if (chargeElement.billableAnnualQuantity < chargeElement.authorisedAnnualQuantity) {
+      if (chargeElement.allocatedReturnVolume < chargeElement.authorisedAnnualQuantity) {
         // Check if the return's purpose and abstraction period match the charge element
         if (_matchReturnToElement(returnData.metadata, chargeElement)) {
           // Calculate how much is left to allocated to the ChargeElement from the return
-          let volumeLeftToAllocate = chargeElement.authorisedAnnualQuantity - chargeElement.billableAnnualQuantity
+          let volumeLeftToAllocate = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedReturnVolume
           // Check for the case that the return does not cover the full allocation
           if (returnVolumeInMegalitres < volumeLeftToAllocate) {
             volumeLeftToAllocate = returnVolumeInMegalitres
           }
 
-          chargeElement.billableAnnualQuantity += volumeLeftToAllocate
+          chargeElement.allocatedReturnVolume += volumeLeftToAllocate
           returnVolumeInMegalitres -= volumeLeftToAllocate
         }
       }
