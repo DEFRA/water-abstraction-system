@@ -18,9 +18,9 @@ module.exports = {
   testMatch: [
 
     '**/test/controllers/*.test.js',
-
     '**/test/errors/*.test.js',
-    '**/test/models/**/*.test.js'
+    '**/test/models/**/*.test.js',
+    '**/test/plugins/**/*.test.js'
   ],
   verbose: true
 }

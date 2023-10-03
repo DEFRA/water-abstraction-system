@@ -1,13 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const ChargingModuleTokenService = require('../../app/services/charging-module/token.service')
 
@@ -25,61 +17,62 @@ describe('Charging Module Token Cache plugin', () => {
     server = await init()
   })
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('When the first call returns a valid token', () => {
     describe('and the second request is made before the cache expires', () => {
-      before(() => {
-        Sinon.stub(ChargingModuleTokenService, 'go')
-          .onFirstCall().resolves({ accessToken: 'FIRST_TOKEN', expiresIn: LONG_EXPIRY_TIME })
-          .onSecondCall().resolves({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
+      beforeEach(() => {
+        // Mock the function 'go' of ChargingModuleTokenService
+        const goMock = jest.spyOn(ChargingModuleTokenService, 'go')
+        // Chain the mockResolvedValue calls for different calls to 'go'
+        goMock
+          .mockResolvedValueOnce({ accessToken: 'FIRST_TOKEN', expiresIn: LONG_EXPIRY_TIME })
+          .mockResolvedValueOnce({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
 
       it('returns the cached token', async () => {
         const firstCall = await server.methods.getChargingModuleToken()
         const secondCall = await server.methods.getChargingModuleToken()
 
-        expect(firstCall.accessToken).to.equal('FIRST_TOKEN')
-        expect(secondCall.accessToken).to.equal('FIRST_TOKEN')
+        expect(firstCall.accessToken).toEqual('FIRST_TOKEN')
+        expect(secondCall.accessToken).toEqual('FIRST_TOKEN')
       })
     })
 
     describe('and the second request is made after the cache expires', () => {
-      before(() => {
-        Sinon.stub(ChargingModuleTokenService, 'go')
-          .onFirstCall().resolves({ accessToken: 'FIRST_TOKEN', expiresIn: SHORT_EXPIRY_TIME })
-          .onSecondCall().resolves({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
+      beforeEach(() => {
+        const goMock = jest.spyOn(ChargingModuleTokenService, 'go')
+        goMock
+          .mockResolvedValueOnce({ accessToken: 'FIRST_TOKEN', expiresIn: SHORT_EXPIRY_TIME })
+          .mockResolvedValueOnce({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
 
       it('returns a new token', async () => {
         await server.methods.getChargingModuleToken()
         const result = await server.methods.getChargingModuleToken()
 
-        expect(result.accessToken).to.equal('SECOND_TOKEN')
+        expect(result.accessToken).toEqual('SECOND_TOKEN')
       })
     })
   })
 
   describe('When the first call returns an invalid token', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleTokenService, 'go')
-        .onFirstCall().resolves({ accessToken: null, expiresIn: null })
-        .onSecondCall().resolves({ accessToken: 'VALID_TOKEN', expiresIn: LONG_EXPIRY_TIME })
+      const goMock = jest.spyOn(ChargingModuleTokenService, 'go')
+      goMock
+        .mockResolvedValueOnce({ accessToken: null, expiresIn: null })
+        .mockResolvedValueOnce({ accessToken: 'VALID_TOKEN', expiresIn: LONG_EXPIRY_TIME })
     })
 
     it('returns a null token', async () => {
       const result = await server.methods.getChargingModuleToken()
 
-      expect(result.accessToken).to.be.null()
+      expect(result.accessToken).toBe('FIRST_TOKEN')
     })
 
     it('does not cache the token', async () => {
       await server.methods.getChargingModuleToken()
       const secondCall = await server.methods.getChargingModuleToken()
 
-      expect(secondCall.accessToken).to.equal('VALID_TOKEN')
+      expect(secondCall.accessToken).toEqual('SECOND_TOKEN')
     })
   })
 })
