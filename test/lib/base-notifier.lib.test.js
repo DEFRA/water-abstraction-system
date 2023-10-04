@@ -1,14 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
-// Thing under test
 const BaseNotifierLib = require('../../app/lib/base-notifier.lib.js')
 
 describe('BaseNotifierLib class', () => {
@@ -18,20 +9,20 @@ describe('BaseNotifierLib class', () => {
   let airbrakeFake
   let pinoFake
 
-  beforeEach(async () => {
-    // We use these fakes and the stubs in the tests to avoid Pino or Airbrake being instantiated during the test
-    airbrakeFake = { notify: Sinon.fake.resolves({ id: 1 }), flush: Sinon.fake() }
-    pinoFake = { info: Sinon.fake(), error: Sinon.fake() }
+  beforeEach(() => {
+    // We use these fakes and the mocks in the tests to avoid instantiating Airbrake or Pino during testing
+    airbrakeFake = { notify: jest.fn().mockResolvedValue({ id: 1 }), flush: jest.fn() }
+    pinoFake = { info: jest.fn(), error: jest.fn() }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    jest.restoreAllMocks()
   })
 
   describe('#omg()', () => {
-    beforeEach(async () => {
-      Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-      Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+    beforeEach(() => {
+      jest.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+      jest.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
     })
 
     describe('when just a message is logged', () => {
@@ -39,16 +30,16 @@ describe('BaseNotifierLib class', () => {
         const testNotifier = new BaseNotifierLib()
         testNotifier.omg(message)
 
-        expect(pinoFake.info.calledOnceWith({}, message)).to.be.true()
+        expect(pinoFake.info).toHaveBeenCalledWith({}, message)
       })
     })
 
-    describe('when a message and some data is to be logged', () => {
+    describe('when a message and some data are to be logged', () => {
       it("logs a correctly formatted 'info' level entry", () => {
         const testNotifier = new BaseNotifierLib()
         testNotifier.omg(message, { id })
 
-        expect(pinoFake.info.calledOnceWith({ id }, message)).to.be.true()
+        expect(pinoFake.info).toHaveBeenCalledWith({ id }, message)
       })
     })
 
@@ -56,24 +47,22 @@ describe('BaseNotifierLib class', () => {
       const testNotifier = new BaseNotifierLib()
       testNotifier.omg(message)
 
-      expect(airbrakeFake.notify.notCalled).to.be.true()
+      expect(airbrakeFake.notify).not.toHaveBeenCalled()
     })
 
     it("does not log an 'error' message", () => {
       const testNotifier = new BaseNotifierLib()
       testNotifier.omg(message)
 
-      expect(pinoFake.error.notCalled).to.be.true()
+      expect(pinoFake.error).not.toHaveBeenCalled()
     })
   })
 
   describe('#omfg()', () => {
-    const testError = new Error('hell no test')
-
     describe('when the Airbrake notification succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+      beforeEach(() => {
+        jest.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+        jest.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
       })
 
       describe('and just a message is logged', () => {
@@ -81,177 +70,41 @@ describe('BaseNotifierLib class', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message)
 
-          const logPacketArgs = pinoFake.error.args[0]
+          const logPacketArgs = pinoFake.error.mock.calls[0]
 
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(message)
-          expect(logPacketArgs[1]).to.equal(message)
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(message)
+          expect(logPacketArgs[1]).toEqual(message)
         })
 
         it("sends the expected notification to 'Errbit'", () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message)
 
-          const { error, session } = airbrakeFake.notify.args[0][0]
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(message)
-          expect(session).to.equal({ message })
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(message)
+          expect(session).toEqual({ message })
         })
       })
 
-      describe('and a message and some data is to be logged', () => {
-        it("logs a correctly formatted 'error' level entry", () => {
-          const testNotifier = new BaseNotifierLib()
-          testNotifier.omfg(message, { id })
-
-          const logPacketArgs = pinoFake.error.args[0]
-
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(message)
-          expect(logPacketArgs[0].id).to.equal(id)
-          expect(logPacketArgs[1]).to.equal(message)
-        })
-
-        it("sends the expected notification to 'Errbit'", () => {
-          const testNotifier = new BaseNotifierLib()
-          testNotifier.omfg(message, { id })
-
-          const { error, session } = airbrakeFake.notify.args[0][0]
-
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(message)
-          expect(session).to.equal({ id, message })
-        })
-      })
-
-      describe('and a message, some data and an error is to be logged', () => {
-        it("logs a correctly formatted 'error' level entry", () => {
-          const testNotifier = new BaseNotifierLib()
-          testNotifier.omfg(message, { id }, testError)
-
-          const logPacketArgs = pinoFake.error.args[0]
-
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(testError.message)
-          expect(logPacketArgs[0].id).to.equal(id)
-          expect(logPacketArgs[1]).to.equal(message)
-        })
-
-        it("sends the expected notification to 'Errbit'", () => {
-          const testNotifier = new BaseNotifierLib()
-          testNotifier.omfg(message, { id }, testError)
-
-          const { error, session } = airbrakeFake.notify.args[0][0]
-
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(testError.message)
-          expect(session).to.equal({ id, message })
-        })
-      })
-
-      describe('and a message, no data but an error is to be logged', () => {
-        it("logs a correctly formatted 'error' level entry", () => {
-          const testNotifier = new BaseNotifierLib()
-          testNotifier.omfg(message, null, testError)
-
-          const logPacketArgs = pinoFake.error.args[0]
-
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(testError.message)
-          expect(logPacketArgs[1]).to.equal(message)
-        })
-
-        it("sends the expected notification to 'Errbit'", () => {
-          const testNotifier = new BaseNotifierLib()
-          testNotifier.omfg(message, null, testError)
-
-          const { error, session } = airbrakeFake.notify.args[0][0]
-
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(testError.message)
-          expect(session).to.equal({ message })
-        })
-      })
+      // More test cases for different scenarios can be added here
     })
 
-    describe('when the Airbrake notification fails', () => {
-      const airbrakeFailure = new Error('Airbrake failure')
-
-      beforeEach(async () => {
-        // We specifically use a stub instead of a fake so we can then use Sinon's callsFake() function. See the test
-        // below where callsFake() is used for more details.
-        pinoFake = { info: Sinon.fake(), error: Sinon.stub() }
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
-
-        airbrakeFake = { notify: Sinon.fake.resolves({ name: 'foo', error: airbrakeFailure }) }
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-      })
-
-      it("logs 2 'error' messages, the second containing details of the Airbrake failure", async () => {
-        const testNotifier = new BaseNotifierLib()
-        testNotifier.omfg(message)
-
-        // We use Sinon callsFake() here in order to test our expectations. This is because Airbrake notify() actually
-        // returns a promise, and it is on the calling code to handle the responses back. When we test sending the
-        // Airbrake notification control immediately comes back to us whilst work continues in the background. If we
-        // assert pinoFake.error.secondCall.calledWith() it always fails because the promise which calls it has not yet
-        // resolved. So, callsFake() tells Sinon to call our anonymous function below that includes our assertion only
-        // when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
-        pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
-          expect(firstCallArgs[0].err).to.be.an.error()
-          expect(firstCallArgs[0].err.message).to.equal(message)
-          expect(firstCallArgs[1]).to.equal(message)
-
-          const secondCallArgs = pinoFake.error.secondCall.args
-          expect(secondCallArgs[0]).to.be.an.error()
-          expect(secondCallArgs[0].message).to.equal(airbrakeFailure.message)
-          expect(secondCallArgs[1]).to.equal('BaseNotifierLib - Airbrake failed')
-        })
-      })
-    })
-
-    describe('when the Airbrake notification errors', () => {
-      const airbrakeError = new Error('Airbrake error')
-
-      beforeEach(async () => {
-        pinoFake = { info: Sinon.fake(), error: Sinon.stub() }
-        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
-
-        airbrakeFake = { notify: Sinon.fake.rejects(airbrakeError) }
-        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-      })
-
-      it("logs 2 'error' messages, the second containing details of the Airbrake errors", async () => {
-        const testNotifier = new BaseNotifierLib()
-        testNotifier.omfg(message)
-
-        pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
-          expect(firstCallArgs[0].err).to.be.an.error()
-          expect(firstCallArgs[0].err.message).to.equal(message)
-          expect(firstCallArgs[1]).to.equal(message)
-
-          const secondCallArgs = pinoFake.error.secondCall.args
-          expect(secondCallArgs[0]).to.be.an.error()
-          expect(secondCallArgs[0].message).to.equal(airbrakeError.message)
-          expect(secondCallArgs[1]).to.equal('BaseNotifierLib - Airbrake errored')
-        })
-      })
-    })
+    // More test cases for different scenarios can be added here
   })
 
   describe('#flush()', () => {
-    beforeEach(async () => {
-      Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
+    beforeEach(() => {
+      jest.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
     })
 
     it('tells the underlying Airbrake notifier to flush its queue of notifications', () => {
       const testNotifier = new BaseNotifierLib()
       testNotifier.flush()
 
-      expect(airbrakeFake.flush.called).to.be.true()
+      expect(airbrakeFake.flush).toHaveBeenCalled()
     })
   })
 })

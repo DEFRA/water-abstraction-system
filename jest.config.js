@@ -16,11 +16,15 @@ module.exports = {
   testEnvironment: 'node',
   // The glob patterns Jest uses to detect test files
   testMatch: [
-
     '**/test/controllers/*.test.js',
     '**/test/errors/*.test.js',
     '**/test/models/**/*.test.js',
-    '**/test/plugins/**/*.test.js'
+    '**/test/plugins/**/*.test.js',
+    '**/test/lib/**/base-notifier.lib.test.js',
+    '**/test/lib/**/boom-notifier.lib.test.js',
+    '**/test/lib/**/charging-module-request.lib.test.js',
+    '**/test/lib/**/general.lib.test.js'
+
   ],
   verbose: true
 }
