@@ -6,6 +6,7 @@
  */
 
 const { capitalize, formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
+const DetermineChargePeriodService = require('../../services/billing/supplementary/determine-charge-period.service.js')
 
 const ISSUE_DESCRIPTIONS = {
   10: 'No returns received',
@@ -32,24 +33,7 @@ function go (billRunInfo, reviewDataByLicence) {
   }
 
   reviewDataByLicence.forEach((licence) => {
-    const twoPartTariffStatuses = []
-
-    licence.returnsEdited = licence.returnsEdited ? 'Yes' : ''
-
-    licence.financialYears.forEach((financialYear) => {
-      financialYear.chargeElements = []
-
-      financialYear.resultsMatchedByFinancialYear.forEach((result) => {
-        if (result.twoPartTariffStatus) {
-          twoPartTariffStatuses.push(result.twoPartTariffStatus)
-        }
-
-        financialYear.chargeElements.push(_transformResultToChargeElement(result))
-      })
-      delete financialYear.resultsMatchedByFinancialYear
-    })
-
-    licence.issue = _determineLicenceIssue(twoPartTariffStatuses)
+    _transformLicence(licence)
 
     if (licence.errored) {
       response.counts.errored += 1
@@ -61,6 +45,24 @@ function go (billRunInfo, reviewDataByLicence) {
   })
 
   return response
+}
+
+function _determineChargePeriod (startYear, endYear, licence, result) {
+  const billingPeriod = {
+    startDate: new Date(startYear, 3, 1),
+    endDate: new Date(endYear, 2, 31)
+  }
+  const { chargeVersionStartDate: startDate, chargeVersionEndDate: endDate } = result
+
+  const dummyChargeVersion = {
+    startDate,
+    endDate,
+    licence
+  }
+
+  const chargePeriod = DetermineChargePeriodService.go(dummyChargeVersion, billingPeriod)
+
+  return `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`
 }
 
 function _determineLicenceIssue (twoPartTariffStatuses) {
@@ -90,7 +92,34 @@ function _transformBillRunInfo (billRunInfo) {
   }
 }
 
-function _transformResultToChargeElement (result) {
+function _transformLicence (licence) {
+  const twoPartTariffStatuses = []
+
+  licence.returnsEdited = licence.returnsEdited ? 'Yes' : ''
+
+  licence.financialYears.forEach((financialYear) => {
+    const { startYear, endYear } = financialYear
+    financialYear.chargeElements = []
+
+    financialYear.resultsMatchedByFinancialYear.forEach((result) => {
+      if (result.twoPartTariffStatus) {
+        twoPartTariffStatuses.push(result.twoPartTariffStatus)
+      }
+
+      const chargePeriod = _determineChargePeriod(startYear, endYear, licence, result)
+      const chargeElement = _transformResultToChargeElement(result, chargePeriod)
+      financialYear.chargeElements.push(chargeElement)
+    })
+
+    delete financialYear.resultsMatchedByFinancialYear
+  })
+
+  licence.issue = _determineLicenceIssue(twoPartTariffStatuses)
+
+  delete licence.dates
+}
+
+function _transformResultToChargeElement (result, chargePeriod) {
   const {
     calculatedVolume,
     description,
@@ -117,7 +146,7 @@ function _transformResultToChargeElement (result) {
     billingAccount: invoiceAccountNumber,
     purpose: capitalize(purpose),
     description,
-    chargePeriod: '',
+    chargePeriod,
     abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
     authorisedQuantity: authorisedQty ? `${authorisedQty}Ml authorised` : 'Authorised not set',
     billableQuantity: billableQty ? `${authorisedQty}Ml billable` : 'Billable not set',

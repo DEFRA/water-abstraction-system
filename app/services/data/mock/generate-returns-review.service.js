@@ -23,6 +23,19 @@ async function go (id) {
   return _response(billRunInfo, transformedReviewData)
 }
 
+function _extractBillRunInfo (reviewDataResult) {
+  const { billingBatchId, billRunNumber, dateCreated, batchType, scheme, regionName } = reviewDataResult
+
+  return {
+    billingBatchId,
+    billRunNumber,
+    dateCreated,
+    batchType,
+    scheme,
+    regionName
+  }
+}
+
 async function _fetchReviewData (id) {
   return db
     .select(
@@ -32,9 +45,15 @@ async function _fetchReviewData (id) {
       'bb.batch_type',
       'bb.scheme',
       'r.name AS region_name',
+      'l.start_date AS licence_start_date',
+      'l.expired_date AS licence_expired_date',
+      'l.lapsed_date AS licence_lapsed_date',
+      'l.revoked_date AS licence_revoked_date',
       'cv.licence_id',
       'cv.licence_ref',
       'cv.invoice_account_id',
+      'cv.start_date AS charge_version_start_date',
+      'cv.end_date AS charge_version_end_date',
       'ia.invoice_account_number',
       'bv.financial_year',
       'bv.calculated_volume',
@@ -59,50 +78,24 @@ async function _fetchReviewData (id) {
     .innerJoin('water.charge_elements AS ce', 'ce.charge_element_id', 'bv.charge_element_id')
     .innerJoin('water.charge_versions AS cv', 'cv.charge_version_id', 'ce.charge_version_id')
     .innerJoin('crm_v2.invoice_accounts AS ia', 'ia.invoice_account_id', 'cv.invoice_account_id')
+    .innerJoin('water.licences AS l', 'l.licence_id', 'cv.licence_id')
     .innerJoin('water.purposes_uses AS pu', 'pu.purpose_use_id', 'ce.purpose_use_id')
     .where({
       'bb.billing_batch_id': id
     })
-    .orderBy('cv.licence_ref', 'bv.financial_year')
-}
-
-function _extractBillRunInfo (reviewDataResult) {
-  const { billingBatchId, billRunNumber, dateCreated, batchType, scheme, regionName } = reviewDataResult
-
-  return {
-    billingBatchId,
-    billRunNumber,
-    dateCreated,
-    batchType,
-    scheme,
-    regionName
-  }
-}
-
-function _uniqueLicenceIds (allResults) {
-  const allLicenceIds = allResults.map((result) => {
-    return result.licenceId
-  })
-
-  const uniqueLicenceIds = [...new Set(allLicenceIds)]
-  uniqueLicenceIds.sort()
-
-  return uniqueLicenceIds
-}
-
-function _uniqueFinanceYears (resultsMatchedByLicence) {
-  const allMatchedFinancialYears = resultsMatchedByLicence.map((result) => {
-    return result.financialYear
-  })
-
-  const uniqueFinancialYears = [...new Set(allMatchedFinancialYears)]
-  uniqueFinancialYears.sort()
-
-  return uniqueFinancialYears
+    .orderBy('cv.licence_ref', 'asc')
+    .orderBy('bv.financial_year', 'asc')
+    .orderBy('cv.start_date', 'asc')
 }
 
 function _generateLicence (licenceId, resultsMatchedByLicence) {
-  const { licenceRef } = resultsMatchedByLicence[0]
+  const {
+    licenceRef,
+    licenceExpiredDate: expiredDate,
+    licenceLapsedDate: lapsedDate,
+    licenceRevokedDate: revokedDate,
+    licenceStartDate: startDate
+  } = resultsMatchedByLicence[0]
 
   const errored = resultsMatchedByLicence.some((result) => {
     return result.twoPartTariffError
@@ -119,8 +112,16 @@ function _generateLicence (licenceId, resultsMatchedByLicence) {
     issue: '',
     errored,
     returnsEdited,
+    startDate,
+    expiredDate,
+    lapsedDate,
+    revokedDate,
     financialYears: []
   }
+}
+
+function _response (billRunInfo, reviewData) {
+  return MockReturnsReviewPresenter.go(billRunInfo, reviewData)
 }
 
 function _transformToBeLicenceBased (reviewData) {
@@ -141,8 +142,8 @@ function _transformToBeLicenceBased (reviewData) {
       })
 
       const financialYear = {
-        financialStartYear: uniqueFinancialYear - 1,
-        financialEndYear: uniqueFinancialYear,
+        startYear: uniqueFinancialYear - 1,
+        endYear: uniqueFinancialYear,
         resultsMatchedByFinancialYear
       }
 
@@ -153,8 +154,26 @@ function _transformToBeLicenceBased (reviewData) {
   })
 }
 
-function _response (billRunInfo, reviewData) {
-  return MockReturnsReviewPresenter.go(billRunInfo, reviewData)
+function _uniqueFinanceYears (resultsMatchedByLicence) {
+  const allMatchedFinancialYears = resultsMatchedByLicence.map((result) => {
+    return result.financialYear
+  })
+
+  const uniqueFinancialYears = [...new Set(allMatchedFinancialYears)]
+  uniqueFinancialYears.sort()
+
+  return uniqueFinancialYears
+}
+
+function _uniqueLicenceIds (allResults) {
+  const allLicenceIds = allResults.map((result) => {
+    return result.licenceId
+  })
+
+  const uniqueLicenceIds = [...new Set(allLicenceIds)]
+  uniqueLicenceIds.sort()
+
+  return uniqueLicenceIds
 }
 
 module.exports = {
