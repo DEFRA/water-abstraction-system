@@ -5,15 +5,16 @@
  */
 
 const BillLicenceModel = require('../../../../app/models/water/bill-licence.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 /**
  * Add a new bill licence
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `billingInvoiceId` - 45f08fe4-5b8b-4cf7-aaf0-5a07534e1357
+ * - `billingInvoiceId` - [random UUID]
  * - `licenceRef` - 01/123
- * - `licenceId` - 2eb0623e-30c6-4bf4-9598-2d60a8366c7d
+ * - `licenceId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -37,9 +38,9 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    billingInvoiceId: '45f08fe4-5b8b-4cf7-aaf0-5a07534e1357',
+    billingInvoiceId: generateUUID(),
     licenceRef: '01/123',
-    licenceId: '2eb0623e-30c6-4bf4-9598-2d60a8366c7d'
+    licenceId: generateUUID()
   }
 
   return {

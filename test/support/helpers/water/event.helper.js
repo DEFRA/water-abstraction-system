@@ -5,7 +5,7 @@
  */
 
 const EventModel = require('../../../../app/models/water/event.model.js')
-const GeneralLib = require('../../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 
 /**
  * Add a new event
@@ -16,10 +16,10 @@ const GeneralLib = require('../../../../app/lib/general.lib.js')
  * - `subtype` - supplementary
  * - `issuer` - test.user@defra.gov.uk
  * - `metadata` - batch: {
-                    id: '744c307f-904f-43c4-9458-24f062381d02',
+                    id: [random UUID],
                     type: 'supplementary',
                     region: {
-                      id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7'
+                      id: [random UUID]
                     },
                     scheme: 'sroc'
                   }
@@ -41,7 +41,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new event
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -49,7 +49,7 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const timestamp = GeneralLib.timestampForPostgres()
+  const timestamp = timestampForPostgres()
 
   const defaults = {
     type: 'billing-batch',
@@ -57,10 +57,10 @@ function defaults (data = {}) {
     issuer: 'test.user@defra.gov.uk',
     metadata: {
       batch: {
-        id: '744c307f-904f-43c4-9458-24f062381d02',
+        id: generateUUID(),
         type: 'supplementary',
         region: {
-          id: 'bd114474-790f-4470-8ba4-7b0cc9c225d7'
+          id: generateUUID()
         },
         scheme: 'sroc'
       }
