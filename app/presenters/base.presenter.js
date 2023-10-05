@@ -1,6 +1,25 @@
 'use strict'
 
 /**
+ * Capitalize the first letter of each word in a string
+ *
+ * Will work for strings containing multiple words or only one.
+ *
+ * @param {string} value The string to capitalize
+ */
+function capitalize (value) {
+  const words = value.split(' ')
+  const capitalizedWords = []
+
+  words.forEach((word) => {
+    const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1)
+    capitalizedWords.push(capitalizedWord)
+  })
+
+  return capitalizedWords.join(' ')
+}
+
+/**
  * Converts a number which represents pence into pounds by dividing it by 100
  *
  * This is such a simply calculation it could be done in place. But by having it as a named method we make it clear
@@ -123,6 +142,7 @@ function leftPadZeroes (number, length) {
 }
 
 module.exports = {
+  capitalize,
   convertPenceToPounds,
   formatAbstractionDate,
   formatAbstractionPeriod,
