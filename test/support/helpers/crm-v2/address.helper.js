@@ -50,7 +50,7 @@ function defaults (data = {}) {
     postcode: 'BS1 5AH',
     country: 'United Kingdom',
     dataSource: 'wrls',
-    uprn: randomInteger(100, 999999)
+    uprn: generateUprn()
   }
 
   return {
@@ -59,7 +59,12 @@ function defaults (data = {}) {
   }
 }
 
+function generateUprn () {
+  return randomInteger(100, 999999)
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateUprn
 }

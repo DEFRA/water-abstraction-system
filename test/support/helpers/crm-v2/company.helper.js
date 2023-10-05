@@ -41,7 +41,7 @@ function defaults (data = {}) {
   const defaults = {
     name: 'Example Trading Ltd',
     type: 'organisation',
-    companyNumber: randomInteger(1000000, 9999999).toString(),
+    companyNumber: generateCompanyNumber(),
     organisationType: 'limitedCompany'
   }
 
@@ -51,7 +51,12 @@ function defaults (data = {}) {
   }
 }
 
+function generateCompanyNumber () {
+  return randomInteger(1000000, 9999999).toString()
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateCompanyNumber
 }
