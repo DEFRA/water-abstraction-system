@@ -59,6 +59,7 @@ describe('BaseNotifierLib class', () => {
   })
 
   describe('#omfg()', () => {
+    const testError = new Error('hell no test')
     describe('when the Airbrake notification succeeds', () => {
       beforeEach(() => {
         jest.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
@@ -88,11 +89,143 @@ describe('BaseNotifierLib class', () => {
           expect(session).toEqual({ message })
         })
       })
+      describe('and a message and some data is to be logged', () => {
+        it("logs a correctly formatted 'error' level entry", () => {
+          const testNotifier = new BaseNotifierLib()
+          testNotifier.omfg(message, { id })
 
-      // More test cases for different scenarios can be added here
+          const logPacketArgs = pinoFake.error.mock.calls[0]
+
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(message)
+          expect(logPacketArgs[0].id).toEqual(id)
+          expect(logPacketArgs[1]).toEqual(message)
+        })
+
+        it("sends the expected notification to 'Errbit'", () => {
+          const testNotifier = new BaseNotifierLib()
+          testNotifier.omfg(message, { id })
+
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
+
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(message)
+          expect(session).toEqual({ id, message })
+        })
+      })
+
+      describe('and a message, some data and an error is to be logged', () => {
+        it("logs a correctly formatted 'error' level entry", () => {
+          const testNotifier = new BaseNotifierLib()
+          testNotifier.omfg(message, { id }, testError)
+
+          const logPacketArgs = pinoFake.error.mock.calls[0]
+
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(testError.message)
+          expect(logPacketArgs[0].id).toEqual(id)
+          expect(logPacketArgs[1]).toEqual(message)
+        })
+
+        it("sends the expected notification to 'Errbit'", () => {
+          const testNotifier = new BaseNotifierLib()
+          testNotifier.omfg(message, { id }, testError)
+
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
+
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(testError.message)
+          expect(session).toEqual({ id, message })
+        })
+      })
+
+      describe('and a message, no data but an error is to be logged', () => {
+        it("logs a correctly formatted 'error' level entry", () => {
+          const testNotifier = new BaseNotifierLib()
+          testNotifier.omfg(message, null, testError)
+
+          const logPacketArgs = pinoFake.error.mock.calls[0]
+
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(testError.message)
+          expect(logPacketArgs[1]).toEqual(message)
+        })
+
+        it("sends the expected notification to 'Errbit'", () => {
+          const testNotifier = new BaseNotifierLib()
+          testNotifier.omfg(message, null, testError)
+
+          const { error, session } = airbrakeFake.notify.mock.calls[0][0]
+
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(testError.message)
+          expect(session).toEqual({ message })
+        })
+      })
+    })
+    describe('when the Airbrake notification fails', () => {
+      const airbrakeFailure = new Error('Airbrake failure')
+
+      beforeEach(() => {
+        // We specifically use a stub instead of a fake so we can then use Sinon's callsFake() function.
+        pinoFake = { info: jest.fn(), error: jest.fn() }
+        jest.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
+
+        airbrakeFake = { notify: jest.fn().mockResolvedValue({ name: 'foo', error: airbrakeFailure }) }
+        jest.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+      })
+
+      it("logs 2 'error' messages, the second containing details of the Airbrake failure", async () => {
+        const testNotifier = new BaseNotifierLib()
+        testNotifier.omfg(message)
+
+        // We use Sinon callsFake() here in order to test our expectations.
+        pinoFake.error.mockImplementation(async () => {
+          const firstCallArgs = pinoFake.error.mock.calls[0]
+
+          expect(firstCallArgs[0].err).toBeInstanceOf(Error)
+          expect(firstCallArgs[0].err.message).toEqual(message)
+          expect(firstCallArgs[1]).toEqual(message)
+
+          const secondCallArgs = pinoFake.error.mock.calls[1]
+
+          expect(secondCallArgs[0]).toBeInstanceOf(Error)
+          expect(secondCallArgs[0].message).toEqual(airbrakeFailure.message)
+          expect(secondCallArgs[1]).toEqual('BaseNotifierLib - Airbrake failed')
+        })
+      })
     })
 
-    // More test cases for different scenarios can be added here
+    describe('when the Airbrake notification errors', () => {
+      const airbrakeError = new Error('Airbrake error')
+
+      beforeEach(() => {
+        pinoFake = { info: jest.fn(), error: jest.fn() }
+        jest.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
+
+        airbrakeFake = { notify: jest.fn().mockRejectedValue(airbrakeError) }
+        jest.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
+      })
+
+      it("logs 2 'error' messages, the second containing details of the Airbrake errors", async () => {
+        const testNotifier = new BaseNotifierLib()
+        testNotifier.omfg(message)
+
+        pinoFake.error.mockImplementation(async () => {
+          const firstCallArgs = pinoFake.error.mock.calls[0]
+
+          expect(firstCallArgs[0].err).toBeInstanceOf(Error)
+          expect(firstCallArgs[0].err.message).toEqual(message)
+          expect(firstCallArgs[1]).toEqual(message)
+
+          const secondCallArgs = pinoFake.error.mock.calls[1]
+
+          expect(secondCallArgs[0]).toBeInstanceOf(Error)
+          expect(secondCallArgs[0].message).toEqual(airbrakeError.message)
+          expect(secondCallArgs[1]).toEqual('BaseNotifierLib - Airbrake errored')
+        })
+      })
+    })
   })
 
   describe('#flush()', () => {
