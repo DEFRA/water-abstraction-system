@@ -41,7 +41,8 @@ const headers = [
 ]
 
 const csvValues = '"20146cdc-9b40-4769-aa78-b51c17080d56",' +
-'"4.4.5",12000,' +
+'"4.4.5",' +
+'12000,' +
 '"Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year, where a Tier 1 model applies.",' +
 '"Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model",' +
 'false,' +
@@ -66,14 +67,14 @@ const csvHeaders = '"billingChargeCategoryId",' +
 '"minVolume",' +
 '"maxVolume"\n'
 
-describe('Write stream to file service', () => {
+describe('Write table to file service', () => {
   let filePath
 
   describe('when successful', () => {
     beforeEach(async () => {
       await DatabaseHelper.clean()
 
-      await ChargeCategoryHelper.add({ createdAt: date, billingChargeCategoryId })
+      await ChargeCategoryHelper.add({ billingChargeCategoryId, createdAt: date, reference: '4.4.5' })
 
       const fileName = 'billing_charge_categories.csv'
       const __dirname = '/tmp/water'

@@ -130,8 +130,9 @@ async function _fetch (regionId, billingPeriod) {
  * We are interested in the associated licences to ensure that their supplementary billing flag is unset.
  */
 function _extractLicenceIdsThenRemoveNonChargeableChargeVersions (allChargeVersions) {
-  const licenceIdsForPeriod = []
   const chargeVersions = []
+
+  let licenceIdsForPeriod = []
 
   for (const chargeVersion of allChargeVersions) {
     licenceIdsForPeriod.push(chargeVersion.licence.licenceId)
@@ -140,6 +141,11 @@ function _extractLicenceIdsThenRemoveNonChargeableChargeVersions (allChargeVersi
       chargeVersions.push(chargeVersion)
     }
   }
+
+  // NOTE: If a licence appears multiple times in the results it will be pushed multiple times into the array. We have
+  // found a handy way to de-dupe an array of values is to create a new Set and then destructure it back to an array
+  // of values.
+  licenceIdsForPeriod = [...new Set(licenceIdsForPeriod)]
 
   return { chargeVersions, licenceIdsForPeriod }
 }

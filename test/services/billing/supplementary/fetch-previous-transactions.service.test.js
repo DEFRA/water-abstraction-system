@@ -12,15 +12,22 @@ const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
+const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
+const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
 
 // Thing under test
 const FetchPreviousTransactionsService = require('../../../../app/services/billing/supplementary/fetch-previous-transactions.service.js')
 
 describe('Fetch Previous Transactions service', () => {
-  const invoiceAccountId = '4fe996c9-7641-4edc-9f42-0700dcde37b5'
-  const licenceId = '4492f1e2-f58c-4d4f-88a1-d4f9eb26fcba'
+  const chargeCategoryCode = '4.3.1'
   const financialYearEnding = 2023
+  const invoiceAccountId = '4fe996c9-7641-4edc-9f42-0700dcde37b5'
+  const invoiceAccountNumber = InvoiceAccountHelper.generateInvoiceAccountNumber()
+  const licenceId = '4492f1e2-f58c-4d4f-88a1-d4f9eb26fcba'
+  const licenceRef = LicenceHelper.generateLicenceRef()
+
+  const billRunSetupValues = { invoiceAccountId, invoiceAccountNumber, licenceId, licenceRef }
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -41,8 +48,9 @@ describe('Fetch Previous Transactions service', () => {
   describe('when there is a bill run', () => {
     describe('for the same licence and invoice account', () => {
       beforeEach(async () => {
-        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(invoiceAccountId, licenceId)
-        await TransactionHelper.add({ billingInvoiceLicenceId })
+        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(billRunSetupValues)
+        await TransactionHelper.add({ billingInvoiceLicenceId, chargeCategoryCode })
+        console.log('🚀 ~ file: fetch-previous-transactions.service.test.js:52 ~ beforeEach ~ billingInvoiceLicenceId:', billingInvoiceLicenceId)
       })
 
       it('returns results', async () => {
@@ -60,7 +68,7 @@ describe('Fetch Previous Transactions service', () => {
         let followUpBillingInvoiceLicenceId
 
         beforeEach(async () => {
-          followUpBillingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(invoiceAccountId, licenceId)
+          followUpBillingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(billRunSetupValues)
         })
 
         describe('which only contains a credit', () => {
@@ -68,6 +76,7 @@ describe('Fetch Previous Transactions service', () => {
             beforeEach(async () => {
               await TransactionHelper.add({
                 billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                chargeCategoryCode,
                 isCredit: true
               })
             })
@@ -89,6 +98,7 @@ describe('Fetch Previous Transactions service', () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
                   billableDays: 30,
+                  chargeCategoryCode,
                   isCredit: true
                 })
               })
@@ -109,6 +119,7 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                  chargeCategoryCode,
                   chargeType: 'compensation',
                   isCredit: true
                 })
@@ -151,8 +162,9 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
-                  section126Factor: 0.5,
-                  isCredit: true
+                  chargeCategoryCode,
+                  isCredit: true,
+                  section126Factor: 0.5
                 })
               })
 
@@ -172,8 +184,9 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
-                  section127Agreement: true,
-                  isCredit: true
+                  chargeCategoryCode,
+                  isCredit: true,
+                  section127Agreement: true
                 })
               })
 
@@ -193,8 +206,9 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
-                  section130Agreement: true,
-                  isCredit: true
+                  chargeCategoryCode,
+                  isCredit: true,
+                  section130Agreement: true
                 })
               })
 
@@ -215,6 +229,7 @@ describe('Fetch Previous Transactions service', () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
                   aggregateFactor: 0.5,
+                  chargeCategoryCode,
                   isCredit: true
                 })
               })
@@ -236,6 +251,7 @@ describe('Fetch Previous Transactions service', () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
                   adjustmentFactor: 0.5,
+                  chargeCategoryCode,
                   isCredit: true
                 })
               })
@@ -256,8 +272,9 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
-                  isWinterOnly: true,
-                  isCredit: true
+                  chargeCategoryCode,
+                  isCredit: true,
+                  isWinterOnly: true
                 })
               })
 
@@ -277,8 +294,9 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
-                  isSupportedSource: true,
-                  isCredit: true
+                  chargeCategoryCode,
+                  isCredit: true,
+                  isSupportedSource: true
                 })
               })
 
@@ -298,8 +316,9 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
-                  supportedSourceName: 'source name',
-                  isCredit: true
+                  chargeCategoryCode,
+                  isCredit: true,
+                  supportedSourceName: 'source name'
                 })
               })
 
@@ -319,8 +338,9 @@ describe('Fetch Previous Transactions service', () => {
               beforeEach(async () => {
                 await TransactionHelper.add({
                   billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
-                  isWaterCompanyCharge: true,
-                  isCredit: true
+                  chargeCategoryCode,
+                  isCredit: true,
+                  isWaterCompanyCharge: true
                 })
               })
 
@@ -350,6 +370,7 @@ describe('Fetch Previous Transactions service', () => {
             beforeEach(async () => {
               await TransactionHelper.add({
                 billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
+                chargeCategoryCode,
                 isCredit: true
               })
             })
@@ -372,6 +393,7 @@ describe('Fetch Previous Transactions service', () => {
               await TransactionHelper.add({
                 billingInvoiceLicenceId: followUpBillingInvoiceLicenceId,
                 billableDays: 30,
+                chargeCategoryCode,
                 isCredit: true
               })
             })
@@ -394,8 +416,12 @@ describe('Fetch Previous Transactions service', () => {
 
     describe('but for a different licence', () => {
       beforeEach(async () => {
-        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(invoiceAccountId, '66498337-e6a6-4a2a-9fb7-e39f43410f80')
-        await TransactionHelper.add({ billingInvoiceLicenceId })
+        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence({
+          ...billRunSetupValues,
+          licenceId: '66498337-e6a6-4a2a-9fb7-e39f43410f80'
+        })
+
+        await TransactionHelper.add({ billingInvoiceLicenceId, chargeCategoryCode })
       })
 
       it('returns no results', async () => {
@@ -411,11 +437,12 @@ describe('Fetch Previous Transactions service', () => {
 
     describe('but for a different invoice account', () => {
       beforeEach(async () => {
-        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(
-          'b0b75e7a-e80a-4c28-9ac9-33b3a850722b',
-          licenceId
-        )
-        await TransactionHelper.add({ billingInvoiceLicenceId })
+        const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence({
+          ...billRunSetupValues,
+          invoiceAccountId: 'b0b75e7a-e80a-4c28-9ac9-33b3a850722b'
+        })
+
+        await TransactionHelper.add({ billingInvoiceLicenceId, chargeCategoryCode })
       })
 
       it('returns no results', async () => {
@@ -431,10 +458,11 @@ describe('Fetch Previous Transactions service', () => {
   })
 })
 
-async function _createBillRunAndBillAndBillLicence (invoiceAccountId, licenceId) {
+async function _createBillRunAndBillAndBillLicence (billRunSetupValues) {
+  const { invoiceAccountId, invoiceAccountNumber, licenceId, licenceRef } = billRunSetupValues
   const { billingBatchId } = await BillRunHelper.add({ status: 'sent' })
-  const { billingInvoiceId } = await BillHelper.add({ invoiceAccountId, billingBatchId })
-  const { billingInvoiceLicenceId } = await BillLicenceHelper.add({ billingInvoiceId, licenceId })
+  const { billingInvoiceId } = await BillHelper.add({ billingBatchId, invoiceAccountId, invoiceAccountNumber })
+  const { billingInvoiceLicenceId } = await BillLicenceHelper.add({ billingInvoiceId, licenceId, licenceRef })
 
   return billingInvoiceLicenceId
 }

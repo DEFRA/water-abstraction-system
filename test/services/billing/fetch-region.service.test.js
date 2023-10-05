@@ -24,7 +24,7 @@ describe('Fetch Region service', () => {
 
   describe('when there is a region with a matching NALD region id', () => {
     beforeEach(async () => {
-      testRegion = await RegionHelper.add()
+      testRegion = await RegionHelper.add({ naldRegionId })
     })
 
     it('returns results', async () => {
@@ -36,7 +36,7 @@ describe('Fetch Region service', () => {
 
   describe('when there is no region with a matching NALD region id', () => {
     beforeEach(async () => {
-      RegionHelper.add({ naldRegionId: 99 })
+      testRegion = await RegionHelper.add({ naldRegionId: 99 })
     })
 
     it('returns no results', async () => {
