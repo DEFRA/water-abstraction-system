@@ -6,6 +6,8 @@
  * Will work for strings containing multiple words or only one.
  *
  * @param {string} value The string to capitalize
+ *
+ * @returns {string} The capitalized string
  */
 function capitalize (value) {
   const words = value.split(' ')
