@@ -4,8 +4,8 @@
  * @module PurposeHelper
  */
 
-const PurposeModel = require('../../../../app/models/water/purpose.model.js')
 const { randomInteger } = require('../general.helper.js')
+const PurposeModel = require('../../../../app/models/water/purpose.model.js')
 
 /**
  * Add a new purpose
