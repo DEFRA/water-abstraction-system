@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
+const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
+const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
