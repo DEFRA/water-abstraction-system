@@ -6,6 +6,7 @@
  */
 
 const { db } = require('../../../db/db.js')
+const Workflow = require('../../models/water/workflow.model.js')
 
 /**
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in 50 days or less
@@ -23,9 +24,25 @@ const { db } = require('../../../db/db.js')
  * @returns {Object} Contains an array of unique licence IDs & version IDs that have been added to the workflow
  */
 async function go () {
-  const licenceIdsToAdd = await _fetch()
+  const licencesForWorkflow = await _fetch()
 
-  return licenceIdsToAdd
+  if (licencesForWorkflow.length) {
+    await _addLicenceToWorkflow(licencesForWorkflow)
+  }
+
+  return licencesForWorkflow
+}
+
+async function _addLicenceToWorkflow (licencesForWorkflow) {
+  // Attach additional data to the array that the chargeVersionWorkflow table requires a create a valid record
+  licencesForWorkflow.forEach((licenceForWorkflow) => {
+    licenceForWorkflow.status = 'to_setup'
+    licenceForWorkflow.data = { chargeVersion: null }
+    licenceForWorkflow.dateCreated = new Date()
+    licenceForWorkflow.dateUpdated = new Date()
+  })
+
+  await Workflow.query().insert(licencesForWorkflow)
 }
 
 async function _fetch () {
