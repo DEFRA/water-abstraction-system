@@ -50,7 +50,6 @@ describe('Fetch Previous Transactions service', () => {
       beforeEach(async () => {
         const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(billRunSetupValues)
         await TransactionHelper.add({ billingInvoiceLicenceId, chargeCategoryCode })
-        console.log('🚀 ~ file: fetch-previous-transactions.service.test.js:52 ~ beforeEach ~ billingInvoiceLicenceId:', billingInvoiceLicenceId)
       })
 
       it('returns results', async () => {
