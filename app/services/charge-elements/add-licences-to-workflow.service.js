@@ -38,8 +38,8 @@ async function _addLicenceToWorkflow (licencesForWorkflow) {
   licencesForWorkflow.forEach((licenceForWorkflow) => {
     licenceForWorkflow.status = 'to_setup'
     licenceForWorkflow.data = { chargeVersion: null }
-    licenceForWorkflow.dateCreated = new Date()
-    licenceForWorkflow.dateUpdated = new Date()
+    licenceForWorkflow.createdAt = new Date()
+    licenceForWorkflow.updatedAt = new Date()
   })
 
   await Workflow.query().insert(licencesForWorkflow)
