@@ -20,7 +20,7 @@ const { db } = require('../../../db/db.js')
  * - not be linked to a licence in the workflow
  * - have a related `purpose` that is due to expire in 50 days or less
  *
- * @returns {Object} Contains an array of unique licence IDs that have been added to the workflow
+ * @returns {Object} Contains an array of unique licence IDs & version IDs that have been added to the workflow
  */
 async function go () {
   const licenceIdsToAdd = await _fetch()
@@ -30,8 +30,9 @@ async function go () {
 
 async function _fetch () {
   return db
-    .distinct('l.licence_id')
+    .distinct('l.licenceId', 'lv.licenceVersionId')
     .from('water.licences as l')
+    .innerJoin('water.licenceVersions as lv', 'l.licenceId', 'lv.licenceId')
     .innerJoin('water.chargeVersions as cv', 'l.licenceId', 'cv.licenceId')
     .innerJoin('water.chargeElements as ce', 'cv.chargeVersionId', 'ce.chargeVersionId')
     .innerJoin('water.chargePurposes as cp', 'ce.chargeElementId', 'cp.chargeElementId')
@@ -42,6 +43,7 @@ async function _fetch () {
     })
     .whereNull('l.revokedDate')
     .whereNull('l.lapsedDate')
+    .where('lv.status', 'current')
     .whereNull('cv.endDate')
     .where('cv.scheme', 'sroc')
     .where('cv.status', 'current')
