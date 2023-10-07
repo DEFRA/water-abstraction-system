@@ -11,6 +11,58 @@ const { expect } = Code
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
 describe('Base presenter', () => {
+  describe('#capitalize()', () => {
+    let valueToCapitalize
+
+    describe('when the value is a single word', () => {
+      beforeEach(() => {
+        valueToCapitalize = 'high'
+      })
+
+      it('correctly returns the value capitalized, for example, High', async () => {
+        const result = BasePresenter.capitalize(valueToCapitalize)
+
+        expect(result).to.equal('High')
+      })
+    })
+
+    describe('when the value is multiple words', () => {
+      beforeEach(() => {
+        valueToCapitalize = 'spray irrigation'
+      })
+
+      it('correctly returns the value capitalized, for example, Spray Irrigation', async () => {
+        const result = BasePresenter.capitalize(valueToCapitalize)
+
+        expect(result).to.equal('Spray Irrigation')
+      })
+    })
+
+    describe('when the value contains a symbol', () => {
+      beforeEach(() => {
+        valueToCapitalize = 'spray irrigation - direct'
+      })
+
+      it('correctly returns the value capitalized, for example, Spray Irrigation - Direct', async () => {
+        const result = BasePresenter.capitalize(valueToCapitalize)
+
+        expect(result).to.equal('Spray Irrigation - Direct')
+      })
+    })
+
+    describe('when the value is all capitals', () => {
+      beforeEach(() => {
+        valueToCapitalize = 'SPRAY IRRIGATION'
+      })
+
+      it('correctly returns the value unchanged, for example, SPRAY IRRIGATION', async () => {
+        const result = BasePresenter.capitalize(valueToCapitalize)
+
+        expect(result).to.equal('SPRAY IRRIGATION')
+      })
+    })
+  })
+
   describe('#convertPenceToPounds()', () => {
     let valueInPence
 
