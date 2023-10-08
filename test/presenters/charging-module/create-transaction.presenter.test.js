@@ -27,6 +27,7 @@ describe('Charging Module Create Transaction presenter', () => {
 
   let transaction
   let licence
+  let region
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -34,7 +35,7 @@ describe('Charging Module Create Transaction presenter', () => {
 
   describe('when provided with a Transaction and Licence instance', () => {
     beforeEach(async () => {
-      const region = await RegionHelper.add()
+      region = await RegionHelper.add()
 
       // NOTE: In the context the presenter is used it is from a Licence instance returned by
       // FetchChargeVersionsService. We recreate how that instance is formed here, including extracting some of the
@@ -65,6 +66,7 @@ describe('Charging Module Create Transaction presenter', () => {
       // standard transaction instance and amend some of the properties to match what FormatSrocTransactionLineService
       // does.
       transaction = await TransactionHelper.add()
+      transaction.chargeCategoryCode = '4.5.6'
       transaction.section127Agreement = false
       transaction.section130Agreement = false
     })
@@ -90,10 +92,10 @@ describe('Charging Module Create Transaction presenter', () => {
       expect(result.chargePeriod).to.equal('01-APR-2022 - 31-MAR-2023')
       expect(result.compensationCharge).to.equal(false)
       expect(result.customerReference).to.equal(invoiceAccountNumber)
-      expect(result.licenceNumber).to.equal('01/123')
+      expect(result.licenceNumber).to.equal(licence.licenceRef)
       expect(result.lineDescription).to.equal('Water abstraction charge: Agriculture other than spray irrigation at East Rudham')
       expect(result.loss).to.equal('medium')
-      expect(result.region).to.equal('S')
+      expect(result.region).to.equal(region.chargeRegionId)
       expect(result.regionalChargingArea).to.equal('Southern')
       expect(result.section127Agreement).to.equal(false)
       expect(result.section130Agreement).to.equal(false)

@@ -5,16 +5,18 @@
  */
 
 const BillModel = require('../../../../app/models/water/bill.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateInvoiceAccountNumber } = require('../crm-v2/invoice-account.helper.js')
 
 /**
  * Add a new bill
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `invoiceAccountId` - 396ee68f-d665-4770-b0ad-d70a007f9bd5
+ * - `invoiceAccountId` - [random UUID]
  * - `address` - {}
- * - `invoiceAccountNumber` - T12345678A
- * - `billingBatchId` - 1d9e3142-8893-4dff-9043-f4b3b34e230d
+ * - `invoiceAccountNumber` - [randomly generated - T12345678A]
+ * - `billingBatchId` - [random UUID]
  * - `financialYearEnding` - 2023
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -39,10 +41,10 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    invoiceAccountId: '396ee68f-d665-4770-b0ad-d70a007f9bd5',
+    invoiceAccountId: generateUUID(),
     address: {},
-    invoiceAccountNumber: 'T12345678A',
-    billingBatchId: '1d9e3142-8893-4dff-9043-f4b3b34e230d',
+    invoiceAccountNumber: generateInvoiceAccountNumber(),
+    billingBatchId: generateUUID(),
     financialYearEnding: 2023
   }
 

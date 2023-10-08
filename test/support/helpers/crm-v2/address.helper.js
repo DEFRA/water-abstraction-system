@@ -5,6 +5,7 @@
  */
 
 const AddressModel = require('../../../../app/models/crm-v2/address.model.js')
+const { randomInteger } = require('../general.helper.js')
 
 /**
  * Add a new address
@@ -18,7 +19,7 @@ const AddressModel = require('../../../../app/models/crm-v2/address.model.js')
  * - `postcode` - BS1 5AH
  * - `country` - United Kingdom
  * - `dataSource` - wrls
- * - `uprn` - 340116
+ * - `uprn` - [randomly generated - 340116]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -33,7 +34,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new address
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -49,7 +50,7 @@ function defaults (data = {}) {
     postcode: 'BS1 5AH',
     country: 'United Kingdom',
     dataSource: 'wrls',
-    uprn: 340116
+    uprn: generateUprn()
   }
 
   return {
@@ -58,7 +59,12 @@ function defaults (data = {}) {
   }
 }
 
+function generateUprn () {
+  return randomInteger(100, 999999)
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateUprn
 }
