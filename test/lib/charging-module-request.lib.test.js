@@ -1,6 +1,5 @@
 'use strict'
 
-const sinon = require('sinon')
 const RequestLib = require('../../app/lib/request.lib.js')
 const ChargingModuleRequestLib = require('../../app/lib/charging-module-request.lib.js')
 
