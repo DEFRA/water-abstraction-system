@@ -10,7 +10,7 @@ const AddLicencesToWorkflowService = require('../services/charge-elements/add-li
 async function workflowTimeLimitedLicences (request, h) {
   const result = await AddLicencesToWorkflowService.go()
 
-  return h.response(result).code(201)
+  return h.response(result).code(200)
 }
 
 module.exports = {
