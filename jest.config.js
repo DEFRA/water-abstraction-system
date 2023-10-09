@@ -23,7 +23,11 @@ module.exports = {
     '**/test/lib/**/base-notifier.lib.test.js',
     '**/test/lib/**/boom-notifier.lib.test.js',
     '**/test/lib/**/charging-module-request.lib.test.js',
-    '**/test/lib/**/general.lib.test.js'
+    '**/test/lib/**/general.lib.test.js',
+    '**/test/lib/**/global-notifier.lib.test.js',
+    '**/test/lib/**/legacy-db-snake-case-mappers.lib.test.js',
+    '**/test/lib/**/legacy-request.lib.test.js',
+    '**/test/lib/**/request-notifier.lib.test.js'
 
   ],
   verbose: true
