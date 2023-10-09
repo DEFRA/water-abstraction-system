@@ -34,7 +34,7 @@ async function go () {
 }
 
 async function _addLicenceToWorkflow (licencesForWorkflow) {
-  // Attach additional data to the array that the chargeVersionWorkflow table requires a create a valid record
+  // Attach additional data to the array that the chargeVersionWorkflow table requires to create a valid record
   licencesForWorkflow.forEach((licenceForWorkflow) => {
     licenceForWorkflow.status = 'to_setup'
     licenceForWorkflow.data = { chargeVersion: null }
