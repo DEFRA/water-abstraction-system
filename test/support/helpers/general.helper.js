@@ -1,6 +1,11 @@
 'use strict'
 
 /**
+ * General helper functions available to all helpers
+ * @module GeneralHelper
+ */
+
+/**
  * Generate a random integer within a range (inclusive)
  *
  * @param {Number} min lowest number (integer) in the range (inclusive)

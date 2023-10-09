@@ -6,6 +6,7 @@
 
 const BillLicenceModel = require('../../../../app/models/water/bill-licence.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const LicenceHelper = require('./licence.helper.js')
 
 /**
  * Add a new bill licence
@@ -13,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
  * If no `data` is provided, default values will be used. These are
  *
  * - `billingInvoiceId` - [random UUID]
- * - `licenceRef` - 01/123
+ * - `licenceRef` - [randomly generated - 01/123]
  * - `licenceId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -39,7 +40,7 @@ async function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     billingInvoiceId: generateUUID(),
-    licenceRef: '01/123',
+    licenceRef: LicenceHelper.generateLicenceRef(),
     licenceId: generateUUID()
   }
 

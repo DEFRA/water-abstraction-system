@@ -4,9 +4,9 @@
  * @module LicenceHelper
  */
 
+const { randomInteger } = require('../general.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceModel = require('../../../../app/models/water/licence.model.js')
-const { randomInteger } = require('../general.helper.js')
 
 /**
  * Add a new licence

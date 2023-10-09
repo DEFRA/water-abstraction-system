@@ -27,7 +27,8 @@ module.exports = {
     '**/test/lib/**/global-notifier.lib.test.js',
     '**/test/lib/**/legacy-db-snake-case-mappers.lib.test.js',
     '**/test/lib/**/legacy-request.lib.test.js',
-    '**/test/lib/**/request-notifier.lib.test.js'
+    '**/test/lib/**/request-notifier.lib.test.js',
+    '**/test/lib/**/general.lib.test.js'
 
   ],
   verbose: true

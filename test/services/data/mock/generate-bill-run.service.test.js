@@ -59,7 +59,11 @@ describe('Generate Bill Run service', () => {
       })
       await ChargeElementHelper.add({ chargeElementId: chargeReference.chargeElementId, purposeUseId: purpose.purposeUseId })
       const billRun = await BillRunHelper.add({ billRunNumber: 10029, regionId: region.regionId })
-      const bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId, invoiceNumber: 'TAI0000013T' })
+      const bill = await BillHelper.add({
+        billingBatchId: billRun.billingBatchId,
+        invoiceAccountNumber: 'T11345678A',
+        invoiceNumber: 'TAI0000013T'
+      })
       const billLicence = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId, licenceId: licence.licenceId })
       await TransactionHelper.add({
         billingInvoiceLicenceId: billLicence.billingInvoiceLicenceId,
