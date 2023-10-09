@@ -39,31 +39,15 @@ describe('Charge Elements controller', () => {
       url: '/charge-elements/time-limited'
     }
 
-    const validResponse = [
-      {
-        licenceId: '092c43c1-07b5-4d87-82d6-68a325bf26ba',
-        licenceVersionId: '0df27617-9958-425d-9386-b06d0d1f686c',
-        status: 'to_setup',
-        data: {
-          chargeVersion: null
-        },
-        createdAt: '2023-10-09T12:34:46.552Z',
-        updatedAt: '2023-10-09T12:34:46.552Z'
-      }
-    ]
-
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(AddLicencesToWorkflowService, 'go').resolves(validResponse)
+        Sinon.stub(AddLicencesToWorkflowService, 'go').resolves()
       })
 
       it('displays the correct message', async () => {
         const response = await server.inject(options)
 
-        const responsePayload = JSON.parse(response.payload)
-
-        expect(response.statusCode).to.equal(200)
-        expect(responsePayload).to.equal(validResponse)
+        expect(response.statusCode).to.equal(204)
       })
     })
 
