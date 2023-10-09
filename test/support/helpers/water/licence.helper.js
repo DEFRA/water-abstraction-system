@@ -4,6 +4,8 @@
  * @module LicenceHelper
  */
 
+const { randomInteger } = require('../general.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceModel = require('../../../../app/models/water/licence.model.js')
 
 /**
@@ -11,8 +13,8 @@ const LicenceModel = require('../../../../app/models/water/licence.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceRef` - 01/123
- * - `regionId` - bd114474-790f-4470-8ba4-7b0cc9c225d7
+ * - `licenceRef` - [randomly generated - 01/123]
+ * - `regionId` - [random UUID]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
  * - `startDate` - new Date('2022-01-01')
  *
@@ -38,8 +40,8 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    licenceRef: '01/123',
-    regionId: 'bd114474-790f-4470-8ba4-7b0cc9c225d7',
+    licenceRef: generateLicenceRef(),
+    regionId: generateUUID(),
     regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },
     startDate: new Date('2022-01-01')
   }
@@ -50,7 +52,14 @@ function defaults (data = {}) {
   }
 }
 
+function generateLicenceRef () {
+  const secondPart = randomInteger(100, 999)
+
+  return `01/${secondPart}`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateLicenceRef
 }

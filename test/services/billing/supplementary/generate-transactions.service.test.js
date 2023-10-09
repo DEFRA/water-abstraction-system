@@ -21,6 +21,8 @@ const CalculateAuthorisedAndBillableDaysService = require('../../../../app/servi
 const GenerateTransactionsService = require('../../../../app/services/billing/supplementary/generate-transactions.service.js')
 
 describe('Generate Transactions service', () => {
+  const reference = '4.4.5'
+
   let chargePeriod
   let chargeElement
   let chargeReference
@@ -33,7 +35,7 @@ describe('Generate Transactions service', () => {
   }
 
   beforeEach(async () => {
-    const chargeCategory = await ChargeCategoryHelper.add()
+    const chargeCategory = await ChargeCategoryHelper.add({ reference })
     const { billingChargeCategoryId } = chargeCategory
 
     const baseChargeReference = await ChargeReferenceHelper.add({ billingChargeCategoryId })

@@ -4,6 +4,8 @@
  * @module TransactionHelper
  */
 
+const { generateChargeReference } = require('./charge-category.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const TransactionModel = require('../../../../app/models/water/transaction.model.js')
 
 /**
@@ -11,8 +13,24 @@ const TransactionModel = require('../../../../app/models/water/transaction.model
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `billingInvoiceLicenceId` - 7190937e-e176-4d50-ae4f-c00c5e76938a
- * - `description` - River Beult at Boughton Monchelsea
+ * - `adjustmentFactor` - 1
+ * - `aggregateFactor` - 1
+ * - `authorisedDays` - 365
+ * - `authorisedQuantity` - 11
+ * - `billableDays` - 365
+ * - `billableQuantity` - 11
+ * - `billingInvoiceLicenceId` - [random UUID]
+ * - `chargeCategoryCode` - [randomly generated - 4.4.5]
+ * - `chargeCategoryDescription` - Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model
+ * - `chargeType` - standard,
+ * - `description` - Water abstraction charge: Agriculture other than spray irrigation at East Rudham
+ * - `isCredit` - false
+ * - `loss` - medium
+ * - `season` - all year
+ * - `section130Agreement` - false
+ * - `scheme` - sroc
+ * - `source` - non-tidal
+ * - `volume` - 11
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -42,8 +60,8 @@ function defaults (data = {}) {
     authorisedQuantity: 11,
     billableDays: 365,
     billableQuantity: 11,
-    billingInvoiceLicenceId: '7190937e-e176-4d50-ae4f-c00c5e76938a',
-    chargeCategoryCode: '4.5.6',
+    billingInvoiceLicenceId: generateUUID(),
+    chargeCategoryCode: generateChargeReference(),
     chargeCategoryDescription: 'Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model',
     chargeType: 'standard',
     description: 'Water abstraction charge: Agriculture other than spray irrigation at East Rudham',

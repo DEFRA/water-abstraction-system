@@ -27,13 +27,20 @@ const ChangeAddressService = require('../../../app/services/billing-accounts/cha
 
 describe('Change address service', () => {
   const addressFromLookup = {
-    addressLine1: 'NATURAL ENGLAND', addressLine2: 'HORIZON HOUSE', town: 'BRISTOL', postcode: 'BS1 5AH', uprn: 340116
+    addressLine1: 'NATURAL ENGLAND',
+    addressLine2: 'HORIZON HOUSE',
+    town: 'BRISTOL',
+    postcode: 'BS1 5AH',
+    uprn: AddressHelper.generateUprn()
   }
   const addressFromManual = {
     addressLine1: '62 High St', town: 'Harpenden', postcode: 'AL5 2SP'
   }
   const companyCompaniesHouse = {
-    type: 'organisation', name: 'SCP Foundation', companyNumber: '04296934', organisationType: 'limitedCompany'
+    type: 'organisation',
+    name: 'SCP Foundation',
+    companyNumber: CompanyHelper.generateCompanyNumber(),
+    organisationType: 'limitedCompany'
   }
   const contactDepartment = {
     type: 'department', department: 'Humanoid Risk Assessment'
@@ -90,7 +97,8 @@ describe('Change address service', () => {
           let existingAddress
 
           beforeEach(async () => {
-            existingAddress = await AddressHelper.add()
+            const { uprn } = address
+            existingAddress = await AddressHelper.add({ uprn })
           })
 
           it('overwrites the existing address with the latest OS Places details', async () => {
@@ -100,7 +108,7 @@ describe('Change address service', () => {
 
             expect(reFetchedExistingAddress.addressId).to.equal(existingAddress.addressId)
             expect(reFetchedExistingAddress.createdAt).to.equal(existingAddress.createdAt)
-            expect(reFetchedExistingAddress.address1).to.equal('NATURAL ENGLAND')
+            expect(reFetchedExistingAddress.address1).to.equal(address.addressLine1)
             expect(reFetchedExistingAddress.updatedAt).not.to.equal(existingAddress.updatedAt)
           })
 
@@ -118,8 +126,8 @@ describe('Change address service', () => {
             const result = await AddressModel.query()
 
             expect(result.length).to.equal(1)
-            expect(result[0].address1).to.equal('NATURAL ENGLAND')
-            expect(result[0].uprn).to.equal(340116)
+            expect(result[0].address1).to.equal(address.addressLine1)
+            expect(result[0].uprn).to.equal(address.uprn)
           })
 
           it('links the invoice account address record to the new address', async () => {
@@ -193,7 +201,8 @@ describe('Change address service', () => {
         let existingCompany
 
         beforeEach(async () => {
-          existingCompany = await CompanyHelper.add()
+          const { companyNumber } = agentCompany
+          existingCompany = await CompanyHelper.add({ companyNumber })
         })
 
         it('overwrites the existing company with the latest Companies House details', async () => {
@@ -203,7 +212,7 @@ describe('Change address service', () => {
 
           expect(reFetchedExistingCompany.companyId).to.equal(existingCompany.companyId)
           expect(reFetchedExistingCompany.createdAt).to.equal(existingCompany.createdAt)
-          expect(reFetchedExistingCompany.name).to.equal('SCP Foundation')
+          expect(reFetchedExistingCompany.name).to.equal(agentCompany.name)
           expect(reFetchedExistingCompany.updatedAt).not.to.equal(existingCompany.updatedAt)
         })
 
@@ -221,8 +230,8 @@ describe('Change address service', () => {
           const result = await CompanyModel.query()
 
           expect(result.length).to.equal(1)
-          expect(result[0].name).to.equal('SCP Foundation')
-          expect(result[0].companyNumber).to.equal('04296934')
+          expect(result[0].name).to.equal(agentCompany.name)
+          expect(result[0].companyNumber).to.equal(agentCompany.companyNumber)
         })
 
         it('links the invoice account address record to the new company', async () => {

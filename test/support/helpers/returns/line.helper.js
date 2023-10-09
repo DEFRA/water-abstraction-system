@@ -12,7 +12,7 @@ const LineModel = require('../../../../app/models/returns/line.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `versionId` - 8ca74383-08fd-4ca8-93f0-21c21247cb22
+ * - `versionId` - [random UUID]
  * - `substance` - water
  * - `quantity` - 4380
  * - `unit` - m³
@@ -38,7 +38,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new line
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -48,7 +48,7 @@ function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     lineId: generateUUID(),
-    versionId: '8ca74383-08fd-4ca8-93f0-21c21247cb22',
+    versionId: generateUUID(),
     substance: 'water',
     quantity: 4380,
     unit: 'm³',

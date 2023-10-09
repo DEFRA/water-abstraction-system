@@ -5,13 +5,14 @@
  */
 
 const ChargeCategoryModel = require('../../../../app/models/water/charge-category.model.js')
+const { randomInteger } = require('../general.helper.js')
 
 /**
  * Add a new charge category
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `reference` - 4.4.5
+ * - `reference` - [randomly generated - 4.4.5]
  * - `subsistenceCharge` - 12000
  * - `description` - Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year,
  *    where a Tier 1 model applies.
@@ -46,7 +47,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    reference: '4.4.5',
+    reference: generateChargeReference(),
     subsistenceCharge: 12000,
     description: 'Low loss non-tidal abstraction of restricted water up to and including 5,000 megalitres a year, where a Tier 1 model applies.',
     shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
@@ -71,7 +72,15 @@ function defaults (data = {}) {
   }
 }
 
+function generateChargeReference () {
+  const secondPart = randomInteger(1, 6)
+  const thirdPart = randomInteger(1, 42)
+
+  return `4.${secondPart}.${thirdPart}`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateChargeReference
 }

@@ -5,18 +5,20 @@
  */
 
 const ChargeVersionModel = require('../../../../app/models/water/charge-version.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('./licence.helper.js')
 
 /**
  * Add a new charge version
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceRef` - 01/123
+ * - `licenceRef` - [randomly generated - 01/123]
  * - `scheme` - sroc
  * - `startDate` - 2022-04-01
- * - `invoiceAccountId` - 01931031-4680-4950-87d6-50f8fe784f6d
+ * - `invoiceAccountId` - [random UUID]
  * - `status` - current
- * - `licenceId` - 4c9d2d86-fc88-4fb6-b49d-8a30f52f7997
+ * - `licenceId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -40,12 +42,12 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    licenceRef: '01/123',
+    licenceRef: generateLicenceRef(),
     scheme: 'sroc',
     startDate: new Date('2022-04-01'),
-    invoiceAccountId: '01931031-4680-4950-87d6-50f8fe784f6d',
+    invoiceAccountId: generateUUID(),
     status: 'current',
-    licenceId: '4c9d2d86-fc88-4fb6-b49d-8a30f52f7997'
+    licenceId: generateUUID()
   }
 
   return {

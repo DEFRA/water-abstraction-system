@@ -4,6 +4,7 @@
  * @module GroupRoleHelper
  */
 
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const GroupRoleModel = require('../../../../app/models/idm/group-role.model.js')
 
 /**
@@ -11,8 +12,8 @@ const GroupRoleModel = require('../../../../app/models/idm/group-role.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `groupId` - e814fc07-e6e3-4a50-8699-9ede17690674
- * - `roleId` - 66b54ff8-edec-417a-8c8b-48d98aad3843
+ * - `groupId` - [random UUID]
+ * - `roleId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -27,7 +28,7 @@ function add (data = {}) {
 }
 
 /**
- * Returns the defaults used when creating a new record
+ * Returns the defaults used
  *
  * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
  * for use in tests to avoid having to duplicate values.
@@ -36,8 +37,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    groupId: 'e814fc07-e6e3-4a50-8699-9ede17690674',
-    roleId: '66b54ff8-edec-417a-8c8b-48d98aad3843'
+    groupId: generateUUID(),
+    roleId: generateUUID()
   }
 
   return {
