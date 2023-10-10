@@ -42,7 +42,7 @@ async function go () {
     .where('cv.scheme', 'sroc')
     .where('cv.status', 'current')
     .whereNotNull('cp.timeLimitedEndDate')
-    .where('cp.timeLimitedEndDate', '<', new Date(new Date() - _convertDaysToMilliseconds(50)))
+    .where('cp.timeLimitedEndDate', '<', new Date(new Date() + _convertDaysToMilliseconds(50)))
     .whereNotExists(
       db
         .select(1)
