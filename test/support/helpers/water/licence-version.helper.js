@@ -5,6 +5,7 @@
  */
 
 const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
+const { randomInteger } = require('../general.helper.js')
 const LicenceVersionModel = require('../../../../app/models/water/licence-version.model.js')
 
 /**
@@ -50,7 +51,7 @@ function defaults (data = {}) {
     increment: 0,
     status: 'current',
     startDate: new Date('2022-01-01'),
-    externalId: '9:99999:1:0',
+    externalId: `9:${randomInteger(10000, 99999)}:1:0`,
     createdAt: timestamp,
     updatedAt: timestamp
   }
