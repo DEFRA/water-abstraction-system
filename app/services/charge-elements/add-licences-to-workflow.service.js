@@ -13,10 +13,14 @@ const Workflow = require('../../models/water/workflow.model.js')
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in 50 days or less
  */
 async function go () {
-  const licencesForWorkflow = await FetchLicencesForWorkflowService.go()
+  try {
+    const licencesForWorkflow = await FetchLicencesForWorkflowService.go()
 
-  if (licencesForWorkflow.length) {
-    await _addLicenceToWorkflow(licencesForWorkflow)
+    if (licencesForWorkflow.length) {
+      await _addLicenceToWorkflow(licencesForWorkflow)
+    }
+  } catch (error) {
+    global.GlobalNotifier.omfg('AddLicencesToWorkflowService failed to run', null, error)
   }
 }
 
