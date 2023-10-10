@@ -42,7 +42,7 @@ async function go () {
     .where('cv.scheme', 'sroc')
     .where('cv.status', 'current')
     .whereNotNull('cp.timeLimitedEndDate')
-    .where('cp.timeLimitedEndDate', '<', new Date(new Date() + _convertDaysToMilliseconds(50)))
+    .where('cp.timeLimitedEndDate', '<', _offSetCurrentDateByDays(50))
     .whereNotExists(
       db
         .select(1)
@@ -52,8 +52,12 @@ async function go () {
     )
 }
 
-function _convertDaysToMilliseconds (days) {
-  return days * 24 * 60 * 60 * 1000
+function _offSetCurrentDateByDays (days) {
+  const date = new Date()
+
+  date.setDate(date.getDate() + days)
+
+  return date
 }
 
 module.exports = {
