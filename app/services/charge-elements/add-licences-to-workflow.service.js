@@ -5,7 +5,7 @@
  * @module AddLicencesToWorkflowService
  */
 
-const FetchLicencesService = require('./fetch-licences.service.js')
+const FetchLicencesForWorkflowService = require('./fetch-licences-for-workflow.service.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
@@ -13,7 +13,7 @@ const Workflow = require('../../models/water/workflow.model.js')
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in 50 days or less
  */
 async function go () {
-  const licencesForWorkflow = await FetchLicencesService.go()
+  const licencesForWorkflow = await FetchLicencesForWorkflowService.go()
 
   if (licencesForWorkflow.length) {
     await _addLicenceToWorkflow(licencesForWorkflow)

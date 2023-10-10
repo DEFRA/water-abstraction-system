@@ -2,7 +2,7 @@
 
 /**
  * Fetches licences that have a related `purpose` that is due to expire in 50 days or less
- * @module FetchLicencesService
+ * @module FetchLicencesForWorkflowService
  */
 
 const { db } = require('../../../db/db.js')
