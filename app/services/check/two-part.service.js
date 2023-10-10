@@ -1,14 +1,13 @@
 'use strict'
 
 /**
- * Used to test the Two-part tariff matching logic
+ * Our test iteration of a two-part tariff returns matching engine
  * @module TwoPartService
  */
 
 const { ref } = require('objection')
 
-const AllocateReturnsVolumes = require('./allocate-returns-volumes.service.js')
-const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
+const AllocateReturnsService = require('./allocate-returns.service.js')
 const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const FriendlyResponseService = require('./friendly-response.service.js')
@@ -16,32 +15,33 @@ const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-p
 const ReturnModel = require('../../models/returns/return.model.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
-async function go (naldRegionId, format = 'friendly') {
+async function go (naldRegionId) {
   const startTime = process.hrtime.bigint()
 
-  const billingPeriods = DetermineBillingPeriodsService.go()
-
-  const billingPeriod = billingPeriods[1]
+  const billingPeriod = _billingPeriod()
 
   const chargeVersions = await _fetchChargeVersions(billingPeriod, naldRegionId)
+  const chargeVersionsGroupedByLicence = await _groupByLicenceAndMatchReturns(chargeVersions, billingPeriod)
 
-  for (const chargeVersion of chargeVersions) {
-    await _fetchAndApplyReturns(billingPeriod, chargeVersion)
-  }
+  const result = AllocateReturnsService.go(chargeVersionsGroupedByLicence, billingPeriod)
 
-  const responseData = _responseData(chargeVersions)
+  _calculateAndLogTime(startTime, naldRegionId)
 
-  _calculateAndLogTime(startTime)
+  return result
+}
 
-  switch (format) {
-    case 'friendly':
-      return FriendlyResponseService.go(billingPeriod, responseData)
-    case 'raw':
-      return responseData
-    default:
-      // TODO: consider throwing a Boom error here
-      return { error: `Invalid format ${format}` }
-  }
+function _billingPeriod () {
+  const billingPeriods = DetermineBillingPeriodsService.go()
+
+  return billingPeriods[1]
+}
+
+function _calculateAndLogTime (startTime, naldRegionId) {
+  const endTime = process.hrtime.bigint()
+  const timeTakenNs = endTime - startTime
+  const timeTakenMs = timeTakenNs / 1000000n
+
+  global.GlobalNotifier.omg('Two part tariff matching complete', { naldRegionId, timeTakenMs })
 }
 
 async function _fetchChargeVersions (billingPeriod, naldRegionId) {
@@ -50,9 +50,7 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
       'chargeVersions.chargeVersionId',
       'chargeVersions.startDate',
       'chargeVersions.endDate',
-      'chargeVersions.status',
-      'chargeVersions.licenceId',
-      'chargeVersions.licenceRef'
+      'chargeVersions.status'
     ])
     .where('chargeVersions.regionCode', naldRegionId)
     .where('chargeVersions.scheme', 'sroc')
@@ -73,135 +71,150 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
+    .orderBy('chargeVersions.licenceRef')
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (builder) => {
+      builder.select([
+        'licenceId',
+        'licenceRef',
+        'startDate',
+        'expiredDate',
+        'lapsedDate',
+        'revokedDate'
+      ])
+    })
     .withGraphFetched('chargeReferences')
-    .modifyGraph('chargeVersions.chargeReferences', (builder) => {
-      builder.whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
+    .modifyGraph('chargeReferences', (builder) => {
+      builder
+        .select([
+          'chargeElementId',
+          'description',
+          ref('chargeElements.adjustments:s127').castText().as('s127')
+        ])
+        .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
     })
     .withGraphFetched('chargeReferences.chargeCategory')
     .modifyGraph('chargeReferences.chargeCategory', (builder) => {
-      builder.select([
-        'reference',
-        'shortDescription'
-      ])
+      builder
+        .select([
+          'reference',
+          'shortDescription',
+          'subsistenceCharge'
+        ])
+    })
+    .withGraphFetched('chargeReferences.chargeElements')
+    .modifyGraph('chargeReferences.chargeElements', (builder) => {
+      builder
+        .select([
+          'chargePurposeId',
+          'description',
+          'abstractionPeriodStartDay',
+          'abstractionPeriodStartMonth',
+          'abstractionPeriodEndDay',
+          'abstractionPeriodEndMonth',
+          'authorisedAnnualQuantity'
+        ])
+        .where('isSection127AgreementEnabled', true)
+        .orderBy('authorisedAnnualQuantity', 'desc')
     })
     .withGraphFetched('chargeReferences.chargeElements.purpose')
+    .modifyGraph('chargeReferences.chargeElements.purpose', (builder) => {
+      builder
+        .select([
+          'purposeUseId',
+          'legacyId',
+          'description'
+        ])
+    })
 
   return chargeVersions
 }
 
-async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
-  const { licenceRef, chargeReferences } = chargeVersion
-  const cumulativeReturnsStatuses = []
-  let returnsUnderQuery
-
-  for (const chargeReference of chargeReferences) {
-    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeReference)
-
-    chargeReference.returns = await ReturnModel.query()
-      .select([
-        'returnId',
-        'returnRequirement',
-        'startDate',
-        'endDate',
-        'status',
-        'underQuery',
-        'metadata'
-      ])
-      .where('licenceRef', licenceRef)
-      // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
-      .where('startDate', '>=', '2008-04-01')
-      .where('startDate', '<=', billingPeriod.endDate)
-      .where('endDate', '>=', billingPeriod.startDate)
-      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
-      .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
-      .withGraphFetched('versions')
-      .modifyGraph('versions', builder => {
-        builder.where('versions.current', true)
-      })
-      .withGraphFetched('versions.lines')
-      .modifyGraph('versions.lines', builder => {
-        builder
-          .where('lines.quantity', '>', 0)
-          .where('lines.startDate', '<=', billingPeriod.endDate)
-          .where('lines.endDate', '>=', billingPeriod.startDate)
-      })
-
-    CalculateReturnsVolumes.go(billingPeriod, chargeReference.returns)
-    AllocateReturnsVolumes.go(chargeReference)
-
-    const chargeReferenceReturnsStatuses = chargeReference.returns.map((matchedReturn) => {
-      if (matchedReturn.underQuery) {
-        returnsUnderQuery = true
-      }
-
-      return matchedReturn.status
+async function _fetchReturnsForLicence (licenceRef, billingPeriod) {
+  const returns = await ReturnModel.query()
+    .select([
+      'returnId',
+      'returnRequirement',
+      ref('metadata:description').castText().as('description'),
+      'startDate',
+      'endDate',
+      'status',
+      'underQuery',
+      ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
+      ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
+      ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
+      ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
+      ref('metadata:purposes[0].tertiary.code').castText().as('purposeCode'),
+      ref('metadata:purposes[0].tertiary.description').castText().as('purposeDescription'),
+      ref('metadata:purposes[0].alias').castText().as('alias')
+    ])
+    .where('licenceRef', licenceRef)
+    // water-abstraction-service filters out old returns in this way: see `src/lib/services/returns/api-connector.js`
+    .where('startDate', '>=', '2008-04-01')
+    .where('startDate', '<=', billingPeriod.endDate)
+    .where('endDate', '>=', billingPeriod.startDate)
+    .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
+    .withGraphFetched('versions')
+    .modifyGraph('versions', builder => {
+      builder
+        .select([
+          'versionId',
+          'nilReturn'
+        ])
+        .where('versions.current', true)
+    })
+    .withGraphFetched('versions.lines')
+    .modifyGraph('versions.lines', builder => {
+      builder
+        .select([
+          'lineId',
+          'startDate',
+          'endDate',
+          'quantity'
+        ])
+        .where('lines.quantity', '>', 0)
+        .where('lines.startDate', '<=', billingPeriod.endDate)
+        .where('lines.endDate', '>=', billingPeriod.startDate)
     })
 
-    cumulativeReturnsStatuses.push(...chargeReferenceReturnsStatuses)
-  }
-
-  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
-
-  _calculateReturnsReady(chargeVersion, returnsUnderQuery)
+  return returns
 }
 
-function _extractPurposeUseLegacyIds (chargeReference) {
-  return chargeReference.chargeElements.map((chargeElement) => {
-    return chargeElement.purpose.legacyId
-  })
-}
-
-function _calculateReturnsReady (chargeVersion, returnsUnderQuery) {
-  if (
-    chargeVersion.returnsStatuses.includes('received', 'void') |
-    returnsUnderQuery |
-    chargeVersion.returnsStatuses.length === 0
-  ) {
-    chargeVersion.returnsReady = false
-  } else {
-    chargeVersion.returnsReady = true
-  }
-}
-
-function _responseData (chargeVersions) {
+async function _groupByLicenceAndMatchReturns (chargeVersions, billingPeriod) {
   const allLicenceIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licenceId
+    return chargeVersion.licence.licenceId
   })
 
   const uniqueLicenceIds = [...new Set(allLicenceIds)]
 
-  return uniqueLicenceIds.map((uniqueLicenceId) => {
-    const licenceChargeVersions = chargeVersions.filter((chargeVersion) => {
-      return chargeVersion.licenceId === uniqueLicenceId
+  // NOTE: We could have initialized licences as an empty array and pushed each new object. But for a big region
+  // the number of licences we might be dealing will be in the hundreds, possibly thousands. In these cases we get a
+  // performance bump if we create the array sized to our needs first, rather than asking Node to resize the array on
+  // each loop. Only applicable here though! Don't go doing this for every new array you declare ;-)
+  const licences = Array(uniqueLicenceIds.length).fill(undefined)
+
+  for (let i = 0; i < uniqueLicenceIds.length; i++) {
+    const licenceId = uniqueLicenceIds[i]
+    const matchedChargeVersions = chargeVersions.filter((chargeVersion) => {
+      return chargeVersion.licence.licenceId === licenceId
     })
 
-    const chargeVersionReturnsStatuses = []
-    let returnsReady = false
+    const { licenceRef, startDate, expiredDate, lapsedDate, revokedDate } = matchedChargeVersions[0].licence
+    const returns = await _fetchReturnsForLicence(licenceRef, billingPeriod)
 
-    for (const chargeVersion of licenceChargeVersions) {
-      chargeVersionReturnsStatuses.push(...chargeVersion.returnsStatuses)
-
-      if (chargeVersion.returnsReady) {
-        returnsReady = true
-      }
+    licences[i] = {
+      licenceId,
+      licenceRef,
+      startDate,
+      expiredDate,
+      lapsedDate,
+      revokedDate,
+      chargeVersions: matchedChargeVersions,
+      returns
     }
+  }
 
-    return {
-      licenceId: uniqueLicenceId,
-      licenceRef: licenceChargeVersions[0].licenceRef,
-      returnsReady,
-      returnsStatuses: [...new Set(chargeVersionReturnsStatuses)],
-      chargeVersions: licenceChargeVersions
-    }
-  })
-}
-
-function _calculateAndLogTime (startTime) {
-  const endTime = process.hrtime.bigint()
-  const timeTakenNs = endTime - startTime
-  const timeTakenMs = timeTakenNs / 1000000n
-
-  global.GlobalNotifier.omg('Two part tariff matching complete', { timeTakenMs })
+  return licences
 }
 
 module.exports = {

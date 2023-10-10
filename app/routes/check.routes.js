@@ -5,7 +5,7 @@ const CheckController = require('../controllers/check.controller.js')
 const routes = [
   {
     method: 'GET',
-    path: '/check/two-part/{naldRegionId}/{format?}',
+    path: '/check/two-part/{naldRegionId}',
     handler: CheckController.twoPart,
     options: {
       app: {
