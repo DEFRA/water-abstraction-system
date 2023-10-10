@@ -4,7 +4,7 @@
  * @module LicenceVersionHelper
  */
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const LicenceVersionModel = require('../../../../app/models/water/licence-version.model.js')
 
 /**
@@ -42,6 +42,8 @@ async function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const timestamp = timestampForPostgres()
+
   const defaults = {
     licenceId: generateUUID(),
     issue: 1,
@@ -49,8 +51,8 @@ function defaults (data = {}) {
     status: 'current',
     startDate: new Date('2022-01-01'),
     externalId: '9:99999:1:0',
-    createdAt: new Date(),
-    updatedAt: new Date()
+    createdAt: timestamp,
+    updatedAt: timestamp
   }
 
   return {
