@@ -18,7 +18,7 @@ const LicenceVersionModel = require('../../../../app/models/water/licence-versio
  * - `increment` - 0
  * - `status` - 'current'
  * - `startDate` - new Date('2022-01-01')
- * - `externalId` - '9:99999:1:0'
+ * - `externalId` - [randomly generated - 9:99999:1:0]
  * - `createdAt` - new Date()
  * - `updatedAt` - new Date()
  *
