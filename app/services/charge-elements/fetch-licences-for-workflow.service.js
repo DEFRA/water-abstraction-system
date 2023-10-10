@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches licences that have a related `purpose` that is due to expire in 50 days or less
+ * Fetches licences that have a related `purpose` that is due to expire in less than 50 days
  * @module FetchLicencesForWorkflowService
  */
 
 const { db } = require('../../../db/db.js')
 
 /**
- * Fetch licences that have a related `purpose` that is due to expire in 50 days or less
+ * Fetch licences that have a related `purpose` that is due to expire in les than 50 days
  *
  * To be selected the licence must
  *
@@ -18,7 +18,7 @@ const { db } = require('../../../db/db.js')
  * - have an 'sroc' charge version with the status of `current` that does not have an `endDate`. The lack of an endDate
  * indicates that the charge version is the latest and has not been replaced/superseded etc
  * - not be linked to a licence in the workflow
- * - have a related `purpose` that is due to expire in 50 days or less
+ * - have a related `purpose` that is due to expire in less than 50 days
  *
  * @returns {Object} Contains an array of unique licence IDs & version IDs
  */
@@ -54,7 +54,6 @@ async function go () {
 
 function _offSetCurrentDateByDays (days) {
   const date = new Date()
-
   date.setDate(date.getDate() + days)
 
   return date
