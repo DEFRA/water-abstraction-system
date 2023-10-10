@@ -6,6 +6,7 @@
  */
 
 const FetchLicencesService = require('./fetch-licences.service.js')
+const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
 /**
@@ -20,12 +21,14 @@ async function go () {
 }
 
 async function _addLicenceToWorkflow (licencesForWorkflow) {
+  const timestamp = timestampForPostgres()
+
   // Attach additional data to the array that the chargeVersionWorkflow table requires to create a valid record
   licencesForWorkflow.forEach((licenceForWorkflow) => {
     licenceForWorkflow.status = 'to_setup'
     licenceForWorkflow.data = { chargeVersion: null }
-    licenceForWorkflow.createdAt = new Date()
-    licenceForWorkflow.updatedAt = new Date()
+    licenceForWorkflow.createdAt = timestamp
+    licenceForWorkflow.updatedAt = timestamp
   })
 
   await Workflow.query().insert(licencesForWorkflow)
