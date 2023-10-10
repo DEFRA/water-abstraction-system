@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Puts SROC licences into workflow that have a related `purpose` that is due to expire in 50 days or less
+ * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days
  * @module AddLicencesToWorkflowService
  */
 
@@ -10,7 +10,7 @@ const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
 /**
- * Puts SROC licences into workflow that have a related `purpose` that is due to expire in 50 days or less
+ * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days
  */
 async function go () {
   try {
