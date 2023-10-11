@@ -8,7 +8,7 @@
 const { db } = require('../../../db/db.js')
 
 /**
- * Fetch licences that have a related `purpose` that is due to expire in les than 50 days
+ * Fetch licences that have a related `purpose` that is due to expire in less than 50 days
  *
  * To be selected the licence must
  *
