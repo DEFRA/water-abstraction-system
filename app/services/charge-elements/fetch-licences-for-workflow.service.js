@@ -20,7 +20,7 @@ const { db } = require('../../../db/db.js')
  * - not be linked to a licence in the workflow
  * - have a related `purpose` that is due to expire in less than 50 days
  *
- * @returns {Object} Contains an array of unique licence IDs & version IDs
+ * @returns {Object[]} The licence IDs with time-limited elements & their current version ID (needed else we break the workflow)
  */
 async function go () {
   return db
