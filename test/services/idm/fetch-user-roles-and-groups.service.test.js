@@ -27,6 +27,7 @@ describe('Fetch User Roles And Groups service', () => {
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
+
     testUser = await UserHelper.add()
 
     // Create a role and assign it directly to the user

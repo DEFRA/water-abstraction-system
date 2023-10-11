@@ -58,6 +58,14 @@ class LicenceModel extends WaterBaseModel {
           from: 'licences.licenceId',
           to: 'chargeVersionWorkflows.licenceId'
         }
+      },
+      licenceVersions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-version.model',
+        join: {
+          from: 'licences.licenceId',
+          to: 'licenceVersions.licenceId'
+        }
       }
     }
   }
