@@ -23,6 +23,8 @@ const { db } = require('../../../db/db.js')
  * @returns {Object[]} The licence IDs with time-limited elements & their current version ID (needed else we break the workflow)
  */
 async function go () {
+  // NOTE: We've resorted to Knex rather than Objection JS due to just how many JOINS we need to get from licence to
+  // charge purposes! Our Objection JS skills failed us as we could not get the query to work using innerJoinRelated()
   return db
     .distinct('l.licenceId', 'lv.licenceVersionId')
     .from('water.licences as l')
