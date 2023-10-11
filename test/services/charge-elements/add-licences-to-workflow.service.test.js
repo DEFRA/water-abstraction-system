@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const Workflow = require('../../../app/models/water/workflow.model.js')
 
 // Things we need to stub
-const FetchLicencesForWorkflowService = require('../../../app/services/charge-elements/fetch-licences-for-workflow.service.js')
+const FetchTimeLimitedLicencesService = require('../../../app/services/charge-elements/fetch-time-limited-licences.service.js')
 
 // Thing under test
 const AddLicencesToWorkflowService = require('../../../app/services/charge-elements/add-licences-to-workflow.service.js')
@@ -48,7 +48,7 @@ describe('Add Licences to Workflow service', () => {
     ]
 
     beforeEach(() => {
-      Sinon.stub(FetchLicencesForWorkflowService, 'go').returns(fetchedLicences)
+      Sinon.stub(FetchTimeLimitedLicencesService, 'go').returns(fetchedLicences)
     })
 
     it('adds the licences to the workflow table', async () => {
@@ -67,7 +67,7 @@ describe('Add Licences to Workflow service', () => {
     const fetchedLicences = []
 
     beforeEach(() => {
-      Sinon.stub(FetchLicencesForWorkflowService, 'go').resolves(fetchedLicences)
+      Sinon.stub(FetchTimeLimitedLicencesService, 'go').resolves(fetchedLicences)
     })
 
     it('does not error', async () => {
@@ -81,7 +81,7 @@ describe('Add Licences to Workflow service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      Sinon.stub(FetchLicencesForWorkflowService, 'go').throws()
+      Sinon.stub(FetchTimeLimitedLicencesService, 'go').throws()
     })
 
     it('handles the error', async () => {

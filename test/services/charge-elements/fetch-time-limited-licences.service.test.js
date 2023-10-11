@@ -18,7 +18,7 @@ const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const WorkflowHelper = require('../../support/helpers/water/workflow.helper.js')
 
 // Thing under test
-const FetchLicencesForWorkflowService = require('../../../app/services/charge-elements/fetch-licences-for-workflow.service.js')
+const FetchTimeLimitedLicencesService = require('../../../app/services/charge-elements/fetch-time-limited-licences.service.js')
 
 describe('Fetch licences for Workflow service', () => {
   let regionId
@@ -51,7 +51,7 @@ describe('Fetch licences for Workflow service', () => {
     })
 
     it('returns the licenceId and licenceVersionId for the SROC licence with an expiring element', async () => {
-      const result = await FetchLicencesForWorkflowService.go()
+      const result = await FetchTimeLimitedLicencesService.go()
 
       expect(result).to.have.length(1)
       expect(result[0].licenceId).to.equal(licenceId)
@@ -64,7 +64,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns the licenceId and licenceVersionId for the SROC licence with an expiring element', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(1)
         expect(result[0].licenceId).to.equal(licenceId)
@@ -93,7 +93,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })
@@ -116,7 +116,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })
@@ -139,7 +139,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })
@@ -162,7 +162,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })
@@ -184,7 +184,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })
@@ -206,7 +206,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })
@@ -228,7 +228,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })
@@ -250,7 +250,7 @@ describe('Fetch licences for Workflow service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await FetchLicencesForWorkflowService.go()
+        const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(0)
       })

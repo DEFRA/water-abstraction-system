@@ -5,7 +5,7 @@
  * @module AddLicencesToWorkflowService
  */
 
-const FetchLicencesForWorkflowService = require('./fetch-licences-for-workflow.service.js')
+const FetchTimeLimitedLicencesService = require('./fetch-time-limited-licences.service.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
@@ -14,7 +14,7 @@ const Workflow = require('../../models/water/workflow.model.js')
  */
 async function go () {
   try {
-    const licencesForWorkflow = await FetchLicencesForWorkflowService.go()
+    const licencesForWorkflow = await FetchTimeLimitedLicencesService.go()
 
     if (licencesForWorkflow.length) {
       await _addLicenceToWorkflow(licencesForWorkflow)
