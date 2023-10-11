@@ -23,6 +23,7 @@ describe('Charge module create bill run service', () => {
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
+
     testRegion = await RegionHelper.add()
   })
 
