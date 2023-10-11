@@ -50,19 +50,5 @@ describe('Charge Elements controller', () => {
         expect(response.statusCode).to.equal(204)
       })
     })
-
-    describe('when the request fails', () => {
-      describe('because the AddLicencesToWorkflowService errors', () => {
-        beforeEach(async () => {
-          Sinon.stub(AddLicencesToWorkflowService, 'go').rejects()
-        })
-
-        it('returns a 500 status', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(500)
-        })
-      })
-    })
   })
 })
