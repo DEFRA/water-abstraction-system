@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -33,11 +33,9 @@ describe('Calculate Authorised and Billable days service', () => {
   let chargeReference
 
   beforeEach(async () => {
-    chargeReference = await ChargeReferenceHelper.add()
-  })
-
-  afterEach(async () => {
     await DatabaseHelper.clean()
+
+    chargeReference = await ChargeReferenceHelper.add()
   })
 
   describe('when there is a single abstraction period (charge element)', () => {

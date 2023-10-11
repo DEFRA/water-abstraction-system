@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -22,7 +22,7 @@ describe('Determine Minimum Charge service', () => {
   }
   let chargeVersion
 
-  afterEach(async () => {
+  beforeEach(async () => {
     await DatabaseHelper.clean()
   })
 

@@ -35,6 +35,8 @@ describe('Generate Transactions service', () => {
   }
 
   beforeEach(async () => {
+    await DatabaseHelper.clean()
+
     const chargeCategory = await ChargeCategoryHelper.add({ reference })
     const { billingChargeCategoryId } = chargeCategory
 
@@ -46,7 +48,6 @@ describe('Generate Transactions service', () => {
   })
 
   afterEach(async () => {
-    await DatabaseHelper.clean()
     Sinon.restore()
   })
 

@@ -22,7 +22,8 @@ const AddLicencesToWorkflowService = require('../../../app/services/charge-eleme
 describe('Add Licences to Workflow service', () => {
   let notifierStub
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await DatabaseHelper.clean()
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -30,8 +31,7 @@ describe('Add Licences to Workflow service', () => {
     global.GlobalNotifier = notifierStub
   })
 
-  afterEach(async () => {
-    await DatabaseHelper.clean()
+  afterEach(() => {
     Sinon.restore()
   })
 
