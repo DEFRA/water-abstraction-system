@@ -17,9 +17,9 @@ const Workflow = require('../../../app/models/water/workflow.model.js')
 const FetchTimeLimitedLicencesService = require('../../../app/services/charge-elements/fetch-time-limited-licences.service.js')
 
 // Thing under test
-const AddLicencesToWorkflowService = require('../../../app/services/charge-elements/add-licences-to-workflow.service.js')
+const ProcessTimeLimitedLicencesService = require('../../../app/services/charge-elements/process-time-limited-licences.service.js')
 
-describe('Add Licences to Workflow service', () => {
+describe('Process Time Limited Licences service', () => {
   let notifierStub
 
   beforeEach(async () => {
@@ -52,7 +52,7 @@ describe('Add Licences to Workflow service', () => {
     })
 
     it('adds the licences to the workflow table', async () => {
-      await AddLicencesToWorkflowService.go()
+      await ProcessTimeLimitedLicencesService.go()
 
       const result = await Workflow.query()
         .whereIn('licenceId', [fetchedLicences[0].licenceId, fetchedLicences[1].licenceId])
@@ -71,7 +71,7 @@ describe('Add Licences to Workflow service', () => {
     })
 
     it('does not error', async () => {
-      await AddLicencesToWorkflowService.go()
+      await ProcessTimeLimitedLicencesService.go()
 
       const args = notifierStub.omfg.firstCall?.args
 
@@ -85,11 +85,11 @@ describe('Add Licences to Workflow service', () => {
     })
 
     it('handles the error', async () => {
-      await AddLicencesToWorkflowService.go()
+      await ProcessTimeLimitedLicencesService.go()
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('AddLicencesToWorkflowService failed to run')
+      expect(args[0]).to.equal('ProcessTimeLimitedLicencesService failed to run')
       expect(args[1]).to.be.null()
       expect(args[2]).to.be.an.error()
     })

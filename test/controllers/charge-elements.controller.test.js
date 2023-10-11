@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const AddLicencesToWorkflowService = require('../../app/services/charge-elements/add-licences-to-workflow.service.js')
+const ProcessTimeLimitedLicencesService = require('../../app/services/charge-elements/process-time-limited-licences.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -41,7 +41,7 @@ describe('Charge Elements controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(AddLicencesToWorkflowService, 'go').resolves()
+        Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
       })
 
       it('displays the correct message', async () => {

@@ -2,11 +2,11 @@
 
 /**
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days
- * @module AddLicencesToWorkflowService
+ * @module ProcessTimeLimitedLicencesService
  */
 
 const FetchTimeLimitedLicencesService = require('./fetch-time-limited-licences.service.js')
-const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
 /**
@@ -20,7 +20,7 @@ async function go () {
       await _addLicenceToWorkflow(licencesForWorkflow)
     }
   } catch (error) {
-    global.GlobalNotifier.omfg('AddLicencesToWorkflowService failed to run', null, error)
+    global.GlobalNotifier.omfg('ProcessTimeLimitedLicencesService failed to run', null, error)
   }
 }
 

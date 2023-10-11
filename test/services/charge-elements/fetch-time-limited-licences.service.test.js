@@ -20,7 +20,7 @@ const WorkflowHelper = require('../../support/helpers/water/workflow.helper.js')
 // Thing under test
 const FetchTimeLimitedLicencesService = require('../../../app/services/charge-elements/fetch-time-limited-licences.service.js')
 
-describe('Fetch licences for Workflow service', () => {
+describe('Fetch Time Limited Licences service', () => {
   let regionId
 
   beforeEach(async () => {

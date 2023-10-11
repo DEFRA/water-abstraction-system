@@ -5,10 +5,10 @@
  * @module ChargeElementsController
  */
 
-const AddLicencesToWorkflowService = require('../services/charge-elements/add-licences-to-workflow.service.js')
+const ProcessTimeLimitedLicencesService = require('../services/charge-elements/process-time-limited-licences.service.js')
 
 async function workflowTimeLimitedLicences (request, h) {
-  AddLicencesToWorkflowService.go()
+  ProcessTimeLimitedLicencesService.go()
 
   return h.response().code(204)
 }
