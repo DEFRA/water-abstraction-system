@@ -1,11 +1,7 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
+const { describe, it, beforeEach } = require('@jest/globals')
+const { expect } = require('@jest/globals')
 
 // Thing under test
 const CreateBillRunPresenter = require('../../../app/presenters/billing/create-bill-run.presenter.js')
@@ -28,12 +24,12 @@ describe('Create Bill Run presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateBillRunPresenter.go(data)
 
-      expect(result.id).to.equal(data.billingBatchId)
-      expect(result.region).to.equal(data.regionId)
-      expect(result.scheme).to.equal(data.scheme)
-      expect(result.status).to.equal(data.status)
-      expect(result.externalId).to.equal(data.externalId)
-      expect(result.errorCode).to.equal(data.errorCode)
+      expect(result.id).toEqual(data.billingBatchId)
+      expect(result.region).toEqual(data.regionId)
+      expect(result.scheme).toEqual(data.scheme)
+      expect(result.status).toEqual(data.status)
+      expect(result.externalId).toEqual(data.externalId)
+      expect(result.errorCode).toEqual(data.errorCode)
     })
   })
 
@@ -52,12 +48,12 @@ describe('Create Bill Run presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateBillRunPresenter.go(data)
 
-      expect(result.id).to.be.null()
-      expect(result.region).to.be.null()
-      expect(result.scheme).to.be.null()
-      expect(result.status).to.be.null()
-      expect(result.externalId).to.be.null()
-      expect(result.errorCode).to.be.null()
+      expect(result.id).toBeNull()
+      expect(result.region).toBeNull()
+      expect(result.scheme).toBeNull()
+      expect(result.status).toBeNull()
+      expect(result.externalId).toBeNull()
+      expect(result.errorCode).toBeNull()
     })
   })
 })

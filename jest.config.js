@@ -28,7 +28,8 @@ module.exports = {
     '**/test/lib/**/legacy-db-snake-case-mappers.lib.test.js',
     '**/test/lib/**/legacy-request.lib.test.js',
     '**/test/lib/**/request-notifier.lib.test.js',
-    '**/test/lib/**/general.lib.test.js'
+    '**/test/lib/**/general.lib.test.js',
+    '**/test/presenters/**/*.test.js'
 
   ],
   verbose: true
