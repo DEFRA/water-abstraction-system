@@ -11,8 +11,9 @@ const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
-const CreateRedisClient = require('./create-redis-client.service.js')
-const FetchImportJobs = require('./fetch-import-jobs.service.js')
+const CreateRedisClientService = require('./create-redis-client.service.js')
+const FetchImportJobsService = require('./fetch-import-jobs.service.js')
+const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const { formatLongDateTime } = require('../../presenters/base.presenter.js')
 const RequestLib = require('../../lib/request.lib.js')
 const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
@@ -28,10 +29,12 @@ const servicesConfig = require('../../../config/services.config.js')
 */
 async function go () {
   const addressFacadeData = await _getAddressFacadeData()
-  const appData = await _getAppData()
   const chargingModuleData = await _getChargingModuleData()
+  const legacyAppData = await _getLegacyAppData()
   const redisConnectivityData = await _getRedisConnectivityData()
   const virusScannerData = await _getVirusScannerData()
+
+  const appData = await _addSystemInfoToLegacyAppData(legacyAppData)
 
   return {
     addressFacadeData,
@@ -40,6 +43,12 @@ async function go () {
     redisConnectivityData,
     virusScannerData
   }
+}
+
+async function _addSystemInfoToLegacyAppData (appData) {
+  const systemInfo = await FetchSystemInfoService.go()
+
+  return [...appData, systemInfo]
 }
 
 async function _getAddressFacadeData () {
@@ -53,7 +62,7 @@ async function _getAddressFacadeData () {
   return _parseFailedRequestResult(result)
 }
 
-async function _getAppData () {
+async function _getLegacyAppData () {
   const healthInfoPath = 'health/info'
 
   const services = [
@@ -97,7 +106,7 @@ async function _getChargingModuleData () {
 
 async function _getImportJobsData () {
   try {
-    const importJobs = await FetchImportJobs.go()
+    const importJobs = await FetchImportJobsService.go()
 
     return _mapArrayToTextCells(importJobs)
   } catch (error) {
@@ -109,7 +118,7 @@ async function _getRedisConnectivityData () {
   let redis
 
   try {
-    redis = await CreateRedisClient.go()
+    redis = await CreateRedisClientService.go()
 
     await redis.ping()
 

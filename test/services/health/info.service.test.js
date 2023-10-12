@@ -14,8 +14,8 @@ const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
-const CreateRedisClient = require('../../../app/services/health/create-redis-client.service.js')
-const FetchImportJobs = require('../../../app/services/health/fetch-import-jobs.service.js')
+const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
+const FetchImportJobsService = require('../../../app/services/health/fetch-import-jobs.service.js')
 const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
 const RequestLib = require('../../../app/lib/request.lib.js')
 
@@ -65,10 +65,10 @@ describe('Info service', () => {
 
   beforeEach(() => {
     chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
-    fetchImportJobsStub = Sinon.stub(FetchImportJobs, 'go')
+    fetchImportJobsStub = Sinon.stub(FetchImportJobsService, 'go')
     legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'get')
     requestLibStub = Sinon.stub(RequestLib, 'get')
-    redisStub = Sinon.stub(CreateRedisClient, 'go')
+    redisStub = Sinon.stub(CreateRedisClientService, 'go')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
