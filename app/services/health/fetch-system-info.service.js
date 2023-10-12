@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Returns the version and commit hash for the `system` repo
+ * Returns information about the `system` repo in the format required by the info service
  * @module FetchSystemInfoService
  */
 
@@ -12,9 +12,9 @@ const exec = util.promisify(require('child_process').exec)
 const { version } = require('../../../package.json')
 
 /**
- * Returns the version and commit hash for the `system` repo
+ * Returns information about the `system` repo in the format required by the info service
  *
- * @returns {Object} An object containing the `version` & `commit`
+ * @returns {Object} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
  */
 async function go () {
   return {
