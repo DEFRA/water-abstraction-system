@@ -15,17 +15,17 @@ const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-p
 const ReturnModel = require('../../models/returns/return.model.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
-async function go (naldRegionId) {
+async function go (id, type) {
   const startTime = process.hrtime.bigint()
 
   const billingPeriod = _billingPeriod()
 
-  const chargeVersions = await _fetchChargeVersions(billingPeriod, naldRegionId)
+  const chargeVersions = await _fetchChargeVersions(billingPeriod, id, type)
   const chargeVersionsGroupedByLicence = await _groupByLicenceAndMatchReturns(chargeVersions, billingPeriod)
 
   const result = AllocateReturnsService.go(chargeVersionsGroupedByLicence, billingPeriod)
 
-  _calculateAndLogTime(startTime, naldRegionId)
+  _calculateAndLogTime(startTime, id, type)
 
   return result
 }
@@ -36,15 +36,17 @@ function _billingPeriod () {
   return billingPeriods[1]
 }
 
-function _calculateAndLogTime (startTime, naldRegionId) {
+function _calculateAndLogTime (startTime, id, type) {
   const endTime = process.hrtime.bigint()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg('Two part tariff matching complete', { naldRegionId, timeTakenMs })
+  global.GlobalNotifier.omg(`Two part tariff ${type} matching complete`, { id, timeTakenMs })
 }
 
-async function _fetchChargeVersions (billingPeriod, naldRegionId) {
+async function _fetchChargeVersions (billingPeriod, id, type) {
+  const whereClause = type === 'region' ? 'chargeVersions.regionCode' : 'chargeVersions.licenceId'
+
   const chargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.chargeVersionId',
@@ -52,10 +54,10 @@ async function _fetchChargeVersions (billingPeriod, naldRegionId) {
       'chargeVersions.endDate',
       'chargeVersions.status'
     ])
-    .where('chargeVersions.regionCode', naldRegionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
+    .where(whereClause, id)
     .whereNotExists(
       Workflow.query()
         .select(1)
