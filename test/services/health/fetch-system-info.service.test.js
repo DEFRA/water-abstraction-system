@@ -13,7 +13,7 @@ const { version } = require('../../../package.json')
 // Thing under test
 const FetchSystemInfoService = require('../../../app/services/health/fetch-system-info.service.js')
 
-describe.only('Fetch System Info service', () => {
+describe('Fetch System Info service', () => {
   it('returns the systems version and commit hash', async () => {
     const result = await FetchSystemInfoService.go()
 
