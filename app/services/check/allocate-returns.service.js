@@ -198,7 +198,7 @@ function _matchLines (chargeElement, matchedReturn) {
     }
 
     const { startDate, endDate } = line
-    return _periodsOverlap(chargeElement.abstractionPeriod, { startDate, endDate })
+    return _periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
   })
 }
 
@@ -218,22 +218,18 @@ function _matchReturns (chargeElement, returns) {
 }
 
 function _periodsOverlap (elementPeriods, returnPeriods) {
-  try {
-    for (const elementPeriod of elementPeriods) {
-      const overLappingPeriods = returnPeriods.filter((returnPeriod) => {
-        if (returnPeriod.startDate > elementPeriod.endDate || elementPeriod.startDate > returnPeriod.endDate) {
-          return false
-        }
-
-        return true
-      })
-
-      if (overLappingPeriods.length) {
-        return true
+  for (const elementPeriod of elementPeriods) {
+    const overLappingPeriods = returnPeriods.filter((returnPeriod) => {
+      if (returnPeriod.startDate > elementPeriod.endDate || elementPeriod.startDate > returnPeriod.endDate) {
+        return false
       }
+
+      return true
+    })
+
+    if (overLappingPeriods.length) {
+      return true
     }
-  } catch (error) {
-    global.GlobalNotifier.omg('Allocation failed', { elementPeriods, returnPeriods })
   }
 
   return false
