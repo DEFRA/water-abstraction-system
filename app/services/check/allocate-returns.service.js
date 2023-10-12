@@ -55,6 +55,7 @@ function _prepChargeElement (chargeElement, chargePeriod) {
 
   chargeElement.issues = []
   chargeElement.returns = []
+  chargeElement.lines = []
   chargeElement.allocatedQuantity = 0
   chargeElement.abstractionPeriods = abstractionPeriods
 }
@@ -167,6 +168,7 @@ function _matchAndAllocate (chargeElement, returns) {
           matchedLine.allocated = true
 
           matchedReturn.allocatedQuantity += matchedLine.quantity
+          chargeElement.lines.push(matchedLine.lineId)
         }
       })
       chargeElement.returns.push({ returnId, returnRequirement, description })
