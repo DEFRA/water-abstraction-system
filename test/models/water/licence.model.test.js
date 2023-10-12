@@ -19,15 +19,17 @@ const LicenceModel = require('../../../app/models/water/licence.model.js')
 describe('Licence model', () => {
   let testBillLicences
   let testChargeVersions
+  let testLicenceVersions
   let testRecord
   let testRegion
   let testWorkflows
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     testRegion = await RegionHelper.add()
     testBillLicences = []
     testChargeVersions = []
     testWorkflows = []
+    testLicenceVersions = []
 
     const { regionId } = testRegion
     testRecord = await LicenceHelper.add({ regionId })
@@ -43,6 +45,9 @@ describe('Licence model', () => {
 
       const workflow = await WorkflowHelper.add({ licenceId })
       testWorkflows.push(workflow)
+
+      const licenceVersion = await LicenceVersionHelper.add({ licenceId })
+      testLicenceVersions.push(licenceVersion)
     }
   })
 
@@ -147,23 +152,11 @@ describe('Licence model', () => {
     })
 
     describe('when linking to licence versions', () => {
-      let testLicenceVersions
-
-      beforeEach(async () => {
-        const { licenceId } = testRecord
-
-        testLicenceVersions = []
-        for (let i = 0; i < 2; i++) {
-          const licenceVersion = await LicenceVersionHelper.add({ licenceId })
-          testLicenceVersions.push(licenceVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query()
           .innerJoinRelated('licenceVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence versions', async () => {
@@ -171,13 +164,13 @@ describe('Licence model', () => {
           .findById(testRecord.licenceId)
           .withGraphFetched('licenceVersions')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.licenceId).to.equal(testRecord.licenceId)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.licenceId).toBe(testRecord.licenceId)
 
-        expect(result.licenceVersions).to.be.an.array()
-        expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
-        expect(result.licenceVersions).to.include(testLicenceVersions[0])
-        expect(result.licenceVersions).to.include(testLicenceVersions[1])
+        expect(result.licenceVersions).toBeInstanceOf(Array)
+        expect(result.licenceVersions[0]).toBeInstanceOf(LicenceVersionModel)
+        expect(result.licenceVersions).toContainEqual(testLicenceVersions[0])
+        expect(result.licenceVersions).toContainEqual(testLicenceVersions[1])
       })
     })
   })
