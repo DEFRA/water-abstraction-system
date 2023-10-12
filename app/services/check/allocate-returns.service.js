@@ -184,7 +184,7 @@ function _matchAndAllocate (chargeElement, returns) {
     })
   } else if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) {
     chargeElement.issues.push({
-      issue: 'not fully allocated'
+      issue: 'under allocated'
     })
   } else if (chargeElement.allocatedQuantity > chargeElement.authorisedAnnualQuantity) {
     chargeElement.issues.push({
