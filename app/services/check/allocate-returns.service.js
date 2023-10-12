@@ -218,18 +218,22 @@ function _matchReturns (chargeElement, returns) {
 }
 
 function _periodsOverlap (elementPeriods, returnPeriods) {
-  for (const elementPeriod of elementPeriods) {
-    const overLappingPeriods = returnPeriods.filter((returnPeriod) => {
-      if (returnPeriod.startDate > elementPeriod.endDate || elementPeriod.startDate > returnPeriod.endDate) {
-        return false
+  try {
+    for (const elementPeriod of elementPeriods) {
+      const overLappingPeriods = returnPeriods.filter((returnPeriod) => {
+        if (returnPeriod.startDate > elementPeriod.endDate || elementPeriod.startDate > returnPeriod.endDate) {
+          return false
+        }
+
+        return true
+      })
+
+      if (overLappingPeriods.length) {
+        return true
       }
-
-      return true
-    })
-
-    if (overLappingPeriods.length) {
-      return true
     }
+  } catch (error) {
+    global.GlobalNotifier.omg('Allocation failed', { elementPeriods, returnPeriods })
   }
 
   return false
