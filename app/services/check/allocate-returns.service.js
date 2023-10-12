@@ -5,7 +5,7 @@
  * @module AllocateReturnsService
  */
 
-const DetermineAbstractionPeriodService = require('./determine-abstraction-period.service.js')
+const DetermineAbstractionPeriodServices = require('./determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../../services/billing/supplementary/determine-charge-period.service.js')
 
 function go (licences, billingPeriod) {
@@ -45,7 +45,7 @@ function _prepChargeElement (chargeElement, chargePeriod) {
     abstractionPeriodEndMonth
   } = chargeElement
 
-  const abstractionPeriod = DetermineAbstractionPeriodService.go(
+  const abstractionPeriods = DetermineAbstractionPeriodServices.go(
     chargePeriod,
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
@@ -56,13 +56,13 @@ function _prepChargeElement (chargeElement, chargePeriod) {
   chargeElement.issues = []
   chargeElement.returns = []
   chargeElement.allocatedQuantity = 0
-  chargeElement.abstractionPeriod = abstractionPeriod
+  chargeElement.abstractionPeriods = abstractionPeriods
 }
 
 function _prepReturnsForMatching (returnRecords, billingPeriod) {
   returnRecords.forEach((returnRecord) => {
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnRecord
-    const abstractionPeriod = DetermineAbstractionPeriodService.go(
+    const abstractionPeriods = DetermineAbstractionPeriodServices.go(
       billingPeriod,
       periodStartDay,
       periodStartMonth,
@@ -73,7 +73,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
     returnRecord.issues = _determinePreAllocationReturnIssues(returnRecord)
     returnRecord.chargeElements = []
     returnRecord.allocatedQuantity = 0
-    returnRecord.abstractionPeriod = abstractionPeriod
+    returnRecord.abstractionPeriods = abstractionPeriods
   })
 }
 
@@ -204,25 +204,35 @@ function _matchLines (chargeElement, matchedReturn) {
 
 function _matchReturns (chargeElement, returns) {
   const elementCode = chargeElement.purpose.legacyId
-  const elementPeriod = chargeElement.abstractionPeriod
+  const elementPeriods = chargeElement.abstractionPeriods
 
   return returns.filter((record) => {
-    const { purposeCode: returnCode, abstractionPeriod: returnPeriod } = record
+    const { purposeCode: returnCode, abstractionPeriods: returnPeriods } = record
 
     if (elementCode !== returnCode) {
       return false
     }
 
-    return _periodsOverlap(elementPeriod, returnPeriod)
+    return _periodsOverlap(elementPeriods, returnPeriods)
   })
 }
 
-function _periodsOverlap (elementPeriod, returnPeriod) {
-  if (returnPeriod.startDate > elementPeriod.startDate || elementPeriod.startDate > returnPeriod.endDate) {
-    return false
+function _periodsOverlap (elementPeriods, returnPeriods) {
+  for (const elementPeriod of elementPeriods) {
+    const overLappingPeriods = returnPeriods.filter((returnPeriod) => {
+      if (returnPeriod.startDate > elementPeriod.endDate || elementPeriod.startDate > returnPeriod.endDate) {
+        return false
+      }
+
+      return true
+    })
+
+    if (overLappingPeriods.length) {
+      return true
+    }
   }
 
-  return true
+  return false
 }
 
 function _sortChargeReferencesBySubsistenceCharge (chargeReferences) {
