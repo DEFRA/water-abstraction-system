@@ -18,8 +18,11 @@ const { version } = require('../../../package.json')
  */
 async function go () {
   return {
+    name: 'System',
+    serviceName: 'system',
     version,
-    commit: await _getCommitHash()
+    commit: await _getCommitHash(),
+    jobs: []
   }
 }
 

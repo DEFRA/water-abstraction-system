@@ -17,7 +17,10 @@ describe('Fetch System Info service', () => {
   it('returns the systems version and commit hash', async () => {
     const result = await FetchSystemInfoService.go()
 
+    expect(result.name).to.equal('System')
+    expect(result.serviceName).to.equal('system')
     expect(result.version).to.equal(version)
     expect(result.commit).to.exist()
+    expect(result.jobs).to.have.length(0)
   })
 })
