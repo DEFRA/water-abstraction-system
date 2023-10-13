@@ -9,20 +9,28 @@ const DetermineAbstractionPeriodServices = require('./determine-abstraction-peri
 const DetermineChargePeriodService = require('../../services/billing/supplementary/determine-charge-period.service.js')
 
 function go (licences, billingPeriod) {
-  licences.forEach((licence) => {
+  licences.forEach((licence, licenceIndex) => {
+    licence.id = `L${licenceIndex + 1}`
+
     const { chargeVersions, returns } = licence
     _prepReturnsForMatching(returns, billingPeriod)
 
-    chargeVersions.forEach((chargeVersion) => {
+    chargeVersions.forEach((chargeVersion, chargeVersionIndex) => {
+      chargeVersion.id = `V${chargeVersionIndex + 1}-${licence.id}`
+
       const { chargeReferences } = chargeVersion
 
       _sortChargeReferencesBySubsistenceCharge(chargeReferences)
       chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-      chargeReferences.forEach((chargeReference) => {
+      chargeReferences.forEach((chargeReference, chargeReferenceIndex) => {
+        chargeReference.id = `R${chargeReferenceIndex + 1}-${chargeVersion.id}`
+
         const { chargeElements } = chargeReference
 
-        chargeElements.forEach((chargeElement) => {
+        chargeElements.forEach((chargeElement, chargeElementIndex) => {
+          chargeElement.id = `E${chargeElementIndex + 1}-${chargeReference.id}`
+
           _prepChargeElement(chargeElement, chargeVersion.chargePeriod)
           _matchAndAllocate(chargeElement, returns)
         })
@@ -61,7 +69,9 @@ function _prepChargeElement (chargeElement, chargePeriod) {
 }
 
 function _prepReturnsForMatching (returnRecords, billingPeriod) {
-  returnRecords.forEach((returnRecord) => {
+  returnRecords.forEach((returnRecord, returnRecordIndex) => {
+    returnRecord.id = `T${returnRecordIndex + 1}`
+
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnRecord
     const abstractionPeriods = DetermineAbstractionPeriodServices.go(
       billingPeriod,
@@ -129,7 +139,7 @@ function _matchAndAllocate (chargeElement, returns) {
 
   matchedReturns.forEach((matchedReturn) => {
     if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) {
-      const { returnId, returnRequirement, description } = matchedReturn
+      const { id: returnTestId, returnId, returnRequirement, description } = matchedReturn
 
       if (matchedReturn.issues.length > 0) {
         const returnIssues = matchedReturn.issues.map((issue) => {
@@ -139,8 +149,9 @@ function _matchAndAllocate (chargeElement, returns) {
           }
         })
         chargeElement.issues.push(...returnIssues)
-        chargeElement.returns.push({ returnId, returnRequirement, description })
+        chargeElement.returns.push({ returnTestId, returnId, returnRequirement, description })
         matchedReturn.chargeElements.push({
+          id: chargeElement.id,
           chargeElementId: chargeElement.chargePurposeId
         })
 
@@ -151,11 +162,13 @@ function _matchAndAllocate (chargeElement, returns) {
 
       if (matchedLines.length === 0) {
         chargeElement.issues.push({
+          id: matchedReturn.id,
           returnId: matchedReturn.returnId,
           issue: 'no lines match'
         })
         chargeElement.returns.push({ returnId, returnRequirement, description })
         matchedReturn.chargeElements.push({
+          id: chargeElement.id,
           chargeElementId: chargeElement.chargePurposeId
         })
 
@@ -168,11 +181,12 @@ function _matchAndAllocate (chargeElement, returns) {
           matchedLine.allocated = true
 
           matchedReturn.allocatedQuantity += matchedLine.quantity
-          chargeElement.lines.push(matchedLine.lineId)
+          chargeElement.lines.push({ id: matchedLine.id, lineId: matchedLine.lineId })
         }
       })
-      chargeElement.returns.push({ returnId, returnRequirement, description })
+      chargeElement.returns.push({ returnTestId, returnId, returnRequirement, description })
       matchedReturn.chargeElements.push({
+        id: chargeElement.id,
         chargeElementId: chargeElement.chargePurposeId
       })
     }
@@ -194,7 +208,9 @@ function _matchAndAllocate (chargeElement, returns) {
 }
 
 function _matchLines (chargeElement, matchedReturn) {
-  return matchedReturn.versions[0]?.lines.filter((line) => {
+  return matchedReturn.versions[0]?.lines.filter((line, lineIndex) => {
+    line.id = `L${lineIndex + 1}-${matchedReturn.id}`
+
     if (line.allocated) {
       return false
     }
