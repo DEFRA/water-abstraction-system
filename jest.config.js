@@ -29,7 +29,9 @@ module.exports = {
     '**/test/lib/**/legacy-request.lib.test.js',
     '**/test/lib/**/request-notifier.lib.test.js',
     '**/test/lib/**/general.lib.test.js',
-    '**/test/presenters/**/*.test.js'
+    '**/test/presenters/**/*.test.js',
+    '**/test/services/plugins/**/authentication.service.test.js',
+    '**/test/services/plugins/**/error-pages.service.test.js'
 
   ],
   verbose: true

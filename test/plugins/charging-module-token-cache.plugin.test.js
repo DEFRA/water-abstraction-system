@@ -8,10 +8,14 @@ const { init } = require('../../app/server.js')
 
 const LONG_EXPIRY_TIME = 3600
 const SHORT_EXPIRY_TIME = 1
+let server
+
+afterAll(async () => {
+  await server.stop()
+  jest.restoreAllMocks()
+})
 
 describe('Charging Module Token Cache plugin', () => {
-  let server
-
   beforeEach(async () => {
     // Create server before each test
     server = await init()
