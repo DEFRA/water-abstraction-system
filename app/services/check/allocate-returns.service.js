@@ -176,12 +176,21 @@ function _matchAndAllocate (chargeElement, returns) {
       }
 
       matchedLines.forEach((matchedLine) => {
-        if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) {
-          chargeElement.allocatedQuantity += matchedLine.quantity / 1000
-          matchedLine.allocated = true
+        const remainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
+        if (remainingAllocation > 0) {
+          // We default how much to allocate to what is unallocated on the line i.e. remaining >= line.unallocated
+          let qtyToAllocate = matchedLine.unallocated
 
-          matchedReturn.allocatedQuantity += matchedLine.quantity
-          chargeElement.lines.push({ id: matchedLine.id, lineId: matchedLine.lineId })
+          // If what remains is actually less than the line we instead set qtyToAllocate to what remains
+          if (remainingAllocation < matchedLine.unallocated) {
+            qtyToAllocate = remainingAllocation
+          }
+
+          chargeElement.allocatedQuantity += qtyToAllocate
+          chargeElement.lines.push({ id: matchedLine.id, lineId: matchedLine.lineId, allocated: qtyToAllocate })
+
+          matchedLine.unallocated -= qtyToAllocate
+          matchedReturn.allocatedQuantity += qtyToAllocate
         }
       })
       chargeElement.returns.push({ returnTestId, returnId, returnRequirement, description })
@@ -211,7 +220,11 @@ function _matchLines (chargeElement, matchedReturn) {
   return matchedReturn.versions[0]?.lines.filter((line, lineIndex) => {
     line.id = `L${lineIndex + 1}-${matchedReturn.id}`
 
-    if (line.allocated) {
+    if (!line.unallocated) {
+      line.unallocated = line.quantity / 1000
+    }
+
+    if (line.unallocated === 0) {
       return false
     }
 
