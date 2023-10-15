@@ -116,7 +116,7 @@ function _determinePostAllocationReturnIssues (returns) {
 
     if (returnRecord.versions[0]) {
       const unallocated = returnRecord.versions[0].lines.some((line) => {
-        return line.quantity > 0 && !line.allocated
+        return line.quantity > 0 && line.unallocated > 0
       })
 
       if (unallocated) {
@@ -220,7 +220,7 @@ function _matchLines (chargeElement, matchedReturn) {
   return matchedReturn.versions[0]?.lines.filter((line, lineIndex) => {
     line.id = `L${lineIndex + 1}-${matchedReturn.id}`
 
-    if (!line.unallocated) {
+    if ('unallocated' in line === false) {
       line.unallocated = line.quantity / 1000
     }
 
