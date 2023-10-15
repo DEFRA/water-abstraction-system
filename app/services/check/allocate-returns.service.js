@@ -81,6 +81,11 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
       periodEndMonth
     )
 
+    returnRecord.versions[0]?.lines.forEach((line, lineIndex) => {
+      line.id = `L${lineIndex + 1}-${returnRecord.id}`
+      line.unallocated = line.quantity / 1000
+    })
+
     returnRecord.issues = _determinePreAllocationReturnIssues(returnRecord)
     returnRecord.chargeElements = []
     returnRecord.allocatedQuantity = 0
@@ -218,12 +223,6 @@ function _matchAndAllocate (chargeElement, returns) {
 
 function _matchLines (chargeElement, matchedReturn) {
   return matchedReturn.versions[0]?.lines.filter((line, lineIndex) => {
-    line.id = `L${lineIndex + 1}-${matchedReturn.id}`
-
-    if ('unallocated' in line === false) {
-      line.unallocated = line.quantity / 1000
-    }
-
     if (line.unallocated === 0) {
       return false
     }
