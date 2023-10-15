@@ -166,7 +166,7 @@ function _matchAndAllocate (chargeElement, returns) {
           returnId: matchedReturn.returnId,
           issue: 'no lines match'
         })
-        chargeElement.returns.push({ returnId, returnRequirement, description })
+        chargeElement.returns.push({ returnTestId, returnId, returnRequirement, description })
         matchedReturn.chargeElements.push({
           id: chargeElement.id,
           chargeElementId: chargeElement.chargePurposeId
