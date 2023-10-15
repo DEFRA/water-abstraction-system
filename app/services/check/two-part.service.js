@@ -156,6 +156,8 @@ async function _fetchReturnsForLicence (licenceRef, billingPeriod) {
     .where('startDate', '<=', billingPeriod.endDate)
     .where('endDate', '>=', billingPeriod.startDate)
     .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
+    .orderBy('startDate', 'ASC')
+    .orderBy('returnRequirement', 'ASC')
     .withGraphFetched('versions')
     .modifyGraph('versions', builder => {
       builder
