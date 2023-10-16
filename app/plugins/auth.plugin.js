@@ -36,22 +36,19 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 const AuthPlugin = {
   name: 'authentication',
   register: async (server, _options) => {
-    // We wait for @hapi/cookie to be registered before setting up the authentication strategy
-    server.dependency('@hapi/cookie', async (server) => {
-      server.auth.strategy('session', 'cookie', {
-        cookie: {
-          name: 'sid',
-          password: AuthenticationConfig.password,
-          isSecure: false,
-          isSameSite: 'Lax',
-          ttl: TWO_HOURS_IN_MS,
-          isHttpOnly: true
-        },
-        redirectTo: '/signin',
-        validate: async (_request, session) => {
-          return AuthService.go(session.userId)
-        }
-      })
+    server.auth.strategy('session', 'cookie', {
+      cookie: {
+        name: 'sid',
+        password: AuthenticationConfig.password,
+        isSecure: false,
+        isSameSite: 'Lax',
+        ttl: TWO_HOURS_IN_MS,
+        isHttpOnly: true
+      },
+      redirectTo: '/signin',
+      validate: async (_request, session) => {
+        return AuthService.go(session.userId)
+      }
     })
   }
 }
