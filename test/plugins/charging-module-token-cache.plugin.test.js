@@ -6,28 +6,32 @@ const ChargingModuleTokenService = require('../../app/services/charging-module/t
 // For running our service
 const { init } = require('../../app/server.js')
 
-const LONG_EXPIRY_TIME = 3600
-const SHORT_EXPIRY_TIME = 1
-let server
-
 describe('Charging Module Token Cache plugin', () => {
+  const LONG_EXPIRY_TIME = 3600
+  const SHORT_EXPIRY_TIME = 1
+
+  let tokenServiceMock
+  let server
+
   beforeEach(async () => {
     // Create server before each test
     server = await init()
+
+    // Mock the function 'go' of ChargingModuleTokenService
+    tokenServiceMock = jest.spyOn(ChargingModuleTokenService, 'go')
   })
 
   afterEach(async () => {
-    jest.restoreAllMocks()
     await server.stop()
+
+    jest.restoreAllMocks()
   })
 
   describe('When the first call returns a valid token', () => {
     describe('and the second request is made before the cache expires', () => {
       beforeEach(() => {
-        // Mock the function 'go' of ChargingModuleTokenService
-        const goMock = jest.spyOn(ChargingModuleTokenService, 'go')
         // Chain the mockResolvedValue calls for different calls to 'go'
-        goMock
+        tokenServiceMock
           .mockResolvedValueOnce({ accessToken: 'FIRST_TOKEN', expiresIn: LONG_EXPIRY_TIME })
           .mockResolvedValueOnce({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
@@ -43,8 +47,7 @@ describe('Charging Module Token Cache plugin', () => {
 
     describe('and the second request is made after the cache expires', () => {
       beforeEach(() => {
-        const goMock = jest.spyOn(ChargingModuleTokenService, 'go')
-        goMock
+        tokenServiceMock
           .mockResolvedValueOnce({ accessToken: 'FIRST_TOKEN', expiresIn: SHORT_EXPIRY_TIME })
           .mockResolvedValueOnce({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
@@ -60,8 +63,7 @@ describe('Charging Module Token Cache plugin', () => {
 
   describe('When the first call returns an invalid token', () => {
     beforeEach(() => {
-      const goMock = jest.spyOn(ChargingModuleTokenService, 'go')
-      goMock
+      tokenServiceMock
         .mockResolvedValueOnce({ accessToken: null, expiresIn: null })
         .mockResolvedValueOnce({ accessToken: 'VALID_TOKEN', expiresIn: LONG_EXPIRY_TIME })
     })
