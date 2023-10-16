@@ -14,9 +14,6 @@ module.exports = {
   ],
   globalSetup: './test/support/jest.setup.js',
   testEnvironment: 'node',
-  testPathIgnorePatterns: [
-    'charging-module-token-cache.plugin.test.js'
-  ],
   // The glob patterns Jest uses to detect test files
   testMatch: [
     '**/test/controllers/*.test.js',
