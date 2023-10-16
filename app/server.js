@@ -19,11 +19,12 @@ const ViewsPlugin = require('./plugins/views.plugin.js')
 const ServerConfig = require('../config/server.config.js')
 
 const registerPlugins = async (server) => {
-  // Register the remaining plugins
+  // NOTE: This order matters to some plugins we register. Inserting into the order should be fine. But if you reorder
+  // any existing plugin registration double-check you haven't broken anything!
   await server.register(StopPlugin)
   await server.register(require('@hapi/inert'))
-  await server.register(AuthPlugin)
   await server.register(require('@hapi/cookie'))
+  await server.register(AuthPlugin)
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin())
   await server.register(AirbrakePlugin)
