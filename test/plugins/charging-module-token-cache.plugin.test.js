@@ -69,14 +69,14 @@ describe('Charging Module Token Cache plugin', () => {
     it('returns a null token', async () => {
       const result = await server.methods.getChargingModuleToken()
 
-      expect(result.accessToken).toBe('FIRST_TOKEN')
+      expect(result.accessToken).toBeNull()
     })
 
     it('does not cache the token', async () => {
       await server.methods.getChargingModuleToken()
       const secondCall = await server.methods.getChargingModuleToken()
 
-      expect(secondCall.accessToken).toEqual('SECOND_TOKEN')
+      expect(secondCall.accessToken).toEqual('VALID_TOKEN')
     })
   })
 })
