@@ -12,9 +12,9 @@ const { expect } = Code
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
 
 // Thing under test
-const AuthenticationService = require('../../../app/services/plugins/authentication.service.js')
+const AuthService = require('../../../app/services/plugins/auth.service.js')
 
-describe('Authentication service', () => {
+describe('Auth service', () => {
   afterEach(() => {
     Sinon.restore()
   })
@@ -30,31 +30,31 @@ describe('Authentication service', () => {
     })
 
     it('returns isValid as `true`', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.isValid).to.be.true()
     })
 
     it('returns the user in credentials.user', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.user).to.equal({ name: 'User' })
     })
 
     it('returns the roles in credentials.roles', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.roles).to.equal([{ role: 'Role' }])
     })
 
     it('returns the groups in credentials.groups', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.groups).to.equal([{ group: 'Group' }])
     })
 
     it('returns the role names in credentials.scope', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.scope).to.equal(['Role'])
     })
@@ -71,31 +71,31 @@ describe('Authentication service', () => {
     })
 
     it('returns isValid as `false`', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.isValid).to.be.false()
     })
 
     it('returns `null` in credentials.user', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.user).to.be.null()
     })
 
     it('returns an empty array in credentials.roles', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.roles).to.be.empty()
     })
 
     it('returns an empty array in credentials.groups', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.groups).to.be.empty()
     })
 
     it('returns an empty array in credentials.scope', async () => {
-      const result = await AuthenticationService.go(12345)
+      const result = await AuthService.go(12345)
 
       expect(result.credentials.scope).to.be.empty()
     })

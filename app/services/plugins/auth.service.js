@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Used by `AuthenticationPlugin` to authenticate and authorise users
- * @module AuthenticationService
+ * Used by `AuthPlugin` to authenticate and authorise users
+ * @module AuthService
  */
 
 const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-groups.service.js')
 
 /**
- * This service is intended to be used by our `AuthenticationPlugin` to authenticate and authorise users.
+ * This service is intended to be used by our `AuthPlugin` to authenticate and authorise users.
  *
  * We take a user id and look it up in the `idm` schema using `FetchUserRolesAndGroupsService`. This gives us a user
  * object along with arrays of role objects and group objects that the user has been assigned to.
@@ -19,6 +19,7 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
  * array of strings then the user's scope array must contain at least one of the strings.
  *
  * @param {Number} userId The user id to be authenticated
+ *
  * @returns {Object} response
  * @returns {Boolean} response.isValid Indicates whether the user was found
  * @returns {Object} response.credentials User credentials found in the IDM

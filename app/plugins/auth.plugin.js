@@ -1,13 +1,13 @@
 'use strict'
 
 /**
- * Plugin to authenticate users
- * @module AuthenticationPlugin
+ * Plugin to authenticate and authorise users
+ * @module AuthPlugin
  */
 
 const AuthenticationConfig = require('../../config/authentication.config.js')
 
-const AuthenticationService = require('../services/plugins/authentication.service.js')
+const AuthService = require('../services/plugins/auth.service.js')
 
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
@@ -33,7 +33,7 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
  * More info on authorisation and scope can be found at https://hapi.dev/api/?v=21.3.2#-routeoptionsauthaccessscope
  */
 
-const AuthenticationPlugin = {
+const AuthPlugin = {
   name: 'authentication',
   register: async (server, _options) => {
     // We wait for @hapi/cookie to be registered before setting up the authentication strategy
@@ -49,11 +49,11 @@ const AuthenticationPlugin = {
         },
         redirectTo: '/signin',
         validate: async (_request, session) => {
-          return AuthenticationService.go(session.userId)
+          return AuthService.go(session.userId)
         }
       })
     })
   }
 }
 
-module.exports = AuthenticationPlugin
+module.exports = AuthPlugin
