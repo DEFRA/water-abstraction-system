@@ -27,6 +27,10 @@ describe('Bill Runs controller', () => {
         scheme,
         region: '07ae7f3a-2677-4102-b352-cc006828948c',
         user: 'test.user@defra.gov.uk'
+      },
+      auth: {
+        strategy: 'session',
+        credentials: { scope: ['billing'] }
       }
     }
   }
@@ -62,7 +66,7 @@ describe('Bill Runs controller', () => {
       })
 
       it('returns a 200 response including details of the new bill run', async () => {
-        const response = await server.inject(options())
+        const response = await server.inject(options('sroc'))
         const payload = JSON.parse(response.payload)
 
         expect(response.statusCode).to.equal(200)
