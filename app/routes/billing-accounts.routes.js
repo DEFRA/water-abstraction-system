@@ -8,10 +8,15 @@ const routes = [
     path: '/billing-accounts/{invoiceAccountId}/change-address',
     handler: BillingAccountsController.changeAddress,
     options: {
-      description: 'Used updating a billing account with a new address',
       app: {
         plainOutput: true
-      }
+      },
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      },
+      description: 'Used updating a billing account with a new address'
     }
   }
 ]

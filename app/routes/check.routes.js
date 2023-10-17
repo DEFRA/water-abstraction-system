@@ -8,11 +8,12 @@ const routes = [
     path: '/check/two-part/{naldRegionId}/{format?}',
     handler: CheckController.twoPart,
     options: {
-      description: 'Used by the delivery team to check the SROC 2PT billing logic',
       app: {
         excludeFromProd: true,
         plainOutput: true
-      }
+      },
+      auth: false,
+      description: 'Used by the delivery team to check the SROC 2PT billing logic'
     }
   }
 ]
