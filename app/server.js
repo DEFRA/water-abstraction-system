@@ -47,7 +47,6 @@ const init = async () => {
   const server = Hapi.server(ServerConfig.hapi)
 
   await registerPlugins(server)
-
   await server.initialize()
 
   return server
