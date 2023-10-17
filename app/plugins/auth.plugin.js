@@ -50,6 +50,9 @@ const AuthPlugin = {
         return AuthService.go(session.userId)
       }
     })
+    // NOTE: This defaults Hapi to authenticate all routes. If a route, for example `/status`, does not require
+    // authentication `options.auth: false` should be set in the route's config.
+    server.auth.default('session')
   }
 }
 
