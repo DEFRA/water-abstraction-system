@@ -64,7 +64,7 @@ describe('Data controller', () => {
     describe('when the request fails', () => {
       describe('because the MockService errors', () => {
         beforeEach(async () => {
-          jest.spyOn(MockService, 'go').mockRejectedValue()
+          jest.spyOn(MockService, 'go').mockRejectedValue(new Error('computer says no'))
         })
 
         it('returns a 500 status', async () => {
@@ -96,7 +96,7 @@ describe('Data controller', () => {
     describe('when the request fails', () => {
       describe('because the SeedService errors', () => {
         beforeEach(async () => {
-          jest.spyOn(SeedService, 'go').mockRejectedValue()
+          jest.spyOn(SeedService, 'go').mockRejectedValue(new Error('computer says no'))
         })
 
         it('returns a 500 status', async () => {
@@ -129,7 +129,7 @@ describe('Data controller', () => {
     describe('when the request fails', () => {
       describe('because the TearDownService errors', () => {
         beforeEach(async () => {
-          jest.spyOn(TearDownService, 'go').mockRejectedValue()
+          jest.spyOn(TearDownService, 'go').mockRejectedValue(new Error('computer says no'))
         })
 
         it('returns a 500 status', async () => {

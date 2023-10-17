@@ -21,6 +21,7 @@ describe('Check controller', () => {
     // We silence sending a notification to our Errbit instance using Airbrake
     server.app.airbrake.notify = jest.fn().mockResolvedValue()
   })
+
   describe('GET /check/two-part', () => {
     const options = {
       method: 'GET',
@@ -45,7 +46,7 @@ describe('Check controller', () => {
     describe('when the request fails', () => {
       describe('because the TwoPartService errors', () => {
         beforeEach(async () => {
-          jest.spyOn(TwoPartService, 'go').mockRejectedValue()
+          jest.spyOn(TwoPartService, 'go').mockRejectedValue(new Error('computer says no'))
         })
 
         it('returns a 500 status', async () => {
