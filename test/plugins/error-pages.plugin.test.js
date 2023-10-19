@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Things we need to stub
-const ErrorPagesService = require('../../app/services/plugins/error-pages.service.js')
-
 // Test helpers
 const Boom = require('@hapi/boom')
 
@@ -23,12 +20,24 @@ describe('Error Pages plugin', () => {
     url: '/error-pages'
   }
 
-  let testRoute
+  let notifierStub
   let server
+  let testRoute
 
   beforeEach(async () => {
+    testRoute = {
+      method: 'GET',
+      path: '/error-pages',
+      options: {
+        auth: false
+      }
+    }
+
     // Create server before each test
     server = await init()
+
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
@@ -36,32 +45,103 @@ describe('Error Pages plugin', () => {
   })
 
   describe('When the response is a Boom error', () => {
-    beforeEach(() => {
-      testRoute = {
-        method: 'GET',
-        path: '/error-pages',
-        handler: function (_request, _h) {
-          return Boom.badRequest('Things go boom')
-        },
-        options: {
-          auth: false
+    describe('because the request was not found', () => {
+      beforeEach(() => {
+        testRoute.handler = (_request, _h) => {
+          return Boom.notFound('where has my boom gone?')
         }
-      }
-    })
+      })
 
-    describe('and it is not a 404', () => {
       describe('and the route is not configured for plain output (redirect to error page)', () => {
         beforeEach(async () => {
           server.route(testRoute)
-
-          Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: true, statusCode: 400 })
         })
 
-        it('returns our general error HTML page', async () => {
+        it('returns our 404 error HTML page', async () => {
           const response = await server.inject(request)
 
-          expect(response.statusCode).to.equal(400)
-          expect(response.statusMessage).to.equal('Bad Request')
+          expect(response.statusCode).to.equal(404)
+          expect(response.statusMessage).to.equal('Not Found')
+          expect(response.payload).startsWith('<!DOCTYPE html>')
+          expect(response.payload).contains('Page not found')
+        })
+      })
+
+      describe('and the route is configured for plain output (do not redirect to error page)', () => {
+        beforeEach(async () => {
+          testRoute.options.app = { plainOutput: true }
+
+          server.route(testRoute)
+        })
+
+        it('returns a plain response', async () => {
+          const response = await server.inject(request)
+
+          expect(response.statusCode).to.equal(404)
+          expect(response.statusMessage).to.equal('Not Found')
+          expect(response.payload).not.to.startWith('<!DOCTYPE html>')
+          expect(response.payload).contains('where has my boom gone?')
+        })
+      })
+    })
+
+    describe('because the request was forbidden', () => {
+      beforeEach(() => {
+        testRoute.handler = (_request, _h) => {
+          return Boom.forbidden("can't touch this")
+        }
+      })
+
+      describe('and the route is not configured for plain output (redirect to error page)', () => {
+        beforeEach(async () => {
+          server.route(testRoute)
+        })
+
+        it('returns our 404 error HTML page', async () => {
+          const response = await server.inject(request)
+
+          expect(response.statusCode).to.equal(404)
+          expect(response.statusMessage).to.equal('Not Found')
+          expect(response.payload).startsWith('<!DOCTYPE html>')
+          expect(response.payload).contains('Page not found')
+        })
+      })
+
+      describe('and the route is configured for plain output (do not redirect to error page)', () => {
+        beforeEach(async () => {
+          testRoute.options.app = { plainOutput: true }
+
+          server.route(testRoute)
+        })
+
+        it('returns a plain response', async () => {
+          const response = await server.inject(request)
+
+          expect(response.statusCode).to.equal(403)
+          expect(response.statusMessage).to.equal('Forbidden')
+          expect(response.payload).not.to.startWith('<!DOCTYPE html>')
+          expect(response.payload).contains("can't touch this")
+        })
+      })
+    })
+
+    describe('because the request was bad (any other error)', () => {
+      beforeEach(() => {
+        testRoute.handler = (_request, _h) => {
+          return Boom.badRequest('computer says no')
+        }
+      })
+
+      describe('and the route is not configured for plain output (redirect to error page)', () => {
+        beforeEach(async () => {
+          server.route(testRoute)
+        })
+
+        it('returns our 500 (there is a problem) error HTML page', async () => {
+          const response = await server.inject(request)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.statusMessage).to.equal('OK')
           expect(response.payload).startsWith('<!DOCTYPE html>')
           expect(response.payload).contains('Sorry, there is a problem with the service')
         })
@@ -70,9 +150,8 @@ describe('Error Pages plugin', () => {
       describe('and the route is configured for plain output (do not redirect to error page)', () => {
         beforeEach(async () => {
           testRoute.options.app = { plainOutput: true }
-          server.route(testRoute)
 
-          Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 400 })
+          server.route(testRoute)
         })
 
         it('returns a plain response', async () => {
@@ -81,46 +160,22 @@ describe('Error Pages plugin', () => {
           expect(response.statusCode).to.equal(400)
           expect(response.statusMessage).to.equal('Bad Request')
           expect(response.payload).not.to.startWith('<!DOCTYPE html>')
-          expect(response.payload).contains('Things go boom')
+          expect(response.payload).contains('computer says no')
         })
-      })
-    })
-
-    describe('and it is a 404', () => {
-      beforeEach(() => {
-        Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: true, statusCode: 404 })
-      })
-
-      it('returns our 404 error HTML page', async () => {
-        const response = await server.inject(request)
-
-        expect(response.statusCode).to.equal(404)
-        expect(response.statusMessage).to.equal('Not Found')
-        expect(response.payload).startsWith('<!DOCTYPE html>')
-        expect(response.payload).contains('Page not found')
       })
     })
   })
 
   describe('When the response is not a Boom error', () => {
     beforeEach(() => {
-      testRoute = {
-        method: 'GET',
-        path: '/error-pages',
-        handler: function (_request, h) {
-          return h.response({ hello: 'world' }).code(200)
-        },
-        options: {
-          auth: false
-        }
+      testRoute.handler = (_request, h) => {
+        return h.response({ hello: 'world' }).code(200)
       }
     })
 
     describe('and the route is not configured for plain output (redirect to error page)', () => {
       beforeEach(async () => {
         server.route(testRoute)
-
-        Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 200 })
       })
 
       it('lets the response continue without change', async () => {
@@ -135,8 +190,6 @@ describe('Error Pages plugin', () => {
       beforeEach(async () => {
         testRoute.options.app = { plainOutput: true }
         server.route(testRoute)
-
-        Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 200 })
       })
 
       it('lets the response continue without change', async () => {
