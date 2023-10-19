@@ -237,9 +237,13 @@ function _matchReturns (chargeElement, returns) {
   const elementPeriods = chargeElement.abstractionPeriods
 
   return returns.filter((record) => {
-    const { purposeCode: returnCode, abstractionPeriods: returnPeriods } = record
+    const returnPeriods = record.abstractionPeriods
 
-    if (elementCode !== returnCode) {
+    const purposeCodes = record.purposes.map((purpose) => {
+      return purpose.tertiary.code
+    })
+
+    if (!purposeCodes.includes(elementCode)) {
       return false
     }
 
