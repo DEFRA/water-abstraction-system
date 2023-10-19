@@ -36,6 +36,8 @@ function _logError (statusCode, request) {
 
   if (statusCode === 404) {
     global.GlobalNotifier.omg('Page not found', { path: request.path })
+  } else if (statusCode === 403) {
+    global.GlobalNotifier.omg('Not authorised', { path: request.path })
   } else if (response.isBoom) {
     global.GlobalNotifier.omfg(response.message, {}, response)
   }
@@ -45,6 +47,12 @@ function _statusCode (request) {
   const { response } = request
 
   if (response.isBoom) {
+    const { statusCode } = response.output
+
+    if ([404, 403].includes(statusCode)) {
+      return 404
+    }
+
     return response.output.statusCode
   }
 
