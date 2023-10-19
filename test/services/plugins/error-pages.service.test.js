@@ -60,12 +60,6 @@ describe('Error pages service', () => {
       }
     })
 
-    it('returns the correct status code', () => {
-      const result = ErrorPagesService.go(request)
-
-      expect(result.statusCode).to.equal(boom500Response.output.statusCode)
-    })
-
     it('logs an error', () => {
       ErrorPagesService.go(request)
 
@@ -82,6 +76,12 @@ describe('Error pages service', () => {
 
         expect(result.stopResponse).to.be.false()
       })
+
+      it('returns the original status code', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(500)
+      })
     })
 
     describe('and the route is not configured for plain output (redirect to error page)', () => {
@@ -89,6 +89,12 @@ describe('Error pages service', () => {
         const result = ErrorPagesService.go(request)
 
         expect(result.stopResponse).to.be.true()
+      })
+
+      it("returns a 'safe' status code", () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(200)
       })
     })
   })
