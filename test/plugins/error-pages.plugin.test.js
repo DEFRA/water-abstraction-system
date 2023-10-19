@@ -42,6 +42,9 @@ describe('Error Pages plugin', () => {
         path: '/error-pages',
         handler: function (_request, _h) {
           return Boom.badRequest('Things go boom')
+        },
+        options: {
+          auth: false
         }
       }
     })
@@ -66,7 +69,7 @@ describe('Error Pages plugin', () => {
 
       describe('and the route is configured for plain output (do not redirect to error page)', () => {
         beforeEach(async () => {
-          testRoute.options = { app: { plainOutput: true } }
+          testRoute.options.app = { plainOutput: true }
           server.route(testRoute)
 
           Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 400 })
@@ -106,6 +109,9 @@ describe('Error Pages plugin', () => {
         path: '/error-pages',
         handler: function (_request, h) {
           return h.response({ hello: 'world' }).code(200)
+        },
+        options: {
+          auth: false
         }
       }
     })
@@ -127,7 +133,7 @@ describe('Error Pages plugin', () => {
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {
       beforeEach(async () => {
-        testRoute.options = { app: { plainOutput: true } }
+        testRoute.options.app = { plainOutput: true }
         server.route(testRoute)
 
         Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 200 })

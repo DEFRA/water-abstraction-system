@@ -27,6 +27,10 @@ describe('Bill Runs controller', () => {
         scheme,
         region: '07ae7f3a-2677-4102-b352-cc006828948c',
         user: 'test.user@defra.gov.uk'
+      },
+      auth: {
+        strategy: 'session',
+        credentials: { scope: ['billing'] }
       }
     }
   }

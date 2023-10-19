@@ -8,11 +8,12 @@ const routes = [
     path: '/data/export',
     handler: DataController.exportDb,
     options: {
-      description: 'Used to export the database and upload the file to our AWS S3 bucket',
       app: {
         excludeFromProd: true,
         plainOutput: true
-      }
+      },
+      auth: false,
+      description: 'Used to export the database and upload the file to our AWS S3 bucket'
     }
   },
   {
@@ -20,8 +21,12 @@ const routes = [
     path: '/data/mock/{type}/{id}',
     handler: DataController.mockData,
     options: {
-      description: 'Used to generate mock data',
-      app: { excludeFromProd: true }
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      },
+      auth: false,
+      description: 'Used to generate mock data'
     }
   },
   {
@@ -29,11 +34,12 @@ const routes = [
     path: '/data/seed',
     handler: DataController.seed,
     options: {
-      description: 'Used to seed test data in the database',
       app: {
         excludeFromProd: true,
         plainOutput: true
-      }
+      },
+      auth: false,
+      description: 'Used to seed test data in the database'
     }
   },
   {
@@ -41,11 +47,12 @@ const routes = [
     path: '/data/tear-down',
     handler: DataController.tearDown,
     options: {
-      description: 'Used to remove the acceptance test data from the database',
       app: {
         excludeFromProd: true,
         plainOutput: true
-      }
+      },
+      auth: false,
+      description: 'Used to remove the acceptance test data from the database'
     }
   }
 ]

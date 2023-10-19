@@ -8,10 +8,11 @@ const routes = [
     path: '/charge-elements/time-limited',
     handler: ChargeElementsController.timeLimited,
     options: {
-      description: 'Puts a licence into workflow when a charge element has a `timeLimitedEndDate` which is < 50 days away',
       app: {
         plainOutput: true
-      }
+      },
+      auth: false,
+      description: 'Puts a licence into workflow when a charge element has a `timeLimitedEndDate` which is < 50 days away'
     }
   }
 ]

@@ -47,7 +47,11 @@ describe('Billing Accounts controller', () => {
     beforeEach(() => {
       options = {
         method: 'POST',
-        url: '/billing-accounts/7fa2f044-b29e-483a-99b6-e16db0db0f58/change-address'
+        url: '/billing-accounts/7fa2f044-b29e-483a-99b6-e16db0db0f58/change-address',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['manage_billing_accounts'] }
+        }
       }
     })
 
