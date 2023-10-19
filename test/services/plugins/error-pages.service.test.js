@@ -103,7 +103,7 @@ describe('Error pages service', () => {
     beforeEach(() => {
       request = {
         response: boom404Response,
-        route: { settings: { app: { plainOutput: true } } },
+        route: { settings: { } },
         path
       }
     })
@@ -111,7 +111,7 @@ describe('Error pages service', () => {
     it('returns the correct status code', () => {
       const result = ErrorPagesService.go(request)
 
-      expect(result.statusCode).to.equal(boom404Response.output.statusCode)
+      expect(result.statusCode).to.equal(404)
     })
 
     it('logs a message', () => {
@@ -133,10 +133,6 @@ describe('Error pages service', () => {
     })
 
     describe('and the route is not configured (redirect to error page)', () => {
-      beforeEach(() => {
-        request.route = { settings: { } }
-      })
-
       it('tells the plugin to stop the response and redirect to an error page', () => {
         const result = ErrorPagesService.go(request)
 
@@ -149,7 +145,7 @@ describe('Error pages service', () => {
     beforeEach(() => {
       request = {
         response: boom403Response,
-        route: { settings: { app: { plainOutput: true } } },
+        route: { settings: { } },
         path
       }
     })
@@ -179,10 +175,6 @@ describe('Error pages service', () => {
     })
 
     describe('and the route is not configured (redirect to error page)', () => {
-      beforeEach(() => {
-        request.route = { settings: { } }
-      })
-
       it('tells the plugin to stop the response and redirect to an error page', () => {
         const result = ErrorPagesService.go(request)
 
