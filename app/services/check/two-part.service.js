@@ -147,9 +147,6 @@ async function _fetchReturnsForLicence (licenceRef, billingPeriod) {
       ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),
       ref('metadata:nald.periodEndMonth').castInt().as('periodEndMonth'),
       ref('metadata:purposes').as('purposes')
-      // ref('metadata:purposes[0].tertiary.code').castText().as('purposeCode'),
-      // ref('metadata:purposes[0].tertiary.description').castText().as('purposeDescription'),
-      // ref('metadata:purposes[0].alias').castText().as('alias')
     ])
     .where('licenceRef', licenceRef)
     // water-abstraction-service filters out old returns in this way: see `src/lib/services/returns/api-connector.js`
