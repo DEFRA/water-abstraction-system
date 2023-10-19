@@ -21,14 +21,38 @@
  * decide how to direct the response
  */
 function go (request) {
-  const result = {
-    stopResponse: _stopResponse(request),
-    statusCode: _statusCode(request)
+  const stopResponse = _stopResponse(request)
+
+  let statusCode = _extractStatusCode(request)
+
+  _logError(statusCode, request)
+
+  // If we're stopping the response i.e. redirecting to an error page we need to return a 'safe' status code.
+  if (stopResponse) {
+    statusCode = _determineSafeStatusCode(statusCode)
   }
 
-  _logError(result.statusCode, request)
+  return {
+    statusCode,
+    stopResponse
+  }
+}
 
-  return result
+/**
+ * Extract the status code from the request
+ *
+ * If the request object reflects a 2xx or 3xx response then the status code will be a property of the request. But if
+ * it's because an error is thrown, `request` is actually a Boom error instance which means the status code is
+ * somewhere else. So, we need this bit of logic to figure out what status code we're dealing with!
+ */
+function _extractStatusCode (request) {
+  const { response } = request
+
+  if (response.isBoom) {
+    return response.output.statusCode
+  }
+
+  return response.statusCode
 }
 
 function _logError (statusCode, request) {
@@ -41,22 +65,6 @@ function _logError (statusCode, request) {
   } else if (response.isBoom) {
     global.GlobalNotifier.omfg(response.message, {}, response)
   }
-}
-
-function _statusCode (request) {
-  const { response } = request
-
-  if (response.isBoom) {
-    const { statusCode } = response.output
-
-    if ([404, 403].includes(statusCode)) {
-      return 404
-    }
-
-    return response.output.statusCode
-  }
-
-  return response.statusCode
 }
 
 /**
@@ -89,6 +97,33 @@ function _stopResponse (request) {
   // Doing this means we are saying with this statement "stop the response and redirect to an error page if the
   // response is an error AND the route is NOT configured to return plain responses".
   return isBoom && !plainOutput
+}
+
+/**
+ * Determine the safe error code to use
+ *
+ * This will only be called when _stopResponse() has determined we need to redirect to an error page. In this case
+ * we need to ensure the code we return is secure and will not get the response blocked by the WAF we have in our AWS
+ * environments.
+ */
+function _determineSafeStatusCode (statusCode) {
+  // The status code will be a 2xx or 3xx so safe to return as is
+  if (statusCode < 400) {
+    return statusCode
+  }
+
+  // If it was an unauthorised (403) request we pretend the page doesn't exist for security reasons. Returning anything
+  // other than 404 could be seen as confirmation the page exists and used in an enumeration attack.
+  // Returning 404 is the accepted response when you want to keep the targetted resource hidden
+  // https://www.rfc-editor.org/rfc/rfc9110.html#name-403-forbidden
+  if ([404, 403].includes(statusCode)) {
+    return 404
+  }
+
+  // If it's any other status code it will reflect an error has occurred. Our F5 Silverline Managed Web Application
+  // Firewall (WAF) will block the response and serve its own error page. We don't want this so we have to return a
+  // 'safe' 200.
+  return 200
 }
 
 module.exports = {

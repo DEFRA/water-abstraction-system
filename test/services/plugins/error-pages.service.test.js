@@ -148,12 +148,6 @@ describe('Error pages service', () => {
       }
     })
 
-    it('returns the correct status code', () => {
-      const result = ErrorPagesService.go(request)
-
-      expect(result.statusCode).to.equal(404)
-    })
-
     it('logs a message', () => {
       ErrorPagesService.go(request)
 
@@ -170,6 +164,12 @@ describe('Error pages service', () => {
 
         expect(result.stopResponse).to.be.false()
       })
+
+      it('returns the original status code', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(403)
+      })
     })
 
     describe('and the route is not configured (redirect to error page)', () => {
@@ -181,6 +181,12 @@ describe('Error pages service', () => {
         const result = ErrorPagesService.go(request)
 
         expect(result.stopResponse).to.be.true()
+      })
+
+      it("returns a 'safe' status code", () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(404)
       })
     })
   })
