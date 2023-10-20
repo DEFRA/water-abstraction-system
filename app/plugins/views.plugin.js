@@ -17,8 +17,6 @@ const pkg = require('../../package.json')
 
 const ServerConfig = require('../../config/server.config.js')
 
-const SERVICE_NAME = 'Manage your water abstraction or impoundment licence'
-
 const ViewsPlugin = {
   plugin: require('@hapi/vision'),
   options: {
@@ -51,9 +49,7 @@ const ViewsPlugin = {
     // h.view() call in a controller.
     context: {
       appVersion: pkg.version,
-      assetPath: '/assets',
-      serviceName: SERVICE_NAME,
-      pageTitle: `${SERVICE_NAME} - GOV.UK`
+      assetPath: '/assets'
     }
   }
 }
