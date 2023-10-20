@@ -11,7 +11,7 @@
  */
 
 const path = require('path')
-const nunjucks = require('nunjucks')
+const Nunjucks = require('nunjucks')
 
 const pkg = require('../../package.json')
 
@@ -23,12 +23,9 @@ const ViewsPlugin = {
     engines: {
       // The 'engine' is the file extension this applies to; in this case, .njk
       njk: {
-        compile: (src, options) => {
-          const template = nunjucks.compile(src, options.environment)
-          return context => template.render(context)
-        },
+        compile,
         prepare: (options, next) => {
-          options.compileOptions.environment = nunjucks.configure([
+          options.compileOptions.environment = Nunjucks.configure([
             path.join(options.relativeTo || process.cwd(), options.path),
             'node_modules/govuk-frontend/'
           ], {
@@ -51,6 +48,34 @@ const ViewsPlugin = {
       appVersion: pkg.version,
       assetPath: '/assets'
     }
+  }
+}
+
+/**
+ * The rendering function for the view engine
+ *
+ * When we register the Vision plugin we are required to populate `options:` (see
+ * {@link https://hapi.dev/module/vision/api/?v=7.0.1#options options}). For each `engine:` we register (in our case
+ * just Nunjucks) we must set the `compile:` property to a function which in turn returns a function that will be called
+ * when a view is to be rendered, for example, when `h.view()` is called in a controller.
+ *
+ * We know, it's confusing! This is why we've broken it out here rather than follow the
+ * {@link https://hapi.dev/module/vision/api/?v=7.0.1#nunjucks nunjucks example} which does it all inline.
+ *
+ * We believe it's done in this way to take advantage of a
+ * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures closure}. Before rendering a template
+ * Nunjucks needs to compile it. So, we can generate the compiled template using the args passed to this function.
+ *
+ * Using a closure, we can refer to the compiled template we create here in the function we're returning, even though
+ * that function will be called somewhere else entirely!
+ *
+ * Tl;DR; It the object we pass to Vision `compile:` must be a function that returns a function :-)
+ */
+function compile (template, options) {
+  const compiledTemplate = Nunjucks.compile(template, options.environment)
+
+  return (context) => {
+    return compiledTemplate.render(context)
   }
 }
 
