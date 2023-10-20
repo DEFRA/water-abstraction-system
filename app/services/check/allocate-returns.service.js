@@ -239,8 +239,11 @@ function _matchReturns (chargeElement, returns) {
   return returns.filter((record) => {
     const returnPeriods = record.abstractionPeriods
 
-    // Check if any of the return purposes match the charge element purpose and return false if it doesnt
-    if (!record.purposes.some(purpose => purpose.tertiary.code === elementCode)) {
+    const matchFound = record.purposes.some((purpose) => {
+      return purpose.tertiary.code === elementCode
+    })
+
+    if (!matchFound) {
       return false
     }
 
