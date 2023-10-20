@@ -1,5 +1,7 @@
 {% extends "govuk/template.njk" %}
 
+{% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
+
 {% block head %}
   <!--[if !IE 8]><!-->
     <link href="{{ assetPath }}/stylesheets/application.css" rel="stylesheet" />
@@ -24,10 +26,6 @@
     serviceName: "Manage your water abstraction or impoundment licence",
     serviceUrl: "#"
   }) }}
-{% endblock %}
-
-{% block pageTitle %}
-  {{ pageTitle }}
 {% endblock %}
 
 {% block content %}
