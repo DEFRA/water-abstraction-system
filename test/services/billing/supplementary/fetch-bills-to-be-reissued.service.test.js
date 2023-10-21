@@ -1,12 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
+const { describe, it, beforeEach, afterEach, expect } = require('@jest/globals')
+const sinon = require('sinon')
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
@@ -36,7 +32,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     it('returns no results', async () => {
       const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
-      expect(result).to.be.empty()
+      expect(result).toEqual([])
     })
   })
 
@@ -48,8 +44,8 @@ describe('Fetch Bills To Be Reissued service', () => {
     it('returns results', async () => {
       const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
-      expect(result).to.have.length(1)
-      expect(result[0]).to.be.an.instanceOf(BillModel)
+      expect(result).toHaveLength(1)
+      expect(result[0]).toBeInstanceOf(BillModel)
     })
 
     it('returns only the required bill fields', async () => {
@@ -57,7 +53,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
       const result = Object.keys(bill[0])
 
-      expect(result).to.only.include([
+      expect(result).toEqual([
         'billingInvoiceId',
         'externalId',
         'financialYearEnding',
@@ -75,7 +71,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
       const result = Object.keys(billLicences[0])
 
-      expect(result).to.only.include([
+      expect(result).toEqual([
         'licenceRef',
         'licenceId',
         'transactions'
@@ -98,8 +94,8 @@ describe('Fetch Bills To Be Reissued service', () => {
       it('returns only sroc bills', async () => {
         const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
-        expect(result).to.have.length(1)
-        expect(result[0].billingInvoiceId).to.equal(bill.billingInvoiceId)
+        expect(result).toHaveLength(1)
+        expect(result[0].billingInvoiceId).toEqual(bill.billingInvoiceId)
       })
     })
   })
@@ -108,26 +104,26 @@ describe('Fetch Bills To Be Reissued service', () => {
     let notifierStub
 
     beforeEach(() => {
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      notifierStub = { omg: sinon.stub(), omfg: sinon.stub() }
       global.GlobalNotifier = notifierStub
     })
 
     afterEach(() => {
       delete global.GlobalNotifier
-      Sinon.restore()
+      sinon.restore()
     })
 
     it('logs an error', async () => {
       // Force an error by calling the service with an invalid uuid
       await FetchBillsToBeReissuedService.go('NOT_A_UUID')
 
-      expect(notifierStub.omfg.calledWith('Could not fetch reissue bills')).to.be.true()
+      expect(notifierStub.omfg.calledWith('Could not fetch reissue bills')).toBeTruthy()
     })
 
     it('returns an empty array', async () => {
       const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
-      expect(result).to.be.empty()
+      expect(result).toEqual([])
     })
   })
 })

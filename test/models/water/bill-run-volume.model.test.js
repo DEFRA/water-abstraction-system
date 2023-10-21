@@ -1,59 +1,45 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const BillRunVolumeHelper = require('../../support/helpers/water/bill-run-volume.helper.js')
 const ChargeReferenceHelper = require('../../support/helpers/water/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../../app/models/water/charge-reference.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
 const BillRunVolumeModel = require('../../../app/models/water/bill-run-volume.model.js')
 
 describe('Bill Run Volume model', () => {
+  let testBillRun
+  let testChargeReference
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    testBillRun = await BillRunHelper.add()
+    testChargeReference = await ChargeReferenceHelper.add()
+
+    const { billingBatchId } = testBillRun
+    const { chargeElementId } = testChargeReference
+    testRecord = await BillRunVolumeHelper.add({ billingBatchId, chargeElementId })
   })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await BillRunVolumeHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await BillRunVolumeModel.query().findById(testRecord.billingVolumeId)
 
-      expect(result).to.be.an.instanceOf(BillRunVolumeModel)
-      expect(result.billingVolumeId).to.equal(testRecord.billingVolumeId)
+      expect(result).toBeInstanceOf(BillRunVolumeModel)
+      expect(result.billingVolumeId).toBe(testRecord.billingVolumeId)
     })
   })
 
   describe('Relationships', () => {
     describe('when linking to bill run', () => {
-      let testBillRun
-
-      beforeEach(async () => {
-        testBillRun = await BillRunHelper.add()
-
-        const { billingBatchId } = testBillRun
-        testRecord = await BillRunVolumeHelper.add({ billingBatchId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunVolumeModel.query()
           .innerJoinRelated('billRun')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the bill run', async () => {
@@ -61,29 +47,20 @@ describe('Bill Run Volume model', () => {
           .findById(testRecord.billingVolumeId)
           .withGraphFetched('billRun')
 
-        expect(result).to.be.instanceOf(BillRunVolumeModel)
-        expect(result.billingVolumeId).to.equal(testRecord.billingVolumeId)
+        expect(result).toBeInstanceOf(BillRunVolumeModel)
+        expect(result.billingVolumeId).toBe(testRecord.billingVolumeId)
 
-        expect(result.billRun).to.be.an.instanceOf(BillRunModel)
-        expect(result.billRun).to.equal(testBillRun)
+        expect(result.billRun).toBeInstanceOf(BillRunModel)
+        expect(result.billRun).toEqual(testBillRun)
       })
     })
 
     describe('when linking to charge reference', () => {
-      let testChargeReference
-
-      beforeEach(async () => {
-        testChargeReference = await ChargeReferenceHelper.add()
-
-        const { chargeElementId } = testChargeReference
-        testRecord = await BillRunVolumeHelper.add({ chargeElementId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunVolumeModel.query()
           .innerJoinRelated('chargeReference')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the charge reference', async () => {
@@ -91,11 +68,11 @@ describe('Bill Run Volume model', () => {
           .findById(testRecord.billingVolumeId)
           .withGraphFetched('chargeReference')
 
-        expect(result).to.be.instanceOf(BillRunVolumeModel)
-        expect(result.billingVolumeId).to.equal(testRecord.billingVolumeId)
+        expect(result).toBeInstanceOf(BillRunVolumeModel)
+        expect(result.billingVolumeId).toBe(testRecord.billingVolumeId)
 
-        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReference).to.equal(testChargeReference)
+        expect(result.chargeReference).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargeReference).toEqual(testChargeReference)
       })
     })
   })
@@ -105,7 +82,7 @@ describe('Bill Run Volume model', () => {
       it('returns the requested status code', async () => {
         const result = BillRunVolumeModel.twoPartTariffStatuses.noReturnsSubmitted
 
-        expect(result).to.equal(10)
+        expect(result).toBe(10)
       })
     })
   })
@@ -119,7 +96,7 @@ describe('Bill Run Volume model', () => {
       it('returns the status', () => {
         const result = testRecord.$twoPartTariffStatus()
 
-        expect(result).to.equal('returnLineOverlapsChargePeriod')
+        expect(result).toBe('returnLineOverlapsChargePeriod')
       })
     })
 
@@ -131,7 +108,7 @@ describe('Bill Run Volume model', () => {
       it('returns null', () => {
         const result = testRecord.$twoPartTariffStatus()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
   })

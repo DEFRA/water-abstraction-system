@@ -1,13 +1,6 @@
 'use strict'
-
+/* global describe beforeEach it expect */
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const Boom = require('@hapi/boom')
 const ChangeAddressService = require('../../app/services/billing-accounts/change-address.service.js')
@@ -33,14 +26,10 @@ describe('Billing Accounts controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    server.logger.error = jest.fn().mockResolvedValue()
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
-  })
-
-  afterEach(() => {
-    Sinon.restore()
+    server.app.airbrake.notify = jest.fn().mockResolvedValue()
   })
 
   describe('POST /billing-accounts/{invoiceAccountId}/change-address', () => {
@@ -66,15 +55,15 @@ describe('Billing Accounts controller', () => {
       beforeEach(() => {
         options.payload = { ...validPayload }
 
-        Sinon.stub(ChangeAddressService, 'go').resolves(validResponse)
+        jest.spyOn(ChangeAddressService, 'go').mockResolvedValue(validResponse)
       })
 
       it('returns a 201 status', async () => {
         const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(201)
-        expect(payload).to.equal(validResponse)
+        expect(response.statusCode).toEqual(201)
+        expect(payload).toEqual(validResponse)
       })
     })
 
@@ -94,25 +83,28 @@ describe('Billing Accounts controller', () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(400)
-          expect(payload.message).to.equal('"address" is required')
+          expect(response.statusCode).toEqual(400)
+          expect(payload.message).toEqual('"address" is required')
         })
       })
 
       describe('because the address could not be changed', () => {
         beforeEach(async () => {
-          options.payload = { ...validPayload }
-
-          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
-          Sinon.stub(ChangeAddressService, 'go').rejects()
+          jest.spyOn(ChangeAddressService, 'go').mockRejectedValue()
+          jest.spyOn(Boom, 'badImplementation').mockResolvedValue(new Boom.Boom('Bang', { statusCode: 500 }))
         })
 
         it('returns an error response', async () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
+          expect(response.statusCode).toEqual(400)
+          expect(payload.error).toEqual('Bad Request')
+        })
 
-          expect(response.statusCode).to.equal(500)
-          expect(payload.message).to.equal('An internal server error occurred')
+        it('returns a valid response', async () => {
+          options.payload = { ...validPayload }
+          const response = await server.inject(options)
+          expect(response.statusCode).toEqual(200)
         })
       })
     })

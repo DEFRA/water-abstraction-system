@@ -1,19 +1,11 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../../support/helpers/water/bill.helper.js')
 const BillModel = require('../../../app/models/water/bill.model.js')
 const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
 const BillRunVolumeHelper = require('../../support/helpers/water/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../../app/models/water/bill-run-volume.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 const RegionModel = require('../../../app/models/water/region.model.js')
 
@@ -21,39 +13,44 @@ const RegionModel = require('../../../app/models/water/region.model.js')
 const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 
 describe('Bill Run model', () => {
+  let testBills
+  let testBillRunVolumes
   let testRecord
+  let testRegion
 
-  beforeEach(async () => {
-    await DatabaseHelper.clean()
+  beforeAll(async () => {
+    testBills = []
+    testBillRunVolumes = []
+    testRegion = await RegionHelper.add()
+    testRecord = await BillRunHelper.add({ regionId: testRegion.regionId })
+
+    const { billingBatchId } = testRecord
+
+    for (let i = 0; i < 2; i++) {
+      const bill = await BillHelper.add({ financialYearEnding: 2023, billingBatchId })
+      testBills.push(bill)
+
+      const billRunVolume = await BillRunVolumeHelper.add({ billingBatchId })
+      testBillRunVolumes.push(billRunVolume)
+    }
   })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await BillRunHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await BillRunModel.query().findById(testRecord.billingBatchId)
 
-      expect(result).to.be.an.instanceOf(BillRunModel)
-      expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
+      expect(result).toBeInstanceOf(BillRunModel)
+      expect(result.billingBatchId).toBe(testRecord.billingBatchId)
     })
   })
 
   describe('Relationships', () => {
     describe('when linking to region', () => {
-      let testRegion
-
-      beforeEach(async () => {
-        testRegion = await RegionHelper.add()
-        testRecord = await BillRunHelper.add({ regionId: testRegion.regionId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunModel.query()
           .innerJoinRelated('region')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the region', async () => {
@@ -61,33 +58,20 @@ describe('Bill Run model', () => {
           .findById(testRecord.billingBatchId)
           .withGraphFetched('region')
 
-        expect(result).to.be.instanceOf(BillRunModel)
-        expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
+        expect(result).toBeInstanceOf(BillRunModel)
+        expect(result.billingBatchId).toBe(testRecord.billingBatchId)
 
-        expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion)
+        expect(result.region).toBeInstanceOf(RegionModel)
+        expect(result.region).toEqual(testRegion)
       })
     })
 
     describe('when linking to bills', () => {
-      let testBills
-
-      beforeEach(async () => {
-        testRecord = await BillRunHelper.add()
-        const { billingBatchId } = testRecord
-
-        testBills = []
-        for (let i = 0; i < 2; i++) {
-          const bill = await BillHelper.add({ financialYearEnding: 2023, billingBatchId })
-          testBills.push(bill)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunModel.query()
           .innerJoinRelated('bills')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the bills', async () => {
@@ -95,35 +79,22 @@ describe('Bill Run model', () => {
           .findById(testRecord.billingBatchId)
           .withGraphFetched('bills')
 
-        expect(result).to.be.instanceOf(BillRunModel)
-        expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
+        expect(result).toBeInstanceOf(BillRunModel)
+        expect(result.billingBatchId).toBe(testRecord.billingBatchId)
 
-        expect(result.bills).to.be.an.array()
-        expect(result.bills[0]).to.be.an.instanceOf(BillModel)
-        expect(result.bills).to.include(testBills[0])
-        expect(result.bills).to.include(testBills[1])
+        expect(result.bills).toBeInstanceOf(Array)
+        expect(result.bills[0]).toBeInstanceOf(BillModel)
+        expect(result.bills).toContainEqual(testBills[0])
+        expect(result.bills).toContainEqual(testBills[1])
       })
     })
 
     describe('when linking to bill run volumes', () => {
-      let testBillRunVolumes
-
-      beforeEach(async () => {
-        testRecord = await BillRunHelper.add()
-        const { billingBatchId } = testRecord
-
-        testBillRunVolumes = []
-        for (let i = 0; i < 2; i++) {
-          const billRunVolume = await BillRunVolumeHelper.add({ billingBatchId })
-          testBillRunVolumes.push(billRunVolume)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await BillRunModel.query()
           .innerJoinRelated('billRunVolumes')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the bills', async () => {
@@ -131,13 +102,13 @@ describe('Bill Run model', () => {
           .findById(testRecord.billingBatchId)
           .withGraphFetched('billRunVolumes')
 
-        expect(result).to.be.instanceOf(BillRunModel)
-        expect(result.billingBatchId).to.equal(testRecord.billingBatchId)
+        expect(result).toBeInstanceOf(BillRunModel)
+        expect(result.billingBatchId).toBe(testRecord.billingBatchId)
 
-        expect(result.billRunVolumes).to.be.an.array()
-        expect(result.billRunVolumes[0]).to.be.an.instanceOf(BillRunVolumeModel)
-        expect(result.billRunVolumes).to.include(testBillRunVolumes[0])
-        expect(result.billRunVolumes).to.include(testBillRunVolumes[1])
+        expect(result.billRunVolumes).toBeInstanceOf(Array)
+        expect(result.billRunVolumes[0]).toBeInstanceOf(BillRunVolumeModel)
+        expect(result.billRunVolumes).toContainEqual(testBillRunVolumes[0])
+        expect(result.billRunVolumes).toContainEqual(testBillRunVolumes[1])
       })
     })
   })
@@ -147,7 +118,7 @@ describe('Bill Run model', () => {
       it('returns the requested error code', async () => {
         const result = BillRunModel.errorCodes.failedToCreateBillRun
 
-        expect(result).to.equal(50)
+        expect(result).toEqual(50)
       })
     })
   })

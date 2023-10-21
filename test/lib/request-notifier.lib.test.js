@@ -1,30 +1,25 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
-// Thing under test
+const { describe, it, beforeEach, afterEach, expect } = require('@jest/globals')
 const RequestNotifierLib = require('../../app/lib/request-notifier.lib.js')
+const sinon = require('sinon')
 
 describe('RequestNotifierLib class', () => {
   const id = '1234567890'
   const message = 'say what test'
+  const testError = new Error('hell no test')
 
   let airbrakeFake
   let pinoFake
 
-  beforeEach(async () => {
-    airbrakeFake = { notify: Sinon.fake.resolves({ id: 1 }), flush: Sinon.fake() }
-    pinoFake = { info: Sinon.fake(), error: Sinon.fake() }
+  beforeEach(() => {
+    airbrakeFake = { notify: sinon.fake.resolves({ id: 1 }), flush: sinon.fake() }
+    pinoFake = { info: sinon.fake(), error: sinon.fake() }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    sinon.restore()
   })
 
   describe('#omg()', () => {
@@ -33,7 +28,7 @@ describe('RequestNotifierLib class', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omg(message)
 
-        expect(pinoFake.info.calledOnceWith({ req: { id } }, message)).to.be.true()
+        expect(pinoFake.info.calledWith({ req: { id } }, message)).toBe(true)
       })
     })
 
@@ -42,14 +37,12 @@ describe('RequestNotifierLib class', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omg(message, { name: 'foo' })
 
-        expect(pinoFake.info.calledOnceWith({ name: 'foo', req: { id } }, message)).to.be.true()
+        expect(pinoFake.info.calledWith({ name: 'foo', req: { id } }, message)).toBe(true)
       })
     })
   })
 
   describe('#omfg()', () => {
-    const testError = new Error('hell no test')
-
     describe('when just a message is logged', () => {
       it("logs a correctly formatted 'error' level entry", () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
@@ -57,10 +50,10 @@ describe('RequestNotifierLib class', () => {
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toBe(message)
+        expect(logPacketArgs[0].req.id).toBe(id)
+        expect(logPacketArgs[1]).toBe(message)
       })
 
       it("sends the expected notification to 'Errbit'", () => {
@@ -69,9 +62,9 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(message)
-        expect(session).to.equal({ message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toBe(message)
+        expect(session).toEqual({ message, req: { id } })
       })
     })
 
@@ -82,11 +75,11 @@ describe('RequestNotifierLib class', () => {
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[0].name).to.equal('foo')
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toBe(message)
+        expect(logPacketArgs[0].req.id).toBe(id)
+        expect(logPacketArgs[0].name).toBe('foo')
+        expect(logPacketArgs[1]).toBe(message)
       })
 
       it("sends the expected notification to 'Errbit'", () => {
@@ -95,24 +88,24 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(message)
-        expect(session).to.equal({ name: 'foo', message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toBe(message)
+        expect(session).toEqual({ name: 'foo', message, req: { id } })
       })
     })
 
-    describe('when a message, some data and an error is to be logged', () => {
+    describe('when a message, some data, and an error is to be logged', () => {
       it("logs a correctly formatted 'error' level entry", () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, { name: 'foo' }, testError)
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(testError.message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[0].name).to.equal('foo')
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toBe(testError.message)
+        expect(logPacketArgs[0].req.id).toBe(id)
+        expect(logPacketArgs[0].name).toBe('foo')
+        expect(logPacketArgs[1]).toBe(message)
       })
 
       it("sends the expected notification to 'Errbit'", () => {
@@ -121,23 +114,23 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(testError.message)
-        expect(session).to.equal({ name: 'foo', message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toBe(testError.message)
+        expect(session).toEqual({ name: 'foo', message, req: { id } })
       })
     })
 
-    describe('when a message, no data but an error is to be logged', () => {
+    describe('when a message, no data, but an error is to be logged', () => {
       it("logs a correctly formatted 'error' level entry", () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, null, testError)
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(testError.message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toBe(testError.message)
+        expect(logPacketArgs[0].req.id).toBe(id)
+        expect(logPacketArgs[1]).toBe(message)
       })
 
       it("sends the expected notification to 'Errbit'", () => {
@@ -146,9 +139,9 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(testError.message)
-        expect(session).to.equal({ message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toBe(testError.message)
+        expect(session).toEqual({ message, req: { id } })
       })
     })
   })

@@ -1,13 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const ProcessTimeLimitedLicencesService = require('../../app/services/charge-elements/process-time-limited-licences.service.js')
 
@@ -23,14 +15,9 @@ describe('Charge Elements controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
-
+    server.logger.error = jest.fn().mockResolvedValue()
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
-  })
-
-  afterEach(() => {
-    Sinon.restore()
+    server.app.airbrake.notify = jest.fn().mockResolvedValue()
   })
 
   describe('POST /charge-elements/time-limited', () => {
@@ -41,13 +28,13 @@ describe('Charge Elements controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
+        jest.spyOn(ProcessTimeLimitedLicencesService, 'go').mockResolvedValue()
       })
 
       it('displays the correct message', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(204)
+        expect(response.statusCode).toEqual(204)
       })
     })
   })

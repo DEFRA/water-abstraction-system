@@ -1,17 +1,6 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, after, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
-// Things we need to stub
 const RequestLib = require('../../app/lib/request.lib.js')
-
-// Thing under test
 const ChargingModuleRequestLib = require('../../app/lib/charging-module-request.lib.js')
 
 describe('ChargingModuleRequestLib', () => {
@@ -21,11 +10,11 @@ describe('ChargingModuleRequestLib', () => {
   }
   const testRoute = 'TEST_ROUTE'
 
-  before(async () => {
+  beforeAll(async () => {
     // ChargingModuleRequestLib makes use of the getChargingModuleToken() server method, which we therefore need to stub
-    // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
+    // Note that we only need to do this once as it is unaffected by the jest.restoreAllMocks() in our afterEach()
     global.HapiServerMethods = {
-      getChargingModuleToken: Sinon.stub().resolves({
+      getChargingModuleToken: jest.fn().mockResolvedValue({
         accessToken: 'ACCESS_TOKEN',
         expiresIn: 3600
       })
@@ -33,10 +22,10 @@ describe('ChargingModuleRequestLib', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    jest.restoreAllMocks()
   })
 
-  after(() => {
+  afterAll(() => {
     // Tidy up our global server methods stub once done
     delete global.HapiServerMethods
   })
@@ -44,7 +33,7 @@ describe('ChargingModuleRequestLib', () => {
   describe('#get', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'get').resolves({
+        jest.spyOn(RequestLib, 'get').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -57,34 +46,34 @@ describe('ChargingModuleRequestLib', () => {
       it('calls the Charging Module with the required options', async () => {
         await ChargingModuleRequestLib.get(testRoute)
 
-        const requestArgs = RequestLib.get.firstCall.args
+        const requestArgs = RequestLib.get.mock.calls[0]
 
-        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-        expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
+        expect(requestArgs[0]).toContain('TEST_ROUTE')
+        expect(requestArgs[1].headers).toEqual({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('returns a `true` success status', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.response.body.testObject.test).to.equal('yes')
+        expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).toEqual(200)
       })
 
       it('returns the information about the running Charging Module API', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.response.info).to.equal({
+        expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
         })
@@ -93,7 +82,7 @@ describe('ChargingModuleRequestLib', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'get').resolves({
+        jest.spyOn(RequestLib, 'get').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -107,25 +96,25 @@ describe('ChargingModuleRequestLib', () => {
       it('returns a `false` success status', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).toEqual(404)
       })
 
       it('returns the information about the running Charging Module API', async () => {
         const result = await ChargingModuleRequestLib.get(testRoute)
 
-        expect(result.response.info).to.equal({
+        expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
         })
@@ -136,7 +125,7 @@ describe('ChargingModuleRequestLib', () => {
   describe('#patch', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'patch').resolves({
+        jest.spyOn(RequestLib, 'patch').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -149,34 +138,34 @@ describe('ChargingModuleRequestLib', () => {
       it('calls the Charging Module with the required options', async () => {
         await ChargingModuleRequestLib.patch(testRoute)
 
-        const requestArgs = RequestLib.patch.firstCall.args
+        const requestArgs = RequestLib.patch.mock.calls[0]
 
-        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-        expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
+        expect(requestArgs[0]).toContain('TEST_ROUTE')
+        expect(requestArgs[1].headers).toEqual({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('returns a `true` success status', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.response.body).to.equal({})
+        expect(result.response.body).toEqual({})
       })
 
       it('returns the status code', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.response.statusCode).to.equal(204)
+        expect(result.response.statusCode).toEqual(204)
       })
 
       it('returns the information about the running Charging Module API', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.response.info).to.equal({
+        expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
         })
@@ -185,7 +174,7 @@ describe('ChargingModuleRequestLib', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'patch').resolves({
+        jest.spyOn(RequestLib, 'patch').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -199,25 +188,25 @@ describe('ChargingModuleRequestLib', () => {
       it('returns a `false` success status', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).toEqual(404)
       })
 
       it('returns the information about the running Charging Module API', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
-        expect(result.response.info).to.equal({
+        expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
         })
@@ -228,7 +217,7 @@ describe('ChargingModuleRequestLib', () => {
   describe('#post', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'post').resolves({
+        jest.spyOn(RequestLib, 'post').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -241,35 +230,35 @@ describe('ChargingModuleRequestLib', () => {
       it('calls the Charging Module with the required options', async () => {
         await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        const requestArgs = RequestLib.post.firstCall.args
+        const requestArgs = RequestLib.post.mock.calls[0]
 
-        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-        expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
-        expect(requestArgs[1].json).to.equal({ test: 'yes' })
+        expect(requestArgs[0]).toContain('TEST_ROUTE')
+        expect(requestArgs[1].headers).toEqual({ authorization: 'Bearer ACCESS_TOKEN' })
+        expect(requestArgs[1].json).toEqual({ test: 'yes' })
       })
 
       it('returns a `true` success status', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.response.body.testObject.test).to.equal('yes')
+        expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).toEqual(200)
       })
 
       it('returns the information about the running Charging Module API', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.response.info).to.equal({
+        expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
         })
@@ -278,7 +267,7 @@ describe('ChargingModuleRequestLib', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'post').resolves({
+        jest.spyOn(RequestLib, 'post').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -292,25 +281,25 @@ describe('ChargingModuleRequestLib', () => {
       it('returns a `false` success status', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).toEqual(404)
       })
 
       it('returns the information about the running Charging Module API', async () => {
         const result = await ChargingModuleRequestLib.post(testRoute, { test: 'yes' })
 
-        expect(result.response.info).to.equal({
+        expect(result.response.info).toEqual({
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
         })

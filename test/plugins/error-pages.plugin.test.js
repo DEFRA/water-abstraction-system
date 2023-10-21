@@ -1,13 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const ErrorPagesService = require('../../app/services/plugins/error-pages.service.js')
 
@@ -31,10 +23,6 @@ describe('Error Pages plugin', () => {
     server = await init()
   })
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('When the response is a Boom error', () => {
     beforeEach(() => {
       testRoute = {
@@ -54,16 +42,16 @@ describe('Error Pages plugin', () => {
         beforeEach(async () => {
           server.route(testRoute)
 
-          Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: true, statusCode: 400 })
+          jest.spyOn(ErrorPagesService, 'go').mockReturnValue({ stopResponse: true, statusCode: 400 })
         })
 
-        it('returns our general error HTML page', async () => {
+        it('mockReturnValue our general error HTML page', async () => {
           const response = await server.inject(request)
 
-          expect(response.statusCode).to.equal(400)
-          expect(response.statusMessage).to.equal('Bad Request')
-          expect(response.payload).startsWith('<!DOCTYPE html>')
-          expect(response.payload).contains('Sorry, there is a problem with the service')
+          expect(response.statusCode).toEqual(400)
+          expect(response.statusMessage).toEqual('Bad Request')
+          expect(response.payload).toMatch('<!DOCTYPE html>')
+          expect(response.payload).toContain('Sorry, there is a problem with the service')
         })
       })
 
@@ -72,32 +60,32 @@ describe('Error Pages plugin', () => {
           testRoute.options.app = { plainOutput: true }
           server.route(testRoute)
 
-          Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 400 })
+          jest.spyOn(ErrorPagesService, 'go').mockReturnValue({ stopResponse: false, statusCode: 400 })
         })
 
-        it('returns a plain response', async () => {
+        it('mockReturnValue a plain response', async () => {
           const response = await server.inject(request)
 
-          expect(response.statusCode).to.equal(400)
-          expect(response.statusMessage).to.equal('Bad Request')
-          expect(response.payload).not.to.startWith('<!DOCTYPE html>')
-          expect(response.payload).contains('Things go boom')
+          expect(response.statusCode).toEqual(400)
+          expect(response.statusMessage).toEqual('Bad Request')
+          expect(response.payload).not.toMatch('<!DOCTYPE html>')
+          expect(response.payload).toContain('Things go boom')
         })
       })
     })
 
     describe('and it is a 404', () => {
       beforeEach(() => {
-        Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: true, statusCode: 404 })
+        jest.spyOn(ErrorPagesService, 'go').mockReturnValue({ stopResponse: true, statusCode: 404 })
       })
 
-      it('returns our 404 error HTML page', async () => {
+      it('mockReturnValue our 404 error HTML page', async () => {
         const response = await server.inject(request)
 
-        expect(response.statusCode).to.equal(404)
-        expect(response.statusMessage).to.equal('Not Found')
-        expect(response.payload).startsWith('<!DOCTYPE html>')
-        expect(response.payload).contains('Page not found')
+        expect(response.statusCode).toEqual(404)
+        expect(response.statusMessage).toEqual('Not Found')
+        expect(response.payload).toMatch('<!DOCTYPE html>')
+        expect(response.payload).toContain('Page not found')
       })
     })
   })
@@ -120,14 +108,14 @@ describe('Error Pages plugin', () => {
       beforeEach(async () => {
         server.route(testRoute)
 
-        Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 200 })
+        jest.spyOn(ErrorPagesService, 'go').mockReturnValue({ stopResponse: false, statusCode: 200 })
       })
 
       it('lets the response continue without change', async () => {
         const response = await server.inject(request)
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).equal('{"hello":"world"}')
+        expect(response.statusCode).toEqual(200)
+        expect(response.payload).toEqual('{"hello":"world"}')
       })
     })
 
@@ -136,14 +124,14 @@ describe('Error Pages plugin', () => {
         testRoute.options.app = { plainOutput: true }
         server.route(testRoute)
 
-        Sinon.stub(ErrorPagesService, 'go').returns({ stopResponse: false, statusCode: 200 })
+        jest.spyOn(ErrorPagesService, 'go').mockReturnValue({ stopResponse: false, statusCode: 200 })
       })
 
       it('lets the response continue without change', async () => {
         const response = await server.inject(request)
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).equal('{"hello":"world"}')
+        expect(response.statusCode).toEqual(200)
+        expect(response.payload).toEqual('{"hello":"world"}')
       })
     })
   })

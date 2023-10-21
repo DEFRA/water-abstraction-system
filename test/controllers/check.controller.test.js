@@ -1,13 +1,6 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Things we need to stub
 const TwoPartService = require('../../app/services/check/two-part.service.js')
 
@@ -23,16 +16,11 @@ describe('Check controller', () => {
 
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    server.logger.error = jest.fn().mockResolvedValue()
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    server.app.airbrake.notify = jest.fn().mockResolvedValue()
   })
-
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('GET /check/two-part', () => {
     const options = {
       method: 'GET',
@@ -41,7 +29,7 @@ describe('Check controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(TwoPartService, 'go').resolves({ regionName: 'Fantasia' })
+        jest.spyOn(TwoPartService, 'go').mockResolvedValue({ regionName: 'Fantasia' })
       })
 
       it('displays the correct message', async () => {
@@ -49,21 +37,21 @@ describe('Check controller', () => {
 
         const responsePayload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(200)
-        expect(responsePayload).to.equal({ regionName: 'Fantasia' })
+        expect(response.statusCode).toEqual(200)
+        expect(responsePayload).toEqual({ regionName: 'Fantasia' })
       })
     })
 
     describe('when the request fails', () => {
       describe('because the TwoPartService errors', () => {
         beforeEach(async () => {
-          Sinon.stub(TwoPartService, 'go').rejects()
+          jest.spyOn(TwoPartService, 'go').mockRejectedValue()
         })
 
         it('returns a 500 status', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).toEqual(500)
         })
       })
     })

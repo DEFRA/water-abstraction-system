@@ -1,11 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
+const { describe, it, beforeEach, expect } = require('@jest/globals')
 
 // Test helpers
 const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
@@ -41,7 +37,7 @@ describe('Determine Minimum Charge service', () => {
       it('returns true', async () => {
         const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
@@ -59,7 +55,7 @@ describe('Determine Minimum Charge service', () => {
       it('returns false', async () => {
         const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
   })
@@ -78,7 +74,7 @@ describe('Determine Minimum Charge service', () => {
     it('returns false', async () => {
       const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 })

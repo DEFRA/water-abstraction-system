@@ -8,6 +8,10 @@
 # VSCode configuration
 /.vscode
 
+# Dev personal config
+jsconfig.json
+wallaby.js
+
 # Logs, temp and OS specific files
 /log/*
 !/log/.keep

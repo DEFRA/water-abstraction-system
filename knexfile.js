@@ -30,6 +30,7 @@ const development = {
 
 const test = {
   ...defaultConfig,
+  pool: { min: 0, idleTimeoutMillis: 500 },
   connection: {
     ...defaultConnection,
     database: DatabaseConfig.testDatabase

@@ -1,11 +1,7 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
+const { describe, it, beforeEach } = require('@jest/globals')
+const { expect } = require('@jest/globals')
 
 // Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
@@ -37,9 +33,6 @@ describe('Charging Module Create Transaction presenter', () => {
     beforeEach(async () => {
       region = await RegionHelper.add()
 
-      // NOTE: In the context the presenter is used it is from a Licence instance returned by
-      // FetchChargeVersionsService. We recreate how that instance is formed here, including extracting some of the
-      // values as distinct properties from the licence's `regions` JSONb field.
       const tempLicence = await LicenceHelper.add({
         regionId: region.regionId,
         regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
@@ -53,18 +46,13 @@ describe('Charging Module Create Transaction presenter', () => {
           ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
         ])
         .withGraphFetched('region')
-        .modifyGraph('licence.region', builder => {
+        .modifyGraph('licence.region', (builder) => {
           builder.select([
             'regionId',
             'chargeRegionId'
           ])
         })
 
-      // NOTE: The transaction object the presenter expects is what `FormatSrocTransactionLineService` returns rather
-      // than a simple instance of `TransactionModel`. But to test the presenter, we just need to _represent_ what the
-      // service returns whilst avoiding over complicating our tests with the additional setup it needs. So, we create a
-      // standard transaction instance and amend some of the properties to match what FormatSrocTransactionLineService
-      // does.
       transaction = await TransactionHelper.add()
       transaction.chargeCategoryCode = '4.5.6'
       transaction.section127Agreement = false
@@ -72,39 +60,44 @@ describe('Charging Module Create Transaction presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateTransactionPresenter.go(transaction, billingPeriod, invoiceAccountNumber, licence)
+      const result = CreateTransactionPresenter.go(
+        transaction,
+        billingPeriod,
+        invoiceAccountNumber,
+        licence
+      )
 
-      expect(result.clientId).to.equal(transaction.billingTransactionId)
-      expect(result.ruleset).to.equal('sroc')
-      expect(result.periodStart).to.equal('01-APR-2022')
-      expect(result.periodEnd).to.equal('31-MAR-2023')
-      expect(result.credit).to.equal(false)
-      expect(result.abatementFactor).to.equal(1)
-      expect(result.adjustmentFactor).to.equal(1)
-      expect(result.actualVolume).to.equal(11)
-      expect(result.aggregateProportion).to.equal(1)
-      expect(result.areaCode).to.equal('SAAR')
-      expect(result.authorisedDays).to.equal(365)
-      expect(result.authorisedVolume).to.equal(11)
-      expect(result.billableDays).to.equal(365)
-      expect(result.chargeCategoryCode).to.equal('4.5.6')
-      expect(result.chargeCategoryDescription).to.equal('Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model')
-      expect(result.chargePeriod).to.equal('01-APR-2022 - 31-MAR-2023')
-      expect(result.compensationCharge).to.equal(false)
-      expect(result.customerReference).to.equal(invoiceAccountNumber)
-      expect(result.licenceNumber).to.equal(licence.licenceRef)
-      expect(result.lineDescription).to.equal('Water abstraction charge: Agriculture other than spray irrigation at East Rudham')
-      expect(result.loss).to.equal('medium')
-      expect(result.region).to.equal(region.chargeRegionId)
-      expect(result.regionalChargingArea).to.equal('Southern')
-      expect(result.section127Agreement).to.equal(false)
-      expect(result.section130Agreement).to.equal(false)
-      expect(result.supportedSource).to.equal(false)
-      expect(result.supportedSourceName).to.equal(null)
-      expect(result.twoPartTariff).to.equal(false)
-      expect(result.waterCompanyCharge).to.equal(false)
-      expect(result.waterUndertaker).to.equal(false)
-      expect(result.winterOnly).to.equal(false)
+      expect(result.clientId).toEqual(transaction.billingTransactionId)
+      expect(result.ruleset).toEqual('sroc')
+      expect(result.periodStart).toEqual('01-APR-2022')
+      expect(result.periodEnd).toEqual('31-MAR-2023')
+      expect(result.credit).toEqual(false)
+      expect(result.abatementFactor).toEqual(1)
+      expect(result.adjustmentFactor).toEqual(1)
+      expect(result.actualVolume).toEqual(11)
+      expect(result.aggregateProportion).toEqual(1)
+      expect(result.areaCode).toEqual('SAAR')
+      expect(result.authorisedDays).toEqual(365)
+      expect(result.authorisedVolume).toEqual(11)
+      expect(result.billableDays).toEqual(365)
+      expect(result.chargeCategoryCode).toEqual('4.5.6')
+      expect(result.chargeCategoryDescription).toEqual('Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model')
+      expect(result.chargePeriod).toEqual('01-APR-2022 - 31-MAR-2023')
+      expect(result.compensationCharge).toEqual(false)
+      expect(result.customerReference).toEqual(invoiceAccountNumber)
+      expect(result.licenceNumber).toEqual(licence.licenceRef)
+      expect(result.lineDescription).toEqual('Water abstraction charge: Agriculture other than spray irrigation at East Rudham')
+      expect(result.loss).toEqual('medium')
+      expect(result.region).toEqual(region.chargeRegionId)
+      expect(result.regionalChargingArea).toEqual('Southern')
+      expect(result.section127Agreement).toEqual(false)
+      expect(result.section130Agreement).toEqual(false)
+      expect(result.supportedSource).toEqual(false)
+      expect(result.supportedSourceName).toEqual(null)
+      expect(result.twoPartTariff).toEqual(false)
+      expect(result.waterCompanyCharge).toEqual(false)
+      expect(result.waterUndertaker).toEqual(false)
+      expect(result.winterOnly).toEqual(false)
     })
   })
 })

@@ -1,29 +1,21 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = exports.lab = Lab.script()
-const { expect } = Code
 
 // Thing under test
 const LegacyDbSnakeCaseMappersLib = require('../../app/lib/legacy-db-snake-case-mappers.lib.js')
 
-// NOTE: Ideally, we would have liked to spy on the Objection snakeCase and camelCase methods to confirm they are or are
-// not being called depending on the circumstance. But all our attempts with Sinon failed (a common issue we have when
-// testing with Objection.js)
-describe('RequestLib', () => {
-  describe('#legacyDbSnakeCaseMappers', () => {
+describe('LegacyDbSnakeCaseMappersLib', () => {
+  describe('legacyDbSnakeCaseMappers', () => {
     // We always pass in these options. See knexfile.application.js and how legacyDbSnakeCaseMappers() is called
     const options = { underscoreBeforeDigits: true }
 
     describe('when called', () => {
-      it('returns an object containing knex wrapIdentifier() and postProcessResponse() hooks', (options) => {
+      it('returns an object containing knex wrapIdentifier() and postProcessResponse() hooks', () => {
         const result = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers()
 
-        expect(result).to.include('wrapIdentifier')
-        expect(result).to.include('postProcessResponse')
+        expect(result).toHaveProperty('wrapIdentifier')
+        expect(result).toHaveProperty('postProcessResponse')
       })
     })
 
@@ -31,9 +23,9 @@ describe('RequestLib', () => {
       const dbResult = [
         {
           address_line_1: '10 Downing Street',
-          purpose: 'Residence of the prime minster',
+          purpose: 'Residence of the prime minister',
           is_occupied: true,
-          section_127_Agreement: false,
+          section_127_agreement: false,
           crm_v2: 'I am really a schema disguised as a table column :-)'
         }
       ]
@@ -42,10 +34,10 @@ describe('RequestLib', () => {
         const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
         const result = identifierMapping.postProcessResponse(dbResult)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             addressLine1: '10 Downing Street',
-            purpose: 'Residence of the prime minster',
+            purpose: 'Residence of the prime minister',
             isOccupied: true,
             section127Agreement: false,
             crm_v2: 'I am really a schema disguised as a table column :-)'
@@ -64,7 +56,7 @@ describe('RequestLib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('addressLine1', origWrap)
 
-          expect(result).to.equal('address_line_1')
+          expect(result).toBe('address_line_1')
         })
       })
 
@@ -73,7 +65,7 @@ describe('RequestLib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('purpose', origWrap)
 
-          expect(result).to.equal('purpose')
+          expect(result).toBe('purpose')
         })
       })
 
@@ -82,7 +74,7 @@ describe('RequestLib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('isOccupied', origWrap)
 
-          expect(result).to.equal('is_occupied')
+          expect(result).toBe('is_occupied')
         })
       })
 
@@ -91,7 +83,7 @@ describe('RequestLib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('section127Agreement', origWrap)
 
-          expect(result).to.equal('section_127_agreement')
+          expect(result).toBe('section_127_agreement')
         })
       })
 
@@ -100,7 +92,7 @@ describe('RequestLib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('crm_v2', origWrap)
 
-          expect(result).to.equal('crm_v2')
+          expect(result).toBe('crm_v2')
         })
       })
 
@@ -109,7 +101,7 @@ describe('RequestLib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('foo_v2', origWrap)
 
-          expect(result).to.equal('foo_v_2')
+          expect(result).toBe('foo_v_2')
         })
       })
     })

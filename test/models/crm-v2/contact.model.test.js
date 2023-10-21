@@ -1,15 +1,7 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = exports.lab = Lab.script()
-const { expect } = Code
-
 // Test helpers
 const ContactHelper = require('../../support/helpers/crm-v2/contact.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
 const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
 
@@ -17,48 +9,40 @@ const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-a
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 
 describe('Contact model', () => {
+  let testInvoiceAccountAddresses
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    testRecord = await ContactHelper.add()
+    testInvoiceAccountAddresses = []
+
+    const { contactId } = testRecord
+
+    for (let i = 0; i < 2; i++) {
+      // NOTE: A constraint in the invoice_account_addresses table means you cannot have 2 records with the same
+      // invoiceAccountId and start date
+      const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
+      const invoiceAccountAddress = await InvoiceAccountAddressHelper.add({ startDate, contactId })
+      testInvoiceAccountAddresses.push(invoiceAccountAddress)
+    }
   })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ContactHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ContactModel.query().findById(testRecord.contactId)
 
-      expect(result).to.be.an.instanceOf(ContactModel)
-      expect(result.contactId).to.equal(testRecord.contactId)
+      expect(result).toBeInstanceOf(ContactModel)
+      expect(result.contactId).toBe(testRecord.contactId)
     })
   })
 
   describe('Relationships', () => {
     describe('when linking to invoice account addresses', () => {
-      let testInvoiceAccountAddresses
-
-      beforeEach(async () => {
-        testRecord = await ContactHelper.add()
-        const { contactId } = testRecord
-
-        testInvoiceAccountAddresses = []
-        for (let i = 0; i < 2; i++) {
-          // NOTE: A constraint in the invoice_account_addresses table means you cannot have 2 records with the same
-          // invoiceAccountId and start date
-          const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
-          const invoiceAccountAddress = await InvoiceAccountAddressHelper.add({ startDate, contactId })
-          testInvoiceAccountAddresses.push(invoiceAccountAddress)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ContactModel.query()
           .innerJoinRelated('invoiceAccountAddresses')
 
-        expect(query).to.exist()
+        expect(query).toBeTruthy()
       })
 
       it('can eager load the invoice account addresses', async () => {
@@ -66,13 +50,13 @@ describe('Contact model', () => {
           .findById(testRecord.contactId)
           .withGraphFetched('invoiceAccountAddresses')
 
-        expect(result).to.be.instanceOf(ContactModel)
-        expect(result.contactId).to.equal(testRecord.contactId)
+        expect(result).toBeInstanceOf(ContactModel)
+        expect(result.contactId).toBe(testRecord.contactId)
 
-        expect(result.invoiceAccountAddresses).to.be.an.array()
-        expect(result.invoiceAccountAddresses[0]).to.be.an.instanceOf(InvoiceAccountAddressModel)
-        expect(result.invoiceAccountAddresses).to.include(testInvoiceAccountAddresses[0])
-        expect(result.invoiceAccountAddresses).to.include(testInvoiceAccountAddresses[1])
+        expect(result.invoiceAccountAddresses).toBeInstanceOf(Array)
+        expect(result.invoiceAccountAddresses[0]).toBeInstanceOf(InvoiceAccountAddressModel)
+        expect(result.invoiceAccountAddresses).toContainEqual(testInvoiceAccountAddresses[0])
+        expect(result.invoiceAccountAddresses).toContainEqual(testInvoiceAccountAddresses[1])
       })
     })
   })
@@ -111,7 +95,7 @@ describe('Contact model', () => {
         it("returns 'Villar'", () => {
           testRecord = ContactModel.fromJson(contactRecord)
 
-          expect(testRecord.$name()).to.equal('Villar')
+          expect(testRecord.$name()).toBe('Villar')
         })
 
         describe("and the salutation 'Mrs'", () => {
@@ -122,7 +106,7 @@ describe('Contact model', () => {
           it("returns 'Mrs Villar'", () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
-            expect(testRecord.$name()).to.equal('Mrs Villar')
+            expect(testRecord.$name()).toBe('Mrs Villar')
           })
 
           describe("and the initial 'J'", () => {
@@ -133,7 +117,7 @@ describe('Contact model', () => {
             it("returns 'Mrs J Villar'", () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
-              expect(testRecord.$name()).to.equal('Mrs J Villar')
+              expect(testRecord.$name()).toBe('Mrs J Villar')
             })
           })
         })
@@ -146,7 +130,7 @@ describe('Contact model', () => {
           it("returns 'Margherita Villar'", () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
-            expect(testRecord.$name()).to.equal('Margherita Villar')
+            expect(testRecord.$name()).toBe('Margherita Villar')
           })
 
           describe("and the salutation 'Mrs'", () => {
@@ -157,7 +141,7 @@ describe('Contact model', () => {
             it("returns 'Mrs Margherita Villar'", () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
-              expect(testRecord.$name()).to.equal('Mrs Margherita Villar')
+              expect(testRecord.$name()).toBe('Mrs Margherita Villar')
             })
 
             describe("and the initial 'J'", () => {
@@ -168,7 +152,7 @@ describe('Contact model', () => {
               it("returns 'Mrs J Villar'", () => {
                 testRecord = ContactModel.fromJson(contactRecord)
 
-                expect(testRecord.$name()).to.equal('Mrs J Villar')
+                expect(testRecord.$name()).toBe('Mrs J Villar')
               })
             })
           })
@@ -190,7 +174,7 @@ describe('Contact model', () => {
         it("returns 'Humanoid Risk Assessment'", () => {
           testRecord = ContactModel.fromJson(contactRecord)
 
-          expect(testRecord.$name()).to.equal('Humanoid Risk Assessment')
+          expect(testRecord.$name()).toBe('Humanoid Risk Assessment')
         })
       })
 
@@ -205,7 +189,7 @@ describe('Contact model', () => {
           it("returns 'Vincent Anderson'", () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
-            expect(testRecord.$name()).to.equal('Vincent Anderson')
+            expect(testRecord.$name()).toBe('Vincent Anderson')
           })
         })
 
@@ -217,7 +201,7 @@ describe('Contact model', () => {
           it("returns 'Mr Vincent Anderson'", () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
-            expect(testRecord.$name()).to.equal('Mr Vincent Anderson')
+            expect(testRecord.$name()).toBe('Mr Vincent Anderson')
           })
 
           describe("and the middle initial 'P'", () => {
@@ -228,7 +212,7 @@ describe('Contact model', () => {
             it("returns 'Mr V P Anderson'", () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
-              expect(testRecord.$name()).to.equal('Mr V P Anderson')
+              expect(testRecord.$name()).toBe('Mr V P Anderson')
             })
 
             describe("and the suffix 'MBE'", () => {
@@ -239,7 +223,7 @@ describe('Contact model', () => {
               it("returns 'Mr V P Anderson MBE'", () => {
                 testRecord = ContactModel.fromJson(contactRecord)
 
-                expect(testRecord.$name()).to.equal('Mr V P Anderson MBE')
+                expect(testRecord.$name()).toBe('Mr V P Anderson MBE')
               })
             })
           })
@@ -253,7 +237,7 @@ describe('Contact model', () => {
           it("returns 'V P Anderson'", () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
-            expect(testRecord.$name()).to.equal('V P Anderson')
+            expect(testRecord.$name()).toBe('V P Anderson')
           })
 
           describe("and the suffix 'MBE'", () => {
@@ -264,7 +248,7 @@ describe('Contact model', () => {
             it("returns 'V P Anderson MBE'", () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
-              expect(testRecord.$name()).to.equal('V P Anderson MBE')
+              expect(testRecord.$name()).toBe('V P Anderson MBE')
             })
           })
         })

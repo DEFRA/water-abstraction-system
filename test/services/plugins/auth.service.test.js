@@ -1,14 +1,9 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-const Sinon = require('sinon')
+const { describe, it, beforeEach, afterEach, expect } = require('@jest/globals')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
-const { expect } = Code
-
-// Things to stub
+// Things to stub (or in this case, mock)
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
 
 // Thing under test
@@ -16,88 +11,86 @@ const AuthService = require('../../../app/services/plugins/auth.service.js')
 
 describe('Auth service', () => {
   afterEach(() => {
-    Sinon.restore()
+    jest.restoreAllMocks()
   })
 
   describe('when the user id is found', () => {
     beforeEach(() => {
-      Sinon.stub(FetchUserRolesAndGroupsService, 'go')
-        .resolves({
-          user: { name: 'User' },
-          roles: [{ role: 'Role' }],
-          groups: [{ group: 'Group' }]
-        })
+      jest.spyOn(FetchUserRolesAndGroupsService, 'go').mockResolvedValue({
+        user: { name: 'User' },
+        roles: [{ role: 'Role' }],
+        groups: [{ group: 'Group' }]
+      })
     })
 
     it('returns isValid as `true`', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.isValid).to.be.true()
+      expect(result.isValid).toBe(true)
     })
 
     it('returns the user in credentials.user', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.user).to.equal({ name: 'User' })
+      expect(result.credentials.user).toEqual({ name: 'User' })
     })
 
     it('returns the roles in credentials.roles', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.roles).to.equal([{ role: 'Role' }])
+      expect(result.credentials.roles).toEqual([{ role: 'Role' }])
     })
 
     it('returns the groups in credentials.groups', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.groups).to.equal([{ group: 'Group' }])
+      expect(result.credentials.groups).toEqual([{ group: 'Group' }])
     })
 
     it('returns the role names in credentials.scope', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.scope).to.equal(['Role'])
+      expect(result.credentials.scope).toEqual(['Role'])
     })
   })
 
   describe('when the user id is not found', () => {
     beforeEach(() => {
-      Sinon.stub(FetchUserRolesAndGroupsService, 'go')
-        .resolves({
-          user: null,
-          roles: [],
-          groups: []
-        })
+      jest.spyOn(FetchUserRolesAndGroupsService, 'go').mockResolvedValue({
+        user: null,
+        roles: [],
+        groups: []
+      })
     })
 
     it('returns isValid as `false`', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.isValid).to.be.false()
+      expect(result.isValid).toBe(false)
     })
 
     it('returns `null` in credentials.user', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.user).to.be.null()
+      expect(result.credentials.user).toBeNull()
     })
 
     it('returns an empty array in credentials.roles', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.roles).to.be.empty()
+      expect(result.credentials.roles).toEqual([])
     })
 
     it('returns an empty array in credentials.groups', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.groups).to.be.empty()
+      expect(result.credentials.groups).toEqual([])
     })
 
     it('returns an empty array in credentials.scope', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.scope).to.be.empty()
+      expect(result.credentials.scope).toEqual([])
     })
   })
 })
