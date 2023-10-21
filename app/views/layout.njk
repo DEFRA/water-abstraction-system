@@ -20,11 +20,18 @@
 {% endblock %}
 
 {% block header %}
+  {% if auth.authenticated %}
+    {% set navigationLinks = [{ href: "/account/update-password", text: "Change password" }, { href: "/signout", text: "Sign out" }] %}
+  {% else %}
+    {% set navigationLinks = [] %}
+  {% endif %}
+
   {{ govukHeader({
     homepageUrl: "#",
     containerClasses: "govuk-width-container",
     serviceName: "Manage your water abstraction or impoundment licence",
-    serviceUrl: "#"
+    serviceUrl: "/",
+    navigation: navigationLinks
   }) }}
 {% endblock %}
 
