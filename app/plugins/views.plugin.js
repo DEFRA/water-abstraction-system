@@ -27,9 +27,12 @@ const ViewsPlugin = {
       }
     },
     context,
+    // the root file path used to resolve and load the templates identified when calling h.view()
     path: '../views',
+    // a base path used as prefix for `path:`
     relativeTo: __dirname,
-    isCached: ServerConfig.environment !== 'development' // Disable caching if we're running in dev
+    // Only enable caching of templates if we are running in production
+    isCached: ServerConfig.environment === 'production'
   }
 }
 
