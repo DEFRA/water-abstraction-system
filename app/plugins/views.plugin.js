@@ -26,16 +26,10 @@ const ViewsPlugin = {
         prepare
       }
     },
+    context,
     path: '../views',
     relativeTo: __dirname,
-    isCached: ServerConfig.environment !== 'development', // Disable caching if we're running in dev
-
-    // The context contains anything we want to pass through to our templates, eg. `assetPath` is referred to in
-    // layout.njk as the path to get static assets like client-side javascript. These are added to or overridden in the
-    // h.view() call in a controller.
-    context: {
-      assetPath: '/assets'
-    }
+    isCached: ServerConfig.environment !== 'development' // Disable caching if we're running in dev
   }
 }
 
@@ -68,6 +62,36 @@ function compile (template, options) {
 
   return (context) => {
     return compiledTemplate.render(context)
+  }
+}
+
+/**
+ * Build global context used with _all_ templates
+ *
+ * According to the Vision docs the global context option can be either an object or a function that takes the `request`
+ * as its only argument and returns a context object.
+ *
+ * When rendering views, the global context will be merged with any context object specified on the handler or using
+ * `h.view()`. When multiple context objects are used, values from the global context always have lowest precedence.
+ *
+ * Expanding that last point what it means is when we call `h.view('bills/view.njk', { ...myContext })` in a controller
+ * Vision will combine the 'context' (data) we pass in with the `params`, `payload`, `query` and `pre` values from the
+ * `request` plus the output of this function and pass that through to the template. Nice!
+ *
+ * @param {Object} request Instance of a Hapi {@link https://hapi.dev/api/?v=21.3.2#request Request}
+ *
+ * @returns {Object} the global context for all templates
+ */
+function context (request) {
+  return {
+    // `assetPath` is referred to in layout.njk as the path to get static assets like client-side javascript
+    assetPath: '/assets',
+    auth: {
+      authenticated: request.auth.isAuthenticated,
+      authorized: request.auth.isAuthorized,
+      user: request.auth.credentials?.user,
+      scope: request.auth.credentials?.scope
+    }
   }
 }
 
