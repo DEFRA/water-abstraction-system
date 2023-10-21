@@ -24,17 +24,7 @@ const ViewsPlugin = {
       // The 'engine' is the file extension this applies to; in this case, .njk
       njk: {
         compile,
-        prepare: (options, next) => {
-          options.compileOptions.environment = Nunjucks.configure([
-            path.join(options.relativeTo || process.cwd(), options.path),
-            'node_modules/govuk-frontend/'
-          ], {
-            autoescape: true, // Automatically escape dangerous characters
-            watch: false // We reload the template each time a page is accessed so don't need to watch files for changes
-          })
-
-          return next()
-        }
+        prepare
       }
     },
     path: '../views',
@@ -70,6 +60,10 @@ const ViewsPlugin = {
  * that function will be called somewhere else entirely!
  *
  * Tl;DR; It the object we pass to Vision `compile:` must be a function that returns a function :-)
+ *
+ * @param {string} template The content of the template
+ * @param {Object} options Vision's `config.compileOptions` property which we assign the Nunjucks Environment instance
+ * to in `prepare()` below
  */
 function compile (template, options) {
   const compiledTemplate = Nunjucks.compile(template, options.environment)
@@ -77,6 +71,40 @@ function compile (template, options) {
   return (context) => {
     return compiledTemplate.render(context)
   }
+}
+
+/**
+ * Initialises additional engine state
+ *
+ * That description and the ones for the params is taken directly from the
+ * {@link https://hapi.dev/module/vision/api/?v=7.0.1#options Vision docs}.
+ *
+ * Essentially, Vision is 'engine agnostic'. It is intended to work with lots of view engines. Some of them, like
+ * Nunjucks, require or can be configured. If `prepare:` is in the plugin options Vision will call it as part of
+ * its initialisation so you can configure your chosen view engine.
+ *
+ * @param {*} config The engine configuration object allowing updates to be made. This is useful for engines like
+ * Nunjucks that rely on additional state for rendering
+ * @param {*} next Has the signature `function(err)`
+ *
+ * @returns the result of calling `next()`
+ */
+function prepare (config, next) {
+  // Tell Nunjucks the paths to where your templates live. We _think_ Nunjucks searches in order of the paths provided.
+  // So, search our templates first before searching in the govuk-frontend package for a template.
+  const paths = [
+    path.join(config.relativeTo, config.path),
+    'node_modules/govuk-frontend/'
+  ]
+
+  // configure() returns an instance of Nunjucks Environment class (
+  // see https://mozilla.github.io/nunjucks/api.html#environment) which is the central object for handling templates.
+  // This gets assigned to Vision's compileOptions which is passed into `compile()` above as `options`.
+  const environment = Nunjucks.configure(paths)
+
+  config.compileOptions.environment = environment
+
+  return next()
 }
 
 module.exports = ViewsPlugin
