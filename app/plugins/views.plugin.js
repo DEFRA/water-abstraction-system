@@ -12,13 +12,14 @@
 
 const path = require('path')
 const Nunjucks = require('nunjucks')
+const Vision = require('@hapi/vision')
 
 const pkg = require('../../package.json')
 
 const ServerConfig = require('../../config/server.config.js')
 
 const ViewsPlugin = {
-  plugin: require('@hapi/vision'),
+  plugin: Vision,
   options: {
     engines: {
       // The 'engine' is the file extension this applies to; in this case, .njk
