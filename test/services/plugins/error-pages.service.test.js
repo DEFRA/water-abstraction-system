@@ -12,6 +12,13 @@ const { expect } = Code
 const ErrorPagesService = require('../../../app/services/plugins/error-pages.service.js')
 
 describe('Error pages service', () => {
+  const boom403Response = {
+    message: "can't touch this",
+    isBoom: true,
+    output: {
+      statusCode: 403
+    }
+  }
   const boom404Response = {
     message: 'where has my boom gone?',
     isBoom: true,
@@ -53,12 +60,6 @@ describe('Error pages service', () => {
       }
     })
 
-    it('returns the correct status code', () => {
-      const result = ErrorPagesService.go(request)
-
-      expect(result.statusCode).to.equal(boom500Response.output.statusCode)
-    })
-
     it('logs an error', () => {
       ErrorPagesService.go(request)
 
@@ -75,6 +76,12 @@ describe('Error pages service', () => {
 
         expect(result.stopResponse).to.be.false()
       })
+
+      it('returns the original status code', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(500)
+      })
     })
 
     describe('and the route is not configured for plain output (redirect to error page)', () => {
@@ -83,6 +90,12 @@ describe('Error pages service', () => {
 
         expect(result.stopResponse).to.be.true()
       })
+
+      it("returns a 'safe' status code", () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(200)
+      })
     })
   })
 
@@ -90,7 +103,7 @@ describe('Error pages service', () => {
     beforeEach(() => {
       request = {
         response: boom404Response,
-        route: { settings: { app: { plainOutput: true } } },
+        route: { settings: { } },
         path
       }
     })
@@ -98,7 +111,7 @@ describe('Error pages service', () => {
     it('returns the correct status code', () => {
       const result = ErrorPagesService.go(request)
 
-      expect(result.statusCode).to.equal(boom404Response.output.statusCode)
+      expect(result.statusCode).to.equal(404)
     })
 
     it('logs a message', () => {
@@ -120,14 +133,58 @@ describe('Error pages service', () => {
     })
 
     describe('and the route is not configured (redirect to error page)', () => {
-      beforeEach(() => {
-        request.route = { settings: { } }
-      })
-
       it('tells the plugin to stop the response and redirect to an error page', () => {
         const result = ErrorPagesService.go(request)
 
         expect(result.stopResponse).to.be.true()
+      })
+    })
+  })
+
+  describe('when the response is a boom 403 error', () => {
+    beforeEach(() => {
+      request = {
+        response: boom403Response,
+        route: { settings: { } },
+        path
+      }
+    })
+
+    it('logs a message', () => {
+      ErrorPagesService.go(request)
+
+      expect(notifierStub.omg.calledWith('Not authorised', { path })).to.be.true()
+    })
+
+    describe('and the route is configured to return plain output (do not redirect to error page)', () => {
+      beforeEach(() => {
+        request.route = { settings: { app: { plainOutput: true } } }
+      })
+
+      it('tells the plugin not to stop the response from continuing', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.stopResponse).to.be.false()
+      })
+
+      it('returns the original status code', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(403)
+      })
+    })
+
+    describe('and the route is not configured (redirect to error page)', () => {
+      it('tells the plugin to stop the response and redirect to an error page', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.stopResponse).to.be.true()
+      })
+
+      it("returns a 'safe' status code", () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(404)
       })
     })
   })
