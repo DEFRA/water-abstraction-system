@@ -81,6 +81,8 @@ function compile (template, options) {
  * Vision will combine the 'context' (data) we pass in with the `params`, `payload`, `query` and `pre` values from the
  * `request` plus the output of this function and pass that through to the template. Nice!
  *
+ * > Credit to https://www.solarwinter.net/hapi-vision-and-who-am-i/ for highlighting we could do this
+ *
  * @param {Object} request Instance of a Hapi {@link https://hapi.dev/api/?v=21.3.2#request Request}
  *
  * @returns {Object} the global context for all templates
