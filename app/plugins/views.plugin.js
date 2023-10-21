@@ -14,8 +14,6 @@ const path = require('path')
 const Nunjucks = require('nunjucks')
 const Vision = require('@hapi/vision')
 
-const pkg = require('../../package.json')
-
 const ServerConfig = require('../../config/server.config.js')
 
 const ViewsPlugin = {
@@ -36,7 +34,6 @@ const ViewsPlugin = {
     // layout.njk as the path to get static assets like client-side javascript. These are added to or overridden in the
     // h.view() call in a controller.
     context: {
-      appVersion: pkg.version,
       assetPath: '/assets'
     }
   }
