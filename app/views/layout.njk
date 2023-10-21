@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block header %}
-  {% set navigationLinks = [{ href: "/account/update-password", text: "Change password" }, { href: "/signout", text: "Sign out" }] %}
+  {% set navigationLinks = ([{ href: "/account/update-password", text: "Change password" }, { href: "/signout", text: "Sign out" }] if auth.authenticated else [] ) %}
   {{ govukHeader({
     homepageUrl: "#",
     containerClasses: "govuk-width-container",
