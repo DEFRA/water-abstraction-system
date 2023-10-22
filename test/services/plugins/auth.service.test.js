@@ -58,6 +58,50 @@ describe('Auth service', () => {
 
       expect(result.credentials.scope).to.equal(['Role'])
     })
+
+    it('returns the top level permissions in credentials.permission', async () => {
+      const result = await AuthService.go(12345)
+
+      expect(result.credentials.permission).to.equal({ billRuns: false, manage: false })
+    })
+  })
+
+  describe('when the user has a top-level permission role', () => {
+    describe("such as 'billing'", () => {
+      beforeEach(() => {
+        Sinon.stub(FetchUserRolesAndGroupsService, 'go')
+          .resolves({
+            user: { name: 'User' },
+            roles: [{ role: 'billing' }],
+            groups: [{ group: 'Group' }]
+          })
+      })
+
+      it('returns the matching top level permission as true', async () => {
+        const result = await AuthService.go(12345)
+
+        // NOTE: Access to bill runs is granted for users with the 'billing' role. They also get access to the manage
+        // page. So, there currently isn't a scenario where a user would see the 'Bill runs' option but not 'Manage'.
+        expect(result.credentials.permission).to.equal({ billRuns: true, manage: true })
+      })
+    })
+
+    describe("such as 'returns'", () => {
+      beforeEach(() => {
+        Sinon.stub(FetchUserRolesAndGroupsService, 'go')
+          .resolves({
+            user: { name: 'User' },
+            roles: [{ role: 'returns' }],
+            groups: [{ group: 'Group' }]
+          })
+      })
+
+      it('returns the matching top level permission as true', async () => {
+        const result = await AuthService.go(12345)
+
+        expect(result.credentials.permission).to.equal({ billRuns: false, manage: true })
+      })
+    })
   })
 
   describe('when the user id is not found', () => {
