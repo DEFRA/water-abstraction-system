@@ -33,7 +33,9 @@
     serviceUrl: "/",
     navigation: navigationLinks
   }) }}
+{% endblock %}
 
+{% block beforeContent %}
   {% if auth.authenticated %}
     {% include "includes/nav-bar.njk" %}
   {% endif %}
