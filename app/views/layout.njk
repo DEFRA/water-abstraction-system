@@ -1,4 +1,5 @@
 {% extends "govuk/template.njk" %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
 
@@ -33,6 +34,17 @@
     serviceUrl: "/",
     navigation: navigationLinks
   }) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{
+    govukPhaseBanner({
+      tag: {
+        text: "Beta"
+      },
+      html: 'This is a new service - your <a class="govuk-link" href="/feedback">feedback</a> will help us to improve it.'
+    })
+  }}
 {% endblock %}
 
 {% block content %}
