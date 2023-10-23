@@ -81,7 +81,16 @@ function _permission (scope = []) {
     return manageRoles.includes(role)
   })
 
+  const abstractionReformRoles = [
+    'ar_user',
+    'ar_approver'
+  ]
+  const abstractionReform = scope.some((role) => {
+    return abstractionReformRoles.includes(role)
+  })
+
   return {
+    abstractionReform,
     billRuns,
     manage
   }

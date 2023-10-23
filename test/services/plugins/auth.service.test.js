@@ -62,11 +62,28 @@ describe('Auth service', () => {
     it('returns the top level permissions in credentials.permission', async () => {
       const result = await AuthService.go(12345)
 
-      expect(result.credentials.permission).to.equal({ billRuns: false, manage: false })
+      expect(result.credentials.permission).to.equal({ abstractionReform: false, billRuns: false, manage: false })
     })
   })
 
   describe('when the user has a top-level permission role', () => {
+    describe("such as 'ar_user'", () => {
+      beforeEach(() => {
+        Sinon.stub(FetchUserRolesAndGroupsService, 'go')
+          .resolves({
+            user: { name: 'User' },
+            roles: [{ role: 'ar_user' }],
+            groups: [{ group: 'Group' }]
+          })
+      })
+
+      it('returns the matching top level permission as true', async () => {
+        const result = await AuthService.go(12345)
+
+        expect(result.credentials.permission).to.equal({ abstractionReform: true, billRuns: false, manage: false })
+      })
+    })
+
     describe("such as 'billing'", () => {
       beforeEach(() => {
         Sinon.stub(FetchUserRolesAndGroupsService, 'go')
@@ -82,7 +99,7 @@ describe('Auth service', () => {
 
         // NOTE: Access to bill runs is granted for users with the 'billing' role. They also get access to the manage
         // page. So, there currently isn't a scenario where a user would see the 'Bill runs' option but not 'Manage'.
-        expect(result.credentials.permission).to.equal({ billRuns: true, manage: true })
+        expect(result.credentials.permission).to.equal({ abstractionReform: false, billRuns: true, manage: true })
       })
     })
 
@@ -99,7 +116,7 @@ describe('Auth service', () => {
       it('returns the matching top level permission as true', async () => {
         const result = await AuthService.go(12345)
 
-        expect(result.credentials.permission).to.equal({ billRuns: false, manage: true })
+        expect(result.credentials.permission).to.equal({ abstractionReform: false, billRuns: false, manage: true })
       })
     })
   })
