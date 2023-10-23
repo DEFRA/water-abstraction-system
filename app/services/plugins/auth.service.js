@@ -53,7 +53,7 @@ async function go (userId) {
  *
  * These 'roles' are very granular, for example, in the Manage page what links you see is dependent on the roles you
  * have. Because of the current way the UI is designed we need to know whether you can access one of the top level areas
- * of the site; Bill runs and Manage.
+ * of the site; Bill runs, Digitise! and Manage.
  *
  * For simplicity we call these 'permissions'. We determine them in this function and add them to the credentials this
  * service returns.
