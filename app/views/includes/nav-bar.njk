@@ -1,0 +1,33 @@
+<!-- navigation pattern -->
+<div class="nav-container navbarWhite">
+  <nav id="nav" class="navbar govuk-width-container ">
+    <ul class="navbar__list">
+      <li class="navbar__item">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'search' }}" href="/licences" id="nav-search">
+          Search
+        </a>
+      </li>
+    {% if auth.permission.billRuns %}
+      <li class="navbar__item">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'bill-runs' }}" href="/billing/batch/list" id="nav-bill-runs">
+          Bill runs
+        </a>
+      </li>
+    {% endif %}
+    {% if auth.permission.abstractionReform %}
+      <li class="navbar__item">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'abstraction-reform' }}" href="/digitise" id="nav-abstraction-reform">
+          Digitise!
+        </a>
+      </li>
+    {% endif %}
+    {% if auth.permission.manage %}
+      <li class="navbar__item">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'manage' }}" href="/manage" id="nav-manage">
+          Manage
+        </a>
+      </li>
+    {% endif %}
+    </ul>
+  </nav>
+</div>

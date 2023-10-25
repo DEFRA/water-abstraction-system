@@ -35,6 +35,12 @@
   }) }}
 {% endblock %}
 
+{% block beforeContent %}
+  {% if auth.authenticated %}
+    {% include "includes/nav-bar.njk" %}
+  {% endif %}
+{% endblock %}
+
 {% block content %}
   <h1 class="govuk-heading-xl">Default page template</h1>
 {% endblock %}

@@ -18,6 +18,8 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
  * of the roles the user has. This is used by hapi when authorising the user against a route; if the route has a scope
  * array of strings then the user's scope array must contain at least one of the strings.
  *
+ * Finally, we return a 'permission' object. This is used to determine which nav bar menu items a user sees.
+ *
  * @param {Number} userId The user id to be authenticated
  *
  * @returns {Object} response
@@ -27,6 +29,8 @@ const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-grou
  * @returns {RoleModel[]} response.credentials.roles Objects representing the roles the user has
  * @returns {GroupModel[]} response.credentials.groups Objects representing the groups the user is assigned to
  * @returns {String[]} response.credentials.scope The names of the roles the user has, for route authorisation purposes
+ * @returns {Object} response.credentials.permission Object with each top level permission as a key and true or false
+ * whether the user has authorisation to access the area
  */
 async function go (userId) {
   const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
@@ -36,7 +40,60 @@ async function go (userId) {
     return role.role
   })
 
-  return { isValid: !!user, credentials: { user, roles, groups, scope } }
+  const permission = _permission(scope)
+
+  return { isValid: !!user, credentials: { user, roles, groups, scope, permission } }
+}
+
+/**
+ * Determine top level permissions
+ *
+ * The legacy service uses 'roles' to determine what a user can or cannot do. These roles are added to routes as 'scope'
+ * and used to determine if a users is authorized to access a particular page.
+ *
+ * These 'roles' are very granular, for example, in the Manage page what links you see is dependent on the roles you
+ * have. Because of the current way the UI is designed we need to know whether you can access one of the top level areas
+ * of the site; Bill runs, Digitise! and Manage.
+ *
+ * For simplicity we call these 'permissions'. We determine them in this function and add them to the credentials this
+ * service returns.
+ *
+ * They are used by the nav bar to determine which menu items should be visible.
+ *
+ * @param {String[]} scope All the scopes (roles) a user has access to
+ *
+ * @returns {Object} Each top level permissions is a key. The value is true or false as to whether the user has
+ * permission to access that area of the service
+ */
+function _permission (scope = []) {
+  const billRuns = scope.includes('billing')
+
+  const manageRoles = [
+    'ar_approver',
+    'billing',
+    'bulk_return_notifications',
+    'hof_notifications',
+    'manage_accounts',
+    'renewal_notifications',
+    'returns'
+  ]
+  const manage = scope.some((role) => {
+    return manageRoles.includes(role)
+  })
+
+  const abstractionReformRoles = [
+    'ar_user',
+    'ar_approver'
+  ]
+  const abstractionReform = scope.some((role) => {
+    return abstractionReformRoles.includes(role)
+  })
+
+  return {
+    abstractionReform,
+    billRuns,
+    manage
+  }
 }
 
 module.exports = {
