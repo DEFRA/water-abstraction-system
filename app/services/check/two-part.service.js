@@ -91,6 +91,7 @@ async function _fetchChargeVersions (billingPeriod, id, type) {
         .select([
           'chargeElementId',
           'description',
+          ref('chargeElements.adjustments:aggregate').as('aggregate'),
           ref('chargeElements.adjustments:s127').castText().as('s127')
         ])
         .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
