@@ -95,7 +95,8 @@ function context (request) {
       authenticated: request.auth.isAuthenticated,
       authorized: request.auth.isAuthorized,
       user: request.auth.credentials?.user,
-      scope: request.auth.credentials?.scope
+      scope: request.auth.credentials?.scope,
+      permission: request.auth.credentials?.permission
     }
   }
 }
