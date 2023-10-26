@@ -130,6 +130,22 @@ function formatNumberAsMoney (value, includeSymbol = false) {
 }
 
 /**
+ * Formats a number which represents a value in pounds as a money string with commas, for example, 2889 as '2,889.00'
+ *
+ * > Credit to https://stackoverflow.com/a/32154217/6117745
+ *
+ * @param {Number} value The value to display as currency. Assumed to be in pounds
+ * @param {Boolean} includeSymbol Whether to add the £ symbol to the start of the returned string
+ *
+ * @returns {string} The value formatted as a money string with commas with optional currency symbol
+ */
+function formatNumberAsMoneyWithCommas (value, includeSymbol = false) {
+  const symbol = includeSymbol ? '£' : ''
+
+  return `${symbol}${value.toLocaleString('en-GB', { minimumFractionDigits: 2 })}`
+}
+
+/**
  * Pads a number to a given length with leading zeroes and returns the result as a string
  *
  * @param {Number} number The number to be padded
@@ -152,5 +168,6 @@ module.exports = {
   formatLongDate,
   formatLongDateTime,
   formatNumberAsMoney,
+  formatNumberAsMoneyWithCommas,
   leftPadZeroes
 }

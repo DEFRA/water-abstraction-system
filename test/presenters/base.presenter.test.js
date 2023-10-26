@@ -186,6 +186,26 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatNumberAsMoneyWithCommas()', () => {
+    const valueInPence = 1149.5
+
+    describe('when no £ symbol is requested', () => {
+      it('correctly returns the value as a money string with commas and no symbol, for example, 1,149.50', async () => {
+        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPence)
+
+        expect(result).to.equal('1,149.50')
+      })
+    })
+
+    describe('when the £ symbol is requested', () => {
+      it('correctly returns the value as a money string with commas and a symbol, for example, £1,149.50', async () => {
+        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPence, true)
+
+        expect(result).to.equal('£1,149.50')
+      })
+    })
+  })
+
   describe('#leftPadZeroes()', () => {
     it('correctly pads numbers', async () => {
       const number = 123
