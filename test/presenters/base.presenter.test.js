@@ -167,7 +167,7 @@ describe('Base presenter', () => {
   })
 
   describe('#formatNumberAsMoney()', () => {
-    const valueInPence = 1149.5
+    const valueInPounds = 1149.5
 
     describe('when no £ symbol is requested', () => {
       it('correctly returns the value as a money string with no symbol, for example, 1149.50', async () => {
@@ -187,7 +187,7 @@ describe('Base presenter', () => {
   })
 
   describe('#formatNumberAsMoneyWithCommas()', () => {
-    const valueInPence = 1149.5
+    const valueInPounds = 1149.5
 
     describe('when no £ symbol is requested', () => {
       it('correctly returns the value as a money string with commas and no symbol, for example, 1,149.50', async () => {
