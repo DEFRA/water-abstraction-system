@@ -5,7 +5,7 @@
  * @module MockBillRunPresenter
  */
 
-const { convertPenceToPounds, formatAbstractionPeriod, formatLongDate, formatNumberAsMoney } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, formatPounds } = require('../base.presenter.js')
 
 function go (billRun) {
   const {
@@ -31,7 +31,7 @@ function go (billRun) {
     transactionFile,
     billRunNumber,
     financialYear: `${fromFinancialYearEnding} to ${toFinancialYearEnding}`,
-    debit: formatNumberAsMoney(convertPenceToPounds(netTotal)),
+    debit: formatPounds(netTotal),
     bills: _formatBills(bills)
   }
 }
@@ -42,8 +42,8 @@ function _formatAdditionalCharges (transaction) {
   const { grossValuesCalculated, isWaterCompanyCharge, supportedSourceName } = transaction
 
   if (supportedSourceName) {
-    const formattedSupportedSourceCharge = formatNumberAsMoney(grossValuesCalculated.supportedSourceCharge, true)
-    formattedData.push(`Supported source ${supportedSourceName} (${formattedSupportedSourceCharge})`)
+    const formattedSupportedSourceCharge = formatPounds(grossValuesCalculated.supportedSourceCharge * 100, true)
+    formattedData.push(`Supported source ${supportedSourceName} (£${formattedSupportedSourceCharge})`)
   }
 
   if (isWaterCompanyCharge) {
@@ -110,9 +110,9 @@ function _formatBills (bills) {
       accountAddress,
       contact,
       isWaterCompany: billLicences[0].licence.isWaterUndertaker,
-      credit: formatNumberAsMoney(convertPenceToPounds(creditNoteValue)),
-      debit: formatNumberAsMoney(convertPenceToPounds(invoiceValue)),
-      netTotal: formatNumberAsMoney(convertPenceToPounds(netAmount)),
+      credit: formatPounds(creditNoteValue),
+      debit: formatPounds(invoiceValue),
+      netTotal: formatPounds(netAmount),
       licences: _formatBillLicences(billLicences)
     }
   })
@@ -135,9 +135,9 @@ function _formatBillLicences (billLicences) {
       licence,
       licenceStartDate: billLicence.licence.startDate,
       licenceHolder,
-      credit: formatNumberAsMoney(convertPenceToPounds(credit)),
-      debit: formatNumberAsMoney(convertPenceToPounds(debit)),
-      netTotal: formatNumberAsMoney(convertPenceToPounds(netTotal)),
+      credit: formatPounds(credit),
+      debit: formatPounds(debit),
+      netTotal: formatPounds(netTotal),
       transactions: _formatTransactions(transactions)
     }
   })
@@ -167,10 +167,10 @@ function _formatTransactions (transactions) {
       billableDays,
       authorisedDays,
       chargeQuantity,
-      credit: isCredit ? formatNumberAsMoney(convertPenceToPounds(netAmount)) : '0.00',
-      debit: isCredit ? '0.00' : formatNumberAsMoney(convertPenceToPounds(netAmount)),
+      credit: isCredit ? formatPounds(netAmount) : '0.00',
+      debit: isCredit ? '0.00' : formatPounds(netAmount),
       chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
-      chargeRefNumber: `${chargeCategoryCode} (${formatNumberAsMoney(grossValuesCalculated.baselineCharge, true)})`,
+      chargeRefNumber: `${chargeCategoryCode} (£${formatPounds(grossValuesCalculated.baselineCharge * 100, true)})`,
       chargeDescription,
       addCharges: _formatAdditionalCharges(transaction),
       adjustments: _formatAdjustments(chargeReference),

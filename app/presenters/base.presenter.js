@@ -116,33 +116,37 @@ function formatLongDateTime (date) {
 }
 
 /**
- * Formats a number which represents a value in pounds as a money string, for example, 1149 as '1149.00'
+ * Formats a value in pence as a money string with commas, for example, 12776805 as '£127,768.05'
  *
- * @param {Number} value The value to display as currency. Assumed to be in pounds
- * @param {Boolean} includeSymbol Whether to add the £ symbol to the start of the returned string
+ * As this is intended for showing values in the UI if the value is a negative it will be made a positive before then
+ * being formatted. This is because the UI shows credits as '£127,768.05 credit' rather than '£-127,768.05'.
  *
- * @returns {string} The value formatted as a money string with optional currency symbol
- */
-function formatNumberAsMoney (value, includeSymbol = false) {
-  const symbol = includeSymbol ? '£' : ''
-
-  return `${symbol}${value.toFixed(2)}`
-}
-
-/**
- * Formats a number which represents a value in pounds as a money string with commas, for example, 2889 as '2,889.00'
- *
- * > Credit to https://stackoverflow.com/a/32154217/6117745
+ * > Credit to https://stackoverflow.com/a/32154217/6117745 for showing numbers with commas
  *
  * @param {Number} value The value to display as currency. Assumed to be in pounds
  * @param {Boolean} includeSymbol Whether to add the £ symbol to the start of the returned string
  *
  * @returns {string} The value formatted as a money string with commas with optional currency symbol
  */
-function formatNumberAsMoneyWithCommas (value, includeSymbol = false) {
-  const symbol = includeSymbol ? '£' : ''
+function formatMoney (valueInPence) {
+  // Even though we store signed values (which you should never do!) we don't display them in the UI. Argh!!!
+  const positiveValueInPence = Math.abs(valueInPence)
+  const positiveValueInPounds = convertPenceToPounds(positiveValueInPence)
 
-  return `${symbol}${value.toLocaleString('en-GB', { minimumFractionDigits: 2 })}`
+  return `£${positiveValueInPounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+}
+
+/**
+ * Formats a number, which represents a value in pence to pounds, for example, 12776805 as '127768.05'
+ *
+ * @param {*} valueInPence The value to be formatted to pounds
+ *
+ * @returns {string} The value converted to pounds and formatted to two decimal places
+ */
+function formatPounds (valueInPence) {
+  const valueInPounds = convertPenceToPounds(valueInPence)
+
+  return valueInPounds.toFixed(2)
 }
 
 /**
@@ -167,7 +171,7 @@ module.exports = {
   formatChargingModuleDate,
   formatLongDate,
   formatLongDateTime,
-  formatNumberAsMoney,
-  formatNumberAsMoneyWithCommas,
+  formatMoney,
+  formatPounds,
   leftPadZeroes
 }
