@@ -12,9 +12,9 @@ const { formatChargingModuleDate } = require('../base.presenter.js')
  *
  * @returns {Object} an object to be used as the body in a Charging Module POST transaction request
  */
-function go (transaction, billingPeriod, invoiceAccountNumber, licence) {
-  const periodStart = formatChargingModuleDate(billingPeriod.startDate)
-  const periodEnd = formatChargingModuleDate(billingPeriod.endDate)
+function go (transaction, invoiceAccountNumber, licence) {
+  const periodStart = formatChargingModuleDate(transaction.startDate)
+  const periodEnd = formatChargingModuleDate(transaction.endDate)
 
   return {
     clientId: transaction.billingTransactionId,

@@ -24,14 +24,13 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  *
  * @returns {Object[]} Array of transactions which have been sent to the Charging Module
  */
-async function go (licence, bill, billLicence, billRunExternalId, transactions, billingPeriod) {
+async function go (licence, bill, billLicence, billRunExternalId, transactions) {
   try {
     const sentTransactions = []
 
     for (const transaction of transactions) {
       const chargingModuleResponse = await _sendTransactionToChargingModule(
         transaction,
-        billingPeriod,
         bill,
         licence,
         billRunExternalId
@@ -48,10 +47,9 @@ async function go (licence, bill, billLicence, billRunExternalId, transactions, 
   }
 }
 
-async function _sendTransactionToChargingModule (transaction, billingPeriod, bill, licence, billRunExternalId) {
+async function _sendTransactionToChargingModule (transaction, bill, licence, billRunExternalId) {
   const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
     transaction,
-    billingPeriod,
     bill.invoiceAccountNumber,
     licence
   )

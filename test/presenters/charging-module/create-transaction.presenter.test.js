@@ -19,10 +19,6 @@ const TransactionHelper = require('../../support/helpers/water/transaction.helpe
 const CreateTransactionPresenter = require('../../../app/presenters/charging-module/create-transaction.presenter.js')
 
 describe('Charging Module Create Transaction presenter', () => {
-  const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
-  }
   const invoiceAccountNumber = 'A51542397A'
 
   let transaction
@@ -69,10 +65,12 @@ describe('Charging Module Create Transaction presenter', () => {
       transaction.chargeCategoryCode = '4.5.6'
       transaction.section127Agreement = false
       transaction.section130Agreement = false
+      transaction.startDate = new Date('2022-04-01')
+      transaction.endDate = new Date('2023-03-31')
     })
 
     it('correctly presents the data', () => {
-      const result = CreateTransactionPresenter.go(transaction, billingPeriod, invoiceAccountNumber, licence)
+      const result = CreateTransactionPresenter.go(transaction, invoiceAccountNumber, licence)
 
       expect(result.clientId).to.equal(transaction.billingTransactionId)
       expect(result.ruleset).to.equal('sroc')
