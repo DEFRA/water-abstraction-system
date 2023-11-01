@@ -91,6 +91,8 @@ function context (request) {
   return {
     // `assetPath` is referred to in layout.njk as the path to get static assets like client-side javascript
     assetPath: '/assets',
+    // this is the url of where the request came from. We use it to generate back links in our pages
+    referrer: request.info.referrer,
     auth: {
       authenticated: request.auth.isAuthenticated,
       authorized: request.auth.isAuthorized,
