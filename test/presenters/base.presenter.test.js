@@ -171,7 +171,7 @@ describe('Base presenter', () => {
 
     describe('when no £ symbol is requested', () => {
       it('correctly returns the value as a money string with no symbol, for example, 1149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoney(valueInPence)
+        const result = BasePresenter.formatNumberAsMoney(valueInPounds)
 
         expect(result).to.equal('1149.50')
       })
@@ -179,7 +179,7 @@ describe('Base presenter', () => {
 
     describe('when the £ symbol is requested', () => {
       it('correctly returns the value as a money string with a symbol, for example, £1149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoney(valueInPence, true)
+        const result = BasePresenter.formatNumberAsMoney(valueInPounds, true)
 
         expect(result).to.equal('£1149.50')
       })
@@ -191,7 +191,7 @@ describe('Base presenter', () => {
 
     describe('when no £ symbol is requested', () => {
       it('correctly returns the value as a money string with commas and no symbol, for example, 1,149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPence)
+        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPounds)
 
         expect(result).to.equal('1,149.50')
       })
@@ -199,7 +199,7 @@ describe('Base presenter', () => {
 
     describe('when the £ symbol is requested', () => {
       it('correctly returns the value as a money string with commas and a symbol, for example, £1,149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPence, true)
+        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPounds, true)
 
         expect(result).to.equal('£1,149.50')
       })
