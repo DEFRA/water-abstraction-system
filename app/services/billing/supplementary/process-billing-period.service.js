@@ -66,8 +66,7 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
         currentBillingData.bill,
         currentBillingData.billLicence,
         billRunExternalId,
-        cleansedTransactions,
-        billingPeriod
+        cleansedTransactions
       )
 
       dataToPersist.transactions.push(...transactions)
