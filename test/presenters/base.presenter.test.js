@@ -166,40 +166,34 @@ describe('Base presenter', () => {
     })
   })
 
-  describe('#formatNumberAsMoney()', () => {
-    const valueInPounds = 1149.5
+  describe('#formatPounds()', () => {
+    const valueInPence = 114950
 
-    describe('when no £ symbol is requested', () => {
-      it('correctly returns the value as a money string with no symbol, for example, 1149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoney(valueInPounds)
+    it('correctly returns the value as pounds, for example, 1149.50', async () => {
+      const result = BasePresenter.formatPounds(valueInPence)
 
-        expect(result).to.equal('1149.50')
-      })
-    })
-
-    describe('when the £ symbol is requested', () => {
-      it('correctly returns the value as a money string with a symbol, for example, £1149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoney(valueInPounds, true)
-
-        expect(result).to.equal('£1149.50')
-      })
+      expect(result).to.equal('1149.50')
     })
   })
 
-  describe('#formatNumberAsMoneyWithCommas()', () => {
-    const valueInPounds = 1149.5
+  describe('#formatMoney()', () => {
+    let valueInPence
 
-    describe('when no £ symbol is requested', () => {
-      it('correctly returns the value as a money string with commas and no symbol, for example, 1,149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPounds)
+    describe('when the value in pence is positive', () => {
+      beforeEach(() => {
+        valueInPence = 114950
+      })
 
-        expect(result).to.equal('1,149.50')
+      it('correctly returns the value as a money string with commas and a symbol, for example, £1,149.50', async () => {
+        const result = BasePresenter.formatMoney(valueInPence)
+
+        expect(result).to.equal('£1,149.50')
       })
     })
 
-    describe('when the £ symbol is requested', () => {
-      it('correctly returns the value as a money string with commas and a symbol, for example, £1,149.50', async () => {
-        const result = BasePresenter.formatNumberAsMoneyWithCommas(valueInPounds, true)
+    describe('when the value in pence is negative', () => {
+      it('correctly returns the value as a positive money string with commas and a symbol, for example, £1,149.50', async () => {
+        const result = BasePresenter.formatMoney(valueInPence, true)
 
         expect(result).to.equal('£1,149.50')
       })
