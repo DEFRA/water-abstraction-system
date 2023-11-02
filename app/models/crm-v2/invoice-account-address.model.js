@@ -35,7 +35,7 @@ class InvoiceAccountAddressModel extends CrmV2BaseModel {
           to: 'addresses.addressId'
         }
       },
-      company: {
+      agentCompany: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'company.model',
         join: {
