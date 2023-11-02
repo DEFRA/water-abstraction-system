@@ -71,7 +71,7 @@ describe('Invoice Account Address model', () => {
       })
     })
 
-    describe('when linking to company', () => {
+    describe('when linking to company (agent)', () => {
       let testCompany
 
       beforeEach(async () => {
@@ -81,21 +81,21 @@ describe('Invoice Account Address model', () => {
 
       it('can successfully run a related query', async () => {
         const query = await InvoiceAccountAddressModel.query()
-          .innerJoinRelated('company')
+          .innerJoinRelated('agentCompany')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the company', async () => {
+      it('can eager load the agent company', async () => {
         const result = await InvoiceAccountAddressModel.query()
           .findById(testRecord.invoiceAccountAddressId)
-          .withGraphFetched('company')
+          .withGraphFetched('agentCompany')
 
         expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
         expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
 
-        expect(result.company).to.be.an.instanceOf(CompanyModel)
-        expect(result.company).to.equal(testCompany)
+        expect(result.agentCompany).to.be.an.instanceOf(CompanyModel)
+        expect(result.agentCompany).to.equal(testCompany)
       })
     })
 
