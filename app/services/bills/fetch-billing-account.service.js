@@ -7,6 +7,13 @@
 
 const InvoiceAccount = require('../../models/crm-v2/invoice-account.model.js')
 
+/**
+ * Fetch the matching Billing account plus the current account address record linked to it
+ *
+ * @param {string} id The UUID for the billing account to fetch
+ *
+ * @returns the matching instance of BillModel including linked company and just the current account address record
+ */
 async function go (id) {
   return _fetch(id)
 }
@@ -27,6 +34,7 @@ async function _fetch (id) {
       ])
     })
     .withGraphFetched('invoiceAccountAddresses')
+    // The current invoice account address is denoted by the fact it is the only one with a null end date
     .modifyGraph('invoiceAccountAddresses', (builder) => {
       builder.whereNull('endDate')
     })
