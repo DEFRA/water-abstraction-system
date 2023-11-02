@@ -23,7 +23,7 @@ const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-a
 // Thing under test
 const FetchBillingAccountService = require('../../../app/services/bills/fetch-billing-account.service.js')
 
-describe('Fetch Charge Versions service', () => {
+describe('Fetch Billing Account service', () => {
   let linkedCompany
   let testBillingAccount
 
