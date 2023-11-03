@@ -29,8 +29,8 @@ async function _fetch (id) {
     .modifyGraph('company', (builder) => {
       builder.select([
         'company_id',
-        'type',
-        'name'
+        'name',
+        'type'
       ])
     })
     .withGraphFetched('invoiceAccountAddresses')
@@ -56,22 +56,23 @@ async function _fetch (id) {
     .modifyGraph('invoiceAccountAddresses.agentCompany', (builder) => {
       builder.select([
         'companyId',
-        'type',
-        'name'
+        'name',
+        'type'
       ])
     })
     .withGraphFetched('invoiceAccountAddresses.contact')
     .modifyGraph('invoiceAccountAddresses.contact', (builder) => {
       builder.select([
         'contactId',
-        'firstName',
-        'middleInitials',
-        'lastName',
-        'initials',
-        'dataSource',
         'contactType',
-        'suffix',
-        'department'
+        'dataSource',
+        'department',
+        'firstName',
+        'initials',
+        'lastName',
+        'middleInitials',
+        'salutation',
+        'suffix'
       ])
     })
 
