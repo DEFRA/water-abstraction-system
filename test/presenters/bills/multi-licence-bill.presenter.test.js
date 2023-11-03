@@ -184,7 +184,7 @@ describe('Multi Licence Bill presenter', () => {
           bill.billRun.scheme = 'alcs'
         })
 
-        it('returns Cold', () => {
+        it('returns Old', () => {
           const result = MultiLicenceBillPresenter.go(bill, licenceSummaries, billingAccount)
 
           expect(result.chargeScheme).to.equal('Old')
