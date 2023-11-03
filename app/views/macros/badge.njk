@@ -1,0 +1,24 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro badge(text, type) %}
+  {% if type === 'error' %}
+    {% set classes = "govuk-tag--red govuk-!-font-size-27" %}
+  {% elif type === 'inactive' %}
+    {% set classes = "govuk-tag--grey govuk-!-font-size-27" %}
+  {% elif type === 'info' %}
+    {% set classes = "govuk-tag--blue govuk-!-font-size-27" %}
+  {% elif type === 'warning' %}
+    {% set classes = "govuk-tag--orange govuk-!-font-size-27" %}
+  {% elif type === 'success' %}
+    {% set classes = "govuk-tag--green govuk-!-font-size-27" %}
+  {% else %}
+    {% set classes = "govuk-tag--blue govuk-!-font-size-27" %}
+  {% endif %}
+
+  {{
+    govukTag({
+      text: text,
+      classes: classes
+    })
+  }}
+{% endmacro %}

@@ -1,0 +1,213 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% from "macros/badge.njk" import badge %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {% if referrer %}
+    {% set backlink = referrer %}
+  {% else %}
+    {% set backlink = 'javascript:history.back()' %}
+  {% endif %}
+  {{
+    govukBackLink({
+      text: "Back",
+      href: backlink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Billing account {{ accountNumber }}</span>{{ pageTitle }}
+    </h1>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+
+      {# Status badge #}
+      {% if billRunStatus === 'ready' %}
+        {% set badgeType = 'info' %}
+      {% elif billRunStatus === 'sent' %}
+        {% set badgeType = 'success' %}
+      {% endif %}
+      <p class="govuk-body">
+        {{ badge(billRunStatus, badgeType) }}
+      </p>
+
+      {# Bill meta-data #}
+      {{
+        govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          attributes: {
+            'data-test': 'meta-data'
+          },
+          rows: [
+            {
+              key: { text: "Date created", classes: "meta-data__label" },
+              value: { text: dateCreated, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Region", classes: "meta-data__label" },
+              value: { text: region, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Bill run type", classes: "meta-data__label" },
+              value: { text: billRunType, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Charge scheme", classes: "meta-data__label" },
+              value: { text: chargeScheme, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Financial year", classes: "meta-data__label" },
+              value: { text: financialYear, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Transaction file", classes: "meta-data__label" },
+              value: { text: transactionFile, classes: "meta-data__value" }
+            } if transactionFile,
+            {
+              key: { text: "Bill number", classes: "meta-data__label" },
+              value: { text: billNumber, classes: "meta-data__value" }
+            } if billNumber
+          ]
+        })
+      }}
+
+      {# Billing account details #}
+      {% set billingAccountLink = '/billing-accounts/' + billingAccountId %}
+      <details class="govuk-details govuk-!-margin-bottom-6" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Billing account details
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body ">
+            <span class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" href="{{ billingAccountLink }}">{{ accountNumber }}</a></span><br>
+            <span data-test="account-name">{{ accountName }}</span><br>
+            {# billing account contact name #}
+            {% if contactName %}
+              <span data-test="contact-name">FAO {{contactName}}</span><br>
+            {% endif %}
+            {# billing account address #}
+            <span data-test="address">
+              {{ addressLines.join("<br>") | safe }}
+            </span>
+          </p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  {# Bill total #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-one-half">
+      <h2>
+        <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="bill-total">{{ total }}</span><br>
+        <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Total</span>
+      </h2>
+      {% if deminimis %}
+        {{
+          govukInsetText({
+            text: "De minimis rule applied",
+            attributes: { 'data-test': 'deminimis' }
+          })
+        }}
+      {% endif %}
+    </div>
+  </div>
+
+  {# Credit and Debit totals #}
+  {% if displayCreditDebitTotals %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+      <div class="govuk-grid-column-one-half">
+        <h2>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="credits-total">{{ creditsTotal }}</span><br>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Credits</span>
+        </h2>
+      </div>
+      <div class="govuk-grid-column-one-half">
+        <h2>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="credits-total">{{ debitsTotal }}</span><br>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Debits</span>
+        </h2>
+      </div>
+    </div>
+  {% endif %}
+
+  {# Remove bill button #}
+  {% if billRunStatus === 'ready' %}
+    {% set removeBillLink = '/billing/batch/' + billRunId + '/delete-invoice/' + billId %}
+    <p class="govuk-body govuk-!-margin-bottom-0">
+      {{
+        govukButton({
+          classes: "govuk-button--secondary",
+          text: "Remove bill",
+          href: removeBillLink
+        })
+      }}
+    </p>
+  {% endif %}
+
+  <div class="divider govuk-!-margin-bottom-7"></div>
+
+  {# Licences table #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+      {% set tableRows = [] %}
+
+      {% for billLicence in billLicences %}
+        {# Generate the link to view the transactions in a bill licence #}
+        {% set actionLink %}
+          <a class="govuk-link" href="/system/bill-licences/{{ billLicence.id }}">View transactions<span class="govuk-visually-hidden"> for licence {{ licenceRef }}</span></a>
+        {% endset %}
+
+        {# Create the licence row and add it to our array of table rows #}
+        {% set transactionRow = [
+          {
+            html: billLicence.reference,
+            attributes: { 'data-test': 'details-' + loop.index0 }
+          },
+          {
+            text: billLicence.total,
+            format: 'numeric',
+            attributes: { 'data-test': 'total-' + loop.index0 }
+          },
+          {
+            html: actionLink,
+            format: 'numeric',
+            attributes: { 'data-test': 'action-' + loop.index0 }
+          }
+        ] %}
+
+        {% set tableRows = (tableRows.push(transactionRow), tableRows) %}
+      {% endfor %}
+
+      {{
+        govukTable({
+          caption: tableCaption,
+          captionClasses: "govuk-table__caption--m",
+          firstCellIsHeader: true,
+          attributes: { 'data-test': 'licences' },
+          head: [
+            { text: "Licence" },
+            { text: "Total", format: "numeric" },
+            { text: "Action", format: "numeric" }
+          ],
+          rows: tableRows
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}
