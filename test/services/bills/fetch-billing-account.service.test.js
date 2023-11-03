@@ -100,7 +100,7 @@ describe('Fetch Billing Account service', () => {
       })
     })
 
-    // Contact is optional in the account addresss record
+    // Contact is optional in the account address record
     describe('and the current invoice account address has a contact', () => {
       let linkedContact
 
