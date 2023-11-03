@@ -19,7 +19,7 @@ const { db } = require('../../../db/db.js')
  * licence linked to the bill
  */
 async function go (id) {
-  const bill = await _fetch(id)
+  const bill = await _fetchBill(id)
   const licenceSummaries = await _fetchLicenceSummaries(id)
 
   return {
@@ -28,7 +28,7 @@ async function go (id) {
   }
 }
 
-async function _fetch (id) {
+async function _fetchBill (id) {
   const result = BillModel.query()
     .findById(id)
     .select([
