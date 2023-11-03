@@ -48,6 +48,10 @@
   {% if auth.authenticated %}
     {% include "includes/nav-bar.njk" %}
   {% endif %}
+
+  {# Place holder section for things like back links or breadcrumbs #}
+  {% block breadcrumbs %}
+  {% endblock %}
 {% endblock %}
 
 {% block content %}
