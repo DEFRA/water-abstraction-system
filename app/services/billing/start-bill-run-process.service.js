@@ -20,13 +20,13 @@ const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bi
  *
  * @returns {Object} Object that will be the JSON response returned to the client
  */
-async function go (regionId, batchType, userEmail) {
+async function go (regionId, batchType, userEmail, financialYear) {
   const billingPeriods = DetermineBillingPeriodsService.go()
   const financialYearEndings = _financialYearEndings(billingPeriods)
 
   const billRun = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, userEmail)
 
-  _processBillRun(billRun, billingPeriods)
+  _processBillRun(billRun, billingPeriods, financialYear)
 
   return _response(billRun)
 }
@@ -38,14 +38,14 @@ function _financialYearEndings (billingPeriods) {
   }
 }
 
-function _processBillRun (billRun, billingPeriods) {
+function _processBillRun (billRun, billingPeriods, financialYear) {
   // We do not `await` the bill run being processed so we can leave it to run in the background while we return an immediate response
   switch (billRun.batchType) {
     case 'supplementary':
       SupplementaryProcessBillRunService.go(billRun, billingPeriods)
       break
     case 'two_part_tariff':
-      TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+      TwoPartTariffProcessBillRunService.go(billRun, billingPeriods, financialYear)
       break
   }
 }
