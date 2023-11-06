@@ -10,10 +10,10 @@ const { expect } = Code
 // Test helpers
 const BillHelper = require('../../support/helpers/water/bill.helper.js')
 const BillModel = require('../../../app/models/water/bill.model.js')
-const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const BillLicenceHelper = require('../../support/helpers/water/bill-licence.helper.js')
 const BillLicenceModel = require('../../../app/models/water/bill-licence.model.js')
+const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const ChargeElementHelper = require('../../support/helpers/water/charge-element.helper.js')
 const ChargeElementModel = require('../../../app/models/water/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/water/charge-reference.helper.js')
