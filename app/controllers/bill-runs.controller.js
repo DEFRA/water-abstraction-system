@@ -19,7 +19,9 @@ async function create (request, h) {
 
   try {
     const { region, type, user } = validatedData.value
-    const result = await StartBillRunProcessService.go(region, type, user)
+    // For Two Part Tariff bill runs an additional value for the `financialYear` will be included in the payload
+    const financialYear = validatedData.value?.financialYear
+    const result = await StartBillRunProcessService.go(region, type, user, financialYear)
 
     return h.response(result).code(200)
   } catch (error) {
