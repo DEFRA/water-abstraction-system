@@ -27,8 +27,8 @@ class PurposeModel extends WaterBaseModel {
 
   static get relationMappings () {
     return {
-      chargeElement: {
-        relation: Model.BelongsToOneRelation,
+      chargeElements: {
+        relation: Model.HasManyRelation,
         modelClass: 'charge-element.model',
         join: {
           from: 'purposesUses.purposeUseId',

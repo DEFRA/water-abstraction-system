@@ -37,32 +37,38 @@ describe('Purpose model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge element', () => {
-      let testChargeElement
+    describe('when linking to charge elements', () => {
+      let testChargeElements
 
       beforeEach(async () => {
         const { purposeUseId } = testRecord
 
-        testChargeElement = await ChargeElementHelper.add({ purposeUseId })
+        testChargeElements = []
+        for (let i = 0; i < 2; i++) {
+          const chargeElement = await ChargeElementHelper.add({ purposeUseId })
+          testChargeElements.push(chargeElement)
+        }
       })
 
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query()
-          .innerJoinRelated('chargeElement')
+          .innerJoinRelated('chargeElements')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the charge element', async () => {
+      it('can eager load the charge elements', async () => {
         const result = await PurposeModel.query()
           .findById(testRecord.purposeUseId)
-          .withGraphFetched('chargeElement')
+          .withGraphFetched('chargeElements')
 
         expect(result).to.be.instanceOf(PurposeModel)
         expect(result.purposeUseId).to.equal(testRecord.purposeUseId)
 
-        expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
-        expect(result.chargeElement).to.equal(testChargeElement)
+        expect(result.chargeElements).to.be.an.array()
+        expect(result.chargeElements[0]).to.be.an.instanceOf(ChargeElementModel)
+        expect(result.chargeElements).to.include(testChargeElements[0])
+        expect(result.chargeElements).to.include(testChargeElements[1])
       })
     })
 
