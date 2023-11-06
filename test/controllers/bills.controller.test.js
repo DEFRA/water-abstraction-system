@@ -14,7 +14,7 @@ const ViewBillService = require('../../app/services/bills/view-bill.service.js')
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Health controller', () => {
+describe('Bills controller', () => {
   let server
 
   beforeEach(async () => {
@@ -33,7 +33,7 @@ describe('Health controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /data/export', () => {
+  describe('GET /bills', () => {
     const options = {
       method: 'GET',
       url: '/bills/64924759-8142-4a08-9d1e-1e902cd9d316',
