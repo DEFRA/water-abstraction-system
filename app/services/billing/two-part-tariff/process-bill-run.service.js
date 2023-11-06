@@ -8,8 +8,8 @@
 /**
  * Functionality not yet implemented
  */
-async function go (_billRun, _billingPeriods, financialYear) {
-  throw new Error(`Two Part Tariff is not yet implemented for Financial Year: ${financialYear}`)
+async function go (_billRun, _billingPeriods, financialYearEnding) {
+  throw new Error(`Two Part Tariff is not yet implemented for Financial Year Ending: ${financialYearEnding}`)
 }
 
 module.exports = {

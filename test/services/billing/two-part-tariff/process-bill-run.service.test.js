@@ -16,7 +16,7 @@ describe('Two Part Tariff Process Bill Run service', () => {
       const error = await expect(TwoPartTariffProcessBillRunService.go('billRun', 'billingPeriods', 2022)).to.reject()
 
       expect(error).to.be.an.instanceOf(Error)
-      expect(error.message).to.equal('Two Part Tariff is not yet implemented for Financial Year: 2022')
+      expect(error.message).to.equal('Two Part Tariff is not yet implemented for Financial Year Ending: 2022')
     })
   })
 })
