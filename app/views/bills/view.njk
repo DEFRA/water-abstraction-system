@@ -10,15 +10,10 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {% if referrer %}
-    {% set backlink = referrer %}
-  {% else %}
-    {% set backlink = 'javascript:history.back()' %}
-  {% endif %}
   {{
     govukBackLink({
       text: "Back",
-      href: backlink
+      href: '/billing/batch/' + billRunId + '/summary'
     })
   }}
 {% endblock %}
