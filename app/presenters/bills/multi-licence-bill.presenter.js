@@ -25,6 +25,7 @@ function go (bill, licenceSummaries, billingAccount) {
     billLicences,
     billNumber: bill.invoiceNumber,
     billRunId: billRun.billingBatchId,
+    billRunNumber: billRun.billRunNumber,
     billRunStatus: billRun.status,
     billRunType: _billRunType(billRun),
     chargeScheme: _scheme(billRun),
