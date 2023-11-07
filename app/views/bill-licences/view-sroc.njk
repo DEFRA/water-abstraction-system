@@ -7,7 +7,7 @@
   {# Back link #}
   {{
     govukBackLink({
-      text: "Back",
+      text: 'Go back to bill for ' + accountNumber,
       href: "/system/bills/" + billingInvoiceId
     })
   }}
@@ -86,20 +86,20 @@
           {% endset %}
 
           {# Only show additional charges if we have any #}
-          {% if transaction.additionalCharges %}
-            {% set additionalChargesDetail %}
-                <br><br>
-                <span data-test="additional-charges-{{ rowIndex }}"><strong>Additional charges:</strong> {{ transaction.additionalCharges }}</span>
-            {% endset %}
-          {% endif %}
+          {% set additionalChargesDetail %}
+            {% if transaction.additionalCharges %}
+              <br><br>
+              <span data-test="additional-charges-{{ rowIndex }}"><strong>Additional charges:</strong> {{ transaction.additionalCharges }}</span>
+            {% endif %}
+          {% endset %}
 
           {# Only show adjustments if we have any #}
-          {% if transaction.adjustments %}
-            {% set adjustmentsDetail %}
+          {% set adjustmentsDetail %}
+            {% if transaction.adjustments %}
               <br><br>
               <span data-test="adjustments-{{ rowIndex }}"><strong>Adjustments:</strong> {{ transaction.adjustments }}</span>
-            {% endset %}
-          {% endif %}
+            {% endif %}
+          {% endset %}
 
           {# Charge element details section #}
           {% set elementDetail %}
