@@ -27,7 +27,7 @@ async function create (request, h) {
   }
 }
 
-async function review2ptSroc (request, h) {
+async function review (request, h) {
   return h.view('bill-runs/view.njk', {
     pageTitle: 'Review Two Part Tariff SROC',
     activeNavBar: 'bill-runs'
@@ -50,5 +50,5 @@ function _formattedInitiateBillRunError (error) {
 
 module.exports = {
   create,
-  review2ptSroc
+  review
 }

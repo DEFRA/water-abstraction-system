@@ -22,8 +22,8 @@ const routes = [
 
   {
     method: 'GET',
-    path: '/bill-runs/{batchId}/two-part-tariff-sroc-review',
-    handler: BillRunsController.review2ptSroc,
+    path: '/bill-runs/{id}/review',
+    handler: BillRunsController.review,
     options: {
       app: {
         plainOutput: true
