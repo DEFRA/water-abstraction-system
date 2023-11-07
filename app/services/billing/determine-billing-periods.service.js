@@ -13,6 +13,10 @@
  * periods for the current year plus a maximum of the previous 5 years. Or to the earliest possible `endYear` for SROC
  * which is 2023, whichever is the greatest.
  *
+ * If a `financialYearEnding` is passed to this service a single billing period will be generated based on that value.
+ *
+ * @param {Number} financialYearEnding End year of the bill run. Only populated for two-part-tariff
+ *
  * @returns {Object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
 function go (financialYearEnding) {
