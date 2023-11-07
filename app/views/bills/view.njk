@@ -10,15 +10,10 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {% if referrer %}
-    {% set backlink = referrer %}
-  {% else %}
-    {% set backlink = 'javascript:history.back()' %}
-  {% endif %}
   {{
     govukBackLink({
-      text: "Back",
-      href: backlink
+      text: 'Go back to bill run ' + billRunNumber,
+      href: '/billing/batch/' + billRunId + '/summary'
     })
   }}
 {% endblock %}
@@ -170,7 +165,7 @@
       {% for billLicence in billLicences %}
         {# Generate the link to view the transactions in a bill licence #}
         {% set actionLink %}
-          <a class="govuk-link" href="/system/bill-licences/{{ billLicence.id }}">View transactions<span class="govuk-visually-hidden"> for licence {{ licenceRef }}</span></a>
+          <a class="govuk-link" href="/system/bill-licences/{{ billLicence.id }}">View transactions<span class="govuk-visually-hidden"> for licence {{ billLicence.reference }}</span></a>
         {% endset %}
 
         {# Create the licence row and add it to our array of table rows #}

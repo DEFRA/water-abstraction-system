@@ -53,6 +53,7 @@ describe('Multi Licence Bill presenter', () => {
         ],
         billNumber: 'EAI0000007T',
         billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+        billRunNumber: 10003,
         billRunStatus: 'sent',
         billRunType: 'Annual',
         chargeScheme: 'Current',
