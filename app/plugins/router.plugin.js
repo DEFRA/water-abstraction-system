@@ -12,6 +12,7 @@
  */
 
 const AssetRoutes = require('../routes/assets.routes.js')
+const BillLicences = require('../routes/bill-licences.routes.js')
 const BillRoutes = require('../routes/bills.routes.js')
 const BillRunRoutes = require('../routes/bill-runs.routes.js')
 const BillingAccountRoutes = require('../routes/billing-accounts.routes.js')
@@ -28,6 +29,7 @@ const routes = [
   ...RootRoutes,
   ...AssetRoutes,
   ...HealthRoutes,
+  ...BillLicences,
   ...BillRoutes,
   ...BillRunRoutes,
   ...BillingAccountRoutes,
