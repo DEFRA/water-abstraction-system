@@ -15,7 +15,7 @@
  *
  * @returns {Object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
-function go () {
+function go (financialYearEnding) {
   const SROC_FIRST_FIN_YEAR_END = 2023
   const NO_OF_YEARS_TO_LOOK_BACK = 5
 
@@ -27,19 +27,32 @@ function go () {
     end: { day: 31, month: 2 }
   }
 
+  // Two-part-tariff bill runs will always be a single period and will provide a value for `financialYearEnding` so we
+  // just return a single period based on that value. `financialYearEnding` is null for other bill run types.
+  if (financialYearEnding) {
+    _addBillingPeriod(billingPeriods, financialPeriod, financialYearEnding - 1, financialYearEnding)
+
+    return billingPeriods
+  }
+
   const years = _determineStartAndEndYear(financialPeriod)
   const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, (years.endYear - NO_OF_YEARS_TO_LOOK_BACK))
 
   while (earliestSrocFinYearEnd <= years.endYear) {
-    billingPeriods.push({
-      startDate: new Date(years.startYear, financialPeriod.start.month, financialPeriod.start.day),
-      endDate: new Date(years.endYear, financialPeriod.end.month, financialPeriod.end.day)
-    })
+    _addBillingPeriod(billingPeriods, financialPeriod, years.startYear, years.endYear)
+
     years.startYear--
     years.endYear--
   }
 
   return billingPeriods
+}
+
+function _addBillingPeriod (billingPeriods, financialPeriod, startYear, endYear) {
+  billingPeriods.push({
+    startDate: new Date(startYear, financialPeriod.start.month, financialPeriod.start.day),
+    endDate: new Date(endYear, financialPeriod.end.month, financialPeriod.end.day)
+  })
 }
 
 function _determineStartAndEndYear (financialPeriod) {
