@@ -101,4 +101,23 @@ describe('Bill Runs controller', () => {
       })
     })
   })
+
+  describe('GET /bill-runs/{id}/review', () => {
+    let options
+
+    beforeEach(async () => {
+      options = {
+        method: 'POST',
+        url: '/charge-elements/time-limited'
+      }
+    })
+
+    describe('when a request is valid', () => {
+      it('returns a 200 response', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(204)
+      })
+    })
+  })
 })
