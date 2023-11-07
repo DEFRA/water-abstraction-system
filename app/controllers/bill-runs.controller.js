@@ -27,6 +27,13 @@ async function create (request, h) {
   }
 }
 
+async function review2ptSroc (request, h) {
+  return h.view('bill-runs/view.njk', {
+    pageTitle: 'Review Two Part Tariff SROC',
+    activeNavBar: 'bill-runs'
+  })
+}
+
 /**
  * Takes an error from a validator and returns a suitable Boom error
 */
@@ -42,5 +49,6 @@ function _formattedInitiateBillRunError (error) {
 }
 
 module.exports = {
-  create
+  create,
+  review2ptSroc
 }

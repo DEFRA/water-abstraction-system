@@ -29,13 +29,6 @@ async function changeAddress (request, h) {
   return h.response(result).code(201)
 }
 
-async function billingTptSrocPage (request, h) {
-  return h.view('billing-accounts/view.njk', {
-    pageTitle: 'Bills',
-    activeNavBar: 'bill-runs'
-  })
-}
-
 /**
  * Takes an error from a validator and returns a suitable Boom error
 */
@@ -44,6 +37,5 @@ function _formattedValidationError (error) {
 }
 
 module.exports = {
-  changeAddress,
-  billingTptSrocPage
+  changeAddress
 }
