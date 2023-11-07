@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const TwoPartTariffProcessBillRunService = require('../../../../app/services/billing/two-part-tariff/process-bill-run.service.js')
 
-describe.only('Two Part Tariff Process Bill Run service', () => {
+describe('Two Part Tariff Process Bill Run service', () => {
   describe('when the service is called', () => {
     const billingPeriods = [{ endDate: new Date('2023-03-31') }]
 

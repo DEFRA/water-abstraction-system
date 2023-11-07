@@ -22,7 +22,7 @@ describe('Billing Periods service', () => {
   })
 
   describe('when the date is in 2022 and falls within the 2022 financial year', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       testDate = new Date('2022-04-01')
       expectedResult = {
         startDate: new Date('2022-04-01'),
@@ -41,7 +41,7 @@ describe('Billing Periods service', () => {
   })
 
   describe('when the date is in 2023 and falls within the 2022 financial year', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       testDate = new Date('2023-03-01')
       expectedResult = {
         startDate: new Date('2022-04-01'),
@@ -60,7 +60,7 @@ describe('Billing Periods service', () => {
   })
 
   describe('when the date is in 2023 and falls within the 2023 financial year', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       testDate = new Date('2023-10-10')
       expectedResult = [
         {
@@ -82,10 +82,30 @@ describe('Billing Periods service', () => {
       expect(result).to.have.length(2)
       expect(result).to.equal(expectedResult)
     })
+
+    describe('when the `financialYearEnding` of 2023 is passed to the service', () => {
+      const financialYearEnding = 2023
+
+      beforeEach(() => {
+        expectedResult = [
+          {
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2023-03-31')
+          }
+        ]
+      })
+
+      it('returns the expected date range', () => {
+        const result = DetermineBillingPeriodsService.go(financialYearEnding)
+
+        expect(result).to.have.length(1)
+        expect(result).to.equal(expectedResult)
+      })
+    })
   })
 
   describe('when the date is in 2030 and falls within the 2030 financial year', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       testDate = new Date('2030-10-10')
       expectedResult = [
         {
