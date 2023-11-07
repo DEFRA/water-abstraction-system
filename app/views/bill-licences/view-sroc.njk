@@ -1,0 +1,291 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: "Back",
+      href: "/system/bills/" + billingInvoiceId
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l" data-test="pre-header">Billing account {{ accountNumber }}</span>{{ pageTitle }}
+    </h1>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+      <section>
+        <div class="govuk-button-group">
+          <a class="govuk-link" href="/licences/{{ licenceId }}">View licence summary</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  {# Transactions table #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+      {# Determine headers (credit column is only shown for supplementary bill runs created in WRLS) #}
+      {% if displayCreditDebitTotals %}
+        {% set tableHeaders = [
+          { text: 'Transaction detail' },
+          { text: 'Billable days', format: 'numeric' },
+          { text: 'Quantity', format: 'numeric' },
+          { text: 'Credit', format: 'numeric' },
+          { text: 'Debit', format: 'numeric' }
+        ] %}
+      {% else %}
+        {% set tableHeaders = [
+          { text: 'Transaction detail' },
+          { text: 'Billable days', format: 'numeric' },
+          { text: 'Quantity', format: 'numeric' },
+          { text: 'Debit', format: 'numeric' }
+        ] %}
+      {% endif %}
+
+      {% set tableRows = [] %}
+
+      {% for transaction in transactions %}
+        {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+        {% set rowIndex = loop.index0 %}
+
+        {#
+          Determine the transaction detail cell contents. Depending on the transaction's charge type this goes from
+          simple to very messy! This is because we embed a lot of data in the cell which is layed out more like a part
+          of the UI.
+
+          All transaction types including minimum charge display a description. Compensation charge we also show the
+          charge period. Standard charges we show all that plus element details, further complicated by whether the
+          transaction is sroc or presroc.
+        #}
+        {% set detailDescription %}
+          <span data-test="description-{{ rowIndex }}">{{ transaction.description }}</span>
+        {% endset %}
+
+        {% if transaction.chargeType === 'compensation' %}
+          {% set detailChargeInfo %}
+            <p class="govuk-body-s"><br>
+              <span data-test="charge-period-{{ rowIndex }}"><strong>Charge period:</strong> {{ transaction.chargePeriod }}</span>
+            </p>
+          {% endset %}
+        {% else %}
+          {% set detailChargeInfo %}
+            <p class="govuk-body-s"><br>
+              <span data-test="charge-period-{{ rowIndex }}"><strong>Charge period:</strong> {{ transaction.chargePeriod }}</span><br>
+              <span data-test="charge-reference-{{ rowIndex }}"><strong>Charge reference:</strong> {{ transaction.chargeReference }}</span><br>
+              <span data-test="category-description-{{ rowIndex }}"><strong>Charge description:</strong> {{ transaction.chargeCategoryDescription }}</span>
+          {% endset %}
+
+          {# Only show additional charges if we have any #}
+          {% if transaction.additionalCharges %}
+            {% set additionalChargesDetail %}
+                <br><br>
+                <span data-test="additional-charges-{{ rowIndex }}"><strong>Additional charges:</strong> {{ transaction.additionalCharges }}</span>
+            {% endset %}
+          {% endif %}
+
+          {# Only show adjustments if we have any #}
+          {% if transaction.adjustments %}
+            {% set adjustmentsDetail %}
+              <br><br>
+              <span data-test="adjustments-{{ rowIndex }}"><strong>Adjustments:</strong> {{ transaction.adjustments }}</span>
+            {% endset %}
+          {% endif %}
+
+          {# Charge element details section #}
+          {% set elementDetail %}
+            <details class="govuk-details govuk-!-margin-bottom-0 govuk-!-font-size-16" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">Charge element details</span>
+              </summary>
+              <div class="govuk-details__text">
+                {#
+                  In SROC a reference (which is what the transaction links to) can have multiple elements. So, we need
+                  to be able to display a summary list for each one.
+                #}
+                {% for chargeElement in transaction.chargeElements %}
+                  {# Again, set an easier to reference loop index, this time for the charge elements loop #}
+                  {% set elementIndex = loop.index0 %}
+
+                  {#
+                    GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This
+                    means we can't assign our data-test attribute using the componenent. Our solution is to use the
+                    html option for each row instead of text and wrap each value in a <span>. That way we can manually
+                    assign our data-test attribute to the span.
+                  #}
+                  {% set chargeElementPurpose %}
+                    <span data-test="charge-element-purpose-{{ rowIndex }}-{{ elementIndex }}">{{ chargeElement.purpose }}</span>
+                  {% endset %}
+                  {% set chargeElementAbstractionPeriod %}
+                    <span data-test="charge-element-period-{{ rowIndex }}-{{ elementIndex }}">{{ chargeElement.abstractionPeriod }}</span>
+                  {% endset %}
+                  {% set chargeElementVolume %}
+                    <span data-test="charge-element-volume-{{ rowIndex }}-{{ elementIndex }}">{{ chargeElement.volume }}</span>
+                  {% endset %}
+                  {{
+                    govukSummaryList({
+                      classes: ' govuk-summary-list--no-border govuk-!-font-size-16 govuk-!-margin-bottom-0',
+                      attributes: { 'data-test': 'charge-element-' + rowIndex + '-' + elementIndex },
+                      rows: [
+                        {
+                          key: {
+                            text: "Purpose",
+                            classes: "meta-data__label govuk-!-font-weight-bold widthOverride"
+                            },
+                          value: {
+                            html: chargeElementPurpose,
+                            classes: "meta-data__value "
+                          }
+                        },
+                        {
+                          key: {
+                            text: "Abstraction period",
+                            classes: "meta-data__label govuk-!-font-weight-bold"
+                          },
+                          value: {
+                            html: chargeElementAbstractionPeriod,
+                            classes: "meta-data__value "
+                          }
+                        },
+                        {
+                          key: {
+                            text: "Volume",
+                            classes: "meta-data__label govuk-!-font-weight-bold"
+                          },
+                          value: {
+                            html: chargeElementVolume,
+                            classes: "meta-data__value "
+                          }
+                        }
+                      ]
+                      })
+                  }}
+                {% endfor %}
+              </div>
+            </details>
+          {% endset %}
+
+          {% set detailChargeInfo = detailChargeInfo + additionalChargesDetail + adjustmentsDetail + '</p>' + elementDetail %}
+        {% endif %}
+
+        {# Create the transaction row and set the first 3 columns; Transaction detail, Billable days and Quantity #}
+        {% set transactionRow = [
+          {
+            html: detailDescription + detailChargeInfo,
+            attributes: { 'data-test': 'details-' + rowIndex }
+          },
+          {
+            text: transaction.billableDays,
+            format: 'numeric',
+            attributes: { 'data-test': 'billable-days-' + rowIndex }
+          },
+          {
+            text: transaction.quantity,
+            format: 'numeric',
+            attributes: { 'data-test': 'quantity-' + rowIndex }
+          }
+        ] %}
+
+        {# Credit column - we only add it for supplementary bills created in WRLS #}
+        {% if displayCreditDebitTotals %}
+          {% set transactionRow = (transactionRow.push(
+            {
+              text: transaction.creditAmount,
+              format: 'numeric',
+              attributes: { 'data-test': 'credit-' + rowIndex }
+            }
+          ), transactionRow) %}
+        {% endif %}
+
+        {# Debit column - always added but must be done after the dynamic credit column to match the header order #}
+        {% set transactionRow = (transactionRow.push(
+          {
+            text: transaction.debitAmount,
+            format: 'numeric',
+            attributes: { 'data-test': 'debit-' + rowIndex }
+          }
+        ), transactionRow) %}
+
+        {% set tableRows = (tableRows.push(transactionRow), tableRows) %}
+      {% endfor %}
+
+      {# Determine if credit and debit total rows should be added #}
+      {% if displayCreditDebitTotals %}
+        {% set creditRow = [
+          {
+            text: 'Credits total',
+            colspan: 3
+          },
+          {
+            text: creditTotal,
+            format: 'numeric',
+            classes: 'govuk-!-font-weight-bold',
+            attributes: { 'data-test': 'credits-total' }
+          },
+          {
+            text: '',
+            format: 'numeric'
+          }
+        ] %}
+
+        {% set debitRow = [
+          {
+            text: 'Debits total',
+            colspan: 4
+          },
+          {
+            text: debitTotal,
+            format: 'numeric',
+            classes: 'govuk-!-font-weight-bold',
+            attributes: { 'data-test': 'debits-total' }
+          }
+        ] %}
+
+        {% set tableRows = (tableRows.push(creditRow), tableRows) %}
+        {% set tableRows = (tableRows.push(debitRow), tableRows) %}
+      {% endif %}
+
+      {#
+        Add the Total row. This always gets added and uses a custom class to add a thicker dividing line.
+
+        To get the colspan correct we get the length of the tableHeaders array using a Nunjucks built in filter.
+      #}
+      {% set totalRow = [
+        {
+          text: 'Total',
+          classes: 'govuk-table__cell--total',
+          colspan: tableHeaders | length - 1
+        },
+        {
+          text: total,
+          format: 'numeric',
+          classes: 'govuk-table__cell--total govuk-!-font-weight-bold',
+          attributes: { 'data-test': 'total' }
+        }
+      ] %}
+      {% set tableRows = (tableRows.push(totalRow), tableRows) %}
+
+
+      {# Finally, add the table to the page! #}
+      {{
+        govukTable({
+          caption: tableCaption,
+          captionClasses: "govuk-table__caption--m govuk-!-margin-bottom-0",
+          firstCellIsHeader: true,
+          attributes: { 'data-test': 'transactions' },
+          head: tableHeaders,
+          rows: tableRows
+        })
+      }}
+    </div>
+  </div>
+{% endblock %}
