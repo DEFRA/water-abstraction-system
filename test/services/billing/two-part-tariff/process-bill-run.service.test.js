@@ -12,11 +12,13 @@ const TwoPartTariffProcessBillRunService = require('../../../../app/services/bil
 
 describe('Two Part Tariff Process Bill Run service', () => {
   describe('when the service is called', () => {
+    const billingPeriods = [{ endDate: new Date('2023-03-31') }]
+
     it('throws an error', async () => {
-      const error = await expect(TwoPartTariffProcessBillRunService.go()).to.reject()
+      const error = await expect(TwoPartTariffProcessBillRunService.go('billRun', billingPeriods)).to.reject()
 
       expect(error).to.be.an.instanceOf(Error)
-      expect(error.message).to.equal('Two Part Tariff is not yet implemented')
+      expect(error.message).to.equal('Two Part Tariff is not yet implemented for Financial Year Ending: 2023')
     })
   })
 })

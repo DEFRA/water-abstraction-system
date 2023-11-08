@@ -18,6 +18,7 @@ describe('Create Bill Run validator', () => {
         scheme: 'sroc',
         region: '07ae7f3a-2677-4102-b352-cc006828948c',
         user: 'test.user@defra.gov.uk',
+        financialYearEnding: 2023,
         previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
       }
 
@@ -28,7 +29,30 @@ describe('Create Bill Run validator', () => {
         scheme: 'sroc',
         region: '07ae7f3a-2677-4102-b352-cc006828948c',
         user: 'test.user@defra.gov.uk',
+        financialYearEnding: 2023,
         previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
+      })
+    })
+
+    describe('which does not include `financialYearEnding`', () => {
+      it('returns validated data', async () => {
+        const validData = {
+          type: 'supplementary',
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c',
+          user: 'test.user@defra.gov.uk',
+          previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
+        }
+
+        const result = await CreateBillRunValidator.go(validData)
+
+        expect(result.value).to.equal({
+          type: 'supplementary',
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c',
+          user: 'test.user@defra.gov.uk',
+          previousBillRunId: '28a5fc2e-bdc9-4b48-96e7-5ee7b2f5d603'
+        })
       })
     })
 
@@ -38,7 +62,8 @@ describe('Create Bill Run validator', () => {
           type: 'supplementary',
           scheme: 'sroc',
           region: '07ae7f3a-2677-4102-b352-cc006828948c',
-          user: 'test.user@defra.gov.uk'
+          user: 'test.user@defra.gov.uk',
+          financialYearEnding: 2023
         }
 
         const result = await CreateBillRunValidator.go(validData)
@@ -47,7 +72,8 @@ describe('Create Bill Run validator', () => {
           type: 'supplementary',
           scheme: 'sroc',
           region: '07ae7f3a-2677-4102-b352-cc006828948c',
-          user: 'test.user@defra.gov.uk'
+          user: 'test.user@defra.gov.uk',
+          financialYearEnding: 2023
         })
       })
     })
@@ -162,6 +188,22 @@ describe('Create Bill Run validator', () => {
           scheme: 'sroc',
           region: '07ae7f3a-2677-4102-b352-cc006828948c',
           user: 'INVALID'
+        }
+
+        const result = await CreateBillRunValidator.go(invalidData)
+
+        expect(result.error).to.not.be.empty()
+      })
+    })
+
+    describe('because `financialYearEnding` has an invalid value', () => {
+      it('returns an error', async () => {
+        const invalidData = {
+          type: 'supplementary',
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c',
+          user: 'test.user@defra.gov.uk',
+          financialYearEnding: 'INVALID'
         }
 
         const result = await CreateBillRunValidator.go(invalidData)

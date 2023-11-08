@@ -17,6 +17,7 @@ function go (data) {
     scheme: Joi.string().valid('sroc').required(),
     region: Joi.string().guid().required(),
     user: Joi.string().email().required(),
+    financialYearEnding: Joi.number().integer().optional(),
     previousBillRunId: Joi.string().guid().optional()
   })
 
