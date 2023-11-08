@@ -18,8 +18,8 @@ async function create (request, h) {
   }
 
   try {
-    const { region, type, user } = validatedData.value
-    const result = await StartBillRunProcessService.go(region, type, user)
+    const { region, type, user, financialYearEnding } = validatedData.value
+    const result = await StartBillRunProcessService.go(region, type, user, financialYearEnding)
 
     return h.response(result).code(200)
   } catch (error) {
