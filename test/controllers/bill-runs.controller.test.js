@@ -101,4 +101,27 @@ describe('Bill Runs controller', () => {
       })
     })
   })
+
+  describe('GET /bill-runs/{id}/review', () => {
+    let options
+
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid', () => {
+      it('returns a 200 response', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+      })
+    })
+  })
 })
