@@ -107,8 +107,12 @@ describe('Bill Runs controller', () => {
 
     beforeEach(async () => {
       options = {
-        method: 'POST',
-        url: '/charge-elements/time-limited'
+        method: 'GET',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
       }
     })
 
@@ -116,7 +120,7 @@ describe('Bill Runs controller', () => {
       it('returns a 200 response', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(204)
+        expect(response.statusCode).to.equal(200)
       })
     })
   })

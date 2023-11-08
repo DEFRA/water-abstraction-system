@@ -19,21 +19,17 @@ const routes = [
       description: 'Used to create a bill run'
     }
   },
-
   {
     method: 'GET',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.review,
     options: {
-      app: {
-        plainOutput: true
-      },
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Used to review sroc returns data'
+      description: 'Review two-part tariff match and allocation results'
     }
   }
 ]
