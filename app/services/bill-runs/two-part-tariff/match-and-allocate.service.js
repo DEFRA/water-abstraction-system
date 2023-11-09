@@ -5,17 +5,17 @@
  * @module MatchAndAllocateService
  */
 
+const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+
 /**
  * Functionality not yet implemented
  */
-async function go (_billRun, billingPeriods, licenceId) {
+async function go (billRun, billingPeriods, licenceId) {
   const startTime = process.hrtime.bigint()
-
-  throw new Error(`Two Part Tariff is not yet implemented for Financial Year Ending: ${billingPeriods[0].endDate.getFullYear()}`)
 
   _calculateAndLogTime(startTime, id, type)
 
-
+  const chargeVersions = FetchChargeVersionsService.go(billRun.regionId, billingPeriods[0], licenceId)
 }
 
 function _calculateAndLogTime (startTime, id, type) {
