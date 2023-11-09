@@ -76,10 +76,19 @@ function go (chargeVersion, billingPeriod) {
   ].filter((timestamp) => timestamp)
 
   const earliestEndDateTimestamp = Math.min(...endDateTimestamps)
+  console.log('🚀 ~ file: determine-charge-period.service.js:81 ~ go ~ earliestEndDateTimestamp:', earliestEndDateTimestamp)
 
   const chargePeriod = {
     startDate: new Date(latestStartDateTimestamp),
     endDate: new Date(earliestEndDateTimestamp)
+  }
+
+  if (chargeVersion.chargeVersionId === 'd0242c61-daf9-4067-b3cd-60c1a9e7423f') {
+    console.log('🚀 ~ file: determine-charge-period.service.js:68 ~ go ~ latestStartDateTimestamp:', latestStartDateTimestamp)
+    console.log('🚀 ~ file: determine-charge-period.service.js:78 ~ go ~ endDateTimestamps:', endDateTimestamps)
+    console.log('🚀 ~ file: determine-charge-period.service.js:81 ~ go ~ earliestEndDateTimestamp:', earliestEndDateTimestamp)
+    console.log('🚀 ~ file: determine-charge-period.service.js:87 ~ go ~ chargePeriod:', chargePeriod)
+    console.log('🚀 ~ file: determine-charge-period.service.js:87 ~ go ~ _periodIsIncompatible:', _periodIsIncompatible(chargePeriod, billingPeriod))
   }
 
   if (_periodIsIncompatible(chargePeriod, billingPeriod)) {
