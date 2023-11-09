@@ -23,18 +23,20 @@ function go (licences, billingPeriod) {
       _sortChargeReferencesBySubsistenceCharge(chargeReferences)
       chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-      chargeReferences.forEach((chargeReference, chargeReferenceIndex) => {
-        chargeReference.id = `R${chargeReferenceIndex + 1}-${chargeVersion.id}`
+      if (chargeVersion.chargePeriod.startDate) {
+        chargeReferences.forEach((chargeReference, chargeReferenceIndex) => {
+          chargeReference.id = `R${chargeReferenceIndex + 1}-${chargeVersion.id}`
 
-        const { chargeElements } = chargeReference
+          const { chargeElements } = chargeReference
 
-        chargeElements.forEach((chargeElement, chargeElementIndex) => {
-          chargeElement.id = `E${chargeElementIndex + 1}-${chargeReference.id}`
+          chargeElements.forEach((chargeElement, chargeElementIndex) => {
+            chargeElement.id = `E${chargeElementIndex + 1}-${chargeReference.id}`
 
-          _prepChargeElement(chargeElement, chargeVersion.chargePeriod)
-          _matchAndAllocate(chargeElement, returns)
+            _prepChargeElement(chargeElement, chargeVersion.chargePeriod)
+            _matchAndAllocate(chargeElement, returns)
+          })
         })
-      })
+      }
 
       delete chargeVersion.licence
     })
