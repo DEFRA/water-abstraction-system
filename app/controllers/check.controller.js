@@ -6,6 +6,7 @@
  */
 
 const CheckTwoPartService = require('../services/check/two-part.service.js')
+const TwoPartTariffMatchAndAllocateService = require('../services/billing/two-part-tariff/match-and-allocate.service.js')
 
 async function twoPart (request, h) {
   const result = await CheckTwoPartService.go(request.params.naldRegionId, 'region')
@@ -19,7 +20,18 @@ async function twoPartLicence (request, h) {
   return h.response(result).code(200)
 }
 
+async function twoPartReview (request, h) {
+  const result = await TwoPartTariffMatchAndAllocateService.go(
+    { billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282' },
+    [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }],
+    request.params.licenceId
+  )
+
+  return h.response(result).code(200)
+}
+
 module.exports = {
   twoPart,
-  twoPartLicence
+  twoPartLicence,
+  twoPartReview
 }

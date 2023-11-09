@@ -28,6 +28,19 @@ const routes = [
       auth: false,
       description: 'Used by the delivery team to check the SROC 2PT billing logic for a single licence'
     }
+  },
+  {
+    method: 'GET',
+    path: '/check/two-part-review/{licenceId}',
+    handler: CheckController.twoPartReview,
+    options: {
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      },
+      auth: false,
+      description: 'Used by the delivery team to check the SROC 2PT billing logic for a single licence'
+    }
   }
 ]
 
