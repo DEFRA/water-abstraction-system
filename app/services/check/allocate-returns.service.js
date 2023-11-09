@@ -46,6 +46,8 @@ function go (licences, billingPeriod) {
 }
 
 function _prepChargeElement (chargeElement, chargePeriod) {
+  console.log('🚀 ~ file: allocate-returns.service.js:49 ~ _prepChargeElement ~ chargePeriod:', chargePeriod)
+  console.log('🚀 ~ file: allocate-returns.service.js:50 ~ _prepChargeElement ~ chargeElement:', chargeElement)
   const {
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
