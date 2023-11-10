@@ -1,17 +1,28 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the view bill page
+ * Orchestrates fetching and presenting the data needed for one of the view bill templates
  * @module ViewBillService
  */
 
 const BillPresenter = require('../../presenters/bills/bill.presenter.js')
-const FetchBillService = require('./fetch-bill-service.js')
 const FetchBillingAccountService = require('./fetch-billing-account.service.js')
+const FetchBillLicence = require('../bill-licences/fetch-bill-licence.service.js')
+const FetchBillService = require('./fetch-bill-service.js')
 const LicenceSummariesPresenter = require('../../presenters/bills/licence-summaries.presenter.js')
+const ViewBillLicencePresenter = require('../../presenters/bill-licences/view-bill-licence.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the view bill page
+ * Orchestrates fetching and presenting the data needed for one of the view bill templates
+ *
+ * When viewing a bill we are required to return a different template depending on whether the bill is linked to one
+ * or multiple licences.
+ *
+ * All templates depend on the same bill and billing account data. We show the same thing at the top of the page. But
+ * if the bill has multiple licences we show a table that summarises them so depend on `LicenceSummariesPresenter`.
+ *
+ * Else when there is just 1 licence we show all the transactions details instead (saving the user an extra click!).
+ * For this we need to fetch the bill licence and use `ViewBillLicencePresenter` to generate the data.
  *
  * @param {string} id The UUID for the bill to view
  *
@@ -22,8 +33,22 @@ async function go (id) {
   const { bill, licenceSummaries } = await FetchBillService.go(id)
   const billingAccount = await FetchBillingAccountService.go(bill.invoiceAccountId)
 
+  // Irrespective of of how many licences are linked to the bill, the templates always need formatted bill and billing
+  // account data
   const billAndBillingAccountData = BillPresenter.go(bill, billingAccount)
-  const additionalData = LicenceSummariesPresenter.go(licenceSummaries)
+
+  let additionalData = {}
+
+  // If we have multiple licences we need to provide formatted licence summary data for the multi licence bill template
+  if (licenceSummaries.length > 1) {
+    additionalData = LicenceSummariesPresenter.go(licenceSummaries)
+  } else {
+    // Else we need to provide we need to provide bill licence data for the single licence bill templates
+    // (ViewBillLicencePresenter handles both PRESROC and SROC)
+    const billLicence = await FetchBillLicence.go(licenceSummaries[0].billingInvoiceLicenceId)
+
+    additionalData = ViewBillLicencePresenter.go(billLicence)
+  }
 
   return {
     ...billAndBillingAccountData,
