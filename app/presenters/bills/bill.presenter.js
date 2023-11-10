@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for a bill including its licence summaries into what is needed for the multi-licence bill page
- * @module MultiLicenceBillPresenter
+ * Formats bill data ready for presenting in the single licence bill and multi licence bill pages
+ * @module BillPresenter
  */
 
 const {
@@ -11,10 +11,8 @@ const {
   formatMoney
 } = require('../base.presenter.js')
 
-function go (bill, licenceSummaries, billingAccount) {
+function go (bill, billingAccount) {
   const { billRun } = bill
-
-  const billLicences = _billLicences(licenceSummaries)
 
   const formattedBill = {
     accountName: _accountName(billingAccount),
@@ -22,7 +20,6 @@ function go (bill, licenceSummaries, billingAccount) {
     addressLines: _addressLines(billingAccount),
     billId: bill.billingInvoiceId,
     billingAccountId: billingAccount.invoiceAccountId,
-    billLicences,
     billNumber: bill.invoiceNumber,
     billRunId: billRun.billingBatchId,
     billRunNumber: billRun.billRunNumber,
@@ -39,7 +36,6 @@ function go (bill, licenceSummaries, billingAccount) {
     financialYear: _financialYear(billRun),
     flaggedForReissue: bill.isFlaggedForRebilling,
     region: capitalize(billRun.region.displayName),
-    tableCaption: _tableCaption(billLicences),
     total: _total(bill.netAmount, bill.isCredit),
     transactionFile: billRun.transactionFileReference
   }
@@ -72,18 +68,6 @@ function _addressLines (billingAccount) {
   ]
 
   return addressParts.filter((part) => part)
-}
-
-function _billLicences (licenceSummaries) {
-  return licenceSummaries.map((licenceSummary) => {
-    const { billingInvoiceLicenceId: id, licenceRef: reference, total } = licenceSummary
-
-    return {
-      id,
-      reference,
-      total: formatMoney(total)
-    }
-  })
 }
 
 function _billRunType (billRun) {
@@ -132,16 +116,6 @@ function _scheme (billRun) {
   }
 
   return 'Old'
-}
-
-function _tableCaption (billLicences) {
-  const numberOfRows = billLicences.length
-
-  if (numberOfRows === 1) {
-    return '1 licence'
-  }
-
-  return `${numberOfRows} licences`
 }
 
 function _total (valueInPence, credit) {
