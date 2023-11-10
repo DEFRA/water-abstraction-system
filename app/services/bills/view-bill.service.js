@@ -5,9 +5,10 @@
  * @module ViewBillService
  */
 
+const BillPresenter = require('../../presenters/bills/bill.presenter.js')
 const FetchBillService = require('./fetch-bill-service.js')
 const FetchBillingAccountService = require('./fetch-billing-account.service.js')
-const MultiLicenceBillPresenter = require('../../presenters/bills/multi-licence-bill.presenter.js')
+const LicenceSummariesPresenter = require('../../presenters/bills/licence-summaries.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the view bill page
@@ -21,7 +22,13 @@ async function go (id) {
   const { bill, licenceSummaries } = await FetchBillService.go(id)
   const billingAccount = await FetchBillingAccountService.go(bill.invoiceAccountId)
 
-  return MultiLicenceBillPresenter.go(bill, licenceSummaries, billingAccount)
+  const billAndBillingAccountData = BillPresenter.go(bill, billingAccount)
+  const additionalData = LicenceSummariesPresenter.go(licenceSummaries)
+
+  return {
+    ...billAndBillingAccountData,
+    ...additionalData
+  }
 }
 
 module.exports = {
