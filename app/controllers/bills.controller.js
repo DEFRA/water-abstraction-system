@@ -12,11 +12,25 @@ async function view (request, h) {
 
   const pageData = await ViewBillService.go(id)
 
-  return h.view('bills/view.njk', {
+  const view = _determineView(pageData)
+
+  return h.view(view, {
     pageTitle: `Bill for ${pageData.accountName}`,
     activeNavBar: 'bill-runs',
     ...pageData
   })
+}
+
+function _determineView (pageData) {
+  if (pageData.billLicences) {
+    return 'bills/view-multi-licence.njk'
+  }
+
+  if (pageData.scheme === 'sroc') {
+    return 'bills/view-single-licence-sroc.njk'
+  }
+
+  return 'bills/view-single-licence-presroc.njk'
 }
 
 module.exports = {
