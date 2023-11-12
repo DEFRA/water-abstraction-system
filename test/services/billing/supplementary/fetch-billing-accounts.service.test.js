@@ -12,9 +12,9 @@ const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-ac
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
-const FetchInvoiceAccountNumbersService = require('../../../../app/services/billing/supplementary/fetch-invoice-account-numbers.service.js')
+const FetchBillingAccountsService = require('../../../../app/services/billing/supplementary/fetch-billing-accounts.service.js')
 
-describe('Fetch Invoice Account Numbers service', () => {
+describe('Fetch Billing Accounts service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
@@ -43,8 +43,8 @@ describe('Fetch Invoice Account Numbers service', () => {
       ]
     })
 
-    it('fetches the invoice accounts that the charge versions link to', async () => {
-      const result = await FetchInvoiceAccountNumbersService.go([
+    it('fetches the billing accounts that the charge versions link to', async () => {
+      const result = await FetchBillingAccountsService.go([
         { invoiceAccountId: billingAccounts[0].invoiceAccountId },
         { invoiceAccountId: billingAccounts[1].invoiceAccountId }
       ])

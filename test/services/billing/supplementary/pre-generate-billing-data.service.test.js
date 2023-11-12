@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchInvoiceAccountNumbersService = require('../../../../app/services/billing/supplementary/fetch-invoice-account-numbers.service.js')
+const FetchBillingAccountsService = require('../../../../app/services/billing/supplementary/fetch-billing-accounts.service.js')
 
 // Thing under test
 const PreGenerateBillingDataService = require('../../../../app/services/billing/supplementary/pre-generate-billing-data.service.js')
@@ -52,7 +52,7 @@ describe('Pre-generate billing data service', () => {
         { invoiceAccountId: billingAccounts[1].invoiceAccountId, licence: licences[1] }
       ]
 
-      Sinon.stub(FetchInvoiceAccountNumbersService, 'go').resolves(billingAccounts)
+      Sinon.stub(FetchBillingAccountsService, 'go').resolves(billingAccounts)
     })
 
     describe('returns an object with a bills property', () => {

@@ -5,7 +5,7 @@
  * @module PreGenerateBillingDataService
  */
 
-const FetchInvoiceAccountNumbersService = require('./fetch-invoice-account-numbers.service.js')
+const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
 const GenerateBillService = require('./generate-bill.service.js')
 const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
 
@@ -14,17 +14,17 @@ const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
  * a keyed object of bills and a keyed object of bill licences. The bills are keyed by the bill ID, and the bill
  * licences are keyed by the concatenated bill id and licence id.
  * *
- * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the invoice
- * account ids and licences to use
+ * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the billing
+ * accounts and licences to use
  * @param {String} billRunId The bill run id to be added to the billing invoices
  * @param {Object} billingPeriod The billing period of the billing invoices
  *
- * @returns {Object} An object containing bills and billLicences objects
+ * @returns {Object} An object containing arrays of bills and billLicences objects
  */
 async function go (chargeVersions, billRunId, billingPeriod) {
-  const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
+  const billingAccounts = await FetchBillingAccountsService.go(chargeVersions)
 
-  const bills = _preGenerateBills(invoiceAccounts, billRunId, billingPeriod)
+  const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)
   const billLicences = _preGenerateBillLicences(chargeVersions, bills)
 
   return { bills, billLicences }
