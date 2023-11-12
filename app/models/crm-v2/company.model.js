@@ -59,7 +59,7 @@ class CompanyModel extends CrmV2BaseModel {
 
   static get relationMappings () {
     return {
-      invoiceAccounts: {
+      billingAccounts: {
         relation: Model.HasManyRelation,
         modelClass: 'billing-account.model',
         join: {

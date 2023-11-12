@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
+const BillingAccountModel = require('../../../app/models/crm-v2/billing-account.model.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
@@ -37,6 +39,42 @@ describe('Company model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to billing accounts', () => {
+      let testBillingAccounts
+
+      beforeEach(async () => {
+        testRecord = await CompanyHelper.add()
+        const { companyId } = testRecord
+
+        testBillingAccounts = []
+        for (let i = 0; i < 2; i++) {
+          const billingAccount = await BillingAccountHelper.add({ companyId })
+          testBillingAccounts.push(billingAccount)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await CompanyModel.query()
+          .innerJoinRelated('billingAccounts')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the billing accounts', async () => {
+        const result = await CompanyModel.query()
+          .findById(testRecord.companyId)
+          .withGraphFetched('billingAccounts')
+
+        expect(result).to.be.instanceOf(CompanyModel)
+        expect(result.companyId).to.equal(testRecord.companyId)
+
+        expect(result.billingAccounts).to.be.an.array()
+        expect(result.billingAccounts[0]).to.be.an.instanceOf(BillingAccountModel)
+        expect(result.billingAccounts).to.include(testBillingAccounts[0])
+        expect(result.billingAccounts).to.include(testBillingAccounts[1])
+      })
+    })
+
     describe('when linking to invoice account addresses', () => {
       let testInvoiceAccountAddresses
 
