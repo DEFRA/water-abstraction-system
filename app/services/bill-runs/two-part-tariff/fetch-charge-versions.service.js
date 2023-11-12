@@ -7,7 +7,7 @@
 
 const { ref } = require('objection')
 
-const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
+const ChargeReferenceModel = require('../../../models/water/charge-reference.model.js')
 const ChargeVersionModel = require('../../../models/water/charge-version.model.js')
 const Workflow = require('../../../models/water/workflow.model.js')
 
