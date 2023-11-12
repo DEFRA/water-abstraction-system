@@ -6,7 +6,7 @@
  */
 
 const CheckTwoPartService = require('../services/check/two-part.service.js')
-const TwoPartTariffMatchAndAllocateService = require('../services/billing/two-part-tariff/match-and-allocate.service.js')
+const TwoPartTariffMatchAndAllocateService = require('../services/bill-runs/two-part-tariff/match-and-allocate.service.js')
 
 async function twoPart (request, h) {
   const result = await CheckTwoPartService.go(request.params.naldRegionId, 'region')

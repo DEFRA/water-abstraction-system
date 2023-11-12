@@ -6,7 +6,7 @@
  */
 
 const DetermineAbstractionPeriodServices = require('./determine-abstraction-periods.service.js')
-const DetermineChargePeriodService = require('../../services/billing/supplementary/determine-charge-period.service.js')
+const DetermineChargePeriodService = require('../../services/bill-runs/supplementary/determine-charge-period.service.js')
 
 function go (licences, billingPeriod) {
   licences.forEach((licence, licenceIndex) => {
