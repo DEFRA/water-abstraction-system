@@ -11,7 +11,7 @@ const FetchPreviousTransactionsService = require('./fetch-previous-transactions.
 const ReverseTransactionsService = require('./reverse-transactions.service.js')
 
 /**
- * Fetches debit-only transactions from the previous bill run for the invoice account and licence provided and reverses
+ * Fetches debit-only transactions from the previous bill run for the billing account and licence provided and reverses
  * them as credits.
  *
  * These credits are compared with the supplied calculated debit transactions (ie. debit transactions which are to be

@@ -5,7 +5,7 @@
  * @module PreGenerateBillingDataService
  */
 
-const FetchInvoiceAccountNumbersService = require('./fetch-invoice-account-numbers.service.js')
+const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
 const GenerateBillService = require('./generate-bill.service.js')
 const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
 
@@ -14,17 +14,17 @@ const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
  * a keyed object of bills and a keyed object of bill licences. The bills are keyed by the bill ID, and the bill
  * licences are keyed by the concatenated bill id and licence id.
  * *
- * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the invoice
- * account ids and licences to use
+ * @param {module:ChargeVersionModel[]} chargeVersions Array of charge versions which provide the billing
+ * accounts and licences to use
  * @param {String} billRunId The bill run id to be added to the billing invoices
  * @param {Object} billingPeriod The billing period of the billing invoices
  *
- * @returns {Object} An object containing bills and billLicences objects
+ * @returns {Object} An object containing arrays of bills and billLicences objects
  */
 async function go (chargeVersions, billRunId, billingPeriod) {
-  const invoiceAccounts = await FetchInvoiceAccountNumbersService.go(chargeVersions)
+  const billingAccounts = await FetchBillingAccountsService.go(chargeVersions)
 
-  const bills = _preGenerateBills(invoiceAccounts, billRunId, billingPeriod)
+  const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)
   const billLicences = _preGenerateBillLicences(chargeVersions, bills)
 
   return { bills, billLicences }
@@ -68,7 +68,7 @@ function _billLicenceKey (billId, licenceId) {
 }
 
 /**
-  * We pre-generate bills for every invoice account so that we don't need to fetch any data from the db during the main
+  * We pre-generate bills for every billing account so that we don't need to fetch any data from the db during the main
   * charge version processing loop. This function generates the required bill licences and returns an object where
   * each key is the invoice account id, and each value is the bill, ie:
   *
@@ -77,14 +77,14 @@ function _billLicenceKey (billId, licenceId) {
   *   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
   * }
   */
-function _preGenerateBills (invoiceAccounts, billRunId, billingPeriod) {
-  const keyedBills = invoiceAccounts.reduce((acc, invoiceAccount) => {
-    // Note that the array of invoice accounts will already have been deduped so we don't need to check whether a
+function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
+  const keyedBills = billingAccounts.reduce((acc, billingAccount) => {
+    // Note that the array of billing accounts will already have been deduped so we don't need to check whether a
     // bill licence already exists in the object before generating one
     return {
       ...acc,
-      [invoiceAccount.invoiceAccountId]: GenerateBillService.go(
-        invoiceAccount,
+      [billingAccount.invoiceAccountId]: GenerateBillService.go(
+        billingAccount,
         billRunId,
         billingPeriod.endDate.getFullYear()
       )

@@ -64,7 +64,7 @@ describe('Bill presenter', () => {
 
       describe('when the billing account is linked to an agent', () => {
         beforeEach(() => {
-          billingAccount.invoiceAccountAddresses[0].agentCompany = {
+          billingAccount.billingAccountAddresses[0].agentCompany = {
             companyId: 'b0d35412-f76c-44ca-9d63-c6350337e03d',
             type: 'person',
             name: 'Alan Broke'
@@ -186,7 +186,7 @@ describe('Bill presenter', () => {
       // we contactName is populated which the view will use to determine if an FAO should be shown with the address
       describe('where the billing account is linked to a contact (FAO)', () => {
         beforeEach(() => {
-          billingAccount.invoiceAccountAddresses[0].contact = ContactModel.fromJson({
+          billingAccount.billingAccountAddresses[0].contact = ContactModel.fromJson({
             contactId: '2b00981d-9388-4f0d-8271-8e216b66c971',
             contactType: 'person',
             dataSource: 'wrls',
@@ -326,7 +326,7 @@ function _testBillingAccount () {
       type: 'organisation',
       name: 'Wessex Water Services Ltd'
     },
-    invoiceAccountAddresses: [
+    billingAccountAddresses: [
       {
         invoiceAccountAddressId: 'b0e53215-b73a-4570-992b-2a724944ea19',
         invoiceAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',

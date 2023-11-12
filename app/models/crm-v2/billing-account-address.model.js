@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for invoiceAccountAddresses
- * @module InvoiceAccountAddressModel
+ * Model for invoice_account_addresses
+ * @module BillingAccountAddressModel
  */
 
 const { Model } = require('objection')
 
 const CrmV2BaseModel = require('./crm-v2-base.model.js')
 
-class InvoiceAccountAddressModel extends CrmV2BaseModel {
+class BillingAccountAddressModel extends CrmV2BaseModel {
   static get tableName () {
     return 'invoiceAccountAddresses'
   }
@@ -43,6 +43,14 @@ class InvoiceAccountAddressModel extends CrmV2BaseModel {
           to: 'companies.companyId'
         }
       },
+      billingAccount: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'billing-account.model',
+        join: {
+          from: 'invoiceAccountAddresses.invoiceAccountId',
+          to: 'invoiceAccounts.invoiceAccountId'
+        }
+      },
       contact: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'contact.model',
@@ -50,17 +58,9 @@ class InvoiceAccountAddressModel extends CrmV2BaseModel {
           from: 'invoiceAccountAddresses.contactId',
           to: 'contacts.contactId'
         }
-      },
-      invoiceAccount: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'invoice-account.model',
-        join: {
-          from: 'invoiceAccountAddresses.invoiceAccountId',
-          to: 'invoiceAccounts.invoiceAccountId'
-        }
       }
     }
   }
 }
 
-module.exports = InvoiceAccountAddressModel
+module.exports = BillingAccountAddressModel

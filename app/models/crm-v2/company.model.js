@@ -59,20 +59,20 @@ class CompanyModel extends CrmV2BaseModel {
 
   static get relationMappings () {
     return {
-      invoiceAccounts: {
+      billingAccountAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'invoice-account.model',
-        join: {
-          from: 'companies.companyId',
-          to: 'invoiceAccounts.companyId'
-        }
-      },
-      invoiceAccountAddresses: {
-        relation: Model.HasManyRelation,
-        modelClass: 'invoice-account-address.model',
+        modelClass: 'billing-account-address.model',
         join: {
           from: 'companies.companyId',
           to: 'invoiceAccountAddresses.agentCompanyId'
+        }
+      },
+      billingAccounts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'billing-account.model',
+        join: {
+          from: 'companies.companyId',
+          to: 'invoiceAccounts.companyId'
         }
       }
     }

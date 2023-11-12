@@ -22,7 +22,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
  *
  * Should the request fail it will generate and throw an error.
  *
- * @param {module:InvoiceAccountModel} invoiceAccount The billing (invoice) account we are changing the address details
+ * @param {module:BillingAccountModel} billingAccount The billing account we are changing the address details
  * for
  * @param {module:AddressModel} address The new address
  * @param {module:CompanyModel} company The agent company for the billing account if one was selected or setup by the
@@ -30,13 +30,13 @@ const ExpandedError = require('../../errors/expanded.error.js')
  * @param {module:ContactModel} contact The new contact for the billing account if an FAO was setup by the user during
  * the change address journey
  */
-async function go (invoiceAccount, address, company, contact) {
-  const requestData = CreateCustomerChangePresenter.go(invoiceAccount, address, company, contact)
+async function go (billingAccount, address, company, contact) {
+  const requestData = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
   const result = await CreateCustomerChangeService.go(requestData)
 
   if (!result.succeeded) {
-    throw new ExpandedError('Customer change failed to send', { invoiceAccountId: invoiceAccount.invoiceAccountId })
+    throw new ExpandedError('Customer change failed to send', { invoiceAccountId: billingAccount.invoiceAccountId })
   }
 }
 

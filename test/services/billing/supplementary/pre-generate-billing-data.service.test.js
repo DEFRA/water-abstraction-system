@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchInvoiceAccountNumbersService = require('../../../../app/services/billing/supplementary/fetch-invoice-account-numbers.service.js')
+const FetchBillingAccountsService = require('../../../../app/services/billing/supplementary/fetch-billing-accounts.service.js')
 
 // Thing under test
 const PreGenerateBillingDataService = require('../../../../app/services/billing/supplementary/pre-generate-billing-data.service.js')
@@ -21,7 +21,7 @@ describe('Pre-generate billing data service', () => {
   }
   const billRunId = '027b69aa-b0f7-46d0-86ce-ab577932fc5b'
 
-  const invoiceAccounts = [
+  const billingAccounts = [
     {
       invoiceAccountId: '235bae72-01f7-4a21-b8a3-d2b5fb2eff91',
       invoiceAccountNumber: 'T12345678A'
@@ -46,17 +46,17 @@ describe('Pre-generate billing data service', () => {
   describe('when the service is called', () => {
     beforeEach(async () => {
       chargeVersions = [
-        { invoiceAccountId: invoiceAccounts[0].invoiceAccountId, licence: licences[0] },
-        { invoiceAccountId: invoiceAccounts[1].invoiceAccountId, licence: licences[0] },
-        { invoiceAccountId: invoiceAccounts[1].invoiceAccountId, licence: licences[1] },
-        { invoiceAccountId: invoiceAccounts[1].invoiceAccountId, licence: licences[1] }
+        { invoiceAccountId: billingAccounts[0].invoiceAccountId, licence: licences[0] },
+        { invoiceAccountId: billingAccounts[1].invoiceAccountId, licence: licences[0] },
+        { invoiceAccountId: billingAccounts[1].invoiceAccountId, licence: licences[1] },
+        { invoiceAccountId: billingAccounts[1].invoiceAccountId, licence: licences[1] }
       ]
 
-      Sinon.stub(FetchInvoiceAccountNumbersService, 'go').resolves(invoiceAccounts)
+      Sinon.stub(FetchBillingAccountsService, 'go').resolves(billingAccounts)
     })
 
     describe('returns an object with a bills property', () => {
-      it('has one key per invoice account', async () => {
+      it('has one key per billing account', async () => {
         const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.keys(result)
@@ -79,8 +79,8 @@ describe('Pre-generate billing data service', () => {
         const entries = Object.entries(result)
 
         entries.forEach(([key, value]) => {
-          const matchingInvoiceAccount = invoiceAccounts.find((invoiceAccount) => {
-            return key === invoiceAccount.invoiceAccountId
+          const matchingInvoiceAccount = billingAccounts.find((billingAccount) => {
+            return key === billingAccount.invoiceAccountId
           })
           expect(value.invoiceAccountNumber).to.equal(matchingInvoiceAccount.invoiceAccountNumber)
         })

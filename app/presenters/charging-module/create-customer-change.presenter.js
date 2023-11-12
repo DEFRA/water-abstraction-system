@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Generates the Charging Module create customer request from an WRLS invoice account
+ * Generates the Charging Module create customer request from an WRLS billing account
  * @module ChargingModuleCreateCustomerChangePresenter
  */
 
@@ -44,7 +44,7 @@
  *
  * Anything set to null the Charging Module API will set to `null` in the record it sends to SSCL.
  *
- * @param {module:InvoiceAccountModel} invoiceAccount the invoice (billing) account having its address changed
+ * @param {module:BillingAccountModel} billingAccount the billing account having its address changed
  * (required)
  * @param {module:AddressModel} address the address it is being changed to (required)
  * @param {module:CompanyModel} company the agent company selected or created during the process (if the user made no
@@ -54,11 +54,11 @@
  *
  * @returns {Object} the request data needed in the format required by the Charging Module
  */
-function go (invoiceAccount, address, company, contact) {
-  const { invoiceAccountNumber: customerReference } = invoiceAccount
+function go (billingAccount, address, company, contact) {
+  const { invoiceAccountNumber: customerReference } = billingAccount
 
   const region = customerReference.charAt(0)
-  const customerName = _customerName(invoiceAccount, company)
+  const customerName = _customerName(billingAccount, company)
   const formattedAddress = _formattedAddress(address, contact)
 
   return {
@@ -85,12 +85,12 @@ function _addressLine6 (county, country) {
   return country
 }
 
-function _customerName (invoiceAccount, company) {
+function _customerName (billingAccount, company) {
   if (company.name) {
     return company.name
   }
 
-  return invoiceAccount.company.name
+  return billingAccount.company.name
 }
 
 function _formattedAddress (address, contact) {

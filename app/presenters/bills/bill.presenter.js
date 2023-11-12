@@ -44,7 +44,7 @@ function go (bill, billingAccount) {
 }
 
 function _accountName (billingAccount) {
-  const accountAddress = billingAccount.invoiceAccountAddresses[0]
+  const accountAddress = billingAccount.billingAccountAddresses[0]
 
   if (accountAddress.agentCompany) {
     return accountAddress.agentCompany.name
@@ -54,7 +54,7 @@ function _accountName (billingAccount) {
 }
 
 function _addressLines (billingAccount) {
-  const { address } = billingAccount.invoiceAccountAddresses[0]
+  const { address } = billingAccount.billingAccountAddresses[0]
 
   const addressParts = [
     address.address1,
@@ -89,7 +89,7 @@ function _billRunType (billRun) {
 }
 
 function _contactName (billingAccount) {
-  const contact = billingAccount.invoiceAccountAddresses[0].contact
+  const contact = billingAccount.billingAccountAddresses[0].contact
 
   if (contact) {
     return contact.$name()

@@ -11,13 +11,13 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
 const AddressModel = require('../../../app/models/crm-v2/address.model.js')
+const BillingAccountAddressHelper = require('../../support/helpers/crm-v2/billing-account-address.helper.js')
+const BillingAccountAddressModel = require('../../../app/models/crm-v2/billing-account-address.model.js')
+const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
 const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
-const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
-const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
 
 // Things we need to stub
 const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
@@ -52,13 +52,13 @@ describe('Change address service', () => {
 
   let address
   let agentCompany
+  let billingAccount
   let contact
-  let invoiceAccount
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    invoiceAccount = await InvoiceAccountHelper.add({ invoiceAccountId })
+    billingAccount = await BillingAccountHelper.add({ invoiceAccountId })
   })
 
   afterEach(() => {
@@ -75,7 +75,7 @@ describe('Change address service', () => {
         address = { ...addressFromManual }
       })
 
-      it('creates the invoice account address and address records and handles the null agent and contact', async () => {
+      it('creates the billing account address and address records and handles the null agent and contact', async () => {
         const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
         const newAddress = await AddressModel.query().first()
@@ -112,7 +112,7 @@ describe('Change address service', () => {
             expect(reFetchedExistingAddress.updatedAt).not.to.equal(existingAddress.updatedAt)
           })
 
-          it('links the invoice account address record to the existing address', async () => {
+          it('links the billing account address record to the existing address', async () => {
             const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
             expect(result.invoiceAccountAddress.addressId).to.equal(existingAddress.addressId)
@@ -130,7 +130,7 @@ describe('Change address service', () => {
             expect(result[0].uprn).to.equal(address.uprn)
           })
 
-          it('links the invoice account address record to the new address', async () => {
+          it('links the billing account address record to the new address', async () => {
             const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
             const newAddress = await AddressModel.query().first()
@@ -154,7 +154,7 @@ describe('Change address service', () => {
           expect(result[0].address1).to.equal('62 High St')
         })
 
-        it('links the invoice account address record to the new address', async () => {
+        it('links the billing account address record to the new address', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
           const newAddress = await AddressModel.query().first()
@@ -183,7 +183,7 @@ describe('Change address service', () => {
           expect(reFetchedExistingAddress.updatedAt).to.equal(existingAddress.updatedAt)
         })
 
-        it('links the invoice account address record to the existing address', async () => {
+        it('links the billing account address record to the existing address', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
           expect(result.invoiceAccountAddress.addressId).to.equal(existingAddress.addressId)
@@ -216,7 +216,7 @@ describe('Change address service', () => {
           expect(reFetchedExistingCompany.updatedAt).not.to.equal(existingCompany.updatedAt)
         })
 
-        it('links the invoice account address record to the existing company', async () => {
+        it('links the billing account address record to the existing company', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
           expect(result.invoiceAccountAddress.agentCompanyId).to.equal(existingCompany.companyId)
@@ -234,7 +234,7 @@ describe('Change address service', () => {
           expect(result[0].companyNumber).to.equal(agentCompany.companyNumber)
         })
 
-        it('links the invoice account address record to the new company', async () => {
+        it('links the billing account address record to the new company', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
           const newCompany = await CompanyModel.query().first()
@@ -263,7 +263,7 @@ describe('Change address service', () => {
           expect(reFetchedExistingCompany.updatedAt).to.equal(existingCompany.updatedAt)
         })
 
-        it('links the invoice account address record to the existing company', async () => {
+        it('links the billing account address record to the existing company', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
           expect(result.invoiceAccountAddress.agentCompanyId).to.equal(existingCompany.companyId)
@@ -290,7 +290,7 @@ describe('Change address service', () => {
           expect(result[0].department).to.equal('Humanoid Risk Assessment')
         })
 
-        it('links the invoice account address record to the new contact', async () => {
+        it('links the billing account address record to the new contact', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
           const newContact = await ContactModel.query().first()
@@ -314,7 +314,7 @@ describe('Change address service', () => {
           expect(result[0].lastName).to.equal('Villar')
         })
 
-        it('links the invoice account address record to the new contact', async () => {
+        it('links the billing account address record to the new contact', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
           const newContact = await ContactModel.query().first()
@@ -324,7 +324,7 @@ describe('Change address service', () => {
       })
     })
 
-    describe("and the 'current' invoice account address", () => {
+    describe("and the 'current' billing account address", () => {
       let clock
       let existingInvoiceAccountAddress
 
@@ -345,7 +345,7 @@ describe('Change address service', () => {
           const startDate = new Date(2023, 8, 4)
           const timestamp = new Date(2023, 8, 4, 9, 22, 57, 13)
 
-          existingInvoiceAccountAddress = await InvoiceAccountAddressHelper.add({
+          existingInvoiceAccountAddress = await BillingAccountAddressHelper.add({
             invoiceAccountId,
             startDate,
             createdAt: timestamp,
@@ -356,7 +356,7 @@ describe('Change address service', () => {
         it('overwrites the existing record and ensures the end date is null', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
-          const newInvoiceAccountAddress = await InvoiceAccountAddressModel.query()
+          const newInvoiceAccountAddress = await BillingAccountAddressModel.query()
             .findById(result.invoiceAccountAddress.invoiceAccountAddressId)
 
           expect(newInvoiceAccountAddress.invoiceAccountAddressId)
@@ -373,7 +373,7 @@ describe('Change address service', () => {
           const startDate = new Date(2023, 7, 3)
           const timestamp = new Date(2023, 7, 3, 14, 46, 3, 18)
 
-          existingInvoiceAccountAddress = await InvoiceAccountAddressHelper.add({
+          existingInvoiceAccountAddress = await BillingAccountAddressHelper.add({
             invoiceAccountId,
             startDate,
             createdAt: timestamp,
@@ -381,10 +381,10 @@ describe('Change address service', () => {
           })
         })
 
-        it('creates a new invoice account record with a null end date', async () => {
+        it('creates a new billing account record with a null end date', async () => {
           const result = await ChangeAddressService.go(invoiceAccountId, address, agentCompany, contact)
 
-          const newInvoiceAccountAddress = await InvoiceAccountAddressModel.query()
+          const newInvoiceAccountAddress = await BillingAccountAddressModel.query()
             .findById(result.invoiceAccountAddress.invoiceAccountAddressId)
 
           expect(newInvoiceAccountAddress.invoiceAccountAddressId)
@@ -414,7 +414,7 @@ describe('Change address service', () => {
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(invoiceAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
     })
   })
 
@@ -426,20 +426,20 @@ describe('Change address service', () => {
 
       // We just need something within the transaction to go bang. `fromJson() is ideal because a) we can stub it!, and
       // b) it gets called after we have supposedly persisted the address, company and contact records.
-      Sinon.stub(InvoiceAccountAddressModel, 'fromJson').rejects()
+      Sinon.stub(BillingAccountAddressModel, 'fromJson').rejects()
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(invoiceAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
     })
 
     it('no changes are made to the DB', async () => {
-      await expect(ChangeAddressService.go(invoiceAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
 
       const resultAddresses = await AddressModel.query()
       const resultCompanies = await CompanyModel.query()
       const resultContacts = await ContactModel.query()
-      const resultInvoiceAccountAddresses = await InvoiceAccountAddressModel.query()
+      const resultInvoiceAccountAddresses = await BillingAccountAddressModel.query()
 
       expect(resultAddresses).to.be.empty()
       expect(resultCompanies).to.be.empty()
