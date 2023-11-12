@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
-const StartBillRunProcessService = require('../../app/services/billing/start-bill-run-process.service.js')
+const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
