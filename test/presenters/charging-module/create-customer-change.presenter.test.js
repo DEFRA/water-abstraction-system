@@ -17,7 +17,7 @@ const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 const CreateCustomerChangePresenter = require('../../../app/presenters/charging-module/create-customer-change.presenter.js')
 
 // NOTE: We are currently required to replicate what the legacy code is doing and unfortunately the conversion of a
-// WRLS billing invoice account's address to the format required by the Charging Module is convoluted to say the least!
+// WRLS billing billing account's address to the format required by the Charging Module is convoluted to say the least!
 // In an effort to describe just how each property of the request data we send to the Charging Module can be affected by
 // what is passed in the tests include a `describe()` block for each property. Within each block we then demonstrate
 // what scenarios we face when converting the WRLS data.
@@ -25,7 +25,7 @@ describe('Charging Module Create Transaction presenter', () => {
   const billingAccount = BillingAccountModel.fromJson({
     invoiceAccountNumber: 'B19120000A',
     company: {
-      name: 'INVOICE ACCOUNT COMPANY'
+      name: 'BILLING ACCOUNT COMPANY'
     }
   })
   const standardAddress = {
@@ -50,7 +50,7 @@ describe('Charging Module Create Transaction presenter', () => {
       contact = ContactModel.fromJson({})
     })
 
-    describe('whatever letter the invoice account number starts with', () => {
+    describe('whatever letter the billing account number starts with', () => {
       it('returns as the region', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
@@ -66,7 +66,7 @@ describe('Charging Module Create Transaction presenter', () => {
       contact = ContactModel.fromJson({})
     })
 
-    it('returns the invoice account number for customer reference', () => {
+    it('returns the billing account number for customer reference', () => {
       const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
       expect(result.customerReference).to.equal('B19120000A')
@@ -97,10 +97,10 @@ describe('Charging Module Create Transaction presenter', () => {
           company = CompanyModel.fromJson({})
         })
 
-        it("returns the name of the invoice account's company for customer name", () => {
+        it("returns the name of the billing account's company for customer name", () => {
           const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-          expect(result.customerName).to.equal('INVOICE ACCOUNT COMPANY')
+          expect(result.customerName).to.equal('BILLING ACCOUNT COMPANY')
         })
       })
     })

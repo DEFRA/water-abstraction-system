@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
 const AddressModel = require('../../../app/models/crm-v2/address.model.js')
+const BillingAccountAddressHelper = require('../../support/helpers/crm-v2/billing-account-address.helper.js')
 const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
 const BillingAccountModel = require('../../../app/models/crm-v2/billing-account.model.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
@@ -17,12 +18,11 @@ const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
 const ContactHelper = require('../../support/helpers/crm-v2/contact.helper.js')
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
 
 // Thing under test
-const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
+const BillingAccountAddressModel = require('../../../app/models/crm-v2/billing-account-address.model.js')
 
-describe('Invoice Account Address model', () => {
+describe('Billing Account Address model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -31,13 +31,13 @@ describe('Invoice Account Address model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await InvoiceAccountAddressHelper.add()
+      testRecord = await BillingAccountAddressHelper.add()
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await InvoiceAccountAddressModel.query().findById(testRecord.invoiceAccountAddressId)
+      const result = await BillingAccountAddressModel.query().findById(testRecord.invoiceAccountAddressId)
 
-      expect(result).to.be.an.instanceOf(InvoiceAccountAddressModel)
+      expect(result).to.be.an.instanceOf(BillingAccountAddressModel)
       expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
     })
   })
@@ -48,22 +48,22 @@ describe('Invoice Account Address model', () => {
 
       beforeEach(async () => {
         testAddress = await AddressHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ addressId: testAddress.addressId })
+        testRecord = await BillingAccountAddressHelper.add({ addressId: testAddress.addressId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await InvoiceAccountAddressModel.query()
+        const query = await BillingAccountAddressModel.query()
           .innerJoinRelated('address')
 
         expect(query).to.exist()
       })
 
       it('can eager load the address', async () => {
-        const result = await InvoiceAccountAddressModel.query()
+        const result = await BillingAccountAddressModel.query()
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('address')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
+        expect(result).to.be.instanceOf(BillingAccountAddressModel)
         expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
 
         expect(result.address).to.be.an.instanceOf(AddressModel)
@@ -76,22 +76,22 @@ describe('Invoice Account Address model', () => {
 
       beforeEach(async () => {
         testCompany = await CompanyHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ agentCompanyId: testCompany.companyId })
+        testRecord = await BillingAccountAddressHelper.add({ agentCompanyId: testCompany.companyId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await InvoiceAccountAddressModel.query()
+        const query = await BillingAccountAddressModel.query()
           .innerJoinRelated('agentCompany')
 
         expect(query).to.exist()
       })
 
       it('can eager load the agent company', async () => {
-        const result = await InvoiceAccountAddressModel.query()
+        const result = await BillingAccountAddressModel.query()
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('agentCompany')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
+        expect(result).to.be.instanceOf(BillingAccountAddressModel)
         expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
 
         expect(result.agentCompany).to.be.an.instanceOf(CompanyModel)
@@ -104,22 +104,22 @@ describe('Invoice Account Address model', () => {
 
       beforeEach(async () => {
         testBillingAccount = await BillingAccountHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ invoiceAccountId: testBillingAccount.invoiceAccountId })
+        testRecord = await BillingAccountAddressHelper.add({ invoiceAccountId: testBillingAccount.invoiceAccountId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await InvoiceAccountAddressModel.query()
+        const query = await BillingAccountAddressModel.query()
           .innerJoinRelated('billingAccount')
 
         expect(query).to.exist()
       })
 
       it('can eager load the billing account', async () => {
-        const result = await InvoiceAccountAddressModel.query()
+        const result = await BillingAccountAddressModel.query()
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('billingAccount')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
+        expect(result).to.be.instanceOf(BillingAccountAddressModel)
         expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
 
         expect(result.billingAccount).to.be.an.instanceOf(BillingAccountModel)
@@ -132,22 +132,22 @@ describe('Invoice Account Address model', () => {
 
       beforeEach(async () => {
         testContact = await ContactHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ contactId: testContact.contactId })
+        testRecord = await BillingAccountAddressHelper.add({ contactId: testContact.contactId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await InvoiceAccountAddressModel.query()
+        const query = await BillingAccountAddressModel.query()
           .innerJoinRelated('contact')
 
         expect(query).to.exist()
       })
 
       it('can eager load the contact', async () => {
-        const result = await InvoiceAccountAddressModel.query()
+        const result = await BillingAccountAddressModel.query()
           .findById(testRecord.invoiceAccountAddressId)
           .withGraphFetched('contact')
 
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
+        expect(result).to.be.instanceOf(BillingAccountAddressModel)
         expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
 
         expect(result.contact).to.be.an.instanceOf(ContactModel)

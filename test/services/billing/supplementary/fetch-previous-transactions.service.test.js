@@ -46,7 +46,7 @@ describe('Fetch Previous Transactions service', () => {
   })
 
   describe('when there is a bill run', () => {
-    describe('for the same licence and invoice account', () => {
+    describe('for the same licence and billing account', () => {
       beforeEach(async () => {
         const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence(billRunSetupValues)
         await TransactionHelper.add({ billingInvoiceLicenceId, chargeCategoryCode })
@@ -63,7 +63,7 @@ describe('Fetch Previous Transactions service', () => {
         expect(results[0].isCredit).to.be.false()
       })
 
-      describe('followed by another bill run for the same licence and invoice account', () => {
+      describe('followed by another bill run for the same licence and billing account', () => {
         let followUpBillingInvoiceLicenceId
 
         beforeEach(async () => {
@@ -434,7 +434,7 @@ describe('Fetch Previous Transactions service', () => {
       })
     })
 
-    describe('but for a different invoice account', () => {
+    describe('but for a different billing account', () => {
       beforeEach(async () => {
         const billingInvoiceLicenceId = await _createBillRunAndBillAndBillLicence({
           ...billRunSetupValues,

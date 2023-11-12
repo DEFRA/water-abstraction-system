@@ -27,9 +27,9 @@ class AddressModel extends CrmV2BaseModel {
 
   static get relationMappings () {
     return {
-      invoiceAccountAddresses: {
+      billingAccountAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'invoice-account-address.model',
+        modelClass: 'billing-account-address.model',
         join: {
           from: 'addresses.addressId',
           to: 'invoiceAccountAddresses.addressId'

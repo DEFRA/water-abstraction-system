@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
 const AddressModel = require('../../../app/models/crm-v2/address.model.js')
+const BillingAccountAddressHelper = require('../../support/helpers/crm-v2/billing-account-address.helper.js')
+const BillingAccountAddressModel = require('../../../app/models/crm-v2/billing-account-address.model.js')
 const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
 const BillingAccountModel = require('../../../app/models/crm-v2/billing-account.model.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
@@ -17,8 +19,6 @@ const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
 const ContactHelper = require('../../support/helpers/crm-v2/contact.helper.js')
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
-const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
 
 // Thing under test
 const FetchBillingAccountService = require('../../../app/services/bills/fetch-billing-account.service.js')
@@ -36,7 +36,7 @@ describe('Fetch Billing Account service', () => {
   })
 
   describe('when a billing account with a matching ID exists', () => {
-    describe('and that has multiple invoice account addresses', () => {
+    describe('and that has multiple billing account addresses', () => {
       let linkedAddress
 
       beforeEach(async () => {
@@ -46,8 +46,8 @@ describe('Fetch Billing Account service', () => {
         const { addressId } = linkedAddress
 
         await Promise.all([
-          InvoiceAccountAddressHelper.add({ invoiceAccountId, addressId, endDate: new Date('2023-09-18') }),
-          InvoiceAccountAddressHelper.add({ invoiceAccountId, addressId, startDate: new Date('2023-09-19') })
+          BillingAccountAddressHelper.add({ invoiceAccountId, addressId, endDate: new Date('2023-09-18') }),
+          BillingAccountAddressHelper.add({ invoiceAccountId, addressId, startDate: new Date('2023-09-19') })
         ])
       })
 
@@ -57,9 +57,9 @@ describe('Fetch Billing Account service', () => {
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
         expect(result).to.be.an.instanceOf(BillingAccountModel)
 
-        expect(result.invoiceAccountAddresses).to.have.length(1)
-        expect(result.invoiceAccountAddresses[0].endDate).to.be.null()
-        expect(result.invoiceAccountAddresses[0]).to.be.an.instanceof(InvoiceAccountAddressModel)
+        expect(result.billingAccountAddresses).to.have.length(1)
+        expect(result.billingAccountAddresses[0].endDate).to.be.null()
+        expect(result.billingAccountAddresses[0]).to.be.an.instanceof(BillingAccountAddressModel)
       })
 
       // All account address records are linked to an address
@@ -69,7 +69,7 @@ describe('Fetch Billing Account service', () => {
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
         expect(result).to.be.an.instanceOf(BillingAccountModel)
 
-        const returnedAddress = result.invoiceAccountAddresses[0].address
+        const returnedAddress = result.billingAccountAddresses[0].address
 
         expect(returnedAddress.addressId).to.equal(linkedAddress.addressId)
         expect(returnedAddress).to.be.an.instanceof(AddressModel)
@@ -77,14 +77,14 @@ describe('Fetch Billing Account service', () => {
     })
 
     // Agent company is optional in the account address record
-    describe('and the current invoice account address has an agent company', () => {
+    describe('and the current billing account address has an agent company', () => {
       let linkedAgentCompany
 
       beforeEach(async () => {
         const { invoiceAccountId } = testBillingAccount
         linkedAgentCompany = await CompanyHelper.add()
 
-        await InvoiceAccountAddressHelper.add({ invoiceAccountId, agentCompanyId: linkedAgentCompany.companyId })
+        await BillingAccountAddressHelper.add({ invoiceAccountId, agentCompanyId: linkedAgentCompany.companyId })
       })
 
       it('returns details for the linked agent company', async () => {
@@ -93,7 +93,7 @@ describe('Fetch Billing Account service', () => {
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
         expect(result).to.be.an.instanceOf(BillingAccountModel)
 
-        const returnedAgentCompany = result.invoiceAccountAddresses[0].agentCompany
+        const returnedAgentCompany = result.billingAccountAddresses[0].agentCompany
 
         expect(returnedAgentCompany.companyId).to.equal(linkedAgentCompany.companyId)
         expect(returnedAgentCompany).to.be.an.instanceof(CompanyModel)
@@ -101,14 +101,14 @@ describe('Fetch Billing Account service', () => {
     })
 
     // Contact is optional in the account address record
-    describe('and the current invoice account address has a contact', () => {
+    describe('and the current billing account address has a contact', () => {
       let linkedContact
 
       beforeEach(async () => {
         const { invoiceAccountId } = testBillingAccount
         linkedContact = await ContactHelper.add()
 
-        await InvoiceAccountAddressHelper.add({ invoiceAccountId, contactId: linkedContact.contactId })
+        await BillingAccountAddressHelper.add({ invoiceAccountId, contactId: linkedContact.contactId })
       })
 
       it('returns details for the linked contact', async () => {
@@ -117,7 +117,7 @@ describe('Fetch Billing Account service', () => {
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
         expect(result).to.be.an.instanceOf(BillingAccountModel)
 
-        const returnedContact = result.invoiceAccountAddresses[0].contact
+        const returnedContact = result.billingAccountAddresses[0].contact
 
         expect(returnedContact.contactId).to.equal(linkedContact.contactId)
         expect(returnedContact).to.be.an.instanceof(ContactModel)

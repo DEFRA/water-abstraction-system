@@ -79,7 +79,7 @@ function _billLicenceKey (billId, licenceId) {
   */
 function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
   const keyedBills = billingAccounts.reduce((acc, billingAccount) => {
-    // Note that the array of invoice accounts will already have been deduped so we don't need to check whether a
+    // Note that the array of billing accounts will already have been deduped so we don't need to check whether a
     // bill licence already exists in the object before generating one
     return {
       ...acc,

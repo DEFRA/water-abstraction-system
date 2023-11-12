@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingAccountAddressHelper = require('../../support/helpers/crm-v2/billing-account-address.helper.js')
+const BillingAccountAddressModel = require('../../../app/models/crm-v2/billing-account-address.model.js')
 const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
 const BillingAccountModel = require('../../../app/models/crm-v2/billing-account.model.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
-const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
 
 // Thing under test
 const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
@@ -39,6 +39,45 @@ describe('Company model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to billing account addresses', () => {
+      let testBillingAccountAddresses
+
+      beforeEach(async () => {
+        testRecord = await CompanyHelper.add()
+        const { companyId: agentCompanyId } = testRecord
+
+        testBillingAccountAddresses = []
+        for (let i = 0; i < 2; i++) {
+          // NOTE: A constraint in the invoice_account_addresses table means you cannot have 2 records with the same
+          // invoiceAccountId and start date
+          const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
+          const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, agentCompanyId })
+          testBillingAccountAddresses.push(billingAccountAddress)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await CompanyModel.query()
+          .innerJoinRelated('billingAccountAddresses')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the billing account addresses', async () => {
+        const result = await CompanyModel.query()
+          .findById(testRecord.companyId)
+          .withGraphFetched('billingAccountAddresses')
+
+        expect(result).to.be.instanceOf(CompanyModel)
+        expect(result.companyId).to.equal(testRecord.companyId)
+
+        expect(result.billingAccountAddresses).to.be.an.array()
+        expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
+        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
+        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+      })
+    })
+
     describe('when linking to billing accounts', () => {
       let testBillingAccounts
 
@@ -72,45 +111,6 @@ describe('Company model', () => {
         expect(result.billingAccounts[0]).to.be.an.instanceOf(BillingAccountModel)
         expect(result.billingAccounts).to.include(testBillingAccounts[0])
         expect(result.billingAccounts).to.include(testBillingAccounts[1])
-      })
-    })
-
-    describe('when linking to invoice account addresses', () => {
-      let testInvoiceAccountAddresses
-
-      beforeEach(async () => {
-        testRecord = await CompanyHelper.add()
-        const { companyId: agentCompanyId } = testRecord
-
-        testInvoiceAccountAddresses = []
-        for (let i = 0; i < 2; i++) {
-          // NOTE: A constraint in the invoice_account_addresses table means you cannot have 2 records with the same
-          // invoiceAccountId and start date
-          const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
-          const invoiceAccountAddress = await InvoiceAccountAddressHelper.add({ startDate, agentCompanyId })
-          testInvoiceAccountAddresses.push(invoiceAccountAddress)
-        }
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await CompanyModel.query()
-          .innerJoinRelated('invoiceAccountAddresses')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the invoice account addresses', async () => {
-        const result = await CompanyModel.query()
-          .findById(testRecord.companyId)
-          .withGraphFetched('invoiceAccountAddresses')
-
-        expect(result).to.be.instanceOf(CompanyModel)
-        expect(result.companyId).to.equal(testRecord.companyId)
-
-        expect(result.invoiceAccountAddresses).to.be.an.array()
-        expect(result.invoiceAccountAddresses[0]).to.be.an.instanceOf(InvoiceAccountAddressModel)
-        expect(result.invoiceAccountAddresses).to.include(testInvoiceAccountAddresses[0])
-        expect(result.invoiceAccountAddresses).to.include(testInvoiceAccountAddresses[1])
       })
     })
   })

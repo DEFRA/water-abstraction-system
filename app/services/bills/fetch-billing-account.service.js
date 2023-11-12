@@ -8,7 +8,7 @@
 const BillingAccount = require('../../models/crm-v2/billing-account.model.js')
 
 /**
- * Fetch the matching Billing account plus the current account address record linked to it
+ * Fetch the matching Billing account plus the current billing account address record linked to it
  *
  * @param {string} id The UUID for the billing account to fetch
  *
@@ -33,13 +33,13 @@ async function _fetch (id) {
         'type'
       ])
     })
-    .withGraphFetched('invoiceAccountAddresses')
-    // The current invoice account address is denoted by the fact it is the only one with a null end date
-    .modifyGraph('invoiceAccountAddresses', (builder) => {
+    .withGraphFetched('billingAccountAddresses')
+    // The current billing account address is denoted by the fact it is the only one with a null end date
+    .modifyGraph('billingAccountAddresses', (builder) => {
       builder.whereNull('endDate')
     })
-    .withGraphFetched('invoiceAccountAddresses.address')
-    .modifyGraph('invoiceAccountAddresses.address', (builder) => {
+    .withGraphFetched('billingAccountAddresses.address')
+    .modifyGraph('billingAccountAddresses.address', (builder) => {
       builder.select([
         'addressId',
         'address1',
@@ -52,16 +52,16 @@ async function _fetch (id) {
         'country'
       ])
     })
-    .withGraphFetched('invoiceAccountAddresses.agentCompany')
-    .modifyGraph('invoiceAccountAddresses.agentCompany', (builder) => {
+    .withGraphFetched('billingAccountAddresses.agentCompany')
+    .modifyGraph('billingAccountAddresses.agentCompany', (builder) => {
       builder.select([
         'companyId',
         'name',
         'type'
       ])
     })
-    .withGraphFetched('invoiceAccountAddresses.contact')
-    .modifyGraph('invoiceAccountAddresses.contact', (builder) => {
+    .withGraphFetched('billingAccountAddresses.contact')
+    .modifyGraph('billingAccountAddresses.contact', (builder) => {
       builder.select([
         'contactId',
         'contactType',

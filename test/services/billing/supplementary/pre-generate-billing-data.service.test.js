@@ -56,7 +56,7 @@ describe('Pre-generate billing data service', () => {
     })
 
     describe('returns an object with a bills property', () => {
-      it('has one key per invoice account', async () => {
+      it('has one key per billing account', async () => {
         const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.keys(result)

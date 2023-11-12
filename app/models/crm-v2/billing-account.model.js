@@ -27,20 +27,20 @@ class BillingAccountModel extends CrmV2BaseModel {
 
   static get relationMappings () {
     return {
+      billingAccountAddresses: {
+        relation: Model.HasManyRelation,
+        modelClass: 'billing-account-address.model',
+        join: {
+          from: 'invoiceAccounts.invoiceAccountId',
+          to: 'invoiceAccountAddresses.invoiceAccountId'
+        }
+      },
       company: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'company.model',
         join: {
           from: 'invoiceAccounts.companyId',
           to: 'companies.companyId'
-        }
-      },
-      invoiceAccountAddresses: {
-        relation: Model.HasManyRelation,
-        modelClass: 'invoice-account-address.model',
-        join: {
-          from: 'invoiceAccounts.invoiceAccountId',
-          to: 'invoiceAccountAddresses.invoiceAccountId'
         }
       }
     }
