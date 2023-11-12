@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * @module InvoiceAccountHelper
+ * @module BillingAccountHelper
  */
 
 const { randomInteger } = require('../general.helper.js')
-const InvoiceAccountModel = require('../../../../app/models/crm-v2/invoice-account.model.js')
+const BillingAccountModel = require('../../../../app/models/crm-v2/billing-account.model.js')
 
 /**
- * Add a new invoice account
+ * Add a new billing account
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -16,12 +16,12 @@ const InvoiceAccountModel = require('../../../../app/models/crm-v2/invoice-accou
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:InvoiceAccountModel} The instance of the newly created record
+ * @returns {module:BillingAccountModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return InvoiceAccountModel.query()
+  return BillingAccountModel.query()
     .insert({ ...insertData })
     .returning('*')
 }

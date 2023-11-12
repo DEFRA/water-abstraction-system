@@ -43,7 +43,7 @@ describe('Billing Accounts controller', () => {
     Sinon.restore()
   })
 
-  describe('POST /billing-accounts/{invoiceAccountId}/change-address', () => {
+  describe('POST /billing-accounts/{billingAccountId}/change-address', () => {
     beforeEach(() => {
       options = {
         method: 'POST',

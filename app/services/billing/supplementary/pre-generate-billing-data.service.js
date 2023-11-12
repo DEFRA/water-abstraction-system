@@ -68,7 +68,7 @@ function _billLicenceKey (billId, licenceId) {
 }
 
 /**
-  * We pre-generate bills for every invoice account so that we don't need to fetch any data from the db during the main
+  * We pre-generate bills for every billing account so that we don't need to fetch any data from the db during the main
   * charge version processing loop. This function generates the required bill licences and returns an object where
   * each key is the invoice account id, and each value is the bill, ie:
   *
@@ -77,14 +77,14 @@ function _billLicenceKey (billId, licenceId) {
   *   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
   * }
   */
-function _preGenerateBills (invoiceAccounts, billRunId, billingPeriod) {
-  const keyedBills = invoiceAccounts.reduce((acc, invoiceAccount) => {
+function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
+  const keyedBills = billingAccounts.reduce((acc, billingAccount) => {
     // Note that the array of invoice accounts will already have been deduped so we don't need to check whether a
     // bill licence already exists in the object before generating one
     return {
       ...acc,
-      [invoiceAccount.invoiceAccountId]: GenerateBillService.go(
-        invoiceAccount,
+      [billingAccount.invoiceAccountId]: GenerateBillService.go(
+        billingAccount,
         billRunId,
         billingPeriod.endDate.getFullYear()
       )

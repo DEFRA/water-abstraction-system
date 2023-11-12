@@ -9,10 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/water/bill.helper.js')
+const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-account.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
 
@@ -23,7 +23,7 @@ describe('Fetch Previous Transactions service', () => {
   const chargeCategoryCode = '4.3.1'
   const financialYearEnding = 2023
   const invoiceAccountId = '4fe996c9-7641-4edc-9f42-0700dcde37b5'
-  const invoiceAccountNumber = InvoiceAccountHelper.generateInvoiceAccountNumber()
+  const invoiceAccountNumber = BillingAccountHelper.generateInvoiceAccountNumber()
   const licenceId = '4492f1e2-f58c-4d4f-88a1-d4f9eb26fcba'
   const licenceRef = LicenceHelper.generateLicenceRef()
 

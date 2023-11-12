@@ -6,9 +6,9 @@
  */
 
 const AddressModel = require('../../models/crm-v2/address.model.js')
+const BillingAccountModel = require('../../models/crm-v2/billing-account.model.js')
 const CompanyModel = require('../../models/crm-v2/company.model.js')
 const ContactModel = require('../../models/crm-v2/contact.model.js')
-const InvoiceAccountModel = require('../../models/crm-v2/invoice-account.model.js')
 const InvoiceAccountAddressModel = require('../../models/crm-v2/invoice-account-address.model.js')
 const SendCustomerChangeService = require('./send-customer-change.service.js')
 
@@ -44,15 +44,15 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * Add to that all SOP wants is a name and address which means we have to do a lot of work to format the data we receive
  * into something the CHA will accept.
  *
- * @param {String} invoiceAccountId The UUID for the billing (invoice) account being updated
+ * @param {String} billingAccountId The UUID for the billing account being updated
  * @param {Object} address The validated address details
  * @param {Object} [agentCompany] The validated agent company details
  * @param {Object} [contact] The validated contact details
  *
  * @returns {Object} contains a copy of the persisted address, agent company and contact if they were also changed
  */
-async function go (invoiceAccountId, address, agentCompany = {}, contact = {}) {
-  const invoiceAccount = await _fetchInvoiceAccount(invoiceAccountId)
+async function go (billingAccountId, address, agentCompany = {}, contact = {}) {
+  const billingAccount = await _fetchBillingAccount(billingAccountId)
 
   // We use the same timestamp for all date created/updated values. We then have something to tie together all the
   // changes we apply
@@ -74,15 +74,15 @@ async function go (invoiceAccountId, address, agentCompany = {}, contact = {}) {
   // it doesn't). If the CHA fails the user will know. If the CHA succeeds but our update fails the user will still see
   // an error and try again. It matters not that we send the same information to the CHA; either way it will overwrite
   // what is either in it or SOP. But this way the user is never left believing all is well when something has failed.
-  await SendCustomerChangeService.go(invoiceAccount, addressInstance, companyInstance, contactInstance)
+  await SendCustomerChangeService.go(billingAccount, addressInstance, companyInstance, contactInstance)
 
-  const persistedData = await _persist(timestamp, invoiceAccount, addressInstance, companyInstance, contactInstance)
+  const persistedData = await _persist(timestamp, billingAccount, addressInstance, companyInstance, contactInstance)
 
   return _response(persistedData)
 }
 
-async function _fetchInvoiceAccount (invoiceAccountId) {
-  return InvoiceAccountModel.query()
+async function _fetchBillingAccount (invoiceAccountId) {
+  return BillingAccountModel.query()
     .findById(invoiceAccountId)
     .withGraphFetched('company')
     .modifyGraph('company', (builder) => {
@@ -113,7 +113,7 @@ async function _fetchInvoiceAccount (invoiceAccountId) {
  * controller and is what it needs to then be able to redirect the user to the correct page.
  *
  * @param {Date} timestamp the timestamp to be used for any date created or updated values when persisting
- * @param {module:InvoiceAccountModel} invoiceAccount the invoice (billing) account having its address changed
+ * @param {module:BillingAccountModel} billingAccount the billing account having its address changed
  * @param {module:AddressModel} address the new address to be persisted (expected to be populated)
  * @param {module:CompanyModel} company the new agent company to be persisted (not expected to be populated)
  * @param {module:ContactModel} contact the new contact to be persisted (not expected to be populated)
@@ -121,16 +121,16 @@ async function _fetchInvoiceAccount (invoiceAccountId) {
  * @returns {Object} a single object that contains the persisted invoiceAccountAddress, plus address, agent company and
  * contact
  */
-async function _persist (timestamp, invoiceAccount, address, company, contact) {
+async function _persist (timestamp, billingAccount, address, company, contact) {
   const persistedData = {}
 
-  await InvoiceAccountModel.transaction(async (trx) => {
+  await BillingAccountModel.transaction(async (trx) => {
     persistedData.address = await _persistAddress(trx, address)
     persistedData.company = await _persistCompany(trx, company)
     persistedData.contact = await _persistContact(trx, contact)
 
     const invoiceAccountAddress = InvoiceAccountAddressModel.fromJson({
-      invoiceAccountId: invoiceAccount.invoiceAccountId,
+      invoiceAccountId: billingAccount.invoiceAccountId,
       addressId: persistedData.address.addressId,
       agentCompanyId: persistedData.company.companyId,
       contactId: persistedData.contact.contactId,
@@ -140,7 +140,7 @@ async function _persist (timestamp, invoiceAccount, address, company, contact) {
       updatedAt: timestamp
     })
 
-    await _patchExistingInvoiceAccountAddressEndDate(trx, invoiceAccount.invoiceAccountId, timestamp)
+    await _patchExistingInvoiceAccountAddressEndDate(trx, billingAccount.invoiceAccountId, timestamp)
     persistedData.invoiceAccountAddress = await _persistInvoiceAccountAddress(trx, invoiceAccountAddress)
   })
 

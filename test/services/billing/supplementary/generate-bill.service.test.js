@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-account.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
 
 // Thing under test
 const GenerateBillService = require('../../../../app/services/billing/supplementary/generate-bill.service.js')
@@ -19,17 +19,17 @@ describe('Generate Bill service', () => {
   const financialYearEnding = 2023
 
   let expectedResult
-  let invoiceAccount
+  let billingAccount
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    invoiceAccount = await InvoiceAccountHelper.add()
+    billingAccount = await BillingAccountHelper.add()
 
     expectedResult = {
-      invoiceAccountId: invoiceAccount.invoiceAccountId,
+      invoiceAccountId: billingAccount.invoiceAccountId,
       address: {},
-      invoiceAccountNumber: invoiceAccount.invoiceAccountNumber,
+      invoiceAccountNumber: billingAccount.invoiceAccountNumber,
       billingBatchId: billRunId,
       financialYearEnding,
       isCredit: false
@@ -39,7 +39,7 @@ describe('Generate Bill service', () => {
   describe('when called', () => {
     it('returns a new bill with the provided values', () => {
       const result = GenerateBillService.go(
-        invoiceAccount,
+        billingAccount,
         billRunId,
         financialYearEnding
       )

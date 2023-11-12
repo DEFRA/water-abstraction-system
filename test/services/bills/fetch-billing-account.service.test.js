@@ -10,13 +10,13 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
 const AddressModel = require('../../../app/models/crm-v2/address.model.js')
+const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
+const BillingAccountModel = require('../../../app/models/crm-v2/billing-account.model.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
 const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
 const ContactHelper = require('../../support/helpers/crm-v2/contact.helper.js')
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
-const InvoiceAccountModel = require('../../../app/models/crm-v2/invoice-account.model.js')
 const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
 const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
 
@@ -32,7 +32,7 @@ describe('Fetch Billing Account service', () => {
 
     linkedCompany = await CompanyHelper.add()
 
-    testBillingAccount = await InvoiceAccountHelper.add({ companyId: linkedCompany.companyId })
+    testBillingAccount = await BillingAccountHelper.add({ companyId: linkedCompany.companyId })
   })
 
   describe('when a billing account with a matching ID exists', () => {
@@ -55,7 +55,7 @@ describe('Fetch Billing Account service', () => {
         const result = await FetchBillingAccountService.go(testBillingAccount.invoiceAccountId)
 
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
-        expect(result).to.be.an.instanceOf(InvoiceAccountModel)
+        expect(result).to.be.an.instanceOf(BillingAccountModel)
 
         expect(result.invoiceAccountAddresses).to.have.length(1)
         expect(result.invoiceAccountAddresses[0].endDate).to.be.null()
@@ -67,7 +67,7 @@ describe('Fetch Billing Account service', () => {
         const result = await FetchBillingAccountService.go(testBillingAccount.invoiceAccountId)
 
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
-        expect(result).to.be.an.instanceOf(InvoiceAccountModel)
+        expect(result).to.be.an.instanceOf(BillingAccountModel)
 
         const returnedAddress = result.invoiceAccountAddresses[0].address
 
@@ -91,7 +91,7 @@ describe('Fetch Billing Account service', () => {
         const result = await FetchBillingAccountService.go(testBillingAccount.invoiceAccountId)
 
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
-        expect(result).to.be.an.instanceOf(InvoiceAccountModel)
+        expect(result).to.be.an.instanceOf(BillingAccountModel)
 
         const returnedAgentCompany = result.invoiceAccountAddresses[0].agentCompany
 
@@ -115,7 +115,7 @@ describe('Fetch Billing Account service', () => {
         const result = await FetchBillingAccountService.go(testBillingAccount.invoiceAccountId)
 
         expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
-        expect(result).to.be.an.instanceOf(InvoiceAccountModel)
+        expect(result).to.be.an.instanceOf(BillingAccountModel)
 
         const returnedContact = result.invoiceAccountAddresses[0].contact
 
@@ -129,7 +129,7 @@ describe('Fetch Billing Account service', () => {
       const result = await FetchBillingAccountService.go(testBillingAccount.invoiceAccountId)
 
       expect(result.invoiceAccountId).to.equal(testBillingAccount.invoiceAccountId)
-      expect(result).to.be.an.instanceOf(InvoiceAccountModel)
+      expect(result).to.be.an.instanceOf(BillingAccountModel)
 
       const returnedCompany = result.company
 

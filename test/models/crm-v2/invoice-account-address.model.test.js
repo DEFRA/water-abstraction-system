@@ -10,13 +10,13 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
 const AddressModel = require('../../../app/models/crm-v2/address.model.js')
+const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
+const BillingAccountModel = require('../../../app/models/crm-v2/billing-account.model.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
 const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
 const ContactHelper = require('../../support/helpers/crm-v2/contact.helper.js')
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
-const InvoiceAccountModel = require('../../../app/models/crm-v2/invoice-account.model.js')
 const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
 
 // Thing under test
@@ -127,31 +127,31 @@ describe('Invoice Account Address model', () => {
       })
     })
 
-    describe('when linking to invoice account', () => {
-      let testInvoiceAccount
+    describe('when linking to billing account', () => {
+      let testBillingAccount
 
       beforeEach(async () => {
-        testInvoiceAccount = await InvoiceAccountHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ invoiceAccountId: testInvoiceAccount.invoiceAccountId })
+        testBillingAccount = await BillingAccountHelper.add()
+        testRecord = await InvoiceAccountAddressHelper.add({ invoiceAccountId: testBillingAccount.invoiceAccountId })
       })
 
       it('can successfully run a related query', async () => {
         const query = await InvoiceAccountAddressModel.query()
-          .innerJoinRelated('invoiceAccount')
+          .innerJoinRelated('billingAccount')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the region', async () => {
+      it('can eager load the billing account', async () => {
         const result = await InvoiceAccountAddressModel.query()
           .findById(testRecord.invoiceAccountAddressId)
-          .withGraphFetched('invoiceAccount')
+          .withGraphFetched('billingAccount')
 
         expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
         expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
 
-        expect(result.invoiceAccount).to.be.an.instanceOf(InvoiceAccountModel)
-        expect(result.invoiceAccount).to.equal(testInvoiceAccount)
+        expect(result.billingAccount).to.be.an.instanceOf(BillingAccountModel)
+        expect(result.billingAccount).to.equal(testBillingAccount)
       })
     })
   })

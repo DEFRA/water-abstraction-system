@@ -43,20 +43,20 @@ class InvoiceAccountAddressModel extends CrmV2BaseModel {
           to: 'companies.companyId'
         }
       },
+      billingAccount: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'billing-account.model',
+        join: {
+          from: 'invoiceAccountAddresses.invoiceAccountId',
+          to: 'invoiceAccounts.invoiceAccountId'
+        }
+      },
       contact: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'contact.model',
         join: {
           from: 'invoiceAccountAddresses.contactId',
           to: 'contacts.contactId'
-        }
-      },
-      invoiceAccount: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'invoice-account.model',
-        join: {
-          from: 'invoiceAccountAddresses.invoiceAccountId',
-          to: 'invoiceAccounts.invoiceAccountId'
         }
       }
     }

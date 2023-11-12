@@ -11,13 +11,13 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
 const AddressModel = require('../../../app/models/crm-v2/address.model.js')
+const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
 const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
 const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const InvoiceAccountAddressHelper = require('../../support/helpers/crm-v2/invoice-account-address.helper.js')
 const InvoiceAccountAddressModel = require('../../../app/models/crm-v2/invoice-account-address.model.js')
-const InvoiceAccountHelper = require('../../support/helpers/crm-v2/invoice-account.helper.js')
 
 // Things we need to stub
 const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
@@ -52,13 +52,13 @@ describe('Change address service', () => {
 
   let address
   let agentCompany
+  let billingAccount
   let contact
-  let invoiceAccount
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    invoiceAccount = await InvoiceAccountHelper.add({ invoiceAccountId })
+    billingAccount = await BillingAccountHelper.add({ invoiceAccountId })
   })
 
   afterEach(() => {
@@ -414,7 +414,7 @@ describe('Change address service', () => {
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(invoiceAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
     })
   })
 
@@ -430,11 +430,11 @@ describe('Change address service', () => {
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(invoiceAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
     })
 
     it('no changes are made to the DB', async () => {
-      await expect(ChangeAddressService.go(invoiceAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
 
       const resultAddresses = await AddressModel.query()
       const resultCompanies = await CompanyModel.query()

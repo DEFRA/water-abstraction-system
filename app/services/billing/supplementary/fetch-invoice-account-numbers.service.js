@@ -5,7 +5,7 @@
  * @module FetchInvoiceAccountNumbersService
  */
 
-const InvoiceAccountModel = require('../../../models/crm-v2/invoice-account.model.js')
+const BillingAccountModel = require('../../../models/crm-v2/billing-account.model.js')
 
 /**
  * Fetch all invoice account numbers for the supplied charge versions
@@ -36,7 +36,7 @@ function _extractUniqueInvoiceAccountIds (chargeVersions) {
 }
 
 function _fetch (uniqueInvoiceAccountIds) {
-  return InvoiceAccountModel.query()
+  return BillingAccountModel.query()
     .select('invoiceAccountId', 'invoiceAccountNumber')
     .findByIds([...uniqueInvoiceAccountIds])
 }

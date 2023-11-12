@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for invoiceAccounts
- * @module InvoiceAccountModel
+ * Model for invoice_accounts
+ * @module BillingAccountModel
  */
 
 const { Model } = require('objection')
 
 const CrmV2BaseModel = require('./crm-v2-base.model.js')
 
-class InvoiceAccountModel extends CrmV2BaseModel {
+class BillingAccountModel extends CrmV2BaseModel {
   static get tableName () {
     return 'invoiceAccounts'
   }
@@ -47,4 +47,4 @@ class InvoiceAccountModel extends CrmV2BaseModel {
   }
 }
 
-module.exports = InvoiceAccountModel
+module.exports = BillingAccountModel

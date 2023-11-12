@@ -6,7 +6,7 @@
 
 const BillModel = require('../../../../app/models/water/bill.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateInvoiceAccountNumber } = require('../crm-v2/invoice-account.helper.js')
+const { generateInvoiceAccountNumber } = require('../crm-v2/billing-account.helper.js')
 
 /**
  * Add a new bill

@@ -5,7 +5,7 @@
  * @module FetchBillingAccountService
  */
 
-const InvoiceAccount = require('../../models/crm-v2/invoice-account.model.js')
+const BillingAccount = require('../../models/crm-v2/billing-account.model.js')
 
 /**
  * Fetch the matching Billing account plus the current account address record linked to it
@@ -19,7 +19,7 @@ async function go (id) {
 }
 
 async function _fetch (id) {
-  const result = InvoiceAccount.query()
+  const result = BillingAccount.query()
     .findById(id)
     .select([
       'invoiceAccountId',

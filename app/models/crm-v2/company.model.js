@@ -61,7 +61,7 @@ class CompanyModel extends CrmV2BaseModel {
     return {
       invoiceAccounts: {
         relation: Model.HasManyRelation,
-        modelClass: 'invoice-account.model',
+        modelClass: 'billing-account.model',
         join: {
           from: 'companies.companyId',
           to: 'invoiceAccounts.companyId'

@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-account.helper.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
@@ -18,7 +19,6 @@ const ChargeElementHelper = require('../../../support/helpers/water/charge-eleme
 const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/water/charge-version.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/billing/supplementary/fetch-charge-versions.service.js')
-const InvoiceAccountHelper = require('../../../support/helpers/crm-v2/invoice-account.helper.js')
 const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const RegionHelper = require('../../../support/helpers/water/region.helper.js')
@@ -37,11 +37,11 @@ describe('Process billing period service', () => {
     endDate: new Date('2023-03-31')
   }
 
-  let chargeCategory
   let billRun
+  let billingAccount
+  let chargeCategory
   let changeReason
   let chargeVersions
-  let invoiceAccount
   let licence
 
   beforeEach(async () => {
@@ -50,7 +50,7 @@ describe('Process billing period service', () => {
     const { regionId } = await RegionHelper.add()
     licence = await LicenceHelper.add({ includeInSrocSupplementaryBilling: true, regionId })
     changeReason = await ChangeReasonHelper.add()
-    invoiceAccount = await InvoiceAccountHelper.add()
+    billingAccount = await BillingAccountHelper.add()
     chargeCategory = await ChargeCategoryHelper.add()
 
     billRun = await BillRunHelper.add({ regionId })
@@ -79,7 +79,7 @@ describe('Process billing period service', () => {
           const { chargeVersionId } = await ChargeVersionHelper.add(
             {
               changeReasonId: changeReason.changeReasonId,
-              invoiceAccountId: invoiceAccount.invoiceAccountId,
+              invoiceAccountId: billingAccount.invoiceAccountId,
               startDate: new Date(2022, 7, 1, 9),
               licenceId: licence.licenceId
             }
@@ -154,7 +154,7 @@ describe('Process billing period service', () => {
             const { chargeVersionId } = await ChargeVersionHelper.add(
               {
                 changeReasonId: changeReason.changeReasonId,
-                invoiceAccountId: invoiceAccount.invoiceAccountId,
+                invoiceAccountId: billingAccount.invoiceAccountId,
                 startDate: new Date(2022, 7, 1, 9),
                 licenceId: licence.licenceId
               }
@@ -189,7 +189,7 @@ describe('Process billing period service', () => {
               const { chargeVersionId } = await ChargeVersionHelper.add(
                 {
                   changeReasonId: changeReason.changeReasonId,
-                  invoiceAccountId: invoiceAccount.invoiceAccountId,
+                  invoiceAccountId: billingAccount.invoiceAccountId,
                   startDate: new Date(2022, 7, 1, 9),
                   licenceId: licence.licenceId,
                   status: 'superseded'
@@ -225,7 +225,7 @@ describe('Process billing period service', () => {
     beforeEach(async () => {
       const { chargeVersionId } = await ChargeVersionHelper.add({
         changeReasonId: changeReason.changeReasonId,
-        invoiceAccountId: invoiceAccount.invoiceAccountId,
+        invoiceAccountId: billingAccount.invoiceAccountId,
         licenceId: licence.licenceId
       })
       const { chargeElementId } = await ChargeReferenceHelper.add(
