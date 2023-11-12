@@ -12,7 +12,7 @@ const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js'
 const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const FriendlyResponseService = require('./friendly-response.service.js')
-const DetermineBillingPeriodsService = require('../billing/determine-billing-periods.service.js')
+const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
