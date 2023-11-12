@@ -99,34 +99,6 @@ describe('Invoice Account Address model', () => {
       })
     })
 
-    describe('when linking to contact', () => {
-      let testContact
-
-      beforeEach(async () => {
-        testContact = await ContactHelper.add()
-        testRecord = await InvoiceAccountAddressHelper.add({ contactId: testContact.contactId })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await InvoiceAccountAddressModel.query()
-          .innerJoinRelated('contact')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the contact', async () => {
-        const result = await InvoiceAccountAddressModel.query()
-          .findById(testRecord.invoiceAccountAddressId)
-          .withGraphFetched('contact')
-
-        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
-        expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
-
-        expect(result.contact).to.be.an.instanceOf(ContactModel)
-        expect(result.contact).to.equal(testContact)
-      })
-    })
-
     describe('when linking to billing account', () => {
       let testBillingAccount
 
@@ -152,6 +124,34 @@ describe('Invoice Account Address model', () => {
 
         expect(result.billingAccount).to.be.an.instanceOf(BillingAccountModel)
         expect(result.billingAccount).to.equal(testBillingAccount)
+      })
+    })
+
+    describe('when linking to contact', () => {
+      let testContact
+
+      beforeEach(async () => {
+        testContact = await ContactHelper.add()
+        testRecord = await InvoiceAccountAddressHelper.add({ contactId: testContact.contactId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await InvoiceAccountAddressModel.query()
+          .innerJoinRelated('contact')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the contact', async () => {
+        const result = await InvoiceAccountAddressModel.query()
+          .findById(testRecord.invoiceAccountAddressId)
+          .withGraphFetched('contact')
+
+        expect(result).to.be.instanceOf(InvoiceAccountAddressModel)
+        expect(result.invoiceAccountAddressId).to.equal(testRecord.invoiceAccountAddressId)
+
+        expect(result.contact).to.be.an.instanceOf(ContactModel)
+        expect(result.contact).to.equal(testContact)
       })
     })
   })
