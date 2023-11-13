@@ -10,15 +10,12 @@ const { ref } = require('objection')
 const ReturnModel = require('../../../models/returns/return.model')
 
 /**
- * Fetch all SROC returns to be processed as part of supplementary billing
+ * Fetch all SROC returns to be processed as part of two-part-tariff billing
  * *
- * From this initial result we extract an array of unique licence IDs and then remove any that are non-chargeable (we
- * need to know about them in order to unset the licence's supplementary billing flag).
- *
  * @param {String} licenceRef The reference of the licence that the return relates to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Object} Contains an array of unique licence IDs and array of charge versions to be processed
+ * @returns {Object} Contains an array of Returns and the associated current Version, and Lines if they exist
  */
 async function go (licenceRef, billingPeriod) {
   return _fetch(licenceRef, billingPeriod)

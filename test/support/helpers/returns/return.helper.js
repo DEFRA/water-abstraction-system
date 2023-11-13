@@ -22,7 +22,23 @@ const ReturnModel = require('../../../../app/models/returns/return.model.js')
  * - `returnsFrequency` - month
  * - `status` - completed
  * - `source` - NALD
- * - `metadata` - {}
+ * - `metadata` - nald: {
+                    periodEndDay: '31',
+                    periodEndMonth: '3',
+                    periodStartDay: '1',
+                    periodStartMonth: '4'
+                  },
+                  purposes: [
+                    {
+                      tertiary: {
+                        code: '400',
+                        description: 'Spray Irrigation - Direct'
+                      }
+                    }
+                  ],
+                  description: 'The Description',
+                  isTwoPartTariff: true
+                }
  * - `receivedDate` - 2023-04-12
  * - `returnRequirement` - [randomly generated - 10000321]
  * - `dueDate` - 2023-04-28
@@ -62,7 +78,24 @@ function defaults (data = {}) {
     returnsFrequency: 'month',
     status: 'completed',
     source: 'NALD',
-    metadata: {},
+    metadata: {
+      nald: {
+        periodEndDay: '31',
+        periodEndMonth: '3',
+        periodStartDay: '1',
+        periodStartMonth: '4'
+      },
+      purposes: [
+        {
+          tertiary: {
+            code: '400',
+            description: 'Spray Irrigation - Direct'
+          }
+        }
+      ],
+      description: 'The Description',
+      isTwoPartTariff: true
+    },
     receivedDate: new Date('2023-04-12'),
     returnRequirement,
     dueDate: new Date('2023-04-28'),
