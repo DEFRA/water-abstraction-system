@@ -76,7 +76,7 @@ function _totals (transactions) {
   return {
     creditTotal: formatMoney(creditTotal),
     debitTotal: formatMoney(debitTotal),
-    total: formatMoney(total)
+    total: formatMoney(total, true)
   }
 }
 
