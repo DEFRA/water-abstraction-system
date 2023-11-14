@@ -101,7 +101,7 @@ function _contactName (billingAccount) {
 function _displayCreditDebitTotals (billRun) {
   const { batchType, source } = billRun
 
-  return batchType === 'supplementary' && source === 'wrls'
+  return batchType === 'supplementary'
 }
 
 function _financialYear (billRun) {
