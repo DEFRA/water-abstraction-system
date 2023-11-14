@@ -126,7 +126,7 @@ describe('Info service', () => {
         'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
       ])
 
-      expect(result.appData).to.have.length(11)
+      expect(result.appData).to.have.length(10)
       expect(result.appData[0].name).to.equal('Import')
       expect(result.appData[0].serviceName).to.equal('import')
       expect(result.appData[0].version).to.equal('9.0.99')
@@ -189,7 +189,7 @@ describe('Info service', () => {
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
-        expect(result.appData).to.have.length(11)
+        expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(2)
 
@@ -232,7 +232,7 @@ describe('Info service', () => {
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
-        expect(result.appData).to.have.length(11)
+        expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(2)
 
@@ -259,7 +259,7 @@ describe('Info service', () => {
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
-        expect(result.appData).to.have.length(11)
+        expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(2)
 
@@ -301,7 +301,7 @@ describe('Info service', () => {
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
-        expect(result.appData).to.have.length(11)
+        expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(0)
 
@@ -321,7 +321,7 @@ describe('Info service', () => {
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
-        expect(result.appData).to.have.length(11)
+        expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(0)
 
@@ -365,7 +365,7 @@ describe('Info service', () => {
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
-        expect(result.appData).to.have.length(11)
+        expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(2)
 
@@ -392,7 +392,7 @@ describe('Info service', () => {
         expect(result).to.include([
           'virusScannerData', 'redisConnectivityData', 'addressFacadeData', 'chargingModuleData', 'appData'
         ])
-        expect(result.appData).to.have.length(11)
+        expect(result.appData).to.have.length(10)
         expect(result.appData[0].version).to.equal('9.0.99')
         expect(result.appData[0].jobs).to.have.length(2)
 
