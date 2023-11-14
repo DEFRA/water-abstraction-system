@@ -370,6 +370,7 @@ function _testBill () {
   return {
     billingInvoiceId: '64924759-8142-4a08-9d1e-1e902cd9d316',
     creditNoteValue: 0,
+    financialYearEnding: 2023,
     invoiceAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
     invoiceNumber: 'EAI0000007T',
     invoiceValue: 21317800,
@@ -382,8 +383,6 @@ function _testBill () {
     billRun: {
       billingBatchId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
       batchType: 'annual',
-      fromFinancialYearEnding: 2022,
-      toFinancialYearEnding: 2023,
       status: 'sent',
       billRunNumber: 10003,
       transactionFileReference: 'nalei50002t',

@@ -33,7 +33,7 @@ function go (bill, billingAccount) {
     debitsTotal: _debitsTotal(bill, billRun),
     deminimis: bill.isDeMinimis,
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
-    financialYear: _financialYear(billRun),
+    financialYear: _financialYear(bill),
     flaggedForReissue: bill.isFlaggedForRebilling,
     region: capitalize(billRun.region.displayName),
     total: _total(bill.netAmount, bill.isCredit),
@@ -134,10 +134,10 @@ function _displayCreditDebitTotals (billRun) {
   return batchType === 'supplementary'
 }
 
-function _financialYear (billRun) {
-  const { fromFinancialYearEnding, toFinancialYearEnding } = billRun
+function _financialYear (bill) {
+  const { financialYearEnding } = bill
 
-  return `${fromFinancialYearEnding} to ${toFinancialYearEnding}`
+  return `${financialYearEnding - 1} to ${financialYearEnding}`
 }
 
 function _scheme (billRun) {
