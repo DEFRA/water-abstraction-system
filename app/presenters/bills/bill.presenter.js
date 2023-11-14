@@ -28,9 +28,9 @@ function go (bill, billingAccount) {
     chargeScheme: _scheme(billRun),
     contactName: _contactName(billingAccount),
     credit: bill.isCredit,
-    creditsTotal: formatMoney(bill.creditNoteValue),
+    creditsTotal: _creditsTotal(bill, billRun),
     dateCreated: formatLongDate(bill.createdAt),
-    debitsTotal: formatMoney(bill.invoiceValue),
+    debitsTotal: _debitsTotal(bill, billRun),
     deminimis: bill.isDeMinimis,
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
     financialYear: _financialYear(billRun),
@@ -98,8 +98,38 @@ function _contactName (billingAccount) {
   return null
 }
 
+function _creditsTotal (bill, billRun) {
+  const { creditNoteValue, netAmount } = bill
+  const { source } = billRun
+
+  if (source === 'wrls') {
+    return formatMoney(creditNoteValue)
+  }
+
+  if (netAmount < 0) {
+    return formatMoney(netAmount)
+  }
+
+  return '£0.00'
+}
+
+function _debitsTotal (bill, billRun) {
+  const { invoiceValue, netAmount } = bill
+  const { source } = billRun
+
+  if (source === 'wrls') {
+    return formatMoney(invoiceValue)
+  }
+
+  if (netAmount > 0) {
+    return formatMoney(netAmount)
+  }
+
+  return '£0.00'
+}
+
 function _displayCreditDebitTotals (billRun) {
-  const { batchType, source } = billRun
+  const { batchType } = billRun
 
   return batchType === 'supplementary'
 }

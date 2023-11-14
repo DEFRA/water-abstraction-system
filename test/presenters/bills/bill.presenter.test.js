@@ -208,6 +208,102 @@ describe('Bill presenter', () => {
       })
     })
 
+    describe("the 'creditsTotal' property", () => {
+      describe('when the bill run was created in WRLS', () => {
+        it("returns the 'creditNoteValue' of the bill (£0.00)", () => {
+          const result = BillPresenter.go(bill, billingAccount)
+
+          expect(result.creditsTotal).to.equal('£0.00')
+        })
+      })
+
+      describe('when the bill run was created in NALD', () => {
+        beforeEach(() => {
+          bill.billRun.source = 'nald'
+        })
+
+        describe("and 'netAmount' on the bill is 21317800", () => {
+          it('returns £0.00', () => {
+            const result = BillPresenter.go(bill, billingAccount)
+
+            expect(result.creditsTotal).to.equal('£0.00')
+          })
+        })
+
+        describe("and 'netAmount' on the bill is -21317800", () => {
+          beforeEach(() => {
+            bill.netAmount = -21317800
+          })
+
+          it('returns £213,178.00', () => {
+            const result = BillPresenter.go(bill, billingAccount)
+
+            expect(result.creditsTotal).to.equal('£213,178.00')
+          })
+        })
+
+        describe("and 'netAmount' on the bill is 0", () => {
+          beforeEach(() => {
+            bill.netAmount = 0
+          })
+
+          it('returns £0.00', () => {
+            const result = BillPresenter.go(bill, billingAccount)
+
+            expect(result.creditsTotal).to.equal('£0.00')
+          })
+        })
+      })
+    })
+
+    describe("the 'debitsTotal' property", () => {
+      describe('when the bill run was created in WRLS', () => {
+        it("returns the 'invoiceValue' of the bill (£213,178.00)", () => {
+          const result = BillPresenter.go(bill, billingAccount)
+
+          expect(result.debitsTotal).to.equal('£213,178.00')
+        })
+      })
+
+      describe('when the bill run was created in NALD', () => {
+        beforeEach(() => {
+          bill.billRun.source = 'nald'
+        })
+
+        describe("and 'netAmount' on the bill is 21317800", () => {
+          it('returns £213,178.00', () => {
+            const result = BillPresenter.go(bill, billingAccount)
+
+            expect(result.debitsTotal).to.equal('£213,178.00')
+          })
+        })
+
+        describe("and 'netAmount' on the bill is -21317800", () => {
+          beforeEach(() => {
+            bill.netAmount = -21317800
+          })
+
+          it('returns £0.00', () => {
+            const result = BillPresenter.go(bill, billingAccount)
+
+            expect(result.debitsTotal).to.equal('£0.00')
+          })
+        })
+
+        describe("and 'netAmount' on the bill is 0", () => {
+          beforeEach(() => {
+            bill.netAmount = 0
+          })
+
+          it('returns £0.00', () => {
+            const result = BillPresenter.go(bill, billingAccount)
+
+            expect(result.debitsTotal).to.equal('£0.00')
+          })
+        })
+      })
+    })
+
     describe("the 'displayCreditDebitTotals' property", () => {
       describe('when the bill run is not supplementary', () => {
         it('returns false', () => {
@@ -218,29 +314,14 @@ describe('Bill presenter', () => {
       })
 
       describe('when the bill run is supplementary', () => {
-        describe('and was created in WRLS', () => {
-          beforeEach(() => {
-            bill.billRun.batchType = 'supplementary'
-          })
-
-          it('returns true', () => {
-            const result = BillPresenter.go(bill, billingAccount)
-
-            expect(result.displayCreditDebitTotals).to.be.true()
-          })
+        beforeEach(() => {
+          bill.billRun.batchType = 'supplementary'
         })
 
-        describe('but was created in NALD', () => {
-          beforeEach(() => {
-            bill.billRun.batchType = 'supplementary'
-            bill.billRun.source = 'nald'
-          })
+        it('returns true', () => {
+          const result = BillPresenter.go(bill, billingAccount)
 
-          it('returns false', () => {
-            const result = BillPresenter.go(bill, billingAccount)
-
-            expect(result.displayCreditDebitTotals).to.be.false()
-          })
+          expect(result.displayCreditDebitTotals).to.be.true()
         })
       })
     })
