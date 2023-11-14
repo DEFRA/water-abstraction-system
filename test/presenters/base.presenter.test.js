@@ -192,10 +192,24 @@ describe('Base presenter', () => {
     })
 
     describe('when the value in pence is negative', () => {
-      it('correctly returns the value as a positive money string with commas and a symbol, for example, £1,149.50', async () => {
-        const result = BasePresenter.formatMoney(valueInPence, true)
+      beforeEach(() => {
+        valueInPence = -114950
+      })
 
-        expect(result).to.equal('£1,149.50')
+      describe("and we do not override the default parameter 'signed'", () => {
+        it('correctly returns the value as a positive money string with commas and a symbol, for example, £1,149.50', async () => {
+          const result = BasePresenter.formatMoney(valueInPence)
+
+          expect(result).to.equal('£1,149.50')
+        })
+      })
+
+      describe("and we override the default parameter 'signed'", () => {
+        it('correctly returns the value as a positive money string with commas and a symbol, for example, -£1,149.50', async () => {
+          const result = BasePresenter.formatMoney(valueInPence, true)
+
+          expect(result).to.equal('-£1,149.50')
+        })
       })
     })
   })

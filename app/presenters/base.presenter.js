@@ -118,22 +118,32 @@ function formatLongDateTime (date) {
 /**
  * Formats a value in pence as a money string with commas, for example, 12776805 as '£127,768.05'
  *
- * As this is intended for showing values in the UI if the value is a negative it will be made a positive before then
- * being formatted. This is because the UI shows credits as '£127,768.05 credit' rather than '£-127,768.05'.
+ * This is intended for use when formatting values to be displayed in the UI. In most cases if the value is a negative
+ * it will be made a positive before then being formatted. This is because the UI generally shows credits as
+ * '£127,768.05 credit' rather than '-£127,768.05'.
+ *
+ * But there are times when we need to show credits with a sign instead. In those cases you can pass the optional
+ * `signed` flag to have the value returned with a sign.
  *
  * > Credit to https://stackoverflow.com/a/32154217/6117745 for showing numbers with commas
  *
- * @param {Number} value The value to display as currency. Assumed to be in pounds
- * @param {Boolean} includeSymbol Whether to add the £ symbol to the start of the returned string
+ * @param {Number} valueInPence The value (in pence) to display as money
+ * @param {Boolean} signed Whether to add the - sign to the start of the returned string if valueInPence is negative
  *
- * @returns {string} The value formatted as a money string with commas with optional currency symbol
+ * @returns {string} The value formatted as a money string with commas and currency symbol plus optional sign
  */
-function formatMoney (valueInPence) {
-  // Even though we store signed values (which you should never do!) we don't display them in the UI. Argh!!!
+function formatMoney (valueInPence, signed = false) {
+  // NOTE: The legacy DB stores values signed (which you should never do!) We always abs the valueInPence for 2 reasons
+  //
+  // - in most cases we display credits as £127,768.05 credit
+  // - if we call `toLocaleString()` on a negative number we'll get a signed number back resulting in £-127,768.05
   const positiveValueInPence = Math.abs(valueInPence)
   const positiveValueInPounds = convertPenceToPounds(positiveValueInPence)
 
-  return `£${positiveValueInPounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  // Determine if we should add a sign (the caller said they want one and the original value in pence was negative)
+  const sign = signed && valueInPence < 0 ? '-' : ''
+
+  return `${sign}£${positiveValueInPounds.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 /**
