@@ -74,7 +74,6 @@ async function _getLegacyAppData () {
     { name: 'Returns', serviceName: 'returns' },
     { name: 'Tactical CRM', serviceName: 'crm' },
     { name: 'Tactical IDM', serviceName: 'idm' },
-    { name: 'Reporting', serviceName: 'reporting' },
     { name: 'Permit repository', serviceName: 'permits' }
   ]
 

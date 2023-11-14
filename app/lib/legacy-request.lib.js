@@ -46,11 +46,6 @@ const services = {
     base: servicesConfig.permitRepository.url,
     api: 'API/1.0/'
   },
-  // water-abstraction-reporting - reporting
-  reporting: {
-    base: servicesConfig.reporting.url,
-    api: 'reporting/1.0'
-  },
   // water-abstraction-returns - returns
   returns: {
     base: servicesConfig.returns.url,
