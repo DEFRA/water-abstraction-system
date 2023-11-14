@@ -28,9 +28,6 @@ const config = {
   serviceBackground: {
     url: process.env.SERVICE_BACKGROUND_URL
   },
-  reporting: {
-    url: process.env.REPORTING_URL
-  },
   import: {
     url: process.env.IMPORT_URL
   },
