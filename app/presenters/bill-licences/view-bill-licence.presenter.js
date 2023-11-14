@@ -42,7 +42,7 @@ function go (billLicence) {
 }
 
 function _displayCreditDebitTotals (billRun) {
-  const { batchType, source } = billRun
+  const { batchType } = billRun
 
   return batchType === 'supplementary'
 }

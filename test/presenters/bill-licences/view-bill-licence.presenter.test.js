@@ -46,29 +46,10 @@ describe('View Bill Licence presenter', () => {
       })
 
       describe('when the bill run is supplementary', () => {
-        describe('and was created in WRLS', () => {
-          beforeEach(() => {
-            billLicence.bill.billRun.batchType = 'supplementary'
-          })
+        it('returns true', () => {
+          const result = ViewBillLicencePresenter.go(billLicence)
 
-          it('returns true', () => {
-            const result = ViewBillLicencePresenter.go(billLicence)
-
-            expect(result.displayCreditDebitTotals).to.be.true()
-          })
-        })
-
-        describe('but was created in NALD', () => {
-          beforeEach(() => {
-            billLicence.bill.billRun.batchType = 'supplementary'
-            billLicence.bill.billRun.source = 'nald'
-          })
-
-          it('returns false', () => {
-            const result = ViewBillLicencePresenter.go(billLicence)
-
-            expect(result.displayCreditDebitTotals).to.be.false()
-          })
+          expect(result.displayCreditDebitTotals).to.be.true()
         })
       })
     })
