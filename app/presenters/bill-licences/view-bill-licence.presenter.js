@@ -2,7 +2,7 @@
 
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
- * @module BillLicencesTransactionsPresenter
+ * @module ViewBillLicencePresenter
  */
 
 const { formatMoney } = require('../base.presenter.js')
@@ -36,8 +36,8 @@ function go (billLicence) {
     licenceRef,
     scheme: bill.billRun.scheme,
     tableCaption: _tableCaption(transactions),
-    total,
-    transactions: _transactions(transactions)
+    transactions: _transactions(transactions),
+    transactionsTotal: total
   }
 }
 

@@ -25,6 +25,7 @@ function go (bill, billingAccount) {
     billRunNumber: billRun.billRunNumber,
     billRunStatus: billRun.status,
     billRunType: _billRunType(billRun),
+    billTotal: _billTotal(bill.netAmount, bill.isCredit),
     chargeScheme: _scheme(billRun),
     contactName: _contactName(billingAccount),
     credit: bill.isCredit,
@@ -33,10 +34,9 @@ function go (bill, billingAccount) {
     debitsTotal: _debitsTotal(bill, billRun),
     deminimis: bill.isDeMinimis,
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
-    financialYear: _financialYear(billRun),
+    financialYear: _financialYear(bill),
     flaggedForReissue: bill.isFlaggedForRebilling,
     region: capitalize(billRun.region.displayName),
-    total: _total(bill.netAmount, bill.isCredit),
     transactionFile: billRun.transactionFileReference
   }
 
@@ -134,10 +134,10 @@ function _displayCreditDebitTotals (billRun) {
   return batchType === 'supplementary'
 }
 
-function _financialYear (billRun) {
-  const { fromFinancialYearEnding, toFinancialYearEnding } = billRun
+function _financialYear (bill) {
+  const { financialYearEnding } = bill
 
-  return `${fromFinancialYearEnding} to ${toFinancialYearEnding}`
+  return `${financialYearEnding - 1} to ${financialYearEnding}`
 }
 
 function _scheme (billRun) {
@@ -148,7 +148,7 @@ function _scheme (billRun) {
   return 'Old'
 }
 
-function _total (valueInPence, credit) {
+function _billTotal (valueInPence, credit) {
   const valueAsMoney = formatMoney(valueInPence)
 
   if (credit) {
