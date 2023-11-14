@@ -26,7 +26,7 @@ describe('Licence Summaries presenter', () => {
           {
             id: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
             reference: '01/735',
-            total: '£6,222.18'
+            total: '-£6,222.18'
           },
           {
             id: '127377ea-24ea-4578-8b96-ef9a8625a313',
@@ -74,7 +74,7 @@ function _testLicenceSummaries () {
     {
       billingInvoiceLicenceId: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
       licenceRef: '01/735',
-      total: 622218
+      total: -622218
     },
     {
       billingInvoiceLicenceId: '127377ea-24ea-4578-8b96-ef9a8625a313',

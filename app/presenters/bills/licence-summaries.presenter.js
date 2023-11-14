@@ -25,7 +25,7 @@ function _billLicences (licenceSummaries) {
     return {
       id,
       reference,
-      total: formatMoney(total)
+      total: formatMoney(total, true)
     }
   })
 }
