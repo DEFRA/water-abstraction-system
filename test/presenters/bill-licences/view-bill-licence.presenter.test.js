@@ -94,13 +94,13 @@ describe('View Bill Licence presenter', () => {
           licenceRef: 'WA/055/0017/013',
           scheme: 'alcs',
           tableCaption: '4 transactions',
-          total: '£288.37',
           transactions: [
             { chargeType: 'standard' },
             { chargeType: 'standard' },
             { chargeType: 'compensation' },
             { chargeType: 'minimum_charge' }
-          ]
+          ],
+          transactionsTotal: '£288.37'
         })
       })
     })
@@ -130,13 +130,13 @@ describe('View Bill Licence presenter', () => {
           licenceRef: 'WA/055/0017/013',
           scheme: 'alcs',
           tableCaption: '4 transactions',
-          total: '-£288.37',
           transactions: [
             { chargeType: 'standard' },
             { chargeType: 'standard' },
             { chargeType: 'compensation' },
             { chargeType: 'minimum_charge' }
-          ]
+          ],
+          transactionsTotal: '-£288.37'
         })
       })
     })
