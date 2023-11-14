@@ -46,29 +46,10 @@ describe('View Bill Licence presenter', () => {
       })
 
       describe('when the bill run is supplementary', () => {
-        describe('and was created in WRLS', () => {
-          beforeEach(() => {
-            billLicence.bill.billRun.batchType = 'supplementary'
-          })
+        it('returns true', () => {
+          const result = ViewBillLicencePresenter.go(billLicence)
 
-          it('returns true', () => {
-            const result = ViewBillLicencePresenter.go(billLicence)
-
-            expect(result.displayCreditDebitTotals).to.be.true()
-          })
-        })
-
-        describe('but was created in NALD', () => {
-          beforeEach(() => {
-            billLicence.bill.billRun.batchType = 'supplementary'
-            billLicence.bill.billRun.source = 'nald'
-          })
-
-          it('returns false', () => {
-            const result = ViewBillLicencePresenter.go(billLicence)
-
-            expect(result.displayCreditDebitTotals).to.be.false()
-          })
+          expect(result.displayCreditDebitTotals).to.be.true()
         })
       })
     })
@@ -95,30 +76,68 @@ describe('View Bill Licence presenter', () => {
       })
     })
 
-    it('correctly presents the data', () => {
-      const result = ViewBillLicencePresenter.go(billLicence)
+    describe('and the total for the transactions is a debit', () => {
+      it('correctly presents the data', () => {
+        const result = ViewBillLicencePresenter.go(billLicence)
 
-      // NOTE: The transaction details we pass in and what we get back is not what would actually happen. Our
-      // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is
-      // that depending on a transaction's charge type ViewBillLicencePresenter will call the relevant transaction
-      // presenter. Plus, that things like the totals and the table caption is returned as expected.
-      expect(result).to.equal({
-        accountNumber: 'W88898987A',
-        billingInvoiceId: '5a5b313b-e707-490a-a693-799339941e4f',
-        creditTotal: '£10.00',
-        debitTotal: '£298.37',
-        displayCreditDebitTotals: true,
-        licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
-        licenceRef: 'WA/055/0017/013',
-        scheme: 'alcs',
-        tableCaption: '4 transactions',
-        total: '£288.37',
-        transactions: [
-          { chargeType: 'standard' },
-          { chargeType: 'standard' },
-          { chargeType: 'compensation' },
-          { chargeType: 'minimum_charge' }
-        ]
+        // NOTE: The transaction details we pass in and what we get back is not what would actually happen. Our
+        // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is
+        // that depending on a transaction's charge type ViewBillLicencePresenter will call the relevant transaction
+        // presenter. Plus, that things like the totals and the table caption is returned as expected.
+        expect(result).to.equal({
+          accountNumber: 'W88898987A',
+          billingInvoiceId: '5a5b313b-e707-490a-a693-799339941e4f',
+          creditTotal: '£10.00',
+          debitTotal: '£298.37',
+          displayCreditDebitTotals: true,
+          licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
+          licenceRef: 'WA/055/0017/013',
+          scheme: 'alcs',
+          tableCaption: '4 transactions',
+          total: '£288.37',
+          transactions: [
+            { chargeType: 'standard' },
+            { chargeType: 'standard' },
+            { chargeType: 'compensation' },
+            { chargeType: 'minimum_charge' }
+          ]
+        })
+      })
+    })
+
+    describe('and the total for the transactions is a credit', () => {
+      beforeEach(() => {
+        billLicence.transactions[0].isCredit = true
+        billLicence.transactions[0].netAmount = -29837
+        billLicence.transactions[1].isCredit = false
+        billLicence.transactions[1].netAmount = 1000
+      })
+
+      it('correctly presents the data', () => {
+        const result = ViewBillLicencePresenter.go(billLicence)
+
+        // NOTE: The transaction details we pass in and what we get back is not what would actually happen. Our
+        // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is
+        // that depending on a transaction's charge type ViewBillLicencePresenter will call the relevant transaction
+        // presenter. Plus, that things like the totals and the table caption is returned as expected.
+        expect(result).to.equal({
+          accountNumber: 'W88898987A',
+          billingInvoiceId: '5a5b313b-e707-490a-a693-799339941e4f',
+          creditTotal: '£298.37',
+          debitTotal: '£10.00',
+          displayCreditDebitTotals: true,
+          licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
+          licenceRef: 'WA/055/0017/013',
+          scheme: 'alcs',
+          tableCaption: '4 transactions',
+          total: '-£288.37',
+          transactions: [
+            { chargeType: 'standard' },
+            { chargeType: 'standard' },
+            { chargeType: 'compensation' },
+            { chargeType: 'minimum_charge' }
+          ]
+        })
       })
     })
   })

@@ -115,5 +115,6 @@ $govuk-global-styles: true;
   @media (min-width: 768px) {
     border-top: solid 2px #0b0c0c !important;
     border-bottom: none !important;
+    white-space: nowrap;
   }
 }

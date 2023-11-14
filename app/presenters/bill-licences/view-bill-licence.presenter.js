@@ -42,9 +42,9 @@ function go (billLicence) {
 }
 
 function _displayCreditDebitTotals (billRun) {
-  const { batchType, source } = billRun
+  const { batchType } = billRun
 
-  return batchType === 'supplementary' && source === 'wrls'
+  return batchType === 'supplementary'
 }
 
 function _tableCaption (transactions) {
@@ -76,7 +76,7 @@ function _totals (transactions) {
   return {
     creditTotal: formatMoney(creditTotal),
     debitTotal: formatMoney(debitTotal),
-    total: formatMoney(total)
+    total: formatMoney(total, true)
   }
 }
 
