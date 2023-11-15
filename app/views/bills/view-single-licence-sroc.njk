@@ -400,13 +400,13 @@
       {% set totalRow = [
         {
           text: 'Total',
-          classes: 'govuk-table__cell--total',
+          classes: 'table__cell--total',
           colspan: tableHeaders | length - 1
         },
         {
           text: transactionsTotal,
           format: 'numeric',
-          classes: 'govuk-table__cell--total govuk-!-font-weight-bold',
+          classes: 'table__cell--total govuk-!-font-weight-bold',
           attributes: { 'data-test': 'total' }
         }
       ] %}

@@ -111,7 +111,7 @@ $govuk-global-styles: true;
 // ========== ========== ========== ========== ==========
 // Table additions
 // ========== ========== ========== ========== ==========
-.govuk-table__cell--total {
+.table__cell--total {
   @media (min-width: 768px) {
     border-top: solid 2px #0b0c0c !important;
     border-bottom: none !important;
