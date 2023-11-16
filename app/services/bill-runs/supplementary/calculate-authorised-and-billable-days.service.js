@@ -6,6 +6,7 @@
  */
 
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
+const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -62,89 +63,24 @@ function go (chargePeriod, billingPeriod, chargeReference) {
   const billableAbstractionPeriods = []
 
   chargeElements.forEach((chargeElement) => {
-    authorisedAbstractionPeriods.push(..._abstractionPeriods(billingPeriod, chargeElement))
-    billableAbstractionPeriods.push(..._abstractionPeriods(chargePeriod, chargeElement))
+    const {
+      abstractionPeriodStartDay: startDay,
+      abstractionPeriodStartMonth: startMonth,
+      abstractionPeriodEndDay: endDay,
+      abstractionPeriodEndMonth: endMonth
+    } = chargeElement
+    authorisedAbstractionPeriods.push(
+      ...DetermineAbstractionPeriodService.go(billingPeriod, startDay, startMonth, endDay, endMonth)
+    )
+    billableAbstractionPeriods.push(
+      ...DetermineAbstractionPeriodService.go(chargePeriod, startDay, startMonth, endDay, endMonth)
+    )
   })
 
   return {
     authorisedDays: _consolidateAndCalculate(billingPeriod, authorisedAbstractionPeriods),
     billableDays: _consolidateAndCalculate(chargePeriod, billableAbstractionPeriods)
   }
-}
-
-/**
- * Calculate from a charge element's abstraction data the relevant abstraction periods
- *
- * Before we can calculate the days and whether a period should be considered, we have to assign actual years to the
- * charge element's abstraction start and end values.
- *
- * ## In-year
- *
- * An "in-year" abstraction period is one that starts and ends in the same year. It can be identified by the start day/
- * month being before the end day/month. For example, 10-Oct to 31-Dec.
- *
- * ## Out-year
- *
- * An "out-year" abstraction period is one that starts in one year and ends in the next. It can be identified by the
- * start day/month being *after* the end day/month. For example, 01-Nov to 31-Mar.
- *
- * To arrive at actual dates for an abstraction period, we start by creating dates based on the reference period's start
- * year. So if the reference period starts in 2022, our first period for the above examples would be:
- *
- * - **In-year abstraction period** 10-Oct-2022 to 31-Dec-2022
- * - **Out-year abstraction period** 01-Nov-2022 to 31-Mar-2023
- *
- * To ensure we cover all possible abstraction periods which the reference period could overlap, we then create
- * additional abstraction periods for the year before and the year after our first period:
- *
- * - **In-year abstraction periods** 10-Oct-2021 to 31-Dec-2021 and 10-Oct-2023 to 31-Oct-2023
- * - **Out-year abstraction periods** 01-Nov-2021 to 31-Mar-2022 and 01-Nov-2023 to 31-Mar-2024
- *
- * Finally, we filter out any of these abstraction periods which don't overlap with the reference period, and return the
- * results.
- *
- * @param {Object} referencePeriod either the billing period or charge period
- * @param {module:ChargeElementModel} chargeElement holds the abstraction start and end day and month values
- *
- * @returns {Object[]} An array of abstraction periods each containing a start and end date
- */
-function _abstractionPeriods (referencePeriod, chargeElement) {
-  const periodStartYear = referencePeriod.startDate.getFullYear()
-  const {
-    abstractionPeriodStartDay: startDay,
-    abstractionPeriodStartMonth: startMonth,
-    abstractionPeriodEndDay: endDay,
-    abstractionPeriodEndMonth: endMonth
-  } = chargeElement
-
-  // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
-  // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
-  const firstPeriod = {
-    startDate: new Date(periodStartYear, startMonth - 1, startDay),
-    endDate: new Date(periodStartYear, endMonth - 1, endDay)
-  }
-
-  // Determine if this is an out-year abstraction period by checking whether the end date is before the start date. If
-  // it is then adjust the end date to be in the next year.
-  if (firstPeriod.endDate < firstPeriod.startDate) {
-    firstPeriod.endDate = _addOneYear(firstPeriod.endDate)
-  }
-
-  // Create periods for the previous year and the following year, covering all possible abstraction periods that our
-  // reference period could overlap
-  const previousPeriod = {
-    startDate: _subtractOneYear(firstPeriod.startDate),
-    endDate: _subtractOneYear(firstPeriod.endDate)
-  }
-  const nextPeriod = {
-    startDate: _addOneYear(firstPeriod.startDate),
-    endDate: _addOneYear(firstPeriod.endDate)
-  }
-
-  // Filter out any periods which don't overlap our reference period to return the ones which do
-  return [previousPeriod, firstPeriod, nextPeriod].filter((period) => {
-    return _isPeriodValid(referencePeriod, period)
-  })
 }
 
 /**
@@ -213,40 +149,6 @@ function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
   }, 0)
 
   return totalDays
-}
-
-/**
- * Checks each abstraction period to see whether it has days that should be counted
- *
- * This is determined by calculating whether the abstraction period intersects with the reference period. For example,
- * if the reference period is 2022-04-01 to 2023-03-31 and the abstraction period is 01-Nov to 31-Mar:
- *
- * - 01-Nov-2022 to 31-Mar-2023 = `true`
- * - 01-Nov-2021 to 31-Mar-2022 = `false`
- *
- * @param {Object} referencePeriod Object that has a `startDate` and `endDate` that defines the reference period
- * @param {Object} abstractionPeriod Object that has a `startDate` and `endDate` that defines the abstraction period
- *
- * @returns {Boolean} true if the abstraction period intersects the reference period
- */
-function _isPeriodValid (referencePeriod, abstractionPeriod) {
-  // If one period starts after the other ends then there is no intersection
-  if (
-    abstractionPeriod.startDate > referencePeriod.endDate ||
-    referencePeriod.startDate > abstractionPeriod.endDate
-  ) {
-    return false
-  }
-
-  return true
-}
-
-function _addOneYear (date) {
-  return new Date(date.getFullYear() + 1, date.getMonth(), date.getDate())
-}
-
-function _subtractOneYear (date) {
-  return new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
 }
 
 module.exports = {
