@@ -69,6 +69,7 @@ function go (chargePeriod, billingPeriod, chargeReference) {
       abstractionPeriodEndDay: endDay,
       abstractionPeriodEndMonth: endMonth
     } = chargeElement
+
     authorisedAbstractionPeriods.push(
       ...DetermineAbstractionPeriodService.go(billingPeriod, startDay, startMonth, endDay, endMonth)
     )
