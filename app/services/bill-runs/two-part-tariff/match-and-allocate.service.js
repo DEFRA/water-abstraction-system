@@ -5,6 +5,7 @@
  * @module MatchAndAllocateService
  */
 
+const DetermineAbstractionPeriodService = require('../../check/determine-abstraction-periods.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FetchReturnsForLicenceService = require('./fetch-returns-for-licence.service.js')
 const RegionModel = require('../../../models/water/region.model.js')
@@ -17,6 +18,8 @@ async function go (billRun, billingPeriods, licenceId) {
 
   _calculateAndLogTime(startTime)
 
+  // --- Group by licence and find the matching returns for them
+
   const regionCode = await _regionCode(billRun)
 
   const chargeVersions = await FetchChargeVersionsService.go(regionCode, billingPeriods[0], licenceId)
@@ -27,9 +30,45 @@ async function go (billRun, billingPeriods, licenceId) {
 
   await _matchReturnsToLicences(licences, billingPeriods[0])
 
+  // ---- ???
+
+  _allocate(licences, billingPeriods[0])
+
   return licences
 }
 
+function _allocate (licences, billingPeriod) {
+  licences.forEach((licence) => {
+    const { chargeVersions, returns } = licence
+
+    _prepReturnsForMatching(returns, billingPeriod)
+
+    chargeVersions.forEach((chargeVersion, chargeVersionIndex) => {
+      const { chargeReferences } = chargeVersion
+
+      _sortChargeReferencesBySubsistenceCharge(chargeReferences)
+    })
+  })
+}
+
+function _prepReturnsForMatching (returnRecords, billingPeriod) {
+  returnRecords.forEach((returnRecord) => {
+    const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnRecord
+    const abstractionPeriods = DetermineAbstractionPeriodService.go(
+      billingPeriod,
+      periodStartDay,
+      periodStartMonth,
+      periodEndDay,
+      periodEndMonth
+    )
+
+    returnRecord.versions[0]?.lines.forEach((line) => {
+      line.unallocated = line.quantity / 1000
+    })
+
+    returnRecord.abstractionPeriods = abstractionPeriods
+  })
+}
 
 function _calculateAndLogTime (startTime) {
   const endTime = process.hrtime.bigint()
@@ -86,6 +125,23 @@ async function _regionCode (billRun) {
   const { naldRegionId } = await RegionModel.query().findById(billRun.regionId).select('naldRegionId')
 
   return naldRegionId
+}
+
+function _sortChargeReferencesBySubsistenceCharge (chargeReferences) {
+  return chargeReferences.sort((firstChargeReference, secondChargeReference) => {
+    const { subsistenceCharge: subsistenceChargeFirst } = firstChargeReference.chargeCategory
+    const { subsistenceCharge: subsistenceChargeSecond } = secondChargeReference.chargeCategory
+
+    if (subsistenceChargeFirst > subsistenceChargeSecond) {
+      return -1
+    }
+
+    if (subsistenceChargeFirst < subsistenceChargeSecond) {
+      return 1
+    }
+
+    return 0
+  })
 }
 
 module.exports = {
