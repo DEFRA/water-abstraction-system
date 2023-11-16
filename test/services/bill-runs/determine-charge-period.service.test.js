@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const DetermineChargePeriodService = require('../../../../app/services/bill-runs/supplementary/determine-charge-period.service.js')
+const DetermineChargePeriodService = require('../../../app/services/bill-runs/determine-charge-period.service.js')
 
 describe('Determine charge period service', () => {
   const billingPeriod = {
