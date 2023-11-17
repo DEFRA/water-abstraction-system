@@ -100,15 +100,11 @@ function _determineYears (referencePeriod, startDay, startMonth, endDay, endMont
 }
 
 function _isPeriodValid (referencePeriod, abstractionPeriod) {
-  // If one period starts after the other ends then there is no intersection
-  if (
+  // If either period starts after the other ends then there is no intersection and `false` is returned
+  return !(
     abstractionPeriod.startDate > referencePeriod.endDate ||
     referencePeriod.startDate > abstractionPeriod.endDate
-  ) {
-    return false
-  }
-
-  return true
+  )
 }
 
 function _subtractOneYear (date) {
