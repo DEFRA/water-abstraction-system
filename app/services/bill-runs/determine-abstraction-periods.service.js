@@ -37,7 +37,6 @@
  * results.
  *
  * @param {Object} referencePeriod either the billing period or charge period
- * @param {module:ChargeElementModel} chargeElement holds the abstraction start and end day and month values
  * @param {Number} startDay the abstraction start day value
  * @param {Number} startMonth the abstraction start month value
  * @param {Number} endDay the abstraction end day value
