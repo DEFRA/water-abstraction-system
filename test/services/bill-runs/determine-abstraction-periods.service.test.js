@@ -124,7 +124,7 @@ describe('Determine Abstraction Periods service', () => {
   })
 
   describe('and the abstraction period is 01-JAN to 30-JUN (in-year)', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       startDay = 1
       startMonth = 1
       endDay = 30
@@ -188,7 +188,7 @@ describe('Determine Abstraction Periods service', () => {
   })
 
   describe('and the abstraction period is 01-OCT to 31-MAR (out-year)', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       startDay = 1
       startMonth = 10
       endDay = 31
