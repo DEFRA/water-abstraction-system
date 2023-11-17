@@ -36,7 +36,10 @@ async function go (regionCode, billingPeriod, licenceId) {
 }
 
 async function _fetch (regionCode, billingPeriod, licenceId) {
-  const whereCondition = licenceId ?? 'chargeVersions.licenceId'
+  const whereClause = {
+    field: licenceId ? 'licenceId' : 'regionCode',
+    value: licenceId ?? regionCode
+  }
 
   const chargeVersions = await ChargeVersionModel.query()
     .select([
@@ -48,8 +51,7 @@ async function _fetch (regionCode, billingPeriod, licenceId) {
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
-    .where('chargeVersions.regionCode', regionCode)
-    .where('chargeVersions.licenceId', whereCondition)
+    .where(`chargeVersions.${whereClause.field}`, whereClause.value)
     .whereNotExists(
       Workflow.query()
         .select(1)
