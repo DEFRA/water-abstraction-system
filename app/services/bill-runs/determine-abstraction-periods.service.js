@@ -6,10 +6,15 @@
  */
 
 /**
- * Calculate from a charge element's abstraction data the relevant abstraction periods
+ * Determine real abstraction periods with years based on a reference period
  *
- * Before we can calculate the days and whether a period should be considered, we have to assign actual years to the
- * charge element's abstraction start and end values.
+ * Abstraction periods on both charge elements and returns are held as just days and months, for example, '1st May to 31
+ * Oct'. When we come to calculate billable days or attempt to match a return line to an element, we need to translate
+ * them into real dates to do so.
+ *
+ * We use a reference period, typically a billing or charge period to determine what years to use. For example if the
+ * `referencePeriod` is a billing period, it will be '1 April 2023 to 31 March 2024'. This service will then apply 2023
+ * and 2024 to the provided abstraction period depending on whether it is an "in-year" or "out-year" abstraction period.
  *
  * ## In-year
  *
