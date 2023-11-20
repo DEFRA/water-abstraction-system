@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Determine the abstraction period
+ * Determine real abstraction periods with years based on a reference period
  * @module DetermineAbstractionPeriodService
  */
 
