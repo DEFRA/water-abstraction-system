@@ -34,7 +34,7 @@ describe('Determine Abstraction Periods service', () => {
       endMonth = 12
     })
 
-    describe('and the reference period is 01-APR-2022 to 31-MAR-2022 (starts first year, ends second year)', () => {
+    describe('and the reference period is 01-APR-2022 to 31-MAR-2023 (starts first year, ends second year)', () => {
       beforeEach(() => {
         referencePeriod = {
           startDate: new Date('2022-04-01'),
