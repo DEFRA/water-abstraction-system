@@ -5,10 +5,6 @@ const DatabaseConfig = require('./config/database.config.js')
 const defaultConfig = {
   client: 'postgres',
   useNullAsDefault: true,
-  migrations: {
-    tableName: 'knex_migrations',
-    directory: './db/migrations'
-  },
   seeds: {
     directory: './db/seeds'
   }
@@ -25,11 +21,20 @@ const defaultConnection = {
 
 const development = {
   ...defaultConfig,
+  migrations: {
+    tableName: 'knex_migrations',
+    directory: './db/migrations/public'
+  },
   connection: defaultConnection
 }
 
 const test = {
   ...defaultConfig,
+  migrations: {
+    sortDirsSeparately: true,
+    tableName: 'knex_migrations',
+    directory: ['./db/migrations/legacy', './db/migrations/public']
+  },
   connection: {
     ...defaultConnection,
     database: DatabaseConfig.testDatabase
@@ -38,6 +43,10 @@ const test = {
 
 const production = {
   ...defaultConfig,
+  migrations: {
+    tableName: 'knex_migrations',
+    directory: './db/migrations/public'
+  },
   connection: defaultConnection
 }
 
