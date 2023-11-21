@@ -16,7 +16,7 @@ class ReturnSubmissionLineModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      version: {
+      returnSubmission: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'return-submission.model',
         join: {

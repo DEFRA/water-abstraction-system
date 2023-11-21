@@ -23,7 +23,7 @@ class ReturnSubmissionModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      return: {
+      formLog: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'form-log.model',
         join: {
@@ -31,7 +31,7 @@ class ReturnSubmissionModel extends BaseModel {
           to: 'formLogs.id'
         }
       },
-      lines: {
+      returnSubmissionLines: {
         relation: Model.HasManyRelation,
         modelClass: 'return-submission-line.model',
         join: {

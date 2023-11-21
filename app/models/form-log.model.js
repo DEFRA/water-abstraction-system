@@ -23,7 +23,7 @@ class FormLogModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      versions: {
+      retrunSubmissions: {
         relation: Model.HasManyRelation,
         modelClass: 'return-submission.model',
         join: {
