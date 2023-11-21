@@ -9,7 +9,7 @@ const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class ReturnModel extends BaseModel {
+class FormLogModel extends BaseModel {
   static get tableName () {
     return 'formLogs'
   }
@@ -35,4 +35,4 @@ class ReturnModel extends BaseModel {
   }
 }
 
-module.exports = ReturnModel
+module.exports = FormLogModel
