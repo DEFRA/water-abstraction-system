@@ -9,6 +9,7 @@ const { ref } = require('objection')
 
 const ChargeReferenceModel = require('../../../models/water/charge-reference.model.js')
 const ChargeVersionModel = require('../../../models/water/charge-version.model.js')
+const RegionModel = require('../../../models/water/region.model.js')
 const Workflow = require('../../../models/water/workflow.model.js')
 
 /**
@@ -31,7 +32,9 @@ const Workflow = require('../../../models/water/workflow.model.js')
  *
  * @returns {Object} Contains an array of unique licence IDs and array of charge versions to be processed
  */
-async function go (regionCode, billingPeriod, licenceId) {
+async function go (regionId, billingPeriod, licenceId) {
+  const regionCode = await _regionCode(regionId)
+
   return _fetch(regionCode, billingPeriod, licenceId)
 }
 
@@ -125,6 +128,12 @@ async function _fetch (regionCode, billingPeriod, licenceId) {
     })
 
   return chargeVersions
+}
+
+async function _regionCode (regionId) {
+  const { naldRegionId } = await RegionModel.query().findById(regionId).select('naldRegionId')
+
+  return naldRegionId
 }
 
 module.exports = {

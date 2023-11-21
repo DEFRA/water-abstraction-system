@@ -22,7 +22,6 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/t
 
 describe('Fetch Charge Versions service', () => {
   describe('when there are charge versions', () => {
-    const regionCode = 5
     let region
     let regionId
     let licence
@@ -104,7 +103,7 @@ describe('Fetch Charge Versions service', () => {
           }]
         }
 
-        const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(1)
         expect(result[0].chargeVersionId).to.include(testRecords[0].chargeVersionId)
@@ -114,7 +113,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns charge versions with correct ordering based on licence reference', async () => {
-        const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(1)
       })
@@ -130,7 +129,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('doesnt return the charge version', async () => {
-        const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(0)
       })
@@ -170,7 +169,7 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
           expect(result[0].chargeVersionId).to.include(testRecordsInDate[0].chargeVersionId)
@@ -202,7 +201,7 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(0)
           expect(result).to.equal([])
@@ -243,7 +242,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns the charge versions that are applicable', async () => {
-        const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(1)
         expect(result[0].chargeVersionId).to.include(testRecordsCurrent[0].chargeVersionId)
@@ -275,7 +274,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns the charge versions that are applicable', async () => {
-        const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(0)
       })
@@ -319,7 +318,7 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('does not return the related charge versions', async () => {
-          const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.equal([])
         })
@@ -331,7 +330,7 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
           expect(result[0].chargeVersionId).to.include(testRecordsSameRegion[0].chargeVersionId)
@@ -340,7 +339,7 @@ describe('Fetch Charge Versions service', () => {
 
       describe('has the same region code', () => {
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
           expect(result[0].chargeVersionId).to.include(testRecordsSameRegion[0].chargeVersionId)
@@ -371,7 +370,7 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
           expect(result[0].chargeVersionId).to.include(testRecordsSameRegion[0].chargeVersionId)
@@ -411,7 +410,7 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns the charge elements with correct ordering based on authorised annual quantity', async () => {
-        const result = await FetchChargeVersionsService.go(regionCode, billingPeriod)
+        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result[0].chargeReferences[0].chargeElements[0].authorisedAnnualQuantity).to.equal(secondSrocChargeElement.authorisedAnnualQuantity)
         expect(result[0].chargeReferences[0].chargeElements[1].authorisedAnnualQuantity).to.equal(firstSrocChargeElement.authorisedAnnualQuantity)
