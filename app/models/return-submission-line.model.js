@@ -14,13 +14,6 @@ class ReturnSubmissionLineModel extends BaseModel {
     return 'returnSubmissionLines'
   }
 
-  // Defining which fields contain json allows us to insert an object without needing to stringify it first
-  static get jsonAttributes () {
-    return [
-      'metadata'
-    ]
-  }
-
   static get relationMappings () {
     return {
       version: {
