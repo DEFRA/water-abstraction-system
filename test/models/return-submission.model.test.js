@@ -94,7 +94,7 @@ describe('Return Submission model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the lines', async () => {
+      it('can eager load the return submission lines', async () => {
         const result = await ReturnSubmissionModel.query()
           .findById(testRecord.id)
           .withGraphFetched('returnSubmissionLines')
