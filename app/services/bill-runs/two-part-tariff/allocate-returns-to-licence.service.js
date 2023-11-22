@@ -16,7 +16,7 @@ function go (licences) {
         const { chargeElements } = chargeReference
 
         chargeElements.forEach((chargeElement) => {
-          _matchAndAllocate(chargeElement, returns)
+          _matchAndAllocate(chargeElement, returns, chargeVersion.chargePeriod)
 
           // PERSIST element ???
         })
@@ -25,6 +25,21 @@ function go (licences) {
 
     // PERSIST returns
   })
+}
+
+function _chargeDatesOverlap (matchedLine, chargePeriod) {
+  const { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate } = chargePeriod
+  const { startDate: lineStartDate, endDate: lineEndDate } = matchedLine
+
+  if (lineStartDate < chargePeriodEndDate && lineEndDate > chargePeriodEndDate) {
+    return true
+  }
+
+  if (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate) {
+    return true
+  }
+
+  return false
 }
 
 function _checkReturnForIssues (returnRecord) {
@@ -47,7 +62,7 @@ function _checkReturnForIssues (returnRecord) {
   return false
 }
 
-function _matchAndAllocate (chargeElement, returns) {
+function _matchAndAllocate (chargeElement, returns, chargePeriod) {
   const matchedReturns = _matchReturns(chargeElement, returns)
 
   if (matchedReturns.length === 0) {
@@ -84,6 +99,7 @@ function _matchAndAllocate (chargeElement, returns) {
             qtyToAllocate = remainingAllocation
           }
 
+          chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
           chargeElement.allocatedQuantity += qtyToAllocate
           matchedReturnResult.allocatedQuantity += qtyToAllocate
 
