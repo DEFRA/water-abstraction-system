@@ -5,7 +5,7 @@
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateFormLogId } = require('./form-log.helper.js')
+const { generateReturnLogId } = require('./return-log.helper.js')
 const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
 
 /**
@@ -14,7 +14,7 @@ const ReturnSubmissionModel = require('../../../app/models/return-submission.mod
  * If no `data` is provided, default values will be used. These are
  *
  * - `id` - [random UUID]
- * - `formLogId` - [randomly generated - v1:1:03/28/78/0033:10025289:2022-04-01:2023-03-31]
+ * - `returnLogId` - [randomly generated - v1:1:03/28/78/0033:10025289:2022-04-01:2023-03-31]
  * - `userId` - admin-internal@wrls.gov.uk
  * - `userType` - internal
  * - `version` - 1
@@ -47,7 +47,7 @@ function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     id: generateUUID(),
-    formLogId: generateFormLogId(),
+    returnLogId: generateReturnLogId(),
     userId: 'admin-internal@wrls.gov.uk',
     userType: 'internal',
     version: 1,

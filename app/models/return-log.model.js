@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Model for form_logs
- * @module FormLogModel
+ * Model for return_logs
+ * @module ReturnLogModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class FormLogModel extends BaseModel {
+class ReturnLogModel extends BaseModel {
   static get tableName () {
-    return 'formLogs'
+    return 'returnLogs'
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
@@ -27,12 +27,12 @@ class FormLogModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'return-submission.model',
         join: {
-          from: 'formLogs.id',
-          to: 'returnSubmissions.formLogId'
+          from: 'returnLogs.id',
+          to: 'returnSubmissions.returnLogId'
         }
       }
     }
   }
 }
 
-module.exports = FormLogModel
+module.exports = ReturnLogModel

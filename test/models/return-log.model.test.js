@@ -9,27 +9,27 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../support/helpers/database.helper.js')
-const FormLogHelper = require('../support/helpers/form-log.helper.js')
+const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
 
 // Thing under test
-const FormLogModel = require('../../app/models/form-log.model.js')
+const ReturnLogModel = require('../../app/models/return-log.model.js')
 
-describe('Form Log model', () => {
+describe('Return Log model', () => {
   let testRecord
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    testRecord = await FormLogHelper.add()
+    testRecord = await ReturnLogHelper.add()
   })
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await FormLogModel.query().findById(testRecord.id)
+      const result = await ReturnLogModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(FormLogModel)
+      expect(result).to.be.an.instanceOf(ReturnLogModel)
       expect(result.id).to.equal(testRecord.id)
     })
   })
@@ -39,29 +39,29 @@ describe('Form Log model', () => {
       let returnSubmissions
 
       beforeEach(async () => {
-        const { id: formLogId } = testRecord
+        const { id: returnLogId } = testRecord
 
         returnSubmissions = []
         for (let i = 0; i < 2; i++) {
           const version = i
-          const returnSubmission = await ReturnSubmissionHelper.add({ formLogId, version })
+          const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId, version })
           returnSubmissions.push(returnSubmission)
         }
       })
 
       it('can successfully run a related query', async () => {
-        const query = await FormLogModel.query()
+        const query = await ReturnLogModel.query()
           .innerJoinRelated('returnSubmissions')
 
         expect(query).to.exist()
       })
 
       it('can eager load the return submissions', async () => {
-        const result = await FormLogModel.query()
+        const result = await ReturnLogModel.query()
           .findById(testRecord.id)
           .withGraphFetched('returnSubmissions')
 
-        expect(result).to.be.instanceOf(FormLogModel)
+        expect(result).to.be.instanceOf(ReturnLogModel)
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.returnSubmissions).to.be.an.array()
