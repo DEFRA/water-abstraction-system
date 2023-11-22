@@ -2,7 +2,7 @@
 
 /**
  * Formats data for a compensation charge transaction for the bill-licence page
- * @module CompensationChargeTransactionPresenter
+ * @module ViewCompensationChargeTransactionPresenter
  */
 
 const { formatLongDate, formatMoney } = require('../base.presenter.js')
