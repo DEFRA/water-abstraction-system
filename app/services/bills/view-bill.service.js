@@ -5,12 +5,12 @@
  * @module ViewBillService
  */
 
-const BillPresenter = require('../../presenters/bills/bill.presenter.js')
 const FetchBillingAccountService = require('./fetch-billing-account.service.js')
 const FetchBillLicence = require('../bill-licences/fetch-bill-licence.service.js')
 const FetchBillService = require('./fetch-bill-service.js')
-const LicenceSummariesPresenter = require('../../presenters/bills/licence-summaries.presenter.js')
+const ViewBillPresenter = require('../../presenters/bills/view-bill.presenter.js')
 const ViewBillLicencePresenter = require('../../presenters/bill-licences/view-bill-licence.presenter.js')
+const ViewLicenceSummariesPresenter = require('../../presenters/bills/view-licence-summaries.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for one of the view bill templates
@@ -35,13 +35,13 @@ async function go (id) {
 
   // Irrespective of of how many licences are linked to the bill, the templates always need formatted bill and billing
   // account data
-  const billAndBillingAccountData = BillPresenter.go(bill, billingAccount)
+  const billAndBillingAccountData = ViewBillPresenter.go(bill, billingAccount)
 
   let additionalData = {}
 
   // If we have multiple licences we need to provide formatted licence summary data for the multi licence bill template
   if (licenceSummaries.length > 1) {
-    additionalData = LicenceSummariesPresenter.go(licenceSummaries)
+    additionalData = ViewLicenceSummariesPresenter.go(licenceSummaries)
   } else {
     // Else we need to provide we need to provide bill licence data for the single licence bill templates
     // (ViewBillLicencePresenter handles both PRESROC and SROC)

@@ -6,9 +6,9 @@
  */
 
 const { formatMoney } = require('../base.presenter.js')
-const CompensationChargeTransactionPresenter = require('./compensation-charge-transaction.presenter.js')
-const MinimumChargeTransactionPresenter = require('./minimum-charge-transaction.presenter.js')
-const StandardChargeTransactionPresenter = require('./standard-charge-transaction.presenter.js')
+const ViewCompensationChargeTransactionPresenter = require('./view-compensation-charge-transaction.presenter.js')
+const ViewMinimumChargeTransactionPresenter = require('./view-minimum-charge-transaction.presenter.js')
+const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-transaction.presenter.js')
 
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
@@ -85,14 +85,14 @@ function _transactions (transactions) {
     const { chargeType } = transaction
 
     if (chargeType === 'minimum_charge') {
-      return MinimumChargeTransactionPresenter.go(transaction)
+      return ViewMinimumChargeTransactionPresenter.go(transaction)
     }
 
     if (chargeType === 'compensation') {
-      return CompensationChargeTransactionPresenter.go(transaction)
+      return ViewCompensationChargeTransactionPresenter.go(transaction)
     }
 
-    return StandardChargeTransactionPresenter.go(transaction)
+    return ViewStandardChargeTransactionPresenter.go(transaction)
   })
 }
 

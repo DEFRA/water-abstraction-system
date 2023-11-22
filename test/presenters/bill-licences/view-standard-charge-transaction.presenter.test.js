@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const StandardChargeTransactionPresenter = require('../../../app/presenters/bill-licences/standard-charge-transaction.presenter.js')
+const ViewStandardChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js')
 
-describe('Standard Charge Transaction presenter', () => {
+describe('View Standard Charge Transaction presenter', () => {
   let transaction
 
   describe('when provided with an SROC standard charge transaction', () => {
@@ -24,7 +24,7 @@ describe('Standard Charge Transaction presenter', () => {
       })
 
       it('returns the credit and debit properties correctly', () => {
-        const result = StandardChargeTransactionPresenter.go(transaction)
+        const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
         expect(result.creditAmount).to.equal('£1,162.00')
         expect(result.debitAmount).to.equal('')
@@ -37,7 +37,7 @@ describe('Standard Charge Transaction presenter', () => {
       })
 
       it('returns the credit and debit properties correctly', () => {
-        const result = StandardChargeTransactionPresenter.go(transaction)
+        const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
         expect(result.creditAmount).to.equal('')
         expect(result.debitAmount).to.equal('£1,162.00')
@@ -57,7 +57,7 @@ describe('Standard Charge Transaction presenter', () => {
           })
 
           it("returns 'Supported source Candover (£-145.67)'", () => {
-            const result = StandardChargeTransactionPresenter.go(transaction)
+            const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
             expect(result.additionalCharges).to.equal('Supported source Candover (£-145.67)')
           })
@@ -69,7 +69,7 @@ describe('Standard Charge Transaction presenter', () => {
           })
 
           it("returns 'Supported source Candover (£145.67)'", () => {
-            const result = StandardChargeTransactionPresenter.go(transaction)
+            const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
             expect(result.additionalCharges).to.equal('Supported source Candover (£145.67)')
           })
@@ -82,7 +82,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Public Water Supply'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.additionalCharges).to.equal('Public Water Supply')
         })
@@ -96,7 +96,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Public Water Supply'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.additionalCharges).to.equal('Supported source Candover (£145.67), Public Water Supply')
         })
@@ -110,7 +110,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Aggregate factor (0.75)'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.adjustments).to.equal('Aggregate factor (0.75)')
         })
@@ -122,7 +122,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Adjustment factor (0.75)'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.adjustments).to.equal('Adjustment factor (0.75)')
         })
@@ -134,7 +134,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Abatement factor (0.75)'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.adjustments).to.equal('Abatement factor (0.75)')
         })
@@ -146,7 +146,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Two-part tariff (0.5)'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.adjustments).to.equal('Two-part tariff (0.5)')
         })
@@ -158,7 +158,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Canal and River Trust (0.5)'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.adjustments).to.equal('Canal and River Trust (0.5)')
         })
@@ -170,7 +170,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Winter discount (0.5)'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.adjustments).to.equal('Winter discount (0.5)')
         })
@@ -184,7 +184,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it('returns the adjustment descriptions combined', () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.adjustments).to.equal('Adjustment factor (0.75), Two-part tariff (0.5), Winter discount (0.5)')
         })
@@ -193,7 +193,7 @@ describe('Standard Charge Transaction presenter', () => {
 
     describe("'chargeElements' property", () => {
       it('returns the purpose, abstraction period and volume for each element linked via the charge reference', () => {
-        const result = StandardChargeTransactionPresenter.go(transaction)
+        const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
         expect(result.chargeElements).to.equal([
           {
@@ -212,14 +212,14 @@ describe('Standard Charge Transaction presenter', () => {
 
     describe("'chargeReference' property", () => {
       it("returns the charge category combined with the base line charge '4.5.13 (£11.62)'", () => {
-        const result = StandardChargeTransactionPresenter.go(transaction)
+        const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
         expect(result.chargeReference).to.equal('4.5.13 (£11.62)')
       })
     })
 
     it('correctly presents the data', () => {
-      const result = StandardChargeTransactionPresenter.go(transaction)
+      const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
       expect(result).to.equal({
         additionalCharges: '',
@@ -260,7 +260,7 @@ describe('Standard Charge Transaction presenter', () => {
       })
 
       it('returns the credit property populated and the debit empty', () => {
-        const result = StandardChargeTransactionPresenter.go(transaction)
+        const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
         expect(result.creditAmount).to.equal('£1,162.00')
         expect(result.debitAmount).to.equal('')
@@ -273,7 +273,7 @@ describe('Standard Charge Transaction presenter', () => {
       })
 
       it('returns the debit property populated and the credit empty', () => {
-        const result = StandardChargeTransactionPresenter.go(transaction)
+        const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
         expect(result.creditAmount).to.equal('')
         expect(result.debitAmount).to.equal('£1,162.00')
@@ -287,7 +287,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it("returns 'Two-part tariff'", () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.agreement).to.equal('Two-part tariff')
         })
@@ -299,7 +299,7 @@ describe('Standard Charge Transaction presenter', () => {
         })
 
         it('returns null', () => {
-          const result = StandardChargeTransactionPresenter.go(transaction)
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
           expect(result.agreement).to.be.null()
         })
@@ -308,7 +308,7 @@ describe('Standard Charge Transaction presenter', () => {
 
     describe("the 'chargeElement' property", () => {
       it('returns the purpose, abstraction period, source, season and loss for the transaction', () => {
-        const result = StandardChargeTransactionPresenter.go(transaction)
+        const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
         expect(result.chargeElement).to.equal({
           purpose: 'Trickle Irrigation - Direct',
@@ -321,7 +321,7 @@ describe('Standard Charge Transaction presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = StandardChargeTransactionPresenter.go(transaction)
+      const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
       expect(result).to.equal({
         agreement: null,

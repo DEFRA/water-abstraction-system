@@ -2,7 +2,7 @@
 
 /**
  * Formats data for minimum charge transaction for the bill-licence page
- * @module MinimumChargeTransactionPresenter
+ * @module ViewMinimumChargeTransactionPresenter
  */
 
 const { formatMoney } = require('../base.presenter.js')
