@@ -21,6 +21,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}',
+    handler: BillRunsController.view,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'View a bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.review,
     options: {
