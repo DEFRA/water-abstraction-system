@@ -28,7 +28,7 @@ class FormLogModel extends BaseModel {
         modelClass: 'return-submission.model',
         join: {
           from: 'formLogs.id',
-          to: 'returnsubmissions.formLogId'
+          to: 'returnSubmissions.formLogId'
         }
       }
     }

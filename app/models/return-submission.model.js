@@ -27,7 +27,7 @@ class ReturnSubmissionModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'form-log.model',
         join: {
-          from: 'returnsubmissions.formLogId',
+          from: 'returnSubmissions.formLogId',
           to: 'formLogs.id'
         }
       },

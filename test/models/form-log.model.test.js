@@ -16,7 +16,7 @@ const ReturnSubmissionModel = require('../../app/models/return-submission.model.
 // Thing under test
 const FormLogModel = require('../../app/models/form-log.model.js')
 
-describe.only('Form Log model', () => {
+describe('Form Log model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -25,7 +25,7 @@ describe.only('Form Log model', () => {
     testRecord = await FormLogHelper.add()
   })
 
-  describe.only('Basic query', () => {
+  describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
       const result = await FormLogModel.query().findById(testRecord.id)
 
@@ -39,12 +39,12 @@ describe.only('Form Log model', () => {
       let returnSubmissions
 
       beforeEach(async () => {
-        const { id } = testRecord
+        const { id: formLogId } = testRecord
 
         returnSubmissions = []
         for (let i = 0; i < 2; i++) {
           const version = i
-          const returnSubmission = await ReturnSubmissionHelper.add({ id, version })
+          const returnSubmission = await ReturnSubmissionHelper.add({ formLogId, version })
           returnSubmissions.push(returnSubmission)
         }
       })
