@@ -2,7 +2,7 @@
 
 /**
  * Formats summary data of licences connected to a bill for the multi-licence bill page
- * @module LicenceSummariesPresenter
+ * @module ViewLicenceSummariesPresenter
  */
 
 const { formatMoney } = require('../base.presenter.js')

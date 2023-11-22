@@ -11,9 +11,9 @@ const { expect } = Code
 const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
 
 // Thing under test
-const BillPresenter = require('../../../app/presenters/bills/bill.presenter.js')
+const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
 
-describe('Bill presenter', () => {
+describe('View Bill presenter', () => {
   let bill
   let billingAccount
 
@@ -24,7 +24,7 @@ describe('Bill presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = BillPresenter.go(bill, billingAccount)
+      const result = ViewBillPresenter.go(bill, billingAccount)
 
       expect(result).to.equal({
         accountName: 'Wessex Water Services Ltd',
@@ -56,7 +56,7 @@ describe('Bill presenter', () => {
     describe("the 'accountName' property", () => {
       describe('when the billing account is not linked to an agent', () => {
         it('returns the name of the company linked to the billing account', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.accountName).to.equal('Wessex Water Services Ltd')
         })
@@ -72,7 +72,7 @@ describe('Bill presenter', () => {
         })
 
         it('returns the name of the agent company', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.accountName).to.equal('Alan Broke')
         })
@@ -82,7 +82,7 @@ describe('Bill presenter', () => {
     describe("the 'addressLines' property", () => {
       describe('when the billing account address contains blank elements', () => {
         it('returns an array of only the set elements', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.addressLines).to.equal(['86 Oxford Road', 'WOOTTON', 'COURTENAY', 'TA24 8NX'])
         })
@@ -92,7 +92,7 @@ describe('Bill presenter', () => {
     describe("the 'billRunType' property", () => {
       describe('when the bill run is annual', () => {
         it('returns Annual', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.billRunType).to.equal('Annual')
         })
@@ -104,7 +104,7 @@ describe('Bill presenter', () => {
         })
 
         it('returns Supplementary', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.billRunType).to.equal('Supplementary')
         })
@@ -117,7 +117,7 @@ describe('Bill presenter', () => {
 
         describe('and the scheme is sroc', () => {
           it('returns Supplementary', () => {
-            const result = BillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter.go(bill, billingAccount)
 
             expect(result.billRunType).to.equal('Two-part tariff')
           })
@@ -130,7 +130,7 @@ describe('Bill presenter', () => {
 
           describe('and it is not summer only', () => {
             it('returns Supplementary', () => {
-              const result = BillPresenter.go(bill, billingAccount)
+              const result = ViewBillPresenter.go(bill, billingAccount)
 
               expect(result.billRunType).to.equal('Two-part tariff winter and all year')
             })
@@ -142,7 +142,7 @@ describe('Bill presenter', () => {
             })
 
             it('returns Supplementary', () => {
-              const result = BillPresenter.go(bill, billingAccount)
+              const result = ViewBillPresenter.go(bill, billingAccount)
 
               expect(result.billRunType).to.equal('Two-part tariff summer')
             })
@@ -154,7 +154,7 @@ describe('Bill presenter', () => {
     describe("the 'billTotal' property", () => {
       describe('when the bill is a debit', () => {
         it('returns just the bill total formatted as money', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.billTotal).to.equal('£213,178.00')
         })
@@ -166,7 +166,7 @@ describe('Bill presenter', () => {
         })
 
         it("returns the bill total formatted as money plus 'credit' as a suffix", () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.billTotal).to.equal('£213,178.00 credit')
         })
@@ -176,7 +176,7 @@ describe('Bill presenter', () => {
     describe("the 'chargeScheme' property", () => {
       describe('when the bill run is sroc', () => {
         it('returns Current', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.chargeScheme).to.equal('Current')
         })
@@ -188,7 +188,7 @@ describe('Bill presenter', () => {
         })
 
         it('returns Old', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.chargeScheme).to.equal('Old')
         })
@@ -198,7 +198,7 @@ describe('Bill presenter', () => {
     describe("the 'contactName' property", () => {
       describe('when the billing account is linked not linked to a contact', () => {
         it('returns null', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.contactName).to.be.null()
         })
@@ -223,7 +223,7 @@ describe('Bill presenter', () => {
         })
 
         it('returns the properly formatted contact name', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.contactName).to.equal('Mrs M J Villar MBE')
         })
@@ -233,7 +233,7 @@ describe('Bill presenter', () => {
     describe("the 'creditsTotal' property", () => {
       describe('when the bill run was created in WRLS', () => {
         it("returns the 'creditNoteValue' of the bill (£0.00)", () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.creditsTotal).to.equal('£0.00')
         })
@@ -246,7 +246,7 @@ describe('Bill presenter', () => {
 
         describe("and 'netAmount' on the bill is 21317800", () => {
           it('returns £0.00', () => {
-            const result = BillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter.go(bill, billingAccount)
 
             expect(result.creditsTotal).to.equal('£0.00')
           })
@@ -258,7 +258,7 @@ describe('Bill presenter', () => {
           })
 
           it('returns £213,178.00', () => {
-            const result = BillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter.go(bill, billingAccount)
 
             expect(result.creditsTotal).to.equal('£213,178.00')
           })
@@ -270,7 +270,7 @@ describe('Bill presenter', () => {
           })
 
           it('returns £0.00', () => {
-            const result = BillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter.go(bill, billingAccount)
 
             expect(result.creditsTotal).to.equal('£0.00')
           })
@@ -281,7 +281,7 @@ describe('Bill presenter', () => {
     describe("the 'debitsTotal' property", () => {
       describe('when the bill run was created in WRLS', () => {
         it("returns the 'invoiceValue' of the bill (£213,178.00)", () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.debitsTotal).to.equal('£213,178.00')
         })
@@ -294,7 +294,7 @@ describe('Bill presenter', () => {
 
         describe("and 'netAmount' on the bill is 21317800", () => {
           it('returns £213,178.00', () => {
-            const result = BillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter.go(bill, billingAccount)
 
             expect(result.debitsTotal).to.equal('£213,178.00')
           })
@@ -306,7 +306,7 @@ describe('Bill presenter', () => {
           })
 
           it('returns £0.00', () => {
-            const result = BillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter.go(bill, billingAccount)
 
             expect(result.debitsTotal).to.equal('£0.00')
           })
@@ -318,7 +318,7 @@ describe('Bill presenter', () => {
           })
 
           it('returns £0.00', () => {
-            const result = BillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter.go(bill, billingAccount)
 
             expect(result.debitsTotal).to.equal('£0.00')
           })
@@ -329,7 +329,7 @@ describe('Bill presenter', () => {
     describe("the 'displayCreditDebitTotals' property", () => {
       describe('when the bill run is not supplementary', () => {
         it('returns false', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.displayCreditDebitTotals).to.be.false()
         })
@@ -341,7 +341,7 @@ describe('Bill presenter', () => {
         })
 
         it('returns true', () => {
-          const result = BillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.displayCreditDebitTotals).to.be.true()
         })
@@ -350,7 +350,7 @@ describe('Bill presenter', () => {
 
     describe("the 'financialYear' property", () => {
       it('returns the bill run start and end financial year', () => {
-        const result = BillPresenter.go(bill, billingAccount)
+        const result = ViewBillPresenter.go(bill, billingAccount)
 
         expect(result.financialYear).to.equal('2022 to 2023')
       })
@@ -358,7 +358,7 @@ describe('Bill presenter', () => {
 
     describe("the 'region' property", () => {
       it("returns the bill run's region display name capitalized", () => {
-        const result = BillPresenter.go(bill, billingAccount)
+        const result = ViewBillPresenter.go(bill, billingAccount)
 
         expect(result.region).to.equal('South West')
       })

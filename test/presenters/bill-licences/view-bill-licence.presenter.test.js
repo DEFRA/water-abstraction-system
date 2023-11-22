@@ -9,9 +9,9 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const CompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/compensation-charge-transaction.presenter.js')
-const MinimumChargeTransactionPresenter = require('../../../app/presenters/bill-licences/minimum-charge-transaction.presenter.js')
-const StandardChargeTransactionPresenter = require('../../../app/presenters/bill-licences/standard-charge-transaction.presenter.js')
+const ViewCompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
+const ViewMinimumChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js')
+const ViewStandardChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js')
 
 // Thing under test
 const ViewBillLicencePresenter = require('../../../app/presenters/bill-licences/view-bill-licence.presenter.js')
@@ -27,9 +27,9 @@ describe('View Bill Licence presenter', () => {
     beforeEach(() => {
       billLicence = _testBillLicence()
 
-      Sinon.stub(CompensationChargeTransactionPresenter, 'go').returns({ chargeType: 'compensation' })
-      Sinon.stub(MinimumChargeTransactionPresenter, 'go').returns({ chargeType: 'minimum_charge' })
-      Sinon.stub(StandardChargeTransactionPresenter, 'go').returns({ chargeType: 'standard' })
+      Sinon.stub(ViewCompensationChargeTransactionPresenter, 'go').returns({ chargeType: 'compensation' })
+      Sinon.stub(ViewMinimumChargeTransactionPresenter, 'go').returns({ chargeType: 'minimum_charge' })
+      Sinon.stub(ViewStandardChargeTransactionPresenter, 'go').returns({ chargeType: 'standard' })
     })
 
     describe("the 'displayCreditDebitTotals' property", () => {

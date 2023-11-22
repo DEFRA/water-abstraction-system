@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const BillPresenter = require('../../../app/presenters/bills/bill.presenter.js')
 const FetchBillingAccountService = require('../../../app/services/bills/fetch-billing-account.service.js')
 const FetchBillService = require('../../../app/services/bills/fetch-bill-service.js')
-const LicenceSummariesPresenter = require('../../../app/presenters/bills/licence-summaries.presenter.js')
+const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
+const ViewLicenceSummariesPresenter = require('../../../app/presenters/bills/view-licence-summaries.presenter.js')
 const ViewBillLicencePresenter = require('../../../app/presenters/bill-licences/view-bill-licence.presenter.js')
 
 // Thing under test
@@ -41,11 +41,11 @@ describe('View Bill service', () => {
           }
         )
 
-        Sinon.stub(BillPresenter, 'go').returns({
+        Sinon.stub(ViewBillPresenter, 'go').returns({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
         })
 
-        Sinon.stub(LicenceSummariesPresenter, 'go').returns(
+        Sinon.stub(ViewLicenceSummariesPresenter, 'go').returns(
           {
             billLicences: [
               {
@@ -100,7 +100,7 @@ describe('View Bill service', () => {
           }
         )
 
-        Sinon.stub(BillPresenter, 'go').returns({
+        Sinon.stub(ViewBillPresenter, 'go').returns({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
         })
 
