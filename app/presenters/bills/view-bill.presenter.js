@@ -2,7 +2,7 @@
 
 /**
  * Formats bill data ready for presenting in the single licence bill and multi licence bill pages
- * @module BillPresenter
+ * @module ViewBillPresenter
  */
 
 const {

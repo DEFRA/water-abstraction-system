@@ -2,7 +2,7 @@
 
 /**
  * Formats data for a standard charge transaction for the bill-licence page
- * @module StandardChargeTransactionPresenter
+ * @module ViewStandardChargeTransactionPresenter
  */
 
 const {
