@@ -4,6 +4,7 @@
  * @module ReturnLogHelper
  */
 
+const { generateLicenceRef } = require('./water/licence.helper.js')
 const { randomInteger } = require('./general.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 
@@ -44,7 +45,7 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const licenceRef = data.licenceRef ? data.licenceRef : _generateLicenceRef()
+  const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const returnRequirement = data.returnRequirement ? data.returnRequirement : randomInteger(10000000, 19999999)
 
   const defaults = {
@@ -74,7 +75,7 @@ function generateReturnLogId (
   returnRequirement
 ) {
   if (!licenceRef) {
-    licenceRef = _generateLicenceRef()
+    licenceRef = generateLicenceRef()
   }
 
   if (!returnRequirement) {
@@ -82,16 +83,6 @@ function generateReturnLogId (
   }
 
   return `v${version}:1:${licenceRef}:${returnRequirement}:${startDate}:${endDate}`
-}
-
-function _generateLicenceRef () {
-  const part1 = randomInteger(1, 9)
-  const part2 = randomInteger(10, 99)
-  const part3 = randomInteger(10, 99)
-  const part4 = randomInteger(10, 99)
-  const part5 = randomInteger(1000, 9999)
-
-  return `${part1}/${part2}/${part3}/${part4}/${part5}`
 }
 
 module.exports = {
