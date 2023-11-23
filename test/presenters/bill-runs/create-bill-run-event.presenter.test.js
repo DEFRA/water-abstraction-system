@@ -14,7 +14,7 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
 
 // Thing under test
-const CreateBillRunEventPresenter = require('../../../app/presenters/billing/create-bill-run-event.presenter.js')
+const CreateBillRunEventPresenter = require('../../../app/presenters/bill-runs/create-bill-run-event.presenter.js')
 
 describe('Create Bill Run Event presenter', () => {
   beforeEach(async () => {

@@ -6,7 +6,7 @@
  */
 
 const DetermineBillingPeriodsService = require('./determine-billing-periods.service.js')
-const CreateBillRunPresenter = require('../../presenters/billing/create-bill-run.presenter.js')
+const CreateBillRunPresenter = require('../../presenters/bill-runs/create-bill-run.presenter.js')
 const InitiateBillRunService = require('./initiate-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('./supplementary/process-bill-run.service.js')
 const TwoPartTariffMatchAndAllocateService = require('./two-part-tariff/match-and-allocate.service.js')

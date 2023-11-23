@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const LicenceSummariesPresenter = require('../../../app/presenters/bills/licence-summaries.presenter.js')
+const ViewLicenceSummariesPresenter = require('../../../app/presenters/bills/view-licence-summaries.presenter.js')
 
-describe('Licence Summaries presenter', () => {
+describe('View Licence Summaries presenter', () => {
   let licenceSummaries
 
   describe('when provided with a populated licence summaries', () => {
@@ -19,7 +19,7 @@ describe('Licence Summaries presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = LicenceSummariesPresenter.go(licenceSummaries)
+      const result = ViewLicenceSummariesPresenter.go(licenceSummaries)
 
       expect(result).to.equal({
         billLicences: [
@@ -52,7 +52,7 @@ describe('Licence Summaries presenter', () => {
         })
 
         it('returns the count and caption singular', () => {
-          const result = LicenceSummariesPresenter.go(singularLicenceSummary)
+          const result = ViewLicenceSummariesPresenter.go(singularLicenceSummary)
 
           expect(result.tableCaption).to.equal('1 licence')
         })
@@ -60,7 +60,7 @@ describe('Licence Summaries presenter', () => {
 
       describe('when there are multiple licence summaries', () => {
         it('returns the count and caption pluralised', () => {
-          const result = LicenceSummariesPresenter.go(licenceSummaries)
+          const result = ViewLicenceSummariesPresenter.go(licenceSummaries)
 
           expect(result.tableCaption).to.equal('3 licences')
         })
