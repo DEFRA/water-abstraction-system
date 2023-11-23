@@ -140,6 +140,8 @@ async function _fetchReturnsForLicence (licenceRef, billingPeriod) {
       ref('metadata:description').castText().as('description'),
       'startDate',
       'endDate',
+      'dueDate',
+      'receivedDate',
       'status',
       'underQuery',
       ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
