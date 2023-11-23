@@ -26,6 +26,9 @@ function go (licences, billingPeriod) {
       if (chargeVersion.chargePeriod.startDate) {
         chargeReferences.forEach((chargeReference, chargeReferenceIndex) => {
           chargeReference.id = `R${chargeReferenceIndex + 1}-${chargeVersion.id}`
+          if (!chargeReference.aggregate) {
+            chargeReference.aggregate = 1
+          }
 
           const { chargeElements } = chargeReference
 
@@ -48,8 +51,6 @@ function go (licences, billingPeriod) {
 }
 
 function _prepChargeElement (chargeElement, chargePeriod) {
-  console.log('🚀 ~ file: allocate-returns.service.js:49 ~ _prepChargeElement ~ chargePeriod:', chargePeriod)
-  console.log('🚀 ~ file: allocate-returns.service.js:50 ~ _prepChargeElement ~ chargeElement:', chargeElement)
   const {
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
