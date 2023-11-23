@@ -48,4 +48,48 @@ describe('RequestLib', () => {
       expect(result).to.equal('2015-10-21T20:31:57.000Z')
     })
   })
+
+  describe.only('#periodsOverlap', () => {
+    let referencePeriod
+    let checkPeriod
+    describe('when given dates that do not overlap', () => {
+      beforeEach(() => {
+        referencePeriod = [{
+          startDate: new Date('2023-02-01'),
+          endDate: new Date('2023-02-02')
+        }]
+
+        checkPeriod = [{
+          startDate: new Date('2023-01-01'),
+          endDate: new Date('2023-01-31')
+        }]
+      })
+
+      it('returns false', () => {
+        const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
+
+        expect(result).to.equal(false)
+      })
+    })
+
+    describe('when given dates that do overlap', () => {
+      beforeEach(() => {
+        referencePeriod = [{
+          startDate: new Date('2023-01-01'),
+          endDate: new Date('2023-01-02')
+        }]
+
+        checkPeriod = [{
+          startDate: new Date('2023-01-01'),
+          endDate: new Date('2023-01-31')
+        }]
+      })
+
+      it('returns true', () => {
+        const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
+
+        expect(result).to.equal(true)
+      })
+    })
+  })
 })
