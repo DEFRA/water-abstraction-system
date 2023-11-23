@@ -52,6 +52,7 @@ describe('Fetch Returns for Licence service', () => {
       beforeEach(async () => {
         const { returnId } = returnRecord
         const { versionId } = await VersionHelper.add({ returnId })
+
         await LineHelper.add({ versionId, startDate: new Date('2022-05-01'), endDate: new Date('2022-05-07'), quantity: 1234 })
         await LineHelper.add({ versionId, startDate: new Date('2022-05-08'), endDate: new Date('2022-05-14'), quantity: 5678 })
       })
@@ -91,6 +92,7 @@ describe('Fetch Returns for Licence service', () => {
       beforeEach(async () => {
         const { returnId } = returnRecord
         const { versionId } = await VersionHelper.add({ returnId })
+
         await LineHelper.add({ versionId, startDate: new Date('2023-05-01'), endDate: new Date('2023-05-07'), quantity: 1234 })
         await LineHelper.add({ versionId, startDate: new Date('2023-05-08'), endDate: new Date('2023-05-14'), quantity: 5678 })
       })
@@ -108,6 +110,7 @@ describe('Fetch Returns for Licence service', () => {
     describe('which is a nil return', () => {
       beforeEach(async () => {
         const { returnId } = returnRecord
+
         await VersionHelper.add({ returnId, nilReturn: true })
       })
 
@@ -130,6 +133,7 @@ describe('Fetch Returns for Licence service', () => {
       beforeEach(async () => {
         returnRecord = await ReturnHelper.add({ startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') })
         const { returnId } = returnRecord
+
         await VersionHelper.add({ returnId })
       })
 
@@ -164,6 +168,7 @@ describe('Fetch Returns for Licence service', () => {
 
         returnRecord = await ReturnHelper.add({ metadata })
         const { returnId } = returnRecord
+
         await VersionHelper.add({ returnId })
       })
 
