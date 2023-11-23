@@ -49,9 +49,10 @@ describe('RequestLib', () => {
     })
   })
 
-  describe.only('#periodsOverlap', () => {
+  describe('#periodsOverlap', () => {
     let referencePeriod
     let checkPeriod
+
     describe('when given dates that do not overlap', () => {
       beforeEach(() => {
         referencePeriod = [{
