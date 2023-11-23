@@ -28,6 +28,30 @@ function generateUUID () {
 }
 
 /**
+ * Checks if any of the periods in checkPeriods overlap with any period in referencePeriods
+ * @param {*} referencePeriods Array of objects representing periods with startDate and endDate properties
+ * @param {*} checkPeriods Array of objects representing periods to check with startDate and endDate properties
+ * @returns Returns true if there is an overlap, otherwise false
+ */
+function periodsOverlap (referencePeriods, checkPeriods) {
+  for (const referencePeriod of referencePeriods) {
+    const overLappingPeriods = checkPeriods.filter((checkPeriod) => {
+      if (checkPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > checkPeriod.endDate) {
+        return false
+      }
+
+      return true
+    })
+
+    if (overLappingPeriods.length) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
  * Returns the current date and time as an ISO string
  *
  * We can't use Date.now() because Javascript returns the time since the epoch in milliseconds, whereas a PostgreSQL
@@ -44,5 +68,6 @@ function timestampForPostgres () {
 
 module.exports = {
   generateUUID,
+  periodsOverlap,
   timestampForPostgres
 }
