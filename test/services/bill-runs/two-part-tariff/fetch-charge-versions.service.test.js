@@ -39,9 +39,7 @@ describe('Fetch Charge Versions service', () => {
         endDate: new Date('2023-03-31')
       }
 
-      licence = await LicenceHelper.add({
-        regionId
-      })
+      licence = await LicenceHelper.add({ regionId })
     })
 
     describe('and the scheme is SROC', () => {
