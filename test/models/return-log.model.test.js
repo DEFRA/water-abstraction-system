@@ -35,7 +35,7 @@ describe('Return Log model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to return submission', () => {
+    describe('when linking to return submissions', () => {
       let returnSubmissions
 
       beforeEach(async () => {
