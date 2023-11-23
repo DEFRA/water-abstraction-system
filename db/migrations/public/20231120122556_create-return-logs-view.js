@@ -1,6 +1,6 @@
 'use strict'
 
-const viewName = 'form_logs'
+const viewName = 'return_logs'
 
 exports.up = function (knex) {
   return knex
