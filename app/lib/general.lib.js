@@ -27,6 +27,24 @@ function generateUUID () {
   return randomUUID({ disableEntropyCache: true })
 }
 
+function periodsOverlap (referencePeriods, checkPeriods) {
+  for (const referencePeriod of referencePeriods) {
+    const overLappingPeriods = checkPeriods.filter((checkPeriod) => {
+      if (checkPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > checkPeriod.endDate) {
+        return false
+      }
+
+      return true
+    })
+
+    if (overLappingPeriods.length) {
+      return true
+    }
+  }
+
+  return false
+}
+
 /**
  * Returns the current date and time as an ISO string
  *
@@ -44,5 +62,6 @@ function timestampForPostgres () {
 
 module.exports = {
   generateUUID,
+  periodsOverlap,
   timestampForPostgres
 }

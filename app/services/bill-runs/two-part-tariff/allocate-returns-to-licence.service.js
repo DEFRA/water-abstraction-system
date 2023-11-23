@@ -5,6 +5,8 @@
  * @module AllocateReturnsToLicenceService
  */
 
+const { periodsOverlap } = require('../../../lib/general.lib.js')
+
 function go (licences) {
   licences.forEach((licence) => {
     const { chargeVersions, returns } = licence
@@ -118,7 +120,7 @@ function _matchLines (chargeElement, returnLines) {
     }
 
     const { startDate, endDate } = returnLine
-    return _periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
+    return periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
   })
 }
 
@@ -137,26 +139,8 @@ function _matchReturns (chargeElement, returns) {
       return false
     }
 
-    return _periodsOverlap(elementPeriods, returnPeriods)
+    return periodsOverlap(elementPeriods, returnPeriods)
   })
-}
-
-function _periodsOverlap (elementPeriods, returnPeriods) {
-  for (const elementPeriod of elementPeriods) {
-    const overLappingPeriods = returnPeriods.filter((returnPeriod) => {
-      if (returnPeriod.startDate > elementPeriod.endDate || elementPeriod.startDate > returnPeriod.endDate) {
-        return false
-      }
-
-      return true
-    })
-
-    if (overLappingPeriods.length) {
-      return true
-    }
-  }
-
-  return false
 }
 
 module.exports = {

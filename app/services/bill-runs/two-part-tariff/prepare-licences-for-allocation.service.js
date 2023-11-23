@@ -8,6 +8,7 @@
 const DetermineAbstractionPeriodService = require('../../check/determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 const FetchReturnsForLicenceService = require('./fetch-returns-for-licence.service.js')
+const { periodsOverlap } = require('../../../lib/general.lib.js')
 
 async function go (licences, billingPeriod) {
   for (const licence of licences) {
@@ -39,6 +40,12 @@ async function go (licences, billingPeriod) {
       }
     })
   }
+}
+
+function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
+  const { startDate, endDate } = returnLine
+
+  return !periodsOverlap(returnAbstractionPeriods, [{ startDate, endDate }])
 }
 
 function _prepChargeElementsForMatching (chargeElements, chargePeriod) {
@@ -76,7 +83,12 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
     )
 
     let totalQty = 0
+    let abstractionOutsidePeriod = false
+
     returnRecord.versions[0]?.lines.forEach((line) => {
+      if (!abstractionOutsidePeriod) {
+        abstractionOutsidePeriod = _abstractionOutsidePeriod(abstractionPeriods, line)
+      }
       line.unallocated = line.quantity / 1000
       totalQty += line.unallocated
     })
@@ -84,6 +96,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
     returnRecord.allocatedQuantity = 0
     returnRecord.totalQuantity = totalQty
     returnRecord.abstractionPeriods = abstractionPeriods
+    returnRecord.abstractionOutsidePeriod = abstractionOutsidePeriod
   })
 }
 

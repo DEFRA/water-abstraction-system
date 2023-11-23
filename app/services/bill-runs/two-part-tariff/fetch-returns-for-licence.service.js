@@ -29,6 +29,8 @@ async function _fetch (licenceRef, billingPeriod) {
       ref('metadata:description').castText().as('description'),
       'startDate',
       'endDate',
+      'receivedDate',
+      'dueDate',
       'status',
       'underQuery',
       ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
