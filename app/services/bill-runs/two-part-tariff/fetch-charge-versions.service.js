@@ -35,7 +35,7 @@ async function go (regionId, billingPeriod) {
   return _fetch(regionCode, billingPeriod)
 }
 
-async function _fetch (regionCode, billingPeriod, licenceId) {
+async function _fetch (regionCode, billingPeriod) {
   const chargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.chargeVersionId',
