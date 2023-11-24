@@ -8,6 +8,8 @@
 function go (licences) {
   licences.forEach((licence) => {
     const { chargeVersions, returns } = licence
+    licence.allIssues = []
+
     _determineAndAssignReturnIssues(returns, licence)
 
     chargeVersions.forEach((chargeVersion) => {
@@ -16,19 +18,24 @@ function go (licences) {
       chargeReferences.forEach((chargeReference) => {
         const { chargeElements, aggregate } = chargeReference
 
-        _determineAndAssignChargeElementIssues(chargeElements, aggregate)
+        _determineAndAssignChargeElementIssues(chargeElements, aggregate, licence)
       })
     })
+    _determineAndAssignLicenceIssues(licence)
   })
 }
 
-// function _determineAndAssignLicenceIssues (licence)
+function _determineAndAssignLicenceIssues (licence) {
+  licence.dedupedIssues = [...new Set(licence.allIssues)]
+
+  // Multiple Issues
+  if (licence.dedupedIssues.length > 1) {
+    licence.issues.push('Multiple Issues')
+  }
+}
 
 function _determineAndAssignReturnIssues (returnLogs, licence) {
-  licence.allIssues = []
   returnLogs.forEach((returnLog) => {
-    returnLog.issues = []
-
     // Over abstraction
     const overAbstraction = returnLog.versions[0]?.lines.some((line) => {
       return line.unallocated > 0
@@ -52,15 +59,12 @@ function _determineAndAssignReturnIssues (returnLogs, licence) {
       returnLog.issues.push('No returns received')
     }
 
-    // multiple Issues
-    allIssues.push(returnLog.issues)
-    if (returnLog.issues.length > 1) {
-      licence.issues.push('No returns received')
-    }
+    // This is to keep track of multiple Issues
+    licence.allIssues.push(returnLog.issues)
   })
 }
 
-function _determineAndAssignChargeElementIssues (chargeElements, aggregate) {
+function _determineAndAssignChargeElementIssues (chargeElements, aggregate, licence) {
   chargeElements.forEach((chargeElement) => {
     chargeElement.issues = []
 
@@ -73,6 +77,9 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate) {
     if (aggregate && aggregate !== 1) {
       chargeElement.issues.push('Aggregate')
     }
+
+    // This is to keep track of multiple Issues
+    licence.allIssues.push(chargeElement.issues)
   })
 }
 
