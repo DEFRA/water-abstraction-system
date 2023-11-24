@@ -27,8 +27,8 @@ async function create (request, h) {
   }
 }
 
-async function review (request, h) {
-  return h.view('bill-runs/view.njk', {
+async function review (_request, h) {
+  return h.view('bill-runs/review.njk', {
     pageTitle: 'Review Two Part Tariff SROC',
     activeNavBar: 'bill-runs'
   })
