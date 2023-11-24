@@ -5,9 +5,10 @@
  * @module MatchAndAllocateService
  */
 
-const FetchLicencesService = require('./fetch-licences.service.js')
 
 const AllocateReturnsToLicenceService = require('./allocate-returns-to-licence.service.js')
+const DetermineIssuesService = require('./determine-issues.service.js')
+const FetchLicencesService = require('./fetch-licences.service.js')
 const PrepareLicencesForAllocationService = require('./prepare-licences-for-allocation.service.js')
 
 /**
@@ -23,6 +24,8 @@ async function go (billRun, billingPeriods, licenceId) {
 
   await PrepareLicencesForAllocationService.go(licences, billingPeriods[0])
   AllocateReturnsToLicenceService.go(licences)
+
+  DetermineIssuesService.go(licences)
 
   _calculateAndLogTime(startTime)
 
