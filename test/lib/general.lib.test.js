@@ -53,7 +53,7 @@ describe('RequestLib', () => {
     let referencePeriod
     let checkPeriod
 
-    describe('when given dates that do not overlap', () => {
+    describe('when given periods that do not overlap', () => {
       beforeEach(() => {
         referencePeriod = [{
           startDate: new Date('2023-02-01'),
@@ -73,16 +73,96 @@ describe('RequestLib', () => {
       })
     })
 
-    describe('when given dates that do overlap', () => {
+    describe('when a check period overlaps the start of a reference period', () => {
+      beforeEach(() => {
+        referencePeriod = [{
+          startDate: new Date('2023-02-01'),
+          endDate: new Date('2023-02-28')
+        }]
+
+        checkPeriod = [{
+          startDate: new Date('2023-01-15'),
+          endDate: new Date('2023-02-15')
+        }]
+      })
+
+      it('returns true', () => {
+        const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
+
+        expect(result).to.equal(true)
+      })
+    })
+
+    describe('when a check period overlaps the end of a reference period', () => {
       beforeEach(() => {
         referencePeriod = [{
           startDate: new Date('2023-01-01'),
-          endDate: new Date('2023-01-02')
+          endDate: new Date('2023-01-31')
+        }]
+
+        checkPeriod = [{
+          startDate: new Date('2023-01-15'),
+          endDate: new Date('2023-02-15')
+        }]
+      })
+
+      it('returns true', () => {
+        const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
+
+        expect(result).to.equal(true)
+      })
+    })
+
+    describe('when a reference period is completely inside a check period', () => {
+      beforeEach(() => {
+        referencePeriod = [{
+          startDate: new Date('2023-02-01'),
+          endDate: new Date('2023-02-15')
         }]
 
         checkPeriod = [{
           startDate: new Date('2023-01-01'),
-          endDate: new Date('2023-01-31')
+          endDate: new Date('2023-02-28')
+        }]
+      })
+
+      it('returns true', () => {
+        const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
+
+        expect(result).to.equal(true)
+      })
+    })
+
+    describe('when a check period is completely inside a reference period', () => {
+      beforeEach(() => {
+        referencePeriod = [{
+          startDate: new Date('2023-01-01'),
+          endDate: new Date('2023-02-28')
+        }]
+
+        checkPeriod = [{
+          startDate: new Date('2023-02-01'),
+          endDate: new Date('2023-02-15')
+        }]
+      })
+
+      it('returns true', () => {
+        const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
+
+        expect(result).to.equal(true)
+      })
+    })
+
+    describe('when the periods are the same', () => {
+      beforeEach(() => {
+        referencePeriod = [{
+          startDate: new Date('2023-02-01'),
+          endDate: new Date('2023-02-28')
+        }]
+
+        checkPeriod = [{
+          startDate: new Date('2023-02-01'),
+          endDate: new Date('2023-02-28')
         }]
       })
 

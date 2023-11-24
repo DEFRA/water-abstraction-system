@@ -28,10 +28,33 @@ function generateUUID () {
 }
 
 /**
- * Checks if any of the periods in checkPeriods overlap with any period in referencePeriods
- * @param {*} referencePeriods Array of objects representing periods with startDate and endDate properties
- * @param {*} checkPeriods Array of objects representing periods to check with startDate and endDate properties
- * @returns Returns true if there is an overlap, otherwise false
+ * Tests if one set of periods (represented by a start and end date) overlaps with another
+ *
+ * Added as part of two-part tariff and the need to match returns and lines to charge elements. A common complication in
+ * WRLS is the need to convert an abstract period, for example '1 Nov to 31 Mar' to a concrete period (2023-11-01 to
+ * 2024-03-31). It gets even more complex when the period crosses over another, for example the start or end of a
+ * billing period. Then the only way to represent the abstract period in a usable way is as 2 separate periods. Hence
+ * this service deals with arrays of periods.
+ *
+ * > See the comments for `DetermineAbstractionPeriodService` to better understand the complexity of going from
+ * > abstract to concrete periods
+ *
+ * Then there are times we need to test if the periods of one thing overlap with another. In two-part tariff that's the
+ * abstraction periods of a charge element with those of a return. If _any_ of the periods overlap then the return is
+ * 'matched' and can be allocated to the charge element.
+ *
+ * This method iterates through the `referencePeriods`. It then filters the `checkPeriods` by testing if any of them
+ * overlap with the `referencePeriod`. If any do `checkPeriods.filter()` will return a non-empty array at which point
+ * `periodsOverlap()` will return `true`.
+ *
+ * Else, having compared all the `checkPeriods` against each `referencePeriod` and finding no overlaps the function will
+ * return false.
+ *
+ * @param {Object[]} referencePeriods Each period is an object containing a `startDate` and `endDate` property
+ * @param {Object[]} checkPeriods Each period is an object containing a `startDate` and `endDate` property. These
+ * periods will be checked against the `referencePeriods for any overlaps
+ *
+ * @returns {boolean} Returns true if there _any_ check period overlaps with a reference period, else false
  */
 function periodsOverlap (referencePeriods, checkPeriods) {
   for (const referencePeriod of referencePeriods) {
