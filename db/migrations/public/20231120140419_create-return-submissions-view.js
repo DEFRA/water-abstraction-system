@@ -8,7 +8,7 @@ exports.up = function (knex) {
     .createView(viewName, (view) => {
       view.as(knex('versions').withSchema('returns').select([
         'versions.version_id AS id',
-        'versions.return_id as form_log_id',
+        'versions.return_id as return_log_id',
         'versions.user_id',
         'versions.user_type',
         'versions.version_number as version',
