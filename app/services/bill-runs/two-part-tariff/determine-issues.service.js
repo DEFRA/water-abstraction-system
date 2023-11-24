@@ -26,10 +26,10 @@ function go (licences) {
 }
 
 function _determineAndAssignLicenceIssues (licence) {
-  licence.dedupedIssues = [...new Set(licence.allIssues)]
+  const dedupedIssues = [...new Set(licence.allIssues)]
 
   // Multiple Issues
-  if (licence.dedupedIssues.length > 1) {
+  if (dedupedIssues.length > 1) {
     licence.issues.push('Multiple Issues')
   }
 }
