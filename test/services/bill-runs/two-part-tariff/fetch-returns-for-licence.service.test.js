@@ -179,5 +179,13 @@ describe('Fetch Returns for Licence service', () => {
         expect(result).to.have.length(0)
       })
     })
+
+    describe('because there are no returns', () => {
+      it('returns no records', async () => {
+        const result = await FetchReturnsForLicenceService.go('LicenceRefWithNoReturns', billingPeriod)
+
+        expect(result).to.have.length(0)
+      })
+    })
   })
 })
