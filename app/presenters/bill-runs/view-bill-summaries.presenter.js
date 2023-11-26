@@ -17,7 +17,8 @@ function go (billSummaries) {
     billGroups.push({
       type: 'water-companies',
       caption: _caption(waterCompanies, true),
-      bills: waterCompanies
+      bills: _bills(waterCompanies),
+      total: _total(waterCompanies)
     })
   }
 
@@ -25,7 +26,8 @@ function go (billSummaries) {
     billGroups.push({
       type: 'other-abstractors',
       caption: _caption(otherAbstractors, false),
-      bills: otherAbstractors
+      bills: _bills(otherAbstractors),
+      total: _total(otherAbstractors)
     })
   }
 
@@ -77,19 +79,23 @@ function _caption (bills, isWaterCompany) {
 }
 
 function _otherAbstractors (summaries) {
-  const filteredSummaries = summaries.filter((summary) => {
+  return summaries.filter((summary) => {
     return !summary.waterCompany
   })
-
-  return _bills(filteredSummaries)
 }
 
 function _waterCompanies (summaries) {
-  const filteredSummaries = summaries.filter((summary) => {
+  return summaries.filter((summary) => {
     return summary.waterCompany
   })
+}
 
-  return _bills(filteredSummaries)
+function _total (billSummaries) {
+  const total = billSummaries.reduce((total, billSummary) => {
+    return total + billSummary.netAmount
+  }, 0)
+
+  return formatMoney(total, true)
 }
 
 module.exports = {
