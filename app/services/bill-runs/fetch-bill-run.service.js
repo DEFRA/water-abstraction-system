@@ -106,9 +106,9 @@ async function _fetchBillSummaries (id) {
       )
     )
     .from('water.billing_invoices AS bi')
-    .innerJoin('crm_v2.invoice_accounts AS ia', 'ia.invoice_account_id', 'bi.invoice_account_id')
-    .innerJoin('crm_v2.companies AS c', 'c.company_id', 'ia.company_id')
-    .innerJoin(
+    .leftJoin('crm_v2.invoice_accounts AS ia', 'ia.invoice_account_id', 'bi.invoice_account_id')
+    .leftJoin('crm_v2.companies AS c', 'c.company_id', 'ia.company_id')
+    .leftJoin(
       'crm_v2.invoice_account_addresses AS iaa',
       function () {
         this.on('iaa.invoice_account_id', '=', 'ia.invoice_account_id').andOnNull('iaa.end_date')
