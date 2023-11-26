@@ -72,10 +72,10 @@ function _caption (bills, isWaterCompany) {
   const numberOfRows = bills.length
 
   if (numberOfRows === 1) {
-    return isWaterCompany ? '1 water company' : '1 other abstractor'
+    return isWaterCompany ? '1 water company bill' : '1 other abstractor bill'
   }
 
-  return isWaterCompany ? `${numberOfRows} water companies` : `${numberOfRows} other abstractors`
+  return isWaterCompany ? `${numberOfRows} water company bills` : `${numberOfRows} other abstractor bills`
 }
 
 function _otherAbstractors (summaries) {
