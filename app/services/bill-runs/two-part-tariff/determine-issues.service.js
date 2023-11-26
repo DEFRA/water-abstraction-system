@@ -60,7 +60,7 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
 
     // Some returns not received
     if (_determineSomeReturnsNotReceived(chargeElement, returns)) {
-      chargeElement.issues.push('Overlap of charge dates')
+      chargeElement.issues.push('Some returns not received')
     }
 
     // Review status
@@ -77,6 +77,12 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
 }
 
 function _determineSomeReturnsNotReceived (chargeElement, returnLogs) {
+  // NOTE: The requirement states "An element matches to multiple returns AND at least 1 of those returns has a status
+  // of due". So, our first check is that the element has matched to more than one return.
+  if (chargeElement.returns.length <= 1) {
+    return false
+  }
+
   for (const matchedReturn of chargeElement.returns) {
     const returnLog = returnLogs.find((returnLog) => {
       return returnLog.returnId === matchedReturn.returnId
