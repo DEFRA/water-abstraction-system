@@ -6,7 +6,6 @@
  */
 
 const AllocateReturnsToLicenceService = require('./allocate-returns-to-licence.service.js')
-const DetermineIssuesService = require('./determine-issues.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
 const PrepareLicencesForAllocationService = require('./prepare-licences-for-allocation.service.js')
 const TransformAllocatedLicencesToResultsService = require('./transform-allocated-licences-to-results.service.js')
@@ -24,8 +23,6 @@ async function go (billRun, billingPeriods, licenceId) {
   AllocateReturnsToLicenceService.go(licences)
 
   const reviewResults = TransformAllocatedLicencesToResultsService.go(billRun, licences)
-
-  DetermineIssuesService.go(licences)
 
   _calculateAndLogTime(startTime)
 
