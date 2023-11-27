@@ -100,7 +100,7 @@ function _determineAndAssignLicenceIssues (licence, allIssues) {
   licence.issues = [...new Set(allIssues)]
 
   // Multiple Issues
-  if (licence.length > 1) {
+  if (licence.issues.length > 1) {
     licence.issues = ['Multiple Issues']
   }
 }
