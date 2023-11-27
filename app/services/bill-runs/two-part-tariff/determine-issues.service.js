@@ -7,7 +7,7 @@
 
 const REVIEW_STATUSES = [
   'Aggregate', 'Checking query', 'Overlap of charge date', 'Returns received but not processed',
-  'Unable to allocate returns', 'Unable to match return'
+  'Return split over charge references', 'Unable to allocate returns', 'Unable to match return'
 ]
 
 function go (licences) {
@@ -17,7 +17,7 @@ function go (licences) {
 
     licence.status = 'Ready'
 
-    const returnReviewNeeded = _determineAndAssignReturnIssues(returns, allIssues)
+    const returnReviewNeeded = _determineAndAssignReturnIssues(returns, chargeVersions, allIssues)
 
     chargeVersions.forEach((chargeVersion) => {
       const { chargeReferences } = chargeVersion
@@ -105,7 +105,7 @@ function _determineAndAssignLicenceIssues (licence, allIssues) {
   }
 }
 
-function _determineAndAssignReturnIssues (returnLogs, allIssues) {
+function _determineAndAssignReturnIssues (returnLogs, chargeVersions, allIssues) {
   let reviewNeeded = false
 
   returnLogs.forEach((returnLog) => {
@@ -144,6 +144,12 @@ function _determineAndAssignReturnIssues (returnLogs, allIssues) {
       returnLog.issues.push('Returns received late')
     }
 
+    // Return split over charge references
+    const returnSplit = _returnSplitOverChargeReferences(returnLog, chargeVersions)
+    if (returnSplit) {
+      returnLog.issues.push('Return split over charge references')
+    }
+
     // Review status
     if (!reviewNeeded) {
       const status = _determineIssueStatus(returnLog.issues)
@@ -152,13 +158,34 @@ function _determineAndAssignReturnIssues (returnLogs, allIssues) {
       }
     }
 
-    // Return split over charge references
-
     // This is to keep track of multiple Issues
     allIssues.push(...returnLog.issues)
   })
 
   return reviewNeeded
+}
+
+function _returnSplitOverChargeReferences (returnLog, chargeVersions) {
+  return chargeVersions.some((chargeVersion) => {
+    let matched = false
+    for (const chargeReference of chargeVersion.chargeReferences) {
+      const returnFound = chargeReference.chargeElements.some((chargeElement) => {
+        return chargeElement.returns.some((matchedReturnResult) => {
+          return matchedReturnResult.returnId === returnLog.returnId
+        })
+      })
+
+      if (matched && returnFound) {
+        return true
+      }
+
+      if (!matched && returnFound) {
+        matched = true
+      }
+    }
+
+    return false
+  })
 }
 
 function _determineIssueStatus (issues) {
