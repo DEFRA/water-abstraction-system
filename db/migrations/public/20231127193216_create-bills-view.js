@@ -1,0 +1,39 @@
+'use strict'
+
+const viewName = 'bills'
+
+exports.up = function (knex) {
+  return knex
+    .schema
+    .createView(viewName, (view) => {
+      // NOTE: We have commented out unused columns from the source table
+      view.as(knex('billing_invoices').withSchema('water').select([
+        'billing_invoice_id AS id',
+        'invoice_account_id',
+        'address',
+        'invoice_account_number',
+        'net_amount',
+        'is_credit',
+        'billing_batch_id AS bill_run_id',
+        'financial_year_ending',
+        'invoice_number',
+        // 'legacy_id', // is not populated for SROC
+        // 'metadata', // is not populated for SROC
+        'credit_note_value',
+        'invoice_value',
+        'is_de_minimis',
+        'external_id',
+        'is_flagged_for_rebilling',
+        'original_billing_invoice_id',
+        'rebilling_state',
+        'date_created AS created_at',
+        'date_updated AS updated_at'
+      ]))
+    })
+}
+
+exports.down = function (knex) {
+  return knex
+    .schema
+    .dropViewIfExists(viewName)
+}
