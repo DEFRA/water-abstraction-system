@@ -73,7 +73,7 @@ function _prepChargeElementsForMatching (chargeElements, chargePeriod) {
 
 function _prepReturnsForMatching (returnRecords, billingPeriod) {
   returnRecords.forEach((returnRecord) => {
-    const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnRecord
+    const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth, versions } = returnRecord
     const abstractionPeriods = DetermineAbstractionPeriodService.go(
       billingPeriod,
       periodStartDay,
@@ -85,7 +85,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
     let totalQty = 0
     let abstractionOutsidePeriod = false
 
-    returnRecord.versions[0]?.lines.forEach((line) => {
+    versions[0]?.lines.forEach((line) => {
       if (!abstractionOutsidePeriod) {
         abstractionOutsidePeriod = _abstractionOutsidePeriod(abstractionPeriods, line)
       }
@@ -93,7 +93,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
       totalQty += line.unallocated
     })
 
-    returnRecord.nilReturn = returnRecord.versions[0]?.nilReturn
+    returnRecord.nilReturn = versions[0]?.nilReturn
     returnRecord.allocatedQuantity = 0
     returnRecord.totalQuantity = totalQty
     returnRecord.abstractionPeriods = abstractionPeriods
