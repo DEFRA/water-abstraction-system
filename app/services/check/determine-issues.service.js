@@ -32,7 +32,7 @@ function go (licence) {
     })
   })
 
-  _determineAndAssignLicenceIssues(licence, allIssues)
+  licence.issue = _determineAndAssignLicenceIssues(allIssues)
 }
 
 function _determineAndAssignChargeElementIssues (chargeElements, aggregate, returns, allIssues) {
@@ -94,13 +94,18 @@ function _determineSomeReturnsNotReceived (chargeElement, returnRecords) {
   return false
 }
 
-function _determineAndAssignLicenceIssues (licence, allIssues) {
-  licence.issues = [...new Set(allIssues)]
-
-  // Multiple Issues
-  if (licence.issues.length > 1) {
-    licence.issues = ['Multiple Issues']
+function _determineAndAssignLicenceIssues (allIssues) {
+  if (allIssues.length === 0) {
+    return ''
   }
+
+  const uniqueIssues = [...new Set(allIssues)]
+
+  if (uniqueIssues.length > 1) {
+    return 'Multiple issues'
+  }
+
+  return uniqueIssues[0]
 }
 
 function _determineAndAssignReturnIssues (returns, chargeVersions, allIssues) {

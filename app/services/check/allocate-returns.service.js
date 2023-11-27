@@ -145,7 +145,7 @@ function _matchAndAllocate (chargeElement, returns, chargePeriod) {
 
           matchedLine.unallocated -= qtyToAllocate
           matchedReturn.allocatedQuantity += qtyToAllocate
-          matchedReturnResult.lines.push({ id: matchedLine.id, lineId: matchedLine.lineId, allocated: qtyToAllocate })
+          matchedReturnResult.lines.push({ id: matchedLine.id, allocated: qtyToAllocate })
         }
       })
     }

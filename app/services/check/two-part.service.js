@@ -12,6 +12,7 @@ const ChargeReferenceModel = require('../../models/water/charge-reference.model.
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-periods.service.js')
 const ReturnModel = require('../../models/returns/return.model.js')
+const ScenarioFormatterService = require('./scenario-formatter.service.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
 async function go (id, type) {
@@ -26,7 +27,7 @@ async function go (id, type) {
 
   _calculateAndLogTime(startTime, id, type)
 
-  return result
+  return ScenarioFormatterService.go(result)
 }
 
 function _billingPeriod () {
@@ -50,8 +51,7 @@ async function _fetchChargeVersions (billingPeriod, id, type) {
     .select([
       'chargeVersions.chargeVersionId',
       'chargeVersions.startDate',
-      'chargeVersions.endDate',
-      'chargeVersions.status'
+      'chargeVersions.endDate'
     ])
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
@@ -89,7 +89,7 @@ async function _fetchChargeVersions (billingPeriod, id, type) {
       builder
         .select([
           'chargeElementId',
-          'description',
+          'volume',
           ref('chargeElements.adjustments:aggregate').as('aggregate'),
           ref('chargeElements.adjustments:s127').castText().as('s127')
         ])
