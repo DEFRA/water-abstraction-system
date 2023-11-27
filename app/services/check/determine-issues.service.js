@@ -10,31 +10,29 @@ const REVIEW_STATUSES = [
   'Return split over charge references', 'Unable to allocate returns', 'Unable to match return'
 ]
 
-function go (licences) {
-  licences.forEach((licence) => {
-    const { chargeVersions, returns } = licence
-    const allIssues = []
+function go (licence) {
+  const { chargeVersions, returns } = licence
+  const allIssues = []
 
-    licence.status = 'Ready'
+  licence.status = 'Ready'
 
-    const returnReviewNeeded = _determineAndAssignReturnIssues(returns, chargeVersions, allIssues)
+  const returnReviewNeeded = _determineAndAssignReturnIssues(returns, chargeVersions, allIssues)
 
-    chargeVersions.forEach((chargeVersion) => {
-      const { chargeReferences } = chargeVersion
+  chargeVersions.forEach((chargeVersion) => {
+    const { chargeReferences } = chargeVersion
 
-      chargeReferences.forEach((chargeReference) => {
-        const { chargeElements, aggregate } = chargeReference
+    chargeReferences.forEach((chargeReference) => {
+      const { chargeElements, aggregate } = chargeReference
 
-        const chargeElementReviewNeeded = _determineAndAssignChargeElementIssues(chargeElements, aggregate, returns, allIssues)
+      const chargeElementReviewNeeded = _determineAndAssignChargeElementIssues(chargeElements, aggregate, returns, allIssues)
 
-        if (returnReviewNeeded || chargeElementReviewNeeded) {
-          licence.status = 'Review'
-        }
-      })
+      if (returnReviewNeeded || chargeElementReviewNeeded) {
+        licence.status = 'Review'
+      }
     })
-
-    _determineAndAssignLicenceIssues(licence, allIssues)
   })
+
+  _determineAndAssignLicenceIssues(licence, allIssues)
 }
 
 function _determineAndAssignChargeElementIssues (chargeElements, aggregate, returns, allIssues) {
@@ -76,7 +74,7 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
   return reviewNeeded
 }
 
-function _determineSomeReturnsNotReceived (chargeElement, returnLogs) {
+function _determineSomeReturnsNotReceived (chargeElement, returnRecords) {
   // NOTE: The requirement states "An element matches to multiple returns AND at least 1 of those returns has a status
   // of due". So, our first check is that the element has matched to more than one return.
   if (chargeElement.returns.length <= 1) {
@@ -84,11 +82,11 @@ function _determineSomeReturnsNotReceived (chargeElement, returnLogs) {
   }
 
   for (const matchedReturn of chargeElement.returns) {
-    const returnLog = returnLogs.find((returnLog) => {
-      return returnLog.returnId === matchedReturn.returnId
+    const result = returnRecords.some((returnRecord) => {
+      return (returnRecord.returnId === matchedReturn.returnId && returnRecord.status === 'due')
     })
 
-    if (returnLog.status === 'due') {
+    if (result) {
       return true
     }
   }
@@ -105,73 +103,73 @@ function _determineAndAssignLicenceIssues (licence, allIssues) {
   }
 }
 
-function _determineAndAssignReturnIssues (returnLogs, chargeVersions, allIssues) {
+function _determineAndAssignReturnIssues (returns, chargeVersions, allIssues) {
   let reviewNeeded = false
 
-  returnLogs.forEach((returnLog) => {
-    returnLog.issues = []
+  returns.forEach((returnRecord) => {
+    returnRecord.issues = []
 
     // Over abstraction
-    const overAbstraction = returnLog.versions[0]?.lines.some((line) => {
+    const overAbstraction = returnRecord.versions[0]?.lines.some((line) => {
       return line.unallocated > 0
     })
     if (overAbstraction) {
-      returnLog.issues.push('Over abstraction')
+      returnRecord.issues.push('Over abstraction')
     }
 
     // Abstraction outside period
-    if (returnLog.abstractionOutside) {
-      returnLog.issues.push('Abstraction outside period')
+    if (returnRecord.abstractionOutside) {
+      returnRecord.issues.push('Abstraction outside period')
     }
 
     // Checking query
-    if (returnLog.underQuery) {
-      returnLog.issues.push('Checking query')
+    if (returnRecord.underQuery) {
+      returnRecord.issues.push('Checking query')
     }
 
     // No returns received
-    if (returnLog.status === 'due') {
-      returnLog.issues.push('No returns received')
+    if (returnRecord.status === 'due') {
+      returnRecord.issues.push('No returns received')
     }
 
     // Returns received but not processed
-    if (returnLog.status === 'received') {
-      returnLog.issues.push('Returns received but not processed')
+    if (returnRecord.status === 'received') {
+      returnRecord.issues.push('Returns received but not processed')
     }
 
     // Returns received late
-    if (returnLog.receivedDate && returnLog.receivedDate > returnLog.dueDate) {
-      returnLog.issues.push('Returns received late')
+    if (returnRecord.receivedDate && returnRecord.receivedDate > returnRecord.dueDate) {
+      returnRecord.issues.push('Returns received late')
     }
 
     // Return split over charge references
-    const returnSplit = _returnSplitOverChargeReferences(returnLog, chargeVersions)
+    const returnSplit = _returnSplitOverChargeReferences(returnRecord, chargeVersions)
     if (returnSplit) {
-      returnLog.issues.push('Return split over charge references')
+      returnRecord.issues.push('Return split over charge references')
     }
 
     // Review status
     if (!reviewNeeded) {
-      const status = _determineIssueStatus(returnLog.issues)
+      const status = _determineIssueStatus(returnRecord.issues)
       if (status === 'Review') {
         reviewNeeded = true
       }
     }
 
     // This is to keep track of multiple Issues
-    allIssues.push(...returnLog.issues)
+    allIssues.push(...returnRecord.issues)
   })
 
   return reviewNeeded
 }
 
-function _returnSplitOverChargeReferences (returnLog, chargeVersions) {
+function _returnSplitOverChargeReferences (returnRecord, chargeVersions) {
   return chargeVersions.some((chargeVersion) => {
     let matched = false
     for (const chargeReference of chargeVersion.chargeReferences) {
       const returnFound = chargeReference.chargeElements.some((chargeElement) => {
         return chargeElement.returns.some((matchedReturnResult) => {
-          return matchedReturnResult.returnId === returnLog.returnId
+          return matchedReturnResult.returnId === returnRecord.returnId
         })
       })
 

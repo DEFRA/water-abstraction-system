@@ -7,6 +7,7 @@
 
 const DetermineAbstractionPeriodServices = require('./determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../../services/bill-runs/determine-charge-period.service.js')
+const DetermineIssuesService = require('./determine-issues.service.js')
 const { periodsOverlap } = require('../../lib/general.lib.js')
 
 function go (licences, billingPeriod) {
@@ -45,7 +46,7 @@ function go (licences, billingPeriod) {
       delete chargeVersion.licence
     })
 
-    _determinePostAllocationReturnIssues(licence.returns)
+    DetermineIssuesService.go(licence)
   })
 
   return licences
@@ -73,6 +74,10 @@ function _chargeDatesOverlap (matchedLine, chargePeriod) {
 }
 
 function _checkReturnForIssues (returnRecord) {
+  if (returnRecord.nilReturn) {
+    return true
+  }
+
   if (returnRecord.underQuery) {
     return true
   }
@@ -85,29 +90,7 @@ function _checkReturnForIssues (returnRecord) {
     return true
   }
 
-  if (returnRecord.versions[0].nilReturn) {
-    return true
-  }
-
   return false
-}
-
-function _determinePostAllocationReturnIssues (returns) {
-  returns.forEach((returnRecord) => {
-    if (returnRecord.chargeElements.length === 0) {
-      returnRecord.issues.push('no matching elements')
-    }
-
-    if (returnRecord.versions[0]) {
-      const unallocated = returnRecord.versions[0].lines.some((line) => {
-        return line.quantity > 0 && line.unallocated > 0
-      })
-
-      if (unallocated) {
-        returnRecord.issues.push('unallocated lines')
-      }
-    }
-  })
 }
 
 function _matchAndAllocate (chargeElement, returns, chargePeriod) {
@@ -120,10 +103,13 @@ function _matchAndAllocate (chargeElement, returns, chargePeriod) {
   matchedReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
       id: matchedReturn.id,
-      allocatedQuantity: 0
+      returnId: matchedReturn.returnId,
+      allocatedQuantity: 0,
+      lines: []
     }
     const matchElementResult = {
       id: chargeElement.id,
+      chargeElementId: chargeElement.chargePurposeId,
       allocatedQuantity: 0
     }
 
@@ -159,7 +145,7 @@ function _matchAndAllocate (chargeElement, returns, chargePeriod) {
 
           matchedLine.unallocated -= qtyToAllocate
           matchedReturn.allocatedQuantity += qtyToAllocate
-          chargeElement.lines.push({ id: matchedLine.id, lineId: matchedLine.lineId, allocated: qtyToAllocate })
+          matchedReturnResult.lines.push({ id: matchedLine.id, lineId: matchedLine.lineId, allocated: qtyToAllocate })
         }
       })
     }
@@ -212,9 +198,7 @@ function _prepChargeElement (chargeElement, chargePeriod) {
     abstractionPeriodEndMonth
   )
 
-  chargeElement.issues = []
   chargeElement.returns = []
-  chargeElement.lines = []
   chargeElement.allocatedQuantity = 0
   chargeElement.abstractionPeriods = abstractionPeriods
 }
@@ -223,7 +207,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
   returnRecords.forEach((returnRecord, returnRecordIndex) => {
     returnRecord.id = `T${returnRecordIndex + 1}`
 
-    const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnRecord
+    const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth, versions } = returnRecord
     const abstractionPeriods = DetermineAbstractionPeriodServices.go(
       billingPeriod,
       periodStartDay,
@@ -235,7 +219,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
     let quantity = 0
     let abstractionOutsidePeriod = false
 
-    returnRecord.versions[0]?.lines.forEach((line, lineIndex) => {
+    versions[0]?.lines.forEach((line, lineIndex) => {
       line.id = `L${lineIndex + 1}-${returnRecord.id}`
 
       if (!abstractionOutsidePeriod) {
@@ -246,12 +230,12 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
       quantity += line.unallocated
     })
 
-    returnRecord.issues = []
-    returnRecord.chargeElements = []
+    returnRecord.nilReturn = versions[0]?.nilReturn
     returnRecord.quantity = quantity
     returnRecord.allocatedQuantity = 0
     returnRecord.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnRecord.abstractionPeriods = abstractionPeriods
+    returnRecord.chargeElements = []
   })
 }
 
