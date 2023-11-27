@@ -17,10 +17,10 @@ exports.up = function (knex) {
         'lines.end_date',
         'lines.time_period',
         // 'lines.metadata',
-        'lines.created_at',
-        'lines.updated_at',
         'lines.reading_type',
-        'lines.user_unit'
+        'lines.user_unit',
+        'lines.created_at',
+        'lines.updated_at'
       ]))
     })
 }

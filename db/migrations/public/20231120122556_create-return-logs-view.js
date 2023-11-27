@@ -18,15 +18,15 @@ exports.up = function (knex) {
         'returns.status',
         // 'returns.source',
         'returns.metadata',
-        'returns.created_at',
-        'returns.updated_at',
         'returns.received_date',
         'returns.return_requirement',
         'returns.due_date',
         'returns.under_query',
         // 'returns.under_query_comment',
-        'returns.is_test'
         // 'returns.return_cycle_id' // is populated but links to a table that does not appear to be used
+        'returns.is_test',
+        'returns.created_at',
+        'returns.updated_at'
       ]))
     })
 }

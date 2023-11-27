@@ -13,10 +13,10 @@ exports.up = function (knex) {
         'versions.user_type',
         'versions.version_number as version',
         'versions.metadata',
-        'versions.created_at',
-        'versions.updated_at',
         'versions.nil_return',
-        'versions.current'
+        'versions.current',
+        'versions.created_at',
+        'versions.updated_at'
       ]))
     })
 }
