@@ -78,6 +78,7 @@ function _matchAndAllocate (chargeElement, returns, chargePeriod) {
     }
 
     chargeElement.returns.push(matchedReturnResult)
+    matchedReturn.matched = true
 
     if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) {
       if (_checkReturnForIssues(matchedReturn)) {

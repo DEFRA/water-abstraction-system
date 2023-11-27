@@ -97,6 +97,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
     returnRecord.totalQuantity = totalQty
     returnRecord.abstractionPeriods = abstractionPeriods
     returnRecord.abstractionOutsidePeriod = abstractionOutsidePeriod
+    returnRecord.matched = false
   })
 }
 
