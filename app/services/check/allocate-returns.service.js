@@ -7,6 +7,7 @@
 
 const DetermineAbstractionPeriodServices = require('./determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../../services/bill-runs/determine-charge-period.service.js')
+const { periodsOverlap } = require('../../lib/general.lib.js')
 
 function go (licences, billingPeriod) {
   licences.forEach((licence, licenceIndex) => {
@@ -36,7 +37,7 @@ function go (licences, billingPeriod) {
             chargeElement.id = `E${chargeElementIndex + 1}-${chargeReference.id}`
 
             _prepChargeElement(chargeElement, chargeVersion.chargePeriod)
-            _matchAndAllocate(chargeElement, returns)
+            _matchAndAllocate(chargeElement, returns, chargeVersion.chargePeriod)
           })
         })
       }
@@ -48,6 +49,27 @@ function go (licences, billingPeriod) {
   })
 
   return licences
+}
+
+function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
+  const { startDate, endDate } = returnLine
+
+  return !periodsOverlap(returnAbstractionPeriods, [{ startDate, endDate }])
+}
+
+function _chargeDatesOverlap (matchedLine, chargePeriod) {
+  const { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate } = chargePeriod
+  const { startDate: lineStartDate, endDate: lineEndDate } = matchedLine
+
+  if (lineStartDate < chargePeriodEndDate && lineEndDate > chargePeriodEndDate) {
+    return true
+  }
+
+  if (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate) {
+    return true
+  }
+
+  return false
 }
 
 function _prepChargeElement (chargeElement, chargePeriod) {
@@ -86,14 +108,25 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
       periodEndMonth
     )
 
+    let quantity = 0
+    let abstractionOutsidePeriod = false
+
     returnRecord.versions[0]?.lines.forEach((line, lineIndex) => {
       line.id = `L${lineIndex + 1}-${returnRecord.id}`
+
+      if (!abstractionOutsidePeriod) {
+        abstractionOutsidePeriod = _abstractionOutsidePeriod(abstractionPeriods, line)
+      }
+
       line.unallocated = line.quantity / 1000
+      quantity += line.unallocated
     })
 
     returnRecord.issues = _determinePreAllocationReturnIssues(returnRecord)
     returnRecord.chargeElements = []
+    returnRecord.quantity = quantity
     returnRecord.allocatedQuantity = 0
+    returnRecord.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnRecord.abstractionPeriods = abstractionPeriods
   })
 }
@@ -136,7 +169,7 @@ function _determinePostAllocationReturnIssues (returns) {
   })
 }
 
-function _matchAndAllocate (chargeElement, returns) {
+function _matchAndAllocate (chargeElement, returns, chargePeriod) {
   const matchedReturns = _matchReturns(chargeElement, returns)
 
   if (matchedReturns.length === 0) {
@@ -196,6 +229,7 @@ function _matchAndAllocate (chargeElement, returns) {
             qtyToAllocate = remainingAllocation
           }
 
+          chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
           chargeElement.allocatedQuantity += qtyToAllocate
           chargeElement.lines.push({ id: matchedLine.id, lineId: matchedLine.lineId, allocated: qtyToAllocate })
 
