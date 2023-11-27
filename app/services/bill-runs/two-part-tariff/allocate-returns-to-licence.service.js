@@ -45,6 +45,10 @@ function _chargeDatesOverlap (matchedLine, chargePeriod) {
 }
 
 function _checkReturnForIssues (returnRecord) {
+  if (returnRecord.nilReturn) {
+    return true
+  }
+
   if (returnRecord.underQuery) {
     return true
   }
@@ -54,10 +58,6 @@ function _checkReturnForIssues (returnRecord) {
   }
 
   if (returnRecord.versions.length === 0 || returnRecord.versions[0].lines.length === 0) {
-    return true
-  }
-
-  if (returnRecord.versions[0].nilReturn) {
     return true
   }
 
