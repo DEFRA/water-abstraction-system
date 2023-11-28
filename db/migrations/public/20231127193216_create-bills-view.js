@@ -6,7 +6,6 @@ exports.up = function (knex) {
   return knex
     .schema
     .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
       view.as(knex('billing_invoices').withSchema('water').select([
         'billing_invoice_id AS id',
         'invoice_account_id',
@@ -17,8 +16,8 @@ exports.up = function (knex) {
         'billing_batch_id AS bill_run_id',
         'financial_year_ending',
         'invoice_number',
-        // 'legacy_id', // is not populated for SROC
-        // 'metadata', // is not populated for SROC
+        'legacy_id',
+        'metadata',
         'credit_note_value',
         'invoice_value',
         'is_de_minimis',

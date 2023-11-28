@@ -6,14 +6,13 @@ exports.up = function (knex) {
   return knex
     .schema
     .createView(viewName, (view) => {
-      // NOTE: We have commented out unused columns from the source table
       view.as(knex('billing_transactions').withSchema('water').select([
         'billing_transaction_id AS id',
         'billing_invoice_licence_id as bill_licence_id',
         'charge_element_id AS charge_reference_id',
         'start_date',
         'end_date',
-        // 'abstraction_period', // is not populated for SROC
+        'abstraction_period',
         'source',
         'season',
         'loss',
@@ -33,8 +32,8 @@ exports.up = function (knex) {
         'section_130_agreement',
         'is_de_minimis',
         'is_new_licence',
-        // 'legacy_id', // is not populated for SROC
-        // 'metadata', // is not populated for SROC
+        'legacy_id',
+        'metadata',
         'source_transaction_id',
         'calc_source_factor',
         'calc_season_factor',

@@ -11,7 +11,7 @@ exports.up = function (knex) {
         'billing_volume_id AS id',
         'charge_element_id AS charge_element_id',
         'financial_year',
-        // 'is_summer', // is not populated for SROC //TODO: Is not nullable so needs a default of `false`
+        'is_summer',
         'calculated_volume',
         'two_part_tariff_error',
         'two_part_tariff_status',
@@ -19,7 +19,7 @@ exports.up = function (knex) {
         'is_approved',
         'billing_batch_id AS bill_run_id',
         'volume'
-        // 'errored_on' // is always null
+        // 'errored_on'
       ]))
     })
 }

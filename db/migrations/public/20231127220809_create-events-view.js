@@ -15,7 +15,7 @@ exports.up = function (knex) {
         'issuer',
         'licences',
         'entities',
-        // '"comment"', // never used
+        // 'comment',
         'metadata',
         'status',
         'created AS created_at',

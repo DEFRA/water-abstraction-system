@@ -20,10 +20,10 @@ exports.up = function (knex) {
         'bill_run_number',
         // 'error_code',
         'external_id',
-        // 'is_summer', // is not populated for SROC
-        // 'source', // is always wrls for SROC
-        // 'legacy_id',
-        // 'metadata',
+        'is_summer',
+        'source',
+        'legacy_id',
+        'metadata',
         'invoice_value',
         'credit_note_value',
         'transaction_file_reference',

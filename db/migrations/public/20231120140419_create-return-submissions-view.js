@@ -7,16 +7,16 @@ exports.up = function (knex) {
     .schema
     .createView(viewName, (view) => {
       view.as(knex('versions').withSchema('returns').select([
-        'versions.version_id AS id',
-        'versions.return_id as return_log_id',
-        'versions.user_id',
-        'versions.user_type',
-        'versions.version_number as version',
-        'versions.metadata',
-        'versions.nil_return',
-        'versions.current',
-        'versions.created_at',
-        'versions.updated_at'
+        'version_id AS id',
+        'return_id as return_log_id',
+        'user_id',
+        'user_type',
+        'version_number as version',
+        'metadata',
+        'nil_return',
+        'current',
+        'created_at',
+        'updated_at'
       ]))
     })
 }

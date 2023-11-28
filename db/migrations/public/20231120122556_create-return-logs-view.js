@@ -8,25 +8,25 @@ exports.up = function (knex) {
     .createView(viewName, (view) => {
       // NOTE: We have commented out unused columns from the source table
       view.as(knex('returns').withSchema('returns').select([
-        'returns.return_id AS id',
-        // 'returns.regime',
-        // 'returns.licence_type',
-        'returns.licence_ref',
-        'returns.start_date',
-        'returns.end_date',
-        'returns.returns_frequency',
-        'returns.status',
-        // 'returns.source',
-        'returns.metadata',
-        'returns.received_date',
-        'returns.return_requirement',
-        'returns.due_date',
-        'returns.under_query',
-        // 'returns.under_query_comment',
-        // 'returns.return_cycle_id' // is populated but links to a table that does not appear to be used
-        'returns.is_test',
-        'returns.created_at',
-        'returns.updated_at'
+        'return_id AS id',
+        // 'regime', // always 'water'
+        // 'licence_type', // always 'abstraction'
+        'licence_ref',
+        'start_date',
+        'end_date',
+        'returns_frequency',
+        'status',
+        // 'source', // always 'NALD'
+        'metadata',
+        'received_date',
+        'return_requirement',
+        'due_date',
+        'under_query',
+        // 'under_query_comment',
+        // 'is_test',
+        // 'return_cycle_id' // is populated but links to a table that does not appear to be used
+        'created_at',
+        'updated_at'
       ]))
     })
 }

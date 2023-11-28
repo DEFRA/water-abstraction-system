@@ -11,16 +11,17 @@ exports.up = function (knex) {
         'charge_version_id AS id',
         'licence_ref',
         'scheme',
-        // 'external_id', // is not populated for SROC
+        'external_id',
         'version_number',
         'start_date',
         'status',
-        // 'apportionment', // is not populated for SROC
+        'apportionment',
         'error',
         'end_date',
         'billed_upto_date',
         'region_code',
-        // 'source',// is always 'wrls' for SROC //TODO: Is not nullable so needs a default of 'wrls'
+        'source',
+        // 'is_test',
         'company_id',
         'invoice_account_id',
         'change_reason_id',
@@ -28,7 +29,6 @@ exports.up = function (knex) {
         'approved_by',
         'licence_id',
         'note_id',
-        'is_test',
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))

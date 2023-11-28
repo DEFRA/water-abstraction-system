@@ -8,19 +8,19 @@ exports.up = function (knex) {
     .createView(viewName, (view) => {
       // NOTE: We have commented out unused columns from the source table
       view.as(knex('lines').withSchema('returns').select([
-        'lines.line_id AS id',
-        'lines.version_id AS return_submission_id',
-        // 'lines.substance',
-        'lines.quantity',
-        // 'lines.unit',
-        'lines.start_date',
-        'lines.end_date',
-        'lines.time_period',
-        // 'lines.metadata',
-        'lines.reading_type',
-        'lines.user_unit',
-        'lines.created_at',
-        'lines.updated_at'
+        'line_id AS id',
+        'version_id AS return_submission_id',
+        // 'substance', // always 'water'
+        'quantity',
+        // 'unit', // always 'm³'
+        'start_date',
+        'end_date',
+        'time_period',
+        // 'metadata',
+        'reading_type',
+        'user_unit',
+        'created_at',
+        'updated_at'
       ]))
     })
 }

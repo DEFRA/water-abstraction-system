@@ -21,11 +21,11 @@ exports.up = function (knex) {
         'time_limited_start_date',
         'time_limited_end_date',
         'description',
-        // 'purpose_primary_id', // is not populated for SROC
-        // 'purpose_secondary_id', // is not populated for SROC
+        // 'is_test',
+        'purpose_primary_id',
+        'purpose_secondary_id',
         'purpose_use_id AS purpose_id',
         'is_section_127_agreement_enabled',
-        'is_test',
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))
