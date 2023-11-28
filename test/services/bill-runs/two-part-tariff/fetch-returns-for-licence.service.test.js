@@ -26,13 +26,33 @@ describe('Fetch Returns for Licence service', () => {
 
   describe('when there are valid Returns that should be considered', () => {
     beforeEach(async () => {
-      returnRecord = await ReturnHelper.add()
+      const metadata = {
+        nald: {
+          periodEndDay: '31',
+          periodEndMonth: '3',
+          periodStartDay: '1',
+          periodStartMonth: '4'
+        },
+        purposes: [
+          {
+            tertiary: {
+              code: '400',
+              description: 'Spray Irrigation - Direct'
+            }
+          }
+        ],
+        description: 'The Description',
+        isTwoPartTariff: true
+      }
+
+      returnRecord = await ReturnHelper.add({ metadata })
     })
 
     describe('which have return lines within the billing period', () => {
       beforeEach(async () => {
         const { returnId } = returnRecord
         const { versionId } = await VersionHelper.add({ returnId })
+
         await LineHelper.add({ versionId, startDate: new Date('2022-05-01'), endDate: new Date('2022-05-07'), quantity: 1234 })
         await LineHelper.add({ versionId, startDate: new Date('2022-05-08'), endDate: new Date('2022-05-14'), quantity: 5678 })
       })
@@ -72,6 +92,7 @@ describe('Fetch Returns for Licence service', () => {
       beforeEach(async () => {
         const { returnId } = returnRecord
         const { versionId } = await VersionHelper.add({ returnId })
+
         await LineHelper.add({ versionId, startDate: new Date('2023-05-01'), endDate: new Date('2023-05-07'), quantity: 1234 })
         await LineHelper.add({ versionId, startDate: new Date('2023-05-08'), endDate: new Date('2023-05-14'), quantity: 5678 })
       })
@@ -89,6 +110,7 @@ describe('Fetch Returns for Licence service', () => {
     describe('which is a nil return', () => {
       beforeEach(async () => {
         const { returnId } = returnRecord
+
         await VersionHelper.add({ returnId, nilReturn: true })
       })
 
@@ -111,6 +133,7 @@ describe('Fetch Returns for Licence service', () => {
       beforeEach(async () => {
         returnRecord = await ReturnHelper.add({ startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') })
         const { returnId } = returnRecord
+
         await VersionHelper.add({ returnId })
       })
 
@@ -145,12 +168,21 @@ describe('Fetch Returns for Licence service', () => {
 
         returnRecord = await ReturnHelper.add({ metadata })
         const { returnId } = returnRecord
+
         await VersionHelper.add({ returnId })
       })
 
       it('returns no records', async () => {
         const { licenceRef } = returnRecord
         const result = await FetchReturnsForLicenceService.go(licenceRef, billingPeriod)
+
+        expect(result).to.have.length(0)
+      })
+    })
+
+    describe('because there are no returns', () => {
+      it('returns no records', async () => {
+        const result = await FetchReturnsForLicenceService.go('LicenceRefWithNoReturns', billingPeriod)
 
         expect(result).to.have.length(0)
       })
