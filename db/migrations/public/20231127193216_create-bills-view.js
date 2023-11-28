@@ -10,7 +10,7 @@ exports.up = function (knex) {
         'billing_invoice_id AS id',
         'invoice_account_id',
         'address',
-        'invoice_account_number',
+        'invoice_account_number AS account_number',
         'net_amount',
         'is_credit',
         'billing_batch_id AS bill_run_id',
@@ -23,7 +23,7 @@ exports.up = function (knex) {
         'is_de_minimis',
         'external_id',
         'is_flagged_for_rebilling',
-        'original_billing_invoice_id',
+        'original_billing_invoice_id AS original_bill_id',
         'rebilling_state',
         'date_created AS created_at',
         'date_updated AS updated_at'

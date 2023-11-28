@@ -23,7 +23,7 @@ exports.up = function (knex) {
         'source',
         // 'is_test',
         'company_id',
-        'invoice_account_id',
+        'invoice_account_id AS billing_account_id',
         'change_reason_id',
         'created_by',
         'approved_by',
