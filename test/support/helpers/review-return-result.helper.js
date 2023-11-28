@@ -7,6 +7,7 @@
 const { randomInteger } = require('./general.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./water/licence.helper.js')
+const { generateReturnLogId } = require('./return-log.helper.js')
 const ReviewReturnResultModel = require('../../../app/models/review-return-result.model.js')
 
 /**
@@ -78,24 +79,6 @@ function defaults (data = {}) {
     ...defaults,
     ...data
   }
-}
-
-function generateReturnLogId (
-  startDate = '2022-04-01',
-  endDate = '2023-03-31',
-  version = 1,
-  licenceRef,
-  returnRequirement
-) {
-  if (!licenceRef) {
-    licenceRef = generateLicenceRef()
-  }
-
-  if (!returnRequirement) {
-    returnRequirement = randomInteger(10000000, 19999999)
-  }
-
-  return `v${version}:1:${licenceRef}:${returnRequirement}:${startDate}:${endDate}`
 }
 
 module.exports = {
