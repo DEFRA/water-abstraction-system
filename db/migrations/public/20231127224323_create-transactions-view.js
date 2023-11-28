@@ -6,6 +6,7 @@ exports.up = function (knex) {
   return knex
     .schema
     .createView(viewName, (view) => {
+      // NOTE: We have commented out unused columns from the source table
       view.as(knex('billing_transactions').withSchema('water').select([
         'billing_transaction_id AS id',
         'billing_invoice_licence_id as bill_licence_id',
@@ -57,8 +58,8 @@ exports.up = function (knex) {
         'is_water_undertaker',
         'purposes',
         'gross_values_calculated',
-        'winter_discount_factor',
-        'calc_adjustment_factor',
+        // 'winter_discount_factor',
+        // 'calc_adjustment_factor',
         'calc_winter_discount_factor',
         'calc_s_130_factor',
         'date_created AS created_at',
