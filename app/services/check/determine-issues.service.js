@@ -169,8 +169,9 @@ function _determineAndAssignReturnIssues (returns, chargeVersions, allIssues) {
 }
 
 function _returnSplitOverChargeReferences (returnRecord, chargeVersions) {
-  return chargeVersions.some((chargeVersion) => {
-    let matched = false
+  let matched = false
+
+  for (const chargeVersion of chargeVersions) {
     for (const chargeReference of chargeVersion.chargeReferences) {
       const returnFound = chargeReference.chargeElements.some((chargeElement) => {
         return chargeElement.returns.some((matchedReturnResult) => {
@@ -186,9 +187,9 @@ function _returnSplitOverChargeReferences (returnRecord, chargeVersions) {
         matched = true
       }
     }
+  }
 
-    return false
-  })
+  return false
 }
 
 function _determineIssueStatus (issues) {
