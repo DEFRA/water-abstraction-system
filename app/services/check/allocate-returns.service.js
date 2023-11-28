@@ -230,7 +230,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
       quantity += line.unallocated
     })
 
-    returnRecord.nilReturn = versions[0]?.nilReturn
+    returnRecord.nilReturn = versions[0]?.nilReturn ?? false
     returnRecord.quantity = quantity
     returnRecord.allocatedQuantity = 0
     returnRecord.abstractionOutsidePeriod = abstractionOutsidePeriod
