@@ -22,7 +22,7 @@ const ReviewResultModel = require('../../../app/models/review-result.model.js')
  * - chargeVersionChangeReason - 'Strategic review of charges (SRoC)'
  * - `reviewChargeElementResultId` - [random UUID]
  * - `reviewReturnResultId` - [random UUID]
- * - updatedAt - null
+ * - updatedAt - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -56,7 +56,7 @@ function defaults (data = {}) {
     chargeVersionChangeReason: 'Strategic review of charges (SRoC)',
     reviewChargeElementResultId: generateUUID(),
     reviewReturnResultId: generateUUID(),
-    updatedAt: null
+    updatedAt: new Date()
   }
 
   return {

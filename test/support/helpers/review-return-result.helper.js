@@ -29,7 +29,7 @@ const ReviewReturnResultModel = require('../../../app/models/review-return-resul
  * - quantity - 0
  * - allocated - 0
  * - abstractionOutsidePeriod - false
- * - updatedAt - null
+ * - updatedAt - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -52,8 +52,8 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here in the database
  */
 function defaults (data = {}) {
-  const licenceRef = data.licenceRef ?? generateReturnLogId
-  const returnRequirement = data.returnRequirement ?? randomInteger(10000000, 19999999)
+  const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
+  const returnRequirement = data.returnRequirement ? data.returnRequirement : randomInteger(10000000, 19999999)
 
   const defaults = {
     id: generateUUID(),
@@ -71,7 +71,7 @@ function defaults (data = {}) {
     quantity: 0,
     allocated: 0,
     abstractionOutsidePeriod: false,
-    updatedAt: null
+    updatedAt: new Date()
   }
 
   return {

@@ -49,7 +49,7 @@ describe('Review Result model', () => {
 
       it('can successfully run a related query', async () => {
         const query = await ReviewResultModel.query()
-          .innerJoinRelated('reviewChargeElementResult')
+          .innerJoinRelated('reviewChargeElementResults')
 
         expect(query).to.exist()
       })
@@ -57,13 +57,13 @@ describe('Review Result model', () => {
       it('can eager load the ', async () => {
         const result = await ReviewResultModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('reviewChargeElementResult')
+          .withGraphFetched('reviewChargeElementResults')
 
         expect(result).to.be.instanceOf(ReviewResultModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.reviewReturnResult).to.be.instanceOf(ReviewChargeElementResultModel)
-        expect(result.reviewReturnResult).to.equal(testReviewChargeElementResult)
+        expect(result.reviewChargeElementResults[0]).to.be.instanceOf(ReviewChargeElementResultModel)
+        expect(result.reviewChargeElementResults[0]).to.equal(testReviewChargeElementResult)
       })
     })
 
@@ -78,7 +78,7 @@ describe('Review Result model', () => {
 
       it('can successfully run a related query', async () => {
         const query = await ReviewResultModel.query()
-          .innerJoinRelated('reviewReturnResult')
+          .innerJoinRelated('reviewReturnResults')
 
         expect(query).to.exist()
       })
@@ -86,13 +86,13 @@ describe('Review Result model', () => {
       it('can eager load the ', async () => {
         const result = await ReviewResultModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('reviewReturnResult')
+          .withGraphFetched('reviewReturnResults')
 
         expect(result).to.be.instanceOf(ReviewResultModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.reviewReturnResult).to.be.instanceOf(ReviewReturnResultModel)
-        expect(result.reviewReturnResult).to.equal(testReviewReturnResult)
+        expect(result.reviewReturnResults[0]).to.be.instanceOf(ReviewReturnResultModel)
+        expect(result.reviewReturnResults[0]).to.equal(testReviewReturnResult)
       })
     })
   })

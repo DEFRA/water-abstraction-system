@@ -17,7 +17,7 @@ const ReviewChargeElementResultModel = require('../../../app/models/review-charg
  * - allocated - 0
  * - aggregate - 1
  * - chargeDatesOverlap - false
- * - updatedAt - null
+ * - updatedAt - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -46,7 +46,7 @@ function defaults (data = {}) {
     allocated: 0,
     aggregate: 1,
     chargeDatesOverlap: false,
-    updatedAt: null
+    updatedAt: new Date()
   }
 
   return {
