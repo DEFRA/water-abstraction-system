@@ -20,6 +20,7 @@ exports.up = function (knex) {
       table.integer('credit_note_count')
       table.integer('net_total')
       table.integer('bill_run_number')
+      table.integer('error_code')
       table.uuid('external_id')
       table.boolean('is_summer').notNullable().defaultTo(false)
       table.string('source').notNullable().defaultTo('wrls')
