@@ -18,19 +18,18 @@ const ReviewReturnResultModel = require('../../../app/models/review-return-resul
  * - `id` - [random UUID]
  * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnRequirement]:2022-04-01:2023-03-31
  * - `returnReference` - `10031343`
- * - startDate - 2022-04-01
- * - endDate - 2022-05-06
- * - dueDate - 2022-06-03
- * - receivedDate - 2022-06-03
- * - status - `completed`
- * - underQuery - false
- * - nilReturn - false
- * - description - `Lands at Mosshayne Farm, Exeter & Broadclyst`
- * - purposes - {}
- * - quantity - 0
- * - allocated - 0
- * - abstractionOutsidePeriod - false
- * - updatedAt - new Date()
+ * - `startDate` - 2022-04-01
+ * - `endDate` - 2022-05-06
+ * - `dueDate` - 2022-06-03
+ * - `receivedDate` - 2022-06-03
+ * - `status` - completed
+ * - `underQuery` - false
+ * - `nilReturn` - false
+ * - `description` - Lands at Mosshayne Farm, Exeter & Broadclyst
+ * - `purposes` - {}
+ * - `quantity` - 0
+ * - `allocated` - 0
+ * - `abstractionOutsidePeriod` - false
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -71,8 +70,7 @@ function defaults (data = {}) {
     purposes: {},
     quantity: 0,
     allocated: 0,
-    abstractionOutsidePeriod: false,
-    updatedAt: new Date()
+    abstractionOutsidePeriod: false
   }
 
   return {

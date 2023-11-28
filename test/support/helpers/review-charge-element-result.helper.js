@@ -14,10 +14,9 @@ const ReviewChargeElementResultModel = require('../../../app/models/review-charg
  *
  * - `id` - [random UUID]
  * - `chargeElementId` - [random UUID]
- * - allocated - 0
- * - aggregate - 1
- * - chargeDatesOverlap - false
- * - updatedAt - new Date()
+ * - `allocated` - 0
+ * - `aggregate` - 1
+ * - `chargeDatesOverlap` - false
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -45,8 +44,7 @@ function defaults (data = {}) {
     chargeElementId: generateUUID(),
     allocated: 0,
     aggregate: 1,
-    chargeDatesOverlap: false,
-    updatedAt: new Date()
+    chargeDatesOverlap: false
   }
 
   return {
