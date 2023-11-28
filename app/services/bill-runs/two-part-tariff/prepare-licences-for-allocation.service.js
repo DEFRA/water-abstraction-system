@@ -82,7 +82,7 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
       periodEndMonth
     )
 
-    let totalQty = 0
+    let quantity = 0
     let abstractionOutsidePeriod = false
 
     versions[0]?.lines.forEach((line) => {
@@ -90,12 +90,12 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
         abstractionOutsidePeriod = _abstractionOutsidePeriod(abstractionPeriods, line)
       }
       line.unallocated = line.quantity / 1000
-      totalQty += line.unallocated
+      quantity += line.unallocated
     })
 
     returnRecord.nilReturn = versions[0]?.nilReturn ?? false
+    returnRecord.quantity = quantity
     returnRecord.allocatedQuantity = 0
-    returnRecord.totalQuantity = totalQty
     returnRecord.abstractionPeriods = abstractionPeriods
     returnRecord.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnRecord.matched = false
