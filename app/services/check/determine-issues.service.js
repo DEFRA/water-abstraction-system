@@ -174,6 +174,11 @@ function _returnSplitOverChargeReferences (returnRecord, chargeVersions) {
   for (const chargeVersion of chargeVersions) {
     for (const chargeReference of chargeVersion.chargeReferences) {
       const returnFound = chargeReference.chargeElements.some((chargeElement) => {
+        if (!chargeElement.returns) {
+          console.log('🚀 ~ file: determine-issues.service.js:178 ~ returnFound ~ chargeElement:', chargeElement)
+          console.log('🚀 ~ file: determine-issues.service.js:176 ~ _returnSplitOverChargeReferences ~ chargeReference:', chargeReference)
+          console.log('🚀 ~ file: determine-issues.service.js:175 ~ _returnSplitOverChargeReferences ~ chargeVersion:', chargeVersion)
+        }
         return chargeElement.returns.some((matchedReturnResult) => {
           return matchedReturnResult.returnId === returnRecord.returnId
         })
