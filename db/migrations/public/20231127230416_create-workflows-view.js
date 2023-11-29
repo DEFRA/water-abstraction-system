@@ -14,7 +14,8 @@ exports.up = function (knex) {
         'status',
         'data',
         'licence_version_id',
-        'date_deleted',
+        'date_deleted AS deleted_at',
+
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))
