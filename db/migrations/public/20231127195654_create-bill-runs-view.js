@@ -20,7 +20,8 @@ exports.up = function (knex) {
         'bill_run_number',
         // 'error_code',
         'external_id',
-        'is_summer',
+        'is_summer AS summer',
+
         'source',
         'legacy_id',
         'metadata',
