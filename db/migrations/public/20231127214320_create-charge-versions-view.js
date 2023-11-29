@@ -18,7 +18,8 @@ exports.up = function (knex) {
         'apportionment',
         'error',
         'end_date',
-        'billed_upto_date',
+        'billed_upto_date AS billed_up_to_date',
+
         'region_code',
         'source',
         // 'is_test',
