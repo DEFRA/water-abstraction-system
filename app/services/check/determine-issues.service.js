@@ -6,7 +6,7 @@
  */
 
 const REVIEW_STATUSES = [
-  'Aggregate', 'Checking query', 'Overlap of charge date', 'Returns received but not processed',
+  'Aggregate', 'Checking query', 'Overlap of charge dates', 'Returns received but not processed',
   'Return split over charge references', 'Unable to allocate returns', 'Unable to match return'
 ]
 
