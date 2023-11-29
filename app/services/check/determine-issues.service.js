@@ -42,7 +42,7 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
     chargeElement.issues = []
 
     // Unable to match return
-    if (chargeElement.returns.length === 0) {
+    if (chargeElement.returns && chargeElement.returns.length === 0) {
       chargeElement.issues.push('Unable to match return')
     }
 
@@ -77,7 +77,7 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
 function _determineSomeReturnsNotReceived (chargeElement, returnRecords) {
   // NOTE: The requirement states "An element matches to multiple returns AND at least 1 of those returns has a status
   // of due". So, our first check is that the element has matched to more than one return.
-  if (chargeElement.returns.length <= 1) {
+  if (chargeElement.returns && chargeElement.returns.length <= 1) {
     return false
   }
 
