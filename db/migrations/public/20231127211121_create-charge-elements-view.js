@@ -25,7 +25,8 @@ exports.up = function (knex) {
         'purpose_primary_id',
         'purpose_secondary_id',
         'purpose_use_id AS purpose_id',
-        'is_section_127_agreement_enabled',
+        'is_section_127_agreement_enabled AS section_127_agreement',
+
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))
