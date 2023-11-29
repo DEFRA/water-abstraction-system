@@ -11,7 +11,8 @@ exports.up = function (knex) {
         'licence_id AS id',
         'region_id',
         'licence_ref',
-        'is_water_undertaker',
+        'is_water_undertaker AS water_undertaker',
+
         'regions',
         'start_date',
         'expired_date',
