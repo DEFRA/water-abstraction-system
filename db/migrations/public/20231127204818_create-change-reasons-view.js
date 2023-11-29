@@ -12,7 +12,6 @@ exports.up = function (knex) {
         'triggers_minimum_charge',
         'type',
         'is_enabled_for_new_charge_versions AS enabled_for_new_charge_versions',
-
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))

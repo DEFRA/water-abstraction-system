@@ -17,7 +17,6 @@ exports.up = function (knex) {
         'two_part_tariff_status',
         'two_part_tariff_review',
         'is_approved AS approved',
-
         'billing_batch_id AS bill_run_id',
         'volume'
         // 'errored_on'

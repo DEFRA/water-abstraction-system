@@ -29,7 +29,6 @@ exports.up = function (knex) {
         'purpose_primary_id',
         'purpose_secondary_id',
         'purpose_use_id AS purpose_id',
-
         'is_section_127_agreement_enabled AS section_127_agreement',
         'scheme',
         'is_restricted_source AS restricted_source',
@@ -40,7 +39,6 @@ exports.up = function (knex) {
         'adjustments',
         'is_section_126_agreement_enabled AS section_126_agreement',
         'is_section_130_agreement_enabled AS section_130_agreement',
-
         'eiuc_region',
         'date_created AS created_at',
         'date_updated AS updated_at'

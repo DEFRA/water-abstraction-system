@@ -21,7 +21,6 @@ exports.up = function (knex) {
         // 'error_code',
         'external_id',
         'is_summer AS summer',
-
         'source',
         'legacy_id',
         'metadata',

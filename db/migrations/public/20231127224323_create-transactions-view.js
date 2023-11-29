@@ -56,7 +56,6 @@ exports.up = function (knex) {
         'is_water_company_charge AS water_company_charge',
         'is_winter_only AS winter_only',
         'is_water_undertaker AS water_undertaker',
-
         'purposes',
         'gross_values_calculated',
         // 'winter_discount_factor',

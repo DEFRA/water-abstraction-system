@@ -13,7 +13,6 @@ exports.up = function (knex) {
         'description',
         'loss_factor',
         'is_two_part_tariff AS two_part_tariff',
-
         // 'is_test',
         'date_created AS created_at',
         'date_updated AS updated_at'
