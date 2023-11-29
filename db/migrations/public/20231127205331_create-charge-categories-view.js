@@ -12,10 +12,11 @@ exports.up = function (knex) {
         'subsistence_charge',
         'description',
         'short_description',
-        'is_tidal',
+        'is_tidal AS tidal',
         'loss_factor',
         'model_tier',
-        'is_restricted_source',
+        'is_restricted_source AS restricted_source',
+
         'min_volume',
         'max_volume',
         'date_created AS created_at',
