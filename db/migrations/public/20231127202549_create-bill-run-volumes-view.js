@@ -11,12 +11,13 @@ exports.up = function (knex) {
         'billing_volume_id AS id',
         'charge_element_id AS charge_element_id',
         'financial_year',
-        'is_summer',
+        'is_summer AS summer',
         'calculated_volume',
         'two_part_tariff_error',
         'two_part_tariff_status',
         'two_part_tariff_review',
-        'is_approved',
+        'is_approved AS approved',
+
         'billing_batch_id AS bill_run_id',
         'volume'
         // 'errored_on'
