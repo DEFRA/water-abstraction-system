@@ -8,7 +8,7 @@ exports.up = function (knex) {
     .createView(viewName, (view) => {
       view.as(knex('billing_invoices').withSchema('water').select([
         'billing_invoice_id AS id',
-        'invoice_account_id',
+        'invoice_account_id AS billing_account_id',
         'address',
         'invoice_account_number AS account_number',
         'net_amount',
