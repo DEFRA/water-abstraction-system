@@ -174,11 +174,17 @@ function _returnSplitOverChargeReferences (returnRecord, chargeVersions) {
   for (const chargeVersion of chargeVersions) {
     for (const chargeReference of chargeVersion.chargeReferences) {
       const returnFound = chargeReference.chargeElements.some((chargeElement) => {
+        // NOTE: If a chargeElement is linked to a charge version where the chargePeriod doesn't get set, then it will
+        // never be prepared and therefore never have a `.returns` property. The scenario this can happen in is where
+        // a charge version (plus reference and element) get setup but then someone sets an expired/lapsed/revoked date
+        // prior to the charge version. This would result in an invalid charge period which means we don't bother to
+        // prep and match the charge version. A real example of this is 6/33/52/*S/0222 which has an SROC 2PT charge
+        // version but was marked as lapsed on 16 June 2009. Either the CV import allowed the CV to be created, or NALD
+        // was updated after the charge version was created.
         if (!chargeElement.returns) {
-          console.log('🚀 ~ file: determine-issues.service.js:178 ~ returnFound ~ chargeElement:', chargeElement)
-          console.log('🚀 ~ file: determine-issues.service.js:176 ~ _returnSplitOverChargeReferences ~ chargeReference:', chargeReference)
-          console.log('🚀 ~ file: determine-issues.service.js:175 ~ _returnSplitOverChargeReferences ~ chargeVersion:', chargeVersion)
+          return false
         }
+
         return chargeElement.returns.some((matchedReturnResult) => {
           return matchedReturnResult.returnId === returnRecord.returnId
         })
