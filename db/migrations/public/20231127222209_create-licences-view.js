@@ -20,8 +20,9 @@ exports.up = function (knex) {
         'revoked_date',
         'suspend_from_billing',
         // 'is_test',
-        'include_in_supplementary_billing',
-        'include_in_sroc_supplementary_billing',
+        'include_in_supplementary_billing AS include_in_presroc_billing',
+        'include_in_sroc_supplementary_billing AS include_in_sroc_billing',
+
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))
