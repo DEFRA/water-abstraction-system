@@ -40,6 +40,10 @@ function go (licences) {
 }
 
 function _formatAbstractionPeriods (abstractionPeriods) {
+  if (!abstractionPeriods) {
+    return ''
+  }
+
   return abstractionPeriods.map((period) => {
     const { startDate, endDate } = period
 
