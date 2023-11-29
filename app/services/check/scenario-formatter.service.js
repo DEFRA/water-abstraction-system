@@ -115,8 +115,8 @@ function _formatChargeVersions (chargeVersions) {
       chargeReferences
     } = chargeVersion
 
-    const chargePeriodStartDate = chargePeriod.startDate.toLocaleDateString('en-GB')
-    const chargePeriodEndDate = chargePeriod.endDate.toLocaleDateString('en-GB')
+    const chargePeriodStartDate = chargePeriod.startDate ? chargePeriod.startDate.toLocaleDateString('en-GB') : ''
+    const chargePeriodEndDate = chargePeriod.endDate ? chargePeriod.endDate.toLocaleDateString('en-GB') : ''
 
     return {
       id,
