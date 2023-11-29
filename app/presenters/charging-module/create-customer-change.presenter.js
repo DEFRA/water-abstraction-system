@@ -132,6 +132,7 @@ function _formattedAddress (address, contact) {
     addressLine2: addressLines[1] ? addressLines[1] : null,
     addressLine3: addressLines[2] ? addressLines[2] : null,
     addressLine4: addressLines[3] ? addressLines[3] : null,
+    // We have encountered instances of ton being null so we confirm we have something to truncate to avoid an error
     addressLine5: town ? _truncate(town, 60) : null,
     addressLine6: _truncate(_addressLine6(county, country), 60),
     postcode: _truncate(postcode, 60)
