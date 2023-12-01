@@ -9,7 +9,7 @@ exports.up = function (knex) {
       // NOTE: We have commented out unused columns from the source table
       view.as(knex('billing_volumes').withSchema('water').select([
         'billing_volume_id AS id',
-        'charge_element_id AS charge_element_id',
+        'charge_element_id AS charge_reference_id',
         'financial_year',
         'is_summer AS summer',
         'calculated_volume',
