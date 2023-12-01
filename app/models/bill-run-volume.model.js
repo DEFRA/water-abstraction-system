@@ -21,7 +21,7 @@ class BillRunVolumeModel extends BaseModel {
         modelClass: 'bill-run.model',
         join: {
           from: 'billRunVolumes.billRunId',
-          to: 'billingBatches.id'
+          to: 'billRuns.id'
         }
       },
       chargeReference: {
