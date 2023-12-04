@@ -18,7 +18,7 @@ const UserRoleModel = require('../../../app/models/user-role.model.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:RoleModel} The instance of the newly created record
+ * @returns {module:UserRoleModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
