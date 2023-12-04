@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for idm.groups
+ * Model for groups (idm.groups)
  * @module GroupModel
  */
 

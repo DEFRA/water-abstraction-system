@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for idm.group_roles
+ * Model for group_roles (idm.group_roles)
  * @module GroupRoleModel
  */
 

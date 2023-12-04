@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for idm.users
+ * Model for users (idm.users)
  * @module UserModel
  */
 

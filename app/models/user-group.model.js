@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for idm.user_groups
+ * Model for user_groups (idm.user_groups)
  * @module UserGroupModel
  */
 

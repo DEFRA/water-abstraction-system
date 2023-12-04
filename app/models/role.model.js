@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for idm.roles
+ * Model for roles (idm.roles)
  * @module RoleModel
  */
 
