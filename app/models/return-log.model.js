@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for return_logs
+ * Model for return_logs (returns.returns)
  * @module ReturnLogModel
  */
 

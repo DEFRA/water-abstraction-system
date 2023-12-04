@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for return_submissions
+ * Model for return_submissions (returns.versions)
  * @module ReturnSubmissionModel
  */
 
