@@ -15,7 +15,10 @@ const { generateLicenceRef } = require('./licence.helper.js')
  *
  * - `licenceRef` - [randomly generated - 01/123]
  * - `scheme` - sroc
+ * - `versionNumber` - 1
  * - `startDate` - 2022-04-01
+ * - `regionCode` - 1
+ * - `source` - wrls
  * - `invoiceAccountId` - [random UUID]
  * - `status` - current
  * - `licenceId` - [random UUID]
@@ -44,7 +47,10 @@ function defaults (data = {}) {
   const defaults = {
     licenceRef: generateLicenceRef(),
     scheme: 'sroc',
+    versionNumber: 1,
     startDate: new Date('2022-04-01'),
+    regionCode: 1,
+    source: 'wrls',
     invoiceAccountId: generateUUID(),
     status: 'current',
     licenceId: generateUUID()

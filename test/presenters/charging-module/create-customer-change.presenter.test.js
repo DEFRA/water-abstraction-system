@@ -296,15 +296,32 @@ describe('Charging Module Create Transaction presenter', () => {
 
   describe('addressLine5:', () => {
     beforeEach(() => {
-      address = AddressModel.fromJson({ ...standardAddress })
       company = CompanyModel.fromJson({})
       contact = ContactModel.fromJson({})
     })
 
-    it('returns the town for addressLine5', () => {
-      const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+    describe('when town is set in the address', () => {
+      beforeEach(() => {
+        address = AddressModel.fromJson({ ...standardAddress })
+      })
 
-      expect(result.addressLine5).to.equal('BRISTOL')
+      it('returns the town for addressLine5', () => {
+        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+
+        expect(result.addressLine5).to.equal('BRISTOL')
+      })
+    })
+
+    describe('when town is not set in the address', () => {
+      beforeEach(() => {
+        address = AddressModel.fromJson({ ...standardAddress, town: null })
+      })
+
+      it('returns null for addressLine5', () => {
+        const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+
+        expect(result.addressLine5).to.be.null()
+      })
     })
   })
 
