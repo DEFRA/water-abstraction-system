@@ -16,7 +16,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * - `source` - non-tidal
  * - `loss` - low
  * - `description` - Mineral washing
- * - `section127AgreementEnabled` - true
+ * - `section127Agreement` - true
  * - `scheme` - sroc
  * - `restrictedSource` - true
  * - `waterModel` - no model
@@ -56,7 +56,7 @@ function defaults (data = {}) {
     source: 'non-tidal',
     loss: 'low',
     description: 'Mineral washing',
-    section127AgreementEnabled: true,
+    section127Agreement: true,
     scheme: 'sroc',
     restrictedSource: true,
     waterModel: 'no model',

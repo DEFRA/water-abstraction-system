@@ -37,7 +37,7 @@ class BillRunModel extends BaseModel {
         modelClass: 'bill-run-volume.model',
         join: {
           from: 'billRuns.id',
-          to: 'billingVolumes.billRunId'
+          to: 'billRunVolumes.billRunId'
         }
       }
     }
