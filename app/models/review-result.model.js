@@ -17,7 +17,7 @@ class ReviewResultModel extends BaseModel {
   static get relationMappings () {
     return {
       reviewChargeElementResults: {
-        relation: Model.HasManyRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: 'review-charge-element-result.model',
         join: {
           from: 'reviewResults.reviewChargeElementResultId',
@@ -25,7 +25,7 @@ class ReviewResultModel extends BaseModel {
         }
       },
       reviewReturnResults: {
-        relation: Model.HasManyRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: 'review-return-result.model',
         join: {
           from: 'reviewResults.reviewReturnResultId',
