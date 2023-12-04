@@ -39,7 +39,7 @@ describe('Review Result model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to review charge element result', () => {
+    describe('when linking to review charge element results', () => {
       let testReviewChargeElementResult
       let testRecords
 
@@ -60,7 +60,7 @@ describe('Review Result model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the ', async () => {
+      it('can eager load the review charge element results', async () => {
         const result = await ReviewResultModel.query()
           .where('reviewChargeElementResultId', testReviewChargeElementResult.id)
           .withGraphFetched('reviewChargeElementResults')
@@ -82,7 +82,7 @@ describe('Review Result model', () => {
       })
     })
 
-    describe('when linking to review return result', () => {
+    describe('when linking to review return results', () => {
       let testReviewReturnResult
       let testRecords
 
@@ -103,7 +103,7 @@ describe('Review Result model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the ', async () => {
+      it('can eager load the review return results', async () => {
         const result = await ReviewResultModel.query()
           .where('reviewReturnResultId', testReviewReturnResult.id)
           .withGraphFetched('reviewReturnResults')
