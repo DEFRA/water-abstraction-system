@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for crm_v2.company
+ * Model for companies (crm_v2.companies)
  * @module CompanyModel
  */
 

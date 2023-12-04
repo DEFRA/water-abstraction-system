@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for crm_v2.addresses
+ * Model for addresses (crm_v2.addresses)
  * @module AddressModel
  */
 

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for crm_v2.invoice_account_addresses
+ * Model for billing_account_addresses (crm_v2.invoice_account_addresses)
  * @module BillingAccountAddressModel
  */
 
