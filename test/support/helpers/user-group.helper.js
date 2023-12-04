@@ -18,7 +18,7 @@ const UserGroupModel = require('../../../app/models/user-group.model.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:GroupModel} The instance of the newly created record
+ * @returns {module:UserGroupModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
