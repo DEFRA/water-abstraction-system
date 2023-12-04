@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for purposes
+ * Model for purposes (water.purposes_uses)
  * @module PurposeModel
  */
 

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for events
+ * Model for events (water.events)
  * @module EventModel
  */
 

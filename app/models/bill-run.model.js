@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for bill_runs
+ * Model for bill_runs (water.billing_batches)
  * @module BillRunModel
  */
 

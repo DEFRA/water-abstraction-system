@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for licenceVersions
+ * Model for licenceVersions (water.licence_versions)
  * @module LicenceVersionModel
  */
 

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for change_reasons
+ * Model for change_reasons (water.change_reasons)
  * @module ChangeReasonModel
  */
 

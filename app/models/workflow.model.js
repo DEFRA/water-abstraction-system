@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for workflows
+ * Model for workflows (water.charge_version_workflows)
  * @module WorkflowModel
  */
 

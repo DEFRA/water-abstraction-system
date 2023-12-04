@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for transactions
+ * Model for transactions (water.billing_transactions)
  * @module TransactionModel
  */
 

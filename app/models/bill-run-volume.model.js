@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for bill_run_volumes
+ * Model for bill_run_volumes (water.billing_volumes)
  * @module BillRunVolumeModel
  */
 

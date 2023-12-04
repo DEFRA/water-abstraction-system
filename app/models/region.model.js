@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for regions
+ * Model for regions (water.regions)
  * @module RegionModel
  */
 

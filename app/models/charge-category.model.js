@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for charge_categories
+ * Model for charge_categories (water.billing_charge_categories)
  * @module ChargeCategoryModel
  */
 

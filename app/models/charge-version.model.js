@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for charge_versions
+ * Model for charge_versions (water.charge_versions)
  * @module ChargeVersionModel
  */
 

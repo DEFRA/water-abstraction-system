@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for charge_elements
+ * Model for charge_elements (water.charge_purposes)
  * @module ChargeElementModel
  */
 

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for bill_licences
+ * Model for bill_licences (water.billing_invoice_licences)
  * @module BillLicenceModel
  */
 
