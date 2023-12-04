@@ -23,7 +23,6 @@ class LegacyBaseModel extends BaseModel {
   static get modelPaths () {
     const currentPath = __dirname
     return [
-      currentPath,
       path.join(currentPath, 'returns'),
       path.join(currentPath, 'water'),
       path.join(currentPath, 'crm-v2'),
