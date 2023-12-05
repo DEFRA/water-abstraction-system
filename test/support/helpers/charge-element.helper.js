@@ -27,7 +27,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * - `purposePrimaryId` - [random UUID]
  * - `purposeSecondaryId` - [random UUID]
  * - `purposeId` - [random UUID]
- * - `section127AgreementEnabled` - true
+ * - `section127Agreement` - true
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -66,7 +66,7 @@ function defaults (data = {}) {
     purposePrimaryId: generateUUID(),
     purposeSecondaryId: generateUUID(),
     purposeId: generateUUID(),
-    section127AgreementEnabled: true
+    section127Agreement: true
   }
 
   return {

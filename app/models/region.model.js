@@ -29,7 +29,7 @@ class RegionModel extends BaseModel {
         modelClass: 'bill-run.model',
         join: {
           from: 'regions.id',
-          to: 'billingBatches.regionId'
+          to: 'billRuns.regionId'
         }
       }
     }
