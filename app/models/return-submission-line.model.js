@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for return_submission_lines
+ * Model for return_submission_lines (returns.lines)
  * @module ReturnSubmissionLineModel
  */
 

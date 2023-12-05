@@ -1,38 +1,38 @@
 'use strict'
 
 /**
- * Model for return_logs (returns.returns)
- * @module ReturnLogModel
+ * Model for review_return_results
+ * @module ReviewReturnResultModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class ReturnLogModel extends BaseModel {
+class ReviewReturnResultModel extends BaseModel {
   static get tableName () {
-    return 'returnLogs'
+    return 'reviewReturnResults'
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
   static get jsonAttributes () {
     return [
-      'metadata'
+      'purposes'
     ]
   }
 
   static get relationMappings () {
     return {
-      returnSubmissions: {
+      reviewResults: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-submission.model',
+        modelClass: 'review-result.model',
         join: {
-          from: 'returnLogs.id',
-          to: 'returnSubmissions.returnLogId'
+          from: 'reviewReturnResults.id',
+          to: 'reviewResults.reviewReturnResultId'
         }
       }
     }
   }
 }
 
-module.exports = ReturnLogModel
+module.exports = ReviewReturnResultModel
