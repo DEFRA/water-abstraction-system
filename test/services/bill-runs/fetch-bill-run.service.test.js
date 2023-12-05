@@ -8,14 +8,14 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/crm-v2/address.helper.js')
+const AddressHelper = require('../../support/helpers/address.helper.js')
 const BillHelper = require('../../support/helpers/water/bill.helper.js')
-const BillingAccountHelper = require('../../support/helpers/crm-v2/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/crm-v2/billing-account-address.helper.js')
+const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
+const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
 const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/water/bill-run.model.js')
 const BillLicenceHelper = require('../../support/helpers/water/bill-licence.helper.js')
-const CompanyHelper = require('../../support/helpers/crm-v2/company.helper.js')
+const CompanyHelper = require('../../support/helpers/company.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
 const RegionHelper = require('../../support/helpers/water/region.helper.js')
@@ -62,8 +62,8 @@ describe('Fetch Bill Run service', () => {
     // We intend to create 2 Bills linked to this bill run and test we get 2 summaries back. Each bill _must_ be linked
     // to a different billing account. So, we need two.
     linkedBillingAccounts = await Promise.all([
-      BillingAccountHelper.add({ companyId: linkedCompanies[0].companyId }),
-      BillingAccountHelper.add({ companyId: linkedCompanies[1].companyId })
+      BillingAccountHelper.add({ companyId: linkedCompanies[0].id }),
+      BillingAccountHelper.add({ companyId: linkedCompanies[1].id })
     ])
 
     // We don't care about the address in our service. But it's a required field when creating a BillingAccountAddress
@@ -73,14 +73,14 @@ describe('Fetch Bill Run service', () => {
     // company we prepared earlier
     await Promise.all([
       BillingAccountAddressHelper.add({
-        invoiceAccountId: linkedBillingAccounts[0].invoiceAccountId,
-        addressId: address.addressId
+        billingAccountId: linkedBillingAccounts[0].id,
+        addressId: address.id
 
       }),
       BillingAccountAddressHelper.add({
-        invoiceAccountId: linkedBillingAccounts[1].invoiceAccountId,
-        addressId: address.addressId,
-        agentCompanyId: linkedCompanies[2].companyId
+        billingAccountId: linkedBillingAccounts[1].id,
+        addressId: address.id,
+        companyId: linkedCompanies[2].id
       })
     ])
 
@@ -89,14 +89,14 @@ describe('Fetch Bill Run service', () => {
     linkedBills = await Promise.all([
       BillHelper.add({
         billingBatchId: testBillRun.billingBatchId,
-        invoiceAccountId: linkedBillingAccounts[0].invoiceAccountId,
-        invoiceAccountNumber: linkedBillingAccounts[0].invoiceAccountNumber,
+        invoiceAccountId: linkedBillingAccounts[0].id,
+        invoiceAccountNumber: linkedBillingAccounts[0].accountNumber,
         netAmount: 1550
       }),
       BillHelper.add({
         billingBatchId: testBillRun.billingBatchId,
-        invoiceAccountId: linkedBillingAccounts[1].invoiceAccountId,
-        invoiceAccountNumber: linkedBillingAccounts[1].invoiceAccountNumber,
+        invoiceAccountId: linkedBillingAccounts[1].id,
+        invoiceAccountNumber: linkedBillingAccounts[1].accountNumber,
         netAmount: 2345
       })
     ])

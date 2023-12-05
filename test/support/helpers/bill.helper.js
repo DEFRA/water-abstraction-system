@@ -6,7 +6,7 @@
 
 const BillModel = require('../../../app/models/bill.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateInvoiceAccountNumber } = require('./crm-v2/billing-account.helper.js')
+const { generateAccountNumber } = require('./billing-account.helper.js')
 
 /**
  * Add a new bill
@@ -43,7 +43,7 @@ function defaults (data = {}) {
   const defaults = {
     billingAccountId: generateUUID(),
     address: {},
-    accountNumber: generateInvoiceAccountNumber(),
+    accountNumber: generateAccountNumber(),
     billRunId: generateUUID(),
     financialYearEnding: 2023
   }
