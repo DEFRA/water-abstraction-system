@@ -5,11 +5,11 @@
  * @module ChangeAddressService
  */
 
-const AddressModel = require('../../models/crm-v2/address.model.js')
-const BillingAccountAddressModel = require('../../models/crm-v2/billing-account-address.model.js')
-const BillingAccountModel = require('../../models/crm-v2/billing-account.model.js')
-const CompanyModel = require('../../models/crm-v2/company.model.js')
-const ContactModel = require('../../models/crm-v2/contact.model.js')
+const AddressModel = require('../../models/address.model.js')
+const BillingAccountAddressModel = require('../../models/billing-account-address.model.js')
+const BillingAccountModel = require('../../models/billing-account.model.js')
+const CompanyModel = require('../../models/company.model.js')
+const ContactModel = require('../../models/contact.model.js')
 const SendCustomerChangeService = require('./send-customer-change.service.js')
 
 /**
@@ -18,11 +18,11 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * Within the service an internal user can 'Change the address' of a billing account. That is what the button says but
  * they can also change or set the agent company and the contact along with the address.
  *
- * Behind the scenes a new `crm_v2.invoice_account_address` record is created that links to the `crm_v2.address`,
- * `crm_v2.company` and `crm_v2.contact` records. It will also be linked to the `crm_v2.invoice_account` which
+ * Behind the scenes a new `billing_account_address` record is created that links to the `addresses`,
+ * `companies` and `contacts` records. It will also be linked to the `crm_v2.billing_account` which
  * represents the billing account being amended.
  *
- * It won't have an end date, which marks it as the 'current' address. The previous `invoice_account_address` will get
+ * It won't have an end date, which marks it as the 'current' address. The previous `billing_account_address` will get
  * its `end_date` updated. The legacy service then knows that address is no longer current.
  *
  * When a change like this is made SOP, the system that sends invoices to customers, needs to know about it. That
@@ -34,7 +34,7 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * - the source for addresses, companies and contacts is NALD and WRLS. But rather than transform them at ingress to a
  *   single format the tables manage both. For example, NALD contacts use `initials` whereas WRLS contacts use
  *   `middle_initials`. A contact can also be a 'department' under WRLS, which means the format changes again
- * - where possible duplication of records has tried to be avoided. For example, you cannot have 2 addresses with the
+ * - where possible, duplication of records has tried to be avoided. For example, you cannot have 2 addresses with the
  *   same UPRN, or 2 companies with the same company number. The problem is the source data _does_ change. We have seen
  *   the OS Places result for Horizon House change from Environment Agency, to Natural England, Defra and back to the
  *   Environment Agency over the years. This means when a user changes the address, for example, they may actually be
@@ -81,9 +81,9 @@ async function go (billingAccountId, address, agentCompany = {}, contact = {}) {
   return _response(persistedData)
 }
 
-async function _fetchBillingAccount (invoiceAccountId) {
+async function _fetchBillingAccount (billingAccountId) {
   return BillingAccountModel.query()
-    .findById(invoiceAccountId)
+    .findById(billingAccountId)
     .withGraphFetched('company')
     .modifyGraph('company', (builder) => {
       builder.select([
@@ -105,7 +105,7 @@ async function _fetchBillingAccount (invoiceAccountId) {
  * instances.
  *
  * We attempt to persist the address, company and contact model instances first because we need their IDs in order to
- * create the new `crm_v2.invoice_account_address` record. When we create that record we also need to apply an end date
+ * create the new `billing_account_addresses` record. When we create that record we also need to apply an end date
  * to any existing billing account addresses with a null end date. This is how the service determines which address
  * details are current (end date is null).
  *
@@ -130,24 +130,24 @@ async function _persist (timestamp, billingAccount, address, company, contact) {
     persistedData.contact = await _persistContact(trx, contact)
 
     const billingAccountAddress = BillingAccountAddressModel.fromJson({
-      invoiceAccountId: billingAccount.invoiceAccountId,
-      addressId: persistedData.address.addressId,
-      agentCompanyId: persistedData.company.companyId,
-      contactId: persistedData.contact.contactId,
+      billingAccountId: billingAccount.id,
+      addressId: persistedData.address.id,
+      companyId: persistedData.company.id,
+      contactId: persistedData.contact.id,
       startDate: timestamp,
       endDate: null,
       createdAt: timestamp,
       updatedAt: timestamp
     })
 
-    await _patchExistingBillingAccountAddressEndDate(trx, billingAccount.invoiceAccountId, timestamp)
+    await _patchExistingBillingAccountAddressEndDate(trx, billingAccount.id, timestamp)
     persistedData.billingAccountAddress = await _persistBillingAccountAddress(trx, billingAccountAddress)
   })
 
   return persistedData
 }
 
-async function _patchExistingBillingAccountAddressEndDate (trx, invoiceAccountId, timestamp) {
+async function _patchExistingBillingAccountAddressEndDate (trx, billingAccountId, timestamp) {
   // The timestamp represents the current date and time we're making this change, i.e. today. So, the new billing
   // account address will start from today. To show that the old record is no longer current, we need to set its
   // `endDate` to be today - 1 (yesterday). The following works it all out even if we're over a month or year boundary
@@ -160,14 +160,14 @@ async function _patchExistingBillingAccountAddressEndDate (trx, invoiceAccountId
       endDate,
       updatedAt: timestamp
     })
-    .where('invoiceAccountId', invoiceAccountId)
+    .where('billingAccountId', billingAccountId)
     .whereNull('endDate')
 }
 
 /**
  * Persist the new billing account address
  *
- * The legacy code included logic to handle a situation where the start date and invoice account ID are the same. This
+ * The legacy code included logic to handle a situation where the start date and billing account ID are the same. This
  * could happen if you make a change to a billing account's address more than once on the same day. It would first
  * SELECT any records where that was the case and then DELETE them.
  *
@@ -177,21 +177,21 @@ async function _patchExistingBillingAccountAddressEndDate (trx, invoiceAccountId
 async function _persistBillingAccountAddress (trx, billingAccountAddress) {
   return billingAccountAddress.$query(trx)
     .insert()
-    .onConflict(['invoiceAccountId', 'startDate'])
+    .onConflict(['billingAccountId', 'startDate'])
     // If a conflict is found this specifies what fields should get updated
     .merge([
       'addressId',
-      'agentCompanyId',
+      'companyId',
       'contactId',
       'endDate',
-      'dateUpdated'
+      'updatedAt'
     ])
 }
 
 /**
  * Persist the address entered during the change address process
  *
- * If the address has an `addressId:` we assume it was an existing address selected during the journey. So, the address
+ * If the address has an `id:` we assume it was an existing address selected during the journey. So, the address
  * is already persisted hence we just return `address`.
  *
  * Else we attempt to insert a new address record. If the address has a `uprn:` it will be one selected from the
@@ -199,7 +199,7 @@ async function _persistBillingAccountAddress (trx, billingAccountAddress) {
  * records with matching UPRNs. But we use this to our advantage. Using `onConflict()` and `merge()` we can have
  * Objection JS update the existing address record if a matching UPRN exists.
  *
- * Because either INSERT or UPDATE gets fired `returning()` will kick in and return the all important `addressId` which
+ * Because either INSERT or UPDATE gets fired `returning()` will kick in and return the all important `id` which
  * we'll need later for the billing account address. It will also return the fields specified in the INSERT/UPDATE hence
  * we get a 'complete' address back that we can return to the calling function.
  *
@@ -211,7 +211,7 @@ async function _persistBillingAccountAddress (trx, billingAccountAddress) {
  * > returned when first added.
  */
 async function _persistAddress (trx, address) {
-  if (address.addressId) {
+  if (address.id) {
     return address
   }
 
@@ -224,21 +224,21 @@ async function _persistAddress (trx, address) {
       'address2',
       'address3',
       'address4',
-      'town',
-      'county',
+      'address5',
+      'address6',
       'country',
       'postcode',
-      'dateUpdated'
+      'updatedAt'
     ])
     .returning([
-      'addressId'
+      'id'
     ])
 }
 
 /**
  * Persist the company (Agent) entered during the change address process
  *
- * If the company has a `companyId:` we assume it was an existing company selected during the journey. So, the company
+ * If the company has an `id:` we assume it was an existing company selected during the journey. So, the company
  * is already persisted hence we just return `company`. If the company name is not set then the user has opted not to
  * change the agent in the journey. So, we just return the empty `CompanyModel` instance.
  *
@@ -246,9 +246,9 @@ async function _persistAddress (trx, address) {
  * company record selected by the user, or they will have been required to enter the company number. The previous team
  * added a unique constraint on `company_number` in the table so we cannot insert 2 records with matching numbers. But
  * we use this to our advantage. Using `onConflict()` and `merge()` we can have Objection JS update the existing company
- * record if a matching company number.
+ * record if a matching company number exists.
  *
- * Because either INSERT or UPDATE gets fired `returning()` will kick in and return the all important `companyId` which
+ * Because either INSERT or UPDATE gets fired `returning()` will kick in and return the all important `id` which
  * we'll need later for the billing account address. It will also return the fields specified in the INSERT/UPDATE hence
  * we get a 'complete' company back that we can return to the calling function.
  *
@@ -260,7 +260,7 @@ async function _persistAddress (trx, address) {
  * > what it returned when first added.
  */
 async function _persistCompany (trx, company) {
-  if (company.companyId || !company.name) {
+  if (company.id || !company.name) {
     return company
   }
 
@@ -270,10 +270,10 @@ async function _persistCompany (trx, company) {
     // If a conflict is found this specifies what fields should get updated
     .merge([
       'name',
-      'dateUpdated'
+      'updatedAt'
     ])
     .returning([
-      'companyId'
+      'id'
     ])
 }
 
@@ -293,7 +293,7 @@ async function _persistContact (trx, contact) {
   return contact.$query(trx)
     .insert()
     .returning([
-      'contactId'
+      'id'
     ])
 }
 
@@ -314,22 +314,22 @@ function _response (persistedData) {
   const { address, company, contact, billingAccountAddress } = persistedData
 
   return {
-    invoiceAccountAddress: { ...billingAccountAddress },
+    billingAccountAddress: { ...billingAccountAddress },
     address: { ...address },
-    agentCompany: company.companyId ? { ...company } : null,
-    contact: contact.contactId ? { ...contact } : null
+    agentCompany: company.id ? { ...company } : null,
+    contact: contact.id ? { ...contact } : null
   }
 }
 
 function _transformAddress (timestamp, address) {
   return AddressModel.fromJson({
-    addressId: address.addressId,
+    id: address.addressId,
     address1: address.addressLine1,
     address2: address.addressLine2,
     address3: address.addressLine3,
     address4: address.addressLine4,
-    town: address.town,
-    county: address.county,
+    address5: address.town,
+    address6: address.county,
     country: address.country,
     postcode: address.postcode,
     uprn: address.uprn,
@@ -341,7 +341,7 @@ function _transformAddress (timestamp, address) {
 
 function _transformCompany (timestamp, company) {
   return CompanyModel.fromJson({
-    companyId: company.companyId,
+    id: company.companyId,
     type: company.type,
     name: company.name,
     companyNumber: company.companyNumber,

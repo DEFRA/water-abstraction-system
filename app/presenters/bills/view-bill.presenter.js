@@ -16,10 +16,10 @@ function go (bill, billingAccount) {
 
   const formattedBill = {
     accountName: _accountName(billingAccount),
-    accountNumber: billingAccount.invoiceAccountNumber,
+    accountNumber: billingAccount.accountNumber,
     addressLines: _addressLines(billingAccount),
     billId: bill.billingInvoiceId,
-    billingAccountId: billingAccount.invoiceAccountId,
+    billingAccountId: billingAccount.id,
     billNumber: bill.invoiceNumber,
     billRunId: billRun.billingBatchId,
     billRunNumber: billRun.billRunNumber,
@@ -46,8 +46,8 @@ function go (bill, billingAccount) {
 function _accountName (billingAccount) {
   const accountAddress = billingAccount.billingAccountAddresses[0]
 
-  if (accountAddress.agentCompany) {
-    return accountAddress.agentCompany.name
+  if (accountAddress.company) {
+    return accountAddress.company.name
   }
 
   return billingAccount.company.name
@@ -61,8 +61,8 @@ function _addressLines (billingAccount) {
     address.address2,
     address.address3,
     address.address4,
-    address.town,
-    address.county,
+    address.address5,
+    address.address6,
     address.postcode,
     address.country
   ]
