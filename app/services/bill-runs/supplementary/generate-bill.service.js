@@ -20,10 +20,10 @@ function go (billingAccount, billRunId, financialYearEnding) {
   const bill = {
     billingBatchId: billRunId,
     financialYearEnding,
-    invoiceAccountId: billingAccount.invoiceAccountId,
+    invoiceAccountId: billingAccount.id,
     billingInvoiceId: generateUUID(),
     address: {}, // Address is set to an empty object for SROC billing invoices
-    invoiceAccountNumber: billingAccount.invoiceAccountNumber,
+    invoiceAccountNumber: billingAccount.accountNumber,
     isCredit: false
   }
 
