@@ -19,7 +19,7 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * they can also change or set the agent company and the contact along with the address.
  *
  * Behind the scenes a new `billing_account_address` record is created that links to the `addresses`,
- * `companies` and `contacts` records. It will also be linked to the `crm_v2.billing_account` which
+ * `companies` and `contacts` records. It will also be linked to the `billing_account` which
  * represents the billing account being amended.
  *
  * It won't have an end date, which marks it as the 'current' address. The previous `billing_account_address` will get
