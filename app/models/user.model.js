@@ -1,37 +1,18 @@
 'use strict'
 
 /**
- * Model for user
+ * Model for users (idm.users)
  * @module UserModel
  */
 
 const { hashSync } = require('bcryptjs')
 const { Model } = require('objection')
 
-const IDMBaseModel = require('./idm-base.model.js')
+const BaseModel = require('./base.model.js')
 
-class UserModel extends IDMBaseModel {
+class UserModel extends BaseModel {
   static get tableName () {
     return 'users'
-  }
-
-  static get idColumn () {
-    return 'userId'
-  }
-
-  static get translations () {
-    return [
-      { database: 'dateCreated', model: 'createdAt' },
-      { database: 'dateUpdated', model: 'updatedAt' }
-    ]
-  }
-
-  // Defining which fields contain json allows us to insert an object without needing to stringify it first
-  static get jsonAttributes () {
-    return [
-      'userData',
-      'role'
-    ]
   }
 
   static get relationMappings () {
@@ -40,7 +21,7 @@ class UserModel extends IDMBaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'user-group.model',
         join: {
-          from: 'users.userId',
+          from: 'users.id',
           to: 'userGroups.userId'
         }
       },
@@ -48,7 +29,7 @@ class UserModel extends IDMBaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'user-role.model',
         join: {
-          from: 'users.userId',
+          from: 'users.id',
           to: 'userRoles.userId'
         }
       },
@@ -56,24 +37,24 @@ class UserModel extends IDMBaseModel {
         relation: Model.ManyToManyRelation,
         modelClass: 'role.model',
         join: {
-          from: 'users.userId',
+          from: 'users.id',
           through: {
             from: 'userRoles.userId',
             to: 'userRoles.roleId'
           },
-          to: 'roles.roleId'
+          to: 'roles.id'
         }
       },
       groups: {
         relation: Model.ManyToManyRelation,
         modelClass: 'group.model',
         join: {
-          from: 'users.userId',
+          from: 'users.id',
           through: {
             from: 'userGroups.userId',
             to: 'userGroups.groupId'
           },
-          to: 'groups.groupId'
+          to: 'groups.id'
         }
       }
     }

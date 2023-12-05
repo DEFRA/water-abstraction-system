@@ -1,28 +1,27 @@
 'use strict'
 
 /**
- * @module GroupRoleHelper
+ * @module RoleHelper
  */
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const GroupRoleModel = require('../../../../app/models/idm/group-role.model.js')
+const RoleModel = require('../../../app/models/role.model.js')
 
 /**
- * Add a new group role
+ * Add a new role
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `groupId` - [random UUID]
- * - `roleId` - [random UUID]
+ * - `role` - billing
+ * - `description` - Administer billing
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:GroupRoleModel} The instance of the newly created record
+ * @returns {module:RoleModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return GroupRoleModel.query()
+  return RoleModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -37,8 +36,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    groupId: generateUUID(),
-    roleId: generateUUID()
+    role: 'billing',
+    description: 'Administer billing'
   }
 
   return {

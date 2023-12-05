@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const GroupHelper = require('../../support/helpers/idm/group.helper.js')
-const GroupModel = require('../../../app/models/idm/group.model.js')
-const GroupRoleHelper = require('../../support/helpers/idm/group-role.helper.js')
-const RoleHelper = require('../../support/helpers/idm/role.helper.js')
-const RoleModel = require('../../../app/models/idm/role.model.js')
+const DatabaseHelper = require('../support/helpers/database.helper.js')
+const GroupHelper = require('../support/helpers/group.helper.js')
+const GroupModel = require('../../app/models/group.model.js')
+const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
+const RoleHelper = require('../support/helpers/role.helper.js')
+const RoleModel = require('../../app/models/role.model.js')
 
 // Thing under test
-const GroupRoleModel = require('../../../app/models/idm/group-role.model.js')
+const GroupRoleModel = require('../../app/models/group-role.model.js')
 
 describe('Group Role model', () => {
   let testRecord
@@ -32,10 +32,10 @@ describe('Group Role model', () => {
 
     it('can successfully run a basic query', async () => {
       const result = await GroupRoleModel.query()
-        .findById(testRecord.groupRoleId)
+        .findById(testRecord.id)
 
       expect(result).to.be.an.instanceOf(GroupRoleModel)
-      expect(result.groupRoleId).to.equal(testRecord.groupRoleId)
+      expect(result.id).to.equal(testRecord.id)
     })
   })
 
@@ -45,7 +45,7 @@ describe('Group Role model', () => {
 
       beforeEach(async () => {
         testRole = await RoleHelper.add()
-        testRecord = await GroupRoleHelper.add({ roleId: testRole.roleId })
+        testRecord = await GroupRoleHelper.add({ roleId: testRole.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -57,11 +57,11 @@ describe('Group Role model', () => {
 
       it('can eager load the role', async () => {
         const result = await GroupRoleModel.query()
-          .findById(testRecord.groupRoleId)
+          .findById(testRecord.id)
           .withGraphFetched('role')
 
         expect(result).to.be.instanceOf(GroupRoleModel)
-        expect(result.groupRoleId).to.equal(testRecord.groupRoleId)
+        expect(result.id).to.equal(testRecord.id)
 
         expect(result.role).to.be.an.instanceOf(RoleModel)
         expect(result.role).to.equal(testRole)
@@ -73,7 +73,7 @@ describe('Group Role model', () => {
 
       beforeEach(async () => {
         testGroup = await GroupHelper.add()
-        testRecord = await GroupRoleHelper.add({ groupId: testGroup.groupId })
+        testRecord = await GroupRoleHelper.add({ groupId: testGroup.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -85,11 +85,11 @@ describe('Group Role model', () => {
 
       it('can eager load the group', async () => {
         const result = await GroupRoleModel.query()
-          .findById(testRecord.groupRoleId)
+          .findById(testRecord.id)
           .withGraphFetched('group')
 
         expect(result).to.be.instanceOf(GroupRoleModel)
-        expect(result.groupRoleId).to.equal(testRecord.groupRoleId)
+        expect(result.id).to.equal(testRecord.id)
 
         expect(result.group).to.be.an.instanceOf(GroupModel)
         expect(result.group).to.equal(testGroup)

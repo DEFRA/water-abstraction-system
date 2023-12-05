@@ -1,28 +1,17 @@
 'use strict'
 
 /**
- * Model for group role
+ * Model for group_roles (idm.group_roles)
  * @module GroupRoleModel
  */
 
 const { Model } = require('objection')
 
-const IDMBaseModel = require('./idm-base.model.js')
+const BaseModel = require('./base.model.js')
 
-class GroupRoleModel extends IDMBaseModel {
+class GroupRoleModel extends BaseModel {
   static get tableName () {
     return 'groupRoles'
-  }
-
-  static get idColumn () {
-    return 'groupRoleId'
-  }
-
-  static get translations () {
-    return [
-      { database: 'dateCreated', model: 'createdAt' },
-      { database: 'dateUpdated', model: 'updatedAt' }
-    ]
   }
 
   static get relationMappings () {
@@ -32,7 +21,7 @@ class GroupRoleModel extends IDMBaseModel {
         modelClass: 'role.model',
         join: {
           from: 'groupRoles.roleId',
-          to: 'roles.roleId'
+          to: 'roles.id'
         }
       },
       group: {
@@ -40,7 +29,7 @@ class GroupRoleModel extends IDMBaseModel {
         modelClass: 'group.model',
         join: {
           from: 'groupRoles.groupId',
-          to: 'groups.groupId'
+          to: 'groups.id'
         }
       }
     }

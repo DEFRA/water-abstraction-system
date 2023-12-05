@@ -8,19 +8,19 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const GroupHelper = require('../../support/helpers/idm/group.helper.js')
-const GroupModel = require('../../../app/models/idm/group.model.js')
-const RoleHelper = require('../../support/helpers/idm/role.helper.js')
-const RoleModel = require('../../../app/models/idm/role.model.js')
-const UserGroupHelper = require('../../support/helpers/idm/user-group.helper.js')
-const UserGroupModel = require('../../../app/models/idm/user-group.model.js')
-const UserHelper = require('../../support/helpers/idm/user.helper.js')
-const UserRoleHelper = require('../../support/helpers/idm/user-role.helper.js')
-const UserRoleModel = require('../../../app/models/idm/user-role.model.js')
+const DatabaseHelper = require('../support/helpers/database.helper.js')
+const GroupHelper = require('../support/helpers/group.helper.js')
+const GroupModel = require('../../app/models/group.model.js')
+const RoleHelper = require('../support/helpers/role.helper.js')
+const RoleModel = require('../../app/models/role.model.js')
+const UserGroupHelper = require('../support/helpers/user-group.helper.js')
+const UserGroupModel = require('../../app/models/user-group.model.js')
+const UserHelper = require('../support/helpers/user.helper.js')
+const UserRoleHelper = require('../support/helpers/user-role.helper.js')
+const UserRoleModel = require('../../app/models/user-role.model.js')
 
 // Thing under test
-const UserModel = require('../../../app/models/idm/user.model.js')
+const UserModel = require('../../app/models/user.model.js')
 
 describe('User model', () => {
   let testRecord
@@ -35,10 +35,10 @@ describe('User model', () => {
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await UserModel.query().findById(testRecord.userId)
+      const result = await UserModel.query().findById(testRecord.id)
 
       expect(result).to.be.an.instanceOf(UserModel)
-      expect(result.userId).to.equal(testRecord.userId)
+      expect(result.id).to.equal(testRecord.id)
     })
   })
 
@@ -48,7 +48,7 @@ describe('User model', () => {
 
       beforeEach(async () => {
         testRecord = await UserHelper.add()
-        testUserGroup = await UserGroupHelper.add({ userId: testRecord.userId })
+        testUserGroup = await UserGroupHelper.add({ userId: testRecord.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -60,11 +60,11 @@ describe('User model', () => {
 
       it('can eager load the user groups', async () => {
         const result = await UserModel.query()
-          .findById(testRecord.userId)
+          .findById(testRecord.id)
           .withGraphFetched('userGroups')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result.id).to.equal(testRecord.id)
 
         expect(result.userGroups).to.be.an.array()
         expect(result.userGroups).to.have.length(1)
@@ -78,7 +78,7 @@ describe('User model', () => {
 
       beforeEach(async () => {
         testRecord = await UserHelper.add()
-        testUserRole = await UserRoleHelper.add({ userId: testRecord.userId })
+        testUserRole = await UserRoleHelper.add({ userId: testRecord.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -90,11 +90,11 @@ describe('User model', () => {
 
       it('can eager load the user roles', async () => {
         const result = await UserModel.query()
-          .findById(testRecord.userId)
+          .findById(testRecord.id)
           .withGraphFetched('userRoles')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result.id).to.equal(testRecord.id)
 
         expect(result.userRoles).to.be.an.array()
         expect(result.userRoles).to.have.length(1)
@@ -109,7 +109,7 @@ describe('User model', () => {
       beforeEach(async () => {
         testRecord = await UserHelper.add()
         testRole = await RoleHelper.add()
-        await UserRoleHelper.add({ userId: testRecord.userId, roleId: testRole.roleId })
+        await UserRoleHelper.add({ userId: testRecord.id, roleId: testRole.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -121,11 +121,11 @@ describe('User model', () => {
 
       it('can eager load the roles', async () => {
         const result = await UserModel.query()
-          .findById(testRecord.userId)
+          .findById(testRecord.id)
           .withGraphFetched('roles')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result.id).to.equal(testRecord.id)
 
         expect(result.roles).to.be.an.array()
         expect(result.roles).to.have.length(1)
@@ -140,7 +140,7 @@ describe('User model', () => {
       beforeEach(async () => {
         testRecord = await UserHelper.add()
         testGroup = await GroupHelper.add()
-        await UserGroupHelper.add({ userId: testRecord.userId, groupId: testGroup.groupId })
+        await UserGroupHelper.add({ userId: testRecord.id, groupId: testGroup.id })
       })
 
       it('can successfully run a related query', async () => {
@@ -152,11 +152,11 @@ describe('User model', () => {
 
       it('can eager load the groups', async () => {
         const result = await UserModel.query()
-          .findById(testRecord.userId)
+          .findById(testRecord.id)
           .withGraphFetched('groups')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result.id).to.equal(testRecord.id)
 
         expect(result.groups).to.be.an.array()
         expect(result.groups).to.have.length(1)

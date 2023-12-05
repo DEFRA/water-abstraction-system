@@ -1,28 +1,17 @@
 'use strict'
 
 /**
- * Model for user group
+ * Model for user_groups (idm.user_groups)
  * @module UserGroupModel
  */
 
 const { Model } = require('objection')
 
-const IDMBaseModel = require('./idm-base.model.js')
+const BaseModel = require('./base.model.js')
 
-class UserGroupModel extends IDMBaseModel {
+class UserGroupModel extends BaseModel {
   static get tableName () {
     return 'userGroups'
-  }
-
-  static get idColumn () {
-    return 'userGroupId'
-  }
-
-  static get translations () {
-    return [
-      { database: 'dateCreated', model: 'createdAt' },
-      { database: 'dateUpdated', model: 'updatedAt' }
-    ]
   }
 
   static get relationMappings () {
@@ -32,7 +21,7 @@ class UserGroupModel extends IDMBaseModel {
         modelClass: 'group.model',
         join: {
           from: 'userGroups.groupId',
-          to: 'groups.groupId'
+          to: 'groups.id'
         }
       },
       user: {
@@ -40,7 +29,7 @@ class UserGroupModel extends IDMBaseModel {
         modelClass: 'user.model',
         join: {
           from: 'userGroups.userId',
-          to: 'users.userId'
+          to: 'users.id'
         }
       }
     }

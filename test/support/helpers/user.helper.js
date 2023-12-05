@@ -4,16 +4,16 @@
  * @module UserHelper
  */
 
-const UserModel = require('../../../../app/models/idm/user.model.js')
+const { randomInteger } = require('./general.helper.js')
+const UserModel = require('../../../app/models/user.model.js')
 
 /**
  * Add a new user
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `userName` - user.name@test-helper.com
+ * - `username` - user.name@test.com
  * - `password` - P@55word (note that this is salted and hashed before being persisted)
- * - `userData` - { source: 'Test helper' }
  * - `resetRequired` - 0
  * - `badLogins` - 0
  * - `application` - water_admin
@@ -43,9 +43,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    userName: 'user.name@test.com',
+    username: 'user.name@test.com',
     password: 'P@55word',
-    userData: { source: 'Test helper' },
     resetRequired: 0,
     badLogins: 0,
     application: 'water_admin'
@@ -57,7 +56,12 @@ function defaults (data = {}) {
   }
 }
 
+function generateUserId () {
+  return randomInteger(100001, 199999)
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateUserId
 }

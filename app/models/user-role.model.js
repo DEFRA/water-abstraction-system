@@ -1,28 +1,17 @@
 'use strict'
 
 /**
- * Model for user role
+ * Model for user_roles (idm.user_roles)
  * @module UserRoleModel
  */
 
 const { Model } = require('objection')
 
-const IDMBaseModel = require('./idm-base.model.js')
+const BaseModel = require('./base.model.js')
 
-class UserRoleModel extends IDMBaseModel {
+class UserRoleModel extends BaseModel {
   static get tableName () {
     return 'userRoles'
-  }
-
-  static get idColumn () {
-    return 'userRoleId'
-  }
-
-  static get translations () {
-    return [
-      { database: 'dateCreated', model: 'createdAt' },
-      { database: 'dateUpdated', model: 'updatedAt' }
-    ]
   }
 
   static get relationMappings () {
@@ -32,7 +21,7 @@ class UserRoleModel extends IDMBaseModel {
         modelClass: 'role.model',
         join: {
           from: 'userRoles.roleId',
-          to: 'roles.roleId'
+          to: 'roles.id'
         }
       },
       user: {
@@ -40,7 +29,7 @@ class UserRoleModel extends IDMBaseModel {
         modelClass: 'user.model',
         join: {
           from: 'userRoles.userId',
-          to: 'users.userId'
+          to: 'users.id'
         }
       }
     }

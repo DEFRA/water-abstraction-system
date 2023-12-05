@@ -1,28 +1,17 @@
 'use strict'
 
 /**
- * Model for group
+ * Model for groups (idm.groups)
  * @module GroupModel
  */
 
 const { Model } = require('objection')
 
-const IDMBaseModel = require('./idm-base.model.js')
+const BaseModel = require('./base.model.js')
 
-class GroupModel extends IDMBaseModel {
+class GroupModel extends BaseModel {
   static get tableName () {
     return 'groups'
-  }
-
-  static get idColumn () {
-    return 'groupId'
-  }
-
-  static get translations () {
-    return [
-      { database: 'dateCreated', model: 'createdAt' },
-      { database: 'dateUpdated', model: 'updatedAt' }
-    ]
   }
 
   static get relationMappings () {
@@ -31,7 +20,7 @@ class GroupModel extends IDMBaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'group-role.model',
         join: {
-          from: 'groups.groupId',
+          from: 'groups.id',
           to: 'groupRoles.groupId'
         }
       },
@@ -39,19 +28,19 @@ class GroupModel extends IDMBaseModel {
         relation: Model.ManyToManyRelation,
         modelClass: 'role.model',
         join: {
-          from: 'groups.groupId',
+          from: 'groups.id',
           through: {
             from: 'groupRoles.groupId',
             to: 'groupRoles.roleId'
           },
-          to: 'roles.roleId'
+          to: 'roles.id'
         }
       },
       userGroups: {
         relation: Model.HasManyRelation,
         modelClass: 'user-group.model',
         join: {
-          from: 'groups.groupId',
+          from: 'groups.id',
           to: 'userGroups.groupId'
         }
       },
@@ -59,12 +48,12 @@ class GroupModel extends IDMBaseModel {
         relation: Model.ManyToManyRelation,
         modelClass: 'user.model',
         join: {
-          from: 'groups.groupId',
+          from: 'groups.id',
           through: {
             from: 'userGroups.groupId',
             to: 'userGroups.userId'
           },
-          to: 'users.userId'
+          to: 'users.id'
         }
       }
     }
