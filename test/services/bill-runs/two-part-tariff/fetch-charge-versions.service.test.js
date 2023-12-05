@@ -75,7 +75,7 @@ describe('Fetch Charge Versions service', () => {
 
       it('includes the related charge references and charge elements', async () => {
         const expectedLicence = {
-          licenceId: licence.licenceId,
+          id: licence.licenceId,
           licenceRef: licence.licenceRef,
           startDate: licence.startDate,
           expiredDate: null,
@@ -84,13 +84,13 @@ describe('Fetch Charge Versions service', () => {
         }
 
         const expectedChargeReferenceAndElement = {
-          chargeElementId: srocChargeReference.chargeElementId,
+          id: srocChargeReference.chargeElementId,
           description: srocChargeReference.description,
           aggregate: 0.562114443,
           s127: 'true',
           chargeCategory: null,
           chargeElements: [{
-            chargePurposeId: srocChargeElement.chargePurposeId,
+            id: srocChargeElement.chargePurposeId,
             description: srocChargeElement.description,
             abstractionPeriodStartDay: srocChargeElement.abstractionPeriodStartDay,
             abstractionPeriodStartMonth: srocChargeElement.abstractionPeriodStartMonth,
@@ -104,7 +104,7 @@ describe('Fetch Charge Versions service', () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(1)
-        expect(result[0].chargeVersionId).to.include(testRecords[0].chargeVersionId)
+        expect(result[0].id).to.include(testRecords[0].chargeVersionId)
         expect(result[0].status).to.equal('current')
         expect(result[0].licence).to.equal(expectedLicence)
         expect(result[0].chargeReferences[0]).to.equal(expectedChargeReferenceAndElement)
@@ -170,7 +170,7 @@ describe('Fetch Charge Versions service', () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
-          expect(result[0].chargeVersionId).to.include(testRecordsInDate[0].chargeVersionId)
+          expect(result[0].id).to.include(testRecordsInDate[0].chargeVersionId)
         })
       })
 
@@ -243,7 +243,7 @@ describe('Fetch Charge Versions service', () => {
         const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(1)
-        expect(result[0].chargeVersionId).to.include(testRecordsCurrent[0].chargeVersionId)
+        expect(result[0].id).to.include(testRecordsCurrent[0].chargeVersionId)
       })
     })
 
@@ -331,7 +331,7 @@ describe('Fetch Charge Versions service', () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
-          expect(result[0].chargeVersionId).to.include(testRecordsSameRegion[0].chargeVersionId)
+          expect(result[0].id).to.include(testRecordsSameRegion[0].chargeVersionId)
         })
       })
 
@@ -340,7 +340,7 @@ describe('Fetch Charge Versions service', () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
-          expect(result[0].chargeVersionId).to.include(testRecordsSameRegion[0].chargeVersionId)
+          expect(result[0].id).to.include(testRecordsSameRegion[0].chargeVersionId)
         })
       })
 
@@ -371,7 +371,7 @@ describe('Fetch Charge Versions service', () => {
           const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
           expect(result).to.have.length(1)
-          expect(result[0].chargeVersionId).to.include(testRecordsSameRegion[0].chargeVersionId)
+          expect(result[0].id).to.include(testRecordsSameRegion[0].chargeVersionId)
         })
       })
     })

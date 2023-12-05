@@ -7,10 +7,10 @@
 
 const { ref } = require('objection')
 
-const ChargeReferenceModel = require('../../../models/water/charge-reference.model.js')
-const ChargeVersionModel = require('../../../models/water/charge-version.model.js')
-const RegionModel = require('../../../models/water/region.model.js')
-const Workflow = require('../../../models/water/workflow.model.js')
+const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
+const ChargeVersionModel = require('../../../models/charge-version.model.js')
+const RegionModel = require('../../../models/region.model.js')
+const Workflow = require('../../../models/workflow.model.js')
 
 /**
  * Fetches SROC charge versions based on region and billing period
@@ -38,7 +38,7 @@ async function go (regionId, billingPeriod) {
 async function _fetch (regionCode, billingPeriod) {
   const chargeVersions = await ChargeVersionModel.query()
     .select([
-      'chargeVersions.chargeVersionId',
+      'chargeVersions.id',
       'chargeVersions.startDate',
       'chargeVersions.endDate',
       'chargeVersions.status'
@@ -50,13 +50,13 @@ async function _fetch (regionCode, billingPeriod) {
     .whereNotExists(
       Workflow.query()
         .select(1)
-        .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
-        .whereNull('chargeVersionWorkflows.dateDeleted')
+        .whereColumn('chargeVersions.licenceId', 'workflows.licenceId')
+        .whereNull('workflows.deletedAt')
     )
     .whereExists(
       ChargeReferenceModel.query()
         .select(1)
-        .whereColumn('chargeVersions.chargeVersionId', 'chargeReferences.chargeVersionId')
+        .whereColumn('chargeVersions.id', 'chargeReferences.chargeVersionId')
         // NOTE: We can make withJsonSuperset() work which looks nicer, but only if we don't have anything camel case
         // in the table/column name. Camel case mappers don't work with whereJsonSuperset() or whereJsonSubset(). So,
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
@@ -66,7 +66,7 @@ async function _fetch (regionCode, billingPeriod) {
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select([
-        'licenceId',
+        'id',
         'licenceRef',
         'startDate',
         'expiredDate',
@@ -78,12 +78,12 @@ async function _fetch (regionCode, billingPeriod) {
     .modifyGraph('chargeReferences', (builder) => {
       builder
         .select([
-          'chargeElementId',
+          'id',
           'description',
-          ref('chargeElements.adjustments:aggregate').as('aggregate'),
-          ref('chargeElements.adjustments:s127').castText().as('s127')
+          ref('chargeReferences.adjustments:aggregate').as('aggregate'),
+          ref('chargeReferences.adjustments:s127').castText().as('s127')
         ])
-        .whereJsonPath('chargeElements.adjustments', '$.s127', '=', true)
+        .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     })
     .withGraphFetched('chargeReferences.chargeCategory')
     .modifyGraph('chargeReferences.chargeCategory', (builder) => {
@@ -98,7 +98,7 @@ async function _fetch (regionCode, billingPeriod) {
     .modifyGraph('chargeReferences.chargeElements', (builder) => {
       builder
         .select([
-          'chargePurposeId',
+          'id',
           'description',
           'abstractionPeriodStartDay',
           'abstractionPeriodStartMonth',
@@ -106,14 +106,14 @@ async function _fetch (regionCode, billingPeriod) {
           'abstractionPeriodEndMonth',
           'authorisedAnnualQuantity'
         ])
-        .where('isSection127AgreementEnabled', true)
+        .where('section127Agreement', true)
         .orderBy('authorisedAnnualQuantity', 'desc')
     })
     .withGraphFetched('chargeReferences.chargeElements.purpose')
     .modifyGraph('chargeReferences.chargeElements.purpose', (builder) => {
       builder
         .select([
-          'purposeUseId',
+          'id',
           'legacyId',
           'description'
         ])
