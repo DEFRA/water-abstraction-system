@@ -39,7 +39,7 @@ describe('Review Result model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to review charge element results', () => {
+    describe('when linking to review charge element result', () => {
       let testReviewChargeElementResult
 
       beforeEach(async () => {
@@ -67,7 +67,7 @@ describe('Review Result model', () => {
       })
     })
 
-    describe('when linking to review return results', () => {
+    describe('when linking to review return result', () => {
       let testReviewReturnResult
 
       beforeEach(async () => {
