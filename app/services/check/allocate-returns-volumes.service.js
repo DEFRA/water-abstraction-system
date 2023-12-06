@@ -7,10 +7,10 @@
 
 function go (chargeReference) {
   let returnVolumeInMegalitres
-  // Loop through each return
-  chargeReference.returns.forEach((returnData) => {
-    // The volumes on the return are in Cubic Metres so we convert to Megalitres to match the charge version data
-    returnVolumeInMegalitres = returnData.volumes.total / 1000
+  // Loop through each return log
+  chargeReference.returnLogs.forEach((returnLogData) => {
+    // The volumes on the return log are in Cubic Metres so we convert to Megalitres to match the charge version data
+    returnVolumeInMegalitres = returnLogData.volumes.total / 1000
     // Loop through each charge element
     chargeReference.chargeElements.forEach((chargeElement) => {
       if (!chargeElement.allocatedReturnVolume) {
@@ -18,11 +18,11 @@ function go (chargeReference) {
       }
       // Check the chargeElement is not already fully allocated
       if (chargeElement.allocatedReturnVolume < chargeElement.authorisedAnnualQuantity) {
-        // Check if the return's purpose and abstraction period match the charge element
-        if (_matchReturnToElement(returnData.metadata, chargeElement)) {
+        // Check if the return log's purpose and abstraction period match the charge element
+        if (_matchReturnToElement(returnLogData.metadata, chargeElement)) {
           // Calculate how much is left to allocated to the ChargeElement from the return
           let volumeLeftToAllocate = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedReturnVolume
-          // Check for the case that the return does not cover the full allocation
+          // Check for the case that the return log does not cover the full allocation
           if (returnVolumeInMegalitres < volumeLeftToAllocate) {
             volumeLeftToAllocate = returnVolumeInMegalitres
           }
@@ -35,9 +35,9 @@ function go (chargeReference) {
 
     if (returnVolumeInMegalitres > 0) {
       // Convert any remaining volume back to Cubic Metres and add it to the volumes object
-      returnData.volumes.unallocated = returnVolumeInMegalitres * 1000
+      returnLogData.volumes.unallocated = returnVolumeInMegalitres * 1000
     } else {
-      returnData.volumes.unallocated = 0
+      returnLogData.volumes.unallocated = 0
     }
   })
 }

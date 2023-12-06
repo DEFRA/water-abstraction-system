@@ -1,40 +1,40 @@
 'use strict'
 
 /**
- * Used to calculate the abstraction volumes for the given returns
+ * Used to calculate the abstraction volumes for the given return logs
  * @module CalculateReturnsVolumes
  */
 
-function go (billingPeriod, returns) {
-  returns.forEach((returnData) => {
-    const lines = returnData?.versions[0]?.lines ? returnData?.versions[0]?.lines : []
+function go (billingPeriod, returnLogs) {
+  returnLogs.forEach((returnLogData) => {
+    const returnSubmissionLines = returnLogData?.returnSubmissions[0]?.returnSubmissionLines ? returnLogData?.returnSubmissions[0]?.returnSubmissionLines : []
 
     let billableAbstractionPeriods = []
-    if (lines) {
-      billableAbstractionPeriods = _billableAbstractionPeriods(billingPeriod, returnData)
+    if (returnSubmissionLines) {
+      billableAbstractionPeriods = _billableAbstractionPeriods(billingPeriod, returnLogData)
     }
 
-    returnData.volumes = _calculateReturnLinesVolumes(lines, billableAbstractionPeriods)
+    returnLogData.volumes = _calculateReturnLinesVolumes(returnSubmissionLines, billableAbstractionPeriods)
   })
 }
 
-function _calculateReturnLinesVolumes (lines, billableAbstractionPeriods) {
+function _calculateReturnLinesVolumes (returnSubmissionLines, billableAbstractionPeriods) {
   const inPeriodLines = []
   const outsidePeriodLines = []
 
-  lines.forEach((line) => {
-    if (!line.quantity) {
+  returnSubmissionLines.forEach((returnSubmissionLine) => {
+    if (!returnSubmissionLine.quantity) {
       return
     }
 
     const isInsideBillablePeriod = billableAbstractionPeriods.some((period) => {
-      return (line.startDate <= period.endDate && line.endDate >= period.startDate)
+      return (returnSubmissionLine.startDate <= period.endDate && returnSubmissionLine.endDate >= period.startDate)
     })
 
     if (isInsideBillablePeriod) {
-      inPeriodLines.push(line)
+      inPeriodLines.push(returnSubmissionLine)
     } else {
-      outsidePeriodLines.push(line)
+      outsidePeriodLines.push(returnSubmissionLine)
     }
   })
 
@@ -53,8 +53,8 @@ function _addOneYear (date) {
   return new Date(date.getFullYear() + 1, date.getMonth(), date.getDate())
 }
 
-function _billableAbstractionPeriods (billingPeriod, returnData) {
-  const abstractionPeriodsWithYears = _determineAbstractionPeriodYears(billingPeriod, returnData)
+function _billableAbstractionPeriods (billingPeriod, returnLogData) {
+  const abstractionPeriodsWithYears = _determineAbstractionPeriodYears(billingPeriod, returnLogData)
 
   return abstractionPeriodsWithYears.map((abstractionPeriod) => {
     return _calculateAbstractionOverlapPeriod(billingPeriod, abstractionPeriod)
@@ -71,12 +71,12 @@ function _calculateAbstractionOverlapPeriod (billingPeriod, abstractionPeriod) {
   }
 }
 
-function _determineAbstractionPeriodYears (billingPeriod, returnData) {
+function _determineAbstractionPeriodYears (billingPeriod, returnLogData) {
   const periodStartYear = billingPeriod.startDate.getFullYear()
-  const startDay = returnData.metadata.nald.periodStartDay
-  const startMonth = returnData.metadata.nald.periodStartMonth
-  const endDay = returnData.metadata.nald.periodEndDay
-  const endMonth = returnData.metadata.nald.periodEndMonth
+  const startDay = returnLogData.metadata.nald.periodStartDay
+  const startMonth = returnLogData.metadata.nald.periodStartMonth
+  const endDay = returnLogData.metadata.nald.periodEndDay
+  const endMonth = returnLogData.metadata.nald.periodEndMonth
 
   // Reminder! Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
   // January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
@@ -120,9 +120,9 @@ function _isPeriodValid (billingPeriod, abstractionPeriod) {
   return true
 }
 
-function _totalLineQuantities (lines) {
-  return lines.reduce((accumulator, line) => {
-    return accumulator + line.quantity
+function _totalLineQuantities (returnSubmissionLines) {
+  return returnSubmissionLines.reduce((accumulator, returnSubmissionLine) => {
+    return accumulator + returnSubmissionLine.quantity
   }, 0)
 }
 
