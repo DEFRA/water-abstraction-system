@@ -67,7 +67,7 @@ describe('Fetch Return Logs for Licence service', () => {
         })
       })
 
-      it('returns the return log and lines that are applicable', async () => {
+      it('returns the return log and return submission lines that are applicable', async () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
@@ -117,7 +117,7 @@ describe('Fetch Return Logs for Licence service', () => {
         })
       })
 
-      it('returns the return log with no lines', async () => {
+      it('returns the return log with no return submission lines', async () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
@@ -134,7 +134,7 @@ describe('Fetch Return Logs for Licence service', () => {
         await ReturnSubmissionHelper.add({ returnLogId: id, nilReturn: true })
       })
 
-      it('returns the return log with `nilreturn` set to `true` and no lines', async () => {
+      it('returns the return log with `nilreturn` set to `true` and no return submission lines', async () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
