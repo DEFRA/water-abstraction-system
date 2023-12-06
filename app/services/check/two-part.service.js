@@ -13,7 +13,7 @@ const ChargeReferenceModel = require('../../models/water/charge-reference.model.
 const ChargeVersionModel = require('../../models/water/charge-version.model.js')
 const FriendlyResponseService = require('./friendly-response.service.js')
 const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-periods.service.js')
-const ReturnModel = require('../../models/returns/return.model.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
 const Workflow = require('../../models/water/workflow.model.js')
 
 async function go (naldRegionId, format = 'friendly') {
@@ -97,9 +97,9 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
   for (const chargeReference of chargeReferences) {
     const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeReference)
 
-    chargeReference.returns = await ReturnModel.query()
+    chargeReference.returnLogs = await ReturnLogModel.query()
       .select([
-        'returnId',
+        'id',
         'returnRequirement',
         'startDate',
         'endDate',
@@ -114,22 +114,22 @@ async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
       .where('endDate', '>=', billingPeriod.startDate)
       .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
       .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
-      .withGraphFetched('versions')
-      .modifyGraph('versions', builder => {
-        builder.where('versions.current', true)
+      .withGraphFetched('returnSubmissions')
+      .modifyGraph('returnSubmissions', builder => {
+        builder.where('returnSubmissions.current', true)
       })
-      .withGraphFetched('versions.lines')
-      .modifyGraph('versions.lines', builder => {
+      .withGraphFetched('returnSubmissions.returnSubmissionLines')
+      .modifyGraph('returnSubmissions.returnSubmissionLines', builder => {
         builder
-          .where('lines.quantity', '>', 0)
-          .where('lines.startDate', '<=', billingPeriod.endDate)
-          .where('lines.endDate', '>=', billingPeriod.startDate)
+          .where('returnSubmissionLines.quantity', '>', 0)
+          .where('returnSubmissionLines.startDate', '<=', billingPeriod.endDate)
+          .where('returnSubmissionLines.endDate', '>=', billingPeriod.startDate)
       })
 
-    CalculateReturnsVolumes.go(billingPeriod, chargeReference.returns)
+    CalculateReturnsVolumes.go(billingPeriod, chargeReference.returnLogs)
     AllocateReturnsVolumes.go(chargeReference)
 
-    const chargeReferenceReturnsStatuses = chargeReference.returns.map((matchedReturn) => {
+    const chargeReferenceReturnsStatuses = chargeReference.returnLogs.map((matchedReturn) => {
       if (matchedReturn.underQuery) {
         returnsUnderQuery = true
       }

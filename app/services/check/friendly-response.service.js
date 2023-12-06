@@ -69,7 +69,7 @@ function _formatFriendlyChargeReferences (friendlyChargeReferences, chargeRefere
       eiucRegion,
       isRestrictedSource,
       loss,
-      returns,
+      returnLogs,
       source,
       volume,
       waterModel
@@ -94,10 +94,10 @@ function _formatFriendlyChargeReferences (friendlyChargeReferences, chargeRefere
       additionalCharges: formattedAdditionalCharges,
       adjustments: formattedAdjustments,
       chargeElements: [],
-      returns: []
+      returnLogs: []
     }
 
-    _formatFriendlyReturns(friendlyChargeReference.returns, returns)
+    _formatFriendlyReturns(friendlyChargeReference.returnLogs, returnLogs)
     _formatFriendlyChargeElements(friendlyChargeReference.chargeElements, chargeElements)
 
     friendlyChargeReferences.push(friendlyChargeReference)
@@ -141,14 +141,14 @@ function _formatFriendlyChargeElements (friendlyChargeElements, chargeElements) 
   })
 }
 
-function _formatFriendlyReturns (returns, matchedReturns) {
-  matchedReturns.forEach((matchedReturn) => {
-    const { returnId, endDate, metadata, startDate, status, volumes } = matchedReturn
+function _formatFriendlyReturns (returnLogs, matchedReturnLogs) {
+  matchedReturnLogs.forEach((matchedReturnLog) => {
+    const { id, endDate, metadata, startDate, status, volumes } = matchedReturnLog
 
     const { periodEndDay, periodEndMonth, periodStartDay, periodStartMonth } = metadata.nald
 
     const friendlyReturn = {
-      id: returnId,
+      id,
       siteDescription: _titleCaseAllWords(metadata.description),
       purpose: _formatPurpose(metadata.purposes[0]),
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
@@ -159,7 +159,7 @@ function _formatFriendlyReturns (returns, matchedReturns) {
       volumes
     }
 
-    returns.push(friendlyReturn)
+    returnLogs.push(friendlyReturn)
   })
 }
 
