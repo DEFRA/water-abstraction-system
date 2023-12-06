@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
+const ContactModel = require('../../../app/models/contact.model.js')
 
 // Thing under test
 const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
@@ -64,7 +64,7 @@ describe('View Bill presenter', () => {
 
       describe('when the billing account is linked to an agent', () => {
         beforeEach(() => {
-          billingAccount.billingAccountAddresses[0].agentCompany = {
+          billingAccount.billingAccountAddresses[0].company = {
             companyId: 'b0d35412-f76c-44ca-9d63-c6350337e03d',
             type: 'person',
             name: 'Alan Broke'
@@ -400,34 +400,33 @@ function _testBill () {
 
 function _testBillingAccount () {
   return {
-    invoiceAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
-    invoiceAccountNumber: 'E88888888A',
+    id: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+    accountNumber: 'E88888888A',
     company: {
       type: 'organisation',
       name: 'Wessex Water Services Ltd'
     },
     billingAccountAddresses: [
       {
-        invoiceAccountAddressId: 'b0e53215-b73a-4570-992b-2a724944ea19',
-        invoiceAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+        id: 'b0e53215-b73a-4570-992b-2a724944ea19',
+        billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
         addressId: 'f3360183-8002-4802-a6d4-80d7e7160a50',
         startDate: new Date('1999-10-01'),
         endDate: null,
-        isTest: false,
-        agentCompanyId: null,
+        companyId: null,
         contactId: null,
         createdAt: new Date('2022-06-15'),
         updatedAt: new Date('2023-10-17'),
-        agentCompany: null,
+        company: null,
         contact: null,
         address: {
-          addressId: 'f3360183-8002-4802-a6d4-80d7e7160a50',
+          id: 'f3360183-8002-4802-a6d4-80d7e7160a50',
           address1: '86 Oxford Road',
           address2: 'WOOTTON',
           address3: null,
           address4: null,
-          town: 'COURTENAY',
-          county: null,
+          address5: 'COURTENAY',
+          address6: null,
           postcode: 'TA24 8NX',
           country: null
         }

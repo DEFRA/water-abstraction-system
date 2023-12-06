@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-account.helper.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
@@ -79,7 +79,7 @@ describe('Process billing period service', () => {
           const { chargeVersionId } = await ChargeVersionHelper.add(
             {
               changeReasonId: changeReason.changeReasonId,
-              invoiceAccountId: billingAccount.invoiceAccountId,
+              invoiceAccountId: billingAccount.id,
               startDate: new Date(2022, 7, 1, 9),
               licenceId: licence.licenceId
             }
@@ -154,7 +154,7 @@ describe('Process billing period service', () => {
             const { chargeVersionId } = await ChargeVersionHelper.add(
               {
                 changeReasonId: changeReason.changeReasonId,
-                invoiceAccountId: billingAccount.invoiceAccountId,
+                invoiceAccountId: billingAccount.id,
                 startDate: new Date(2022, 7, 1, 9),
                 licenceId: licence.licenceId
               }
@@ -189,7 +189,7 @@ describe('Process billing period service', () => {
               const { chargeVersionId } = await ChargeVersionHelper.add(
                 {
                   changeReasonId: changeReason.changeReasonId,
-                  invoiceAccountId: billingAccount.invoiceAccountId,
+                  invoiceAccountId: billingAccount.id,
                   startDate: new Date(2022, 7, 1, 9),
                   licenceId: licence.licenceId,
                   status: 'superseded'
@@ -225,7 +225,7 @@ describe('Process billing period service', () => {
     beforeEach(async () => {
       const { chargeVersionId } = await ChargeVersionHelper.add({
         changeReasonId: changeReason.changeReasonId,
-        invoiceAccountId: billingAccount.invoiceAccountId,
+        invoiceAccountId: billingAccount.id,
         licenceId: licence.licenceId
       })
       const { chargeElementId } = await ChargeReferenceHelper.add(
