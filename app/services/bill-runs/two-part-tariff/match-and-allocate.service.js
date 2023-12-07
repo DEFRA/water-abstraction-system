@@ -23,6 +23,8 @@ async function go (billRun, billingPeriods, licenceId) {
   AllocateReturnsToLicenceService.go(licences)
 
   const reviewResults = TransformAllocatedLicencesToResultsService.go(billRun, licences)
+  // Temporaily put a console log to shut up the linting
+  console.log(reviewResults)
 
   _calculateAndLogTime(startTime)
 

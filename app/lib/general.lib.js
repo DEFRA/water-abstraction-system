@@ -27,24 +27,6 @@ function generateUUID () {
   return randomUUID({ disableEntropyCache: true })
 }
 
-function periodsOverlap (referencePeriods, checkPeriods) {
-  for (const referencePeriod of referencePeriods) {
-    const overLappingPeriods = checkPeriods.filter((checkPeriod) => {
-      if (checkPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > checkPeriod.endDate) {
-        return false
-      }
-
-      return true
-    })
-
-    if (overLappingPeriods.length) {
-      return true
-    }
-  }
-
-  return false
-}
-
 /**
  * Tests if one set of periods (represented by a start and end date) overlaps with another
  *
