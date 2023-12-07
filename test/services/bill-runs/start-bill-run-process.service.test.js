@@ -12,12 +12,12 @@ const { expect } = Code
 const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
 const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
-const TwoPartTariffProcessBillRunService = require('../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
+const TwoPartTariffMatchAndAllocateService = require('../../../app/services/bill-runs/two-part-tariff/match-and-allocate.service.js')
 
 // Thing under test
 const StartBillRunProcessService = require('../../../app/services/bill-runs/start-bill-run-process.service.js')
 
-describe.skip('Start Bill Run Process service', () => {
+describe('Start Bill Run Process service', () => {
   const regionId = '3b24cc01-19c5-4654-8ef6-24ddb4c8dcdf'
   const userEmail = 'test@wrsl.gov.uk'
 
@@ -97,7 +97,7 @@ describe.skip('Start Bill Run Process service', () => {
         }
         Sinon.stub(InitiateBillRunService, 'go').resolves(twoPartTariffBillRun)
 
-        Sinon.stub(TwoPartTariffProcessBillRunService, 'go')
+        Sinon.stub(TwoPartTariffMatchAndAllocateService, 'go')
       })
 
       it('initiates a new bill run', async () => {
@@ -123,7 +123,7 @@ describe.skip('Start Bill Run Process service', () => {
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
-        expect(TwoPartTariffProcessBillRunService.go.called).to.be.true()
+        expect(TwoPartTariffMatchAndAllocateService.go.called).to.be.true()
       })
     })
   })
