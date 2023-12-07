@@ -30,12 +30,11 @@ const Workflow = require('../../../models/workflow.model.js')
  * @returns {Object} Contains an array of SROC charge versions with linked licences, charge references, charge elements and related purpose
  */
 async function go (regionId, billingPeriod, licenceId) {
-  let regionCode
+  let regionCode = null
+
   if (!licenceId) {
     regionCode = await _regionCode(regionId)
   }
-
-  regionCode = null
 
   return _fetch(regionCode, billingPeriod, licenceId)
 }
