@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const AddressModel = require('../../../app/models/crm-v2/address.model.js')
-const BillingAccountModel = require('../../../app/models/crm-v2/billing-account.model.js')
-const CompanyModel = require('../../../app/models/crm-v2/company.model.js')
-const ContactModel = require('../../../app/models/crm-v2/contact.model.js')
+const AddressModel = require('../../../app/models/address.model.js')
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+const CompanyModel = require('../../../app/models/company.model.js')
+const ContactModel = require('../../../app/models/contact.model.js')
 
 // Thing under test
 const CreateCustomerChangePresenter = require('../../../app/presenters/charging-module/create-customer-change.presenter.js')
@@ -23,7 +23,7 @@ const CreateCustomerChangePresenter = require('../../../app/presenters/charging-
 // what scenarios we face when converting the WRLS data.
 describe('Charging Module Create Transaction presenter', () => {
   const billingAccount = BillingAccountModel.fromJson({
-    invoiceAccountNumber: 'B19120000A',
+    accountNumber: 'B19120000A',
     company: {
       name: 'BILLING ACCOUNT COMPANY'
     }
@@ -33,8 +33,8 @@ describe('Charging Module Create Transaction presenter', () => {
     address2: 'HORIZON HOUSE',
     address3: 'DEANERY ROAD',
     address4: null,
-    town: 'BRISTOL',
-    county: null,
+    address5: 'BRISTOL',
+    address6: null,
     country: 'United Kingdom',
     postcode: 'BS1 5AH'
   }
@@ -300,21 +300,21 @@ describe('Charging Module Create Transaction presenter', () => {
       contact = ContactModel.fromJson({})
     })
 
-    describe('when town is set in the address', () => {
+    describe('when address5 is set in the address', () => {
       beforeEach(() => {
         address = AddressModel.fromJson({ ...standardAddress })
       })
 
-      it('returns the town for addressLine5', () => {
+      it('returns address for addressLine5', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
         expect(result.addressLine5).to.equal('BRISTOL')
       })
     })
 
-    describe('when town is not set in the address', () => {
+    describe('when address5 is not set in the address', () => {
       beforeEach(() => {
-        address = AddressModel.fromJson({ ...standardAddress, town: null })
+        address = AddressModel.fromJson({ ...standardAddress, address5: null })
       })
 
       it('returns null for addressLine5', () => {
@@ -331,22 +331,22 @@ describe('Charging Module Create Transaction presenter', () => {
       contact = ContactModel.fromJson({})
     })
 
-    describe('when both county and country are set', () => {
+    describe('when both address6 and country are set', () => {
       beforeEach(() => {
         address = AddressModel.fromJson({
           ...standardAddress,
-          county: 'AVON'
+          address6: 'AVON'
         })
       })
 
-      it('returns both county and country for addressLine6', () => {
+      it('returns both address6 and country for addressLine6', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
         expect(result.addressLine6).to.equal('AVON, United Kingdom')
       })
     })
 
-    describe('when neither county and country are set', () => {
+    describe('when neither address6 and country are set', () => {
       beforeEach(() => {
         address = AddressModel.fromJson({
           ...standardAddress,
@@ -361,16 +361,16 @@ describe('Charging Module Create Transaction presenter', () => {
       })
     })
 
-    describe('when only county is set', () => {
+    describe('when only address6 is set', () => {
       beforeEach(() => {
         address = AddressModel.fromJson({
           ...standardAddress,
-          county: 'AVON',
+          address6: 'AVON',
           country: null
         })
       })
 
-      it('returns just the county for addressLine6', () => {
+      it('returns just address for addressLine6', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
         expect(result.addressLine6).to.equal('AVON')
@@ -408,7 +408,7 @@ describe('Charging Module Create Transaction presenter', () => {
     beforeEach(() => {
       address = AddressModel.fromJson({
         ...standardAddress,
-        town: 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch Town'
+        address5: 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch Town'
       })
       company = CompanyModel.fromJson({})
       contact = ContactModel.fromJson({})

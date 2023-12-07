@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-account.helper.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
@@ -27,9 +27,9 @@ describe('Generate Bill service', () => {
     billingAccount = await BillingAccountHelper.add()
 
     expectedResult = {
-      invoiceAccountId: billingAccount.invoiceAccountId,
+      invoiceAccountId: billingAccount.id,
       address: {},
-      invoiceAccountNumber: billingAccount.invoiceAccountNumber,
+      invoiceAccountNumber: billingAccount.accountNumber,
       billingBatchId: billRunId,
       financialYearEnding,
       isCredit: false

@@ -23,12 +23,12 @@ describe('Pre-generate billing data service', () => {
 
   const billingAccounts = [
     {
-      invoiceAccountId: '235bae72-01f7-4a21-b8a3-d2b5fb2eff91',
-      invoiceAccountNumber: 'T12345678A'
+      id: '235bae72-01f7-4a21-b8a3-d2b5fb2eff91',
+      accountNumber: 'T12345678A'
     },
     {
-      invoiceAccountId: '1d407b9c-457a-487d-bfe1-a54b72ef0bb5',
-      invoiceAccountNumber: 'T87654321A'
+      id: '1d407b9c-457a-487d-bfe1-a54b72ef0bb5',
+      accountNumber: 'T87654321A'
     }
   ]
 
@@ -46,10 +46,10 @@ describe('Pre-generate billing data service', () => {
   describe('when the service is called', () => {
     beforeEach(async () => {
       chargeVersions = [
-        { invoiceAccountId: billingAccounts[0].invoiceAccountId, licence: licences[0] },
-        { invoiceAccountId: billingAccounts[1].invoiceAccountId, licence: licences[0] },
-        { invoiceAccountId: billingAccounts[1].invoiceAccountId, licence: licences[1] },
-        { invoiceAccountId: billingAccounts[1].invoiceAccountId, licence: licences[1] }
+        { invoiceAccountId: billingAccounts[0].id, licence: licences[0] },
+        { invoiceAccountId: billingAccounts[1].id, licence: licences[0] },
+        { invoiceAccountId: billingAccounts[1].id, licence: licences[1] },
+        { invoiceAccountId: billingAccounts[1].id, licence: licences[1] }
       ]
 
       Sinon.stub(FetchBillingAccountsService, 'go').resolves(billingAccounts)
@@ -63,7 +63,7 @@ describe('Pre-generate billing data service', () => {
         expect(keys).to.have.length(2)
       })
 
-      it('is keyed with the invoice account id', async () => {
+      it('is keyed with the billing account id', async () => {
         const { bills: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const entries = Object.entries(result)
@@ -79,10 +79,10 @@ describe('Pre-generate billing data service', () => {
         const entries = Object.entries(result)
 
         entries.forEach(([key, value]) => {
-          const matchingInvoiceAccount = billingAccounts.find((billingAccount) => {
-            return key === billingAccount.invoiceAccountId
+          const matchingBillingAccount = billingAccounts.find((billingAccount) => {
+            return key === billingAccount.id
           })
-          expect(value.invoiceAccountNumber).to.equal(matchingInvoiceAccount.invoiceAccountNumber)
+          expect(value.invoiceAccountNumber).to.equal(matchingBillingAccount.accountNumber)
         })
       })
     })
