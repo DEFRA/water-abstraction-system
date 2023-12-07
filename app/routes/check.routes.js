@@ -30,6 +30,7 @@ const routes = [
     }
   },
   {
+    // Used on the alternate branch
     method: 'GET',
     path: '/check/two-part-review/{licenceId}',
     handler: CheckController.twoPartReview,

@@ -14,9 +14,9 @@ function go (billRun, licences) {
   const reviewResults = []
 
   licences.forEach((licence) => {
-    const { chargeVersions, returns } = licence
+    const { chargeVersions, returnLogs } = licence
 
-    const reviewReturnResults = _generateReviewReturnResults(returns)
+    const reviewReturnResults = _generateReviewReturnResults(returnLogs)
 
     chargeVersions.forEach((chargeVersion) => {
       const { chargeReferences } = chargeVersion
@@ -27,9 +27,9 @@ function go (billRun, licences) {
         chargeElements.forEach((chargeElement) => {
           const reviewChargeElementResult = _generateReviewChargeElement(chargeElement, chargeReference)
 
-          if (chargeElement.returns.length > 0) {
-            chargeElement.returns.forEach((matchedReturn) => {
-              const matchReviewReturnResult = _matchingReviewReturnResult(reviewReturnResults, matchedReturn)
+          if (chargeElement.returnLogs.length > 0) {
+            chargeElement.returnLogs.forEach((matchedReturnLog) => {
+              const matchReviewReturnResult = _matchingReviewReturnResult(reviewReturnResults, matchedReturnLog)
 
               const reviewResult = _generateReviewResult(billRun, licence, chargeVersion, chargeReference, reviewChargeElementResult, matchReviewReturnResult)
               reviewResults.push(reviewResult)
@@ -41,7 +41,7 @@ function go (billRun, licences) {
         })
       })
     })
-    const unmatchedReviewResults = _generateReviewResultsForUnmatchedReturns(billRun, licence, returns, reviewReturnResults)
+    const unmatchedReviewResults = _generateReviewResultsForUnmatchedReturns(billRun, licence, returnLogs, reviewReturnResults)
     reviewResults.push(...unmatchedReviewResults)
   })
 
@@ -70,8 +70,8 @@ function _generateReviewResult (billRun, licence, chargeVersion, chargeReference
     id: generateUUID(),
     billRunId: billRun.billingBatchId,
     licenceId: licence.licenceId,
-    chargeVersionId: chargeVersion.chargeVersionId,
-    chargeReferenceId: chargeReference.chargeElementId,
+    chargeVersionId: chargeVersion.id,
+    chargeReferenceId: chargeReference.id,
     reviewChargeElementResultId: reviewChargeElementResult.id,
     reviewChargeElementResult,
     reviewReturnResultId: reviewReturnResult.id,
@@ -82,7 +82,7 @@ function _generateReviewResult (billRun, licence, chargeVersion, chargeReference
 }
 
 function _generateReviewChargeElement (chargeElement, chargeReference) {
-  const { chargePurposeId: chargeElementId, allocatedQuantity: allocated, chargeDatesOverlap } = chargeElement
+  const { id: chargeElementId, allocatedQuantity: allocated, chargeDatesOverlap } = chargeElement
   const { aggregate } = chargeReference
 
   const attributes = {
@@ -98,7 +98,7 @@ function _generateReviewChargeElement (chargeElement, chargeReference) {
 
 function _generateReviewReturnResults (returnLogs) {
   return returnLogs.map((returnLog) => {
-    const { returnId, returnRequirement: reference, startDate, endDate, dueDate, receivedDate, status, underQuery, nilReturn, description, purposes, totalQuantity: quantity, allocatedQuantity: allocated, abstractionOutsidePeriod } = returnLog
+    const { id: returnId, returnRequirement: reference, startDate, endDate, dueDate, receivedDate, status, underQuery, nilReturn, description, purposes, totalQuantity: quantity, allocatedQuantity: allocated, abstractionOutsidePeriod } = returnLog
 
     const attributes = {
       id: generateUUID(),

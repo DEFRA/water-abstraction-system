@@ -7,16 +7,16 @@
 
 const DetermineAbstractionPeriodService = require('../../check/determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
-const FetchReturnsForLicenceService = require('./fetch-returns-for-licence.service.js')
+const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
 async function go (licences, billingPeriod) {
   for (const licence of licences) {
-    licence.returns = await FetchReturnsForLicenceService.go(licence.licenceRef, billingPeriod)
+    licence.returnLogs = await FetchReturnLogsForLicenceService.go(licence.licenceRef, billingPeriod)
 
-    const { chargeVersions, returns } = licence
+    const { chargeVersions, returnLogs } = licence
 
-    _prepReturnsForMatching(returns, billingPeriod)
+    _prepReturnsForMatching(returnLogs, billingPeriod)
 
     chargeVersions.forEach((chargeVersion) => {
       const { chargeReferences } = chargeVersion
@@ -65,15 +65,15 @@ function _prepChargeElementsForMatching (chargeElements, chargePeriod) {
       abstractionPeriodEndMonth
     )
 
-    chargeElement.returns = []
+    chargeElement.returnLogs = []
     chargeElement.allocatedQuantity = 0
     chargeElement.abstractionPeriods = abstractionPeriods
   })
 }
 
-function _prepReturnsForMatching (returnRecords, billingPeriod) {
-  returnRecords.forEach((returnRecord) => {
-    const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth, versions } = returnRecord
+function _prepReturnsForMatching (returnLogs, billingPeriod) {
+  returnLogs.forEach((returnLog) => {
+    const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth, returnSubmissions } = returnLog
     const abstractionPeriods = DetermineAbstractionPeriodService.go(
       billingPeriod,
       periodStartDay,
@@ -85,20 +85,20 @@ function _prepReturnsForMatching (returnRecords, billingPeriod) {
     let quantity = 0
     let abstractionOutsidePeriod = false
 
-    versions[0]?.lines.forEach((line) => {
+    returnSubmissions[0]?.returnSubmissionLines.forEach((returnSubmissionLine) => {
       if (!abstractionOutsidePeriod) {
-        abstractionOutsidePeriod = _abstractionOutsidePeriod(abstractionPeriods, line)
+        abstractionOutsidePeriod = _abstractionOutsidePeriod(abstractionPeriods, returnSubmissionLine)
       }
-      line.unallocated = line.quantity / 1000
-      quantity += line.unallocated
+      returnSubmissionLine.unallocated = returnSubmissionLine.quantity / 1000
+      quantity += returnSubmissionLine.unallocated
     })
 
-    returnRecord.nilReturn = versions[0]?.nilReturn ?? false
-    returnRecord.quantity = quantity
-    returnRecord.allocatedQuantity = 0
-    returnRecord.abstractionPeriods = abstractionPeriods
-    returnRecord.abstractionOutsidePeriod = abstractionOutsidePeriod
-    returnRecord.matched = false
+    returnLog.nilReturn = returnSubmissions[0]?.nilReturn ?? false
+    returnLog.quantity = quantity
+    returnLog.allocatedQuantity = 0
+    returnLog.abstractionPeriods = abstractionPeriods
+    returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
+    returnLog.matched = false
   })
 }
 

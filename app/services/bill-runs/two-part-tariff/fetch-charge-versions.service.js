@@ -29,13 +29,23 @@ const Workflow = require('../../../models/workflow.model.js')
  *
  * @returns {Object} Contains an array of SROC charge versions with linked licences, charge references, charge elements and related purpose
  */
-async function go (regionId, billingPeriod) {
-  const regionCode = await _regionCode(regionId)
+async function go (regionId, billingPeriod, licenceId) {
+  let regionCode
+  if (!licenceId) {
+    regionCode = await _regionCode(regionId)
+  }
 
-  return _fetch(regionCode, billingPeriod)
+  regionCode = null
+
+  return _fetch(regionCode, billingPeriod, licenceId)
 }
 
-async function _fetch (regionCode, billingPeriod) {
+async function _fetch (regionCode, billingPeriod, licenceId) {
+  const whereClause = {
+    field: licenceId ? 'licenceId' : 'regionCode',
+    value: licenceId ?? regionCode
+  }
+
   const chargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.id',
@@ -46,7 +56,7 @@ async function _fetch (regionCode, billingPeriod) {
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
-    .where('chargeVersions.regionCode', regionCode)
+    .where(`chargeVersions.${whereClause.field}`, whereClause.value)
     .whereNotExists(
       Workflow.query()
         .select(1)

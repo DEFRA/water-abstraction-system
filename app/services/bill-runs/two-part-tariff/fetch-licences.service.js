@@ -25,7 +25,7 @@ async function go (regionId, billingPeriod, licenceId) {
 
 function _extractUniqueLicenceIds (chargeVersions) {
   const allLicenceIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licence.licenceId
+    return chargeVersion.licence.id
   })
 
   return [...new Set(allLicenceIds)]
@@ -41,7 +41,7 @@ function _groupByLicence (chargeVersions, uniqueLicenceIds) {
   for (let i = 0; i < uniqueLicenceIds.length; i++) {
     const licenceId = uniqueLicenceIds[i]
     const matchedChargeVersions = chargeVersions.filter((chargeVersion) => {
-      return chargeVersion.licence.licenceId === licenceId
+      return chargeVersion.licence.id === licenceId
     })
 
     const { licenceRef, startDate, expiredDate, lapsedDate, revokedDate } = matchedChargeVersions[0].licence

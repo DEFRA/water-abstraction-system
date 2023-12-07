@@ -9,7 +9,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
 
 function go (licences) {
   licences.forEach((licence) => {
-    const { chargeVersions, returns } = licence
+    const { chargeVersions, returnLogs } = licence
 
     chargeVersions.forEach((chargeVersion) => {
       const { chargeReferences } = chargeVersion
@@ -18,7 +18,7 @@ function go (licences) {
         const { chargeElements } = chargeReference
 
         chargeElements.forEach((chargeElement) => {
-          _matchAndAllocate(chargeElement, returns, chargeVersion.chargePeriod)
+          _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod)
 
           // PERSIST element ???
         })
@@ -57,15 +57,15 @@ function _checkReturnForIssues (returnRecord) {
     return true
   }
 
-  if (returnRecord.versions.length === 0 || returnRecord.versions[0].lines.length === 0) {
+  if (returnRecord.returnSubmissions.length === 0 || returnRecord.returnSubmissions[0].returnSubmissionLines.length === 0) {
     return true
   }
 
   return false
 }
 
-function _matchAndAllocate (chargeElement, returns, chargePeriod) {
-  const matchedReturns = _matchReturns(chargeElement, returns)
+function _matchAndAllocate (chargeElement, returnLogs, chargePeriod) {
+  const matchedReturns = _matchReturns(chargeElement, returnLogs)
 
   if (matchedReturns.length === 0) {
     return
@@ -73,11 +73,11 @@ function _matchAndAllocate (chargeElement, returns, chargePeriod) {
 
   matchedReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
-      returnId: matchedReturn.returnId,
+      returnId: matchedReturn.id,
       allocatedQuantity: 0
     }
 
-    chargeElement.returns.push(matchedReturnResult)
+    chargeElement.returnLogs.push(matchedReturnResult)
     matchedReturn.matched = true
 
     if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) {
@@ -85,7 +85,7 @@ function _matchAndAllocate (chargeElement, returns, chargePeriod) {
         return
       }
 
-      const matchedLines = _matchLines(chargeElement, matchedReturn.versions[0].lines)
+      const matchedLines = _matchLines(chargeElement, matchedReturn.returnSubmissions[0].returnSubmissionLines)
 
       if (matchedLines.length === 0) {
         return
@@ -114,22 +114,22 @@ function _matchAndAllocate (chargeElement, returns, chargePeriod) {
   })
 }
 
-function _matchLines (chargeElement, returnLines) {
-  return returnLines.filter((returnLine) => {
-    if (returnLine.unallocated === 0) {
+function _matchLines (chargeElement, returnSubmissionLines) {
+  return returnSubmissionLines.filter((returnSubmissionLine) => {
+    if (returnSubmissionLine.unallocated === 0) {
       return false
     }
 
-    const { startDate, endDate } = returnLine
+    const { startDate, endDate } = returnSubmissionLine
     return periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
   })
 }
 
-function _matchReturns (chargeElement, returns) {
+function _matchReturns (chargeElement, returnLogs) {
   const elementCode = chargeElement.purpose.legacyId
   const elementPeriods = chargeElement.abstractionPeriods
 
-  return returns.filter((record) => {
+  return returnLogs.filter((record) => {
     const returnPeriods = record.abstractionPeriods
 
     const matchFound = record.purposes.some((purpose) => {

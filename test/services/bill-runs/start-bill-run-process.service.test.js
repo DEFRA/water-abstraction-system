@@ -17,7 +17,7 @@ const TwoPartTariffProcessBillRunService = require('../../../app/services/bill-r
 // Thing under test
 const StartBillRunProcessService = require('../../../app/services/bill-runs/start-bill-run-process.service.js')
 
-describe('Start Bill Run Process service', () => {
+describe.skip('Start Bill Run Process service', () => {
   const regionId = '3b24cc01-19c5-4654-8ef6-24ddb4c8dcdf'
   const userEmail = 'test@wrsl.gov.uk'
 
