@@ -48,10 +48,10 @@ describe('Fetch Charge Versions service', () => {
       let srocChargeElement
 
       beforeEach(async () => {
-        const { id, licenceRef } = licence
+        const { id: licenceId, licenceRef } = licence
 
         const srocChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId: id, licenceRef, regionCode: 5 }
+          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
         chargeCategory = ChargeCategoryHelper.add()
@@ -119,10 +119,10 @@ describe('Fetch Charge Versions service', () => {
 
     describe('and the scheme is PRE SROC', () => {
       beforeEach(async () => {
-        const { id, licenceRef } = licence
+        const { id: licenceId, licenceRef } = licence
 
         await ChargeVersionHelper.add(
-          { scheme: 'alcs', licenceId: id, licenceRef, regionCode: 5 }
+          { scheme: 'alcs', licenceId, licenceRef, regionCode: 5 }
         )
       })
 
@@ -141,10 +141,10 @@ describe('Fetch Charge Versions service', () => {
         let inDateChargeElement
 
         beforeEach(async () => {
-          const { id, licenceRef } = licence
+          const { id: licenceId, licenceRef } = licence
 
           const inDateChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2022-04-01'), licenceId: id, licenceRef, regionCode: 5 }
+            { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
           )
 
           chargeCategory = ChargeCategoryHelper.add()
@@ -179,10 +179,10 @@ describe('Fetch Charge Versions service', () => {
         let notInDateChargeReference
 
         beforeEach(async () => {
-          const { id, licenceRef } = licence
+          const { id: licenceId, licenceRef } = licence
 
           const notInDateChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2023-04-01'), licenceId: id, licenceRef, regionCode: 5 }
+            { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode: 5 }
           )
 
           chargeCategory = ChargeCategoryHelper.add()
@@ -214,10 +214,10 @@ describe('Fetch Charge Versions service', () => {
       let currentChargeElement
 
       beforeEach(async () => {
-        const { id, licenceRef } = licence
+        const { id: licenceId, licenceRef } = licence
 
         const currentChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId: id, licenceRef, regionCode: 5 }
+          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
         chargeCategory = ChargeCategoryHelper.add()
@@ -252,10 +252,10 @@ describe('Fetch Charge Versions service', () => {
       let notCurrentChargeReference
 
       beforeEach(async () => {
-        const { id, licenceRef } = licence
+        const { id: licenceId, licenceRef } = licence
 
         const notCurrentChargeVersion = await ChargeVersionHelper.add(
-          { status: 'superseded', licenceId: id, licenceRef, regionCode: 5 }
+          { status: 'superseded', licenceId, licenceRef, regionCode: 5 }
         )
 
         chargeCategory = ChargeCategoryHelper.add()
@@ -285,10 +285,10 @@ describe('Fetch Charge Versions service', () => {
       let sameRegionChargeElement
 
       beforeEach(async () => {
-        const { id, licenceRef } = licence
+        const { id: licenceId, licenceRef } = licence
 
         const sameRegionChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId: id, licenceRef, regionCode: 5 }
+          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
         chargeCategory = ChargeCategoryHelper.add()
@@ -348,10 +348,10 @@ describe('Fetch Charge Versions service', () => {
         let differentRegionChargeReference
 
         beforeEach(async () => {
-          const { id, licenceRef } = licence
+          const { id: licenceId, licenceRef } = licence
 
           const differentRegionChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2022-04-01'), licenceId: id, licenceRef, regionCode: 4 }
+            { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 4 }
           )
 
           chargeCategory = ChargeCategoryHelper.add()
@@ -383,10 +383,10 @@ describe('Fetch Charge Versions service', () => {
       let chargeCategory
 
       beforeEach(async () => {
-        const { id, licenceRef } = licence
+        const { id: licenceId, licenceRef } = licence
 
         const srocChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId: id, licenceRef, regionCode: 5 }
+          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
         chargeCategory = ChargeCategoryHelper.add()
