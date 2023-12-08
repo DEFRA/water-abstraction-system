@@ -28,17 +28,17 @@ const GenerateBillService = require('./generate-bill.service.js')
  * bill licences and transactions.
  *
  * Once the bill has been handled, we mark the source bill as `rebilled` in the db (note that "rebill" is legacy
- * terminology for "reissue") along with the `originalBillingInvoiceId` field; if this is empty then we update it with
+ * terminology for "reissue") along with the `originalBillId` field; if this is empty then we update it with
  * the source bill's ID, or if it's already filled in then we leave it as-is. This ensures that if a bill is reissued,
- * and that reissuing bill is itself reissued, then `originalBillingInvoiceId` will still point directly to the original
+ * and that reissuing bill is itself reissued, then `originalBillId` will still point directly to the original
  * source bill.
  *
- * @param {module:BillModel} sourceBill The bill to be reissued. Note that we expect it to include the billing invoice
+ * @param {module:BillModel} sourceBill The bill to be reissued. Note that we expect it to include the bill
  * licences and transactions
  * @param {module:BillRunModel} reissueBillRun The bill run that the new bills should belong to
  *
- * @returns {Object} dataToReturn Data that has been generated while reissuing the invoice
- * @returns {Object[]} dataToReturn.bills Array of billing invoices
+ * @returns {Object} dataToReturn Data that has been generated while reissuing the bill
+ * @returns {Object[]} dataToReturn.bills Array of bills
  * @returns {Object[]} dataToReturn.billLicences Array of bill licences
  * @returns {Object[]} dataToReturn.transactions Array of transactions
  */
@@ -80,7 +80,7 @@ async function go (sourceBill, reissueBillRun) {
       const reissueBillLicence = _retrieveOrGenerateBillLicence(
         dataToReturn,
         sourceBill,
-        reissueBill.billingInvoiceId,
+        reissueBill.id,
         sourceBillLicence
       )
 
@@ -100,7 +100,7 @@ async function go (sourceBill, reissueBillRun) {
         const reissueTransaction = _generateTransaction(
           chargingModuleReissueTransaction,
           sourceTransaction,
-          reissueBillLicence.billingInvoiceLicenceId
+          reissueBillLicence.id
         )
 
         dataToReturn.transactions.push(reissueTransaction)
@@ -153,14 +153,14 @@ async function _pauseUntilNotPending (billRunExternalId) {
 function _generateTransaction (chargingModuleReissueTransaction, sourceTransaction, billLicenceId) {
   return {
     ...sourceTransaction,
-    billingTransactionId: generateUUID(),
+    id: generateUUID(),
     externalId: chargingModuleReissueTransaction.id,
-    isCredit: chargingModuleReissueTransaction.credit,
+    credit: chargingModuleReissueTransaction.credit,
     netAmount: _determineSignOfNetAmount(
       chargingModuleReissueTransaction.chargeValue,
       chargingModuleReissueTransaction.credit
     ),
-    billingInvoiceLicenceId: billLicenceId
+    billLicenceId
   }
 }
 
@@ -174,7 +174,7 @@ function _determineSignOfNetAmount (chargeValue, credit) {
 }
 
 /**
- * Maps the provided CM invoice fields to their billing invoice equivalents
+ * Maps the provided CM invoice fields to their bill equivalents
  */
 function _mapChargingModuleInvoice (chargingModuleInvoice) {
   const chargingModuleRebilledTypes = new Map()
@@ -185,7 +185,7 @@ function _mapChargingModuleInvoice (chargingModuleInvoice) {
   return {
     externalId: chargingModuleInvoice.id,
     netAmount: chargingModuleInvoice.netTotal,
-    isDeMinimis: chargingModuleInvoice.deminimisInvoice,
+    deminimis: chargingModuleInvoice.deminimisInvoice,
     invoiceValue: chargingModuleInvoice.debitLineValue,
     // As per legacy code we invert the sign of creditLineValue
     creditNoteValue: -chargingModuleInvoice.creditLineValue,
@@ -199,11 +199,10 @@ function _mapChargingModuleInvoice (chargingModuleInvoice) {
 async function _markSourceBillAsRebilled (sourceBill) {
   await sourceBill.$query().patch({
     rebillingState: 'rebilled',
-    // If the source invoice's originalBillingInvoiceId field is `null` then we update it with the invoice's id;
-    // otherwise, we use its existing value. This ensures that if we reissue an invoice, then reissue that reissuing
-    // invoice, every invoice in the chain will have originalBillingInvoiceId pointing back to the very first invoice in
-    // the chain
-    originalBillingInvoiceId: sourceBill.originalBillingInvoiceId ?? sourceBill.billingInvoiceId
+    // If the source bill's originalBillId field is `null` then we update it with the bill's id; otherwise, we use its
+    // existing value. This ensures that if we reissue a bill, then reissue that reissuing bill, every bill in the chain
+    // will have originalBillId pointing back to the very first bill in the chain
+    originalBillId: sourceBill.originalBillId ?? sourceBill.id
   })
 }
 
@@ -227,7 +226,7 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
   // Because we have nested iteration of source bill and Charging Module reissue invoice, we need to ensure we have
   // a bill for every combination of these, hence we search by both of their ids
   const existingBill = dataToReturn.bills.find((bill) => {
-    return bill.invoiceAccountId === sourceBill.invoiceAccountId &&
+    return bill.billingAccountId === sourceBill.billingAccountId &&
       bill.externalId === chargingModuleReissueInvoice.id
   })
 
@@ -238,7 +237,7 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
   const translatedChargingModuleInvoice = _mapChargingModuleInvoice(chargingModuleReissueInvoice)
   const generatedBill = GenerateBillService.go(
     sourceBill,
-    reissueBillRun.billingBatchId,
+    reissueBillRun.id,
     sourceBill.financialYearEnding
   )
 
@@ -247,7 +246,7 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
   const newBill = {
     ...generatedBill,
     ...translatedChargingModuleInvoice,
-    originalBillingInvoiceId: sourceBill.billingInvoiceId
+    originalBillId: sourceBill.id
   }
 
   dataToReturn.bills.push(newBill)
@@ -256,12 +255,12 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
 }
 
 /**
- * If a bill licence exists for this invoice account id then return it; otherwise, generate it, store it and then return
+ * If a bill licence exists for this billing account id then return it; otherwise, generate it, store it and then return
  * it.
  */
 function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, sourceBillLicence) {
-  const existingBillLicence = dataToReturn.billLicences.find((invoice) => {
-    return invoice.invoiceAccountId === sourceBill.invoiceAccountId
+  const existingBillLicence = dataToReturn.billLicences.find((billLicence) => {
+    return billLicence.billingAccountId === sourceBill.billingAccountId
   })
 
   if (existingBillLicence) {
