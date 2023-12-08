@@ -6,7 +6,7 @@
 
 const { randomInteger } = require('./general.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./water/licence.helper.js')
+const { generateLicenceRef } = require('./licence.helper.js')
 const { generateReturnLogId } = require('./return-log.helper.js')
 const ReviewReturnResultModel = require('../../../app/models/review-return-result.model.js')
 
