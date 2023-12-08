@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Things we need to stub
 const ChargingModuleCreateTransactionService = require('../../../../app/services/charging-module/create-transaction.service.js')
@@ -21,7 +21,7 @@ const SendTransactionsService = require('../../../../app/services/bill-runs/supp
 describe('Send Transactions service', () => {
   const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
   const bill = { accountNumber: 'ABC123' }
-  const billLicence = { billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a' }
+  const billLicence = { id: '594fc25e-99c1-440a-8b88-b507ee17738a' }
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
