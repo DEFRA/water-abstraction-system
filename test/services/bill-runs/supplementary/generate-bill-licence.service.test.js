@@ -12,28 +12,28 @@ const GenerateBillLicenceService = require('../../../../app/services/bill-runs/s
 
 describe('Generate Bill Licence service', () => {
   const licence = {
-    licenceId: 'bfd93113-0ca7-4218-bff7-e685af360df4',
+    id: 'bfd93113-0ca7-4218-bff7-e685af360df4',
     licenceRef: '01/TEST/02'
   }
 
-  const billingInvoiceId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
+  const billId = 'f4fb6257-c50f-46ea-80b0-7533423d6efd'
 
   let expectedResult
 
   describe('when called', () => {
     beforeEach(() => {
       expectedResult = {
-        billingInvoiceLicenceId: 'fa0c763e-3976-42df-ae2c-e93a954701dd',
-        billingInvoiceId,
-        licenceRef: licence.licenceRef,
-        licenceId: licence.licenceId
+        id: '',
+        billId,
+        licenceId: licence.id,
+        licenceRef: licence.licenceRef
       }
     })
 
     it('returns a new bill licence with the provided values', () => {
-      const result = GenerateBillLicenceService.go(billingInvoiceId, licence)
+      const result = GenerateBillLicenceService.go(billId, licence)
 
-      expect(result).to.equal(expectedResult, { skip: 'billingInvoiceLicenceId' })
+      expect(result).to.equal(expectedResult, { skip: 'id' })
     })
   })
 })

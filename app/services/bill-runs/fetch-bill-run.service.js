@@ -5,7 +5,7 @@
  * @module FetchBillRunService
  */
 
-const BillRunModel = require('../../models/water/bill-run.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 const { db } = require('../../../db/db.js')
 
 /**
@@ -32,15 +32,15 @@ async function _fetchBillRun (id) {
   const result = BillRunModel.query()
     .findById(id)
     .select([
-      'billingBatchId',
+      'id',
       'batchType',
       'billRunNumber',
+      'createdAt',
       'creditNoteCount',
       'creditNoteValue',
-      'dateCreated',
       'invoiceCount',
       'invoiceValue',
-      'isSummer',
+      'summer',
       'netTotal',
       'scheme',
       'source',
@@ -51,7 +51,7 @@ async function _fetchBillRun (id) {
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select([
-        'regionId',
+        'id',
         'displayName'
       ])
     })
@@ -81,7 +81,7 @@ async function _fetchBillRun (id) {
  *  not use a JOIN. So, instead we use a function built into PostgreSQL that allows you to aggregate multiple results
  *  into a single value. (We can easily split them out again using JavaScripts `split()` method)
  * - **flag the bill as a water company** - Again we have to avoid joining to the `licences` table via
- *  `billing_invoice_licences` as we'll get duplicate results. So, again we use a PostgreSQL function that will return
+ *  `bill_licences` as we'll get duplicate results. So, again we use a PostgreSQL function that will return
  *  true or false based on the query provided to it.
  *
  * We could have made things simpler by performing separate queries and then transforming all the results into what we
@@ -91,33 +91,33 @@ async function _fetchBillRun (id) {
 async function _fetchBillSummaries (id) {
   const results = await db
     .select(
-      'bi.billing_invoice_id',
-      'bi.invoice_account_id',
-      'bi.invoice_account_number',
+      'bi.id',
+      'bi.billing_account_id',
+      'bi.account_number',
       'bi.net_amount',
       'bi.financial_year_ending',
       db.raw('(c."name") AS company_name'),
       db.raw('(ac."name") AS agent_name'),
       db.raw(
-        "(SELECT string_agg(bil.licence_ref, ',' ORDER BY bil.licence_ref) FROM water.billing_invoice_licences bil WHERE bil.billing_invoice_id = bi.billing_invoice_id GROUP BY bil.billing_invoice_id) AS all_licences"
+        "(SELECT string_agg(bil.licence_ref, ',' ORDER BY bil.licence_ref) FROM bill_licences bil WHERE bil.bill_id = bi.id GROUP BY bil.bill_id) AS all_licences"
       ),
       db.raw(
-        '(EXISTS(SELECT 1 FROM water.licences l WHERE l.is_water_undertaker AND l.licence_id IN (SELECT bil2.licence_id FROM water.billing_invoice_licences bil2 WHERE bil2.billing_invoice_id = bi.billing_invoice_id))) AS water_company'
+        '(EXISTS(SELECT 1 FROM licences l WHERE l.water_undertaker AND l.id IN (SELECT bil2.licence_id FROM bill_licences bil2 WHERE bil2.bill_id = bi.id))) AS water_company'
       )
     )
-    .from('water.billing_invoices AS bi')
-    .innerJoin('crm_v2.invoice_accounts AS ia', 'ia.invoice_account_id', 'bi.invoice_account_id')
-    .innerJoin('crm_v2.companies AS c', 'c.company_id', 'ia.company_id')
+    .from('bills AS bi')
+    .innerJoin('billing_accounts AS ia', 'ia.id', 'bi.billing_account_id')
+    .innerJoin('companies AS c', 'c.id', 'ia.company_id')
     .innerJoin(
-      'crm_v2.invoice_account_addresses AS iaa',
+      'billing_account_addresses AS iaa',
       function () {
-        this.on('iaa.invoice_account_id', '=', 'ia.invoice_account_id').andOnNull('iaa.end_date')
+        this.on('iaa.billing_account_id', '=', 'ia.id').andOnNull('iaa.end_date')
       }
     )
-    .leftJoin('crm_v2.companies AS ac', 'ac.company_id', 'iaa.agent_company_id')
-    .where('bi.billing_batch_id', '=', id)
+    .leftJoin('companies AS ac', 'ac.id', 'iaa.company_id')
+    .where('bi.bill_run_id', '=', id)
     .orderBy([
-      { column: 'bi.invoice_account_number' },
+      { column: 'bi.account_number' },
       { column: 'bi.financial_year_ending', order: 'desc' }
     ])
 

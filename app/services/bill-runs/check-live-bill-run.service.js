@@ -5,7 +5,7 @@
  * @module CheckLiveBillRunService
  */
 
-const BillRunModel = require('../../models/water/bill-run.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
 

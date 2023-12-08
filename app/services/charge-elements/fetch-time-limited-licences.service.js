@@ -26,12 +26,12 @@ async function go () {
   // NOTE: We've resorted to Knex rather than Objection JS due to just how many JOINS we need to get from licence to
   // charge purposes! Our Objection JS skills failed us as we could not get the query to work using innerJoinRelated()
   return db
-    .distinct('l.licenceId', 'lv.licenceVersionId')
-    .from('water.licences as l')
-    .innerJoin('water.licenceVersions as lv', 'l.licenceId', 'lv.licenceId')
-    .innerJoin('water.chargeVersions as cv', 'l.licenceId', 'cv.licenceId')
-    .innerJoin('water.chargeElements as ce', 'cv.chargeVersionId', 'ce.chargeVersionId')
-    .innerJoin('water.chargePurposes as cp', 'ce.chargeElementId', 'cp.chargeElementId')
+    .distinct('l.id', 'lv.id AS licenceVersionId')
+    .from('licences as l')
+    .innerJoin('licenceVersions as lv', 'l.id', 'lv.licenceId')
+    .innerJoin('chargeVersions as cv', 'l.id', 'cv.licenceId')
+    .innerJoin('chargeReferences as cr', 'cv.id', 'cr.chargeVersionId')
+    .innerJoin('chargeElements as ce', 'cr.id', 'ce.chargeReferenceId')
     .where((builder) => {
       builder
         .whereNull('l.expiredDate')
@@ -43,14 +43,14 @@ async function go () {
     .whereNull('cv.endDate')
     .where('cv.scheme', 'sroc')
     .where('cv.status', 'current')
-    .whereNotNull('cp.timeLimitedEndDate')
-    .where('cp.timeLimitedEndDate', '<', _offSetCurrentDateByDays(50))
+    .whereNotNull('ce.timeLimitedEndDate')
+    .where('ce.timeLimitedEndDate', '<', _offSetCurrentDateByDays(50))
     .whereNotExists(
       db
         .select(1)
-        .from('water.chargeVersionWorkflows as cvw')
-        .whereColumn('l.licenceId', 'cvw.licenceId')
-        .whereNull('cvw.dateDeleted')
+        .from('workflows as w')
+        .whereColumn('l.id', 'w.licenceId')
+        .whereNull('w.deletedAt')
     )
 }
 

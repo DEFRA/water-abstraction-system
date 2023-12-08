@@ -12,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  * Fetches the previously billed transactions that match the bill, licence and year provided, removing any debits
  * which are cancelled out by previous credits.
  *
- * @param {Object} bill A generated bill that identifies the invoice account ID we need to match
+ * @param {Object} bill A generated bill that identifies the billing account ID we need to match
  *  against
  * @param {Object} billLicence A generated bill licence that identifies the licence we need to
  *  match against
@@ -23,7 +23,7 @@ const { db } = require('../../../../db/db.js')
 async function go (bill, billLicence, financialYearEnding) {
   const transactions = await _fetch(
     billLicence.licenceId,
-    bill.invoiceAccountId,
+    bill.billingAccountId,
     financialYearEnding
   )
 
@@ -37,8 +37,8 @@ async function go (bill, billLicence, financialYearEnding) {
  * to know only about debits that have not been credited.
  */
 function _cleanse (transactions) {
-  const credits = transactions.filter((transaction) => transaction.isCredit)
-  const debits = transactions.filter((transaction) => !transaction.isCredit)
+  const credits = transactions.filter((transaction) => transaction.credit)
+  const debits = transactions.filter((transaction) => !transaction.credit)
 
   credits.forEach((credit) => {
     const debitIndex = debits.findIndex((debit) => {
@@ -96,73 +96,73 @@ function _matchTransactions (debit, credit) {
     debit.section130Agreement === credit.section130Agreement &&
     debit.aggregateFactor === credit.aggregateFactor &&
     debit.adjustmentFactor === credit.adjustmentFactor &&
-    debit.isWinterOnly === credit.isWinterOnly &&
-    debit.isSupportedSource === credit.isSupportedSource &&
+    debit.winterOnly === credit.winterOnly &&
+    debit.supportedSource === credit.supportedSource &&
     debit.supportedSourceName === credit.supportedSourceName &&
-    debit.isWaterCompanyCharge === credit.isWaterCompanyCharge
+    debit.waterCompanyCharge === credit.waterCompanyCharge
 }
 
-async function _fetch (licenceId, invoiceAccountId, financialYearEnding) {
+async function _fetch (licenceId, billingAccountId, financialYearEnding) {
   return db
     .select(
-      'bt.authorisedDays',
-      'bt.billableDays',
-      'bt.isWaterUndertaker',
-      'bt.chargeElementId',
-      'bt.startDate',
-      'bt.endDate',
-      'bt.source',
-      'bt.season',
-      'bt.loss',
-      'bt.isCredit',
-      'bt.chargeType',
-      'bt.authorisedQuantity',
-      'bt.billableQuantity',
-      'bt.description',
-      'bt.volume',
-      'bt.section126Factor',
-      'bt.section127Agreement',
+      't.authorisedDays',
+      't.billableDays',
+      't.waterUndertaker',
+      't.chargeReferenceId',
+      't.startDate',
+      't.endDate',
+      't.source',
+      't.season',
+      't.loss',
+      't.credit',
+      't.chargeType',
+      't.authorisedQuantity',
+      't.billableQuantity',
+      't.description',
+      't.volume',
+      't.section126Factor',
+      't.section127Agreement',
       // NOTE: The section130Agreement field is a varchar in the DB for historic reasons. It seems some early PRESROC
       // transactions recorded values other than 'true' or 'false'. For SROC though, it will only ever be true/false. We
       // generate our calculated billing transaction lines based on the Section130 flag against charge_elements which is
       // always a boolean. So, to avoid issues when we need to compare the values we cast this to a boolean when
       // fetching the data.
-      db.raw('bt.section_130_agreement::boolean'),
-      'bt.isTwoPartSecondPartCharge',
-      'bt.scheme',
-      'bt.aggregateFactor',
-      'bt.adjustmentFactor',
-      'bt.chargeCategoryCode',
-      'bt.chargeCategoryDescription',
-      'bt.isSupportedSource',
-      'bt.supportedSourceName',
-      'bt.isNewLicence',
-      'bt.isWaterCompanyCharge',
-      'bt.isWinterOnly',
-      'bt.purposes',
-      'validBillingInvoices.invoiceAccountId',
-      'validBillingInvoices.invoiceAccountNumber'
+      db.raw('t.section_130_agreement::boolean'),
+      't.secondPartCharge',
+      't.scheme',
+      't.aggregateFactor',
+      't.adjustmentFactor',
+      't.chargeCategoryCode',
+      't.chargeCategoryDescription',
+      't.supportedSource',
+      't.supportedSourceName',
+      't.newLicence',
+      't.waterCompanyCharge',
+      't.winterOnly',
+      't.purposes',
+      'validBills.billingAccountId',
+      'validBills.accountNumber'
     )
-    .from('water.billingTransactions as bt')
+    .from('transactions as t')
     .innerJoin(
       db
         .select(
-          'bil.billingInvoiceLicenceId',
-          'bi.invoiceAccountId',
-          'bi.invoiceAccountNumber'
+          'bl.id',
+          'b.billingAccountId',
+          'b.accountNumber'
         )
-        .from('water.billingInvoiceLicences as bil')
-        .innerJoin('water.billingInvoices as bi', 'bil.billingInvoiceId', 'bi.billingInvoiceId')
-        .innerJoin('water.billingBatches as bb', 'bi.billingBatchId', 'bb.billingBatchId')
+        .from('billLicences as bl')
+        .innerJoin('bills as b', 'bl.billId', 'b.id')
+        .innerJoin('billRuns as br', 'br.id', 'b.billRunId')
         .where({
-          'bil.licenceId': licenceId,
-          'bi.invoiceAccountId': invoiceAccountId,
-          'bi.financialYearEnding': financialYearEnding,
-          'bb.status': 'sent',
-          'bb.scheme': 'sroc'
+          'bl.licenceId': licenceId,
+          'b.billingAccountId': billingAccountId,
+          'b.financialYearEnding': financialYearEnding,
+          'br.status': 'sent',
+          'br.scheme': 'sroc'
         })
-        .as('validBillingInvoices'),
-      'bt.billingInvoiceLicenceId', 'validBillingInvoices.billingInvoiceLicenceId'
+        .as('validBills'),
+      't.billLicenceId', 'validBills.id'
     )
 }
 

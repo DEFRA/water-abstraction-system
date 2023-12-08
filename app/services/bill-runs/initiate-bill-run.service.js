@@ -5,7 +5,7 @@
  * @module InitiateBillRunService
  */
 
-const BillRunModel = require('../../models/water/bill-run.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
 const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
 const CreateBillRunService = require('./create-bill-run.service.js')
