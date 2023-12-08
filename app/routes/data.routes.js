@@ -17,19 +17,6 @@ const routes = [
     }
   },
   {
-    method: 'GET',
-    path: '/data/mock/{type}/{id}',
-    handler: DataController.mockData,
-    options: {
-      app: {
-        excludeFromProd: true,
-        plainOutput: true
-      },
-      auth: false,
-      description: 'Used to generate mock data'
-    }
-  },
-  {
     method: 'POST',
     path: '/data/seed',
     handler: DataController.seed,
