@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { db } = require('../../../../db/db.js')
 const fs = require('fs')
