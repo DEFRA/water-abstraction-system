@@ -21,7 +21,7 @@ const WriteTableToFileService = require('../../../../app/services/data/export/wr
 const tableName = 'billing_charge_categories'
 const schemaName = 'water'
 const schemaFolderPath = '/tmp/water'
-const billingChargeCategoryId = '20146cdc-9b40-4769-aa78-b51c17080d56'
+const chargeCategoryId = '20146cdc-9b40-4769-aa78-b51c17080d56'
 const date = new Date('2022-12-14').toISOString()
 
 const headers = [
@@ -74,7 +74,7 @@ describe('Write table to file service', () => {
     beforeEach(async () => {
       await DatabaseHelper.clean()
 
-      await ChargeCategoryHelper.add({ billingChargeCategoryId, createdAt: date, reference: '4.4.5' })
+      await ChargeCategoryHelper.add({ id: chargeCategoryId, createdAt: date, reference: '4.4.5' })
 
       const fileName = 'billing_charge_categories.csv'
       const __dirname = '/tmp/water'
