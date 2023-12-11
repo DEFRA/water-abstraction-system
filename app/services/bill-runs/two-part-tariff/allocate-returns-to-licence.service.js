@@ -15,10 +15,12 @@ function go (licences) {
       const { chargeReferences } = chargeVersion
 
       chargeReferences.forEach((chargeReference) => {
+        chargeReference.allocatedQuantity = 0
+
         const { chargeElements } = chargeReference
 
         chargeElements.forEach((chargeElement) => {
-          _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod)
+          _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod, chargeReference)
 
           // PERSIST element ???
         })
@@ -64,7 +66,7 @@ function _checkReturnForIssues (returnRecord) {
   return false
 }
 
-function _matchAndAllocate (chargeElement, returnLogs, chargePeriod) {
+function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeReference) {
   const matchedReturns = _matchReturns(chargeElement, returnLogs)
 
   if (matchedReturns.length === 0) {
@@ -80,7 +82,7 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod) {
     chargeElement.returnLogs.push(matchedReturnResult)
     matchedReturn.matched = true
 
-    if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) {
+    if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity && chargeReference.allocatedQuantity < chargeReference.volume) {
       if (_checkReturnForIssues(matchedReturn)) {
         return
       }
@@ -97,8 +99,13 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod) {
           // We default how much to allocate to what is unallocated on the line i.e. remaining >= line.unallocated
           let qtyToAllocate = matchedLine.unallocated
 
-          // If what remains is actually less than the line we instead set qtyToAllocate to what remains
-          if (remainingAllocation < matchedLine.unallocated) {
+          // If what remains is actually less than the line we instead set qtyToAllocate to what remains. We check this
+          // on both the chargeReference and the element
+          const chargeReferenceRemainingAllocation = chargeReference.volume - chargeReference.allocatedQuantity
+
+          if (qtyToAllocate > chargeReferenceRemainingAllocation) {
+            qtyToAllocate = chargeReferenceRemainingAllocation
+          } else if (remainingAllocation < matchedLine.unallocated) {
             qtyToAllocate = remainingAllocation
           }
 
@@ -108,6 +115,7 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod) {
 
           matchedLine.unallocated -= qtyToAllocate
           matchedReturn.allocatedQuantity += qtyToAllocate
+          chargeReference.allocatedQuantity += qtyToAllocate
         }
       })
     }
