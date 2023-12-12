@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Controller for /licences endpoints
+ * @module LicencesController
+ */
+
 async function noReturnsRequired (_request, h) {
   return h.response().code(200)
 }
