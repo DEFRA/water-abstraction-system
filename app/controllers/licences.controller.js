@@ -5,8 +5,13 @@
  * @module LicencesController
  */
 
-async function noReturnsRequired (_request, h) {
-  return h.response().code(200)
+async function noReturnsRequired (request, h) {
+  const { id } = request.params
+
+  return h.view('return-requirements/no-returns-required.njk', {
+    activeNavBar: 'search',
+    licenceId: id
+  })
 }
 
 async function selectReturnStartDate (request, h) {
