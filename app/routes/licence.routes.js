@@ -27,6 +27,18 @@ const routes = [
       },
       description: 'Select the start date of the return'
     }
+  }, {
+    method: 'GET',
+    path: '/licences/{id}/no-return-check-your-answers',
+    handler: LicencesController.noReturnCheckYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'No return check your answers page'
+    }
   }
 ]
 

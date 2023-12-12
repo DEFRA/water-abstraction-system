@@ -7,7 +7,7 @@
   {{
     govukBackLink({
       text: 'back',
-      href: "/licences/" + licenceId + "/no-returns-required"
+      href: "/licences/" + licenceId + "/select-return-start-date"
     })
   }}
 {% endblock %}
@@ -15,10 +15,10 @@
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Select the start date for the return requirement</h1>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Check your answers</h1>
   </div>
 
   <div class="govuk-body">
-    {{ govukButton({ text: "Continue" }) }}
+    {{ govukButton({ text: "Approve returns requirements" }) }}
   </div>
 {% endblock %}
