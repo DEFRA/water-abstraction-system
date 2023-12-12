@@ -8,11 +8,13 @@
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 
 /**
+ * Fetches 2PT Licences for the matching region and billing period plus the charge versions associated with them grouped
+ * by licence
  *
- * @param {*} regionId
- * @param {*} billingPeriod
+ * @param {*} regionId UUID of the region being billed that the licences must be linked to
+ * @param {*} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns
+ * @returns {Object} Contains an array of unique licence IDs and array of charge versions to be processed
  */
 async function go (regionId, billingPeriod) {
   const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod)
