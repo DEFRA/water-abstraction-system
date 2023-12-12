@@ -30,7 +30,7 @@ const routes = [
   }, {
     method: 'GET',
     path: '/licences/{id}/no-return-check-your-answers',
-    handler: LicencesController.noReturnCheckYourAnswers,
+    handler: LicencesController.noReturnsCheckYourAnswers,
     options: {
       auth: {
         access: {
