@@ -22,7 +22,6 @@ function go (licences) {
       chargeVersions,
       returns
     } = licence
-    console.log('🚀 ~ file: scenario-formatter.service.js:40 ~ returnlicences.map ~ licence:', licence)
 
     return {
       simpleId,
