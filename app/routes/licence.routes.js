@@ -27,6 +27,19 @@ const routes = [
       },
       description: 'Select the start date of the return'
     }
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/requirements-approved',
+    handler: LicencesController.requirementsApproved,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns requirements approved'
+    }
   }
 ]
 
