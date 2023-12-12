@@ -1,0 +1,24 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'back',
+      href: "/licences/{{ licenceId }}/no-returns-required"
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Select the start date for the return requirement</h1>
+  </div>
+
+  <div class="govuk-body">
+    {{ govukButton({ text: "Continue" }) }}
+  </div>
+{% endblock %}
