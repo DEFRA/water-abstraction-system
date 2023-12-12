@@ -34,6 +34,6 @@ async function requirementsApproved (request, h) {
 
 module.exports = {
   noReturnsRequired,
-  selectReturnStartDate,
-  requirementsApproved
+  requirementsApproved,
+  selectReturnStartDate
 }

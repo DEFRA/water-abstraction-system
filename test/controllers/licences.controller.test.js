@@ -71,6 +71,7 @@ describe('Licences controller', () => {
       })
     })
   })
+
   describe('GET /licences/{id}/requirements-approved', () => {
     const options = {
       method: 'GET',
