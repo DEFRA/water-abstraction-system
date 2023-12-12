@@ -80,7 +80,7 @@ async function _fetch (regionCode, billingPeriod) {
         .select([
           'id',
           'description',
-          ref('chargeReferences.adjustments:aggregate').as('aggregate'),
+          ref('chargeReferences.adjustments:aggregate').castFloat().as('aggregate'),
           ref('chargeReferences.adjustments:s127').castText().as('s127')
         ])
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
