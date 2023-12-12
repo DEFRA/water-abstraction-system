@@ -13,7 +13,7 @@ const { expect } = Code
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Liicences controller', () => {
+describe('Licences controller', () => {
   let server
 
   beforeEach(async () => {
@@ -48,6 +48,26 @@ describe('Liicences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the start date for the return requirement')
+      })
+    })
+  })
+
+  describe('GET /licences/{id}/no-returns-required', () => {
+    const options = {
+      method: 'GET',
+      url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-required',
+      auth: {
+        strategy: 'session',
+        credentials: { scope: ['billing'] }
+      }
+    }
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Why are no returns required?')
       })
     })
   })
