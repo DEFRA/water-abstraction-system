@@ -8,24 +8,24 @@
 const { ref } = require('objection')
 
 const AllocateReturnsService = require('./allocate-returns.service.js')
-const ChargeReferenceModel = require('../../models/charge-reference.model.js')
-const ChargeVersionModel = require('../../models/charge-version.model.js')
 const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-periods.service.js')
+const FetchChargeVersionsService = require('../bill-runs/two-part-tariff/fetch-charge-versions.service.js')
+const LicenceModel = require('../../models/licence.model.js')
+const RegionModel = require('../../models/region.model.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
 const ScenarioFormatterService = require('./scenario-formatter.service.js')
-const Workflow = require('../../models/workflow.model.js')
 
-async function go (id, type) {
+async function go (identifier, type) {
   const startTime = process.hrtime.bigint()
 
   const billingPeriod = _billingPeriod()
 
-  const chargeVersions = await _fetchChargeVersions(billingPeriod, id, type)
+  const chargeVersions = await _fetchChargeVersions(billingPeriod, identifier, type)
   const chargeVersionsGroupedByLicence = await _groupByLicenceAndMatchReturns(chargeVersions, billingPeriod)
 
   const result = AllocateReturnsService.go(chargeVersionsGroupedByLicence, billingPeriod)
 
-  _calculateAndLogTime(startTime, id, type)
+  _calculateAndLogTime(startTime, identifier, type)
 
   return ScenarioFormatterService.go(result)
 }
@@ -36,100 +36,26 @@ function _billingPeriod () {
   return billingPeriods[1]
 }
 
-function _calculateAndLogTime (startTime, id, type) {
+function _calculateAndLogTime (startTime, identifier, type) {
   const endTime = process.hrtime.bigint()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
 
-  global.GlobalNotifier.omg(`Two part tariff ${type} matching complete`, { id, timeTakenMs })
+  global.GlobalNotifier.omg(`Two part tariff ${type} matching complete`, { identifier, timeTakenMs })
 }
 
-async function _fetchChargeVersions (billingPeriod, id, type) {
-  const whereClause = type === 'region' ? 'chargeVersions.regionCode' : 'chargeVersions.licenceId'
-
-  const chargeVersions = await ChargeVersionModel.query()
-    .select([
-      'chargeVersions.id',
-      'chargeVersions.startDate',
-      'chargeVersions.endDate'
-    ])
-    .where('chargeVersions.scheme', 'sroc')
-    .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .where('chargeVersions.status', 'current')
-    .where(whereClause, id)
-    .whereNotExists(
-      Workflow.query()
-        .select(1)
-        .whereColumn('chargeVersions.licenceId', 'workflows.licenceId')
-        .whereNull('workflows.deletedAt')
-    )
-    .whereExists(
-      ChargeReferenceModel.query()
-        .select(1)
-        .whereColumn('chargeVersions.id', 'chargeReferences.chargeVersionId')
-        // NOTE: We can make withJsonSuperset() work which looks nicer, but only if we don't have anything camel case
-        // in the table/column name. Camel case mappers don't work with whereJsonSuperset() or whereJsonSubset(). So,
-        // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
-        .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
-    )
-    .orderBy('chargeVersions.licenceRef')
-    .withGraphFetched('licence')
-    .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'licenceRef',
-        'startDate',
-        'expiredDate',
-        'lapsedDate',
-        'revokedDate'
-      ])
-    })
-    .withGraphFetched('chargeReferences')
-    .modifyGraph('chargeReferences', (builder) => {
-      builder
-        .select([
-          'id',
-          'volume',
-          ref('chargeReferences.adjustments:aggregate').as('aggregate'),
-          ref('chargeReferences.adjustments:s127').castText().as('s127')
-        ])
-        .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
-    })
-    .withGraphFetched('chargeReferences.chargeCategory')
-    .modifyGraph('chargeReferences.chargeCategory', (builder) => {
-      builder
-        .select([
-          'reference',
-          'shortDescription',
-          'subsistenceCharge'
-        ])
-    })
-    .withGraphFetched('chargeReferences.chargeElements')
-    .modifyGraph('chargeReferences.chargeElements', (builder) => {
-      builder
-        .select([
-          'id',
-          'description',
-          'abstractionPeriodStartDay',
-          'abstractionPeriodStartMonth',
-          'abstractionPeriodEndDay',
-          'abstractionPeriodEndMonth',
-          'authorisedAnnualQuantity'
-        ])
-        .where('section127Agreement', true)
-        .orderBy('authorisedAnnualQuantity', 'desc')
-    })
-    .withGraphFetched('chargeReferences.chargeElements.purpose')
-    .modifyGraph('chargeReferences.chargeElements.purpose', (builder) => {
-      builder
-        .select([
-          'id',
-          'legacyId',
-          'description'
-        ])
-    })
-
-  return chargeVersions
+async function _fetchChargeVersions (billingPeriod, identifier, type) {
+  let regionId = ''
+  if (type === 'region') {
+    const region = await RegionModel.query().select('identifier').where('naldRegionId', identifier)
+    regionId = region.id
+  } else {
+    const licence = await LicenceModel.query()
+      .findById(identifier)
+      .select('regionId')
+    regionId = licence.regionId
+  }
+  return await FetchChargeVersionsService.go(regionId, billingPeriod)
 }
 
 async function _fetchReturnsForLicence (licenceRef, billingPeriod) {
