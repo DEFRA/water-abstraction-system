@@ -23,6 +23,15 @@ async function selectReturnStartDate (request, h) {
   })
 }
 
+async function requirementsApproved (request, h) {
+  const { id } = request.params
+
+  return h.view('return-requirements/requirements-approved.njk', {
+    activeNavBar: 'search',
+    licenceId: id
+  })
+}
+
 async function noReturnsCheckYourAnswers (request, h) {
   const { id } = request.params
 
@@ -35,5 +44,6 @@ async function noReturnsCheckYourAnswers (request, h) {
 module.exports = {
   noReturnsCheckYourAnswers,
   noReturnsRequired,
+  requirementsApproved,
   selectReturnStartDate
 }
