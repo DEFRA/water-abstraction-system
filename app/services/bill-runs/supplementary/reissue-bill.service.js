@@ -242,7 +242,7 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
   )
 
   // Construct our new bill by taking the generated bill and combining it with the mapped fields from the CM invoice,
-  // then updating its `originalBillingInvoiceId` field
+  // then updating its `originalBillId` field
   const newBill = {
     ...generatedBill,
     ...translatedChargingModuleInvoice,

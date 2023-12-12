@@ -23,7 +23,7 @@ describe('View Minimum Charge Transaction presenter', () => {
 
     describe('that is a credit', () => {
       beforeEach(() => {
-        transaction.isCredit = true
+        transaction.credit = true
       })
 
       it('returns the credit property populated and the debit empty', () => {
@@ -36,7 +36,7 @@ describe('View Minimum Charge Transaction presenter', () => {
 
     describe('that is a debit', () => {
       beforeEach(() => {
-        transaction.isCredit = false
+        transaction.credit = false
       })
 
       it('returns the debit property populated and the credit empty', () => {

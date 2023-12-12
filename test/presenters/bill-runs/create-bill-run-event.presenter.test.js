@@ -41,7 +41,7 @@ describe('Create Bill Run Event presenter', () => {
       expect(result.batch.type).to.equal(billRun.batchType)
       expect(result.batch.source).to.equal(billRun.source)
       expect(result.batch.status).to.equal(billRun.status)
-      expect(result.batch.isSummer).to.equal(billRun.summer)
+      expect(result.batch.summer).to.equal(billRun.summer)
       expect(result.batch.netTotal).to.equal(billRun.netTotal)
 
       expect(result.batch.dateCreated).to.equal(billRun.createdAt)

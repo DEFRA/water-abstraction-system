@@ -69,11 +69,11 @@ function _cleanse (transactions) {
  * - Canal and River Trust agreement - section130Agreement
  * - Aggregate - aggregateFactor
  * - Charge Adjustment - adjustmentFactor
- * - Winter discount - isWinterOnly
+ * - Winter discount - winterOnly
  *
- * - Additional charges - isSupportedSource
+ * - Additional charges - supportedSource
  * - Additional charges - supportedSourceName
- * - Additional charges - isWaterCompanyCharge
+ * - Additional charges - waterCompanyCharge
  */
 function _matchTransactions (debit, credit) {
   // TODO: This logic is a duplicate of what we are doing in

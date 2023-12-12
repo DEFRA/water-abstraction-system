@@ -36,7 +36,7 @@ async function go (billingAccount, address, company, contact) {
   const result = await CreateCustomerChangeService.go(requestData)
 
   if (!result.succeeded) {
-    throw new ExpandedError('Customer change failed to send', { invoiceAccountId: billingAccount.invoiceAccountId })
+    throw new ExpandedError('Customer change failed to send', { billingAccountId: billingAccount.id })
   }
 }
 

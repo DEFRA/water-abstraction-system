@@ -333,7 +333,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('because none of them have an `invoiceAccountId`', () => {
+    describe('because none of them have a `billingAccountId`', () => {
       let licenceId
       beforeEach(async () => {
         billingPeriod = {

@@ -18,15 +18,15 @@ const { formatMoney } = require('../base.presenter.js')
 function go (transaction) {
   const {
     chargeType,
-    isCredit,
+    credit,
     netAmount
   } = transaction
 
   return {
     billableDays: '',
     chargeType,
-    creditAmount: isCredit ? formatMoney(netAmount) : '',
-    debitAmount: isCredit ? '' : formatMoney(netAmount),
+    creditAmount: credit ? formatMoney(netAmount) : '',
+    debitAmount: credit ? '' : formatMoney(netAmount),
     description: 'Minimum charge',
     quantity: ''
   }

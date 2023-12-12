@@ -20,7 +20,7 @@ describe('View Compensation Charge Transaction presenter', () => {
         billableDays: 153,
         chargeType: 'compensation',
         endDate: new Date('2024-03-31'),
-        isCredit: false,
+        credit: false,
         netAmount: 21474,
         scheme: 'sroc',
         section127Agreement: false,
@@ -31,7 +31,7 @@ describe('View Compensation Charge Transaction presenter', () => {
 
     describe('that is a credit', () => {
       beforeEach(() => {
-        transaction.isCredit = true
+        transaction.credit = true
       })
 
       it('returns the credit property populated and the debit empty', () => {
@@ -44,7 +44,7 @@ describe('View Compensation Charge Transaction presenter', () => {
 
     describe('that is a debit', () => {
       beforeEach(() => {
-        transaction.isCredit = false
+        transaction.credit = false
       })
 
       it('returns the debit property populated and the credit empty', () => {

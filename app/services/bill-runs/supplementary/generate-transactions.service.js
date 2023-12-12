@@ -17,7 +17,7 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * If there are billable days, it will generate a transaction object where the `chargeType` is 'standard'.
  *
- * If the `isWaterUndertaker` flag was false, it will then generate a second 'compensation' transaction object based on
+ * If the `waterUndertaker` flag was false, it will then generate a second 'compensation' transaction object based on
  * the first. The only differences are the charge type and description properties. This is something the Charging
  * Module expects to receive when the licence is for a water undertaker.
  *

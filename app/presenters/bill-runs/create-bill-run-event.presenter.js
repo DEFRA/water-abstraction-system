@@ -39,7 +39,7 @@ function go (billRun) {
       status,
       endYear: { yearEnding: toFinancialYearEnding },
       invoices: [],
-      isSummer: summer,
+      summer,
       netTotal,
       startYear: { yearEnding: fromFinancialYearEnding },
       dateCreated: createdAt,

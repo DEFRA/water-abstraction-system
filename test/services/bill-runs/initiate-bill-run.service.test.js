@@ -87,9 +87,9 @@ describe('Initiate Bill Run service', () => {
     it('returns the new bill run', async () => {
       const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      const billRun = await BillRunModel.query().first()
+      const billRun = await BillRunModel.query().limit(1).first()
 
-      expect(result.billingBatchId).to.equal(billRun.billingBatchId)
+      expect(result.id).to.equal(billRun.id)
       expect(result.regionId).to.equal(billRun.regionId)
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
@@ -123,7 +123,7 @@ describe('Initiate Bill Run service', () => {
 
         const billRun = await BillRunModel.query().limit(1).first()
 
-        expect(result.billingBatchId).to.equal(billRun.billingBatchId)
+        expect(result.id).to.equal(billRun.id)
         expect(result.regionId).to.equal(billRun.regionId)
         expect(result.scheme).to.equal('sroc')
         expect(result.batchType).to.equal('supplementary')

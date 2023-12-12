@@ -42,7 +42,7 @@ async function go (chargeVersions, billRunId, billingPeriod) {
   * }
   */
 function _preGenerateBillLicences (chargeVersions, bills) {
-  const keyedBillingInvoiceLicences = chargeVersions.reduce((acc, chargeVersion) => {
+  const keyedBillLicences = chargeVersions.reduce((acc, chargeVersion) => {
     const { id: billId } = bills[chargeVersion.billingAccountId]
     const { licence } = chargeVersion
 
@@ -60,7 +60,7 @@ function _preGenerateBillLicences (chargeVersions, bills) {
     }
   }, {})
 
-  return keyedBillingInvoiceLicences
+  return keyedBillLicences
 }
 
 function _billLicenceKey (billId, licenceId) {
