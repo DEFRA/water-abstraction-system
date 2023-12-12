@@ -15,133 +15,158 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/t
 const FetchLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-licences.service.js')
 
 describe('Fetch Licences service', () => {
-  const testId = '64924759-8142-4a08-9d1e-1e902cd9d316'
+  const regionId = '64924759-8142-4a08-9d1e-1e902cd9d316'
+  const billingPeriod = {
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31')
+  }
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when a bill with a matching ID exists', () => {
-    describe('and it is linked to multiple licences', () => {
+  describe('when at least one 2PT licence exists for the region and billing period', () => {
+    const licenceOne = {
+      id: '301d4ef9-41b9-4ec9-927b-0c78d9ece5ba',
+      licenceRef: '11/11/11/1111',
+      startDate: '1967-02-13T00:00:00.000Z',
+      expiredDate: '2050-04-01T00:00:00.000Z',
+      lapsedDate: null,
+      revokedDate: null
+    }
+
+    describe('and there is a single licence linked to a single charge version', () => {
       beforeEach(() => {
         Sinon.stub(FetchChargeVersionsService, 'go').resolves(
-          {
-            bill: {
-              billingInvoiceId: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
-              invoiceAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
-            },
-            licenceSummaries: [
-              { billingInvoiceLicenceId: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' },
-              { billingInvoiceLicenceId: '5bf9a7f0-c769-486d-a685-f032799e42d9' }
-            ]
-          }
-        )
-
-        Sinon.stub(ViewBillPresenter, 'go').returns({
-          billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
-        })
-
-        Sinon.stub(ViewLicenceSummariesPresenter, 'go').returns(
-          {
-            billLicences: [
-              {
-                id: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
-                reference: '01/735',
-                total: '£6,222.18'
-              },
-              {
-                id: '127377ea-24ea-4578-8b96-ef9a8625a313',
-                reference: '01/466',
-                total: '£7,066.55'
-              }
-            ],
-            tableCaption: '3 licences'
-          }
+          [
+            {
+              id: '9407b74d-816c-44a2-9926-73a89a9da985',
+              startDate: '2022-04-01T00:00:00.000Z',
+              endDate: null,
+              status: 'current',
+              licence: licenceOne
+            }
+          ]
         )
       })
 
-      it('will fetch the data and format it using the bill and licence summaries presenters', async () => {
-        const result = await ViewBillService.go(testId)
+      it('will fetch the data, format it and group the charge version by the licence', async () => {
+        const result = await FetchLicencesService.go(regionId, billingPeriod)
 
-        expect(result).to.equal({
-          billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
-          billLicences: [
-            {
-              id: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
-              reference: '01/735',
-              total: '£6,222.18'
-            },
-            {
-              id: '127377ea-24ea-4578-8b96-ef9a8625a313',
-              reference: '01/466',
-              total: '£7,066.55'
-            }
-          ],
-          tableCaption: '3 licences'
-        })
+        expect(result).to.have.length(1)
+        expect(result[0].licenceId).to.equal(licenceOne.id)
+        expect(result[0].licenceRef).to.equal(licenceOne.licenceRef)
+        expect(result[0].startDate).to.equal(licenceOne.startDate)
+        expect(result[0].expiredDate).to.equal(licenceOne.expiredDate)
+        expect(result[0].lapsedDate).to.equal(licenceOne.lapsedDate)
+        expect(result[0].revokedDate).to.equal(licenceOne.revokedDate)
+
+        expect(result[0].chargeVersions).to.have.length(1)
+        expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
+        expect(result[0].chargeVersions[0].startDate).to.equal('2022-04-01T00:00:00.000Z')
+        expect(result[0].chargeVersions[0].endDate).to.equal(null)
+        expect(result[0].chargeVersions[0].status).to.equal('current')
+        expect(result[0].chargeVersions[0].licence).to.equal(licenceOne)
       })
     })
 
-    describe('and it is linked to a single licence', () => {
+    describe('and there is a single licence linked to two charge versions', () => {
       beforeEach(() => {
-        Sinon.stub(FetchBillService, 'go').resolves(
-          {
-            bill: {
-              billingInvoiceId: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
-              invoiceAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves(
+          [
+            {
+              id: '9407b74d-816c-44a2-9926-73a89a9da985',
+              startDate: '2022-10-01T00:00:00.000Z',
+              endDate: null,
+              status: 'current',
+              licence: licenceOne
             },
-            licenceSummaries: [
-              { billingInvoiceLicenceId: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' }
-            ]
-          }
-        )
-
-        Sinon.stub(ViewBillPresenter, 'go').returns({
-          billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
-        })
-
-        Sinon.stub(ViewBillLicencePresenter, 'go').returns(
-          {
-            tableCaption: '2 transactions',
-            transactions: [
-              { chargeType: 'standard' },
-              { chargeType: 'compensation' }
-            ]
-          }
+            {
+              id: 'cbab5668-21db-4fe5-9af8-9bb823d9294f',
+              startDate: '2022-04-01T00:00:00.000Z',
+              endDate: '2022-09-30T00:00:00.000Z',
+              status: 'current',
+              licence: licenceOne
+            }
+          ]
         )
       })
 
-      it('will fetch the data and format it using the bill and view bill licence presenters', async () => {
-        const result = await ViewBillService.go(testId)
+      it('will fetch the data, format it and group the charge versions by the licence', async () => {
+        const result = await FetchLicencesService.go(regionId, billingPeriod)
 
-        expect(result).to.equal({
-          billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
-          tableCaption: '2 transactions',
-          transactions: [
-            { chargeType: 'standard' },
-            { chargeType: 'compensation' }
+        expect(result).to.have.length(1)
+        expect(result[0].licenceId).to.equal(licenceOne.id)
+
+        expect(result[0].chargeVersions).to.have.length(2)
+        expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
+        expect(result[0].chargeVersions[1].id).to.equal('cbab5668-21db-4fe5-9af8-9bb823d9294f')
+      })
+    })
+
+    describe('and there are two licences linked to three charge versions', () => {
+      const licenceTwo = {
+        id: 'd561be9a-ddbb-4442-a361-757a4d1ef46c',
+        licenceRef: '22/22/22/2222',
+        startDate: '1971-02-13T00:00:00.000Z',
+        expiredDate: null,
+        lapsedDate: null,
+        revokedDate: null
+      }
+
+      beforeEach(() => {
+        Sinon.stub(FetchChargeVersionsService, 'go').resolves(
+          [
+            {
+              id: '9407b74d-816c-44a2-9926-73a89a9da985',
+              startDate: '2022-10-01T00:00:00.000Z',
+              endDate: null,
+              status: 'current',
+              licence: licenceOne
+            },
+            {
+              id: 'cbab5668-21db-4fe5-9af8-9bb823d9294f',
+              startDate: '2022-04-01T00:00:00.000Z',
+              endDate: '2022-09-30T00:00:00.000Z',
+              status: 'current',
+              licence: licenceOne
+            },
+            {
+              id: 'efe652ba-f42c-4113-a190-f3d9d829a640',
+              startDate: '2022-04-01T00:00:00.000Z',
+              endDate: null,
+              status: 'current',
+              licence: licenceTwo
+            }
           ]
-        })
+        )
+      })
+
+      it('will fetch the data, format it and group the charge versions by the licences', async () => {
+        const result = await FetchLicencesService.go(regionId, billingPeriod)
+
+        expect(result).to.have.length(2)
+        expect(result[0].licenceId).to.equal(licenceOne.id)
+        expect(result[1].licenceId).to.equal(licenceTwo.id)
+
+        expect(result[0].chargeVersions).to.have.length(2)
+        expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
+        expect(result[0].chargeVersions[1].id).to.equal('cbab5668-21db-4fe5-9af8-9bb823d9294f')
+        expect(result[1].chargeVersions).to.have.length(1)
+        expect(result[1].chargeVersions[0].id).to.equal('efe652ba-f42c-4113-a190-f3d9d829a640')
       })
     })
   })
 
-  describe('when a bill with a matching ID does not exist', () => {
+  describe('when no 2PT licences exist for the region and billing period', () => {
     beforeEach(() => {
-      Sinon.stub(FetchBillService, 'go').resolves(
-        {
-          bill: undefined,
-          licenceSummaries: []
-        }
-      )
-
-      Sinon.stub(FetchBillingAccountService, 'go').resolves(undefined)
+      Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
     })
 
-    it('throws an exception', async () => {
-      await expect(ViewBillService.go('testId'))
-        .to
-        .reject()
+    it('will return an empty array', async () => {
+      const result = await FetchLicencesService.go(regionId, billingPeriod)
+
+      expect(result).to.have.length(0)
     })
   })
 })
