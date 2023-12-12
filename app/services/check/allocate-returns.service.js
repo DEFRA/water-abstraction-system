@@ -5,8 +5,8 @@
  * @module AllocateReturnsService
  */
 
-const DetermineAbstractionPeriodServices = require('./determine-abstraction-periods.service.js')
-const DetermineChargePeriodService = require('../../services/bill-runs/determine-charge-period.service.js')
+const DetermineAbstractionPeriodServices = require('../bill-runs/determine-abstraction-periods.service.js')
+const DetermineChargePeriodService = require('../bill-runs/determine-charge-period.service.js')
 const DetermineIssuesService = require('./determine-issues.service.js')
 const { periodsOverlap } = require('../../lib/general.lib.js')
 
