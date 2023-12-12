@@ -16,16 +16,12 @@ const ReturnLogModel = require('../../models/return-log.model.js')
 const ScenarioFormatterService = require('./scenario-formatter.service.js')
 
 async function go (identifier, type) {
-  const startTime = process.hrtime.bigint()
-
   const billingPeriod = _billingPeriod()
 
   const chargeVersions = await _fetchChargeVersions(billingPeriod, identifier, type)
   const chargeVersionsGroupedByLicence = await _groupByLicenceAndMatchReturns(chargeVersions, billingPeriod)
 
   const result = AllocateReturnsService.go(chargeVersionsGroupedByLicence, billingPeriod)
-
-  _calculateAndLogTime(startTime, identifier, type)
 
   return ScenarioFormatterService.go(result)
 }
@@ -34,14 +30,6 @@ function _billingPeriod () {
   const billingPeriods = DetermineBillingPeriodsService.go()
 
   return billingPeriods[1]
-}
-
-function _calculateAndLogTime (startTime, identifier, type) {
-  const endTime = process.hrtime.bigint()
-  const timeTakenNs = endTime - startTime
-  const timeTakenMs = timeTakenNs / 1000000n
-
-  global.GlobalNotifier.omg(`Two part tariff ${type} matching complete`, { identifier, timeTakenMs })
 }
 
 async function _fetchChargeVersions (billingPeriod, identifier, type) {
