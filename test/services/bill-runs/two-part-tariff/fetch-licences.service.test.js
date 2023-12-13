@@ -70,40 +70,6 @@ describe('Fetch Licences service', () => {
       })
     })
 
-    describe('and there is a single licence linked to two charge versions', () => {
-      beforeEach(() => {
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves(
-          [
-            {
-              id: '9407b74d-816c-44a2-9926-73a89a9da985',
-              startDate: '2022-10-01T00:00:00.000Z',
-              endDate: null,
-              status: 'current',
-              licence: licenceOne
-            },
-            {
-              id: 'cbab5668-21db-4fe5-9af8-9bb823d9294f',
-              startDate: '2022-04-01T00:00:00.000Z',
-              endDate: '2022-09-30T00:00:00.000Z',
-              status: 'current',
-              licence: licenceOne
-            }
-          ]
-        )
-      })
-
-      it('will fetch the data, format it and group the charge versions by the licence', async () => {
-        const result = await FetchLicencesService.go(regionId, billingPeriod)
-
-        expect(result).to.have.length(1)
-        expect(result[0].licenceId).to.equal(licenceOne.id)
-
-        expect(result[0].chargeVersions).to.have.length(2)
-        expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
-        expect(result[0].chargeVersions[1].id).to.equal('cbab5668-21db-4fe5-9af8-9bb823d9294f')
-      })
-    })
-
     describe('and there are two licences linked to three charge versions', () => {
       const licenceTwo = {
         id: 'd561be9a-ddbb-4442-a361-757a4d1ef46c',
