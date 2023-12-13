@@ -5,12 +5,10 @@
  * @module TwoPartService
  */
 
-const { ref } = require('objection')
-
 const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-periods.service.js')
+const DetermineIssuesService = require('./determine-issues.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 const RegionModel = require('../../models/region.model.js')
-const ReturnLogModel = require('../../models/return-log.model.js')
 const ScenarioFormatterService = require('./scenario-formatter.service.js')
 const { allocateReturnsToLicencesService, fetchLicencesService, prepareLicencesForAllocationService } = require('./stand-in.service.js')
 
@@ -38,9 +36,13 @@ async function go (identifier, type) {
 
   allocateReturnsToLicencesService.go(licences)
 
-  // return ScenarioFormatterService.go(result)
+  licences.forEach((licence, licenceIndex) => {
+    DetermineIssuesService.go(licence)
+  })
 
   return licences
+
+  // return ScenarioFormatterService.go(result)
 }
 
 function _billingPeriod () {

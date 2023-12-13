@@ -11,12 +11,12 @@ const REVIEW_STATUSES = [
 ]
 
 function go (licence) {
-  const { chargeVersions, returns } = licence
+  const { chargeVersions, returnLogs } = licence
   const allIssues = []
 
   licence.status = 'Ready'
 
-  const returnReviewNeeded = _determineAndAssignReturnIssues(returns, chargeVersions, allIssues)
+  const returnReviewNeeded = _determineAndAssignReturnIssues(returnLogs, chargeVersions, allIssues)
 
   chargeVersions.forEach((chargeVersion) => {
     const { chargeReferences } = chargeVersion
@@ -24,7 +24,7 @@ function go (licence) {
     chargeReferences.forEach((chargeReference) => {
       const { chargeElements, aggregate } = chargeReference
 
-      const chargeElementReviewNeeded = _determineAndAssignChargeElementIssues(chargeElements, aggregate, returns, allIssues)
+      const chargeElementReviewNeeded = _determineAndAssignChargeElementIssues(chargeElements, aggregate, returnLogs, allIssues)
 
       if (returnReviewNeeded || chargeElementReviewNeeded) {
         licence.status = 'Review'
@@ -35,7 +35,7 @@ function go (licence) {
   licence.issue = _determineAndAssignLicenceIssues(allIssues)
 }
 
-function _determineAndAssignChargeElementIssues (chargeElements, aggregate, returns, allIssues) {
+function _determineAndAssignChargeElementIssues (chargeElements, aggregate, returnLogs, allIssues) {
   let reviewNeeded = false
 
   chargeElements.forEach((chargeElement) => {
@@ -57,7 +57,7 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
     }
 
     // Some returns not received
-    if (_determineSomeReturnsNotReceived(chargeElement, returns)) {
+    if (_determineSomeReturnsNotReceived(chargeElement, returnLogs)) {
       chargeElement.issues.push('Some returns not received')
     }
 
@@ -74,7 +74,7 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
   return reviewNeeded
 }
 
-function _determineSomeReturnsNotReceived (chargeElement, returnRecords) {
+function _determineSomeReturnsNotReceived (chargeElement, returnLogs) {
   // NOTE: The requirement states "An element matches to multiple returns AND at least 1 of those returns has a status
   // of due". So, our first check is that the element has matched to more than one return.
   if (!chargeElement.returns || chargeElement.returns.length <= 1) {
@@ -82,8 +82,8 @@ function _determineSomeReturnsNotReceived (chargeElement, returnRecords) {
   }
 
   for (const matchedReturn of chargeElement.returns) {
-    const result = returnRecords.some((returnRecord) => {
-      return (returnRecord.id === matchedReturn.id && returnRecord.status === 'due')
+    const result = returnLogs.some((returnLog) => {
+      return (returnLog.id === matchedReturn.id && returnLog.status === 'due')
     })
 
     if (result) {
@@ -108,67 +108,67 @@ function _determineAndAssignLicenceIssues (allIssues) {
   return uniqueIssues[0]
 }
 
-function _determineAndAssignReturnIssues (returns, chargeVersions, allIssues) {
+function _determineAndAssignReturnIssues (returnLogs, chargeVersions, allIssues) {
   let reviewNeeded = false
 
-  returns.forEach((returnRecord) => {
-    returnRecord.issues = []
+  returnLogs.forEach((returnLog) => {
+    returnLog.issues = []
 
     // Over abstraction
-    const overAbstraction = returnRecord.returnSubmissions[0]?.returnSubmissionLines.some((line) => {
+    const overAbstraction = returnLog.returnSubmissions[0]?.returnSubmissionLines.some((line) => {
       return line.unallocated > 0
     })
     if (overAbstraction) {
-      returnRecord.issues.push('Over abstraction')
+      returnLog.issues.push('Over abstraction')
     }
 
     // Abstraction outside period
-    if (returnRecord.abstractionOutside) {
-      returnRecord.issues.push('Abstraction outside period')
+    if (returnLog.abstractionOutside) {
+      returnLog.issues.push('Abstraction outside period')
     }
 
     // Checking query
-    if (returnRecord.underQuery) {
-      returnRecord.issues.push('Checking query')
+    if (returnLog.underQuery) {
+      returnLog.issues.push('Checking query')
     }
 
     // No returns received
-    if (returnRecord.status === 'due') {
-      returnRecord.issues.push('No returns received')
+    if (returnLog.status === 'due') {
+      returnLog.issues.push('No returns received')
     }
 
     // Returns received but not processed
-    if (returnRecord.status === 'received') {
-      returnRecord.issues.push('Returns received but not processed')
+    if (returnLog.status === 'received') {
+      returnLog.issues.push('Returns received but not processed')
     }
 
     // Returns received late
-    if (returnRecord.receivedDate && returnRecord.receivedDate > returnRecord.dueDate) {
-      returnRecord.issues.push('Returns received late')
+    if (returnLog.receivedDate && returnLog.receivedDate > returnLog.dueDate) {
+      returnLog.issues.push('Returns received late')
     }
 
     // Return split over charge references
-    const returnSplit = _returnSplitOverChargeReferences(returnRecord, chargeVersions)
+    const returnSplit = _returnSplitOverChargeReferences(returnLog, chargeVersions)
     if (returnSplit) {
-      returnRecord.issues.push('Return split over charge references')
+      returnLog.issues.push('Return split over charge references')
     }
 
     // Review status
     if (!reviewNeeded) {
-      const status = _determineIssueStatus(returnRecord.issues)
+      const status = _determineIssueStatus(returnLog.issues)
       if (status === 'Review') {
         reviewNeeded = true
       }
     }
 
     // This is to keep track of multiple Issues
-    allIssues.push(...returnRecord.issues)
+    allIssues.push(...returnLog.issues)
   })
 
   return reviewNeeded
 }
 
-function _returnSplitOverChargeReferences (returnRecord, chargeVersions) {
+function _returnSplitOverChargeReferences (returnLog, chargeVersions) {
   let matched = false
 
   for (const chargeVersion of chargeVersions) {
@@ -186,7 +186,7 @@ function _returnSplitOverChargeReferences (returnRecord, chargeVersions) {
         }
 
         return chargeElement.returns.some((matchedReturnResult) => {
-          return matchedReturnResult.id === returnRecord.id
+          return matchedReturnResult.id === returnLog.id
         })
       })
 
