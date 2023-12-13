@@ -127,7 +127,7 @@ describe('Fetch Charge Versions service', () => {
         )
       })
 
-      it('doesnt return the charge version', async () => {
+      it('does not return the charge version', async () => {
         const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(results).to.have.length(0)
@@ -248,7 +248,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('and the charge version doesnt have a status of current', () => {
+    describe('and the charge version does not have a status of current', () => {
       let chargeCategory
       let notCurrentChargeReference
 
@@ -345,7 +345,7 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      describe('doesnt have the same region code', () => {
+      describe('does not have the same region code', () => {
         let differentRegionChargeReference
 
         beforeEach(async () => {
