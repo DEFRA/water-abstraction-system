@@ -48,7 +48,7 @@ function _groupByLicence (chargeVersions, uniqueLicenceIds) {
     const { licenceRef, startDate, expiredDate, lapsedDate, revokedDate } = matchedChargeVersions[0].licence
 
     licences[i] = {
-      licenceId,
+      id: licenceId,
       licenceRef,
       startDate,
       expiredDate,
