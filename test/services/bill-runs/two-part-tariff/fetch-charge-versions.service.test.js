@@ -181,7 +181,7 @@ describe('Fetch Charge Versions service', () => {
     describe("because the status is not 'current'", () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode, status: 'superseded' }
+          { licenceId, licenceRef, regionCode, status: 'superseded' }
         )
 
         await ChargeReferenceHelper.add({
@@ -201,7 +201,7 @@ describe('Fetch Charge Versions service', () => {
     describe('because the region is different', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode: 9 }
+          { licenceId, licenceRef, regionCode: 9 }
         )
 
         await ChargeReferenceHelper.add({
@@ -221,7 +221,7 @@ describe('Fetch Charge Versions service', () => {
     describe('because the licence is linked to a workflow', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode }
+          { licenceId, licenceRef, regionCode }
         )
 
         await ChargeReferenceHelper.add({
