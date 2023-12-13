@@ -102,19 +102,19 @@ describe('Fetch Charge Versions service', () => {
           }]
         }
 
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(1)
-        expect(result[0].id).to.equal(testRecords[0].id)
-        expect(result[0].status).to.equal('current')
-        expect(result[0].licence).to.equal(expectedLicence)
-        expect(result[0].chargeReferences[0]).to.equal(expectedChargeReferenceAndElement)
+        expect(results).to.have.length(1)
+        expect(results[0].id).to.equal(testRecords[0].id)
+        expect(results[0].status).to.equal('current')
+        expect(results[0].licence).to.equal(expectedLicence)
+        expect(results[0].chargeReferences[0]).to.equal(expectedChargeReferenceAndElement)
       })
 
       it('returns charge versions with correct ordering based on licence reference', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(1)
+        expect(results).to.have.length(1)
       })
     })
 
@@ -128,9 +128,9 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('doesnt return the charge version', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(results).to.have.length(0)
       })
     })
 
@@ -168,10 +168,10 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+          const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.have.length(1)
-          expect(result[0].id).to.include(testRecordsInDate[0].id)
+          expect(results).to.have.length(1)
+          expect(results[0].id).to.include(testRecordsInDate[0].id)
         })
       })
 
@@ -200,10 +200,10 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+          const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.have.length(0)
-          expect(result).to.equal([])
+          expect(results).to.have.length(0)
+          expect(results).to.equal([])
         })
       })
     })
@@ -241,10 +241,10 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns the charge versions that are applicable', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(1)
-        expect(result[0].id).to.include(testRecordsCurrent[0].id)
+        expect(results).to.have.length(1)
+        expect(results[0].id).to.include(testRecordsCurrent[0].id)
       })
     })
 
@@ -273,9 +273,9 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns the charge versions that are applicable', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(results).to.have.length(0)
       })
     })
 
@@ -317,9 +317,9 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('does not return the related charge versions', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+          const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.equal([])
+          expect(results).to.equal([])
         })
       })
 
@@ -329,19 +329,19 @@ describe('Fetch Charge Versions service', () => {
         })
 
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+          const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.have.length(1)
-          expect(result[0].id).to.include(testRecordsSameRegion[0].id)
+          expect(results).to.have.length(1)
+          expect(results[0].id).to.include(testRecordsSameRegion[0].id)
         })
       })
 
       describe('has the same region code', () => {
         it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+          const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-          expect(result).to.have.length(1)
-          expect(result[0].id).to.include(testRecordsSameRegion[0].id)
+          expect(results).to.have.length(1)
+          expect(results[0].id).to.include(testRecordsSameRegion[0].id)
         })
       })
 
@@ -409,10 +409,10 @@ describe('Fetch Charge Versions service', () => {
       })
 
       it('returns the charge elements with correct ordering based on authorised annual quantity', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result[0].chargeReferences[0].chargeElements[0].authorisedAnnualQuantity).to.equal(secondSrocChargeElement.authorisedAnnualQuantity)
-        expect(result[0].chargeReferences[0].chargeElements[1].authorisedAnnualQuantity).to.equal(firstSrocChargeElement.authorisedAnnualQuantity)
+        expect(results[0].chargeReferences[0].chargeElements[0].authorisedAnnualQuantity).to.equal(secondSrocChargeElement.authorisedAnnualQuantity)
+        expect(results[0].chargeReferences[0].chargeElements[1].authorisedAnnualQuantity).to.equal(firstSrocChargeElement.authorisedAnnualQuantity)
       })
     })
   })
