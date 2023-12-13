@@ -36,7 +36,7 @@ describe('Fetch Charge Versions service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    const chargeCategory = ChargeCategoryHelper.add()
+    const chargeCategory = await ChargeCategoryHelper.add()
     chargeCategoryId = chargeCategory.id
 
     const region = await RegionHelper.add({ naldRegionId: regionCode })
