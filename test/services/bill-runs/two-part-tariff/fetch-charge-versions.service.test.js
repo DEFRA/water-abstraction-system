@@ -28,14 +28,13 @@ describe('Fetch Charge Versions service', () => {
     }
 
     let licence
-    let region
     let regionId
     let testRecords
 
     beforeEach(async () => {
       await DatabaseHelper.clean()
 
-      region = await RegionHelper.add({ naldRegionId: 5 })
+      const region = await RegionHelper.add({ naldRegionId: 5 })
       regionId = region.id
 
       licence = await LicenceHelper.add({ regionId })
