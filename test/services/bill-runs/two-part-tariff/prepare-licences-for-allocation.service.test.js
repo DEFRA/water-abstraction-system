@@ -8,15 +8,14 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const DetermineChargePeriodService = require('../../../../app/services/bill-runs/determine-charge-period.service.js')
+// Things we need to stub
 const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-return-logs-for-licence.service.js')
 
 // Thing under test
 const PrepareLicencesForAllocationService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-licences-for-allocation.service.js')
 
 describe('Prepare Licences For Allocation Service', () => {
-  describe('when given multiple licences and billing period', () => {
+  describe('when given multiple licences and a billing period', () => {
     let licence
     let billingPeriod
     let returnLogs
@@ -243,22 +242,15 @@ describe('Prepare Licences For Allocation Service', () => {
     })
 
     describe('prepares all the charge elements for that licence', () => {
-      describe('except when there is no start date for the charge period', () => {
-        beforeEach(async () => {
-          Sinon.stub(DetermineChargePeriodService, 'go').resolves({})
-        })
+      it('does not prepare the charge element if it has a null startDate', async () => {
+        licences[0].chargeVersions[0].startDate = new Date('2023-04-01')
+        licences[0].chargeVersions[0].endDate = new Date('2023-04-10')
 
-        it('does not prepare the charge element', async () => {
-          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
+        await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['abstractionPeriods'])
-          expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['allocatedQuantity'])
-          expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['returnLogs'])
-
-          expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['abstractionPeriods'])
-          expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['allocatedQuantity'])
-          expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['returnLogs'])
-        })
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['abstractionPeriods'])
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['allocatedQuantity'])
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['returnLogs'])
       })
 
       it('sets the charge elements return logs to an empty array', async () => {
