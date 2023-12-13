@@ -14,7 +14,7 @@ const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-
 // Thing under test
 const PrepareLicencesForAllocationService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-licences-for-allocation.service.js')
 
-describe('Prepare Licences For Allocation Service', () => {
+describe.only('Prepare Licences For Allocation Service', () => {
   describe('when given a licence and billing period', () => {
     let licence
     let billingPeriod
@@ -174,9 +174,12 @@ describe('Prepare Licences For Allocation Service', () => {
       })
     })
 
-    // it('sorts the charge references by subsistence charge', () => {
+    it('sorts the charge references by subsistence charge', async () => {
+      console.log('Licence', licence[0].chargeVersions[0].chargeReferences)
+      await PrepareLicencesForAllocationService.go(licence, billingPeriod)
 
-    // })
+      expect(licence[0].returnLogs[0].quantity).to.equal(6.912)
+    })
 
     // it('determines the charge period for each charge version', () => {
 
