@@ -62,7 +62,17 @@ describe('Fetch Charge Versions service', () => {
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
-        await ChargeElementHelper.add({ id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2', chargeReferenceId })
+        await ChargeElementHelper.add({
+          id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
+          chargeReferenceId,
+          authorisedAnnualQuantity: 100
+        })
+
+        await ChargeElementHelper.add({
+          id: 'dab91d76-6778-417f-8f2d-9124a270e926',
+          chargeReferenceId,
+          authorisedAnnualQuantity: 200
+        })
       })
 
       it('includes the related charge references and charge elements', async () => {
@@ -89,16 +99,28 @@ describe('Fetch Charge Versions service', () => {
             aggregate: 0.562114443,
             s127: 'true',
             chargeCategory: null,
-            chargeElements: [{
-              id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
-              description: 'Trickle Irrigation - Direct',
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3,
-              authorisedAnnualQuantity: 200,
-              purpose: null
-            }]
+            chargeElements: [
+              {
+                id: 'dab91d76-6778-417f-8f2d-9124a270e926',
+                description: 'Trickle Irrigation - Direct',
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                authorisedAnnualQuantity: 200,
+                purpose: null
+              },
+              {
+                id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
+                description: 'Trickle Irrigation - Direct',
+                abstractionPeriodStartDay: 1,
+                abstractionPeriodStartMonth: 4,
+                abstractionPeriodEndDay: 31,
+                abstractionPeriodEndMonth: 3,
+                authorisedAnnualQuantity: 100,
+                purpose: null
+              }
+            ]
           }]
         })
       })
@@ -107,6 +129,13 @@ describe('Fetch Charge Versions service', () => {
         const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(results).to.have.length(1)
+      })
+
+      it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(results[0].chargeReferences[0].chargeElements[0].id).to.equal('dab91d76-6778-417f-8f2d-9124a270e926')
+        expect(results[0].chargeReferences[0].chargeElements[1].id).to.equal('1a966bd1-dbce-499d-ae94-b1d6ab72f0b2')
       })
     })
 
@@ -266,42 +295,6 @@ describe('Fetch Charge Versions service', () => {
           expect(result).to.have.length(1)
           expect(result[0].id).to.include(testRecordsSameRegion[0].id)
         })
-      })
-    })
-
-    describe('when there are multiple charge elements associated with the charge reference,', () => {
-      let secondSrocChargeElement
-      let firstSrocChargeElement
-      let firstSrocChargeReference
-
-      beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
-        const srocChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode }
-        )
-
-        firstSrocChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: srocChargeVersion.id,
-          chargeCategoryId,
-          adjustments: { s127: true, aggregate: 0.562114443 }
-        })
-
-        firstSrocChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: firstSrocChargeReference.id
-        })
-
-        secondSrocChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: firstSrocChargeReference.id,
-          authorisedAnnualQuantity: firstSrocChargeElement.authorisedAnnualQuantity + 10
-        })
-      })
-
-      it('returns the charge elements with correct ordering based on authorised annual quantity', async () => {
-        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-        expect(results[0].chargeReferences[0].chargeElements[0].authorisedAnnualQuantity).to.equal(secondSrocChargeElement.authorisedAnnualQuantity)
-        expect(results[0].chargeReferences[0].chargeElements[1].authorisedAnnualQuantity).to.equal(firstSrocChargeElement.authorisedAnnualQuantity)
       })
     })
   })
