@@ -150,7 +150,7 @@ describe('Fetch Charge Versions service', () => {
 
           inDateChargeReference = await ChargeReferenceHelper.add({
             chargeVersionId: inDateChargeVersion.id,
-            billingChargeCategoryId: chargeCategory.id,
+            chargeCategoryId: chargeCategory.id,
             adjustments: { s127: true, aggregate: 0.562114443 }
           })
 
@@ -188,7 +188,7 @@ describe('Fetch Charge Versions service', () => {
 
           notInDateChargeReference = await ChargeReferenceHelper.add({
             chargeVersionId: notInDateChargeVersion.id,
-            billingChargeCategoryId: chargeCategory.id,
+            chargeCategoryId: chargeCategory.id,
             adjustments: { s127: true, aggregate: 0.562114443 }
           })
 
@@ -223,7 +223,7 @@ describe('Fetch Charge Versions service', () => {
 
         currentChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: currentChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
+          chargeCategoryId: chargeCategory.id,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
@@ -261,7 +261,7 @@ describe('Fetch Charge Versions service', () => {
 
         notCurrentChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: notCurrentChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
+          chargeCategoryId: chargeCategory.id,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
@@ -294,7 +294,7 @@ describe('Fetch Charge Versions service', () => {
 
         sameRegionChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: sameRegionChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
+          chargeCategoryId: chargeCategory.id,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
@@ -357,7 +357,7 @@ describe('Fetch Charge Versions service', () => {
 
           differentRegionChargeReference = await ChargeReferenceHelper.add({
             chargeVersionId: differentRegionChargeVersion.id,
-            billingChargeCategoryId: chargeCategory.id,
+            chargeCategoryId: chargeCategory.id,
             adjustments: { s127: true, aggregate: 0.562114443 }
           })
 
@@ -392,7 +392,7 @@ describe('Fetch Charge Versions service', () => {
 
         firstSrocChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: srocChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
+          chargeCategoryId: chargeCategory.id,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
