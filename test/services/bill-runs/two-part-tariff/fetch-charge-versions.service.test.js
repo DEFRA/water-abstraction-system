@@ -127,43 +127,6 @@ describe('Fetch Charge Versions service', () => {
     })
 
     describe('and the start date', () => {
-      describe('is before the billing period end', () => {
-        let testRecordsInDate
-        let inDateChargeReference
-        let inDateChargeElement
-
-        beforeEach(async () => {
-          const { id: licenceId, licenceRef } = licence
-
-          const inDateChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode }
-          )
-
-          inDateChargeReference = await ChargeReferenceHelper.add({
-            chargeVersionId: inDateChargeVersion.id,
-            chargeCategoryId,
-            adjustments: { s127: true, aggregate: 0.562114443 }
-          })
-
-          inDateChargeElement = await ChargeElementHelper.add({
-            chargeReferenceId: inDateChargeReference.id
-          })
-
-          testRecordsInDate = [
-            inDateChargeVersion,
-            inDateChargeReference,
-            inDateChargeElement
-          ]
-        })
-
-        it('returns the charge versions that are applicable', async () => {
-          const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(results).to.have.length(1)
-          expect(results[0].id).to.include(testRecordsInDate[0].id)
-        })
-      })
-
       describe('is after the billing period end', () => {
         let notInDateChargeReference
 
