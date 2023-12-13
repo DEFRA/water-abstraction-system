@@ -30,7 +30,6 @@ describe('Fetch Charge Versions service', () => {
     let chargeCategoryId
     let licence
     let regionId
-    let testRecords
 
     beforeEach(async () => {
       await DatabaseHelper.clean()
@@ -45,69 +44,62 @@ describe('Fetch Charge Versions service', () => {
     })
 
     describe('and the scheme is SROC', () => {
-      let srocChargeReference
-      let srocChargeElement
+      let chargeVersionId
 
       beforeEach(async () => {
         const { id: licenceId, licenceRef } = licence
 
-        const srocChargeVersion = await ChargeVersionHelper.add(
+        const chargeVersion = await ChargeVersionHelper.add(
           { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
+        chargeVersionId = chargeVersion.id
 
-        srocChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: srocChargeVersion.id,
+        const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+          id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
+          chargeVersionId,
           chargeCategoryId,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
-        srocChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: srocChargeReference.id
-        })
-
-        testRecords = [
-          srocChargeVersion,
-          srocChargeReference,
-          srocChargeElement
-        ]
+        await ChargeElementHelper.add({ id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2', chargeReferenceId })
       })
 
       it('includes the related charge references and charge elements', async () => {
-        const expectedLicence = {
-          id: licence.id,
-          licenceRef: licence.licenceRef,
-          startDate: licence.startDate,
-          expiredDate: null,
-          lapsedDate: null,
-          revokedDate: null
-        }
-
-        const expectedChargeReferenceAndElement = {
-          id: srocChargeReference.id,
-          volume: 6.82,
-          description: srocChargeReference.description,
-          aggregate: 0.562114443,
-          s127: 'true',
-          chargeCategory: null,
-          chargeElements: [{
-            id: srocChargeElement.id,
-            description: srocChargeElement.description,
-            abstractionPeriodStartDay: srocChargeElement.abstractionPeriodStartDay,
-            abstractionPeriodStartMonth: srocChargeElement.abstractionPeriodStartMonth,
-            abstractionPeriodEndDay: srocChargeElement.abstractionPeriodEndDay,
-            abstractionPeriodEndMonth: srocChargeElement.abstractionPeriodEndMonth,
-            authorisedAnnualQuantity: srocChargeElement.authorisedAnnualQuantity,
-            purpose: null
-          }]
-        }
-
         const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
         expect(results).to.have.length(1)
-        expect(results[0].id).to.equal(testRecords[0].id)
-        expect(results[0].status).to.equal('current')
-        expect(results[0].licence).to.equal(expectedLicence)
-        expect(results[0].chargeReferences[0]).to.equal(expectedChargeReferenceAndElement)
+        expect(results[0]).to.equal({
+          id: chargeVersionId,
+          startDate: new Date('2022-04-01'),
+          endDate: null,
+          status: 'current',
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef,
+            startDate: new Date('2022-01-01'),
+            expiredDate: null,
+            lapsedDate: null,
+            revokedDate: null
+          },
+          chargeReferences: [{
+            id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
+            volume: 6.82,
+            description: 'Mineral washing',
+            aggregate: 0.562114443,
+            s127: 'true',
+            chargeCategory: null,
+            chargeElements: [{
+              id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
+              description: 'Trickle Irrigation - Direct',
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              authorisedAnnualQuantity: 200,
+              purpose: null
+            }]
+          }]
+        })
       })
 
       it('returns charge versions with correct ordering based on licence reference', async () => {
