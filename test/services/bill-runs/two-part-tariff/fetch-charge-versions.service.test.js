@@ -140,9 +140,15 @@ describe('Fetch Charge Versions service', () => {
   describe('when there are no applicable charge versions', () => {
     describe("because the scheme is 'presroc'", () => {
       beforeEach(async () => {
-        await ChargeVersionHelper.add(
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { scheme: 'alcs', licenceId, licenceRef, regionCode: 5 }
         )
+
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
+        })
       })
 
       it('returns no records', async () => {
