@@ -21,28 +21,28 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service')
 
 describe('Fetch Charge Versions service', () => {
+  const billingPeriod = {
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31')
+  }
+
+  let chargeCategoryId
+  let licence
+  let regionId
+
+  beforeEach(async () => {
+    await DatabaseHelper.clean()
+
+    const chargeCategory = ChargeCategoryHelper.add()
+    chargeCategoryId = chargeCategory.id
+
+    const region = await RegionHelper.add({ naldRegionId: 5 })
+    regionId = region.id
+
+    licence = await LicenceHelper.add({ regionId })
+  })
+
   describe('when there are charge versions', () => {
-    const billingPeriod = {
-      startDate: new Date('2022-04-01'),
-      endDate: new Date('2023-03-31')
-    }
-
-    let chargeCategoryId
-    let licence
-    let regionId
-
-    beforeEach(async () => {
-      await DatabaseHelper.clean()
-
-      const chargeCategory = ChargeCategoryHelper.add()
-      chargeCategoryId = chargeCategory.id
-
-      const region = await RegionHelper.add({ naldRegionId: 5 })
-      regionId = region.id
-
-      licence = await LicenceHelper.add({ regionId })
-    })
-
     describe('and the scheme is SROC', () => {
       let chargeVersionId
 
