@@ -10,6 +10,12 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
+/**
+ * Prepares return logs and charge versions for matching and allocation based on provided licences and billing period
+ *
+ * @param {Object[]} licences - The licences to prepare
+ * @param {Object[]} billingPeriod - The billing period
+ */
 async function go (licences, billingPeriod) {
   for (const licence of licences) {
     await _prepareReturnLogs(licence, billingPeriod)
@@ -17,6 +23,14 @@ async function go (licences, billingPeriod) {
   }
 }
 
+/**
+ * Checks if the abstraction period is outside the given return line's period
+ *
+ * @param {Object[]} returnAbstractionPeriods - Abstraction periods to compare
+ * @param {Object} returnLine - Return line object with start and end date
+ *
+ * @returns {Boolean}
+ */
 function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
   const { startDate, endDate } = returnLine
 
@@ -109,6 +123,12 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
   })
 }
 
+/**
+ * Sorts charge references by subsistence charge in descending order
+ * @param {Object[]} chargeReferences - Charge references to sort
+ *
+ * @returns {Object[]} - Sorted array of charge references
+ */
 function _sortChargeReferencesBySubsistenceCharge (chargeReferences) {
   return chargeReferences.sort((firstChargeReference, secondChargeReference) => {
     const { subsistenceCharge: subsistenceChargeFirst } = firstChargeReference.chargeCategory
