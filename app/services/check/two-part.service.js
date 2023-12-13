@@ -7,10 +7,11 @@
 
 const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-periods.service.js')
 const DetermineIssuesService = require('./determine-issues.service.js')
+const FetchLicencesService = require('../bill-runs/two-part-tariff/fetch-licences.service.js')
 const LicenceModel = require('../../models/licence.model.js')
 const RegionModel = require('../../models/region.model.js')
 const ScenarioFormatterService = require('./scenario-formatter.service.js')
-const { allocateReturnsToLicencesService, fetchLicencesService, prepareLicencesForAllocationService } = require('./stand-in.service.js')
+const { allocateReturnsToLicencesService, prepareLicencesForAllocationService } = require('./stand-in.service.js')
 
 async function go (identifier, type) {
   const billingPeriod = _billingPeriod()
@@ -20,7 +21,7 @@ async function go (identifier, type) {
   // run for.
   const regionId = await _determineRegionId(identifier, type)
 
-  let licences = await fetchLicencesService.go(regionId, billingPeriod)
+  let licences = await FetchLicencesService.go(regionId, billingPeriod)
 
   // NOTE: fetchLicencesService depends on FetchChargeVersionsService which was built to support the proper 2PT match &
   // allocate engine so doesn't have the ability to search for just a single licence. We still want to support just
