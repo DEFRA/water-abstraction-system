@@ -15,6 +15,7 @@ const ChargeVersionHelper = require('../../../support/helpers/charge-version.hel
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -59,16 +60,21 @@ describe('Fetch Charge Versions service', () => {
         adjustments: { s127: true, aggregate: 0.562114443 }
       })
 
+      const purposeId = '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b'
+      await PurposeHelper.add({ id: purposeId, legacyId: '420' })
+
       await ChargeElementHelper.add({
         id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
         chargeReferenceId,
-        authorisedAnnualQuantity: 100
+        authorisedAnnualQuantity: 100,
+        purposeId
       })
 
       await ChargeElementHelper.add({
         id: 'dab91d76-6778-417f-8f2d-9124a270e926',
         chargeReferenceId,
-        authorisedAnnualQuantity: 200
+        authorisedAnnualQuantity: 200,
+        purposeId
       })
     })
 
@@ -105,7 +111,11 @@ describe('Fetch Charge Versions service', () => {
               abstractionPeriodEndDay: 31,
               abstractionPeriodEndMonth: 3,
               authorisedAnnualQuantity: 200,
-              purpose: null
+              purpose: {
+                id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
+                legacyId: '420',
+                description: 'Spray Irrigation - Storage'
+              }
             },
             {
               id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
@@ -115,7 +125,11 @@ describe('Fetch Charge Versions service', () => {
               abstractionPeriodEndDay: 31,
               abstractionPeriodEndMonth: 3,
               authorisedAnnualQuantity: 100,
-              purpose: null
+              purpose: {
+                id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
+                legacyId: '420',
+                description: 'Spray Irrigation - Storage'
+              }
             }
           ]
         }]
