@@ -36,13 +36,15 @@ async function go (identifier, type) {
 
   allocateReturnsToLicencesService.go(licences)
 
+  const formattedResults = []
   licences.forEach((licence, licenceIndex) => {
     DetermineIssuesService.go(licence)
+
+    const formattedResult = ScenarioFormatterService.go(licence, licenceIndex)
+    formattedResults.push(formattedResult)
   })
 
-  return licences
-
-  // return ScenarioFormatterService.go(result)
+  return formattedResults
 }
 
 function _billingPeriod () {

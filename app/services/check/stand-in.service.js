@@ -83,7 +83,7 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
 
   matchedReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
-      returnId: matchedReturn.id,
+      id: matchedReturn.id,
       allocatedQuantity: 0,
       lines: []
     }
