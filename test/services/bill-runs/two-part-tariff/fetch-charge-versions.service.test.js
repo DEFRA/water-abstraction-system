@@ -45,13 +45,12 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are applicable charge versions', () => {
-    let chargeVersionId
+    const chargeVersionId = '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59'
 
     beforeEach(async () => {
-      const chargeVersion = await ChargeVersionHelper.add(
-        { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode }
+      await ChargeVersionHelper.add(
+        { id: chargeVersionId, startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode }
       )
-      chargeVersionId = chargeVersion.id
 
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
         id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
@@ -78,7 +77,7 @@ describe('Fetch Charge Versions service', () => {
 
       expect(results).to.have.length(1)
       expect(results[0]).to.equal({
-        id: chargeVersionId,
+        id: '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59',
         startDate: new Date('2022-04-01'),
         endDate: null,
         status: 'current',
