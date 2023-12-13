@@ -85,6 +85,7 @@ describe('Fetch Charge Versions service', () => {
 
         const expectedChargeReferenceAndElement = {
           id: srocChargeReference.id,
+          volume: 6.82,
           description: srocChargeReference.description,
           aggregate: 0.562114443,
           s127: 'true',

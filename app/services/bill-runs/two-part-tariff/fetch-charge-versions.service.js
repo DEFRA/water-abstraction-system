@@ -79,6 +79,7 @@ async function _fetch (regionCode, billingPeriod) {
       builder
         .select([
           'id',
+          'volume',
           'description',
           ref('chargeReferences.adjustments:aggregate').castFloat().as('aggregate'),
           ref('chargeReferences.adjustments:s127').castText().as('s127')
