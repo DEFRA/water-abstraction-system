@@ -26,9 +26,10 @@ describe('Fetch Charge Versions service', () => {
     endDate: new Date('2023-03-31')
   }
   const regionCode = 5
+  const licenceId = 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd'
+  const licenceRef = '01/128'
 
   let chargeCategoryId
-  let licence
   let regionId
 
   beforeEach(async () => {
@@ -40,15 +41,13 @@ describe('Fetch Charge Versions service', () => {
     const region = await RegionHelper.add({ naldRegionId: regionCode })
     regionId = region.id
 
-    licence = await LicenceHelper.add({ regionId })
+    await LicenceHelper.add({ id: licenceId, licenceRef, regionId })
   })
 
   describe('when there are applicable charge versions', () => {
     let chargeVersionId
 
     beforeEach(async () => {
-      const { id: licenceId, licenceRef } = licence
-
       const chargeVersion = await ChargeVersionHelper.add(
         { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode }
       )
@@ -84,8 +83,8 @@ describe('Fetch Charge Versions service', () => {
         endDate: null,
         status: 'current',
         licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef,
+          id: 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd',
+          licenceRef: '01/128',
           startDate: new Date('2022-01-01'),
           expiredDate: null,
           lapsedDate: null,
@@ -141,8 +140,6 @@ describe('Fetch Charge Versions service', () => {
   describe('when there are no applicable charge versions', () => {
     describe("because the scheme is 'presroc'", () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
         await ChargeVersionHelper.add(
           { scheme: 'alcs', licenceId, licenceRef, regionCode: 5 }
         )
@@ -157,8 +154,6 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the start date is after the billing period ends', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode }
         )
@@ -179,8 +174,6 @@ describe('Fetch Charge Versions service', () => {
 
     describe("because the status is not 'current'", () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode, status: 'superseded' }
         )
@@ -201,8 +194,6 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the region is different', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode: 9 }
         )
@@ -223,8 +214,6 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the licence is linked to a workflow', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode }
         )
@@ -235,7 +224,7 @@ describe('Fetch Charge Versions service', () => {
           adjustments: { s127: true }
         })
 
-        await WorkflowHelper.add({ licenceId: licence.id })
+        await WorkflowHelper.add({ licenceId })
       })
 
       it('returns no records', async () => {
