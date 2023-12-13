@@ -11,7 +11,7 @@ const FetchLicencesService = require('../bill-runs/two-part-tariff/fetch-licence
 const LicenceModel = require('../../models/licence.model.js')
 const RegionModel = require('../../models/region.model.js')
 const ScenarioFormatterService = require('./scenario-formatter.service.js')
-const { allocateReturnsToLicencesService, prepareLicencesForAllocationService } = require('./stand-in.service.js')
+const { allocateReturnsToLicencesService, prepareLicencesForAllocationService } = require('./stand-ins.service.js')
 
 async function go (identifier, type) {
   const billingPeriod = _billingPeriod()
