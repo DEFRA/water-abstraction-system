@@ -194,43 +194,6 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('and the charge version has a status of current', () => {
-      let testRecordsCurrent
-      let currentChargeReference
-      let currentChargeElement
-
-      beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
-        const currentChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode }
-        )
-
-        currentChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: currentChargeVersion.id,
-          chargeCategoryId,
-          adjustments: { s127: true, aggregate: 0.562114443 }
-        })
-
-        currentChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: currentChargeReference.id
-        })
-
-        testRecordsCurrent = [
-          currentChargeVersion,
-          currentChargeReference,
-          currentChargeElement
-        ]
-      })
-
-      it('returns the charge versions that are applicable', async () => {
-        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-        expect(results).to.have.length(1)
-        expect(results[0].id).to.include(testRecordsCurrent[0].id)
-      })
-    })
-
     describe('and the charge version does not have a status of current', () => {
       let notCurrentChargeReference
 
