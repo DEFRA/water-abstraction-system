@@ -51,6 +51,18 @@ const routes = [
       },
       description: 'Returns requirements approved'
     }
+  }, {
+    method: 'GET',
+    path: '/licences/{id}/returns-check-your-answers',
+    handler: LicencesController.returnsCheckYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns check your answers page'
+    }
   }
 ]
 
