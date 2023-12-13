@@ -161,7 +161,7 @@ describe('Fetch Charge Versions service', () => {
         await ChargeReferenceHelper.add({
           chargeVersionId,
           chargeCategoryId,
-          adjustments: { s127: true, aggregate: 0.562114443 }
+          adjustments: { s127: true }
         })
       })
 
