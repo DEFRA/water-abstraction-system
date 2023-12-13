@@ -84,7 +84,8 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
   matchedReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
       returnId: matchedReturn.id,
-      allocatedQuantity: 0
+      allocatedQuantity: 0,
+      lines: []
     }
 
     chargeElement.returnLogs.push(matchedReturnResult)
@@ -124,6 +125,7 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
           matchedLine.unallocated -= qtyToAllocate
           matchedReturn.allocatedQuantity += qtyToAllocate
           chargeReference.allocatedQuantity += qtyToAllocate
+          matchedReturnResult.lines.push({ id: matchedLine.id, allocated: qtyToAllocate })
         }
       })
     }
