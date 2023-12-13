@@ -15,9 +15,13 @@ const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-
 const PrepareLicencesForAllocationService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-licences-for-allocation.service.js')
 
 describe('Prepare Licences For Allocation Service', () => {
+  const billingPeriod = {
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31')
+  }
+
   describe('when given multiple licences and a billing period', () => {
     let licence
-    let billingPeriod
     let returnLogs
     let licences
 
@@ -118,11 +122,6 @@ describe('Prepare Licences For Allocation Service', () => {
 
       // Stubbing the FetchReturnLogsForLicenceService to return our licence return logs
       Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves(returnLogs)
-
-      billingPeriod = {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2023-03-31')
-      }
 
       licences = [licence, licence]
     })
@@ -293,6 +292,12 @@ describe('Prepare Licences For Allocation Service', () => {
         expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['abstractionPeriods'])
         expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0].abstractionPeriods).to.equal(abstractionPeriod)
       })
+    })
+  })
+
+  describe('when given no licences and a billing period', () => {
+    it('does not throw an error', async () => {
+      await expect(PrepareLicencesForAllocationService.go([], billingPeriod)).not.to.reject()
     })
   })
 })
