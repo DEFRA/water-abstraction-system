@@ -24,7 +24,7 @@ describe('Prepare Licences For Allocation Service', () => {
     beforeEach(async () => {
       // Setting up our licence object with charge versions, charge references and charge elements hanging off it
       licence = {
-        licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+        id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
         licenceRef: '5/31/14/*S/0116A',
         startDate: new Date('1966-02-01T00:00:00.000Z'),
         expiredDate: null,
@@ -37,7 +37,7 @@ describe('Prepare Licences For Allocation Service', () => {
             endDate: null,
             status: 'current',
             licence: {
-              licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+              id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
               licenceRef: '5/31/14/*S/0116A',
               startDate: new Date('1966-02-01T00:00:00.000Z'),
               expiredDate: null,
