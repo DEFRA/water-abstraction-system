@@ -27,9 +27,9 @@ describe('Fetch Charge Versions service', () => {
       endDate: new Date('2023-03-31')
     }
 
+    let licence
     let region
     let regionId
-    let licence
     let testRecords
 
     beforeEach(async () => {
