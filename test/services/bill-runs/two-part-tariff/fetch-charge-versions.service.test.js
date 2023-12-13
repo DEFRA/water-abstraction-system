@@ -22,22 +22,21 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/t
 
 describe('Fetch Charge Versions service', () => {
   describe('when there are charge versions', () => {
+    const billingPeriod = {
+      startDate: new Date('2022-04-01'),
+      endDate: new Date('2023-03-31')
+    }
+
     let region
     let regionId
     let licence
     let testRecords
-    let billingPeriod
 
     beforeEach(async () => {
       await DatabaseHelper.clean()
 
       region = await RegionHelper.add({ naldRegionId: 5 })
       regionId = region.id
-
-      billingPeriod = {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2023-03-31')
-      }
 
       licence = await LicenceHelper.add({ regionId })
     })
