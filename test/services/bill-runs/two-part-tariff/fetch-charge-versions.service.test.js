@@ -27,12 +27,16 @@ describe('Fetch Charge Versions service', () => {
       endDate: new Date('2023-03-31')
     }
 
+    let chargeCategoryId
     let licence
     let regionId
     let testRecords
 
     beforeEach(async () => {
       await DatabaseHelper.clean()
+
+      const chargeCategory = ChargeCategoryHelper.add()
+      chargeCategoryId = chargeCategory.id
 
       const region = await RegionHelper.add({ naldRegionId: 5 })
       regionId = region.id
@@ -41,7 +45,6 @@ describe('Fetch Charge Versions service', () => {
     })
 
     describe('and the scheme is SROC', () => {
-      let chargeCategory
       let srocChargeReference
       let srocChargeElement
 
@@ -52,11 +55,9 @@ describe('Fetch Charge Versions service', () => {
           { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
         srocChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: srocChargeVersion.id,
-          chargeCategoryId: chargeCategory.id,
+          chargeCategoryId,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
@@ -135,7 +136,6 @@ describe('Fetch Charge Versions service', () => {
     describe('and the start date', () => {
       describe('is before the billing period end', () => {
         let testRecordsInDate
-        let chargeCategory
         let inDateChargeReference
         let inDateChargeElement
 
@@ -146,11 +146,9 @@ describe('Fetch Charge Versions service', () => {
             { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
           )
 
-          chargeCategory = ChargeCategoryHelper.add()
-
           inDateChargeReference = await ChargeReferenceHelper.add({
             chargeVersionId: inDateChargeVersion.id,
-            chargeCategoryId: chargeCategory.id,
+            chargeCategoryId,
             adjustments: { s127: true, aggregate: 0.562114443 }
           })
 
@@ -174,7 +172,6 @@ describe('Fetch Charge Versions service', () => {
       })
 
       describe('is after the billing period end', () => {
-        let chargeCategory
         let notInDateChargeReference
 
         beforeEach(async () => {
@@ -184,11 +181,9 @@ describe('Fetch Charge Versions service', () => {
             { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode: 5 }
           )
 
-          chargeCategory = ChargeCategoryHelper.add()
-
           notInDateChargeReference = await ChargeReferenceHelper.add({
             chargeVersionId: notInDateChargeVersion.id,
-            chargeCategoryId: chargeCategory.id,
+            chargeCategoryId,
             adjustments: { s127: true, aggregate: 0.562114443 }
           })
 
@@ -208,7 +203,6 @@ describe('Fetch Charge Versions service', () => {
 
     describe('and the charge version has a status of current', () => {
       let testRecordsCurrent
-      let chargeCategory
       let currentChargeReference
       let currentChargeElement
 
@@ -219,11 +213,9 @@ describe('Fetch Charge Versions service', () => {
           { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
         currentChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: currentChargeVersion.id,
-          chargeCategoryId: chargeCategory.id,
+          chargeCategoryId,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
@@ -247,7 +239,6 @@ describe('Fetch Charge Versions service', () => {
     })
 
     describe('and the charge version does not have a status of current', () => {
-      let chargeCategory
       let notCurrentChargeReference
 
       beforeEach(async () => {
@@ -257,11 +248,9 @@ describe('Fetch Charge Versions service', () => {
           { status: 'superseded', licenceId, licenceRef, regionCode: 5 }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
         notCurrentChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: notCurrentChargeVersion.id,
-          chargeCategoryId: chargeCategory.id,
+          chargeCategoryId,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
@@ -279,7 +268,6 @@ describe('Fetch Charge Versions service', () => {
 
     describe('and the licence associated with it', () => {
       let testRecordsSameRegion
-      let chargeCategory
       let sameRegionChargeReference
       let sameRegionChargeElement
 
@@ -290,11 +278,9 @@ describe('Fetch Charge Versions service', () => {
           { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
         sameRegionChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: sameRegionChargeVersion.id,
-          chargeCategoryId: chargeCategory.id,
+          chargeCategoryId,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
@@ -353,11 +339,9 @@ describe('Fetch Charge Versions service', () => {
             { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 4 }
           )
 
-          chargeCategory = ChargeCategoryHelper.add()
-
           differentRegionChargeReference = await ChargeReferenceHelper.add({
             chargeVersionId: differentRegionChargeVersion.id,
-            chargeCategoryId: chargeCategory.id,
+            chargeCategoryId,
             adjustments: { s127: true, aggregate: 0.562114443 }
           })
 
@@ -379,7 +363,6 @@ describe('Fetch Charge Versions service', () => {
       let secondSrocChargeElement
       let firstSrocChargeElement
       let firstSrocChargeReference
-      let chargeCategory
 
       beforeEach(async () => {
         const { id: licenceId, licenceRef } = licence
@@ -388,11 +371,9 @@ describe('Fetch Charge Versions service', () => {
           { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
         firstSrocChargeReference = await ChargeReferenceHelper.add({
           chargeVersionId: srocChargeVersion.id,
-          chargeCategoryId: chargeCategory.id,
+          chargeCategoryId,
           adjustments: { s127: true, aggregate: 0.562114443 }
         })
 
