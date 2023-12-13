@@ -54,7 +54,7 @@ describe('Fetch Licences service', () => {
         const result = await FetchLicencesService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(1)
-        expect(result[0].licenceId).to.equal(licenceOne.id)
+        expect(result[0].id).to.equal(licenceOne.id)
         expect(result[0].licenceRef).to.equal(licenceOne.licenceRef)
         expect(result[0].startDate).to.equal(licenceOne.startDate)
         expect(result[0].expiredDate).to.equal(licenceOne.expiredDate)
@@ -112,8 +112,8 @@ describe('Fetch Licences service', () => {
         const result = await FetchLicencesService.go(regionId, billingPeriod)
 
         expect(result).to.have.length(2)
-        expect(result[0].licenceId).to.equal(licenceOne.id)
-        expect(result[1].licenceId).to.equal(licenceTwo.id)
+        expect(result[0].id).to.equal(licenceOne.id)
+        expect(result[1].id).to.equal(licenceTwo.id)
 
         expect(result[0].chargeVersions).to.have.length(2)
         expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
