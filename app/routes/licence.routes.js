@@ -63,6 +63,18 @@ const routes = [
       },
       description: 'Returns check your answers page'
     }
+  }, {
+    method: 'GET',
+    path: '/licences/{id}/add-a-note',
+    handler: LicencesController.addANote,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns add a note page'
+    }
   }
 ]
 

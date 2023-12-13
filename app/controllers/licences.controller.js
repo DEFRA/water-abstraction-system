@@ -50,7 +50,17 @@ async function returnsCheckYourAnswers (request, h) {
   })
 }
 
+async function addANote (request, h) {
+  const { id } = request.params
+
+  return h.view('return-requirements/add-a-note.njk', {
+    activeNavBar: 'search',
+    licenceId: id
+  })
+}
+
 module.exports = {
+  addANote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
   requirementsApproved,
