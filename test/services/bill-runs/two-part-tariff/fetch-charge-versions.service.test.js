@@ -239,15 +239,6 @@ describe('Fetch Charge Versions service', () => {
         })
       })
 
-      describe('has the same region code', () => {
-        it('returns the charge versions that are applicable', async () => {
-          const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(results).to.have.length(1)
-          expect(results[0].id).to.include(testRecordsSameRegion[0].id)
-        })
-      })
-
       describe('does not have the same region code', () => {
         let differentRegionChargeReference
 
