@@ -9,12 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const DetermineChargePeriodService = require('../../../../app/services/bill-runs/determine-charge-period.service.js')
 const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-return-logs-for-licence.service.js')
 
 // Thing under test
 const PrepareLicencesForAllocationService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-licences-for-allocation.service.js')
 
-describe.only('Prepare Licences For Allocation Service', () => {
+describe('Prepare Licences For Allocation Service', () => {
   describe('when given a licence and billing period', () => {
     let licence
     let billingPeriod
@@ -50,6 +51,11 @@ describe.only('Prepare Licences For Allocation Service', () => {
                 description: 'Example',
                 aggregate: null,
                 s127: 'true',
+                chargeCategory: {
+                  reference: '4.5.12',
+                  shortDescription: 'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
+                  subsistenceCharge: 68400
+                },
                 chargeElements: [
                   {
                     id: '8eac5976-d16c-4818-8bc8-384d958ce863',
@@ -175,31 +181,100 @@ describe.only('Prepare Licences For Allocation Service', () => {
     })
 
     it('sorts the charge references by subsistence charge', async () => {
-      console.log('Licence', licence[0].chargeVersions[0].chargeReferences)
+      const secondChargeReference = {
+        id: '6e7f1824-3680-4df0-806f-c6d651ba4771',
+        volume: 32,
+        description: 'Second Reference',
+        aggregate: null,
+        s127: 'true',
+        chargeCategory: {
+          reference: '4.5.12',
+          shortDescription: 'Medium loss, non-tidal, restricted water, greater than 25 up to and including 83 ML/yr, Tier 2 model',
+          subsistenceCharge: 70000
+        },
+        chargeElements: [
+          {
+            id: '8eac5976-d16c-4818-8bc8-384d958ce863',
+            description: 'Spray irrigation',
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 3,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            authorisedAnnualQuantity: 32,
+            purpose: {
+              id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
+              legacyId: '400',
+              description: 'Spray Irrigation - Direct'
+            }
+          }
+        ]
+      }
+
+      licence[0].chargeVersions[0].chargeReferences[1] = secondChargeReference
+
       await PrepareLicencesForAllocationService.go(licence, billingPeriod)
 
-      expect(licence[0].returnLogs[0].quantity).to.equal(6.912)
+      expect(licence[0].chargeVersions[0].chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
+      expect(licence[0].chargeVersions[0].chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
     })
 
-    // it('determines the charge period for each charge version', () => {
+    it('determines the charge period for each charge version', async () => {
+      const chargePeriod = {
+        startDate: new Date('2022-04-01'),
+        endDate: new Date('2023-03-31')
+      }
 
-    // })
+      await PrepareLicencesForAllocationService.go(licence, billingPeriod)
 
-    // describe('prepares all the charge elements for that licence', () => {
-    //   it('does not prepare a charge element that has a charge version with no start or end date', () => {
+      expect(licence[0].chargeVersions[0].chargePeriod).to.equal(chargePeriod)
+    })
 
-    //   })
+    describe('prepares all the charge elements for that licence', () => {
+      describe('except when there is no start date for the charge period', () => {
+        beforeEach(async () => {
+          Sinon.stub(DetermineChargePeriodService, 'go').resolves({})
+        })
 
-    //   it('sets the charge elements return logs to an empty array', () => {
+        it('does not prepare the charge element', async () => {
+          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
 
-    //   })
+          expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['abstractionPeriods'])
+          expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['allocatedQuantity'])
+          expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['returnLogs'])
+        })
+      })
 
-    //   it('sets the chare elements allocated quantity to 0', () => {
+      it('sets the charge elements return logs to an empty array', async () => {
+        await PrepareLicencesForAllocationService.go(licence, billingPeriod)
 
-    //   })
-    //   it('sets the charge elements abstraction periods', () => {
+        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['returnLogs'])
+        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs).to.equal([])
+      })
 
-    //   })
-    // })
+      it('sets the chare elements allocated quantity to 0', async () => {
+        await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+
+        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['allocatedQuantity'])
+        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity).to.equal(0)
+      })
+
+      it('sets the charge elements abstraction periods', async () => {
+        const abstractionPeriod = [
+          {
+            startDate: new Date('2022-04-01'),
+            endDate: new Date('2022-10-31')
+          },
+          {
+            startDate: new Date('2023-03-01'),
+            endDate: new Date('2023-03-31')
+          }
+        ]
+
+        await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+
+        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['abstractionPeriods'])
+        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0].abstractionPeriods).to.equal(abstractionPeriod)
+      })
+    })
   })
 })

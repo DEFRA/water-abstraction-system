@@ -29,7 +29,6 @@ function _prepareChargeVersions (licence, billingPeriod) {
   chargeVersions.forEach((chargeVersion) => {
     const { chargeReferences } = chargeVersion
 
-    console.log('Charge References', chargeReferences)
     _sortChargeReferencesBySubsistenceCharge(chargeReferences)
     chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
