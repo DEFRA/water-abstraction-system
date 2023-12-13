@@ -7,7 +7,6 @@
 
 const DetermineAbstractionPeriodService = require('../bill-runs/determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../bill-runs/determine-charge-period.service.js')
-const FetchChargeVersionsService = require('../bill-runs/two-part-tariff/fetch-charge-versions.service.js')
 const FetchReturnLogsForLicenceService = require('../bill-runs/two-part-tariff/fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../lib/general.lib.js')
 
