@@ -42,7 +42,7 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
     chargeElement.issues = []
 
     // Unable to match return
-    if (chargeElement.returns && chargeElement.returns.length === 0) {
+    if (chargeElement.returnLogs && chargeElement.returnLogs.length === 0) {
       chargeElement.issues.push('Unable to match return')
     }
 
@@ -77,11 +77,11 @@ function _determineAndAssignChargeElementIssues (chargeElements, aggregate, retu
 function _determineSomeReturnsNotReceived (chargeElement, returnLogs) {
   // NOTE: The requirement states "An element matches to multiple returns AND at least 1 of those returns has a status
   // of due". So, our first check is that the element has matched to more than one return.
-  if (!chargeElement.returns || chargeElement.returns.length <= 1) {
+  if (!chargeElement.returnLogs || chargeElement.returnLogs.length <= 1) {
     return false
   }
 
-  for (const matchedReturn of chargeElement.returns) {
+  for (const matchedReturn of chargeElement.returnLogs) {
     const result = returnLogs.some((returnLog) => {
       return (returnLog.id === matchedReturn.id && returnLog.status === 'due')
     })
@@ -181,11 +181,11 @@ function _returnSplitOverChargeReferences (returnLog, chargeVersions) {
         // prep and match the charge version. A real example of this is 6/33/52/*S/0222 which has an SROC 2PT charge
         // version but was marked as lapsed on 16 June 2009. Either the CV import allowed the CV to be created, or NALD
         // was updated after the charge version was created.
-        if (!chargeElement.returns) {
+        if (!chargeElement.returnLogs) {
           return false
         }
 
-        return chargeElement.returns.some((matchedReturnResult) => {
+        return chargeElement.returnLogs.some((matchedReturnResult) => {
           return matchedReturnResult.id === returnLog.id
         })
       })
