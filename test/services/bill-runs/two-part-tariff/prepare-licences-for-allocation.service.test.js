@@ -16,14 +16,15 @@ const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-
 const PrepareLicencesForAllocationService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-licences-for-allocation.service.js')
 
 describe('Prepare Licences For Allocation Service', () => {
-  describe('when given a licence and billing period', () => {
+  describe('when given multiple licences and billing period', () => {
     let licence
     let billingPeriod
     let returnLogs
+    let licences
 
     beforeEach(async () => {
       // Setting up our licence object with charge versions, charge references and charge elements hanging off it
-      licence = [{
+      licence = {
         licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
         licenceRef: '5/31/14/*S/0116A',
         startDate: new Date('1966-02-01T00:00:00.000Z'),
@@ -76,7 +77,7 @@ describe('Prepare Licences For Allocation Service', () => {
             ]
           }
         ]
-      }]
+      }
 
       returnLogs = [
         {
@@ -123,6 +124,8 @@ describe('Prepare Licences For Allocation Service', () => {
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31')
       }
+
+      licences = [licence, licence]
     })
 
     afterEach(() => {
@@ -139,43 +142,49 @@ describe('Prepare Licences For Allocation Service', () => {
             }
           ]
 
-          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licence[0].returnLogs[0].abstractionPeriods).to.equal(abstractionPeriods)
+          expect(licences[0].returnLogs[0].abstractionPeriods).to.equal(abstractionPeriods)
+          expect(licences[1].returnLogs[0].abstractionPeriods).to.equal(abstractionPeriods)
         })
 
         it('flags the return if abstraction has happened outside the abstraction period', async () => {
           returnLogs[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2023-04-05')
 
-          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licence[0].returnLogs[0].abstractionOutsidePeriod).to.be.true()
+          expect(licences[0].returnLogs[0].abstractionOutsidePeriod).to.be.true()
+          expect(licences[1].returnLogs[0].abstractionOutsidePeriod).to.be.true()
         })
 
         it('flags if the return is a nil-return', async () => {
           returnLogs[0].returnSubmissions[0].nilReturn = true
 
-          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licence[0].returnLogs[0].nilReturn).to.be.true()
+          expect(licences[0].returnLogs[0].nilReturn).to.be.true()
+          expect(licences[1].returnLogs[0].nilReturn).to.be.true()
         })
 
         it('sets the allocated quantity on the return to 0', async () => {
-          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licence[0].returnLogs[0].allocatedQuantity).to.equal(0)
+          expect(licences[0].returnLogs[0].allocatedQuantity).to.equal(0)
+          expect(licences[1].returnLogs[0].allocatedQuantity).to.equal(0)
         })
 
         it('sets `matched` on the return to false', async () => {
-          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licence[0].returnLogs[0].matched).to.be.false()
+          expect(licences[0].returnLogs[0].matched).to.be.false()
+          expect(licences[1].returnLogs[0].matched).to.be.false()
         })
 
         it('sets the quantity on the return to the sum of the returns lines', async () => {
-          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licence[0].returnLogs[0].quantity).to.equal(6.912)
+          expect(licences[0].returnLogs[0].quantity).to.equal(6.912)
+          expect(licences[1].returnLogs[0].quantity).to.equal(6.912)
         })
       })
     })
@@ -210,12 +219,15 @@ describe('Prepare Licences For Allocation Service', () => {
         ]
       }
 
-      licence[0].chargeVersions[0].chargeReferences[1] = secondChargeReference
+      licences[0].chargeVersions[0].chargeReferences[1] = secondChargeReference
 
-      await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+      await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-      expect(licence[0].chargeVersions[0].chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
-      expect(licence[0].chargeVersions[0].chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
+      expect(licences[0].chargeVersions[0].chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
+      expect(licences[0].chargeVersions[0].chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
+
+      expect(licences[1].chargeVersions[0].chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
+      expect(licences[1].chargeVersions[0].chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
     })
 
     it('determines the charge period for each charge version', async () => {
@@ -224,9 +236,10 @@ describe('Prepare Licences For Allocation Service', () => {
         endDate: new Date('2023-03-31')
       }
 
-      await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+      await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-      expect(licence[0].chargeVersions[0].chargePeriod).to.equal(chargePeriod)
+      expect(licences[0].chargeVersions[0].chargePeriod).to.equal(chargePeriod)
+      expect(licences[1].chargeVersions[0].chargePeriod).to.equal(chargePeriod)
     })
 
     describe('prepares all the charge elements for that licence', () => {
@@ -236,26 +249,36 @@ describe('Prepare Licences For Allocation Service', () => {
         })
 
         it('does not prepare the charge element', async () => {
-          await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-          expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['abstractionPeriods'])
-          expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['allocatedQuantity'])
-          expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['returnLogs'])
+          expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['abstractionPeriods'])
+          expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['allocatedQuantity'])
+          expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['returnLogs'])
+
+          expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['abstractionPeriods'])
+          expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['allocatedQuantity'])
+          expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.not.include(['returnLogs'])
         })
       })
 
       it('sets the charge elements return logs to an empty array', async () => {
-        await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+        await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['returnLogs'])
-        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs).to.equal([])
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['returnLogs'])
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs).to.equal([])
+
+        expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['returnLogs'])
+        expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs).to.equal([])
       })
 
       it('sets the chare elements allocated quantity to 0', async () => {
-        await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+        await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['allocatedQuantity'])
-        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity).to.equal(0)
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['allocatedQuantity'])
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity).to.equal(0)
+
+        expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['allocatedQuantity'])
+        expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity).to.equal(0)
       })
 
       it('sets the charge elements abstraction periods', async () => {
@@ -270,10 +293,13 @@ describe('Prepare Licences For Allocation Service', () => {
           }
         ]
 
-        await PrepareLicencesForAllocationService.go(licence, billingPeriod)
+        await PrepareLicencesForAllocationService.go(licences, billingPeriod)
 
-        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['abstractionPeriods'])
-        expect(licence[0].chargeVersions[0].chargeReferences[0].chargeElements[0].abstractionPeriods).to.equal(abstractionPeriod)
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['abstractionPeriods'])
+        expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].abstractionPeriods).to.equal(abstractionPeriod)
+
+        expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.include(['abstractionPeriods'])
+        expect(licences[1].chargeVersions[0].chargeReferences[0].chargeElements[0].abstractionPeriods).to.equal(abstractionPeriod)
       })
     })
   })
