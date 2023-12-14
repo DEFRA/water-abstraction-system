@@ -59,7 +59,6 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
 
   for (const currentBillingData of Object.values(billingData)) {
     const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod)
-    console.log('🚀 ~ file: process-billing-period.service.js:62 ~ _buildDataToPersist ~ cleansedTransactions:', cleansedTransactions)
 
     if (cleansedTransactions.length !== 0) {
       const transactions = await SendTransactionsService.go(
