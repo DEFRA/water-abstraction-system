@@ -81,12 +81,12 @@ describe('Fetch Charge Versions service', () => {
       // Second charge version to test ordering
       const otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId })
       const chargeVersion = await ChargeVersionHelper.add(
-        { startDate: new Date('2022-04-01'), licenceId: otherLicence.id, licenceRef: '01/130', regionCode }
+        { licenceId: otherLicence.id, licenceRef: '01/130', regionCode }
       )
       const chargeReference = await ChargeReferenceHelper.add({
         chargeVersionId: chargeVersion.id,
         chargeCategoryId,
-        adjustments: { s127: true, aggregate: 0.562114443 }
+        adjustments: { s127: true }
       })
       await ChargeElementHelper.add({
         chargeReferenceId: chargeReference.id,
