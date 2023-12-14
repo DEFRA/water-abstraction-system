@@ -49,9 +49,10 @@ describe('Fetch Charge Versions service', () => {
     const chargeVersionId = '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59'
 
     beforeEach(async () => {
-      await ChargeVersionHelper.add(
-        { id: chargeVersionId, licenceId, licenceRef, regionCode }
-      )
+      // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
+      // second part is to create another charge version with a different licence ref so we can test the order of the
+      // results
+      await ChargeVersionHelper.add({ id: chargeVersionId, licenceId, licenceRef, regionCode })
 
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
         id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
@@ -76,12 +77,28 @@ describe('Fetch Charge Versions service', () => {
         authorisedAnnualQuantity: 200,
         purposeId
       })
+
+      // Second charge version to test ordering
+      const otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId })
+      const chargeVersion = await ChargeVersionHelper.add(
+        { startDate: new Date('2022-04-01'), licenceId: otherLicence.id, licenceRef: '01/130', regionCode }
+      )
+      const chargeReference = await ChargeReferenceHelper.add({
+        chargeVersionId: chargeVersion.id,
+        chargeCategoryId,
+        adjustments: { s127: true, aggregate: 0.562114443 }
+      })
+      await ChargeElementHelper.add({
+        chargeReferenceId: chargeReference.id,
+        authorisedAnnualQuantity: 100,
+        purposeId
+      })
     })
 
     it('returns the charge version with related licence, charge references and charge elements', async () => {
       const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(results).to.have.length(1)
+      expect(results).to.have.length(2)
       expect(results[0]).to.equal({
         id: '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59',
         startDate: new Date('2022-04-01'),
@@ -140,10 +157,11 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    it('returns charge versions with correct ordering based on licence reference', async () => {
+    it('returns the charge versions order by licence reference', async () => {
       const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-      expect(results).to.have.length(1)
+      expect(results[0].licence.licenceRef).to.equal('01/128')
+      expect(results[1].licence.licenceRef).to.equal('01/130')
     })
 
     it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
