@@ -36,7 +36,7 @@ describe('Fetch Charge Versions service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    const chargeCategory = await ChargeCategoryHelper.add()
+    const chargeCategory = await ChargeCategoryHelper.add({ reference: '4.3.41' })
     chargeCategoryId = chargeCategory.id
 
     const region = await RegionHelper.add({ naldRegionId: regionCode })
@@ -101,7 +101,11 @@ describe('Fetch Charge Versions service', () => {
           description: 'Mineral washing',
           aggregate: 0.562114443,
           s127: 'true',
-          chargeCategory: null,
+          chargeCategory: {
+            reference: '4.3.41',
+            shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+            subsistenceCharge: 12000
+          },
           chargeElements: [
             {
               id: 'dab91d76-6778-417f-8f2d-9124a270e926',
