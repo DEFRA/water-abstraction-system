@@ -50,7 +50,7 @@ describe('Fetch Charge Versions service', () => {
 
     beforeEach(async () => {
       await ChargeVersionHelper.add(
-        { id: chargeVersionId, startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode }
+        { id: chargeVersionId, licenceId, licenceRef, regionCode }
       )
 
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
