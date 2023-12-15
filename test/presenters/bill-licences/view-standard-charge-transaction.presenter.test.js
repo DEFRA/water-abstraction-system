@@ -20,7 +20,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
     describe('that is a credit', () => {
       beforeEach(() => {
-        transaction.isCredit = true
+        transaction.credit = true
       })
 
       it('returns the credit and debit properties correctly', () => {
@@ -33,7 +33,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
     describe('that is a debit', () => {
       beforeEach(() => {
-        transaction.isCredit = false
+        transaction.credit = false
       })
 
       it('returns the credit and debit properties correctly', () => {
@@ -53,7 +53,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
         describe('and the transaction is a credit', () => {
           beforeEach(() => {
-            transaction.isCredit = true
+            transaction.credit = true
           })
 
           it("returns 'Supported source Candover (£-145.67)'", () => {
@@ -65,7 +65,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
         describe('and the transaction is a debit', () => {
           beforeEach(() => {
-            transaction.isCredit = false
+            transaction.credit = false
           })
 
           it("returns 'Supported source Candover (£145.67)'", () => {
@@ -78,7 +78,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
       describe('when is a water company charge is true', () => {
         beforeEach(() => {
-          transaction.isWaterCompanyCharge = true
+          transaction.waterCompanyCharge = true
         })
 
         it("returns 'Public Water Supply'", () => {
@@ -92,7 +92,7 @@ describe('View Standard Charge Transaction presenter', () => {
         beforeEach(() => {
           transaction.supportedSourceName = 'Candover'
           transaction.supportedSourceCharge = '14567'
-          transaction.isWaterCompanyCharge = true
+          transaction.waterCompanyCharge = true
         })
 
         it("returns 'Public Water Supply'", () => {
@@ -166,7 +166,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
       describe('when is winter only is true', () => {
         beforeEach(() => {
-          transaction.isWinterOnly = true
+          transaction.winterOnly = true
         })
 
         it("returns 'Winter discount (0.5)'", () => {
@@ -180,7 +180,7 @@ describe('View Standard Charge Transaction presenter', () => {
         beforeEach(() => {
           transaction.adjustmentFactor = 0.75
           transaction.section127Agreement = true
-          transaction.isWinterOnly = true
+          transaction.winterOnly = true
         })
 
         it('returns the adjustment descriptions combined', () => {
@@ -256,7 +256,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
     describe('that is a credit', () => {
       beforeEach(() => {
-        transaction.isCredit = true
+        transaction.credit = true
       })
 
       it('returns the credit property populated and the debit empty', () => {
@@ -269,7 +269,7 @@ describe('View Standard Charge Transaction presenter', () => {
 
     describe('that is a debit', () => {
       beforeEach(() => {
-        transaction.isCredit = false
+        transaction.credit = false
       })
 
       it('returns the debit property populated and the credit empty', () => {
@@ -352,7 +352,7 @@ function _baseTransaction () {
     chargeType: 'standard',
     description: 'Water abstraction charge: Testing',
     endDate: new Date('2024-03-31'),
-    isCredit: false,
+    credit: false,
     netAmount: 116200,
     startDate: new Date('2023-04-01'),
     volume: 100,
@@ -392,8 +392,8 @@ function _srocTransaction () {
     adjustmentFactor: 1,
     chargeCategoryCode: '4.5.13',
     chargeCategoryDescription: 'Medium loss, non-tidal, greater than 83 up to and including 142 ML/yr',
-    isWaterCompanyCharge: false,
-    isWinterOnly: false,
+    waterCompanyCharge: false,
+    winterOnly: false,
     scheme: 'sroc',
     section126Factor: 1,
     section127Agreement: false,

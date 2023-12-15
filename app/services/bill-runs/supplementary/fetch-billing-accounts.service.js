@@ -12,7 +12,7 @@ const BillingAccountModel = require('../../../models/billing-account.model.js')
  *
  * @param {module:ChargeVersionModel[]} chargeVersions An array of charge versions
  *
- * @returns {Object[]} Array of objects in the format { invoiceAccountId: '...', invoiceAccountNumber: '...' }
+ * @returns {Object[]} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
  */
 async function go (chargeVersions) {
   const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)
@@ -27,7 +27,7 @@ async function go (chargeVersions) {
 
 function _extractUniqueBillingAccountIds (chargeVersions) {
   const allBillingAccountIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.invoiceAccountId
+    return chargeVersion.billingAccountId
   })
 
   // Creating a new set from allBillingAccountIds gives us just the unique ids. Objection does not accept sets in

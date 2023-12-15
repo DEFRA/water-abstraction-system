@@ -154,7 +154,7 @@ describe('View Bill Run presenter', () => {
 
           describe('and it is for summer only', () => {
             beforeEach(() => {
-              billRun.isSummer = true
+              billRun.summer = true
             })
 
             it('returns Supplementary', () => {
@@ -283,14 +283,14 @@ describe('View Bill Run presenter', () => {
 
 function _testBillRun () {
   return {
-    billingBatchId: '420e948f-1992-437e-8a47-74c0066cb017',
+    id: '420e948f-1992-437e-8a47-74c0066cb017',
     batchType: 'supplementary',
     billRunNumber: 10010,
     creditNoteCount: 2,
     creditNoteValue: -199278,
     invoiceCount: 6,
     invoiceValue: 269978,
-    isSummer: false,
+    summer: false,
     netTotal: 70700,
     scheme: 'sroc',
     source: 'wrls',
@@ -299,7 +299,7 @@ function _testBillRun () {
     transactionFileReference: 'nalwi50002t',
     createdAt: new Date('2023-11-01'),
     region: {
-      regionId: 'f6c4699f-9a80-419a-82e7-f785ece727e1',
+      id: 'f6c4699f-9a80-419a-82e7-f785ece727e1',
       displayName: 'Wales'
     }
   }

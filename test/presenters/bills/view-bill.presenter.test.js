@@ -138,7 +138,7 @@ describe('View Bill presenter', () => {
 
           describe('and it is for summer only', () => {
             beforeEach(() => {
-              bill.billRun.isSummer = true
+              bill.billRun.summer = true
             })
 
             it('returns Supplementary', () => {
@@ -162,7 +162,7 @@ describe('View Bill presenter', () => {
 
       describe('when the bill is a credit', () => {
         beforeEach(() => {
-          bill.isCredit = true
+          bill.credit = true
         })
 
         it("returns the bill total formatted as money plus 'credit' as a suffix", () => {
@@ -368,30 +368,30 @@ describe('View Bill presenter', () => {
 
 function _testBill () {
   return {
-    billingInvoiceId: '64924759-8142-4a08-9d1e-1e902cd9d316',
+    id: '64924759-8142-4a08-9d1e-1e902cd9d316',
     creditNoteValue: 0,
     financialYearEnding: 2023,
-    invoiceAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+    billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
     invoiceNumber: 'EAI0000007T',
     invoiceValue: 21317800,
-    isCredit: false,
-    isFlaggedForRebilling: false,
+    credit: false,
+    flaggedForRebilling: false,
     netAmount: 21317800,
     rebillingState: null,
-    isDeMinimis: false,
+    deminimis: false,
     createdAt: new Date('2023-03-07'),
     billRun: {
-      billingBatchId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+      id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
       batchType: 'annual',
       status: 'sent',
       billRunNumber: 10003,
       transactionFileReference: 'nalei50002t',
       scheme: 'sroc',
-      isSummer: false,
+      summer: false,
       source: 'wrls',
       createdAt: new Date('2023-03-07'),
       region: {
-        regionId: 'adca5dd3-114d-4477-8cdd-684081429f4b',
+        id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
         displayName: 'South West'
       }
     }

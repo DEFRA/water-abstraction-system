@@ -57,7 +57,7 @@ describe('Billing Accounts controller', () => {
 
     describe('when a request is valid', () => {
       const validResponse = {
-        invoiceAccountAddress: {},
+        billingAccountAddress: {},
         address: {},
         agentCompany: {},
         contact: {}

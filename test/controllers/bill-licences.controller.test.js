@@ -82,7 +82,7 @@ describe('Bill Licences controller', () => {
 function _presrocPageData () {
   return {
     accountNumber: 'W99999999A',
-    billingInvoiceId: '5a5b313b-e707-490a-a693-799339941e4f',
+    billId: '5a5b313b-e707-490a-a693-799339941e4f',
     creditTotal: '£0.00',
     debitTotal: '£100.37',
     displayCreditDebitTotals: true,
@@ -126,7 +126,7 @@ function _presrocPageData () {
 function _srocPageData () {
   return {
     accountNumber: 'B99990099A',
-    billingInvoiceId: '13822096-1118-404c-81a4-fdbe5fb73d8f',
+    billId: '13822096-1118-404c-81a4-fdbe5fb73d8f',
     creditTotal: '£0.00',
     debitTotal: '£1,253.00',
     displayCreditDebitTotals: true,

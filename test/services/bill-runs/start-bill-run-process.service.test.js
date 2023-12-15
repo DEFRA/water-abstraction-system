@@ -22,7 +22,7 @@ describe('Start Bill Run Process service', () => {
   const userEmail = 'test@wrsl.gov.uk'
 
   const billRun = {
-    billingBatchId: 'e3bc5bb1-a223-43a2-b73f-10e6c4ed9626',
+    id: 'e3bc5bb1-a223-43a2-b73f-10e6c4ed9626',
     regionId,
     scheme: 'sroc',
     batchType: 'supplementary',
@@ -71,7 +71,9 @@ describe('Start Bill Run Process service', () => {
       it('returns a response containing details of the new bill run', async () => {
         const result = await StartBillRunProcessService.go(regionId, userEmail)
 
-        expect(result.id).to.equal(billRun.billingBatchId)
+        // NOTE: The result from the service is a the formatted result for the legacy UI. Hence the reference to
+        // billingBatchId
+        expect(result.billingBatchId).to.equal(billRun.id)
         expect(result.region).to.equal(billRun.regionId)
         expect(result.scheme).to.equal(billRun.scheme)
         expect(result.batchType).to.equal(batchType)
@@ -111,7 +113,9 @@ describe('Start Bill Run Process service', () => {
       it('returns a response containing details of the new bill run', async () => {
         const result = await StartBillRunProcessService.go(regionId, batchType, userEmail)
 
-        expect(result.id).to.equal(billRun.billingBatchId)
+        // NOTE: The result from the service is a the formatted result for the legacy UI. Hence the reference to
+        // billingBatchId
+        expect(result.billingBatchId).to.equal(billRun.id)
         expect(result.region).to.equal(billRun.regionId)
         expect(result.scheme).to.equal(billRun.scheme)
         expect(result.batchType).to.equal(batchType)

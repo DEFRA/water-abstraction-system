@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunModel = require('../../../app/models/water/bill-run.model.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
-const RegionModel = require('../../../app/models/water/region.model.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
+const RegionModel = require('../../../app/models/region.model.js')
 
 // Thing under test
 const CreateBillRunService = require('../../../app/services/bill-runs/create-bill-run.service.js')
@@ -28,7 +28,7 @@ describe('Create Bill Run service', () => {
 
   describe('when the defaults are not overridden', () => {
     it('returns the new bill run instance containing the defaults', async () => {
-      const result = await CreateBillRunService.go(region.regionId, financialYearEndings)
+      const result = await CreateBillRunService.go(region.id, financialYearEndings)
 
       expect(result).to.be.an.instanceOf(BillRunModel)
 
@@ -42,7 +42,7 @@ describe('Create Bill Run service', () => {
       expect(result.errorCode).to.be.null()
 
       expect(result.region).to.be.an.instanceOf(RegionModel)
-      expect(result.region.regionId).to.equal(region.regionId)
+      expect(result.region.id).to.equal(region.id)
     })
   })
 
@@ -55,7 +55,7 @@ describe('Create Bill Run service', () => {
     const errorCode = 50
 
     it('returns the new bill run instance containing the provided values', async () => {
-      const result = await CreateBillRunService.go(region.regionId, financialYearEndings, { batchType, scheme, source, externalId, status, errorCode })
+      const result = await CreateBillRunService.go(region.id, financialYearEndings, { batchType, scheme, source, externalId, status, errorCode })
 
       expect(result).to.be.an.instanceOf(BillRunModel)
 
@@ -69,7 +69,7 @@ describe('Create Bill Run service', () => {
       expect(result.errorCode).to.equal(errorCode)
 
       expect(result.region).to.be.an.instanceOf(RegionModel)
-      expect(result.region.regionId).to.equal(region.regionId)
+      expect(result.region.id).to.equal(region.id)
     })
   })
 
@@ -78,7 +78,7 @@ describe('Create Bill Run service', () => {
     const status = 'error'
 
     it('returns the new bill run instance containing the provided values', async () => {
-      const result = await CreateBillRunService.go(region.regionId, financialYearEndings, { externalId, status })
+      const result = await CreateBillRunService.go(region.id, financialYearEndings, { externalId, status })
 
       expect(result).to.be.an.instanceOf(BillRunModel)
 
@@ -91,7 +91,7 @@ describe('Create Bill Run service', () => {
       expect(result.status).to.equal('error')
 
       expect(result.region).to.be.an.instanceOf(RegionModel)
-      expect(result.region.regionId).to.equal(region.regionId)
+      expect(result.region.id).to.equal(region.id)
     })
   })
 })
