@@ -277,7 +277,16 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the licence ended (expired, lapsed or revoked) before the billing period', () => {
       beforeEach(async () => {
-        const licence = await LicenceHelper.add({ licenceRef, regionId, expiredDate: new Date('2019-05-01') })
+        // NOTE: To make things spicy (!) we have the licence expire _after_ the billing period starts but revoked
+        // before it. Where The licence has dates in more than one of these fields, it is considered ended on the
+        // earliest of them (we have found real examples that confirm this is possible)
+        const licence = await LicenceHelper.add({
+          licenceRef,
+          regionId,
+          expiredDate: new Date('2019-05-01'),
+          revokedDate: new Date('2022-06-01')
+        })
+
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { licenceId: licence.id, licenceRef, regionCode }
         )
