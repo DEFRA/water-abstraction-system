@@ -8,15 +8,16 @@
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 
 /**
+ * Fetches 2PT Licences for the matching region and billing period plus the charge versions associated with them grouped
+ * by licence
  *
- * @param {*} regionId
- * @param {*} billingPeriod
- * @param {*} licenceId
+ * @param {String} regionId UUID of the region being billed that the licences must be linked to
+ * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns
+ * @returns {Object[]} the licences to be matched, each containing an array of charge versions applicable for two-part tariff
  */
-async function go (regionId, billingPeriod, licenceId) {
-  const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod, licenceId)
+async function go (regionId, billingPeriod) {
+  const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
 
@@ -47,7 +48,7 @@ function _groupByLicence (chargeVersions, uniqueLicenceIds) {
     const { licenceRef, startDate, expiredDate, lapsedDate, revokedDate } = matchedChargeVersions[0].licence
 
     licences[i] = {
-      licenceId,
+      id: licenceId,
       licenceRef,
       startDate,
       expiredDate,

@@ -21,6 +21,7 @@ const CheckRoutes = require('../routes/check.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const HealthRoutes = require('../routes/health.routes.js')
+const LicenceRoutes = require('../routes/licence.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 
 const AirbrakeConfig = require('../../config/airbrake.config.js')
@@ -34,6 +35,7 @@ const routes = [
   ...BillRunRoutes,
   ...BillingAccountRoutes,
   ...ChargeElements,
+  ...LicenceRoutes,
   ...CheckRoutes,
   ...DataRoutes
 ]
