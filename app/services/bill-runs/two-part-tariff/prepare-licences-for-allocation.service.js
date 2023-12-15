@@ -46,20 +46,11 @@ function _prepareChargeVersions (licence, billingPeriod) {
     _sortChargeReferencesBySubsistenceCharge(chargeReferences)
     chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
-    // NOTE: Imagine the scenario where a billing account change is due to happen. The users will create a new charge
-    // version whose start date will be when the account is due to change, for example 1 Oct. So, the charge version
-    // we are looking at has a `startDate:` of 2023-10-01. But then someone marks the licence as revoked in NALD on
-    // 2023-08-01. In this scenario DetermineChargePeriodService will return an empty charge period because it will
-    // have calculated the charge period start date as 2023-10-01 and the end date as 2023-08-01. Clearly, this is
-    // incompatible so the service actually returns `{ startDate: null, endDate: null }`. This check is to handle
-    // scenarios like this
-    if (chargeVersion.chargePeriod.startDate) {
-      chargeReferences.forEach((chargeReference) => {
-        const { chargeElements } = chargeReference
+    chargeReferences.forEach((chargeReference) => {
+      const { chargeElements } = chargeReference
 
-        _prepareChargeElementsForMatching(chargeElements, chargeVersion.chargePeriod)
-      })
-    }
+      _prepareChargeElementsForMatching(chargeElements, chargeVersion.chargePeriod)
+    })
   })
 }
 
