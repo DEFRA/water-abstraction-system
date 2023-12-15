@@ -27,7 +27,7 @@ exports.up = function (knex) {
         EXECUTE PROCEDURE update_timestamp();
         `)
     })
-};
+}
 
 /**
  * @param { import("knex").Knex } knex
@@ -37,4 +37,4 @@ exports.down = function (knex) {
   return knex
     .schema
     .dropTableIfExists(tableName)
-};
+}
