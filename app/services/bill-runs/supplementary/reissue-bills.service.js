@@ -5,11 +5,11 @@
  * @module ReissueBillsService
  */
 
-const BillModel = require('../../../models/water/bill.model.js')
-const BillLicenceModel = require('../../../models/water/bill-licence.model.js')
+const BillModel = require('../../../models/bill.model.js')
+const BillLicenceModel = require('../../../models/bill-licence.model.js')
 const FetchBillsToBeReissuedService = require('./fetch-bills-to-be-reissued.service.js')
 const ReissueBillService = require('./reissue-bill.service.js')
-const TransactionModel = require('../../../models/water/transaction.model.js')
+const TransactionModel = require('../../../models/transaction.model.js')
 
 /**
  * Handles the reissuing of bills

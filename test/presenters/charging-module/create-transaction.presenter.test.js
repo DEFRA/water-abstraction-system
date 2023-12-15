@@ -9,17 +9,17 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const LicenceHelper = require('../../support/helpers/water/licence.helper.js')
-const LicenceModel = require('../../../app/models/water/licence.model.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
 const { ref } = require('objection')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
-const TransactionHelper = require('../../support/helpers/water/transaction.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
+const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 
 // Thing under test
 const CreateTransactionPresenter = require('../../../app/presenters/charging-module/create-transaction.presenter.js')
 
 describe('Charging Module Create Transaction presenter', () => {
-  const invoiceAccountNumber = 'A51542397A'
+  const accountNumber = 'A51542397A'
 
   let transaction
   let licence
@@ -37,13 +37,13 @@ describe('Charging Module Create Transaction presenter', () => {
       // FetchChargeVersionsService. We recreate how that instance is formed here, including extracting some of the
       // values as distinct properties from the licence's `regions` JSONb field.
       const tempLicence = await LicenceHelper.add({
-        regionId: region.regionId,
+        regionId: region.id,
         regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
       })
       licence = await LicenceModel.query()
-        .findById(tempLicence.licenceId)
+        .findById(tempLicence.id)
         .select([
-          'licenceId',
+          'id',
           'licenceRef',
           ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
           ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
@@ -51,7 +51,7 @@ describe('Charging Module Create Transaction presenter', () => {
         .withGraphFetched('region')
         .modifyGraph('licence.region', builder => {
           builder.select([
-            'regionId',
+            'id',
             'chargeRegionId'
           ])
         })
@@ -70,9 +70,9 @@ describe('Charging Module Create Transaction presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateTransactionPresenter.go(transaction, invoiceAccountNumber, licence)
+      const result = CreateTransactionPresenter.go(transaction, accountNumber, licence)
 
-      expect(result.clientId).to.equal(transaction.billingTransactionId)
+      expect(result.clientId).to.equal(transaction.id)
       expect(result.ruleset).to.equal('sroc')
       expect(result.periodStart).to.equal('01-APR-2022')
       expect(result.periodEnd).to.equal('31-MAR-2023')
@@ -89,7 +89,7 @@ describe('Charging Module Create Transaction presenter', () => {
       expect(result.chargeCategoryDescription).to.equal('Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model')
       expect(result.chargePeriod).to.equal('01-APR-2022 - 31-MAR-2023')
       expect(result.compensationCharge).to.equal(false)
-      expect(result.customerReference).to.equal(invoiceAccountNumber)
+      expect(result.customerReference).to.equal(accountNumber)
       expect(result.licenceNumber).to.equal(licence.licenceRef)
       expect(result.lineDescription).to.equal('Water abstraction charge: Agriculture other than spray irrigation at East Rudham')
       expect(result.loss).to.equal('medium')

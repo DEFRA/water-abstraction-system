@@ -5,7 +5,7 @@
  * @module CreateBillRunService
  */
 
-const BillRunModel = require('../../models/water/bill-run.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 /**
  * Create a new bill run

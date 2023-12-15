@@ -153,7 +153,6 @@ function _testSingleLicenceBill () {
     region: 'South West',
     total: '£1,162.00',
     transactionFile: 'nalei50002t',
-    billingInvoiceId: '8b8b8831-d671-4456-93cd-30310e6fdf7a',
     creditTotal: '£0.00',
     debitTotal: '£1,162.00',
     licenceId: '6d4236b2-add7-4446-9472-6ffc98b0ded1',
@@ -188,6 +187,7 @@ function _testSingleLicenceBill () {
         description: 'Compensation charge',
         quantity: '100ML'
       }
-    ]
+    ],
+    transactionsTotal: '£1,162.00'
   }
 }

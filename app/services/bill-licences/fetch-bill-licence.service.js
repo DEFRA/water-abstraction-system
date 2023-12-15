@@ -7,7 +7,7 @@
 
 const { ref } = require('objection')
 
-const BillLicenceModel = require('../../models/water/bill-licence.model.js')
+const BillLicenceModel = require('../../models/bill-licence.model.js')
 
 /**
  * Fetch the matching Bill Licence plus its transactions
@@ -27,21 +27,21 @@ async function _fetchBillLicence (id) {
   const results = await BillLicenceModel.query()
     .findById(id)
     .select([
-      'billingInvoiceLicenceId',
+      'id',
       'licenceId',
       'licenceRef'
     ])
     .withGraphFetched('bill')
     .modifyGraph('bill', (builder) => {
       builder.select([
-        'billingInvoiceId',
-        'invoiceAccountNumber'
+        'id',
+        'accountNumber'
       ])
     })
     .withGraphFetched('bill.billRun')
     .modifyGraph('bill.billRun', (builder) => {
       builder.select([
-        'billingBatchId',
+        'id',
         'batchType',
         'scheme',
         'source'
@@ -50,7 +50,7 @@ async function _fetchBillLicence (id) {
     .withGraphFetched('transactions')
     .modifyGraph('transactions', (builder) => {
       builder.select([
-        'billingTransactionId',
+        'id',
         'aggregateFactor',
         'adjustmentFactor',
         'authorisedDays',
@@ -60,9 +60,9 @@ async function _fetchBillLicence (id) {
         'chargeType',
         'description',
         'endDate',
-        'isCredit',
-        'isWaterCompanyCharge',
-        'isWinterOnly',
+        'credit',
+        'waterCompanyCharge',
+        'winterOnly',
         'loss',
         'netAmount',
         'scheme',
@@ -84,26 +84,26 @@ async function _fetchBillLicence (id) {
         .orderBy([
           { column: 'chargeCategoryCode', order: 'desc' },
           { column: 'billableDays', order: 'desc' },
-          { column: 'dateCreated', order: 'asc' }
+          { column: 'createdAt', order: 'asc' }
         ])
     })
     .withGraphFetched('transactions.chargeReference')
     .modifyGraph('transactions.chargeReference', (builder) => {
       builder.select([
-        'chargeElementId'
+        'id'
       ])
     })
     .withGraphFetched('transactions.chargeReference.purpose')
     .modifyGraph('transactions.chargeReference.purpose', (builder) => {
       builder.select([
-        'purposeUseId',
+        'id',
         'description'
       ])
     })
     .withGraphFetched('transactions.chargeReference.chargeElements')
     .modifyGraph('transactions.chargeReference.chargeElements', (builder) => {
       builder.select([
-        'chargePurposeId',
+        'id',
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
         'abstractionPeriodEndDay',
@@ -114,7 +114,7 @@ async function _fetchBillLicence (id) {
     .withGraphFetched('transactions.chargeReference.chargeElements.purpose')
     .modifyGraph('transactions.chargeReference.chargeElements.purpose', (builder) => {
       builder.select([
-        'purposeUseId',
+        'id',
         'description'
       ])
     })

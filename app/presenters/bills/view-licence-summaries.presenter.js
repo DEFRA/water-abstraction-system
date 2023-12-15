@@ -20,7 +20,7 @@ function go (licenceSummaries) {
 
 function _billLicences (licenceSummaries) {
   return licenceSummaries.map((licenceSummary) => {
-    const { billingInvoiceLicenceId: id, licenceRef: reference, total } = licenceSummary
+    const { id, licenceRef: reference, total } = licenceSummary
 
     return {
       id,

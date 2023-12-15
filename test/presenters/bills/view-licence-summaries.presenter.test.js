@@ -72,17 +72,17 @@ describe('View Licence Summaries presenter', () => {
 function _testLicenceSummaries () {
   return [
     {
-      billingInvoiceLicenceId: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
+      id: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
       licenceRef: '01/735',
       total: -622218
     },
     {
-      billingInvoiceLicenceId: '127377ea-24ea-4578-8b96-ef9a8625a313',
+      id: '127377ea-24ea-4578-8b96-ef9a8625a313',
       licenceRef: '01/466',
       total: 706655
     },
     {
-      billingInvoiceLicenceId: 'af709c49-54ac-4a4f-a167-8b152c9f44fb',
+      id: 'af709c49-54ac-4a4f-a167-8b152c9f44fb',
       licenceRef: '01/638',
       total: 823907
     }

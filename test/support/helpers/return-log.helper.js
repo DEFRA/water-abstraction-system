@@ -4,7 +4,7 @@
  * @module ReturnLogHelper
  */
 
-const { generateLicenceRef } = require('./water/licence.helper.js')
+const { generateLicenceRef } = require('./licence.helper.js')
 const { randomInteger } = require('./general.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 

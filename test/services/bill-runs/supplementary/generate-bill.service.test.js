@@ -27,12 +27,13 @@ describe('Generate Bill service', () => {
     billingAccount = await BillingAccountHelper.add()
 
     expectedResult = {
-      invoiceAccountId: billingAccount.id,
+      id: '',
+      accountNumber: billingAccount.accountNumber,
       address: {},
-      invoiceAccountNumber: billingAccount.accountNumber,
-      billingBatchId: billRunId,
-      financialYearEnding,
-      isCredit: false
+      billingAccountId: billingAccount.id,
+      billRunId,
+      credit: false,
+      financialYearEnding
     }
   })
 
@@ -44,9 +45,9 @@ describe('Generate Bill service', () => {
         financialYearEnding
       )
 
-      expect(result).to.equal(expectedResult, { skip: 'billingInvoiceId' })
-      // Separate check for billingInvoiceId as it will be a random UUID
-      expect(result.billingInvoiceId).to.be.a.string().and.to.have.length(36)
+      expect(result).to.equal(expectedResult, { skip: 'id' })
+      // Separate check for billId as it will be a random UUID
+      expect(result.id).to.be.a.string().and.to.have.length(36)
     })
   })
 })

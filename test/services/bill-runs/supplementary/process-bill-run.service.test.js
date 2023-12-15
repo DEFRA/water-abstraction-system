@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
-const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Things we need to stub
@@ -82,7 +82,7 @@ describe('Supplementary Process Bill Run service', () => {
         it('sets the Bill Run status to empty', async () => {
           await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-          const result = await BillRunModel.query().findById(billRun.billingBatchId)
+          const result = await BillRunModel.query().findById(billRun.id)
 
           expect(result.status).to.equal('empty')
         })
@@ -96,7 +96,7 @@ describe('Supplementary Process Bill Run service', () => {
         it('sets the Bill Run status to processing', async () => {
           await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-          const result = await BillRunModel.query().findById(billRun.billingBatchId)
+          const result = await BillRunModel.query().findById(billRun.id)
 
           expect(result.status).to.equal('processing')
         })
@@ -112,7 +112,7 @@ describe('Supplementary Process Bill Run service', () => {
       it('sets the Bill Run status to processing', async () => {
         await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        const result = await BillRunModel.query().findById(billRun.billingBatchId)
+        const result = await BillRunModel.query().findById(billRun.id)
 
         expect(result.status).to.equal('processing')
       })
@@ -136,7 +136,7 @@ describe('Supplementary Process Bill Run service', () => {
 
         expect(args[0]).to.equal('Process bill run complete')
         expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].billRunId).to.equal(billRun.billingBatchId)
+        expect(args[1].billRunId).to.equal(billRun.id)
       })
     })
   })
@@ -169,7 +169,7 @@ describe('Supplementary Process Bill Run service', () => {
         const args = notifierStub.omfg.firstCall.args
 
         expect(args[0]).to.equal('Bill run process errored')
-        expect(args[1].billRun.billingBatchId).to.equal(billRun.billingBatchId)
+        expect(args[1].billRun.id).to.equal(billRun.id)
         expect(args[2]).to.be.an.error()
         expect(args[2].name).to.equal(thrownError.name)
         expect(args[2].message).to.equal(`Error: ${thrownError.message}`)
@@ -200,7 +200,7 @@ describe('Supplementary Process Bill Run service', () => {
           const args = notifierStub.omfg.firstCall.args
 
           expect(args[0]).to.equal('Bill run process errored')
-          expect(args[1].billRun.billingBatchId).to.equal(billRun.billingBatchId)
+          expect(args[1].billRun.id).to.equal(billRun.id)
           expect(args[2]).to.be.an.error()
           expect(args[2].name).to.equal(thrownError.name)
           expect(args[2].message).to.equal(thrownError.message)
@@ -232,7 +232,7 @@ describe('Supplementary Process Bill Run service', () => {
         const args = notifierStub.omfg.firstCall.args
 
         expect(args[0]).to.equal('Bill run process errored')
-        expect(args[1].billRun.billingBatchId).to.equal(billRun.billingBatchId)
+        expect(args[1].billRun.id).to.equal(billRun.id)
         expect(args[2]).to.be.an.error()
         expect(args[2].name).to.equal(thrownError.name)
         expect(args[2].message).to.equal(thrownError.message)

@@ -9,11 +9,11 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/water/bill-run.model.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const EventModel = require('../../../app/models/water/event.model.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
+const EventModel = require('../../../app/models/event.model.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const CreateBillRunEventService = require('../../../app/services/bill-runs/create-bill-run-event.service.js')
@@ -41,10 +41,10 @@ describe('Create Bill Run Event service', () => {
 
     beforeEach(async () => {
       const region = await RegionHelper.add()
-      const testBillRun = await BillRunHelper.add({ regionId: region.regionId })
+      const testBillRun = await BillRunHelper.add({ regionId: region.id })
 
       billRun = await BillRunModel.query()
-        .findById(testBillRun.billingBatchId)
+        .findById(testBillRun.id)
         .withGraphFetched('region')
     })
 
@@ -62,7 +62,7 @@ describe('Create Bill Run Event service', () => {
       expect(result.updatedAt).to.equal(testDate)
 
       expect(result.metadata).to.exist()
-      expect(result.metadata.batch.id).to.equal(billRun.billingBatchId)
+      expect(result.metadata.batch.id).to.equal(billRun.id)
     })
   })
 })
