@@ -27,7 +27,7 @@ describe('Sessions model', () => {
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await SessionsHelper.query().findById(testRecord.id)
+      const result = await SessionsModel.query().findById(testRecord.id)
 
       expect(result).to.be.an.instanceOf(SessionsModel)
       expect(result.id).to.equal(testRecord.id)
