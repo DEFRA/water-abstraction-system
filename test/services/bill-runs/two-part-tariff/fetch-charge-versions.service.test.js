@@ -274,5 +274,28 @@ describe('Fetch Charge Versions service', () => {
         expect(results).to.be.empty()
       })
     })
+
+    describe('because the licence ended (expired, lapsed or revoked) before the billing period', () => {
+      beforeEach(async () => {
+        const licence = await LicenceHelper.add({ licenceRef, regionId, expiredDate: new Date('2019-05-01') })
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
+          { licenceId: licence.id, licenceRef, regionCode }
+        )
+
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
+        })
+
+        await WorkflowHelper.add({ licenceId })
+      })
+
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(results).to.be.empty()
+      })
+    })
   })
 })
