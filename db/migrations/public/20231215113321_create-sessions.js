@@ -1,6 +1,6 @@
 'use strict'
 
-const tableName = 'review_return_results'
+const tableName = 'sessions'
 
 /**
  * @param { import("knex").Knex } knex
