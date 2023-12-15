@@ -42,7 +42,7 @@ describe('Fetch Charge Versions service', () => {
     const region = await RegionHelper.add({ naldRegionId: regionCode })
     regionId = region.id
 
-    await LicenceHelper.add({ id: licenceId, licenceRef, regionId })
+    await LicenceHelper.add({ id: licenceId, licenceRef, regionId, expiredDate: new Date('2024-05-01') })
   })
 
   describe('when there are applicable charge versions', () => {
@@ -108,7 +108,7 @@ describe('Fetch Charge Versions service', () => {
           id: 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd',
           licenceRef: '01/128',
           startDate: new Date('2022-01-01'),
-          expiredDate: null,
+          expiredDate: new Date('2024-05-01'),
           lapsedDate: null,
           revokedDate: null
         },
@@ -257,6 +257,38 @@ describe('Fetch Charge Versions service', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { licenceId, licenceRef, regionCode }
+        )
+
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
+        })
+
+        await WorkflowHelper.add({ licenceId })
+      })
+
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(results).to.be.empty()
+      })
+    })
+
+    describe('because the licence ended (expired, lapsed or revoked) before the billing period', () => {
+      beforeEach(async () => {
+        // NOTE: To make things spicy (!) we have the licence expire _after_ the billing period starts but revoked
+        // before it. Where The licence has dates in more than one of these fields, it is considered ended on the
+        // earliest of them (we have found real examples that confirm this is possible)
+        const licence = await LicenceHelper.add({
+          licenceRef,
+          regionId,
+          expiredDate: new Date('2019-05-01'),
+          revokedDate: new Date('2022-06-01')
+        })
+
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
+          { licenceId: licence.id, licenceRef, regionCode }
         )
 
         await ChargeReferenceHelper.add({

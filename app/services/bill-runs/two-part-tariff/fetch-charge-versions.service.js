@@ -21,6 +21,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * - be linked to a licence with is linked to the selected region
  * - have a start date before the end of the billing period
  * - not be linked to a licence in the workflow
+ * - not be linked to a licence that 'ended' before the billing period
  * - have a status of current
  * - be linked to a charge reference that is marked as two-part-tariff
  *
@@ -52,10 +53,26 @@ async function _fetch (regionCode, billingPeriod, licenceId) {
       'chargeVersions.endDate',
       'chargeVersions.status'
     ])
+    .innerJoinRelated('licence')
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
     .where(`chargeVersions.${whereClause.field}`, whereClause.value)
+    .where((builder) => {
+      builder
+        .whereNull('licence.expiredDate')
+        .orWhere('licence.expiredDate', '>=', billingPeriod.startDate)
+    })
+    .where((builder) => {
+      builder
+        .whereNull('licence.lapsedDate')
+        .orWhere('licence.lapsedDate', '>=', billingPeriod.startDate)
+    })
+    .where((builder) => {
+      builder
+        .whereNull('licence.revokedDate')
+        .orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
+    })
     .whereNotExists(
       Workflow.query()
         .select(1)
