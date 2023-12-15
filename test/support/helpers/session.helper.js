@@ -1,11 +1,11 @@
 'use strict'
 
 /**
- * @module SessionsHelper
+ * @module SessionHelper
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const SessionsModel = require('../../../app/models/session.model.js')
+const SessionModel = require('../../../app/models/session.model.js')
 
 /**
  * Add a new session
@@ -17,12 +17,12 @@ const SessionsModel = require('../../../app/models/session.model.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:SessionsModel} The instance of the newly created record
+ * @returns {module:SessionModel} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return SessionsModel.query()
+  return SessionModel.query()
     .insert({ ...insertData })
     .returning('*')
 }

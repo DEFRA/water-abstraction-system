@@ -9,10 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../support/helpers/database.helper.js')
-const SessionsHelper = require('../support/helpers/session.helper.js')
+const SessionHelper = require('../support/helpers/session.helper.js')
 
 // Thing under test
-const SessionsModel = require('../../app/models/session.model.js')
+const SessionModel = require('../../app/models/session.model.js')
 
 describe('Sessions model', () => {
   let testRecord
@@ -23,13 +23,13 @@ describe('Sessions model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await SessionsHelper.add()
+      testRecord = await SessionHelper.add()
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await SessionsModel.query().findById(testRecord.id)
+      const result = await SessionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(SessionsModel)
+      expect(result).to.be.an.instanceOf(SessionModel)
       expect(result.id).to.equal(testRecord.id)
       expect(result.data).to.equal({})
     })

@@ -2,12 +2,12 @@
 
 /**
  * Model for sessions
- * @module SessionstModel
+ * @module SessionModel
  */
 
 const BaseModel = require('./base.model.js')
 
-class SessionsModel extends BaseModel {
+class SessionModel extends BaseModel {
   static get tableName () {
     return 'sessions'
   }
@@ -20,4 +20,4 @@ class SessionsModel extends BaseModel {
   }
 }
 
-module.exports = SessionsModel
+module.exports = SessionModel
