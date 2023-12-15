@@ -5,7 +5,7 @@
  * @module ProcessBillRunService
  */
 
-const BillRunModel = require('../../../models/water/bill-run.model.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
 const BillRunError = require('../../../errors/bill-run.error.js')
 const ChargingModuleGenerateService = require('../../charging-module/generate-bill-run.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
@@ -25,7 +25,7 @@ const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
  * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`
  */
 async function go (billRun, billingPeriods) {
-  const { billingBatchId: billRunId } = billRun
+  const { id: billRunId } = billRun
 
   try {
     const startTime = process.hrtime.bigint()
@@ -117,7 +117,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   // .findByIds() so we spread it into an array
   const allLicenceIds = [...new Set(accumulatedLicenceIds)]
 
-  await UnflagUnbilledLicencesService.go(billRun.billingBatchId, allLicenceIds)
+  await UnflagUnbilledLicencesService.go(billRun.id, allLicenceIds)
 
   // We set `isPopulated` to `true` if at least one processing result was truthy
   const isPopulated = resultsOfProcessing.some(result => result)
@@ -125,7 +125,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
   if (!isPopulated) {
-    await _updateStatus(billRun.billingBatchId, 'empty')
+    await _updateStatus(billRun.id, 'empty')
     return
   }
 
@@ -133,7 +133,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
   await ChargingModuleGenerateService.go(billRun.externalId)
 
-  await LegacyRequestLib.post('water', `billing/batches/${billRun.billingBatchId}/refresh`)
+  await LegacyRequestLib.post('water', `billing/batches/${billRun.id}/refresh`)
 }
 
 function _logError (billRun, error) {

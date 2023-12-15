@@ -14,28 +14,28 @@ const {
 function go (billRun) {
   const {
     batchType,
-    billingBatchId,
     billRunNumber,
     createdAt,
     creditNoteCount,
     creditNoteValue,
+    id,
     invoiceCount,
     invoiceValue,
-    isSummer,
     netTotal,
     region,
     scheme,
     status,
+    summer,
     transactionFileReference,
     toFinancialYearEnding
   } = billRun
 
-  const billRunType = _billRunType(batchType, isSummer, scheme)
+  const billRunType = _billRunType(batchType, summer, scheme)
   const regionName = capitalize(region.displayName)
 
   return {
     billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType),
-    billRunId: billingBatchId,
+    billRunId: id,
     billRunNumber,
     billRunStatus: status,
     billRunTotal: _billRunTotal(netTotal),
@@ -74,7 +74,7 @@ function _billRunTotal (valueInPence) {
   return valueAsMoney
 }
 
-function _billRunType (batchType, isSummer, scheme) {
+function _billRunType (batchType, summer, scheme) {
   if (batchType !== 'two_part_tariff') {
     return capitalize(batchType)
   }
@@ -83,7 +83,7 @@ function _billRunType (batchType, isSummer, scheme) {
     return 'Two-part tariff'
   }
 
-  if (isSummer) {
+  if (summer) {
     return 'Two-part tariff summer'
   }
 

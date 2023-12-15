@@ -58,11 +58,11 @@ async function go (calculatedTransactions, bill, billLicence, billingPeriod) {
  * - Canal and River Trust agreement - section130Agreement
  * - Aggregate - aggregateFactor
  * - Charge Adjustment - adjustmentFactor
- * - Winter discount - isWinterOnly
+ * - Winter discount - winterOnly
  *
- * - Additional charges - isSupportedSource
+ * - Additional charges - supportedSource
  * - Additional charges - supportedSourceName
- * - Additional charges - isWaterCompanyCharge
+ * - Additional charges - waterCompanyCharge
  *
  * NOTE: This function will mutate the provided array of reversed transactions if one of the transactions in it will
  * cancel the calculated transaction; in this case, we remove the reversed transaction from the array as it can only
@@ -84,10 +84,10 @@ function _cancelCalculatedTransaction (calculatedTransaction, reversedTransactio
       reversedTransaction.section130Agreement === calculatedTransaction.section130Agreement &&
       reversedTransaction.aggregateFactor === calculatedTransaction.aggregateFactor &&
       reversedTransaction.adjustmentFactor === calculatedTransaction.adjustmentFactor &&
-      reversedTransaction.isWinterOnly === calculatedTransaction.isWinterOnly &&
-      reversedTransaction.isSupportedSource === calculatedTransaction.isSupportedSource &&
+      reversedTransaction.winterOnly === calculatedTransaction.winterOnly &&
+      reversedTransaction.supportedSource === calculatedTransaction.supportedSource &&
       reversedTransaction.supportedSourceName === calculatedTransaction.supportedSourceName &&
-      reversedTransaction.isWaterCompanyCharge === calculatedTransaction.isWaterCompanyCharge
+      reversedTransaction.waterCompanyCharge === calculatedTransaction.waterCompanyCharge
   })
 
   if (result === -1) {

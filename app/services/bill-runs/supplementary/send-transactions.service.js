@@ -6,7 +6,7 @@
  */
 
 const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/water/bill-run.model.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
 const ChargingModuleCreateTransactionService = require('../../charging-module/create-transaction.service.js')
 const ChargingModuleCreateTransactionPresenter = require('../../../presenters/charging-module/create-transaction.presenter.js')
 
@@ -50,7 +50,7 @@ async function go (licence, bill, billLicence, billRunExternalId, transactions) 
 async function _sendTransactionToChargingModule (transaction, bill, licence, billRunExternalId) {
   const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
     transaction,
-    bill.invoiceAccountNumber,
+    bill.accountNumber,
     licence
   )
 
@@ -60,7 +60,7 @@ async function _sendTransactionToChargingModule (transaction, bill, licence, bil
 function _updateTransaction (transaction, chargingModuleResponse, billLicence) {
   transaction.status = 'charge_created'
   transaction.externalId = chargingModuleResponse.response.body.transaction.id
-  transaction.billingInvoiceLicenceId = billLicence.billingInvoiceLicenceId
+  transaction.billLicenceId = billLicence.id
 }
 
 module.exports = {

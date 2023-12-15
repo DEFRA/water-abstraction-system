@@ -27,8 +27,8 @@ function go (billLicence) {
   const { creditTotal, debitTotal, total } = _totals(transactions)
 
   return {
-    accountNumber: bill.invoiceAccountNumber,
-    billingInvoiceId: bill.billingInvoiceId,
+    accountNumber: bill.accountNumber,
+    billId: bill.id,
     creditTotal,
     debitTotal,
     displayCreditDebitTotals,
@@ -63,10 +63,10 @@ function _totals (transactions) {
   let total = 0
 
   transactions.forEach((transaction) => {
-    const { isCredit, netAmount } = transaction
+    const { credit, netAmount } = transaction
 
     total += netAmount
-    if (isCredit) {
+    if (credit) {
       creditTotal += netAmount
     } else {
       debitTotal += netAmount

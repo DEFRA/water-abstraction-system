@@ -88,7 +88,6 @@ describe('Review Result model', () => {
           .findById(testRecord.id)
           .withGraphFetched('reviewReturnResults')
 
-        console.log('Result :', result)
         expect(result).to.be.instanceOf(ReviewResultModel)
         expect(result.id).to.equal(testRecord.id)
 

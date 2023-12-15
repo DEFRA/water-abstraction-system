@@ -5,7 +5,7 @@ const BillingAccountsController = require('../controllers/billing-accounts.contr
 const routes = [
   {
     method: 'POST',
-    path: '/billing-accounts/{invoiceAccountId}/change-address',
+    path: '/billing-accounts/{billingAccountId}/change-address',
     handler: BillingAccountsController.changeAddress,
     options: {
       app: {

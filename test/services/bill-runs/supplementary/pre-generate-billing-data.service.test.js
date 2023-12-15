@@ -33,8 +33,8 @@ describe('Pre-generate billing data service', () => {
   ]
 
   const licences = [
-    { licenceId: 'caf6d22b-f235-4f82-9867-b98c884432b6', licenceRef: 'AT/CURR/MONTHLY/01' },
-    { licenceId: 'e35636a1-9115-4e69-830d-48eb80738838', licenceRef: 'AT/CURR/MONTHLY/02' }
+    { id: 'caf6d22b-f235-4f82-9867-b98c884432b6', licenceRef: 'AT/CURR/MONTHLY/01' },
+    { id: 'e35636a1-9115-4e69-830d-48eb80738838', licenceRef: 'AT/CURR/MONTHLY/02' }
   ]
 
   let chargeVersions
@@ -46,10 +46,10 @@ describe('Pre-generate billing data service', () => {
   describe('when the service is called', () => {
     beforeEach(async () => {
       chargeVersions = [
-        { invoiceAccountId: billingAccounts[0].id, licence: licences[0] },
-        { invoiceAccountId: billingAccounts[1].id, licence: licences[0] },
-        { invoiceAccountId: billingAccounts[1].id, licence: licences[1] },
-        { invoiceAccountId: billingAccounts[1].id, licence: licences[1] }
+        { billingAccountId: billingAccounts[0].id, licence: licences[0] },
+        { billingAccountId: billingAccounts[1].id, licence: licences[0] },
+        { billingAccountId: billingAccounts[1].id, licence: licences[1] },
+        { billingAccountId: billingAccounts[1].id, licence: licences[1] }
       ]
 
       Sinon.stub(FetchBillingAccountsService, 'go').resolves(billingAccounts)
@@ -69,7 +69,7 @@ describe('Pre-generate billing data service', () => {
         const entries = Object.entries(result)
 
         entries.forEach(([key, value]) => {
-          expect(key).to.equal(value.invoiceAccountId)
+          expect(key).to.equal(value.billingAccountId)
         })
       })
 
@@ -82,13 +82,13 @@ describe('Pre-generate billing data service', () => {
           const matchingBillingAccount = billingAccounts.find((billingAccount) => {
             return key === billingAccount.id
           })
-          expect(value.invoiceAccountNumber).to.equal(matchingBillingAccount.accountNumber)
+          expect(value.accountNumber).to.equal(matchingBillingAccount.accountNumber)
         })
       })
     })
 
     describe('returns an object with a billLicences property', () => {
-      it('has one key per combination of billing invoice id and licence id', async () => {
+      it('has one key per combination of bill id and licence id', async () => {
         const { billLicences: result } = await PreGenerateBillingDataService.go(chargeVersions, billRunId, billingPeriod)
 
         const keys = Object.entries(result)
@@ -101,7 +101,7 @@ describe('Pre-generate billing data service', () => {
         const entries = Object.entries(result)
 
         entries.forEach(([key, value]) => {
-          expect(key).to.equal(`${value.billingInvoiceId}-${value.licenceId}`)
+          expect(key).to.equal(`${value.billId}-${value.licenceId}`)
         })
       })
 
@@ -112,7 +112,7 @@ describe('Pre-generate billing data service', () => {
 
         entries.forEach(([key, value]) => {
           const matchingLicence = licences.find((licence) => {
-            return key === `${value.billingInvoiceId}-${licence.licenceId}`
+            return key === `${value.billId}-${licence.id}`
           })
           expect(value.licenceRef).to.equal(matchingLicence.licenceRef)
         })

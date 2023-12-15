@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
@@ -52,13 +52,13 @@ describe('Charge module create bill run service', () => {
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+      const result = await ChargingModuleCreateBillRunService.go(testRegion.id, 'sroc')
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the bill run id and number in the `response`', async () => {
-      const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+      const result = await ChargingModuleCreateBillRunService.go(testRegion.id, 'sroc')
 
       expect(result.response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
       expect(result.response.body.billRun.billRunNumber).to.equal(10004)
@@ -87,13 +87,13 @@ describe('Charge module create bill run service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.id, 'sroc')
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.id, 'sroc')
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -110,13 +110,13 @@ describe('Charge module create bill run service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.id, 'sroc')
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateBillRunService.go(testRegion.regionId, 'sroc')
+        const result = await ChargingModuleCreateBillRunService.go(testRegion.id, 'sroc')
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()
