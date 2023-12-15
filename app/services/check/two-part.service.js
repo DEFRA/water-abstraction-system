@@ -57,8 +57,10 @@ function _billingPeriod () {
 async function _determineRegionId (identifier, type) {
   if (type === 'region') {
     const region = await RegionModel.query()
-      .select('identifier')
+      .select('id')
       .where('naldRegionId', identifier)
+      .limit(1)
+      .first()
 
     return region.id
   }
