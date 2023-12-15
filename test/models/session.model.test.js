@@ -9,10 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../support/helpers/database.helper.js')
-const SessionsHelper = require('../support/helpers/sessions.helper.js')
+const SessionsHelper = require('../support/helpers/session.helper.js')
 
 // Thing under test
-const SessionsModel = require('../../app/models/sessions.model.js')
+const SessionsModel = require('../../app/models/session.model.js')
 
 describe('Sessions model', () => {
   let testRecord

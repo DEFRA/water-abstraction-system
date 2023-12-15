@@ -5,7 +5,7 @@
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const SessionsModel = require('../../../app/models/sessions.model.js')
+const SessionsModel = require('../../../app/models/session.model.js')
 
 /**
  * Add a new session
