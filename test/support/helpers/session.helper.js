@@ -4,7 +4,6 @@
  * @module SessionHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const SessionModel = require('../../../app/models/session.model.js')
 
 /**
@@ -36,10 +35,7 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here in the database
  */
 function defaults (data = {}) {
-  const defaults = {
-    id: generateUUID(),
-    data: {}
-  }
+  const defaults = {}
 
   return {
     ...defaults,

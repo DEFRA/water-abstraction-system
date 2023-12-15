@@ -14,7 +14,7 @@ const SessionHelper = require('../support/helpers/session.helper.js')
 // Thing under test
 const SessionModel = require('../../app/models/session.model.js')
 
-describe('Sessions model', () => {
+describe('Session model', () => {
   let testRecord
 
   beforeEach(async () => {
