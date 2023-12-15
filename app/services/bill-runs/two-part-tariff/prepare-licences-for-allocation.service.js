@@ -5,7 +5,7 @@
  * @module PrepareLicencesForAllocationService
  */
 
-const DetermineAbstractionPeriodService = require('../../check/determine-abstraction-periods.service.js')
+const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../../lib/general.lib.js')
