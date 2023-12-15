@@ -157,7 +157,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    it('returns the charge versions order by licence reference', async () => {
+    it('returns the charge versions ordered by licence reference', async () => {
       const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       expect(results[0].licence.licenceRef).to.equal('01/128')
