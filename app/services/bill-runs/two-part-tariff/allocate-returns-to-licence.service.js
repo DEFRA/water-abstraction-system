@@ -6,8 +6,10 @@
  */
 
 const { periodsOverlap } = require('../../../lib/general.lib.js')
+const ReviewChargeElementResultModel = require('../../../models/review-charge-element-result.model.js')
+const ReviewReturnResultModel = require('../../../models/review-return-result.model.js')
 
-function go (licences) {
+async function go (licences) {
   licences.forEach((licence) => {
     const { chargeVersions, returnLogs } = licence
 
@@ -23,12 +25,48 @@ function go (licences) {
           _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod, chargeReference)
 
           // PERSIST element ???
+          const chargeElementToPersist = {
+            chargeElementId: chargeElement.id,
+            allocated: chargeElement.allocated,
+            aggregate: chargeReference.aggregate,
+            chargeDatesOverlap: chargeElement.chargeDatesOverlap
+          }
+
+          _persistDataToReviewChargeElementResult(chargeElementToPersist)
         })
       })
     })
 
-    // PERSIST returns
+    returnLogs.forEach((returnLog) => {
+      // PERSIST returns
+      const returnResultToPersist = {
+        returnId: returnLog.id,
+        returnReference: returnLog.returnReference,
+        startDate: returnLog.start_date,
+        endDate: returnLog.endDate,
+        dueDate: returnLog.dueDate,
+        receivedDate: returnLog.receivedDate,
+        status: returnLog.status,
+        underQuery: returnLog.underQuery,
+        nilReturn: returnLog.nilReturn,
+        description: returnLog.description,
+        purposes: returnLog.purposes,
+        quantity: returnLog.quantity,
+        allocated: returnLog.allocated,
+        abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
+      }
+
+      _persistDataToReviewReturnResult(returnResultToPersist)
+    })
   })
+}
+
+async function _persistDataToReviewChargeElementResult (chargeElementToPersist) {
+  await ReviewChargeElementResultModel.query().insert(chargeElementToPersist)
+}
+
+async function _persistDataToReviewReturnResult (dataToPersist) {
+  await ReviewReturnResultModel.query().insert(dataToPersist)
 }
 
 function _chargeDatesOverlap (matchedLine, chargePeriod) {
