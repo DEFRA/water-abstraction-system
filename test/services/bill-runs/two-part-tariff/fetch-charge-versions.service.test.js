@@ -15,403 +15,263 @@ const ChargeVersionHelper = require('../../../support/helpers/charge-version.hel
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-charge-versions.service')
 
 describe('Fetch Charge Versions service', () => {
-  describe('when there are charge versions', () => {
-    let region
-    let regionId
-    let licence
-    let testRecords
-    let billingPeriod
+  const billingPeriod = {
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2023-03-31')
+  }
+  const regionCode = 5
+  const licenceId = 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd'
+  const licenceRef = '01/128'
+
+  let chargeCategoryId
+  let regionId
+
+  beforeEach(async () => {
+    await DatabaseHelper.clean()
+
+    const chargeCategory = await ChargeCategoryHelper.add({ reference: '4.3.41' })
+    chargeCategoryId = chargeCategory.id
+
+    const region = await RegionHelper.add({ naldRegionId: regionCode })
+    regionId = region.id
+
+    await LicenceHelper.add({ id: licenceId, licenceRef, regionId })
+  })
+
+  describe('when there are applicable charge versions', () => {
+    const chargeVersionId = '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59'
 
     beforeEach(async () => {
-      await DatabaseHelper.clean()
+      // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
+      // second part is to create another charge version with a different licence ref so we can test the order of the
+      // results
+      await ChargeVersionHelper.add({ id: chargeVersionId, licenceId, licenceRef, regionCode })
 
-      region = await RegionHelper.add({ naldRegionId: 5 })
-      regionId = region.id
-
-      billingPeriod = {
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2023-03-31')
-      }
-
-      licence = await LicenceHelper.add({ regionId })
-    })
-
-    describe('and the scheme is SROC', () => {
-      let chargeCategory
-      let srocChargeReference
-      let srocChargeElement
-
-      beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
-        const srocChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
-        )
-
-        chargeCategory = ChargeCategoryHelper.add()
-
-        srocChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: srocChargeVersion.id,
-          chargeCategoryId: chargeCategory.id,
-          adjustments: { s127: true, aggregate: 0.562114443 }
-        })
-
-        srocChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: srocChargeReference.id
-        })
-
-        testRecords = [
-          srocChargeVersion,
-          srocChargeReference,
-          srocChargeElement
-        ]
+      const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
+        id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
+        chargeVersionId,
+        chargeCategoryId,
+        adjustments: { s127: true, aggregate: 0.562114443 }
       })
 
-      it('includes the related charge references and charge elements', async () => {
-        const expectedLicence = {
-          id: licence.id,
-          licenceRef: licence.licenceRef,
-          startDate: licence.startDate,
+      const purposeId = '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b'
+      await PurposeHelper.add({ id: purposeId, legacyId: '420' })
+
+      await ChargeElementHelper.add({
+        id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
+        chargeReferenceId,
+        authorisedAnnualQuantity: 100,
+        purposeId
+      })
+
+      await ChargeElementHelper.add({
+        id: 'dab91d76-6778-417f-8f2d-9124a270e926',
+        chargeReferenceId,
+        authorisedAnnualQuantity: 200,
+        purposeId
+      })
+
+      // Second charge version to test ordering
+      const otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId })
+      const chargeVersion = await ChargeVersionHelper.add(
+        { licenceId: otherLicence.id, licenceRef: '01/130', regionCode }
+      )
+      const chargeReference = await ChargeReferenceHelper.add({
+        chargeVersionId: chargeVersion.id,
+        chargeCategoryId,
+        adjustments: { s127: true }
+      })
+      await ChargeElementHelper.add({
+        chargeReferenceId: chargeReference.id,
+        authorisedAnnualQuantity: 100,
+        purposeId
+      })
+    })
+
+    it('returns the charge version with related licence, charge references and charge elements', async () => {
+      const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+      expect(results).to.have.length(2)
+      expect(results[0]).to.equal({
+        id: '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59',
+        startDate: new Date('2022-04-01'),
+        endDate: null,
+        status: 'current',
+        licence: {
+          id: 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd',
+          licenceRef: '01/128',
+          startDate: new Date('2022-01-01'),
           expiredDate: null,
           lapsedDate: null,
           revokedDate: null
-        }
-
-        const expectedChargeReferenceAndElement = {
-          id: srocChargeReference.id,
-          description: srocChargeReference.description,
+        },
+        chargeReferences: [{
+          id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
+          volume: 6.82,
+          description: 'Mineral washing',
           aggregate: 0.562114443,
           s127: 'true',
-          chargeCategory: null,
-          chargeElements: [{
-            id: srocChargeElement.id,
-            description: srocChargeElement.description,
-            abstractionPeriodStartDay: srocChargeElement.abstractionPeriodStartDay,
-            abstractionPeriodStartMonth: srocChargeElement.abstractionPeriodStartMonth,
-            abstractionPeriodEndDay: srocChargeElement.abstractionPeriodEndDay,
-            abstractionPeriodEndMonth: srocChargeElement.abstractionPeriodEndMonth,
-            authorisedAnnualQuantity: srocChargeElement.authorisedAnnualQuantity,
-            purpose: null
-          }]
-        }
-
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-        expect(result).to.have.length(1)
-        expect(result[0].id).to.equal(testRecords[0].id)
-        expect(result[0].status).to.equal('current')
-        expect(result[0].licence).to.equal(expectedLicence)
-        expect(result[0].chargeReferences[0]).to.equal(expectedChargeReferenceAndElement)
-      })
-
-      it('returns charge versions with correct ordering based on licence reference', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-        expect(result).to.have.length(1)
+          chargeCategory: {
+            reference: '4.3.41',
+            shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
+            subsistenceCharge: 12000
+          },
+          chargeElements: [
+            {
+              id: 'dab91d76-6778-417f-8f2d-9124a270e926',
+              description: 'Trickle Irrigation - Direct',
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              authorisedAnnualQuantity: 200,
+              purpose: {
+                id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
+                legacyId: '420',
+                description: 'Spray Irrigation - Storage'
+              }
+            },
+            {
+              id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
+              description: 'Trickle Irrigation - Direct',
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 4,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              authorisedAnnualQuantity: 100,
+              purpose: {
+                id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
+                legacyId: '420',
+                description: 'Spray Irrigation - Storage'
+              }
+            }
+          ]
+        }]
       })
     })
 
-    describe('and the scheme is PRE SROC', () => {
-      beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
+    it('returns the charge versions ordered by licence reference', async () => {
+      const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        await ChargeVersionHelper.add(
+      expect(results[0].licence.licenceRef).to.equal('01/128')
+      expect(results[1].licence.licenceRef).to.equal('01/130')
+    })
+
+    it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
+      const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+      expect(results[0].chargeReferences[0].chargeElements[0].id).to.equal('dab91d76-6778-417f-8f2d-9124a270e926')
+      expect(results[0].chargeReferences[0].chargeElements[1].id).to.equal('1a966bd1-dbce-499d-ae94-b1d6ab72f0b2')
+    })
+  })
+
+  describe('when there are no applicable charge versions', () => {
+    describe("because the scheme is 'presroc'", () => {
+      beforeEach(async () => {
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { scheme: 'alcs', licenceId, licenceRef, regionCode: 5 }
         )
-      })
 
-      it('doesnt return the charge version', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-        expect(result).to.have.length(0)
-      })
-    })
-
-    describe('and the start date', () => {
-      describe('is before the billing period end', () => {
-        let testRecordsInDate
-        let chargeCategory
-        let inDateChargeReference
-        let inDateChargeElement
-
-        beforeEach(async () => {
-          const { id: licenceId, licenceRef } = licence
-
-          const inDateChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
-          )
-
-          chargeCategory = ChargeCategoryHelper.add()
-
-          inDateChargeReference = await ChargeReferenceHelper.add({
-            chargeVersionId: inDateChargeVersion.id,
-            billingChargeCategoryId: chargeCategory.id,
-            adjustments: { s127: true, aggregate: 0.562114443 }
-          })
-
-          inDateChargeElement = await ChargeElementHelper.add({
-            chargeReferenceId: inDateChargeReference.id
-          })
-
-          testRecordsInDate = [
-            inDateChargeVersion,
-            inDateChargeReference,
-            inDateChargeElement
-          ]
-        })
-
-        it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(result).to.have.length(1)
-          expect(result[0].id).to.include(testRecordsInDate[0].id)
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
         })
       })
 
-      describe('is after the billing period end', () => {
-        let chargeCategory
-        let notInDateChargeReference
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        beforeEach(async () => {
-          const { id: licenceId, licenceRef } = licence
-
-          const notInDateChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode: 5 }
-          )
-
-          chargeCategory = ChargeCategoryHelper.add()
-
-          notInDateChargeReference = await ChargeReferenceHelper.add({
-            chargeVersionId: notInDateChargeVersion.id,
-            billingChargeCategoryId: chargeCategory.id,
-            adjustments: { s127: true, aggregate: 0.562114443 }
-          })
-
-          await ChargeElementHelper.add({
-            chargeReferenceId: notInDateChargeReference.id
-          })
-        })
-
-        it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(result).to.have.length(0)
-          expect(result).to.equal([])
-        })
+        expect(results).to.be.empty()
       })
     })
 
-    describe('and the charge version has a status of current', () => {
-      let testRecordsCurrent
-      let chargeCategory
-      let currentChargeReference
-      let currentChargeElement
-
+    describe('because the start date is after the billing period ends', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
-        const currentChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
+          { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
-        currentChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: currentChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
-          adjustments: { s127: true, aggregate: 0.562114443 }
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
         })
-
-        currentChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: currentChargeReference.id
-        })
-
-        testRecordsCurrent = [
-          currentChargeVersion,
-          currentChargeReference,
-          currentChargeElement
-        ]
       })
 
-      it('returns the charge versions that are applicable', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(1)
-        expect(result[0].id).to.include(testRecordsCurrent[0].id)
+        expect(results).to.be.empty()
       })
     })
 
-    describe('and the charge version doesnt have a status of current', () => {
-      let chargeCategory
-      let notCurrentChargeReference
-
+    describe("because the status is not 'current'", () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
-        const notCurrentChargeVersion = await ChargeVersionHelper.add(
-          { status: 'superseded', licenceId, licenceRef, regionCode: 5 }
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
+          { licenceId, licenceRef, regionCode, status: 'superseded' }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
-        notCurrentChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: notCurrentChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
-          adjustments: { s127: true, aggregate: 0.562114443 }
-        })
-
-        await ChargeElementHelper.add({
-          chargeReferenceId: notCurrentChargeReference.id
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
         })
       })
 
-      it('returns the charge versions that are applicable', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(results).to.be.empty()
       })
     })
 
-    describe('and the licence associated with it', () => {
-      let testRecordsSameRegion
-      let chargeCategory
-      let sameRegionChargeReference
-      let sameRegionChargeElement
-
+    describe('because the region is different', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
-        const sameRegionChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
+          { licenceId, licenceRef, regionCode: 9 }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
-        sameRegionChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: sameRegionChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
-          adjustments: { s127: true, aggregate: 0.562114443 }
-        })
-
-        sameRegionChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: sameRegionChargeReference.id
-        })
-
-        testRecordsSameRegion = [
-          sameRegionChargeVersion,
-          sameRegionChargeReference,
-          sameRegionChargeElement
-        ]
-      })
-
-      describe('is in workflow', () => {
-        beforeEach(async () => {
-          await WorkflowHelper.add({ licenceId: licence.id })
-        })
-
-        it('does not return the related charge versions', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(result).to.equal([])
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
         })
       })
 
-      describe('has a soft-deleted workflow record', () => {
-        beforeEach(async () => {
-          await WorkflowHelper.add({ licenceId: licence.id, deletedAt: new Date('2022-04-01') })
-        })
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(result).to.have.length(1)
-          expect(result[0].id).to.include(testRecordsSameRegion[0].id)
-        })
-      })
-
-      describe('has the same region code', () => {
-        it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(result).to.have.length(1)
-          expect(result[0].id).to.include(testRecordsSameRegion[0].id)
-        })
-      })
-
-      describe('doesnt have the same region code', () => {
-        let differentRegionChargeReference
-
-        beforeEach(async () => {
-          const { id: licenceId, licenceRef } = licence
-
-          const differentRegionChargeVersion = await ChargeVersionHelper.add(
-            { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 4 }
-          )
-
-          chargeCategory = ChargeCategoryHelper.add()
-
-          differentRegionChargeReference = await ChargeReferenceHelper.add({
-            chargeVersionId: differentRegionChargeVersion.id,
-            billingChargeCategoryId: chargeCategory.id,
-            adjustments: { s127: true, aggregate: 0.562114443 }
-          })
-
-          await ChargeElementHelper.add({
-            chargeReferenceId: differentRegionChargeReference.id
-          })
-        })
-
-        it('returns the charge versions that are applicable', async () => {
-          const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
-
-          expect(result).to.have.length(1)
-          expect(result[0].id).to.include(testRecordsSameRegion[0].id)
-        })
+        expect(results).to.be.empty()
       })
     })
 
-    describe('when there are multiple charge elements associated with the charge reference,', () => {
-      let secondSrocChargeElement
-      let firstSrocChargeElement
-      let firstSrocChargeReference
-      let chargeCategory
-
+    describe('because the licence is linked to a workflow', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = licence
-
-        const srocChargeVersion = await ChargeVersionHelper.add(
-          { startDate: new Date('2022-04-01'), licenceId, licenceRef, regionCode: 5 }
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
+          { licenceId, licenceRef, regionCode }
         )
 
-        chargeCategory = ChargeCategoryHelper.add()
-
-        firstSrocChargeReference = await ChargeReferenceHelper.add({
-          chargeVersionId: srocChargeVersion.id,
-          billingChargeCategoryId: chargeCategory.id,
-          adjustments: { s127: true, aggregate: 0.562114443 }
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
         })
 
-        firstSrocChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: firstSrocChargeReference.id
-        })
-
-        secondSrocChargeElement = await ChargeElementHelper.add({
-          chargeReferenceId: firstSrocChargeReference.id,
-          authorisedAnnualQuantity: firstSrocChargeElement.authorisedAnnualQuantity + 10
-        })
+        await WorkflowHelper.add({ licenceId })
       })
 
-      it('returns the charge elements with correct ordering based on authorised annual quantity', async () => {
-        const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
-        expect(result[0].chargeReferences[0].chargeElements[0].authorisedAnnualQuantity).to.equal(secondSrocChargeElement.authorisedAnnualQuantity)
-        expect(result[0].chargeReferences[0].chargeElements[1].authorisedAnnualQuantity).to.equal(firstSrocChargeElement.authorisedAnnualQuantity)
+        expect(results).to.be.empty()
       })
     })
   })
