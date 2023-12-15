@@ -42,7 +42,7 @@ describe('Fetch Charge Versions service', () => {
     const region = await RegionHelper.add({ naldRegionId: regionCode })
     regionId = region.id
 
-    await LicenceHelper.add({ id: licenceId, licenceRef, regionId })
+    await LicenceHelper.add({ id: licenceId, licenceRef, regionId, expiredDate: new Date('2024-05-01') })
   })
 
   describe('when there are applicable charge versions', () => {
@@ -108,7 +108,7 @@ describe('Fetch Charge Versions service', () => {
           id: 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd',
           licenceRef: '01/128',
           startDate: new Date('2022-01-01'),
-          expiredDate: null,
+          expiredDate: new Date('2024-05-01'),
           lapsedDate: null,
           revokedDate: null
         },
