@@ -99,7 +99,8 @@ function context (request) {
       user: request.auth.credentials?.user,
       scope: request.auth.credentials?.scope,
       permission: request.auth.credentials?.permission
-    }
+    },
+    navigationLinks: _navigationLinks(request.auth)
   }
 }
 
@@ -135,6 +136,19 @@ function prepare (config, next) {
   config.compileOptions.environment = environment
 
   return next()
+}
+
+function _navigationLinks (auth) {
+  if (!auth.isAuthenticated) {
+    return []
+  }
+
+  const links = [
+    { href: '/account/update-password', text: 'Change password' },
+    { href: '/signout', text: 'Sign out' }
+  ]
+
+  return links
 }
 
 module.exports = ViewsPlugin
