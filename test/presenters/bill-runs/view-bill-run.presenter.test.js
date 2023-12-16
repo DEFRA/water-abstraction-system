@@ -44,7 +44,7 @@ describe.only('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'billsCount' property", () => {
+    describe.only("the 'billsCount' property", () => {
       describe('when the sum of the invoice and credit count is 1', () => {
         beforeEach(() => {
           billRun.creditNoteCount = 0
@@ -52,26 +52,75 @@ describe.only('View Bill Run presenter', () => {
         })
 
         describe('and there are no zero-value bills', () => {
-          it('returns the sum plus the bill run type as singular (1 Supplementary bill)', () => {
+          it('returns 1 plus the bill run type as singular (1 Supplementary bill)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
             expect(result.billsCount).to.equal('1 Supplementary bill')
+          })
+        })
+
+        describe('and there is 1 zero-value bill', () => {
+          beforeEach(() => {
+            billRunSummaries[0].netAmount = 0
+          })
+
+          it('returns 1 plus the bill run type and zero-value as singular (1 Supplementary bill and 1 zero value bill)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
+
+            expect(result.billsCount).to.equal('1 Supplementary bill and 1 zero value bill')
+          })
+        })
+
+        describe('and there are multiple zero-value bills', () => {
+          beforeEach(() => {
+            billRunSummaries[0].netAmount = 0
+            billRunSummaries[1].netAmount = 0
+          })
+
+          it('returns 1 plus the bill run type as singular but zero-value pluralised (1 Supplementary bill and 2 zero value bills)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
+
+            expect(result.billsCount).to.equal('1 Supplementary bill and 2 zero value bills')
           })
         })
       })
 
       describe('when the sum of the invoice and credit count is more than 1', () => {
         beforeEach(() => {
-          billRun.batchType = 'annual'
           billRun.creditNoteCount = 5
           billRun.invoiceCount = 7
         })
 
         describe('and there are no zero-value bills', () => {
-          it('returns the sum plus the bill run type pluralised (12 Annual bills)', () => {
+          it('returns the sum plus the bill run type pluralised (12 Supplementary bills)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
-            expect(result.billsCount).to.equal('12 Annual bills')
+            expect(result.billsCount).to.equal('12 Supplementary bills')
+          })
+        })
+
+        describe('and there is 1 zero-value bill', () => {
+          beforeEach(() => {
+            billRunSummaries[0].netAmount = 0
+          })
+
+          it('returns the sum plus the bill run type pluralised and zero-value as singular (12 Supplementary bills and 1 zero value bill)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
+
+            expect(result.billsCount).to.equal('12 Supplementary bills and 1 zero value bill')
+          })
+        })
+
+        describe('and there are multiple zero-value bills', () => {
+          beforeEach(() => {
+            billRunSummaries[0].netAmount = 0
+            billRunSummaries[1].netAmount = 0
+          })
+
+          it('returns the sum plus the bill run type and zero-value pluralised (12 Supplementary bills and 2 zero value bills)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
+
+            expect(result.billsCount).to.equal('1 Supplementary bill and 2 zero value bills')
           })
         })
       })
@@ -323,6 +372,17 @@ function _testBillSummaries () {
       agentName: 'Geordie Leforge',
       allLicences: '17/53/001/G/782',
       waterCompany: false
+    },
+    {
+      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+      accountNumber: 'E22288888A',
+      netAmount: 21317800,
+      financialYearEnding: 2023,
+      companyName: 'Acme Water Services Ltd',
+      agentName: null,
+      allLicences: '17/53/001/A/101,17/53/002/B/205,17/53/002/C/308',
+      waterCompany: true
     }
   ]
 }
