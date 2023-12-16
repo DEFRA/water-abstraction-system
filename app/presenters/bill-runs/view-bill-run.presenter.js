@@ -34,7 +34,7 @@ function go (billRun, billRunSummaries) {
   const regionName = capitalize(region.displayName)
 
   return {
-    billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType),
+    billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billRunSummaries),
     billRunId: id,
     billRunNumber,
     billRunStatus: status,
@@ -54,14 +54,30 @@ function go (billRun, billRunSummaries) {
   }
 }
 
-function _billsCount (creditsCount, debitsCount, billRunType) {
+function _billsCount (creditsCount, debitsCount, billRunType, billRunSummaries) {
   const total = creditsCount + debitsCount
 
+  // NOTE: A bill run wouldn't exist if there was just a single zero value bill on it. So, we can safely assume if the
+  // total is 1 it's not for a zero value bill and we can immediately return.
   if (total === 1) {
     return `1 ${billRunType} bill`
   }
 
-  return `${total} ${billRunType} bills`
+  const zeroValueBills = billRunSummaries.filter((billRunSummary) => {
+    return billRunSummary.netAmount === 0
+  })
+
+  const numberOfZeroValueBills = zeroValueBills.length
+
+  if (numberOfZeroValueBills === 0) {
+    return `${total} ${billRunType} bills`
+  }
+
+  if (numberOfZeroValueBills === 1) {
+    return `${total} ${billRunType} bills and 1 zero value bill`
+  }
+
+  return `${total} ${billRunType} bills and ${numberOfZeroValueBills} zero value bills`
 }
 
 function _billRunTotal (valueInPence) {
