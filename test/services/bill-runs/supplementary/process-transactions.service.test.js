@@ -15,8 +15,8 @@ const FetchPreviousTransactionsService = require('../../../../app/services/bill-
 const ProcessTransactionsService = require('../../../../app/services/bill-runs/supplementary/process-transactions.service.js')
 
 describe('Process Transactions service', () => {
-  const bill = { billingInvoiceId: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
-  const billLicence = { billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
+  const bill = { id: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
+  const billLicence = { id: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
 
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
@@ -134,7 +134,7 @@ describe('Process Transactions service', () => {
             expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
             expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
-            expect(result[1].isCredit).to.be.true()
+            expect(result[1].credit).to.be.true()
           })
         })
       })
@@ -353,7 +353,7 @@ describe('Process Transactions service', () => {
     describe('when the winter discount differs', () => {
       beforeEach(() => {
         const previousTransactions = [
-          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isWinterOnly: true })
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { winterOnly: true })
         ]
 
         Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
@@ -376,7 +376,7 @@ describe('Process Transactions service', () => {
     describe('when if it is a supported source differs (additional charge)', () => {
       beforeEach(() => {
         const previousTransactions = [
-          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isSupportedSource: true })
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { supportedSource: true })
         ]
 
         Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
@@ -422,7 +422,7 @@ describe('Process Transactions service', () => {
     describe('when the water company flag differs (additional charge)', () => {
       beforeEach(() => {
         const previousTransactions = [
-          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { isWaterCompanyCharge: true })
+          _generatePreviousTransaction('4.10.1', 365, 'PREVIOUS_TRANSACTION', { waterCompanyCharge: true })
         ]
 
         Sinon.stub(FetchPreviousTransactionsService, 'go').resolves(previousTransactions)
@@ -465,9 +465,9 @@ describe('Process Transactions service', () => {
 
 function _generateCalculatedTransaction (chargeCategoryCode, billableDays, testReference, changes = {}) {
   const defaultProperties = {
-    billingTransactionId: '61abdc15-7859-4783-9622-6cb8de7f2461',
-    billingInvoiceLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
-    isCredit: false,
+    id: '61abdc15-7859-4783-9622-6cb8de7f2461',
+    billLicenceId: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+    credit: false,
     status: 'candidate',
     chargeType: 'standard',
     chargeCategoryCode,
@@ -477,10 +477,10 @@ function _generateCalculatedTransaction (chargeCategoryCode, billableDays, testR
     section130Agreement: false,
     aggregateFactor: 1,
     adjustmentFactor: 1,
-    isWinterOnly: false,
-    isSupportedSource: false,
+    winterOnly: false,
+    supportedSource: false,
     supportedSourceName: null,
-    isWaterCompanyCharge: false,
+    waterCompanyCharge: false,
     purposes: testReference
   }
 
@@ -492,9 +492,9 @@ function _generateCalculatedTransaction (chargeCategoryCode, billableDays, testR
 
 function _generatePreviousTransaction (chargeCategoryCode, billableDays, testReference, changes = {}) {
   const defaultProperties = {
-    billingTransactionId: '8d68eb26-d054-47a7-aee8-cd93a24fa860',
-    billingInvoiceLicenceId: 'a76b3ab3-d70d-4fb0-8d72-2e2cdd334729',
-    isCredit: false,
+    id: '8d68eb26-d054-47a7-aee8-cd93a24fa860',
+    billLicenceId: 'a76b3ab3-d70d-4fb0-8d72-2e2cdd334729',
+    credit: false,
     status: 'candidate',
     chargeType: 'standard',
     chargeCategoryCode,
@@ -504,10 +504,10 @@ function _generatePreviousTransaction (chargeCategoryCode, billableDays, testRef
     section130Agreement: false,
     aggregateFactor: 1,
     adjustmentFactor: 1,
-    isWinterOnly: false,
-    isSupportedSource: false,
+    winterOnly: false,
+    supportedSource: false,
     supportedSourceName: null,
-    isWaterCompanyCharge: false,
+    waterCompanyCharge: false,
     purposes: [testReference]
   }
 

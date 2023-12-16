@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunModel = require('../../../app/models/water/bill-run.model.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const EventModel = require('../../../app/models/water/event.model.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
+const EventModel = require('../../../app/models/event.model.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
@@ -32,7 +32,7 @@ describe('Initiate Bill Run service', () => {
     await DatabaseHelper.clean()
 
     const region = await RegionHelper.add()
-    regionId = region.regionId
+    regionId = region.id
 
     Sinon.stub(CheckLiveBillRunService, 'go').resolves(false)
 
@@ -87,9 +87,9 @@ describe('Initiate Bill Run service', () => {
     it('returns the new bill run', async () => {
       const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      const billRun = await BillRunModel.query().first()
+      const billRun = await BillRunModel.query().limit(1).first()
 
-      expect(result.billingBatchId).to.equal(billRun.billingBatchId)
+      expect(result.id).to.equal(billRun.id)
       expect(result.regionId).to.equal(billRun.regionId)
       expect(result.scheme).to.equal('sroc')
       expect(result.batchType).to.equal('supplementary')
@@ -123,7 +123,7 @@ describe('Initiate Bill Run service', () => {
 
         const billRun = await BillRunModel.query().limit(1).first()
 
-        expect(result.billingBatchId).to.equal(billRun.billingBatchId)
+        expect(result.id).to.equal(billRun.id)
         expect(result.regionId).to.equal(billRun.regionId)
         expect(result.scheme).to.equal('sroc')
         expect(result.batchType).to.equal('supplementary')

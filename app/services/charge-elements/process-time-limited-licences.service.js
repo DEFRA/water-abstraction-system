@@ -7,7 +7,7 @@
 
 const FetchTimeLimitedLicencesService = require('./fetch-time-limited-licences.service.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
-const Workflow = require('../../models/water/workflow.model.js')
+const Workflow = require('../../models/workflow.model.js')
 
 /**
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days

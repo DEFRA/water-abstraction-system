@@ -31,12 +31,12 @@ function go (transaction) {
   return _presrocContent(transaction)
 }
 
-function _additionalCharges (isCredit, isWaterCompanyCharge, supportedSourceCharge, supportedSourceName) {
+function _additionalCharges (credit, waterCompanyCharge, supportedSourceCharge, supportedSourceName) {
   const charges = []
 
   if (supportedSourceName) {
     let chargeInPounds = 0
-    if (isCredit) {
+    if (credit) {
       chargeInPounds = formatPounds(supportedSourceCharge * -1)
     } else {
       chargeInPounds = formatPounds(supportedSourceCharge)
@@ -45,7 +45,7 @@ function _additionalCharges (isCredit, isWaterCompanyCharge, supportedSourceChar
     charges.push(`Supported source ${supportedSourceName} (£${chargeInPounds})`)
   }
 
-  if (isWaterCompanyCharge) {
+  if (waterCompanyCharge) {
     charges.push('Public Water Supply')
   }
 
@@ -55,7 +55,7 @@ function _additionalCharges (isCredit, isWaterCompanyCharge, supportedSourceChar
 function _adjustments (
   adjustmentFactor,
   aggregateFactor,
-  isWinterOnly,
+  winterOnly,
   section126Factor,
   section127Agreement,
   section130Agreement
@@ -82,7 +82,7 @@ function _adjustments (
     adjustments.push('Canal and River Trust (0.5)')
   }
 
-  if (isWinterOnly) {
+  if (winterOnly) {
     adjustments.push('Winter discount (0.5)')
   }
 
@@ -138,7 +138,7 @@ function _presrocContent (transaction) {
     chargeType,
     description,
     endDate,
-    isCredit,
+    credit,
     loss,
     netAmount,
     season,
@@ -167,8 +167,8 @@ function _presrocContent (transaction) {
     ),
     chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     chargeType,
-    creditAmount: isCredit ? formatMoney(netAmount) : '',
-    debitAmount: isCredit ? '' : formatMoney(netAmount),
+    creditAmount: credit ? formatMoney(netAmount) : '',
+    debitAmount: credit ? '' : formatMoney(netAmount),
     description,
     quantity: `${volume}ML`
   }
@@ -187,9 +187,9 @@ function _srocContent (transaction) {
     chargeType,
     description,
     endDate,
-    isCredit,
-    isWaterCompanyCharge,
-    isWinterOnly,
+    credit,
+    waterCompanyCharge,
+    winterOnly,
     netAmount,
     section126Factor,
     section127Agreement,
@@ -201,11 +201,11 @@ function _srocContent (transaction) {
   } = transaction
 
   return {
-    additionalCharges: _additionalCharges(isCredit, isWaterCompanyCharge, supportedSourceCharge, supportedSourceName),
+    additionalCharges: _additionalCharges(credit, waterCompanyCharge, supportedSourceCharge, supportedSourceName),
     adjustments: _adjustments(
       adjustmentFactor,
       aggregateFactor,
-      isWinterOnly,
+      winterOnly,
       section126Factor,
       section127Agreement,
       section130Agreement
@@ -216,8 +216,8 @@ function _srocContent (transaction) {
     chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     chargeReference: _chargeReference(baselineCharge, chargeCategoryCode),
     chargeType,
-    creditAmount: isCredit ? formatMoney(netAmount) : '',
-    debitAmount: isCredit ? '' : formatMoney(netAmount),
+    creditAmount: credit ? formatMoney(netAmount) : '',
+    debitAmount: credit ? '' : formatMoney(netAmount),
     description,
     quantity: `${volume}ML`
   }

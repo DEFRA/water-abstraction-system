@@ -55,7 +55,7 @@
  * @returns {Object} the request data needed in the format required by the Charging Module
  */
 function go (billingAccount, address, company, contact) {
-  const { invoiceAccountNumber: customerReference } = billingAccount
+  const { accountNumber: customerReference } = billingAccount
 
   const region = customerReference.charAt(0)
   const customerName = _customerName(billingAccount, company)
@@ -69,17 +69,17 @@ function go (billingAccount, address, company, contact) {
   }
 }
 
-function _addressLine6 (county, country) {
-  if (!county && !country) {
+function _addressLine6 (address6, country) {
+  if (!address6 && !country) {
     return ''
   }
 
-  if (county && country) {
-    return `${county}, ${country}`
+  if (address6 && country) {
+    return `${address6}, ${country}`
   }
 
-  if (county) {
-    return county
+  if (address6) {
+    return address6
   }
 
   return country
@@ -96,7 +96,7 @@ function _customerName (billingAccount, company) {
 function _formattedAddress (address, contact) {
   const addressLines = []
 
-  const { address1, address2, address3, address4, town, county, country, postcode } = address
+  const { address1, address2, address3, address4, address5, address6, country, postcode } = address
   const contactName = contact.$name()
 
   if (address1) {
@@ -132,8 +132,9 @@ function _formattedAddress (address, contact) {
     addressLine2: addressLines[1] ? addressLines[1] : null,
     addressLine3: addressLines[2] ? addressLines[2] : null,
     addressLine4: addressLines[3] ? addressLines[3] : null,
-    addressLine5: _truncate(town, 60),
-    addressLine6: _truncate(_addressLine6(county, country), 60),
+    // We have encountered instances of ton being null so we confirm we have something to truncate to avoid an error
+    addressLine5: address5 ? _truncate(address5, 60) : null,
+    addressLine6: _truncate(_addressLine6(address6, country), 60),
     postcode: _truncate(postcode, 60)
   }
 }

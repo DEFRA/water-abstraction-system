@@ -20,7 +20,7 @@ async function changeAddress (request, h) {
   const { address, agentCompany, contact } = validatedData.value
 
   const result = await ChangeAddressService.go(
-    request.params.invoiceAccountId,
+    request.params.billingAccountId,
     address,
     agentCompany,
     contact

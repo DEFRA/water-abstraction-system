@@ -5,7 +5,7 @@
  * @module FetchBillService
  */
 
-const BillModel = require('../../models/water/bill.model.js')
+const BillModel = require('../../models/bill.model.js')
 const { db } = require('../../../db/db.js')
 
 /**
@@ -32,37 +32,37 @@ async function _fetchBill (id) {
   const result = BillModel.query()
     .findById(id)
     .select([
-      'billingInvoiceId',
+      'id',
       'creditNoteValue',
-      'dateCreated',
+      'createdAt',
       'financialYearEnding',
-      'invoiceAccountId',
+      'billingAccountId',
       'invoiceNumber',
       'invoiceValue',
-      'isCredit',
-      'isFlaggedForRebilling',
+      'credit',
+      'flaggedForRebilling',
       'netAmount',
       'rebillingState',
-      'isDeMinimis'
+      'deminimis'
     ])
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
       builder.select([
-        'billingBatchId',
+        'id',
         'batchType',
-        'dateCreated',
+        'createdAt',
         'status',
         'billRunNumber',
         'transactionFileReference',
         'scheme',
-        'isSummer',
+        'summer',
         'source'
       ])
     })
     .withGraphFetched('billRun.region')
     .modifyGraph('billRun.region', (builder) => {
       builder.select([
-        'regionId',
+        'id',
         'displayName'
       ])
     })
@@ -73,11 +73,11 @@ async function _fetchBill (id) {
 /**
  * Query the DB and generate a distinct summarised result for each licence
  *
- * Licences are linked to a bill (billing_invoice) via bill licences (billing_invoice_licences). But the bill licence
- * doesn't contain any data, for example, the total for all transactions for the linked licence.
+ * Licences are linked to a bill via bill licences. But the bill licence doesn't contain any data, for example, the
+ * total for all transactions for the linked licence.
  *
- * The page requires us to show the total for each licence which means we need to calculate this by totalling the
- * net amount on each linked transaction.
+ * The page requires us to show the total for each licence which means we need to calculate this by totalling the net
+ * amount on each linked transaction.
  *
  * To get the query to return a single line for each licence we need to use DISTINCT. So, due to the complexity of the
  * query needed we've had to drop back down to Knex and generate the query ourselves rather than going through
@@ -85,13 +85,13 @@ async function _fetchBill (id) {
  */
 async function _fetchLicenceSummaries (id) {
   const results = await db
-    .distinct(['bil.billingInvoiceLicenceId', 'bil.licenceRef'])
+    .distinct(['bil.id', 'bil.licenceRef'])
     .sum('bt.net_amount AS total')
-    .from('water.billingInvoiceLicences AS bil')
-    .innerJoin('water.billing_transactions AS bt', 'bil.billingInvoiceLicenceId', 'bt.billingInvoiceLicenceId')
-    .where('bil.billingInvoiceId', id)
+    .from('billLicences AS bil')
+    .innerJoin('transactions AS bt', 'bil.id', 'bt.billLicenceId')
+    .where('bil.billId', id)
     .where('bt.chargeType', 'standard')
-    .groupBy('bil.billingInvoiceLicenceId', 'bil.licenceRef')
+    .groupBy('bil.id', 'bil.licenceRef')
     .orderBy('bil.licenceRef')
 
   return results

@@ -1,0 +1,25 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set rootLink = "/system/licences/" + licenceId %}
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: rootLink + "/returns-check-your-answers"
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Add a note</h1>
+  </div>
+
+  <div class="govuk-body">
+    {{ govukButton({ text: "Confirm" }) }}
+  </div>
+{% endblock %}

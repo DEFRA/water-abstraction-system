@@ -17,7 +17,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * @param {module:TransactionModel[]} transactions Array of transactions to be reversed
  * @param {module:BillLicenceModel} billLicence The bill licence these transactions are intended to be added to
  *
- * @returns {Object[]} Array of reversing transactions with `billingInvoiceLicenceId` set to the id of the supplied
+ * @returns {Object[]} Array of reversing transactions with `billLicenceId` set to the id of the supplied
  *  `billLicence`
  */
 function go (transactions, billLicence) {
@@ -26,25 +26,24 @@ function go (transactions, billLicence) {
 
 /**
  * Receives an array of debit transactions and returns transactions that will reverse them. These transactions are
- * identical except the `isCredit` flag is set to 'true', the status is set to `candidate`, the
- * `billingInvoiceLicenceId` is set to the id of the supplied bill licence, and a new `billingTransactionId`
- * is generated.
+ * identical except the `credit` flag is set to 'true', the status is set to `candidate`, the `billLicenceId` is set
+ * to the id of the supplied bill licence, and a new transaction ID is generated.
  */
 function _reverseTransactions (transactions, billLicence) {
   return transactions.map((transaction) => {
-    // TODO: The FetchTransactionsService which we use to get the transactions to reverse adds the invoice account ID
+    // TODO: The FetchTransactionsService which we use to get the transactions to reverse adds the billing account ID
     // and number to each transaction returned. This is a performance measure to avoid an extra query to the DB. But if
     // we don't strip them from the result when we try to persist our reversed versions, they fail because the
-    // billing_transactions table doesn't have these fields. We do the stripping here to avoid iterating through the
+    // transactions table doesn't have these fields. We do the stripping here to avoid iterating through the
     // collection multiple times. Ideally, we'd look to return a result from FetchTransactionsService that avoids us
     // having to do this.
-    const { invoiceAccountId, invoiceAccountNumber, ...propertiesToKeep } = transaction
+    const { billingAccountId, accountNumber, ...propertiesToKeep } = transaction
 
     return {
       ...propertiesToKeep,
-      billingTransactionId: generateUUID(),
-      billingInvoiceLicenceId: billLicence.billingInvoiceLicenceId,
-      isCredit: true,
+      id: generateUUID(),
+      billLicenceId: billLicence.id,
+      credit: true,
       status: 'candidate',
       // TODO: Our query result seems to return the transaction's `purposes:` property as [Object]. Clearly, we need
       // to re-jig something or give Knex some more instructions on dealing with this JSONB field. But just to prove
