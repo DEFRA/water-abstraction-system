@@ -99,7 +99,8 @@ function context (request) {
       user: request.auth.credentials?.user,
       scope: request.auth.credentials?.scope,
       permission: request.auth.credentials?.permission
-    }
+    },
+    navigationLinks: _navigationLinks(request.auth)
   }
 }
 
@@ -135,6 +136,38 @@ function prepare (config, next) {
   config.compileOptions.environment = environment
 
   return next()
+}
+
+/**
+ * Determine which navigation links, if any to display in the top-level GOV.UK header
+ *
+ * When a user is authenticated we display a 'Change password' and 'Sign out' link in the top-level header of each page.
+ *
+ * Some users are also eligible to see a 'Contact information' link, which allows them to set their contact details
+ * which will be used when generating, for example, renewal notifications.
+ *
+ * @param {Object} auth The `auth` property added to each Hapi request by the `AuthPlugin`. It tells us whether a user
+ * is authenticated and what scopes (permissions) they have
+ *
+ * @returns {Object[]} if the user is authenticated navigation links to display in the top-level GOV.UK header
+ */
+function _navigationLinks (auth) {
+  if (!auth.isAuthenticated) {
+    return []
+  }
+
+  const links = [
+    { href: '/account/update-password', text: 'Change password' },
+    { href: '/signout', text: 'Sign out' }
+  ]
+
+  const { scope } = auth.credentials
+
+  if (scope.includes('hof_notifications') || scope.includes('renewal_notifications')) {
+    links.unshift({ href: '/contact-information', text: 'Contact information' })
+  }
+
+  return links
 }
 
 module.exports = ViewsPlugin
