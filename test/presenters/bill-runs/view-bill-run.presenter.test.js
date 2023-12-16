@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewBillRunPresenter = require('../../../app/presenters/bill-runs/view-bill-run.presenter.js')
 
-describe('View Bill Run presenter', () => {
+describe.only('View Bill Run presenter', () => {
   let billRun
   let billRunSummaries
 
@@ -52,7 +52,7 @@ describe('View Bill Run presenter', () => {
         })
 
         describe('and there are no zero-value bills', () => {
-          it('returns to sum plus the bill run type as singular (1 Supplementary bill)', () => {
+          it('returns the sum plus the bill run type as singular (1 Supplementary bill)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
             expect(result.billsCount).to.equal('1 Supplementary bill')
@@ -68,7 +68,7 @@ describe('View Bill Run presenter', () => {
         })
 
         describe('and there are no zero-value bills', () => {
-          it('returns to sum plus the bill run type pluralised (12 Annual bills)', () => {
+          it('returns the sum plus the bill run type pluralised (12 Annual bills)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
             expect(result.billsCount).to.equal('12 Annual bills')
