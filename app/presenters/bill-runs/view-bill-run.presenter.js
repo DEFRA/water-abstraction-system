@@ -11,7 +11,7 @@ const {
   formatMoney
 } = require('../base.presenter.js')
 
-function go (billRun, billRunSummaries) {
+function go (billRun, billSummaries) {
   const {
     batchType,
     billRunNumber,
@@ -34,7 +34,7 @@ function go (billRun, billRunSummaries) {
   const regionName = capitalize(region.displayName)
 
   return {
-    billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billRunSummaries),
+    billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billSummaries),
     billRunId: id,
     billRunNumber,
     billRunStatus: status,
@@ -54,7 +54,7 @@ function go (billRun, billRunSummaries) {
   }
 }
 
-function _billsCount (creditsCount, debitsCount, billRunType, billRunSummaries) {
+function _billsCount (creditsCount, debitsCount, billRunType, billSummaries) {
   const total = creditsCount + debitsCount
 
   // NOTE: A bill run wouldn't exist if there was just a single zero value bill on it. So, we can safely assume if the
@@ -63,8 +63,8 @@ function _billsCount (creditsCount, debitsCount, billRunType, billRunSummaries) 
     return `1 ${billRunType} bill`
   }
 
-  const zeroValueBills = billRunSummaries.filter((billRunSummary) => {
-    return billRunSummary.netAmount === 0
+  const zeroValueBills = billSummaries.filter((billSummary) => {
+    return billSummary.netAmount === 0
   })
 
   const numberOfZeroValueBills = zeroValueBills.length
