@@ -118,3 +118,33 @@ $govuk-global-styles: true;
     white-space: nowrap;
   }
 }
+
+// ========== ========== ========== ========== ==========
+// Widths
+// ========== ========== ========== ========== ==========
+.width-one-fifth {
+  width: 100% !important;
+}
+@media (min-width: 40.0625em) {
+  .width-one-fifth {
+    width: 20% !important;
+  }
+}
+
+.width-one-sixth {
+  width: 100% !important;
+}
+@media (min-width: 40.0625em) {
+  .width-one-sixth {
+    width: 17% !important;
+  }
+}
+
+.width-one-tenth {
+  width: 100% !important;
+}
+@media (min-width: 40.0625em) {
+  .width-one-tenth {
+    width: 10% !important;
+  }
+}
