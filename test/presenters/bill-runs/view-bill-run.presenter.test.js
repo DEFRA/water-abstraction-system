@@ -51,10 +51,12 @@ describe('View Bill Run presenter', () => {
           billRun.invoiceCount = 1
         })
 
-        it('returns to sum plus the bill run type as singular (1 Supplementary bill)', () => {
-          const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
+        describe('and there are no zero-value bills', () => {
+          it('returns to sum plus the bill run type as singular (1 Supplementary bill)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
-          expect(result.billsCount).to.equal('1 Supplementary bill')
+            expect(result.billsCount).to.equal('1 Supplementary bill')
+          })
         })
       })
 
@@ -65,10 +67,12 @@ describe('View Bill Run presenter', () => {
           billRun.invoiceCount = 7
         })
 
-        it('returns to sum plus the bill run type pluralised (12 Annual bills)', () => {
-          const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
+        describe('and there are no zero-value bills', () => {
+          it('returns to sum plus the bill run type pluralised (12 Annual bills)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
-          expect(result.billsCount).to.equal('12 Annual bills')
+            expect(result.billsCount).to.equal('12 Annual bills')
+          })
         })
       })
     })
