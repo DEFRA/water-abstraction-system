@@ -145,11 +145,7 @@
     govukButton({
       classes: "govuk-button--secondary",
       text: "Download this bill run",
-<<<<<<< HEAD
-      href: downloadBillRunLink
-=======
       href: cancelBillRunLink
->>>>>>> origin/main
     })
   }}
 
@@ -279,32 +275,6 @@
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
-<<<<<<< HEAD
-    {# If we're displaying a table for each bill group we add a total row to the bottom of each one #}
-    {% if billGroupsCount > 1  %}
-      {#
-        Add the Total row. This uses a custom class to add a thicker dividing line.
-
-        To get the colspan correct we get the length of the tableHeaders array using a Nunjucks built in filter.
-      #}
-      {% set totalRow = [
-        {
-          text: 'Total',
-          classes: 'table__cell--total',
-          colspan: tableHeaders | length - 1
-        },
-        {
-          text: billGroup.total,
-          format: 'numeric',
-          classes: 'table__cell--total govuk-!-font-weight-bold',
-          attributes: { 'data-test': billGroup.type + '-total' }
-        }
-      ] %}
-      {% set tableRows = (tableRows.push(totalRow), tableRows) %}
-    {% endif %}
-
-=======
->>>>>>> origin/main
     {# Display the table using a GOVUK table component #}
     <div class="govuk-grid-row govuk-!-margin-bottom-0">
       <div class="govuk-grid-column-full">
