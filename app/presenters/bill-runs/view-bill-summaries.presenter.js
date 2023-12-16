@@ -37,18 +37,18 @@ function _bills (summaries) {
     const {
       agentName,
       allLicences,
-      billingInvoiceId,
+      id,
       companyName,
       financialYearEnding,
-      invoiceAccountNumber,
+      accountNumber,
       netAmount
     } = summary
 
     const licences = allLicences.split(',')
 
     return {
-      id: billingInvoiceId,
-      accountNumber: invoiceAccountNumber,
+      id,
+      accountNumber,
       billingContact: _billingContact(agentName, companyName),
       licences,
       licencesCount: licences.length,

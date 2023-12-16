@@ -179,9 +179,9 @@ describe('View Bill Summaries presenter', () => {
 function _testBillSummaries () {
   return [
     {
-      billingInvoiceId: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-      invoiceAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
-      invoiceAccountNumber: 'E11101999A',
+      id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+      billingAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
+      accountNumber: 'E11101999A',
       netAmount: -9700,
       financialYearEnding: 2023,
       companyName: 'H M Scotty & Daughter',
@@ -190,9 +190,9 @@ function _testBillSummaries () {
       waterCompany: false
     },
     {
-      billingInvoiceId: '64924759-8142-4a08-9d1e-1e902cd9d316',
-      invoiceAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
-      invoiceAccountNumber: 'E22288888A',
+      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+      accountNumber: 'E22288888A',
       netAmount: 21317800,
       financialYearEnding: 2023,
       companyName: 'Acme Water Services Ltd',
@@ -201,9 +201,9 @@ function _testBillSummaries () {
       waterCompany: true
     },
     {
-      billingInvoiceId: '88f85abd-129d-4fb6-b82e-b92224992b1d',
-      invoiceAccountId: '5313ce61-0f35-4e37-b8b9-a1b4f408f32e',
-      invoiceAccountNumber: 'E33397999A',
+      id: '88f85abd-129d-4fb6-b82e-b92224992b1d',
+      billingAccountId: '5313ce61-0f35-4e37-b8b9-a1b4f408f32e',
+      accountNumber: 'E33397999A',
       netAmount: 7909,
       financialYearEnding: 2023,
       companyName: 'Flint & Michigan Squash Club Ltd',
