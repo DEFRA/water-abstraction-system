@@ -161,6 +161,12 @@ function _navigationLinks (auth) {
     { href: '/signout', text: 'Sign out' }
   ]
 
+  const { scope } = auth.credentials
+
+  if (scope.includes('hof_notifications') || scope.includes('renewal_notifications')) {
+    links.unshift({ href: '/contact-information', text: 'Contact information' })
+  }
+
   return links
 }
 
