@@ -8,15 +8,15 @@
 function go (billRun) {
   const {
     batchType,
-    billingBatchId,
     creditNoteCount,
     creditNoteValue,
     createdAt,
     updatedAt,
     fromFinancialYearEnding,
+    id,
     invoiceCount,
     invoiceValue,
-    isSummer,
+    summer,
     netTotal,
     region,
     source,
@@ -25,10 +25,10 @@ function go (billRun) {
   } = billRun
   return {
     batch: {
-      id: billingBatchId,
+      id,
       type: batchType,
       region: {
-        id: region.regionId,
+        id: region.id,
         code: region.chargeRegionId,
         name: region.name,
         type: 'region',
@@ -39,7 +39,7 @@ function go (billRun) {
       status,
       endYear: { yearEnding: toFinancialYearEnding },
       invoices: [],
-      isSummer,
+      summer,
       netTotal,
       startYear: { yearEnding: fromFinancialYearEnding },
       dateCreated: createdAt,

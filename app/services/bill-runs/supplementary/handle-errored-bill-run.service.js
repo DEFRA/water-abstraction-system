@@ -5,7 +5,7 @@
  * @module HandleErroredBillRunService
  */
 
-const BillRunModel = require('../../../models/water/bill-run.model.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
 
 /**
  * Sets the status of the specified bill run to `error`, and logs an error if this can't be done.

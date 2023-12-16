@@ -5,7 +5,7 @@
  * @module ChargingModuleCreateBillRunService
  */
 
-const RegionModel = require('../../models/water/region.model.js')
+const RegionModel = require('../../models/region.model.js')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
 
 /**
@@ -29,8 +29,8 @@ async function go (regionId, ruleset) {
 // Gets the single-letter charge region code for the provided regionId UUID
 async function _getChargeRegionId (regionId) {
   const result = await RegionModel.query()
+    .findById(regionId)
     .select('chargeRegionId')
-    .findOne('regionId', regionId)
 
   return result.chargeRegionId
 }

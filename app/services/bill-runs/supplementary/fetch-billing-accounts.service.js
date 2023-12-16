@@ -5,18 +5,18 @@
  * @module FetchBillingAccountsService
  */
 
-const BillingAccountModel = require('../../../models/crm-v2/billing-account.model.js')
+const BillingAccountModel = require('../../../models/billing-account.model.js')
 
 /**
  * Fetch all billing accounts for the supplied charge versions
  *
  * @param {module:ChargeVersionModel[]} chargeVersions An array of charge versions
  *
- * @returns {Object[]} Array of objects in the format { invoiceAccountId: '...', invoiceAccountNumber: '...' }
+ * @returns {Object[]} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
  */
 async function go (chargeVersions) {
-  const uniqueInvoiceAccountIds = _extractUniqueInvoiceAccountIds(chargeVersions)
-  const billingAccountModels = await _fetch(uniqueInvoiceAccountIds)
+  const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)
+  const billingAccountModels = await _fetch(uniqueBillingAccountIds)
 
   // The results come back from Objection as BillingAccountModels. Since we want to be clear that these are not
   // full-blown models, we turn them into plain objects using Objection's .toJSON() method
@@ -25,20 +25,20 @@ async function go (chargeVersions) {
   return billingAccountObjects
 }
 
-function _extractUniqueInvoiceAccountIds (chargeVersions) {
-  const allInvoiceAccountIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.invoiceAccountId
+function _extractUniqueBillingAccountIds (chargeVersions) {
+  const allBillingAccountIds = chargeVersions.map((chargeVersion) => {
+    return chargeVersion.billingAccountId
   })
 
-  // Creating a new set from allInvoiceAccountIds gives us just the unique ids. Objection does not accept sets in
+  // Creating a new set from allBillingAccountIds gives us just the unique ids. Objection does not accept sets in
   // .findByIds() so we spread it into an array
-  return [...new Set(allInvoiceAccountIds)]
+  return [...new Set(allBillingAccountIds)]
 }
 
-function _fetch (uniqueInvoiceAccountIds) {
+function _fetch (uniqueBillingAccountIds) {
   return BillingAccountModel.query()
-    .select('invoiceAccountId', 'invoiceAccountNumber')
-    .findByIds([...uniqueInvoiceAccountIds])
+    .select('id', 'accountNumber')
+    .findByIds([...uniqueBillingAccountIds])
 }
 
 function _makeObjects (models) {

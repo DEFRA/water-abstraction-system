@@ -7,21 +7,21 @@ const { formatChargingModuleDate } = require('../base.presenter.js')
  *
  * @param {Object} transaction the transaction object
  * @param {Object} billingPeriod The billing period of the transaction
- * @param {string} invoiceAccountNumber known as the customer reference in the Charging Module API
+ * @param {string} accountNumber known as the customer reference in the Charging Module API
  * @param {module:LicenceModel} licence an instance of LicenceModel
  *
  * @returns {Object} an object to be used as the body in a Charging Module POST transaction request
  */
-function go (transaction, invoiceAccountNumber, licence) {
+function go (transaction, accountNumber, licence) {
   const periodStart = formatChargingModuleDate(transaction.startDate)
   const periodEnd = formatChargingModuleDate(transaction.endDate)
 
   return {
-    clientId: transaction.billingTransactionId,
+    clientId: transaction.id,
     ruleset: transaction.scheme,
     periodStart,
     periodEnd,
-    credit: transaction.isCredit,
+    credit: transaction.credit,
     abatementFactor: transaction.section126Factor,
     adjustmentFactor: transaction.adjustmentFactor,
     actualVolume: transaction.volume,
@@ -34,7 +34,7 @@ function go (transaction, invoiceAccountNumber, licence) {
     chargeCategoryDescription: transaction.chargeCategoryDescription,
     chargePeriod: `${periodStart} - ${periodEnd}`,
     compensationCharge: transaction.chargeType === 'compensation',
-    customerReference: invoiceAccountNumber,
+    customerReference: accountNumber,
     licenceNumber: licence.licenceRef,
     lineDescription: transaction.description,
     loss: transaction.loss,
@@ -42,12 +42,12 @@ function go (transaction, invoiceAccountNumber, licence) {
     regionalChargingArea: licence.regionalChargeArea,
     section127Agreement: transaction.section127Agreement,
     section130Agreement: transaction.section130Agreement,
-    supportedSource: transaction.isSupportedSource,
+    supportedSource: transaction.supportedSource,
     supportedSourceName: transaction.supportedSourceName,
-    twoPartTariff: transaction.isTwoPartSecondPartCharge,
-    waterCompanyCharge: transaction.isWaterCompanyCharge,
-    waterUndertaker: transaction.isWaterUndertaker,
-    winterOnly: transaction.isWinterOnly
+    twoPartTariff: transaction.secondPartCharge,
+    waterCompanyCharge: transaction.waterCompanyCharge,
+    waterUndertaker: transaction.waterUndertaker,
+    winterOnly: transaction.winterOnly
   }
 }
 

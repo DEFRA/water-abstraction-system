@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const FetchRegionService = require('../../../app/services/bill-runs/fetch-region.service.js')
@@ -30,7 +30,7 @@ describe('Fetch Region service', () => {
     it('returns results', async () => {
       const result = await FetchRegionService.go(naldRegionId)
 
-      expect(result.regionId).to.equal(testRegion.regionId)
+      expect(result.id).to.equal(testRegion.id)
     })
   })
 

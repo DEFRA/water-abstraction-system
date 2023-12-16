@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-account.helper.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
@@ -33,20 +33,20 @@ describe('Fetch Billing Accounts service', () => {
 
       expectedResult = [
         {
-          invoiceAccountId: billingAccounts[0].invoiceAccountId,
-          invoiceAccountNumber: billingAccounts[0].invoiceAccountNumber
+          id: billingAccounts[0].id,
+          accountNumber: billingAccounts[0].accountNumber
         },
         {
-          invoiceAccountId: billingAccounts[1].invoiceAccountId,
-          invoiceAccountNumber: billingAccounts[1].invoiceAccountNumber
+          id: billingAccounts[1].id,
+          accountNumber: billingAccounts[1].accountNumber
         }
       ]
     })
 
     it('fetches the billing accounts that the charge versions link to', async () => {
       const result = await FetchBillingAccountsService.go([
-        { invoiceAccountId: billingAccounts[0].invoiceAccountId },
-        { invoiceAccountId: billingAccounts[1].invoiceAccountId }
+        { billingAccountId: billingAccounts[0].id },
+        { billingAccountId: billingAccounts[1].id }
       ])
 
       expect(result).to.have.length(2).and.contain(expectedResult)

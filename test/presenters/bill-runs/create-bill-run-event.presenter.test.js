@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/water/bill-run.model.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const RegionHelper = require('../../support/helpers/water/region.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
 const CreateBillRunEventPresenter = require('../../../app/presenters/bill-runs/create-bill-run-event.presenter.js')
@@ -26,10 +26,10 @@ describe('Create Bill Run Event presenter', () => {
 
     beforeEach(async () => {
       const region = await RegionHelper.add()
-      const testBillRun = await BillRunHelper.add({ regionId: region.regionId })
+      const testBillRun = await BillRunHelper.add({ regionId: region.id })
 
       billRun = await BillRunModel.query()
-        .findById(testBillRun.billingBatchId)
+        .findById(testBillRun.id)
         .withGraphFetched('region')
     })
 
@@ -37,11 +37,11 @@ describe('Create Bill Run Event presenter', () => {
       const result = CreateBillRunEventPresenter.go(billRun)
 
       expect(result.batch).to.exist()
-      expect(result.batch.id).to.equal(billRun.billingBatchId)
+      expect(result.batch.id).to.equal(billRun.id)
       expect(result.batch.type).to.equal(billRun.batchType)
       expect(result.batch.source).to.equal(billRun.source)
       expect(result.batch.status).to.equal(billRun.status)
-      expect(result.batch.isSummer).to.equal(billRun.isSummer)
+      expect(result.batch.summer).to.equal(billRun.summer)
       expect(result.batch.netTotal).to.equal(billRun.netTotal)
 
       expect(result.batch.dateCreated).to.equal(billRun.createdAt)
@@ -52,7 +52,7 @@ describe('Create Bill Run Event presenter', () => {
       expect(result.batch.creditNoteValue).to.equal(billRun.creditNoteValue)
 
       expect(result.batch.region).to.equal({
-        id: billRun.region.regionId,
+        id: billRun.region.id,
         code: billRun.region.chargeRegionId,
         name: billRun.region.name,
         type: 'region',

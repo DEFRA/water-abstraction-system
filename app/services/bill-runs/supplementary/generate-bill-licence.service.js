@@ -18,10 +18,10 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  */
 function go (billId, licence) {
   const billLicence = {
-    billingInvoiceId: billId,
-    billingInvoiceLicenceId: generateUUID(),
-    licenceRef: licence.licenceRef,
-    licenceId: licence.licenceId
+    id: generateUUID(),
+    billId,
+    licenceId: licence.id,
+    licenceRef: licence.licenceRef
   }
 
   return billLicence

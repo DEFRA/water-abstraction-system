@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillHelper = require('../../../support/helpers/water/bill.helper.js')
-const BillModel = require('../../../../app/models/water/bill.model.js')
-const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
-const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
+const BillHelper = require('../../../support/helpers/bill.helper.js')
+const BillModel = require('../../../../app/models/bill.model.js')
+const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
+const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
 // Thing under test
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/supplementary/fetch-bills-to-be-reissued.service.js')
@@ -27,9 +27,9 @@ describe('Fetch Bills To Be Reissued service', () => {
     await DatabaseHelper.clean()
 
     billRun = await BillRunHelper.add()
-    bill = await BillHelper.add({ billingBatchId: billRun.billingBatchId })
-    const { billingInvoiceLicenceId } = await BillLicenceHelper.add({ billingInvoiceId: bill.billingInvoiceId })
-    await TransactionHelper.add({ billingInvoiceLicenceId })
+    bill = await BillHelper.add({ billRunId: billRun.id })
+    const { id: billLicenceId } = await BillLicenceHelper.add({ billId: bill.id })
+    await TransactionHelper.add({ billLicenceId })
   })
 
   describe('when there are no bills to be reissued', () => {
@@ -42,7 +42,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
   describe('when there are bills to be reissued', () => {
     beforeEach(async () => {
-      await bill.$query().patch({ isFlaggedForRebilling: true })
+      await bill.$query().patch({ flaggedForRebilling: true })
     })
 
     it('returns results', async () => {
@@ -58,13 +58,13 @@ describe('Fetch Bills To Be Reissued service', () => {
       const result = Object.keys(bill[0])
 
       expect(result).to.only.include([
-        'billingInvoiceId',
+        'id',
         'externalId',
         'financialYearEnding',
-        'invoiceAccountId',
-        'invoiceAccountNumber',
+        'billingAccountId',
+        'accountNumber',
         'billLicences',
-        'originalBillingInvoiceId'
+        'originalBillId'
       ])
     })
 
@@ -86,20 +86,20 @@ describe('Fetch Bills To Be Reissued service', () => {
       beforeEach(async () => {
         const alcsBillRun = await BillRunHelper.add({ scheme: 'alcs' })
         const alcsBill = await BillHelper.add({
-          billingBatchId: alcsBillRun.billingBatchId,
-          isFlaggedForRebilling: true
+          billRunId: alcsBillRun.id,
+          flaggedForRebilling: true
         })
-        const { billingInvoiceLicenceId: alcsBillingInvoiceLicenceId } = await BillLicenceHelper.add({
-          billingInvoiceId: alcsBill.billingInvoiceId
+        const { id: alcsBillLicenceId } = await BillLicenceHelper.add({
+          billId: alcsBill.id
         })
-        await TransactionHelper.add({ billingInvoiceLicenceId: alcsBillingInvoiceLicenceId })
+        await TransactionHelper.add({ billLicenceId: alcsBillLicenceId })
       })
 
       it('returns only sroc bills', async () => {
         const result = await FetchBillsToBeReissuedService.go(billRun.regionId)
 
         expect(result).to.have.length(1)
-        expect(result[0].billingInvoiceId).to.equal(bill.billingInvoiceId)
+        expect(result[0].id).to.equal(bill.id)
       })
     })
   })

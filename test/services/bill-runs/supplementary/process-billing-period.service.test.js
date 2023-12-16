@@ -9,19 +9,19 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/crm-v2/billing-account.helper.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunHelper = require('../../../support/helpers/water/bill-run.helper.js')
-const BillRunModel = require('../../../../app/models/water/bill-run.model.js')
-const ChangeReasonHelper = require('../../../support/helpers/water/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/water/charge-version.helper.js')
+const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
+const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
+const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-const LicenceHelper = require('../../../support/helpers/water/licence.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const RegionHelper = require('../../../support/helpers/water/region.helper.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
@@ -47,8 +47,8 @@ describe('Process billing period service', () => {
   beforeEach(async () => {
     await DatabaseHelper.clean()
 
-    const { regionId } = await RegionHelper.add()
-    licence = await LicenceHelper.add({ includeInSrocSupplementaryBilling: true, regionId })
+    const { id: regionId } = await RegionHelper.add()
+    licence = await LicenceHelper.add({ includeInSrocBilling: true, regionId })
     changeReason = await ChangeReasonHelper.add()
     billingAccount = await BillingAccountHelper.add()
     chargeCategory = await ChargeCategoryHelper.add()
@@ -76,19 +76,19 @@ describe('Process billing period service', () => {
     describe('and there are charge versions to process', () => {
       describe('and they are billable', () => {
         beforeEach(async () => {
-          const { chargeVersionId } = await ChargeVersionHelper.add(
+          const { id: chargeVersionId } = await ChargeVersionHelper.add(
             {
-              changeReasonId: changeReason.changeReasonId,
-              invoiceAccountId: billingAccount.invoiceAccountId,
+              changeReasonId: changeReason.id,
+              billingAccountId: billingAccount.id,
               startDate: new Date(2022, 7, 1, 9),
-              licenceId: licence.licenceId
+              licenceId: licence.id
             }
           )
-          const { chargeElementId } = await ChargeReferenceHelper.add(
-            { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
+          const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
+            { chargeCategoryId: chargeCategory.id, chargeVersionId }
           )
           await ChargeElementHelper.add({
-            chargeElementId,
+            chargeReferenceId,
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
@@ -99,15 +99,15 @@ describe('Process billing period service', () => {
           chargeVersions = chargeVersionData.chargeVersions
 
           const sentTransactions = [{
-            billingTransactionId: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
-            billingInvoiceLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
-            chargeElementId: '32058a19-4813-4ee7-808b-a0559deb8469',
+            id: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
+            billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
+            chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
             startDate: new Date('2022-04-01'),
             endDate: new Date('2022-10-31'),
             source: 'non-tidal',
             season: 'all year',
             loss: 'low',
-            isCredit: false,
+            credit: false,
             chargeType: 'standard',
             authorisedQuantity: 6.82,
             billableQuantity: 6.82,
@@ -119,18 +119,18 @@ describe('Process billing period service', () => {
             section126Factor: 1,
             section127Agreement: false,
             section130Agreement: false,
-            isNewLicence: false,
-            isTwoPartSecondPartCharge: false,
+            newLicence: false,
+            secondPartCharge: false,
             scheme: 'sroc',
             aggregateFactor: 0.562114443,
             adjustmentFactor: 1,
             chargeCategoryCode: '4.4.5',
             chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
-            isSupportedSource: false,
+            supportedSource: false,
             supportedSourceName: null,
-            isWaterCompanyCharge: true,
-            isWinterOnly: false,
-            isWaterUndertaker: false,
+            waterCompanyCharge: true,
+            winterOnly: false,
+            waterUndertaker: false,
             externalId: '7e752fa6-a19c-4779-b28c-6e536f028795'
           }]
 
@@ -151,19 +151,19 @@ describe('Process billing period service', () => {
       describe('but none of them are billable', () => {
         describe('because the billable days calculated as 0', () => {
           beforeEach(async () => {
-            const { chargeVersionId } = await ChargeVersionHelper.add(
+            const { id: chargeVersionId } = await ChargeVersionHelper.add(
               {
-                changeReasonId: changeReason.changeReasonId,
-                invoiceAccountId: billingAccount.invoiceAccountId,
+                changeReasonId: changeReason.id,
+                billingAccountId: billingAccount.id,
                 startDate: new Date(2022, 7, 1, 9),
-                licenceId: licence.licenceId
+                licenceId: licence.id
               }
             )
-            const { chargeElementId } = await ChargeReferenceHelper.add(
-              { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
+            const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
+              { chargeCategoryId: chargeCategory.id, chargeVersionId }
             )
             await ChargeElementHelper.add({
-              chargeElementId,
+              chargeReferenceId,
               abstractionPeriodStartDay: 1,
               abstractionPeriodStartMonth: 4,
               abstractionPeriodEndDay: 31,
@@ -186,17 +186,17 @@ describe('Process billing period service', () => {
         describe('because the charge version status is `superseded`', () => {
           describe('and there are no previously billed transactions', () => {
             beforeEach(async () => {
-              const { chargeVersionId } = await ChargeVersionHelper.add(
+              const { id: chargeVersionId } = await ChargeVersionHelper.add(
                 {
-                  changeReasonId: changeReason.changeReasonId,
-                  invoiceAccountId: billingAccount.invoiceAccountId,
+                  changeReasonId: changeReason.id,
+                  billingAccountId: billingAccount.id,
                   startDate: new Date(2022, 7, 1, 9),
-                  licenceId: licence.licenceId,
+                  licenceId: licence.id,
                   status: 'superseded'
                 }
               )
               const { chargeElementId } = await ChargeReferenceHelper.add(
-                { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
+                { chargeCategoryId: chargeCategory.id, chargeVersionId }
               )
               await ChargeElementHelper.add({
                 chargeElementId,
@@ -223,15 +223,15 @@ describe('Process billing period service', () => {
 
   describe('when the service errors', () => {
     beforeEach(async () => {
-      const { chargeVersionId } = await ChargeVersionHelper.add({
-        changeReasonId: changeReason.changeReasonId,
-        invoiceAccountId: billingAccount.invoiceAccountId,
-        licenceId: licence.licenceId
+      const { id: chargeVersionId } = await ChargeVersionHelper.add({
+        changeReasonId: changeReason.id,
+        billingAccountId: billingAccount.id,
+        licenceId: licence.id
       })
-      const { chargeElementId } = await ChargeReferenceHelper.add(
-        { billingChargeCategoryId: chargeCategory.billingChargeCategoryId, chargeVersionId }
+      const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
+        { chargeCategoryId: chargeCategory.id, chargeVersionId }
       )
-      await ChargeElementHelper.add({ chargeElementId })
+      await ChargeElementHelper.add({ chargeReferenceId })
 
       const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
       chargeVersions = chargeVersionData.chargeVersions
