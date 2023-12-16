@@ -63,11 +63,13 @@ function _billsCount (creditsCount, debitsCount, billRunType, billSummaries) {
     return `1 ${billRunType} bill`
   }
 
-  const zeroValueBills = billSummaries.filter((billSummary) => {
-    return billSummary.netAmount === 0
-  })
+  const numberOfZeroValueBills = billSummaries.reduce((count, billSummary) => {
+    if (billSummary.netAmount === 0) {
+      count += 1
+    }
 
-  const numberOfZeroValueBills = zeroValueBills.length
+    return count
+  }, 0)
 
   if (numberOfZeroValueBills === 0) {
     return `${total} ${billRunType} bills`
