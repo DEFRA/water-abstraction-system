@@ -1,0 +1,294 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/badge.njk" import badge %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to bill runs',
+      href: '/billing/batch/list'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Bill run {{ billRunNumber }}</span>{{ pageTitle }}
+    </h1>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+
+      {# Status badge #}
+      {% if billRunStatus === 'ready' %}
+        {% set badgeType = 'info' %}
+      {% elif billRunStatus === 'sent' %}
+        {% set badgeType = 'success' %}
+      {% endif %}
+      <p class="govuk-body">
+        {{ badge(billRunStatus, badgeType) }}
+      </p>
+
+      {# Bill run meta-data #}
+      {{
+        govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          attributes: {
+            'data-test': 'meta-data'
+          },
+          rows: [
+            {
+              key: { text: "Date created", classes: "meta-data__label" },
+              value: { text: dateCreated, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Region", classes: "meta-data__label" },
+              value: { text: region, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Bill run type", classes: "meta-data__label" },
+              value: { text: billRunType, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Charge scheme", classes: "meta-data__label" },
+              value: { text: chargeScheme, classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Financial year", classes: "meta-data__label" },
+              value: { text: financialYear, classes: "meta-data__value" }
+            } if financialYear,
+            {
+              key: { text: "Transaction file", classes: "meta-data__label" },
+              value: { text: transactionFile, classes: "meta-data__value" }
+            } if transactionFile,
+            {
+              key: { text: "Bill number", classes: "meta-data__label" },
+              value: { text: billNumber, classes: "meta-data__value" }
+            } if billNumber
+          ]
+        })
+      }}
+    </div>
+  </div>
+
+  {# Bill run total #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-two-thirds">
+      <h2>
+        <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-80" data-test="bill-total">{{ billRunTotal }}</span><br>
+        <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Total</span>
+      </h2>
+    </div>
+  </div>
+
+  {# Credit and Debit totals #}
+  {% if displayCreditDebitTotals %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+      <div class="govuk-grid-column-one-half">
+        <h2>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="credits-total">{{ creditsTotal }}</span><br>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24" data-test="credits-count">{{ creditsCount }}</span>
+        </h2>
+      </div>
+      <div class="govuk-grid-column-one-half">
+        <h2>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="debits-total">{{ debitsTotal }}</span><br>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24" data-test="debits-count">{{ debitsCount }}</span>
+        </h2>
+      </div>
+    </div>
+  {% endif %}
+
+  {# Confirm and cancel buttons #}
+  {% if billRunStatus === 'ready' %}
+    {% set cancelBillRunLink = '/billing/batch/' + billRunId + '/cancel' %}
+    {% set confirmBillRunLink = '/billing/batch/' + billRunId + '/confirm' %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-two-thirds">
+        <section class="govuk-!-margin-bottom-6">
+          {{
+            govukButton({
+              classes: 'govuk-!-margin-right-1',
+              text: "Confirm bill run",
+              href: confirmBillRunLink
+            })
+          }}
+          {{
+            govukButton({
+              classes: "govuk-button--secondary",
+              text: "Cancel bill run",
+              href: cancelBillRunLink
+            })
+          }}
+        </section>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="divider govuk-!-margin-bottom-7"></div>
+
+  {# Count of bills in bill run #}
+  <h2 class="govuk-heading-l" data-test="bills-count">{{ billsCount }}</h2>
+
+  {# Download the bill run as CSV button #}
+  {% set downloadBillRunLink = '/billing/batch/' + billRunId + '/transactions-csv' %}
+  {{
+    govukButton({
+      classes: "govuk-button--secondary",
+      text: "Download this bill run",
+      href: cancelBillRunLink
+    })
+  }}
+
+  {# Determine the headers - if the bill run is annual we don't include the financial year column #}
+  {% if displayCreditDebitTotals %}
+    {% set tableHeaders = [
+      { text: 'Billing account', classes: 'width-one-tenth' },
+      { text: 'Billing contact', classes: 'govuk-!-width-one-quarter' },
+      { text: 'Licence', classes: 'width-one-quarter' },
+      { text: 'Financial year', format: 'numeric', classes: 'width-one-tenth' },
+      { text: 'Total', format: 'numeric', classes: 'width-one-sixth' },
+      { text: 'Action', format: 'numeric', classes: 'width-one-tenth' }
+    ] %}
+  {% else %}
+    {% set tableHeaders = [
+      { text: 'Billing account', classes: 'width-one-tenth' },
+      { text: 'Billing contact', classes: 'govuk-!-width-one-third' },
+      { text: 'Licence', classes: 'govuk-!-width-one-quarter' },
+      { text: 'Total', format: 'numeric', classes: 'width-one-fifth' },
+      { text: 'Action', format: 'numeric', classes: 'width-one-tenth' }
+    ] %}
+  {% endif %}
+
+  {# Add the bill tables #}
+  {# If the bill run contains both water companies and normal abstractors we show a seperate table for each group. #}
+  {# Each table will also display a caption, for example, '3 water companies'. #}
+  {# If there is only one group type in the bill run we just show the one table without a caption. #}
+  {% for billGroup in billGroups %}
+
+    {# Determine if the table is to display a caption. We only show it if both group types are present. #}
+    {% set caption %}
+      {% if billGroupsCount > 1 %}
+        {{ billGroup.caption }}
+      {% endif %}
+    {% endset %}
+
+    {% set tableRows = [] %}
+
+    {% for bill in billGroup.bills %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
+
+      {# Generate the link to view the bill #}
+      {% set actionLink %}
+        <a class="govuk-link" href="/system/bills/{{ bill.id }}">View<span class="govuk-visually-hidden"> bill for billing account {{ bill.accountNumber }}</span></a>
+      {% endset %}
+
+      {# Generate the licence cell #}
+      {# This one is a bit special because we do something different for billing accounts with more than 5 licences. #}
+      {# 5 or less we just display them in the cell. More than that then we put them behind a GOVUK Details #}
+      {# component whose summary gives the count. Users need to expand the block to get the full list. #}
+      {# However, the content remains the same which is why we first get that sorted. _Then_ we decided whether to #}
+      {# put inside a Details block or not. #}
+      {% set licenceCell %}
+        {% set licencesList %}
+          {% for licence in bill.licences %}
+            {% if (loop.index0 + 1) == bill.licencesCount %}
+              {{licence}}
+            {% else %}
+              {{licence}}<br>
+            {% endif %}
+          {% endfor %}
+        {% endset %}
+
+        {% if bill.licencesCount > 5 %}
+          {{
+            govukDetails({
+              classes: 'govuk-!-margin-bottom-0',
+              summaryText: bill.licencesCount + ' licences',
+              html: licencesList
+            })
+          }}
+        {% else %}
+          {{ licencesList | safe }}
+        {% endif %}
+      {% endset %}
+
+      {# Create the bill row and add first 3 columns - Bill account, Billing contact and Licence #}
+      {% set tableRow = [
+        {
+          text: bill.accountNumber,
+          attributes: { 'data-test': 'account-number' + rowIndex }
+        },
+        {
+          text: bill.billingContact,
+          attributes: { 'data-test': 'billing-contact-' + rowIndex }
+        },
+        {
+          html: licenceCell,
+          attributes: { 'data-test': 'licence-' + rowIndex }
+        }
+      ] %}
+
+      {# Determine if we should add the financial year column to the table row #}
+      {% if displayCreditDebitTotals %}
+        {% set tableRow = (tableRow.push(
+          {
+            text: bill.financialYear,
+            format: 'numeric',
+            attributes: { 'data-test': 'financial-year' + rowIndex }
+          }
+        ), tableRow) %}
+      {% endif %}
+
+      {# These next 2 columns are always added but must be done after the dynamic financial year column to match the #}
+      {# header order #}
+
+      {# Total column #}
+      {% set tableRow = (tableRow.push(
+        {
+          text: bill.total,
+          format: 'numeric',
+          attributes: { 'data-test': 'total-' + rowIndex }
+        }
+      ), tableRow) %}
+
+      {# Action column #}
+      {% set tableRow = (tableRow.push(
+        {
+          html: actionLink,
+          format: 'numeric',
+          attributes: { 'data-test': 'action-' + rowIndex }
+        }
+      ), tableRow) %}
+
+      {# Push our row into the table rows array #}
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    {# Display the table using a GOVUK table component #}
+    <div class="govuk-grid-row govuk-!-margin-bottom-0">
+      <div class="govuk-grid-column-full">
+        {{
+          govukTable({
+            caption: caption,
+            captionClasses: "govuk-table__caption--m",
+            firstCellIsHeader: true,
+            attributes: { 'data-test': billGroup.type},
+            head: tableHeaders,
+            rows: tableRows
+          })
+        }}
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
