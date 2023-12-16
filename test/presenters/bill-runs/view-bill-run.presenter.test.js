@@ -51,7 +51,7 @@ describe.only('View Bill Run presenter', () => {
           billRun.invoiceCount = 1
         })
 
-        describe('and there are no zero-value bills', () => {
+        describe('and there are no zero value bills', () => {
           it('returns 1 plus the bill run type as singular (1 Supplementary bill)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
@@ -59,25 +59,25 @@ describe.only('View Bill Run presenter', () => {
           })
         })
 
-        describe('and there is 1 zero-value bill', () => {
+        describe('and there is 1 zero value bill', () => {
           beforeEach(() => {
             billRunSummaries[0].netAmount = 0
           })
 
-          it('returns 1 plus the bill run type and zero-value as singular (1 Supplementary bill and 1 zero value bill)', () => {
+          it('returns 1 plus the bill run type and zero value as singular (1 Supplementary bill and 1 zero value bill)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
             expect(result.billsCount).to.equal('1 Supplementary bill and 1 zero value bill')
           })
         })
 
-        describe('and there are multiple zero-value bills', () => {
+        describe('and there are multiple zero value bills', () => {
           beforeEach(() => {
             billRunSummaries[0].netAmount = 0
             billRunSummaries[1].netAmount = 0
           })
 
-          it('returns 1 plus the bill run type as singular but zero-value pluralised (1 Supplementary bill and 2 zero value bills)', () => {
+          it('returns 1 plus the bill run type as singular but zero value pluralised (1 Supplementary bill and 2 zero value bills)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
             expect(result.billsCount).to.equal('1 Supplementary bill and 2 zero value bills')
@@ -91,7 +91,7 @@ describe.only('View Bill Run presenter', () => {
           billRun.invoiceCount = 7
         })
 
-        describe('and there are no zero-value bills', () => {
+        describe('and there are no zero value bills', () => {
           it('returns the sum plus the bill run type pluralised (12 Supplementary bills)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
@@ -99,25 +99,25 @@ describe.only('View Bill Run presenter', () => {
           })
         })
 
-        describe('and there is 1 zero-value bill', () => {
+        describe('and there is 1 zero value bill', () => {
           beforeEach(() => {
             billRunSummaries[0].netAmount = 0
           })
 
-          it('returns the sum plus the bill run type pluralised and zero-value as singular (12 Supplementary bills and 1 zero value bill)', () => {
+          it('returns the sum plus the bill run type pluralised and zero value as singular (12 Supplementary bills and 1 zero value bill)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
             expect(result.billsCount).to.equal('12 Supplementary bills and 1 zero value bill')
           })
         })
 
-        describe('and there are multiple zero-value bills', () => {
+        describe('and there are multiple zero value bills', () => {
           beforeEach(() => {
             billRunSummaries[0].netAmount = 0
             billRunSummaries[1].netAmount = 0
           })
 
-          it('returns the sum plus the bill run type and zero-value pluralised (12 Supplementary bills and 2 zero value bills)', () => {
+          it('returns the sum plus the bill run type and zero value pluralised (12 Supplementary bills and 2 zero value bills)', () => {
             const result = ViewBillRunPresenter.go(billRun, billRunSummaries)
 
             expect(result.billsCount).to.equal('1 Supplementary bill and 2 zero value bills')
