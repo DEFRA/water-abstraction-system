@@ -9,11 +9,11 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillHelper = require('../../../support/helpers/water/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/water/bill-licence.helper.js')
+const BillHelper = require('../../../support/helpers/bill.helper.js')
+const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const TransactionHelper = require('../../../support/helpers/water/transaction.helper.js')
+const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
 // Things we need to stub
 const ChargingModuleBillRunStatusService = require('../../../../app/services/charging-module/bill-run-status.service.js')
@@ -124,30 +124,30 @@ describe('Reissue Bill service', () => {
 
     sourceBill = await BillHelper.add({
       externalId: INVOICE_EXTERNAL_ID,
-      isFlaggedForRebilling: true
+      flaggedForRebilling: true
     })
 
     const sourceBillLicences = await Promise.all([
       BillLicenceHelper.add({
-        billingInvoiceId: sourceBill.billingInvoiceId,
+        billId: sourceBill.id,
         licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_1'
       }),
       BillLicenceHelper.add({
-        billingInvoiceId: sourceBill.billingInvoiceId,
+        billId: sourceBill.id,
         licenceId: generateUUID(),
         licenceRef: 'INVOICE_LICENCE_2'
       })
     ])
 
     await TransactionHelper.add({
-      billingInvoiceLicenceId: sourceBillLicences[0].billingInvoiceLicenceId,
+      billLicenceId: sourceBillLicences[0].id,
       externalId: INVOICE_LICENCE_1_TRANSACTION_ID,
       purposes: { test: 'TEST' }
     })
 
     await TransactionHelper.add({
-      billingInvoiceLicenceId: sourceBillLicences[1].billingInvoiceLicenceId,
+      billLicenceId: sourceBillLicences[1].id,
       externalId: INVOICE_LICENCE_2_TRANSACTION_ID,
       purposes: { test: 'TEST' }
     })
@@ -189,16 +189,16 @@ describe('Reissue Bill service', () => {
       it('to its own id if `null`', async () => {
         await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        expect(sourceBill.originalBillingInvoiceId).to.equal(sourceBill.billingInvoiceId)
+        expect(sourceBill.originalBillId).to.equal(sourceBill.id)
       })
 
       it("to the existing value if it's populated", async () => {
-        const ORIGINAL_BILLING_INVOICE_ID = generateUUID()
-        await sourceBill.$query().patch({ originalBillingInvoiceId: ORIGINAL_BILLING_INVOICE_ID })
+        const originalBillId = generateUUID()
+        await sourceBill.$query().patch({ originalBillId })
 
         await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        expect(sourceBill.originalBillingInvoiceId).to.equal(ORIGINAL_BILLING_INVOICE_ID)
+        expect(sourceBill.originalBillId).to.equal(originalBillId)
       })
     })
 
@@ -206,7 +206,7 @@ describe('Reissue Bill service', () => {
       it('negative for credits', async () => {
         const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        const credits = result.transactions.filter(transaction => transaction.isCredit)
+        const credits = result.transactions.filter(transaction => transaction.credit)
 
         credits.forEach((transaction) => {
           expect(transaction.netAmount).to.be.below(0)
@@ -216,7 +216,7 @@ describe('Reissue Bill service', () => {
       it('positive for debits', async () => {
         const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        const debits = result.transactions.filter(transaction => !transaction.isCredit)
+        const debits = result.transactions.filter(transaction => !transaction.credit)
 
         debits.forEach((transaction) => {
           expect(transaction.netAmount).to.be.above(0)

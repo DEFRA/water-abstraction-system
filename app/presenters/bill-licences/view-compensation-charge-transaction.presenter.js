@@ -39,7 +39,7 @@ function _presrocContent (transaction) {
     billableDays,
     chargeType,
     endDate,
-    isCredit,
+    credit,
     netAmount,
     section127Agreement,
     startDate,
@@ -51,8 +51,8 @@ function _presrocContent (transaction) {
     billableDays: `${billableDays}/${authorisedDays}`,
     chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     chargeType,
-    creditAmount: isCredit ? formatMoney(netAmount) : '',
-    debitAmount: isCredit ? '' : formatMoney(netAmount),
+    creditAmount: credit ? formatMoney(netAmount) : '',
+    debitAmount: credit ? '' : formatMoney(netAmount),
     description: 'Compensation charge',
     quantity: `${volume}ML`
   }
@@ -64,7 +64,7 @@ function _srocContent (transaction) {
     billableDays,
     chargeType,
     endDate,
-    isCredit,
+    credit,
     netAmount,
     startDate,
     volume
@@ -74,8 +74,8 @@ function _srocContent (transaction) {
     billableDays: `${billableDays}/${authorisedDays}`,
     chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     chargeType,
-    creditAmount: isCredit ? formatMoney(netAmount) : '',
-    debitAmount: isCredit ? '' : formatMoney(netAmount),
+    creditAmount: credit ? formatMoney(netAmount) : '',
+    debitAmount: credit ? '' : formatMoney(netAmount),
     description: 'Compensation charge',
     quantity: `${volume}ML`
   }

@@ -5,7 +5,7 @@
  * @module FetchBillsToBeReissuedService
  */
 
-const BillModel = require('../../../models/water/bill.model.js')
+const BillModel = require('../../../models/bill.model.js')
 
 /**
  * Takes a region and fetches sroc bills in that region marked for reissuing, along with their transactions
@@ -18,14 +18,14 @@ async function go (regionId) {
   try {
     const result = await BillModel.query()
       .select(
-        'billingInvoiceId',
-        'billingInvoices.externalId',
-        'financialYearEnding',
-        'invoiceAccountId',
-        'invoiceAccountNumber',
-        'originalBillingInvoiceId'
+        'bills.id',
+        'bills.externalId',
+        'bills.financialYearEnding',
+        'bills.billingAccountId',
+        'bills.accountNumber',
+        'bills.originalBillId'
       )
-      .where('isFlaggedForRebilling', true)
+      .where('bills.flaggedForRebilling', true)
       .joinRelated('billRun')
       .where('billRun.regionId', regionId)
       .where('billRun.scheme', 'sroc')

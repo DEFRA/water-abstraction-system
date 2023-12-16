@@ -5,7 +5,7 @@
  * @module UnflagUnbilledLicencesService
  */
 
-const LicenceModel = require('../../../models/water/licence.model.js')
+const LicenceModel = require('../../../models/licence.model.js')
 
 /**
  * Unflag any licences that were not billed as part of a bill run
@@ -32,12 +32,12 @@ const LicenceModel = require('../../../models/water/licence.model.js')
  */
 async function go (billRunId, allLicenceIds) {
   const result = await LicenceModel.query()
-    .patch({ includeInSrocSupplementaryBilling: false })
-    .whereIn('licenceId', allLicenceIds)
+    .patch({ includeInSrocBilling: false })
+    .whereIn('id', allLicenceIds)
     .whereNotExists(
       LicenceModel.relatedQuery('billLicences')
-        .join('billingInvoices', 'billingInvoices.billingInvoiceId', '=', 'billLicences.billingInvoiceId')
-        .where('billingInvoices.billingBatchId', '=', billRunId)
+        .join('bills', 'bills.id', '=', 'billLicences.billId')
+        .where('bills.billRunId', '=', billRunId)
     )
 
   return result

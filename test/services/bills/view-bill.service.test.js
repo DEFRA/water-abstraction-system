@@ -31,12 +31,12 @@ describe('View Bill service', () => {
         Sinon.stub(FetchBillService, 'go').resolves(
           {
             bill: {
-              billingInvoiceId: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
-              invoiceAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
+              id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
+              billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
             },
             licenceSummaries: [
-              { billingInvoiceLicenceId: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' },
-              { billingInvoiceLicenceId: '5bf9a7f0-c769-486d-a685-f032799e42d9' }
+              { id: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' },
+              { id: '5bf9a7f0-c769-486d-a685-f032799e42d9' }
             ]
           }
         )
@@ -91,11 +91,11 @@ describe('View Bill service', () => {
         Sinon.stub(FetchBillService, 'go').resolves(
           {
             bill: {
-              billingInvoiceId: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
-              invoiceAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
+              id: 'a102d2b4-d0d5-4b26-82e2-d74a66e2cdc3',
+              billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
             },
             licenceSummaries: [
-              { billingInvoiceLicenceId: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' }
+              { id: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' }
             ]
           }
         )

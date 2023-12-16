@@ -37,16 +37,16 @@ async function go (chargeVersions, billRunId, billingPeriod) {
   * is the bill licence for that combination of bill and licence, ie:
   *
   * {
-  *   'key-1': { billingInvoiceLicenceId: 'bill-licence-1', ... },
-  *   'key-2': { billingInvoiceLicenceId: 'bill-licence-2', ... }
+  *   'key-1': { billLicenceId: 'bill-licence-1', ... },
+  *   'key-2': { billLicenceId: 'bill-licence-2', ... }
   * }
   */
 function _preGenerateBillLicences (chargeVersions, bills) {
-  const keyedBillingInvoiceLicences = chargeVersions.reduce((acc, chargeVersion) => {
-    const { billingInvoiceId: billId } = bills[chargeVersion.invoiceAccountId]
+  const keyedBillLicences = chargeVersions.reduce((acc, chargeVersion) => {
+    const { id: billId } = bills[chargeVersion.billingAccountId]
     const { licence } = chargeVersion
 
-    const key = _billLicenceKey(billId, licence.licenceId)
+    const key = _billLicenceKey(billId, licence.id)
 
     // The charge versions may contain a combination of bill and licence multiple times, so we check to see if this
     // combination has already had a bill licence generated for it and return early if so
@@ -60,7 +60,7 @@ function _preGenerateBillLicences (chargeVersions, bills) {
     }
   }, {})
 
-  return keyedBillingInvoiceLicences
+  return keyedBillLicences
 }
 
 function _billLicenceKey (billId, licenceId) {
@@ -70,11 +70,11 @@ function _billLicenceKey (billId, licenceId) {
 /**
   * We pre-generate bills for every billing account so that we don't need to fetch any data from the db during the main
   * charge version processing loop. This function generates the required bill licences and returns an object where
-  * each key is the invoice account id, and each value is the bill, ie:
+  * each key is the billing account id, and each value is the bill, ie:
   *
   * {
-  *   'uuid-1': { invoiceAccountId: 'uuid-1', ... },
-  *   'uuid-2': { invoiceAccountId: 'uuid-2', ... }
+  *   'uuid-1': { id: 'uuid-1', ... },
+  *   'uuid-2': { id: 'uuid-2', ... }
   * }
   */
 function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
@@ -83,7 +83,7 @@ function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
     // bill licence already exists in the object before generating one
     return {
       ...acc,
-      [billingAccount.invoiceAccountId]: GenerateBillService.go(
+      [billingAccount.id]: GenerateBillService.go(
         billingAccount,
         billRunId,
         billingPeriod.endDate.getFullYear()

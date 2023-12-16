@@ -5,7 +5,7 @@
  * @module FetchBillingAccountService
  */
 
-const BillingAccount = require('../../models/crm-v2/billing-account.model.js')
+const BillingAccount = require('../../models/billing-account.model.js')
 
 /**
  * Fetch the matching Billing account plus the current billing account address record linked to it
@@ -22,13 +22,13 @@ async function _fetch (id) {
   const result = BillingAccount.query()
     .findById(id)
     .select([
-      'invoiceAccountId',
-      'invoiceAccountNumber'
+      'id',
+      'accountNumber'
     ])
     .withGraphFetched('company')
     .modifyGraph('company', (builder) => {
       builder.select([
-        'company_id',
+        'id',
         'name',
         'type'
       ])
@@ -41,21 +41,21 @@ async function _fetch (id) {
     .withGraphFetched('billingAccountAddresses.address')
     .modifyGraph('billingAccountAddresses.address', (builder) => {
       builder.select([
-        'addressId',
+        'id',
         'address1',
         'address2',
         'address3',
         'address4',
-        'town',
-        'county',
+        'address5',
+        'address6',
         'postcode',
         'country'
       ])
     })
-    .withGraphFetched('billingAccountAddresses.agentCompany')
-    .modifyGraph('billingAccountAddresses.agentCompany', (builder) => {
+    .withGraphFetched('billingAccountAddresses.company')
+    .modifyGraph('billingAccountAddresses.company', (builder) => {
       builder.select([
-        'companyId',
+        'id',
         'name',
         'type'
       ])
@@ -63,7 +63,7 @@ async function _fetch (id) {
     .withGraphFetched('billingAccountAddresses.contact')
     .modifyGraph('billingAccountAddresses.contact', (builder) => {
       builder.select([
-        'contactId',
+        'id',
         'contactType',
         'dataSource',
         'department',
