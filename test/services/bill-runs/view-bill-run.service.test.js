@@ -155,14 +155,14 @@ function _multipleGroupBillRun () {
 
   return {
     billRun: {
-      billingBatchId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+      id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
       batchType: 'annual',
       billRunNumber: 10003,
       creditNoteCount: 0,
       creditNoteValue: 0,
       invoiceCount: 2,
       invoiceValue: 21327500,
-      isSummer: false,
+      summer: false,
       netTotal: 21327500,
       scheme: 'sroc',
       source: 'wrls',
@@ -171,7 +171,7 @@ function _multipleGroupBillRun () {
       transactionFileReference: 'nalei90002t',
       createdAt: new Date('2023-03-07'),
       region: {
-        regionId: 'adca5dd3-114d-4477-8cdd-684081429f4b',
+        id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
         displayName: 'South West'
       }
     },
@@ -185,14 +185,14 @@ function _singleGroupBillRun () {
 
   return {
     billRun: {
-      billingBatchId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+      id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
       batchType: 'annual',
       billRunNumber: 10003,
       creditNoteCount: 0,
       creditNoteValue: 0,
       invoiceCount: 1,
       invoiceValue: 9700,
-      isSummer: false,
+      summer: false,
       netTotal: 9700,
       scheme: 'sroc',
       source: 'wrls',
@@ -201,7 +201,7 @@ function _singleGroupBillRun () {
       transactionFileReference: 'nalei90002t',
       createdAt: new Date('2023-03-07'),
       region: {
-        regionId: 'adca5dd3-114d-4477-8cdd-684081429f4b',
+        id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
         displayName: 'South West'
       }
     },
@@ -212,9 +212,9 @@ function _singleGroupBillRun () {
 function _billSummariesData () {
   return [
     {
-      billingInvoiceId: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-      invoiceAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
-      invoiceAccountNumber: 'E11101999A',
+      id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+      billingAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
+      accountNumber: 'E11101999A',
       netAmount: 9700,
       financialYearEnding: 2023,
       companyName: 'H M Scotty & Daughter',
@@ -223,9 +223,9 @@ function _billSummariesData () {
       waterCompany: false
     },
     {
-      billingInvoiceId: '64924759-8142-4a08-9d1e-1e902cd9d316',
-      invoiceAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
-      invoiceAccountNumber: 'E22288888A',
+      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+      accountNumber: 'E22288888A',
       netAmount: 21317800,
       financialYearEnding: 2023,
       companyName: 'Acme Water Services Ltd',
