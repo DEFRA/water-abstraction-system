@@ -20,7 +20,7 @@ const FetchBillRunService = require('./fetch-bill-run.service.js')
 async function go (id) {
   const result = await FetchBillRunService.go(id)
 
-  const billRun = ViewBillRunPresenter.go(result.billRun)
+  const billRun = ViewBillRunPresenter.go(result.billRun, result.billSummaries)
   const billGroups = ViewBillSummariesPresenter.go(result.billSummaries)
 
   return {

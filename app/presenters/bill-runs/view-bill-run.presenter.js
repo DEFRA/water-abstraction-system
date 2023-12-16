@@ -11,7 +11,7 @@ const {
   formatMoney
 } = require('../base.presenter.js')
 
-function go (billRun) {
+function go (billRun, billRunSummaries) {
   const {
     batchType,
     billRunNumber,
