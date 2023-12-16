@@ -17,8 +17,7 @@ function go (billSummaries) {
     billGroups.push({
       type: 'water-companies',
       caption: _caption(waterCompanies, true),
-      bills: _bills(waterCompanies),
-      total: _total(waterCompanies)
+      bills: waterCompanies
     })
   }
 
@@ -26,8 +25,7 @@ function go (billSummaries) {
     billGroups.push({
       type: 'other-abstractors',
       caption: _caption(otherAbstractors, false),
-      bills: _bills(otherAbstractors),
-      total: _total(otherAbstractors)
+      bills: otherAbstractors
     })
   }
 
@@ -39,18 +37,18 @@ function _bills (summaries) {
     const {
       agentName,
       allLicences,
-      billingInvoiceId,
+      id,
       companyName,
       financialYearEnding,
-      invoiceAccountNumber,
+      accountNumber,
       netAmount
     } = summary
 
     const licences = allLicences.split(',')
 
     return {
-      id: billingInvoiceId,
-      accountNumber: invoiceAccountNumber,
+      id,
+      accountNumber,
       billingContact: _billingContact(agentName, companyName),
       licences,
       licencesCount: licences.length,
@@ -72,30 +70,26 @@ function _caption (bills, isWaterCompany) {
   const numberOfRows = bills.length
 
   if (numberOfRows === 1) {
-    return isWaterCompany ? '1 water company bill' : '1 other abstractor bill'
+    return isWaterCompany ? '1 water company' : '1 other abstractor'
   }
 
-  return isWaterCompany ? `${numberOfRows} water company bills` : `${numberOfRows} other abstractor bills`
+  return isWaterCompany ? `${numberOfRows} water companies` : `${numberOfRows} other abstractors`
 }
 
 function _otherAbstractors (summaries) {
-  return summaries.filter((summary) => {
+  const filteredSummaries = summaries.filter((summary) => {
     return !summary.waterCompany
   })
+
+  return _bills(filteredSummaries)
 }
 
 function _waterCompanies (summaries) {
-  return summaries.filter((summary) => {
+  const filteredSummaries = summaries.filter((summary) => {
     return summary.waterCompany
   })
-}
 
-function _total (billSummaries) {
-  const total = billSummaries.reduce((total, billSummary) => {
-    return total + billSummary.netAmount
-  }, 0)
-
-  return formatMoney(total, true)
+  return _bills(filteredSummaries)
 }
 
 module.exports = {
