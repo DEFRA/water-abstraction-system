@@ -14,6 +14,28 @@ async function go (licences, billRunID) {
   licences.forEach((licence) => {
     const { chargeVersions, returnLogs } = licence
 
+    returnLogs.forEach((returnLog) => {
+      // PERSIST returns
+      const returnResultToPersist = {
+        returnId: returnLog.id,
+        returnReference: returnLog.returnReference,
+        startDate: returnLog.start_date,
+        endDate: returnLog.endDate,
+        dueDate: returnLog.dueDate,
+        receivedDate: returnLog.receivedDate,
+        status: returnLog.status,
+        underQuery: returnLog.underQuery,
+        nilReturn: returnLog.nilReturn,
+        description: returnLog.description,
+        purposes: returnLog.purposes,
+        quantity: returnLog.quantity,
+        allocated: returnLog.allocated,
+        abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
+      }
+
+      _persistDataToReviewReturnResult(returnResultToPersist)
+    })
+
     chargeVersions.forEach((chargeVersion) => {
       const { chargeReferences } = chargeVersion
 
@@ -40,28 +62,6 @@ async function go (licences, billRunID) {
           _persistReviewResult(billRunID, licence.id, chargeVersion.id, chargeVersion.chargePeriod, chargeVersion.changeReason.description, chargeReference.id, reviewChargeElementResultId) // missing review return results id
         })
       })
-    })
-
-    returnLogs.forEach((returnLog) => {
-      // PERSIST returns
-      const returnResultToPersist = {
-        returnId: returnLog.id,
-        returnReference: returnLog.returnReference,
-        startDate: returnLog.start_date,
-        endDate: returnLog.endDate,
-        dueDate: returnLog.dueDate,
-        receivedDate: returnLog.receivedDate,
-        status: returnLog.status,
-        underQuery: returnLog.underQuery,
-        nilReturn: returnLog.nilReturn,
-        description: returnLog.description,
-        purposes: returnLog.purposes,
-        quantity: returnLog.quantity,
-        allocated: returnLog.allocated,
-        abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
-      }
-
-      _persistDataToReviewReturnResult(returnResultToPersist)
     })
   })
 }
@@ -176,6 +176,9 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
           chargeReference.allocatedQuantity += qtyToAllocate
         }
       })
+      // persist charge element
+      // matched returns allocatedQuanitity
+      // review results
     }
   })
 }
@@ -208,6 +211,8 @@ function _matchReturns (chargeElement, returnLogs) {
 
     return periodsOverlap(elementPeriods, returnPeriods)
   })
+  // returns unmatched returns persisted
+  // persisted review results table
 }
 
 module.exports = {
