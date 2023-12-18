@@ -5,11 +5,12 @@
  * @module AllocateReturnsToLicenceService
  */
 
-const { periodsOverlap } = require('../../../lib/general.lib.js')
+const { generateUUID, periodsOverlap } = require('../../../lib/general.lib.js')
 const ReviewChargeElementResultModel = require('../../../models/review-charge-element-result.model.js')
 const ReviewReturnResultModel = require('../../../models/review-return-result.model.js')
+const ReviewResultModel = require('../../../models/review-result.model.js')
 
-async function go (licences) {
+async function go (licences, billRunID) {
   licences.forEach((licence) => {
     const { chargeVersions, returnLogs } = licence
 
@@ -25,7 +26,10 @@ async function go (licences) {
           _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod, chargeReference)
 
           // PERSIST element ???
+          const reviewChargeElementResultId = generateUUID()
+
           const chargeElementToPersist = {
+            id: reviewChargeElementResultId,
             chargeElementId: chargeElement.id,
             allocated: chargeElement.allocated,
             aggregate: chargeReference.aggregate,
@@ -33,6 +37,7 @@ async function go (licences) {
           }
 
           _persistDataToReviewChargeElementResult(chargeElementToPersist)
+          _persistReviewResult(billRunID, licence.id, chargeVersion.id, chargeVersion.chargePeriod, chargeVersion.changeReason.description, chargeReference.id, reviewChargeElementResultId) // missing review return results id
         })
       })
     })
@@ -59,6 +64,21 @@ async function go (licences) {
       _persistDataToReviewReturnResult(returnResultToPersist)
     })
   })
+}
+
+async function _persistReviewResult (billRunID, licenceId, chargeVersionId, chargePeriod, chargeVersionChangeReason, chargeReferenceId, reviewChargeElementResultId) {
+  const data = {
+    billRunID,
+    licenceId,
+    chargeVersionId,
+    chargePeriodStartDate: chargePeriod.startDate,
+    chargePeriodEndDate: chargePeriod.endDate,
+    chargeVersionChangeReason,
+    chargeReferenceId,
+    reviewChargeElementResultId
+  }
+
+  await ReviewResultModel.query().insert(data)
 }
 
 async function _persistDataToReviewChargeElementResult (chargeElementToPersist) {

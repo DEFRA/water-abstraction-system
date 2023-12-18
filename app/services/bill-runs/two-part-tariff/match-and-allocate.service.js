@@ -20,7 +20,7 @@ async function go (billRun, billingPeriods, licenceId) {
 
   await PrepareLicencesForAllocationService.go(licences, billingPeriods[0])
 
-  AllocateReturnsToLicenceService.go(licences)
+  AllocateReturnsToLicenceService.go(licences, billRun.billingBatchId)
 
   const reviewResults = TransformAllocatedLicencesToResultsService.go(billRun, licences)
   // Temporaily put a console log to shut up the linting
