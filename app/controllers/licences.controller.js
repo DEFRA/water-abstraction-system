@@ -59,11 +59,21 @@ async function addANote (request, h) {
   })
 }
 
+async function returnsHowDoYouWant (request, h) {
+  const { id } = request.params
+
+  return h.view('return-requirements/returns-how-do-you-want.njk', {
+    activeNavBar: 'search',
+    licenceId: id
+  })
+}
+
 module.exports = {
   addANote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
   requirementsApproved,
   returnsCheckYourAnswers,
+  returnsHowDoYouWant,
   selectReturnStartDate
 }

@@ -17,6 +17,18 @@ const routes = [
     }
   }, {
     method: 'GET',
+    path: '/licences/{id}/returns-how-do-you-want',
+    handler: LicencesController.returnsHowDoYouWant,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns required - create How do you want to set up the requirements'
+    }
+  }, {
+    method: 'GET',
     path: '/licences/{id}/select-return-start-date',
     handler: LicencesController.selectReturnStartDate,
     options: {

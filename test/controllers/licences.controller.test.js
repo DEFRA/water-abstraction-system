@@ -52,6 +52,26 @@ describe('Licences controller', () => {
     })
   })
 
+  describe('GET /licences/{id}/returns-how-do-you-wantd', () => {
+    const options = {
+      method: 'GET',
+      url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/returns-how-do-you-want',
+      auth: {
+        strategy: 'session',
+        credentials: { scope: ['billing'] }
+      }
+    }
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('How do you want to set up return requirement?')
+      })
+    })
+  })
+
   describe('GET /licences/{id}/no-returns-required', () => {
     const options = {
       method: 'GET',
