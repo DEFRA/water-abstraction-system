@@ -16,24 +16,7 @@ async function go (licences, billRunID) {
 
     returnLogs.forEach((returnLog) => {
       // PERSIST returns
-      const returnResultToPersist = {
-        returnId: returnLog.id,
-        returnReference: returnLog.returnReference,
-        startDate: returnLog.start_date,
-        endDate: returnLog.endDate,
-        dueDate: returnLog.dueDate,
-        receivedDate: returnLog.receivedDate,
-        status: returnLog.status,
-        underQuery: returnLog.underQuery,
-        nilReturn: returnLog.nilReturn,
-        description: returnLog.description,
-        purposes: returnLog.purposes,
-        quantity: returnLog.quantity,
-        allocated: returnLog.allocated,
-        abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
-      }
-
-      _persistDataToReviewReturnResult(returnResultToPersist)
+      _persistDataToReviewReturnResult(returnLog)
     })
 
     chargeVersions.forEach((chargeVersion) => {
@@ -85,8 +68,23 @@ async function _persistDataToReviewChargeElementResult (chargeElementToPersist) 
   await ReviewChargeElementResultModel.query().insert(chargeElementToPersist)
 }
 
-async function _persistDataToReviewReturnResult (dataToPersist) {
-  await ReviewReturnResultModel.query().insert(dataToPersist)
+async function _persistDataToReviewReturnResult (returnLog) {
+  await ReviewReturnResultModel.query().insert({
+    returnId: returnLog.id,
+    returnReference: returnLog.returnReference,
+    startDate: returnLog.start_date,
+    endDate: returnLog.endDate,
+    dueDate: returnLog.dueDate,
+    receivedDate: returnLog.receivedDate,
+    status: returnLog.status,
+    underQuery: returnLog.underQuery,
+    nilReturn: returnLog.nilReturn,
+    description: returnLog.description,
+    purposes: returnLog.purposes,
+    quantity: returnLog.quantity,
+    allocated: returnLog.allocated,
+    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
+  })
 }
 
 function _chargeDatesOverlap (matchedLine, chargePeriod) {
