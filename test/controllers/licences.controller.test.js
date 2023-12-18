@@ -32,6 +32,26 @@ describe('Licences controller', () => {
     Sinon.restore()
   })
 
+  describe('GET /licences/{id}/reason', () => {
+    const options = {
+      method: 'GET',
+      url: '/licences/64924759-8142-4a08-9d1e-1e902cd9d316/reason',
+      auth: {
+        strategy: 'session',
+        credentials: { scope: ['billing'] }
+      }
+    }
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Select the reason for the return requirement')
+      })
+    })
+  })
+
   describe('GET /licences/{id}/select-return-start-date', () => {
     const options = {
       method: 'GET',

@@ -14,6 +14,15 @@ async function noReturnsRequired (request, h) {
   })
 }
 
+async function reasonNewRequirements (request, h) {
+  const { id } = request.params
+
+  return h.view('return-requirements/reason.njk', {
+    activeNavBar: 'search',
+    licenceId: id
+  })
+}
+
 async function selectReturnStartDate (request, h) {
   const { id } = request.params
 
@@ -64,6 +73,7 @@ module.exports = {
   noReturnsCheckYourAnswers,
   noReturnsRequired,
   requirementsApproved,
+  reasonNewRequirements,
   returnsCheckYourAnswers,
   selectReturnStartDate
 }
