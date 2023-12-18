@@ -12,14 +12,16 @@ const ViewBillRunPresenter = require('../../../app/presenters/bill-runs/view-bil
 
 describe('View Bill Run presenter', () => {
   let billRun
+  let billSummaries
 
   describe('when provided with a populated bill run', () => {
     beforeEach(() => {
       billRun = _testBillRun()
+      billSummaries = _testBillSummaries()
     })
 
     it('correctly presents the data', () => {
-      const result = ViewBillRunPresenter.go(billRun)
+      const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
       expect(result).to.equal({
         billsCount: '8 Supplementary bills',
@@ -43,14 +45,16 @@ describe('View Bill Run presenter', () => {
     })
 
     describe("the 'billsCount' property", () => {
+      // NOTE: We have no tests for zero value bills in this scenario because a bill run won't exist if it just contains
+      // a single zero value bill. So, if there is only one bill it must be a credit or an invoice
       describe('when the sum of the invoice and credit count is 1', () => {
         beforeEach(() => {
           billRun.creditNoteCount = 0
           billRun.invoiceCount = 1
         })
 
-        it('returns to sum plus the bill run type as singular (1 Supplementary bill)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+        it('returns 1 plus the bill run type as singular (1 Supplementary bill)', () => {
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.billsCount).to.equal('1 Supplementary bill')
         })
@@ -58,15 +62,41 @@ describe('View Bill Run presenter', () => {
 
       describe('when the sum of the invoice and credit count is more than 1', () => {
         beforeEach(() => {
-          billRun.batchType = 'annual'
           billRun.creditNoteCount = 5
           billRun.invoiceCount = 7
         })
 
-        it('returns to sum plus the bill run type pluralised (12 Annual bills)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+        describe('and there are no zero value bills', () => {
+          it('returns the sum plus the bill run type pluralised (12 Supplementary bills)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.billsCount).to.equal('12 Annual bills')
+            expect(result.billsCount).to.equal('12 Supplementary bills')
+          })
+        })
+
+        describe('and there is 1 zero value bill', () => {
+          beforeEach(() => {
+            billSummaries[0].netAmount = 0
+          })
+
+          it('returns the sum plus the bill run type pluralised and zero value as singular (12 Supplementary bills and 1 zero value bill)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billSummaries)
+
+            expect(result.billsCount).to.equal('12 Supplementary bills and 1 zero value bill')
+          })
+        })
+
+        describe('and there are multiple zero value bills', () => {
+          beforeEach(() => {
+            billSummaries[0].netAmount = 0
+            billSummaries[1].netAmount = 0
+          })
+
+          it('returns the sum plus the bill run type and zero value pluralised (12 Supplementary bills and 2 zero value bills)', () => {
+            const result = ViewBillRunPresenter.go(billRun, billSummaries)
+
+            expect(result.billsCount).to.equal('12 Supplementary bills and 2 zero value bills')
+          })
         })
       })
     })
@@ -74,7 +104,7 @@ describe('View Bill Run presenter', () => {
     describe("the 'billRunTotal' property", () => {
       describe('when the net total is greater than 0', () => {
         it('returns the value converted to pounds, formatted as money and showing as a debit (£707.00)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.billRunTotal).to.equal('£707.00')
         })
@@ -86,7 +116,7 @@ describe('View Bill Run presenter', () => {
         })
 
         it('returns the value converted to pounds, formatted as money and showing as a debit (£0.00)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.billRunTotal).to.equal('£0.00')
         })
@@ -98,7 +128,7 @@ describe('View Bill Run presenter', () => {
         })
 
         it('returns the value converted to pounds, formatted as money and showing as a credit (£707.00 credit)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.billRunTotal).to.equal('£707.00 credit')
         })
@@ -112,7 +142,7 @@ describe('View Bill Run presenter', () => {
         })
 
         it('returns Annual', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.billRunType).to.equal('Annual')
         })
@@ -120,7 +150,7 @@ describe('View Bill Run presenter', () => {
 
       describe('when the bill run is supplementary', () => {
         it('returns Supplementary', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.billRunType).to.equal('Supplementary')
         })
@@ -133,7 +163,7 @@ describe('View Bill Run presenter', () => {
 
         describe('and the scheme is sroc', () => {
           it('returns Supplementary', () => {
-            const result = ViewBillRunPresenter.go(billRun)
+            const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
             expect(result.billRunType).to.equal('Two-part tariff')
           })
@@ -146,7 +176,7 @@ describe('View Bill Run presenter', () => {
 
           describe('and it is not summer only', () => {
             it('returns Supplementary', () => {
-              const result = ViewBillRunPresenter.go(billRun)
+              const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
               expect(result.billRunType).to.equal('Two-part tariff winter and all year')
             })
@@ -158,7 +188,7 @@ describe('View Bill Run presenter', () => {
             })
 
             it('returns Supplementary', () => {
-              const result = ViewBillRunPresenter.go(billRun)
+              const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
               expect(result.billRunType).to.equal('Two-part tariff summer')
             })
@@ -170,7 +200,7 @@ describe('View Bill Run presenter', () => {
     describe("the 'chargeScheme' property", () => {
       describe('when the bill run is sroc', () => {
         it('returns Current', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.chargeScheme).to.equal('Current')
         })
@@ -182,7 +212,7 @@ describe('View Bill Run presenter', () => {
         })
 
         it('returns Old', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.chargeScheme).to.equal('Old')
         })
@@ -196,7 +226,7 @@ describe('View Bill Run presenter', () => {
         })
 
         it('returns the count singular (1 credit note)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.creditsCount).to.equal('1 credit note')
         })
@@ -204,7 +234,7 @@ describe('View Bill Run presenter', () => {
 
       describe('when there are multiple credit notes', () => {
         it('returns the count pluralised (2 credit notes)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.creditsCount).to.equal('2 credit notes')
         })
@@ -218,7 +248,7 @@ describe('View Bill Run presenter', () => {
         })
 
         it('returns the count singular (1 invoice)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.debitsCount).to.equal('1 invoice')
         })
@@ -226,7 +256,7 @@ describe('View Bill Run presenter', () => {
 
       describe('when there are multiple invoices', () => {
         it('returns the count pluralised (6 invoices)', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.debitsCount).to.equal('6 invoices')
         })
@@ -240,7 +270,7 @@ describe('View Bill Run presenter', () => {
         })
 
         it('returns false', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.displayCreditDebitTotals).to.be.false()
         })
@@ -248,7 +278,7 @@ describe('View Bill Run presenter', () => {
 
       describe('when the bill run is supplementary', () => {
         it('returns true', () => {
-          const result = ViewBillRunPresenter.go(billRun)
+          const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
           expect(result.displayCreditDebitTotals).to.be.true()
         })
@@ -257,7 +287,7 @@ describe('View Bill Run presenter', () => {
 
     describe("the 'financialYear' property", () => {
       it('returns the to and from financial year (2023 to 2024)', () => {
-        const result = ViewBillRunPresenter.go(billRun)
+        const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
         expect(result.financialYear).to.equal('2023 to 2024')
       })
@@ -265,7 +295,7 @@ describe('View Bill Run presenter', () => {
 
     describe("the 'pageTitle' property", () => {
       it('returns the region name and bill run type (Wales supplementary)', () => {
-        const result = ViewBillRunPresenter.go(billRun)
+        const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
         expect(result.pageTitle).to.equal('Wales supplementary')
       })
@@ -273,7 +303,7 @@ describe('View Bill Run presenter', () => {
 
     describe("the 'region' property", () => {
       it("returns the bill run's region display name capitalized (Wales)", () => {
-        const result = ViewBillRunPresenter.go(billRun)
+        const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
         expect(result.region).to.equal('Wales')
       })
@@ -303,4 +333,31 @@ function _testBillRun () {
       displayName: 'Wales'
     }
   }
+}
+
+function _testBillSummaries () {
+  return [
+    {
+      id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+      billingAccountId: 'e8bd9fe1-47eb-42f2-a507-786bccd35aee',
+      accountNumber: 'E11101999A',
+      netAmount: -9700,
+      financialYearEnding: 2023,
+      companyName: 'H M Scotty & Daughter',
+      agentName: 'Geordie Leforge',
+      allLicences: '17/53/001/G/782',
+      waterCompany: false
+    },
+    {
+      id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+      billingAccountId: 'ee3f5562-26ad-4d58-9b59-5c388a13d7d0',
+      accountNumber: 'E22288888A',
+      netAmount: 21317800,
+      financialYearEnding: 2023,
+      companyName: 'Acme Water Services Ltd',
+      agentName: null,
+      allLicences: '17/53/001/A/101,17/53/002/B/205,17/53/002/C/308',
+      waterCompany: true
+    }
+  ]
 }
