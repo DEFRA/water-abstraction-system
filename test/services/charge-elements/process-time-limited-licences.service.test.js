@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const Workflow = require('../../../app/models/water/workflow.model.js')
+const Workflow = require('../../../app/models/workflow.model.js')
 
 // Things we need to stub
 const FetchTimeLimitedLicencesService = require('../../../app/services/charge-elements/fetch-time-limited-licences.service.js')

@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/water/bill-run.helper.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test

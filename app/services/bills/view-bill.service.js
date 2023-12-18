@@ -31,7 +31,7 @@ const ViewLicenceSummariesPresenter = require('../../presenters/bills/view-licen
  */
 async function go (id) {
   const { bill, licenceSummaries } = await FetchBillService.go(id)
-  const billingAccount = await FetchBillingAccountService.go(bill.invoiceAccountId)
+  const billingAccount = await FetchBillingAccountService.go(bill.billingAccountId)
 
   // Irrespective of of how many licences are linked to the bill, the templates always need formatted bill and billing
   // account data
@@ -43,9 +43,9 @@ async function go (id) {
   if (licenceSummaries.length > 1) {
     additionalData = ViewLicenceSummariesPresenter.go(licenceSummaries)
   } else {
-    // Else we need to provide we need to provide bill licence data for the single licence bill templates
-    // (ViewBillLicencePresenter handles both PRESROC and SROC)
-    const billLicence = await FetchBillLicence.go(licenceSummaries[0].billingInvoiceLicenceId)
+    // Else we need to provide bill licence data for the single licence bill templates (ViewBillLicencePresenter handles
+    // both PRESROC and SROC)
+    const billLicence = await FetchBillLicence.go(licenceSummaries[0].id)
 
     additionalData = ViewBillLicencePresenter.go(billLicence)
   }

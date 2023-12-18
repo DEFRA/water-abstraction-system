@@ -45,8 +45,8 @@ describe('Fetch Billing Accounts service', () => {
 
     it('fetches the billing accounts that the charge versions link to', async () => {
       const result = await FetchBillingAccountsService.go([
-        { invoiceAccountId: billingAccounts[0].id },
-        { invoiceAccountId: billingAccounts[1].id }
+        { billingAccountId: billingAccounts[0].id },
+        { billingAccountId: billingAccounts[1].id }
       ])
 
       expect(result).to.have.length(2).and.contain(expectedResult)

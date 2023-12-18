@@ -29,7 +29,7 @@ describe('View Bill Licence service', () => {
       fetchBillLicenceSpy = Sinon.spy(FetchBillLicenceService, 'go')
 
       Sinon.stub(ViewBillLicencePresenter, 'go').returns({
-        billingInvoiceLicenceId: '1ac20440-fddc-4835-97ea-95c702cb9430'
+        billId: '4fc6536e-1970-47f0-a4b3-d4c6360ad389'
       })
     })
 
@@ -37,7 +37,7 @@ describe('View Bill Licence service', () => {
       const result = await ViewBillLicenceService.go(testId)
 
       expect(result).to.equal({
-        billingInvoiceLicenceId: '1ac20440-fddc-4835-97ea-95c702cb9430'
+        billId: '4fc6536e-1970-47f0-a4b3-d4c6360ad389'
       })
 
       expect(fetchBillLicenceSpy.calledOnceWith(testId)).to.be.true()

@@ -1,207 +1,75 @@
 'use strict'
 
 /**
- * Used to test the Two-part tariff matching logic
+ * Our test iteration of a two-part tariff returns matching engine
  * @module TwoPartService
  */
 
-const { ref } = require('objection')
-
-const AllocateReturnsVolumes = require('./allocate-returns-volumes.service.js')
-const CalculateReturnsVolumes = require('./calculate-returns-volumes.service.js')
-const ChargeReferenceModel = require('../../models/water/charge-reference.model.js')
-const ChargeVersionModel = require('../../models/water/charge-version.model.js')
-const FriendlyResponseService = require('./friendly-response.service.js')
 const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-periods.service.js')
-const ReturnLogModel = require('../../models/return-log.model.js')
-const Workflow = require('../../models/water/workflow.model.js')
+const DetermineIssuesService = require('./determine-issues.service.js')
+const FetchLicencesService = require('../bill-runs/two-part-tariff/fetch-licences.service.js')
+const LicenceModel = require('../../models/licence.model.js')
+const RegionModel = require('../../models/region.model.js')
+const ScenarioFormatterService = require('./scenario-formatter.service.js')
+const { allocateReturnsToLicencesService, prepareLicencesForAllocationService } = require('./stand-ins.service.js')
 
-async function go (naldRegionId, format = 'friendly') {
-  const startTime = process.hrtime.bigint()
+async function go (identifier, type) {
+  const billingPeriod = _billingPeriod()
 
+  // NOTE: This is something specific to this verify service. The real version will be kicked off as part of creating
+  // a new bill run, which means the region ID will be provided as it is required to know who we are creating the bill
+  // run for.
+  const regionId = await _determineRegionId(identifier, type)
+
+  let licences = await FetchLicencesService.go(regionId, billingPeriod)
+
+  // NOTE: fetchLicencesService depends on FetchChargeVersionsService which was built to support the proper 2PT match &
+  // allocate engine so doesn't have the ability to search for just a single licence. We still want to support just
+  // verifying a single licence in our check endpoint though. So, if the type is 'licence' we filter out everything that
+  // isn't the requested licence.
+  if (type === 'licence') {
+    licences = licences.filter((licence) => {
+      return licence.id === identifier
+    })
+  }
+
+  await prepareLicencesForAllocationService.go(licences, billingPeriod)
+
+  allocateReturnsToLicencesService.go(licences)
+
+  const formattedResults = []
+  licences.forEach((licence, licenceIndex) => {
+    DetermineIssuesService.go(licence)
+
+    const formattedResult = ScenarioFormatterService.go(licence, licenceIndex)
+    formattedResults.push(formattedResult)
+  })
+
+  return formattedResults
+}
+
+function _billingPeriod () {
   const billingPeriods = DetermineBillingPeriodsService.go()
 
-  const billingPeriod = billingPeriods[1]
+  return billingPeriods[1]
+}
 
-  const chargeVersions = await _fetchChargeVersions(billingPeriod, naldRegionId)
+async function _determineRegionId (identifier, type) {
+  if (type === 'region') {
+    const region = await RegionModel.query()
+      .select('id')
+      .where('naldRegionId', identifier)
+      .limit(1)
+      .first()
 
-  for (const chargeVersion of chargeVersions) {
-    await _fetchAndApplyReturns(billingPeriod, chargeVersion)
+    return region.id
   }
 
-  const responseData = _responseData(chargeVersions)
+  const licence = await LicenceModel.query()
+    .findById(identifier)
+    .select('regionId')
 
-  _calculateAndLogTime(startTime)
-
-  switch (format) {
-    case 'friendly':
-      return FriendlyResponseService.go(billingPeriod, responseData)
-    case 'raw':
-      return responseData
-    default:
-      // TODO: consider throwing a Boom error here
-      return { error: `Invalid format ${format}` }
-  }
-}
-
-async function _fetchChargeVersions (billingPeriod, naldRegionId) {
-  const chargeVersions = await ChargeVersionModel.query()
-    .select([
-      'chargeVersions.chargeVersionId',
-      'chargeVersions.startDate',
-      'chargeVersions.endDate',
-      'chargeVersions.status',
-      'chargeVersions.licenceId',
-      'chargeVersions.licenceRef'
-    ])
-    .where('chargeVersions.regionCode', naldRegionId)
-    .where('chargeVersions.scheme', 'sroc')
-    .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
-    .where('chargeVersions.status', 'current')
-    .whereNotExists(
-      Workflow.query()
-        .select(1)
-        .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
-        .whereNull('chargeVersionWorkflows.dateDeleted')
-    )
-    .whereExists(
-      ChargeReferenceModel.query()
-        .select(1)
-        .whereColumn('chargeVersions.chargeVersionId', 'chargeReferences.chargeVersionId')
-        // NOTE: We can make withJsonSuperset() work which looks nicer, but only if we don't have anything camel case
-        // in the table/column name. Camel case mappers don't work with whereJsonSuperset() or whereJsonSubset(). So,
-        // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
-        .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
-    )
-    .withGraphFetched('chargeReferences')
-    .modifyGraph('chargeVersions.chargeReferences', (builder) => {
-      builder.whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
-    })
-    .withGraphFetched('chargeReferences.chargeCategory')
-    .modifyGraph('chargeReferences.chargeCategory', (builder) => {
-      builder.select([
-        'reference',
-        'shortDescription'
-      ])
-    })
-    .withGraphFetched('chargeReferences.chargeElements.purpose')
-
-  return chargeVersions
-}
-
-async function _fetchAndApplyReturns (billingPeriod, chargeVersion) {
-  const { licenceRef, chargeReferences } = chargeVersion
-  const cumulativeReturnsStatuses = []
-  let returnsUnderQuery
-
-  for (const chargeReference of chargeReferences) {
-    const purposeUseLegacyIds = _extractPurposeUseLegacyIds(chargeReference)
-
-    chargeReference.returnLogs = await ReturnLogModel.query()
-      .select([
-        'id',
-        'returnRequirement',
-        'startDate',
-        'endDate',
-        'status',
-        'underQuery',
-        'metadata'
-      ])
-      .where('licenceRef', licenceRef)
-      // water-abstraction-service filters out old returns in this way: `src/lib/services/returns/api-connector.js`
-      .where('startDate', '>=', '2008-04-01')
-      .where('startDate', '<=', billingPeriod.endDate)
-      .where('endDate', '>=', billingPeriod.startDate)
-      .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
-      .whereIn(ref('metadata:purposes[0].tertiary.code').castInt(), purposeUseLegacyIds)
-      .withGraphFetched('returnSubmissions')
-      .modifyGraph('returnSubmissions', builder => {
-        builder.where('returnSubmissions.current', true)
-      })
-      .withGraphFetched('returnSubmissions.returnSubmissionLines')
-      .modifyGraph('returnSubmissions.returnSubmissionLines', builder => {
-        builder
-          .where('returnSubmissionLines.quantity', '>', 0)
-          .where('returnSubmissionLines.startDate', '<=', billingPeriod.endDate)
-          .where('returnSubmissionLines.endDate', '>=', billingPeriod.startDate)
-      })
-
-    CalculateReturnsVolumes.go(billingPeriod, chargeReference.returnLogs)
-    AllocateReturnsVolumes.go(chargeReference)
-
-    const chargeReferenceReturnsStatuses = chargeReference.returnLogs.map((matchedReturn) => {
-      if (matchedReturn.underQuery) {
-        returnsUnderQuery = true
-      }
-
-      return matchedReturn.status
-    })
-
-    cumulativeReturnsStatuses.push(...chargeReferenceReturnsStatuses)
-  }
-
-  chargeVersion.returnsStatuses = [...new Set(cumulativeReturnsStatuses)]
-
-  _calculateReturnsReady(chargeVersion, returnsUnderQuery)
-}
-
-function _extractPurposeUseLegacyIds (chargeReference) {
-  return chargeReference.chargeElements.map((chargeElement) => {
-    return chargeElement.purpose.legacyId
-  })
-}
-
-function _calculateReturnsReady (chargeVersion, returnsUnderQuery) {
-  if (
-    chargeVersion.returnsStatuses.includes('received', 'void') |
-    returnsUnderQuery |
-    chargeVersion.returnsStatuses.length === 0
-  ) {
-    chargeVersion.returnsReady = false
-  } else {
-    chargeVersion.returnsReady = true
-  }
-}
-
-function _responseData (chargeVersions) {
-  const allLicenceIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.licenceId
-  })
-
-  const uniqueLicenceIds = [...new Set(allLicenceIds)]
-
-  return uniqueLicenceIds.map((uniqueLicenceId) => {
-    const licenceChargeVersions = chargeVersions.filter((chargeVersion) => {
-      return chargeVersion.licenceId === uniqueLicenceId
-    })
-
-    const chargeVersionReturnsStatuses = []
-    let returnsReady = false
-
-    for (const chargeVersion of licenceChargeVersions) {
-      chargeVersionReturnsStatuses.push(...chargeVersion.returnsStatuses)
-
-      if (chargeVersion.returnsReady) {
-        returnsReady = true
-      }
-    }
-
-    return {
-      licenceId: uniqueLicenceId,
-      licenceRef: licenceChargeVersions[0].licenceRef,
-      returnsReady,
-      returnsStatuses: [...new Set(chargeVersionReturnsStatuses)],
-      chargeVersions: licenceChargeVersions
-    }
-  })
-}
-
-function _calculateAndLogTime (startTime) {
-  const endTime = process.hrtime.bigint()
-  const timeTakenNs = endTime - startTime
-  const timeTakenMs = timeTakenNs / 1000000n
-
-  global.GlobalNotifier.omg('Two part tariff matching complete', { timeTakenMs })
+  return licence.regionId
 }
 
 module.exports = {

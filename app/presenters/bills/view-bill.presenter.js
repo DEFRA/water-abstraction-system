@@ -18,24 +18,24 @@ function go (bill, billingAccount) {
     accountName: _accountName(billingAccount),
     accountNumber: billingAccount.accountNumber,
     addressLines: _addressLines(billingAccount),
-    billId: bill.billingInvoiceId,
+    billId: bill.id,
     billingAccountId: billingAccount.id,
     billNumber: bill.invoiceNumber,
-    billRunId: billRun.billingBatchId,
+    billRunId: billRun.id,
     billRunNumber: billRun.billRunNumber,
     billRunStatus: billRun.status,
     billRunType: _billRunType(billRun),
-    billTotal: _billTotal(bill.netAmount, bill.isCredit),
+    billTotal: _billTotal(bill.netAmount, bill.credit),
     chargeScheme: _scheme(billRun),
     contactName: _contactName(billingAccount),
-    credit: bill.isCredit,
+    credit: bill.credit,
     creditsTotal: _creditsTotal(bill, billRun),
     dateCreated: formatLongDate(bill.createdAt),
     debitsTotal: _debitsTotal(bill, billRun),
-    deminimis: bill.isDeMinimis,
+    deminimis: bill.deminimis,
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
     financialYear: _financialYear(bill),
-    flaggedForReissue: bill.isFlaggedForRebilling,
+    flaggedForReissue: bill.flaggedForRebilling,
     region: capitalize(billRun.region.displayName),
     transactionFile: billRun.transactionFileReference
   }
@@ -71,7 +71,7 @@ function _addressLines (billingAccount) {
 }
 
 function _billRunType (billRun) {
-  const { batchType, isSummer, scheme } = billRun
+  const { batchType, summer, scheme } = billRun
 
   if (batchType !== 'two_part_tariff') {
     return capitalize(batchType)
@@ -81,7 +81,7 @@ function _billRunType (billRun) {
     return 'Two-part tariff'
   }
 
-  if (isSummer) {
+  if (summer) {
     return 'Two-part tariff summer'
   }
 

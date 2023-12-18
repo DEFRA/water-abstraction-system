@@ -6,7 +6,7 @@
  */
 
 const CreateBillRunEventPresenter = require('../../presenters/bill-runs/create-bill-run-event.presenter.js')
-const EventModel = require('../../models/water/event.model.js')
+const EventModel = require('../../models/event.model.js')
 const GeneralLib = require('../../lib/general.lib.js')
 
 /**

@@ -9,6 +9,7 @@ const Boom = require('@hapi/boom')
 
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
+const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
 async function create (request, h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
@@ -34,6 +35,17 @@ async function review (_request, h) {
   })
 }
 
+async function view (request, h) {
+  const { id } = request.params
+
+  const pageData = await ViewBillRunService.go(id)
+
+  return h.view('bill-runs/view.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
 /**
  * Takes an error from a validator and returns a suitable Boom error
 */
@@ -50,5 +62,6 @@ function _formattedInitiateBillRunError (error) {
 
 module.exports = {
   create,
-  review
+  review,
+  view
 }

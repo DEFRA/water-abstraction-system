@@ -86,7 +86,7 @@ describe('View Bill Licence presenter', () => {
         // presenter. Plus, that things like the totals and the table caption is returned as expected.
         expect(result).to.equal({
           accountNumber: 'W88898987A',
-          billingInvoiceId: '5a5b313b-e707-490a-a693-799339941e4f',
+          billId: '5a5b313b-e707-490a-a693-799339941e4f',
           creditTotal: '£10.00',
           debitTotal: '£298.37',
           displayCreditDebitTotals: true,
@@ -107,9 +107,9 @@ describe('View Bill Licence presenter', () => {
 
     describe('and the total for the transactions is a credit', () => {
       beforeEach(() => {
-        billLicence.transactions[0].isCredit = true
+        billLicence.transactions[0].credit = true
         billLicence.transactions[0].netAmount = -29837
-        billLicence.transactions[1].isCredit = false
+        billLicence.transactions[1].credit = false
         billLicence.transactions[1].netAmount = 1000
       })
 
@@ -122,7 +122,7 @@ describe('View Bill Licence presenter', () => {
         // presenter. Plus, that things like the totals and the table caption is returned as expected.
         expect(result).to.equal({
           accountNumber: 'W88898987A',
-          billingInvoiceId: '5a5b313b-e707-490a-a693-799339941e4f',
+          billId: '5a5b313b-e707-490a-a693-799339941e4f',
           creditTotal: '£298.37',
           debitTotal: '£10.00',
           displayCreditDebitTotals: true,
@@ -145,14 +145,14 @@ describe('View Bill Licence presenter', () => {
 
 function _testBillLicence () {
   return {
-    billingInvoiceLicenceId: 'a4fbaa27-a91c-4328-a1b8-774ade11027b',
+    id: 'a4fbaa27-a91c-4328-a1b8-774ade11027b',
     licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
     licenceRef: 'WA/055/0017/013',
     bill: {
-      billingInvoiceId: '5a5b313b-e707-490a-a693-799339941e4f',
-      invoiceAccountNumber: 'W88898987A',
+      id: '5a5b313b-e707-490a-a693-799339941e4f',
+      accountNumber: 'W88898987A',
       billRun: {
-        billingBatchId: '0e61c36f-f22f-4534-8247-b73a97f551b5',
+        id: '0e61c36f-f22f-4534-8247-b73a97f551b5',
         batchType: 'supplementary',
         scheme: 'alcs',
         source: 'wrls'
@@ -160,27 +160,27 @@ function _testBillLicence () {
     },
     transactions: [
       {
-        billingTransactionId: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
+        id: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
         chargeType: 'standard',
-        isCredit: false,
+        credit: false,
         netAmount: 29837
       },
       {
-        billingTransactionId: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
+        id: '5858e36f-5a8e-4f5c-84b3-cbca26624d67',
         chargeType: 'standard',
-        isCredit: true,
+        credit: true,
         netAmount: -1000
       },
       {
-        billingTransactionId: '14d6d530-7f07-4e4b-ac17-b8ade9f5b21a',
+        id: '14d6d530-7f07-4e4b-ac17-b8ade9f5b21a',
         chargeType: 'compensation',
-        isCredit: false,
+        credit: false,
         netAmount: 0
       },
       {
-        billingTransactionId: '23f43d51-8880-4e30-89da-40231cb8dea2',
+        id: '23f43d51-8880-4e30-89da-40231cb8dea2',
         chargeType: 'minimum_charge',
-        isCredit: false,
+        credit: false,
         netAmount: 0
       }
     ]

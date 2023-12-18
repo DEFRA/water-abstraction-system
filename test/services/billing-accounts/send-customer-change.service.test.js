@@ -19,7 +19,7 @@ const ChargingModuleCreateCustomerChangeService = require('../../../app/services
 const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
 
 describe('Send Transactions service', () => {
-  const billingAccount = { invoiceAccountId: '3b53f101-d256-40f8-a6be-ddefb5f9647c' }
+  const billingAccount = { id: '3b53f101-d256-40f8-a6be-ddefb5f9647c' }
 
   beforeEach(() => {
     Sinon.stub(ChargingModuleCreateCustomerChangePresenter, 'go').returns({
@@ -64,7 +64,7 @@ describe('Send Transactions service', () => {
 
       expect(result).to.be.an.instanceOf(ExpandedError)
       expect(result.message).to.equal('Customer change failed to send')
-      expect(result.invoiceAccountId).to.equal(billingAccount.invoiceAccountId)
+      expect(result.billingAccountId).to.equal(billingAccount.id)
     })
   })
 })
