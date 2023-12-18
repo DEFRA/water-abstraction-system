@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
+const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
@@ -49,10 +50,12 @@ describe('Fetch Charge Versions service', () => {
     const chargeVersionId = '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59'
 
     beforeEach(async () => {
+      const { id: changeReasonId } = await ChangeReasonHelper.add()
+
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
       // second part is to create another charge version with a different licence ref so we can test the order of the
       // results
-      await ChargeVersionHelper.add({ id: chargeVersionId, licenceId, licenceRef, regionCode })
+      await ChargeVersionHelper.add({ id: chargeVersionId, licenceId, licenceRef, regionCode, changeReasonId })
 
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
         id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
@@ -81,7 +84,7 @@ describe('Fetch Charge Versions service', () => {
       // Second charge version to test ordering
       const otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId })
       const chargeVersion = await ChargeVersionHelper.add(
-        { licenceId: otherLicence.id, licenceRef: '01/130', regionCode }
+        { licenceId: otherLicence.id, licenceRef: '01/130', regionCode, changeReasonId }
       )
       const chargeReference = await ChargeReferenceHelper.add({
         chargeVersionId: chargeVersion.id,
@@ -153,7 +156,10 @@ describe('Fetch Charge Versions service', () => {
               }
             }
           ]
-        }]
+        }],
+        changeReason: {
+          description: 'Strategic review of charges (SRoC)'
+        }
       })
     })
 
