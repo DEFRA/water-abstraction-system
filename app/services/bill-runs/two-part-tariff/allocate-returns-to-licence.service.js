@@ -14,37 +14,12 @@ async function go (licences, billRunID) {
   licences.forEach((licence) => {
     const { chargeVersions, returnLogs } = licence
 
-    chargeVersions.forEach((chargeVersion) => {
-      const { chargeReferences } = chargeVersion
-
-      chargeReferences.forEach((chargeReference) => {
-        chargeReference.allocatedQuantity = 0
-
-        const { chargeElements } = chargeReference
-
-        chargeElements.forEach((chargeElement) => {
-          _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod, chargeReference)
-
-          // PERSIST element ???
-          const reviewChargeElementResultId = generateUUID()
-
-          const chargeElementToPersist = {
-            id: reviewChargeElementResultId,
-            chargeElementId: chargeElement.id,
-            allocated: chargeElement.allocated,
-            aggregate: chargeReference.aggregate,
-            chargeDatesOverlap: chargeElement.chargeDatesOverlap
-          }
-
-          _persistDataToReviewChargeElementResult(chargeElementToPersist)
-          _persistReviewResult(billRunID, licence.id, chargeVersion.id, chargeVersion.chargePeriod, chargeVersion.changeReason.description, chargeReference.id, reviewChargeElementResultId) // missing review return results id
-        })
-      })
-    })
-
     returnLogs.forEach((returnLog) => {
       // PERSIST returns
+      const reviewReturnResultId = generateUUID()
+
       const returnResultToPersist = {
+        id: reviewReturnResultId,
         returnId: returnLog.id,
         returnReference: returnLog.returnReference,
         startDate: returnLog.start_date,
@@ -57,16 +32,49 @@ async function go (licences, billRunID) {
         description: returnLog.description,
         purposes: returnLog.purposes,
         quantity: returnLog.quantity,
-        allocated: returnLog.allocated,
+        allocated: returnLog.allocated, // Set at 0, need to update
         abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
       }
 
+      returnLog.reviewReturnResultId = reviewReturnResultId
+
       _persistDataToReviewReturnResult(returnResultToPersist)
+    })
+
+    chargeVersions.forEach((chargeVersion) => {
+      const { chargeReferences } = chargeVersion
+
+      chargeReferences.forEach((chargeReference) => {
+        chargeReference.allocatedQuantity = 0
+
+        const { chargeElements } = chargeReference
+
+        chargeElements.forEach((chargeElement) => {
+          const reviewChargeElementResultId = generateUUID()
+          _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod, chargeReference, reviewChargeElementResultId, billRunID, licence, chargeVersion)
+
+          // PERSIST element ???
+
+          const chargeElementToPersist = {
+            id: reviewChargeElementResultId,
+            chargeElementId: chargeElement.id,
+            allocated: chargeElement.allocated,
+            aggregate: chargeReference.aggregate,
+            chargeDatesOverlap: chargeElement.chargeDatesOverlap
+          }
+
+          _persistDataToReviewChargeElementResult(chargeElementToPersist)
+
+          // returnLogs.forEach((returnLog) => {
+          //   _persistReviewResult(billRunID, licence.id, chargeVersion.id, chargeVersion.chargePeriod, chargeVersion.changeReason.description, chargeReference.id, reviewChargeElementResultId) // missing review return results id
+          // })
+        })
+      })
     })
   })
 }
 
-async function _persistReviewResult (billRunID, licenceId, chargeVersionId, chargePeriod, chargeVersionChangeReason, chargeReferenceId, reviewChargeElementResultId) {
+async function _persistReviewResult (billRunID, licenceId, chargeVersionId, chargePeriod, chargeVersionChangeReason, chargeReferenceId, reviewChargeElementResultId, reviewReturnResultId) {
   const data = {
     billRunID,
     licenceId,
@@ -75,7 +83,8 @@ async function _persistReviewResult (billRunID, licenceId, chargeVersionId, char
     chargePeriodEndDate: chargePeriod.endDate,
     chargeVersionChangeReason,
     chargeReferenceId,
-    reviewChargeElementResultId
+    reviewChargeElementResultId,
+    reviewReturnResultId
   }
 
   await ReviewResultModel.query().insert(data)
@@ -124,7 +133,30 @@ function _checkReturnForIssues (returnRecord) {
   return false
 }
 
-function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeReference) {
+async function _matchedAndPersisted (chargeElement, returnLogs, reviewChargeElementResultId, chargeReference, billRunID, licence, chargeVersion) {
+  returnLogs.forEach((record) => {
+    let matchFound
+    const elementCode = chargeElement.purpose.legacyId
+    const elementPeriods = chargeElement.abstractionPeriods
+
+    const returnPeriods = record.abstractionPeriods
+
+    matchFound = record.purposes.some((purpose) => {
+      return purpose.tertiary.code === elementCode
+    })
+
+    matchFound = periodsOverlap(elementPeriods, returnPeriods)
+    if (!matchFound) {
+      _persistReviewResult(billRunID, licence.id, chargeVersion.id, chargeVersion.chargePeriod, chargeVersion.changeReason.description, chargeReference.id, null, record.reviewReturnResultId) // missing review return results id
+      return
+    }
+
+    _persistReviewResult(billRunID, licence.id, chargeVersion.id, chargeVersion.chargePeriod, chargeVersion.changeReason.description, chargeReference.id, reviewChargeElementResultId, record.reviewReturnResultId) // missing review return results id
+  })
+}
+
+function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeReference, reviewChargeElementResultId, billRunID, licence, chargeVersion) {
+  _matchedAndPersisted(chargeElement, returnLogs, reviewChargeElementResultId, chargePeriod, chargeReference, billRunID, licence, chargeVersion)
   const matchedReturns = _matchReturns(chargeElement, returnLogs)
 
   if (matchedReturns.length === 0) {
