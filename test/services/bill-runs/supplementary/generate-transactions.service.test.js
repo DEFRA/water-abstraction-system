@@ -9,9 +9,9 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeCategoryHelper = require('../../../support/helpers/water/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/water/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/water/charge-reference.helper.js')
+const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Things we need to stub
@@ -26,8 +26,8 @@ describe('Generate Transactions service', () => {
   let chargePeriod
   let chargeElement
   let chargeReference
-  let isNewLicence
-  let isWaterUndertaker
+  let newLicence
+  let waterUndertaker
 
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
@@ -38,10 +38,10 @@ describe('Generate Transactions service', () => {
     await DatabaseHelper.clean()
 
     const chargeCategory = await ChargeCategoryHelper.add({ reference })
-    const { billingChargeCategoryId } = chargeCategory
+    const { id: chargeCategoryId } = chargeCategory
 
-    const baseChargeReference = await ChargeReferenceHelper.add({ billingChargeCategoryId })
-    chargeElement = await ChargeElementHelper.add({ chargeElementId: baseChargeReference.chargeElementId })
+    const baseChargeReference = await ChargeReferenceHelper.add({ chargeCategoryId })
+    chargeElement = await ChargeElementHelper.add({ chargeReferenceId: baseChargeReference.id })
     chargeReference = await baseChargeReference.$query()
       .withGraphFetched('chargeCategory')
       .withGraphFetched('chargeElements')
@@ -59,17 +59,17 @@ describe('Generate Transactions service', () => {
         startDate: new Date('2022-04-01'),
         endDate: new Date('2022-10-31')
       }
-      isWaterUndertaker = false
-      isNewLicence = false
+      waterUndertaker = false
+      newLicence = false
 
       expectedStandardChargeResult = {
-        chargeElementId: chargeReference.chargeElementId,
+        chargeReferenceId: chargeReference.id,
         startDate: chargePeriod.startDate,
         endDate: chargePeriod.endDate,
         source: 'non-tidal',
         season: 'all year',
         loss: 'low',
-        isCredit: false,
+        credit: false,
         chargeType: 'standard',
         authorisedQuantity: 6.82,
         billableQuantity: 6.82,
@@ -81,17 +81,17 @@ describe('Generate Transactions service', () => {
         section126Factor: 1,
         section127Agreement: false,
         section130Agreement: false,
-        isNewLicence: false,
-        isTwoPartSecondPartCharge: false,
+        newLicence: false,
+        secondPartCharge: false,
         scheme: 'sroc',
         aggregateFactor: 0.562114443,
         adjustmentFactor: 1,
         chargeCategoryCode: '4.4.5',
         chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
-        isSupportedSource: false,
+        supportedSource: false,
         supportedSourceName: null,
-        isWaterCompanyCharge: true,
-        isWinterOnly: false
+        waterCompanyCharge: true,
+        winterOnly: false
       }
 
       Sinon.stub(CalculateAuthorisedAndBillableDaysService, 'go').returns({ authorisedDays: 365, billableDays: 214 })
@@ -99,11 +99,11 @@ describe('Generate Transactions service', () => {
 
     describe('and is a water undertaker', () => {
       beforeEach(() => {
-        isWaterUndertaker = true
+        waterUndertaker = true
       })
 
       it('returns an array of one transaction containing the expected data', () => {
-        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
         // Should only return the 'standard' charge transaction line
         expect(results).to.have.length(1)
@@ -111,24 +111,24 @@ describe('Generate Transactions service', () => {
         expect(results[0]).to.equal(
           {
             ...expectedStandardChargeResult,
-            isWaterUndertaker
+            waterUndertaker
           },
-          { skip: ['purposes', 'billingTransactionId'] }
+          { skip: ['purposes', 'id'] }
         )
       })
 
       it('returns the charge element as JSON in the transaction line `purposes` property', () => {
-        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
         const parsedElements = JSON.parse(results[0].purposes)
 
-        expect(parsedElements[0].chargePurposeId).to.equal(chargeElement.chargePurposeId)
+        expect(parsedElements[0].id).to.equal(chargeElement.id)
       })
     })
 
     describe('and is not a water undertaker', () => {
       it('returns an array of two transactions containing the expected data', () => {
-        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
         // Should return both a 'standard' charge and 'compensation' charge transaction line
         expect(results).to.have.length(2)
@@ -136,64 +136,64 @@ describe('Generate Transactions service', () => {
         expect(results[0]).to.equal(
           {
             ...expectedStandardChargeResult,
-            isWaterUndertaker
+            waterUndertaker
           },
-          { skip: ['purposes', 'billingTransactionId'] }
+          { skip: ['purposes', 'id'] }
         )
       })
 
       it('returns a second compensation charge transaction', () => {
-        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
         expect(results[1]).to.equal(
           {
             ...expectedStandardChargeResult,
-            isWaterUndertaker,
+            waterUndertaker,
             chargeType: 'compensation',
             description: 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
           },
-          { skip: ['purposes', 'billingTransactionId'] }
+          { skip: ['purposes', 'id'] }
         )
       })
 
       it('returns the charge element as JSON in both transaction lines `purposes` property', () => {
-        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
         const parsedStandardElements = JSON.parse(results[0].purposes)
         const parsedCompensationElements = JSON.parse(results[1].purposes)
 
-        expect(parsedStandardElements[0].chargePurposeId).to.equal(chargeElement.chargePurposeId)
-        expect(parsedCompensationElements[0].chargePurposeId).to.equal(chargeElement.chargePurposeId)
+        expect(parsedStandardElements[0].id).to.equal(chargeElement.id)
+        expect(parsedCompensationElements[0].id).to.equal(chargeElement.id)
       })
     })
 
-    // NOTE: isNewLicence unlike isWaterUndertaker does not result in any behaviour changes in the service. It is just
+    // NOTE: newLicence unlike waterUndertaker does not result in any behaviour changes in the service. It is just
     // getting applied to the transaction lines the service generates as is. But as an arg to the service we felt it
     // worth adding unit tests for, if only to document it as something that the service expects
     describe('and is a new licence', () => {
       beforeEach(() => {
-        isNewLicence = true
+        newLicence = true
       })
 
-      it('returns `isNewLicence` as true in the results', () => {
-        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+      it('returns `newLicence` as true in the results', () => {
+        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
-        expect(results[0].isNewLicence).to.be.true()
+        expect(results[0].newLicence).to.be.true()
       })
     })
 
     describe('and is not a new licence', () => {
-      it('returns `isNewLicence` as false in the results', () => {
-        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+      it('returns `newLicence` as false in the results', () => {
+        const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
-        expect(results[0].isNewLicence).to.be.false()
+        expect(results[0].newLicence).to.be.false()
       })
     })
 
     describe('and a two-part tariff agreement (section 127)', () => {
       describe('has not applied', () => {
         it('returns the standard description', () => {
-          const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+          const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
           expect(results[0].description).to.equal(`Water abstraction charge: ${chargeReference.description}`)
         })
@@ -205,7 +205,7 @@ describe('Generate Transactions service', () => {
         })
 
         it('returns the two-part tariff prefixed description', () => {
-          const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+          const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
           expect(results[0].description).to.equal(`Two-part tariff basic water abstraction charge: ${chargeReference.description}`)
         })
@@ -224,7 +224,7 @@ describe('Generate Transactions service', () => {
     })
 
     it('returns an empty array', () => {
-      const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, isNewLicence, isWaterUndertaker)
+      const results = GenerateTransactionsService.go(chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker)
 
       expect(results).to.be.empty()
     })

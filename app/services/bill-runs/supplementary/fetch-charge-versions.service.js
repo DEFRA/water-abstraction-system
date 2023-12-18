@@ -7,8 +7,8 @@
 
 const { ref } = require('objection')
 
-const ChargeVersionModel = require('../../../models/water/charge-version.model.js')
-const Workflow = require('../../../models/water/workflow.model.js')
+const ChargeVersionModel = require('../../../models/charge-version.model.js')
+const Workflow = require('../../../models/workflow.model.js')
 
 /**
  * Fetch all SROC charge versions to be processed as part of supplementary billing
@@ -23,7 +23,7 @@ const Workflow = require('../../../models/water/workflow.model.js')
  * - not be linked to a licence in the workflow
  *
  * From this initial result we extract an array of unique licence IDs and then remove any that are non-chargeable (we
- * need to know about them in order to unset the licence's supplementary billing flag).
+ * need to know about them in order to unset the licence's sroc billing flag).
  *
  * @param {String} regionId UUID of the region being billed that the licences must be linked to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
@@ -39,35 +39,35 @@ async function go (regionId, billingPeriod) {
 async function _fetch (regionId, billingPeriod) {
   const allChargeVersions = await ChargeVersionModel.query()
     .select([
-      'chargeVersionId',
-      'scheme',
+      'chargeVersions.id',
+      'chargeVersions.scheme',
       'chargeVersions.startDate',
       'chargeVersions.endDate',
-      'invoiceAccountId',
-      'status'
+      'chargeVersions.billingAccountId',
+      'chargeVersions.status'
     ])
     .innerJoinRelated('licence')
-    .where('includeInSrocSupplementaryBilling', true)
-    .where('regionId', regionId)
+    .where('licence.includeInSrocBilling', true)
+    .where('licence.regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .whereNot('chargeVersions.status', 'draft')
     .whereNotExists(
       Workflow.query()
         .select(1)
-        .whereColumn('chargeVersions.licenceId', 'chargeVersionWorkflows.licenceId')
-        .whereNull('chargeVersionWorkflows.dateDeleted')
+        .whereColumn('chargeVersions.licenceId', 'workflows.licenceId')
+        .whereNull('workflows.deletedAt')
     )
     .orderBy([
-      { column: 'chargeVersions.invoiceAccountId' },
+      { column: 'chargeVersions.billingAccountId' },
       { column: 'chargeVersions.licenceId' }
     ])
     .withGraphFetched('licence')
     .modifyGraph('licence', builder => {
       builder.select([
-        'licenceId',
+        'id',
         'licenceRef',
-        'isWaterUndertaker',
+        'waterUndertaker',
         ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
         ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea'),
         'startDate',
@@ -79,7 +79,7 @@ async function _fetch (regionId, billingPeriod) {
     .withGraphFetched('licence.region')
     .modifyGraph('licence.region', builder => {
       builder.select([
-        'regionId',
+        'id',
         'chargeRegionId'
       ])
     })
@@ -92,7 +92,7 @@ async function _fetch (regionId, billingPeriod) {
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', builder => {
       builder.select([
-        'chargeElementId',
+        'id',
         'source',
         'loss',
         'volume',
@@ -111,7 +111,7 @@ async function _fetch (regionId, billingPeriod) {
     .withGraphFetched('chargeReferences.chargeElements')
     .modifyGraph('chargeReferences.chargeElements', builder => {
       builder.select([
-        'chargePurposeId',
+        'id',
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
         'abstractionPeriodEndDay',
@@ -135,9 +135,9 @@ function _extractLicenceIdsThenRemoveNonChargeableChargeVersions (allChargeVersi
   let licenceIdsForPeriod = []
 
   for (const chargeVersion of allChargeVersions) {
-    licenceIdsForPeriod.push(chargeVersion.licence.licenceId)
+    licenceIdsForPeriod.push(chargeVersion.licence.id)
 
-    if (chargeVersion.invoiceAccountId) {
+    if (chargeVersion.billingAccountId) {
       chargeVersions.push(chargeVersion)
     }
   }

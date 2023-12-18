@@ -398,11 +398,11 @@ describe('Change address service', () => {
         it("updates the end date of the existing record to yesterday's date", async () => {
           await ChangeAddressService.go(billingAccountId, address, agentCompany, contact)
 
-          const reFetchedExistingInvoiceAccountAddress = await existingBillingAccountAddress.$query()
+          const reFetchedExistingBillingAccountAddress = await existingBillingAccountAddress.$query()
           const yesterday = new Date(2023, 8, 3)
 
-          expect(reFetchedExistingInvoiceAccountAddress.endDate).to.equal(yesterday)
-          expect(reFetchedExistingInvoiceAccountAddress.updatedAt).to.be.above(existingBillingAccountAddress.updatedAt)
+          expect(reFetchedExistingBillingAccountAddress.endDate).to.equal(yesterday)
+          expect(reFetchedExistingBillingAccountAddress.updatedAt).to.be.above(existingBillingAccountAddress.updatedAt)
         })
       })
     })
@@ -439,12 +439,12 @@ describe('Change address service', () => {
       const resultAddresses = await AddressModel.query()
       const resultCompanies = await CompanyModel.query()
       const resultContacts = await ContactModel.query()
-      const resultInvoiceAccountAddresses = await BillingAccountAddressModel.query()
+      const resultBillingAccountAddresses = await BillingAccountAddressModel.query()
 
       expect(resultAddresses).to.be.empty()
       expect(resultCompanies).to.be.empty()
       expect(resultContacts).to.be.empty()
-      expect(resultInvoiceAccountAddresses).to.be.empty()
+      expect(resultBillingAccountAddresses).to.be.empty()
     })
   })
 })

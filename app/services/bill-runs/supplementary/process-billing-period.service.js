@@ -6,16 +6,16 @@
  */
 
 const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/water/bill-run.model.js')
-const BillModel = require('../../../models/water/bill.model.js')
-const BillLicenceModel = require('../../../models/water/bill-licence.model.js')
+const BillRunModel = require('../../../models/bill-run.model.js')
+const BillModel = require('../../../models/bill.model.js')
+const BillLicenceModel = require('../../../models/bill-licence.model.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 const DetermineMinimumChargeService = require('./determine-minimum-charge.service.js')
 const GenerateTransactionsService = require('./generate-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
 const ProcessTransactionsService = require('./process-transactions.service.js')
 const SendTransactionsService = require('./send-transactions.service.js')
-const TransactionModel = require('../../../models/water/transaction.model.js')
+const TransactionModel = require('../../../models/transaction.model.js')
 
 /**
  * Creates the bills and transactions in both WRLS and the Charging Module API
@@ -33,7 +33,7 @@ async function go (billRun, billingPeriod, chargeVersions) {
 
   const preGeneratedData = await PreGenerateBillingDataService.go(
     chargeVersions,
-    billRun.billingBatchId,
+    billRun.id,
     billingPeriod
   )
 
@@ -106,21 +106,21 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
   return chargeVersions.reduce((acc, chargeVersion) => {
     const { billLicence, bill } = _retrievePreGeneratedData(
       preGeneratedData,
-      chargeVersion.invoiceAccountId,
+      chargeVersion.billingAccountId,
       chargeVersion.licence
     )
 
-    const { billingInvoiceLicenceId } = billLicence
+    const { id: billLicenceId } = billLicence
 
-    if (!acc[billingInvoiceLicenceId]) {
-      acc[billingInvoiceLicenceId] = _initialBillingData(chargeVersion.licence, bill, billLicence)
+    if (!acc[billLicenceId]) {
+      acc[billLicenceId] = _initialBillingData(chargeVersion.licence, bill, billLicence)
     }
 
     // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
     // We fetch the previous transactions for `superseded` (REPLACED) charge versions later in the process
     if (chargeVersion.status === 'current') {
       const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
-      acc[billingInvoiceLicenceId].calculatedTransactions.push(...calculatedTransactions)
+      acc[billLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 
     return acc
@@ -144,12 +144,12 @@ async function _persistData (dataToPersist) {
   return true
 }
 
-function _retrievePreGeneratedData (preGeneratedData, invoiceAccountId, licence) {
+function _retrievePreGeneratedData (preGeneratedData, billingAccountId, licence) {
   const { bills, billLicences } = preGeneratedData
 
-  const bill = bills[invoiceAccountId]
+  const bill = bills[billingAccountId]
 
-  const billLicenceKey = _billLicenceKey(bill.billingInvoiceId, licence.licenceId)
+  const billLicenceKey = _billLicenceKey(bill.id, licence.id)
   const billLicence = billLicences[billLicenceKey]
 
   return { bill, billLicence }
@@ -193,8 +193,8 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
       return []
     }
 
-    const isNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
-    const isWaterUndertaker = chargeVersion.licence.isWaterUndertaker
+    const newLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+    const waterUndertaker = chargeVersion.licence.waterUndertaker
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
@@ -202,8 +202,8 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
         chargeReference,
         billingPeriod,
         chargePeriod,
-        isNewLicence,
-        isWaterUndertaker
+        newLicence,
+        waterUndertaker
       )
     })
 

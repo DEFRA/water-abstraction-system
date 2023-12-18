@@ -9,7 +9,7 @@ const Joi = require('joi')
 const StaticLookupsLib = require('../lib/static-lookups.lib.js')
 
 /**
- * Checks that the payload of a `/billing-accounts/{invoiceAccountId}/address` request is valid
+ * Checks that the payload of a `/billing-accounts/{billingAccountId}/address` request is valid
  *
  * The JOI schema was interpreted from what we found in water-abstraction-service/src/modules/invoice-accounts/routes.js
  *

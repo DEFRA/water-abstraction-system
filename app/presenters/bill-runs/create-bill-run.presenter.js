@@ -5,9 +5,19 @@
  * @module CreateBillRunPresenter
  */
 
+/**
+ * Formats a newly created bill run into the response needed by the legacy UI
+ *
+ * Because the legacy code does not use our views of the legacy data, the response needs to be formatted to use the
+ * legacy field names.
+ *
+ * @param {module:BillRunModel} billRun An instance of the newly created bill run
+ *
+ * @returns {Object} the formatted response
+ */
 function go (billRun) {
   const {
-    billingBatchId: id,
+    id: billingBatchId,
     regionId: region,
     scheme,
     batchType,
@@ -17,7 +27,7 @@ function go (billRun) {
   } = billRun
 
   return {
-    id,
+    billingBatchId,
     region,
     scheme,
     batchType,
