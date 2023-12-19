@@ -9,15 +9,15 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const Workflow = require('../../../app/models/workflow.model.js')
+const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const Workflow = require('../../../../app/models/workflow.model.js')
 
 // Things we need to stub
-const FetchTimeLimitedLicencesService = require('../../../app/services/charge-elements/fetch-time-limited-licences.service.js')
+const FetchTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
 
 // Thing under test
-const ProcessTimeLimitedLicencesService = require('../../../app/services/charge-elements/process-time-limited-licences.service.js')
+const ProcessTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 describe('Process Time Limited Licences service', () => {
   let notifierStub
