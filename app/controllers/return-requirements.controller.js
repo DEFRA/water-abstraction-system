@@ -140,7 +140,9 @@ async function saveNote (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/returns-check-your-answers`)
+  const { id } = session
+
+  return h.redirect(`/system/return-requirements/${id}/returns-check-your-answers`)
 }
 
 module.exports = {
