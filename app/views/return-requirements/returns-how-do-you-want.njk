@@ -1,17 +1,17 @@
 {% extends 'layout.njk' %}
-{# {% from "govuk/components/back-link/macro.njk" import govukBackLink %} #}
-{# {% from "govuk/components/button/macro.njk" import govukButton %} #}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{# {% set rootLink = "/system/licences/" + licenceId %} #}
+{% set rootLink = "/system/return-requirements/" + id %}
 
 {% block breadcrumbs %}
   {# Back link #}
-  {# {{
+  {{
     govukBackLink({
-      text: 'back',
+      text: 'Back',
       href: rootLink + "/reason"
     })
-  }} #}
+  }}
 {% endblock %}
 
 {% block content %}
@@ -20,9 +20,9 @@
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">How do you want to set up the return requirement?</h1>
   </div>
 
-  {# <form method="post">
+  <form method="post">
     <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
     </div>
-  </form> #}
+  </form>
 {% endblock %}

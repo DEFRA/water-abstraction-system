@@ -112,10 +112,10 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/requirements-approved', () => {
+  describe('GET /return-requirements/requirements-approved', () => {
     const options = {
       method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/requirements-approved',
+      url: '/return-requirements/requirements-approved',
       auth: {
         strategy: 'session',
         credentials: { scope: ['billing'] }
