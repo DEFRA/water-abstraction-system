@@ -5,6 +5,18 @@ const ReturnRequirementsController = require('../controllers/return-requirements
 const routes = [
   {
     method: 'GET',
+    path: '/return-requirements/{id}/reason',
+    handler: ReturnRequirementsController.reasonNewRequirements,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Reason page'
+    }
+  }, {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/no-returns-required',
     handler: ReturnRequirementsController.noReturnsRequired,
     options: {
@@ -13,12 +25,60 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Review two-part tariff match and allocation results'
+      description: 'Show no returns required page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/no-returns-required',
+    handler: ReturnRequirementsController.saveNoReturnsRequired,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save no returns required option'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{id}/returns-how-do-you-want',
+    handler: ReturnRequirementsController.returnsHowDoYouWant,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns required - create How do you want to set up the requirements'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{id}/returns-how-do-you-want',
+    handler: ReturnRequirementsController.,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns required - create How do you want to set up the requirements'
     }
   }, {
     method: 'GET',
     path: '/return-requirements/{sessionId}/select-return-start-date',
     handler: ReturnRequirementsController.selectReturnStartDate,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the start date of the return'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/select-return-start-date',
+    handler: ReturnRequirementsController.saveReturnStartDate,
     options: {
       auth: {
         access: {
@@ -74,6 +134,18 @@ const routes = [
         }
       },
       description: 'Returns add a note page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/add-a-note',
+    handler: ReturnRequirementsController.saveNote,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save note'
     }
   }
 ]

@@ -10,9 +10,10 @@ const SessionModel = require('../models/session.model.js')
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 
-  const session = SessionModel.query()
+  const data = { licenceId: id }
+  const session = await SessionModel.query()
     .insert({
-      licenceId: id
+      data
     })
     .returning('*')
 
