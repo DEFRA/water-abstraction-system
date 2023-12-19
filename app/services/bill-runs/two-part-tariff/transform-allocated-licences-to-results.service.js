@@ -69,7 +69,7 @@ function _generateReviewResult (billRun, licence, chargeVersion, chargeReference
   const attributes = {
     id: generateUUID(),
     billRunId: billRun.billingBatchId,
-    licenceId: licence.licenceId,
+    licenceId: licence.id,
     chargeVersionId: chargeVersion.id,
     chargeReferenceId: chargeReference.id,
     reviewChargeElementResultId: reviewChargeElementResult.id,
@@ -98,7 +98,7 @@ function _generateReviewChargeElement (chargeElement, chargeReference) {
 
 function _generateReviewReturnResults (returnLogs) {
   return returnLogs.map((returnLog) => {
-    const { id: returnId, returnRequirement: reference, startDate, endDate, dueDate, receivedDate, status, underQuery, nilReturn, description, purposes, totalQuantity: quantity, allocatedQuantity: allocated, abstractionOutsidePeriod } = returnLog
+    const { id: returnId, returnRequirement: reference, startDate, endDate, dueDate, receivedDate, status, underQuery, nilReturn, description, purposes, quantity, allocatedQuantity: allocated, abstractionOutsidePeriod } = returnLog
 
     const attributes = {
       id: generateUUID(),
