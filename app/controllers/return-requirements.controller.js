@@ -80,13 +80,8 @@ async function saveReturnsCheckYourAnswers (request, h) {
 }
 
 async function requirementsApproved (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
   return h.view('return-requirements/requirements-approved.njk', {
-    activeNavBar: 'search',
-    ...session
+    activeNavBar: 'search'
   })
 }
 
@@ -106,7 +101,7 @@ async function saveNoReturnsRequired (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/no-returns-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${session.id}/no-return-check-your-answers`)
 }
 
 async function noReturnsCheckYourAnswers (request, h) {
