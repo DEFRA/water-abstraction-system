@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ProcessTimeLimitedLicencesService = require('../../app/services/charge-elements/process-time-limited-licences.service.js')
+const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Charge Elements controller', () => {
+describe('Jobs controller', () => {
   let server
 
   beforeEach(async () => {
@@ -33,10 +33,10 @@ describe('Charge Elements controller', () => {
     Sinon.restore()
   })
 
-  describe('POST /charge-elements/time-limited', () => {
+  describe('POST /jobs/time-limited', () => {
     const options = {
       method: 'POST',
-      url: '/charge-elements/time-limited'
+      url: '/jobs/time-limited'
     }
 
     describe('when the request succeeds', () => {

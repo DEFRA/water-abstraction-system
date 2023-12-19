@@ -1,12 +1,12 @@
 'use strict'
 
-const ChargeElementsController = require('../controllers/charge-elements.controller.js')
+const JobsController = require('../controllers/jobs.controller.js')
 
 const routes = [
   {
     method: 'POST',
-    path: '/charge-elements/time-limited',
-    handler: ChargeElementsController.timeLimited,
+    path: '/jobs/time-limited',
+    handler: JobsController.timeLimited,
     options: {
       app: {
         plainOutput: true
