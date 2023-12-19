@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const ExportService = require('../../app/services/jobs/export/export.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
@@ -31,6 +32,25 @@ describe('Jobs controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('GET /data/export', () => {
+    const options = {
+      method: 'GET',
+      url: '/data/export'
+    }
+
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(ExportService, 'go').resolves()
+      })
+
+      it('displays the correct message', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(204)
+      })
+    })
   })
 
   describe('POST /jobs/time-limited', () => {

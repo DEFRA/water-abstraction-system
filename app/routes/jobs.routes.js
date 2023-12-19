@@ -4,6 +4,19 @@ const JobsController = require('../controllers/jobs.controller.js')
 
 const routes = [
   {
+    method: 'GET',
+    path: '/data/export',
+    handler: JobsController.exportDb,
+    options: {
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      },
+      auth: false,
+      description: 'Used to export the database and upload the file to our AWS S3 bucket'
+    }
+  },
+  {
     method: 'POST',
     path: '/jobs/time-limited',
     handler: JobsController.timeLimited,
