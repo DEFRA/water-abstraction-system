@@ -16,7 +16,7 @@ const fs = require('fs')
 const path = require('path')
 
 // Thing under test
-const WriteTableToFileService = require('../../../../app/services/data/export/write-table-to-file.service.js')
+const WriteTableToFileService = require('../../../../app/services/jobs/export/write-table-to-file.service.js')
 
 const tableName = 'billing_charge_categories'
 const schemaName = 'water'

@@ -9,11 +9,11 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchTableService = require('../../../../app/services/data/export/fetch-table.service.js')
-const WriteTableToFileService = require('../../../../app/services/data/export/write-table-to-file.service.js')
+const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
+const WriteTableToFileService = require('../../../../app/services/jobs/export/write-table-to-file.service.js')
 
 // Thing under test
-const ExportTableService = require('../../../../app/services/data/export/export-table.service.js')
+const ExportTableService = require('../../../../app/services/jobs/export/export-table.service.js')
 
 describe('Table Export service', () => {
   let fetchTableServiceStub
