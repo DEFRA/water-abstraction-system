@@ -22,6 +22,7 @@ const FilterRoutesService = require('../services/plugins/filter-routes.service.j
 const HealthRoutes = require('../routes/health.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
+const ReturnRequirementRoutes = require('../routes/return-requirement.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 
 const AirbrakeConfig = require('../../config/airbrake.config.js')
@@ -36,6 +37,7 @@ const routes = [
   ...BillingAccountRoutes,
   ...LicenceRoutes,
   ...JobRoutes,
+  ...ReturnRequirementRoutes,
   ...CheckRoutes,
   ...DataRoutes
 ]
