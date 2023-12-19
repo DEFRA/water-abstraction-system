@@ -20,6 +20,8 @@ const requestConfig = require('../../config/request.config.js')
  * Note that we have a function here rather than defining a const as this did not allow us to override settings using
  * Sinon to stub `requestConfig`; the const appeared to have its values fixed when the file was required, whereas a
  * function generates its values each time it's called.
+ *
+ * @returns {Object} default options to pass to Got when making a request
  */
 function defaultOptions () {
   return {
