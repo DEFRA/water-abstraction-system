@@ -80,6 +80,12 @@ async function _fetch (regionCode, billingPeriod) {
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
     .orderBy('chargeVersions.licenceRef')
+    .withGraphFetched('changeReason')
+    .modifyGraph('changeReason', (builder) => {
+      builder.select([
+        'description'
+      ])
+    })
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select([
