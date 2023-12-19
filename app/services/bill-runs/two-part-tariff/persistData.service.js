@@ -47,11 +47,12 @@ async function _persistReturnLogs (returnLogs) {
   for (const returnLog of returnLogs) {
     const reviewReturnResultId = generateUUID()
 
+    console.log('Return :', returnLog)
     const data = {
       id: reviewReturnResultId,
       returnId: returnLog.id,
-      returnReference: returnLog.returnReference,
-      startDate: returnLog.start_date,
+      returnReference: returnLog.returnRequirement,
+      startDate: returnLog.startDate,
       endDate: returnLog.endDate,
       dueDate: returnLog.dueDate,
       receivedDate: returnLog.receivedDate,
@@ -61,7 +62,7 @@ async function _persistReturnLogs (returnLogs) {
       description: returnLog.description,
       purposes: returnLog.purposes,
       quantity: returnLog.quantity,
-      allocated: returnLog.allocated,
+      allocated: returnLog.allocatedQuantity,
       abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
     }
 
