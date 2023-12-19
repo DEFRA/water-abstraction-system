@@ -20,32 +20,29 @@ describe('Prepare Licences For Allocation Service', () => {
     endDate: new Date('2023-03-31')
   }
 
-  let licence
-  let returnLogs
-  let licences
-
-  beforeEach(async () => {
-    // Create our licence object with charge versions, charge references and charge elements attached and our returnLogs
-    licence = _testLicences()
-    returnLogs = _testReturnLogs()
-
-    // Stubbing the FetchReturnLogsForLicenceService to return our licences return logs
-    Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves(returnLogs)
-
-    licences = [licence, licence]
-  })
-
   afterEach(() => {
     Sinon.restore()
   })
 
   describe('for each licence', () => {
-    describe('when matching returns exist', () => {
-      describe('that have submission lines inside the abstraction period', () => {
-        it('preps the return correctly', async () => {
-          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
+    let licence
 
-          expect(licences[0].returnLogs[0]).to.equal({
+    beforeEach(async () => {
+      licence = _testLicences()
+    })
+
+    describe('when matching returns exist', () => {
+      describe('that have have no issues', () => {
+        beforeEach(async () => {
+          const returnLog = _testReturnLog()
+
+          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
+        })
+
+        it('preps the return correctly', async () => {
+          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
+
+          expect(licence.returnLogs[0]).to.equal({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
             returnRequirement: '14959864',
             description: 'The Description',
@@ -97,135 +94,59 @@ describe('Prepare Licences For Allocation Service', () => {
       })
 
       describe('that have submission lines outside the abstraction period', () => {
-        beforeEach(() => {
-          returnLogs[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2023-04-05')
+        beforeEach(async () => {
+          const returnLog = _testReturnLog()
+          returnLog.returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2023-04-05')
+
+          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
         })
 
-        it('preps the return and flags it as outside the abstraction period', async () => {
-          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
+        it('flags the return as outside the abstraction period', async () => {
+          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
 
-          expect(licences[0].returnLogs[0]).to.equal({
-            id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
-            returnRequirement: '14959864',
-            description: 'The Description',
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2023-03-31'),
-            receivedDate: new Date('2023-04-12'),
-            dueDate: new Date('2023-04-28'),
-            status: 'completed',
-            underQuery: false,
-            periodStartDay: 1,
-            periodStartMonth: 4,
-            periodEndDay: 31,
-            periodEndMonth: 3,
-            returnSubmissions: [
-              {
-                id: 'daac9a37-377a-4c8a-a44c-8b5bf1fbc9eb',
-                nilReturn: false,
-                returnSubmissionLines: [
-                  {
-                    id: '7230448c-ec31-45d6-b14d-12c999bb27ec',
-                    startDate: new Date('2023-04-05'),
-                    endDate: new Date('2022-05-07'),
-                    quantity: 1234,
-                    unallocated: 1.234
-                  },
-                  {
-                    id: '383e0969-760b-4cb6-8d95-d4e93f812a2e',
-                    startDate: new Date('2022-05-08'),
-                    endDate: new Date('2022-05-14'),
-                    quantity: 5678,
-                    unallocated: 5.678
-                  }
-                ]
-              }
-            ],
-            nilReturn: false,
-            quantity: 6.912,
-            allocatedQuantity: 0,
-            abstractionPeriods: [
-              {
-                startDate: new Date('2022-04-01'),
-                endDate: new Date('2023-03-31')
-              }
-            ],
-            abstractionOutsidePeriod: true,
-            matched: false
-          })
+          expect(licence.returnLogs[0].abstractionOutsidePeriod).to.be.true()
         })
       })
 
       describe('that is a nil return', () => {
-        beforeEach(() => {
-          returnLogs[0].returnSubmissions[0].nilReturn = true
+        beforeEach(async () => {
+          const returnLog = _testReturnLog()
+          returnLog.returnSubmissions[0].nilReturn = true
+
+          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
         })
 
-        it('preps the return and flags it as a nil return', async () => {
-          await PrepareLicencesForAllocationService.go(licences, billingPeriod)
+        it('flags the return as a nil return', async () => {
+          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
 
-          expect(licences[0].returnLogs[0]).to.equal({
-            id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
-            returnRequirement: '14959864',
-            description: 'The Description',
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2023-03-31'),
-            receivedDate: new Date('2023-04-12'),
-            dueDate: new Date('2023-04-28'),
-            status: 'completed',
-            underQuery: false,
-            periodStartDay: 1,
-            periodStartMonth: 4,
-            periodEndDay: 31,
-            periodEndMonth: 3,
-            returnSubmissions: [
-              {
-                id: 'daac9a37-377a-4c8a-a44c-8b5bf1fbc9eb',
-                nilReturn: true,
-                returnSubmissionLines: [
-                  {
-                    id: '7230448c-ec31-45d6-b14d-12c999bb27ec',
-                    startDate: new Date('2022-05-01'),
-                    endDate: new Date('2022-05-07'),
-                    quantity: 1234,
-                    unallocated: 1.234
-                  },
-                  {
-                    id: '383e0969-760b-4cb6-8d95-d4e93f812a2e',
-                    startDate: new Date('2022-05-08'),
-                    endDate: new Date('2022-05-14'),
-                    quantity: 5678,
-                    unallocated: 5.678
-                  }
-                ]
-              }
-            ],
-            nilReturn: true,
-            quantity: 6.912,
-            allocatedQuantity: 0,
-            abstractionPeriods: [
-              {
-                startDate: new Date('2022-04-01'),
-                endDate: new Date('2023-03-31')
-              }
-            ],
-            abstractionOutsidePeriod: false,
-            matched: false
-          })
+          expect(licence.returnLogs[0].nilReturn).to.be.true()
         })
       })
     })
 
-    it('sorts the charge references by the subsistence charge', async () => {
-      await PrepareLicencesForAllocationService.go(licences, billingPeriod)
+    describe('when no matching returns exist', () => {
+      beforeEach(async () => {
+        Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([])
+      })
 
-      expect(licences[0].chargeVersions[0].chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
-      expect(licences[0].chargeVersions[0].chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
+      it('assigns no return logs to the licence', async () => {
+        await PrepareLicencesForAllocationService.go([licence], billingPeriod)
+
+        expect(licence.returnLogs).to.be.empty()
+      })
+    })
+
+    it('sorts the charge references by their subsistence charge', async () => {
+      await PrepareLicencesForAllocationService.go([licence], billingPeriod)
+
+      expect(licence.chargeVersions[0].chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
+      expect(licence.chargeVersions[0].chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
     })
 
     it('preps the charge elements correctly', async () => {
-      await PrepareLicencesForAllocationService.go(licences, billingPeriod)
+      await PrepareLicencesForAllocationService.go([licence], billingPeriod)
 
-      expect(licences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]).to.equal({
+      expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0]).to.equal({
         id: '8eac5976-d16c-4818-8bc8-384d958ce863',
         description: 'Spray irrigation',
         abstractionPeriodStartDay: 1,
@@ -346,42 +267,40 @@ function _testLicences () {
   }
 }
 
-function _testReturnLogs () {
-  return [
-    {
-      id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
-      returnRequirement: '14959864',
-      description: 'The Description',
-      startDate: new Date('2022-04-01T00:00:00.000Z'),
-      endDate: new Date('2023-03-31T00:00:00.000Z'),
-      receivedDate: new Date('2023-04-12T00:00:00.000Z'),
-      dueDate: new Date('2023-04-28T00:00:00.000Z'),
-      status: 'completed',
-      underQuery: false,
-      periodStartDay: 1,
-      periodStartMonth: 4,
-      periodEndDay: 31,
-      periodEndMonth: 3,
-      returnSubmissions: [
-        {
-          id: 'daac9a37-377a-4c8a-a44c-8b5bf1fbc9eb',
-          nilReturn: false,
-          returnSubmissionLines: [
-            {
-              id: '7230448c-ec31-45d6-b14d-12c999bb27ec',
-              startDate: new Date('2022-05-01'),
-              endDate: new Date('2022-05-07'),
-              quantity: 1234
-            },
-            {
-              id: '383e0969-760b-4cb6-8d95-d4e93f812a2e',
-              startDate: new Date('2022-05-08'),
-              endDate: new Date('2022-05-14'),
-              quantity: 5678
-            }
-          ]
-        }
-      ]
-    }
-  ]
+function _testReturnLog () {
+  return {
+    id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
+    returnRequirement: '14959864',
+    description: 'The Description',
+    startDate: new Date('2022-04-01T00:00:00.000Z'),
+    endDate: new Date('2023-03-31T00:00:00.000Z'),
+    receivedDate: new Date('2023-04-12T00:00:00.000Z'),
+    dueDate: new Date('2023-04-28T00:00:00.000Z'),
+    status: 'completed',
+    underQuery: false,
+    periodStartDay: 1,
+    periodStartMonth: 4,
+    periodEndDay: 31,
+    periodEndMonth: 3,
+    returnSubmissions: [
+      {
+        id: 'daac9a37-377a-4c8a-a44c-8b5bf1fbc9eb',
+        nilReturn: false,
+        returnSubmissionLines: [
+          {
+            id: '7230448c-ec31-45d6-b14d-12c999bb27ec',
+            startDate: new Date('2022-05-01'),
+            endDate: new Date('2022-05-07'),
+            quantity: 1234
+          },
+          {
+            id: '383e0969-760b-4cb6-8d95-d4e93f812a2e',
+            startDate: new Date('2022-05-08'),
+            endDate: new Date('2022-05-14'),
+            quantity: 5678
+          }
+        ]
+      }
+    ]
+  }
 }
