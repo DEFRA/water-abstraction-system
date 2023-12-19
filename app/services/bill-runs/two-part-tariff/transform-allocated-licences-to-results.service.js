@@ -101,12 +101,12 @@ function _generateReviewChargeElement (chargeElement, chargeReference) {
 
 function _generateReviewReturnResults (returnLogs) {
   return returnLogs.map((returnLog) => {
-    const { id: returnId, returnRequirement: reference, startDate, endDate, dueDate, receivedDate, status, underQuery, nilReturn, description, purposes, quantity, allocatedQuantity: allocated, abstractionOutsidePeriod } = returnLog
+    const { id: returnId, returnRequirement: returnReference, startDate, endDate, dueDate, receivedDate, status, underQuery, nilReturn, description, purposes, quantity, allocatedQuantity: allocated, abstractionOutsidePeriod } = returnLog
 
     const attributes = {
       id: generateUUID(),
       returnId,
-      reference,
+      returnReference,
       startDate,
       endDate,
       dueDate,
