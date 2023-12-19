@@ -5,7 +5,7 @@ const JobsController = require('../controllers/jobs.controller.js')
 const routes = [
   {
     method: 'GET',
-    path: '/data/export',
+    path: '/jobs/export',
     handler: JobsController.exportDb,
     options: {
       app: {
