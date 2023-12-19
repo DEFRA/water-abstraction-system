@@ -7,34 +7,6 @@
 
 const SessionModel = require('../models/session.model.js')
 
-async function noReturnsRequired (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/no-returns-required.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function saveNoReturnsRequired (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.redirect(`/system/return-requirements/${session.id}/no-returns-check-your-answers`)
-}
-
-async function reasonNewRequirements (request, h) {
-  const { id } = request.params
-
-  return h.view('return-requirements/reason.njk', {
-    activeNavBar: 'search',
-    licenceId: id
-  })
-}
-
 async function selectReturnStartDate (request, h) {
   const { sessionId } = request.params
 
@@ -51,18 +23,26 @@ async function saveReturnStartDate (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/returns-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${session.id}/reason`)
 }
 
-async function requirementsApproved (request, h) {
+async function reasonNewRequirements (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/requirements-approved.njk', {
+  return h.view('return-requirements/reason.njk', {
     activeNavBar: 'search',
     ...session
   })
+}
+
+async function saveReasonNewRequirements (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.redirect(`/system/return-requirements/${session.id}/returns-how-do-you-want`)
 }
 
 async function returnsHowDoYouWant (request, h) {
@@ -84,21 +64,6 @@ async function saveReturnsHowDoYouWant (request, h) {
   return h.redirect(`/system/return-requirements/${session.id}/returns-check-your-answers`)
 }
 
-async function noReturnsCheckYourAnswers (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/no-return-check-your-answers.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function saveNoReturnsCheckYourAnswers (request, h) {
-  return h.redirect('/system/return-requirements/requirements-approved')
-}
-
 async function returnsCheckYourAnswers (request, h) {
   const { sessionId } = request.params
 
@@ -111,6 +76,51 @@ async function returnsCheckYourAnswers (request, h) {
 }
 
 async function saveReturnsCheckYourAnswers (request, h) {
+  return h.redirect('/system/return-requirements/requirements-approved')
+}
+
+async function requirementsApproved (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/requirements-approved.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function noReturnsRequired (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/no-returns-required.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveNoReturnsRequired (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.redirect(`/system/return-requirements/${session.id}/no-returns-check-your-answers`)
+}
+
+async function noReturnsCheckYourAnswers (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/no-return-check-your-answers.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveNoReturnsCheckYourAnswers (request, h) {
   return h.redirect('/system/return-requirements/requirements-approved')
 }
 
@@ -144,6 +154,7 @@ module.exports = {
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
+  saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
   saveReturnsHowDoYouWant,
   saveReturnStartDate,

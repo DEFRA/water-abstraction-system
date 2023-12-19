@@ -5,7 +5,31 @@ const ReturnRequirementsController = require('../controllers/return-requirements
 const routes = [
   {
     method: 'GET',
-    path: '/return-requirements/{id}/reason',
+    path: '/return-requirements/{sessionId}/select-return-start-date',
+    handler: ReturnRequirementsController.selectReturnStartDate,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the start date of the return'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/select-return-start-date',
+    handler: ReturnRequirementsController.saveReturnStartDate,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the start date of the return'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/reason',
     handler: ReturnRequirementsController.reasonNewRequirements,
     options: {
       auth: {
@@ -14,6 +38,78 @@ const routes = [
         }
       },
       description: 'Reason page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/reason',
+    handler: ReturnRequirementsController.saveReasonNewRequirements,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Reason page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/returns-how-do-you-want',
+    handler: ReturnRequirementsController.returnsHowDoYouWant,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns required - create How do you want to set up the requirements'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/returns-how-do-you-want',
+    handler: ReturnRequirementsController.saveReturnsHowDoYouWant,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns required - create How do you want to set up the requirements'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/returns-check-your-answers',
+    handler: ReturnRequirementsController.returnsCheckYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns check your answers page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/returns-check-your-answers',
+    handler: ReturnRequirementsController.saveReturnsCheckYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns check your answers page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/requirements-approved',
+    handler: ReturnRequirementsController.requirementsApproved,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns requirements approved'
     }
   }, {
     method: 'GET',
@@ -41,54 +137,6 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/{id}/returns-how-do-you-want',
-    handler: ReturnRequirementsController.returnsHowDoYouWant,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns required - create How do you want to set up the requirements'
-    }
-  }, {
-    method: 'POST',
-    path: '/return-requirements/{id}/returns-how-do-you-want',
-    handler: ReturnRequirementsController.,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns required - create How do you want to set up the requirements'
-    }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/select-return-start-date',
-    handler: ReturnRequirementsController.selectReturnStartDate,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Select the start date of the return'
-    }
-  }, {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/select-return-start-date',
-    handler: ReturnRequirementsController.saveReturnStartDate,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Select the start date of the return'
-    }
-  }, {
-    method: 'GET',
     path: '/return-requirements/{sessionId}/no-return-check-your-answers',
     handler: ReturnRequirementsController.noReturnsCheckYourAnswers,
     options: {
@@ -100,28 +148,16 @@ const routes = [
       description: 'No return check your answers page'
     }
   }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/requirements-approved',
-    handler: ReturnRequirementsController.requirementsApproved,
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/no-return-check-your-answers',
+    handler: ReturnRequirementsController.saveNoReturnsCheckYourAnswers,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Returns requirements approved'
-    }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/returns-check-your-answers',
-    handler: ReturnRequirementsController.returnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns check your answers page'
+      description: 'No return check your answers page'
     }
   }, {
     method: 'GET',

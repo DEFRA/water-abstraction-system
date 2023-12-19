@@ -72,7 +72,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/returns-how-do-you-wantd', () => {
+  describe('GET /return-requirements/{sessionId}/returns-how-do-you-want', () => {
     const options = {
       method: 'GET',
       url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/returns-how-do-you-want',
@@ -87,7 +87,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('How do you want to set up return requirement?')
+        expect(response.payload).to.contain('How do you want to set up the return requirement?')
       })
     })
   })

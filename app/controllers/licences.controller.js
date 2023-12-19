@@ -17,7 +17,7 @@ async function noReturnsRequired (request, h) {
     })
     .returning('*')
 
-  return h.redirect(`/system/return-requirements/${session.id}/no-returns-required`)
+  return h.redirect(`/system/return-requirements/${session.id}/select-return-start-date`)
 }
 
 module.exports = {
