@@ -9,7 +9,6 @@ const routes = [
     handler: JobsController.exportDb,
     options: {
       app: {
-        excludeFromProd: true,
         plainOutput: true
       },
       auth: false,
