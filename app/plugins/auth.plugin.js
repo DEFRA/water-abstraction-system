@@ -47,7 +47,6 @@ const AuthPlugin = {
       },
       redirectTo: '/signin',
       validate: async (_request, session) => {
-        console.log('🚀 ~ file: auth.plugin.js:50 ~ validate: ~ session:', session)
         return AuthService.go(session.userId)
       }
     })
