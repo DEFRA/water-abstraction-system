@@ -34,10 +34,10 @@ describe('Jobs controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /data/export', () => {
+  describe('GET /jobs/export', () => {
     const options = {
       method: 'GET',
-      url: '/data/export'
+      url: '/jobs/export'
     }
 
     describe('when the request succeeds', () => {
