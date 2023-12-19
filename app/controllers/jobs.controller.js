@@ -19,7 +19,7 @@ async function exportDb (_request, h) {
   return h.response().code(204)
 }
 
-async function timeLimited (request, h) {
+async function timeLimited (_request, h) {
   ProcessTimeLimitedLicencesService.go()
 
   return h.response().code(204)
