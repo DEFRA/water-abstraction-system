@@ -9,7 +9,7 @@ const AllocateReturnsToLicenceService = require('./allocate-returns-to-licence.s
 const FetchLicencesService = require('./fetch-licences.service.js')
 const PrepareLicencesForAllocationService = require('./prepare-licences-for-allocation.service.js')
 const TransformAllocatedLicencesToResultsService = require('./transform-allocated-licences-to-results.service.js')
-const PersistDataService = require('./persistData.service.js')
+const PersistAllocatedLicencesToResultsService = require('./persistAllocatedLicencesToResults.service.js')
 /**
  * Functionality not yet implemented
  */
@@ -26,7 +26,7 @@ async function go (billRun, billingPeriods, licenceId) {
   // Temporaily put a console log to shut up the linting
   console.log(reviewResults)
 
-  await PersistDataService.go(billRun.billingBatchId, licences)
+  await PersistAllocatedLicencesToResultsService.go(billRun.billingBatchId, licences)
 
   _calculateAndLogTime(startTime)
 

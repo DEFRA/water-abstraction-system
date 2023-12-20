@@ -2,7 +2,7 @@
 
 /**
  * It saves stuff! (hopefully)
- * @module PersistDataService
+ * @module PersistAllocatedLicencesToResultsService
  */
 const { generateUUID } = require('../../../lib/general.lib.js')
 const ReviewChargeElementResultModel = require('../../../models/review-charge-element-result.model.js')
