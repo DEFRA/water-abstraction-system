@@ -9,12 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ProcessTimeLimitedLicencesService = require('../../app/services/charge-elements/process-time-limited-licences.service.js')
+const ExportService = require('../../app/services/jobs/export/export.service.js')
+const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Charge Elements controller', () => {
+describe('Jobs controller', () => {
   let server
 
   beforeEach(async () => {
@@ -33,10 +34,29 @@ describe('Charge Elements controller', () => {
     Sinon.restore()
   })
 
-  describe('POST /charge-elements/time-limited', () => {
+  describe('GET /jobs/export', () => {
+    const options = {
+      method: 'GET',
+      url: '/jobs/export'
+    }
+
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(ExportService, 'go').resolves()
+      })
+
+      it('displays the correct message', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(204)
+      })
+    })
+  })
+
+  describe('POST /jobs/time-limited', () => {
     const options = {
       method: 'POST',
-      url: '/charge-elements/time-limited'
+      url: '/jobs/time-limited'
     }
 
     describe('when the request succeeds', () => {

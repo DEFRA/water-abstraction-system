@@ -12,7 +12,7 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 
 // Thing under test
-const FetchTableService = require('../../../../app/services/data/export/fetch-table.service.js')
+const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
 
 const billingChargeCategoriesColumnInfo = [
   'billingChargeCategoryId',
