@@ -5,7 +5,7 @@
  * @module FetchTimeLimitedLicencesService
  */
 
-const { db } = require('../../../db/db.js')
+const { db } = require('../../../../db/db.js')
 
 /**
  * Fetch licences that have a related `purpose` that is due to expire in less than 50 days
