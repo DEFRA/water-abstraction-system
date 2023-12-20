@@ -9,7 +9,7 @@ const AllocateReturnsToLicenceService = require('./allocate-returns-to-licence.s
 const FetchLicencesService = require('./fetch-licences.service.js')
 const PrepareLicencesForAllocationService = require('./prepare-licences-for-allocation.service.js')
 // const TransformAllocatedLicencesToResultsService = require('./transform-allocated-licences-to-results.service.js')
-const PersistAllocatedLicencesToResultsService = require('./persistAllocatedLicencesToResults.service.js')
+const PersistAllocatedLicencesToResultsService = require('./persist-allocated-licences-to-results.service.js')
 /**
  * Functionality not yet implemented
  */
