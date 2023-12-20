@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const SchemaExportService = require('../../../../app/services/data/export/schema-export.service.js')
+const SchemaExportService = require('../../../../app/services/jobs/export/schema-export.service.js')
 
 // Thing under test
-const ExportService = require('../../../../app/services/data/export/export.service.js')
+const ExportService = require('../../../../app/services/jobs/export/export.service.js')
 
 describe('Export Service', () => {
   let SchemaExportServiceStub
