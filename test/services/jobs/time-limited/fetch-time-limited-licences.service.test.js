@@ -8,17 +8,17 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
+const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
+const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const FetchTimeLimitedLicencesService = require('../../../app/services/charge-elements/fetch-time-limited-licences.service.js')
+const FetchTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
 
 describe('Fetch Time Limited Licences service', () => {
   let regionId

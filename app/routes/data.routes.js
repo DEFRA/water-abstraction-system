@@ -4,19 +4,6 @@ const DataController = require('../controllers/data.controller.js')
 
 const routes = [
   {
-    method: 'GET',
-    path: '/data/export',
-    handler: DataController.exportDb,
-    options: {
-      app: {
-        excludeFromProd: true,
-        plainOutput: true
-      },
-      auth: false,
-      description: 'Used to export the database and upload the file to our AWS S3 bucket'
-    }
-  },
-  {
     method: 'POST',
     path: '/data/seed',
     handler: DataController.seed,
