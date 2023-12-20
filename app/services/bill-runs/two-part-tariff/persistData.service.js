@@ -85,7 +85,7 @@ async function _persistChargeElement (chargeElement, chargeReference) {
   const data = {
     id: reviewChargeELementResultId,
     chargeElementId: chargeElement.id,
-    allocated: chargeElement.allocated,
+    allocated: chargeElement.allocatedQuantity,
     aggregate: chargeReference.aggregate ?? 1,
     chargeDatesOverlap: chargeElement.chargeDatesOverlap
   }
