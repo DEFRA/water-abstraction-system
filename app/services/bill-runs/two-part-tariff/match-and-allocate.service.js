@@ -8,7 +8,7 @@
 const AllocateReturnsToLicenceService = require('./allocate-returns-to-licence.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
 const PrepareLicencesForAllocationService = require('./prepare-licences-for-allocation.service.js')
-// const TransformAllocatedLicencesToResultsService = require('./transform-allocated-licences-to-results.service.js')
+const TransformAllocatedLicencesToResultsService = require('./transform-allocated-licences-to-results.service.js')
 const PersistAllocatedLicencesToResultsService = require('./persist-allocated-licences-to-results.service.js')
 /**
  * Functionality not yet implemented
@@ -22,9 +22,9 @@ async function go (billRun, billingPeriods, licenceId) {
 
   AllocateReturnsToLicenceService.go(licences, billRun.billingBatchId)
 
-  // const reviewResults = TransformAllocatedLicencesToResultsService.go(billRun, licences)
+  const reviewResults = TransformAllocatedLicencesToResultsService.go(billRun, licences)
   // Temporaily put a console log to shut up the linting
-  // console.log(reviewResults)
+  console.log(reviewResults)
 
   await PersistAllocatedLicencesToResultsService.go(billRun.billingBatchId, licences)
 

@@ -77,7 +77,7 @@ function _generateReviewResult (billRun, licence, chargeVersion, chargeReference
     chargeVersionChangeReason: chargeVersion.changeReason.description,
     reviewChargeElementResultId: reviewChargeElementResult.id,
     reviewChargeElementResult,
-    reviewReturnResultId: reviewReturnResult.id,
+    reviewReturnResultId: reviewReturnResult?.id,
     reviewReturnResult
   }
 
