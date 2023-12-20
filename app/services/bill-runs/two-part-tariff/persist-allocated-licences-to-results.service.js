@@ -10,44 +10,43 @@ const ReviewReturnResultModel = require('../../../models/review-return-result.mo
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
 async function go (billRunId, licences) {
-  let unmatchedReturns = []
-  let reviewReturnResultIds
-
   for (const licence of licences) {
     const { chargeVersions, returnLogs } = licence
 
-    reviewReturnResultIds = await _persistReturnLogs(returnLogs)
-    unmatchedReturns = returnLogs
+    const reviewReturnResultIds = await _persistReviewReturnResults(returnLogs)
+    // Cloning the returnLogs object so we can removed returns that have been matched
+    const unpersistedReturns = [{ ...returnLogs }]
 
     for (const chargeVersion of chargeVersions) {
       const { chargeReferences } = chargeVersion
-      let i = 0
 
-      for (const chargeReference of chargeReferences) {
-        i++
+      for (const [i, chargeReference] of chargeReferences.entries()) {
         const { chargeElements } = chargeReference
 
         for (const chargeElement of chargeElements) {
-          const matchedReturnLogs = chargeElement.returnLogs
-
-          await _persistData(billRunId, licence, chargeVersion, chargeReference, chargeElement, reviewReturnResultIds, matchedReturnLogs, unmatchedReturns)
+          await _persistData(billRunId, licence, chargeVersion, chargeReference, chargeElement, reviewReturnResultIds, unpersistedReturns)
         }
 
-        if (chargeReferences.length === i) {
-          await _persistUnmatchedReturns(unmatchedReturns, reviewReturnResultIds, billRunId, licence, chargeVersion, chargeReference)
+        if (chargeReferences.length - 1 === i) {
+          await _persistUnmatchedReturns(unpersistedReturns, reviewReturnResultIds, billRunId, licence, chargeVersion, chargeReference)
         }
       }
     }
   }
 }
 
-async function _persistReturnLogs (returnLogs) {
+/**
+ *
+ * @param {*} returnLogs
+ *
+ * @returns {[]} - An array of the given returns with returnId and reviewReturnResultId
+ */
+async function _persistReviewReturnResults (returnLogs) {
   const reviewReturnResultIds = []
 
   for (const returnLog of returnLogs) {
     const reviewReturnResultId = generateUUID()
 
-    console.log('Return :', returnLog)
     const data = {
       id: reviewReturnResultId,
       returnId: returnLog.id,
@@ -73,17 +72,24 @@ async function _persistReturnLogs (returnLogs) {
   return reviewReturnResultIds
 }
 
-async function _persistData (billRunId, licence, chargeVersion, chargeReference, chargeElement, reviewReturnResultIds, matchedReturnLogs, returnLogs) {
-  const reviewChargeElementId = await _persistChargeElement(chargeElement, chargeReference)
+async function _persistData (billRunId, licence, chargeVersion, chargeReference, chargeElement, reviewReturnResultIds, unpersistedReturns) {
+  const reviewChargeElementId = await _persistReviewChargeElementResult(chargeElement, chargeReference)
 
-  await _persistsReviewResult(billRunId, licence, chargeVersion, chargeReference, reviewChargeElementId, chargeElement, reviewReturnResultIds, matchedReturnLogs, returnLogs)
+  await _persistReviewResult(billRunId, licence, chargeVersion, chargeReference, reviewChargeElementId, chargeElement, reviewReturnResultIds, unpersistedReturns)
 }
 
-async function _persistChargeElement (chargeElement, chargeReference) {
-  const reviewChargeELementResultId = generateUUID()
+/**
+ * Persists review charge element result in the database
+ * @param {*} chargeElement - The charge element object
+ * @param {*} chargeReference - The charge reference object
+ *
+ * @returns {String} reviewChargeElementResultId - The ID of the persisted review charge element result
+ */
+async function _persistReviewChargeElementResult (chargeElement, chargeReference) {
+  const reviewChargeElementResultId = generateUUID()
 
   const data = {
-    id: reviewChargeELementResultId,
+    id: reviewChargeElementResultId,
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
     aggregate: chargeReference.aggregate ?? 1,
@@ -92,10 +98,22 @@ async function _persistChargeElement (chargeElement, chargeReference) {
 
   await ReviewChargeElementResultModel.query().insert(data)
 
-  return reviewChargeELementResultId
+  return reviewChargeElementResultId
 }
 
-async function _persistsReviewResult (billRunId, licence, chargeVersion, chargeReference, reviewChargeElementId, chargeElement, reviewReturnResultIds, matchedReturnLogs, unmatchedReturns) {
+/**
+ * Persists review results associated with a charge element and returns in the database, once a return has been persisted it is removed from the unpersistedReturns
+ *
+ * @param {*} billRunId
+ * @param {*} licence
+ * @param {*} chargeVersion
+ * @param {*} chargeReference
+ * @param {*} reviewChargeElementId
+ * @param {*} chargeElement
+ * @param {[]} reviewReturnResultIds
+ * @param {[]} unpersistedReturns
+ */
+async function _persistReviewResult (billRunId, licence, chargeVersion, chargeReference, reviewChargeElementId, chargeElement, reviewReturnResultIds, unpersistedReturns) {
   const data = {
     billRunId,
     licenceId: licence.id,
@@ -110,28 +128,31 @@ async function _persistsReviewResult (billRunId, licence, chargeVersion, chargeR
     data.reviewChargeElementResultId = reviewChargeElementId
 
     for (const returnLog of chargeElement.returnLogs) {
-      const reviewReturnResultId = reviewReturnResultIds.find(returnId => returnId.returnId === returnLog.returnId)
-      for (let i = 0; i < unmatchedReturns.length; i++) {
-        if (unmatchedReturns[i].id === returnLog.returnId) {
-          unmatchedReturns.splice(i, 1)
-        }
-      }
+      const reviewReturnResultId = reviewReturnResultIds.find((returnId) => {
+        return returnId.returnId === returnLog.returnId
+      })
 
       data.reviewReturnResultId = reviewReturnResultId.reviewReturnResultId
 
       await ReviewResultModel.query().insert(data)
+
+      // Removing the persisted returns
+      for (let i = 0; i < unpersistedReturns.length; i++) {
+        if (unpersistedReturns[i].id === returnLog.returnId) {
+          unpersistedReturns.splice(i, 1)
+        }
+      }
     }
   } else {
     data.reviewChargeElementResultId = reviewChargeElementId
 
-    console.log('Persisting Charge Element if no returns')
     await ReviewResultModel.query().insert(data)
   }
 }
 
-async function _persistUnmatchedReturns (unmatchedReturns, reviewReturnResultIds, billRunId, licence, chargeVersion, chargeReference) {
-  if (unmatchedReturns.length > 0) {
-    for (const unmatchedReturn of unmatchedReturns) {
+async function _persistUnmatchedReturns (unpersistedReturns, reviewReturnResultIds, billRunId, licence, chargeVersion, chargeReference) {
+  if (unpersistedReturns.length > 0) {
+    for (const unpersistedReturn of unpersistedReturns) {
       const data = {
         billRunId,
         licenceId: licence.id,
@@ -142,7 +163,10 @@ async function _persistUnmatchedReturns (unmatchedReturns, reviewReturnResultIds
         chargeVersionChangeReason: chargeVersion.changeReason.description
       }
 
-      const reviewReturnResultId = reviewReturnResultIds.find(reviewReturnResultId => reviewReturnResultId.reviewReturnResultId === unmatchedReturn.returnId)
+      const reviewReturnResultId = reviewReturnResultIds.find((reviewReturnResultId) => {
+        return reviewReturnResultId.reviewReturnResultId === unpersistedReturn.returnId
+      })
+
       data.reviewReturnResultId = reviewReturnResultId
 
       await ReviewResultModel.query().insert(data)

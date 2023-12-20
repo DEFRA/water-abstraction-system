@@ -24,8 +24,6 @@ async function go (licences) {
         })
       })
     })
-    console.log('Licence :', licence)
-    console.log('Return Log :', licence.chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs)
   })
 }
 
