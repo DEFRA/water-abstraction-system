@@ -5,19 +5,11 @@
  * @module AllocateReturnsToLicenceService
  */
 
-const { generateUUID, periodsOverlap } = require('../../../lib/general.lib.js')
-const ReviewChargeElementResultModel = require('../../../models/review-charge-element-result.model.js')
-const ReviewReturnResultModel = require('../../../models/review-return-result.model.js')
-const ReviewResultModel = require('../../../models/review-result.model.js')
+const { periodsOverlap } = require('../../../lib/general.lib.js')
 
-async function go (licences, billRunID) {
+async function go (licences) {
   licences.forEach((licence) => {
     const { chargeVersions, returnLogs } = licence
-
-    returnLogs.forEach((returnLog) => {
-      // PERSIST returns
-      _persistDataToReviewReturnResult(returnLog)
-    })
 
     chargeVersions.forEach((chargeVersion) => {
       const { chargeReferences } = chargeVersion
@@ -29,61 +21,11 @@ async function go (licences, billRunID) {
 
         chargeElements.forEach((chargeElement) => {
           _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod, chargeReference)
-
-          // PERSIST element ???
-          const reviewChargeElementResultId = generateUUID()
-
-          const chargeElementToPersist = {
-            id: reviewChargeElementResultId,
-            chargeElementId: chargeElement.id,
-            allocated: chargeElement.allocated,
-            aggregate: chargeReference.aggregate,
-            chargeDatesOverlap: chargeElement.chargeDatesOverlap
-          }
-
-          _persistDataToReviewChargeElementResult(chargeElementToPersist)
-          _persistReviewResult(billRunID, licence.id, chargeVersion.id, chargeVersion.chargePeriod, chargeVersion.changeReason.description, chargeReference.id, reviewChargeElementResultId) // missing review return results id
         })
       })
     })
-  })
-}
-
-async function _persistReviewResult (billRunID, licenceId, chargeVersionId, chargePeriod, chargeVersionChangeReason, chargeReferenceId, reviewChargeElementResultId) {
-  const data = {
-    billRunID,
-    licenceId,
-    chargeVersionId,
-    chargePeriodStartDate: chargePeriod.startDate,
-    chargePeriodEndDate: chargePeriod.endDate,
-    chargeVersionChangeReason,
-    chargeReferenceId,
-    reviewChargeElementResultId
-  }
-
-  await ReviewResultModel.query().insert(data)
-}
-
-async function _persistDataToReviewChargeElementResult (chargeElementToPersist) {
-  await ReviewChargeElementResultModel.query().insert(chargeElementToPersist)
-}
-
-async function _persistDataToReviewReturnResult (returnLog) {
-  await ReviewReturnResultModel.query().insert({
-    returnId: returnLog.id,
-    returnReference: returnLog.returnReference,
-    startDate: returnLog.start_date,
-    endDate: returnLog.endDate,
-    dueDate: returnLog.dueDate,
-    receivedDate: returnLog.receivedDate,
-    status: returnLog.status,
-    underQuery: returnLog.underQuery,
-    nilReturn: returnLog.nilReturn,
-    description: returnLog.description,
-    purposes: returnLog.purposes,
-    quantity: returnLog.quantity,
-    allocated: returnLog.allocated,
-    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
+    console.log('Licence :', licence)
+    console.log('Return Log :', licence.chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs)
   })
 }
 
@@ -174,9 +116,6 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
           chargeReference.allocatedQuantity += qtyToAllocate
         }
       })
-      // persist charge element
-      // matched returns allocatedQuanitity
-      // review results
     }
   })
 }
@@ -209,8 +148,6 @@ function _matchReturns (chargeElement, returnLogs) {
 
     return periodsOverlap(elementPeriods, returnPeriods)
   })
-  // returns unmatched returns persisted
-  // persisted review results table
 }
 
 module.exports = {
