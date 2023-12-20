@@ -122,7 +122,7 @@ async function _persistsReviewResult (billRunId, licence, chargeVersion, chargeR
       await ReviewResultModel.query().insert(data)
     }
   } else {
-    data.reviewChargeELementId = reviewChargeElementId
+    data.reviewChargeElementResultId = reviewChargeElementId
 
     console.log('Persisting Charge Element if no returns')
     await ReviewResultModel.query().insert(data)
