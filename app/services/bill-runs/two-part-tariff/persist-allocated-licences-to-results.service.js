@@ -10,7 +10,7 @@ const ReviewReturnResultModel = require('../../../models/review-return-result.mo
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
 /**
- * Perisists the returnLogs and chargeElements processed from the `allocateReturnsToLicenceService`
+ * Persists the returnLogs and chargeElements processed from the `allocateReturnsToLicenceService`
  *
  * @param {String} billRunId UUID of the bill run this bill will be linked to
  * @param {Object[]} licences licences with returns data to persist
@@ -49,7 +49,7 @@ async function _persistChargeElement (billRunId, licence, chargeVersion, chargeR
       await _persistReviewResult(billRunId, licence, chargeVersion, chargeReference, reviewChargeElementResultId, reviewReturnResultId)
     }
   } else {
-    // Perisisting the charge element without any matching returns
+    // Persisting the charge element without any matching returns
     await _persistReviewResult(billRunId, licence, chargeVersion, chargeReference, reviewChargeElementResultId, null)
   }
 }
