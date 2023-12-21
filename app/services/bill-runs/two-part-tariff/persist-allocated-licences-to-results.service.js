@@ -15,22 +15,21 @@ async function go (billRunId, licences) {
 
     const reviewReturnResultIds = await _persistReviewReturnResults(returnLogs)
     // Cloning the returnLogs object so we can removed returns that have been matched
-    const unpersistedReturns = [{ ...returnLogs }]
+    const unpersistedReturns = [...returnLogs]
 
     for (const chargeVersion of chargeVersions) {
       const { chargeReferences } = chargeVersion
 
-      for (const [i, chargeReference] of chargeReferences.entries()) {
+      for (const chargeReference of chargeReferences) {
         const { chargeElements } = chargeReference
 
         for (const chargeElement of chargeElements) {
           await _persistData(billRunId, licence, chargeVersion, chargeReference, chargeElement, reviewReturnResultIds, unpersistedReturns)
         }
-
-        if (chargeReferences.length - 1 === i) {
-          await _persistUnmatchedReturns(unpersistedReturns, reviewReturnResultIds, billRunId, licence, chargeVersion, chargeReference)
-        }
       }
+    }
+    if (unpersistedReturns.length > 0) {
+      await _persistUnmatchedReturns(unpersistedReturns, reviewReturnResultIds, billRunId, licence)
     }
   }
 }
@@ -128,8 +127,8 @@ async function _persistReviewResult (billRunId, licence, chargeVersion, chargeRe
     data.reviewChargeElementResultId = reviewChargeElementId
 
     for (const returnLog of chargeElement.returnLogs) {
-      const reviewReturnResultId = reviewReturnResultIds.find((returnId) => {
-        return returnId.returnId === returnLog.returnId
+      const reviewReturnResultId = reviewReturnResultIds.find((reviewReturnResultIds) => {
+        return reviewReturnResultIds.returnId === returnLog.returnId
       })
 
       data.reviewReturnResultId = reviewReturnResultId.reviewReturnResultId
@@ -150,27 +149,19 @@ async function _persistReviewResult (billRunId, licence, chargeVersion, chargeRe
   }
 }
 
-async function _persistUnmatchedReturns (unpersistedReturns, reviewReturnResultIds, billRunId, licence, chargeVersion, chargeReference) {
-  if (unpersistedReturns.length > 0) {
-    for (const unpersistedReturn of unpersistedReturns) {
-      const data = {
-        billRunId,
-        licenceId: licence.id,
-        chargeVersionId: chargeVersion.id,
-        chargeReferenceId: chargeReference.id,
-        chargePeriodStartDate: chargeVersion.chargePeriod.startDate,
-        chargePeriodEndDate: chargeVersion.chargePeriod.endDate,
-        chargeVersionChangeReason: chargeVersion.changeReason.description
-      }
-
-      const reviewReturnResultId = reviewReturnResultIds.find((reviewReturnResultId) => {
-        return reviewReturnResultId.reviewReturnResultId === unpersistedReturn.returnId
-      })
-
-      data.reviewReturnResultId = reviewReturnResultId
-
-      await ReviewResultModel.query().insert(data)
+async function _persistUnmatchedReturns (unpersistedReturns, reviewReturnResultIds, billRunId, licence) {
+  for (const unpersistedReturn of unpersistedReturns) {
+    const data = {
+      billRunId,
+      licenceId: licence.id
     }
+
+    const reviewReturnResultId = reviewReturnResultIds.find((reviewReturnResultId) => {
+      return reviewReturnResultId.returnId === unpersistedReturn.id
+    })
+
+    data.reviewReturnResultId = reviewReturnResultId
+    await ReviewResultModel.query().insert(data)
   }
 }
 
