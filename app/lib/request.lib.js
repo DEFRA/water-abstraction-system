@@ -10,6 +10,63 @@ const { HttpsProxyAgent } = require('hpagent')
 const requestConfig = require('../../config/request.config.js')
 
 /**
+ * Returns an object containing the default options.
+ *
+ * We want to be able to export these options so we can set specific settings that may be multiple objects deep. For
+ * example, if we want to set `retry.backoffLimit` then we can't simply pass `{ retry: { backoffLimit: 5 } }` to the lib
+ * as `additionalOptions` as this would replace the entire `retry` section. We would therefore want to get the exported
+ * `retry` section and add our setting to it before passing it back as `additionalOptions`.
+ *
+ * Note that we have a function here rather than defining a const as this did not allow us to override settings using
+ * Sinon to stub `requestConfig`; the const appeared to have its values fixed when the file was required, whereas a
+ * function generates its values each time it's called.
+ *
+ * @returns {Object} default options to pass to Got when making a request
+ */
+function defaultOptions () {
+  return {
+    // This uses the ternary operator to give either an `agent` object or an empty object, and the spread operator to
+    // bring the result back into the top level of the `defaultOptions` object.
+    ...(requestConfig.httpProxy
+      ? {
+          agent: {
+            https: new HttpsProxyAgent({ proxy: requestConfig.httpProxy })
+          }
+        }
+      : {}),
+    // If we don't have this setting Got will throw its own HTTPError unless the result is 2xx or 3xx. That makes it
+    // impossible to see what the status code was because it doesn't get set on the response object Got provides when
+    // an error is thrown. With this set Got will treat a 404 in the same way it treats a 204.
+    throwHttpErrors: false,
+    // Got has a built in retry mechanism. We have found though you have to be careful with what gets retried. Our
+    // preference is to only retry in the event of a timeout on assumption the destination server might be busy but has
+    // a chance to succeed when attempted again
+    retry: {
+      // The default is also 2 retries before erroring. We specify it to make this fact visible
+      limit: 2,
+      // We ensure that the only network errors Got retries are timeout errors
+      errorCodes: ['ETIMEDOUT'],
+      // By default, Got does not retry PATCH and POST requests. As we only retry timeouts there is no risk in retrying
+      // our PATCH and POST requests. So, we set methods to be Got's defaults plus 'PATCH' and 'POST'
+      methods: ['GET', 'PATCH', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
+      // We set statusCodes as an empty array to ensure that 4xx, 5xx etc. errors are not retried
+      statusCodes: []
+    },
+    // Got states
+    //
+    // > It is a good practice to set a timeout to prevent hanging requests. By default, there is no timeout set.
+    timeout: {
+      request: requestConfig.timeout
+    },
+    hooks: {
+      beforeRetry: [
+        _beforeRetryHook
+      ]
+    }
+  }
+}
+
+/**
  * Make a GET request to the specified URL
  *
  * Use when you need to make a GET request. It returns a result tuple
@@ -104,48 +161,7 @@ function _logFailure (method, result, url, additionalOptions) {
  * @param {Object} additionalOptions Object of custom options
  */
 function _requestOptions (additionalOptions) {
-  const defaultOptions = {
-    // This uses the ternary operator to give either an `agent` object or an empty object, and the spread operator to
-    // bring the result back into the top level of the `defaultOptions` object.
-    ...(requestConfig.httpProxy
-      ? {
-          agent: {
-            https: new HttpsProxyAgent({ proxy: requestConfig.httpProxy })
-          }
-        }
-      : {}),
-    // If we don't have this setting Got will throw its own HTTPError unless the result is 2xx or 3xx. That makes it
-    // impossible to see what the status code was because it doesn't get set on the response object Got provides when
-    // an error is thrown. With this set Got will treat a 404 in the same way it treats a 204.
-    throwHttpErrors: false,
-    // Got has a built in retry mechanism. We have found though you have to be careful with what gets retried. Our
-    // preference is to only retry in the event of a timeout on assumption the destination server might be busy but has
-    // a chance to succeed when attempted again
-    retry: {
-      // The default is also 2 retries before erroring. We specify it to make this fact visible
-      limit: 2,
-      // We ensure that the only network errors Got retries are timeout errors
-      errorCodes: ['ETIMEDOUT'],
-      // By default, Got does not retry PATCH and POST requests. As we only retry timeouts there is no risk in retrying
-      // our PATCH and POST requests. So, we set methods to be Got's defaults plus 'PATCH' and 'POST'
-      methods: ['GET', 'PATCH', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
-      // We set statusCodes as an empty array to ensure that 4xx, 5xx etc. errors are not retried
-      statusCodes: []
-    },
-    // Got states
-    //
-    // > It is a good practice to set a timeout to prevent hanging requests. By default, there is no timeout set.
-    timeout: {
-      request: requestConfig.timeout
-    },
-    hooks: {
-      beforeRetry: [
-        _beforeRetryHook
-      ]
-    }
-  }
-
-  return { ...defaultOptions, ...additionalOptions }
+  return { ...defaultOptions(), ...additionalOptions }
 }
 
 async function _sendRequest (method, url, additionalOptions) {
@@ -178,5 +194,6 @@ async function _sendRequest (method, url, additionalOptions) {
 module.exports = {
   get,
   patch,
-  post
+  post,
+  defaultOptions: defaultOptions()
 }
