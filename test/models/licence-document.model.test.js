@@ -14,7 +14,7 @@ const LicenceDocumentHelper = require('../support/helpers/licence-document.helpe
 // Thing under test
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
 
-describe.only('Licence Document model', () => {
+describe('Licence Document model', () => {
   let testRecord
 
   beforeEach(async () => {
