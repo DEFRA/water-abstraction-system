@@ -11,10 +11,14 @@ const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licenc
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
 /**
- * Prepares return logs and charge versions for matching and allocation based on provided licences and billing period
+ * For each licence finds returns for the billing period and prepares them and the licence's charge elements
+ * ready to be matched and allocated to one another
  *
+ * > Rather than create a copy of each licence and amend it we amend the licences in place. Hence this service
+ * > has no return value
  * @param {Object[]} licences - The licences to prepare
- * @param {Object[]} billingPeriod - The billing period
+ * @param {Object[]} billingPeriod - The period a bill run is being calculated for. Currently, this always equates to a
+ * financial year, for example, 2022-04-01 to 2023-03-31
  */
 async function go (licences, billingPeriod) {
   for (const licence of licences) {
@@ -24,7 +28,10 @@ async function go (licences, billingPeriod) {
 }
 
 /**
- * Checks if the abstraction period is outside the given return line's period
+ * Checks if a return has evidence of abstraction outside the return's abstraction periods
+ *
+ * Each line has a start and end date. If that period does not overlap one of the abstraction periods assigned to the
+ * licence the return needs to be flagged as having water been abstracted outside the agreed abstraction period.
  *
  * @param {Object[]} returnAbstractionPeriods - Abstraction periods to compare
  * @param {Object} returnLine - Return line object with start and end date
@@ -115,8 +122,14 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
 }
 
 /**
- * Sorts charge references by subsistence charge in descending order
- * @param {Object[]} chargeReferences - Charge references to sort
+ * Sorts charge references by their subsistence charge in descending order
+ *
+ * The rules for matching returns to charge elements require us to consider those charge elements assigned to the
+ * charge reference with the highest subsistence charge first.
+ *
+ * Normally, we'd deal with the ordering of things in the original fetch service. But to do that in this case would have
+ * meant either creating a complex Knex-based query instead of just using Objection.js or, looping through the results
+ * both in `FetchChargeVersionsService` and here.
  *
  * @returns {Object[]} - Sorted array of charge references
  */
