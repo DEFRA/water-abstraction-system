@@ -1,17 +1,5 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
-{% set rootLink = "/system/return-requirements/" + id %}
-{% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: rootLink + "/how-do-you-want-to-return"
-    })
-  }}
-{% endblock %}
 
 {% block content %}
   {# Main heading #}
