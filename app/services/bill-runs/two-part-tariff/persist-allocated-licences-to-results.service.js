@@ -20,7 +20,7 @@ async function go (billRunId, licences) {
   for (const licence of licences) {
     const { chargeVersions, returnLogs } = licence
 
-    const reviewReturnResultIds = await _persistReturnLogs(returnLogs, billRunId, licence)
+    await _persistReturnLogs(returnLogs, billRunId, licence)
 
     for (const chargeVersion of chargeVersions) {
       const { chargeReferences } = chargeVersion
@@ -29,24 +29,20 @@ async function go (billRunId, licences) {
         const { chargeElements } = chargeReference
 
         for (const chargeElement of chargeElements) {
-          await _persistChargeElement(billRunId, licence, chargeVersion, chargeReference, chargeElement, reviewReturnResultIds)
+          await _persistChargeElement(billRunId, licence, chargeVersion, chargeReference, chargeElement)
         }
       }
     }
   }
 }
 
-async function _persistChargeElement (billRunId, licence, chargeVersion, chargeReference, chargeElement, reviewReturnResultIds) {
+async function _persistChargeElement (billRunId, licence, chargeVersion, chargeReference, chargeElement) {
   const reviewChargeElementResultId = await _persistReviewChargeElementResult(chargeElement, chargeReference)
 
   // Persisting the charge elements that have a matching return
   if (chargeElement.returnLogs.length > 0) {
-    for (const returnLog of chargeElement.returnLogs) {
-      const { reviewReturnResultId } = reviewReturnResultIds.find((reviewReturnResultIds) => {
-        return reviewReturnResultIds.returnId === returnLog.returnId
-      })
-
-      await _persistReviewResult(billRunId, licence, chargeVersion, chargeReference, reviewChargeElementResultId, reviewReturnResultId)
+    for (const chargeElementReturnLog of chargeElement.returnLogs) {
+      await _persistReviewResult(billRunId, licence, chargeVersion, chargeReference, reviewChargeElementResultId, chargeElementReturnLog.reviewReturnResultId)
     }
   } else {
     // Persisting the charge element without any matching returns
@@ -55,21 +51,14 @@ async function _persistChargeElement (billRunId, licence, chargeVersion, chargeR
 }
 
 async function _persistReturnLogs (returnLogs, billRunId, licence) {
-  const reviewReturnResultIds = []
-
   for (const returnLog of returnLogs) {
-    const reviewReturnResultId = generateUUID()
+    await _persistReviewReturnResult(returnLog)
 
-    await _persistReviewReturnResult(reviewReturnResultId, returnLog)
-    reviewReturnResultIds.push({ returnId: returnLog.id, reviewReturnResultId })
-
-    // Persisting the unmatched return logs
+    // Persists the unmatched return logs. The matched return logs will be persisted when processing the charge elements
     if (returnLog.matched === false) {
-      _persistReviewResult(billRunId, licence, null, null, null, reviewReturnResultId)
+      _persistReviewResult(billRunId, licence, null, null, null, returnLog.reviewReturnResultId)
     }
   }
-
-  return reviewReturnResultIds
 }
 
 async function _persistReviewChargeElementResult (chargeElement, chargeReference) {
@@ -104,9 +93,9 @@ async function _persistReviewResult (billRunId, licence, chargeVersion, chargeRe
   await ReviewResultModel.query().insert(data)
 }
 
-async function _persistReviewReturnResult (reviewReturnResultId, returnLog) {
+async function _persistReviewReturnResult (returnLog) {
   const data = {
-    id: reviewReturnResultId,
+    id: returnLog.reviewReturnResultId,
     returnId: returnLog.id,
     returnReference: returnLog.returnRequirement,
     startDate: returnLog.startDate,
