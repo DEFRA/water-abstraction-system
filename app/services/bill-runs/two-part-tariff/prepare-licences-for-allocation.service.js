@@ -1,54 +1,67 @@
 'use strict'
 
 /**
- * Do stuff
+ * Prepares the return logs and charge elements and sorts the charge references ready for matching and allocating
  * @module PrepareLicencesForAllocationService
  */
 
 const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
-const { generateUUID, periodsOverlap } = require('../../../lib/general.lib.js')
+const { periodsOverlap } = require('../../../lib/general.lib.js')
 
+/**
+ * For each licence finds returns for the billing period and prepares them and the licence's charge elements
+ * ready to be matched and allocated to one another
+ *
+ * > Rather than create a copy of each licence and amend it we amend the licences in place. Hence this service
+ * > has no return value
+ * @param {Object[]} licences - The licences to prepare
+ * @param {Object[]} billingPeriod - The period a bill run is being calculated for. Currently, this always equates to a
+ * financial year, for example, 2022-04-01 to 2023-03-31
+ */
 async function go (licences, billingPeriod) {
   for (const licence of licences) {
-    licence.returnLogs = await FetchReturnLogsForLicenceService.go(licence.licenceRef, billingPeriod)
-
-    const { chargeVersions, returnLogs } = licence
-
-    _prepReturnsForMatching(returnLogs, billingPeriod)
-
-    chargeVersions.forEach((chargeVersion) => {
-      const { chargeReferences } = chargeVersion
-
-      _sortChargeReferencesBySubsistenceCharge(chargeReferences)
-      chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
-
-      // NOTE: Imagine the scenario where a billing account change is due to happen. The users will create a new charge
-      // version whose start date will be when the account is due to change, for example 1 Oct. So, the charge version
-      // we are looking at has a `startDate:` of 2023-10-01. But then someone marks the licence as revoked in NALD on
-      // 2023-08-01. In this scenario DetermineChargePeriodService will return an empty charge period because it will
-      // have calculated the charge period start date as 2023-10-01 and the end date as 2023-08-01. Clearly, this is
-      // incompatible so the service actually returns `{ startDate: null, endDate: null }`. This check is to handle
-      // scenarios like this
-      if (chargeVersion.chargePeriod.startDate) {
-        chargeReferences.forEach((chargeReference) => {
-          const { chargeElements } = chargeReference
-
-          _prepChargeElementsForMatching(chargeElements, chargeVersion.chargePeriod)
-        })
-      }
-    })
+    await _prepareReturnLogs(licence, billingPeriod)
+    _prepareChargeVersions(licence, billingPeriod)
   }
 }
 
+/**
+ * Checks if a return has evidence of abstraction outside the return's abstraction periods
+ *
+ * Each line has a start and end date. If that period does not overlap one of the abstraction periods assigned to the
+ * licence the return needs to be flagged as having water been abstracted outside the agreed abstraction period.
+ *
+ * @param {Object[]} returnAbstractionPeriods - Abstraction periods to compare
+ * @param {Object} returnLine - Return line object with start and end date
+ *
+ * @returns {Boolean}
+ */
 function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
   const { startDate, endDate } = returnLine
 
   return !periodsOverlap(returnAbstractionPeriods, [{ startDate, endDate }])
 }
 
-function _prepChargeElementsForMatching (chargeElements, chargePeriod) {
+function _prepareChargeVersions (licence, billingPeriod) {
+  const { chargeVersions } = licence
+
+  chargeVersions.forEach((chargeVersion) => {
+    const { chargeReferences } = chargeVersion
+
+    _sortChargeReferencesBySubsistenceCharge(chargeReferences)
+    chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+
+    chargeReferences.forEach((chargeReference) => {
+      const { chargeElements } = chargeReference
+
+      _prepareChargeElementsForMatching(chargeElements, chargeVersion.chargePeriod)
+    })
+  })
+}
+
+function _prepareChargeElementsForMatching (chargeElements, chargePeriod) {
   chargeElements.forEach((chargeElement) => {
     const {
       abstractionPeriodStartDay,
@@ -69,6 +82,12 @@ function _prepChargeElementsForMatching (chargeElements, chargePeriod) {
     chargeElement.allocatedQuantity = 0
     chargeElement.abstractionPeriods = abstractionPeriods
   })
+}
+
+async function _prepareReturnLogs (licence, billingPeriod) {
+  licence.returnLogs = await FetchReturnLogsForLicenceService.go(licence.licenceRef, billingPeriod)
+
+  _prepReturnsForMatching(licence.returnLogs, billingPeriod)
 }
 
 function _prepReturnsForMatching (returnLogs, billingPeriod) {
@@ -99,12 +118,21 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
     returnLog.abstractionPeriods = abstractionPeriods
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
-    // `reviewReturnResultId` will be the `id` in the `reviewReturnResults` table for each return log, and is used to
-    // identify the matched return log when populating the `reviewResults` table for a charge element
-    returnLog.reviewReturnResultId = generateUUID()
   })
 }
 
+/**
+ * Sorts charge references by their subsistence charge in descending order
+ *
+ * The rules for matching returns to charge elements require us to consider those charge elements assigned to the
+ * charge reference with the highest subsistence charge first.
+ *
+ * Normally, we'd deal with the ordering of things in the original fetch service. But to do that in this case would have
+ * meant either creating a complex Knex-based query instead of just using Objection.js or, looping through the results
+ * both in `FetchChargeVersionsService` and here.
+ *
+ * @returns {Object[]} - Sorted array of charge references
+ */
 function _sortChargeReferencesBySubsistenceCharge (chargeReferences) {
   return chargeReferences.sort((firstChargeReference, secondChargeReference) => {
     const { subsistenceCharge: subsistenceChargeFirst } = firstChargeReference.chargeCategory
