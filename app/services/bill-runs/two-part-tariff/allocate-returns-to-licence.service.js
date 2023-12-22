@@ -71,8 +71,9 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
 
   matchedReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
+      allocatedQuantity: 0,
       returnId: matchedReturn.id,
-      allocatedQuantity: 0
+      reviewReturnResultId: matchedReturn.reviewReturnResultId
     }
 
     chargeElement.returnLogs.push(matchedReturnResult)

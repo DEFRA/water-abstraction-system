@@ -8,7 +8,7 @@
 const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
-const { periodsOverlap } = require('../../../lib/general.lib.js')
+const { generateUUID, periodsOverlap } = require('../../../lib/general.lib.js')
 
 async function go (licences, billingPeriod) {
   for (const licence of licences) {
@@ -99,6 +99,9 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
     returnLog.abstractionPeriods = abstractionPeriods
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
+    // `reviewReturnResultId` will be the `id` of in the `reviewReturnResults` table for each return log, and is used
+    // to identify the matched return log when populating the `reviewResults` table for a charge element
+    returnLog.reviewReturnResultId = generateUUID()
   })
 }
 
