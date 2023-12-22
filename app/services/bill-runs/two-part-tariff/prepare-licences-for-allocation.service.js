@@ -99,8 +99,8 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
     returnLog.abstractionPeriods = abstractionPeriods
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
-    // `reviewReturnResultId` will be the `id` of in the `reviewReturnResults` table for each return log, and is used
-    // to identify the matched return log when populating the `reviewResults` table for a charge element
+    // `reviewReturnResultId` will be the `id` in the `reviewReturnResults` table for each return log, and is used to
+    // identify the matched return log when populating the `reviewResults` table for a charge element
     returnLog.reviewReturnResultId = generateUUID()
   })
 }
