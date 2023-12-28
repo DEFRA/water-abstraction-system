@@ -21,8 +21,8 @@ exports.up = function (knex) {
       table.boolean('nil_return').defaultTo(false)
       table.string('description')
       table.jsonb('purposes')
-      table.decimal('quantity').defaultTo(0)
-      table.decimal('allocated').defaultTo(0)
+      table.decimal('quantity', null, null).defaultTo(0)
+      table.decimal('allocated', null, null).defaultTo(0)
       table.boolean('abstraction_outside_period').defaultTo(false)
 
       // Automatic timestamps
