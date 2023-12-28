@@ -11,8 +11,6 @@ const { expect } = Code
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
-const ReviewChargeElementResultModel = require('../../../../app/models/review-charge-element-result.model.js')
-const ReviewReturnResultModel = require('../../../../app/models/review-return-result.model.js')
 const ReviewResultModel = require('../../../../app/models/review-result.model.js')
 
 // Thing under test
@@ -26,23 +24,137 @@ describe('Persist Allocated Licences to Results service', () => {
   })
 
   describe('when there are valid records to be persisted', () => {
-    let licences
+    let testLicences
 
-    describe('with charge elements that have been matched to returns', () => {
+    describe('with a charge element that has been matched to a return', () => {
       beforeEach(() => {
-        licences = _generateData()
+        testLicences = _generateData()
       })
 
-      it.only('persists the data into the results tables', async () => {
-        await PersistAllocatedLicencesToResultsService.go(billRunId, licences)
+      it('persists the data into the results tables', async () => {
+        await PersistAllocatedLicencesToResultsService.go(billRunId, testLicences)
+
+        const result = await ReviewResultModel.query()
+          .where('licenceId', testLicences[0].id)
+          .withGraphFetched('reviewChargeElementResults')
+          .withGraphFetched('reviewReturnResults')
+
+        expect(result[0].billRunId).to.equal(billRunId)
+        expect(result[0].licenceId).to.equal(testLicences[0].id)
+        expect(result[0].chargeVersionId).to.equal(testLicences[0].chargeVersions[0].id)
+        expect(result[0].chargeReferenceId).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].id)
+        expect(result[0].chargePeriodStartDate).to.equal(testLicences[0].chargeVersions[0].chargePeriod.startDate)
+        expect(result[0].chargePeriodEndDate).to.equal(testLicences[0].chargeVersions[0].chargePeriod.endDate)
+        expect(result[0].chargeVersionChangeReason).to.equal(testLicences[0].chargeVersions[0].changeReason.description)
+        expect(result[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
+
+        expect(result[0].reviewChargeElementResults.chargeElementId).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].id)
+        expect(result[0].reviewChargeElementResults.allocated).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity)
+        // As the aggregate is null on the charge reference the service returns 1
+        expect(result[0].reviewChargeElementResults.aggregate).to.equal(1)
+        expect(result[0].reviewChargeElementResults.chargeDatesOverlap).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap)
+
+        expect(result[0].reviewReturnResults.id).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
+        expect(result[0].reviewReturnResults.returnId).to.equal(testLicences[0].returnLogs[0].id)
+        expect(result[0].reviewReturnResults.returnReference).to.equal(testLicences[0].returnLogs[0].returnRequirement)
+        expect(result[0].reviewReturnResults.startDate).to.equal(testLicences[0].returnLogs[0].startDate)
+        expect(result[0].reviewReturnResults.endDate).to.equal(testLicences[0].returnLogs[0].endDate)
+        expect(result[0].reviewReturnResults.dueDate).to.equal(testLicences[0].returnLogs[0].dueDate)
+        expect(result[0].reviewReturnResults.receivedDate).to.equal(testLicences[0].returnLogs[0].receivedDate)
+        expect(result[0].reviewReturnResults.status).to.equal(testLicences[0].returnLogs[0].status)
+        expect(result[0].reviewReturnResults.underQuery).to.equal(testLicences[0].returnLogs[0].underQuery)
+        expect(result[0].reviewReturnResults.nilReturn).to.equal(testLicences[0].returnLogs[0].nilReturn)
+        expect(result[0].reviewReturnResults.description).to.equal(testLicences[0].returnLogs[0].description)
+        expect(result[0].reviewReturnResults.purposes).to.equal(testLicences[0].returnLogs[0].purposes)
+        expect(result[0].reviewReturnResults.quantity).to.equal(testLicences[0].returnLogs[0].quantity)
+        expect(result[0].reviewReturnResults.allocated).to.equal(testLicences[0].returnLogs[0].allocatedQuantity)
+        expect(result[0].reviewReturnResults.abstractionOutsidePeriod).to.equal(testLicences[0].returnLogs[0].abstractionOutsidePeriod)
       })
+    })
+
+    describe('with an aggregate value set and a charge element that has NOT been matched to a return', () => {
+      beforeEach(() => {
+        const aggregate = 0.5
+        const returnMatched = false
+
+        testLicences = _generateData(aggregate, returnMatched)
+      })
+
+      it('persists the data into the results tables', async () => {
+        await PersistAllocatedLicencesToResultsService.go(billRunId, testLicences)
+
+        const result = await ReviewResultModel.query()
+          .where('licenceId', testLicences[0].id)
+          .withGraphFetched('reviewChargeElementResults')
+          .withGraphFetched('reviewReturnResults')
+
+        expect(result[0].billRunId).to.equal(billRunId)
+        expect(result[0].licenceId).to.equal(testLicences[0].id)
+        expect(result[0].chargeVersionId).to.be.null()
+        expect(result[0].chargeReferenceId).to.be.null()
+        expect(result[0].chargePeriodStartDate).to.be.null()
+        expect(result[0].chargePeriodEndDate).to.be.null()
+        expect(result[0].chargeVersionChangeReason).to.be.null()
+        expect(result[0].reviewChargeElementResultId).to.be.null()
+        expect(result[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
+
+        expect(result[0].reviewChargeElementResults).to.be.null()
+
+        expect(result[0].reviewReturnResults.id).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
+        expect(result[0].reviewReturnResults.returnId).to.equal(testLicences[0].returnLogs[0].id)
+        expect(result[0].reviewReturnResults.returnReference).to.equal(testLicences[0].returnLogs[0].returnRequirement)
+        expect(result[0].reviewReturnResults.startDate).to.equal(testLicences[0].returnLogs[0].startDate)
+        expect(result[0].reviewReturnResults.endDate).to.equal(testLicences[0].returnLogs[0].endDate)
+        expect(result[0].reviewReturnResults.dueDate).to.equal(testLicences[0].returnLogs[0].dueDate)
+        expect(result[0].reviewReturnResults.receivedDate).to.equal(testLicences[0].returnLogs[0].receivedDate)
+        expect(result[0].reviewReturnResults.status).to.equal(testLicences[0].returnLogs[0].status)
+        expect(result[0].reviewReturnResults.underQuery).to.equal(testLicences[0].returnLogs[0].underQuery)
+        expect(result[0].reviewReturnResults.nilReturn).to.equal(testLicences[0].returnLogs[0].nilReturn)
+        expect(result[0].reviewReturnResults.description).to.equal(testLicences[0].returnLogs[0].description)
+        expect(result[0].reviewReturnResults.purposes).to.equal(testLicences[0].returnLogs[0].purposes)
+        expect(result[0].reviewReturnResults.quantity).to.equal(testLicences[0].returnLogs[0].quantity)
+        expect(result[0].reviewReturnResults.allocated).to.equal(testLicences[0].returnLogs[0].allocatedQuantity)
+        expect(result[0].reviewReturnResults.abstractionOutsidePeriod).to.equal(testLicences[0].returnLogs[0].abstractionOutsidePeriod)
+
+        expect(result[1].billRunId).to.equal(billRunId)
+        expect(result[1].licenceId).to.equal(testLicences[0].id)
+        expect(result[1].chargeVersionId).to.equal(testLicences[0].chargeVersions[0].id)
+        expect(result[1].chargeReferenceId).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].id)
+        expect(result[1].chargePeriodStartDate).to.equal(testLicences[0].chargeVersions[0].chargePeriod.startDate)
+        expect(result[1].chargePeriodEndDate).to.equal(testLicences[0].chargeVersions[0].chargePeriod.endDate)
+        expect(result[1].chargeVersionChangeReason).to.equal(testLicences[0].chargeVersions[0].changeReason.description)
+        expect(result[1].reviewReturnResultId).to.be.null()
+
+        expect(result[1].reviewChargeElementResults.chargeElementId).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].id)
+        expect(result[1].reviewChargeElementResults.allocated).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity)
+        expect(result[1].reviewChargeElementResults.aggregate).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].aggregate)
+        expect(result[1].reviewChargeElementResults.chargeDatesOverlap).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap)
+
+        expect(result[1].reviewReturnResults).to.be.null()
+      })
+    })
+  })
+
+  describe('when there are NO records to persist', () => {
+    const testLicences = []
+
+    it('does not throw an error', () => {
+      expect(async () => await PersistAllocatedLicencesToResultsService.go(billRunId, testLicences)).to.not.throw()
     })
   })
 })
 
-function _generateData () {
+function _generateData (aggregate = null, returnMatched = true) {
   const returnId = generateReturnLogId()
   const reviewReturnResultId = generateUUID()
+
+  const chargeElementReturnLogs = [
+    {
+      allocatedQuantity: 32,
+      returnId,
+      reviewReturnResultId
+    }
+  ]
 
   // All data not required for the tests has been excluded from the generated data
   const dataToPersist = [
@@ -57,22 +169,15 @@ function _generateData () {
           chargeReferences: [
             {
               id: generateUUID(),
-              aggregate: null,
+              aggregate,
               chargeElements: [
                 {
                   id: generateUUID(),
-                  returnLogs: [
-                    {
-                      allocatedQuantity: 32,
-                      returnId,
-                      reviewReturnResultId
-                    }
-                  ],
-                  allocatedQuantity: 32,
+                  returnLogs: returnMatched ? chargeElementReturnLogs : [],
+                  allocatedQuantity: returnMatched ? 32 : 0,
                   chargeDatesOverlap: false
                 }
-              ],
-              allocatedQuantity: 32
+              ]
             }
           ],
           chargePeriod: {
@@ -102,9 +207,9 @@ function _generateData () {
           ],
           nilReturn: false,
           quantity: 32,
-          allocatedQuantity: 32,
+          allocatedQuantity: returnMatched ? 32 : 0,
           abstractionOutsidePeriod: false,
-          matched: true,
+          matched: returnMatched,
           reviewReturnResultId
         }
       ]
