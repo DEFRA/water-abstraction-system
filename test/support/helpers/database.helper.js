@@ -19,7 +19,7 @@ const { db } = require('../../../db/db.js')
  * identity columns. For example, if a table relies on an incrementing ID the query will reset that to 1.
  */
 async function clean () {
-  const schemas = ['crm_v2', 'idm', 'water', 'returns']
+  const schemas = ['crm_v2', 'idm', 'public', 'water', 'returns']
 
   for (const schema of schemas) {
     const tables = await _tableNames(schema)
