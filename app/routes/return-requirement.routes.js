@@ -193,7 +193,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select prupose for returns requirement page'
+      description: 'Select purpose for returns requirement page'
     }
   }
 ]

@@ -145,9 +145,10 @@ async function selectPurpose (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  const { id } = session
-
-  return h.redirect(`/system/return-requirements/${id}/purpose`)
+  return h.view('return-requirements/purpose.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
 }
 
 module.exports = {
