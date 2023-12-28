@@ -20,7 +20,18 @@ async function twoPartLicence (request, h) {
   return h.response(result).code(200)
 }
 
-async function twoPartReview (request, h) {
+// Used on alternate branch
+async function twoPartReview (_request, h) {
+  const result = await TwoPartTariffMatchAndAllocateService.go(
+    { billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282', regionId: 'ffea25c2-e577-4969-8667-b0eed899230d' },
+    [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]
+  )
+
+  return h.response(result).code(200)
+}
+
+// Used on alternate branch
+async function twoPartReviewLicence (request, h) {
   const result = await TwoPartTariffMatchAndAllocateService.go(
     { billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282', regionId: 'ffea25c2-e577-4969-8667-b0eed899230d' },
     [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }],
@@ -33,5 +44,6 @@ async function twoPartReview (request, h) {
 module.exports = {
   twoPart,
   twoPartLicence,
-  twoPartReview
+  twoPartReview,
+  twoPartReviewLicence
 }
