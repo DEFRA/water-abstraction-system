@@ -48,11 +48,17 @@ describe('Persist Allocated Licences to Results service', () => {
         expect(result[0].chargeVersionChangeReason).to.equal(testLicences[0].chargeVersions[0].changeReason.description)
         expect(result[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
 
-        expect(result[0].reviewChargeElementResults.chargeElementId).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].id)
-        expect(result[0].reviewChargeElementResults.allocated).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity)
+        expect(result[0].reviewChargeElementResults.chargeElementId).to.equal(
+          testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].id
+        )
+        expect(result[0].reviewChargeElementResults.allocated).to.equal(
+          testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity
+        )
         // As the aggregate is null on the charge reference the service returns 1
         expect(result[0].reviewChargeElementResults.aggregate).to.equal(1)
-        expect(result[0].reviewChargeElementResults.chargeDatesOverlap).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap)
+        expect(result[0].reviewChargeElementResults.chargeDatesOverlap).to.equal(
+          testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap
+        )
 
         expect(result[0].reviewReturnResults.id).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
         expect(result[0].reviewReturnResults.returnId).to.equal(testLicences[0].returnLogs[0].id)
@@ -68,7 +74,9 @@ describe('Persist Allocated Licences to Results service', () => {
         expect(result[0].reviewReturnResults.purposes).to.equal(testLicences[0].returnLogs[0].purposes)
         expect(result[0].reviewReturnResults.quantity).to.equal(testLicences[0].returnLogs[0].quantity)
         expect(result[0].reviewReturnResults.allocated).to.equal(testLicences[0].returnLogs[0].allocatedQuantity)
-        expect(result[0].reviewReturnResults.abstractionOutsidePeriod).to.equal(testLicences[0].returnLogs[0].abstractionOutsidePeriod)
+        expect(result[0].reviewReturnResults.abstractionOutsidePeriod).to.equal(
+          testLicences[0].returnLogs[0].abstractionOutsidePeriod
+        )
       })
     })
 
@@ -114,7 +122,9 @@ describe('Persist Allocated Licences to Results service', () => {
         expect(result[0].reviewReturnResults.purposes).to.equal(testLicences[0].returnLogs[0].purposes)
         expect(result[0].reviewReturnResults.quantity).to.equal(testLicences[0].returnLogs[0].quantity)
         expect(result[0].reviewReturnResults.allocated).to.equal(testLicences[0].returnLogs[0].allocatedQuantity)
-        expect(result[0].reviewReturnResults.abstractionOutsidePeriod).to.equal(testLicences[0].returnLogs[0].abstractionOutsidePeriod)
+        expect(result[0].reviewReturnResults.abstractionOutsidePeriod).to.equal(
+          testLicences[0].returnLogs[0].abstractionOutsidePeriod
+        )
 
         expect(result[1].billRunId).to.equal(billRunId)
         expect(result[1].licenceId).to.equal(testLicences[0].id)
@@ -125,10 +135,18 @@ describe('Persist Allocated Licences to Results service', () => {
         expect(result[1].chargeVersionChangeReason).to.equal(testLicences[0].chargeVersions[0].changeReason.description)
         expect(result[1].reviewReturnResultId).to.be.null()
 
-        expect(result[1].reviewChargeElementResults.chargeElementId).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].id)
-        expect(result[1].reviewChargeElementResults.allocated).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity)
-        expect(result[1].reviewChargeElementResults.aggregate).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].aggregate)
-        expect(result[1].reviewChargeElementResults.chargeDatesOverlap).to.equal(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap)
+        expect(result[1].reviewChargeElementResults.chargeElementId).to.equal(
+          testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].id
+        )
+        expect(result[1].reviewChargeElementResults.allocated).to.equal(
+          testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity
+        )
+        expect(result[1].reviewChargeElementResults.aggregate).to.equal(
+          testLicences[0].chargeVersions[0].chargeReferences[0].aggregate
+        )
+        expect(result[1].reviewChargeElementResults.chargeDatesOverlap).to.equal(
+          testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap
+        )
 
         expect(result[1].reviewReturnResults).to.be.null()
       })
