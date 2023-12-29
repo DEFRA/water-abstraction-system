@@ -151,7 +151,30 @@ async function returnsFrequency (request, h) {
   })
 }
 
+async function selectPurpose (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/purpose.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function abstractionPeriod (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/abstraction-period.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 module.exports = {
+  abstractionPeriod,
   addANote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
@@ -163,6 +186,7 @@ module.exports = {
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
+  selectPurpose,
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
   saveReturnsHowDoYouWant,
