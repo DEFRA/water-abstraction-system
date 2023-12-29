@@ -151,6 +151,28 @@ async function returnsFrequencyCollected (request, h) {
   })
 }
 
+async function selectPoints (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/points.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveReturnsCycle (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/returns-cycle.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function returnsFrequency (request, h) {
   const { sessionId } = request.params
 
@@ -205,19 +227,17 @@ module.exports = {
   returnsCheckYourAnswers,
   returnsSettings,
   returnsHowDoYouWant,
-<<<<<<< HEAD
   returnsFrequencyCollected,
-||||||| bca4dd1
-=======
   returnsFrequency,
->>>>>>> origin/main
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
   selectPurpose,
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
+  saveReturnsCycle,
   saveReturnsHowDoYouWant,
   saveReturnStartDate,
+  selectPoints,
   selectReturnStartDate
 }
