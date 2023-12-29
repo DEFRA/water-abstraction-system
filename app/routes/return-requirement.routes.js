@@ -185,6 +185,18 @@ const routes = [
     }
   }, {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/frequency-collected',
+    handler: ReturnRequirementsController.returnsFrequencyCollected,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns Select how often readings or volumes are collected page'
+    }
+  }, {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/description',
     handler: ReturnRequirementsController.saveDescription,
     options: {
