@@ -195,6 +195,18 @@ const routes = [
       },
       description: 'Returns add a desciption page'
     }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/abstraction-period',
+    handler: ReturnRequirementsController.abstractionPeriod,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns abstraction period page'
+    }
   }
 ]
 
