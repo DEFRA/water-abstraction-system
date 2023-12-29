@@ -151,6 +151,39 @@ async function saveDescription (request, h) {
   })
 }
 
+async function returnsFrequency (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function returnsSettings (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/settings.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function selectPurpose (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/purpose.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function abstractionPeriod (request, h) {
   const { sessionId } = request.params
 
@@ -170,11 +203,18 @@ module.exports = {
   reasonNewRequirements,
   requirementsApproved,
   returnsCheckYourAnswers,
+  returnsSettings,
   returnsHowDoYouWant,
+<<<<<<< HEAD
   saveDescription,
+||||||| 3a7a60b
+=======
+  returnsFrequency,
+>>>>>>> origin/main
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
+  selectPurpose,
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
   saveReturnsHowDoYouWant,
