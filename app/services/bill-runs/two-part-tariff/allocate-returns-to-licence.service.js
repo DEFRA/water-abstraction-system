@@ -1,12 +1,23 @@
 'use strict'
 
 /**
- * Do stuff
+ * Matches and allocates where applicable the abstracted volumes on the return log with the appropriate charge element
  * @module AllocateReturnsToLicenceService
  */
 
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
+/**
+ * For each licence the service attempts to match the return logs to the charge element(s). It does this by matching the
+ * `elementCode` of the charge element with the return logs, also checking that the abstraction periods for both the
+ * element and return log overlap.
+ *
+ * If a match is found any abstracted volume recorded on the return log will be allocated to the charge element up to a
+ * maximum of the charge elements authorised volume, or the remaining authorised volume on the charge reference,
+ * whichever is lower.
+ *
+ * @param {Object[]} licences - The licences, associated charging data, and return logs to process
+ */
 async function go (licences) {
   licences.forEach((licence) => {
     const { chargeVersions, returnLogs } = licence
