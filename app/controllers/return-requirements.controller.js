@@ -151,6 +151,17 @@ async function selectPoints (request, h) {
   })
 }
 
+async function saveReturnsCycle (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/returns-cycle.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function returnsFrequency (request, h) {
   const { sessionId } = request.params
 
@@ -212,6 +223,7 @@ module.exports = {
   selectPurpose,
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
+  saveReturnsCycle,
   saveReturnsHowDoYouWant,
   saveReturnStartDate,
   selectPoints,
