@@ -151,7 +151,19 @@ async function selectPurpose (request, h) {
   })
 }
 
+async function abstractionPeriod (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/abstraction-period.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 module.exports = {
+  abstractionPeriod,
   addANote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
