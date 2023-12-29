@@ -183,6 +183,18 @@ const routes = [
       },
       description: 'Save note'
     }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/settings',
+    handler: ReturnRequirementsController.returnsSettings,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select how often collected readings or volumes are reported'
+    }
   }
 ]
 
