@@ -1,0 +1,29 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = "Select the purpose for the return requirement" %}
+{% set rootLink = "/system/return-requirements/" + id %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: rootLink + "/returns-how-do-you-want"
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ title }}</h1>
+  </div>
+
+  <form method="post">
+    <div class="govuk-body">
+      {{ govukButton({ text: "Continue" }) }}
+    </div>
+  </form>
+{% endblock %}
