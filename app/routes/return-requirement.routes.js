@@ -183,6 +183,18 @@ const routes = [
       },
       description: 'Save note'
     }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/description',
+    handler: ReturnRequirementsController.saveDescription,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns add a desciption page'
+    }
   }
 ]
 
