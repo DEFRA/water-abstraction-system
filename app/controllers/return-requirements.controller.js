@@ -151,6 +151,17 @@ async function returnsFrequencyCollected (request, h) {
   })
 }
 
+async function saveDescription (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/description.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function selectPoints (request, h) {
   const { sessionId } = request.params
 
@@ -228,6 +239,7 @@ module.exports = {
   returnsSettings,
   returnsHowDoYouWant,
   returnsFrequencyCollected,
+  saveDescription,
   returnsFrequency,
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
