@@ -18,7 +18,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  *
  * @param {Object[]} licences - The licences, associated charging data, and return logs to process
  */
-async function go (licences) {
+function go (licences) {
   licences.forEach((licence) => {
     const { chargeVersions, returnLogs } = licence
 
