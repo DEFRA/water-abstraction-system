@@ -140,6 +140,17 @@ async function saveNote (request, h) {
   return h.redirect(`/system/return-requirements/${id}/returns-check-your-answers`)
 }
 
+async function returnsFrequency (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function returnsSettings (request, h) {
   const { sessionId } = request.params
 
@@ -183,6 +194,7 @@ module.exports = {
   returnsCheckYourAnswers,
   returnsSettings,
   returnsHowDoYouWant,
+  returnsFrequency,
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
