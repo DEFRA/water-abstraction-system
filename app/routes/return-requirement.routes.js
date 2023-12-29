@@ -185,6 +185,18 @@ const routes = [
     }
   }, {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/description',
+    handler: ReturnRequirementsController.saveDescription,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns add a desciption page'
+    }
+  }, {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/points',
     handler: ReturnRequirementsController.selectPoints,
     options: {
