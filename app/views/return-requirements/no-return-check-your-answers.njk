@@ -1,10 +1,11 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% set title = "Check your answers" %}
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Check your answers</h1>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{title}}</h1>
   </div>
 
   <form method="post">
