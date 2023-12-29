@@ -151,6 +151,28 @@ async function returnsFrequencyCollected (request, h) {
   })
 }
 
+async function returnsFrequency (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function returnsSettings (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/settings.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function selectPurpose (request, h) {
   const { sessionId } = request.params
 
@@ -181,8 +203,14 @@ module.exports = {
   reasonNewRequirements,
   requirementsApproved,
   returnsCheckYourAnswers,
+  returnsSettings,
   returnsHowDoYouWant,
+<<<<<<< HEAD
   returnsFrequencyCollected,
+||||||| bca4dd1
+=======
+  returnsFrequency,
+>>>>>>> origin/main
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
