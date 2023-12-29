@@ -145,10 +145,10 @@ function _matchReturns (chargeElement, returnLogs) {
   const elementCode = chargeElement.purpose.legacyId
   const elementPeriods = chargeElement.abstractionPeriods
 
-  return returnLogs.filter((record) => {
-    const returnPeriods = record.abstractionPeriods
+  return returnLogs.filter((returnLog) => {
+    const returnPeriods = returnLog.abstractionPeriods
 
-    const matchFound = record.purposes.some((purpose) => {
+    const matchFound = returnLog.purposes.some((purpose) => {
       return purpose.tertiary.code === elementCode
     })
 
