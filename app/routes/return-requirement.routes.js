@@ -183,6 +183,18 @@ const routes = [
       },
       description: 'Save note'
     }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/abstraction-period',
+    handler: ReturnRequirementsController.abstractionPeriod,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns abstraction period page'
+    }
   }
 ]
 
