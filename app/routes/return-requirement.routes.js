@@ -183,6 +183,18 @@ const routes = [
       },
       description: 'Save note'
     }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/frequency',
+    handler: ReturnRequirementsController.returnsFrequency,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns Select how often collected readings or volumes are reported page'
+    }
   }
 ]
 
