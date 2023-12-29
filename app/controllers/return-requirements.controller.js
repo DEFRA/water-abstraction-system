@@ -140,20 +140,116 @@ async function saveNote (request, h) {
   return h.redirect(`/system/return-requirements/${id}/returns-check-your-answers`)
 }
 
+async function returnsFrequencyCollected (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency-collected.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveDescription (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/description.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function selectPoints (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/points.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveReturnsCycle (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/returns-cycle.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function returnsFrequency (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function returnsSettings (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/settings.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function selectPurpose (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/purpose.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function abstractionPeriod (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/abstraction-period.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 module.exports = {
+  abstractionPeriod,
   addANote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
   reasonNewRequirements,
   requirementsApproved,
   returnsCheckYourAnswers,
+  returnsSettings,
   returnsHowDoYouWant,
+  returnsFrequencyCollected,
+  saveDescription,
+  returnsFrequency,
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
+  selectPurpose,
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
+  saveReturnsCycle,
   saveReturnsHowDoYouWant,
   saveReturnStartDate,
+  selectPoints,
   selectReturnStartDate
 }
