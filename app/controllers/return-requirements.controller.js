@@ -140,6 +140,17 @@ async function saveNote (request, h) {
   return h.redirect(`/system/return-requirements/${id}/returns-check-your-answers`)
 }
 
+async function selectPurpose (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/purpose.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function abstractionPeriod (request, h) {
   const { sessionId } = request.params
 
@@ -163,6 +174,7 @@ module.exports = {
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
+  selectPurpose,
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
   saveReturnsHowDoYouWant,

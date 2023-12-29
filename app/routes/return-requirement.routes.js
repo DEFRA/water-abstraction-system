@@ -185,6 +185,18 @@ const routes = [
     }
   }, {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/purpose',
+    handler: ReturnRequirementsController.selectPurpose,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select purpose for returns requirement page'
+    }
+  }, {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/abstraction-period',
     handler: ReturnRequirementsController.abstractionPeriod,
     options: {
