@@ -185,6 +185,18 @@ const routes = [
     }
   }, {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/points',
+    handler: ReturnRequirementsController.selectPoints,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns select points page'
+    }
+  }, {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/returns-cycle',
     handler: ReturnRequirementsController.saveReturnsCycle,
     options: {
