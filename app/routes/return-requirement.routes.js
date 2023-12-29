@@ -185,6 +185,18 @@ const routes = [
     }
   }, {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/returns-cycle',
+    handler: ReturnRequirementsController.saveReturnsCycle,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns Select the returns cycle page'
+    }
+  }, {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/frequency',
     handler: ReturnRequirementsController.returnsFrequency,
     options: {

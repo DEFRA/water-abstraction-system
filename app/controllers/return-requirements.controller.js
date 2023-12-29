@@ -140,6 +140,17 @@ async function saveNote (request, h) {
   return h.redirect(`/system/return-requirements/${id}/returns-check-your-answers`)
 }
 
+async function saveReturnsCycle (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/returns-cycle.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 async function returnsFrequency (request, h) {
   const { sessionId } = request.params
 
@@ -201,6 +212,7 @@ module.exports = {
   selectPurpose,
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
+  saveReturnsCycle,
   saveReturnsHowDoYouWant,
   saveReturnStartDate,
   selectReturnStartDate
