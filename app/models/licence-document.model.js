@@ -16,6 +16,14 @@ class LicenceDocumentModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      licence: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence.model',
+        join: {
+          from: 'licenceDocuments.licenceRef',
+          to: 'licences.licenceRef'
+        }
+      },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-document-role.model',
