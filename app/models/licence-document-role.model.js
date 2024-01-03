@@ -23,6 +23,14 @@ class LicenceDocumentRoleModel extends BaseModel {
           from: 'licenceDocumentRoles.licenceDocumentId',
           to: 'licenceDocuments.id'
         }
+      },
+      licenceRole: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-role.model',
+        join: {
+          from: 'licenceDocumentRoles.licenceRoleId',
+          to: 'licenceRoles.id'
+        }
       }
     }
   }
