@@ -16,6 +16,14 @@ class LicenceDocumentRoleModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      address: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'address.model',
+        join: {
+          from: 'licenceDocumentRoles.addressId',
+          to: 'addresses.id'
+        }
+      },
       licenceDocument: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence-document.model',

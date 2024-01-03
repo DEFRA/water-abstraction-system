@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const AddressHelper = require('../support/helpers/address.helper.js')
+const AddressModel = require('../../app/models/address.model.js')
 const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
@@ -39,6 +41,36 @@ describe('Licence Document Role model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to address', () => {
+      let testAddress
+
+      beforeEach(async () => {
+        testAddress = await AddressHelper.add()
+
+        const { id: addressId } = testAddress
+        testRecord = await LicenceDocumentRoleHelper.add({ addressId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceDocumentRoleModel.query()
+          .innerJoinRelated('address')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the address', async () => {
+        const result = await LicenceDocumentRoleModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('address')
+
+        expect(result).to.be.instanceOf(LicenceDocumentRoleModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.address).to.be.an.instanceOf(AddressModel)
+        expect(result.address).to.equal(testAddress)
+      })
+    })
+
     describe('when linking to licence document', () => {
       let testLicenceDocument
 
