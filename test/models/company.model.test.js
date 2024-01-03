@@ -14,6 +14,8 @@ const BillingAccountHelper = require('../support/helpers/billing-account.helper.
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const DatabaseHelper = require('../support/helpers/database.helper.js')
+const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
+const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 
 // Thing under test
 const CompanyModel = require('../../app/models/company.model.js')
@@ -111,6 +113,43 @@ describe('Company model', () => {
         expect(result.billingAccounts[0]).to.be.an.instanceOf(BillingAccountModel)
         expect(result.billingAccounts).to.include(testBillingAccounts[0])
         expect(result.billingAccounts).to.include(testBillingAccounts[1])
+      })
+    })
+
+    describe('when linking to licence document roles', () => {
+      let testLicenceDocumentRoles
+
+      beforeEach(async () => {
+        testRecord = await CompanyHelper.add()
+
+        const { id: companyId } = testRecord
+
+        testLicenceDocumentRoles = []
+        for (let i = 0; i < 2; i++) {
+          const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ companyId })
+          testLicenceDocumentRoles.push(licenceDocumentRole)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await CompanyModel.query()
+          .innerJoinRelated('licenceDocumentRoles')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence document roles', async () => {
+        const result = await CompanyModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceDocumentRoles')
+
+        expect(result).to.be.instanceOf(CompanyModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceDocumentRoles).to.be.an.array()
+        expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
+        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[0])
+        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[1])
       })
     })
   })

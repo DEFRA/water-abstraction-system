@@ -63,6 +63,14 @@ class CompanyModel extends BaseModel {
           from: 'companies.id',
           to: 'billingAccounts.companyId'
         }
+      },
+      licenceDocumentRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-document-role.model',
+        join: {
+          from: 'companies.id',
+          to: 'licenceDocumentRoles.companyId'
+        }
       }
     }
   }
