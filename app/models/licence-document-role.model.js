@@ -5,11 +5,26 @@
  * @module LicenceDocumentRoleModel
  */
 
+const { Model } = require('objection')
+
 const BaseModel = require('./base.model.js')
 
 class LicenceDocumentRoleModel extends BaseModel {
   static get tableName () {
     return 'licenceDocumentRoles'
+  }
+
+  static get relationMappings () {
+    return {
+      licenceDocument: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-document.model',
+        join: {
+          from: 'licenceDocumentRoles.licenceDocumentId',
+          to: 'licenceDocuments.id'
+        }
+      }
+    }
   }
 }
 
