@@ -48,6 +48,14 @@ class LicenceModel extends BaseModel {
           to: 'workflows.licenceId'
         }
       },
+      licenceDocument: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-document.model',
+        join: {
+          from: 'licences.licenceRef',
+          to: 'licenceDocuments.licenceRef'
+        }
+      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',

@@ -14,6 +14,8 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
+const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
+const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
@@ -175,6 +177,36 @@ describe('Licence model', () => {
         expect(result.workflows[0]).to.be.an.instanceOf(WorkflowModel)
         expect(result.workflows).to.include(testWorkflows[0])
         expect(result.workflows).to.include(testWorkflows[1])
+      })
+    })
+
+    describe('when linking to licence document', () => {
+      let testLicenceDocument
+
+      beforeEach(async () => {
+        testLicenceDocument = await LicenceDocumentHelper.add()
+
+        const { licenceRef } = testLicenceDocument
+        testRecord = await LicenceHelper.add({ licenceRef })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('licenceDocument')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence document', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceDocument')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceDocument).to.be.an.instanceOf(LicenceDocumentModel)
+        expect(result.licenceDocument).to.equal(testLicenceDocument)
       })
     })
 
