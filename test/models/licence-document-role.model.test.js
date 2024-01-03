@@ -12,6 +12,8 @@ const AddressHelper = require('../support/helpers/address.helper.js')
 const AddressModel = require('../../app/models/address.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
+const ContactHelper = require('../support/helpers/contact.helper.js')
+const ContactModel = require('../../app/models/contact.model.js')
 const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
@@ -100,6 +102,36 @@ describe('Licence Document Role model', () => {
 
         expect(result.company).to.be.an.instanceOf(CompanyModel)
         expect(result.company).to.equal(testCompany)
+      })
+    })
+
+    describe('when linking to contact', () => {
+      let testContact
+
+      beforeEach(async () => {
+        testContact = await ContactHelper.add()
+
+        const { id: contactId } = testContact
+        testRecord = await LicenceDocumentRoleHelper.add({ contactId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceDocumentRoleModel.query()
+          .innerJoinRelated('contact')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the contact', async () => {
+        const result = await LicenceDocumentRoleModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('contact')
+
+        expect(result).to.be.instanceOf(LicenceDocumentRoleModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.contact).to.be.an.instanceOf(ContactModel)
+        expect(result.contact).to.equal(testContact)
       })
     })
 
