@@ -183,6 +183,102 @@ const routes = [
       },
       description: 'Save note'
     }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/frequency-collected',
+    handler: ReturnRequirementsController.returnsFrequencyCollected,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns Select how often readings or volumes are collected page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/description',
+    handler: ReturnRequirementsController.saveDescription,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns add a desciption page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/points',
+    handler: ReturnRequirementsController.selectPoints,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns select points page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/returns-cycle',
+    handler: ReturnRequirementsController.saveReturnsCycle,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns Select the returns cycle page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/frequency',
+    handler: ReturnRequirementsController.returnsFrequency,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns Select how often collected readings or volumes are reported page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/settings',
+    handler: ReturnRequirementsController.returnsSettings,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select how often collected readings or volumes are reported'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/purpose',
+    handler: ReturnRequirementsController.selectPurpose,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select purpose for returns requirement page'
+    }
+  }, {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/abstraction-period',
+    handler: ReturnRequirementsController.abstractionPeriod,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Returns abstraction period page'
+    }
   }
 ]
 
