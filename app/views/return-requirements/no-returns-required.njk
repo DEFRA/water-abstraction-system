@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Why are no returns required?" %}
 {% set rootLink = "/system/return-requirements/" + id %}
@@ -16,11 +17,25 @@
 
 {% block content %}
 
-  <form method="post">
-    
+{% if errorMessage %}
+  {{ govukErrorSummary({
+    titleText: "There is a problem",
+    errorList: [
+      {
+        text: errorMessage,
+        href: "#reasonNewRequirements"
+      },
+      ]
+    }) }}
+{% endif %}
+
+  <form method="post" class="form">
     {{ govukRadios({
         idPrefix: "reasonNewRequirements",
         name: "reasonNewRequirements",
+        errorMessage: errorMessage ? {
+            text: errorMessage
+          } : undefined,
         fieldset: {
           legend: {
             html: '<span class="govuk-caption-l">Licence ' + 'TODO: licence number' + '</span>' + [title],
@@ -30,17 +45,17 @@
         },
         items: [
         {
-          value: "abstraction-below-100-cubic-metres-per-day",
+          value: "abstraction_below_100_cubic_metres_per_day",
           text: "Abstraction amount below 100 cubic metres per day",
           checked: checked("reasonNewRequirements", "abstraction-below-100-cubic-metres-per-day")
         },
         {
-          value: "returns-exception",
+          value: "returns_exception",
           text: "Returns exception",
           checked: checked("reasonNewRequirements", "returns-exception")
         },
         {
-          value: "transfer-licence",
+          value: "transfer_licence",
           text: "Transfer licence",
           checked: checked("reasonNewRequirements", "transfer-licence")
         }

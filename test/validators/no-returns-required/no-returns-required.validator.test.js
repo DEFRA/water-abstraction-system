@@ -1,7 +1,7 @@
 const Lab = require('@hapi/lab')
 const { expect } = require('@hapi/code')
-const { noReturnsRequired } = require('../validation/no-returns-required.validation')
-const { reasonNewRequirementsFields } = require('../../lib/static-lookups.lib')
+const { noReturnsRequired } = require('../../validators/no-returns-required/no-returns-required.validation')
+const { reasonNewRequirementsFields } = require('../../../lib/static-lookups.lib')
 
 const { describe, it } = exports.lab = Lab.script()
 
