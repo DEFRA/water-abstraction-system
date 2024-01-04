@@ -6,6 +6,7 @@
  */
 
 const SessionModel = require('../models/session.model.js')
+const { reasonNewRequirementsFields } = require('../lib/static-lookups.lib.js')
 
 async function selectReturnStartDate (request, h) {
   const { sessionId } = request.params
@@ -92,6 +93,23 @@ async function noReturnsRequired (request, h) {
 
   return h.view('return-requirements/no-returns-required.njk', {
     activeNavBar: 'search',
+    radioItems: [
+      {
+        value: reasonNewRequirementsFields[0],
+        text: 'Abstraction amount below 100 cubic metres per day',
+        checked: false
+      },
+      {
+        value: reasonNewRequirementsFields[1],
+        text: 'Returns exception',
+        checked: false
+      },
+      {
+        value: reasonNewRequirementsFields[2],
+        text: 'Transfer licence',
+        checked: false
+      }
+    ],
     ...session
   })
 }

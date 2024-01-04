@@ -17,17 +17,17 @@
 
 {% block content %}
 
-{% if errorMessage %}
-  {{ govukErrorSummary({
-    titleText: "There is a problem",
-    errorList: [
-      {
-        text: errorMessage,
-        href: "#reasonNewRequirements"
-      },
-      ]
-    }) }}
-{% endif %}
+  {% if errorMessage %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: errorMessage,
+          href: "#reasonNewRequirements"
+        },
+        ]
+      }) }}
+  {% endif %}
 
   <form method="post" class="form">
     {{ govukRadios({
@@ -43,23 +43,7 @@
             classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
           }
         },
-        items: [
-        {
-          value: "abstraction_below_100_cubic_metres_per_day",
-          text: "Abstraction amount below 100 cubic metres per day",
-          checked: checked("reasonNewRequirements", "abstraction-below-100-cubic-metres-per-day")
-        },
-        {
-          value: "returns_exception",
-          text: "Returns exception",
-          checked: checked("reasonNewRequirements", "returns-exception")
-        },
-        {
-          value: "transfer_licence",
-          text: "Transfer licence",
-          checked: checked("reasonNewRequirements", "transfer-licence")
-        }
-        ]
+        items: radioItems
         }) }}
 
     <div class="govuk-body">
