@@ -98,10 +98,18 @@ async function noReturnsRequired (request, h) {
 
 async function saveNoReturnsRequired (request, h) {
   const { sessionId } = request.params
+  const validation = noReturnsRequired(request.payload)
+
+  if (validation.error) {
+    return h.view('return-requirements/no-returns-required.njk', {
+      activeNavBar: 'search',
+      errorMessage: validation.error.details[0].message,
+      ...request.payload
+    }).code(400)
+  }
 
   const session = await SessionModel.query().findById(sessionId)
-
-  return h.redirect(`/system/return-requirements/${session.id}/no-return-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${session.id}/check-your-answers`)
 }
 
 async function noReturnsCheckYourAnswers (request, h) {

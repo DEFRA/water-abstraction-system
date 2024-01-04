@@ -15,12 +15,38 @@
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{title}}</h1>
-  </div>
 
   <form method="post">
+    
+    {{ govukRadios({
+        idPrefix: "reasonNewRequirements",
+        name: "reasonNewRequirements",
+        fieldset: {
+          legend: {
+            html: '<span class="govuk-caption-l">Licence ' + 'TODO: licence number' + '</span>' + [title],
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+          }
+        },
+        items: [
+        {
+          value: "abstraction-below-100-cubic-metres-per-day",
+          text: "Abstraction amount below 100 cubic metres per day",
+          checked: checked("reasonNewRequirements", "abstraction-below-100-cubic-metres-per-day")
+        },
+        {
+          value: "returns-exception",
+          text: "Returns exception",
+          checked: checked("reasonNewRequirements", "returns-exception")
+        },
+        {
+          value: "transfer-licence",
+          text: "Transfer licence",
+          checked: checked("reasonNewRequirements", "transfer-licence")
+        }
+        ]
+        }) }}
+
     <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
     </div>
