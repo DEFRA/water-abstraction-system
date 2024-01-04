@@ -69,14 +69,10 @@ describe('Fetch Bill Run service', () => {
     // We don't care about the address in our service. But it's a required field when creating a BillingAccountAddress
     const address = await AddressHelper.add()
 
-    // Create a BillingAccountAddress for each BillingAccount we created. On the second one we set the optional agent
+    // Create a BillingAccountAddress for just one BillingAccount. This is to cater for billing accounts that don't
+    // have BillingAccountAddress record (something we found in testing!) For the one we create set the optional agent
     // company we prepared earlier
     await Promise.all([
-      BillingAccountAddressHelper.add({
-        billingAccountId: linkedBillingAccounts[0].id,
-        addressId: address.id
-
-      }),
       BillingAccountAddressHelper.add({
         billingAccountId: linkedBillingAccounts[1].id,
         addressId: address.id,
