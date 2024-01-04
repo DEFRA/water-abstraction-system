@@ -12,6 +12,8 @@ const AddressHelper = require('../support/helpers/address.helper.js')
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
 const DatabaseHelper = require('../support/helpers/database.helper.js')
+const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
+const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 
 // Thing under test
 const AddressModel = require('../../app/models/address.model.js')
@@ -73,6 +75,43 @@ describe('Address model', () => {
         expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+      })
+    })
+
+    describe('when linking to licence document roles', () => {
+      let testLicenceDocumentRoles
+
+      beforeEach(async () => {
+        testRecord = await AddressHelper.add()
+
+        const { id: addressId } = testRecord
+
+        testLicenceDocumentRoles = []
+        for (let i = 0; i < 2; i++) {
+          const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ addressId })
+          testLicenceDocumentRoles.push(licenceDocumentRole)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await AddressModel.query()
+          .innerJoinRelated('licenceDocumentRoles')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence document roles', async () => {
+        const result = await AddressModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceDocumentRoles')
+
+        expect(result).to.be.instanceOf(AddressModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceDocumentRoles).to.be.an.array()
+        expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
+        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[0])
+        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[1])
       })
     })
   })
