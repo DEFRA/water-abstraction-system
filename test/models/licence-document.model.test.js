@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../support/helpers/database.helper.js')
+const LicenceHelper = require('../support/helpers/licence.helper.js')
+const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
@@ -37,6 +39,36 @@ describe('Licence Document model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to licence', () => {
+      let testLicence
+
+      beforeEach(async () => {
+        testLicence = await LicenceHelper.add()
+
+        const { licenceRef } = testLicence
+        testRecord = await LicenceDocumentHelper.add({ licenceRef })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceDocumentModel.query()
+          .innerJoinRelated('licence')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence', async () => {
+        const result = await LicenceDocumentModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licence')
+
+        expect(result).to.be.instanceOf(LicenceDocumentModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licence).to.be.an.instanceOf(LicenceModel)
+        expect(result.licence).to.equal(testLicence)
+      })
+    })
+
     describe('when linking to licence document roles', () => {
       let testLicenceDocumentRoles
 
