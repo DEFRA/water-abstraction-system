@@ -108,7 +108,7 @@ async function _fetchBillSummaries (id) {
     .from('bills AS bi')
     .innerJoin('billing_accounts AS ia', 'ia.id', 'bi.billing_account_id')
     .innerJoin('companies AS c', 'c.id', 'ia.company_id')
-    .leftJoin(
+    .innerJoin(
       'billing_account_addresses AS iaa',
       function () {
         this.on('iaa.billing_account_id', '=', 'ia.id').andOnNull('iaa.end_date')

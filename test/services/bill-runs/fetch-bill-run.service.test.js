@@ -74,6 +74,10 @@ describe('Fetch Bill Run service', () => {
     // company we prepared earlier
     await Promise.all([
       BillingAccountAddressHelper.add({
+        billingAccountId: linkedBillingAccounts[0].id,
+        addressId: address.id
+      }),
+      BillingAccountAddressHelper.add({
         billingAccountId: linkedBillingAccounts[1].id,
         addressId: address.id,
         companyId: linkedCompanies[2].id
