@@ -77,6 +77,19 @@ describe('Licences controller', () => {
           expect(response.payload).to.contain('Page not found')
         })
       })
+
+      describe('because the initialise session service errors', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateReturnRequirementSessionService, 'go').rejects()
+        })
+
+        it('returns a 200 and there is a problem with the service page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Sorry, there is a problem with the service')
+        })
+      })
     })
   })
 })
