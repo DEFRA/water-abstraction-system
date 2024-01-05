@@ -44,6 +44,7 @@ describe('Prepare Licences For Allocation Service', () => {
 
           expect(licence.returnLogs[0]).to.equal({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
+            issues: false,
             returnRequirement: '14959864',
             description: 'The Description',
             startDate: new Date('2022-04-01'),
