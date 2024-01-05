@@ -44,6 +44,28 @@ function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
   return !periodsOverlap(returnAbstractionPeriods, [{ startDate, endDate }])
 }
 
+/**
+ * Checks a return record for potential issues based on specific criteria and flags it accordingly
+ * @param {*} returnRecord The return record to be checked for issues
+ */
+function _checkReturnForIssues (returnRecord) {
+  if (returnRecord.nilReturn) {
+    returnRecord.issues = true
+  }
+
+  if (returnRecord.underQuery) {
+    returnRecord.issues = true
+  }
+
+  if (returnRecord.status !== 'completed') {
+    returnRecord.issues = true
+  }
+
+  if (returnRecord.returnSubmissions.length === 0 || returnRecord.returnSubmissions[0].returnSubmissionLines.length === 0) {
+    returnRecord.issues = true
+  }
+}
+
 function _prepareChargeVersions (licence, billingPeriod) {
   const { chargeVersions } = licence
 
@@ -118,6 +140,8 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
     returnLog.abstractionPeriods = abstractionPeriods
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
+
+    _checkReturnForIssues(returnLog)
   })
 }
 
