@@ -5,6 +5,7 @@
  * @module InitiateReturnRequirementSessionService
  */
 
+const LicenceModel = require('../../../app/models/licence.model.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -40,8 +41,13 @@ async function _createSession (data) {
 }
 
 async function _licenceDetails (licenceId) {
+  const licence = await LicenceModel.query()
+    .findById(licenceId)
+    .select('licenceRef')
+
   return {
-    licenceId
+    licenceId,
+    licenceRef: licence.licenceRef
   }
 }
 
