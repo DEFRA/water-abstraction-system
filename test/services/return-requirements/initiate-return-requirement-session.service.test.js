@@ -25,10 +25,10 @@ describe('Initiate Return Requirement Session service', () => {
     it('creates a new session record containing details of the licence', async () => {
       const result = await InitiateReturnRequirementSessionService.go(licenceId)
 
-      const newSession = await SessionModel.query().findById(result)
+      const session = await SessionModel.query().findById(result)
+      const { licence } = session.data
 
-      expect(newSession).to.exist()
-      expect(newSession.data.licenceId).to.equal(licenceId)
+      expect(licence.licenceId).to.equal(licenceId)
     })
   })
 })
