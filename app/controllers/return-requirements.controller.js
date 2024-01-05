@@ -6,7 +6,8 @@
  */
 
 const SessionModel = require('../models/session.model.js')
-const { reasonNewRequirementsFields } = require('../lib/static-lookups.lib.js')
+const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
+const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 
 async function selectReturnStartDate (request, h) {
   const { sessionId } = request.params
@@ -89,45 +90,23 @@ async function requirementsApproved (request, h) {
 async function noReturnsRequired (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await NoReturnsRequiredService.go(sessionId)
 
   return h.view('return-requirements/no-returns-required.njk', {
-    activeNavBar: 'search',
-    radioItems: [
-      {
-        value: reasonNewRequirementsFields[0],
-        text: 'Abstraction amount below 100 cubic metres per day',
-        checked: false
-      },
-      {
-        value: reasonNewRequirementsFields[1],
-        text: 'Returns exception',
-        checked: false
-      },
-      {
-        value: reasonNewRequirementsFields[2],
-        text: 'Transfer licence',
-        checked: false
-      }
-    ],
-    ...session
+    ...pageData
   })
 }
 
 async function saveNoReturnsRequired (request, h) {
   const { sessionId } = request.params
-  const validation = noReturnsRequired(request.payload)
+  const validation = NoReturnsRequiredValidator.go(request.payload)
 
   if (validation.error) {
-    return h.view('return-requirements/no-returns-required.njk', {
-      activeNavBar: 'search',
-      errorMessage: validation.error.details[0].message,
-      ...request.payload
-    }).code(400)
+    const pageData = await NoReturnsRequiredService.go(sessionId, validation.error)
+    return h.view('return-requirements/no-returns-required.njk', pageData)
   }
 
-  const session = await SessionModel.query().findById(sessionId)
-  return h.redirect(`/system/return-requirements/${session.id}/check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
 async function noReturnsCheckYourAnswers (request, h) {

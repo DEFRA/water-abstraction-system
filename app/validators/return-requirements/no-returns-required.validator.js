@@ -1,9 +1,9 @@
 'use strict'
 
 const Joi = require('joi')
-const { reasonNewRequirementsFields } = require('../lib/static-lookups.lib.js')
+const { reasonNewRequirementsFields } = require('../../lib/static-lookups.lib.js')
 
-const noReturnsRequired = (data) => {
+function go (data) {
   const schema = Joi.object({
     reasonNewRequirements: Joi.string()
       .valid(...reasonNewRequirementsFields)
@@ -19,5 +19,5 @@ const noReturnsRequired = (data) => {
 }
 
 module.exports = {
-  noReturnsRequired
+  go
 }

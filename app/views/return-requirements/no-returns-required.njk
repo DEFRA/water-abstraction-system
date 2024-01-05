@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set title = "Why are no returns required?" %}
@@ -16,29 +17,28 @@
 {% endblock %}
 
 {% block content %}
-
   {% if errorMessage %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: [
         {
-          text: errorMessage,
-          href: "#reasonNewRequirements"
-        },
+          text: errorMessage.text,
+          href: "#reasonNewRequirements-error"
+        }
         ]
       }) }}
   {% endif %}
+
+{# <p><pre>{{ radioItems | dump(2) }}</pre></p> #}
 
   <form method="post" class="form">
     {{ govukRadios({
         idPrefix: "reasonNewRequirements",
         name: "reasonNewRequirements",
-        errorMessage: errorMessage ? {
-            text: errorMessage
-          } : undefined,
+        errorMessage: errorMessage,
         fieldset: {
           legend: {
-            html: '<span class="govuk-caption-l">Licence ' + 'TODO: licence number' + '</span>' + [title],
+            html: '<span class="govuk-caption-l">Licence ' + 'TODO: licence number' + '</span>' + title,
             isPageHeading: true,
             classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
           }
