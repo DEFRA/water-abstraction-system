@@ -6,6 +6,8 @@
  */
 
 const Boom = require('@hapi/boom')
+
+const { db } = require('../../../db/db.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -25,8 +27,11 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
+  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:30 ~ go:', licence)
+  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:31 ~ go:', licence.licenceDocument)
 
   const data = _data(licence)
+  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:34 ~ go ~ data:', data)
 
   const sessionId = await _createSession(data)
 
@@ -44,12 +49,13 @@ async function _createSession (data) {
 }
 
 function _data (licence) {
-  const { id, licenceRef } = licence
+  const { id, licenceRef, licenceDocument } = licence
 
   return {
     licence: {
       id,
-      licenceRef
+      licenceRef,
+      licenceHolder: _licenceHolder(licenceDocument)
     }
   }
 }
@@ -57,13 +63,67 @@ function _data (licence) {
 async function _fetchLicence (licenceId) {
   const licence = await LicenceModel.query()
     .findById(licenceId)
-    .select(['id', 'licenceRef'])
+    .select([
+      'id',
+      'licenceRef'
+    ])
+    .withGraphFetched('licenceDocument')
+    .modifyGraph('licenceDocument', (builder) => {
+      builder.select([
+        'id'
+      ])
+    })
+    .withGraphFetched('licenceDocument.licenceDocumentRoles')
+    .modifyGraph('licenceDocument.licenceDocumentRoles', (builder) => {
+      builder
+        .select([
+          'licenceDocumentRoles.id'
+        ])
+        .innerJoinRelated('licenceRole')
+        .where('licenceRole.name', 'licenceHolder')
+        .orderBy('licenceDocumentRoles.createdAt', 'desc')
+    })
+    .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
+    .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
+      builder.select([
+        'id',
+        'name',
+        'type'
+      ])
+    })
+    .withGraphFetched('licenceDocument.licenceDocumentRoles.contact')
+    .modifyGraph('licenceDocument.licenceDocumentRoles.contact', (builder) => {
+      builder.select([
+        'id',
+        'contactType',
+        'dataSource',
+        'department',
+        'firstName',
+        'initials',
+        'lastName',
+        'middleInitials',
+        'salutation',
+        'suffix'
+      ])
+    })
 
   if (!licence) {
     throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
   }
 
   return licence
+}
+
+function _licenceHolder (licenceDocument) {
+  // Extract the company and contact from the last licenceDocumentRole created. fetchLicence() ensures in the case that
+  // there is more than one that they are ordered by their created date
+  const { company, contact } = licenceDocument.licenceDocumentRoles[0]
+
+  if (contact) {
+    return contact.$name()
+  }
+
+  return company.name
 }
 
 module.exports = {

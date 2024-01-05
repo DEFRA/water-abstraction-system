@@ -8,8 +8,13 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const CompanyHelper = require('../../support/helpers/company.helper.js')
+const ContactHelper = require('../../support/helpers/contact.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
+const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
+const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 const SessionModel = require('../../../app/models/session.model.js')
 
 // Thing under test
@@ -20,20 +25,59 @@ describe('Initiate Return Requirement Session service', () => {
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
-
-    licence = await LicenceHelper.add()
   })
 
   describe('when called', () => {
     describe('and the licence exists', () => {
-      it('creates a new session record containing details of the licence', async () => {
-        const result = await InitiateReturnRequirementSessionService.go(licence.id)
+      const licenceRoles = {}
 
-        const session = await SessionModel.query().findById(result)
-        const { data } = session
+      let company
+      let contact
+      let licenceDocument
 
-        expect(data.licence.id).to.equal(licence.id)
-        expect(data.licence.licenceRef).to.equal(licence.licenceRef)
+      beforeEach(async () => {
+        licence = await LicenceHelper.add()
+
+        // Create 2 licence roles so we can test the service only gets the licence document role record that is for
+        // 'licence holder'
+        licenceRoles.billing = await LicenceRoleHelper.add({ name: 'billing', label: 'Billing' })
+        licenceRoles.holder = await LicenceRoleHelper.add()
+
+        // Create a company and contact record
+        company = await CompanyHelper.add()
+        contact = await ContactHelper.add()
+
+        // We have to create a licence document to link our licence record to (eventually!) the company or contact
+        // record that is the 'licence holder'
+        licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
+
+        // Create a licence document role record. This one is linked to the billing role so should be ignored by the
+        // service
+        await LicenceDocumentRoleHelper.add({
+          licenceDocumentId: licenceDocument.id,
+          licenceRoleId: licenceRoles.billing.id
+        })
+      })
+
+      describe('and the licence holder is a company', () => {
+        beforeEach(async () => {
+          // Create the licence document role record that _is_ linked to the licence holder records
+          await LicenceDocumentRoleHelper.add({
+            licenceDocumentId: licenceDocument.id,
+            licenceRoleId: licenceRoles.holder.id,
+            companyId: company.id
+          })
+        })
+
+        it('creates a new session record containing details of the licence and licence holder', async () => {
+          const result = await InitiateReturnRequirementSessionService.go(licence.id)
+
+          const session = await SessionModel.query().findById(result)
+          const { data } = session
+
+          expect(data.licence.id).to.equal(licence.id)
+          expect(data.licence.licenceRef).to.equal(licence.licenceRef)
+        })
       })
     })
 
