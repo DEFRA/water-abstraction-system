@@ -13,7 +13,7 @@ const { generateReturnLogId } = require('../../../support/helpers/return-log.hel
 // Thing under test
 const AllocateReturnsToLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-licence.service.js')
 
-describe.only('Allocate Returns to Licence service', () => {
+describe('Allocate Returns to Licence service', () => {
   describe('when there are valid records to process', () => {
     let testLicences
 

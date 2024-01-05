@@ -6,6 +6,7 @@
  */
 
 const { periodsOverlap } = require('../../../lib/general.lib.js')
+const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
 
 /**
  * For each licence the service attempts to match the return logs to the charge element(s). It does this by matching the
@@ -53,45 +54,16 @@ function _chargeDatesOverlap (matchedLine, chargePeriod) {
   return false
 }
 
-function _checkReturnForIssues (returnRecord) {
-  if (returnRecord.nilReturn) {
-    return true
-  }
-
-  if (returnRecord.underQuery) {
-    return true
-  }
-
-  if (returnRecord.status !== 'completed') {
-    return true
-  }
-
-  if (returnRecord.returnSubmissions.length === 0 || returnRecord.returnSubmissions[0].returnSubmissionLines.length === 0) {
-    return true
-  }
-
-  return false
-}
-
 function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeReference) {
-  const matchedReturns = _matchReturns(chargeElement, returnLogs)
+  const matchedReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
   if (matchedReturns.length === 0) {
     return
   }
 
   matchedReturns.forEach((matchedReturn) => {
-    const matchedReturnResult = {
-      allocatedQuantity: 0,
-      returnId: matchedReturn.id,
-      reviewReturnResultId: matchedReturn.reviewReturnResultId
-    }
-
-    chargeElement.returnLogs.push(matchedReturnResult)
-    matchedReturn.matched = true
-
     if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity && chargeReference.allocatedQuantity < chargeReference.volume) {
-      if (_checkReturnForIssues(matchedReturn)) {
+      if (matchedReturn.issues) {
         return
       }
 
@@ -119,7 +91,7 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
 
           chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
           chargeElement.allocatedQuantity += qtyToAllocate
-          matchedReturnResult.allocatedQuantity += qtyToAllocate
+          matchedReturn.matchedReturnResult.allocatedQuantity += qtyToAllocate
 
           matchedLine.unallocated -= qtyToAllocate
           matchedReturn.allocatedQuantity += qtyToAllocate
@@ -138,25 +110,6 @@ function _matchLines (chargeElement, returnSubmissionLines) {
 
     const { startDate, endDate } = returnSubmissionLine
     return periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
-  })
-}
-
-function _matchReturns (chargeElement, returnLogs) {
-  const elementCode = chargeElement.purpose.legacyId
-  const elementPeriods = chargeElement.abstractionPeriods
-
-  return returnLogs.filter((returnLog) => {
-    const returnPeriods = returnLog.abstractionPeriods
-
-    const matchFound = returnLog.purposes.some((purpose) => {
-      return purpose.tertiary.code === elementCode
-    })
-
-    if (!matchFound) {
-      return false
-    }
-
-    return periodsOverlap(elementPeriods, returnPeriods)
   })
 }
 
