@@ -14,6 +14,8 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
+const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
+const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
@@ -43,71 +45,6 @@ describe('Licence model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge versions', () => {
-      let testChargeVersions
-
-      beforeEach(async () => {
-        const { id, licenceRef } = testRecord
-
-        testChargeVersions = []
-        for (let i = 0; i < 2; i++) {
-          const chargeVersion = await ChargeVersionHelper.add({ licenceRef, licenceId: id })
-          testChargeVersions.push(chargeVersion)
-        }
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('chargeVersions')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the charge versions', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('chargeVersions')
-
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.chargeVersions).to.be.an.array()
-        expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersions).to.include(testChargeVersions[0])
-        expect(result.chargeVersions).to.include(testChargeVersions[1])
-      })
-    })
-
-    describe('when linking to region', () => {
-      let testRegion
-
-      beforeEach(async () => {
-        testRegion = await RegionHelper.add()
-
-        const { id: regionId } = testRegion
-        testRecord = await LicenceHelper.add({ regionId })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await LicenceModel.query()
-          .innerJoinRelated('region')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the region', async () => {
-        const result = await LicenceModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('region')
-
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion)
-      })
-    })
-
     describe('when linking to bill licences', () => {
       let testBillLicences
 
@@ -143,38 +80,68 @@ describe('Licence model', () => {
       })
     })
 
-    describe('when linking to workflows', () => {
-      let testWorkflows
+    describe('when linking to charge versions', () => {
+      let testChargeVersions
 
       beforeEach(async () => {
-        const { id } = testRecord
+        const { id, licenceRef } = testRecord
 
-        testWorkflows = []
+        testChargeVersions = []
         for (let i = 0; i < 2; i++) {
-          const workflow = await WorkflowHelper.add({ licenceId: id })
-          testWorkflows.push(workflow)
+          const chargeVersion = await ChargeVersionHelper.add({ licenceRef, licenceId: id })
+          testChargeVersions.push(chargeVersion)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query()
-          .innerJoinRelated('workflows')
+          .innerJoinRelated('chargeVersions')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the workflows', async () => {
+      it('can eager load the charge versions', async () => {
         const result = await LicenceModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('workflows')
+          .withGraphFetched('chargeVersions')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.workflows).to.be.an.array()
-        expect(result.workflows[0]).to.be.an.instanceOf(WorkflowModel)
-        expect(result.workflows).to.include(testWorkflows[0])
-        expect(result.workflows).to.include(testWorkflows[1])
+        expect(result.chargeVersions).to.be.an.array()
+        expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersions).to.include(testChargeVersions[0])
+        expect(result.chargeVersions).to.include(testChargeVersions[1])
+      })
+    })
+
+    describe('when linking to licence document', () => {
+      let testLicenceDocument
+
+      beforeEach(async () => {
+        testLicenceDocument = await LicenceDocumentHelper.add()
+
+        const { licenceRef } = testLicenceDocument
+        testRecord = await LicenceHelper.add({ licenceRef })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('licenceDocument')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence document', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceDocument')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceDocument).to.be.an.instanceOf(LicenceDocumentModel)
+        expect(result.licenceDocument).to.equal(testLicenceDocument)
       })
     })
 
@@ -210,6 +177,71 @@ describe('Licence model', () => {
         expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
         expect(result.licenceVersions).to.include(testLicenceVersions[0])
         expect(result.licenceVersions).to.include(testLicenceVersions[1])
+      })
+    })
+
+    describe('when linking to region', () => {
+      let testRegion
+
+      beforeEach(async () => {
+        testRegion = await RegionHelper.add()
+
+        const { id: regionId } = testRegion
+        testRecord = await LicenceHelper.add({ regionId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('region')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the region', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('region')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.region).to.be.an.instanceOf(RegionModel)
+        expect(result.region).to.equal(testRegion)
+      })
+    })
+
+    describe('when linking to workflows', () => {
+      let testWorkflows
+
+      beforeEach(async () => {
+        const { id } = testRecord
+
+        testWorkflows = []
+        for (let i = 0; i < 2; i++) {
+          const workflow = await WorkflowHelper.add({ licenceId: id })
+          testWorkflows.push(workflow)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('workflows')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the workflows', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('workflows')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.workflows).to.be.an.array()
+        expect(result.workflows[0]).to.be.an.instanceOf(WorkflowModel)
+        expect(result.workflows).to.include(testWorkflows[0])
+        expect(result.workflows).to.include(testWorkflows[1])
       })
     })
   })

@@ -16,12 +16,36 @@ class LicenceModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      billLicences: {
+        relation: Model.HasManyRelation,
+        modelClass: 'bill-licence.model',
+        join: {
+          from: 'licences.id',
+          to: 'billLicences.licenceId'
+        }
+      },
       chargeVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'charge-version.model',
         join: {
           from: 'licences.id',
           to: 'chargeVersions.licenceId'
+        }
+      },
+      licenceDocument: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-document.model',
+        join: {
+          from: 'licences.licenceRef',
+          to: 'licenceDocuments.licenceRef'
+        }
+      },
+      licenceVersions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-version.model',
+        join: {
+          from: 'licences.id',
+          to: 'licenceVersions.licenceId'
         }
       },
       region: {
@@ -32,28 +56,12 @@ class LicenceModel extends BaseModel {
           to: 'regions.id'
         }
       },
-      billLicences: {
-        relation: Model.HasManyRelation,
-        modelClass: 'bill-licence.model',
-        join: {
-          from: 'licences.id',
-          to: 'billLicences.licenceId'
-        }
-      },
       workflows: {
         relation: Model.HasManyRelation,
         modelClass: 'workflow.model',
         join: {
           from: 'licences.id',
           to: 'workflows.licenceId'
-        }
-      },
-      licenceVersions: {
-        relation: Model.HasManyRelation,
-        modelClass: 'licence-version.model',
-        join: {
-          from: 'licences.id',
-          to: 'licenceVersions.licenceId'
         }
       }
     }
