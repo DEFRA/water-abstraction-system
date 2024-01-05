@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/match-returns-to-charge-element.service.js')
 
-describe.only('Match Returns to Charge Element service', () => {
+describe('Match Returns to Charge Element service', () => {
   describe('when given a charge element', () => {
     let chargeElement
     let returnLogs
