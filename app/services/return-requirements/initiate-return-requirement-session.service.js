@@ -5,6 +5,7 @@
  * @module InitiateReturnRequirementSessionService
  */
 
+const Boom = require('@hapi/boom')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -23,7 +24,9 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {StringId} the ID of the newly created session record
  */
 async function go (licenceId) {
-  const data = { licence: await _licenceDetails(licenceId) }
+  const licence = await _fetchLicence(licenceId)
+
+  const data = _data(licence)
 
   const sessionId = await _createSession(data)
 
@@ -40,15 +43,27 @@ async function _createSession (data) {
   return session.id
 }
 
-async function _licenceDetails (licenceId) {
-  const licence = await LicenceModel.query()
-    .findById(licenceId)
-    .select('licenceRef')
+function _data (licence) {
+  const { id, licenceRef } = licence
 
   return {
-    licenceId,
-    licenceRef: licence.licenceRef
+    licence: {
+      id,
+      licenceRef
+    }
   }
+}
+
+async function _fetchLicence (licenceId) {
+  const licence = await LicenceModel.query()
+    .findById(licenceId)
+    .select(['id', 'licenceRef'])
+
+  if (!licence) {
+    throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
+  }
+
+  return licence
 }
 
 module.exports = {
