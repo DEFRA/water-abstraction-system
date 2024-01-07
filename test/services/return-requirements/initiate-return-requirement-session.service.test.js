@@ -43,29 +43,40 @@ describe('Initiate Return Requirement Session service', () => {
         licenceRoles.billing = await LicenceRoleHelper.add({ name: 'billing', label: 'Billing' })
         licenceRoles.holder = await LicenceRoleHelper.add()
 
-        // Create a company and contact record
+        // Create company and contact records. We create an additional company so we can create 2 licence document role
+        // records for our licence to test the one with the latest start date is used.
         company = await CompanyHelper.add({ name: 'Licence Holder Ltd' })
         contact = await ContactHelper.add({ firstName: 'Luce', lastName: 'Holder' })
+        const oldCompany = await CompanyHelper.add({ name: 'Old Licence Holder Ltd' })
 
         // We have to create a licence document to link our licence record to (eventually!) the company or contact
         // record that is the 'licence holder'
         licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
 
-        // Create a licence document role record. This one is linked to the billing role so should be ignored by the
+        // Create two licence document role records. This one is linked to the billing role so should be ignored by the
         // service
         await LicenceDocumentRoleHelper.add({
           licenceDocumentId: licenceDocument.id,
           licenceRoleId: licenceRoles.billing.id
         })
+
+        // This one is linked to the old company record so should not be used to provide the licence holder name
+        await LicenceDocumentRoleHelper.add({
+          licenceDocumentId: licenceDocument.id,
+          licenceRoleId: licenceRoles.holder.id,
+          company: oldCompany.id,
+          startDate: new Date('2022-01-01')
+        })
       })
 
       describe('and the licence holder is a company', () => {
         beforeEach(async () => {
-          // Create the licence document role record that _is_ linked to the licence holder records
+          // Create the licence document role record that _is_ linked to the correct licence holder record
           await LicenceDocumentRoleHelper.add({
             licenceDocumentId: licenceDocument.id,
             licenceRoleId: licenceRoles.holder.id,
-            companyId: company.id
+            companyId: company.id,
+            startDate: new Date('2022-08-01')
           })
         })
 
@@ -83,12 +94,15 @@ describe('Initiate Return Requirement Session service', () => {
 
       describe('and the licence holder is a contact', () => {
         beforeEach(async () => {
-          // Create the licence document role record that _is_ linked to the licence holder records
+          // Create the licence document role record that _is_ linked to the correct licence holder record.
+          // NOTE: We create this against both the company and contact to also confirm that the contact name has
+          // precedence over the company name
           await LicenceDocumentRoleHelper.add({
             licenceDocumentId: licenceDocument.id,
             licenceRoleId: licenceRoles.holder.id,
             companyId: company.id,
-            contactId: contact.id
+            contactId: contact.id,
+            startDate: new Date('2022-08-01')
           })
         })
 

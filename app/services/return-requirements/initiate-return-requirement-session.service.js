@@ -28,6 +28,7 @@ async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
 
   const data = _data(licence)
+  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:31 ~ go ~ data:', data)
 
   const sessionId = await _createSession(data)
 
@@ -77,7 +78,7 @@ async function _fetchLicence (licenceId) {
         ])
         .innerJoinRelated('licenceRole')
         .where('licenceRole.name', 'licenceHolder')
-        .orderBy('licenceDocumentRoles.createdAt', 'desc')
+        .orderBy('licenceDocumentRoles.startDate', 'desc')
     })
     .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
     .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
@@ -112,7 +113,7 @@ async function _fetchLicence (licenceId) {
 
 function _licenceHolder (licenceDocument) {
   // Extract the company and contact from the last licenceDocumentRole created. _fetchLicence() ensures in the case
-  // that there is more than one that they are ordered by their created date
+  // that there is more than one that they are ordered by their start date (DESC)
   const { company, contact } = licenceDocument.licenceDocumentRoles[0]
 
   if (contact) {
