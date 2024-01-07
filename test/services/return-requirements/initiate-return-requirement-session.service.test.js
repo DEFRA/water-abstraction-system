@@ -44,8 +44,8 @@ describe('Initiate Return Requirement Session service', () => {
         licenceRoles.holder = await LicenceRoleHelper.add()
 
         // Create a company and contact record
-        company = await CompanyHelper.add()
-        contact = await ContactHelper.add()
+        company = await CompanyHelper.add({ name: 'Licence Holder Ltd' })
+        contact = await ContactHelper.add({ firstName: 'Luce', lastName: 'Holder' })
 
         // We have to create a licence document to link our licence record to (eventually!) the company or contact
         // record that is the 'licence holder'
@@ -69,7 +69,7 @@ describe('Initiate Return Requirement Session service', () => {
           })
         })
 
-        it('creates a new session record containing details of the licence and licence holder', async () => {
+        it('creates a new session record containing details of the licence and licence holder (company)', async () => {
           const result = await InitiateReturnRequirementSessionService.go(licence.id)
 
           const session = await SessionModel.query().findById(result)
@@ -77,6 +77,30 @@ describe('Initiate Return Requirement Session service', () => {
 
           expect(data.licence.id).to.equal(licence.id)
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
+          expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
+        })
+      })
+
+      describe('and the licence holder is a contact', () => {
+        beforeEach(async () => {
+          // Create the licence document role record that _is_ linked to the licence holder records
+          await LicenceDocumentRoleHelper.add({
+            licenceDocumentId: licenceDocument.id,
+            licenceRoleId: licenceRoles.holder.id,
+            companyId: company.id,
+            contactId: contact.id
+          })
+        })
+
+        it('creates a new session record containing details of the licence and licence holder (contact)', async () => {
+          const result = await InitiateReturnRequirementSessionService.go(licence.id)
+
+          const session = await SessionModel.query().findById(result)
+          const { data } = session
+
+          expect(data.licence.id).to.equal(licence.id)
+          expect(data.licence.licenceRef).to.equal(licence.licenceRef)
+          expect(data.licence.licenceHolder).to.equal('Luce Holder')
         })
       })
     })

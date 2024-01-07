@@ -7,7 +7,6 @@
 
 const Boom = require('@hapi/boom')
 
-const { db } = require('../../../db/db.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -27,11 +26,8 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
-  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:30 ~ go:', licence)
-  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:31 ~ go:', licence.licenceDocument)
 
   const data = _data(licence)
-  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:34 ~ go ~ data:', data)
 
   const sessionId = await _createSession(data)
 
@@ -115,8 +111,8 @@ async function _fetchLicence (licenceId) {
 }
 
 function _licenceHolder (licenceDocument) {
-  // Extract the company and contact from the last licenceDocumentRole created. fetchLicence() ensures in the case that
-  // there is more than one that they are ordered by their created date
+  // Extract the company and contact from the last licenceDocumentRole created. _fetchLicence() ensures in the case
+  // that there is more than one that they are ordered by their created date
   const { company, contact } = licenceDocument.licenceDocumentRoles[0]
 
   if (contact) {
