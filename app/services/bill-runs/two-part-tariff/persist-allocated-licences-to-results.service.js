@@ -10,11 +10,19 @@ const ReviewReturnResultModel = require('../../../models/review-return-result.mo
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
 /**
- * Persists the returnLogs and chargeElements processed from the `allocateReturnsToLicenceService`
+ * Persists results of matching and allocating return logs to licence charge elements for a two-part tariff bill run
  *
- * @param {String} billRunId UUID of the bill run this bill will be linked to
- * @param {Object[]} licences licences with returns data to persist
+ * Each licence will have a `returnLogs` property that contains all return logs linked to the licence for the billing
+ * period of the bill run. It will also have a `chargeVersions` property, which within each one it will have details of
+ * which charge elements matched to which return logs and whether anything was allocated to the charge element from
+ * them.
  *
+ * We need to persist all this information ready for use in the review screens that our users use to asses if the
+ * matching and allocating looks correct or if any issues need resolving first.
+ *
+ * @param {String} billRunId - the ID of the two-part tariff bill run being generated
+ * @param {Object[]} licences - the two-part tariff licences included in the bill run, along with their match and
+ *  allocation results
  */
 async function go (billRunId, licences) {
   for (const licence of licences) {
