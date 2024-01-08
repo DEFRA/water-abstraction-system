@@ -11,6 +11,7 @@ exports.up = function (knex) {
 
       // Data
       table.uuid('charge_element_id').notNullable()
+      // Specifying `null, null` creates a decimal column that can store numbers of any precision and scale
       table.decimal('allocated', null, null).defaultTo(0)
       table.decimal('aggregate', null, null).defaultTo(1)
       table.boolean('charge_dates_overlap').defaultTo(false)
