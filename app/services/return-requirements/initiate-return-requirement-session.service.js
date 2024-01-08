@@ -28,7 +28,6 @@ async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
 
   const data = _data(licence)
-  console.log('🚀 ~ file: initiate-return-requirement-session.service.js:31 ~ go ~ data:', data)
 
   const sessionId = await _createSession(data)
 
