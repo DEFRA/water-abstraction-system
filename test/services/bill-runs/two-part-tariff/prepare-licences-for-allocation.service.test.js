@@ -88,9 +88,7 @@ describe('Prepare Licences For Allocation Service', () => {
               }
             ],
             abstractionOutsidePeriod: false,
-            matched: false,
-            // `reviewReturnResultId` is a randomly generated UUID
-            reviewReturnResultId: licence.returnLogs[0].reviewReturnResultId
+            matched: false
           })
         })
       })
