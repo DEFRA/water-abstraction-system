@@ -38,7 +38,7 @@ describe('Licences controller', () => {
   })
 
   describe('GET /licences/{id}/no-returns-required', () => {
-    const sessionId = '1c265420-6a5e-4a4c-94e4-196d7799ed01'
+    const session = { id: '1c265420-6a5e-4a4c-94e4-196d7799ed01' }
 
     beforeEach(async () => {
       options = {
@@ -53,14 +53,14 @@ describe('Licences controller', () => {
 
     describe('when a request is valid', () => {
       beforeEach(async () => {
-        Sinon.stub(InitiateReturnRequirementSessionService, 'go').resolves(sessionId)
+        Sinon.stub(InitiateReturnRequirementSessionService, 'go').resolves(session)
       })
 
       it('redirects to select return start date page', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal(`/system/return-requirements/${sessionId}/select-return-start-date`)
+        expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/select-return-start-date`)
       })
     })
 

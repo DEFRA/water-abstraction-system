@@ -15,7 +15,6 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
-const SessionModel = require('../../../app/models/session.model.js')
 
 // Thing under test
 const InitiateReturnRequirementSessionService = require('../../../app/services/return-requirements/initiate-return-requirement-session.service.js')
@@ -83,8 +82,7 @@ describe('Initiate Return Requirement Session service', () => {
         it('creates a new session record containing details of the licence and licence holder (company)', async () => {
           const result = await InitiateReturnRequirementSessionService.go(licence.id)
 
-          const session = await SessionModel.query().findById(result)
-          const { data } = session
+          const { data } = result
 
           expect(data.licence.id).to.equal(licence.id)
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
@@ -109,8 +107,7 @@ describe('Initiate Return Requirement Session service', () => {
         it('creates a new session record containing details of the licence and licence holder (contact)', async () => {
           const result = await InitiateReturnRequirementSessionService.go(licence.id)
 
-          const session = await SessionModel.query().findById(result)
-          const { data } = session
+          const { data } = result
 
           expect(data.licence.id).to.equal(licence.id)
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)

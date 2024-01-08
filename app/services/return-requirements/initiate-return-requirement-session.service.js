@@ -22,16 +22,14 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {String} licenceId - the ID of the licence the return requirement will be created for
  *
- * @returns {String} the ID of the newly created session record
+ * @returns {module:SessionModel} the newly created session record
  */
 async function go (licenceId) {
   const licence = await _fetchLicence(licenceId)
 
   const data = _data(licence)
 
-  const sessionId = await _createSession(data)
-
-  return sessionId
+  return _createSession(data)
 }
 
 async function _createSession (data) {
@@ -41,7 +39,7 @@ async function _createSession (data) {
     })
     .returning('*')
 
-  return session.id
+  return session
 }
 
 function _data (licence) {

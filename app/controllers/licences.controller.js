@@ -10,9 +10,9 @@ const InitiateReturnRequirementSessionService = require('../services/return-requ
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 
-  const sessionId = await InitiateReturnRequirementSessionService.go(id)
+  const session = await InitiateReturnRequirementSessionService.go(id)
 
-  return h.redirect(`/system/return-requirements/${sessionId}/select-return-start-date`)
+  return h.redirect(`/system/return-requirements/${session.id}/select-return-start-date`)
 }
 
 module.exports = {
