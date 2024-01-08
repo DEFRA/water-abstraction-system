@@ -5,6 +5,8 @@
  * @module LicenceDocumentHeaderModel
  */
 
+const { Model } = require('objection')
+
 const BaseModel = require('./base.model.js')
 
 /**
@@ -39,6 +41,19 @@ class LicenceDocumentHeaderModel extends BaseModel {
     return [
       'metadata'
     ]
+  }
+
+  static get relationMappings () {
+    return {
+      licence: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence.model',
+        join: {
+          from: 'licenceDocumentHeaders.licenceRef',
+          to: 'licences.licenceRef'
+        }
+      }
+    }
   }
 }
 
