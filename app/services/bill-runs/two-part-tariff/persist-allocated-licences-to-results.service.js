@@ -64,6 +64,11 @@ async function _persistChargeElement (
   // Persisting the charge elements that have a matching return
   if (chargeElement.returnLogs.length > 0) {
     for (const returnLog of chargeElement.returnLogs) {
+      // When we persist the review result we need the Id's for both the charge element and return log's review result
+      // records. Though it looks like we're iterating return logs here, these are copies assigned during matching and
+      // allocation. We don't create `ReviewReturnResult` records until this service is called, and those are based
+      // on the `returnLogs` property of each licence. Hence, we need to pass in the ID's created and search them for
+      // a match in order to get the `reviewReturnResultId`.
       const { reviewReturnResultId } = reviewReturnResultIds.find((reviewReturnResultIds) => {
         return reviewReturnResultIds.returnId === returnLog.returnId
       })
