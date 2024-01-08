@@ -46,7 +46,6 @@ describe('Persist Allocated Licences to Results service', () => {
         expect(result[0].chargePeriodStartDate).to.equal(testLicences[0].chargeVersions[0].chargePeriod.startDate)
         expect(result[0].chargePeriodEndDate).to.equal(testLicences[0].chargeVersions[0].chargePeriod.endDate)
         expect(result[0].chargeVersionChangeReason).to.equal(testLicences[0].chargeVersions[0].changeReason.description)
-        expect(result[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
 
         expect(result[0].reviewChargeElementResults.chargeElementId).to.equal(
           testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].id
@@ -60,7 +59,6 @@ describe('Persist Allocated Licences to Results service', () => {
           testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap
         )
 
-        expect(result[0].reviewReturnResults.id).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
         expect(result[0].reviewReturnResults.returnId).to.equal(testLicences[0].returnLogs[0].id)
         expect(result[0].reviewReturnResults.returnReference).to.equal(testLicences[0].returnLogs[0].returnRequirement)
         expect(result[0].reviewReturnResults.startDate).to.equal(testLicences[0].returnLogs[0].startDate)
@@ -104,11 +102,9 @@ describe('Persist Allocated Licences to Results service', () => {
         expect(result[0].chargePeriodEndDate).to.be.null()
         expect(result[0].chargeVersionChangeReason).to.be.null()
         expect(result[0].reviewChargeElementResultId).to.be.null()
-        expect(result[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
 
         expect(result[0].reviewChargeElementResults).to.be.null()
 
-        expect(result[0].reviewReturnResults.id).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
         expect(result[0].reviewReturnResults.returnId).to.equal(testLicences[0].returnLogs[0].id)
         expect(result[0].reviewReturnResults.returnReference).to.equal(testLicences[0].returnLogs[0].returnRequirement)
         expect(result[0].reviewReturnResults.startDate).to.equal(testLicences[0].returnLogs[0].startDate)
@@ -164,13 +160,11 @@ describe('Persist Allocated Licences to Results service', () => {
 
 function _generateData (aggregate = null, returnMatched = true) {
   const returnId = generateReturnLogId()
-  const reviewReturnResultId = generateUUID()
 
   const chargeElementReturnLogs = [
     {
       allocatedQuantity: 32,
-      returnId,
-      reviewReturnResultId
+      returnId
     }
   ]
 
@@ -227,8 +221,7 @@ function _generateData (aggregate = null, returnMatched = true) {
           quantity: 32,
           allocatedQuantity: returnMatched ? 32 : 0,
           abstractionOutsidePeriod: false,
-          matched: returnMatched,
-          reviewReturnResultId
+          matched: returnMatched
         }
       ]
     }
