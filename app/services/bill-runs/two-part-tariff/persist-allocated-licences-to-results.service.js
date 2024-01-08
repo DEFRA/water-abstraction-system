@@ -87,9 +87,7 @@ async function _persistReturnLogs (returnLogs, billRunId, licence) {
   const reviewReturnResultIds = []
 
   for (const returnLog of returnLogs) {
-    const reviewReturnResultId = generateUUID()
-
-    await _persistReviewReturnResult(reviewReturnResultId, returnLog)
+    const reviewReturnResultId = await _persistReviewReturnResult(returnLog)
     reviewReturnResultIds.push({ returnId: returnLog.id, reviewReturnResultId })
 
     // Persisting the unmatched return logs
@@ -140,7 +138,9 @@ async function _persistReviewResult (
   await ReviewResultModel.query().insert(data)
 }
 
-async function _persistReviewReturnResult (reviewReturnResultId, returnLog) {
+async function _persistReviewReturnResult (returnLog) {
+  const reviewReturnResultId = generateUUID()
+
   const data = {
     id: reviewReturnResultId,
     returnId: returnLog.id,
@@ -160,6 +160,8 @@ async function _persistReviewReturnResult (reviewReturnResultId, returnLog) {
   }
 
   await ReviewReturnResultModel.query().insert(data)
+
+  return reviewReturnResultId
 }
 
 module.exports = {
