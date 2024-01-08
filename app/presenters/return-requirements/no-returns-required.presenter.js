@@ -6,7 +6,9 @@ function go (session, error = null) {
   const data = {
     activeNavBar: 'search',
     errorMessage: _error(session, error),
-    radioItems: _radioButtons(session)
+    radioItems: _radioButtons(session),
+    licenceRef: session.data.licence.licenceRef,
+    id: session.id
   }
 
   return data
