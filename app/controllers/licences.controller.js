@@ -5,17 +5,12 @@
  * @module LicencesController
  */
 
-const SessionModel = require('../models/session.model.js')
+const InitiateReturnRequirementSessionService = require('../services/return-requirements/initiate-return-requirement-session.service.js')
 
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 
-  const data = { licenceId: id }
-  const session = await SessionModel.query()
-    .insert({
-      data
-    })
-    .returning('*')
+  const session = await InitiateReturnRequirementSessionService.go(id)
 
   return h.redirect(`/system/return-requirements/${session.id}/select-return-start-date`)
 }
