@@ -5,7 +5,7 @@ const { reasonNewRequirementsFields } = require('../../../app/lib/static-lookups
 
 const { describe, it } = exports.lab = Lab.script()
 
-describe.only('No Returns Required Validation', () => {
+describe('No Returns Required Validation', () => {
   reasonNewRequirementsFields.forEach(reason => {
     it(`should validate for valid reason: ${reason}`, () => {
       const { error } = noReturnsRequiredGo({ reasonNewRequirements: reason })
@@ -16,6 +16,6 @@ describe.only('No Returns Required Validation', () => {
   it('should fail validation for invalid reason', () => {
     const { error } = noReturnsRequiredGo({ reasonNewRequirements: '' })
     expect(error).to.exist()
-    expect(error.details[0].message).to.equal('Select a valid reason for the return requirement')
+    expect(error.details[0].message).to.equal('Select the reason for the return requirement')
   })
 })
