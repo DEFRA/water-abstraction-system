@@ -4,7 +4,7 @@
  * Persists the results from the `allocateReturnsToLicenceService` into the DB
  * @module PersistAllocatedLicencesToResultsService
  */
-const { generateUUID } = require('../../../lib/general.lib.js')
+
 const ReviewChargeElementResultModel = require('../../../models/review-charge-element-result.model.js')
 const ReviewReturnResultModel = require('../../../models/review-return-result.model.js')
 const ReviewResultModel = require('../../../models/review-result.model.js')
@@ -100,17 +100,14 @@ async function _persistReturnLogs (returnLogs, billRunId, licence) {
 }
 
 async function _persistReviewChargeElementResult (chargeElement, chargeReference) {
-  const reviewChargeElementResultId = generateUUID()
-
   const data = {
-    id: reviewChargeElementResultId,
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
     aggregate: chargeReference.aggregate ?? 1,
     chargeDatesOverlap: chargeElement.chargeDatesOverlap
   }
 
-  await ReviewChargeElementResultModel.query().insert(data)
+  const { id: reviewChargeElementResultId } = await ReviewChargeElementResultModel.query().insert(data).returning('id')
 
   return reviewChargeElementResultId
 }
@@ -139,10 +136,7 @@ async function _persistReviewResult (
 }
 
 async function _persistReviewReturnResult (returnLog) {
-  const reviewReturnResultId = generateUUID()
-
   const data = {
-    id: reviewReturnResultId,
     returnId: returnLog.id,
     returnReference: returnLog.returnRequirement,
     startDate: returnLog.startDate,
@@ -159,7 +153,7 @@ async function _persistReviewReturnResult (returnLog) {
     abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
   }
 
-  await ReviewReturnResultModel.query().insert(data)
+  const { id: reviewReturnResultId } = await ReviewReturnResultModel.query().insert(data).returning('id')
 
   return reviewReturnResultId
 }
