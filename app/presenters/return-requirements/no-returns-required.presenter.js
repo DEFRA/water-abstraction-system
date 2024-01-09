@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Formats data for the `/return-requirements/{sessionId}/no-returns-required` page
+ * @module NoReturnsRequiredPresenter
+ */
+
 const { reasonNewRequirementsFields } = require('../../lib/static-lookups.lib.js')
 
 function go (session, error = null) {
