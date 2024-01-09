@@ -14,6 +14,18 @@ function go (session, error = null) {
   return data
 }
 
+function _error (session, error) {
+  if (!error) {
+    return null
+  }
+
+  const errorMessage = {
+    text: error.message
+  }
+
+  return errorMessage
+}
+
 function _radioButtons (session) {
   const radioItems = [
     {
@@ -34,18 +46,6 @@ function _radioButtons (session) {
   ]
 
   return radioItems
-}
-
-function _error (session, error) {
-  if (!error) {
-    return null
-  }
-
-  const errorMessage = {
-    text: error.message
-  }
-
-  return errorMessage
 }
 
 module.exports = {
