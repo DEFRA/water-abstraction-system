@@ -1,0 +1,47 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { expect } = Code
+
+// Thing under test
+const NoReturnsRequiredPresenter = require('../../../app/presenters/return-requirements/no-returns-required.presenter.js')
+
+describe('No Returns Required presenter', () => {
+  let session
+
+  beforeEach(() => {
+    session = {
+      id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+      data: {
+        licence: {
+          id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
+          licenceRef: '01/123',
+          licenceHolder: 'Jane Doe'
+        }
+      }
+    }
+  })
+
+  describe('when provided with a populated session', () => {
+    it('correctly presents the data', () => {
+      const result = NoReturnsRequiredPresenter.go(session)
+
+      expect(result.id).to.equal(session.id)
+      expect(result.licenceRef).to.equal(session.data.licence.licenceRef)
+    })
+  })
+
+  describe('when provided with an error', () => {
+    it('includes the error message in the presented data', () => {
+      const error = new Error('Test error message')
+      const result = NoReturnsRequiredPresenter.go(session, error)
+
+      expect(result.errorMessage).to.exist()
+      expect(result.errorMessage.text).to.equal(error.message)
+    })
+  })
+})
