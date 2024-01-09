@@ -10,7 +10,6 @@ const ReviewReturnResultModel = require('../../../models/review-return-result.mo
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
 async function go (billRunId, licence) {
-  console.log('First Licence :', licence)
   const { chargeVersions, returnLogs } = licence
 
   const reviewReturnResultIds = await _persistReturnLogs(returnLogs, billRunId, licence)
@@ -74,9 +73,6 @@ async function _persistChargeElement (
 
 async function _persistReturnLogs (returnLogs, billRunId, licence) {
   const reviewReturnResultIds = []
-
-  console.log('Return Logs!!! :', returnLogs)
-  console.log('Return Logs!!! :', licence)
 
   for (const returnLog of returnLogs) {
     const reviewReturnResultId = await _persistReviewReturnResult(returnLog)
