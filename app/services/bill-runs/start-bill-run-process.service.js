@@ -9,7 +9,7 @@ const DetermineBillingPeriodsService = require('./determine-billing-periods.serv
 const CreateBillRunPresenter = require('../../presenters/bill-runs/create-bill-run.presenter.js')
 const InitiateBillRunService = require('./initiate-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('./supplementary/process-bill-run.service.js')
-const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bill-run.service.js')
+const TwoPartTariffMatchAndAllocateService = require('./two-part-tariff/match-and-allocate.service.js')
 
 /**
  * Manages the creation of a new bill run
@@ -46,7 +46,7 @@ function _processBillRun (billRun, billingPeriods) {
       SupplementaryProcessBillRunService.go(billRun, billingPeriods)
       break
     case 'two_part_tariff':
-      TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+      TwoPartTariffMatchAndAllocateService.go(billRun, billingPeriods)
       break
   }
 }
