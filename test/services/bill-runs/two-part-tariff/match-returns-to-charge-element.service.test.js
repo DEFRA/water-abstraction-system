@@ -93,7 +93,7 @@ describe('Match Returns to Charge Element service', () => {
         returnLogs = _setUpReturnLogs(purpose1, purpose2)
       })
 
-      it('for the matching return logs it adds them to the charge element', () => {
+      it('for the matching return logs adds them to the charge element', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
         expect(chargeElement).to.equal({
@@ -123,13 +123,13 @@ describe('Match Returns to Charge Element service', () => {
         })
       })
 
-      it('for the matching return logs it changes the matched property to be true', () => {
+      it('changes the matched property to true for the matching return logs', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
         expect(returnLogs[0].matched).to.be.true()
       })
 
-      it('for any unmatched return logs the matched property stays false', () => {
+      it('keeps the matched property as false for any unmatched return logs', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
         expect(returnLogs[1].matched).to.be.false()

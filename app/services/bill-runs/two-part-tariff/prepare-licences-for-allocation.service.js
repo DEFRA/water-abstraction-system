@@ -46,24 +46,25 @@ function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
 
 /**
  * Checks a return record for potential issues based on specific criteria and flags it accordingly
- * @param {*} returnRecord The return record to be checked for issues
  */
-function _checkReturnForIssues (returnRecord) {
-  if (returnRecord.nilReturn) {
-    returnRecord.issues = true
+function _checkReturnForIssues (returnLog) {
+  if (returnLog.nilReturn) {
+    return true
   }
 
-  if (returnRecord.underQuery) {
-    returnRecord.issues = true
+  if (returnLog.underQuery) {
+    return true
   }
 
-  if (returnRecord.status !== 'completed') {
-    returnRecord.issues = true
+  if (returnLog.status !== 'completed') {
+    return true
   }
 
-  if (returnRecord.returnSubmissions.length === 0 || returnRecord.returnSubmissions[0].returnSubmissionLines.length === 0) {
-    returnRecord.issues = true
+  if (returnLog.returnSubmissions.length === 0 || returnLog.returnSubmissions[0].returnSubmissionLines.length === 0) {
+    return true
   }
+
+  return false
 }
 
 function _prepareChargeVersions (licence, billingPeriod) {
@@ -141,7 +142,7 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
 
-    _checkReturnForIssues(returnLog)
+    returnLog.issues = (_checkReturnForIssues(returnLog))
   })
 }
 
