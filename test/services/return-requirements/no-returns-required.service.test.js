@@ -23,18 +23,37 @@ describe('No Returns Required service', () => {
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
+    it('fetches the current setup session record', async () => {
       const result = await NoReturnsRequiredService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
-    it('returns page data including the error for the view', async () => {
-      const error = new Error('Test error message')
-      const result = await NoReturnsRequiredService.go(session.id, error)
+    describe('without the optional error param', () => {
+      it('returns page data for the view', async () => {
+        const result = await NoReturnsRequiredService.go(session.id)
 
-      expect(result.errorMessage).to.exist()
-      expect(result.errorMessage.text).to.equal(error.message)
+        expect(result.activeNavBar).to.exist()
+        expect(result.licenceRef).to.exist()
+        expect(result.radioItems).to.exist()
+
+        expect(result.errorMessage).to.be.null()
+      })
+    })
+
+    describe('with the optional error param', () => {
+      const error = new Error('Test error message')
+
+      it('returns page data for the view including the error message', async () => {
+        const result = await NoReturnsRequiredService.go(session.id, error)
+
+        expect(result.activeNavBar).to.exist()
+        expect(result.licenceRef).to.exist()
+        expect(result.radioItems).to.exist()
+
+        expect(result.errorMessage).to.exist()
+        expect(result.errorMessage.text).to.equal(error.message)
+      })
     })
   })
 })
