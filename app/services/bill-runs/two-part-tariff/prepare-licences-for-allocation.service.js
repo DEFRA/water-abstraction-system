@@ -20,11 +20,9 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * @param {Object[]} billingPeriod - The period a bill run is being calculated for. Currently, this always equates to a
  * financial year, for example, 2022-04-01 to 2023-03-31
  */
-async function go (licences, billingPeriod) {
-  for (const licence of licences) {
-    await _prepareReturnLogs(licence, billingPeriod)
-    _prepareChargeVersions(licence, billingPeriod)
-  }
+async function go (licence, billingPeriod) {
+  await _prepareReturnLogs(licence, billingPeriod)
+  _prepareChargeVersions(licence, billingPeriod)
 }
 
 /**
