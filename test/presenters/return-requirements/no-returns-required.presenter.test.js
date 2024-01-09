@@ -36,8 +36,9 @@ describe('No Returns Required presenter', () => {
   })
 
   describe('when provided with an error', () => {
+    const error = new Error('Test error message')
+
     it('includes the error message in the presented data', () => {
-      const error = new Error('Test error message')
       const result = NoReturnsRequiredPresenter.go(session, error)
 
       expect(result.errorMessage).to.exist()
