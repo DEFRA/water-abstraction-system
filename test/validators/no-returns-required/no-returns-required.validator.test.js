@@ -1,21 +1,39 @@
+'use strict'
+
+// Test framework dependencies
 const Lab = require('@hapi/lab')
-const { expect } = require('@hapi/code')
-const noReturnsRequired = require('../../../app/validators/return-requirements/no-returns-required.validator.js')
-const { reasonNewRequirementsFields } = require('../../../app/lib/static-lookups.lib.js')
+const Code = require('@hapi/code')
 
 const { describe, it } = exports.lab = Lab.script()
+const { expect } = Code
 
-describe('No Returns Required Validation', () => {
-  reasonNewRequirementsFields.forEach(reason => {
-    it(`should validate for valid reason: ${reason}`, () => {
-      const { error } = noReturnsRequired.go({ reasonNewRequirements: reason })
-      expect(error).to.be.undefined()
+// Test helpers
+const { reasonNewRequirementsFields } = require('../../../app/lib/static-lookups.lib.js')
+
+// Thing under test
+const NoReturnsRequiredValidator = require('../../../app/validators/return-requirements/no-returns-required.validator.js')
+
+describe('No Returns Required validator', () => {
+  describe('when valid data is provided', () => {
+    reasonNewRequirementsFields.forEach(reason => {
+      it(`confirms the data is valid (reason ${reason})`, () => {
+        const result = NoReturnsRequiredValidator.go({ reasonNewRequirements: reason })
+
+        expect(result.value).to.exist()
+        expect(result.error).not.to.exist()
+      })
     })
   })
 
-  it('should fail validation for invalid reason', () => {
-    const { error } = noReturnsRequired.go({ reasonNewRequirements: '' })
-    expect(error).to.exist()
-    expect(error.details[0].message).to.equal('Select the reason for the return requirement')
+  describe('when valid data is provided', () => {
+    describe("because no 'reason' is given", () => {
+      it('fails validation', () => {
+        const result = NoReturnsRequiredValidator.go({ reasonNewRequirements: '' })
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Select the reason for the return requirement')
+      })
+    })
   })
 })
