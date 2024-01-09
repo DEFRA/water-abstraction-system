@@ -30,8 +30,29 @@ describe('No Returns Required presenter', () => {
     it('correctly presents the data', () => {
       const result = NoReturnsRequiredPresenter.go(session)
 
-      expect(result.id).to.equal(session.id)
-      expect(result.licenceRef).to.equal(session.data.licence.licenceRef)
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        errorMessage: null,
+        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+        licenceRef: '01/123',
+        radioItems: [
+          {
+            checked: false,
+            text: 'Abstraction amount below 100 cubic metres per day',
+            value: 'abstraction_below_100_cubic_metres_per_day'
+          },
+          {
+            checked: false,
+            text: 'Returns exception',
+            value: 'returns_exception'
+          },
+          {
+            checked: false,
+            text: 'Transfer licence',
+            value: 'transfer_licence'
+          }
+        ]
+      })
     })
   })
 
