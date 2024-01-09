@@ -30,8 +30,7 @@ function _addReturnToElement (matchingReturns, chargeElement) {
   matchingReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
       allocatedQuantity: 0,
-      returnId: matchedReturn.id,
-      reviewReturnResultId: matchedReturn.reviewReturnResultId
+      returnId: matchedReturn.id
     }
 
     chargeElement.returnLogs.push(matchedReturnResult)
