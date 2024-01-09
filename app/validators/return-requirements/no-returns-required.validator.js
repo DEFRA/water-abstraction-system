@@ -4,7 +4,7 @@
  * Validates data submitted for the `/return-requirements/{sessionId}/no-returns-required` page
  * @module NoReturnsRequiredValidator
  */
- 
+
 const Joi = require('joi')
 
 function go (data) {
