@@ -5,9 +5,9 @@
  * @module ReturnRequirementsController
  */
 
-const SessionModel = require('../models/session.model.js')
-const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
+const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
+const SessionModel = require('../models/session.model.js')
 
 async function selectReturnStartDate (request, h) {
   const { sessionId } = request.params
