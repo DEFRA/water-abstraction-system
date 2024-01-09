@@ -61,9 +61,10 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
     return
   }
 
+  let i = 0
   matchedReturns.forEach((matchedReturn) => {
     if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity && chargeReference.allocatedQuantity < chargeReference.volume) {
-      if (matchedReturn.issues) {
+      if (matchedReturn.issues === true) {
         return
       }
 
@@ -91,7 +92,9 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
 
           chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
           chargeElement.allocatedQuantity += qtyToAllocate
-          matchedReturn.matchedReturnResult.allocatedQuantity += qtyToAllocate
+          console.log('Charge Element :', chargeElement)
+          console.log('Matched Return :', matchedReturn)
+          chargeElement.returnLogs[i].allocatedQuantity += qtyToAllocate
 
           matchedLine.unallocated -= qtyToAllocate
           matchedReturn.allocatedQuantity += qtyToAllocate
@@ -99,6 +102,7 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
         }
       })
     }
+    i++
   })
 }
 
