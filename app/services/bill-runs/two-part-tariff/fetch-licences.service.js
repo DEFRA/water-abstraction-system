@@ -16,8 +16,8 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
  *
  * @returns {Object[]} the licences to be matched, each containing an array of charge versions applicable for two-part tariff
  */
-async function go (regionId, billingPeriod) {
-  const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod)
+async function go (regionId, billingPeriod, licenceId) {
+  const chargeVersions = await FetchChargeVersionsService.go(regionId, billingPeriod, licenceId)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
 
