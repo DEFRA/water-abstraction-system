@@ -275,6 +275,12 @@ async function submitSiteDescription (request, h) {
 async function submitStartDate (request, h) {
   const { sessionId } = request.params
 
+  const session = await SessionModel.query().findById(sessionId)
+
+  if (session.data.journey === 'returns-required') {
+    return h.redirect(`/system/return-requirements/${sessionId}/reason`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)
 }
 
