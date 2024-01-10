@@ -5,6 +5,8 @@
  * @module ReturnRequirementsController
  */
 
+const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
+const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../models/session.model.js')
 
 async function selectReturnStartDate (request, h) {
@@ -88,20 +90,23 @@ async function requirementsApproved (request, h) {
 async function noReturnsRequired (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await NoReturnsRequiredService.go(sessionId)
 
   return h.view('return-requirements/no-returns-required.njk', {
-    activeNavBar: 'search',
-    ...session
+    ...pageData
   })
 }
 
 async function saveNoReturnsRequired (request, h) {
   const { sessionId } = request.params
+  const validation = NoReturnsRequiredValidator.go(request.payload)
 
-  const session = await SessionModel.query().findById(sessionId)
+  if (validation.error) {
+    const pageData = await NoReturnsRequiredService.go(sessionId, validation.error)
+    return h.view('return-requirements/no-returns-required.njk', pageData)
+  }
 
-  return h.redirect(`/system/return-requirements/${session.id}/no-return-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
 async function noReturnsCheckYourAnswers (request, h) {

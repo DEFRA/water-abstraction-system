@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -101,6 +102,10 @@ describe('Return requirements controller', () => {
         credentials: { scope: ['billing'] }
       }
     }
+
+    beforeEach(async () => {
+      Sinon.stub(NoReturnsRequiredService, 'go').resolves({ id: '8702b98f-ae51-475d-8fcc-e049af8b8d38' })
+    })
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {

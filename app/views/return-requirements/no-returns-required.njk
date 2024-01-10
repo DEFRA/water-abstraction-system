@@ -1,6 +1,8 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set title = "Why are no returns required?" %}
 {% set rootLink = "/system/return-requirements/" + id %}
@@ -9,18 +11,39 @@
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink
+      href: rootLink + '/select-return-start-date'
     })
   }}
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{title}}</h1>
-  </div>
+  {% if errorMessage %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: errorMessage.text,
+          href: "#reasonNewRequirements-error"
+        }
+        ]
+      }) }}
+  {% endif %}
 
-  <form method="post">
+  <form method="post" class="form">
+    {{ govukRadios({
+        idPrefix: "reasonNewRequirements",
+        name: "reasonNewRequirements",
+        errorMessage: errorMessage,
+        fieldset: {
+          legend: {
+            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + title,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+          }
+        },
+        items: radioItems
+        }) }}
+
     <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
     </div>
