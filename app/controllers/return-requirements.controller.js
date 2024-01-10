@@ -63,21 +63,21 @@ async function saveHowDoYouWant (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/returns-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${session.id}/check-your-answers`)
 }
 
-async function returnsCheckYourAnswers (request, h) {
+async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/returns-check-your-answers.njk', {
+  return h.view('return-requirements/check-your-answers.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveReturnsCheckYourAnswers (request, h) {
+async function saveCheckYourAnswers (request, h) {
   return h.redirect('/system/return-requirements/requirements-approved')
 }
 
@@ -142,7 +142,7 @@ async function saveNote (request, h) {
 
   const { id } = session
 
-  return h.redirect(`/system/return-requirements/${id}/returns-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${id}/check-your-answers`)
 }
 
 async function returnsFrequencyCollected (request, h) {
@@ -240,7 +240,7 @@ module.exports = {
   noReturnsRequired,
   reasonNewRequirements,
   requirementsApproved,
-  returnsCheckYourAnswers,
+  checkYourAnswers,
   returnsSettings,
   howDoYouWant,
   returnsFrequencyCollected,
@@ -251,7 +251,7 @@ module.exports = {
   saveNote,
   selectPurpose,
   saveReasonNewRequirements,
-  saveReturnsCheckYourAnswers,
+  saveCheckYourAnswers,
   saveReturnsCycle,
   saveHowDoYouWant,
   saveReturnStartDate,

@@ -77,8 +77,8 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/returns-check-your-answers',
-    handler: ReturnRequirementsController.returnsCheckYourAnswers,
+    path: '/return-requirements/{sessionId}/check-your-answers',
+    handler: ReturnRequirementsController.checkYourAnswers,
     options: {
       auth: {
         access: {
@@ -89,8 +89,8 @@ const routes = [
     }
   }, {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/returns-check-your-answers',
-    handler: ReturnRequirementsController.saveReturnsCheckYourAnswers,
+    path: '/return-requirements/{sessionId}/check-your-answers',
+    handler: ReturnRequirementsController.checkYourAnswers,
     options: {
       auth: {
         access: {
