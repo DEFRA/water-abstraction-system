@@ -255,12 +255,23 @@ async function saveFrequencyReported (request, h) {
   })
 }
 
-async function returnsSettings (request, h) {
+async function agreementsExceptions (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/settings.njk', {
+  return h.view('return-requirements/agreements-exceptions.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveAgreementsExceptions (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/agreements-exceptions.njk', {
     activeNavBar: 'search',
     ...session
   })
@@ -296,7 +307,8 @@ module.exports = {
   reason,
   requirementsApproved,
   checkYourAnswers,
-  returnsSettings,
+  agreementsExceptions,
+  saveAgreementsExceptions,
   howDoYouWant,
   frequencyCollected,
   saveFrequencyCollected,

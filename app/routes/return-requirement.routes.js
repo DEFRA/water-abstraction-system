@@ -305,15 +305,27 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/settings',
-    handler: ReturnRequirementsController.returnsSettings,
+    path: '/return-requirements/{sessionId}/agreements-exceptions',
+    handler: ReturnRequirementsController.agreementsExceptions,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Select how often collected readings or volumes are reported'
+      description: 'Select agreements and exceptions'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/agreements-exceptions',
+    handler: ReturnRequirementsController.saveAgreementsExceptions,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save agreements and exceptions'
     }
   }, {
     method: 'GET',
