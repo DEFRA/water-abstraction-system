@@ -110,17 +110,6 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/no-returns-check-your-answers', () => {
-    describe('when the request succeeds', () => {
-      it('returns the page successfully', async () => {
-        const response = await server.inject(_options('no-returns-check-your-answers'))
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Check your answers')
-      })
-    })
-  })
-
   describe('GET /return-requirements/{sessionId}/no-returns-required', () => {
     beforeEach(async () => {
       Sinon.stub(NoReturnsRequiredService, 'go').resolves({ id: '8702b98f-ae51-475d-8fcc-e049af8b8d38' })

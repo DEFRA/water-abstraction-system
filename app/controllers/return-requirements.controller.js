@@ -90,17 +90,6 @@ async function frequencyReported (request, h) {
   })
 }
 
-async function noReturnsCheckYourAnswers (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/no-returns-check-your-answers.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
 async function noReturnsRequired (request, h) {
   const { sessionId } = request.params
 
@@ -231,12 +220,6 @@ async function submitFrequencyReported (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
 }
 
-async function submitNoReturnsCheckYourAnswers (request, h) {
-  const { licenceId } = request.params
-
-  return h.redirect(`/system/return-requirements/${licenceId}/approved`)
-}
-
 async function submitNoReturnsRequired (request, h) {
   const { sessionId } = request.params
   const validation = NoReturnsRequiredValidator.go(request.payload)
@@ -246,7 +229,7 @@ async function submitNoReturnsRequired (request, h) {
     return h.view('return-requirements/no-returns-required.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/no-returns-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
 async function submitPoints (request, h) {
@@ -299,7 +282,6 @@ module.exports = {
   checkYourAnswers,
   frequencyCollected,
   frequencyReported,
-  noReturnsCheckYourAnswers,
   noReturnsRequired,
   points,
   purpose,
@@ -314,7 +296,6 @@ module.exports = {
   submitCheckYourAnswers,
   submitFrequencyCollected,
   submitFrequencyReported,
-  submitNoReturnsCheckYourAnswers,
   submitNoReturnsRequired,
   submitPoints,
   submitPurpose,

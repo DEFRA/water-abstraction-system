@@ -174,32 +174,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
-    handler: ReturnRequirementsController.noReturnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Check your answers'
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
-    handler: ReturnRequirementsController.submitNoReturnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Submit check your answers'
-    }
-  },
-  {
-    method: 'GET',
     path: '/return-requirements/{sessionId}/no-returns-required',
     handler: ReturnRequirementsController.noReturnsRequired,
     options: {
