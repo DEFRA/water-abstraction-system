@@ -200,12 +200,23 @@ async function saveReturnsCycle (request, h) {
   })
 }
 
-async function returnsFrequency (request, h) {
+async function frequencyReported (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/frequency.njk', {
+  return h.view('return-requirements/frequency-reported.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveFrequencyReported (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency-reported.njk', {
     activeNavBar: 'search',
     ...session
   })
@@ -257,7 +268,8 @@ module.exports = {
   frequencyCollected,
   saveFrequencyCollected,
   saveDescription,
-  returnsFrequency,
+  frequencyReported,
+  saveFrequencyReported,
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveNote,
