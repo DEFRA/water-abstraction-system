@@ -19,7 +19,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/abstraction-period',
-    handler: ReturnRequirementsController.saveAbstractionPeriod,
+    handler: ReturnRequirementsController.submitAbstractionPeriod,
     options: {
       auth: {
         access: {
@@ -45,7 +45,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/add-note',
-    handler: ReturnRequirementsController.saveAddNote,
+    handler: ReturnRequirementsController.submitAddNote,
     options: {
       auth: {
         access: {
@@ -71,7 +71,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/agreements-exceptions',
-    handler: ReturnRequirementsController.saveAgreementsExceptions,
+    handler: ReturnRequirementsController.submitAgreementsExceptions,
     options: {
       auth: {
         access: {
@@ -136,7 +136,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/frequency-collected',
-    handler: ReturnRequirementsController.saveFrequencyCollected,
+    handler: ReturnRequirementsController.submitFrequencyCollected,
     options: {
       auth: {
         access: {
@@ -162,7 +162,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/frequency-reported',
-    handler: ReturnRequirementsController.saveFrequencyReported,
+    handler: ReturnRequirementsController.submitFrequencyReported,
     options: {
       auth: {
         access: {
@@ -188,7 +188,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
-    handler: ReturnRequirementsController.saveNoReturnsCheckYourAnswers,
+    handler: ReturnRequirementsController.submitNoReturnsCheckYourAnswers,
     options: {
       auth: {
         access: {
@@ -214,7 +214,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/no-returns-required',
-    handler: ReturnRequirementsController.saveNoReturnsRequired,
+    handler: ReturnRequirementsController.submitNoReturnsRequired,
     options: {
       auth: {
         access: {
@@ -240,7 +240,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/points',
-    handler: ReturnRequirementsController.savePoints,
+    handler: ReturnRequirementsController.submitPoints,
     options: {
       auth: {
         access: {
@@ -266,7 +266,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/purpose',
-    handler: ReturnRequirementsController.savePurpose,
+    handler: ReturnRequirementsController.submitPurpose,
     options: {
       auth: {
         access: {
@@ -292,7 +292,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/reason',
-    handler: ReturnRequirementsController.saveReason,
+    handler: ReturnRequirementsController.submitReason,
     options: {
       auth: {
         access: {
@@ -318,7 +318,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/returns-cycle',
-    handler: ReturnRequirementsController.saveReturnsCycle,
+    handler: ReturnRequirementsController.submitReturnsCycle,
     options: {
       auth: {
         access: {
@@ -344,7 +344,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/setup',
-    handler: ReturnRequirementsController.saveSetup,
+    handler: ReturnRequirementsController.submitSetup,
     options: {
       auth: {
         access: {
@@ -370,7 +370,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/site-description',
-    handler: ReturnRequirementsController.saveSiteDescription,
+    handler: ReturnRequirementsController.submitSiteDescription,
     options: {
       auth: {
         access: {
@@ -395,7 +395,7 @@ const routes = [
   }, {
     method: 'POST',
     path: '/return-requirements/{sessionId}/start-date',
-    handler: ReturnRequirementsController.saveStartDate,
+    handler: ReturnRequirementsController.submitStartDate,
     options: {
       auth: {
         access: {

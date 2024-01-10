@@ -182,7 +182,7 @@ async function startDate (request, h) {
   })
 }
 
-async function saveAbstractionPeriod (request, h) {
+async function submitAbstractionPeriod (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -193,7 +193,7 @@ async function saveAbstractionPeriod (request, h) {
   })
 }
 
-async function saveAddNote (request, h) {
+async function submitAddNote (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -203,7 +203,7 @@ async function saveAddNote (request, h) {
   return h.redirect(`/system/return-requirements/${id}/check-your-answers`)
 }
 
-async function saveAgreementsExceptions (request, h) {
+async function submitAgreementsExceptions (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -214,11 +214,11 @@ async function saveAgreementsExceptions (request, h) {
   })
 }
 
-async function saveCheckYourAnswers (request, h) {
+async function submitCheckYourAnswers (request, h) {
   return h.redirect('/system/return-requirements/approved')
 }
 
-async function saveFrequencyCollected (request, h) {
+async function submitFrequencyCollected (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -229,7 +229,7 @@ async function saveFrequencyCollected (request, h) {
   })
 }
 
-async function saveFrequencyReported (request, h) {
+async function submitFrequencyReported (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -240,11 +240,11 @@ async function saveFrequencyReported (request, h) {
   })
 }
 
-async function saveNoReturnsCheckYourAnswers (request, h) {
+async function submitNoReturnsCheckYourAnswers (request, h) {
   return h.redirect('/system/return-requirements/approved')
 }
 
-async function saveNoReturnsRequired (request, h) {
+async function submitNoReturnsRequired (request, h) {
   const { sessionId } = request.params
   const validation = NoReturnsRequiredValidator.go(request.payload)
 
@@ -256,7 +256,7 @@ async function saveNoReturnsRequired (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
-async function savePoints (request, h) {
+async function submitPoints (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -267,7 +267,7 @@ async function savePoints (request, h) {
   })
 }
 
-async function savePurpose (request, h) {
+async function submitPurpose (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -278,7 +278,7 @@ async function savePurpose (request, h) {
   })
 }
 
-async function saveReason (request, h) {
+async function submitReason (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -286,7 +286,7 @@ async function saveReason (request, h) {
   return h.redirect(`/system/return-requirements/${session.id}/setup`)
 }
 
-async function saveReturnsCycle (request, h) {
+async function submitReturnsCycle (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -297,7 +297,7 @@ async function saveReturnsCycle (request, h) {
   })
 }
 
-async function saveSetup (request, h) {
+async function submitSetup (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -305,7 +305,7 @@ async function saveSetup (request, h) {
   return h.redirect(`/system/return-requirements/${session.id}/check-your-answers`)
 }
 
-async function saveSiteDescription (request, h) {
+async function submitSiteDescription (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -316,7 +316,7 @@ async function saveSiteDescription (request, h) {
   })
 }
 
-async function saveStartDate (request, h) {
+async function submitStartDate (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -341,19 +341,19 @@ module.exports = {
   setup,
   siteDescription,
   startDate,
-  saveAbstractionPeriod,
-  saveAddNote,
-  saveAgreementsExceptions,
-  saveCheckYourAnswers,
-  saveFrequencyCollected,
-  saveFrequencyReported,
-  saveNoReturnsCheckYourAnswers,
-  saveNoReturnsRequired,
-  savePoints,
-  savePurpose,
-  saveReason,
-  saveReturnsCycle,
-  saveSetup,
-  saveSiteDescription,
-  saveStartDate
+  submitAbstractionPeriod,
+  submitAddNote,
+  submitAgreementsExceptions,
+  submitCheckYourAnswers,
+  submitFrequencyCollected,
+  submitFrequencyReported,
+  submitNoReturnsCheckYourAnswers,
+  submitNoReturnsRequired,
+  submitPoints,
+  submitPurpose,
+  submitReason,
+  submitReturnsCycle,
+  submitSetup,
+  submitSiteDescription,
+  submitStartDate
 }
