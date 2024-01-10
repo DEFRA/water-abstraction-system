@@ -81,17 +81,6 @@ async function frequencyReported (request, h) {
   })
 }
 
-async function howDoYouWant (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/how-do-you-want.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
 async function noReturnsCheckYourAnswers (request, h) {
   const { sessionId } = request.params
 
@@ -152,6 +141,17 @@ async function returnsCycle (request, h) {
   const session = await SessionModel.query().findById(sessionId)
 
   return h.view('return-requirements/returns-cycle.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function setup (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/setup.njk', {
     activeNavBar: 'search',
     ...session
   })
@@ -237,14 +237,6 @@ async function saveFrequencyReported (request, h) {
   })
 }
 
-async function saveHowDoYouWant (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.redirect(`/system/return-requirements/${session.id}/check-your-answers`)
-}
-
 async function saveNoReturnsCheckYourAnswers (request, h) {
   return h.redirect('/system/return-requirements/approved')
 }
@@ -288,7 +280,7 @@ async function saveReason (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/how-do-you-want`)
+  return h.redirect(`/system/return-requirements/${session.id}/setup`)
 }
 
 async function saveReturnsCycle (request, h) {
@@ -300,6 +292,14 @@ async function saveReturnsCycle (request, h) {
     activeNavBar: 'search',
     ...session
   })
+}
+
+async function saveSetup (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.redirect(`/system/return-requirements/${session.id}/check-your-answers`)
 }
 
 async function saveSiteDescription (request, h) {
@@ -329,13 +329,13 @@ module.exports = {
   checkYourAnswers,
   frequencyCollected,
   frequencyReported,
-  howDoYouWant,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
   points,
   purpose,
   reason,
   returnsCycle,
+  setup,
   siteDescription,
   startDate,
   saveAbstractionPeriod,
@@ -344,13 +344,13 @@ module.exports = {
   saveCheckYourAnswers,
   saveFrequencyCollected,
   saveFrequencyReported,
-  saveHowDoYouWant,
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   savePoints,
   savePurpose,
   saveReason,
   saveReturnsCycle,
+  saveSetup,
   saveSiteDescription,
   saveStartDate
 }
