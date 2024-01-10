@@ -10,15 +10,15 @@ const { reasonNewRequirementsFields } = require('../../lib/static-lookups.lib.js
 function go (session, error = null) {
   const data = {
     id: session.id,
-    errorMessage: _error(session, error),
+    errorMessage: _error(error),
     licenceRef: session.data.licence.licenceRef,
-    radioItems: _radioButtons(session)
+    radioItems: _radioItems(session)
   }
 
   return data
 }
 
-function _error (session, error) {
+function _error (error) {
   if (!error) {
     return null
   }
@@ -30,7 +30,7 @@ function _error (session, error) {
   return errorMessage
 }
 
-function _radioButtons (session) {
+function _radioItems (_session) {
   const radioItems = [
     {
       value: reasonNewRequirementsFields[0],
