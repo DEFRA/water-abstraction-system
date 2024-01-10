@@ -23,6 +23,14 @@ class AddressModel extends BaseModel {
           from: 'addresses.id',
           to: 'billingAccountAddresses.addressId'
         }
+      },
+      licenceDocumentRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-document-role.model',
+        join: {
+          from: 'addresses.id',
+          to: 'licenceDocumentRoles.addressId'
+        }
       }
     }
   }
