@@ -186,7 +186,7 @@ const routes = [
   }, {
     method: 'GET',
     path: '/return-requirements/{sessionId}/frequency-collected',
-    handler: ReturnRequirementsController.returnsFrequencyCollected,
+    handler: ReturnRequirementsController.frequencyCollected,
     options: {
       auth: {
         access: {
@@ -194,6 +194,18 @@ const routes = [
         }
       },
       description: 'Returns Select how often readings or volumes are collected page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/frequency-collected',
+    handler: ReturnRequirementsController.saveFrequencyCollected,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save frequency collected'
     }
   }, {
     method: 'GET',

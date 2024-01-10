@@ -145,7 +145,18 @@ async function saveNote (request, h) {
   return h.redirect(`/system/return-requirements/${id}/check-your-answers`)
 }
 
-async function returnsFrequencyCollected (request, h) {
+async function frequencyCollected (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency-collected.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveFrequencyCollected (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -243,7 +254,8 @@ module.exports = {
   checkYourAnswers,
   returnsSettings,
   howDoYouWant,
-  returnsFrequencyCollected,
+  frequencyCollected,
+  saveFrequencyCollected,
   saveDescription,
   returnsFrequency,
   saveNoReturnsCheckYourAnswers,
