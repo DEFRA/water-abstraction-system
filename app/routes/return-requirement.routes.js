@@ -30,7 +30,7 @@ const routes = [
   }, {
     method: 'GET',
     path: '/return-requirements/{sessionId}/reason',
-    handler: ReturnRequirementsController.reasonNewRequirements,
+    handler: ReturnRequirementsController.reason,
     options: {
       auth: {
         access: {
@@ -42,14 +42,14 @@ const routes = [
   }, {
     method: 'POST',
     path: '/return-requirements/{sessionId}/reason',
-    handler: ReturnRequirementsController.saveReasonNewRequirements,
+    handler: ReturnRequirementsController.saveReason,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Reason page'
+      description: 'Save reason for the return requirement'
     }
   }, {
     method: 'GET',

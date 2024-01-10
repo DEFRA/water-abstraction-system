@@ -28,7 +28,7 @@ async function saveStartDate (request, h) {
   return h.redirect(`/system/return-requirements/${session.id}/reason`)
 }
 
-async function reasonNewRequirements (request, h) {
+async function reason (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -39,7 +39,7 @@ async function reasonNewRequirements (request, h) {
   })
 }
 
-async function saveReasonNewRequirements (request, h) {
+async function saveReason (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -271,7 +271,7 @@ module.exports = {
   addANote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
-  reasonNewRequirements,
+  reason,
   requirementsApproved,
   checkYourAnswers,
   returnsSettings,
@@ -286,7 +286,7 @@ module.exports = {
   saveNoReturnsRequired,
   saveNote,
   selectPurpose,
-  saveReasonNewRequirements,
+  saveReason,
   saveCheckYourAnswers,
   saveReturnsCycle,
   saveHowDoYouWant,
