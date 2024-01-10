@@ -10,7 +10,6 @@ const { reasonNewRequirementsFields } = require('../../lib/static-lookups.lib.js
 function go (session, error = null) {
   const data = {
     id: session.id,
-    activeNavBar: 'search',
     errorMessage: _error(session, error),
     licenceRef: session.data.licence.licenceRef,
     radioItems: _radioButtons(session)
