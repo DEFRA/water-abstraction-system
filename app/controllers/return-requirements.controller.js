@@ -43,8 +43,11 @@ async function agreementsExceptions (request, h) {
 }
 
 async function approved (request, h) {
+  const { licenceId } = request.params
+
   return h.view('return-requirements/approved.njk', {
-    activeNavBar: 'search'
+    activeNavBar: 'search',
+    licenceId
   })
 }
 

@@ -83,7 +83,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/approved',
+    path: '/return-requirements/{licenceId}/approved',
     handler: ReturnRequirementsController.approved,
     options: {
       auth: {

@@ -81,19 +81,10 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/approved', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/approved',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
+  describe('GET /return-requirements/{licenceId}/approved', () => {
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('approved'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Returns requirements approved')
