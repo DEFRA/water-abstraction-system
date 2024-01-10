@@ -16,6 +16,7 @@ async function abstractionPeriod (request, h) {
 
   return h.view('return-requirements/abstraction-period.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Enter the abstraction period for the return requirement',
     ...session
   })
 }
@@ -27,6 +28,7 @@ async function addNote (request, h) {
 
   return h.view('return-requirements/add-note.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Add a note',
     ...session
   })
 }
@@ -38,6 +40,7 @@ async function agreementsExceptions (request, h) {
 
   return h.view('return-requirements/agreements-exceptions.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select agreements and exceptions for the return requirement',
     ...session
   })
 }
@@ -47,6 +50,7 @@ async function approved (request, h) {
 
   return h.view('return-requirements/approved.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Returns requirements approved',
     licenceId
   })
 }
@@ -69,6 +73,7 @@ async function frequencyCollected (request, h) {
 
   return h.view('return-requirements/frequency-collected.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select how often readings or volumes are collected',
     ...session
   })
 }
@@ -80,6 +85,7 @@ async function frequencyReported (request, h) {
 
   return h.view('return-requirements/frequency-reported.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select how often collected readings or volumes are reported',
     ...session
   })
 }
@@ -112,6 +118,7 @@ async function points (request, h) {
 
   return h.view('return-requirements/points.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the points for the return requirement',
     ...session
   })
 }
@@ -123,6 +130,7 @@ async function purpose (request, h) {
 
   return h.view('return-requirements/purpose.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the purpose for the return requirement',
     ...session
   })
 }
@@ -134,6 +142,7 @@ async function reason (request, h) {
 
   return h.view('return-requirements/reason.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the reason for the return requirement',
     ...session
   })
 }
@@ -145,6 +154,7 @@ async function returnsCycle (request, h) {
 
   return h.view('return-requirements/returns-cycle.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the returns cycle for the return requirement',
     ...session
   })
 }
@@ -156,6 +166,7 @@ async function setup (request, h) {
 
   return h.view('return-requirements/setup.njk', {
     activeNavBar: 'search',
+    pageTitle: 'How do you want to set up the return requirement?',
     ...session
   })
 }
@@ -167,6 +178,7 @@ async function siteDescription (request, h) {
 
   return h.view('return-requirements/site-description.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Enter a site description for the return requirement',
     ...session
   })
 }
@@ -178,6 +190,7 @@ async function startDate (request, h) {
 
   return h.view('return-requirements/start-date.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the start date for the return requirement',
     ...session
   })
 }
