@@ -60,7 +60,7 @@ describe('Licences controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/select-return-start-date`)
+        expect(response.headers.location).to.equal(`/system/return-requirements/${session.id}/start-date`)
       })
     })
 

@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set title = "Check your answers" %}
+
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
@@ -13,4 +14,5 @@
       {{ govukButton({ text: "Approve returns requirements" }) }}
     </div>
   </form>
+
 {% endblock %}

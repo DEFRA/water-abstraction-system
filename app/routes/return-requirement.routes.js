@@ -5,104 +5,86 @@ const ReturnRequirementsController = require('../controllers/return-requirements
 const routes = [
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/select-return-start-date',
-    handler: ReturnRequirementsController.selectReturnStartDate,
+    path: '/return-requirements/{sessionId}/abstraction-period',
+    handler: ReturnRequirementsController.abstractionPeriod,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Select the start date of the return'
+      description: 'Enter the abstraction period for the return requirement'
     }
-  }, {
+  },
+  {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/select-return-start-date',
-    handler: ReturnRequirementsController.saveReturnStartDate,
+    path: '/return-requirements/{sessionId}/abstraction-period',
+    handler: ReturnRequirementsController.submitAbstractionPeriod,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Select the start date of the return'
+      description: 'Submit the abstraction period for the return requirement'
     }
-  }, {
+  },
+  {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/reason',
-    handler: ReturnRequirementsController.reasonNewRequirements,
+    path: '/return-requirements/{sessionId}/add-note',
+    handler: ReturnRequirementsController.addNote,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Reason page'
+      description: 'Add a note'
     }
-  }, {
+  },
+  {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/reason',
-    handler: ReturnRequirementsController.saveReasonNewRequirements,
+    path: '/return-requirements/{sessionId}/add-note',
+    handler: ReturnRequirementsController.submitAddNote,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Reason page'
+      description: 'Submit a note'
     }
-  }, {
+  },
+  {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/returns-how-do-you-want',
-    handler: ReturnRequirementsController.returnsHowDoYouWant,
+    path: '/return-requirements/{sessionId}/agreements-exceptions',
+    handler: ReturnRequirementsController.agreementsExceptions,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Returns required - create How do you want to set up the requirements'
+      description: 'Select agreements and exceptions for the return requirement'
     }
-  }, {
+  },
+  {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/returns-how-do-you-want',
-    handler: ReturnRequirementsController.saveReturnsHowDoYouWant,
+    path: '/return-requirements/{sessionId}/agreements-exceptions',
+    handler: ReturnRequirementsController.submitAgreementsExceptions,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Returns required - create How do you want to set up the requirements'
+      description: 'Submit agreements and exceptions for the return requirement'
     }
-  }, {
+  },
+  {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/returns-check-your-answers',
-    handler: ReturnRequirementsController.returnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns check your answers page'
-    }
-  }, {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/returns-check-your-answers',
-    handler: ReturnRequirementsController.saveReturnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns check your answers page'
-    }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/requirements-approved',
-    handler: ReturnRequirementsController.requirementsApproved,
+    path: '/return-requirements/{licenceId}/approved',
+    handler: ReturnRequirementsController.approved,
     options: {
       auth: {
         access: {
@@ -111,7 +93,112 @@ const routes = [
       },
       description: 'Returns requirements approved'
     }
-  }, {
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/check-your-answers',
+    handler: ReturnRequirementsController.checkYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Check your answers'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/check-your-answers',
+    handler: ReturnRequirementsController.checkYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit check your answers'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/frequency-collected',
+    handler: ReturnRequirementsController.frequencyCollected,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select how often readings or volumes are collected'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/frequency-collected',
+    handler: ReturnRequirementsController.submitFrequencyCollected,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit how often readings or volumes are collected'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/frequency-reported',
+    handler: ReturnRequirementsController.frequencyReported,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select how often collected readings or volumes are reported'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/frequency-reported',
+    handler: ReturnRequirementsController.submitFrequencyReported,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit how often collected readings or volumes are reported'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
+    handler: ReturnRequirementsController.noReturnsCheckYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Check your answers'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
+    handler: ReturnRequirementsController.submitNoReturnsCheckYourAnswers,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit check your answers'
+    }
+  },
+  {
     method: 'GET',
     path: '/return-requirements/{sessionId}/no-returns-required',
     handler: ReturnRequirementsController.noReturnsRequired,
@@ -121,163 +208,201 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Show no returns required page'
+      description: 'Why are no returns required?'
     }
-  }, {
+  },
+  {
     method: 'POST',
     path: '/return-requirements/{sessionId}/no-returns-required',
-    handler: ReturnRequirementsController.saveNoReturnsRequired,
+    handler: ReturnRequirementsController.submitNoReturnsRequired,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Save no returns required option'
+      description: 'Submit why are no returns required?'
     }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/no-return-check-your-answers',
-    handler: ReturnRequirementsController.noReturnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'No return check your answers page'
-    }
-  }, {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/no-return-check-your-answers',
-    handler: ReturnRequirementsController.saveNoReturnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'No return check your answers page'
-    }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/add-a-note',
-    handler: ReturnRequirementsController.addANote,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns add a note page'
-    }
-  }, {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/add-a-note',
-    handler: ReturnRequirementsController.saveNote,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Save note'
-    }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/frequency-collected',
-    handler: ReturnRequirementsController.returnsFrequencyCollected,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns Select how often readings or volumes are collected page'
-    }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/description',
-    handler: ReturnRequirementsController.saveDescription,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns add a desciption page'
-    }
-  }, {
+  },
+  {
     method: 'GET',
     path: '/return-requirements/{sessionId}/points',
-    handler: ReturnRequirementsController.selectPoints,
+    handler: ReturnRequirementsController.points,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Returns select points page'
+      description: 'Select the points for the return requirement'
     }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/returns-cycle',
-    handler: ReturnRequirementsController.saveReturnsCycle,
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/points',
+    handler: ReturnRequirementsController.submitPoints,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Returns Select the returns cycle page'
+      description: 'Submit the points for the return requirement'
     }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/frequency',
-    handler: ReturnRequirementsController.returnsFrequency,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Returns Select how often collected readings or volumes are reported page'
-    }
-  }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/settings',
-    handler: ReturnRequirementsController.returnsSettings,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Select how often collected readings or volumes are reported'
-    }
-  }, {
+  },
+  {
     method: 'GET',
     path: '/return-requirements/{sessionId}/purpose',
-    handler: ReturnRequirementsController.selectPurpose,
+    handler: ReturnRequirementsController.purpose,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Select purpose for returns requirement page'
+      description: 'Select the purpose for the return requirement'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/purpose',
+    handler: ReturnRequirementsController.submitPurpose,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the purpose for the return requirement'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/reason',
+    handler: ReturnRequirementsController.reason,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the reason for the return requirement'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/reason',
+    handler: ReturnRequirementsController.submitReason,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the reason for the return requirement'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/returns-cycle',
+    handler: ReturnRequirementsController.returnsCycle,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the returns cycle for the return requirement'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/returns-cycle',
+    handler: ReturnRequirementsController.submitReturnsCycle,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the returns cycle for the return requirement'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/setup',
+    handler: ReturnRequirementsController.setup,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'How do you want to set up the return requirement?'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/setup',
+    handler: ReturnRequirementsController.submitSetup,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit how do you want to set up the return requirement?'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/site-description',
+    handler: ReturnRequirementsController.siteDescription,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Enter a site description for the return requirement'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/site-description',
+    handler: ReturnRequirementsController.submitSiteDescription,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit a site description for the return requirement'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/start-date',
+    handler: ReturnRequirementsController.startDate,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the start date for the return requirement'
     }
   }, {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/abstraction-period',
-    handler: ReturnRequirementsController.abstractionPeriod,
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/start-date',
+    handler: ReturnRequirementsController.submitStartDate,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Returns abstraction period page'
+      description: 'Submit the start date for the return requirement'
     }
   }
 ]

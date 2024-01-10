@@ -9,81 +9,89 @@ const NoReturnsRequiredService = require('../services/return-requirements/no-ret
 const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../models/session.model.js')
 
-async function selectReturnStartDate (request, h) {
+async function abstractionPeriod (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/select-return-start-date.njk', {
+  return h.view('return-requirements/abstraction-period.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveReturnStartDate (request, h) {
+async function addNote (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/reason`)
-}
-
-async function reasonNewRequirements (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/reason.njk', {
+  return h.view('return-requirements/add-note.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveReasonNewRequirements (request, h) {
+async function agreementsExceptions (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/returns-how-do-you-want`)
-}
-
-async function returnsHowDoYouWant (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/returns-how-do-you-want.njk', {
+  return h.view('return-requirements/agreements-exceptions.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveReturnsHowDoYouWant (request, h) {
-  const { sessionId } = request.params
+async function approved (request, h) {
+  const { licenceId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.redirect(`/system/return-requirements/${session.id}/returns-check-your-answers`)
+  return h.view('return-requirements/approved.njk', {
+    activeNavBar: 'search',
+    licenceId
+  })
 }
 
-async function returnsCheckYourAnswers (request, h) {
+async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/returns-check-your-answers.njk', {
+  return h.view('return-requirements/check-your-answers.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveReturnsCheckYourAnswers (request, h) {
-  return h.redirect('/system/return-requirements/requirements-approved')
+async function frequencyCollected (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency-collected.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
 }
 
-async function requirementsApproved (request, h) {
-  return h.view('return-requirements/requirements-approved.njk', {
-    activeNavBar: 'search'
+async function frequencyReported (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/frequency-reported.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function noReturnsCheckYourAnswers (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/no-returns-check-your-answers.njk', {
+    activeNavBar: 'search',
+    ...session
   })
 }
 
@@ -97,77 +105,7 @@ async function noReturnsRequired (request, h) {
   })
 }
 
-async function saveNoReturnsRequired (request, h) {
-  const { sessionId } = request.params
-  const validation = NoReturnsRequiredValidator.go(request.payload)
-
-  if (validation.error) {
-    const pageData = await NoReturnsRequiredService.go(sessionId, validation.error)
-    return h.view('return-requirements/no-returns-required.njk', pageData)
-  }
-
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
-}
-
-async function noReturnsCheckYourAnswers (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/no-return-check-your-answers.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function saveNoReturnsCheckYourAnswers (request, h) {
-  return h.redirect('/system/return-requirements/requirements-approved')
-}
-
-async function addANote (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/add-a-note.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function saveNote (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  const { id } = session
-
-  return h.redirect(`/system/return-requirements/${id}/returns-check-your-answers`)
-}
-
-async function returnsFrequencyCollected (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/frequency-collected.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function saveDescription (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/description.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function selectPoints (request, h) {
+async function points (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -178,40 +116,7 @@ async function selectPoints (request, h) {
   })
 }
 
-async function saveReturnsCycle (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/returns-cycle.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function returnsFrequency (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/frequency.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function returnsSettings (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/settings.njk', {
-    activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function selectPurpose (request, h) {
+async function purpose (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -222,39 +127,187 @@ async function selectPurpose (request, h) {
   })
 }
 
-async function abstractionPeriod (request, h) {
+async function reason (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/abstraction-period.njk', {
+  return h.view('return-requirements/reason.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
+async function returnsCycle (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/returns-cycle.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function setup (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/setup.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function siteDescription (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/site-description.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function startDate (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/start-date.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function submitAbstractionPeriod (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle`)
+}
+
+async function submitAddNote (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+}
+
+async function submitAgreementsExceptions (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+}
+
+async function submitCheckYourAnswers (request, h) {
+  const { licenceId } = request.params
+
+  return h.redirect(`/system/return-requirements/${licenceId}/approved`)
+}
+
+async function submitFrequencyCollected (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported`)
+}
+
+async function submitFrequencyReported (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
+}
+
+async function submitNoReturnsCheckYourAnswers (request, h) {
+  const { licenceId } = request.params
+
+  return h.redirect(`/system/return-requirements/${licenceId}/approved`)
+}
+
+async function submitNoReturnsRequired (request, h) {
+  const { sessionId } = request.params
+  const validation = NoReturnsRequiredValidator.go(request.payload)
+
+  if (validation.error) {
+    const pageData = await NoReturnsRequiredService.go(sessionId, validation.error)
+    return h.view('return-requirements/no-returns-required.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-requirements/${sessionId}/no-returns-check-your-answers`)
+}
+
+async function submitPoints (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period`)
+}
+
+async function submitPurpose (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/points`)
+}
+
+async function submitReason (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/setup`)
+}
+
+async function submitReturnsCycle (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/site-description`)
+}
+
+async function submitSetup (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/purpose`)
+}
+
+async function submitSiteDescription (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/frequency-collected`)
+}
+
+async function submitStartDate (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)
+}
+
 module.exports = {
   abstractionPeriod,
-  addANote,
+  addNote,
+  agreementsExceptions,
+  approved,
+  checkYourAnswers,
+  frequencyCollected,
+  frequencyReported,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
-  reasonNewRequirements,
-  requirementsApproved,
-  returnsCheckYourAnswers,
-  returnsSettings,
-  returnsHowDoYouWant,
-  returnsFrequencyCollected,
-  saveDescription,
-  returnsFrequency,
-  saveNoReturnsCheckYourAnswers,
-  saveNoReturnsRequired,
-  saveNote,
-  selectPurpose,
-  saveReasonNewRequirements,
-  saveReturnsCheckYourAnswers,
-  saveReturnsCycle,
-  saveReturnsHowDoYouWant,
-  saveReturnStartDate,
-  selectPoints,
-  selectReturnStartDate
+  points,
+  purpose,
+  reason,
+  returnsCycle,
+  setup,
+  siteDescription,
+  startDate,
+  submitAbstractionPeriod,
+  submitAddNote,
+  submitAgreementsExceptions,
+  submitCheckYourAnswers,
+  submitFrequencyCollected,
+  submitFrequencyReported,
+  submitNoReturnsCheckYourAnswers,
+  submitNoReturnsRequired,
+  submitPoints,
+  submitPurpose,
+  submitReason,
+  submitReturnsCycle,
+  submitSetup,
+  submitSiteDescription,
+  submitStartDate
 }

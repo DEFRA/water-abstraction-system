@@ -2,14 +2,15 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set title = "Add a note" %}
+{% set title = "Select agreements and exceptions for the return requirement" %}
 {% set rootLink = "/system/return-requirements/" + id %}
+
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/returns-check-your-answers"
+      href: rootLink + "/frequency-reported"
     })
   }}
 {% endblock %}
@@ -17,12 +18,12 @@
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{title}}</h1>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ title }}</h1>
   </div>
 
   <form method="post">
     <div class="govuk-body">
-      {{ govukButton({ text: "Confirm" }) }}
+      {{ govukButton({ text: "Continue" }) }}
     </div>
   </form>
 {% endblock %}
