@@ -206,7 +206,11 @@ async function submitAgreementsExceptions (request, h) {
 }
 
 async function submitCheckYourAnswers (request, h) {
-  const { licenceId } = request.params
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  const { id: licenceId } = session.data.licence
 
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
 }
