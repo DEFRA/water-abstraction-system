@@ -110,7 +110,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/check-your-answers',
-    handler: ReturnRequirementsController.checkYourAnswers,
+    handler: ReturnRequirementsController.submitCheckYourAnswers,
     options: {
       auth: {
         access: {
