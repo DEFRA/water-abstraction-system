@@ -5,8 +5,8 @@ const ReturnRequirementsController = require('../controllers/return-requirements
 const routes = [
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/select-return-start-date',
-    handler: ReturnRequirementsController.selectReturnStartDate,
+    path: '/return-requirements/{sessionId}/start-date',
+    handler: ReturnRequirementsController.startDate,
     options: {
       auth: {
         access: {
@@ -17,15 +17,15 @@ const routes = [
     }
   }, {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/select-return-start-date',
-    handler: ReturnRequirementsController.saveReturnStartDate,
+    path: '/return-requirements/{sessionId}/start-date',
+    handler: ReturnRequirementsController.saveStartDate,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Select the start date of the return'
+      description: 'Save the start date of the return'
     }
   }, {
     method: 'GET',

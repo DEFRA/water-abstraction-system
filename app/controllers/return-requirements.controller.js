@@ -9,18 +9,18 @@ const NoReturnsRequiredService = require('../services/return-requirements/no-ret
 const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../models/session.model.js')
 
-async function selectReturnStartDate (request, h) {
+async function startDate (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/select-return-start-date.njk', {
+  return h.view('return-requirements/start-date.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveReturnStartDate (request, h) {
+async function saveStartDate (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -290,7 +290,7 @@ module.exports = {
   saveCheckYourAnswers,
   saveReturnsCycle,
   saveHowDoYouWant,
-  saveReturnStartDate,
+  saveStartDate,
   selectPoints,
-  selectReturnStartDate
+  startDate
 }

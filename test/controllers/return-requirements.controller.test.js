@@ -33,10 +33,10 @@ describe('Return requirements controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /return-requirements/{sessionId}/select-return-start-date', () => {
+  describe('GET /return-requirements/{sessionId}/start-date', () => {
     const options = {
       method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/select-return-start-date',
+      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/start-date',
       auth: {
         strategy: 'session',
         credentials: { scope: ['billing'] }
