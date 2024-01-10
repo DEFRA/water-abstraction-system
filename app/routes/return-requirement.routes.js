@@ -258,7 +258,7 @@ const routes = [
   }, {
     method: 'GET',
     path: '/return-requirements/{sessionId}/returns-cycle',
-    handler: ReturnRequirementsController.saveReturnsCycle,
+    handler: ReturnRequirementsController.returnsCycle,
     options: {
       auth: {
         access: {
@@ -266,6 +266,18 @@ const routes = [
         }
       },
       description: 'Returns Select the returns cycle page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/returns-cycle',
+    handler: ReturnRequirementsController.saveReturnsCycle,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save the returns cycle'
     }
   }, {
     method: 'GET',
