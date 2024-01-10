@@ -13,7 +13,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns abstraction period page'
+      description: 'Enter the abstraction period for the return requirement'
     }
   },
   {
@@ -26,7 +26,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save abstraction period'
+      description: 'Submit the abstraction period for the return requirement'
     }
   },
   {
@@ -39,7 +39,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns add a note page'
+      description: 'Add a note'
     }
   },
   {
@@ -52,7 +52,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save note'
+      description: 'Submit a note'
     }
   },
   {
@@ -65,7 +65,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select agreements and exceptions'
+      description: 'Select agreements and exceptions for the return requirement'
     }
   },
   {
@@ -78,7 +78,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save agreements and exceptions'
+      description: 'Submit agreements and exceptions for the return requirement'
     }
   },
   {
@@ -104,7 +104,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns check your answers page'
+      description: 'Check your answers'
     }
   },
   {
@@ -117,7 +117,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns check your answers page'
+      description: 'Submit check your answers'
     }
   },
   {
@@ -130,7 +130,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns Select how often readings or volumes are collected page'
+      description: 'Select how often readings or volumes are collected'
     }
   },
   {
@@ -143,7 +143,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save frequency collected'
+      description: 'Submit how often readings or volumes are collected'
     }
   },
   {
@@ -156,7 +156,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns Select how often collected readings or volumes are reported page'
+      description: 'Select how often collected readings or volumes are reported'
     }
   },
   {
@@ -169,7 +169,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save frequency reported'
+      description: 'Submit how often collected readings or volumes are reported'
     }
   },
   {
@@ -182,7 +182,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'No return check your answers page'
+      description: 'Check your answers'
     }
   },
   {
@@ -195,7 +195,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'No return check your answers page'
+      description: 'Submit check your answers'
     }
   },
   {
@@ -208,7 +208,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Show no returns required page'
+      description: 'Why are no returns required?'
     }
   },
   {
@@ -221,7 +221,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save no returns required option'
+      description: 'Submit why are no returns required?'
     }
   },
   {
@@ -234,7 +234,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns select points page'
+      description: 'Select the points for the return requirement'
     }
   },
   {
@@ -247,7 +247,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save points'
+      description: 'Submit the points for the return requirement'
     }
   },
   {
@@ -260,7 +260,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select purpose for returns requirement page'
+      description: 'Select the purpose for the return requirement'
     }
   },
   {
@@ -273,7 +273,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save purpose for returns requirement'
+      description: 'Submit the purpose for the return requirement'
     }
   },
   {
@@ -286,7 +286,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Reason page'
+      description: 'Select the reason for the return requirement'
     }
   },
   {
@@ -299,7 +299,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save reason for the return requirement'
+      description: 'Submit the reason for the return requirement'
     }
   },
   {
@@ -312,7 +312,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns Select the returns cycle page'
+      description: 'Select the returns cycle for the return requirement'
     }
   },
   {
@@ -325,7 +325,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save the returns cycle'
+      description: 'Submit the returns cycle for the return requirement'
     }
   },
   {
@@ -338,7 +338,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns required - create How do you want to set up the requirements'
+      description: 'How do you want to set up the return requirement?'
     }
   },
   {
@@ -351,7 +351,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns required - create How do you want to set up the requirements'
+      description: 'Submit how do you want to set up the return requirement?'
     }
   },
   {
@@ -364,7 +364,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns add a site description page'
+      description: 'Enter a site description for the return requirement'
     }
   },
   {
@@ -377,7 +377,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save site description'
+      description: 'Submit a site description for the return requirement'
     }
   },
   {
@@ -390,7 +390,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the start date of the return'
+      description: 'Select the start date for the return requirement'
     }
   }, {
     method: 'POST',
@@ -402,7 +402,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Save the start date of the return'
+      description: 'Submit the start date for the return requirement'
     }
   }
 ]
