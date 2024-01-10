@@ -363,6 +363,18 @@ const routes = [
       },
       description: 'Returns abstraction period page'
     }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/abstraction-period',
+    handler: ReturnRequirementsController.saveAbstractionPeriod,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save abstraction period'
+    }
   }
 ]
 

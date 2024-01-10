@@ -310,8 +310,20 @@ async function abstractionPeriod (request, h) {
   })
 }
 
+async function saveAbstractionPeriod (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/abstraction-period.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
 module.exports = {
   abstractionPeriod,
+  saveAbstractionPeriod,
   addNote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
