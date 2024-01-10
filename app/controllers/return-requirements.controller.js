@@ -277,7 +277,18 @@ async function saveAgreementsExceptions (request, h) {
   })
 }
 
-async function selectPurpose (request, h) {
+async function purpose (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/purpose.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function savePurpose (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -319,7 +330,8 @@ module.exports = {
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
   saveAddNote,
-  selectPurpose,
+  purpose,
+  savePurpose,
   saveReason,
   saveCheckYourAnswers,
   returnsCycle,

@@ -330,7 +330,7 @@ const routes = [
   }, {
     method: 'GET',
     path: '/return-requirements/{sessionId}/purpose',
-    handler: ReturnRequirementsController.selectPurpose,
+    handler: ReturnRequirementsController.purpose,
     options: {
       auth: {
         access: {
@@ -338,6 +338,18 @@ const routes = [
         }
       },
       description: 'Select purpose for returns requirement page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/purpose',
+    handler: ReturnRequirementsController.savePurpose,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save purpose for returns requirement'
     }
   }, {
     method: 'GET',
