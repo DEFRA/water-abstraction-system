@@ -27,10 +27,17 @@ const sources = [
   'wrls'
 ]
 
+const reasonNewRequirementsFields = [
+  'abstraction_below_100_cubic_metres_per_day',
+  'returns_exception',
+  'transfer_licence'
+]
+
 module.exports = {
   billRunTypes,
   companyTypes,
   contactTypes,
   organisationTypes,
+  reasonNewRequirementsFields,
   sources
 }
