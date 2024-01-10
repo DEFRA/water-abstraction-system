@@ -177,10 +177,10 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/add-a-note', () => {
+  describe('GET /return-requirements/{sessionId}/add-note', () => {
     const options = {
       method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/add-a-note',
+      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/add-note',
       auth: {
         strategy: 'session',
         credentials: { scope: ['billing'] }

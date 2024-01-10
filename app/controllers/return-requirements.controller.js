@@ -124,18 +124,18 @@ async function saveNoReturnsCheckYourAnswers (request, h) {
   return h.redirect('/system/return-requirements/requirements-approved')
 }
 
-async function addANote (request, h) {
+async function addNote (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/add-a-note.njk', {
+  return h.view('return-requirements/add-note.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveNote (request, h) {
+async function saveAddNote (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -268,7 +268,7 @@ async function abstractionPeriod (request, h) {
 
 module.exports = {
   abstractionPeriod,
-  addANote,
+  addNote,
   noReturnsCheckYourAnswers,
   noReturnsRequired,
   reason,
@@ -284,7 +284,7 @@ module.exports = {
   saveFrequencyReported,
   saveNoReturnsCheckYourAnswers,
   saveNoReturnsRequired,
-  saveNote,
+  saveAddNote,
   selectPurpose,
   saveReason,
   saveCheckYourAnswers,

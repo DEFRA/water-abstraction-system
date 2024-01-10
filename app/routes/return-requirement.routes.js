@@ -161,8 +161,8 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/add-a-note',
-    handler: ReturnRequirementsController.addANote,
+    path: '/return-requirements/{sessionId}/add-note',
+    handler: ReturnRequirementsController.addNote,
     options: {
       auth: {
         access: {
@@ -173,8 +173,8 @@ const routes = [
     }
   }, {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/add-a-note',
-    handler: ReturnRequirementsController.saveNote,
+    path: '/return-requirements/{sessionId}/add-note',
+    handler: ReturnRequirementsController.saveAddNote,
     options: {
       auth: {
         access: {
