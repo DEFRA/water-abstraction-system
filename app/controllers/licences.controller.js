@@ -15,6 +15,15 @@ async function noReturnsRequired (request, h) {
   return h.redirect(`/system/return-requirements/${session.id}/start-date`)
 }
 
+async function returnsRequired (request, h) {
+  const { id } = request.params
+
+  const session = await InitiateReturnRequirementSessionService.go(id)
+
+  return h.redirect(`/system/return-requirements/${session.id}/start-date`)
+}
+
 module.exports = {
-  noReturnsRequired
+  noReturnsRequired,
+  returnsRequired
 }
