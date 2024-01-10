@@ -36,28 +36,28 @@ function _calculateAndLogTime (startTime) {
 async function _process (licences, billingPeriods, billRun) {
   for (const licence of licences) {
     await PrepareReturnLogsService.go(licence, billingPeriods[0])
-    PrepareChargeVersionService.go(licence, billingPeriods[0])
+
     const { chargeVersions, returnLogs } = licence
+    chargeVersions.forEach((chargeVersion) => {
+      PrepareChargeVersionService.go(chargeVersion, billingPeriods[0])
 
-    for (const chargeVersion of chargeVersions) {
       const { chargeReferences } = chargeVersion
-
-      for (const chargeReference of chargeReferences) {
+      chargeReferences.forEach((chargeReference) => {
         chargeReference.allocatedQuantity = 0
 
         const { chargeElements } = chargeReference
 
-        for (const chargeElement of chargeElements) {
+        chargeElements.forEach((chargeElement) => {
           const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
           if (matchingReturns.length > 0) {
             AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion, chargeReference)
           }
+        })
+      })
+    })
 
-          await PersistAllocatedLicenceToResultsService.go(billRun.billingBatchId, licence)
-        }
-      }
-    }
+    await PersistAllocatedLicenceToResultsService.go(billRun.billingBatchId, licence)
   }
 }
 

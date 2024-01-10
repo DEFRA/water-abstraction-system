@@ -12,8 +12,17 @@ const DetermineChargePeriodService = require('../determine-charge-period.service
  * @param {*} licence
  * @param {*} billingPeriod
  */
-function go (licence, billingPeriod) {
-  _prepareChargeVersions(licence, billingPeriod)
+function go (chargeVersion, billingPeriod) {
+  const { chargeReferences } = chargeVersion
+
+  _sortChargeReferencesBySubsistenceCharge(chargeReferences)
+  chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+
+  chargeReferences.forEach((chargeReference) => {
+    const { chargeElements } = chargeReference
+
+    _prepareChargeElementsForMatching(chargeElements, chargeVersion.chargePeriod)
+  })
 }
 
 function _prepareChargeElementsForMatching (chargeElements, chargePeriod) {
@@ -36,23 +45,6 @@ function _prepareChargeElementsForMatching (chargeElements, chargePeriod) {
     chargeElement.returnLogs = []
     chargeElement.allocatedQuantity = 0
     chargeElement.abstractionPeriods = abstractionPeriods
-  })
-}
-
-function _prepareChargeVersions (licence, billingPeriod) {
-  const { chargeVersions } = licence
-
-  chargeVersions.forEach((chargeVersion) => {
-    const { chargeReferences } = chargeVersion
-
-    _sortChargeReferencesBySubsistenceCharge(chargeReferences)
-    chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
-
-    chargeReferences.forEach((chargeReference) => {
-      const { chargeElements } = chargeReference
-
-      _prepareChargeElementsForMatching(chargeElements, chargeVersion.chargePeriod)
-    })
   })
 }
 

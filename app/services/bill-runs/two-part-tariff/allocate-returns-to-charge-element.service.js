@@ -23,9 +23,11 @@ function go (chargeElement, matchingReturns, chargeVersion, chargeReference) {
 }
 
 function _allocateReturns (chargeElement, matchingReturns, chargePeriod, chargeReference) {
-  let i = 0
-  matchingReturns.forEach((matchedReturn) => {
-    if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity && chargeReference.allocatedQuantity < chargeReference.volume) {
+  matchingReturns.forEach((matchedReturn, i) => {
+    if (
+      (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) &&
+      (chargeReference.allocatedQuantity < chargeReference.volume)
+    ) {
       if (matchedReturn.issues === true) {
         return
       }
@@ -62,7 +64,6 @@ function _allocateReturns (chargeElement, matchingReturns, chargePeriod, chargeR
         }
       })
     }
-    i++
   })
 }
 

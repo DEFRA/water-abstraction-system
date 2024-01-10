@@ -17,16 +17,14 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  */
 function go (chargeElement, returnLogs) {
   const matchingReturns = _matchReturns(chargeElement, returnLogs)
-  _addReturnToElement(matchingReturns, chargeElement)
+  if (matchingReturns.length > 0) {
+    _addMatchingReturnsToElement(matchingReturns, chargeElement)
+  }
 
   return matchingReturns
 }
 
-function _addReturnToElement (matchingReturns, chargeElement) {
-  if (matchingReturns.length === 0) {
-    return
-  }
-
+function _addMatchingReturnsToElement (matchingReturns, chargeElement) {
   matchingReturns.forEach((matchedReturn) => {
     const matchedReturnResult = {
       allocatedQuantity: 0,
