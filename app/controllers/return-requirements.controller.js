@@ -44,21 +44,21 @@ async function saveReasonNewRequirements (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.redirect(`/system/return-requirements/${session.id}/returns-how-do-you-want`)
+  return h.redirect(`/system/return-requirements/${session.id}/how-do-you-want`)
 }
 
-async function returnsHowDoYouWant (request, h) {
+async function howDoYouWant (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/returns-how-do-you-want.njk', {
+  return h.view('return-requirements/how-do-you-want.njk', {
     activeNavBar: 'search',
     ...session
   })
 }
 
-async function saveReturnsHowDoYouWant (request, h) {
+async function saveHowDoYouWant (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
@@ -242,7 +242,7 @@ module.exports = {
   requirementsApproved,
   returnsCheckYourAnswers,
   returnsSettings,
-  returnsHowDoYouWant,
+  howDoYouWant,
   returnsFrequencyCollected,
   saveDescription,
   returnsFrequency,
@@ -253,7 +253,7 @@ module.exports = {
   saveReasonNewRequirements,
   saveReturnsCheckYourAnswers,
   saveReturnsCycle,
-  saveReturnsHowDoYouWant,
+  saveHowDoYouWant,
   saveReturnStartDate,
   selectPoints,
   selectReturnStartDate

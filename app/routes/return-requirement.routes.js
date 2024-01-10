@@ -53,8 +53,8 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/returns-how-do-you-want',
-    handler: ReturnRequirementsController.returnsHowDoYouWant,
+    path: '/return-requirements/{sessionId}/how-do-you-want',
+    handler: ReturnRequirementsController.howDoYouWant,
     options: {
       auth: {
         access: {
@@ -65,8 +65,8 @@ const routes = [
     }
   }, {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/returns-how-do-you-want',
-    handler: ReturnRequirementsController.saveReturnsHowDoYouWant,
+    path: '/return-requirements/{sessionId}/how-do-you-want',
+    handler: ReturnRequirementsController.saveHowDoYouWant,
     options: {
       auth: {
         access: {
