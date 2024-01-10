@@ -42,6 +42,12 @@ async function agreementsExceptions (request, h) {
   })
 }
 
+async function approved (request, h) {
+  return h.view('return-requirements/approved.njk', {
+    activeNavBar: 'search'
+  })
+}
+
 async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
 
@@ -140,12 +146,6 @@ async function reason (request, h) {
   })
 }
 
-async function requirementsApproved (request, h) {
-  return h.view('return-requirements/requirements-approved.njk', {
-    activeNavBar: 'search'
-  })
-}
-
 async function returnsCycle (request, h) {
   const { sessionId } = request.params
 
@@ -212,7 +212,7 @@ async function saveAgreementsExceptions (request, h) {
 }
 
 async function saveCheckYourAnswers (request, h) {
-  return h.redirect('/system/return-requirements/requirements-approved')
+  return h.redirect('/system/return-requirements/approved')
 }
 
 async function saveFrequencyCollected (request, h) {
@@ -246,7 +246,7 @@ async function saveHowDoYouWant (request, h) {
 }
 
 async function saveNoReturnsCheckYourAnswers (request, h) {
-  return h.redirect('/system/return-requirements/requirements-approved')
+  return h.redirect('/system/return-requirements/approved')
 }
 
 async function saveNoReturnsRequired (request, h) {
@@ -325,6 +325,7 @@ module.exports = {
   abstractionPeriod,
   addNote,
   agreementsExceptions,
+  approved,
   checkYourAnswers,
   frequencyCollected,
   frequencyReported,
@@ -334,7 +335,6 @@ module.exports = {
   points,
   purpose,
   reason,
-  requirementsApproved,
   returnsCycle,
   siteDescription,
   startDate,

@@ -101,8 +101,8 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/requirements-approved',
-    handler: ReturnRequirementsController.requirementsApproved,
+    path: '/return-requirements/approved',
+    handler: ReturnRequirementsController.approved,
     options: {
       auth: {
         access: {

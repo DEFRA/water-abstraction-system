@@ -117,10 +117,10 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/requirements-approved', () => {
+  describe('GET /return-requirements/approved', () => {
     const options = {
       method: 'GET',
-      url: '/return-requirements/requirements-approved',
+      url: '/return-requirements/approved',
       auth: {
         strategy: 'session',
         credentials: { scope: ['billing'] }
