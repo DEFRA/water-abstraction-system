@@ -137,10 +137,10 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/no-return-check-your-answers', () => {
+  describe('GET /return-requirements/{sessionId}/no-returns-check-your-answers', () => {
     const options = {
       method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/no-return-check-your-answers',
+      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-check-your-answers',
       auth: {
         strategy: 'session',
         credentials: { scope: ['billing'] }

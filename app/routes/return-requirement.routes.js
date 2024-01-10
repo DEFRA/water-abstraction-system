@@ -137,7 +137,7 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/no-return-check-your-answers',
+    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
     handler: ReturnRequirementsController.noReturnsCheckYourAnswers,
     options: {
       auth: {
@@ -149,7 +149,7 @@ const routes = [
     }
   }, {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/no-return-check-your-answers',
+    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
     handler: ReturnRequirementsController.saveNoReturnsCheckYourAnswers,
     options: {
       auth: {

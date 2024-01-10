@@ -114,7 +114,7 @@ async function noReturnsCheckYourAnswers (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/no-return-check-your-answers.njk', {
+  return h.view('return-requirements/no-returns-check-your-answers.njk', {
     activeNavBar: 'search',
     ...session
   })
