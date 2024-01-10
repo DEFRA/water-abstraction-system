@@ -34,18 +34,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/start-date', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/start-date',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('start-date'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the start date for the return requirement')
@@ -54,18 +45,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/reason', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/reason',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('reason'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the reason for the return requirement')
@@ -74,18 +56,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/setup', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/setup',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('setup'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('How do you want to set up the return requirement?')
@@ -94,22 +67,13 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/no-returns-required', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-required',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     beforeEach(async () => {
       Sinon.stub(NoReturnsRequiredService, 'go').resolves({ id: '8702b98f-ae51-475d-8fcc-e049af8b8d38' })
     })
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('no-returns-required'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Why are no returns required?')
@@ -138,18 +102,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/no-returns-check-your-answers', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/no-returns-check-your-answers',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('no-returns-check-your-answers'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Check your answers')
@@ -158,18 +113,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/check-your-answers', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/check-your-answers',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('check-your-answers'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Check your answers')
@@ -178,18 +124,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/add-note', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/add-note',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('add-note'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Add a note')
@@ -198,18 +135,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/frequency-collected', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/frequency-collected',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('frequency-collected'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select how often readings or volumes are collected')
@@ -218,18 +146,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/site-description', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/site-description',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('site-description'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Enter a site description for the return requirement')
@@ -238,18 +157,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/points', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/points',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('points'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the points for the return requirement')
@@ -258,18 +168,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/returns-cycle', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/returns-cycle',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('returns-cycle'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the returns cycle for the return requirement')
@@ -278,18 +179,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/frequency-reported', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/frequency-reported',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('frequency-reported'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select how often collected readings or volumes are reported')
@@ -298,18 +190,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/agreements-exceptions', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/agreements-exceptions',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('agreements-exceptions'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select agreements and exceptions for the return requirement')
@@ -318,18 +201,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/purpose', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/purpose',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('purpose'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the purpose for the return requirement')
@@ -338,18 +212,9 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/abstraction-period', () => {
-    const options = {
-      method: 'GET',
-      url: '/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/abstraction-period',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+        const response = await server.inject(_options('abstraction-period'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Enter the abstraction period for the return requirement')
@@ -357,3 +222,14 @@ describe('Return requirements controller', () => {
     })
   })
 })
+
+function _options (path) {
+  return {
+    method: 'GET',
+    url: `/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/${path}`,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['billing'] }
+    }
+  }
+}
