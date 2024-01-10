@@ -234,7 +234,7 @@ const routes = [
   }, {
     method: 'GET',
     path: '/return-requirements/{sessionId}/points',
-    handler: ReturnRequirementsController.selectPoints,
+    handler: ReturnRequirementsController.points,
     options: {
       auth: {
         access: {
@@ -242,6 +242,18 @@ const routes = [
         }
       },
       description: 'Returns select points page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/points',
+    handler: ReturnRequirementsController.savePoints,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save points'
     }
   }, {
     method: 'GET',
