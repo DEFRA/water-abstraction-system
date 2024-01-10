@@ -167,12 +167,23 @@ async function saveFrequencyCollected (request, h) {
   })
 }
 
-async function saveDescription (request, h) {
+async function siteDescription (request, h) {
   const { sessionId } = request.params
 
   const session = await SessionModel.query().findById(sessionId)
 
-  return h.view('return-requirements/description.njk', {
+  return h.view('return-requirements/site-description.njk', {
+    activeNavBar: 'search',
+    ...session
+  })
+}
+
+async function saveSiteDescription (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/site-description.njk', {
     activeNavBar: 'search',
     ...session
   })
@@ -267,7 +278,8 @@ module.exports = {
   howDoYouWant,
   frequencyCollected,
   saveFrequencyCollected,
-  saveDescription,
+  siteDescription,
+  saveSiteDescription,
   frequencyReported,
   saveFrequencyReported,
   saveNoReturnsCheckYourAnswers,

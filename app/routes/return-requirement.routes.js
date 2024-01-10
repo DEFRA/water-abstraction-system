@@ -209,15 +209,27 @@ const routes = [
     }
   }, {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/description',
-    handler: ReturnRequirementsController.saveDescription,
+    path: '/return-requirements/{sessionId}/site-description',
+    handler: ReturnRequirementsController.siteDescription,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Returns add a desciption page'
+      description: 'Returns add a site description page'
+    }
+  }, {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/site-description',
+    handler: ReturnRequirementsController.saveSiteDescription,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Save site description'
     }
   }, {
     method: 'GET',
