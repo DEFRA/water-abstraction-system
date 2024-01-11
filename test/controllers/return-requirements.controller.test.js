@@ -112,7 +112,9 @@ describe('Return requirements controller', () => {
 
   describe('GET /return-requirements/{sessionId}/no-returns-required', () => {
     beforeEach(async () => {
-      Sinon.stub(NoReturnsRequiredService, 'go').resolves({ id: '8702b98f-ae51-475d-8fcc-e049af8b8d38' })
+      Sinon.stub(NoReturnsRequiredService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Why are no returns required?'
+      })
     })
 
     describe('when the request succeeds', () => {
