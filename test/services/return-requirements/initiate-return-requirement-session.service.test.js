@@ -20,6 +20,7 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 const InitiateReturnRequirementSessionService = require('../../../app/services/return-requirements/initiate-return-requirement-session.service.js')
 
 describe('Initiate Return Requirement Session service', () => {
+  let journey
   let licence
 
   beforeEach(async () => {
@@ -77,16 +78,26 @@ describe('Initiate Return Requirement Session service', () => {
             companyId: company.id,
             startDate: new Date('2022-08-01')
           })
+
+          journey = 'returns-required'
         })
 
         it('creates a new session record containing details of the licence and licence holder (company)', async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id)
+          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
           const { data } = result
 
           expect(data.licence.id).to.equal(licence.id)
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
           expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
+        })
+
+        it('creates a new session record containing the journey passed in', async () => {
+          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+
+          const { data } = result
+
+          expect(data.journey).to.equal(journey)
         })
       })
 
@@ -102,10 +113,12 @@ describe('Initiate Return Requirement Session service', () => {
             contactId: contact.id,
             startDate: new Date('2022-08-01')
           })
+
+          journey = 'no-returns-required'
         })
 
         it('creates a new session record containing details of the licence and licence holder (contact)', async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id)
+          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
           const { data } = result
 
@@ -113,12 +126,20 @@ describe('Initiate Return Requirement Session service', () => {
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
           expect(data.licence.licenceHolder).to.equal('Luce Holder')
         })
+
+        it('creates a new session record containing the journey passed in', async () => {
+          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+
+          const { data } = result
+
+          expect(data.journey).to.equal(journey)
+        })
       })
     })
 
     describe('but the licence does not exist', () => {
       it('throws a Boom not found error', async () => {
-        const error = await expect(InitiateReturnRequirementSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945')).to.reject()
+        const error = await expect(InitiateReturnRequirementSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', 'journey')).to.reject()
 
         expect(error.isBoom).to.be.true()
         expect(error.data).to.equal({ id: 'e456e538-4d55-4552-84f7-6a7636eb1945' })
