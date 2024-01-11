@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/match-returns-to-charge-element.service.js')
 
-describe('Match Returns to Charge Element service', () => {
+describe.only('Match Returns to Charge Element service', () => {
   describe('when given a charge element', () => {
     let chargeElement
     let returnLogs
@@ -67,13 +67,11 @@ describe('Match Returns to Charge Element service', () => {
           returnLogs: [
             {
               allocatedQuantity: 0,
-              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31',
-              reviewReturnResultId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
+              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
             },
             {
               allocatedQuantity: 0,
-              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2023-10-01',
-              reviewReturnResultId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
+              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2023-10-01'
             }
           ]
         })
@@ -116,8 +114,7 @@ describe('Match Returns to Charge Element service', () => {
           returnLogs: [
             {
               allocatedQuantity: 0,
-              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31',
-              reviewReturnResultId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
+              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
             }
           ]
         })
@@ -215,8 +212,7 @@ function _setUpReturnLogs (purpose1, purpose2) {
           endDate: new Date('2022-10-31')
         }
       ],
-      matched: false,
-      reviewReturnResultId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
+      matched: false
     }
   ]
 }

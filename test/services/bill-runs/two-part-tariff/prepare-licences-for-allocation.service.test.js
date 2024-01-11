@@ -44,7 +44,6 @@ describe('Prepare Licences For Allocation Service', () => {
 
           expect(licence.returnLogs[0]).to.equal({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
-            issues: false,
             returnRequirement: '14959864',
             description: 'The Description',
             startDate: new Date('2022-04-01'),
@@ -121,57 +120,6 @@ describe('Prepare Licences For Allocation Service', () => {
           await PrepareLicencesForAllocationService.go([licence], billingPeriod)
 
           expect(licence.returnLogs[0].nilReturn).to.be.true()
-        })
-
-        it('adds an issues flag to the return', async () => {
-          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
-
-          expect(licence.returnLogs[0].issues).to.be.true()
-        })
-      })
-
-      describe('that is under query', () => {
-        beforeEach(async () => {
-          const returnLog = _testReturnLog()
-          returnLog.underQuery = true
-
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
-        })
-
-        it('adds an issues flag to the return', async () => {
-          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
-
-          expect(licence.returnLogs[0].issues).to.be.true()
-        })
-      })
-
-      describe('that do not have a status of complete', () => {
-        beforeEach(async () => {
-          const returnLog = _testReturnLog()
-          returnLog.status = 'due'
-
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
-        })
-
-        it('adds an issues flag to the return', async () => {
-          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
-
-          expect(licence.returnLogs[0].issues).to.be.true()
-        })
-      })
-
-      describe('that have no submission lines', () => {
-        beforeEach(async () => {
-          const returnLog = _testReturnLog()
-          returnLog.returnSubmissions = []
-
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
-        })
-
-        it('adds an issues flag to the return', async () => {
-          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
-
-          expect(licence.returnLogs[0].issues).to.be.true()
         })
       })
     })

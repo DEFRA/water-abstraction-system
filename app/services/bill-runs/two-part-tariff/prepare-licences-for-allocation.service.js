@@ -44,29 +44,6 @@ function _abstractionOutsidePeriod (returnAbstractionPeriods, returnLine) {
   return !periodsOverlap(returnAbstractionPeriods, [{ startDate, endDate }])
 }
 
-/**
- * Checks a return record for potential issues based on specific criteria and flags it accordingly
- */
-function _checkReturnForIssues (returnLog) {
-  if (returnLog.nilReturn) {
-    return true
-  }
-
-  if (returnLog.underQuery) {
-    return true
-  }
-
-  if (returnLog.status !== 'completed') {
-    return true
-  }
-
-  if (returnLog.returnSubmissions.length === 0 || returnLog.returnSubmissions[0].returnSubmissionLines.length === 0) {
-    return true
-  }
-
-  return false
-}
-
 function _prepareChargeVersions (licence, billingPeriod) {
   const { chargeVersions } = licence
 
@@ -141,8 +118,6 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
     returnLog.abstractionPeriods = abstractionPeriods
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
-
-    returnLog.issues = (_checkReturnForIssues(returnLog))
   })
 }
 
