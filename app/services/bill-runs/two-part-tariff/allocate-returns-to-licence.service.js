@@ -1,97 +1,33 @@
 'use strict'
 
 /**
- * Matches and allocates where applicable the abstracted volumes on the return log with the appropriate charge element
+ * Allocates where applicable the abstracted volumes on the return log with the appropriate charge element
  * @module AllocateReturnsToLicenceService
  */
 
 const { periodsOverlap } = require('../../../lib/general.lib.js')
-const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
 
 /**
- * For each licence the service attempts to match the return logs to the charge element(s). It does this by calling the
- * MatchReturnsToChargeElementService. That service matched the `elementCode` of the charge element with the return
- * logs, also checking that the abstraction periods for both the element and return log overlap.
+ * For a chargeElement with matching returns any abstracted volume recorded on the return log will be allocated to the
+ * charge element up to a maximum of the charge elements authorised volume, or the remaining authorised volume on the
+ * charge reference, whichever is lower.
  *
- * If a match is found any abstracted volume recorded on the return log will be allocated to the charge element up to a
- * maximum of the charge elements authorised volume, or the remaining authorised volume on the charge reference,
- * whichever is lower.
- *
- * @param {Object[]} licences - The licences, associated charging data, and return logs to process
+ * @param {module:ChargeElementModel} chargeElement - The charge element to match return logs against
+ * @param {module:ReturnLogModel[]} matchingReturns - logs that matched the charge element
+ * @param {module:ChargeVersionModel} chargeVersion - The charge version the element belongs to
+ * @param {module:ChargeReferenceModel} chargeReference - The charge reference the element belongs to
  */
-function go (licences) {
-  licences.forEach((licence) => {
-    const { chargeVersions, returnLogs } = licence
-
-    chargeVersions.forEach((chargeVersion) => {
-      const { chargeReferences } = chargeVersion
-
-      chargeReferences.forEach((chargeReference) => {
-        chargeReference.allocatedQuantity = 0
-
-        const { chargeElements } = chargeReference
-
-        chargeElements.forEach((chargeElement) => {
-          _matchAndAllocate(chargeElement, returnLogs, chargeVersion.chargePeriod, chargeReference)
-        })
-      })
-    })
-  })
+function go (chargeElement, matchingReturns, chargeVersion, chargeReference) {
+  _allocateReturns(chargeElement, matchingReturns, chargeVersion.chargePeriod, chargeReference)
 }
 
-function _chargeDatesOverlap (matchedLine, chargePeriod) {
-  const { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate } = chargePeriod
-  const { startDate: lineStartDate, endDate: lineEndDate } = matchedLine
-
-  if (lineStartDate < chargePeriodEndDate && lineEndDate > chargePeriodEndDate) {
-    return true
-  }
-
-  if (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate) {
-    return true
-  }
-
-  return false
-}
-
-/**
- * Matches return logs to a charge element and quantity allocation process
- *
- * This function coordinates the matching of return logs to a charge element and the subsequent allocation of
- * quantities. Initially, it invokes the MatchReturnsToChargeElementService. This service performs the matching process,
- * identifying return logs that correspond to the charge element based on their legacy ID and abstraction periods. The
- * resulting matchedReturns represent the return logs aligned with the element.
- *
- * Once these matched returns are obtained, the function proceeds to iterate through them. At each iteration, it
- * verifies the availability of allocation space on both the element and the reference. This validation is crucial to
- * avoid overallocating quantities beyond the specified limits on either.
- *
- * In the allocation loop, the function checks each return for potential issues that might hinder allocation. If the
- * return is flagged with issues—such as being a nil return, under query, incomplete, or lacking submission lines—it is
- * deemed unsuitable for quantity allocation to the element.
- *
- * For returns passing the issue-check, the function then calls _matchLines. This internal function filters the return
- * submission lines, considering only those within the valid date range and with non-zero quantities. These filtered
- * submission lines are then used to allocate quantities to the charge element.
- *
- * The allocation process iterates through each of the filtered return submission lines, assigning quantities to the
- * charge element based on available unallocated space, while ensuring alignment with the specified criteria.
- *
- * @param {module:ChargeElementModel} chargeElement
- * @param {module: ReturnLogModel} returnLogs
- * @param {Object} chargePeriod The start and end date of the calculated charge period
- * @param {module: ChargeReferenceModel} chargeReference
- */
-function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeReference) {
-  const matchedReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
-
-  if (matchedReturns.length === 0) {
-    return
-  }
-
-  matchedReturns.forEach((matchedReturn) => {
-    if (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity && chargeReference.allocatedQuantity < chargeReference.volume) {
-      if (matchedReturn.issues) {
+function _allocateReturns (chargeElement, matchingReturns, chargePeriod, chargeReference) {
+  matchingReturns.forEach((matchedReturn, i) => {
+    if (
+      (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) &&
+      (chargeReference.allocatedQuantity < chargeReference.volume)
+    ) {
+      if (matchedReturn.issues === true) {
         return
       }
 
@@ -119,7 +55,7 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
 
           chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
           chargeElement.allocatedQuantity += qtyToAllocate
-          matchedReturn.matchedReturnResult.allocatedQuantity += qtyToAllocate
+          chargeElement.returnLogs[i].allocatedQuantity += qtyToAllocate
 
           matchedLine.unallocated -= qtyToAllocate
           matchedReturn.allocatedQuantity += qtyToAllocate
@@ -128,6 +64,21 @@ function _matchAndAllocate (chargeElement, returnLogs, chargePeriod, chargeRefer
       })
     }
   })
+}
+
+function _chargeDatesOverlap (matchedLine, chargePeriod) {
+  const { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate } = chargePeriod
+  const { startDate: lineStartDate, endDate: lineEndDate } = matchedLine
+
+  if (lineStartDate < chargePeriodEndDate && lineEndDate > chargePeriodEndDate) {
+    return true
+  }
+
+  if (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate) {
+    return true
+  }
+
+  return false
 }
 
 function _matchLines (chargeElement, returnSubmissionLines) {
