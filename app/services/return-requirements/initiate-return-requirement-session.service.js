@@ -44,13 +44,14 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceRef, licenceDocument } = licence
+  const { id, licenceDocument, licenceRef, licenceVersions } = licence
 
   return {
     licence: {
       id,
       licenceRef,
-      licenceHolder: _licenceHolder(licenceDocument)
+      licenceHolder: _licenceHolder(licenceDocument),
+      startDate: _startDate(licenceVersions)
     },
     journey
   }
@@ -63,6 +64,16 @@ async function _fetchLicence (licenceId) {
       'id',
       'licenceRef'
     ])
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (builder) => {
+      builder
+        .select([
+          'id',
+          'startDate'
+        ])
+        .where('status', 'current')
+        .orderBy('startDate', 'desc')
+    })
     .withGraphFetched('licenceDocument')
     .modifyGraph('licenceDocument', (builder) => {
       builder.select([
@@ -120,6 +131,14 @@ function _licenceHolder (licenceDocument) {
   }
 
   return company.name
+}
+
+function _startDate (licenceVersions) {
+  // Extract the start date from the most 'current' licence version. _fetchLicence() ensures in the case
+  // that there is more than one that they are ordered by their start date (DESC)
+  const { startDate } = licenceVersions[0]
+
+  return startDate
 }
 
 module.exports = {
