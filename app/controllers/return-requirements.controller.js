@@ -60,11 +60,9 @@ async function checkYourAnswers (request, h) {
 
   const session = await SessionModel.query().findById(sessionId)
 
-  const { licenceHolder } = session.data.licence
-
   return h.view('return-requirements/check-your-answers.njk', {
     activeNavBar: 'search',
-    pageTitle: `Check the return requirements for ${licenceHolder}`,
+    pageTitle: `Check the return requirements for ${session?.data?.licence?.licenceHolder}`,
     ...session
   })
 }

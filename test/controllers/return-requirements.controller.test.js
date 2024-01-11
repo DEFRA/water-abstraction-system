@@ -83,7 +83,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('check-your-answers'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Check your answers')
+        expect(response.payload).to.contain('Check the return requirements for')
       })
     })
   })
