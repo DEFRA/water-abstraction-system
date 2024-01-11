@@ -34,6 +34,7 @@ describe('No Returns Required service', () => {
         const result = await NoReturnsRequiredService.go(session.id)
 
         expect(result.activeNavBar).to.exist()
+        expect(result.pageTitle).to.exist()
         expect(result.licenceRef).to.exist()
         expect(result.radioItems).to.exist()
 
@@ -48,6 +49,7 @@ describe('No Returns Required service', () => {
         const result = await NoReturnsRequiredService.go(session.id, error)
 
         expect(result.activeNavBar).to.exist()
+        expect(result.pageTitle).to.exist()
         expect(result.licenceRef).to.exist()
         expect(result.radioItems).to.exist()
 

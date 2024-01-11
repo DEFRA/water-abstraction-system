@@ -24,9 +24,13 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, error = null) {
   const session = await SessionModel.query().findById(sessionId)
-  const pageData = NoReturnsRequiredPresenter.go(session, error)
+  const formattedData = NoReturnsRequiredPresenter.go(session, error)
 
-  return pageData
+  return {
+    activeNavBar: 'search',
+    pageTitle: 'Why are no returns required?',
+    ...formattedData
+  }
 }
 
 module.exports = {
