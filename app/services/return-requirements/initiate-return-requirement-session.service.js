@@ -38,7 +38,7 @@ async function _createSession (data) {
     .insert({
       data
     })
-    .returning('*')
+    .returning('id')
 
   return session
 }
