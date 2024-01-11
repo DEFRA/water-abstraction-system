@@ -110,7 +110,7 @@ const routes = [
   {
     method: 'POST',
     path: '/return-requirements/{sessionId}/check-your-answers',
-    handler: ReturnRequirementsController.checkYourAnswers,
+    handler: ReturnRequirementsController.submitCheckYourAnswers,
     options: {
       auth: {
         access: {
@@ -170,32 +170,6 @@ const routes = [
         }
       },
       description: 'Submit how often collected readings or volumes are reported'
-    }
-  },
-  {
-    method: 'GET',
-    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
-    handler: ReturnRequirementsController.noReturnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Check your answers'
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/no-returns-check-your-answers',
-    handler: ReturnRequirementsController.submitNoReturnsCheckYourAnswers,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Submit check your answers'
     }
   },
   {

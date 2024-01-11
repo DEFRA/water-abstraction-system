@@ -16,6 +16,7 @@ async function abstractionPeriod (request, h) {
 
   return h.view('return-requirements/abstraction-period.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Enter the abstraction period for the return requirement',
     ...session
   })
 }
@@ -27,6 +28,7 @@ async function addNote (request, h) {
 
   return h.view('return-requirements/add-note.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Add a note',
     ...session
   })
 }
@@ -38,6 +40,7 @@ async function agreementsExceptions (request, h) {
 
   return h.view('return-requirements/agreements-exceptions.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select agreements and exceptions for the return requirement',
     ...session
   })
 }
@@ -47,6 +50,7 @@ async function approved (request, h) {
 
   return h.view('return-requirements/approved.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Returns requirements approved',
     licenceId
   })
 }
@@ -58,6 +62,7 @@ async function checkYourAnswers (request, h) {
 
   return h.view('return-requirements/check-your-answers.njk', {
     activeNavBar: 'search',
+    pageTitle: `Check the return requirements for ${session?.data?.licence?.licenceHolder}`,
     ...session
   })
 }
@@ -69,6 +74,7 @@ async function frequencyCollected (request, h) {
 
   return h.view('return-requirements/frequency-collected.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select how often readings or volumes are collected',
     ...session
   })
 }
@@ -80,17 +86,7 @@ async function frequencyReported (request, h) {
 
   return h.view('return-requirements/frequency-reported.njk', {
     activeNavBar: 'search',
-    ...session
-  })
-}
-
-async function noReturnsCheckYourAnswers (request, h) {
-  const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  return h.view('return-requirements/no-returns-check-your-answers.njk', {
-    activeNavBar: 'search',
+    pageTitle: 'Select how often collected readings or volumes are reported',
     ...session
   })
 }
@@ -112,6 +108,7 @@ async function points (request, h) {
 
   return h.view('return-requirements/points.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the points for the return requirement',
     ...session
   })
 }
@@ -123,6 +120,7 @@ async function purpose (request, h) {
 
   return h.view('return-requirements/purpose.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the purpose for the return requirement',
     ...session
   })
 }
@@ -134,6 +132,7 @@ async function reason (request, h) {
 
   return h.view('return-requirements/reason.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the reason for the return requirement',
     ...session
   })
 }
@@ -145,6 +144,7 @@ async function returnsCycle (request, h) {
 
   return h.view('return-requirements/returns-cycle.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the returns cycle for the return requirement',
     ...session
   })
 }
@@ -156,6 +156,7 @@ async function setup (request, h) {
 
   return h.view('return-requirements/setup.njk', {
     activeNavBar: 'search',
+    pageTitle: 'How do you want to set up the return requirement?',
     ...session
   })
 }
@@ -167,6 +168,7 @@ async function siteDescription (request, h) {
 
   return h.view('return-requirements/site-description.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Enter a site description for the return requirement',
     ...session
   })
 }
@@ -178,6 +180,7 @@ async function startDate (request, h) {
 
   return h.view('return-requirements/start-date.njk', {
     activeNavBar: 'search',
+    pageTitle: 'Select the start date for the return requirement',
     ...session
   })
 }
@@ -201,7 +204,11 @@ async function submitAgreementsExceptions (request, h) {
 }
 
 async function submitCheckYourAnswers (request, h) {
-  const { licenceId } = request.params
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  const { id: licenceId } = session.data.licence
 
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
 }
@@ -218,12 +225,6 @@ async function submitFrequencyReported (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
 }
 
-async function submitNoReturnsCheckYourAnswers (request, h) {
-  const { licenceId } = request.params
-
-  return h.redirect(`/system/return-requirements/${licenceId}/approved`)
-}
-
 async function submitNoReturnsRequired (request, h) {
   const { sessionId } = request.params
   const validation = NoReturnsRequiredValidator.go(request.payload)
@@ -233,7 +234,7 @@ async function submitNoReturnsRequired (request, h) {
     return h.view('return-requirements/no-returns-required.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/no-returns-check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
 async function submitPoints (request, h) {
@@ -292,7 +293,6 @@ module.exports = {
   checkYourAnswers,
   frequencyCollected,
   frequencyReported,
-  noReturnsCheckYourAnswers,
   noReturnsRequired,
   points,
   purpose,
@@ -307,7 +307,6 @@ module.exports = {
   submitCheckYourAnswers,
   submitFrequencyCollected,
   submitFrequencyReported,
-  submitNoReturnsCheckYourAnswers,
   submitNoReturnsRequired,
   submitPoints,
   submitPurpose,

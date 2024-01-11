@@ -1,17 +1,15 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% set title = "What happens next" %}
-
 {% block content %}
    {{ govukPanel({
-      titleText: "Returns requirements approved",
+      titleText: pageTitle,
       classes: "govuk-!-margin-bottom-4"
     }) }}
 
-    <h2 class="govuk-heading-m">{{title}}</h2>
+    <h2 class="govuk-heading-m">What happens next</h2>
     <p class="govuk-body">These return requirements are now active and returns will be opened for this licence in the next returns cycle.</p>
     <p class="govuk-body">
-      <a href="/licences/{{ licenceId }}" class="govuk-link">Return to licence set up</a>
+      <a href="/licences/{{ licenceId }}#charge" class="govuk-link">Return to licence set up</a>
     </p>
 {% endblock %}
