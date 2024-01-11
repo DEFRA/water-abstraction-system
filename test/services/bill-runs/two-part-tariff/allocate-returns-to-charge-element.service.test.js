@@ -19,6 +19,7 @@ describe.only('Allocate Returns to Charge Element Service', () => {
     let chargeElement
     let chargeVersion
     let chargeReference
+    let matchingReturns
 
     describe('with a charge element that has been matched to a return with a quantity to allocate', () => {
       beforeEach(() => {
@@ -57,7 +58,48 @@ describe.only('Allocate Returns to Charge Element Service', () => {
 })
 
 function _generateMatchingReturns () {
-  
+  return [
+    {
+      id: 'v1:1:5/31/14/*S/0116A:10021668:2022-04-01:2023-03-31',
+      returnRequirement: '10021668',
+      description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
+      startDate: new Date('2022-04-01'),
+      endDate: new Date('2023-03-31'),
+      receivedDate: null,
+      dueDate: new Date('2023-04-28'),
+      status: 'completed',
+      underQuery: false,
+      periodStartDay: 1,
+      periodStartMonth: 3,
+      periodEndDay: 31,
+      periodEndMonth: 10,
+      purposes: [
+        [{
+          alias: 'Spray Irrigation - Direct',
+          primary: { code: 'A', description: 'Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+          secondary: { code: 'AGR', description: 'General Agriculture' }
+        }]
+      ],
+      returnSubmissions: [],
+      nilReturn: false,
+      quantity: 0,
+      allocatedQuantity: 0,
+      abstractionPeriods: [
+        {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2022-10-31')
+        },
+        {
+          startDate: new Date('2023-03-01'),
+          endDate: new Date('2023-03-31')
+        }
+      ],
+      abstractionOutsidePeriod: false,
+      matched: true,
+      issues: false
+    }
+  ]
 }
 
 function _generateLicenceData () {
