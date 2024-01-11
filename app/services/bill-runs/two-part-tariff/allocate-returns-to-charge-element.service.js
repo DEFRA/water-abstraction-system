@@ -2,7 +2,7 @@
 
 /**
  * Allocates where applicable the abstracted volumes on the return log with the appropriate charge element
- * @module AllocateReturnsToLicenceService
+ * @module AllocateReturnsToChargeElementService
  */
 
 const { periodsOverlap } = require('../../../lib/general.lib.js')

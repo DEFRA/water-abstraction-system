@@ -11,19 +11,27 @@ const { expect } = Code
 const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const AllocateReturnsToLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-licence.service.js')
+const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-licence.service.js')
 
-describe.only('Allocate Returns to Licence service', () => {
+describe.only('Allocate Returns to Charge Element Service', () => {
   describe('when there are valid records to process', () => {
     let testLicences
+    let chargeElement
+    let chargeVersion
+    let chargeReference
 
     describe('with a charge element that has been matched to a return with a quantity to allocate', () => {
       beforeEach(() => {
-        testLicences = _generateData(false, false, 'completed', true)
+        testLicences = _generateLicenceData()
+        chargeVersion = testLicences.chargeVersion[0]
+        chargeReference = testLicences.chargeVersion[0].chargeReference[0]
+        chargeElement = testLicences.chargeVersion[0].chargeReference[0].chargeElement[0]
+
+        matchingReturns = _generateMatchingReturns()
       })
 
       it('correctly allocates the returns and adds the results to the `testLicences` array', () => {
-        AllocateReturnsToLicenceService.go(testLicences)
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion, chargeReference)
 
         expect(testLicences[0].returnLogs[0].allocatedQuantity).to.equal(32)
         expect(testLicences[0].returnLogs[0].matched).to.be.true()
@@ -37,87 +45,22 @@ describe.only('Allocate Returns to Licence service', () => {
         expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
       })
     })
-
-    describe.only('with a charge element that has matched to a return but with no quantity to allocate', () => {
-      // describe('because the return is a nil return', () => {
-      //   beforeEach(() => {
-      //     testLicences = _generateData(false, true, 'completed', false)
-      //   })
-
-      //   it('doesnt allocate any return quantities but marks the return as being matched', () => {
-      //     AllocateReturnsToLicenceService.go(testLicences)
-
-      //     expect(testLicences[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
-      //     expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity).to.equal(0)
-
-      //     expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].allocatedQuantity).to.equal(0)
-      //     expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].returnId).to.equal(testLicences[0].returnLogs[0].id)
-      //     expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
-
-      //     expect(testLicences[0].returnLogs[0].allocatedQuantity).to.equal(0)
-      //     expect(testLicences[0].returnLogs[0].matched).to.equal(true)
-      //   })
-      // })
-
-      // describe('because the return status is not complete', () => {
-      //   beforeEach(() => {
-      //     testLicences = _generateData(false, false, 'received', true)
-      //   })
-      // })
-
-      // describe('because the return has no returnSubmissionLines', () => {
-      //   beforeEach(() => {
-      //     testLicences = _generateData(false, false, 'completed', false)
-      //   })
-      // })
-
-      // describe('because the return is under query', () => {
-      //   beforeEach(() => {
-      //     testLicences = _generateData(true, false, 'completed', true)
-      //   })
-      // })
-
-      const scenarios = [
-        { args: [false, true, 'completed', false], reason: 'because the return is a nil return' },
-        { args: [false, false, 'received', true], reason: 'because the return status is not complete' },
-        { args: [false, false, 'completed', false], reason: 'because the return has no returnSubmissionLines' },
-        { args: [true, false, 'completed', true], reason: 'because the return is under query' }
-      ]
-
-      scenarios.forEach((scenario) => {
-        describe(`${scenario.reason}`, () => {
-          beforeEach(() => {
-            testLicences = _generateData(...scenario.args)
-          })
-
-          it('doesnt allocate any return quantities', () => {
-            AllocateReturnsToLicenceService.go(testLicences)
-
-            expect(testLicences[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
-            expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity).to.equal(0)
-
-            expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].allocatedQuantity).to.equal(0)
-            // expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].returnId).to.equal(testLicences[0].returnLogs[0].id)
-            // expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
-
-            expect(testLicences[0].returnLogs[0].allocatedQuantity).to.equal(0)
-            // expect(testLicences[0].returnLogs[0].matched).to.equal(true)
-          })
-        })
-      })
-    })
   })
 
   describe('when there are NO records to allocate', () => {
     const testLicences = []
 
     it('does not throw an error', () => {
-      expect(() => AllocateReturnsToLicenceService.go(testLicences)).to.not.throw()
+      expect(() => AllocateReturnsToChargeElementService.go(testLicences)).to.not.throw()
     })
   })
 })
 
-function _generateData (underQuery, nilReturn, status, submissionLines) {
+function _generateMatchingReturns () {
+  
+}
+
+function _generateLicenceData () {
   // All data not required for the tests has been excluded from the generated data
   const dataToProcess = [
     {
@@ -162,8 +105,8 @@ function _generateData (underQuery, nilReturn, status, submissionLines) {
       returnLogs: [
         {
           id: generateReturnLogId(),
-          status,
-          underQuery,
+          status: 'completed',
+          underQuery: false,
           purposes: [
             {
               tertiary: {
@@ -174,7 +117,7 @@ function _generateData (underQuery, nilReturn, status, submissionLines) {
           returnSubmissions: [
             {
               id: 'c081f44e-4ec8-4287-b4f9-ce41c988ff4e',
-              nilReturn,
+              nilReturn: false,
               returnSubmissionLines: [
                 {
                   id: '20020dd1-e975-4cd3-b23e-d5b5b88df2f7',
@@ -235,7 +178,7 @@ function _generateData (underQuery, nilReturn, status, submissionLines) {
               ]
             }
           ],
-          nilReturn,
+          nilReturn: false,
           quantity: 32,
           allocatedQuantity: 0,
           abstractionPeriods: [
@@ -254,12 +197,5 @@ function _generateData (underQuery, nilReturn, status, submissionLines) {
       ]
     }
   ]
-
-  // If nilReturn is true then there are no return submission lines
-  if (nilReturn || !submissionLines) {
-    dataToProcess[0].returnLogs[0].returnSubmissions = []
-  }
-
   return dataToProcess
 }
-
