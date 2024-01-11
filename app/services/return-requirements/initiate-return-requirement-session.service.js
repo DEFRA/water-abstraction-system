@@ -21,13 +21,14 @@ const SessionModel = require('../../models/session.model.js')
  * the session record itself deleted.
  *
  * @param {String} licenceId - the ID of the licence the return requirement will be created for
+ * @param {String} journey - whether the set up journey needed is 'no-returns-required' or 'returns-required'
  *
  * @returns {module:SessionModel} the newly created session record
  */
-async function go (licenceId) {
+async function go (licenceId, journey) {
   const licence = await _fetchLicence(licenceId)
 
-  const data = _data(licence)
+  const data = _data(licence, journey)
 
   return _createSession(data)
 }
@@ -42,7 +43,7 @@ async function _createSession (data) {
   return session
 }
 
-function _data (licence) {
+function _data (licence, journey) {
   const { id, licenceRef, licenceDocument } = licence
 
   return {
@@ -50,7 +51,8 @@ function _data (licence) {
       id,
       licenceRef,
       licenceHolder: _licenceHolder(licenceDocument)
-    }
+    },
+    journey
   }
 }
 
