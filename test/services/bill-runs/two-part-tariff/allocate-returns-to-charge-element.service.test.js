@@ -11,7 +11,7 @@ const { expect } = Code
 const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-licence.service.js')
+const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-charge-element.service.js')
 
 describe.only('Allocate Returns to Charge Element Service', () => {
   describe('when there are valid records to process', () => {
@@ -24,14 +24,14 @@ describe.only('Allocate Returns to Charge Element Service', () => {
     describe('with a charge element that has been matched to a return with a quantity to allocate', () => {
       beforeEach(() => {
         testLicences = _generateLicenceData()
-        chargeVersion = testLicences.chargeVersion[0]
-        chargeReference = testLicences.chargeVersion[0].chargeReference[0]
-        chargeElement = testLicences.chargeVersion[0].chargeReference[0].chargeElement[0]
+        chargeVersion = testLicences[0].chargeVersions[0]
+        chargeReference = testLicences[0].chargeVersions[0].chargeReferences[0]
+        chargeElement = testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
 
         matchingReturns = _generateMatchingReturns()
       })
 
-      it('correctly allocates the returns and adds the results to the `testLicences` array', () => {
+      it.only('correctly allocates the returns and adds the results to the `testLicences` array', () => {
         AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion, chargeReference)
 
         expect(testLicences[0].returnLogs[0].allocatedQuantity).to.equal(32)
@@ -81,7 +81,21 @@ function _generateMatchingReturns () {
           secondary: { code: 'AGR', description: 'General Agriculture' }
         }]
       ],
-      returnSubmissions: [],
+      returnSubmissions: [
+        {
+          id: '1313d4f1-0fe8-4dfa-b18d-3faddedcc18f',
+          nilReturn: false,
+          returnSubmissionLines: [
+            {
+              id: 'e828b761-0fe0-4d57-8fcd-fa892ecc213e',
+              startDate: new Date('2022-04-01'),
+              endDate: new Date('2022-04-30'),
+              quantity: 0.025,
+              unallocated: 0.000025
+            }
+          ]
+        }
+      ],
       nilReturn: false,
       quantity: 0,
       allocatedQuantity: 0,
@@ -239,5 +253,6 @@ function _generateLicenceData () {
       ]
     }
   ]
+
   return dataToProcess
 }
