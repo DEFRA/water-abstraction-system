@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/match-returns-to-charge-element.service.js')
 
-describe('Match Returns to Charge Element service', () => {
+describe('Match Returns To Charge Element Service', () => {
   describe('when given a charge element', () => {
     let chargeElement
     let returnLogs
@@ -174,8 +174,8 @@ describe('Match Returns to Charge Element service', () => {
   })
 })
 
+// All data not required for the tests has been excluded from the generated data
 function _setUpReturnLogs (purpose1, purpose2) {
-  // All data not required for the tests has been excluded from the generated data
   return [
     {
       id: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31',
