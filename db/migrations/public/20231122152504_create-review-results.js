@@ -12,8 +12,8 @@ exports.up = function (knex) {
       // Data
       table.uuid('bill_run_id').notNullable()
       table.uuid('licence_id').notNullable()
-      table.uuid('charge_version_id').notNullable()
-      table.uuid('charge_reference_id').notNullable()
+      table.uuid('charge_version_id')
+      table.uuid('charge_reference_id')
       table.date('charge_period_start_date')
       table.date('charge_period_end_date')
       table.string('charge_version_change_reason')
