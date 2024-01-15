@@ -32,9 +32,9 @@ async function go (billRun, billingPeriods) {
 
   if (licences.length > 0) {
     await _process(licences, billingPeriods, billRun)
-
-    _calculateAndLogTime(startTime)
   }
+
+  _calculateAndLogTime(startTime)
 
   return licences
 }
