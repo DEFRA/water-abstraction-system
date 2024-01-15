@@ -23,6 +23,7 @@ const MatchAndAllocateService = require('../../../../app/services/bill-runs/two-
 
 describe('Match And Allocate Service', () => {
   let notifierStub
+  let licences
 
   const billingPeriods = [
     { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
@@ -38,8 +39,9 @@ describe('Match And Allocate Service', () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    const licences = _generateLicencesData()
+    licences = _generateLicencesData()
     const matchingReturns = _generateMatchingReturnsData()
+
     Sinon.stub(FetchLicencesService, 'go').returns(licences)
     Sinon.stub(PrepareReturnLogsService, 'go')
     Sinon.stub(PrepareChargeVersionService, 'go')
@@ -61,30 +63,93 @@ describe('Match And Allocate Service', () => {
     })
 
     describe('when there are licences to be processed for the billing period', () => {
-      it.only('processes the licences for matching and allocating', async () => {
+      it('processes the licences for matching and allocating', async () => {
         await MatchAndAllocateService.go(billRun, billingPeriods)
 
         expect(PrepareReturnLogsService.go.called).to.be.true()
         expect(PrepareChargeVersionService.go.called).to.be.true()
       })
 
-      it('matches and allocated the charge element to return logs', () => {
-        
+      it('matches and allocated the charge element to return logs', async () => {
+        await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(MatchReturnsToChargeElementService.go.called).to.be.true()
+        expect(AllocateReturnsToChargeElementService.go.called).to.be.true()
       })
 
-      it('persists the results of matching and allocating', () => {
-        
+      it('persists the results of matching and allocating', async () => {
+        await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
       })
 
-      it('returns the licences all processed', () => {
-        
+      it('returns the licences all processed', async () => {
+        const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(result).to.equal(licences)
+        expect(result[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
       })
     })
   })
 })
 
 function _generateMatchingReturnsData () {
-
+  return [
+    {
+      id: 'v1:1:5/31/14/*S/0116A:10021668:2022-04-01:2023-03-31',
+      returnRequirement: '10021668',
+      description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
+      startDate: new Date('2022-04-01'),
+      endDate: new Date('2023-03-31'),
+      receivedDate: new Date('2024-01-10'),
+      dueDate: new Date('2023-04-28'),
+      status: 'completed',
+      underQuery: false,
+      periodStartDay: 1,
+      periodStartMonth: 3,
+      periodEndDay: 31,
+      periodEndMonth: 10,
+      purposes: [
+        {
+          alias: 'Spray Irrigation - Direct',
+          primary: { code: 'A', description: 'Agriculture' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
+          secondary: { code: 'AGR', description: 'General Agriculture' }
+        }
+      ],
+      returnSubmissions: [
+        {
+          id: '1313d4f1-0fe8-4dfa-b18d-3faddedcc18f',
+          nilReturn: false,
+          returnSubmissionLines: [
+            {
+              id: 'e828b761-0fe0-4d57-8fcd-fa892ecc213e',
+              startDate: new Date('2022-04-01'),
+              endDate: new Date('2022-04-30'),
+              quantity: 0.025,
+              unallocated: 0.000025
+            }
+          ]
+        }
+      ],
+      nilReturn: false,
+      quantity: 0.000263,
+      allocatedQuantity: 0,
+      abstractionPeriods: [
+        {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2022-10-31')
+        },
+        {
+          startDate: new Date('2023-03-01'),
+          endDate: new Date('2023-03-31')
+        }
+      ],
+      abstractionOutsidePeriod: true,
+      matched: true,
+      issues: false
+    }
+  ]
 }
 
 function _generateLicencesData () {
