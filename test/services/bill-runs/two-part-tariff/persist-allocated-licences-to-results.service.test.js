@@ -14,7 +14,7 @@ const { generateReturnLogId } = require('../../../support/helpers/return-log.hel
 const ReviewResultModel = require('../../../../app/models/review-result.model.js')
 
 // Thing under test
-const PersistAllocatedLicencesToResultsService = require('../../../../app/services/bill-runs/two-part-tariff/persist-allocated-licences-to-results.service.js')
+const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/two-part-tariff/persist-allocated-licence-to-results.service.js')
 
 describe('Persist Allocated Licences to Results service', () => {
   const billRunId = generateUUID()
@@ -32,7 +32,7 @@ describe('Persist Allocated Licences to Results service', () => {
       })
 
       it('persists the data into the results tables', async () => {
-        await PersistAllocatedLicencesToResultsService.go(billRunId, testLicences)
+        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicences)
 
         const result = await ReviewResultModel.query()
           .where('licenceId', testLicences[0].id)
@@ -87,7 +87,7 @@ describe('Persist Allocated Licences to Results service', () => {
       })
 
       it('persists the data into the results tables', async () => {
-        await PersistAllocatedLicencesToResultsService.go(billRunId, testLicences)
+        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicences)
 
         const result = await ReviewResultModel.query()
           .where('licenceId', testLicences[0].id)
@@ -153,7 +153,7 @@ describe('Persist Allocated Licences to Results service', () => {
     const testLicences = []
 
     it('does not throw an error', () => {
-      expect(async () => await PersistAllocatedLicencesToResultsService.go(billRunId, testLicences)).to.not.throw()
+      expect(async () => await PersistAllocatedLicenceToResultsService.go(billRunId, testLicences)).to.not.throw()
     })
   })
 })
