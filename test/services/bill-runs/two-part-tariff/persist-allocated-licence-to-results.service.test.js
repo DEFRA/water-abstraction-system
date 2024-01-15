@@ -86,7 +86,7 @@ describe('Persist Allocated Licence to Results service', () => {
         testLicence = _generateData(aggregate, returnMatched)
       })
 
-      it.only('persists the data into the results tables', async () => {
+      it('persists the data into the results tables', async () => {
         await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
 
         const result = await ReviewResultModel.query()
