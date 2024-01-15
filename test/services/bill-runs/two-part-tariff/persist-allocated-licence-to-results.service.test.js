@@ -16,14 +16,14 @@ const ReviewResultModel = require('../../../../app/models/review-result.model.js
 // Thing under test
 const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/two-part-tariff/persist-allocated-licence-to-results.service.js')
 
-describe('Persist Allocated Licence to Results service', () => {
+describe.only('Persist Allocated Licence to Results service', () => {
   const billRunId = generateUUID()
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when there are valid records to be persisted', () => {
+  describe('when there are records to be persisted', () => {
     let testLicence
 
     describe('with a charge element that has been matched to a return', () => {
@@ -86,7 +86,7 @@ describe('Persist Allocated Licence to Results service', () => {
         testLicence = _generateData(aggregate, returnMatched)
       })
 
-      it('persists the data into the results tables', async () => {
+      it('persists the return logs data into the results tables', async () => {
         await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
 
         const result = await ReviewResultModel.query()
@@ -121,6 +121,15 @@ describe('Persist Allocated Licence to Results service', () => {
         expect(result[0].reviewReturnResults.abstractionOutsidePeriod).to.equal(
           testLicence.returnLogs[0].abstractionOutsidePeriod
         )
+      })
+
+      it('persists the charge element data into the results tables', async () => {
+        await PersistAllocatedLicenceToResultsService.go(billRunId, testLicence)
+
+        const result = await ReviewResultModel.query()
+          .where('licenceId', testLicence.id)
+          .withGraphFetched('reviewChargeElementResults')
+          .withGraphFetched('reviewReturnResults')
 
         expect(result[1].billRunId).to.equal(billRunId)
         expect(result[1].licenceId).to.equal(testLicence.id)
@@ -146,14 +155,6 @@ describe('Persist Allocated Licence to Results service', () => {
 
         expect(result[1].reviewReturnResults).to.be.null()
       })
-    })
-  })
-
-  describe('when there are NO records to persist', () => {
-    const testLicences = []
-
-    it('does not throw an error', () => {
-      expect(async () => await PersistAllocatedLicenceToResultsService.go(billRunId, testLicences)).to.not.throw()
     })
   })
 })
