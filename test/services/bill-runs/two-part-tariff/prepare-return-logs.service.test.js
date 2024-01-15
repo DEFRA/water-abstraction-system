@@ -28,7 +28,7 @@ describe('Prepare Return Logs Service', () => {
     let licence
 
     beforeEach(async () => {
-      licence = _testLicences()
+      licence = _testLicence()
     })
 
     describe('when matching returns exist', () => {
@@ -139,7 +139,7 @@ describe('Prepare Return Logs Service', () => {
   })
 })
 
-function _testLicences () {
+function _testLicence () {
   return {
     id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
     licenceRef: '5/31/14/*S/0116A',
