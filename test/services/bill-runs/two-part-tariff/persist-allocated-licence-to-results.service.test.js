@@ -16,7 +16,7 @@ const ReviewResultModel = require('../../../../app/models/review-result.model.js
 // Thing under test
 const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/two-part-tariff/persist-allocated-licence-to-results.service.js')
 
-describe.only('Persist Allocated Licence to Results service', () => {
+describe('Persist Allocated Licence to Results service', () => {
   const billRunId = generateUUID()
 
   beforeEach(async () => {
