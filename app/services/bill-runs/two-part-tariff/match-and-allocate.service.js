@@ -18,9 +18,11 @@ async function go (billRun, billingPeriods, licenceId) {
 
   const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0], licenceId)
 
-  await _process(licences, billingPeriods, billRun)
+  if (licences.length > 0) {
+    await _process(licences, billingPeriods, billRun)
 
-  _calculateAndLogTime(startTime)
+    _calculateAndLogTime(startTime)
+  }
 
   return licences
 }
