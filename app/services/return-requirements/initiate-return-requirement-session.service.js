@@ -21,13 +21,14 @@ const SessionModel = require('../../models/session.model.js')
  * the session record itself deleted.
  *
  * @param {String} licenceId - the ID of the licence the return requirement will be created for
+ * @param {String} journey - whether the set up journey needed is 'no-returns-required' or 'returns-required'
  *
  * @returns {module:SessionModel} the newly created session record
  */
-async function go (licenceId) {
+async function go (licenceId, journey) {
   const licence = await _fetchLicence(licenceId)
 
-  const data = _data(licence)
+  const data = _data(licence, journey)
 
   return _createSession(data)
 }
@@ -37,20 +38,22 @@ async function _createSession (data) {
     .insert({
       data
     })
-    .returning('*')
+    .returning('id')
 
   return session
 }
 
-function _data (licence) {
-  const { id, licenceRef, licenceDocument } = licence
+function _data (licence, journey) {
+  const { id, licenceDocument, licenceRef, licenceVersions } = licence
 
   return {
     licence: {
       id,
       licenceRef,
-      licenceHolder: _licenceHolder(licenceDocument)
-    }
+      licenceHolder: _licenceHolder(licenceDocument),
+      startDate: _startDate(licenceVersions)
+    },
+    journey
   }
 }
 
@@ -61,6 +64,16 @@ async function _fetchLicence (licenceId) {
       'id',
       'licenceRef'
     ])
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (builder) => {
+      builder
+        .select([
+          'id',
+          'startDate'
+        ])
+        .where('status', 'current')
+        .orderBy('startDate', 'desc')
+    })
     .withGraphFetched('licenceDocument')
     .modifyGraph('licenceDocument', (builder) => {
       builder.select([
@@ -118,6 +131,14 @@ function _licenceHolder (licenceDocument) {
   }
 
   return company.name
+}
+
+function _startDate (licenceVersions) {
+  // Extract the start date from the most 'current' licence version. _fetchLicence() ensures in the case
+  // that there is more than one that they are ordered by their start date (DESC)
+  const { startDate } = licenceVersions[0]
+
+  return startDate
 }
 
 module.exports = {

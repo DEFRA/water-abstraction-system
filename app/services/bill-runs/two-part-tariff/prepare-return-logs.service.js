@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Stuff
+ * Prepares the return logs to be matched to a charge element
  * @module PrepareReturnLogsService
  */
 
@@ -9,6 +9,16 @@ const DetermineAbstractionPeriodService = require('../determine-abstraction-peri
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
+/**
+ * Prepares return logs for matching with abstraction periods and performs checks for potential issues
+ *
+ * This function fetches the return logs for the given licence using an external service and attaches them to the
+ * licence object. It then prepares each return log for matching by determining abstraction periods and checking for
+ * issues.
+ *
+ * @param {module:LicenceModel} licence - An individual licence to prepare the return logs for
+ * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+ */
 async function go (licence, billingPeriod) {
   await _prepareReturnLogs(licence, billingPeriod)
 }
