@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Persists the results from the `allocateReturnsToLicenceService` into the DB
- * @module PersistAllocatedLicencesToResultsService
+ * Persists the results from the `allocateReturnsToChargeElementService` into the DB
+ * @module PersistAllocatedLicenceToResultsService
  */
 
 const ReviewChargeElementResultModel = require('../../../models/review-charge-element-result.model.js')
@@ -21,31 +21,29 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
  * matching and allocating looks correct or if any issues need resolving first.
  *
  * @param {String} billRunId - the ID of the two-part tariff bill run being generated
- * @param {Object[]} licences - the two-part tariff licences included in the bill run, along with their match and
+ * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match and
  *  allocation results
  */
-async function go (billRunId, licences) {
-  for (const licence of licences) {
-    const { chargeVersions, returnLogs } = licence
+async function go (billRunId, licence) {
+  const { chargeVersions, returnLogs } = licence
 
-    const reviewReturnResultIds = await _persistReturnLogs(returnLogs, billRunId, licence)
+  const reviewReturnResultIds = await _persistReturnLogs(returnLogs, billRunId, licence)
 
-    for (const chargeVersion of chargeVersions) {
-      const { chargeReferences } = chargeVersion
+  for (const chargeVersion of chargeVersions) {
+    const { chargeReferences } = chargeVersion
 
-      for (const chargeReference of chargeReferences) {
-        const { chargeElements } = chargeReference
+    for (const chargeReference of chargeReferences) {
+      const { chargeElements } = chargeReference
 
-        for (const chargeElement of chargeElements) {
-          await _persistChargeElement(
-            billRunId,
-            licence,
-            chargeVersion,
-            chargeReference,
-            chargeElement,
-            reviewReturnResultIds
-          )
-        }
+      for (const chargeElement of chargeElements) {
+        await _persistChargeElement(
+          billRunId,
+          licence,
+          chargeVersion,
+          chargeReference,
+          chargeElement,
+          reviewReturnResultIds
+        )
       }
     }
   }
