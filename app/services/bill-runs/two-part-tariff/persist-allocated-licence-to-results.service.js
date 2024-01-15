@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Persists the results from the `allocateReturnsToLicenceService` into the DB
+ * Persists the results from the `allocateReturnsToChargeElementService` into the DB
  * @module PersistAllocatedLicenceToResultsService
  */
 
@@ -9,6 +9,21 @@ const ReviewChargeElementResultModel = require('../../../models/review-charge-el
 const ReviewReturnResultModel = require('../../../models/review-return-result.model.js')
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
+/**
+ * Persists results of matching and allocating return logs to licence charge elements for a two-part tariff bill run
+ *
+ * Each licence will have a `returnLogs` property that contains all return logs linked to the licence for the billing
+ * period of the bill run. It will also have a `chargeVersions` property, which within each one it will have details of
+ * which charge elements matched to which return logs and whether anything was allocated to the charge element from
+ * them.
+ *
+ * We need to persist all this information ready for use in the review screens that our users use to asses if the
+ * matching and allocating looks correct or if any issues need resolving first.
+ *
+ * @param {String} billRunId - the ID of the two-part tariff bill run being generated
+ * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match and
+ *  allocation results
+ */
 async function go (billRunId, licence) {
   const { chargeVersions, returnLogs } = licence
 
