@@ -1,17 +1,20 @@
 'use strict'
 
 /**
- * Matches the return logs to the charge element
+ * Matches return logs to a charge element
  * @module MatchReturnsToChargeElementService
  */
 
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
 /**
- * Matches return logs to a charge element and adds the matching returns to the charge element
+ * Matches return logs to a charge element
+ *
+ * When a match is found the service stores a record of the matching return log against the element. It also flags
+ * the return log as matched.
  *
  * @param {module:ChargeElementModel} chargeElement - The charge element to match return logs against
- * @param {module:ReturnLogModel[]} returnLogs - All return logs from the charge elements licence
+ * @param {module:ReturnLogModel[]} returnLogs - All return logs from the charge element's licence
  *
  * @returns {module:ReturnLogModel[]} Return logs that matched the charge element
  */
