@@ -38,11 +38,12 @@ describe('Match And Allocate Service', () => {
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
 
-    const licences = _generateLicences()
+    const licences = _generateLicencesData()
+    const matchingReturns = _generateMatchingReturnsData()
     Sinon.stub(FetchLicencesService, 'go').returns(licences)
     Sinon.stub(PrepareReturnLogsService, 'go')
     Sinon.stub(PrepareChargeVersionService, 'go')
-    Sinon.stub(MatchReturnsToChargeElementService, 'go').returns()
+    Sinon.stub(MatchReturnsToChargeElementService, 'go').returns(matchingReturns)
     Sinon.stub(AllocateReturnsToChargeElementService, 'go')
     Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
   })
@@ -82,64 +83,68 @@ describe('Match And Allocate Service', () => {
   })
 })
 
-function _generateLicences () {
-  return {
-    id: '2c2f0ab5-4f73-416e-b3f8-5ed19d81bd59',
-    startDate: new Date('2022-04-01'),
-    endDate: null,
-    status: 'current',
-    licence: {
-      id: 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd',
-      licenceRef: '01/128',
-      startDate: new Date('2022-01-01'),
-      expiredDate: new Date('2024-05-01'),
+function _generateMatchingReturnsData () {
+
+}
+
+function _generateLicencesData () {
+  return [
+    {
+      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+      licenceRef: '5/31/14/*S/0116A',
+      startDate: new Date('1966-02-01'),
+      expiredDate: null,
       lapsedDate: null,
-      revokedDate: null
-    },
-    chargeReferences: [{
-      id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
-      volume: 6.82,
-      description: 'Mineral washing',
-      aggregate: 0.562114443,
-      s127: 'true',
-      chargeCategory: {
-        reference: '4.3.41',
-        shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
-        subsistenceCharge: 12000
-      },
-      chargeElements: [
+      revokedDate: null,
+      chargeVersions: [
         {
-          id: 'dab91d76-6778-417f-8f2d-9124a270e926',
-          description: 'Trickle Irrigation - Direct',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3,
-          authorisedAnnualQuantity: 200,
-          purpose: {
-            id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
-            legacyId: '420',
-            description: 'Spray Irrigation - Storage'
-          }
-        },
-        {
-          id: '1a966bd1-dbce-499d-ae94-b1d6ab72f0b2',
-          description: 'Trickle Irrigation - Direct',
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3,
-          authorisedAnnualQuantity: 100,
-          purpose: {
-            id: '4f300bf3-9d6d-44a2-ac76-ce3c02e7e81b',
-            legacyId: '420',
-            description: 'Spray Irrigation - Storage'
-          }
+          id: 'aad7de5b-d684-4980-bcb7-e3b631d3036f',
+          startDate: new Date('2022-04-01'),
+          endDate: null,
+          status: 'current',
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          licence: {
+            id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+            licenceRef: '5/31/14/*S/0116A',
+            startDate: new Date('1966-02-01'),
+            expiredDate: null,
+            lapsedDate: null,
+            revokedDate: null
+          },
+          chargeReferences: [
+            {
+              id: '4e7f1824-3680-4df0-806f-c6d651ba4771',
+              volume: 32,
+              description: 'Example 1',
+              aggregate: null,
+              s127: 'true',
+              chargeCategory: {
+                reference: '4.6.12',
+                shortDescription: 'High loss, non-tidal, restricted water, greater than 15 up to and including 50 ML/yr, Tier 2 model',
+                subsistenceCharge: 68400
+              },
+              chargeElements: [
+                {
+                  id: '8eac5976-d16c-4818-8bc8-384d958ce863',
+                  description: 'Spray irrigation at Welland and Deepings Internal Drainage Board drains and the River Glen at West Pinchbeck',
+                  abstractionPeriodStartDay: 1,
+                  abstractionPeriodStartMonth: 3,
+                  abstractionPeriodEndDay: 31,
+                  abstractionPeriodEndMonth: 10,
+                  authorisedAnnualQuantity: 32,
+                  purpose: {
+                    id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
+                    legacyId: '400',
+                    description: 'Spray Irrigation - Direct'
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
-    }],
-    changeReason: {
-      description: 'Strategic review of charges (SRoC)'
     }
-  }
+  ]
 }
