@@ -11,171 +11,155 @@ const { expect } = Code
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/match-returns-to-charge-element.service.js')
 
 describe('Match Returns To Charge Element Service', () => {
-  describe('when given a charge element', () => {
-    let chargeElement
-    let returnLogs
+  let chargeElement
+  let returnLogs
 
-    beforeEach(() => {
-      chargeElement =
-      {
-        id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-        purpose: {
-          id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
-          legacyId: '400',
-          description: 'Spray Irrigation - Direct'
+  beforeEach(() => {
+    chargeElement =
+    {
+      id: '8eac5976-d16c-4818-8bc8-384d958ce863',
+      purpose: {
+        id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
+        legacyId: '400',
+        description: 'Spray Irrigation - Direct'
+      },
+      returnLogs: [],
+      abstractionPeriods: [
+        {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2022-10-31')
         },
-        returnLogs: [],
+        {
+          startDate: new Date('2023-03-01'),
+          endDate: new Date('2023-03-31')
+        }
+      ]
+    }
+  })
+
+  describe('when the return logs all match', () => {
+    beforeEach(() => {
+      returnLogs = _testReturnLogs()
+    })
+
+    it('adds the matching return logs to the charge element', () => {
+      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+
+      expect(chargeElement).to.equal({
         abstractionPeriods: [
           {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2022-10-31')
+            endDate: new Date('2022-10-31'),
+            startDate: new Date('2022-04-01')
           },
           {
-            startDate: new Date('2023-03-01'),
-            endDate: new Date('2023-03-31')
+            endDate: new Date('2023-03-31'),
+            startDate: new Date('2023-03-01')
+          }
+        ],
+        id: '8eac5976-d16c-4818-8bc8-384d958ce863',
+        purpose: {
+          description: 'Spray Irrigation - Direct',
+          id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
+          legacyId: '400'
+        },
+        returnLogs: [
+          {
+            allocatedQuantity: 0,
+            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
+          },
+          {
+            allocatedQuantity: 0,
+            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2023-10-01'
           }
         ]
-      }
-    })
-
-    describe('and return logs that all match', () => {
-      beforeEach(() => {
-        const purpose1 = '400'
-        returnLogs = _setUpReturnLogs(purpose1, purpose1)
-      })
-
-      it('adds the matching return logs to the charge element', () => {
-        MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
-
-        expect(chargeElement).to.equal({
-          abstractionPeriods: [
-            {
-              endDate: new Date('2022-10-31'),
-              startDate: new Date('2022-04-01')
-            },
-            {
-              endDate: new Date('2023-03-31'),
-              startDate: new Date('2023-03-01')
-            }
-          ],
-          id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-          purpose: {
-            description: 'Spray Irrigation - Direct',
-            id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
-            legacyId: '400'
-          },
-          returnLogs: [
-            {
-              allocatedQuantity: 0,
-              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
-            },
-            {
-              allocatedQuantity: 0,
-              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2023-10-01'
-            }
-          ]
-        })
-      })
-
-      it('changes the matched property on the return log to be true', () => {
-        MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
-
-        expect(returnLogs[0].matched).to.be.true()
       })
     })
 
-    describe('and return logs that partially match', () => {
+    it('changes the matched property on the return log to be true', () => {
+      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+
+      expect(returnLogs[0].matched).to.be.true()
+    })
+  })
+
+  describe('when some return logs do not match', () => {
+    describe('because the purposes are different', () => {
       beforeEach(() => {
-        const purpose1 = '400'
-        const purpose2 = '600'
-        returnLogs = _setUpReturnLogs(purpose1, purpose2)
+        returnLogs = _testReturnLogs()
+        returnLogs[1].purposes[0].tertiary.code = '600'
       })
 
-      it('for the matching return logs adds them to the charge element', () => {
+      it('records only the matching return logs against the charge element', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-        expect(chargeElement).to.equal({
-          abstractionPeriods: [
-            {
-              endDate: new Date('2022-10-31'),
-              startDate: new Date('2022-04-01')
-            },
-            {
-              endDate: new Date('2023-03-31'),
-              startDate: new Date('2023-03-01')
-            }
-          ],
-          id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-          purpose: {
-            description: 'Spray Irrigation - Direct',
-            id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
-            legacyId: '400'
-          },
-          returnLogs: [
-            {
-              allocatedQuantity: 0,
-              returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
-            }
-          ]
-        })
+        expect(chargeElement.returnLogs).to.equal([
+          {
+            allocatedQuantity: 0,
+            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
+          }
+        ])
       })
 
-      it('changes the matched property to true for the matching return logs', () => {
+      it("only flags the matching return logs as 'matched'", () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
         expect(returnLogs[0].matched).to.be.true()
-      })
-
-      it('keeps the matched property as false for any unmatched return logs', () => {
-        MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
-
         expect(returnLogs[1].matched).to.be.false()
       })
     })
 
-    describe('and return logs that do not match', () => {
+    describe('because the abstraction periods are different', () => {
       beforeEach(() => {
-        const purpose1 = '600'
-        const purpose2 = '600'
-        returnLogs = _setUpReturnLogs(purpose1, purpose2)
+        returnLogs = _testReturnLogs()
+
+        returnLogs[1].abstractionPeriods[0].startDate = new Date('2022-11-01')
+        returnLogs[1].abstractionPeriods[0].endDate = new Date('2022-12-31')
       })
 
-      it('does not add the return logs to the charge element', () => {
+      it('records only the matching return logs against the charge element', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-        expect(chargeElement).to.equal({
-          abstractionPeriods: [
-            {
-              endDate: new Date('2022-10-31'),
-              startDate: new Date('2022-04-01')
-            },
-            {
-              endDate: new Date('2023-03-31'),
-              startDate: new Date('2023-03-01')
-            }
-          ],
-          id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-          purpose: {
-            description: 'Spray Irrigation - Direct',
-            id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
-            legacyId: '400'
-          },
-          returnLogs: []
-        })
+        expect(chargeElement.returnLogs).to.equal([
+          {
+            allocatedQuantity: 0,
+            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
+          }
+        ])
       })
 
-      it('does not change the matched property on the return logs', () => {
+      it("only flags the matching return logs as 'matched'", () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-        expect(returnLogs[0].matched).to.be.false()
+        expect(returnLogs[0].matched).to.be.true()
         expect(returnLogs[1].matched).to.be.false()
       })
+    })
+  })
+
+  describe('when no return logs match', () => {
+    beforeEach(() => {
+      returnLogs = _testReturnLogs()
+      returnLogs[0].purposes[0].tertiary.code = '600'
+      returnLogs[1].purposes[0].tertiary.code = '600'
+    })
+
+    it('adds no matching return logs to the charge element', () => {
+      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+
+      expect(chargeElement.returnLogs).to.be.empty()
+    })
+
+    it('leaves the matched property on the return logs as false', () => {
+      MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+
+      expect(returnLogs[0].matched).to.be.false()
+      expect(returnLogs[1].matched).to.be.false()
     })
   })
 })
 
 // All data not required for the tests has been excluded from the generated data
-function _setUpReturnLogs (purpose1, purpose2) {
+function _testReturnLogs () {
   return [
     {
       id: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31',
@@ -183,7 +167,7 @@ function _setUpReturnLogs (purpose1, purpose2) {
         {
           alias: 'Spray Irrigation - Direct',
           primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: purpose1, description: 'Spray Irrigation - Direct' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
           secondary: { code: 'AGR', description: 'General Agriculture' }
         }
       ],
@@ -202,7 +186,7 @@ function _setUpReturnLogs (purpose1, purpose2) {
         {
           alias: 'Spray Irrigation - Direct',
           primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: purpose2, description: 'Spray Irrigation - Direct' },
+          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
           secondary: { code: 'AGR', description: 'General Agriculture' }
         }
       ],
