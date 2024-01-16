@@ -7,252 +7,341 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
-
 // Thing under test
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-charge-element.service.js')
 
-describe.only('Allocate Returns to Charge Element Service', () => {
-  describe('when there are valid records to process', () => {
-    let testLicences
-    let chargeElement
-    let chargeVersion
-    let chargeReference
-    let matchingReturns
+describe('Allocate Returns to Charge Element Service', () => {
+  describe('when there are records to process', () => {
+    const chargePeriod = {
+      startDate: new Date('2022-04-01'),
+      endDate: new Date('2023-03-31')
+    }
 
-    describe('with a charge element that has been matched to a return with a quantity to allocate', () => {
+    let testData
+
+    describe('with a charge reference/element authorised upto 32, matched to a return with a quantity of 32', () => {
       beforeEach(() => {
-        testLicences = _generateLicenceData()
-        chargeVersion = testLicences[0].chargeVersions[0]
-        chargeReference = testLicences[0].chargeVersions[0].chargeReferences[0]
-        chargeElement = testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
-
-        matchingReturns = _generateMatchingReturns()
+        testData = _generateTestData()
       })
 
-      it.only('correctly allocates the returns and adds the results to the `testLicences` array', () => {
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion, chargeReference)
+      it('correctly allocates 32 to the charge reference', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
 
-        expect(testLicences[0].returnLogs[0].allocatedQuantity).to.equal(32)
-        expect(testLicences[0].returnLogs[0].matched).to.be.true()
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-        expect(testLicences[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(32)
+        expect(chargeReference.allocatedQuantity).to.equal(32)
+      })
 
-        expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity).to.equal(32)
+      it('correctly allocates 32 to the charge element and adds chargeDatesOverlap item as `false`', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
 
-        expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].allocatedQuantity).to.equal(32)
-        expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].returnId).to.equal(testLicences[0].returnLogs[0].id)
-        expect(testLicences[0].chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[0].reviewReturnResultId).to.equal(testLicences[0].returnLogs[0].reviewReturnResultId)
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeElement.allocatedQuantity).to.equal(32)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+        expect(chargeElement.chargeDatesOverlap).to.be.false()
+      })
+
+      it('correctly allocates all 32 from the return log', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(matchingReturns[0].allocatedQuantity).to.equal(32)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
       })
     })
-  })
 
-  describe('when there are NO records to allocate', () => {
-    const testLicences = []
+    describe('with a charge reference authorised upto 10, matched to a return with a quantity of 32', () => {
+      beforeEach(() => {
+        testData = _generateTestData()
+        testData.chargeReference.volume = 10
+      })
 
-    it('does not throw an error', () => {
-      expect(() => AllocateReturnsToChargeElementService.go(testLicences)).to.not.throw()
+      it('correctly allocates 10 to the charge reference', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeReference.volume).to.equal(10)
+        expect(chargeReference.allocatedQuantity).to.equal(10)
+      })
+
+      it('correctly allocates 10 to the charge element', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeElement.authorisedAnnualQuantity).to.equal(32)
+        expect(chargeElement.allocatedQuantity).to.equal(10)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+      })
+
+      it('correctly allocates 10 from the return log', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+      })
+    })
+
+    describe('with a charge element authorised upto 10, matched to a return with a quantity of 32', () => {
+      beforeEach(() => {
+        testData = _generateTestData()
+        testData.chargeElement.authorisedAnnualQuantity = 10
+      })
+
+      it('correctly allocates 10 to the charge reference', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeReference.volume).to.equal(32)
+        expect(chargeReference.allocatedQuantity).to.equal(10)
+      })
+
+      it('correctly allocates 10 to the charge element', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeElement.authorisedAnnualQuantity).to.equal(10)
+        expect(chargeElement.allocatedQuantity).to.equal(10)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+      })
+
+      it('correctly allocates 10 from the return log', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+      })
+    })
+
+    describe('with a `returnSubmissionLine` outside of the `chargePeriod`', () => {
+      beforeEach(() => {
+        testData = _generateTestData()
+        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
+        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].endDate = new Date('2022-03-30')
+      })
+
+      it('correctly allocates 28 to the charge reference', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeReference.allocatedQuantity).to.equal(28)
+      })
+
+      it('correctly allocates 28 to the charge element', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeElement.allocatedQuantity).to.equal(28)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(28)
+      })
+
+      it('does not include the line outside of the charge period and allocates 28 from the return log', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(matchingReturns[0].allocatedQuantity).to.equal(28)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
+      })
+    })
+
+    describe('with a `returnSubmissionLine` with a `startDate` outside the charge period but endDate within', () => {
+      beforeEach(() => {
+        testData = _generateTestData()
+        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
+        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].endDate = new Date('2022-04-30')
+      })
+
+      it('correctly allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeElement.allocatedQuantity).to.equal(32)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+        expect(chargeElement.chargeDatesOverlap).to.be.true()
+      })
+    })
+
+    describe('with a `returnSubmissionLine` with a `endDate` outside the charge period but startDate within', () => {
+      beforeEach(() => {
+        testData = _generateTestData()
+        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].startDate = new Date('2023-03-01')
+        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].endDate = new Date('2023-04-31')
+      })
+
+      it('correctly allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeElement.allocatedQuantity).to.equal(32)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+        expect(chargeElement.chargeDatesOverlap).to.be.true()
+      })
+    })
+
+    describe('with a return that has issues', () => {
+      beforeEach(() => {
+        testData = _generateTestData()
+        testData.matchingReturns[0].issues = true
+      })
+
+      it('does not allocate anything from the return log', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeReference.allocatedQuantity).to.equal(0)
+
+        expect(chargeElement.allocatedQuantity).to.equal(0)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+
+        expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
+      })
+    })
+
+    describe('with a nil return that has no `returnSubmissionLines`', () => {
+      beforeEach(() => {
+        testData = _generateTestData()
+        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines = []
+      })
+
+      it('does not allocate anything from the return log', () => {
+        const { chargeElement, chargeReference, matchingReturns } = testData
+
+        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+        expect(chargeReference.allocatedQuantity).to.equal(0)
+
+        expect(chargeElement.allocatedQuantity).to.equal(0)
+        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+
+        expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+      })
     })
   })
 })
 
-function _generateMatchingReturns () {
-  return [
+function _generateTestData () {
+  // Data not required for the tests has been excluded from the generated data
+  const chargeElement = {
+    authorisedAnnualQuantity: 32,
+    returnLogs: [
+      {
+        allocatedQuantity: 0
+      }
+    ],
+    allocatedQuantity: 0,
+    abstractionPeriods: [
+      {
+        startDate: new Date('2022-04-01'),
+        endDate: new Date('2022-10-31')
+      },
+      {
+        startDate: new Date('2023-03-01'),
+        endDate: new Date('2023-03-31')
+      }
+    ]
+  }
+
+  const chargeReference = {
+    volume: 32,
+    allocatedQuantity: 0
+  }
+
+  const matchingReturns = [
     {
-      id: 'v1:1:5/31/14/*S/0116A:10021668:2022-04-01:2023-03-31',
-      returnRequirement: '10021668',
-      description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
-      startDate: new Date('2022-04-01'),
-      endDate: new Date('2023-03-31'),
-      receivedDate: null,
-      dueDate: new Date('2023-04-28'),
-      status: 'completed',
-      underQuery: false,
-      periodStartDay: 1,
-      periodStartMonth: 3,
-      periodEndDay: 31,
-      periodEndMonth: 10,
-      purposes: [
-        [{
-          alias: 'Spray Irrigation - Direct',
-          primary: { code: 'A', description: 'Agriculture' },
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' },
-          secondary: { code: 'AGR', description: 'General Agriculture' }
-        }]
-      ],
       returnSubmissions: [
         {
-          id: '1313d4f1-0fe8-4dfa-b18d-3faddedcc18f',
-          nilReturn: false,
           returnSubmissionLines: [
             {
-              id: 'e828b761-0fe0-4d57-8fcd-fa892ecc213e',
               startDate: new Date('2022-04-01'),
               endDate: new Date('2022-04-30'),
-              quantity: 0.025,
-              unallocated: 0.000025
+              unallocated: 4
+            },
+            {
+              startDate: new Date('2022-05-01'),
+              endDate: new Date('2022-05-31'),
+              unallocated: 4
+            },
+            {
+              startDate: new Date('2022-06-01'),
+              endDate: new Date('2022-06-30'),
+              unallocated: 4
+            },
+            {
+              startDate: new Date('2022-07-01'),
+              endDate: new Date('2022-07-31'),
+              unallocated: 4
+            },
+            {
+              startDate: new Date('2022-08-01'),
+              endDate: new Date('2022-08-31'),
+              unallocated: 4
+            },
+            {
+              startDate: new Date('2022-09-01'),
+              endDate: new Date('2022-09-30'),
+              unallocated: 4
+            },
+            {
+              startDate: new Date('2022-10-01'),
+              endDate: new Date('2022-10-31'),
+              unallocated: 4
+            },
+            {
+              startDate: new Date('2023-03-01'),
+              endDate: new Date('2023-03-31'),
+              unallocated: 4
             }
           ]
         }
       ],
-      nilReturn: false,
-      quantity: 0,
       allocatedQuantity: 0,
-      abstractionPeriods: [
-        {
-          startDate: new Date('2022-04-01'),
-          endDate: new Date('2022-10-31')
-        },
-        {
-          startDate: new Date('2023-03-01'),
-          endDate: new Date('2023-03-31')
-        }
-      ],
-      abstractionOutsidePeriod: false,
-      matched: true,
       issues: false
     }
   ]
-}
 
-function _generateLicenceData () {
-  // All data not required for the tests has been excluded from the generated data
-  const dataToProcess = [
-    {
-      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
-      chargeVersions: [
-        {
-          id: 'aad7de5b-d684-4980-bcb7-e3b631d3036f',
-          chargeReferences: [
-            {
-              id: '4e7f1824-3680-4df0-806f-c6d651ba4771',
-              volume: 32,
-              chargeElements: [
-                {
-                  id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-                  authorisedAnnualQuantity: 32,
-                  purpose: {
-                    legacyId: '400'
-                  },
-                  returnLogs: [
-                  ],
-                  allocatedQuantity: 0,
-                  abstractionPeriods: [
-                    {
-                      startDate: new Date('2022-04-01'),
-                      endDate: new Date('2022-10-31')
-                    },
-                    {
-                      startDate: new Date('2023-03-01'),
-                      endDate: new Date('2023-03-31')
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          chargePeriod: {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2023-03-31')
-          }
-        }
-      ],
-      returnLogs: [
-        {
-          id: generateReturnLogId(),
-          status: 'completed',
-          underQuery: false,
-          purposes: [
-            {
-              tertiary: {
-                code: '400'
-              }
-            }
-          ],
-          returnSubmissions: [
-            {
-              id: 'c081f44e-4ec8-4287-b4f9-ce41c988ff4e',
-              nilReturn: false,
-              returnSubmissionLines: [
-                {
-                  id: '20020dd1-e975-4cd3-b23e-d5b5b88df2f7',
-                  startDate: new Date('2022-04-01'),
-                  endDate: new Date('2022-04-30'),
-                  quantity: 4000,
-                  unallocated: 4
-                },
-                {
-                  id: '13d27ac4-9026-49e3-9597-67e3e82e6776',
-                  startDate: new Date('2022-05-01'),
-                  endDate: new Date('2022-05-31'),
-                  quantity: 4000,
-                  unallocated: 4
-                },
-                {
-                  id: '90c9c45b-ea09-47bf-afe5-4f6ebb97231f',
-                  startDate: new Date('2022-06-01'),
-                  endDate: new Date('2022-06-30'),
-                  quantity: 4000,
-                  unallocated: 4
-                },
-                {
-                  id: 'ab91f66e-6db3-4c60-b308-aeeeee4df7a9',
-                  startDate: new Date('2022-07-01'),
-                  endDate: new Date('2022-07-31'),
-                  quantity: 4000,
-                  unallocated: 4
-                },
-                {
-                  id: '319a139f-a565-4047-a39d-dafd3e810b6b',
-                  startDate: new Date('2022-08-01'),
-                  endDate: new Date('2022-08-31'),
-                  quantity: 4000,
-                  unallocated: 4
-                },
-                {
-                  id: '43d58ca8-969d-4e1c-8dd3-987460c63576',
-                  startDate: new Date('2022-09-01'),
-                  endDate: new Date('2022-09-30'),
-                  quantity: 4000,
-                  unallocated: 4
-                },
-                {
-                  id: '2aa18525-58d3-40e0-a3ea-44b178748b12',
-                  startDate: new Date('2022-10-01'),
-                  endDate: new Date('2022-10-31'),
-                  quantity: 4000,
-                  unallocated: 4
-                },
-                {
-                  id: '3683b81e-18a1-433b-948f-1abcb7bf6a83',
-                  startDate: new Date('2023-03-01'),
-                  endDate: new Date('2023-03-31'),
-                  quantity: 4000,
-                  unallocated: 4
-                }
-              ]
-            }
-          ],
-          nilReturn: false,
-          quantity: 32,
-          allocatedQuantity: 0,
-          abstractionPeriods: [
-            {
-              startDate: new Date('2022-04-01'),
-              endDate: new Date('2022-10-31')
-            },
-            {
-              startDate: new Date('2023-03-01'),
-              endDate: new Date('2023-03-31')
-            }
-          ],
-          matched: false,
-          reviewReturnResultId: 'c3f823c9-7875-4251-913c-a2c859049fd9'
-        }
-      ]
-    }
-  ]
-
-  return dataToProcess
+  return { chargeElement, chargeReference, matchingReturns }
 }
