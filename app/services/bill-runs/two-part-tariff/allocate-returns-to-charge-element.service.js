@@ -19,16 +19,26 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  */
 function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
   matchingReturns.forEach((matchedReturn, i) => {
-    if (
-      (chargeElement.allocatedQuantity < chargeElement.authorisedAnnualQuantity) &&
-      (chargeReference.allocatedQuantity < chargeReference.volume) &&
-      (matchedReturn.issues === false)
-    ) {
-      const matchedLines = _matchLines(chargeElement, matchedReturn.returnSubmissions[0].returnSubmissionLines)
+    // We don't allocate returns with issues
+    if (matchedReturn.issues) {
+      return
+    }
 
-      if (matchedLines.length > 0) {
-        _allocateReturns(chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines)
-      }
+    // We can only allocate up to the authorised volume on the charge reference, even if there is charge elements
+    // unallocated and returns to be allocated
+    if (chargeReference.allocatedQuantity >= chargeReference.volume) {
+      return
+    }
+
+    // Finally, we can only allocate to the charge element if there is unallocated volume left!
+    if (chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity) {
+      return
+    }
+
+    const matchedLines = _matchLines(chargeElement, matchedReturn.returnSubmissions[0].returnSubmissionLines)
+
+    if (matchedLines.length > 0) {
+      _allocateReturns(chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines)
     }
   })
 }
@@ -74,11 +84,7 @@ function _chargeDatesOverlap (matchedLine, chargePeriod) {
     return true
   }
 
-  if (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate) {
-    return true
-  }
-
-  return false
+  return (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate)
 }
 
 function _matchLines (chargeElement, returnSubmissionLines) {
