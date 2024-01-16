@@ -40,6 +40,14 @@ class LicenceModel extends BaseModel {
           to: 'licenceDocuments.licenceRef'
         }
       },
+      licenceDocumentHeader: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-document-header.model',
+        join: {
+          from: 'licences.licenceRef',
+          to: 'licenceDocumentHeaders.licenceRef'
+        }
+      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',
