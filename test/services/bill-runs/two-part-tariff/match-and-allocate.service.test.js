@@ -25,16 +25,6 @@ describe('Match And Allocate Service', () => {
   let notifierStub
   let licences
 
-  const billingPeriods = [
-    { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
-    { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
-  ]
-
-  const billRun = {
-    regionId: 'ffea25c2-e577-4969-8667-b0eed899230d',
-    billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282'
-  }
-
   beforeEach(() => {
     notifierStub = { omg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
@@ -46,61 +36,84 @@ describe('Match And Allocate Service', () => {
   })
 
   describe('with a given billRun and billingPeriods', () => {
-    describe('when there are licences to be processed for the billing period', () => {
+    const billingPeriods = [
+      { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
+      { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
+    ]
+
+    const billRun = {
+      regionId: 'ffea25c2-e577-4969-8667-b0eed899230d',
+      billingBatchId: '41be6d72-701b-4252-90d5-2d38614b6282'
+    }
+
+    describe('when there are licences to be processed', () => {
       beforeEach(() => {
         licences = _generateLicencesData()
-        const matchingReturns = _generateMatchingReturnsData()
 
         Sinon.stub(FetchLicencesService, 'go').returns(licences)
         Sinon.stub(PrepareReturnLogsService, 'go')
         Sinon.stub(PrepareChargeVersionService, 'go')
-        Sinon.stub(MatchReturnsToChargeElementService, 'go').returns(matchingReturns)
         Sinon.stub(AllocateReturnsToChargeElementService, 'go')
         Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
       })
 
-      it('fetches the licences for that bill run', async () => {
-        await MatchAndAllocateService.go(billRun, billingPeriods)
+      describe('and the charge element has matching returns', () => {
+        beforeEach(() => {
+          const matchingReturns = _generateMatchingReturnsData()
 
-        expect(FetchLicencesService.go.called).to.be.true()
+          Sinon.stub(MatchReturnsToChargeElementService, 'go').returns(matchingReturns)
+        })
+
+        it('processes the licence for matching allocating', async () => {
+          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+
+          expect(FetchLicencesService.go.called).to.be.true()
+          expect(PrepareReturnLogsService.go.called).to.be.true()
+          expect(PrepareChargeVersionService.go.called).to.be.true()
+
+          expect(result[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
+          expect(MatchReturnsToChargeElementService.go.called).to.be.true()
+          expect(AllocateReturnsToChargeElementService.go.called).to.be.true()
+
+          expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
+        })
+
+        it('returns the licences all processed', async () => {
+          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+
+          expect(result).to.equal(licences)
+        })
       })
 
-      it('processes the licences for matching and allocating', async () => {
-        await MatchAndAllocateService.go(billRun, billingPeriods)
+      describe('and the charge element does not have matching returns', () => {
+        beforeEach(() => {
+          Sinon.stub(MatchReturnsToChargeElementService, 'go').returns([])
+        })
 
-        expect(PrepareReturnLogsService.go.called).to.be.true()
-        expect(PrepareChargeVersionService.go.called).to.be.true()
-      })
+        it('processes the licence for matching but does not allocate', async () => {
+          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
-      it('adds allocated quantity on the charge reference', async () => {
-        const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+          expect(FetchLicencesService.go.called).to.be.true()
+          expect(PrepareReturnLogsService.go.called).to.be.true()
+          expect(PrepareChargeVersionService.go.called).to.be.true()
 
-        expect(result[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
-      })
+          expect(result[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
+          expect(MatchReturnsToChargeElementService.go.called).to.be.true()
+          expect(AllocateReturnsToChargeElementService.go.called).to.be.false()
 
-      it('matches and allocated the charge element to return logs', async () => {
-        await MatchAndAllocateService.go(billRun, billingPeriods)
+          expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
+        })
 
-        expect(MatchReturnsToChargeElementService.go.called).to.be.true()
-        expect(AllocateReturnsToChargeElementService.go.called).to.be.true()
-      })
+        it('returns the licences all processed', async () => {
+          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
-      it('persists the results of matching and allocating', async () => {
-        await MatchAndAllocateService.go(billRun, billingPeriods)
-
-        expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
-      })
-
-      it('returns the licences all processed', async () => {
-        const result = await MatchAndAllocateService.go(billRun, billingPeriods)
-
-        expect(result).to.equal(licences)
+          expect(result).to.equal(licences)
+        })
       })
     })
 
-    describe('when there are no licences to e processed for a billing period', () => {
+    describe('when there are no licences to be processed', () => {
       beforeEach(() => {
-        licences = _generateLicencesData()
         Sinon.stub(FetchLicencesService, 'go').returns([])
         Sinon.stub(PrepareReturnLogsService, 'go')
         Sinon.stub(PrepareChargeVersionService, 'go')
@@ -123,6 +136,12 @@ describe('Match And Allocate Service', () => {
         expect(MatchReturnsToChargeElementService.go.called).to.be.false()
         expect(AllocateReturnsToChargeElementService.go.called).to.be.false()
         expect(PersistAllocatedLicenceToResultsService.go.called).to.be.false()
+      })
+
+      it('does not return any licences', async () => {
+        const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(result).to.equal([])
       })
     })
   })
