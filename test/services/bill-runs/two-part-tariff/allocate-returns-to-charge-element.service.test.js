@@ -32,7 +32,7 @@ describe('Allocate Returns to Charge Element Service', () => {
         expect(chargeReference.allocatedQuantity).to.equal(32)
       })
 
-      it('correctly allocates 32 to the charge element and adds chargeDatesOverlap item as `false`', () => {
+      it('correctly allocates 32 to the charge element and adds chargeDatesOverlap property as `false`', () => {
         const { chargeElement, chargeReference, matchingReturns } = testData
 
         AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)

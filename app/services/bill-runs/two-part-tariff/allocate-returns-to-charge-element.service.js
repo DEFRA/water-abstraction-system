@@ -12,9 +12,9 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * charge element up to a maximum of the charge elements authorised volume, or the remaining authorised volume on the
  * charge reference, whichever is lower.
  *
- * @param {module:ChargeElementModel} chargeElement - The charge element to match return logs against
- * @param {module:ReturnLogModel[]} matchingReturns - logs that matched the charge element
- * @param {module:ChargeVersionModel} chargePeriod - The charge period from the charge version the element belongs to
+ * @param {module:ChargeElementModel} chargeElement - The charge element to allocate return logs against
+ * @param {module:ReturnLogModel[]} matchingReturns - Return logs that matched to the charge element
+ * @param {module:ChargeVersionModel} chargePeriod - The charge period taken from the charge version
  * @param {module:ChargeReferenceModel} chargeReference - The charge reference the element belongs to
  */
 function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
@@ -53,6 +53,8 @@ function _allocateReturns (chargeElement, matchingReturns, chargePeriod, chargeR
             qtyToAllocate = remainingAllocation
           }
 
+          // We do this check to prevent overwriting the value with false once it's been set to true as it only requires
+          // a single `matchedLine` to overlap the charge period
           if (!chargeElement.chargeDatesOverlap) {
             chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
           }
