@@ -18,8 +18,8 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  *
  * @param {Object[]} licences - The licences, associated charging data, and return logs to process
  */
-function go (chargeElement, matchingReturns, chargeVersion, chargeReference) {
-  _allocateReturns(chargeElement, matchingReturns, chargeVersion.chargePeriod, chargeReference)
+function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
+  _allocateReturns(chargeElement, matchingReturns, chargePeriod, chargeReference)
 }
 
 function _allocateReturns (chargeElement, matchingReturns, chargePeriod, chargeReference) {

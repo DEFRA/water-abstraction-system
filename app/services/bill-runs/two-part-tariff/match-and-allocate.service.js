@@ -53,7 +53,7 @@ async function _process (licences, billingPeriods, billRun) {
           const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
           if (matchingReturns.length > 0) {
-            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion, chargeReference)
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion.chargePeriod, chargeReference)
           }
         })
       })
