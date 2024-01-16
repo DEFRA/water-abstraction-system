@@ -36,18 +36,8 @@ describe('Match And Allocate Service', () => {
   }
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = { omg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
-
-    licences = _generateLicencesData()
-    const matchingReturns = _generateMatchingReturnsData()
-
-    Sinon.stub(FetchLicencesService, 'go').returns(licences)
-    Sinon.stub(PrepareReturnLogsService, 'go')
-    Sinon.stub(PrepareChargeVersionService, 'go')
-    Sinon.stub(MatchReturnsToChargeElementService, 'go').returns(matchingReturns)
-    Sinon.stub(AllocateReturnsToChargeElementService, 'go')
-    Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
   })
 
   afterEach(async () => {
@@ -56,18 +46,36 @@ describe('Match And Allocate Service', () => {
   })
 
   describe('with a given billRun and billingPeriods', () => {
-    it('fetches the licences for that bill run', async () => {
-      await MatchAndAllocateService.go(billRun, billingPeriods)
-
-      expect(FetchLicencesService.go.called).to.be.true()
-    })
-
     describe('when there are licences to be processed for the billing period', () => {
+      beforeEach(() => {
+        licences = _generateLicencesData()
+        const matchingReturns = _generateMatchingReturnsData()
+
+        Sinon.stub(FetchLicencesService, 'go').returns(licences)
+        Sinon.stub(PrepareReturnLogsService, 'go')
+        Sinon.stub(PrepareChargeVersionService, 'go')
+        Sinon.stub(MatchReturnsToChargeElementService, 'go').returns(matchingReturns)
+        Sinon.stub(AllocateReturnsToChargeElementService, 'go')
+        Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
+      })
+
+      it('fetches the licences for that bill run', async () => {
+        await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(FetchLicencesService.go.called).to.be.true()
+      })
+
       it('processes the licences for matching and allocating', async () => {
         await MatchAndAllocateService.go(billRun, billingPeriods)
 
         expect(PrepareReturnLogsService.go.called).to.be.true()
         expect(PrepareChargeVersionService.go.called).to.be.true()
+      })
+
+      it('adds allocated quantity on the charge reference', async () => {
+        const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(result[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
       })
 
       it('matches and allocated the charge element to return logs', async () => {
@@ -87,7 +95,34 @@ describe('Match And Allocate Service', () => {
         const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
         expect(result).to.equal(licences)
-        expect(result[0].chargeVersions[0].chargeReferences[0].allocatedQuantity).to.equal(0)
+      })
+    })
+
+    describe('when there are no licences to e processed for a billing period', () => {
+      beforeEach(() => {
+        licences = _generateLicencesData()
+        Sinon.stub(FetchLicencesService, 'go').returns([])
+        Sinon.stub(PrepareReturnLogsService, 'go')
+        Sinon.stub(PrepareChargeVersionService, 'go')
+        Sinon.stub(MatchReturnsToChargeElementService, 'go')
+        Sinon.stub(AllocateReturnsToChargeElementService, 'go')
+        Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
+      })
+
+      it('calls the fetchLicencesService', async () => {
+        await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(FetchLicencesService.go.called).to.be.true()
+      })
+
+      it('does not process the licences', async () => {
+        await MatchAndAllocateService.go(billRun, billingPeriods)
+
+        expect(PrepareReturnLogsService.go.called).to.be.false()
+        expect(PrepareChargeVersionService.go.called).to.be.false()
+        expect(MatchReturnsToChargeElementService.go.called).to.be.false()
+        expect(AllocateReturnsToChargeElementService.go.called).to.be.false()
+        expect(PersistAllocatedLicenceToResultsService.go.called).to.be.false()
       })
     })
   })
