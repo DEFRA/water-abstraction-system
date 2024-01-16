@@ -14,11 +14,11 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  *
  * @param {module:ChargeElementModel} chargeElement - The charge element to match return logs against
  * @param {module:ReturnLogModel[]} matchingReturns - logs that matched the charge element
- * @param {module:ChargeVersionModel} chargeVersion - The charge version the element belongs to
+ * @param {module:ChargeVersionModel} chargePeriod - The charge period from the charge version the element belongs to
  * @param {module:ChargeReferenceModel} chargeReference - The charge reference the element belongs to
  */
-function go (chargeElement, matchingReturns, chargeVersion, chargeReference) {
-  _allocateReturns(chargeElement, matchingReturns, chargeVersion.chargePeriod, chargeReference)
+function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
+  _allocateReturns(chargeElement, matchingReturns, chargePeriod, chargeReference)
 }
 
 function _allocateReturns (chargeElement, matchingReturns, chargePeriod, chargeReference) {
@@ -53,7 +53,10 @@ function _allocateReturns (chargeElement, matchingReturns, chargePeriod, chargeR
             qtyToAllocate = remainingAllocation
           }
 
-          chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
+          if (!chargeElement.chargeDatesOverlap) {
+            chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
+          }
+
           chargeElement.allocatedQuantity += qtyToAllocate
           chargeElement.returnLogs[i].allocatedQuantity += qtyToAllocate
 
