@@ -16,6 +16,8 @@ const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
+const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
+const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
@@ -142,6 +144,36 @@ describe('Licence model', () => {
 
         expect(result.licenceDocument).to.be.an.instanceOf(LicenceDocumentModel)
         expect(result.licenceDocument).to.equal(testLicenceDocument)
+      })
+    })
+
+    describe('when linking to licence document header', () => {
+      let testLicenceDocumentHeader
+
+      beforeEach(async () => {
+        testLicenceDocumentHeader = await LicenceDocumentHeaderHelper.add()
+
+        const { licenceRef } = testLicenceDocumentHeader
+        testRecord = await LicenceHelper.add({ licenceRef })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('licenceDocumentHeader')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence document header', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceDocumentHeader')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceDocumentHeader).to.be.an.instanceOf(LicenceDocumentHeaderModel)
+        expect(result.licenceDocumentHeader).to.equal(testLicenceDocumentHeader)
       })
     })
 
