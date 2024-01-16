@@ -7,7 +7,8 @@
 
 const Joi = require('joi')
 
-function go (data, licenceStartDate, licenceEndDate) {
+function go (data) {
+  const { licenceStartDate, licenceEndDate } = data
   const schema = Joi.object({
     day: Joi.string().required(),
     month: Joi.string().required(),

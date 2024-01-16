@@ -6,18 +6,20 @@ const Code = require('@hapi/code')
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Thing under test
 const StartDateValidator = require('../../../app/validators/return-requirements/start-date.validator.js')
 
 describe('Start Date Validator', () => {
-  const licenceStartDate = '2023-01-01T00:00:00.000Z'
-  const licenceEndDate = '2023-12-31T00:00:00.000Z'
+  const testData = {
+    day: '15',
+    month: '06',
+    year: '2023',
+    licenceStartDate: '2023-01-01T00:00:00.000Z',
+    licenceEndDate: '2023-12-31T00:00:00.000Z'
+  }
 
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const testData = { day: '15', month: '06', year: '2023' }
-
-      const result = StartDateValidator.go(testData, licenceStartDate, licenceEndDate)
+      const result = StartDateValidator.go(testData)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -27,9 +29,8 @@ describe('Start Date Validator', () => {
   describe('when invalid data is provided', () => {
     describe('because the date is non-existent', () => {
       it('fails validation', () => {
-        const testData = { day: '31', month: '09', year: '2023' }
-
-        const result = StartDateValidator.go(testData, licenceStartDate, licenceEndDate)
+        const invalidTestData = { ...testData, day: '31', month: '09' }
+        const result = StartDateValidator.go(invalidTestData)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -39,9 +40,8 @@ describe('Start Date Validator', () => {
 
     describe('because the date is before the licence start date', () => {
       it('fails validation', () => {
-        const testData = { day: '31', month: '12', year: '2022' }
-
-        const result = StartDateValidator.go(testData, licenceStartDate, licenceEndDate)
+        const invalidTestData = { ...testData, day: '31', month: '12', year: '2022' }
+        const result = StartDateValidator.go(invalidTestData)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -51,9 +51,8 @@ describe('Start Date Validator', () => {
 
     describe('because the date is after the licence end date', () => {
       it('fails validation', () => {
-        const testData = { day: '01', month: '01', year: '2024' }
-
-        const result = StartDateValidator.go(testData, licenceStartDate, licenceEndDate)
+        const invalidTestData = { ...testData, day: '01', month: '01', year: '2024' }
+        const result = StartDateValidator.go(invalidTestData)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

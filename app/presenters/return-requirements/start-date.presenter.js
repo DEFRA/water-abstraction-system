@@ -11,6 +11,7 @@ function go (session, error = null) {
     errorMessage: _error(error),
     licenceRef: session.data.licence.licenceRef,
     licenceStartDate: _formattedStartDate(session.data.licence.startDate),
+    licenceStartDateValue: session.data.licence.startDate,
     dateFields: _dateFields(session, error)
   }
 
