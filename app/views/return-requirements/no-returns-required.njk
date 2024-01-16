@@ -4,14 +4,13 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set title = "Why are no returns required?" %}
 {% set rootLink = "/system/return-requirements/" + id %}
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + '/select-return-start-date'
+      href: rootLink + '/start-date'
     })
   }}
 {% endblock %}
@@ -36,7 +35,7 @@
         errorMessage: errorMessage,
         fieldset: {
           legend: {
-            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + title,
+            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
             isPageHeading: true,
             classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
           }

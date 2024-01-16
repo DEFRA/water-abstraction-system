@@ -12,9 +12,9 @@ const { expect } = Code
 const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-return-logs-for-licence.service.js')
 
 // Thing under test
-const PrepareLicencesForAllocationService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-licences-for-allocation.service.js')
+const PrepareReturnLogService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-return-logs.service.js')
 
-describe('Prepare Licences For Allocation Service', () => {
+describe('Prepare Return Logs Service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -24,23 +24,23 @@ describe('Prepare Licences For Allocation Service', () => {
     Sinon.restore()
   })
 
-  describe('for each licence', () => {
+  describe('for a licence', () => {
     let licence
 
     beforeEach(async () => {
-      licence = _testLicences()
+      licence = _testLicence()
     })
 
     describe('when matching returns exist', () => {
-      describe('that have have no issues', () => {
+      describe('that have no issues', () => {
         beforeEach(async () => {
           const returnLog = _testReturnLog()
 
           Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
         })
 
-        it('preps the return correctly', async () => {
-          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
+        it('preps the returns correctly', async () => {
+          await PrepareReturnLogService.go(licence, billingPeriod)
 
           expect(licence.returnLogs[0]).to.equal({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
@@ -88,7 +88,8 @@ describe('Prepare Licences For Allocation Service', () => {
               }
             ],
             abstractionOutsidePeriod: false,
-            matched: false
+            matched: false,
+            issues: false
           })
         })
       })
@@ -102,7 +103,7 @@ describe('Prepare Licences For Allocation Service', () => {
         })
 
         it('flags the return as outside the abstraction period', async () => {
-          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
+          await PrepareReturnLogService.go(licence, billingPeriod)
 
           expect(licence.returnLogs[0].abstractionOutsidePeriod).to.be.true()
         })
@@ -117,7 +118,7 @@ describe('Prepare Licences For Allocation Service', () => {
         })
 
         it('flags the return as a nil return', async () => {
-          await PrepareLicencesForAllocationService.go([licence], billingPeriod)
+          await PrepareReturnLogService.go(licence, billingPeriod)
 
           expect(licence.returnLogs[0].nilReturn).to.be.true()
         })
@@ -130,59 +131,15 @@ describe('Prepare Licences For Allocation Service', () => {
       })
 
       it('assigns no return logs to the licence', async () => {
-        await PrepareLicencesForAllocationService.go([licence], billingPeriod)
+        await PrepareReturnLogService.go(licence, billingPeriod)
 
         expect(licence.returnLogs).to.be.empty()
       })
     })
-
-    it('sorts the charge references by their subsistence charge', async () => {
-      await PrepareLicencesForAllocationService.go([licence], billingPeriod)
-
-      expect(licence.chargeVersions[0].chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
-      expect(licence.chargeVersions[0].chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
-    })
-
-    it('preps the charge elements correctly', async () => {
-      await PrepareLicencesForAllocationService.go([licence], billingPeriod)
-
-      expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0]).to.equal({
-        id: '8eac5976-d16c-4818-8bc8-384d958ce863',
-        description: 'Spray irrigation',
-        abstractionPeriodStartDay: 1,
-        abstractionPeriodStartMonth: 3,
-        abstractionPeriodEndDay: 31,
-        abstractionPeriodEndMonth: 10,
-        authorisedAnnualQuantity: 32,
-        purpose: {
-          id: 'f3872a42-b91b-4c58-887a-ef09dda686fd',
-          legacyId: '400',
-          description: 'Spray Irrigation - Direct'
-        },
-        returnLogs: [],
-        allocatedQuantity: 0,
-        abstractionPeriods: [
-          {
-            startDate: new Date('2022-04-01'),
-            endDate: new Date(' 2022-10-31')
-          },
-          {
-            startDate: new Date('2023-03-01'),
-            endDate: new Date('2023-03-31')
-          }
-        ]
-      })
-    })
-  })
-
-  describe('when given no licences', () => {
-    it('does not throw an error', async () => {
-      await expect(PrepareLicencesForAllocationService.go([], billingPeriod)).not.to.reject()
-    })
   })
 })
 
-function _testLicences () {
+function _testLicence () {
   return {
     id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
     licenceRef: '5/31/14/*S/0116A',

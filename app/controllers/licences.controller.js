@@ -11,9 +11,17 @@ const ViewLicenceService = require('../services/licences/view-licence.service.js
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 
-  const session = await InitiateReturnRequirementSessionService.go(id)
+  const session = await InitiateReturnRequirementSessionService.go(id, 'no-returns-required')
 
-  return h.redirect(`/system/return-requirements/${session.id}/select-return-start-date`)
+  return h.redirect(`/system/return-requirements/${session.id}/start-date`)
+}
+
+async function returnsRequired (request, h) {
+  const { id } = request.params
+
+  const session = await InitiateReturnRequirementSessionService.go(id, 'returns-required')
+
+  return h.redirect(`/system/return-requirements/${session.id}/start-date`)
 }
 
 async function summary (request, h) {
@@ -29,5 +37,6 @@ async function summary (request, h) {
 
 module.exports = {
   noReturnsRequired,
+  returnsRequired,
   summary
 }

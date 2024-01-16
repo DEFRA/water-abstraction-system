@@ -25,7 +25,20 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Review two-part tariff match and allocation results'
+      description: 'Start no returns required set up journey (return-requirements)'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/returns-required',
+    handler: LicencesController.returnsRequired,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Start returns required set up journey (return-requirements)'
     }
   }
 ]
