@@ -275,11 +275,17 @@ async function submitSiteDescription (request, h) {
 
 async function submitStartDate (request, h) {
   const { sessionId } = request.params
-  const validation = StartDateValidator.go(request.payload)
+  const pageData = await StartDateService.go(sessionId)
+  const validationData = {
+    ...request.payload,
+    licenceStartDate: pageData.licenceStartDateValue,
+    licenceEndDate: pageData.licenceEndDateValue
+  }
+  const validation = StartDateValidator.go(validationData)
 
   if (validation.error) {
-    const pageData = await StartDateService.go(sessionId, validation.error)
-    return h.view('return-requirements/save-date.njk', pageData)
+    const errorPageData = await StartDateService.go(sessionId, validation.error)
+    return h.view('return-requirements/save-date.njk', errorPageData)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)

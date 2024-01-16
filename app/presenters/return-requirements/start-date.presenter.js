@@ -1,5 +1,7 @@
 'use strict'
 
+const { formatLongDate } = require('../base.presenter.js')
+
 /**
  * Formats data for the `/return-requirements/{sessionId}/start-date` page
  * @module StartDatedPresenter
@@ -10,8 +12,9 @@ function go (session, error = null) {
     id: session.id,
     errorMessage: _error(error),
     licenceRef: session.data.licence.licenceRef,
-    licenceStartDate: _formattedStartDate(session.data.licence.startDate),
+    licenceStartDate: formatLongDate(session.data.licence.startDate),
     licenceStartDateValue: session.data.licence.startDate,
+    licenceEndDateValue: session.data.licence.endDate,
     dateFields: _dateFields(session, error)
   }
 
@@ -51,19 +54,6 @@ function _dateFields (_session, error = null) {
   ]
 
   return dateFields
-}
-
-function _formattedStartDate (dateTimeStamp) {
-  const date = new Date(dateTimeStamp)
-
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
-  const day = date.getDate()
-  const month = months[date.getMonth()]
-  const year = date.getFullYear()
-
-  // Return the formatted string
-  return `${day} ${month} ${year}`
 }
 
 module.exports = {

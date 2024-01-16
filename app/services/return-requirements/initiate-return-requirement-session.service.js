@@ -44,12 +44,15 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceDocument, licenceRef, licenceVersions } = licence
+  const { id, licenceDocument, licenceRef, licenceVersions, expiredDate, lapsedDate, revokedDate } = licence
 
   return {
     licence: {
       id,
       licenceRef,
+      expiredDate,
+      lapsedDate,
+      revokedDate,
       licenceHolder: _licenceHolder(licenceDocument),
       startDate: _startDate(licenceVersions)
     },
@@ -62,7 +65,10 @@ async function _fetchLicence (licenceId) {
     .findById(licenceId)
     .select([
       'id',
-      'licenceRef'
+      'licenceRef',
+      'expiredDate',
+      'lapsedDate',
+      'revokedDate'
     ])
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
