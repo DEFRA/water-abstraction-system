@@ -92,4 +92,28 @@ describe('Licences controller', () => {
       })
     })
   })
+
+  describe('GET /licences/{id}/', () => {
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Summary')
+        expect(response.payload).to.contain('Effective from')
+        expect(response.payload).to.contain('End Date')
+      })
+    })
+  })
 })

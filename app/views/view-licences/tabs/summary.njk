@@ -1,218 +1,34 @@
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 <h2 class="govuk-heading-l">Summary</h2>
 
-{% if summary %}
-    <dl class="govuk-summary-list">
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Effective from</dt>
+        <dd class="govuk-summary-list__value">{{ startDate }}</dd>
+    </div>
+    {% if endDate %}
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Licence holder</dt>
-            <dd class="govuk-summary-list__value">
-                {{ summary.licenceHolderFullName | htmlDecode }}
-                <a href="/licences/{{ documentId }}/contact">
-                    View licence contact details
-                </a>
-            </dd>
+            <dt class="govuk-summary-list__key">End date</dt>
+            <dd class="govuk-summary-list__value">{{ endDate }}</dd>
         </div>
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Effective from</dt>
-            <dd class="govuk-summary-list__value">{{ summary.effectiveDate | date }}</dd>
-        </div>
-        {% if licenceNumber.expiryDate %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">End date</dt>
-                <dd class="govuk-summary-list__value">{{ summary.expiryDate | date }}</dd>
-            </div>
-        {% endif %}
+    {% endif %}
 
-        {% if summary.sourcesOfSupply.length %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    {{ 'Source' | pluralize(summary.sourcesOfSupply) }} of supply
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    {% if summary.sourcesOfSupply.length > 5 %}
-                        You have {{ summary.sourcesOfSupply.length }} sources of supply
-                    {% elseif summary.sourcesOfSupply.length > 1 %}
-                        <ul class="govuk-list govuk-!-margin-0">
-                            {% for source in summary.sourcesOfSupply %}
-                                <li>{{ source.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        {{ summary.sourcesOfSupply[0].name }}
-                    {% endif %}
-                </dd>
-            </div>
-        {% endif %}
-
-        {% if summary.uniquePurposeNames.length %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                {{ 'Purpose' | pluralize(summary.uniquePurposeNames) }}
-                </dt>
-                <dd class="govuk-summary-list__value">
-                {% if summary.uniquePurposeNames.length > 5 %}
-                    You have {{ summary.uniquePurposeNames.length }} purposes
-                {% elseif summary.uniquePurposeNames.length > 1 %}
-                <ul class="govuk-list govuk-!-margin-0">
-                    {% for purpose in summary.uniquePurposeNames %}
-                    <li>{{ purpose }}</li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                    {{ summary.uniquePurposeNames[0] }}
-                {% endif %}
-                </dd>
-            </div>
-        {% endif %}
-
-        {% if periods.length %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    {{ 'Period' | pluralize(periods) }} of abstraction
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    {% if periods.length > 5 %}
-                        You have {{ periods.length }} abstraction periods
-                    {% elseif periods.length > 1 %}
-                    <ul class="govuk-list govuk-!-margin-0">
-                        {% for period in periods %}
-                            <li>{{ period.periodStart | abstractionPeriod }} to {{ period.periodEnd | abstractionPeriod }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                        {{ abstractionPeriod(periods[0]) }}
-                    {% endif %}
-                    <a href="/licences/{{ documentId }}/purposes">
-                        View details of your
-                        {{ 'purpose' | pluralize(summary.uniquePurposeNames) }},
-                        {{ 'period' | pluralize(summary.abstractionPeriods) }}
-                        and amounts
-                    </a>
-                </dd>
-            </div>
-        {% endif %}
-
-        {% if summary.points.length %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                {{ 'Point' | pluralize(summary.points) }} of abstraction
-                </dt>
-                <dd class="govuk-summary-list__value">
-                {% if summary.points.length > 5 %}
-                    You have {{ summary.points.length }} abstraction points
-                {% elseif summary.points.length > 1 %}
-                    <ul class="govuk-list govuk-!-margin-0">
-                        {% for abstractionPoint in summary.points %}
-                        <li>
-                            {% if point.ngr4 %}
-                                Within the area formed by the straight lines running between National Grid References
-                                {{ point.ngr1 }}, {{ point.ngr2 }}, {{ point.ngr3 }} and {{ point.ngr4 }}
-                            {% elif point.ngr2 %}
-                                Between National Grid References
-                                {{ point.ngr1 }} and {{ point.ngr2 }}
-                            {% elif point.ngr1 %}
-                                At National Grid Reference {{ point.ngr1 }}
-                            {% endif %}
-                            {% if point.name %} ({{ point.name }}){% endif %}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    {{ point(summary.points[0]) }}
-                {% endif %}
-
-                <a href="/licences/{{ documentId }}/points">
-                    View details of your abstraction {{ 'point' | pluralize(summary.points) }}
-                </a>
-                </dd>
-            </div>
-        {% endif %}
-
-        {% if (gaugingStationsData.length) and (gaugingStationsData.length > 0) %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Monitoring {{ 'station' | pluralize(gaugingStationsData) }}
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list govuk-!-margin-0">
-                        {% for station in gaugingStationsData %}
-                            <li>
-                                <a href="/monitoring-stations/{{ station.gaugingStationId }}">{{ station.label }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </dd>
-            </div>
-        {% else %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Monitoring {{ 'station' | pluralize(gaugingStationsData) }}
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    This licence is not tagged with a station
-                    <a href="/licences">Search for a monitoring station and tag this licence</a>
-                </dd>
-            </div>
-        {% endif %}
-
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                Abstraction {{ 'condition' | pluralize(summary.conditions) }}
-            </dt>
-            <dd class="govuk-summary-list__value">
-                {% if summary.conditions.length > 5 %}
-                    You have {{ summary.conditions.length }} abstraction conditions
-                {% elif summary.conditions.length > 1 %}
-                    <ul class="govuk-list govuk-!-margin-0">
-                        {% for condition in summary.conditions %}
-                            <li>{{ condition.displayTitle }}</li>
-                        {% endfor %}
-                    </ul>
-                {% elif summary.conditions.length %}
-                    {{ summary.conditions[0].displayTitle }}
-                {% endif %}
-
-                <a href="/licences/{{ documentId }}/conditions">
-                    View details of your abstraction {{ 'condition' | pluralize(summary.conditions) }}
-                </a>
-            </dd>
-        </div>
-
-        {% if summary.aggregateQuantity.length %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                Abstraction {{ 'amount' | pluralize(summary.aggregateQuantity) }}
-                </dt>
-                <dd class="govuk-summary-list__value">
-                <ul class="govuk-list govuk-!-margin-0">
-                    {% for amount in summary.aggregateQuantity %}
-                    <li>{{ amount.value | fixed(2) }} {{ amount.name }}</li>
-                    {% endfor %}
-                </ul>
-                </dd>
-            </div>
-        {% endif %}
-
-        {% if summary.waterLicence.region %}
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Billing region
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list govuk-!-margin-0">
-                        {{ summary.waterLicence.region.name }}
-                    </ul>
-                </dd>
-            </div>
-        {% endif %}
-    </dl>
-{% else %}
-  <p>No summary for this licence.</p>
-{% endif %}
-
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Billing region
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <ul class="govuk-list govuk-!-margin-0">
+                {{ region }}
+            </ul>
+        </dd>
+    </div>
+</dl>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     {{ govukInsetText({
       text: "The information included in this service does not replace or
       affect the legal (paper) copy of the licence issued to you. The
@@ -221,18 +37,20 @@
       decisions about abstracting or impounding water."
     }) }}
 
-    {% set html %}
-    <p>
-      To help us improve our new service, please let us know if you find
-      any errors in the licence information we are showing you. You can
-      contact us by:
-    </p>
-    {{ contactDetails() }}
-    {% endset %}
-
-    {{ govukDetails({
-      summaryText: "Is your licence information correct?",
-      html: html
-    }) }}
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Is your licence information correct?</span>
+        </summary>
+        <div class="govuk-details__text">
+            <p>
+                To help us improve our new service, please let us know if you find any errors in the licence
+                information we are showing you. You can contact us by:
+            </p>
+            <p>Email: <a href="mailto:enquiries@environment-agency.gov.uk">enquiries@environment-agency.gov.uk</a></p>
+            <p>Telephone: <a href="tel:03708506506">03708 506 506</a></p>
+            <p>Telephone from outside the UK: <a href="tel:+441142825312">+44 114 282 5312</a></p>
+            <p>You can call us from 8am to 6pm, Monday to Friday.</p>
+        </div>
+    </details>
   </div>
 </div>

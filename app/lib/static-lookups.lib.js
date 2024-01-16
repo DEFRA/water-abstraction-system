@@ -33,11 +33,14 @@ const reasonNewRequirementsFields = [
   'transfer_licence'
 ]
 
+const dataFormat = 'd MMMM yyy'
+
 module.exports = {
   billRunTypes,
   companyTypes,
   contactTypes,
   organisationTypes,
   reasonNewRequirementsFields,
-  sources
+  sources,
+  dataFormat
 }
