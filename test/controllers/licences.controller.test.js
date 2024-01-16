@@ -13,9 +13,12 @@ const Boom = require('@hapi/boom')
 
 // Things we need to stub
 const InitiateReturnRequirementSessionService = require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
+const ViewLicenceService = require('../../app/services/licences/view-licence.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
+const { format } = require('date-fns')
+const { dataFormat } = require('../../app/lib/static-lookups.lib.js')
 
 describe('Licences controller', () => {
   let options
@@ -149,11 +152,11 @@ describe('Licences controller', () => {
     })
   })
 
-  describe('GET /system/licences/{id}/', () => {
+  describe('GET /licences/{id}/', () => {
     beforeEach(async () => {
       options = {
         method: 'GET',
-        url: '/system/licences/7861814c-ca19-43f2-be11-3c612f0d744b/',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b',
         auth: {
           strategy: 'session',
           credentials: { scope: ['billing'] }
@@ -162,14 +165,28 @@ describe('Licences controller', () => {
     })
 
     describe('when a request is valid', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceService, 'go').resolves(_viewLicenceSummary())
+      })
+
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Summary')
         expect(response.payload).to.contain('Effective from')
-        expect(response.payload).to.contain('End Date')
+        expect(response.payload).to.contain('End date')
       })
     })
+
+    function _viewLicenceSummary () {
+      return {
+        id: '7861814c-ca19-43f2-be11-3c612f0d744b',
+        licenceRef: '01/130/R01',
+        region: 'Southern',
+        startDate: format(new Date('11/01/22'), dataFormat),
+        endDate: format(new Date('11/01/32'), dataFormat)
+      }
+    }
   })
 })
