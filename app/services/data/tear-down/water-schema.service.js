@@ -8,6 +8,10 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
+  const startTime = process.hrtime.bigint()
+
+  await _disableTriggers()
+
   await _deleteBilling()
   await _deleteGaugingStations()
   await _deleteTestData('water.chargeElements')
@@ -25,6 +29,10 @@ async function go () {
   await _deleteTestData('water.purposesUses')
   await _deleteNotifications()
   await _deleteSessions()
+
+  await _enableTriggers()
+
+  _calculateAndLogTime(startTime)
 }
 
 async function _deleteBilling () {
@@ -172,6 +180,58 @@ async function _deleteTestData (tableName) {
     .from(tableName)
     .where('isTest', true)
     .del()
+}
+
+async function _disableTriggers () {
+  await Promise.all([
+    db.raw('ALTER TABLE water.billing_batch_charge_version_years DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_batches DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_invoices DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_invoice_licences DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_transactions DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_volumes DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.events DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.charge_elements DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.charge_versions DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.charge_version_workflows DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.licence_agreements DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.gauging_stations DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.return_requirement_purposes DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.return_requirements DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.return_versions DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.scheduled_notification DISABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.sessions DISABLE TRIGGER ALL')
+  ])
+}
+
+async function _enableTriggers () {
+  await Promise.all([
+    db.raw('ALTER TABLE water.billing_batch_charge_version_years ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_batches ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_invoices ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_invoice_licences ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_transactions ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.billing_volumes ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.events ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.charge_elements ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.charge_versions ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.charge_version_workflows ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.gauging_stations ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.return_requirement_purposes ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.return_requirements ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.return_versions ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.scheduled_notification ENABLE TRIGGER ALL'),
+    db.raw('ALTER TABLE water.sessions enable TRIGGER ALL')
+  ])
+}
+
+function _calculateAndLogTime (startTime) {
+  const endTime = process.hrtime.bigint()
+  const timeTakenNs = endTime - startTime
+  const timeTakenMs = timeTakenNs / 1000000n
+
+  global.GlobalNotifier.omg('Water complete', { timeTakenMs })
 }
 
 module.exports = {
