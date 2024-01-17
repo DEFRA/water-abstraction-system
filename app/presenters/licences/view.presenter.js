@@ -18,7 +18,7 @@ function go (licence) {
 
   return {
     id,
-    ...(endDate && { endDate: _endDate(expiredDate) }),
+    ...(endDate && { endDate }),
     licenceRef,
     region: region.displayName,
     startDate: formatLongDate(startDate)
