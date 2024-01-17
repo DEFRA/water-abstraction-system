@@ -56,7 +56,8 @@ describe('View Licence service', () => {
           id: testId,
           licenceRef: '01/130/R01',
           region: 'South West',
-          startDate: '7 March 2013'
+          startDate: '7 March 2013',
+          endDate: null
         })
       })
     })
