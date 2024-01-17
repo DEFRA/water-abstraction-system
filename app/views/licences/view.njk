@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
 
 {% block breadcrumbs %}
   {{
@@ -10,43 +11,67 @@
   }}
 {% endblock %}
 
+{% set summaryTabHtml %}
+  {% include "licences/tabs/summary.njk" %}
+{% endset -%}
+
+{% set contactDetailsTabHtml %}
+{% endset -%}
+
+{% set returnsTabHtml %}
+{% endset -%}
+
+{% set communicationsTabHtml %}
+{% endset -%}
+
+{% set billsTabHtml %}
+{% endset -%}
+
+{% set chargeInformationTabHtml %}
+{% endset -%}
+
 {% block content %}
   <h1 class="govuk-heading-l">Licence Number {{ licenceRef }}</h1>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <div class="govuk-tabs" data-module="govuk-tabs">
-        <h2 class="govuk-tabs__title">Contents</h2>
 
-        <ul class="govuk-tabs__list">
-          <li class="govuk-tabs__list-item ">
-            <a class="govuk-tabs__tab" href="#summary">Summary</a>
-          </li>
-
-          <li class="govuk-tabs__list-item">
-            <a class="govuk-tabs__tab" href="#contacts">Contact details</a>
-          </li>
-
-          <li class="govuk-tabs__list-item">
-            <a class="govuk-tabs__tab" href="#returns">Returns</a>
-          </li>
-
-          <li class="govuk-tabs__list-item">
-            <a class="govuk-tabs__tab" href="#communications">Communications</a>
-          </li>
-
-          <li class="govuk-tabs__list-item">
-              <a class="govuk-tabs__tab" href="#bills">Bills</a>
-          </li>
-
-          <li class="govuk-tabs__list-item">
-            <a class="govuk-tabs__tab" href="#charge">Charge information</a>
-          </li>
-        </ul>
-
-        <section class="govuk-tabs__panel" id="summary">
-          {% include "licences/tabs/summary.njk" %}
-        </section>
-      </div>
-    </div>
-  </div>
+  {{ govukTabs({
+    items: [
+      {
+        label: "Summary",
+        id: "summary",
+        panel: {
+          html: summaryTabHtml
+        }
+      }, {
+        label: "Contact details",
+        id: "contact-details",
+        panel: {
+          html: contactDetailsTabHtml
+        }
+      }, {
+        label: "Returns",
+        id: "returns",
+        panel: {
+          html: returnsTabHtml
+        }
+      }, {
+        label: "Communications",
+        id: "communications",
+        panel: {
+          html: communicationsTabHtml
+        }
+      }, {
+        label: "Bills",
+        id: "bills",
+        panel: {
+          html: billsTabHtml
+        }
+      }, {
+        label: "Charge information",
+        id: "charge-information",
+        panel: {
+          html: chargeInformationTabHtml
+        }
+      }
+    ]
+  }) }}
 {% endblock %}
