@@ -11,18 +11,30 @@ const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
 const PersistAllocatedLicenceToResultsService = require('./persist-allocated-licence-to-results.service.js')
 
 /**
- * Functionality not yet implemented
+ * Performs the two-part tariff matching and allocating
+ *
+ * This function initiates the processing of matching and allocating by fetching licenses within the specified region and billing period.
+ * Each license undergoes individual processing, including fetching and preparing return logs, charge versions, and
+ * charge references. The allocated quantity for each charge reference is set to 0, and matching return logs are allocated
+ * to the corresponding charge elements.
+ *
+ * After processing each license, the results are persisted using PersistAllocatedLicenceToResultsService.
+ *
+ * @param {module:BillRunModel} billRun - The bill run object containing billing information
+ * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
+ *
+ * @returns {Array} - An array of processed licences associated with the bill run
  */
-async function go (billRun, billingPeriods, licenceId) {
+async function go (billRun, billingPeriods) {
   const startTime = process.hrtime.bigint()
 
-  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0], licenceId)
+  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0])
 
   if (licences.length > 0) {
     await _process(licences, billingPeriods, billRun)
-
-    _calculateAndLogTime(startTime)
   }
+
+  _calculateAndLogTime(startTime)
 
   return licences
 }
