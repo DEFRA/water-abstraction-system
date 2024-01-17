@@ -14,11 +14,10 @@ const { formatLongDate } = require('../base.presenter.js')
  */
 function go (licence) {
   const { expiredDate, id, licenceRef, region, startDate } = licence
-  const endDate = _endDate(expiredDate)
 
   return {
     id,
-    ...(endDate && { endDate }),
+    endDate: _endDate(expiredDate),
     licenceRef,
     region: region.displayName,
     startDate: formatLongDate(startDate)
