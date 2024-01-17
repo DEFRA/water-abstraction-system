@@ -1,0 +1,77 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+
+{% block breadcrumbs %}
+  {{
+    govukBackLink({
+      text: 'Go back to search',
+      href: "/licences"
+    })
+  }}
+{% endblock %}
+
+{% set summaryTabHtml %}
+  {% include "licences/tabs/summary.njk" %}
+{% endset %}
+
+{% set contactDetailsTabHtml %}
+{% endset %}
+
+{% set returnsTabHtml %}
+{% endset %}
+
+{% set communicationsTabHtml %}
+{% endset %}
+
+{% set billsTabHtml %}
+{% endset %}
+
+{% set chargeInformationTabHtml %}
+{% endset %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">Licence Number {{ licenceRef }}</h1>
+
+  {{ govukTabs({
+    items: [
+      {
+        label: "Summary",
+        id: "summary",
+        panel: {
+          html: summaryTabHtml
+        }
+      }, {
+        label: "Contact details",
+        id: "contact-details",
+        panel: {
+          html: contactDetailsTabHtml
+        }
+      }, {
+        label: "Returns",
+        id: "returns",
+        panel: {
+          html: returnsTabHtml
+        }
+      }, {
+        label: "Communications",
+        id: "communications",
+        panel: {
+          html: communicationsTabHtml
+        }
+      }, {
+        label: "Bills",
+        id: "bills",
+        panel: {
+          html: billsTabHtml
+        }
+      }, {
+        label: "Charge information",
+        id: "charge-information",
+        panel: {
+          html: chargeInformationTabHtml
+        }
+      }
+    ]
+  }) }}
+{% endblock %}

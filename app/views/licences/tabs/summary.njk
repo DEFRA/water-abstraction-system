@@ -1,0 +1,56 @@
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+<h2 class="govuk-heading-l">Summary</h2>
+
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Effective from</dt>
+        <dd class="govuk-summary-list__value">{{ startDate }}</dd>
+    </div>
+    {% if endDate %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">End date</dt>
+            <dd class="govuk-summary-list__value">{{ endDate }}</dd>
+        </div>
+    {% endif %}
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Billing region
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <ul class="govuk-list govuk-!-margin-0">
+                {{ region }}
+            </ul>
+        </dd>
+    </div>
+</dl>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {{ govukInsetText({
+      text: "The information included in this service does not replace or
+      affect the legal (paper) copy of the licence issued to you. The
+      information must be used for reference only. You must refer to and
+      comply with the licence issued to you as a paper copy when you make
+      decisions about abstracting or impounding water."
+    }) }}
+
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Is your licence information correct?</span>
+        </summary>
+        <div class="govuk-details__text">
+            <p>
+                To help us improve our new service, please let us know if you find any errors in the licence
+                information we are showing you. You can contact us by:
+            </p>
+            <p>Email: <a href="mailto:enquiries@environment-agency.gov.uk">enquiries@environment-agency.gov.uk</a></p>
+            <p>Telephone: <a href="tel:03708506506">03708 506 506</a></p>
+            <p>Telephone from outside the UK: <a href="tel:+441142825312">+44 114 282 5312</a></p>
+            <p>You can call us from 8am to 6pm, Monday to Friday.</p>
+        </div>
+    </details>
+  </div>
+</div>
