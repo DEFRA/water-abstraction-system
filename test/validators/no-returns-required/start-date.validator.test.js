@@ -59,5 +59,22 @@ describe('Start Date Validator', () => {
         expect(result.error.details[0].message).to.equal('Start date must be before the licence end date')
       })
     })
+
+    describe('when the licence end date is null', () => {
+      it('validates a start date after the original licence end date', () => {
+        const testDataWithNullEndDate = {
+          ...testData,
+          licenceEndDate: null,
+          day: '01',
+          month: '01',
+          year: '2024'
+        }
+
+        const result = StartDateValidator.go(testDataWithNullEndDate)
+
+        expect(result.value).to.exist()
+        expect(result.error).not.to.exist()
+      })
+    })
   })
 })

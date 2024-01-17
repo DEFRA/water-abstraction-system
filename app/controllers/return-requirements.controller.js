@@ -285,7 +285,7 @@ async function submitStartDate (request, h) {
 
   if (validation.error) {
     const errorPageData = await StartDateService.go(sessionId, validation.error)
-    return h.view('return-requirements/save-date.njk', errorPageData)
+    return h.view('return-requirements/start-date.njk', errorPageData)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)

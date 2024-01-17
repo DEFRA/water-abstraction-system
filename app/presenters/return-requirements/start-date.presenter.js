@@ -12,12 +12,12 @@ function go (session, error = null) {
     id: session.id,
     errorMessage: _error(error),
     licenceRef: session.data.licence.licenceRef,
-    licenceStartDate: formatLongDate(session.data.licence.startDate),
+    licenceStartDate: _startDate(session.data.licence.startDate),
     licenceStartDateValue: session.data.licence.startDate,
-    licenceEndDateValue: session.data.licence.endDate,
+    licenceEndDateValue: _endDate(session.data.licence),
     dateFields: _dateFields(session, error)
   }
-
+  console.log('LICENCE:', session.data.licence)
   return data
 }
 
@@ -54,6 +54,31 @@ function _dateFields (_session, error = null) {
   ]
 
   return dateFields
+}
+
+function _startDate (date) {
+  // convert string from JSONB back to JS Date format so we can format it correctly using formatLongDate utility
+  const dateObj = new Date(date)
+  const formattedDate = formatLongDate(dateObj)
+  return formattedDate
+}
+
+function _endDate (licence) {
+  // we need to return the earliest date, so we need to filter out null dates and convert to Date objects.
+  const { expiredDate, lapsedDate, revokedDate } = licence
+  let endDate = null
+
+  // Filter out null dates and convert to Date objects
+  const dates = [expiredDate, lapsedDate, revokedDate].filter(Boolean).map(date => new Date(date))
+
+  // If there are no valid dates, return null
+  if (dates.length === 0) {
+    return endDate
+  }
+
+  // Sort dates and return the earliest, if the value is null, the array will be empty
+  endDate = dates.sort((a, b) => a - b)[0].toISOString()
+  return endDate
 }
 
 module.exports = {
