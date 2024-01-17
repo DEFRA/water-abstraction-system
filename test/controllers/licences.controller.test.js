@@ -17,7 +17,6 @@ const ViewLicenceService = require('../../app/services/licences/view-licence.ser
 
 // For running our service
 const { init } = require('../../app/server.js')
-const { formatLongDate } = require('../../app/presenters/base.presenter.js')
 
 describe('Licences controller', () => {
   let options
@@ -183,8 +182,8 @@ describe('Licences controller', () => {
         id: '7861814c-ca19-43f2-be11-3c612f0d744b',
         licenceRef: '01/130/R01',
         region: 'Southern',
-        startDate: formatLongDate(new Date('2022-11-01')),
-        endDate: formatLongDate(new Date('2032-11-01'))
+        startDate: '1 November 2022',
+        endDate: '1 November 2032'
       }
     }
   })
