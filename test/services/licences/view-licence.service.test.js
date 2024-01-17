@@ -26,7 +26,7 @@ describe('View Licence service', () => {
     describe('and it has an expired date', () => {
       beforeEach(() => {
         fetchLicenceResult = _licenceData()
-        fetchLicenceResult.licence.expiredDate = new Date('2033-03-07')
+        fetchLicenceResult.expiredDate = new Date('2033-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
@@ -65,14 +65,12 @@ describe('View Licence service', () => {
 
 function _licenceData () {
   return {
-    licence: {
-      id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
-      licenceRef: '01/130/R01',
-      region: {
-        id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
-        displayName: 'South West'
-      },
-      startDate: new Date('2013-03-07')
-    }
+    id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+    licenceRef: '01/130/R01',
+    region: {
+      id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
+      displayName: 'South West'
+    },
+    startDate: new Date('2013-03-07')
   }
 }

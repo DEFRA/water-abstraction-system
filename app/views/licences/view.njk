@@ -4,7 +4,7 @@
 {% block breadcrumbs %}
   {{
     govukBackLink({
-      text: 'Back',
+      text: 'Go back to search',
       href: "/licences"
     })
   }}
@@ -44,7 +44,7 @@
         </ul>
 
         <section class="govuk-tabs__panel" id="summary">
-          {% include "view-licences/tabs/summary.njk" %}
+          {% include "licences/tabs/summary.njk" %}
         </section>
       </div>
     </div>

@@ -6,14 +6,14 @@ const routes = [
   {
     method: 'GET',
     path: '/licences/{id}',
-    handler: LicencesController.summary,
+    handler: LicencesController.view,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Licence summary tab'
+      description: 'View a licence page'
     }
   }, {
     method: 'GET',

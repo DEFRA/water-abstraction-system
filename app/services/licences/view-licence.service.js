@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceService = require('./fetch-licence.service.js')
-const ViewLicencePresenter = require('../../presenters/view-licences/view-licence.presenter.js')
+const ViewLicencePresenter = require('../../presenters/licences/view.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page

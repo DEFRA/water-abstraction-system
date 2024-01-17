@@ -17,8 +17,7 @@ const ViewLicenceService = require('../../app/services/licences/view-licence.ser
 
 // For running our service
 const { init } = require('../../app/server.js')
-const { format } = require('date-fns')
-const { dataFormat } = require('../../app/lib/static-lookups.lib.js')
+const { formatLongDate } = require('../../app/presenters/base.presenter.js')
 
 describe('Licences controller', () => {
   let options
@@ -184,8 +183,8 @@ describe('Licences controller', () => {
         id: '7861814c-ca19-43f2-be11-3c612f0d744b',
         licenceRef: '01/130/R01',
         region: 'Southern',
-        startDate: format(new Date('11/01/22'), dataFormat),
-        endDate: format(new Date('11/01/32'), dataFormat)
+        startDate: formatLongDate(new Date('2022-11-01')),
+        endDate: formatLongDate(new Date('2032-11-01'))
       }
     }
   })
