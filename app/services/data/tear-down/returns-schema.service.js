@@ -12,20 +12,42 @@ async function go () {
 
   await _disableTriggers()
 
+  let query = db
+    .from('returns.lines as l')
+    .innerJoin('returns.versions as v', 'l.versionId', 'v.versionId')
+    .innerJoin('returns.returns as r', 'v.returnId', 'r.returnId')
+    .where('r.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ RTNS-LINES:', query)
+
   await db
     .from('returns.lines as l')
     .innerJoin('returns.versions as v', 'l.versionId', 'v.versionId')
     .innerJoin('returns.returns as r', 'v.returnId', 'r.returnId')
     .where('r.isTest', true)
     .del()
-  await db.raw('ALTER TABLE returns.lines ENABLE TRIGGER ALL')
+
+  query = db
+    .from('returns.versions as v')
+    .innerJoin('returns.returns as r', 'v.returnId', 'r.returnId')
+    .where('r.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ RTNS-VERSIONS:', query)
 
   await db
     .from('returns.versions as v')
     .innerJoin('returns.returns as r', 'v.returnId', 'r.returnId')
     .where('r.isTest', true)
     .del()
-  await db.raw('ALTER TABLE returns.lines ENABLE TRIGGER ALL')
+
+  query = db
+    .from('returns.returns')
+    .where('isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ RTNS-RETURNS:', query)
 
   await db
     .from('returns.returns')

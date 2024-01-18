@@ -12,6 +12,13 @@ async function go () {
 
   await _disableTriggers()
 
+  const query = db
+    .from('idm.users')
+    .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')
+    .orWhereLike('userName', '%@example.com')
+    .del().toString()
+  console.log('🚀 ~ IDM:', query)
+
   await db
     .from('idm.users')
     .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')

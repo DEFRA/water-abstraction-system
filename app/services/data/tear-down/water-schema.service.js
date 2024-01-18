@@ -36,6 +36,16 @@ async function go () {
 }
 
 async function _deleteBilling () {
+  let query = db
+    .from('water.billingTransactions as bt')
+    .innerJoin('water.billingInvoiceLicences as bil', 'bt.billingInvoiceLicenceId', 'bil.billingInvoiceLicenceId')
+    .innerJoin('water.billingInvoices as bi', 'bil.billingInvoiceId', 'bi.billingInvoiceId')
+    .innerJoin('water.billingBatches as bb', 'bi.billingBatchId', 'bb.billingBatchId')
+    .innerJoin('water.regions as r', 'bb.regionId', 'r.regionId')
+    .where('r.isTest', true)
+    .del(['bt.billingInvoiceLicenceId'])
+    .toString()
+  console.log('🚀 ~ WATER-BILLING_TRANSACTIONS:', query)
   const billLicences = await db
     .from('water.billingTransactions as bt')
     .innerJoin('water.billingInvoiceLicences as bil', 'bt.billingInvoiceLicenceId', 'bil.billingInvoiceLicenceId')
@@ -49,6 +59,12 @@ async function _deleteBilling () {
     return billLicence.billingInvoiceLicenceId
   })
 
+  query = db
+    .from('water.billingInvoiceLicences')
+    .whereIn('billingInvoiceLicenceId', billLicenceIds)
+    .del(['billingInvoiceId'])
+    .toString()
+  console.log('🚀 ~ WATER-BILLING_INVOICE_LICENCES:', query)
   const bills = await db
     .from('water.billingInvoiceLicences')
     .whereIn('billingInvoiceLicenceId', billLicenceIds)
@@ -58,6 +74,12 @@ async function _deleteBilling () {
     return bill.billingInvoiceId
   })
 
+  query = db
+    .from('water.billingInvoices')
+    .whereIn('billingInvoiceId', billIds)
+    .del(['billingBatchId'])
+    .toString()
+  console.log('🚀 ~ WATER-BILLING_INVOICES:', query)
   const billRuns = await db
     .from('water.billingInvoices')
     .whereIn('billingInvoiceId', billIds)
@@ -67,11 +89,23 @@ async function _deleteBilling () {
     return billRun.billingBatchId
   })
 
+  query = db
+    .from('water.billingBatchChargeVersionYears')
+    .whereIn('billingBatchId', billRunIds)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-BILLING_CHARGE_VERSION_YEARS:', query)
   await db
     .from('water.billingBatchChargeVersionYears')
     .whereIn('billingBatchId', billRunIds)
     .del()
 
+  query = db
+    .from('water.billingVolumes')
+    .whereIn('billingBatchId', billRunIds)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-BILLING_VOLUMES:', query)
   await db
     .from('water.billingVolumes')
     .whereIn('billingBatchId', billRunIds)
@@ -79,6 +113,13 @@ async function _deleteBilling () {
 
   // Just deleting the `billingBatches` based on the `billingBatchIds` does not always remove all test records so the
   // Test Region is used to identify the records for deletion
+  query = db
+    .from('water.billingBatches as bb')
+    .innerJoin('water.regions as r', 'bb.regionId', 'r.regionId')
+    .where('r.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-BILLING_BATCHES:', query)
   await db
     .from('water.billingBatches as bb')
     .innerJoin('water.regions as r', 'bb.regionId', 'r.regionId')
@@ -87,6 +128,13 @@ async function _deleteBilling () {
 }
 
 async function _deleteGaugingStations () {
+  const query = db
+    .from('water.licenceGaugingStations as lgs')
+    .innerJoin('water.gaugingStations as gs', 'lgs.gaugingStationId', 'gs.gaugingStationId')
+    .where('gs.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-LICENCE_GAUGING_STATIONS:', query)
   await db
     .from('water.licenceGaugingStations as lgs')
     .innerJoin('water.gaugingStations as gs', 'lgs.gaugingStationId', 'gs.gaugingStationId')
@@ -97,10 +145,23 @@ async function _deleteGaugingStations () {
 }
 
 async function _deleteChargeVersions () {
+  let query = db
+    .from('water.chargeVersionWorkflows')
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-CHG_VER_WORKFLOWS:', query)
   await db
     .from('water.chargeVersionWorkflows')
     .del()
 
+  query = db
+    .from('water.chargeElements as ce')
+    .innerJoin('water.chargeVersions as cv', 'ce.chargeVersionId', 'cv.chargeVersionId')
+    .innerJoin('water.licences as l', 'cv.licenceId', 'l.licenceId')
+    .where('l.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-CHG_ELEMENTS:', query)
   await db
     .from('water.chargeElements as ce')
     .innerJoin('water.chargeVersions as cv', 'ce.chargeVersionId', 'cv.chargeVersionId')
@@ -108,6 +169,13 @@ async function _deleteChargeVersions () {
     .where('l.isTest', true)
     .del()
 
+  query = db
+    .from('water.chargeVersions as cv')
+    .innerJoin('water.licences as l', 'cv.licenceId', 'l.licenceId')
+    .where('l.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-CHG_VERSIONS:', query)
   await db
     .from('water.chargeVersions as cv')
     .innerJoin('water.licences as l', 'cv.licenceId', 'l.licenceId')
@@ -116,6 +184,15 @@ async function _deleteChargeVersions () {
 }
 
 async function _deleteReturnRequirements () {
+  let query = db
+    .from('water.returnRequirementPurposes as rrp')
+    .innerJoin('water.returnRequirements as rr', 'rrp.returnRequirementId', 'rr.returnRequirementId')
+    .innerJoin('water.returnVersions as rv', 'rr.returnVersionId', 'rv.returnVersionId')
+    .innerJoin('water.licences as l', 'rv.licenceId', 'l.licenceId')
+    .where('l.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-RTN_REQ_PURPOSES:', query)
   await db
     .from('water.returnRequirementPurposes as rrp')
     .innerJoin('water.returnRequirements as rr', 'rrp.returnRequirementId', 'rr.returnRequirementId')
@@ -124,6 +201,14 @@ async function _deleteReturnRequirements () {
     .where('l.isTest', true)
     .del()
 
+  query = db
+    .from('water.returnRequirements as rr')
+    .innerJoin('water.returnVersions as rv', 'rr.returnVersionId', 'rv.returnVersionId')
+    .innerJoin('water.licences as l', 'rv.licenceId', 'l.licenceId')
+    .where('l.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-RET_REQUIREMENTS:', query)
   await db
     .from('water.returnRequirements as rr')
     .innerJoin('water.returnVersions as rv', 'rr.returnVersionId', 'rv.returnVersionId')
@@ -131,6 +216,13 @@ async function _deleteReturnRequirements () {
     .where('l.isTest', true)
     .del()
 
+  query = db
+    .from('water.returnVersions as rv')
+    .innerJoin('water.licences as l', 'rv.licenceId', 'l.licenceId')
+    .where('l.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-RET_VERSIONS:', query)
   await db
     .from('water.returnVersions as rv')
     .innerJoin('water.licences as l', 'rv.licenceId', 'l.licenceId')
@@ -149,17 +241,36 @@ async function _deleteLicenceAgreements () {
 }
 
 async function _deleteNotifications () {
+  let query = db
+    .from('water.scheduledNotification')
+    .where('messageRef', 'test-ref')
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-SCHEDULEDNOTIFICATIONS-1:', query)
   await db
     .from('water.scheduledNotification')
     .where('messageRef', 'test-ref')
     .del()
 
+  query = db
+    .from('water.scheduledNotification as sn')
+    .innerJoin('water.events as e', 'sn.eventId', 'e.eventId')
+    .whereLike('e.issuer', 'acceptance-test%')
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-SCHEDULEDNOTIFICATIONS-2:', query)
   await db
     .from('water.scheduledNotification as sn')
     .innerJoin('water.events as e', 'sn.eventId', 'e.eventId')
     .whereLike('e.issuer', 'acceptance-test%')
     .del()
 
+  query = db
+    .from('water.events')
+    .whereLike('issuer', 'acceptance-test%')
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-EVENTS:', query)
   await db
     .from('water.events')
     .whereLike('issuer', 'acceptance-test%')
@@ -167,6 +278,12 @@ async function _deleteNotifications () {
 }
 
 async function _deleteSessions () {
+  const query = db
+    .from('water.sessions')
+    .where(db.raw("session_data::jsonb->>'companyName' = 'acceptance-test-company'"))
+    .del()
+    .toString()
+  console.log('🚀 ~ WATER-SESSIONS:', query)
   await db
     .from('water.sessions')
     // NOTE: Normally we would use whereJsonPath() when working with JSONB fields in PostgreSQL. However, the previous
@@ -176,6 +293,13 @@ async function _deleteSessions () {
 }
 
 async function _deleteTestData (tableName) {
+  const query = db
+    .from(tableName)
+    .where('isTest', true)
+    .del()
+    .toString()
+  console.log(`🚀 ~ WATER-${tableName}:`, query)
+
   await db
     .from(tableName)
     .where('isTest', true)

@@ -12,6 +12,13 @@ async function go () {
 
   await _disableTriggers()
 
+  const query = db
+    .from('permit.licence')
+    .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')
+    .del()
+    .toString()
+  console.log('🚀 ~ PERMIT:', query)
+
   await db
     .from('permit.licence')
     .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')

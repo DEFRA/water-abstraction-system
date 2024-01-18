@@ -30,6 +30,12 @@ async function go () {
 }
 
 async function _deleteCompanies () {
+  const query = db
+    .from('crm_v2.companies')
+    .whereLike('name', 'Big Farm Co Ltd%')
+    .del()
+    .toString()
+  console.log('🚀 ~ CRM-COMPANIES:', query)
   await db
     .from('crm_v2.companies')
     .whereLike('name', 'Big Farm Co Ltd%')
@@ -37,11 +43,27 @@ async function _deleteCompanies () {
 }
 
 async function _deleteEntities () {
+  let query = db
+    .from('crm.entityRoles')
+    .where('createdBy', 'acceptance-test-setup')
+    .del()
+    .toString()
+  console.log('🚀 ~ CRM-ENTITYROLES:', query)
   await db
     .from('crm.entityRoles')
     .where('createdBy', 'acceptance-test-setup')
     .del()
 
+  query = db
+    .from('crm.entity')
+    .whereLike('entityNm', 'acceptance-test.%')
+    .orWhereLike('entityNm', '%@example.com')
+    .orWhereLike('entityNm', 'regression.tests.%')
+    .orWhereLike('entityNm', 'Big Farm Co Ltd%')
+    .orWhere('source', 'acceptance-test-setup')
+    .del()
+    .toString()
+  console.log('🚀 ~ CRM-ENTITY:', query)
   await db
     .from('crm.entity')
     .whereLike('entityNm', 'acceptance-test.%')
@@ -53,6 +75,14 @@ async function _deleteEntities () {
 }
 
 async function _deleteInvoiceAccounts () {
+  let query = db
+    .from('crm_v2.invoiceAccountAddresses as iaa')
+    .innerJoin('crm_v2.invoiceAccounts as ia', 'iaa.invoiceAccountId', 'ia.invoiceAccountId')
+    .innerJoin('crm_v2.companies as c', 'ia.companyId', 'c.companyId')
+    .where('c.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ CRM-INVOICEACCOUNTADDRESSES:', query)
   await db
     .from('crm_v2.invoiceAccountAddresses as iaa')
     .innerJoin('crm_v2.invoiceAccounts as ia', 'iaa.invoiceAccountId', 'ia.invoiceAccountId')
@@ -62,6 +92,13 @@ async function _deleteInvoiceAccounts () {
 
   await _deleteTestData('crm_v2.invoiceAccountAddresses')
 
+  query = db
+    .from('crm_v2.invoiceAccounts as ia')
+    .innerJoin('crm_v2.companies as c', 'ia.companyId', 'c.companyId')
+    .where('c.isTest', true)
+    .del()
+    .toString()
+  console.log('🚀 ~ CRM-INVOICEACCOUNTS:', query)
   await db
     .from('crm_v2.invoiceAccounts as ia')
     .innerJoin('crm_v2.companies as c', 'ia.companyId', 'c.companyId')
@@ -72,12 +109,25 @@ async function _deleteInvoiceAccounts () {
 async function _deleteDocuments () {
   await _deleteTestData('crm_v2.documents')
 
+  let query = db
+    .from('crm_v2.documents as d')
+    .innerJoin('crm.documentHeader as dh', 'd.documentRef', 'dh.systemExternalId')
+    .whereJsonPath('dh.metadata', '$.dataType', '=', 'acceptance-test-setup')
+    .del()
+    .toString()
+  console.log('🚀 ~ CRM-DOCUMENTS:', query)
   await db
     .from('crm_v2.documents as d')
     .innerJoin('crm.documentHeader as dh', 'd.documentRef', 'dh.systemExternalId')
     .whereJsonPath('dh.metadata', '$.dataType', '=', 'acceptance-test-setup')
     .del()
 
+  query = db
+    .from('crm.documentHeader')
+    .whereJsonPath('metadata', '$.dataType', '=', 'acceptance-test-setup')
+    .del()
+    .toString()
+  console.log('🚀 ~ CRM-DOCUMENTHEADER:', query)
   await db
     .from('crm.documentHeader')
     .whereJsonPath('metadata', '$.dataType', '=', 'acceptance-test-setup')
@@ -85,6 +135,13 @@ async function _deleteDocuments () {
 }
 
 async function _deleteTestData (tableName) {
+  const query = db
+    .from(tableName)
+    .where('isTest', true)
+    .del()
+    .toString()
+  console.log(`🚀 ~ CRM-${tableName}:`, query)
+
   await db
     .from(tableName)
     .where('isTest', true)
