@@ -1,19 +1,19 @@
 # Tear down
 
-This function supports our [water-abstraction-acceptance-tests](https://github.com/DEFRA/water-abstraction-acceptance-tests). At the start of each test it will make a HTTP call to `POST /data/tear-down` which results in `TearDownService.go()` being called.
+This function supports our [water-abstraction-acceptance-tests](https://github.com/DEFRA/water-abstraction-acceptance-tests). At the start of each test, it will make an HTTP call to `POST /data/tear-down` resulting in `TearDownService.go()` being called.
 
 The service and those it calls are responsible for clearing the various schemas we use of test data. Some tables have a `is_test` field that immediately identifies the record as being created for a test.
 
-But each test will create data that won't be flagged in this way. So, the tear-down services also removes records we can identify as being test data.
+But each test will create data that won't be flagged this way. So, the tear-down services also remove records we can identify as being test data.
 
 - it might be linked to a `is_test` record
-- it has a known value, for example `name`, that is specific to the acceptance tests
+- it has a known value, for example, `name`, that is specific to the acceptance tests
 
 Ideally, we wouldn't need to remove anything between the tests. We could then avoid this step and the delay it causes. But until we re-architect fully the acceptance tests we've inherited we have to work with what we've got.
 
-When we took on WRLS [water-abstraction-service](https://github.com/DEFRA/water-abstraction-service) had a tear-down endpoint. But it would take more than a minute to complete. This not only caused the tests to take a long time to finish, it often caused them to fail.
+When we took on WRLS [water-abstraction-service](https://github.com/DEFRA/water-abstraction-service) had a tear-down endpoint. But it would take more than a minute to complete. This caused the tests to take a long time to finish and often caused them to fail.
 
-We built our own version that was more performant. It would typically get the job done in 15 to 20 seconds. But sometimes this would creep to 40 seconds which again would cause test runs to fail.
+We built a more performant version. It would typically get the job done in 15 to 20 seconds. But sometimes this would creep to 40 seconds which again would cause test runs to fail.
 
 We are adding this README at the point we've taken a second shot at an even more performant option. We wanted to capture what we tried and the results we got to help
 
@@ -76,7 +76,7 @@ Again, this confirmed disabling the table triggers still had a massive impact on
 
 ## Results
 
-> The average times are in milliseconds. Just divide by 1000 for secs, for example 1770 / 1000 = 1.7 secs
+> The average times are in milliseconds. Just divide by 1000 for secs, for example, 1770 / 1000 = 1.7 secs
 
 | Schema  | No change | Just triggers | Single Query | Promise all | Best of | All in one |
 |---------|-----------|---------------|--------------|-------------|---------|------------|
