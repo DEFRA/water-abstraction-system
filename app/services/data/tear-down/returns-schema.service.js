@@ -56,13 +56,13 @@ async function go () {
 
   // await _enableTriggers()
 
-  // await _raw()
+  await _raw()
 
-  await Promise.all([
-    _lines(),
-    _versions(),
-    _returns()
-  ])
+  // await Promise.all([
+  //   _lines(),
+  //   _versions(),
+  //   _returns()
+  // ])
 
   _calculateAndLogTime(startTime)
 }

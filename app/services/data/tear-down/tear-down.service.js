@@ -16,15 +16,13 @@ const IdmSchemaService = require('./idm-schema.service.js')
 async function go () {
   const startTime = process.hrtime.bigint()
 
-  // await Promise.all([
-  //   WaterSchemaService.go(),
-  //   CrmSchemaService.go(),
-  //   ReturnsSchemaService.go(),
-  //   PermitSchemaService.go(),
-  //   IdmSchemaService.go()
-  // ])
-
-  await _delete()
+  await Promise.all([
+    WaterSchemaService.go(),
+    CrmSchemaService.go(),
+    ReturnsSchemaService.go(),
+    PermitSchemaService.go(),
+    IdmSchemaService.go()
+  ])
 
   _calculateAndLogTime(startTime)
 }

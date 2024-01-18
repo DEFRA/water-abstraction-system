@@ -623,7 +623,10 @@ async function _raw () {
   ALTER TABLE water.charge_elements DISABLE TRIGGER ALL;
   ALTER TABLE water.charge_versions DISABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows DISABLE TRIGGER ALL;
+  ALTER TABLE water.licences DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_versions DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purposes DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements DISABLE TRIGGER ALL;
   ALTER TABLE water.return_versions DISABLE TRIGGER ALL;
@@ -656,7 +659,6 @@ async function _raw () {
   delete from "water"."charge_version_workflows";
   delete from "water"."charge_elements" as "ce" using "water"."charge_versions" as "cv","water"."licences" as "l" where "l"."is_test" = true and "ce"."charge_version_id" = "cv"."charge_version_id" and "cv"."licence_id" = "l"."licence_id";
   delete from "water"."charge_versions" as "cv" using "water"."licences" as "l" where "l"."is_test" = true and "cv"."licence_id" = "l"."licence_id";
-  delete from "water"."licence_agreements" where "is_test" = TRUE;
   delete from "water"."return_requirement_purposes" as "rrp" using "water"."return_requirements" as "rr","water"."return_versions" as "rv","water"."licences" as "l" where "l"."is_test" = true and "rrp"."return_requirement_id" = "rr"."return_requirement_id" and "rr"."return_version_id" = "rv"."return_version_id" and "rv"."licence_id" = "l"."licence_id";
   delete from "water"."return_requirements" as "rr" using "water"."return_versions" as "rv","water"."licences" as "l" where "l"."is_test" = true and "rr"."return_version_id" = "rv"."return_version_id" and "rv"."licence_id" = "l"."licence_id";
   delete from "water"."return_versions" as "rv" using "water"."licences" as "l" where "l"."is_test" = true and "rv"."licence_id" = "l"."licence_id";
@@ -683,7 +685,10 @@ async function _raw () {
   ALTER TABLE water.charge_elements ENABLE TRIGGER ALL;
   ALTER TABLE water.charge_versions ENABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows ENABLE TRIGGER ALL;
+  ALTER TABLE water.licences ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_versions ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_version_purposes ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirements ENABLE TRIGGER ALL;
   ALTER TABLE water.return_versions ENABLE TRIGGER ALL;
