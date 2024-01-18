@@ -10,22 +10,24 @@ const { db } = require('../../../../db/db.js')
 async function go () {
   const startTime = process.hrtime.bigint()
 
-  await _disableTriggers()
+  // await _disableTriggers()
 
-  const query = db
-    .from('idm.users')
-    .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')
-    .orWhereLike('userName', '%@example.com')
-    .del().toString()
-  console.log('🚀 ~ IDM:', query)
+  // const query = db
+  //   .from('idm.users')
+  //   .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')
+  //   .orWhereLike('userName', '%@example.com')
+  //   .del().toString()
+  // console.log('🚀 ~ IDM:', query)
 
-  await db
-    .from('idm.users')
-    .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')
-    .orWhereLike('userName', '%@example.com')
-    .del()
+  // await db
+  //   .from('idm.users')
+  //   .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')
+  //   .orWhereLike('userName', '%@example.com')
+  //   .del()
 
-  await _enableTriggers()
+  // await _enableTriggers()
+
+  await _raw()
 
   _calculateAndLogTime(startTime)
 }
@@ -36,6 +38,12 @@ async function _disableTriggers () {
 
 async function _enableTriggers () {
   await db.raw('ALTER TABLE idm.users ENABLE TRIGGER ALL')
+}
+
+async function _raw () {
+  await db.raw(`
+  delete from "idm"."users" where jsonb_path_query_first("user_data", '$.source') #>> '{}' = 'acceptance-test-setup' or "user_name" like '%@example.com';
+  `)
 }
 
 function _calculateAndLogTime (startTime) {

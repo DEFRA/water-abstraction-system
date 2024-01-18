@@ -10,27 +10,29 @@ const { db } = require('../../../../db/db.js')
 async function go () {
   const startTime = process.hrtime.bigint()
 
-  await _disableTriggers()
+  // await _disableTriggers()
 
-  await _deleteBilling()
-  await _deleteGaugingStations()
-  await _deleteTestData('water.chargeElements')
-  await _deleteChargeVersions()
-  await _deleteTestData('water.licenceAgreements')
-  await _deleteReturnRequirements()
-  await _deleteLicenceAgreements()
-  await _deleteTestData('water.financialAgreementTypes')
-  await _deleteTestData('water.licenceVersionPurposes')
-  await _deleteTestData('water.licenceVersions')
-  await _deleteTestData('water.licences')
-  await _deleteTestData('water.regions')
-  await _deleteTestData('water.purposesPrimary')
-  await _deleteTestData('water.purposesSecondary')
-  await _deleteTestData('water.purposesUses')
-  await _deleteNotifications()
-  await _deleteSessions()
+  // await _deleteBilling()
+  // await _deleteGaugingStations()
+  // await _deleteTestData('water.chargeElements')
+  // await _deleteChargeVersions()
+  // await _deleteTestData('water.licenceAgreements')
+  // await _deleteReturnRequirements()
+  // await _deleteLicenceAgreements()
+  // await _deleteTestData('water.financialAgreementTypes')
+  // await _deleteTestData('water.licenceVersionPurposes')
+  // await _deleteTestData('water.licenceVersions')
+  // await _deleteTestData('water.licences')
+  // await _deleteTestData('water.regions')
+  // await _deleteTestData('water.purposesPrimary')
+  // await _deleteTestData('water.purposesSecondary')
+  // await _deleteTestData('water.purposesUses')
+  // await _deleteNotifications()
+  // await _deleteSessions()
 
-  await _enableTriggers()
+  // await _enableTriggers()
+
+  await _raw()
 
   _calculateAndLogTime(startTime)
 }
@@ -348,6 +350,85 @@ async function _enableTriggers () {
     db.raw('ALTER TABLE water.scheduled_notification ENABLE TRIGGER ALL'),
     db.raw('ALTER TABLE water.sessions enable TRIGGER ALL')
   ])
+}
+
+async function _raw () {
+  await db.raw(`
+  ALTER TABLE water.billing_batch_charge_version_years DISABLE TRIGGER ALL;
+  ALTER TABLE water.billing_batches DISABLE TRIGGER ALL;
+  ALTER TABLE water.billing_invoices DISABLE TRIGGER ALL;
+  ALTER TABLE water.billing_invoice_licences DISABLE TRIGGER ALL;
+  ALTER TABLE water.billing_transactions DISABLE TRIGGER ALL;
+  ALTER TABLE water.billing_volumes DISABLE TRIGGER ALL;
+  ALTER TABLE water.charge_elements DISABLE TRIGGER ALL;
+  ALTER TABLE water.charge_versions DISABLE TRIGGER ALL;
+  ALTER TABLE water.charge_version_workflows DISABLE TRIGGER ALL;
+  ALTER TABLE water.licence_agreements DISABLE TRIGGER ALL;
+  ALTER TABLE water.return_requirement_purposes DISABLE TRIGGER ALL;
+  ALTER TABLE water.return_requirements DISABLE TRIGGER ALL;
+  ALTER TABLE water.return_versions DISABLE TRIGGER ALL;
+  ALTER TABLE water.scheduled_notification DISABLE TRIGGER ALL;
+
+  delete from "water"."billing_transactions" as "bt"
+  using "water"."billing_invoice_licences" as "bil", "water"."billing_invoices" as "bi", "water"."billing_batches" as "bb", "water"."regions" as "r"
+  where "r"."is_test" = true and "bt"."billing_invoice_licence_id" = "bil"."billing_invoice_licence_id" and "bil"."billing_invoice_id" = "bi"."billing_invoice_id" and "bi"."billing_batch_id" = "bb"."billing_batch_id" and "bb"."region_id" = "r"."region_id";
+
+  delete from "water"."billing_invoice_licences" as "bil"
+  using "water"."billing_invoices" as "bi", "water"."billing_batches" as "bb", "water"."regions" as "r"
+  where "r"."is_test" = true and "bil"."billing_invoice_id" = "bi"."billing_invoice_id" and "bi"."billing_batch_id" = "bb"."billing_batch_id" and "bb"."region_id" = "r"."region_id";
+
+  delete from "water"."billing_invoices" as "bi"
+  using "water"."billing_batches" as "bb", "water"."regions" as "r"
+  where "r"."is_test" = true and "bi"."billing_batch_id" = "bb"."billing_batch_id" and "bb"."region_id" = "r"."region_id";
+
+  delete from "water"."billing_batch_charge_version_years" as "bbcvy"
+  using "water"."billing_batches" as "bb", "water"."regions" as "r"
+  where "r"."is_test" = true and "bbcvy"."billing_batch_id" = "bb"."billing_batch_id" and "bb"."region_id" = "r"."region_id";
+
+  delete from "water"."billing_volumes" as "bv"
+  using "water"."billing_batches" as "bb", "water"."regions" as "r"
+  where "r"."is_test" = true and "bv"."billing_batch_id" = "bb"."billing_batch_id" and "bb"."region_id" = "r"."region_id";
+
+  delete from "water"."billing_batches" as "bb" using "water"."regions" as "r" where "r"."is_test" = true and "bb"."region_id" = "r"."region_id";
+  delete from "water"."licence_gauging_stations" as "lgs" using "water"."gauging_stations" as "gs" where "gs"."is_test" = true and "lgs"."gauging_station_id" = "gs"."gauging_station_id";
+  delete from "water"."gauging_stations" where "is_test" = TRUE;
+  delete from "water"."charge_elements" where "is_test" = TRUE;
+  delete from "water"."charge_version_workflows";
+  delete from "water"."charge_elements" as "ce" using "water"."charge_versions" as "cv","water"."licences" as "l" where "l"."is_test" = true and "ce"."charge_version_id" = "cv"."charge_version_id" and "cv"."licence_id" = "l"."licence_id";
+  delete from "water"."charge_versions" as "cv" using "water"."licences" as "l" where "l"."is_test" = true and "cv"."licence_id" = "l"."licence_id";
+  delete from "water"."licence_agreements" where "is_test" = TRUE;
+  delete from "water"."return_requirement_purposes" as "rrp" using "water"."return_requirements" as "rr","water"."return_versions" as "rv","water"."licences" as "l" where "l"."is_test" = true and "rrp"."return_requirement_id" = "rr"."return_requirement_id" and "rr"."return_version_id" = "rv"."return_version_id" and "rv"."licence_id" = "l"."licence_id";
+  delete from "water"."return_requirements" as "rr" using "water"."return_versions" as "rv","water"."licences" as "l" where "l"."is_test" = true and "rr"."return_version_id" = "rv"."return_version_id" and "rv"."licence_id" = "l"."licence_id";
+  delete from "water"."return_versions" as "rv" using "water"."licences" as "l" where "l"."is_test" = true and "rv"."licence_id" = "l"."licence_id";
+  delete from "water"."licence_agreements" where "is_test" = TRUE;
+  delete from "water"."financial_agreement_types" where "is_test" = TRUE;
+  delete from "water"."licence_version_purposes" where "is_test" = TRUE;
+  delete from "water"."licence_versions" where "is_test" = TRUE;
+  delete from "water"."licences" where "is_test" = TRUE;
+  delete from "water"."regions" where "is_test" = TRUE;
+  delete from "water"."purposes_primary" where "is_test" = TRUE;
+  delete from "water"."purposes_secondary" where "is_test" = TRUE;
+  delete from "water"."purposes_uses" where "is_test" = TRUE;
+  delete from "water"."scheduled_notification" where "message_ref" = 'test-ref';
+  delete from "water"."scheduled_notification" as "sn" using "water"."events" as "e" where "e"."issuer" like 'acceptance-test%' and "sn"."event_id" = "e"."event_id";
+  delete from "water"."events" where "issuer" like 'acceptance-test%';
+  delete from "water"."sessions" where session_data::jsonb->>'companyName' = 'acceptance-test-company';
+
+  ALTER TABLE water.billing_batch_charge_version_years ENABLE TRIGGER ALL;
+  ALTER TABLE water.billing_batches ENABLE TRIGGER ALL;
+  ALTER TABLE water.billing_invoices ENABLE TRIGGER ALL;
+  ALTER TABLE water.billing_invoice_licences ENABLE TRIGGER ALL;
+  ALTER TABLE water.billing_transactions ENABLE TRIGGER ALL;
+  ALTER TABLE water.billing_volumes ENABLE TRIGGER ALL;
+  ALTER TABLE water.charge_elements ENABLE TRIGGER ALL;
+  ALTER TABLE water.charge_versions ENABLE TRIGGER ALL;
+  ALTER TABLE water.charge_version_workflows ENABLE TRIGGER ALL;
+  ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL;
+  ALTER TABLE water.return_requirement_purposes ENABLE TRIGGER ALL;
+  ALTER TABLE water.return_requirements ENABLE TRIGGER ALL;
+  ALTER TABLE water.return_versions ENABLE TRIGGER ALL;
+  ALTER TABLE water.scheduled_notification ENABLE TRIGGER ALL;
+  `)
 }
 
 function _calculateAndLogTime (startTime) {

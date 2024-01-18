@@ -10,21 +10,23 @@ const { db } = require('../../../../db/db.js')
 async function go () {
   const startTime = process.hrtime.bigint()
 
-  await _disableTriggers()
+  // await _disableTriggers()
 
-  const query = db
-    .from('permit.licence')
-    .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')
-    .del()
-    .toString()
-  console.log('🚀 ~ PERMIT:', query)
+  // const query = db
+  //   .from('permit.licence')
+  //   .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')
+  //   .del()
+  //   .toString()
+  // console.log('🚀 ~ PERMIT:', query)
 
-  await db
-    .from('permit.licence')
-    .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')
-    .del()
+  // await db
+  //   .from('permit.licence')
+  //   .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')
+  //   .del()
 
-  await _enableTriggers()
+  // await _enableTriggers()
+
+  await _raw()
 
   _calculateAndLogTime(startTime)
 }
@@ -35,6 +37,16 @@ async function _disableTriggers () {
 
 async function _enableTriggers () {
   await db.raw('ALTER TABLE permit.licence ENABLE TRIGGER ALL')
+}
+
+async function _raw () {
+  await db.raw(`
+  ALTER TABLE permit.licence DISABLE TRIGGER ALL;
+
+  delete from "permit"."licence" where jsonb_path_query_first("metadata", '$.source') #>> '{}' = 'acceptance-test-setup';
+
+  ALTER TABLE permit.licence ENABLE TRIGGER ALL;
+  `)
 }
 
 function _calculateAndLogTime (startTime) {
