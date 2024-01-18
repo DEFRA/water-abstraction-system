@@ -40,7 +40,7 @@ async function _enableTriggers () {
 }
 
 async function _raw () {
-  await db.raw(`
+  return db.raw(`
   ALTER TABLE permit.licence DISABLE TRIGGER ALL;
 
   delete from "permit"."licence" where jsonb_path_query_first("metadata", '$.source') #>> '{}' = 'acceptance-test-setup';

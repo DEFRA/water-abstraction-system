@@ -41,7 +41,7 @@ async function _enableTriggers () {
 }
 
 async function _raw () {
-  await db.raw(`
+  return db.raw(`
   delete from "idm"."users" where jsonb_path_query_first("user_data", '$.source') #>> '{}' = 'acceptance-test-setup' or "user_name" like '%@example.com';
   `)
 }
