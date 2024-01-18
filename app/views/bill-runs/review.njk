@@ -1,8 +1,316 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/badge.njk" import badge %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to bill runs',
+      href: '/billing/batch/list'
+    })
+  }}
+{% endblock %}
+
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      <iframe src="https://giphy.com/embed/vmv47p4zksWDC" width="480" height="261" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/alive-vmv47p4zksWDC"></a></p>
-    </h1>
+  <!-- page title -->
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-l">Anglian two-part tariff bill run</span>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Review licences</h1>
+
+      <p class="govuk-body">
+        {{govukTag({
+          text: "Review",
+          classes: "govuk-tag--blue govuk-!-font-size-27"
+        })}}
+      </p>
+
+      {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "Date created",
+                classes: "meta-data__label"
+              },
+              value: {
+                text: "5 June 2023",
+                classes: "meta-data__value "
+              }
+            },
+            {
+              key: {
+                text: "Region",
+                classes: "meta-data__label "
+              },
+              value: {
+                text: "Anglian" |capitalize,
+                classes: "meta-data__value "
+              }
+            },
+            {
+              key: {
+                text: "Bill run type",
+                classes: "meta-data__label "
+              },
+              value: {
+                text: "two-part tariff" | capitalize,
+                classes: "meta-data__value "
+              }
+            },
+            {
+              key: {
+                text: "Charge scheme",
+                classes: "meta-data__label "
+              },
+              value: {
+                text: "Current" | capitalize,
+                classes: "meta-data__value "
+              }
+            },
+            {
+              key: {
+                text: "Financial year",
+                classes: "meta-data__label "
+              },
+              value: {
+                text: "2022 to 2023",
+                classes: "meta-data__value "
+              }
+            }
+          ]
+        }) }}
+    </div>
   </div>
+
+{% set billRunDataTpTReview = [1,2] %}
+
+
+  {% if billRunDataTpTReview.length > 1 %}
+  <section class="govuk-!-margin-bottom-9">
+    <form  method="post" novalidate action="review/apply-filters"></form>
+    <form method="post" action="review/cancel-bill-run" novalidate>
+    {{ govukButton({
+      text: "Cancel bill run",
+      classes: "govuk-button--secondary govuk-!-margin-bottom-0"
+    }) }}
+  </form>
+
+  {% set errors = 1 %}
+  {# {% for licence in billRunDataTpTReview %}
+    {% if licence.issues[0].issue.length %}
+      {% set errors = errors + 1 %}
+    {% endif %} #}
+  {# {% endfor %} #}
+
+  {{ govukInsetText({
+    text: "You need to review " + errors + " licences with returns data issues. You can then continue and send the bill run."
+  }) }}
+
+  </section>
+  {% else %}
+  <section class="govuk-!-margin-bottom-9">
+    <p class="govuk-body ">You have resolved all returns data issues. Continue to generate bills.</p>
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Continue",
+        classes: "govuk-button--primary"
+      }) }}
+      {{ govukButton({
+        text: "Cancel bill run",
+        classes: "govuk-button--secondary"
+      }) }}
+    </div>
+  </section>
+  {% endif %}
+
+{% set numberOfLicences = "2" %}
+{% set filteredResults = "1" %}
+{# {% set filteredResults = data.filteredResults | default("")%} #}
+
+    <!--get and loop through the notifications table, check if results are filtered or not-->
+    {% if filteredResults.length %}
+    {# {% set licences  = data.filteredResults  %} #}
+    {% set licences  = "2" %}
+    {% else %}
+    {# {% set licences  = numberOfLicences  %} #}
+    {% set licences  = "0"  %}
+    {% endif %}
+
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{% if licences == "empty" %}0{% else %}{{licences | length }}{% endif %} of {{numberOfLicences | length}} licences</h2>
+
+  {% set filtersForm %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
+
+    <form  method="post" novalidate action="review/apply-filters">
+      {{ govukInput({
+        label: {
+          text: "Licence holder",
+          classes: "govuk-label--s",
+          isPageHeading: false
+        },
+        classes: "govuk-input--width-20",
+        id: "licenceHolder",
+        name: "licenceHolder",
+        value: "Bottled Water Plc"
+      }) }}
+
+{{data.issue}}
+      {{ govukRadios({
+        classes: "govuk-radios--small",
+        name: "issue",
+        fieldset: {
+          legend: {
+            text: "Issue",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            value: "Abstraction outside period",
+            text: "Abstraction outside period"
+          },
+          {
+            value: "Aggregate",
+            text: "Aggregate"
+          },
+          {
+            value: "Checking query",
+            text: "Checking query"
+          },
+          {
+            value: "No returns received",
+            text: "No returns received"
+          },
+          {
+            value: "Over abstraction",
+            text: "Over abstraction"
+          },
+          {
+            value: "Overlap of charge dates",
+            text: "Overlap of charge dates"
+          },
+          {
+            value: "Returns received but not processed",
+            text: "Returns received but not processed"
+          },
+          {
+            value: "Returns received late",
+            text: "Returns received late"
+          },
+          {
+            value: "Return split over charge references",
+            text: "Return split over charge references"
+          },
+          {
+            value: "Some returns IDs not received",
+            text: "Some returns IDs not received"
+          },
+          {
+            value: "Unable to allocate returns",
+            text: "Unable to allocate returns"
+          },
+          {
+            value: "Unable to match return",
+            text: "Unable to match return"
+          }
+        ]
+      }) }}
+
+      {{ govukRadios({
+        classes: "govuk-radios--small",
+        name: "TpTReviewStatus",
+        fieldset: {
+          legend: {
+            text: "Status",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            value: "review",
+            text: "Review"
+          },
+          {
+            value: "ready",
+            text: "Ready"
+          }
+        ]
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Apply filters"
+        }) }}
+
+        {{ govukButton({
+            text: "Clear filters",
+            classes: "govuk-button--secondary ",
+            name: "clearFilters",
+            value: "true"
+        }) }}
+      </div>
+    </form>
+  {% endset %}
+
+  {{ govukDetails({
+    summaryText: "Filter licences",
+    html: filtersForm | safe,
+    classes: "govuk-!-margin-bottom-2",
+    open: data['openDetails']
+  }) }}
+
+
+
+
+{% set progress = "" %}
+{% set statusTag %}
+{{govukTag({
+  text: "review",
+  classes: "govuk-tag--blue"
+})}}
+{% endset %}
+{% set action = '<a class="govuk-link" href="linkToLicence"><span class="govuk-visually-hidden">View licence matching for licence </span>' + "09/99/99/9999" + '</a>' %}
+{% set rows = [ {html: action | safe}, {text: "2PT Testers"}, {text: "Multiple issues" }, {html: progress |safe, classes: "center-text" }, {html: statusTag |safe,format: "numeric"} ] %}
+
+  {% set caption = '<div id="caption">'+data.TpTfilterCaption|default("Showing all licences")+'</div>' %}
+
+  {{ govukTable({
+    caption: caption |safe,
+    captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
+    firstCellIsHeader: false,
+    head: [
+  {
+    text: "Licence"
+  },
+  {
+    text: "Licence holder"
+  },
+  {
+    text: "Issue"
+  },
+  {
+    text: "Progress",
+    classes: "center-text"
+  },
+  {
+    text: "Status",
+    format: "numeric"
+  }
+    ],
+  rows: [rows]
+  }) }}
+
 {% endblock %}
