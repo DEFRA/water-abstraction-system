@@ -19,7 +19,15 @@ async function _lines () {
   return db.raw(`
   ALTER TABLE returns.lines DISABLE TRIGGER ALL;
 
-  delete from "returns"."lines" as "l" using "returns"."versions" as "v","returns"."returns" as "r" where "r"."is_test" = true and "l"."version_id" = "v"."version_id" and "v"."return_id" = "r"."return_id";
+  DELETE
+  FROM
+    "returns"."lines" AS "l"
+      USING "returns"."versions" AS "v",
+    "returns"."returns" AS "r"
+  WHERE
+    "r"."is_test" = TRUE
+    AND "l"."version_id" = "v"."version_id"
+    AND "v"."return_id" = "r"."return_id";
 
   ALTER TABLE returns.lines ENABLE TRIGGER ALL;
   `)
@@ -29,7 +37,13 @@ async function _versions () {
   return db.raw(`
   ALTER TABLE returns.versions DISABLE TRIGGER ALL;
 
-  delete from "returns"."versions" as "v" using "returns"."returns" as "r" where "r"."is_test" = true and "v"."return_id" = "r"."return_id";
+  DELETE
+  FROM
+    "returns"."versions" AS "v"
+      USING "returns"."returns" AS "r"
+  WHERE
+    "r"."is_test" = TRUE
+    AND "v"."return_id" = "r"."return_id";
 
   ALTER TABLE returns.versions ENABLE TRIGGER ALL;
   `)
@@ -39,7 +53,11 @@ async function _returns () {
   await db.raw(`
   ALTER TABLE returns.returns DISABLE TRIGGER ALL;
 
-  delete from "returns"."returns" where "is_test" = TRUE;
+  DELETE
+  FROM
+    "returns"."returns"
+  WHERE
+    "is_test" = TRUE;
 
   ALTER TABLE returns.returns ENABLE TRIGGER ALL;
   `)

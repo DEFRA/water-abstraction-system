@@ -15,7 +15,14 @@ async function _licence () {
   return db.raw(`
   ALTER TABLE permit.licence DISABLE TRIGGER ALL;
 
-  delete from "permit"."licence" where jsonb_path_query_first("metadata", '$.source') #>> '{}' = 'acceptance-test-setup';
+  DELETE
+  FROM
+    "permit"."licence"
+  WHERE
+    jsonb_path_query_first(
+      "metadata",
+      '$.source'
+    ) #>> '{}' = 'acceptance-test-setup';
 
   ALTER TABLE permit.licence ENABLE TRIGGER ALL;
   `)

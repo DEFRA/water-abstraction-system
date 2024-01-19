@@ -13,7 +13,15 @@ async function go () {
 
 async function _users () {
   return db.raw(`
-  delete from "idm"."users" where jsonb_path_query_first("user_data", '$.source') #>> '{}' = 'acceptance-test-setup' or "user_name" like '%@example.com';
+  DELETE
+  FROM
+    "idm"."users"
+  WHERE
+    jsonb_path_query_first(
+      "user_data",
+      '$.source'
+    ) #>> '{}' = 'acceptance-test-setup'
+    OR "user_name" LIKE '%@example.com';
   `)
 }
 
