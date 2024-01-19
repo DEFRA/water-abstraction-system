@@ -26,7 +26,6 @@ async function go () {
     _financialAgreementTypes(),
     _licenceVersionPurposes(),
     _licenceVersions(),
-    _licences(),
     _purposesPrimary,
     _purposesSecondary(),
     _purposesUses(),
@@ -35,7 +34,15 @@ async function go () {
     _sessions()
   ])
 
-  return _regions()
+  // We have to do region and licence separate from the rest because they are the 'root' test records. The test data
+  // setup endpoint in water-abstraction-service will create the test region and licence records (plus others). The
+  // acceptance tests will then generate new data linked to these 'root' records, for example, new bill runs and licence
+  // agreements.
+  //
+  // These do not get flagged as `is_test`. So, to find them for deletion we have to join to the 'root' test records. If
+  // we included deleting these along with the other statements they could be deleted before statements like, delete
+  // from bill runs where region is 'test'.
+  return _regionsAndLicences()
 }
 
 async function _billingTransactions () {
@@ -229,6 +236,14 @@ async function _licenceAgreements () {
   WHERE
     "is_test" = TRUE;
 
+  DELETE
+  FROM
+    "water"."licence_agreements" AS "la"
+      USING "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "la"."licence_ref" = "l"."licence_ref";
+
   ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL;
   `)
 }
@@ -325,30 +340,6 @@ async function _licenceVersions () {
   `)
 }
 
-async function _licences () {
-  return db.raw(`
-  ALTER TABLE water.licences DISABLE TRIGGER ALL;
-
-  DELETE
-  FROM
-    "water"."licences"
-  WHERE
-    "is_test" = TRUE;
-
-  ALTER TABLE water.licences ENABLE TRIGGER ALL;
-  `)
-}
-
-async function _regions () {
-  return db.raw(`
-  DELETE
-  FROM
-    "water"."regions"
-  WHERE
-    "is_test" = TRUE;
-  `)
-}
-
 async function _purposesPrimary () {
   return db.raw(`
   DELETE
@@ -418,6 +409,26 @@ async function _sessions () {
     "water"."sessions"
   WHERE
     session_data::jsonb->>'companyName' = 'acceptance-test-company';
+  `)
+}
+
+async function _regionsAndLicences () {
+  return db.raw(`
+  ALTER TABLE water.licences DISABLE TRIGGER ALL;
+
+  DELETE
+  FROM
+    "water"."licences"
+  WHERE
+    "is_test" = TRUE;
+
+  DELETE
+    FROM
+      "water"."regions"
+    WHERE
+      "is_test" = TRUE;
+
+  ALTER TABLE water.licences ENABLE TRIGGER ALL;
   `)
 }
 
