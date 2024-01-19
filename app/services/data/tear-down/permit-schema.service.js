@@ -8,10 +8,24 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  await db
-    .from('permit.licence')
-    .whereJsonPath('metadata', '$.source', '=', 'acceptance-test-setup')
-    .del()
+  return _licence()
+}
+
+async function _licence () {
+  return db.raw(`
+  ALTER TABLE permit.licence DISABLE TRIGGER ALL;
+
+  DELETE
+  FROM
+    "permit"."licence"
+  WHERE
+    jsonb_path_query_first(
+      "metadata",
+      '$.source'
+    ) #>> '{}' = 'acceptance-test-setup';
+
+  ALTER TABLE permit.licence ENABLE TRIGGER ALL;
+  `)
 }
 
 module.exports = {

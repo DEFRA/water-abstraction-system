@@ -8,11 +8,21 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  await db
-    .from('idm.users')
-    .whereJsonPath('user_data', '$.source', '=', 'acceptance-test-setup')
-    .orWhereLike('userName', '%@example.com')
-    .del()
+  return _users()
+}
+
+async function _users () {
+  return db.raw(`
+  DELETE
+  FROM
+    "idm"."users"
+  WHERE
+    jsonb_path_query_first(
+      "user_data",
+      '$.source'
+    ) #>> '{}' = 'acceptance-test-setup'
+    OR "user_name" LIKE '%@example.com';
+  `)
 }
 
 module.exports = {
