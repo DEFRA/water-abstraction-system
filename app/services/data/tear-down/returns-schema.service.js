@@ -8,16 +8,14 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  return Promise.all([
-    _lines(),
-    _versions(),
-    _returns()
-  ])
+  return _deleteAllTestData()
 }
 
-async function _lines () {
+async function _deleteAllTestData () {
   return db.raw(`
   ALTER TABLE returns.lines DISABLE TRIGGER ALL;
+  ALTER TABLE returns.versions DISABLE TRIGGER ALL;
+  ALTER TABLE returns.returns DISABLE TRIGGER ALL;
 
   DELETE
   FROM
@@ -29,14 +27,6 @@ async function _lines () {
     AND "l"."version_id" = "v"."version_id"
     AND "v"."return_id" = "r"."return_id";
 
-  ALTER TABLE returns.lines ENABLE TRIGGER ALL;
-  `)
-}
-
-async function _versions () {
-  return db.raw(`
-  ALTER TABLE returns.versions DISABLE TRIGGER ALL;
-
   DELETE
   FROM
     "returns"."versions" AS "v"
@@ -45,20 +35,14 @@ async function _versions () {
     "r"."is_test" = TRUE
     AND "v"."return_id" = "r"."return_id";
 
-  ALTER TABLE returns.versions ENABLE TRIGGER ALL;
-  `)
-}
-
-async function _returns () {
-  await db.raw(`
-  ALTER TABLE returns.returns DISABLE TRIGGER ALL;
-
   DELETE
   FROM
     "returns"."returns"
   WHERE
     "is_test" = TRUE;
 
+  ALTER TABLE returns.lines ENABLE TRIGGER ALL;
+  ALTER TABLE returns.versions ENABLE TRIGGER ALL;
   ALTER TABLE returns.returns ENABLE TRIGGER ALL;
   `)
 }

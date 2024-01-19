@@ -8,10 +8,10 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  return _users()
+  return _deleteAllTestData()
 }
 
-async function _users () {
+async function _deleteAllTestData () {
   return db.raw(`
   DELETE
   FROM

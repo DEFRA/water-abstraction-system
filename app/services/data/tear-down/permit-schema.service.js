@@ -8,10 +8,10 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  return _licence()
+  return _deleteAllTestData()
 }
 
-async function _licence () {
+async function _deleteAllTestData () {
   return db.raw(`
   ALTER TABLE permit.licence DISABLE TRIGGER ALL;
 
