@@ -22,12 +22,13 @@
 {% endblock %}
 
 {% block content %}
-  <!-- page title -->
+  {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-l">Anglian two-part tariff bill run</span>
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Review licences</h1>
 
+      {# Status badge #}
       <p class="govuk-body">
         {{govukTag({
           text: "Review",
@@ -35,6 +36,7 @@
         })}}
       </p>
 
+      {# Bill run meta-data #}
       {{ govukSummaryList({
           classes: 'govuk-summary-list--no-border',
           rows: [
@@ -93,174 +95,163 @@
     </div>
   </div>
 
-{% set billRunDataTpTReview = [1,2] %}
+  {% set billRunDataTpTReview = [1, 2] %}
 
-
+  {# Cancel bill run button only if there are bills for review #}
   {% if billRunDataTpTReview.length > 1 %}
-  <section class="govuk-!-margin-bottom-9">
-    <form  method="post" novalidate action="review/apply-filters"></form>
-    <form method="post" action="review/cancel-bill-run" novalidate>
-    {{ govukButton({
-      text: "Cancel bill run",
-      classes: "govuk-button--secondary govuk-!-margin-bottom-0"
-    }) }}
-  </form>
+    <section class="govuk-!-margin-bottom-9">
+      <form method="post" action="review/cancel-bill-run" novalidate>
+        {{ govukButton({
+          text: "Cancel bill run",
+          classes: "govuk-button--secondary govuk-!-margin-bottom-0"
+        }) }}
+      </form>
 
-  {% set errors = 1 %}
-  {# {% for licence in billRunDataTpTReview %}
-    {% if licence.issues[0].issue.length %}
-      {% set errors = errors + 1 %}
-    {% endif %} #}
-  {# {% endfor %} #}
+      {% set errors = 1 %}
+      {# {% for licence in billRunDataTpTReview %}
+        {% if licence.issues[0].issue.length %}
+          {% set errors = errors + 1 %}
+        {% endif %} #}
+      {# {% endfor %} #}
 
-  {{ govukInsetText({
-    text: "You need to review " + errors + " licences with returns data issues. You can then continue and send the bill run."
-  }) }}
-
-  </section>
+      {{ govukInsetText({
+        text: "You need to review " + errors + " licences with returns data issues. You can then continue and send the bill run."
+      }) }}
+    </section>
+  {# Continue and Cancel bill run buttons if there are no bills for review #}
   {% else %}
-  <section class="govuk-!-margin-bottom-9">
-    <p class="govuk-body ">You have resolved all returns data issues. Continue to generate bills.</p>
-    <div class="govuk-button-group">
-      {{ govukButton({
+    <section class="govuk-!-margin-bottom-9">
+      <p class="govuk-body ">You have resolved all returns data issues. Continue to generate bills.</p>
+      <div class="govuk-button-group">
+        {{ govukButton({
         text: "Continue",
         classes: "govuk-button--primary"
       }) }}
-      {{ govukButton({
+        {{ govukButton({
         text: "Cancel bill run",
         classes: "govuk-button--secondary"
       }) }}
-    </div>
-  </section>
+      </div>
+    </section>
   {% endif %}
 
-{% set numberOfLicences = "2" %}
-{% set filteredResults = "1" %}
-{# {% set filteredResults = data.filteredResults | default("")%} #}
-
-    <!--get and loop through the notifications table, check if results are filtered or not-->
-    {% if filteredResults.length %}
-    {# {% set licences  = data.filteredResults  %} #}
-    {% set licences  = "2" %}
-    {% else %}
-    {# {% set licences  = numberOfLicences  %} #}
-    {% set licences  = "0"  %}
-    {% endif %}
-
-  <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{% if licences == "empty" %}0{% else %}{{licences | length }}{% endif %} of {{numberOfLicences | length}} licences</h2>
-
+  {# Filter licences #}
   {% set filtersForm %}
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
 
     <form  method="post" novalidate action="review/apply-filters">
+      {# Filter by licence holder #}
       {{ govukInput({
-        label: {
-          text: "Licence holder",
-          classes: "govuk-label--s",
-          isPageHeading: false
-        },
-        classes: "govuk-input--width-20",
-        id: "licenceHolder",
-        name: "licenceHolder",
-        value: "Bottled Water Plc"
-      }) }}
+          label: {
+            text: "Licence holder",
+            classes: "govuk-label--s",
+            isPageHeading: false
+          },
+          classes: "govuk-input--width-20",
+          id: "licenceHolder",
+          name: "licenceHolder",
+          value: "Bottled Water Plc"
+        }) }}
 
-{{data.issue}}
+      {# Filter by issue #}
       {{ govukRadios({
-        classes: "govuk-radios--small",
-        name: "issue",
-        fieldset: {
-          legend: {
-            text: "Issue",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: [
-          {
-            value: "Abstraction outside period",
-            text: "Abstraction outside period"
+          classes: "govuk-radios--small",
+          name: "issue",
+          fieldset: {
+            legend: {
+              text: "Issue",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
           },
-          {
-            value: "Aggregate",
-            text: "Aggregate"
-          },
-          {
-            value: "Checking query",
-            text: "Checking query"
-          },
-          {
-            value: "No returns received",
-            text: "No returns received"
-          },
-          {
-            value: "Over abstraction",
-            text: "Over abstraction"
-          },
-          {
-            value: "Overlap of charge dates",
-            text: "Overlap of charge dates"
-          },
-          {
-            value: "Returns received but not processed",
-            text: "Returns received but not processed"
-          },
-          {
-            value: "Returns received late",
-            text: "Returns received late"
-          },
-          {
-            value: "Return split over charge references",
-            text: "Return split over charge references"
-          },
-          {
-            value: "Some returns IDs not received",
-            text: "Some returns IDs not received"
-          },
-          {
-            value: "Unable to allocate returns",
-            text: "Unable to allocate returns"
-          },
-          {
-            value: "Unable to match return",
-            text: "Unable to match return"
-          }
-        ]
-      }) }}
+          items: [
+            {
+              value: "Abstraction outside period",
+              text: "Abstraction outside period"
+            },
+            {
+              value: "Aggregate",
+              text: "Aggregate"
+            },
+            {
+              value: "Checking query",
+              text: "Checking query"
+            },
+            {
+              value: "No returns received",
+              text: "No returns received"
+            },
+            {
+              value: "Over abstraction",
+              text: "Over abstraction"
+            },
+            {
+              value: "Overlap of charge dates",
+              text: "Overlap of charge dates"
+            },
+            {
+              value: "Returns received but not processed",
+              text: "Returns received but not processed"
+            },
+            {
+              value: "Returns received late",
+              text: "Returns received late"
+            },
+            {
+              value: "Return split over charge references",
+              text: "Return split over charge references"
+            },
+            {
+              value: "Some returns IDs not received",
+              text: "Some returns IDs not received"
+            },
+            {
+              value: "Unable to allocate returns",
+              text: "Unable to allocate returns"
+            },
+            {
+              value: "Unable to match return",
+              text: "Unable to match return"
+            }
+          ]
+        }) }}
 
+      {# Filter by status #}
       {{ govukRadios({
-        classes: "govuk-radios--small",
-        name: "TpTReviewStatus",
-        fieldset: {
-          legend: {
-            text: "Status",
-            isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: [
-          {
-            value: "review",
-            text: "Review"
+          classes: "govuk-radios--small",
+          name: "TpTReviewStatus",
+          fieldset: {
+            legend: {
+              text: "Status",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
           },
-          {
-            value: "ready",
-            text: "Ready"
-          }
-        ]
-      }) }}
+          items: [
+            {
+              value: "review",
+              text: "Review"
+            },
+            {
+              value: "ready",
+              text: "Ready"
+            }
+          ]
+        }) }}
 
       <div class="govuk-button-group">
+        {# Apply filters button #}
         {{ govukButton({
-          text: "Apply filters"
-        }) }}
+            text: "Apply filters"
+          }) }}
 
+        {# Clear filters button #}
         {{ govukButton({
-            text: "Clear filters",
-            classes: "govuk-button--secondary ",
-            name: "clearFilters",
-            value: "true"
-        }) }}
+              text: "Clear filters",
+              classes: "govuk-button--secondary ",
+              name: "clearFilters",
+              value: "true"
+          }) }}
       </div>
     </form>
   {% endset %}
@@ -272,45 +263,45 @@
     open: data['openDetails']
   }) }}
 
+  {% set progress = "" %}
 
+  {% set statusTag %}
+    {{govukTag({
+    text: "review",
+    classes: "govuk-tag--blue"
+    })}}
+  {% endset %}
 
+  {% set action = '<a class="govuk-link" href="linkToLicence"><span class="govuk-visually-hidden">View licence matching for licence </span>' + "09/99/99/9999" + '</a>' %}
+  {% set rows = [ {html: action | safe}, {text: "2PT Testers"}, {text: "Multiple issues" }, {html: progress |safe, classes: "center-text" }, {html: statusTag |safe,format: "numeric"} ] %}
 
-{% set progress = "" %}
-{% set statusTag %}
-{{govukTag({
-  text: "review",
-  classes: "govuk-tag--blue"
-})}}
-{% endset %}
-{% set action = '<a class="govuk-link" href="linkToLicence"><span class="govuk-visually-hidden">View licence matching for licence </span>' + "09/99/99/9999" + '</a>' %}
-{% set rows = [ {html: action | safe}, {text: "2PT Testers"}, {text: "Multiple issues" }, {html: progress |safe, classes: "center-text" }, {html: statusTag |safe,format: "numeric"} ] %}
+  {# Caption displaying the number of licences shown after filtering. Will either be Showing all or Showing X of #}
+  {% set caption = '<div id="caption">' + data.TpTfilterCaption | default("Showing all 100 licences") + '</div>' %}
 
-  {% set caption = '<div id="caption">'+data.TpTfilterCaption|default("Showing all licences")+'</div>' %}
-
+  {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
   {{ govukTable({
     caption: caption |safe,
     captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
     firstCellIsHeader: false,
     head: [
-  {
-    text: "Licence"
-  },
-  {
-    text: "Licence holder"
-  },
-  {
-    text: "Issue"
-  },
-  {
-    text: "Progress",
-    classes: "center-text"
-  },
-  {
-    text: "Status",
-    format: "numeric"
-  }
+      {
+        text: "Licence"
+      },
+      {
+        text: "Licence holder"
+      },
+      {
+        text: "Issue"
+      },
+      {
+        text: "Progress",
+        classes: "center-text"
+      },
+      {
+        text: "Status",
+        format: "numeric"
+      }
     ],
-  rows: [rows]
+    rows: [rows]
   }) }}
-
 {% endblock %}
