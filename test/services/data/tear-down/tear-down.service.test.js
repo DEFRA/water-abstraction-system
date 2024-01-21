@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Things we need to stub
 const CrmSchemaService = require('../../../../app/services/data/tear-down/crm-schema.service.js')
-const CrmV2SchemaService = require('../../../../app/services/data/tear-down/crm-v2-schema.service.js')
 const IdmSchemaService = require('../../../../app/services/data/tear-down/idm-schema.service.js')
 const PermitSchemaService = require('../../../../app/services/data/tear-down/permit-schema.service.js')
 const ReturnsSchemaService = require('../../../../app/services/data/tear-down/returns-schema.service.js')
@@ -21,7 +20,6 @@ const TearDownService = require('../../../../app/services/data/tear-down/tear-do
 
 describe('Tear down service', () => {
   let crmSchemaServiceStub
-  let crmV2SchemaServiceStub
   let idmSchemaServiceStub
   let notifierStub
   let permitSchemaServiceStub
@@ -36,7 +34,6 @@ describe('Tear down service', () => {
     global.GlobalNotifier = notifierStub
 
     crmSchemaServiceStub = Sinon.stub(CrmSchemaService, 'go').resolves()
-    crmV2SchemaServiceStub = Sinon.stub(CrmV2SchemaService, 'go').resolves()
     idmSchemaServiceStub = Sinon.stub(IdmSchemaService, 'go').resolves()
     permitSchemaServiceStub = Sinon.stub(PermitSchemaService, 'go').resolves()
     returnsSchemaServiceStub = Sinon.stub(ReturnsSchemaService, 'go').resolves()
@@ -56,7 +53,6 @@ describe('Tear down service', () => {
     expect(args[1].timeTakenMs).to.exist()
 
     expect(crmSchemaServiceStub.called).to.be.true()
-    expect(crmV2SchemaServiceStub.called).to.be.true()
     expect(idmSchemaServiceStub.called).to.be.true()
     expect(permitSchemaServiceStub.called).to.be.true()
     expect(returnsSchemaServiceStub.called).to.be.true()
