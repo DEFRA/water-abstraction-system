@@ -172,6 +172,14 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
+    "water"."licence_agreements" AS "la"
+    USING "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "la"."licence_ref" = "l"."licence_ref";
+
+  DELETE
+  FROM
     "water"."financial_agreement_types"
   WHERE
     "is_test" = TRUE;
