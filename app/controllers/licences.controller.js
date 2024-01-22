@@ -28,6 +28,7 @@ async function view (request, h) {
   const { id } = request.params
 
   const data = await ViewLicenceService.go(id)
+  console.log(data)
 
   return h.view('licences/view.njk', {
     activeNavBar: 'search',

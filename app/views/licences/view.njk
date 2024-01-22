@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block breadcrumbs %}
   {{
@@ -31,7 +32,13 @@
 {% endset %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">Licence Number {{ licenceRef }}</h1>
+  {% if warning %}
+    {{ govukWarningText({
+      text: warning,
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">Licence number {{ licenceRef }}</h1>
 
   {{ govukTabs({
     items: [
