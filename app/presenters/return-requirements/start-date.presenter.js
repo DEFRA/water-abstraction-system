@@ -13,6 +13,7 @@ function go (session, error = null, payload) {
     dateFields: _dateFields(error, payload),
     errorMessage: _error(error),
     id: session.id,
+    licenceId: session.data.licence.id,
     licenceEndDateValue: _endDate(session.data.licence),
     licenceRef: session.data.licence.licenceRef,
     licenceStartDate: _startDate(session.data.licence.startDate),
@@ -37,18 +38,18 @@ function _dateFields (error, payload) {
     {
       classes: _getErrorClass(error, 'day'),
       name: 'day',
-      value: _setErrorValue(error, payload, 'day')
+      value: _setFieldValue(error, payload, 'day')
     },
     {
       classes: _getErrorClass(error, 'month'),
 
       name: 'month',
-      value: _setErrorValue(error, payload, 'month')
+      value: _setFieldValue(error, payload, 'month')
     },
     {
       classes: _getErrorClass(error, 'year'),
       name: 'year',
-      value: _setErrorValue(error, payload, 'year')
+      value: _setFieldValue(error, payload, 'year')
     }
   ]
 
@@ -99,12 +100,13 @@ function _getErrorClass (error, fieldName) {
   return classes
 }
 
-function _setErrorValue (error, payload, fieldName) {
-  let value = payload[`start-date-${fieldName}`]
+function _setFieldValue (error, payload, fieldName) {
+  let value = null
   if (error) {
     if (error.details[0].invalidFields.includes(fieldName)) {
       value = null
     }
+    value = payload[`start-date-${fieldName}`]
   }
 
   return value

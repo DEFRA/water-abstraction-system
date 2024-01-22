@@ -11,7 +11,7 @@
   {{
     govukBackLink({
       text: 'Back',
-      href: '/licences/' + id + '#charge'
+      href: '/licences/' + licenceId + '#charge'
     })
   }}
 {% endblock %}
@@ -33,7 +33,6 @@
 {% endset %}
 
 {% block content %}
-
   {% if errorMessage %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
