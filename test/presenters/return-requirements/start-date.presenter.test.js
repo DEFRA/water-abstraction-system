@@ -39,7 +39,7 @@ describe('Start Date Presenter', () => {
 
   describe('when provided with an error', () => {
     beforeEach(() => {
-      error = new Error('Invalid date format')
+      error = new Error('Enter a real start date')
     })
 
     it('includes the error message in the presented data', () => {
