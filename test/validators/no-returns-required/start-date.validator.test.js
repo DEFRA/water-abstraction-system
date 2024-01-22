@@ -8,7 +8,7 @@ const { expect } = Code
 
 const StartDateValidator = require('../../../app/validators/return-requirements/start-date.validator.js')
 
-describe.only('Start Date Validator', () => {
+describe('Start Date Validator', () => {
   const testData = {
     startDate: 'anotherStartDate',
     'start-date-day': '15',
