@@ -40,6 +40,12 @@
       </p>
 
       {# Bill meta-data #}
+      {#
+        GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
+        can't assign our data-test attribute using the component. Our solution is to use the html option for each row
+        instead of text and wrap each value in a <span>. That way we can manually assign our data-test attribute to the
+        span.
+      #}
       {{
         govukSummaryList({
           classes: 'govuk-summary-list--no-border',
@@ -49,31 +55,31 @@
           rows: [
             {
               key: { text: "Date created", classes: "meta-data__label" },
-              value: { text: dateCreated, classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-created">' + dateCreated + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Region", classes: "meta-data__label" },
-              value: { text: region, classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-region">' + region + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Bill run type", classes: "meta-data__label" },
-              value: { text: billRunType, classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-type">' + billRunType + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Charge scheme", classes: "meta-data__label" },
-              value: { text: chargeScheme, classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-scheme">' + chargeScheme + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Financial year", classes: "meta-data__label" },
-              value: { text: financialYear, classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-year">' + financialYear + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Transaction file", classes: "meta-data__label" },
-              value: { text: transactionFile, classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-file">' + transactionFile + '</span>', classes: "meta-data__value" }
             } if transactionFile,
             {
               key: { text: "Bill number", classes: "meta-data__label" },
-              value: { text: billNumber, classes: "meta-data__value" }
+              value: { html: '<span data-test="meta-data-number">' + billNumber + '</span>', classes: "meta-data__value" }
             } if billNumber
           ]
         })
@@ -134,7 +140,7 @@
       </div>
       <div class="govuk-grid-column-one-half">
         <h2>
-          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="credits-total">{{ debitsTotal }}</span><br>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-48" data-test="debits-total">{{ debitsTotal }}</span><br>
           <span class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24">Debits</span>
         </h2>
       </div>
@@ -367,7 +373,7 @@
             text: creditTotal,
             format: 'numeric',
             classes: 'govuk-!-font-weight-bold',
-            attributes: { 'data-test': 'credits-total' }
+            attributes: { 'data-test': 'transactions-credits-total' }
           },
           {
             text: '',
@@ -384,7 +390,7 @@
             text: debitTotal,
             format: 'numeric',
             classes: 'govuk-!-font-weight-bold',
-            attributes: { 'data-test': 'debits-total' }
+            attributes: { 'data-test': 'transactions-debits-total' }
           }
         ] %}
 

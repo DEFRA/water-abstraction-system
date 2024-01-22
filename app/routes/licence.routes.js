@@ -5,6 +5,18 @@ const LicencesController = require('../controllers/licences.controller.js')
 const routes = [
   {
     method: 'GET',
+    path: '/licences/{id}',
+    handler: LicencesController.view,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'View a licence page'
+    }
+  }, {
+    method: 'GET',
     path: '/licences/{id}/no-returns-required',
     handler: LicencesController.noReturnsRequired,
     options: {

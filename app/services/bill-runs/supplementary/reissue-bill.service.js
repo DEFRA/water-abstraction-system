@@ -235,8 +235,16 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
   }
 
   const translatedChargingModuleInvoice = _mapChargingModuleInvoice(chargingModuleReissueInvoice)
+
+  // GenerateBillService expects a BillingAccount instance and was built for supplementary billing. We only have the
+  // Bill object. So, we create a 'billing account' from its data that GenerateBillService can then use.
+  const billingAccount = {
+    id: sourceBill.billingAccountId,
+    accountNumber: sourceBill.accountNumber
+  }
+
   const generatedBill = GenerateBillService.go(
-    sourceBill,
+    billingAccount,
     reissueBillRun.id,
     sourceBill.financialYearEnding
   )
@@ -267,7 +275,14 @@ function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, so
     return existingBillLicence
   }
 
-  const newBillLicence = GenerateBillLicenceService.go(billingId, sourceBillLicence)
+  // GenerateBillLicenceService expects a Licence object and was built for supplementary billing. We only have the
+  // BillLicence object. So, we create a 'licence' from its data that GenerateBillLicenceService can then use.
+  const licence = {
+    id: sourceBillLicence.licenceId,
+    licenceRef: sourceBillLicence.licenceRef
+  }
+
+  const newBillLicence = GenerateBillLicenceService.go(billingId, licence)
 
   dataToReturn.billLicences.push(newBillLicence)
 
