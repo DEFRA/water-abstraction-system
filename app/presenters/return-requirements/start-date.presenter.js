@@ -15,9 +15,8 @@ function go (session, error = null) {
     licenceStartDate: _startDate(session.data.licence.startDate),
     licenceStartDateValue: session.data.licence.startDate,
     licenceEndDateValue: _endDate(session.data.licence),
-    dateFields: _dateFields(session, error)
+    dateFields: _dateFields(error)
   }
-  console.log('LICENCE:', session.data.licence)
   return data
 }
 
@@ -25,29 +24,28 @@ function _error (error) {
   if (!error) {
     return null
   }
-
   const errorMessage = {
-    text: error.message
+    text: error.details[0].message
   }
 
   return errorMessage
 }
 
-function _dateFields (_session, error = null) {
+function _dateFields (error) {
   const dateFields = [
     {
-      classes: error ? 'govuk-input--width-2 govuk-input--error' : 'govuk-input--width-2',
+      classes: _getErrorClass(error, 'day'),
       name: 'day',
       value: ''
     },
     {
-      classes: error ? 'govuk-input--width-2 govuk-input--error' : 'govuk-input--width-2',
+      classes: _getErrorClass(error, 'month'),
 
       name: 'month',
       value: ''
     },
     {
-      classes: error ? 'govuk-input--width-4 govuk-input--error' : 'govuk-input--width-4',
+      classes: _getErrorClass(error, 'year'),
       name: 'year',
       value: ''
     }
@@ -64,11 +62,9 @@ function _startDate (date) {
 }
 
 function _endDate (licence) {
-  // we need to return the earliest date, so we need to filter out null dates and convert to Date objects.
   const { expiredDate, lapsedDate, revokedDate } = licence
   let endDate = null
 
-  // Filter out null dates and convert to Date objects
   const dates = [expiredDate, lapsedDate, revokedDate].filter(Boolean).map(date => new Date(date))
 
   // If there are no valid dates, return null
@@ -79,6 +75,19 @@ function _endDate (licence) {
   // Sort dates and return the earliest, if the value is null, the array will be empty
   endDate = dates.sort((a, b) => a - b)[0].toISOString()
   return endDate
+}
+
+function _getErrorClass (error, fieldName) {
+  let classes = 'govuk-input--width-2'
+  if (!error) {
+    classes = 'govuk-input--width-2'
+  } else {
+    if (error.details[0].invalidFields.includes(fieldName)) {
+      classes = 'govuk-input--width-2 govuk-input--error'
+    }
+  }
+
+  return classes
 }
 
 module.exports = {

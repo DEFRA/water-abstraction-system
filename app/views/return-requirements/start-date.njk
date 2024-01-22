@@ -59,15 +59,18 @@
           items: [
              {
               value: licenceStartDateValue,
-              html: "Licence version start date",
+              text: "Licence version start date",
               hint: {
                 text:  licenceStartDate
               },
               checked: true
             },
             {
-              value: "other",
+              value: "anotherStartDate",
               text: "Another date",
+              hint: {
+                text: "For example, 27 3 2007"
+              },
               conditional: {
                 html: dateInputHTML
               }

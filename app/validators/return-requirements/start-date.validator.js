@@ -3,48 +3,58 @@
 const Joi = require('joi')
 
 function go (data) {
-  // Arrange
-  const { licenceStartDate, licenceEndDate } = data
-  const dateField = `${data.day}/${data.month}/${data.year}`
+  const customErrorMessages = {
+    realStartDate: 'Enter a real start date',
+    selectStartDate: 'Select the start date for the return requirement',
+    dateGreaterThan: 'Start date must be after the original licence start date',
+    dateLessThan: 'Start date must be before the licence end date'
+  }
+
+  const { licenceStartDate, licenceEndDate, startDate, 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = data
 
   const schema = Joi.object({
-    day: Joi.string().required(),
-    month: Joi.string().required(),
-    year: Joi.string().required(),
-    date: Joi.string()
-      .custom((value, helpers) => {
-        // Convert to date object
-        const dateParts = value.split('/')
-        const year = parseInt(dateParts[2], 10)
-        const month = parseInt(dateParts[1], 10) - 1 // JS months are 0-based
-        const day = parseInt(dateParts[0], 10)
-        const date = new Date(year, month, day)
-
-        // Validate if date is real
-        if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
-          return helpers.error('any.invalid')
-        }
-
-        // Validate against licence start date
-        if (date < new Date(licenceStartDate)) {
-          return helpers.error('date.min')
-        }
-
-        // Validate against licence end date, if it exists
-        if (licenceEndDate && date > new Date(licenceEndDate)) {
-          return helpers.error('date.max')
-        }
-
-        return value
-      }, 'Date Validation')
-      .messages({
-        'any.invalid': 'Enter a real start date',
-        'date.min': 'Start date must be after the original licence start date',
-        'date.max': 'Start date must be before the licence end date'
-      })
+    startDate: Joi.string().required().messages({
+      'string.empty': customErrorMessages.selectStartDate
+    }),
+    fullDate: Joi.when('startDate', {
+      is: 'anotherStartDate',
+      then: Joi.date().iso().required().greater(licenceStartDate).less(licenceEndDate || '9999-12-31').messages({
+        'date.base': customErrorMessages.realStartDate,
+        'date.greater': customErrorMessages.dateGreaterThan,
+        'date.less': customErrorMessages.dateLessThan,
+        'any.required': customErrorMessages.selectStartDate
+      }),
+      otherwise: Joi.forbidden()
+    })
   })
 
-  const validationResult = schema.validate({ ...data, date: dateField }, { abortEarly: false })
+  if (startDate === 'anotherStartDate') {
+    const invalidFields = []
+    const isDayValid = day && /^\d{1,2}$/.test(day) && day >= 1 && day <= 31
+    const isMonthValid = month && /^\d{1,2}$/.test(month) && month >= 1 && month <= 12
+    const isYearValid = year && /^\d{4}$/.test(year)
+
+    if (!isDayValid) invalidFields.push('day')
+    if (!isMonthValid) invalidFields.push('month')
+    if (!isYearValid) invalidFields.push('year')
+
+    if (invalidFields.length) {
+      const invalidFieldsError = {
+        value: data,
+        error: {
+          details: [{ message: customErrorMessages.realStartDate, invalidFields }]
+        }
+      }
+      return invalidFieldsError
+    }
+
+    const formattedMonth = month.padStart(2, '0')
+    const formattedDay = day.padStart(2, '0')
+    data.fullDate = `${year}-${formattedMonth}-${formattedDay}`
+  }
+
+  const validationResult = schema.validate(data, { abortEarly: false, allowUnknown: true })
+
   return validationResult
 }
 
