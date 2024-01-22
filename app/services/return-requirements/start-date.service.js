@@ -22,9 +22,9 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @returns {Object} page data needed by the view template
  */
-async function go (sessionId, error = null) {
+async function go (sessionId, error = null, payload) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = StartDatePresenter.go(session, error)
+  const formattedData = StartDatePresenter.go(session, error, payload)
 
   return {
     activeNavBar: 'search',

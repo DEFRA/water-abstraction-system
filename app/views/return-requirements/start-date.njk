@@ -63,7 +63,7 @@
               hint: {
                 text:  licenceStartDate
               },
-              checked: true
+              checked: false
             },
             {
               value: "anotherStartDate",
@@ -71,6 +71,7 @@
               hint: {
                 text: "For example, 27 3 2007"
               },
+              checked: anotherStartDateHasErrors,
               conditional: {
                 html: dateInputHTML
               }

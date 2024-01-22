@@ -284,7 +284,7 @@ async function submitStartDate (request, h) {
   const validation = StartDateValidator.go(validationData)
 
   if (validation.error) {
-    const errorPageData = await StartDateService.go(sessionId, validation.error)
+    const errorPageData = await StartDateService.go(sessionId, validation.error, request.payload)
     return h.view('return-requirements/start-date.njk', errorPageData)
   }
 

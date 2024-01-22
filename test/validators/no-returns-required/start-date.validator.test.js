@@ -36,7 +36,7 @@ describe.only('Start Date Validator', () => {
   describe('when invalid data is provided', () => {
     describe('because the date is non-existent', () => {
       it('fails validation', () => {
-        const invalidTestData = { ...testData, 'start-date-day': '31', 'start-date-month': '02' }
+        const invalidTestData = { ...testData, 'start-date-day': '31', 'start-date-month': '02', 'start-date-year': 'aaa' }
         const result = StartDateValidator.go(invalidTestData)
 
         expect(result.value).to.exist()
