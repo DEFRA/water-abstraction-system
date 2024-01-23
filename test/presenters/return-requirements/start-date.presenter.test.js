@@ -10,7 +10,7 @@ const { expect } = Code
 const StartDatePresenter = require('../../../app/presenters/return-requirements/start-date.presenter.js')
 
 describe('Start Date Presenter', () => {
-  let session, error
+  let session, error, payload
 
   beforeEach(() => {
     session = {
@@ -39,14 +39,28 @@ describe('Start Date Presenter', () => {
 
   describe('when provided with an error', () => {
     beforeEach(() => {
-      error = new Error('Enter a real start date')
+      error = {
+        details: [
+          {
+            message: 'Enter a real start date',
+            invalidFields: ['day', 'month', 'year']
+          }
+        ]
+      }
+
+      // Mock payload
+      payload = {
+        'start-date-day': '',
+        'start-date-month': '',
+        'start-date-year': ''
+      }
     })
 
     it('includes the error message in the presented data', () => {
-      const result = StartDatePresenter.go(session, error)
+      const result = StartDatePresenter.go(session, error, payload)
 
       expect(result.errorMessage).to.exist()
-      expect(result.errorMessage.text).to.equal(error.message)
+      expect(result.errorMessage.text).to.equal(error.details[0].message)
     })
   })
 })

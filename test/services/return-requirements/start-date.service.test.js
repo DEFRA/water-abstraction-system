@@ -40,10 +40,22 @@ describe('Start Date Service', () => {
     })
 
     describe('with the optional error param', () => {
-      const error = new Error('Invalid date format')
+      const error = {
+        details: [
+          {
+            message: 'Enter a real start date',
+            invalidFields: ['day', 'month', 'year']
+          }
+        ]
+      }
+      const payload = {
+        'start-date-day': '',
+        'start-date-month': '',
+        'start-date-year': ''
+      }
 
       it('returns page data for the view including the error message', async () => {
-        const result = await StartDateService.go(session.id, error)
+        const result = await StartDateService.go(session.id, error, payload)
 
         expect(result.activeNavBar).to.exist()
         expect(result.pageTitle).to.exist()
@@ -51,7 +63,7 @@ describe('Start Date Service', () => {
         expect(result.dateFields).to.exist()
 
         expect(result.errorMessage).to.exist()
-        expect(result.errorMessage.text).to.equal(error.message)
+        expect(result.errorMessage.text).to.equal(error.details[0].message)
       })
     })
   })
