@@ -44,7 +44,7 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceDocument, licenceRef, licenceVersions } = licence
+  const { id, licenceRef, licenceVersions } = licence
   const ends = licence.$ends()
 
   return {
@@ -52,7 +52,7 @@ function _data (licence, journey) {
       id,
       endDate: ends ? ends.date : null,
       licenceRef,
-      licenceHolder: _licenceHolder(licenceDocument),
+      licenceHolder: licence.$licenceHolder(),
       startDate: _startDate(licenceVersions)
     },
     journey
@@ -87,18 +87,6 @@ async function _fetchLicence (licenceId) {
   }
 
   return licence
-}
-
-function _licenceHolder (licenceDocument) {
-  // Extract the company and contact from the last licenceDocumentRole created. _fetchLicence() ensures in the case
-  // that there is more than one that they are ordered by their start date (DESC)
-  const { company, contact } = licenceDocument.licenceDocumentRoles[0]
-
-  if (contact) {
-    return contact.$name()
-  }
-
-  return company.name
 }
 
 function _startDate (licenceVersions) {

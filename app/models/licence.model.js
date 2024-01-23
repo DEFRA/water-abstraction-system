@@ -191,6 +191,45 @@ class LicenceModel extends BaseModel {
 
     return filteredDates[0]
   }
+
+  /**
+   * Determine the name of the licence holder for the licence
+   *
+   * > We recommend adding the `licenceHolder` modifier to your query to ensure the joined records are available to
+   * > determine this
+   *
+   * Every licence has a licence holder. They may be a company or a person (held as a 'contact' record). This
+   * information is stored in 'licence document roles' and because the licence holder can change, there may be more
+   * than one record.
+   *
+   * To get to the 'licence document roles' we have to go via the linked 'licence document' and ensure we sort by their
+   * start date so that we have the 'current' licence holder. Thankfully, the `licenceHolder` query modifier deals
+   * with this for us.
+   *
+   * Every licence is always linked to a 'company' record. But if they are also linked to a 'contact' it takes
+   * precedence when determining the licence holder name.
+   *
+   * @returns {(string|null)} `null` if this instance does not have the additional properties needed to determine the
+   * licence holder else the licence holder's name
+   */
+  $licenceHolder () {
+    // Extract the company and contact from the last licenceDocumentRole created. It is assumed that the
+    // `licenceHolder` modifier has been used to get the additional records needed for this. It also ensures in the case
+    // that there is more than one that they are ordered by their start date (DESC)
+    const latestLicenceDocumentRole = this.licenceDocument.licenceDocumentRoles[0]
+
+    if (!latestLicenceDocumentRole) {
+      return null
+    }
+
+    const { company, contact } = latestLicenceDocumentRole
+
+    if (contact) {
+      return contact.$name()
+    }
+
+    return company.name
+  }
 }
 
 module.exports = LicenceModel
