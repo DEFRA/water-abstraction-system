@@ -74,6 +74,60 @@ class LicenceModel extends BaseModel {
       }
     }
   }
+
+  /**
+   * Determine the 'end' date for the licence
+   *
+   * A licence can 'end' for 3 reasons:
+   *
+   * - because it is _revoked_
+   * - because it is _lapsed_
+   * - because it is _expired_
+   *
+   * The previous delivery team chose to encode these as 3 separate date fields on the licence record. So, if a field is
+   * populated it means the licence 'ends' for that reason on that day.
+   *
+   * More than one of these fields may be populated. For example, a licence was due to expire on 2023-08-10 but was then
+   * revoked on 2022-04-27. So, to determine the reason you need to select the _earliest_ date.
+   *
+   * But are examples where 2 of the fields might be populated with the same date (and 1 licence where all 3 have the
+   * same date!) If more than one date field is populated and they hold the earliest date value then we select based on
+   * priority; _revoked_ -> _lapsed_ -> _expired_.
+   *
+   * @returns `null` if no 'end' dates are set else an object containing the date, priority and reason for either the
+   * earliest or highest priority end date
+   */
+  $ends () {
+    const endDates = [
+      { date: this.revokedDate, priority: 1, reason: 'revoked' },
+      { date: this.lapsedDate, priority: 2, reason: 'lapsed' },
+      { date: this.expiredDate, priority: 3, reason: 'expired' }
+    ]
+
+    const filteredDates = endDates.filter((endDate) => endDate.date)
+
+    if (filteredDates.length === 0) {
+      return null
+    }
+
+    filteredDates.sort((firstDate, secondDate) => {
+      if (firstDate.date !== secondDate.date) {
+        if (firstDate.date < secondDate.date) {
+          return -1
+        }
+
+        return 1
+      }
+
+      if (firstDate.priority < secondDate.priority) {
+        return -1
+      }
+
+      return 1
+    })
+
+    return filteredDates[0]
+  }
 }
 
 module.exports = LicenceModel
