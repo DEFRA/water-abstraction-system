@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const LicenceModel = require('../../../app/models/licence.model.js')
+
 // Things we need to stub
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
@@ -23,49 +26,102 @@ describe('View Licence service', () => {
   })
 
   describe('when a licence with a matching ID exists', () => {
-    describe('and it has an expired date', () => {
+    describe('and it does not have an expired, lapsed, or revoke date', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
-        fetchLicenceResult.expiredDate = new Date('2033-03-07')
+        fetchLicenceResult = _testLicence()
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
       it('will return the data and format it for use in the licence summary page', async () => {
         const result = await ViewLicenceService.go(testId)
 
-        expect(result).to.equal({
-          id: testId,
-          licenceRef: '01/130/R01',
-          region: 'South West',
-          startDate: '7 March 2013',
-          endDate: '7 March 2033'
+        expect(result.warning).to.equal(null)
+      })
+    })
+
+    describe("and it did 'end' in the past", () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+      })
+
+      describe('because it was revoked', () => {
+        beforeEach(() => {
+          fetchLicenceResult.revokedDate = new Date('2023-03-07')
+          Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+        })
+
+        it('will include the revoked warning message for use in the view licence page', async () => {
+          const result = await ViewLicenceService.go(testId)
+
+          expect(result.warning).to.equal('This licence was revoked on 7 March 2023')
+        })
+      })
+
+      describe('because it was lapsed', () => {
+        beforeEach(() => {
+          fetchLicenceResult.lapsedDate = new Date('2023-03-07')
+          Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+        })
+
+        it('will include the lapsed warning message for use in the view licence page', async () => {
+          const result = await ViewLicenceService.go(testId)
+
+          expect(result.warning).to.equal('This licence lapsed on 7 March 2023')
+        })
+      })
+
+      describe('because it was expired', () => {
+        beforeEach(() => {
+          fetchLicenceResult.expiredDate = new Date('2023-03-07')
+          Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+        })
+
+        it('will include the expired warning message for use in the view licence page', async () => {
+          const result = await ViewLicenceService.go(testId)
+
+          expect(result.warning).to.equal('This licence expired on 7 March 2023')
         })
       })
     })
 
-    describe('and it does not have an expired date', () => {
+    describe("and it did 'ends' today", () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.revokedDate = new Date()
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the data and format it for use in the licence summary page', async () => {
+      it('will include a warning message for use in the view licence page', async () => {
         const result = await ViewLicenceService.go(testId)
 
-        expect(result).to.equal({
-          id: testId,
-          licenceRef: '01/130/R01',
-          region: 'South West',
-          startDate: '7 March 2013',
-          endDate: null
-        })
+        expect(result.warning).to.startWith('This licence was revoked on')
+      })
+    })
+
+    describe("and it did 'ends' in the future", () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+
+        // Set the 'end' date to tomorrow
+        const today = new Date()
+        // 86400000 is one day in milliseconds
+        const tomorrow = new Date(today.getTime() + 86400000)
+        fetchLicenceResult.revokedDate = tomorrow
+
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will include a warning message for use in the view licence page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.warning).to.be.null()
       })
     })
   })
 })
 
-function _licenceData () {
-  return {
+function _testLicence () {
+  return LicenceModel.fromJson({
     id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
     licenceRef: '01/130/R01',
     region: {
@@ -73,5 +129,5 @@ function _licenceData () {
       displayName: 'South West'
     },
     startDate: new Date('2013-03-07')
-  }
+  })
 }

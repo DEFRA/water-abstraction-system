@@ -16,27 +16,49 @@ const { formatLongDate } = require('../base.presenter.js')
  */
 function go (licence) {
   const { expiredDate, id, licenceRef, region, startDate } = licence
+  const warning = _generateWarningMessage(licence)
 
   return {
     id,
     endDate: _endDate(expiredDate),
     licenceRef,
     region: region.displayName,
-    startDate: formatLongDate(startDate)
+    startDate: formatLongDate(startDate),
+    warning
   }
 }
 
-/**
- * Formats the expired date of the licence as the end date for the view
- *
- * @module ViewLicencePresenter
- */
 function _endDate (expiredDate) {
   if (!expiredDate || expiredDate < Date.now()) {
     return null
   }
 
   return formatLongDate(expiredDate)
+}
+
+function _generateWarningMessage (licence) {
+  const ends = licence.$ends()
+
+  if (!ends) {
+    return null
+  }
+
+  const { date, reason } = ends
+  const today = new Date()
+
+  if (date > today) {
+    return null
+  }
+
+  if (reason === 'revoked') {
+    return `This licence was revoked on ${formatLongDate(date)}`
+  }
+
+  if (reason === 'lapsed') {
+    return `This licence lapsed on ${formatLongDate(date)}`
+  }
+
+  return `This licence expired on ${formatLongDate(date)}`
 }
 
 module.exports = {
