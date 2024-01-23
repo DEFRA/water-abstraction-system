@@ -14,7 +14,7 @@ function go (session, error = null, payload) {
     errorMessage: _error(error),
     id: session.id,
     licenceId: session.data.licence.id,
-    licenceEndDateValue: _endDate(session.data.licence),
+    licenceEndDateValue: session.data.licence.endDate,
     licenceRef: session.data.licence.licenceRef,
     licenceStartDate: _startDate(session.data.licence.startDate),
     licenceStartDateValue: session.data.licence.startDate
@@ -38,22 +38,31 @@ function _dateFields (error, payload) {
     {
       classes: _getErrorClass(error, 'day'),
       name: 'day',
-      value: payload['start-date-day'] || ''
+      value: _getFieldValue(payload, 'start-date-day')
     },
     {
       classes: _getErrorClass(error, 'month'),
 
       name: 'month',
-      value: payload['start-date-month'] || ''
+      value: _getFieldValue(payload, 'start-date-month')
     },
     {
       classes: _getErrorClass(error, 'year'),
       name: 'year',
-      value: payload['start-date-year'] || ''
+      value: _getFieldValue(payload, 'start-date-year')
     }
   ]
 
   return dateFields
+}
+
+function _getFieldValue (payload, fieldName) {
+  let value = null
+  if (payload) {
+    value = payload[fieldName]
+  }
+
+  return value
 }
 
 function _startDate (date) {
@@ -64,40 +73,22 @@ function _startDate (date) {
   return formattedDate
 }
 
-/**
- * Returns the earliest end date value from the licence expiredDate, lapsedDate, or revokedDate properties.
- * Sorts the valid date values and returns the earliest date string in ISO format.
- * If no valid end dates exist, returns null.
-*/
-function _endDate (licence) {
-  const { expiredDate, lapsedDate, revokedDate } = licence
-  let endDate = null
-
-  const dates = [expiredDate, lapsedDate, revokedDate]
-    .filter(Boolean)
-    .map(date => new Date(date))
-
-  // If there are no valid dates, return null
-  if (dates.length === 0) {
-    return endDate
-  }
-
-  // Sort dates and return the earliest, if the value is null, the array will be empty
-  endDate = dates.sort((a, b) => a - b)[0].toISOString()
-
-  return endDate
-}
-
 function _getErrorClass (error, fieldName) {
-  let classes = 'govuk-input--width-2'
+  const baseClass = 'govuk-input--width-2'
+  let errorClass = ''
 
   if (error) {
-    if (error.details[0].invalidFields.includes(fieldName)) {
-      classes = 'govuk-input--width-2 govuk-input--error'
+    const errorDetails = error.details[0]
+
+    const isFieldInvalid = errorDetails?.invalidFields?.includes(fieldName)
+    const isDateInvalid = errorDetails?.type === 'date.greater' || errorDetails?.type === 'date.less'
+
+    if (isFieldInvalid || isDateInvalid) {
+      errorClass = ' govuk-input--error'
     }
   }
 
-  return classes
+  return baseClass + errorClass
 }
 
 module.exports = {

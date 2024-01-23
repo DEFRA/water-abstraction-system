@@ -47,8 +47,6 @@ describe('Start Date Presenter', () => {
           }
         ]
       }
-
-      // Mock payload
       payload = {
         'start-date-day': '',
         'start-date-month': '',
