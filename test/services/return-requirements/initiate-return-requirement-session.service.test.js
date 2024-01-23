@@ -37,7 +37,9 @@ describe('Initiate Return Requirement Session service', () => {
       let licenceDocument
 
       beforeEach(async () => {
-        licence = await LicenceHelper.add()
+        // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
+        // 'ends' information
+        licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10') })
 
         // Create 2 licence versions so we can test the service only gets the 'current' version
         await LicenceVersionHelper.add({
@@ -97,6 +99,7 @@ describe('Initiate Return Requirement Session service', () => {
           const { data } = result
 
           expect(data.licence.id).to.equal(licence.id)
+          expect(data.licence.ends).to.equal({ date: new Date('2024-08-10'), priority: 3, reason: 'expired' })
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
           expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
         })
@@ -140,6 +143,7 @@ describe('Initiate Return Requirement Session service', () => {
           const { data } = result
 
           expect(data.licence.id).to.equal(licence.id)
+          expect(data.licence.ends).to.equal({ date: new Date('2024-08-10'), priority: 3, reason: 'expired' })
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
           expect(data.licence.licenceHolder).to.equal('Luce Holder')
         })

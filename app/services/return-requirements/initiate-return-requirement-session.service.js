@@ -49,6 +49,7 @@ function _data (licence, journey) {
   return {
     licence: {
       id,
+      ends: licence.$ends(),
       licenceRef,
       licenceHolder: _licenceHolder(licenceDocument),
       startDate: _startDate(licenceVersions)
@@ -62,7 +63,10 @@ async function _fetchLicence (licenceId) {
     .findById(licenceId)
     .select([
       'id',
-      'licenceRef'
+      'expiredDate',
+      'lapsedDate',
+      'licenceRef',
+      'revokedDate'
     ])
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
