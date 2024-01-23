@@ -99,7 +99,6 @@ describe('Initiate Return Requirement Session service', () => {
           const { data } = result
 
           expect(data.licence.id).to.equal(licence.id)
-          expect(data.licence.ends).to.equal({ date: new Date('2024-08-10'), priority: 3, reason: 'expired' })
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
           expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
         })
@@ -110,6 +109,14 @@ describe('Initiate Return Requirement Session service', () => {
           const { data } = result
 
           expect(data.licence.startDate).to.equal(new Date('2022-05-01'))
+        })
+
+        it("creates a new session record containing the licence's end date", async () => {
+          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+
+          const { data } = result
+
+          expect(data.licence.endDate).to.equal(new Date('2024-08-10'))
         })
 
         it('creates a new session record containing the journey passed in', async () => {
@@ -143,7 +150,6 @@ describe('Initiate Return Requirement Session service', () => {
           const { data } = result
 
           expect(data.licence.id).to.equal(licence.id)
-          expect(data.licence.ends).to.equal({ date: new Date('2024-08-10'), priority: 3, reason: 'expired' })
           expect(data.licence.licenceRef).to.equal(licence.licenceRef)
           expect(data.licence.licenceHolder).to.equal('Luce Holder')
         })
@@ -154,6 +160,14 @@ describe('Initiate Return Requirement Session service', () => {
           const { data } = result
 
           expect(data.licence.startDate).to.equal(new Date('2022-05-01'))
+        })
+
+        it("creates a new session record containing the licence's end date", async () => {
+          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+
+          const { data } = result
+
+          expect(data.licence.endDate).to.equal(new Date('2024-08-10'))
         })
 
         it('creates a new session record containing the journey passed in', async () => {
