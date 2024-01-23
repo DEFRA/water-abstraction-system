@@ -216,7 +216,7 @@ class LicenceModel extends BaseModel {
     // Extract the company and contact from the last licenceDocumentRole created. It is assumed that the
     // `licenceHolder` modifier has been used to get the additional records needed for this. It also ensures in the case
     // that there is more than one that they are ordered by their start date (DESC)
-    const latestLicenceDocumentRole = this.licenceDocument.licenceDocumentRoles[0]
+    const latestLicenceDocumentRole = this?.licenceDocument?.licenceDocumentRoles[0]
 
     if (!latestLicenceDocumentRole) {
       return null
