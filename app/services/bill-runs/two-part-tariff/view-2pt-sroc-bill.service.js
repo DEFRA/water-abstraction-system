@@ -10,16 +10,13 @@ const FetchBillRunLicenceDataService = require('./fetch-bill-run-licence-data.se
 const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-tariff/review-bill-run.presenter.js')
 
 async function go (id) {
-  const preparedLicences = []
-  const { billRun, licences } = await FetchBillRunLicenceDataService.go(id)
+  const result = await FetchBillRunLicenceDataService.go(id)
 
-  for (const licence of licences) {
-    const issues = await DetermineBillRunIssuesService.go(licence.licenceId)
+  await DetermineBillRunIssuesService.go(result.licences)
 
-    preparedLicences.push(ReviewBillRunPresenter.go(licence, issues))
-  }
+  const { preparedBillRun: billRun, preparedLicences: licences } = await ReviewBillRunPresenter.go(result.billRun, result.licences)
 
-  return { billRun, preparedLicences }
+  return { billRun, licences }
 }
 
 module.exports = {

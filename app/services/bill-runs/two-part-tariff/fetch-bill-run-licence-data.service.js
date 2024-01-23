@@ -11,6 +11,7 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
 
 async function go (id) {
   const billRun = await _fetchBillRun(id)
+  console.log('Bill Run :', billRun)
   const licences = await _fetchLicences(id)
 
   for (const licence of licences) {
@@ -94,12 +95,8 @@ async function _fetchBillRun (id) {
     .findById(id)
     .select([
       'id',
-      'batchType',
       'billRunNumber',
       'createdAt',
-      'summer',
-      'scheme',
-      'source',
       'status',
       'toFinancialYearEnding'
     ])

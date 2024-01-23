@@ -33,7 +33,7 @@ async function review (request, h) {
   const { id } = request.params
 
   const pageData = await View2ptSrocBillService.go(id)
-
+  console.log('Page Data :', pageData)
   return h.view('bill-runs/review.njk', {
     pageTitle: 'Review Two Part Tariff SROC',
     activeNavBar: 'bill-runs',

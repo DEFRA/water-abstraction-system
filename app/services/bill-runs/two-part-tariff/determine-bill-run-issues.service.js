@@ -12,12 +12,13 @@ const FetchReviewResultsService = require('./fetch-review-results.service.js')
  * @param {*} licenceResults
  * @returns
  */
-async function go (licenceId) {
-  const licenceResults = await FetchReviewResultsService.go(licenceId)
-
-  const { issues, status } = _determineIssues(licenceResults)
-
-  return { issues, status }
+async function go (licences) {
+  for (const licence of licences) {
+    const licenceResults = await FetchReviewResultsService.go(licence.licenceId)
+    const { issues, status } = _determineIssues(licenceResults)
+    licence.issues = issues
+    licence.status = status
+  }
 }
 
 function _determineIssues (licenceResults) {
