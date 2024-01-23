@@ -1,0 +1,32 @@
+'use strict'
+
+/**
+ * Orchestrates fetching and presenting the data needed for the review bill run page
+ * @module ReviewBillRunService
+ */
+
+const DetermineBillRunIssuesService = require('./determine-bill-run-issues.service.js')
+const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
+const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-tariff/review-bill-run.presenter.js')
+
+/**
+ * Orchestrates fetching and presenting the data needed for the review bill run page
+ *
+ * @param {string} id The UUID for the bill run to review
+ *
+ * @returns {Object} an object representing the `pageData` needed by the review bill run template. It contains details of
+ * the bill run and the licences linked to it.
+ */
+async function go (id) {
+  const result = await FetchBillRunLicencesService.go(id)
+
+  await DetermineBillRunIssuesService.go(result.licences)
+
+  const { preparedBillRun: billRun, preparedLicences: licences } = ReviewBillRunPresenter.go(result.billRun, result.licences)
+
+  return { billRun, licences }
+}
+
+module.exports = {
+  go
+}

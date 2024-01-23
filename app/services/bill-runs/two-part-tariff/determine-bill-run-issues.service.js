@@ -1,86 +1,95 @@
 'use strict'
 
 /**
- * Determines the issues on the licence for a two-part tariff bill run
+ * Determines the issues on the licences for a two-part tariff bill run
  * @module DetermineBillRunIssuesService
  */
 
 const FetchReviewResultsService = require('./fetch-review-results.service.js')
 
 /**
+ * Determines all the issues on the licences for a two-part tariff bill run
  *
- * @param {*} licenceResults
- * @returns
+ * @param {module:LicenceModel} licences the two-part tariff licence included in the bill run
  */
 async function go (licences) {
   for (const licence of licences) {
-    const licenceResults = await FetchReviewResultsService.go(licence.licenceId)
-    const { issues, status } = _determineIssues(licenceResults)
+    const licenceReviewResults = await FetchReviewResultsService.go(licence.licenceId)
+    const { issues, status } = _determineIssues(licenceReviewResults)
+
     licence.issues = issues
     licence.status = status
   }
 }
 
-function _determineIssues (licenceResults) {
+function _determineIssues (licenceReviewResults) {
   let status = 'Ready'
   const issues = []
 
-  const abstractionOutsidePeriod = licenceResults.some(reviewResult => reviewResult.reviewReturnResults?.abstractionOutsidePeriod)
+  const abstractionOutsidePeriod = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.abstractionOutsidePeriod)
   if (abstractionOutsidePeriod) {
     issues.push('Abstraction outside period')
   }
 
-  const hasAggregate = licenceResults.some(reviewResult => reviewResult.reviewChargeElementResults?.aggregate !== 1)
+  const hasAggregate = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.aggregate !== 1)
   if (hasAggregate) {
     issues.push('Aggregate factor')
     status = 'Review'
   }
 
-  const underQuery = licenceResults.some(reviewResult => reviewResult.reviewReturnResults?.underQuery)
+  const underQuery = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.underQuery)
   if (underQuery) {
     issues.push('Checking query')
     status = 'Review'
   }
 
-  const noReturnsReceived = licenceResults.some(reviewResult => reviewResult.reviewReturnResults?.status === 'due' || 'overdue')
+  const noReturnsReceived = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.status === 'due' || 'overdue'
+  })
   if (noReturnsReceived) {
     issues.push('No returns received')
   }
 
-  const overAbstracted = licenceResults.some(reviewResult => reviewResult.reviewReturnResults?.quantity > reviewResult.reviewReturnResults?.allocated)
+  const overAbstracted = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.quantity > licenceReviewResult.reviewReturnResults?.allocated
+  })
   if (overAbstracted) {
     issues.push('Over abstraction')
   }
 
-  const hasChargeDatesOverlap = licenceResults.some(reviewResult => reviewResult.reviewChargeElementResults?.chargeDatesOverlap)
+  const hasChargeDatesOverlap = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.chargeDatesOverlap)
   if (hasChargeDatesOverlap) {
     issues.push('Overlap of charge dates')
     status = 'Review'
   }
 
-  const notProcessed = licenceResults.some(reviewResult => reviewResult.reviewReturnResults?.status === 'received')
+  const notProcessed = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.status === 'received')
   if (notProcessed) {
     issues.push('Returns received but not processed')
     status = 'Review'
   }
 
-  const receivedLate = licenceResults.some(reviewResult => reviewResult.reviewReturnResults?.receivedDate > reviewResult.reviewReturnResults?.dueDate)
+  const receivedLate = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.receivedDate > licenceReviewResult.reviewReturnResults?.dueDate
+  })
   if (receivedLate) {
     issues.push('Returns received late')
   }
 
-  const returnsSplitOverChargeReference = _returnsSplitOverChargeReference(licenceResults)
+  const returnsSplitOverChargeReference = _returnsSplitOverChargeReference(licenceReviewResults)
   if (returnsSplitOverChargeReference) {
     issues.push('Returns split over charge references')
     status = 'Review'
   }
 
-  const returnsNotReceived = _returnsNotReceived(licenceResults)
+  const returnsNotReceived = _returnsNotReceived(licenceReviewResults)
   if (returnsNotReceived) {
     issues.push('Some returns not received')
   }
 
-  const matchingReturns = licenceResults.some(reviewResult => !(reviewResult?.reviewChargeElementResultId && reviewResult?.reviewReturnResultId))
+  const matchingReturns = licenceReviewResults.some((licenceReviewResult) => {
+    return !(licenceReviewResult?.reviewChargeElementResultId && licenceReviewResult?.reviewReturnResultId)
+  })
   if (matchingReturns) {
     issues.push('Unable to match returns')
     status = 'Review'
@@ -90,12 +99,16 @@ function _determineIssues (licenceResults) {
 }
 
 /**
+ * Checks if any of the licence review results indicate that a charge element has not received its returns
  *
+ * @param {Array} licenceReviewResults An array of objects containing the licence review results records
+ *
+ * @returns {boolean} - Returns true if there are review results indicating that returns have not been received
  */
-function _returnsNotReceived (licenceResults) {
-  const returnsNotReceived = licenceResults.some((reviewResult) => {
-    if (reviewResult.reviewReturnResultId && reviewResult.reviewChargeElementResultId) {
-      if (reviewResult.reviewReturnResults.status === 'due' || reviewResult.reviewReturnResults.status === 'overdue') {
+function _returnsNotReceived (licenceReviewResults) {
+  const returnsNotReceived = licenceReviewResults.some((licenceReviewResult) => {
+    if (licenceReviewResult.reviewReturnResultId && licenceReviewResult.reviewChargeElementResultId) {
+      if (licenceReviewResult.reviewReturnResults.status === 'due' || licenceReviewResult.reviewReturnResults.status === 'overdue') {
         return true
       }
     }
@@ -107,13 +120,18 @@ function _returnsNotReceived (licenceResults) {
 }
 
 /**
+ * Determines if there are multiple charge references associated with a matched return
  *
+ * @param {Array} licenceReviewResults An array of objects containing the licence review results records
+ *
+ * @returns {boolean} Returns true if there are multiple charge references associated with different review return
+ * results
  */
-function _returnsSplitOverChargeReference (licenceResults) {
+function _returnsSplitOverChargeReference (licenceReviewResults) {
   const seenReviewReturnResults = {}
   let returnsSplitOverChargeReference
 
-  for (const result of licenceResults) {
+  for (const result of licenceReviewResults) {
     const { chargeReferenceId, reviewReturnResultId } = result
 
     if (seenReviewReturnResults[reviewReturnResultId]) {

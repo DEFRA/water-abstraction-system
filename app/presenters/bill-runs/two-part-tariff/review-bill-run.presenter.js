@@ -1,4 +1,5 @@
 'use strict'
+
 /**
  * @module ReviewBillRunPresenter
  */
@@ -6,13 +7,22 @@
 const { formatLongDate } = require('../../base.presenter.js')
 
 function go (billRun, licences) {
+  const { preparedLicences, licencesToReviewCount } = _prepareLicences(licences)
+
+  const preparedBillRun = _prepareBillRun(billRun, licences, licencesToReviewCount)
+
+  console.log('Bill Run :', preparedBillRun)
+  return { preparedLicences, preparedBillRun }
+}
+
+function _prepareLicences (licences) {
   const preparedLicences = []
   let licencesToReviewCount = 0
 
   for (const licence of licences) {
     const { issue, status } = _issuesOnLicence(licence)
 
-    if (status === 'review') {
+    if (status === 'Review') {
       licencesToReviewCount++
     }
 
@@ -25,9 +35,7 @@ function go (billRun, licences) {
     })
   }
 
-  const preparedBillRun = _prepareBillRun(billRun, licences, licencesToReviewCount)
-
-  return { preparedLicences, preparedBillRun }
+  return { licencesToReviewCount, preparedLicences }
 }
 
 function _prepareBillRun (billRun, licences, licencesToReviewCount) {
@@ -36,8 +44,22 @@ function _prepareBillRun (billRun, licences, licencesToReviewCount) {
     status: billRun.status.toUpperCase(),
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
+    chargeScheme: _scheme(billRun.scheme),
+    billRunType: _billRunType(billRun.batchType),
     numberOfLicences: licences.length,
     licencesToReviewCount
+  }
+}
+
+function _billRunType (billRunType) {
+  if (billRunType === 'two_part_tariff') {
+    return 'two-part tariff'
+  }
+}
+
+function _scheme (scheme) {
+  if (scheme === 'sroc') {
+    return 'Current'
   }
 }
 
