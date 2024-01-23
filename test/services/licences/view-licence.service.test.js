@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const LicenceModel = require('../../../app/models/licence.model.js')
+
 // Things we need to stub
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
@@ -25,7 +28,7 @@ describe('View Licence service', () => {
   describe('when a licence with a matching ID exists', () => {
     describe('and it does not have an expired, lapsed, or revoke date', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
@@ -38,7 +41,7 @@ describe('View Licence service', () => {
 
     describe('and it has an expired date, revoked date and lapsed date all in the past on the same day', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
@@ -54,7 +57,7 @@ describe('View Licence service', () => {
 
     describe('and it has no expired date but revoked and lapsed dates are in the past on the same day', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -69,7 +72,7 @@ describe('View Licence service', () => {
 
     describe('and it has no lapsed date but expired and revoked dates are in the past on the same day', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -84,7 +87,7 @@ describe('View Licence service', () => {
 
     describe('and it has no revoked date but expired and lapsed dates are in the past on the same day', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -99,7 +102,7 @@ describe('View Licence service', () => {
 
     describe('and it only has an expired date', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
@@ -113,7 +116,7 @@ describe('View Licence service', () => {
 
     describe('and it only has a lapsed date', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
@@ -127,7 +130,7 @@ describe('View Licence service', () => {
 
     describe('and it only has a revoked date', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
@@ -141,7 +144,7 @@ describe('View Licence service', () => {
 
     describe('and it has an expired and revoked date with expired being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
         fetchLicenceResult.expiredDate = new Date('2023-02-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -156,7 +159,7 @@ describe('View Licence service', () => {
 
     describe('and it has an expired and lapsed date with expired being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.expiredDate = new Date('2023-02-07')
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -171,7 +174,7 @@ describe('View Licence service', () => {
 
     describe('and it has an expired and lapsed date with lapsed being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
         fetchLicenceResult.lapsedDate = new Date('2023-02-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -186,7 +189,7 @@ describe('View Licence service', () => {
 
     describe('and it has an expired and revoked date with revoked being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
         fetchLicenceResult.revokedDate = new Date('2023-02-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -201,7 +204,7 @@ describe('View Licence service', () => {
 
     describe('and it has a revoked and lapsed date with lapsed being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.lapsedDate = new Date('2023-02-07')
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -216,7 +219,7 @@ describe('View Licence service', () => {
 
     describe('and it has a revoked and lapsed date with revoked being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.revokedDate = new Date('2023-02-07')
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
@@ -231,7 +234,7 @@ describe('View Licence service', () => {
 
     describe('and it has a revoked, expired and lapsed date with revoked being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.revokedDate = new Date('2023-02-07')
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
@@ -247,7 +250,7 @@ describe('View Licence service', () => {
 
     describe('and it has a revoked, expired and lapsed date with expired being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
         fetchLicenceResult.lapsedDate = new Date('2023-03-07')
         fetchLicenceResult.expiredDate = new Date('2023-02-07')
@@ -263,7 +266,7 @@ describe('View Licence service', () => {
 
     describe('and it has a revoked, expired and lapsed date with lapsed being earlier', () => {
       beforeEach(() => {
-        fetchLicenceResult = _licenceData()
+        fetchLicenceResult = _testLicence()
         fetchLicenceResult.revokedDate = new Date('2023-03-07')
         fetchLicenceResult.lapsedDate = new Date('2023-02-07')
         fetchLicenceResult.expiredDate = new Date('2023-03-07')
@@ -279,8 +282,8 @@ describe('View Licence service', () => {
   })
 })
 
-function _licenceData () {
-  return {
+function _testLicence () {
+  return LicenceModel.fromJson({
     id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
     licenceRef: '01/130/R01',
     region: {
@@ -288,5 +291,5 @@ function _licenceData () {
       displayName: 'South West'
     },
     startDate: new Date('2013-03-07')
-  }
+  })
 }
