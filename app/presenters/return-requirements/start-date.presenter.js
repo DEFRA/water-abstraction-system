@@ -38,18 +38,18 @@ function _dateFields (error, payload) {
     {
       classes: _getErrorClass(error, 'day'),
       name: 'day',
-      value: _setFieldValue(error, payload, 'day')
+      value: payload['start-date-day'] || ''
     },
     {
       classes: _getErrorClass(error, 'month'),
 
       name: 'month',
-      value: _setFieldValue(error, payload, 'month')
+      value: payload['start-date-month'] || ''
     },
     {
       classes: _getErrorClass(error, 'year'),
       name: 'year',
-      value: _setFieldValue(error, payload, 'year')
+      value: payload['start-date-year'] || ''
     }
   ]
 
@@ -98,18 +98,6 @@ function _getErrorClass (error, fieldName) {
   }
 
   return classes
-}
-
-function _setFieldValue (error, payload, fieldName) {
-  let value = null
-  if (error) {
-    if (error.details[0].invalidFields.includes(fieldName)) {
-      value = null
-    }
-    value = payload[`start-date-${fieldName}`]
-  }
-
-  return value
 }
 
 module.exports = {
