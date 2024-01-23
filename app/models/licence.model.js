@@ -76,6 +76,65 @@ class LicenceModel extends BaseModel {
   }
 
   /**
+   * Modifiers allow us to reuse logic in queries, eg. select the licence and everything to get the licence holder:
+   *
+   * return LicenceModel.query()
+   *   .findById(licenceId)
+   *   .modify('licenceHolder')
+   *
+   * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   */
+  static get modifiers () {
+    return {
+      /**
+       * licenceHolder modifier fetches all the joined records needed to identify the licence holder
+       */
+      licenceHolder (query) {
+        query
+          .withGraphFetched('licenceDocument')
+          .modifyGraph('licenceDocument', (builder) => {
+            builder.select([
+              'id'
+            ])
+          })
+          .withGraphFetched('licenceDocument.licenceDocumentRoles')
+          .modifyGraph('licenceDocument.licenceDocumentRoles', (builder) => {
+            builder
+              .select([
+                'licenceDocumentRoles.id'
+              ])
+              .innerJoinRelated('licenceRole')
+              .where('licenceRole.name', 'licenceHolder')
+              .orderBy('licenceDocumentRoles.startDate', 'desc')
+          })
+          .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
+          .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
+            builder.select([
+              'id',
+              'name',
+              'type'
+            ])
+          })
+          .withGraphFetched('licenceDocument.licenceDocumentRoles.contact')
+          .modifyGraph('licenceDocument.licenceDocumentRoles.contact', (builder) => {
+            builder.select([
+              'id',
+              'contactType',
+              'dataSource',
+              'department',
+              'firstName',
+              'initials',
+              'lastName',
+              'middleInitials',
+              'salutation',
+              'suffix'
+            ])
+          })
+      }
+    }
+  }
+
+  /**
    * Determine the 'end' date for the licence
    *
    * A licence can 'end' for 3 reasons:

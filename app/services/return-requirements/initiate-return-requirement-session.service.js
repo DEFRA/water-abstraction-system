@@ -79,45 +79,8 @@ async function _fetchLicence (licenceId) {
         .where('status', 'current')
         .orderBy('startDate', 'desc')
     })
-    .withGraphFetched('licenceDocument')
-    .modifyGraph('licenceDocument', (builder) => {
-      builder.select([
-        'id'
-      ])
-    })
-    .withGraphFetched('licenceDocument.licenceDocumentRoles')
-    .modifyGraph('licenceDocument.licenceDocumentRoles', (builder) => {
-      builder
-        .select([
-          'licenceDocumentRoles.id'
-        ])
-        .innerJoinRelated('licenceRole')
-        .where('licenceRole.name', 'licenceHolder')
-        .orderBy('licenceDocumentRoles.startDate', 'desc')
-    })
-    .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
-    .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
-      builder.select([
-        'id',
-        'name',
-        'type'
-      ])
-    })
-    .withGraphFetched('licenceDocument.licenceDocumentRoles.contact')
-    .modifyGraph('licenceDocument.licenceDocumentRoles.contact', (builder) => {
-      builder.select([
-        'id',
-        'contactType',
-        'dataSource',
-        'department',
-        'firstName',
-        'initials',
-        'lastName',
-        'middleInitials',
-        'salutation',
-        'suffix'
-      ])
-    })
+    // See licence.model.js `static get modifiers` if you are unsure about what this is doing
+    .modify('licenceHolder')
 
   if (!licence) {
     throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
