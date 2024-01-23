@@ -455,7 +455,7 @@ describe('Licence model', () => {
         })
 
         it("returns 'revoked' as the end date", () => {
-          const result = LicenceModel.fromJson({ lapsedDate, revokedDate }).$ends()
+          const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
 
           expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
         })

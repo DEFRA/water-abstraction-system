@@ -99,9 +99,9 @@ class LicenceModel extends BaseModel {
    */
   $ends () {
     const endDates = [
-      { date: this.revokedDate, priority: 1, reason: 'revoked' },
+      { date: this.expiredDate, priority: 3, reason: 'expired' },
       { date: this.lapsedDate, priority: 2, reason: 'lapsed' },
-      { date: this.expiredDate, priority: 3, reason: 'expired' }
+      { date: this.revokedDate, priority: 1, reason: 'revoked' }
     ]
 
     const filteredDates = endDates.filter((endDate) => endDate.date)
@@ -113,16 +113,20 @@ class LicenceModel extends BaseModel {
     filteredDates.sort((firstDate, secondDate) => {
       if (firstDate.date !== secondDate.date) {
         if (firstDate.date < secondDate.date) {
+          console.log('-> D1 <_')
           return -1
         }
 
+        console.log('-> D2 <_')
         return 1
       }
 
       if (firstDate.priority < secondDate.priority) {
+        console.log('-> P1 <_')
         return -1
       }
 
+      console.log('-> P2 <_')
       return 1
     })
 
