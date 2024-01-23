@@ -15,8 +15,8 @@ const { formatLongDate } = require('../base.presenter.js')
  * @returns {Object} The data formatted for the view template
  */
 function go (licence) {
-  const { expiredDate, id, lapsedDate, licenceRef, region, revokedDate, startDate } = licence
-  const warning = _generateWarningMessage(expiredDate, lapsedDate, revokedDate)
+  const { expiredDate, id, licenceRef, region, startDate } = licence
+  const warning = _generateWarningMessage(licence)
 
   return {
     id,
@@ -28,17 +28,6 @@ function go (licence) {
   }
 }
 
-function _compareEndDates (firstEndDate, secondEndDate) {
-  if (firstEndDate.date.getTime() === secondEndDate.date.getTime()) {
-    if (firstEndDate.name === 'revoked') return firstEndDate
-    if (secondEndDate.name === 'revoked') return secondEndDate
-    if (firstEndDate.name === 'lapsed') return firstEndDate
-  } else if (firstEndDate.date < secondEndDate.date) {
-    return firstEndDate
-  }
-  return secondEndDate
-}
-
 function _endDate (expiredDate) {
   if (!expiredDate || expiredDate < Date.now()) {
     return null
@@ -47,46 +36,29 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
-function _generateWarningMessage (expiredDate, lapsedDate, revokedDate) {
-  const endDates = []
+function _generateWarningMessage (licence) {
+  const ends = licence.$ends()
 
-  if (lapsedDate) {
-    endDates.push({
-      name: 'lapsed',
-      message: `This licence lapsed on ${formatLongDate(lapsedDate)}`,
-      date: lapsedDate
-    })
-  }
-
-  if (expiredDate) {
-    endDates.push({
-      name: 'expired',
-      message: `This licence expired on ${formatLongDate(expiredDate)}`,
-      date: expiredDate
-    })
-  }
-
-  if (revokedDate) {
-    endDates.push({
-      name: 'revoked',
-      message: `This licence was revoked on ${formatLongDate(revokedDate)}`,
-      date: revokedDate
-    })
-  }
-
-  if (endDates.length === 0) {
+  if (!ends) {
     return null
   }
 
-  if (endDates.length === 1) {
-    return endDates[0].message
+  const { date, reason } = ends
+  const today = new Date()
+
+  if (date > today) {
+    return null
   }
 
-  const earliestPriorityEndDate = endDates.reduce((result, endDate) => {
-    return _compareEndDates(result, endDate)
-  })
+  if (reason === 'revoked') {
+    return `This licence was revoked on ${formatLongDate(date)}`
+  }
 
-  return earliestPriorityEndDate.message
+  if (reason === 'lapsed') {
+    return `This licence lapsed on ${formatLongDate(date)}`
+  }
+
+  return `This licence expired on ${formatLongDate(date)}`
 }
 
 module.exports = {
