@@ -44,6 +44,11 @@ function _generateWarningMessage (licence) {
   }
 
   const { date, reason } = ends
+  const today = new Date()
+
+  if (date > today) {
+    return null
+  }
 
   if (reason === 'revoked') {
     return `This licence was revoked on ${formatLongDate(date)}`
