@@ -39,7 +39,6 @@ describe('View Licence service', () => {
         expect(result.licenceHolder).to.equal('Unregistered licence')
       })
     })
-
     describe('and it does have a licence holder', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
@@ -47,7 +46,7 @@ describe('View Licence service', () => {
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the liceence holder name for use in the licence summary page', async () => {
+      it('will return the licence holder for use in the licence summary page', async () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.licenceHolder).to.equal('Test Company')
@@ -134,7 +133,6 @@ describe('View Licence service', () => {
         const today = new Date()
         // 86400000 is one day in milliseconds
         const tomorrow = new Date(today.getTime() + 86400000)
-        fetchLicenceResult.revokedDate = tomorrow
         fetchLicenceResult.ends = { date: tomorrow, priority: 1, reason: 'revoked' }
 
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
