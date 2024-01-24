@@ -112,7 +112,7 @@
   {% set tableRows = [] %}
     {% if licences.length > 0 %}
       {% for licence in licences %}
-        {% if licence.licenceStatus == 'Review' %}
+        {% if licence.licenceStatus == 'REVIEW' %}
           {% set colour = "govuk-tag--blue" %}
         {% else %}
           {% set colour = "govuk-tag--green" %}
