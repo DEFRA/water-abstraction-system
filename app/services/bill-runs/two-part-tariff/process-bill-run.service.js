@@ -5,15 +5,11 @@
  * @module ProcessBillRunService
  */
 
-const MatchAndAllocateService = require('./match-and-allocate.service.js')
-
 /**
  * Functionality not yet implemented
  */
 async function go (billRun, billingPeriods) {
-  console.log('Bill Run :', billRun)
-  await MatchAndAllocateService.go(billRun, billingPeriods)
-  // throw new Error(`Two Part Tariff is not yet implemented for Financial Year Ending: ${billingPeriods[0].endDate.getFullYear()}`)
+  throw new Error(`Two Part Tariff is not yet implemented for Financial Year Ending: ${billingPeriods[0].endDate.getFullYear()}`)
 }
 
 module.exports = {
