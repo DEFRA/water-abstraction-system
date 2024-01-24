@@ -120,15 +120,15 @@
   {% set rows = [ {html: action | safe}, {text: "2PT Testers"}, {text: "Multiple issues" }, {html: statusTag |safe,format: "numeric"} ] %}
 
 
-  {% set tableRows %}
+  {% set tableRows = [] %}
     {% if licences.length > 0 %}
       {% for licence in licences %}
-      {{licence}}
+      {# {{licence}} #}
+      {% set tableRow = [{html: action | safe}, {text: "2PT Testers"}, {text: "Multiple issues" }, {html: statusTag |safe,format: "numeric"}] %}
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
       {% endfor %}
     {% endif %}
-  {% endset %}
-
-<p>{{tableRows}}</p>
+  {# {% endset %} #}
 
   {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
   {{ govukTable({
@@ -150,6 +150,6 @@
         format: "numeric"
       }
     ],
-    rows: [rows]
+    rows: tableRows
   }) }}
 {% endblock %}
