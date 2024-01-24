@@ -7,6 +7,9 @@
 
 const FetchReviewResultsService = require('./fetch-review-results.service.js')
 
+const READY = 'ready'
+const REVIEW = 'review'
+
 /**
  * Determines all the issues on the licences for a two-part tariff bill run
  *
@@ -23,7 +26,7 @@ async function go (licences) {
 }
 
 function _determineIssues (licenceReviewResults) {
-  let status = 'Ready'
+  let status = READY
   const issues = []
 
   const abstractionOutsidePeriod = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.abstractionOutsidePeriod)
@@ -34,13 +37,13 @@ function _determineIssues (licenceReviewResults) {
   const hasAggregate = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.aggregate !== 1)
   if (hasAggregate) {
     issues.push('Aggregate factor')
-    status = 'Review'
+    status = REVIEW
   }
 
   const underQuery = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.underQuery)
   if (underQuery) {
     issues.push('Checking query')
-    status = 'Review'
+    status = REVIEW
   }
 
   const noReturnsReceived = licenceReviewResults.some((licenceReviewResult) => {
@@ -60,13 +63,13 @@ function _determineIssues (licenceReviewResults) {
   const hasChargeDatesOverlap = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.chargeDatesOverlap)
   if (hasChargeDatesOverlap) {
     issues.push('Overlap of charge dates')
-    status = 'Review'
+    status = REVIEW
   }
 
   const notProcessed = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.status === 'received')
   if (notProcessed) {
     issues.push('Returns received but not processed')
-    status = 'Review'
+    status = REVIEW
   }
 
   const receivedLate = licenceReviewResults.some((licenceReviewResult) => {
@@ -79,7 +82,7 @@ function _determineIssues (licenceReviewResults) {
   const returnsSplitOverChargeReference = _returnsSplitOverChargeReference(licenceReviewResults)
   if (returnsSplitOverChargeReference) {
     issues.push('Returns split over charge references')
-    status = 'Review'
+    status = REVIEW
   }
 
   const returnsNotReceived = _returnsNotReceived(licenceReviewResults)
@@ -92,7 +95,7 @@ function _determineIssues (licenceReviewResults) {
   })
   if (matchingReturns) {
     issues.push('Unable to match returns')
-    status = 'Review'
+    status = REVIEW
   }
 
   return { issues, status }

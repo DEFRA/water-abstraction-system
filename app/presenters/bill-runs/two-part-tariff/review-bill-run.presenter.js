@@ -6,12 +6,14 @@
 
 const { formatLongDate } = require('../../base.presenter.js')
 
+const READY = 'ready'
+const REVIEW = 'review'
+
 function go (billRun, licences) {
   const { preparedLicences, licencesToReviewCount } = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, licences, licencesToReviewCount)
 
-  console.log('Bill Run :', preparedBillRun)
   return { preparedLicences, preparedBillRun }
 }
 
@@ -22,7 +24,7 @@ function _prepareLicences (licences) {
   for (const licence of licences) {
     const { issue, status } = _issuesOnLicence(licence)
 
-    if (status === 'Review') {
+    if (status === REVIEW) {
       licencesToReviewCount++
     }
 
@@ -31,7 +33,7 @@ function _prepareLicences (licences) {
       licenceRef: licence.licenceRef,
       licenceHolder: licence.licenceHolder,
       licenceIssues: issue,
-      licenceStatus: status.toUpperCase()
+      licenceStatus: status
     })
   }
 
@@ -41,7 +43,7 @@ function _prepareLicences (licences) {
 function _prepareBillRun (billRun, licences, licencesToReviewCount) {
   return {
     region: billRun.region.displayName,
-    status: billRun.status.toUpperCase(),
+    status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     chargeScheme: _scheme(billRun.scheme),
@@ -72,11 +74,11 @@ function _financialYear (financialYearEnding) {
 
 function _issuesOnLicence (licence) {
   if (licence.issues.length > 1) {
-    return { issue: 'Multiple Issues', status: 'Review' }
+    return { issue: 'Multiple Issues', status: REVIEW }
   } else if (licence.issues.length === 1) {
     return { issue: licence.issues[0], status: licence.status }
   } else {
-    return { issue: '', status: 'Ready' }
+    return { issue: '', status: READY }
   }
 }
 
