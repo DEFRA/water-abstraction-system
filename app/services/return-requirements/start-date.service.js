@@ -16,13 +16,13 @@ const SessionModel = require('../../models/session.model.js')
  * If a validation issue is found when the form is submitted, it will be called from the POST handler with the Joi
  * validation error passed in. This extra information will be used to ensure the right error message is included in the
  * data needed by the view.
- *
- * @param {string} sessionId - The UUID for return requirement setup session record
- * @param {Object} [error] - A Joi validation error if an issue was found with the submitted form data
- *
- * @returns {Object} page data needed by the view template
- */
-async function go (sessionId, error = null, payload) {
+ * @param {string} sessionId - The id of the current session
+ * @param {Error} [error] - An optional error object
+ * @param {object} [payload] - Optional payload data
+ * @returns {Promise} A promise resolving to the view data for the start date page
+*/
+
+async function go (sessionId, error = null, payload = {}) {
   const session = await SessionModel.query().findById(sessionId)
   const formattedData = StartDatePresenter.go(session, error, payload)
 

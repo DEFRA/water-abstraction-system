@@ -47,15 +47,32 @@ function go (data) {
   return validationResult
 }
 
+function _validateDay (day) {
+  const maxDays = 31
+  return day && /^\d{1,2}$/.test(day) && day >= 1 && day <= maxDays
+}
+
+function _validateMonth (month) {
+  const maxMonths = 12
+  return month && /^\d{1,2}$/.test(month) && month >= 1 && month <= maxMonths
+}
+
+function _validateYear (year) {
+  return year && /^\d{4}$/.test(year)
+}
+
 function _validateDateFields (day, month, year) {
   const invalidFields = []
-  const isDayValid = day && /^\d{1,2}$/.test(day) && day >= 1 && day <= 31
-  const isMonthValid = month && /^\d{1,2}$/.test(month) && month >= 1 && month <= 12
-  const isYearValid = year && /^\d{4}$/.test(year)
 
-  if (!isDayValid) invalidFields.push('day')
-  if (!isMonthValid) invalidFields.push('month')
-  if (!isYearValid) invalidFields.push('year')
+  if (!_validateYear(year)) {
+    invalidFields.push('year')
+  }
+  if (!_validateMonth(month)) {
+    invalidFields.push('month')
+  }
+  if (!_validateDay(day, month, year)) {
+    invalidFields.push('day')
+  }
 
   return invalidFields
 }
