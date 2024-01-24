@@ -20,9 +20,9 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
 async function go (id) {
   const result = await FetchBillRunLicencesService.go(id)
 
-  await DetermineBillRunIssuesService.go(result.licences)
+  await DetermineBillRunIssuesService.go(result.billRunLicences)
 
-  const { preparedBillRun: billRun, preparedLicences: licences } = ReviewBillRunPresenter.go(result.billRun, result.licences)
+  const { preparedBillRun: billRun, preparedLicences: licences } = ReviewBillRunPresenter.go(result.billRun, result.billRunLicences)
 
   return { billRun, licences }
 }
