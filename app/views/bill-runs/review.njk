@@ -30,7 +30,7 @@
 
       {# Status badge #}
       <p class="govuk-body">
-        {{govukTag({
+        {{ govukTag({
           text: billRun.status,
           classes: "govuk-tag--blue govuk-!-font-size-27"
         })}}
@@ -42,7 +42,7 @@
           rows: [
             {
               key: {
-                text: "Date created",
+                text: 'Date created',
                 classes: "meta-data__label"
               },
               value: {
@@ -52,7 +52,7 @@
             },
             {
               key: {
-                text: "Region",
+                text: 'Region',
                 classes: "meta-data__label"
               },
               value: {
@@ -62,7 +62,7 @@
             },
             {
               key: {
-                text: "Bill run type",
+                text: 'Bill run type',
                 classes: "meta-data__label"
               },
               value: {
@@ -72,7 +72,7 @@
             },
             {
               key: {
-                text: "Charge scheme",
+                text: 'Charge scheme',
                 classes: "meta-data__label"
               },
               value: {
@@ -82,7 +82,7 @@
             },
             {
               key: {
-                text: "Financial year",
+                text: 'Financial year',
                 classes: "meta-data__label"
               },
               value: {
@@ -95,40 +95,46 @@
     </div>
   </div>
 
-  {# Cancel bill run button only if there are bills for review #}
+  {# Dynamic message either telling the user they have issues to deal with or that they can generate bills #}
   {% if billRun.licencesToReviewCount > 0 %}
     <section class="govuk-!-margin-bottom-9">
       {{ govukInsetText({
-        text: "You need to review " + billRun.licencesToReviewCount + " licences with returns data issues. You can then continue and send the bill run."
+        text: 'You need to review ' + billRun.licencesToReviewCount + ' licences with returns data issues. You can then continue and send the bill run.'
       }) }}
     </section>
-  {# Continue and Cancel bill run buttons if there are no bills for review #}
   {% else %}
     <section class="govuk-!-margin-bottom-9">
       <p class="govuk-body ">You have resolved all returns data issues. Continue to generate bills.</p>
     </section>
   {% endif %}
 
-  {% set statusTag %}
-    {{govukTag({
-    text: "review",
-    classes: "govuk-tag--blue"
-    })}}
-  {% endset %}
-
-  {% set action = '<a class="govuk-link" href="linkToLicence"><span class="govuk-visually-hidden">View licence matching for licence </span>' + "09/99/99/9999" + '</a>' %}
-  {% set rows = [ {html: action | safe}, {text: "2PT Testers"}, {text: "Multiple issues" }, {html: statusTag |safe,format: "numeric"} ] %}
-
-
+  {# Generate the row data for the table #}
   {% set tableRows = [] %}
     {% if licences.length > 0 %}
       {% for licence in licences %}
-      {# {{licence}} #}
-      {% set tableRow = [{html: action | safe}, {text: "2PT Testers"}, {text: "Multiple issues" }, {html: statusTag |safe,format: "numeric"}] %}
+        {% if licence.licenceStatus == 'Review' %}
+          {% set colour = "govuk-tag--blue" %}
+        {% else %}
+          {% set colour = "govuk-tag--green" %}
+        {% endif %}
+
+        {% set statusTag %}
+          {{govukTag({
+            text: licence.licenceStatus,
+            classes: colour
+          })}}
+        {% endset %}
+
+      {% set action = '<a class="govuk-link" href=""><span class="govuk-visually-hidden">View licence matching for licence </span>' + licence.licenceRef + '</a>' %}
+      {% set tableRow = [
+        {html: action | safe},
+        {text: licence.licenceHolder},
+        {text: licence.licenceIssues },
+        {html: statusTag, format: "numeric"}
+      ] %}
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
       {% endfor %}
     {% endif %}
-  {# {% endset %} #}
 
   {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
   {{ govukTable({
@@ -137,16 +143,16 @@
     firstCellIsHeader: false,
     head: [
       {
-        text: "Licence"
+        text: 'Licence'
       },
       {
-        text: "Licence holder"
+        text: 'Licence holder'
       },
       {
-        text: "Issue"
+        text: 'Issue'
       },
       {
-        text: "Status",
+        text: 'Status',
         format: "numeric"
       }
     ],
