@@ -10,18 +10,18 @@ const StartDateValidator = require('../../../app/validators/return-requirements/
 
 describe('Start Date Validator', () => {
   const testData = {
-    startDate: 'anotherStartDate',
     'start-date-day': '15',
     'start-date-month': '06',
     'start-date-year': '2023',
+    licenceEndDate: '2023-12-31T00:00:00.000Z',
     licenceStartDate: '2023-01-01T00:00:00.000Z',
-    licenceEndDate: '2023-12-31T00:00:00.000Z'
+    startDate: 'anotherStartDate'
   }
   const customErrorMessages = {
-    realStartDate: 'Enter a real start date',
-    selectStartDate: 'Select the start date for the return requirement',
     dateGreaterThan: 'Start date must be after the original licence start date',
-    dateLessThan: 'Start date must be before the licence end date'
+    dateLessThan: 'Start date must be before the licence end date',
+    realStartDate: 'Enter a real start date',
+    selectStartDate: 'Select the start date for the return requirement'
   }
 
   describe('when valid data is provided', () => {

@@ -7,7 +7,7 @@ const { formatLongDate } = require('../base.presenter.js')
  * @module StartDatedPresenter
  */
 
-function go (session, error = null, payload) {
+function go (session, error = null, payload = {}) {
   const data = {
     anotherStartDateHasErrors: !!error,
     dateFields: _dateFields(error, payload),

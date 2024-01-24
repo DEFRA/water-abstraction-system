@@ -1,18 +1,32 @@
 'use strict'
 
 const Joi = require('joi')
-
 function go (data) {
   const { licenceStartDate, licenceEndDate, startDate, 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = data
-
   const customErrorMessages = {
-    realStartDate: 'Enter a real start date',
-    selectStartDate: 'Select the start date for the return requirement',
     dateGreaterThan: 'Start date must be after the original licence start date',
-    dateLessThan: 'Start date must be before the licence end date'
+    dateLessThan: 'Start date must be before the licence end date',
+    realStartDate: 'Enter a real start date',
+    selectStartDate: 'Select the start date for the return requirement'
   }
 
-  const schema = Joi.object({
+  const schema = _createSchema(licenceStartDate, licenceEndDate, customErrorMessages)
+
+  if (startDate === 'anotherStartDate') {
+    const invalidFields = _validateDateFields(day, month, year)
+
+    if (invalidFields.length) {
+      return _createValidationError(data, customErrorMessages.realStartDate, invalidFields)
+    }
+
+    data.fullDate = _formatFullDate(day, month, year)
+  }
+
+  return schema.validate(data, { abortEarly: false, allowUnknown: true })
+}
+
+function _createSchema (licenceStartDate, licenceEndDate, customErrorMessages) {
+  return Joi.object({
     startDate: Joi.string().required().messages({
       'string.empty': customErrorMessages.selectStartDate
     }),
@@ -27,24 +41,12 @@ function go (data) {
       otherwise: Joi.forbidden()
     })
   })
+}
 
-  if (startDate === 'anotherStartDate') {
-    const invalidFields = _validateDateFields(day, month, year)
-
-    if (invalidFields.length) {
-      const validationError = _createValidationError(data, customErrorMessages.realStartDate, invalidFields)
-
-      return validationError
-    }
-
-    const formattedMonth = month.padStart(2, '0')
-    const formattedDay = day.padStart(2, '0')
-    data.fullDate = `${year}-${formattedMonth}-${formattedDay}`
-  }
-
-  const validationResult = schema.validate(data, { abortEarly: false, allowUnknown: true })
-
-  return validationResult
+function _formatFullDate (day, month, year) {
+  const formattedMonth = month.padStart(2, '0')
+  const formattedDay = day.padStart(2, '0')
+  return `${year}-${formattedMonth}-${formattedDay}`
 }
 
 function _validateDay (day) {
@@ -64,14 +66,14 @@ function _validateYear (year) {
 function _validateDateFields (day, month, year) {
   const invalidFields = []
 
-  if (!_validateYear(year)) {
-    invalidFields.push('year')
+  if (!_validateDay(day)) {
+    invalidFields.push('day')
   }
   if (!_validateMonth(month)) {
     invalidFields.push('month')
   }
-  if (!_validateDay(day, month, year)) {
-    invalidFields.push('day')
+  if (!_validateYear(year)) {
+    invalidFields.push('year')
   }
 
   return invalidFields
