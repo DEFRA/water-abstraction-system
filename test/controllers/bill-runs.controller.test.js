@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
+const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 
@@ -166,10 +167,17 @@ describe('Bill Runs controller', () => {
     })
 
     describe('when a request is valid', () => {
+      beforeEach(() => {
+        Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
+      })
+
       it('returns a 200 response', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('two-part tariff')
+        expect(response.payload).to.contain('Southern (Test replica)')
+        expect(response.payload).to.contain('Showing all 1 licences')
       })
     })
   })
@@ -221,6 +229,30 @@ function _multiGroupBillRun () {
           financialYear: 2023,
           total: '£97.00'
         }]
+      }
+    ]
+  }
+}
+
+function _reviewBillRunData () {
+  return {
+    billRun: {
+      region: 'Southern (Test replica)',
+      status: 'REVIEW',
+      dateCreated: '6 November 2023',
+      financialYear: '2021 to 2022',
+      chargeScheme: 'Current',
+      billRunType: 'two-part tariff',
+      numberOfLicences: 1,
+      licencesToReviewCount: 1
+    },
+    licences: [
+      {
+        licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
+        licenceRef: '7/34/10/*S/0084',
+        licenceHolder: 'Charles Wharton Ltd',
+        licenceIssues: 'Multiple Issues',
+        licenceStatus: 'REVIEW'
       }
     ]
   }
