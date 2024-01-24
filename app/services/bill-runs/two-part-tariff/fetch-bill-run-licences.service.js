@@ -20,10 +20,10 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
  */
 async function go (id) {
   const billRun = await _fetchBillRun(id)
-  const billRunLicences = await _fetchLicences(id)
+  const billRunLicences = await _fetchLicenceIds(id)
 
   for (const billRunLicence of billRunLicences) {
-    const licence = await _fetchLicenceHolder(billRunLicence.licenceId)
+    const licence = await _fetchLicence(billRunLicence.licenceId)
 
     billRunLicence.licenceHolder = licence.$licenceHolder()
     billRunLicence.licenceRef = licence.licenceRef
@@ -33,7 +33,7 @@ async function go (id) {
 }
 
 async function _fetchBillRun (id) {
-  const result = BillRunModel.query()
+  const billRun = BillRunModel.query()
     .findById(id)
     .select([
       'id',
@@ -52,39 +52,29 @@ async function _fetchBillRun (id) {
       ])
     })
 
-  return result
+  return billRun
 }
 
-async function _fetchLicences (id) {
-  const licences = ReviewResultModel.query()
+async function _fetchLicenceIds (id) {
+  const licenceIds = ReviewResultModel.query()
     .where('billRunId', id)
     .distinct([
       'licenceId'
     ])
 
-  return licences
+  return licenceIds
 }
 
-async function _fetchLicenceHolder (licenceId) {
-  const licenceHolder = await LicenceModel.query()
+async function _fetchLicence (licenceId) {
+  const licence = await LicenceModel.query()
     .findById(licenceId)
     .select([
       'id',
       'licenceRef'
     ])
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (builder) => {
-      builder
-        .select([
-          'id',
-          'startDate'
-        ])
-        .where('status', 'current')
-        .orderBy('startDate', 'desc')
-    })
     .modify('licenceHolder')
 
-  return licenceHolder
+  return licence
 }
 
 module.exports = {
