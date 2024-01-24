@@ -8,23 +8,43 @@
 const { db } = require('../../../../db/db.js')
 
 async function go () {
-  await db
-    .from('returns.lines as l')
-    .innerJoin('returns.versions as v', 'l.versionId', 'v.versionId')
-    .innerJoin('returns.returns as r', 'v.returnId', 'r.returnId')
-    .where('r.isTest', true)
-    .del()
+  return _deleteAllTestData()
+}
 
-  await db
-    .from('returns.versions as v')
-    .innerJoin('returns.returns as r', 'v.returnId', 'r.returnId')
-    .where('r.isTest', true)
-    .del()
+async function _deleteAllTestData () {
+  return db.raw(`
+  ALTER TABLE returns.lines DISABLE TRIGGER ALL;
+  ALTER TABLE returns.versions DISABLE TRIGGER ALL;
+  ALTER TABLE returns.returns DISABLE TRIGGER ALL;
 
-  await db
-    .from('returns.returns')
-    .where('isTest', true)
-    .del()
+  DELETE
+  FROM
+    "returns"."lines" AS "l"
+      USING "returns"."versions" AS "v",
+    "returns"."returns" AS "r"
+  WHERE
+    "r"."is_test" = TRUE
+    AND "l"."version_id" = "v"."version_id"
+    AND "v"."return_id" = "r"."return_id";
+
+  DELETE
+  FROM
+    "returns"."versions" AS "v"
+      USING "returns"."returns" AS "r"
+  WHERE
+    "r"."is_test" = TRUE
+    AND "v"."return_id" = "r"."return_id";
+
+  DELETE
+  FROM
+    "returns"."returns"
+  WHERE
+    "is_test" = TRUE;
+
+  ALTER TABLE returns.lines ENABLE TRIGGER ALL;
+  ALTER TABLE returns.versions ENABLE TRIGGER ALL;
+  ALTER TABLE returns.returns ENABLE TRIGGER ALL;
+  `)
 }
 
 module.exports = {

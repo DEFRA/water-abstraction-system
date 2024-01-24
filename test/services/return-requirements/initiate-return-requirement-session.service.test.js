@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
@@ -30,14 +29,10 @@ describe('Initiate Return Requirement Session service', () => {
 
   describe('when called', () => {
     describe('and the licence exists', () => {
-      const licenceRoles = {}
-
-      let company
-      let contact
-      let licenceDocument
-
       beforeEach(async () => {
-        licence = await LicenceHelper.add()
+        // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
+        // 'ends' information
+        licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10') })
 
         // Create 2 licence versions so we can test the service only gets the 'current' version
         await LicenceVersionHelper.add({
@@ -47,118 +42,59 @@ describe('Initiate Return Requirement Session service', () => {
           licenceId: licence.id, startDate: new Date('2022-05-01')
         })
 
-        // Create 2 licence roles so we can test the service only gets the licence document role record that is for
-        // 'licence holder'
-        licenceRoles.billing = await LicenceRoleHelper.add({ name: 'billing', label: 'Billing' })
-        licenceRoles.holder = await LicenceRoleHelper.add()
+        // Create a licence role (the default is licenceHolder)
+        const licenceRole = await LicenceRoleHelper.add()
 
-        // Create company and contact records. We create an additional company so we can create 2 licence document role
-        // records for our licence to test the one with the latest start date is used.
-        company = await CompanyHelper.add({ name: 'Licence Holder Ltd' })
-        contact = await ContactHelper.add({ firstName: 'Luce', lastName: 'Holder' })
-        const oldCompany = await CompanyHelper.add({ name: 'Old Licence Holder Ltd' })
+        // Create a company record
+        const company = await CompanyHelper.add({ name: 'Licence Holder Ltd' })
 
         // We have to create a licence document to link our licence record to (eventually!) the company or contact
         // record that is the 'licence holder'
-        licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
+        const licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
 
-        // Create two licence document role records. This one is linked to the billing role so should be ignored by the
-        // service
+        // Create the licence document role record that _is_ linked to the correct licence holder record
         await LicenceDocumentRoleHelper.add({
           licenceDocumentId: licenceDocument.id,
-          licenceRoleId: licenceRoles.billing.id
+          licenceRoleId: licenceRole.id,
+          companyId: company.id,
+          startDate: new Date('2022-08-01')
         })
 
-        // This one is linked to the old company record so should not be used to provide the licence holder name
-        await LicenceDocumentRoleHelper.add({
-          licenceDocumentId: licenceDocument.id,
-          licenceRoleId: licenceRoles.holder.id,
-          company: oldCompany.id,
-          startDate: new Date('2022-01-01')
-        })
+        journey = 'returns-required'
       })
 
-      describe('and the licence holder is a company', () => {
-        beforeEach(async () => {
-          // Create the licence document role record that _is_ linked to the correct licence holder record
-          await LicenceDocumentRoleHelper.add({
-            licenceDocumentId: licenceDocument.id,
-            licenceRoleId: licenceRoles.holder.id,
-            companyId: company.id,
-            startDate: new Date('2022-08-01')
-          })
+      it('creates a new session record containing details of the licence and licence holder', async () => {
+        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
-          journey = 'returns-required'
-        })
+        const { data } = result
 
-        it('creates a new session record containing details of the licence and licence holder (company)', async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-          const { data } = result
-
-          expect(data.licence.id).to.equal(licence.id)
-          expect(data.licence.licenceRef).to.equal(licence.licenceRef)
-          expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
-        })
-
-        it("creates a new session record containing the licence's 'current' start date", async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-          const { data } = result
-
-          expect(data.licence.startDate).to.equal(new Date('2022-05-01'))
-        })
-
-        it('creates a new session record containing the journey passed in', async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-          const { data } = result
-
-          expect(data.journey).to.equal(journey)
-        })
+        expect(data.licence.id).to.equal(licence.id)
+        expect(data.licence.licenceRef).to.equal(licence.licenceRef)
+        expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
       })
 
-      describe('and the licence holder is a contact', () => {
-        beforeEach(async () => {
-          // Create the licence document role record that _is_ linked to the correct licence holder record.
-          // NOTE: We create this against both the company and contact to also confirm that the contact name has
-          // precedence over the company name
-          await LicenceDocumentRoleHelper.add({
-            licenceDocumentId: licenceDocument.id,
-            licenceRoleId: licenceRoles.holder.id,
-            companyId: company.id,
-            contactId: contact.id,
-            startDate: new Date('2022-08-01')
-          })
+      it("creates a new session record containing the licence's 'current' start date", async () => {
+        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
-          journey = 'no-returns-required'
-        })
+        const { data } = result
 
-        it('creates a new session record containing details of the licence and licence holder (contact)', async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+        expect(data.licence.startDate).to.equal(new Date('2022-05-01'))
+      })
 
-          const { data } = result
+      it("creates a new session record containing the licence's end date", async () => {
+        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
-          expect(data.licence.id).to.equal(licence.id)
-          expect(data.licence.licenceRef).to.equal(licence.licenceRef)
-          expect(data.licence.licenceHolder).to.equal('Luce Holder')
-        })
+        const { data } = result
 
-        it("creates a new session record containing the licence's 'current' start date", async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+        expect(data.licence.endDate).to.equal(new Date('2024-08-10'))
+      })
 
-          const { data } = result
+      it('creates a new session record containing the journey passed in', async () => {
+        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
-          expect(data.licence.startDate).to.equal(new Date('2022-05-01'))
-        })
+        const { data } = result
 
-        it('creates a new session record containing the journey passed in', async () => {
-          const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-          const { data } = result
-
-          expect(data.journey).to.equal(journey)
-        })
+        expect(data.journey).to.equal(journey)
       })
     })
 
