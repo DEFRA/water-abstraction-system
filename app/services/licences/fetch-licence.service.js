@@ -18,12 +18,21 @@ const LicenceModel = require('../../models/licence.model.js')
  */
 async function go (id) {
   const licence = await _fetchLicence(id)
+  const data = await _data(licence)
 
-  return licence
+  return data
+}
+
+async function _data (licence) {
+  return {
+    ...licence,
+    ends: licence.$ends(),
+    licenceHolder: licence.$licenceHolder()
+  }
 }
 
 async function _fetchLicence (id) {
-  const result = LicenceModel.query()
+  const result = await LicenceModel.query()
     .findById(id)
     .select([
       'expiredDate',
@@ -40,6 +49,7 @@ async function _fetchLicence (id) {
         'displayName'
       ])
     })
+    .modify('licenceHolder')
 
   return result
 }
