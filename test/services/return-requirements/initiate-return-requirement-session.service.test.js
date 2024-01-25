@@ -8,18 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const CompanyHelper = require('../../support/helpers/company.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 
 // Thing under test
 const InitiateReturnRequirementSessionService = require('../../../app/services/return-requirements/initiate-return-requirement-session.service.js')
 
-describe('Initiate Return Requirement Session service', () => {
+describe.only('Initiate Return Requirement Session service', () => {
   let journey
   let licence
 
@@ -42,23 +39,8 @@ describe('Initiate Return Requirement Session service', () => {
           licenceId: licence.id, startDate: new Date('2022-05-01')
         })
 
-        // Create a licence role (the default is licenceHolder)
-        const licenceRole = await LicenceRoleHelper.add()
-
-        // Create a company record
-        const company = await CompanyHelper.add({ name: 'Licence Holder Ltd' })
-
-        // We have to create a licence document to link our licence record to (eventually!) the company or contact
-        // record that is the 'licence holder'
-        const licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
-
-        // Create the licence document role record that _is_ linked to the correct licence holder record
-        await LicenceDocumentRoleHelper.add({
-          licenceDocumentId: licenceDocument.id,
-          licenceRoleId: licenceRole.id,
-          companyId: company.id,
-          startDate: new Date('2022-08-01')
-        })
+        // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
+        await LicenceHolderSeeder.seed(licence.licenceRef)
 
         journey = 'returns-required'
       })
