@@ -16,7 +16,7 @@ const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder
 // Thing under test
 const InitiateReturnRequirementSessionService = require('../../../app/services/return-requirements/initiate-return-requirement-session.service.js')
 
-describe.only('Initiate Return Requirement Session service', () => {
+describe('Initiate Return Requirement Session service', () => {
   let journey
   let licence
 
