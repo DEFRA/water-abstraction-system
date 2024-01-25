@@ -4,8 +4,9 @@
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/start-date` page
  * @module StartDateService
  */
+ 
+const SessionModel = require('../../models/session.model.js') 
 const StartDatePresenter = require('../../presenters/return-requirements/start-date.presenter.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/save-date` page
