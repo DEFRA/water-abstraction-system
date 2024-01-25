@@ -42,7 +42,6 @@ function _dateFields (error, payload) {
     },
     {
       classes: _getErrorClass(error, 'month'),
-
       name: 'month',
       value: _getFieldValue(payload, 'start-date-month')
     },
