@@ -7,9 +7,9 @@
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
+const SessionModel = require('../models/session.model.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const StartDateValidator = require('../validators/return-requirements/start-date.validator.js')
-const SessionModel = require('../models/session.model.js')
 
 async function abstractionPeriod (request, h) {
   const { sessionId } = request.params
