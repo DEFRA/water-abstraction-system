@@ -1,6 +1,12 @@
 'use strict'
 
+/**
+ * Validates data submitted for the `/return-requirements/{sessionId}/start-date` page
+ * @module StartDateValidator
+ */
+ 
 const Joi = require('joi')
+
 function go (data) {
   const { licenceStartDate, licenceEndDate, startDate, 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = data
   const customErrorMessages = {
