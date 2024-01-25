@@ -23,17 +23,6 @@ function go (session, error = null, payload = {}) {
   return data
 }
 
-function _error (error) {
-  if (!error) {
-    return null
-  }
-  const errorMessage = {
-    text: error.details[0].message
-  }
-
-  return errorMessage
-}
-
 function _dateFields (error, payload) {
   const dateFields = [
     {
@@ -56,21 +45,15 @@ function _dateFields (error, payload) {
   return dateFields
 }
 
-function _getFieldValue (payload, fieldName) {
-  let value = null
-  if (payload) {
-    value = payload[fieldName]
+function _error (error) {
+  if (!error) {
+    return null
+  }
+  const errorMessage = {
+    text: error.details[0].message
   }
 
-  return value
-}
-
-function _startDate (date) {
-  // convert string from JSONB back to JS Date format so we can format it correctly using formatLongDate utility
-  const dateObj = new Date(date)
-  const formattedDate = formatLongDate(dateObj)
-
-  return formattedDate
+  return errorMessage
 }
 
 function _getErrorClass (error, fieldName) {
@@ -89,6 +72,23 @@ function _getErrorClass (error, fieldName) {
   }
 
   return baseClass + errorClass
+}
+
+function _getFieldValue (payload, fieldName) {
+  let value = null
+  if (payload) {
+    value = payload[fieldName]
+  }
+
+  return value
+}
+
+function _startDate (date) {
+  // convert string from JSONB back to JS Date format so we can format it correctly using formatLongDate utility
+  const dateObj = new Date(date)
+  const formattedDate = formatLongDate(dateObj)
+
+  return formattedDate
 }
 
 module.exports = {
