@@ -39,12 +39,7 @@
     }) }}
   {% endif %}
 
-  <span class="govuk-caption-l">{{ licenceHolder }}</span>
   <h1 class="govuk-heading-l">Licence number {{ licenceRef }}</h1>
-
-  {% if registeredUser %}
-    <p>Registered to <a href="/user/{{primaryUser.userId}}/status">{{ registeredUser }}</a></p>
-  {% endif %}
 
   {{ govukTabs({
     items: [

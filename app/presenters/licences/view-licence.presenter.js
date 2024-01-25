@@ -15,10 +15,11 @@ const { formatLongDate } = require('../base.presenter.js')
  * @returns {Object} The data formatted for the view template
  */
 function go (licence) {
-  const { ends, expiredDate, id, licenceHolder, licenceRef, region, startDate } = licence
+  const { ends, expiredDate, id, licenceDocumentHeader, licenceHolder, licenceRef, region, startDate } = licence
 
   return {
     id,
+    documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceRef,

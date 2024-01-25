@@ -49,6 +49,12 @@ async function _fetchLicence (id) {
         'displayName'
       ])
     })
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select([
+        'id'
+      ])
+    })
     .modify('licenceHolder')
 
   return result

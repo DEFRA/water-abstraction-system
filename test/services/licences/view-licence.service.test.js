@@ -39,6 +39,7 @@ describe('View Licence service', () => {
         expect(result.licenceHolder).to.equal('Unregistered licence')
       })
     })
+
     describe('and it does have a licence holder', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
@@ -150,6 +151,9 @@ describe('View Licence service', () => {
 function _testLicence () {
   return LicenceModel.fromJson({
     id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+    licenceDocumentHeader: {
+      id: '40306a46-d4ce-4874-9c9e-30ab6469b3fe'
+    },
     licenceRef: '01/130/R01',
     region: {
       id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
