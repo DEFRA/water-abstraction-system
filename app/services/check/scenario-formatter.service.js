@@ -92,9 +92,10 @@ function _formatChargeElementMatchedReturns (matchedReturns, formattedReturns) {
   return matchedReturns.map((matchedReturn) => {
     const {
       id,
-      allocatedQuantity,
-      lines
+      allocatedQuantity
     } = matchedReturn
+
+    const lines = matchedReturn.lines ? matchedReturn.lines : []
 
     const matchingReturn = formattedReturns.find((formattedReturn) => formattedReturn.id === matchedReturn.id)
     lines.forEach((line) => {
