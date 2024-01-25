@@ -18,7 +18,7 @@ const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two
 // Thing under test
 const ReviewBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 
-describe('Review Bill Run Service', () => {
+describe.only('Review Bill Run Service', () => {
   afterEach(() => {
     Sinon.restore()
   })
@@ -35,7 +35,7 @@ describe('Review Bill Run Service', () => {
       Sinon.stub(ReviewBillRunPresenter, 'go').returns({ preparedBillRun, preparedLicences })
     })
 
-    it.only('will fetch the data and format it for use in the review bill run page', async () => {
+    it('will fetch the data and format it for use in the review bill run page', async () => {
       const result = await ReviewBillRunService.go(billRunId)
 
       expect(result.billRun).to.equal(preparedBillRun)
@@ -48,13 +48,8 @@ describe('Review Bill Run Service', () => {
   })
 
   describe('when a bill run with a matching ID does not exist', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves()
-      Sinon.stub(DetermineBillRunIssuesService, 'go').resolves()
-      Sinon.stub(ReviewBillRunPresenter, 'go').resolves()
-    })
     it('throws an exception', async () => {
-
+      await expect(ReviewBillRunService.go('billRunId')).to.reject()
     })
   })
 })
