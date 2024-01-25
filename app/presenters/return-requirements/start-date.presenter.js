@@ -19,6 +19,7 @@ function go (session, error = null, payload = {}) {
     licenceStartDate: _startDate(session.data.licence.startDate),
     licenceStartDateValue: session.data.licence.startDate
   }
+  
   return data
 }
 
