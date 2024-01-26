@@ -20,14 +20,14 @@ function go (session, payload = {}) {
     id: session.id,
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
-    licenceStartDate: _startDate(session.data.licence.startDate),
+    licenceVersionStartDate: _licenceVersionStartDate(session.data.licence.currentVersionStartDate),
     ..._transformPayload(payload)
   }
 
   return data
 }
 
-function _startDate (date) {
+function _licenceVersionStartDate (date) {
   // NOTE: because the session data is stored in a JSONB field when we get the instance from the DB the date values are
   // in JS Date format (string). So, we have to convert it to a date before calling `formatLongDate()`
   const dateObj = new Date(date)
