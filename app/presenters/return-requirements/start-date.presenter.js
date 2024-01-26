@@ -7,10 +7,8 @@ const { formatLongDate } = require('../base.presenter.js')
  * @module StartDatedPresenter
  */
 
-function go (session, error = null, payload = {}) {
+function go (session, payload = {}) {
   const data = {
-    anotherStartDateHasErrors: !!error,
-    errorMessage: _error(error),
     id: session.id,
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
@@ -41,17 +39,6 @@ function _transformPayload (payload) {
     anotherStartDateSelected: selectedOption === 'anotherStartDate',
     licenceStartDateSelected: selectedOption === 'licenceStartDate'
   }
-}
-
-function _error (error) {
-  if (!error) {
-    return null
-  }
-  const errorMessage = {
-    text: error.details[0].message
-  }
-
-  return errorMessage
 }
 
 function _startDate (date) {

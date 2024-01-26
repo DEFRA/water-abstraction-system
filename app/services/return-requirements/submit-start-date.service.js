@@ -21,15 +21,31 @@ async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const { endDate, startDate } = session.data.licence
+  const validationResult = _validate(payload, startDate, endDate)
 
-  const validation = StartDateValidator.go(payload, startDate, endDate)
-
-  const formattedData = StartDatePresenter.go(session, validation.error, payload)
+  const formattedData = StartDatePresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
     pageTitle: 'Select the start date for the return requirement',
+    error: validationResult,
     ...formattedData
+  }
+}
+
+function _validate (payload, licenceStartDate, licenceEndDate) {
+  const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+
+  if (!validation.error) {
+    return null
+  }
+
+  const { message, type } = validation.error.details[0]
+
+  return {
+    message,
+    radioFormElement: type === 'any.required' ? { text: message } : null,
+    dateInputFormElement: type === 'any.required' ? null : { text: message }
   }
 }
 

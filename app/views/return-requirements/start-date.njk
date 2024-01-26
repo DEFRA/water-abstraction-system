@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% set dateInputHTML %}
-  {% if errorMessage %}
+  {% if error %}
     {% set errorClass = 'govuk-input--error' %}
   {% else %}
     {% set errorClass = '' %}
@@ -25,7 +25,7 @@
   {{ govukDateInput({
     id: 'other-start-date',
     namePrefix: 'start-date',
-    errorMessage: errorMessage,
+    errorMessage: error.dateInputFormElement,
     fieldset: {
       legend: {
         classes: 'govuk-fieldset__legend--m',
@@ -53,12 +53,12 @@
 {% endset %}
 
 {% block content %}
-  {% if errorMessage %}
+  {% if error %}
     {{ govukErrorSummary({
       titleText: 'There is a problem',
       errorList: [
         {
-          text: errorMessage.text,
+          text: error.message,
           href: '#startDate-error'
         }
       ]
@@ -69,6 +69,7 @@
     <form method="post">
       {{ govukRadios({
           name: 'start-date-options',
+          errorMessage: error.radioFormElement,
           fieldset: {
             legend: {
               html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,

@@ -278,7 +278,7 @@ async function submitStartDate (request, h) {
 
   const pageData = await SubmitStartDateService.go(sessionId, request.payload)
 
-  if (pageData.errorMessage) {
+  if (pageData.error) {
     return h.view('return-requirements/start-date.njk', pageData)
   }
 
