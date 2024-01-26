@@ -5,7 +5,7 @@
  * @module StartDateValidator
  */
 
-const Joi = require('joi')
+const Joi = require('joi').extend(require('@joi/date'))
 
 const { leftPadZeroes } = require('../../presenters/base.presenter.js')
 
@@ -59,7 +59,7 @@ function _validateAnotherStartDate (payload, licenceStartDate, licenceEndDate) {
   const schema = Joi.object({
     fullDate: Joi
       .date()
-      .iso()
+      .format(['YYYY-MM-DD'])
       .required()
       .greater(licenceStartDate)
       .less(licenceEndDate || '9999-12-31')
