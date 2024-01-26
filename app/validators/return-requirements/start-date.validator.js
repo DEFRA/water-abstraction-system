@@ -42,6 +42,19 @@ function go (payload, licenceStartDate, licenceEndDate) {
   return _validateLicenceVersionStartDate(payload)
 }
 
+function _fullDate (payload) {
+  const {
+    'start-date-day': day,
+    'start-date-month': month,
+    'start-date-year': year
+  } = payload
+
+  const paddedMonth = month ? leftPadZeroes(month, 2) : ''
+  const paddedDay = day ? leftPadZeroes(day, 2) : ''
+
+  return `${year}-${paddedMonth}-${paddedDay}`
+}
+
 function _validateAnotherStartDate (payload, licenceStartDate, licenceEndDate) {
   const schema = Joi.object({
     fullDate: Joi
@@ -73,19 +86,6 @@ function _validateLicenceVersionStartDate (payload) {
   })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-function _fullDate (payload) {
-  const {
-    'start-date-day': day,
-    'start-date-month': month,
-    'start-date-year': year
-  } = payload
-
-  const paddedMonth = month ? leftPadZeroes(month, 2) : ''
-  const paddedDay = day ? leftPadZeroes(day, 2) : ''
-
-  return `${year}-${paddedMonth}-${paddedDay}`
 }
 
 module.exports = {
