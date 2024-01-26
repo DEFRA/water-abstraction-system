@@ -118,7 +118,7 @@
   {% set tableRows = [] %}
     {% if licences.length > 0 %}
       {% for licence in licences %}
-        {% if licence.licenceStatus == 'review' %}
+        {% if licence.status == 'review' %}
           {% set colour = "govuk-tag--blue" %}
         {% else %}
           {% set colour = "govuk-tag--green" %}
@@ -126,7 +126,7 @@
 
         {% set statusTag %}
           {{govukTag({
-            text: licence.licenceStatus,
+            text: licence.status,
             classes: colour
           })}}
         {% endset %}
@@ -135,7 +135,7 @@
       {% set tableRow = [
         {html: action | safe},
         {text: licence.licenceHolder},
-        {text: licence.licenceIssues },
+        {text: licence.issue },
         {html: statusTag, format: "numeric"}
       ] %}
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}

@@ -6,38 +6,27 @@
 
 const { formatLongDate } = require('../../base.presenter.js')
 
-const READY = 'ready'
-const REVIEW = 'review'
+function go (billRun, licences) {
+  console.log('🚀 ~ go ~ licences:', licences)
+  const licencesToReviewCount = _prepareLicences(licences)
 
-function go (billRun, billRunLicences) {
-  const { licences, licencesToReviewCount } = _prepareLicences(billRunLicences)
-
-  const preparedBillRun = _prepareBillRun(billRun, billRunLicences, licencesToReviewCount)
+  const preparedBillRun = _prepareBillRun(billRun, licences, licencesToReviewCount)
 
   return { ...preparedBillRun, licences }
 }
 
-function _prepareLicences (billRunLicences) {
-  const licences = []
+function _prepareLicences (licences) {
   let licencesToReviewCount = 0
 
-  for (const billRunLicence of billRunLicences) {
-    const { issue, status } = _issuesOnLicence(billRunLicence)
-
-    if (status === REVIEW) {
+  for (const licence of licences) {
+    if (licence.status === 'review') {
       licencesToReviewCount++
     }
 
-    licences.push({
-      licenceId: billRunLicence.licenceId,
-      licenceRef: billRunLicence.licenceRef,
-      licenceHolder: billRunLicence.licenceHolder,
-      licenceIssues: issue,
-      licenceStatus: status
-    })
+    licence.issue = _getIssueOnLicence(licence.issues)
   }
 
-  return { licencesToReviewCount, licences }
+  return licencesToReviewCount
 }
 
 function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
@@ -72,14 +61,14 @@ function _financialYear (financialYearEnding) {
   return `${startYear} to ${endYear}`
 }
 
-function _issuesOnLicence (licence) {
-  if (licence.issues.length > 1) {
-    return { issue: 'Multiple Issues', status: REVIEW }
-  } else if (licence.issues.length === 1) {
-    return { issue: licence.issues[0], status: licence.status }
-  } else {
-    return { issue: '', status: READY }
+function _getIssueOnLicence (issues) {
+  if (issues.length > 1) {
+    return 'Multiple Issues'
+  } else if (issues.length === 1) {
+    return issues[0]
   }
+
+  return ''
 }
 
 module.exports = {
