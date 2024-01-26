@@ -37,7 +37,6 @@ async function _fetchBillRun (id) {
     .findById(id)
     .select([
       'id',
-      'billRunNumber', // TODO remove this, don't think it's needed. I've not included it in the tests
       'createdAt',
       'status',
       'toFinancialYearEnding',

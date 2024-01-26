@@ -49,7 +49,7 @@ describe('Review Bill Run Service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ReviewBillRunService.go('billRunId')).to.reject()
+      await expect(ReviewBillRunService.go('718c01a2-04bc-40f1-8e06-36c0ee50bb3a')).to.reject()
     })
   })
 })
