@@ -47,7 +47,7 @@ function _determineIssues (licenceReviewResults) {
   }
 
   const noReturnsReceived = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.status === 'due' || 'overdue'
+    return licenceReviewResult.reviewReturnResults?.status === 'due' || licenceReviewResult.reviewReturnResults?.status === 'overdue'
   })
   if (noReturnsReceived) {
     issues.push('No returns received')
