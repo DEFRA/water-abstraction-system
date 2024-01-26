@@ -90,13 +90,9 @@ function _formatChargeElements (chargeElements, formattedReturns, chargeReferenc
 
 function _formatChargeElementMatchedReturns (matchedReturns, formattedReturns) {
   return matchedReturns.map((matchedReturn) => {
-    const {
-      id,
-      allocatedQuantity,
-      lines
-    } = matchedReturn
+    const lines = matchedReturn.lines ? matchedReturn.lines : []
 
-    const matchingReturn = formattedReturns.find((formattedReturn) => formattedReturn.id === matchedReturn.id)
+    const matchingReturn = formattedReturns.find((formattedReturn) => formattedReturn.id === matchedReturn.returnId)
     lines.forEach((line) => {
       line.matchingLine = matchingReturn.lines.find((matchingReturnLine) => {
         return matchingReturnLine.id === line.id
@@ -113,8 +109,8 @@ function _formatChargeElementMatchedReturns (matchedReturns, formattedReturns) {
 
     return {
       simpleId: matchingReturn.simpleId,
-      id,
-      allocatedQuantity,
+      id: matchedReturn.returnId,
+      allocatedQuantity: matchedReturn.allocatedQuantity,
       lines: formattedLines
     }
   })
