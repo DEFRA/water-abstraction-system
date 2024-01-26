@@ -22,12 +22,7 @@ async function go (sessionId, payload) {
 
   const { endDate, startDate } = session.data.licence
 
-  const validationData = {
-    ...payload,
-    licenceStartDate: startDate,
-    licenceEndDate: endDate
-  }
-  const validation = StartDateValidator.go(validationData)
+  const validation = StartDateValidator.go(payload, startDate, endDate)
 
   const formattedData = StartDatePresenter.go(session, validation.error, payload)
 

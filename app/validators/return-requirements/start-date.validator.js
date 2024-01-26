@@ -4,11 +4,11 @@
  * Validates data submitted for the `/return-requirements/{sessionId}/start-date` page
  * @module StartDateValidator
  */
- 
+
 const Joi = require('joi')
 
-function go (data) {
-  const { licenceStartDate, licenceEndDate, startDate, 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = data
+function go (payload, licenceStartDate, licenceEndDate) {
+  const { startDate, 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = payload
   const customErrorMessages = {
     dateGreaterThan: 'Start date must be after the original licence start date',
     dateLessThan: 'Start date must be before the licence end date',
@@ -22,13 +22,13 @@ function go (data) {
     const invalidFields = _validateDateFields(day, month, year)
 
     if (invalidFields.length) {
-      return _createValidationError(data, customErrorMessages.realStartDate, invalidFields)
+      return _createValidationError(payload, customErrorMessages.realStartDate, invalidFields)
     }
 
-    data.fullDate = _formatFullDate(day, month, year)
+    payload.fullDate = _formatFullDate(day, month, year)
   }
 
-  return schema.validate(data, { abortEarly: false, allowUnknown: true })
+  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
 }
 
 function _createSchema (licenceStartDate, licenceEndDate, customErrorMessages) {
