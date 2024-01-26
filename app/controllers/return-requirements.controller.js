@@ -282,6 +282,10 @@ async function submitStartDate (request, h) {
     return h.view('return-requirements/start-date.njk', pageData)
   }
 
+  if (pageData.journey === 'returns-required') {
+    return h.redirect(`/system/return-requirements/${sessionId}/reason`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)
 }
 
