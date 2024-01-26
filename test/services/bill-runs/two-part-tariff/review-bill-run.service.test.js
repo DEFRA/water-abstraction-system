@@ -18,7 +18,7 @@ const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two
 // Thing under test
 const ReviewBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 
-describe.only('Review Bill Run Service', () => {
+describe('Review Bill Run Service', () => {
   afterEach(() => {
     Sinon.restore()
   })
