@@ -44,13 +44,15 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceDocument, licenceRef, licenceVersions } = licence
+  const { id, licenceRef, licenceVersions } = licence
+  const ends = licence.$ends()
 
   return {
     licence: {
       id,
+      endDate: ends ? ends.date : null,
       licenceRef,
-      licenceHolder: _licenceHolder(licenceDocument),
+      licenceHolder: licence.$licenceHolder(),
       startDate: _startDate(licenceVersions)
     },
     journey
@@ -62,7 +64,10 @@ async function _fetchLicence (licenceId) {
     .findById(licenceId)
     .select([
       'id',
-      'licenceRef'
+      'expiredDate',
+      'lapsedDate',
+      'licenceRef',
+      'revokedDate'
     ])
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
@@ -74,63 +79,14 @@ async function _fetchLicence (licenceId) {
         .where('status', 'current')
         .orderBy('startDate', 'desc')
     })
-    .withGraphFetched('licenceDocument')
-    .modifyGraph('licenceDocument', (builder) => {
-      builder.select([
-        'id'
-      ])
-    })
-    .withGraphFetched('licenceDocument.licenceDocumentRoles')
-    .modifyGraph('licenceDocument.licenceDocumentRoles', (builder) => {
-      builder
-        .select([
-          'licenceDocumentRoles.id'
-        ])
-        .innerJoinRelated('licenceRole')
-        .where('licenceRole.name', 'licenceHolder')
-        .orderBy('licenceDocumentRoles.startDate', 'desc')
-    })
-    .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
-    .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
-      builder.select([
-        'id',
-        'name',
-        'type'
-      ])
-    })
-    .withGraphFetched('licenceDocument.licenceDocumentRoles.contact')
-    .modifyGraph('licenceDocument.licenceDocumentRoles.contact', (builder) => {
-      builder.select([
-        'id',
-        'contactType',
-        'dataSource',
-        'department',
-        'firstName',
-        'initials',
-        'lastName',
-        'middleInitials',
-        'salutation',
-        'suffix'
-      ])
-    })
+    // See licence.model.js `static get modifiers` if you are unsure about what this is doing
+    .modify('licenceHolder')
 
   if (!licence) {
     throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
   }
 
   return licence
-}
-
-function _licenceHolder (licenceDocument) {
-  // Extract the company and contact from the last licenceDocumentRole created. _fetchLicence() ensures in the case
-  // that there is more than one that they are ordered by their start date (DESC)
-  const { company, contact } = licenceDocument.licenceDocumentRoles[0]
-
-  if (contact) {
-    return contact.$name()
-  }
-
-  return company.name
 }
 
 function _startDate (licenceVersions) {

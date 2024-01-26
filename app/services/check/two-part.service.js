@@ -9,9 +9,12 @@ const DetermineBillingPeriodsService = require('../bill-runs/determine-billing-p
 const DetermineIssuesService = require('./determine-issues.service.js')
 const FetchLicencesService = require('../bill-runs/two-part-tariff/fetch-licences.service.js')
 const LicenceModel = require('../../models/licence.model.js')
+const MatchReturnsToChargeElementService = require('../bill-runs/two-part-tariff/match-returns-to-charge-element.service.js')
+const PrepareChargeVersionService = require('../bill-runs/two-part-tariff/prepare-charge-version.service.js')
+const PrepareReturnLogsService = require('../bill-runs/two-part-tariff/prepare-return-logs.service.js')
 const RegionModel = require('../../models/region.model.js')
 const ScenarioFormatterService = require('./scenario-formatter.service.js')
-const { allocateReturnsToLicencesService, prepareLicencesForAllocationService } = require('./stand-ins.service.js')
+const { AllocateReturnsToChargeElementService } = require('./stand-ins.service.js')
 
 async function go (identifier, type) {
   const billingPeriod = _billingPeriod()
@@ -33,9 +36,7 @@ async function go (identifier, type) {
     })
   }
 
-  await prepareLicencesForAllocationService.go(licences, billingPeriod)
-
-  allocateReturnsToLicencesService.go(licences)
+  await _process(licences, billingPeriod)
 
   const formattedResults = []
   licences.forEach((licence, licenceIndex) => {
@@ -70,6 +71,36 @@ async function _determineRegionId (identifier, type) {
     .select('regionId')
 
   return licence.regionId
+}
+
+/**
+ * This is a copy of the main processing loop from app/services/bill-runs/two-part-tariff/match-and-allocate.service.js
+ * excluding the persistence.
+ */
+async function _process (licences, billingPeriod) {
+  for (const licence of licences) {
+    await PrepareReturnLogsService.go(licence, billingPeriod)
+
+    const { chargeVersions, returnLogs } = licence
+    chargeVersions.forEach((chargeVersion) => {
+      PrepareChargeVersionService.go(chargeVersion, billingPeriod)
+
+      const { chargeReferences } = chargeVersion
+      chargeReferences.forEach((chargeReference) => {
+        chargeReference.allocatedQuantity = 0
+
+        const { chargeElements } = chargeReference
+
+        chargeElements.forEach((chargeElement) => {
+          const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+
+          if (matchingReturns.length > 0) {
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion.chargePeriod, chargeReference)
+          }
+        })
+      })
+    })
+  }
 }
 
 module.exports = {
