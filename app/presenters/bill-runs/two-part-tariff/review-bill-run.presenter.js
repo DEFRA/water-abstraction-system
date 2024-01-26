@@ -9,38 +9,38 @@ const { formatLongDate } = require('../../base.presenter.js')
 const READY = 'ready'
 const REVIEW = 'review'
 
-function go (billRun, licences) {
-  const { preparedLicences, licencesToReviewCount } = _prepareLicences(licences)
+function go (billRun, billRunLicences) {
+  const { licences, licencesToReviewCount } = _prepareLicences(billRunLicences)
 
-  const preparedBillRun = _prepareBillRun(billRun, licences, licencesToReviewCount)
+  const preparedBillRun = _prepareBillRun(billRun, billRunLicences, licencesToReviewCount)
 
-  return { preparedLicences, preparedBillRun }
+  return { ...preparedBillRun, licences }
 }
 
-function _prepareLicences (licences) {
-  const preparedLicences = []
+function _prepareLicences (billRunLicences) {
+  const licences = []
   let licencesToReviewCount = 0
 
-  for (const licence of licences) {
-    const { issue, status } = _issuesOnLicence(licence)
+  for (const billRunLicence of billRunLicences) {
+    const { issue, status } = _issuesOnLicence(billRunLicence)
 
     if (status === REVIEW) {
       licencesToReviewCount++
     }
 
-    preparedLicences.push({
-      licenceId: licence.licenceId,
-      licenceRef: licence.licenceRef,
-      licenceHolder: licence.licenceHolder,
+    licences.push({
+      licenceId: billRunLicence.licenceId,
+      licenceRef: billRunLicence.licenceRef,
+      licenceHolder: billRunLicence.licenceHolder,
       licenceIssues: issue,
       licenceStatus: status
     })
   }
 
-  return { licencesToReviewCount, preparedLicences }
+  return { licencesToReviewCount, licences }
 }
 
-function _prepareBillRun (billRun, licences, licencesToReviewCount) {
+function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
   return {
     region: billRun.region.displayName,
     status: billRun.status,
@@ -48,7 +48,7 @@ function _prepareBillRun (billRun, licences, licencesToReviewCount) {
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     chargeScheme: _scheme(billRun.scheme),
     billRunType: _billRunType(billRun.batchType),
-    numberOfLicences: licences.length,
+    numberOfLicences: billRunLicences.length,
     licencesToReviewCount
   }
 }
