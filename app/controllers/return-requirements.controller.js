@@ -9,7 +9,7 @@ const NoReturnsRequiredService = require('../services/return-requirements/no-ret
 const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../models/session.model.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
-const StartDateValidator = require('../validators/return-requirements/start-date.validator.js')
+const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
   const { sessionId } = request.params
@@ -275,17 +275,11 @@ async function submitSiteDescription (request, h) {
 
 async function submitStartDate (request, h) {
   const { sessionId } = request.params
-  const pageData = await StartDateService.go(sessionId)
-  const validationData = {
-    ...request.payload,
-    licenceStartDate: pageData.licenceStartDateValue,
-    licenceEndDate: pageData.licenceEndDateValue
-  }
-  const validation = StartDateValidator.go(validationData)
 
-  if (validation.error) {
-    const errorPageData = await StartDateService.go(sessionId, validation.error, request.payload)
-    return h.view('return-requirements/start-date.njk', errorPageData)
+  const pageData = await SubmitStartDateService.go(sessionId, request.payload)
+
+  if (pageData.errorMessage) {
+    return h.view('return-requirements/start-date.njk', pageData)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/no-returns-required`)
