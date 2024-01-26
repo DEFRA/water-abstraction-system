@@ -12,17 +12,15 @@ const { leftPadZeroes } = require('../../presenters/base.presenter.js')
 function go (payload, licenceStartDate, licenceEndDate) {
   const { startDate } = payload
 
-  const schema = _createSchema(licenceStartDate, licenceEndDate)
-
   if (startDate === 'anotherStartDate') {
     payload.fullDate = _fullDate(payload)
   }
 
-  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
+  return _validate(payload, licenceStartDate, licenceEndDate)
 }
 
-function _createSchema (licenceStartDate, licenceEndDate) {
-  return Joi.object({
+function _validate (payload, licenceStartDate, licenceEndDate) {
+  const schema = Joi.object({
     startDate: Joi.string().required().messages({
       'string.empty': 'Select the start date for the return requirement',
       'any.required': 'Select the start date for the return requirement'
@@ -38,6 +36,8 @@ function _createSchema (licenceStartDate, licenceEndDate) {
       otherwise: Joi.forbidden()
     })
   })
+
+  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
 }
 
 function _fullDate (payload) {
