@@ -236,16 +236,14 @@ function _multiGroupBillRun () {
 
 function _reviewBillRunData () {
   return {
-    billRun: {
-      region: 'Southern (Test replica)',
-      status: 'REVIEW',
-      dateCreated: '6 November 2023',
-      financialYear: '2021 to 2022',
-      chargeScheme: 'Current',
-      billRunType: 'two-part tariff',
-      numberOfLicences: 1,
-      licencesToReviewCount: 1
-    },
+    region: 'Southern (Test replica)',
+    status: 'REVIEW',
+    dateCreated: '6 November 2023',
+    financialYear: '2021 to 2022',
+    chargeScheme: 'Current',
+    billRunType: 'two-part tariff',
+    numberOfLicences: 1,
+    licencesToReviewCount: 1,
     licences: [
       {
         licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
