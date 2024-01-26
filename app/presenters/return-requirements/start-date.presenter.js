@@ -37,7 +37,14 @@ function _licenceVersionStartDate (date) {
 }
 
 function _transformPayload (payload) {
-  if (!payload) {
+  // NOTE: 'start-date-options' is the payload value that tells us whether the user selected the licence version start
+  // date or another date radio button.
+  // If it is not set then either its because the presenter has been called from `StartDateService` and it's the first
+  // load. Else its been called by `SubmitStartDateService` but the user hasn't selected a radio button.
+  // Either way, we use it to tell us whether there is anything in the payload worth transforming.
+  const selectedOption = payload['start-date-options']
+
+  if (!selectedOption) {
     return {
       anotherStartDateDay: null,
       anotherStartDateMonth: null,
@@ -46,8 +53,6 @@ function _transformPayload (payload) {
       licenceStartDateSelected: false
     }
   }
-
-  const selectedOption = payload['start-date-options']
 
   return {
     anotherStartDateDay: payload['start-date-day'],
