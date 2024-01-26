@@ -13,10 +13,8 @@ function go (session, error = null, payload = {}) {
     errorMessage: _error(error),
     id: session.id,
     licenceId: session.data.licence.id,
-    licenceEndDateValue: session.data.licence.endDate,
     licenceRef: session.data.licence.licenceRef,
     licenceStartDate: _startDate(session.data.licence.startDate),
-    licenceStartDateValue: session.data.licence.startDate,
     ..._transformPayload(payload)
   }
 

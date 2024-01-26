@@ -19,18 +19,17 @@ const StartDateValidator = require('../../validators/return-requirements/start-d
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
-  let formattedData = StartDatePresenter.go(session, null, payload)
+
+  const { endDate, startDate } = session.data.licence
 
   const validationData = {
     ...payload,
-    licenceStartDate: formattedData.licenceStartDateValue,
-    licenceEndDate: formattedData.licenceEndDateValue
+    licenceStartDate: startDate,
+    licenceEndDate: endDate
   }
   const validation = StartDateValidator.go(validationData)
 
-  if (validation.error) {
-    formattedData = StartDatePresenter.go(session, validation.error, payload)
-  }
+  const formattedData = StartDatePresenter.go(session, validation.error, payload)
 
   return {
     activeNavBar: 'search',
