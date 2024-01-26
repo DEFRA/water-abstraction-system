@@ -5,7 +5,6 @@
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 {% from 'govuk/components/radios/macro.njk' import govukRadios %}
 
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
@@ -65,8 +64,9 @@
       ]
     }) }}
   {% endif %}
-  <form method="post">
-    <div class="govuk-body">
+
+  <div class="govuk-body">
+    <form method="post">
       {{ govukRadios({
           name: 'startDate',
           fieldset: {
@@ -98,7 +98,8 @@
             }
           ]
         }) }}
+
       {{ govukButton({ text: 'Continue' }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock %}
