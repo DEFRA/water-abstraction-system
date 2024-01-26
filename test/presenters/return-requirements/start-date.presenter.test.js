@@ -9,56 +9,71 @@ const { expect } = Code
 // Thing under test
 const StartDatePresenter = require('../../../app/presenters/return-requirements/start-date.presenter.js')
 
-describe('Start Date Presenter', () => {
-  let session, error, payload
+describe('Start Date presenter', () => {
+  let session
 
   beforeEach(() => {
     session = {
-      id: 'some-session-id',
+      id: '61e07498-f309-4829-96a9-72084a54996d',
       data: {
         licence: {
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+          endDate: null,
           licenceRef: '01/ABC',
-          startDate: '2023-01-01T00:00:00.000Z'
+          licenceHolder: 'Turbo Kid',
+          startDate: '2022-04-01T00:00:00.000Z'
         }
       }
     }
-    error = null
   })
 
-  describe('when provided with a populated session and no error', () => {
-    it('correctly presents the data without an error message', () => {
-      const result = StartDatePresenter.go(session, error)
+  describe('when provided with a populated session', () => {
+    describe('and no payload', () => {
+      it('correctly presents the data', () => {
+        const result = StartDatePresenter.go(session)
 
-      expect(result).to.include({
-        id: session.id,
-        errorMessage: null,
-        licenceRef: session.data.licence.licenceRef
+        expect(result).to.equal({
+          id: '61e07498-f309-4829-96a9-72084a54996d',
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC',
+          licenceVersionStartDate: '1 January 2023',
+          anotherStartDateDay: null,
+          anotherStartDateMonth: null,
+          anotherStartDateYear: null,
+          anotherStartDateSelected: false,
+          licenceStartDateSelected: false
+        })
       })
     })
-  })
 
-  describe('when provided with an error', () => {
-    beforeEach(() => {
-      error = {
-        details: [
-          {
-            message: 'Enter a real start date',
-            invalidFields: ['day', 'month', 'year']
-          }
-        ]
-      }
-      payload = {
-        'start-date-day': '',
-        'start-date-month': '',
-        'start-date-year': ''
-      }
-    })
+    describe('and a populated payload', () => {
+      let payload
 
-    it('includes the error message in the presented data', () => {
-      const result = StartDatePresenter.go(session, error, payload)
+      beforeEach(() => {
+        payload = {
+          'start-date-options': 'anotherStartDate',
+          'start-date-day': '26',
+          'start-date-month': '11',
+          'start-date-year': '2023'
+        }
+      })
 
-      expect(result.errorMessage).to.exist()
-      expect(result.errorMessage.text).to.equal(error.details[0].message)
+      it('correctly presents the data', () => {
+        const result = StartDatePresenter.go(session, payload)
+
+        expect(result).to.equal({
+          id: session.id,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC',
+          licenceVersionStartDate: '1 January 2023',
+          anotherStartDateDay: '26',
+          anotherStartDateMonth: '11',
+          anotherStartDateYear: '2023',
+          anotherStartDateSelected: true,
+          licenceStartDateSelected: false
+        })
+      })
     })
   })
 })
