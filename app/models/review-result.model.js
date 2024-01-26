@@ -33,7 +33,7 @@ class ReviewResultModel extends BaseModel {
         }
       },
       licence: {
-        relation: Model.HasManyRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
         join: {
           from: 'reviewResults.licenceId',

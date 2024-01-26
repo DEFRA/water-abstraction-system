@@ -26,6 +26,8 @@ const LicenceVersionHelper = require('../support/helpers/licence-version.helper.
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
+const ReviewResultHelper = require('../support/helpers/review-result.helper.js')
+const ReviewResultModel = require('../../app/models/review-result.model.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 
@@ -243,6 +245,41 @@ describe('Licence model', () => {
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
         expect(result.region).to.equal(testRegion)
+      })
+    })
+
+    describe('when linking to review results', () => {
+      let testReviewResults
+
+      beforeEach(async () => {
+        const { id } = testRecord
+
+        testReviewResults = []
+        for (let i = 0; i < 2; i++) {
+          const reviewResult = await ReviewResultHelper.add({ licenceId: id })
+          testReviewResults.push(reviewResult)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('reviewResults')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the workflows', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewResults')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewResults).to.be.an.array()
+        expect(result.reviewResults[0]).to.be.an.instanceOf(ReviewResultModel)
+        expect(result.reviewResults).to.include(testReviewResults[0])
+        expect(result.reviewResults).to.include(testReviewResults[1])
       })
     })
 
