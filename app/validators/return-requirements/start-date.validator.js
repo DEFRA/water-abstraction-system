@@ -36,6 +36,7 @@ function _createSchema (licenceStartDate, licenceEndDate, customErrorMessages) {
       is: 'anotherStartDate',
       then: Joi.date().iso().required().greater(licenceStartDate).less(licenceEndDate || '9999-12-31').messages({
         'date.base': customErrorMessages.realStartDate,
+        'date.format': 'Enter a real start date',
         'date.greater': customErrorMessages.dateGreaterThan,
         'date.less': customErrorMessages.dateLessThan,
         'any.required': customErrorMessages.selectStartDate
