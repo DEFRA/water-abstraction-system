@@ -26,14 +26,20 @@ function _transformPayload (payload) {
     return {
       anotherStartDateDay: null,
       anotherStartDateMonth: null,
-      anotherStartDateYear: null
+      anotherStartDateYear: null,
+      anotherStartDateSelected: false,
+      licenceStartDateSelected: false
     }
   }
+
+  const selectedOption = payload['start-date-options']
 
   return {
     anotherStartDateDay: payload['start-date-day'],
     anotherStartDateMonth: payload['start-date-month'],
-    anotherStartDateYear: payload['start-date-year']
+    anotherStartDateYear: payload['start-date-year'],
+    anotherStartDateSelected: selectedOption === 'anotherStartDate',
+    licenceStartDateSelected: selectedOption === 'licenceStartDate'
   }
 }
 

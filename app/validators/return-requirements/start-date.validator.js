@@ -32,31 +32,44 @@ const { leftPadZeroes } = require('../../presenters/base.presenter.js')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (payload, licenceStartDate, licenceEndDate) {
-  const { startDate } = payload
+  const { 'start-date-options': selectedOption } = payload
 
-  if (startDate === 'anotherStartDate') {
+  if (selectedOption === 'anotherStartDate') {
     payload.fullDate = _fullDate(payload)
+    return _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate)
   }
 
-  return _validate(payload, licenceStartDate, licenceEndDate)
+  return _validateLicenceVersionStartDate(payload)
 }
 
-function _validate (payload, licenceStartDate, licenceEndDate) {
+function _validateAnotherStartDate (payload, licenceStartDate, licenceEndDate) {
   const schema = Joi.object({
-    startDate: Joi.string().required().messages({
-      'string.empty': 'Select the start date for the return requirement',
-      'any.required': 'Select the start date for the return requirement'
-    }),
-    fullDate: Joi.when('startDate', {
-      is: 'anotherStartDate',
-      then: Joi.date().iso().required().greater(licenceStartDate).less(licenceEndDate || '9999-12-31').messages({
+    fullDate: Joi
+      .date()
+      .iso()
+      .required()
+      .greater(licenceStartDate)
+      .less(licenceEndDate || '9999-12-31')
+      .messages({
         'date.base': 'Enter a real start date',
         'date.format': 'Enter a real start date',
         'date.greater': 'Start date must be after the original licence start date',
         'date.less': 'Start date must be before the licence end date'
       }),
-      otherwise: Joi.forbidden()
-    })
+    otherwise: Joi.forbidden()
+  })
+
+  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
+}
+
+function _validateLicenceVersionStartDate (payload) {
+  const schema = Joi.object({
+    'start-date-options': Joi.string()
+      .required()
+      .messages({
+        'any.required': 'Select the start date for the return requirement',
+        'string.empty': 'Select the start date for the return requirement'
+      })
   })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })

@@ -68,7 +68,7 @@
   <div class="govuk-body">
     <form method="post">
       {{ govukRadios({
-          name: 'startDate',
+          name: 'start-date-options',
           fieldset: {
             legend: {
               html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
@@ -78,20 +78,22 @@
           },
           items: [
             {
+              id: 'licence-start-date',
               value: 'licenceStartDate',
               text: 'Licence version start date',
               hint: {
                 text:  licenceStartDate
               },
-              checked: false
+              checked: licenceStartDateSelected
             },
             {
+              id: 'another-start-date',
               value: 'anotherStartDate',
               text: 'Another date',
               hint: {
                 text: 'For example, 27 3 2007'
               },
-              checked: anotherStartDateHasErrors,
+              checked: anotherStartDateSelected,
               conditional: {
                 html: dateInputHTML
               }
