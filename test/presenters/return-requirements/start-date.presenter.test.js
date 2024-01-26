@@ -1,5 +1,6 @@
 'use strict'
 
+// Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 

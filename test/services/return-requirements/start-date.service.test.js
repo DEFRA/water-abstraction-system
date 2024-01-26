@@ -1,14 +1,17 @@
 'use strict'
 
+// Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
+// Thing under test
 const StartDateService = require('../../../app/services/return-requirements/start-date.service.js')
 
 describe('Start Date service', () => {
