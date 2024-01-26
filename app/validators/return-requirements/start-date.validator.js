@@ -24,7 +24,8 @@ function go (payload, licenceStartDate, licenceEndDate) {
 function _createSchema (licenceStartDate, licenceEndDate) {
   return Joi.object({
     startDate: Joi.string().required().messages({
-      'string.empty': 'Select the start date for the return requirement'
+      'string.empty': 'Select the start date for the return requirement',
+      'any.required': 'Select the start date for the return requirement'
     }),
     fullDate: Joi.when('startDate', {
       is: 'anotherStartDate',
@@ -32,8 +33,7 @@ function _createSchema (licenceStartDate, licenceEndDate) {
         'date.base': 'Enter a real start date',
         'date.format': 'Enter a real start date',
         'date.greater': 'Start date must be after the original licence start date',
-        'date.less': 'Start date must be before the licence end date',
-        'any.required': 'Select the start date for the return requirement'
+        'date.less': 'Start date must be before the licence end date'
       }),
       otherwise: Joi.forbidden()
     })
