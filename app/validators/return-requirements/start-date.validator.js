@@ -9,6 +9,28 @@ const Joi = require('joi')
 
 const { leftPadZeroes } = require('../../presenters/base.presenter.js')
 
+/**
+ * Validates data submitted for the `/return-requirements/{sessionId}/start-date` page
+ *
+ * When setting up a requirement users must specify a start date for when the requirement will apply from. The page
+ * allows them to select the start date of the current version for the licence or enter a custom date.
+ *
+ * The custom date uses a {@link https://design-system.service.gov.uk/components/date-input/ | GOV.UK date input}
+ * which is 3 text fields for day, month and year. Users can enter what they like or omit a value completely which is
+ * why date validation can become quite complex.
+ *
+ * Also, the date they enter cannot be before the original start of the licence or after it ends.
+ *
+ * Finally, we also need to validate that the user selected one of the options; licence version start date or a custom
+ * date.
+ *
+ * @param {Object} payload - The payload from the request to be validated
+ * @param {string} licenceStartDate - the date the original version of the licence starts from
+ * @param {string} licenceEndDate - the date the licence has or will end if one is set
+ *
+ * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * any errors are found the `error:` property will also exist detailing what the issues were
+ */
 function go (payload, licenceStartDate, licenceEndDate) {
   const { startDate } = payload
 
