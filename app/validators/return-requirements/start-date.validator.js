@@ -7,6 +7,8 @@
 
 const Joi = require('joi')
 
+const { leftPadZeroes } = require('../../presenters/base.presenter.js')
+
 function go (payload, licenceStartDate, licenceEndDate) {
   const { startDate, 'start-date-day': day, 'start-date-month': month, 'start-date-year': year } = payload
   const customErrorMessages = {
@@ -25,7 +27,7 @@ function go (payload, licenceStartDate, licenceEndDate) {
       return _createValidationError(payload, customErrorMessages.realStartDate, invalidFields)
     }
 
-    payload.fullDate = _formatFullDate(day, month, year)
+    payload.fullDate = _fullDate(payload)
   }
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
@@ -49,10 +51,17 @@ function _createSchema (licenceStartDate, licenceEndDate, customErrorMessages) {
   })
 }
 
-function _formatFullDate (day, month, year) {
-  const formattedMonth = month.padStart(2, '0')
-  const formattedDay = day.padStart(2, '0')
-  return `${year}-${formattedMonth}-${formattedDay}`
+function _fullDate (payload) {
+  const {
+    'start-date-day': day,
+    'start-date-month': month,
+    'start-date-year': year
+  } = payload
+
+  const paddedMonth = month ? leftPadZeroes(month, 2) : ''
+  const paddedDay = day ? leftPadZeroes(day, 2) : ''
+
+  return `${year}-${paddedMonth}-${paddedDay}`
 }
 
 function _validateDay (day) {
