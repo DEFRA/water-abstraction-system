@@ -17,9 +17,9 @@
 
 {% set dateInputHTML %}
   {% if errorMessage %}
-    {% set dateInputClasses = 'govuk-input--width-2 govuk-input--error' %}
+    {% set errorClass = 'govuk-input--error' %}
   {% else %}
-    {% set dateInputClasses = 'govuk-input--width-2' %}
+    {% set errorClass = '' %}
   {% endif %}
 
   {{ govukDateInput({
@@ -34,17 +34,17 @@
     },
     items: [
       {
-        classes: dateInputClasses,
+        classes: 'govuk-input--width-2 ' + errorClass,
         name: 'day',
         value: anotherStartDateDay
       },
       {
-        classes: dateInputClasses,
+        classes: 'govuk-input--width-2 ' + errorClass,
         name: 'month',
         value: anotherStartDateMonth
       },
       {
-        classes: dateInputClasses,
+        classes: 'govuk-input--width-4 ' + errorClass,
         name: 'year',
         value: anotherStartDateYear
       }
