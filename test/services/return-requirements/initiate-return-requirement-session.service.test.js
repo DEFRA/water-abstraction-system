@@ -73,12 +73,12 @@ describe('Initiate Return Requirement Session service', () => {
         expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
       })
 
-      it("creates a new session record containing the licence's 'current' start date", async () => {
+      it("creates a new session record containing the licence's 'current version' start date", async () => {
         const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
         const { data } = result
 
-        expect(data.licence.startDate).to.equal(new Date('2022-05-01'))
+        expect(data.licence.currentVersionStartDate).to.equal(new Date('2022-05-01'))
       })
 
       it("creates a new session record containing the licence's end date", async () => {
@@ -87,6 +87,14 @@ describe('Initiate Return Requirement Session service', () => {
         const { data } = result
 
         expect(data.licence.endDate).to.equal(new Date('2024-08-10'))
+      })
+
+      it("creates a new session record containing the licence's start date", async () => {
+        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+
+        const { data } = result
+
+        expect(data.licence.startDate).to.equal(new Date('2022-01-01'))
       })
 
       it('creates a new session record containing the journey passed in', async () => {
