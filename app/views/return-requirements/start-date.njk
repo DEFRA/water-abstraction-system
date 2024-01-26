@@ -17,6 +17,12 @@
 {% endblock %}
 
 {% set dateInputHTML %}
+  {% if errorMessage %}
+    {% set dateInputClasses = 'govuk-input--width-2 govuk-input--error' %}
+  {% else %}
+    {% set dateInputClasses = 'govuk-input--width-2' %}
+  {% endif %}
+
   {{ govukDateInput({
     id: 'other-start-date',
     namePrefix: 'start-date',
@@ -28,7 +34,23 @@
         text: 'Start date'
       }
     },
-    items: dateFields
+    items: [
+      {
+        classes: dateInputClasses,
+        name: 'day',
+        value: anotherStartDateDay
+      },
+      {
+        classes: dateInputClasses,
+        name: 'month',
+        value: anotherStartDateMonth
+      },
+      {
+        classes: dateInputClasses,
+        name: 'year',
+        value: anotherStartDateYear
+      }
+    ]
   }) }}
 {% endset %}
 

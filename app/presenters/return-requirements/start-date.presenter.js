@@ -10,39 +10,33 @@ const { formatLongDate } = require('../base.presenter.js')
 function go (session, error = null, payload = {}) {
   const data = {
     anotherStartDateHasErrors: !!error,
-    dateFields: _dateFields(error, payload),
     errorMessage: _error(error),
     id: session.id,
     licenceId: session.data.licence.id,
     licenceEndDateValue: session.data.licence.endDate,
     licenceRef: session.data.licence.licenceRef,
     licenceStartDate: _startDate(session.data.licence.startDate),
-    licenceStartDateValue: session.data.licence.startDate
+    licenceStartDateValue: session.data.licence.startDate,
+    ..._transformPayload(payload)
   }
-  
+
   return data
 }
 
-function _dateFields (error, payload) {
-  const dateFields = [
-    {
-      classes: _getErrorClass(error, 'day'),
-      name: 'day',
-      value: _getFieldValue(payload, 'start-date-day')
-    },
-    {
-      classes: _getErrorClass(error, 'month'),
-      name: 'month',
-      value: _getFieldValue(payload, 'start-date-month')
-    },
-    {
-      classes: _getErrorClass(error, 'year'),
-      name: 'year',
-      value: _getFieldValue(payload, 'start-date-year')
+function _transformPayload (payload) {
+  if (!payload) {
+    return {
+      anotherStartDateDay: null,
+      anotherStartDateMonth: null,
+      anotherStartDateYear: null
     }
-  ]
+  }
 
-  return dateFields
+  return {
+    anotherStartDateDay: payload['start-date-day'],
+    anotherStartDateMonth: payload['start-date-month'],
+    anotherStartDateYear: payload['start-date-year']
+  }
 }
 
 function _error (error) {
@@ -54,33 +48,6 @@ function _error (error) {
   }
 
   return errorMessage
-}
-
-function _getErrorClass (error, fieldName) {
-  const baseClass = 'govuk-input--width-2'
-  let errorClass = ''
-
-  if (error) {
-    const errorDetails = error.details[0]
-
-    const isFieldInvalid = errorDetails?.invalidFields?.includes(fieldName)
-    const isDateInvalid = errorDetails?.type === 'date.greater' || errorDetails?.type === 'date.less'
-
-    if (isFieldInvalid || isDateInvalid) {
-      errorClass = ' govuk-input--error'
-    }
-  }
-
-  return baseClass + errorClass
-}
-
-function _getFieldValue (payload, fieldName) {
-  let value = null
-  if (payload) {
-    value = payload[fieldName]
-  }
-
-  return value
 }
 
 function _startDate (date) {
