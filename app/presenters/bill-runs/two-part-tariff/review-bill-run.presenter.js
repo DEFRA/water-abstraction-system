@@ -7,7 +7,6 @@
 const { formatLongDate } = require('../../base.presenter.js')
 
 function go (billRun, licences) {
-  console.log('🚀 ~ go ~ licences:', licences)
   const licencesToReviewCount = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, licences, licencesToReviewCount)
