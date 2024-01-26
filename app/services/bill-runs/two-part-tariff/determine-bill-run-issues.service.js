@@ -17,7 +17,7 @@ const REVIEW = 'review'
  */
 async function go (licences) {
   for (const licence of licences) {
-    const licenceReviewResults = await FetchReviewResultsService.go(licence.licenceId)
+    const licenceReviewResults = await FetchReviewResultsService.go(licence.id)
     const { issues, status } = _determineIssues(licenceReviewResults)
 
     licence.issues = issues

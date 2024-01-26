@@ -52,10 +52,10 @@ describe('Fetch Bill Run Licences service', () => {
         expect(result.billRun.batchType).to.equal(billRun.batchType)
         expect(result.billRun.region.displayName).to.equal(region.displayName)
 
-        expect(result.billRunLicences).to.have.length(1)
-        expect(result.billRunLicences[0].licenceId).to.equal(testLicence.id)
-        expect(result.billRunLicences[0].licenceHolder).to.equal('Licence Holder Ltd')
-        expect(result.billRunLicences[0].licenceRef).to.equal(testLicence.licenceRef)
+        expect(result.licences).to.have.length(1)
+        expect(result.licences[0].id).to.equal(testLicence.id)
+        expect(result.licences[0].licenceHolder).to.equal('Licence Holder Ltd')
+        expect(result.licences[0].licenceRef).to.equal(testLicence.licenceRef)
       })
     })
   })
@@ -65,7 +65,7 @@ describe('Fetch Bill Run Licences service', () => {
       const result = await FetchBillRunLicencesService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d')
 
       expect(result.billRun).to.be.undefined()
-      expect(result.billRunLicences).to.have.length(0)
+      expect(result.licences).to.have.length(0)
     })
   })
 })

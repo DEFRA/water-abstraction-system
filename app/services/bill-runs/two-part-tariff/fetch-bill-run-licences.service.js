@@ -7,7 +7,6 @@
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const LicenceModel = require('../../../models/licence.model.js')
-const ReviewResultModel = require('../../../models/review-result.model.js')
 
 /**
  * Takes the bill run ID and fetches all the data needed to review the bill run
@@ -16,24 +15,17 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
  * ref.
  * @param {String} id The UUID for the bill run
  *
- * @returns {Object} an object containing the billRun data and the list of licences for the bill run
+ * @returns {Object} an object containing the billRun data and an array of licences for the bill run
  */
 async function go (id) {
   const billRun = await _fetchBillRun(id)
-  const billRunLicences = await _fetchLicenceIds(id)
+  const licences = await _fetchLicences(id)
 
-  for (const billRunLicence of billRunLicences) {
-    const licence = await _fetchLicence(billRunLicence.licenceId)
-
-    billRunLicence.licenceHolder = licence.$licenceHolder()
-    billRunLicence.licenceRef = licence.licenceRef
-  }
-
-  return { billRun, billRunLicences }
+  return { billRun, licences }
 }
 
 async function _fetchBillRun (id) {
-  const billRun = BillRunModel.query()
+  const billRun = await BillRunModel.query()
     .findById(id)
     .select([
       'id',
@@ -54,26 +46,21 @@ async function _fetchBillRun (id) {
   return billRun
 }
 
-async function _fetchLicenceIds (id) {
-  const licenceIds = ReviewResultModel.query()
-    .where('billRunId', id)
+async function _fetchLicences (id) {
+  const licences = await LicenceModel.query()
     .distinct([
-      'licenceId'
-    ])
-
-  return licenceIds
-}
-
-async function _fetchLicence (licenceId) {
-  const licence = await LicenceModel.query()
-    .findById(licenceId)
-    .select([
-      'id',
+      'licences.id',
       'licenceRef'
     ])
+    .innerJoinRelated('reviewResults')
+    .where('billRunId', id)
     .modify('licenceHolder')
 
-  return licence
+  for (const licence of licences) {
+    licence.licenceHolder = licence.$licenceHolder()
+  }
+
+  return licences
 }
 
 module.exports = {
