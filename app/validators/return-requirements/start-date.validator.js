@@ -11,14 +11,8 @@ const { leftPadZeroes } = require('../../presenters/base.presenter.js')
 
 function go (payload, licenceStartDate, licenceEndDate) {
   const { startDate } = payload
-  const customErrorMessages = {
-    dateGreaterThan: 'Start date must be after the original licence start date',
-    dateLessThan: 'Start date must be before the licence end date',
-    realStartDate: 'Enter a real start date',
-    selectStartDate: 'Select the start date for the return requirement'
-  }
 
-  const schema = _createSchema(licenceStartDate, licenceEndDate, customErrorMessages)
+  const schema = _createSchema(licenceStartDate, licenceEndDate)
 
   if (startDate === 'anotherStartDate') {
     payload.fullDate = _fullDate(payload)
@@ -27,19 +21,19 @@ function go (payload, licenceStartDate, licenceEndDate) {
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
 }
 
-function _createSchema (licenceStartDate, licenceEndDate, customErrorMessages) {
+function _createSchema (licenceStartDate, licenceEndDate) {
   return Joi.object({
     startDate: Joi.string().required().messages({
-      'string.empty': customErrorMessages.selectStartDate
+      'string.empty': 'Select the start date for the return requirement'
     }),
     fullDate: Joi.when('startDate', {
       is: 'anotherStartDate',
       then: Joi.date().iso().required().greater(licenceStartDate).less(licenceEndDate || '9999-12-31').messages({
-        'date.base': customErrorMessages.realStartDate,
+        'date.base': 'Enter a real start date',
         'date.format': 'Enter a real start date',
-        'date.greater': customErrorMessages.dateGreaterThan,
-        'date.less': customErrorMessages.dateLessThan,
-        'any.required': customErrorMessages.selectStartDate
+        'date.greater': 'Start date must be after the original licence start date',
+        'date.less': 'Start date must be before the licence end date',
+        'any.required': 'Select the start date for the return requirement'
       }),
       otherwise: Joi.forbidden()
     })
