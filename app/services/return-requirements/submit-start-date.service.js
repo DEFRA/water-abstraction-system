@@ -12,6 +12,13 @@ const StartDateValidator = require('../../validators/return-requirements/start-d
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/start-date` page
  *
+ * It first retrieves the session instance for the returns requirements journey in progress. The session has details
+ * about the licence that are needed to validate that the chosen date is valid.
+ *
+ * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
+ * If there was a validation error the controller will re-render the page so needs this information. If all is well the
+ * controller will redirect to the next page in the journey.
+ *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
  *

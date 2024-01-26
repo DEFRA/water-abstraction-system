@@ -1,12 +1,20 @@
 'use strict'
 
+/**
+ * Formats data for the `/return-requirements/{sessionId}/start-date` page
+ * @module StartDatedPresenter
+*/
+
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/start-date` page
- * @module StartDatedPresenter
+ *
+ * @param {module:SessionModel} session - The returns requirements session instance
+ * @param {Object} [payload] - The payload from the request
+ *
+ * @returns {Object} The data formatted for the view template
  */
-
 function go (session, payload = {}) {
   const data = {
     id: session.id,
@@ -17,6 +25,15 @@ function go (session, payload = {}) {
   }
 
   return data
+}
+
+function _startDate (date) {
+  // NOTE: because the session data is stored in a JSONB field when we get the instance from the DB the date values are
+  // in JS Date format (string). So, we have to convert it to a date before calling `formatLongDate()`
+  const dateObj = new Date(date)
+  const formattedDate = formatLongDate(dateObj)
+
+  return formattedDate
 }
 
 function _transformPayload (payload) {
@@ -39,14 +56,6 @@ function _transformPayload (payload) {
     anotherStartDateSelected: selectedOption === 'anotherStartDate',
     licenceStartDateSelected: selectedOption === 'licenceStartDate'
   }
-}
-
-function _startDate (date) {
-  // convert string from JSONB back to JS Date format so we can format it correctly using formatLongDate utility
-  const dateObj = new Date(date)
-  const formattedDate = formatLongDate(dateObj)
-
-  return formattedDate
 }
 
 module.exports = {
