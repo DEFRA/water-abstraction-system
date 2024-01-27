@@ -131,7 +131,7 @@ class LicenceModel extends BaseModel {
             ])
           })
       },
-      registeredUserAndLicenceName (query) {
+      registeredToAndLicenceName (query) {
         query
           .withGraphFetched('licenceDocumentHeader')
           .modifyGraph('licenceDocumentHeader', (builder) => {
@@ -139,7 +139,7 @@ class LicenceModel extends BaseModel {
               'licenceDocumentHeaders.id',
               'licenceDocumentHeaders.licenceName',
               'licenceEntityRoles.role',
-              'licenceEntities.name'
+              'licenceEntities.name AS registeredTo'
             ])
               .leftJoin('licenceEntityRoles', function () {
                 this
@@ -247,6 +247,18 @@ class LicenceModel extends BaseModel {
     }
 
     return company.name
+  }
+
+  $licenceName () {
+    const licenceName = this?.licenceDocumentHeader?.licenceName
+
+    return licenceName || null
+  }
+
+  $registeredTo () {
+    const registeredUserName = this?.licenceDocumentHeader?.registeredTo
+
+    return registeredUserName || null
   }
 }
 

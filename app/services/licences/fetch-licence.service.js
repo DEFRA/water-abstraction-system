@@ -51,7 +51,7 @@ async function _fetchLicence (id) {
       ])
     })
     .modify('licenceHolder')
-    .modify('registeredUserAndLicenceName')
+    .modify('registeredToAndLicenceName')
 
   return result
 }
