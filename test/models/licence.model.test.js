@@ -21,13 +21,12 @@ const LicenceDocumentModel = require('../../app/models/licence-document.model.js
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
-const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
-const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
+const RegisteredToAndLicenceNameSeeder = require('../support/seeders/registered-to-and-licence-name.seeder.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 
@@ -576,20 +575,17 @@ describe('Licence model', () => {
 
     describe('when the instance has been set with the additional properties needed', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = await LicenceHelper.add()
+        const licence = await LicenceHelper.add()
 
-        await LicenceDocumentHeaderHelper.add({
-          licenceName: 'Between Two Ferns',
-          licenceRef
-        })
+        await RegisteredToAndLicenceNameSeeder.seed(licence)
 
-        testRecord = await LicenceModel.query().findById(licenceId).modify('registeredToAndLicenceName')
+        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
       })
 
       it('returns the licence name', async () => {
         const result = testRecord.$licenceName()
 
-        expect(result).to.equal('Between Two Ferns')
+        expect(result).to.equal('My custom licence name')
       })
     })
   })
@@ -605,19 +601,11 @@ describe('Licence model', () => {
 
     describe('when the instance has been set with the additional properties needed', () => {
       beforeEach(async () => {
-        const { id: licenceId, licenceRef } = await LicenceHelper.add()
-        const companyEntityId = 'c960a4a1-94f9-4c05-9db1-a70ce5d08738'
+        const licence = await LicenceHelper.add()
 
-        await LicenceDocumentHeaderHelper.add({
-          companyEntityId,
-          licenceName: 'Between Two Ferns',
-          licenceRef
-        })
+        await RegisteredToAndLicenceNameSeeder.seed(licence)
 
-        const { id: licenceEntityId } = await LicenceEntityHelper.add()
-        await LicenceEntityRoleHelper.add({ companyEntityId, licenceEntityId })
-
-        testRecord = await LicenceModel.query().findById(licenceId).modify('registeredToAndLicenceName')
+        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
       })
 
       it('returns who the licence is registered to', async () => {
