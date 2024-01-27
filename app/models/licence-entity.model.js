@@ -5,6 +5,8 @@
  * @module LicenceEntityModel
  */
 
+const { Model } = require('objection')
+
 const BaseModel = require('./base.model.js')
 
 /**
@@ -30,6 +32,19 @@ const BaseModel = require('./base.model.js')
 class LicenceEntityModel extends BaseModel {
   static get tableName () {
     return 'licenceEntities'
+  }
+
+  static get relationMappings () {
+    return {
+      licenceEntityRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-entity-role.model',
+        join: {
+          from: 'licenceEntities.id',
+          to: 'licenceEntityRoles.licenceEntityId'
+        }
+      }
+    }
   }
 }
 
