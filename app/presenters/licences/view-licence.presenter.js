@@ -22,6 +22,7 @@ function go (licence) {
     id,
     endDate: _endDate(expiredDate),
     licenceRef,
+    pageTitle: `Licence ${licenceRef}`,
     region: region.displayName,
     startDate: formatLongDate(startDate),
     warning
