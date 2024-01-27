@@ -52,7 +52,13 @@ describe('View Licence presenter', () => {
 
       describe('when the licence expired date is set to a date less than or equal to today', () => {
         beforeEach(() => {
-          licence.expiredDate = new Date()
+          // NOTE: The date we get back from the DB is without time. If we just assigned new Date() to expiredDate
+          // there is a chance the test could fail depending on how quickly this is compared to the logic in the
+          // presenter
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+
+          licence.expiredDate = today
         })
 
         it('returns NULL', () => {
