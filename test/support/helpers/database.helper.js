@@ -8,7 +8,7 @@
  * @module DatabaseHelper
  */
 
-const { db } = require('../../../db/db.js')
+const { db, dbConfig } = require('../../../db/db.js')
 
 /**
  * Call to clean the database of all data
@@ -27,10 +27,15 @@ async function clean () {
   }
 }
 
+function _migrationTables () {
+  return [dbConfig.migrations.tableName, `${dbConfig.migrations.tableName}_lock`]
+}
+
 async function _tableNames (schema) {
   const result = await db('pg_tables')
     .select('tablename')
     .where('schemaname', schema)
+    .whereNotIn('tablename', _migrationTables())
 
   return result.map((table) => {
     return `"${schema}".${table.tablename}`
