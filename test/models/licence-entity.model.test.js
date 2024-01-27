@@ -14,7 +14,7 @@ const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js
 // Thing under test
 const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
 
-describe('Licence Role model', () => {
+describe('Licence Entity model', () => {
   let testRecord
 
   beforeEach(async () => {

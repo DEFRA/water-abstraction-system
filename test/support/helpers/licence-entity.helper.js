@@ -4,6 +4,7 @@
  * @module LicenceEntityHelper
  */
 
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
 
 /**
@@ -11,6 +12,7 @@ const LicenceEntityModel = require('../../../app/models/licence-entity.model.js'
  *
  * If no `data` is provided, default values will be used. These are
  *
+ * - `id` - [random UUID]
  * - `name` - Grace Hopper
  * - `type` - individual
  *
@@ -36,6 +38,7 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
+    id: generateUUID(),
     name: 'Grace Hopper',
     type: 'Licence Holder'
   }

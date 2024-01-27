@@ -8,7 +8,7 @@ exports.up = function (knex) {
     .withSchema('crm')
     .createTable(tableName, (table) => {
       // Primary Key
-      table.uuid('entity_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
+      table.string('entity_id').primary()
 
       // Data
       table.string('entity_nm').notNullable()
