@@ -19,29 +19,19 @@ const LicenceModel = require('../../models/licence.model.js')
 async function go (id) {
   const licence = await _fetchLicence(id)
 
-  const data = await _data(licence)
-
-  return data
-}
-
-async function _data (licence) {
-  return {
-    ...licence,
-    ends: licence.$ends(),
-    licenceHolder: licence.$licenceHolder()
-  }
+  return licence
 }
 
 async function _fetchLicence (id) {
-  const result = await LicenceModel.query()
+  const result = LicenceModel.query()
     .findById(id)
     .select([
-      'licences.expiredDate',
-      'licences.id',
-      'licences.lapsedDate',
-      'licences.licenceRef',
-      'licences.revokedDate',
-      'licences.startDate'
+      'expiredDate',
+      'id',
+      'lapsedDate',
+      'licenceRef',
+      'revokedDate',
+      'startDate'
     ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
@@ -50,8 +40,6 @@ async function _fetchLicence (id) {
         'displayName'
       ])
     })
-    .modify('licenceHolder')
-    .modify('registeredToAndLicenceName')
 
   return result
 }
