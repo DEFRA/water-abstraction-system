@@ -66,5 +66,35 @@ describe('Licence Entity Role model', () => {
         expect(result.licenceEntity).to.equal(testLicenceEntity)
       })
     })
+
+    describe('when linking to regime entity', () => {
+      let testRegimeEntity
+
+      beforeEach(async () => {
+        testRegimeEntity = await LicenceEntityHelper.add({ type: 'regime' })
+
+        const { id: regimeEntityId } = testRegimeEntity
+        testRecord = await LicenceEntityRoleHelper.add({ regimeEntityId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceEntityRoleModel.query()
+          .innerJoinRelated('regimeEntity')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the regime entity', async () => {
+        const result = await LicenceEntityRoleModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('regimeEntity')
+
+        expect(result).to.be.instanceOf(LicenceEntityRoleModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.regimeEntity).to.be.an.instanceOf(LicenceEntityModel)
+        expect(result.regimeEntity).to.equal(testRegimeEntity)
+      })
+    })
   })
 })

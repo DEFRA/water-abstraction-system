@@ -35,6 +35,14 @@ class LicenceEntityRoleModel extends BaseModel {
           from: 'licenceEntityRoles.licenceEntityId',
           to: 'licenceEntities.id'
         }
+      },
+      regimeEntity: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-entity.model',
+        join: {
+          from: 'licenceEntityRoles.regimeEntityId',
+          to: 'licenceEntities.id'
+        }
       }
     }
   }
