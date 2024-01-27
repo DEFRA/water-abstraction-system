@@ -131,6 +131,10 @@ class LicenceModel extends BaseModel {
             ])
           })
       },
+      /**
+       * registeredToAndLicenceName modifier fetches the linked `licenceDocumentHeader` which holds the licence name and
+       * adds to it the registered user's email address if one is set.
+       */
       registeredToAndLicenceName (query) {
         query
           .withGraphFetched('licenceDocumentHeader')
@@ -249,12 +253,42 @@ class LicenceModel extends BaseModel {
     return company.name
   }
 
+  /**
+   * Determine the licence name for the licence
+   *
+   * > We recommend adding the `registeredToAndLicenceName` modifier to your query to ensure the joined records are
+   * > available to determine this
+   *
+   * If set this is visible on the view licence page above the licence reference and on the legacy external view as a
+   * field in the summary tab.
+   *
+   * The licence name is a custom name the registered user of the licence can set. So, you will only see a licence name
+   * if the licence is registered to a user and they have chosen to set a name for it via the external UI.
+   *
+   * @returns {(string|null)} `null` if this instance does not have the additional properties needed to determine the
+   * licence name else the licence's custom name
+   */
   $licenceName () {
     const licenceName = this?.licenceDocumentHeader?.licenceName
 
     return licenceName || null
   }
 
+  /**
+   * Determine who the licence is registered to
+   *
+   * > We recommend adding the `registeredToAndLicenceName` modifier to your query to ensure the joined records are
+   * > available to determine this
+   *
+   * If set this is visible on the view licence page below the licence reference.
+   *
+   * When an external user has an account they can add a licence via the external UI. We'll generate a letter with a
+   * code which gets sent to the licence's address. Once they receive it they can enter the code in the UI and they
+   * then become the registered user for it.
+   *
+   * @returns {(string|null)} `null` if this instance does not have the additional properties needed to determine who
+   * the licence is registered to else the email of the user
+   */
   $registeredTo () {
     const registeredUserName = this?.licenceDocumentHeader?.registeredTo
 
