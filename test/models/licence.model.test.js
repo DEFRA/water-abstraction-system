@@ -562,4 +562,33 @@ describe('Licence model', () => {
       })
     })
   })
+
+  describe('$licenceName', () => {
+    describe('when instance has not been set with the additional properties needed', () => {
+      it('returns null', () => {
+        const result = testRecord.$licenceName()
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the instance has been set with the additional properties needed', () => {
+      beforeEach(async () => {
+        const { id: licenceId, licenceRef } = await LicenceHelper.add()
+
+        await LicenceDocumentHeaderHelper.add({
+          licenceName: 'Between Two Ferns',
+          licenceRef
+        })
+
+        testRecord = await LicenceModel.query().findById(licenceId).modify('registeredToAndLicenceName')
+      })
+
+      it('returns the licence name', async () => {
+        const result = testRecord.$licenceName()
+
+        expect(result).to.equal('Between Two Ferns')
+      })
+    })
+  })
 })
