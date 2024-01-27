@@ -37,6 +37,36 @@ describe('Licence Entity Role model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to company entity', () => {
+      let testCompanyEntity
+
+      beforeEach(async () => {
+        testCompanyEntity = await LicenceEntityHelper.add({ type: 'company' })
+
+        const { id: companyEntityId } = testCompanyEntity
+        testRecord = await LicenceEntityRoleHelper.add({ companyEntityId })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceEntityRoleModel.query()
+          .innerJoinRelated('companyEntity')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the company entity', async () => {
+        const result = await LicenceEntityRoleModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('companyEntity')
+
+        expect(result).to.be.instanceOf(LicenceEntityRoleModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.companyEntity).to.be.an.instanceOf(LicenceEntityModel)
+        expect(result.companyEntity).to.equal(testCompanyEntity)
+      })
+    })
+
     describe('when linking to licence entity', () => {
       let testLicenceEntity
 

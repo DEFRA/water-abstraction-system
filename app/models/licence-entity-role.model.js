@@ -28,6 +28,14 @@ class LicenceEntityRoleModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      companyEntity: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence-entity.model',
+        join: {
+          from: 'licenceEntityRoles.companyEntityId',
+          to: 'licenceEntities.id'
+        }
+      },
       licenceEntity: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence-entity.model',
