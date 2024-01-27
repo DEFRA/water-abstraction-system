@@ -5,6 +5,7 @@
  * @module FetchLicenceService
  */
 
+const { db } = require('../../../db/db.js')
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
@@ -36,12 +37,12 @@ async function _fetchLicence (id) {
   const result = await LicenceModel.query()
     .findById(id)
     .select([
-      'expiredDate',
-      'id',
-      'lapsedDate',
-      'licenceRef',
-      'revokedDate',
-      'startDate'
+      'licences.expiredDate',
+      'licences.id',
+      'licences.lapsedDate',
+      'licences.licenceRef',
+      'licences.revokedDate',
+      'licences.startDate'
     ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
@@ -53,8 +54,17 @@ async function _fetchLicence (id) {
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (builder) => {
       builder.select([
-        'id'
+        'licenceDocumentHeaders.id',
+        'licenceDocumentHeaders.licenceName',
+        'licenceEntityRoles.role',
+        'licenceEntities.name'
       ])
+        .leftJoin('licenceEntityRoles', function () {
+          this
+            .on('licenceEntityRoles.companyEntityId', '=', 'licenceDocumentHeaders.companyEntityId')
+            .andOn('licenceEntityRoles.role', '=', db.raw('?', ['primary_user']))
+        })
+        .leftJoin('licenceEntities', 'licenceEntities.id', 'licenceEntityRoles.licenceEntityId')
     })
     .modify('licenceHolder')
 
