@@ -130,6 +130,24 @@ class LicenceModel extends BaseModel {
               'suffix'
             ])
           })
+      },
+      registeredUserAndLicenceName (query) {
+        query
+          .withGraphFetched('licenceDocumentHeader')
+          .modifyGraph('licenceDocumentHeader', (builder) => {
+            builder.select([
+              'licenceDocumentHeaders.id',
+              'licenceDocumentHeaders.licenceName',
+              'licenceEntityRoles.role',
+              'licenceEntities.name'
+            ])
+              .leftJoin('licenceEntityRoles', function () {
+                this
+                  .on('licenceEntityRoles.companyEntityId', '=', 'licenceDocumentHeaders.companyEntityId')
+                  .andOn('licenceEntityRoles.role', '=', Model.raw('?', ['primary_user']))
+              })
+              .leftJoin('licenceEntities', 'licenceEntities.id', 'licenceEntityRoles.licenceEntityId')
+          })
       }
     }
   }

@@ -5,7 +5,6 @@
  * @module FetchLicenceService
  */
 
-const { db } = require('../../../db/db.js')
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
@@ -51,22 +50,8 @@ async function _fetchLicence (id) {
         'displayName'
       ])
     })
-    .withGraphFetched('licenceDocumentHeader')
-    .modifyGraph('licenceDocumentHeader', (builder) => {
-      builder.select([
-        'licenceDocumentHeaders.id',
-        'licenceDocumentHeaders.licenceName',
-        'licenceEntityRoles.role',
-        'licenceEntities.name'
-      ])
-        .leftJoin('licenceEntityRoles', function () {
-          this
-            .on('licenceEntityRoles.companyEntityId', '=', 'licenceDocumentHeaders.companyEntityId')
-            .andOn('licenceEntityRoles.role', '=', db.raw('?', ['primary_user']))
-        })
-        .leftJoin('licenceEntities', 'licenceEntities.id', 'licenceEntityRoles.licenceEntityId')
-    })
     .modify('licenceHolder')
+    .modify('registeredUserAndLicenceName')
 
   return result
 }
