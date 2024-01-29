@@ -5,6 +5,7 @@
  * @module StartBillRunProcessService
  */
 
+const AnnualProcessBillRunService = require('./annual/process-bill-run.service.js')
 const DetermineBillingPeriodsService = require('./determine-billing-periods.service.js')
 const CreateBillRunPresenter = require('../../presenters/bill-runs/create-bill-run.presenter.js')
 const InitiateBillRunService = require('./initiate-bill-run.service.js')
@@ -42,6 +43,9 @@ function _financialYearEndings (billingPeriods) {
 function _processBillRun (billRun, billingPeriods) {
   // We do not `await` the bill run being processed so we can leave it to run in the background while we return an immediate response
   switch (billRun.batchType) {
+    case 'annual':
+      AnnualProcessBillRunService.go(billRun, billingPeriods)
+      break
     case 'supplementary':
       SupplementaryProcessBillRunService.go(billRun, billingPeriods)
       break

@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const AnnualProcessBillRunService = require('../../../app/services/bill-runs/annual/process-bill-run.service.js')
 const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
 const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
@@ -45,6 +46,48 @@ describe('Start Bill Run Process service', () => {
       ]
 
       Sinon.stub(DetermineBillingPeriodsService, 'go').returns(billingPeriods)
+    })
+
+    describe("and the bill run type is 'annual'", () => {
+      beforeEach(async () => {
+        batchType = 'annual'
+
+        const annualBillRun = {
+          ...billRun,
+          batchType
+        }
+        Sinon.stub(InitiateBillRunService, 'go').resolves(annualBillRun)
+
+        Sinon.stub(AnnualProcessBillRunService, 'go')
+      })
+
+      it('initiates a new bill run', async () => {
+        await StartBillRunProcessService.go(regionId, userEmail)
+
+        const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
+
+        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+      })
+
+      it('returns a response containing details of the new bill run', async () => {
+        const result = await StartBillRunProcessService.go(regionId, batchType, userEmail)
+
+        // NOTE: The result from the service is a the formatted result for the legacy UI. Hence the reference to
+        // billingBatchId
+        expect(result.billingBatchId).to.equal(billRun.id)
+        expect(result.region).to.equal(billRun.regionId)
+        expect(result.scheme).to.equal(billRun.scheme)
+        expect(result.batchType).to.equal(batchType)
+        expect(result.status).to.equal(billRun.status)
+        expect(result.externalId).to.equal(billRun.externalId)
+        expect(result.errorCode).to.equal(billRun.errorCode)
+      })
+
+      it('starts processing the bill run', async () => {
+        await StartBillRunProcessService.go(regionId, userEmail)
+
+        expect(AnnualProcessBillRunService.go.called).to.be.true()
+      })
     })
 
     describe("and the bill run type is 'supplementary'", () => {
