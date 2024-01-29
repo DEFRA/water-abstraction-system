@@ -17,6 +17,7 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
  */
 async function go (id) {
   const licenceData = await FetchLicenceService.go(id)
+
   const pageData = ViewLicencePresenter.go(licenceData)
 
   return {
