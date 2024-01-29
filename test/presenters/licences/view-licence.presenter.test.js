@@ -7,9 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const LicenceModel = require('../../../app/models/licence.model.js')
-
 // Thing under test
 const ViewLicencePresenter = require('../../../app/presenters/licences/view-licence.presenter.js')
 
@@ -17,13 +14,16 @@ describe('View Licence presenter', () => {
   let licence
 
   beforeEach(() => {
-    licence = LicenceModel.fromJson({
+    licence = {
       id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+      ends: null,
       expiredDate: null,
+      licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
+      licenceHolder: null,
       licenceRef: '01/123',
       region: { displayName: 'Narnia' },
       startDate: new Date('2019-04-01')
-    })
+    }
   })
 
   describe('when provided with a populated licence', () => {
@@ -32,7 +32,9 @@ describe('View Licence presenter', () => {
 
       expect(result).to.equal({
         id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+        documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
+        licenceHolder: 'Unregistered licence',
         licenceRef: '01/123',
         pageTitle: 'Licence 01/123',
         region: 'Narnia',
@@ -81,6 +83,28 @@ describe('View Licence presenter', () => {
       })
     })
 
+    describe("the 'licenceHolder' property", () => {
+      describe('when the licence holder is not set', () => {
+        it("returns 'Unregistered licence'", () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.licenceHolder).to.equal('Unregistered licence')
+        })
+      })
+
+      describe('when the licence holder is set', () => {
+        beforeEach(() => {
+          licence.licenceHolder = 'Barbara Liskov'
+        })
+
+        it("returns 'Barbara Liskov'", () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.licenceHolder).to.equal('Barbara Liskov')
+        })
+      })
+    })
+
     describe("the 'warning' property", () => {
       describe('when the licence does not have an end date (expired, lapsed or revoked)', () => {
         it('returns NULL', () => {
@@ -102,9 +126,9 @@ describe('View Licence presenter', () => {
         })
       })
 
-      describe('when the licence expired today or in the past (2019-04-01)', () => {
+      describe('when the licence ends today or in the past (2019-04-01) because it is expired', () => {
         beforeEach(() => {
-          licence.expiredDate = new Date('2019-04-01')
+          licence.ends = { date: new Date('2019-04-01'), reason: 'expired' }
         })
 
         it("returns 'This licence expired on 1 April 2019'", () => {
@@ -114,9 +138,9 @@ describe('View Licence presenter', () => {
         })
       })
 
-      describe('when the licence lapsed today or in the past (2019-04-01)', () => {
+      describe('when the licence ends today or in the past (2019-04-01) because it is lapsed', () => {
         beforeEach(() => {
-          licence.lapsedDate = new Date('2019-04-01')
+          licence.ends = { date: new Date('2019-04-01'), reason: 'lapsed' }
         })
 
         it("returns 'This licence lapsed on 1 April 2019'", () => {
@@ -126,9 +150,9 @@ describe('View Licence presenter', () => {
         })
       })
 
-      describe('when the licence was revoked today or in the past (2019-04-01)', () => {
+      describe('when the licence was ends today or in the past (2019-04-01) because it is revoked', () => {
         beforeEach(() => {
-          licence.revokedDate = new Date('2019-04-01')
+          licence.ends = { date: new Date('2019-04-01'), reason: 'revoked' }
         })
 
         it("returns 'This licence was revoked on 1 April 2019'", () => {
