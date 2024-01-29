@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const AnnualProcessBillRunService = require('../../../../app/services/bill-runs/annual/process-bill-run.service.js')
 
-describe.only('Annual Process Bill Run service', () => {
+describe('Annual Process Bill Run service', () => {
   let notifierStub
 
   beforeEach(() => {
