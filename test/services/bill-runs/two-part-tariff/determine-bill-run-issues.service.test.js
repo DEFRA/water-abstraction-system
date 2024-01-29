@@ -20,7 +20,7 @@ describe('Determine Bill Run Issues Service', () => {
   })
 
   describe('when given licences', () => {
-    const licence = _licence()
+    const testLicences = _testLicences()
 
     beforeEach(() => {
       Sinon.stub(FetchReviewResultsService, 'go')
@@ -29,36 +29,38 @@ describe('Determine Bill Run Issues Service', () => {
     })
 
     it('it fetches their review result records', async () => {
-      await DetermineBillRunIssuesService.go(licence)
+      await DetermineBillRunIssuesService.go(testLicences)
 
       expect(FetchReviewResultsService.go.called).to.be.true()
     })
 
     describe('that have issues', () => {
-      it('marks the status on the licence as `review` or `ready', async () => {
-        await DetermineBillRunIssuesService.go(licence)
+      it('adds the status of `review` or `ready` to the licence', async () => {
+        await DetermineBillRunIssuesService.go(testLicences)
 
-        expect(licence[0].status).to.equal('ready')
-        expect(licence[1].status).to.equal('review')
+        expect(testLicences[0].status).to.equal('ready')
+        expect(testLicences[1].status).to.equal('review')
       })
 
-      it('includes the specific issues on the licence', async () => {
-        await DetermineBillRunIssuesService.go(licence)
+      it('adds the specific issues to the licence', async () => {
+        await DetermineBillRunIssuesService.go(testLicences)
 
-        expect(licence[0].issues).to.equal([
+        expect(testLicences[0].issues).to.equal([
           'Abstraction outside period',
           'No returns received',
           'Over abstraction',
           'Returns received late',
-          'Some returns not received'])
+          'Some returns not received'
+        ])
 
-        expect(licence[1].issues).to.equal([
+        expect(testLicences[1].issues).to.equal([
           'Aggregate factor',
           'Checking query',
           'Overlap of charge dates',
           'Returns received but not processed',
           'Returns split over charge references',
-          'Unable to match returns'])
+          'Unable to match returns'
+        ])
       })
     })
   })
@@ -146,16 +148,16 @@ function _readyLicenceReviewResults () {
   ]
 }
 
-function _licence () {
+function _testLicences () {
   return [
     {
       licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
-      licenceHolder: 'Charles Wharton Ltd',
-      licenceRef: '7/34/10/*S/0084'
+      licenceHolder: 'Big Farm Ltd',
+      licenceRef: '1/11/11/*11/1111'
     }, {
       licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
-      licenceHolder: 'LP Sneath',
-      licenceRef: '5/31/14/*S/0116A'
+      licenceHolder: 'Bob Bobbles',
+      licenceRef: '2/22/22/*S2/2222'
     }
   ]
 }
