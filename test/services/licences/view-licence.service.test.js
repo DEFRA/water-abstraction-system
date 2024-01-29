@@ -26,6 +26,56 @@ describe('View Licence service', () => {
   })
 
   describe('when a licence with a matching ID exists', () => {
+    describe('and it has no optional fields', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return all the mandatory data and default values for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result).to.equal({
+          id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+          documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
+          endDate: null,
+          licenceHolder: 'Unregistered licence',
+          licenceRef: '01/130/R01',
+          region: 'South West',
+          startDate: '7 March 2013',
+          warning: null
+        })
+      })
+    })
+
+    describe('and it does not have a licence holder', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.licenceHolder = null
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return unregistered licence for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.licenceHolder).to.equal('Unregistered licence')
+      })
+    })
+
+    describe('and it does have a licence holder', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.licenceHolder = 'Test Company'
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the licence holder for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.licenceHolder).to.equal('Test Company')
+      })
+    })
+
     describe('and it does not have an expired, lapsed, or revoke date', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
@@ -46,7 +96,7 @@ describe('View Licence service', () => {
 
       describe('because it was revoked', () => {
         beforeEach(() => {
-          fetchLicenceResult.revokedDate = new Date('2023-03-07')
+          fetchLicenceResult.ends = { date: new Date('2023-03-07'), priority: 1, reason: 'revoked' }
           Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
         })
 
@@ -59,7 +109,7 @@ describe('View Licence service', () => {
 
       describe('because it was lapsed', () => {
         beforeEach(() => {
-          fetchLicenceResult.lapsedDate = new Date('2023-03-07')
+          fetchLicenceResult.ends = { date: new Date('2023-03-07'), priority: 1, reason: 'lapsed' }
           Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
         })
 
@@ -72,7 +122,7 @@ describe('View Licence service', () => {
 
       describe('because it was expired', () => {
         beforeEach(() => {
-          fetchLicenceResult.expiredDate = new Date('2023-03-07')
+          fetchLicenceResult.ends = { date: new Date('2023-03-07'), priority: 1, reason: 'expired' }
           Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
         })
 
@@ -87,7 +137,7 @@ describe('View Licence service', () => {
     describe("and it did 'ends' today", () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
-        fetchLicenceResult.revokedDate = new Date()
+        fetchLicenceResult.ends = { date: new Date(), priority: 1, reason: 'revoked' }
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
@@ -106,7 +156,7 @@ describe('View Licence service', () => {
         const today = new Date()
         // 86400000 is one day in milliseconds
         const tomorrow = new Date(today.getTime() + 86400000)
-        fetchLicenceResult.revokedDate = tomorrow
+        fetchLicenceResult.ends = { date: tomorrow, priority: 1, reason: 'revoked' }
 
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
@@ -123,6 +173,9 @@ describe('View Licence service', () => {
 function _testLicence () {
   return LicenceModel.fromJson({
     id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+    licenceDocumentHeader: {
+      id: '40306a46-d4ce-4874-9c9e-30ab6469b3fe'
+    },
     licenceRef: '01/130/R01',
     region: {
       id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
