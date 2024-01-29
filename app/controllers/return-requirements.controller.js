@@ -8,6 +8,8 @@
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../models/session.model.js')
+const StartDateService = require('../services/return-requirements/start-date.service.js')
+const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
   const { sessionId } = request.params
@@ -176,12 +178,10 @@ async function siteDescription (request, h) {
 async function startDate (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await StartDateService.go(sessionId)
 
   return h.view('return-requirements/start-date.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the start date for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -276,9 +276,13 @@ async function submitSiteDescription (request, h) {
 async function submitStartDate (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await SubmitStartDateService.go(sessionId, request.payload)
 
-  if (session.data.journey === 'returns-required') {
+  if (pageData.error) {
+    return h.view('return-requirements/start-date.njk', pageData)
+  }
+
+  if (pageData.journey === 'returns-required') {
     return h.redirect(`/system/return-requirements/${sessionId}/reason`)
   }
 
