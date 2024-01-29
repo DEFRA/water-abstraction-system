@@ -10,6 +10,12 @@ const FetchReviewResultsService = require('./fetch-review-results.service.js')
 const READY = 'ready'
 const REVIEW = 'review'
 
+// A list of issues that would put a licence into a status of `REVIEW`
+const REVIEW_STATUSES = [
+  'Aggregate factor', 'Checking query', 'Overlap of charge dates', 'Returns received but not processed',
+  'Returns split over charge references', 'Unable to match returns'
+]
+
 /**
  * Determines all the issues on the licences for a two-part tariff bill run
  *
@@ -25,80 +31,126 @@ async function go (licences) {
   }
 }
 
-function _determineIssues (licenceReviewResults) {
-  let status = READY
-  const issues = []
-
+function _abstractionOutsidePeriod (issues, licenceReviewResults) {
   const abstractionOutsidePeriod = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.abstractionOutsidePeriod)
+
   if (abstractionOutsidePeriod) {
     issues.push('Abstraction outside period')
   }
+}
 
+function _determineIssues (licenceReviewResults) {
+  const issues = []
+
+  _abstractionOutsidePeriod(issues, licenceReviewResults)
+
+  _hasAggregate(issues, licenceReviewResults)
+
+  _underQuery(issues, licenceReviewResults)
+
+  _noReturnsReceived(issues, licenceReviewResults)
+
+  _overAbstracted(issues, licenceReviewResults)
+
+  _hasChargeDatesOverlap(issues, licenceReviewResults)
+
+  _notProcessed(issues, licenceReviewResults)
+
+  _receivedLate(issues, licenceReviewResults)
+
+  _returnsSplitOverChargeReference(issues, licenceReviewResults)
+
+  _returnsNotReceived(issues, licenceReviewResults)
+
+  _matchingReturns(issues, licenceReviewResults)
+
+  const status = _determineIssueStatus(issues)
+
+  return { issues, status }
+}
+
+function _determineIssueStatus (issues) {
+  const hasReviewIssue = issues.some((issue) => {
+    return REVIEW_STATUSES.includes(issue)
+  })
+
+  if (hasReviewIssue) {
+    return REVIEW
+  }
+
+  return READY
+}
+
+function _hasAggregate (issues, licenceReviewResults) {
   const hasAggregate = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.aggregate !== 1)
+
   if (hasAggregate) {
     issues.push('Aggregate factor')
-    status = REVIEW
   }
+}
 
-  const underQuery = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.underQuery)
-  if (underQuery) {
-    issues.push('Checking query')
-    status = REVIEW
-  }
-
-  const noReturnsReceived = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.status === 'due' || licenceReviewResult.reviewReturnResults?.status === 'overdue'
-  })
-  if (noReturnsReceived) {
-    issues.push('No returns received')
-  }
-
-  const overAbstracted = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.quantity > licenceReviewResult.reviewReturnResults?.allocated
-  })
-  if (overAbstracted) {
-    issues.push('Over abstraction')
-  }
-
+function _hasChargeDatesOverlap (issues, licenceReviewResults) {
   const hasChargeDatesOverlap = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.chargeDatesOverlap)
+
   if (hasChargeDatesOverlap) {
     issues.push('Overlap of charge dates')
-    status = REVIEW
   }
+}
 
-  const notProcessed = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.status === 'received')
-  if (notProcessed) {
-    issues.push('Returns received but not processed')
-    status = REVIEW
-  }
-
-  const receivedLate = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.receivedDate > licenceReviewResult.reviewReturnResults?.dueDate
-  })
-  if (receivedLate) {
-    issues.push('Returns received late')
-  }
-
-  const returnsSplitOverChargeReference = _returnsSplitOverChargeReference(licenceReviewResults)
-  if (returnsSplitOverChargeReference) {
-    issues.push('Returns split over charge references')
-    status = REVIEW
-  }
-
-  const returnsNotReceived = _returnsNotReceived(licenceReviewResults)
-  if (returnsNotReceived) {
-    issues.push('Some returns not received')
-  }
-
+function _matchingReturns (issues, licenceReviewResults) {
   const matchingReturns = licenceReviewResults.some((licenceReviewResult) => {
     return !(licenceReviewResult?.reviewChargeElementResultId && licenceReviewResult?.reviewReturnResultId)
   })
+
   if (matchingReturns) {
     issues.push('Unable to match returns')
-    status = REVIEW
   }
+}
 
-  return { issues, status }
+function _notProcessed (issues, licenceReviewResults) {
+  const notProcessed = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.status === 'received')
+
+  if (notProcessed) {
+    issues.push('Returns received but not processed')
+  }
+}
+
+function _noReturnsReceived (issues, licenceReviewResults) {
+  const noReturnsReceived = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.status === 'due' || licenceReviewResult.reviewReturnResults?.status === 'overdue'
+  })
+
+  if (noReturnsReceived) {
+    issues.push('No returns received')
+  }
+}
+
+function _overAbstracted (issues, licenceReviewResults) {
+  const overAbstracted = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.quantity > licenceReviewResult.reviewReturnResults?.allocated
+  })
+
+  if (overAbstracted) {
+    issues.push('Over abstraction')
+  }
+}
+
+function _receivedLate (issues, licenceReviewResults) {
+  const receivedLate = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.receivedDate > licenceReviewResult.reviewReturnResults?.dueDate
+  })
+
+  if (receivedLate) {
+    issues.push('Returns received late')
+  }
+}
+
+function _underQuery (issues, licenceReviewResults) {
+  const underQuery = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.underQuery)
+
+  if (underQuery) {
+    issues.push('Checking query')
+  }
 }
 
 /**
@@ -108,7 +160,7 @@ function _determineIssues (licenceReviewResults) {
  *
  * @returns {boolean} - Returns true if there are review results indicating that returns have not been received
  */
-function _returnsNotReceived (licenceReviewResults) {
+function _returnsNotReceived (issues, licenceReviewResults) {
   const returnsNotReceived = licenceReviewResults.some((licenceReviewResult) => {
     if (licenceReviewResult.reviewReturnResultId && licenceReviewResult.reviewChargeElementResultId) {
       if (licenceReviewResult.reviewReturnResults.status === 'due' || licenceReviewResult.reviewReturnResults.status === 'overdue') {
@@ -119,7 +171,9 @@ function _returnsNotReceived (licenceReviewResults) {
     return false
   })
 
-  return returnsNotReceived
+  if (returnsNotReceived) {
+    issues.push('Some returns not received')
+  }
 }
 
 /**
@@ -130,7 +184,7 @@ function _returnsNotReceived (licenceReviewResults) {
  * @returns {boolean} Returns true if there are multiple charge references associated with different review return
  * results
  */
-function _returnsSplitOverChargeReference (licenceReviewResults) {
+function _returnsSplitOverChargeReference (issues, licenceReviewResults) {
   const seenReviewReturnResults = {}
   let returnsSplitOverChargeReference
 
@@ -146,7 +200,9 @@ function _returnsSplitOverChargeReference (licenceReviewResults) {
     }
   }
 
-  return returnsSplitOverChargeReference
+  if (returnsSplitOverChargeReference) {
+    issues.push('Returns split over charge references')
+  }
 }
 
 module.exports = {
