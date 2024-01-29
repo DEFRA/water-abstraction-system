@@ -26,6 +26,7 @@ const LicenceVersionHelper = require('../support/helpers/licence-version.helper.
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
+const RegisteredToAndLicenceNameSeeder = require('../support/seeders/registered-to-and-licence-name.seeder.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 
@@ -559,6 +560,58 @@ describe('Licence model', () => {
 
           expect(result).to.equal('Luce Holder')
         })
+      })
+    })
+  })
+
+  describe('$licenceName', () => {
+    describe('when instance has not been set with the additional properties needed', () => {
+      it('returns null', () => {
+        const result = testRecord.$licenceName()
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the instance has been set with the additional properties needed', () => {
+      beforeEach(async () => {
+        const licence = await LicenceHelper.add()
+
+        await RegisteredToAndLicenceNameSeeder.seed(licence)
+
+        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
+      })
+
+      it('returns the licence name', async () => {
+        const result = testRecord.$licenceName()
+
+        expect(result).to.equal('My custom licence name')
+      })
+    })
+  })
+
+  describe('$registeredTo', () => {
+    describe('when instance has not been set with the additional properties needed', () => {
+      it('returns null', () => {
+        const result = testRecord.$registeredTo()
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the instance has been set with the additional properties needed', () => {
+      beforeEach(async () => {
+        const licence = await LicenceHelper.add()
+
+        await RegisteredToAndLicenceNameSeeder.seed(licence)
+
+        testRecord = await LicenceModel.query().findById(licence.id).modify('registeredToAndLicenceName')
+      })
+
+      it('returns who the licence is registered to', async () => {
+        const result = testRecord.$registeredTo()
+
+        expect(result).to.equal('grace.hopper@example.com')
       })
     })
   })
