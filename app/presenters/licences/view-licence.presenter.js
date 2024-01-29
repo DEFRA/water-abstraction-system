@@ -23,6 +23,7 @@ function go (licence) {
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceRef,
+    pageTitle: `Licence ${licenceRef}`,
     region: region.displayName,
     startDate: formatLongDate(startDate),
     warning: _generateWarningMessage(ends)

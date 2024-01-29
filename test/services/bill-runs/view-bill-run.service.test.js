@@ -91,7 +91,6 @@ describe('View Bill Run service', () => {
 
       it('will fetch the data and format it for use in the view bill run page', async () => {
         const result = await ViewBillRunService.go(testId)
-        console.log('🚀 ~ file: view-bill-run.service.test.js:55 ~ it ~ result:', result)
 
         expect(result).to.equal({
           billsCount: '1 Annual bill',
