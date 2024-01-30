@@ -5,6 +5,7 @@
  * @module DbExportService
  */
 
+const { currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const SchemaExportService = require('./schema-export.service.js')
 
 /**
@@ -12,7 +13,7 @@ const SchemaExportService = require('./schema-export.service.js')
  */
 async function go () {
   // Mark the start time for later logging
-  const startTime = process.hrtime.bigint()
+  const startTime = currentTimeInNanoseconds()
 
   const schemaNames = ['water', 'returns', 'crm', 'crm_v2', 'idm', 'permit']
 
