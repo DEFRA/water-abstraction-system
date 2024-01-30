@@ -12,6 +12,21 @@ const { expect } = Code
 const GeneralLib = require('../../app/lib/general.lib.js')
 
 describe('RequestLib', () => {
+  describe('#currentTimeInNanoseconds', () => {
+    let timeBeforeTest
+
+    beforeEach(() => {
+      timeBeforeTest = process.hrtime.bigint()
+    })
+
+    it('returns the current date and time as an ISO string', () => {
+      const result = GeneralLib.currentTimeInNanoseconds()
+
+      expect(typeof result).to.equal('bigint')
+      expect(result).to.be.greaterThan(timeBeforeTest)
+    })
+  })
+
   describe('#generateUUID', () => {
     // NOTE: generateUUID() only calls crypto.randomUUID(); it does nothing else. So, there is nothing really to test
     // and certainly, testing the UUID is really unique is beyond the scope of this project! But this test at least
@@ -149,21 +164,6 @@ describe('RequestLib', () => {
 
         expect(result).to.equal(true)
       })
-    })
-  })
-
-  describe('#startTime', () => {
-    let timeBeforeTest
-
-    beforeEach(() => {
-      timeBeforeTest = process.hrtime.bigint()
-    })
-
-    it('returns the current date and time as an ISO string', () => {
-      const result = GeneralLib.startTime()
-
-      expect(typeof result).to.equal('bigint')
-      expect(result).to.be.greaterThan(timeBeforeTest)
     })
   })
 
