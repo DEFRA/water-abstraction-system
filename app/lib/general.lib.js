@@ -30,7 +30,7 @@ const { randomUUID } = require('crypto')
  * @param {Object} [data] - additional data to include with the log output
  */
 function calculateAndLogTimeTaken (startTime, message, data = {}) {
-  const endTime = process.hrtime.bigint()
+  const endTime = currentTimeInNanoseconds()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
   const timeTakenSs = timeTakenMs / 1000n
