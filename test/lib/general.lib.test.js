@@ -12,6 +12,54 @@ const { expect } = Code
 const GeneralLib = require('../../app/lib/general.lib.js')
 
 describe('RequestLib', () => {
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('#calculateAndLogTime', () => {
+    let notifierStub
+    let startTime
+
+    beforeEach(() => {
+      startTime = GeneralLib.currentTimeInNanoseconds()
+
+      // RequestLib depends on the GlobalNotifier to have been set. This happens in
+      // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
+      // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our own
+      // stub
+      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      global.GlobalNotifier = notifierStub
+    })
+
+    describe('when no additional data is provided', () => {
+      it('logs the message and time taken in milliseconds', () => {
+        GeneralLib.calculateAndLogTime(startTime, 'I am the test with no data')
+
+        const logDataArg = notifierStub.omg.args[0][1]
+
+        expect(
+          notifierStub.omg.calledWith('I am the test with no data')
+        ).to.be.true()
+        expect(logDataArg.timeTakenMs).to.exist()
+        expect(logDataArg.name).not.to.exist()
+      })
+    })
+
+    describe('when additional data is provided', () => {
+      it('logs the message and time taken in milliseconds as well as the additional data', () => {
+        GeneralLib.calculateAndLogTime(startTime, 'I am the test with data', { name: 'Foo Bar' })
+
+        const logDataArg = notifierStub.omg.args[0][1]
+
+        expect(
+          notifierStub.omg.calledWith('I am the test with data')
+        ).to.be.true()
+        expect(logDataArg.timeTakenMs).to.exist()
+        expect(logDataArg.name).to.exist()
+      })
+    })
+  })
+
   describe('#currentTimeInNanoseconds', () => {
     let timeBeforeTest
 
@@ -179,7 +227,6 @@ describe('RequestLib', () => {
 
     afterEach(() => {
       clock.restore()
-      Sinon.restore()
     })
 
     it('returns the current date and time as an ISO string', () => {
