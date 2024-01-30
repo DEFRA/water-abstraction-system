@@ -44,16 +44,17 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceRef, licenceVersions } = licence
+  const { id, licenceRef, licenceVersions, startDate } = licence
   const ends = licence.$ends()
 
   return {
     licence: {
       id,
+      currentVersionStartDate: _currentVersionStartDate(licenceVersions),
       endDate: ends ? ends.date : null,
       licenceRef,
       licenceHolder: licence.$licenceHolder(),
-      startDate: _startDate(licenceVersions)
+      startDate
     },
     journey
   }
@@ -67,7 +68,8 @@ async function _fetchLicence (licenceId) {
       'expiredDate',
       'lapsedDate',
       'licenceRef',
-      'revokedDate'
+      'revokedDate',
+      'startDate'
     ])
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (builder) => {
@@ -89,7 +91,7 @@ async function _fetchLicence (licenceId) {
   return licence
 }
 
-function _startDate (licenceVersions) {
+function _currentVersionStartDate (licenceVersions) {
   // Extract the start date from the most 'current' licence version. _fetchLicence() ensures in the case
   // that there is more than one that they are ordered by their start date (DESC)
   const { startDate } = licenceVersions[0]

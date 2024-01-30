@@ -41,6 +41,7 @@ describe('View Licence service', () => {
           endDate: null,
           licenceHolder: 'Unregistered licence',
           licenceRef: '01/130/R01',
+          pageTitle: 'Licence 01/130/R01',
           region: 'South West',
           startDate: '7 March 2013',
           warning: null
