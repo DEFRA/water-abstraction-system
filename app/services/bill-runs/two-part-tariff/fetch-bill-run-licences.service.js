@@ -58,11 +58,6 @@ async function _fetchLicences (id) {
 
   for (const licence of licences) {
     licence.licenceHolder = licence.$licenceHolder()
-
-    // Using `.modify('licenceHolder')` causes the model to add a significant amount of data relating to the
-    // `licenceDocument` to the licence model data. Since this is no longer required once the the licence holder has
-    // been calculated it's being removed to minimise the size of the licence model data.
-    delete licence.licenceDocument
   }
 
   return licences
