@@ -1,31 +1,46 @@
 'use strict'
 
 /**
+ * Formats the two part tariff review data ready for presenting in the review page
  * @module ReviewBillRunPresenter
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
 
+/**
+ * Prepares and processes bill run and licence data for presentation
+ *
+ * @param {module:BillRunModel} billRun the data from the bill run
+ * @param {module:LicenceModel} licences the licences data asociated with the bill run
+ *
+ * @returns {Object} the prepared bill run and licence data to be passed to the review page
+ */
 function go (billRun, licences) {
-  const licencesToReviewCount = _prepareLicences(licences)
+  const { licencesToReviewCount, preparedLicences } = _prepareLicences(licences)
 
-  const preparedBillRun = _prepareBillRun(billRun, licences, licencesToReviewCount)
+  const preparedBillRun = _prepareBillRun(billRun, preparedLicences, licencesToReviewCount)
 
-  return { ...preparedBillRun, licences }
+  return { ...preparedBillRun, preparedLicences }
 }
 
 function _prepareLicences (licences) {
   let licencesToReviewCount = 0
+  const preparedLicences = []
 
   for (const licence of licences) {
     if (licence.status === 'review') {
       licencesToReviewCount++
     }
 
-    licence.issue = _getIssueOnLicence(licence.issues)
+    preparedLicences.push({
+      licenceRef: licence.licenceRef,
+      licenceHolder: licence.licenceHolder,
+      status: licence.status,
+      issue: _getIssueOnLicence(licence.issues)
+    })
   }
 
-  return licencesToReviewCount
+  return { preparedLicences, licencesToReviewCount }
 }
 
 function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
@@ -34,7 +49,6 @@ function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
-    chargeScheme: 'Current',
     billRunType: 'two-part tariff',
     numberOfLicences: billRunLicences.length,
     licencesToReviewCount

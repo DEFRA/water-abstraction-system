@@ -7,17 +7,14 @@
 
 const FetchReviewResultsService = require('./fetch-review-results.service.js')
 
-const READY = 'ready'
-const REVIEW = 'review'
-
-// A list of issues that would put a licence into a status of `REVIEW`
+// A list of issues that would put a licence into a status of 'review'
 const REVIEW_STATUSES = [
   'Aggregate factor', 'Checking query', 'Overlap of charge dates', 'Returns received but not processed',
   'Returns split over charge references', 'Unable to match returns'
 ]
 
 /**
- * Determines all the issues on the licences for a two-part tariff bill run
+ * Fetches the review data on a licence and determines all the issues and licence status
  *
  * @param {module:LicenceModel} licences the two-part tariff licence included in the bill run
  */
@@ -77,10 +74,10 @@ function _determineIssueStatus (issues) {
   })
 
   if (hasReviewIssue) {
-    return REVIEW
+    return 'review'
   }
 
-  return READY
+  return 'ready'
 }
 
 function _hasAggregate (issues, licenceReviewResults) {
@@ -165,10 +162,6 @@ function _underQuery (issues, licenceReviewResults) {
 
 /**
  * Checks if any of the licence review results indicate that a charge element has not received its returns
- *
- * @param {Array} licenceReviewResults An array of objects containing the licence review results records
- *
- * @returns {boolean} - Returns true if there are review results indicating that returns have not been received
  */
 function _returnsNotReceived (issues, licenceReviewResults) {
   const returnsNotReceived = licenceReviewResults.some((licenceReviewResult) => {
@@ -186,11 +179,6 @@ function _returnsNotReceived (issues, licenceReviewResults) {
 
 /**
  * Determines if there are multiple charge references associated with a matched return
- *
- * @param {Array} licenceReviewResults An array of objects containing the licence review results records
- *
- * @returns {boolean} Returns true if there are multiple charge references associated with different review return
- * results
  */
 function _returnsSplitOverChargeReference (issues, licenceReviewResults) {
   const seenReviewReturnResults = {}

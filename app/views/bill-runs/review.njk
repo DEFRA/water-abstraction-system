@@ -82,7 +82,7 @@
                 classes: "meta-data__label"
               },
               value: {
-                text: chargeScheme,
+                text: 'Current',
                 classes: "meta-data__value"
               }
             },
@@ -116,8 +116,8 @@
 
   {# Generate the row data for the table #}
   {% set tableRows = [] %}
-    {% if licences.length > 0 %}
-      {% for licence in licences %}
+    {% if preparedLicences.length > 0 %}
+      {% for licence in preparedLicences %}
         {% if licence.status == 'review' %}
           {% set colour = "govuk-tag--blue" %}
         {% else %}

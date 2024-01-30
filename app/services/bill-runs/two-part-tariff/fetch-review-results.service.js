@@ -1,12 +1,19 @@
 'use strict'
 
 /**
- * Determines the issues on the licence for a two-part tariff bill run
+ * Fetches the review results data for a given licence along with their associated charge elements and return logs
  * @module FetchReviewResultService
  */
 
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
+/**
+ * Fetches the review results data for a given licence along with their associated charge elements and return logs
+ *
+ * @param {String} licenceId the id of the licence
+ *
+ * @returns {module:ReviewResultModel} the review result data associated with the given licence
+ */
 async function go (licenceId) {
   const reviewResults = await _fetchReviewResults(licenceId)
 

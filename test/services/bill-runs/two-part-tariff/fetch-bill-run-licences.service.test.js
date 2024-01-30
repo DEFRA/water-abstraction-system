@@ -29,7 +29,7 @@ describe('Fetch Bill Run Licences service', () => {
 
     beforeEach(async () => {
       region = await RegionHelper.add()
-      billRun = await BillRunHelper.add({ regionId: region.id })
+      billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
     })
 
     describe('and there are licences in the bill run', () => {
@@ -48,7 +48,6 @@ describe('Fetch Bill Run Licences service', () => {
         expect(result.billRun.createdAt).to.equal(billRun.createdAt)
         expect(result.billRun.status).to.equal(billRun.status)
         expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-        expect(result.billRun.scheme).to.equal(billRun.scheme)
         expect(result.billRun.batchType).to.equal(billRun.batchType)
         expect(result.billRun.region.displayName).to.equal(region.displayName)
 

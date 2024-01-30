@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ReviewResultsHelper = require('../../..//support/helpers/review-result.helper.js')
-const ReviewChargeElementsResultsHelper = require('../../..//support/helpers/review-charge-element-result.helper.js')
-const ReviewReturnResultsHelper = require('../../../support/helpers/review-return-result.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const ReviewChargeElementsResultsHelper = require('../../..//support/helpers/review-charge-element-result.helper.js')
+const ReviewResultsHelper = require('../../..//support/helpers/review-result.helper.js')
+const ReviewReturnResultsHelper = require('../../../support/helpers/review-return-result.helper.js')
 
 // Thing under test
 const FetchReviewResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-results.service.js')
@@ -23,94 +23,103 @@ describe('Fetch Review Results Service', () => {
     await DatabaseHelper.clean()
   })
 
-  describe('when there are applicable review results', () => {
-    const reviewChargeElementResultId = '00ef49b5-dfd1-44cb-948f-d4f62c91741f'
-    const reviewReturnResultId = 'c4c7e681-9539-4bbb-a507-d019ff088218'
-    const chargeReferenceId = 'a0e69d38-216d-4d52-b8d9-cb4b8c3f9688'
+  describe('when the licence has data for review', () => {
+    let reviewChargeElementsResults
+    let reviewReturnResults
+    let reviewResults
 
-    describe('with related review charge element results and review return results', () => {
+    describe('with related charge elements and returns', () => {
       beforeEach(async () => {
-        await ReviewResultsHelper.add({ licenceId, reviewChargeElementResultId, reviewReturnResultId, chargeReferenceId })
-
-        await ReviewChargeElementsResultsHelper.add({ id: reviewChargeElementResultId })
-
-        await ReviewReturnResultsHelper.add({ id: reviewReturnResultId })
+        reviewChargeElementsResults = await ReviewChargeElementsResultsHelper.add()
+        reviewReturnResults = await ReviewReturnResultsHelper.add()
+        reviewResults = await ReviewResultsHelper.add({
+          licenceId,
+          reviewChargeElementResultId: reviewChargeElementsResults.id,
+          reviewReturnResultId: reviewReturnResults.id
+        })
       })
 
-      it('returns the review result with the related review charge element results and review return results', async () => {
+      it('returns the review result with the related charge element and returns', async () => {
         const result = await FetchReviewResultsService.go(licenceId)
 
         expect(result[0]).to.equal({
-          reviewChargeElementResultId: '00ef49b5-dfd1-44cb-948f-d4f62c91741f',
-          chargeReferenceId: 'a0e69d38-216d-4d52-b8d9-cb4b8c3f9688',
-          reviewReturnResultId: 'c4c7e681-9539-4bbb-a507-d019ff088218',
+          reviewChargeElementResultId: reviewResults.reviewChargeElementResultId,
+          chargeReferenceId: reviewResults.chargeReferenceId,
+          reviewReturnResultId: reviewReturnResults.id,
           reviewChargeElementResults: {
-            id: '00ef49b5-dfd1-44cb-948f-d4f62c91741f',
-            chargeDatesOverlap: false,
-            aggregate: 1
+            id: reviewChargeElementsResults.id,
+            chargeDatesOverlap: reviewChargeElementsResults.chargeDatesOverlap,
+            aggregate: reviewChargeElementsResults.aggregate
           },
           reviewReturnResults: {
-            id: 'c4c7e681-9539-4bbb-a507-d019ff088218',
-            underQuery: false,
-            quantity: 0,
-            allocated: 0,
-            abstractionOutsidePeriod: false,
-            status: 'completed',
-            dueDate: new Date('2022-06-03'),
-            receivedDate: new Date('2022-06-03')
+            id: reviewReturnResults.id,
+            underQuery: reviewReturnResults.underQuery,
+            quantity: reviewReturnResults.quantity,
+            allocated: reviewReturnResults.allocated,
+            abstractionOutsidePeriod: reviewReturnResults.abstractionOutsidePeriod,
+            status: reviewReturnResults.status,
+            dueDate: reviewReturnResults.dueDate,
+            receivedDate: reviewReturnResults.receivedDate
           }
         })
       })
     })
 
-    describe('with related review charge element result but no review return results', () => {
+    describe('with related charge elements but no returns', () => {
       beforeEach(async () => {
-        await ReviewResultsHelper.add({ licenceId, reviewChargeElementResultId, chargeReferenceId, reviewReturnResultId: null })
-
-        await ReviewChargeElementsResultsHelper.add({ id: reviewChargeElementResultId })
+        reviewChargeElementsResults = await ReviewChargeElementsResultsHelper.add()
+        reviewResults = await ReviewResultsHelper.add({
+          licenceId,
+          reviewChargeElementResultId: reviewChargeElementsResults.id,
+          reviewReturnResultId: null
+        })
       })
 
-      it('returns the review result with the related review charge element results', async () => {
+      it('returns the review results with the related charge elements', async () => {
         const result = await FetchReviewResultsService.go(licenceId)
 
         expect(result[0]).to.equal({
-          reviewChargeElementResultId: '00ef49b5-dfd1-44cb-948f-d4f62c91741f',
-          chargeReferenceId: 'a0e69d38-216d-4d52-b8d9-cb4b8c3f9688',
-          reviewReturnResultId: null,
+          reviewChargeElementResultId: reviewResults.reviewChargeElementResultId,
+          chargeReferenceId: reviewResults.chargeReferenceId,
+          reviewReturnResultId: reviewResults.reviewReturnResultId,
           reviewChargeElementResults: {
-            id: '00ef49b5-dfd1-44cb-948f-d4f62c91741f',
-            chargeDatesOverlap: false,
-            aggregate: 1
+            id: reviewChargeElementsResults.id,
+            chargeDatesOverlap: reviewChargeElementsResults.chargeDatesOverlap,
+            aggregate: reviewChargeElementsResults.aggregate
           },
           reviewReturnResults: null
         })
       })
     })
 
-    describe('with related review return result but no review charge element results', () => {
+    describe('with related returns but no charge elements', () => {
       beforeEach(async () => {
-        await ReviewResultsHelper.add({ licenceId, reviewChargeElementResultId: null, reviewReturnResultId, chargeReferenceId })
+        reviewReturnResults = await ReviewReturnResultsHelper.add()
 
-        await ReviewReturnResultsHelper.add({ id: reviewReturnResultId })
+        reviewResults = await ReviewResultsHelper.add({
+          licenceId,
+          reviewChargeElementResultId: null,
+          reviewReturnResultId: reviewReturnResults.id
+        })
       })
 
-      it('returns the review result with the related review return results', async () => {
+      it('returns the review results with the related returns', async () => {
         const result = await FetchReviewResultsService.go(licenceId)
 
         expect(result[0]).to.equal({
-          reviewChargeElementResultId: null,
-          chargeReferenceId: 'a0e69d38-216d-4d52-b8d9-cb4b8c3f9688',
-          reviewReturnResultId: 'c4c7e681-9539-4bbb-a507-d019ff088218',
+          reviewChargeElementResultId: reviewResults.reviewChargeElementResultId,
+          chargeReferenceId: reviewResults.chargeReferenceId,
+          reviewReturnResultId: reviewResults.reviewReturnResultId,
           reviewChargeElementResults: null,
           reviewReturnResults: {
-            id: 'c4c7e681-9539-4bbb-a507-d019ff088218',
-            underQuery: false,
-            quantity: 0,
-            allocated: 0,
-            abstractionOutsidePeriod: false,
-            status: 'completed',
-            dueDate: new Date('2022-06-03'),
-            receivedDate: new Date('2022-06-03')
+            id: reviewReturnResults.id,
+            underQuery: reviewReturnResults.underQuery,
+            quantity: reviewReturnResults.quantity,
+            allocated: reviewReturnResults.allocated,
+            abstractionOutsidePeriod: reviewReturnResults.abstractionOutsidePeriod,
+            status: reviewReturnResults.status,
+            dueDate: reviewReturnResults.dueDate,
+            receivedDate: reviewReturnResults.receivedDate
           }
         })
       })

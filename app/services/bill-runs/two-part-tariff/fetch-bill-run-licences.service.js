@@ -32,7 +32,6 @@ async function _fetchBillRun (id) {
       'createdAt',
       'status',
       'toFinancialYearEnding',
-      'scheme',
       'batchType'
     ])
     .withGraphFetched('region')

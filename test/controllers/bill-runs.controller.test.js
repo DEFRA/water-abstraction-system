@@ -237,7 +237,7 @@ function _multiGroupBillRun () {
 function _reviewBillRunData () {
   return {
     region: 'Southern (Test replica)',
-    status: 'REVIEW',
+    status: 'review',
     dateCreated: '6 November 2023',
     financialYear: '2021 to 2022',
     chargeScheme: 'Current',
@@ -247,10 +247,10 @@ function _reviewBillRunData () {
     licences: [
       {
         licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
-        licenceRef: '7/34/10/*S/0084',
-        licenceHolder: 'Charles Wharton Ltd',
+        licenceRef: '1/11/11/*1/1111',
+        licenceHolder: 'Big Farm Ltd',
         licenceIssues: 'Multiple Issues',
-        licenceStatus: 'REVIEW'
+        licenceStatus: 'review'
       }
     ]
   }
