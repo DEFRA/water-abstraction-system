@@ -27,43 +27,6 @@ describe('RequestLib', () => {
     })
   })
 
-  describe('#startTime', () => {
-    let timeBeforeTest
-
-    beforeEach(() => {
-      timeBeforeTest = process.hrtime.bigint()
-    })
-
-    it('returns the current date and time as an ISO string', () => {
-      const result = GeneralLib.startTime()
-
-      expect(typeof result).to.equal('bigint')
-      expect(result).to.be.greaterThan(timeBeforeTest)
-    })
-  })
-
-  describe('#timestampForPostgres', () => {
-    let clock
-    let testDate
-
-    beforeEach(() => {
-      testDate = new Date(2015, 9, 21, 20, 31, 57)
-
-      clock = Sinon.useFakeTimers(testDate)
-    })
-
-    afterEach(() => {
-      clock.restore()
-      Sinon.restore()
-    })
-
-    it('returns the current date and time as an ISO string', () => {
-      const result = GeneralLib.timestampForPostgres()
-
-      expect(result).to.equal('2015-10-21T20:31:57.000Z')
-    })
-  })
-
   describe('#periodsOverlap', () => {
     let referencePeriod
     let checkPeriod
@@ -186,6 +149,43 @@ describe('RequestLib', () => {
 
         expect(result).to.equal(true)
       })
+    })
+  })
+
+  describe('#startTime', () => {
+    let timeBeforeTest
+
+    beforeEach(() => {
+      timeBeforeTest = process.hrtime.bigint()
+    })
+
+    it('returns the current date and time as an ISO string', () => {
+      const result = GeneralLib.startTime()
+
+      expect(typeof result).to.equal('bigint')
+      expect(result).to.be.greaterThan(timeBeforeTest)
+    })
+  })
+
+  describe('#timestampForPostgres', () => {
+    let clock
+    let testDate
+
+    beforeEach(() => {
+      testDate = new Date(2015, 9, 21, 20, 31, 57)
+
+      clock = Sinon.useFakeTimers(testDate)
+    })
+
+    afterEach(() => {
+      clock.restore()
+      Sinon.restore()
+    })
+
+    it('returns the current date and time as an ISO string', () => {
+      const result = GeneralLib.timestampForPostgres()
+
+      expect(result).to.equal('2015-10-21T20:31:57.000Z')
     })
   })
 })
