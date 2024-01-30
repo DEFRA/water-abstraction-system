@@ -23,7 +23,7 @@ const { randomUUID } = require('crypto')
  * "the current high-resolution real time in nanoseconds".
  *
  * Assuming a process recorded the start time using `currentTimeInNanoseconds()` when passed to this helper it will
- * work out the time taken in nanoseconds, convert that to milliseconds and output it as a log message.
+ * work out the time taken in nanoseconds, convert that to milliseconds and seconds and output it as a log message.
  *
  * @param {bigint} startTime - the time the process started in nanoseconds
  * @param {string} message - the message to log
@@ -33,9 +33,11 @@ function calculateAndLogTimeTaken (startTime, message, data = {}) {
   const endTime = process.hrtime.bigint()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
+  const timeTakenSs = timeTakenMs / 1000
 
   const logData = {
     timeTakenMs,
+    timeTakenSs,
     ...data
   }
 

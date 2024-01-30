@@ -32,7 +32,7 @@ describe('RequestLib', () => {
     })
 
     describe('when no additional data is provided', () => {
-      it('logs the message and time taken in milliseconds', () => {
+      it('logs the message and time taken in milliseconds and seconds', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with no data')
 
         const logDataArg = notifierStub.omg.args[0][1]
@@ -41,12 +41,13 @@ describe('RequestLib', () => {
           notifierStub.omg.calledWith('I am the test with no data')
         ).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
+        expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.name).not.to.exist()
       })
     })
 
     describe('when additional data is provided', () => {
-      it('logs the message and time taken in milliseconds as well as the additional data', () => {
+      it('logs the message and time taken in milliseconds and seconds as well as the additional data', () => {
         GeneralLib.calculateAndLogTime(startTime, 'I am the test with data', { name: 'Foo Bar' })
 
         const logDataArg = notifierStub.omg.args[0][1]
