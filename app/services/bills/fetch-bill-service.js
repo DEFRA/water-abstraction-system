@@ -29,7 +29,7 @@ async function go (id) {
 }
 
 async function _fetchBill (id) {
-  const result = BillModel.query()
+  return BillModel.query()
     .findById(id)
     .select([
       'id',
@@ -66,8 +66,6 @@ async function _fetchBill (id) {
         'displayName'
       ])
     })
-
-  return result
 }
 
 /**
@@ -84,7 +82,7 @@ async function _fetchBill (id) {
  * Objection.js.
  */
 async function _fetchLicenceSummaries (id) {
-  const results = await db
+  return db
     .distinct(['bil.id', 'bil.licenceRef'])
     .sum('bt.net_amount AS total')
     .from('billLicences AS bil')
@@ -93,8 +91,6 @@ async function _fetchLicenceSummaries (id) {
     .where('bt.chargeType', 'standard')
     .groupBy('bil.id', 'bil.licenceRef')
     .orderBy('bil.licenceRef')
-
-  return results
 }
 
 module.exports = {

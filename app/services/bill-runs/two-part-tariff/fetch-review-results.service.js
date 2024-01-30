@@ -14,7 +14,7 @@ async function go (licenceId) {
 }
 
 async function _fetchReviewResults (licenceId) {
-  return await ReviewResultModel.query()
+  return ReviewResultModel.query()
     .where('licenceId', licenceId)
     .select(
       'reviewChargeElementResultId',

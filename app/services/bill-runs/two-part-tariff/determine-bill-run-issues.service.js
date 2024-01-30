@@ -32,7 +32,9 @@ async function go (licences) {
 }
 
 function _abstractionOutsidePeriod (issues, licenceReviewResults) {
-  const abstractionOutsidePeriod = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.abstractionOutsidePeriod)
+  const abstractionOutsidePeriod = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.abstractionOutsidePeriod
+  })
 
   if (abstractionOutsidePeriod) {
     issues.push('Abstraction outside period')
@@ -82,7 +84,9 @@ function _determineIssueStatus (issues) {
 }
 
 function _hasAggregate (issues, licenceReviewResults) {
-  const hasAggregate = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.aggregate !== 1)
+  const hasAggregate = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewChargeElementResults?.aggregate !== 1
+  })
 
   if (hasAggregate) {
     issues.push('Aggregate factor')
@@ -90,7 +94,9 @@ function _hasAggregate (issues, licenceReviewResults) {
 }
 
 function _hasChargeDatesOverlap (issues, licenceReviewResults) {
-  const hasChargeDatesOverlap = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewChargeElementResults?.chargeDatesOverlap)
+  const hasChargeDatesOverlap = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewChargeElementResults?.chargeDatesOverlap
+  })
 
   if (hasChargeDatesOverlap) {
     issues.push('Overlap of charge dates')
@@ -108,7 +114,9 @@ function _matchingReturns (issues, licenceReviewResults) {
 }
 
 function _notProcessed (issues, licenceReviewResults) {
-  const notProcessed = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.status === 'received')
+  const notProcessed = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.status === 'received'
+  })
 
   if (notProcessed) {
     issues.push('Returns received but not processed')
@@ -146,7 +154,9 @@ function _receivedLate (issues, licenceReviewResults) {
 }
 
 function _underQuery (issues, licenceReviewResults) {
-  const underQuery = licenceReviewResults.some(licenceReviewResult => licenceReviewResult.reviewReturnResults?.underQuery)
+  const underQuery = licenceReviewResults.some((licenceReviewResult) => {
+    return licenceReviewResult.reviewReturnResults?.underQuery
+  })
 
   if (underQuery) {
     issues.push('Checking query')
@@ -162,10 +172,12 @@ function _underQuery (issues, licenceReviewResults) {
  */
 function _returnsNotReceived (issues, licenceReviewResults) {
   const returnsNotReceived = licenceReviewResults.some((licenceReviewResult) => {
-    if (licenceReviewResult.reviewReturnResultId && licenceReviewResult.reviewChargeElementResultId) {
-      if (licenceReviewResult.reviewReturnResults.status === 'due' || licenceReviewResult.reviewReturnResults.status === 'overdue') {
-        return true
-      }
+    if (licenceReviewResult.reviewReturnResultId &&
+      licenceReviewResult.reviewChargeElementResultId &&
+      (licenceReviewResult.reviewReturnResults.status === 'due' ||
+      licenceReviewResult.reviewReturnResults.status === 'overdue')
+    ) {
+      return true
     }
 
     return false

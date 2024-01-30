@@ -34,22 +34,10 @@ function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
-    chargeScheme: _scheme(billRun.scheme),
-    billRunType: _billRunType(billRun.batchType),
+    chargeScheme: 'Current',
+    billRunType: 'two-part tariff',
     numberOfLicences: billRunLicences.length,
     licencesToReviewCount
-  }
-}
-
-function _billRunType (billRunType) {
-  if (billRunType === 'two_part_tariff') {
-    return 'two-part tariff'
-  }
-}
-
-function _scheme (scheme) {
-  if (scheme === 'sroc') {
-    return 'Current'
   }
 }
 
@@ -65,9 +53,9 @@ function _getIssueOnLicence (issues) {
     return 'Multiple Issues'
   } else if (issues.length === 1) {
     return issues[0]
+  } else {
+    return ''
   }
-
-  return ''
 }
 
 module.exports = {
