@@ -172,15 +172,11 @@ function _underQuery (issues, licenceReviewResults) {
  */
 function _returnsNotReceived (issues, licenceReviewResults) {
   const returnsNotReceived = licenceReviewResults.some((licenceReviewResult) => {
-    if (licenceReviewResult.reviewReturnResultId &&
+    return (licenceReviewResult.reviewReturnResultId &&
       licenceReviewResult.reviewChargeElementResultId &&
       (licenceReviewResult.reviewReturnResults.status === 'due' ||
       licenceReviewResult.reviewReturnResults.status === 'overdue')
-    ) {
-      return true
-    }
-
-    return false
+    )
   })
 
   if (returnsNotReceived) {
