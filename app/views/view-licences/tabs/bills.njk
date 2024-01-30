@@ -1,0 +1,74 @@
+<h2 class="govuk-heading-l">Bills</h2>
+
+{% if bills.data.length > 0 %}
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">Bill number</th>
+                <th class="govuk-table__header" scope="col">Date created</th>
+                <th class="govuk-table__header" scope="col">Billing account</th>
+                <th class="govuk-table__header" scope="col">Bill run type</th>
+                <th class="govuk-table__header govuk-table__header--numeric" scope="col">Financial year</th>
+                <th class="govuk-table__header govuk-table__header--numeric" scope="col">Bill total</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            {% for row in bills.data %}
+                <tr class="govuk-table__row">
+                    {% set link = '/system/bills/' + row.invoice.id %}
+                    <td class="govuk-table__cell" scope="row">
+                        <a href="{{ link }}">{{ row.invoice.displayLabel }}</a>
+                        {% if invoice.isFlaggedForRebilling != true %}
+                            {% if row.invoice.rebillingState == 'rebill'%}
+                                <p class="govuk-body-s govuk-!-margin-bottom-0">Reissued</p>
+                            {% elif row.invoice.rebillingState == 'reversal' %}
+                                <p class="govuk-body-s govuk-!-margin-bottom-0">Reversed</p>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if row.invoice.isFlaggedForRebilling %}
+                            <p class="govuk-body-s govuk-!-margin-bottom-0">Marked for reissue</p>
+                        {% endif %}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ row.invoice.dateCreated | date }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {% if row.invoice.invoiceAccount %}
+                            <a href="/billing-accounts/{{ row.invoice.invoiceAccount.id }}">
+                                {{ row.invoice.invoiceAccount.accountNumber }}
+                            </a>
+                        {% else %}
+                            {{ row.invoice.accountNumber }}
+                        {% endif %}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ row.batch.type | sentenceCase }}
+                    </td>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                        {{ row.invoice.financialYear.yearEnding }}
+                    </td>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                        {% if value | defaultTo(false) !== false %}
+                        {# TO DO implement currency formatting - see charge filter in UI code #}
+                            row.invoice.netTotal
+                        {% else %}
+                            <span>-</span>
+                        {% endif %}
+                        {% if row.invoice.isCredit %}
+                            <div>Credit</div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No bills sent for this licence.</p>
+{% endif %}
+
+{% if bills.pagination | hasMorePages %}
+<p>
+  <a href="{{ links.bills }}">View all sent bills</a>
+</p>
+{% endif %}
