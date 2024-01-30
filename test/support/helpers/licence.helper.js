@@ -17,6 +17,7 @@ const { randomInteger } = require('./general.helper.js')
  * - `regionId` - [random UUID]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
  * - `startDate` - new Date('2022-01-01')
+ * - `waterUndertaker` - false
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -43,7 +44,8 @@ function defaults (data = {}) {
     licenceRef: generateLicenceRef(),
     regionId: generateUUID(),
     regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },
-    startDate: new Date('2022-01-01')
+    startDate: new Date('2022-01-01'),
+    waterUndertaker: false
   }
 
   return {
