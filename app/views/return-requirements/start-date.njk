@@ -1,26 +1,108 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from 'govuk/components/back-link/macro.njk' import govukBackLink %}
+{% from 'govuk/components/button/macro.njk' import govukButton %}
+{% from 'govuk/components/date-input/macro.njk' import govukDateInput %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+{% from 'govuk/components/radios/macro.njk' import govukRadios %}
 
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: '/licences/' + data.licence.id + '#charge'
+      href: '/licences/' + licenceId + '#charge'
     })
   }}
 {% endblock %}
 
-{% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+{% set dateInputHTML %}
+  {% if error %}
+    {% set errorClass = 'govuk-input--error' %}
+  {% else %}
+    {% set errorClass = '' %}
+  {% endif %}
 
-  <form method="post">
-    <div class="govuk-body">
-      {{ govukButton({ text: "Continue" }) }}
-    </div>
-  </form>
+  {{ govukDateInput({
+    id: 'other-start-date',
+    namePrefix: 'start-date',
+    errorMessage: error.dateInputFormElement,
+    fieldset: {
+      legend: {
+        classes: 'govuk-fieldset__legend--m',
+        text: 'Start date'
+      }
+    },
+    items: [
+      {
+        classes: 'govuk-input--width-2 ' + errorClass,
+        name: 'day',
+        value: anotherStartDateDay
+      },
+      {
+        classes: 'govuk-input--width-2 ' + errorClass,
+        name: 'month',
+        value: anotherStartDateMonth
+      },
+      {
+        classes: 'govuk-input--width-4 ' + errorClass,
+        name: 'year',
+        value: anotherStartDateYear
+      }
+    ]
+  }) }}
+{% endset %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.message,
+          href: '#startDate-error'
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukRadios({
+          name: 'start-date-options',
+          errorMessage: error.radioFormElement,
+          fieldset: {
+            legend: {
+              html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--l'
+            }
+          },
+          items: [
+            {
+              id: 'licence-start-date',
+              value: 'licenceStartDate',
+              text: 'Licence version start date',
+              hint: {
+                text:  licenceVersionStartDate
+              },
+              checked: licenceStartDateSelected
+            },
+            {
+              id: 'another-start-date',
+              value: 'anotherStartDate',
+              text: 'Another date',
+              hint: {
+                text: 'For example, 27 3 2007'
+              },
+              checked: anotherStartDateSelected,
+              conditional: {
+                html: dateInputHTML
+              }
+            }
+          ]
+        }) }}
+
+      {{ govukButton({ text: 'Continue' }) }}
+    </form>
+  </div>
 {% endblock %}
