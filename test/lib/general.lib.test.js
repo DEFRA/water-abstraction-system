@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const GeneralLib = require('../../app/lib/general.lib.js')
 
-describe('RequestLib', () => {
+describe('GeneralLib', () => {
   afterEach(() => {
     Sinon.restore()
   })
@@ -48,7 +48,7 @@ describe('RequestLib', () => {
 
     describe('when additional data is provided', () => {
       it('logs the message and time taken in milliseconds and seconds as well as the additional data', () => {
-        GeneralLib.calculateAndLogTime(startTime, 'I am the test with data', { name: 'Foo Bar' })
+        GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with data', { name: 'Foo Bar' })
 
         const logDataArg = notifierStub.omg.args[0][1]
 
