@@ -27,6 +27,21 @@ describe('RequestLib', () => {
     })
   })
 
+  describe('#startTime', () => {
+    let timeBeforeTest
+
+    beforeEach(() => {
+      timeBeforeTest = process.hrtime.bigint()
+    })
+
+    it('returns the current date and time as an ISO string', () => {
+      const result = GeneralLib.startTime()
+
+      expect(typeof result).to.equal('bigint')
+      expect(result).to.be.greaterThan(timeBeforeTest)
+    })
+  })
+
   describe('#timestampForPostgres', () => {
     let clock
     let testDate

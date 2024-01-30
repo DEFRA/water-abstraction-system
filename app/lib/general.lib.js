@@ -75,6 +75,30 @@ function periodsOverlap (referencePeriods, checkPeriods) {
 }
 
 /**
+ * Returns the current time in nanoseconds. Used as part of logging how long something takes
+ *
+ * We often want to see how long a process takes and capture it in our logs. This can be especially useful when we
+ * have a process that involves talking to an external one. By capturing the time it takes our process to complete
+ * we can deal with any challenges about the performance of our process VS the total time taken.
+ *
+ * To do that you need to record the time when the process starts and the time when the process ends and then work out
+ * the duration. Doing that with JavaScript time constructs though gets very messy and we want to avoid bringing in
+ * 3rd party packages for just this one thing.
+ *
+ * Unfortunately, we cannot find the original source but a 'neat' way of doing it is to use
+ * {@link https://nodejs.org/api/process.html#processhrtimebigint | process.hrtime.bigint()} which returns
+ * "the current high-resolution real time in nanoseconds".
+ *
+ * Do the same at the end and take one from the other, and you then have the duration in nanoseconds which you can
+ * easily convert into something more readable.
+ *
+ * @returns {bigint} the current time in nanoseconds
+ */
+function startTime () {
+  return process.hrtime.bigint()
+}
+
+/**
  * Returns the current date and time as an ISO string
  *
  * We can't use Date.now() because Javascript returns the time since the epoch in milliseconds, whereas a PostgreSQL
@@ -92,5 +116,6 @@ function timestampForPostgres () {
 module.exports = {
   generateUUID,
   periodsOverlap,
+  startTime,
   timestampForPostgres
 }
