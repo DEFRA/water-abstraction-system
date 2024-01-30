@@ -5,7 +5,7 @@
  * @module DbExportService
  */
 
-const { calculateAndLogTime, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const SchemaExportService = require('./schema-export.service.js')
 
 /**
@@ -22,7 +22,7 @@ async function go () {
   }
 
   // Log how long the process took
-  calculateAndLogTime(startTime, 'DB export complete')
+  calculateAndLogTimeTaken(startTime, 'DB export complete')
 }
 
 module.exports = {

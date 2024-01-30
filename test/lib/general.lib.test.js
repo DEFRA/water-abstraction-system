@@ -16,7 +16,7 @@ describe('RequestLib', () => {
     Sinon.restore()
   })
 
-  describe('#calculateAndLogTime', () => {
+  describe('#calculateAndLogTimeTaken', () => {
     let notifierStub
     let startTime
 
@@ -33,7 +33,7 @@ describe('RequestLib', () => {
 
     describe('when no additional data is provided', () => {
       it('logs the message and time taken in milliseconds', () => {
-        GeneralLib.calculateAndLogTime(startTime, 'I am the test with no data')
+        GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with no data')
 
         const logDataArg = notifierStub.omg.args[0][1]
 

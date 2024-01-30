@@ -5,7 +5,7 @@
 
 const AllocateReturnsToChargeElementService = require('./allocate-returns-to-charge-element.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
-const { calculateAndLogTime, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('./prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
@@ -35,7 +35,7 @@ async function go (billRun, billingPeriods) {
     await _process(licences, billingPeriods, billRun)
   }
 
-  calculateAndLogTime(startTime, 'Two part tariff matching complete', { billRunId: billRun.id })
+  calculateAndLogTimeTaken(startTime, 'Two part tariff matching complete', { billRunId: billRun.id })
 
   return licences
 }

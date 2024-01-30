@@ -9,7 +9,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
 const BillRunError = require('../../../errors/bill-run.error.js')
 const ChargingModuleGenerateService = require('../../charging-module/generate-bill-run.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const { calculateAndLogTime, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('./handle-errored-bill-run.service.js')
 const LegacyRequestLib = require('../../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
@@ -37,7 +37,7 @@ async function go (billRun, billingPeriods) {
 
     await _processBillingPeriods(billingPeriods, billRun, resultOfReissuing)
 
-    calculateAndLogTime(startTime, 'Process bill run complete', { billRunId, type: 'supplementary' })
+    calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'supplementary' })
   } catch (error) {
     await HandleErroredBillRunService.go(billRunId, error.code)
     _logError(billRun, error)

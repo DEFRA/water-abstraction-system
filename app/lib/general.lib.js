@@ -29,7 +29,7 @@ const { randomUUID } = require('crypto')
  * @param {string} message - the message to log
  * @param {Object} [data] - additional data to include with the log output
  */
-function calculateAndLogTime (startTime, message, data = {}) {
+function calculateAndLogTimeTaken (startTime, message, data = {}) {
   const endTime = process.hrtime.bigint()
   const timeTakenNs = endTime - startTime
   const timeTakenMs = timeTakenNs / 1000000n
@@ -149,7 +149,7 @@ function timestampForPostgres () {
 }
 
 module.exports = {
-  calculateAndLogTime,
+  calculateAndLogTimeTaken,
   currentTimeInNanoseconds,
   generateUUID,
   periodsOverlap,
