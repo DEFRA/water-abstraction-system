@@ -1,8 +1,167 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/badge.njk" import badge %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to bill runs',
+      href: '/billing/batch/list'
+    })
+  }}
+{% endblock %}
+
 {% block content %}
   {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
-      <iframe src="https://giphy.com/embed/vmv47p4zksWDC" width="480" height="261" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/alive-vmv47p4zksWDC"></a></p>
-    </h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-l">{{region}} {{billRunType}} bill run</span>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
+
+      {# Status badge #}
+      {% if status == 'review' %}
+        {% set colour = "govuk-tag--blue govuk-!-font-size-27" %}
+      {% else %}
+        {% set colour = "govuk-tag--green govuk-!-font-size-27" %}
+      {% endif %}
+
+      <p class="govuk-body">
+        {{govukTag({
+          text: status,
+          classes: colour
+        })}}
+      </p>
+
+      {# Bill run meta-data #}
+      {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: 'Date created',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: dateCreated,
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Region',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: region,
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Bill run type',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: billRunType | capitalize,
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Charge scheme',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: 'Current',
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Financial year',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: financialYear,
+                classes: "meta-data__value"
+              }
+            }
+          ]
+        }) }}
+    </div>
   </div>
+
+  {# Dynamic message either telling the user they have issues to deal with or that they can generate bills #}
+  {% if licencesToReviewCount > 0 %}
+    <section class="govuk-!-margin-bottom-9">
+      {{ govukInsetText({
+        text: 'You need to review ' + licencesToReviewCount + ' licences with returns data issues. You can then continue and send the bill run.'
+      }) }}
+    </section>
+  {% else %}
+    <section class="govuk-!-margin-bottom-9">
+      <p class="govuk-body ">You have resolved all returns data issues. Continue to generate bills.</p>
+    </section>
+  {% endif %}
+
+  {# Generate the row data for the table #}
+  {% set tableRows = [] %}
+    {% if preparedLicences.length > 0 %}
+      {% for licence in preparedLicences %}
+        {% if licence.status == 'review' %}
+          {% set colour = "govuk-tag--blue" %}
+        {% else %}
+          {% set colour = "govuk-tag--green" %}
+        {% endif %}
+
+        {% set statusTag %}
+          {{govukTag({
+            text: licence.status,
+            classes: colour
+          })}}
+        {% endset %}
+
+      {% set action = '<a class="govuk-link" href=""><span class="govuk-visually-hidden">View licence matching for licence </span>' + licence.licenceRef + '</a>' %}
+      {% set tableRow = [
+        {html: action | safe},
+        {text: licence.licenceHolder},
+        {text: licence.issue },
+        {html: statusTag, format: "numeric"}
+      ] %}
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+      {% endfor %}
+    {% endif %}
+
+  {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
+  {{ govukTable({
+    caption: "Showing all " + numberOfLicences + " licences",
+    captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
+    firstCellIsHeader: false,
+    head: [
+      {
+        text: 'Licence'
+      },
+      {
+        text: 'Licence holder'
+      },
+      {
+        text: 'Issue'
+      },
+      {
+        text: 'Status',
+        format: "numeric"
+      }
+    ],
+    rows: tableRows
+  }) }}
 {% endblock %}

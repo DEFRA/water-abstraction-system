@@ -64,7 +64,7 @@ async function _process (licences, billingPeriods, billRun) {
       })
     })
 
-    await PersistAllocatedLicenceToResultsService.go(billRun.billingBatchId, licence)
+    await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
   }
 }
 
