@@ -131,7 +131,10 @@
           })}}
         {% endset %}
 
-      {% set action = '<a class="govuk-link" href=""><span class="govuk-visually-hidden">View licence matching for licence </span>' + licence.licenceRef + '</a>' %}
+        {% set action %}
+        <a class="govuk-link" href="/system/bill-runs/{{ id }}/licence-review/{{ licence.id }}/">{{ licence.licenceRef }}<span class="govuk-visually-hidden">View licence matching for licence {{ licence.licenceRef }} </a>
+        {% endset %}
+
       {% set tableRow = [
         {html: action | safe},
         {text: licence.licenceHolder},

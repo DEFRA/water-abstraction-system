@@ -181,7 +181,40 @@ describe('Bill Runs controller', () => {
       })
     })
   })
+
+  describe('GET /bill-runs/{id}/licence-review', () => {
+    let options
+
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/licence-review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid', () => {
+      beforeEach(() => {
+        Sinon.stub(ReviewBillRunService, 'go').resolves(_licenceReviewData)
+      })
+
+      it('returns a 200 response', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+      })
+    })
+  })
 })
+
+function _licenceReviewData () {
+  return {
+
+  }
+}
 
 function _multiGroupBillRun () {
   return {

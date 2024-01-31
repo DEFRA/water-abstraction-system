@@ -1,0 +1,130 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/badge.njk" import badge %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to review licences',
+      href: '/system/bill-runs/' + id + '/review'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+{# Main heading #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-l">{{region}} {{billRunType}} bill run</span>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
+
+      {# Status badge #}
+      {% if status == 'review' %}
+        {% set colour = "govuk-tag--blue govuk-!-font-size-16" %}
+      {% else %}
+        {% set colour = "govuk-tag--green govuk-!-font-size-16" %}
+      {% endif %}
+
+      <p class="govuk-body">
+        {{govukTag({
+          text: status,
+          classes: colour
+        })}}
+      </p>
+    </div>
+  </div>
+
+{# Licence nav bar #}
+<ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
+  <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
+      Summary
+    </a></li>
+  <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
+      Returns
+    </a></li>
+    <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
+      Charge information
+    </a></li>
+</ul>
+
+{# Charge Period #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
+        <ul class="govuk-list">
+        <li>
+          <a class="govuk-link" href="#">{{chargePeriodDate}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="divider govuk-!-margin-bottom-6"></div>
+
+{# Returns #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Returns</h2>
+    </div>
+  </div>
+
+      {% set tableRows = [] %}
+        {% for return in returns %}
+
+          {% if return.status == 'completed' %}
+            {% set colour = "govuk-tag--green" %}
+          {% else %}
+            {% set colour = "govuk-tag--blue" %}
+          {% endif %}
+
+          {% set statusTag %}
+            {{govukTag({
+              text: return.status,
+              classes: colour + ' govuk-!-font-size-14'
+            })}}
+          {% endset %}
+
+        {% set action %}
+        <a class="govuk-link" href="/">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        {% endset %}
+
+        {% set tableRow = [
+          {html: action | safe + '<br>' + return.dates, classes: 'govuk-body-s' },
+          {html: return.purpose + '<br>' + return.description, classes: 'govuk-body-s' },
+          {html: statusTag, classes: 'govuk-body-s' },
+          {html: return.total + '<br>' + return.allocated, classes: 'govuk-body-s' }
+          ]
+        %}
+
+        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+        {% endfor %}
+
+      {# Table displaying details of the matched returns #}
+      {{ govukTable({
+        caption: "Matched returns",
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: 'Return reference and dates'
+          },
+          {
+            text: 'Purpose and description'
+          },
+          {
+            text: 'Status'
+          },
+          {
+            text: 'Return totals Allocated/Total',
+            format: 'numeric',
+            classes: 'width-one-tenth'
+          }
+        ],
+        rows: tableRows
+      }) }}
+
+  <div class="divider govuk-!-margin-bottom-6"></div>
+{% endblock %}
