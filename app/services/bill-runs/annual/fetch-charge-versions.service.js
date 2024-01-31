@@ -18,9 +18,11 @@ const Workflow = require('../../../models/workflow.model.js')
  * - be linked to a licence which is linked to the selected region
  * - have the scheme 'sroc'
  * - have a start date before the end of the billing period
- * - not have a status of draft
+ * - not have an end date before the start date of the billing period
+ * - have a status of 'current'
  * - not have a null billing account ID (these are created when the licence becomes non-chargeable)
  * - not be linked to a licence in the workflow
+ * - not be linked to a licence that 'ended' before the start date of the billing period
  *
  * @param {String} regionId UUID of the region being billed that the licences must be linked to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
@@ -103,6 +105,7 @@ async function _fetch (regionId, billingPeriod) {
     .withGraphFetched('changeReason')
     .modifyGraph('changeReason', builder => {
       builder.select([
+        'id',
         'triggersMinimumCharge'
       ])
     })
@@ -121,6 +124,7 @@ async function _fetch (regionId, billingPeriod) {
     .withGraphFetched('chargeReferences.chargeCategory')
     .modifyGraph('chargeReferences.chargeCategory', builder => {
       builder.select([
+        'id',
         'reference',
         'shortDescription'
       ])
