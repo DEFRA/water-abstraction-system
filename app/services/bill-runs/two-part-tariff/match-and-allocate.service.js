@@ -14,10 +14,10 @@ const PersistAllocatedLicenceToResultsService = require('./persist-allocated-lic
 /**
  * Performs the two-part tariff matching and allocating
  *
- * This function initiates the processing of matching and allocating by fetching licenses within the specified region and billing period.
- * Each license undergoes individual processing, including fetching and preparing return logs, charge versions, and
- * charge references. The allocated quantity for each charge reference is set to 0, and matching return logs are allocated
- * to the corresponding charge elements.
+ * This function initiates the processing of matching and allocating by fetching licenses within the specified region
+ * and billing period. Each license undergoes individual processing, including fetching and preparing return logs,
+ * charge versions, and charge references. The allocated quantity for each charge reference is set to 0, and matching
+ * return logs are allocated to the corresponding charge elements.
  *
  * After processing each license, the results are persisted using PersistAllocatedLicenceToResultsService.
  *
@@ -37,7 +37,7 @@ async function go (billRun, billingPeriods) {
 
   calculateAndLogTimeTaken(startTime, 'Two part tariff matching complete', { billRunId: billRun.id })
 
-  return licences
+  return licences.length > 0
 }
 
 async function _process (licences, billingPeriods, billRun) {
@@ -58,7 +58,12 @@ async function _process (licences, billingPeriods, billRun) {
           const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
           if (matchingReturns.length > 0) {
-            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion.chargePeriod, chargeReference)
+            AllocateReturnsToChargeElementService.go(
+              chargeElement,
+              matchingReturns,
+              chargeVersion.chargePeriod,
+              chargeReference
+            )
           }
         })
       })
