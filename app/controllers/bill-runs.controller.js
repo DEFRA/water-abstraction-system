@@ -10,6 +10,7 @@ const Boom = require('@hapi/boom')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
+const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 
 async function create (request, h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
@@ -28,10 +29,15 @@ async function create (request, h) {
   }
 }
 
-async function review (_request, h) {
+async function review (request, h) {
+  const { id } = request.params
+
+  const pageData = await ReviewBillRunService.go(id)
+
   return h.view('bill-runs/review.njk', {
-    pageTitle: 'Review Two Part Tariff SROC',
-    activeNavBar: 'bill-runs'
+    pageTitle: 'Review licences',
+    activeNavBar: 'bill-runs',
+    ...pageData
   })
 }
 

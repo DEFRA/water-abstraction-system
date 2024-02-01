@@ -1,6 +1,7 @@
 'use strict'
 
 const billRunTypes = [
+  'annual',
   'supplementary',
   'two_part_tariff'
 ]

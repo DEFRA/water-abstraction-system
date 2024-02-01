@@ -35,7 +35,7 @@ async function _fetchTableNames (schemaName) {
         AND table_type = 'BASE TABLE';
     `
 
-  return await db.raw(query)
+  return db.raw(query)
 }
 
 function _pluckTableNames (tableData) {

@@ -5,6 +5,7 @@
 
 const AllocateReturnsToChargeElementService = require('./allocate-returns-to-charge-element.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('./prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
@@ -26,7 +27,7 @@ const PersistAllocatedLicenceToResultsService = require('./persist-allocated-lic
  * @returns {Array} - An array of processed licences associated with the bill run
  */
 async function go (billRun, billingPeriods) {
-  const startTime = process.hrtime.bigint()
+  const startTime = currentTimeInNanoseconds()
 
   const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0])
 
@@ -34,17 +35,9 @@ async function go (billRun, billingPeriods) {
     await _process(licences, billingPeriods, billRun)
   }
 
-  _calculateAndLogTime(startTime)
+  calculateAndLogTimeTaken(startTime, 'Two part tariff matching complete', { billRunId: billRun.id })
 
   return licences
-}
-
-function _calculateAndLogTime (startTime) {
-  const endTime = process.hrtime.bigint()
-  const timeTakenNs = endTime - startTime
-  const timeTakenMs = timeTakenNs / 1000000n
-
-  global.GlobalNotifier.omg('Two part tariff matching complete', { timeTakenMs })
 }
 
 async function _process (licences, billingPeriods, billRun) {
@@ -71,7 +64,7 @@ async function _process (licences, billingPeriods, billRun) {
       })
     })
 
-    await PersistAllocatedLicenceToResultsService.go(billRun.billingBatchId, licence)
+    await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
   }
 }
 
