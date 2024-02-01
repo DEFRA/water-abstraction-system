@@ -20,6 +20,7 @@ async function _deleteAllTestData () {
   ALTER TABLE water.billing_transactions DISABLE TRIGGER ALL;
   ALTER TABLE water.billing_volumes DISABLE TRIGGER ALL;
   ALTER TABLE water.charge_elements DISABLE TRIGGER ALL;
+  ALTER TABLE water.charge_purposes DISABLE TRIGGER ALL;
   ALTER TABLE water.charge_versions DISABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements DISABLE TRIGGER ALL;
@@ -118,6 +119,18 @@ async function _deleteAllTestData () {
 
   DELETE
   FROM
+      "water"."charge_purposes" AS "cp"
+      USING "water"."charge_elements" AS "ce",
+      "water"."charge_versions" AS "cv",
+    "water"."licences" AS "l"
+  WHERE
+    "l"."is_test" = TRUE
+    AND "cp"."charge_element_id" = "ce"."charge_element_id"
+    AND "ce"."charge_version_id" = "cv"."charge_version_id"
+    AND "cv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
     "water"."charge_elements" AS "ce"
       USING "water"."charge_versions" AS "cv",
     "water"."licences" AS "l"
@@ -133,6 +146,24 @@ async function _deleteAllTestData () {
   WHERE
     "l"."is_test" = TRUE
     AND "cv"."licence_id" = "l"."licence_id";
+
+  DELETE
+  FROM
+    "water"."charge_purposes"
+  WHERE
+    "is_test" = TRUE;
+
+  DELETE
+  FROM
+    "water"."charge_elements"
+  WHERE
+    "is_test" = TRUE;
+
+  DELETE
+  FROM
+    "water"."charge_versions"
+  WHERE
+    "is_test" = TRUE;
 
   DELETE
   FROM
@@ -259,6 +290,7 @@ async function _deleteAllTestData () {
   ALTER TABLE water.billing_transactions ENABLE TRIGGER ALL;
   ALTER TABLE water.billing_volumes ENABLE TRIGGER ALL;
   ALTER TABLE water.charge_elements ENABLE TRIGGER ALL;
+  ALTER TABLE water.charge_purposes ENABLE TRIGGER ALL;
   ALTER TABLE water.charge_versions ENABLE TRIGGER ALL;
   ALTER TABLE water.charge_version_workflows ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_agreements ENABLE TRIGGER ALL;

@@ -119,6 +119,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   await LegacyRequestLib.post('water', `billing/batches/${billRun.id}/refresh`)
 }
 
+// TODO: only called once so probably not needed any more
 function _logError (billRun, error) {
   global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
 }
