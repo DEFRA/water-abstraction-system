@@ -4,25 +4,16 @@
  * @module LicenceReviewBillRunService
  */
 
-const FetchLicenceReviewReturnsService = require('./fetch-licence-review-returns.service.js')
+const FetchLicenceReviewDataService = require('./fetch-licence-review-data.service.js')
 const LicenceReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-tariff/licence-review-bill-run.presenter.js')
+const PrepareLicenceReturnsService = require('../two-part-tariff/prepare-licence-returns.service.js')
 
-async function go (billRunId, licenceId) {
-  const { returnLogs, licence } = await FetchLicenceReviewReturnsService.go(billRunId, licenceId)
+async function go (billRunId, licenceId, status) {
+  const { returnLogs, licence, billRun } = await FetchLicenceReviewDataService.go(billRunId, licenceId)
 
-  const preparedReturns = await LicenceReviewBillRunPresenter.go(returnLogs)
+  const { matchedReturns, unmatchedReturns, chargePeriods } = await PrepareLicenceReturnsService.go(returnLogs)
 
-  const pageData = {
-    licenceRef: licence.licenceRef,
-    billRunId,
-    status: 'review',
-    licenceId,
-    region: 'Anglian',
-    billRunType: 'two-part tariff',
-    chargePeriodDate: '1 April 2022 to 31 March 2023'
-  }
-
-  pageData.returns = preparedReturns
+  const pageData = await LicenceReviewBillRunPresenter.go(matchedReturns, unmatchedReturns, chargePeriods, licence, billRun, status)
 
   return { pageData }
 }
