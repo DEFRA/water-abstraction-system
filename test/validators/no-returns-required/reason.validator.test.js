@@ -17,7 +17,7 @@ describe('Select Reason validator', () => {
   describe('when valid data is provided', () => {
     selectReasonFields.forEach(reason => {
       it(`confirms the data is valid (reason ${reason})`, () => {
-        const result = SelectReasonValidator.go({ reasonNewRequirements: reason })
+        const result = SelectReasonValidator.go({ selectReason: reason })
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -28,7 +28,7 @@ describe('Select Reason validator', () => {
   describe('when valid data is provided', () => {
     describe("because no 'reason' is given", () => {
       it('fails validation', () => {
-        const result = SelectReasonValidator.go({ reasonNewRequirements: '' })
+        const result = SelectReasonValidator.go({ selectReason: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
