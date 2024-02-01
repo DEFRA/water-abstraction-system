@@ -20,7 +20,7 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} id - The UUID for return requirement setup session record
  * @param {Object} [error] - A Joi validation error if an issue was found with the submitted form data
  *
- * @returns {Object} page data needed by the view template
+ * @returns {Promise<Object>} page data needed by the view template
  */
 async function go (sessionId, error = null) {
   const session = await SessionModel.query().findById(sessionId)
