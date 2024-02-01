@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Process the Return Logs for a given two-part tariff bill run for the given billing periods
+ * Processes the licences for a two-part tariff bill run for the given billing periods
  * @module ProcessTwoPartTariffReturnsService
  */
 
@@ -34,7 +34,7 @@ async function go (billRun, billingPeriods) {
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_tariff' })
   } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
+    await HandleErroredBillRunService.go(billRunId)
     _logError(billRun, error)
   }
 }
