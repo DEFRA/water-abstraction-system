@@ -7,6 +7,8 @@
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
+const SelectReasonService = require('../services/return-requirements/reason.service.js')
+const SelectReasonValidator = require('../validators/return-requirements/reason.validator.js')
 const SessionModel = require('../models/session.model.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
@@ -130,12 +132,10 @@ async function purpose (request, h) {
 async function reason (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await SelectReasonService.go(sessionId)
 
   return h.view('return-requirements/reason.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the reason for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -251,6 +251,13 @@ async function submitPurpose (request, h) {
 
 async function submitReason (request, h) {
   const { sessionId } = request.params
+
+  const validation = SelectReasonValidator.go(request.payload)
+
+  if (validation.error) {
+    const pageData = await SelectReasonService.go(sessionId, validation.error)
+    return h.view('return-requirements/reason.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/setup`)
 }
