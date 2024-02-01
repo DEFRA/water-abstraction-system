@@ -46,7 +46,6 @@ const selectReasonFields = [
   'new_special_agreement',
   'succession_or_transfer_of_licence',
   'succession_to_remainder_licence_or_licence_apportionment'
-
 ]
 
 module.exports = {

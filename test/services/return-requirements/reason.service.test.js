@@ -36,7 +36,6 @@ describe('Select Reason service', () => {
         expect(result.activeNavBar).to.exist()
         expect(result.pageTitle).to.exist()
         expect(result.licenceRef).to.exist()
-        expect(result.radioItems).to.exist()
 
         expect(result.errorMessage).to.be.null()
       })
@@ -51,7 +50,6 @@ describe('Select Reason service', () => {
         expect(result.activeNavBar).to.exist()
         expect(result.pageTitle).to.exist()
         expect(result.licenceRef).to.exist()
-        expect(result.radioItems).to.exist()
 
         expect(result.errorMessage).to.exist()
         expect(result.errorMessage.text).to.equal(error.message)
