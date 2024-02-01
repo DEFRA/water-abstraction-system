@@ -1,22 +1,23 @@
 'use strict'
 
 /**
- * Process a given two-part tariff bill run for the given billing periods
- * @module ProcessBillRunService
+ * Process the Return Logs for a given two-part tariff bill run for the given billing periods
+ * @module ProcessTwoPartTariffReturnsService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const LegacyRequestLib = require('../../../lib/legacy-request.lib.js')
 const MatchAndAllocateService = require('./match-and-allocate.service.js')
 
 /**
- * Process a given bill run for the given billing periods. In this case, "process" means that we create the
- * required bills and transactions for it in both this service and the Charging Module.
+ * Matches and allocates licences to returns for a two-part tariff bill run for the given billing periods. The results
+ * of this matching process are then persisted to the database ready for the results to be reviewed. The bill run status
+ * is then updated based on whether any licences were matched, or if the process has errored.
  *
  * @param {module:BillRunModel} billRun
- * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`
+ * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`. For 2PT
+ * this will only ever contain a single period
  */
 async function go (billRun, billingPeriods) {
   const { id: billRunId } = billRun
@@ -29,7 +30,7 @@ async function go (billRun, billingPeriods) {
     // `isPopulated` will be set to true if `MatchAndAllocateService` matches at least one licence
     const isPopulated = await MatchAndAllocateService.go(billRun, billingPeriods)
 
-    await _finaliseBillRun(billRunId, isPopulated)
+    await _setBillRunStatus(billRunId, isPopulated)
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_tariff' })
   } catch (error) {
@@ -38,12 +39,7 @@ async function go (billRun, billingPeriods) {
   }
 }
 
-/**
- * Finalises the bill run by unflagging all unbilled licences, requesting the Charging Module run its generate
- * process, and refreshes the bill run locally. However if there were no resulting bill licences then we simply
- * unflag the unbilled licences and mark the bill run with `empty` status
- */
-async function _finaliseBillRun (billRunId, isPopulated) {
+async function _setBillRunStatus (billRunId, isPopulated) {
   // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
   if (!isPopulated) {
@@ -51,8 +47,8 @@ async function _finaliseBillRun (billRunId, isPopulated) {
     return
   }
 
+  // If licences are successfully matched to returns then the bill run status is set to 'review'
   await _updateStatus(billRunId, 'review')
-  await LegacyRequestLib.post('water', `billing/batches/${billRunId}/refresh`)
 }
 
 function _logError (billRun, error) {

@@ -5,7 +5,6 @@
 
 const AllocateReturnsToChargeElementService = require('./allocate-returns-to-charge-element.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('./prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
@@ -27,15 +26,11 @@ const PersistAllocatedLicenceToResultsService = require('./persist-allocated-lic
  * @returns {Array} - An array of processed licences associated with the bill run
  */
 async function go (billRun, billingPeriods) {
-  const startTime = currentTimeInNanoseconds()
-
   const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0])
 
   if (licences.length > 0) {
     await _process(licences, billingPeriods, billRun)
   }
-
-  calculateAndLogTimeTaken(startTime, 'Two part tariff matching complete', { billRunId: billRun.id })
 
   return licences.length > 0
 }
