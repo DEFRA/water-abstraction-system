@@ -23,7 +23,7 @@ const PersistAllocatedLicenceToResultsService = require('./persist-allocated-lic
  * @param {module:BillRunModel} billRun - The bill run object containing billing information
  * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
  *
- * @returns {Array} - An array of processed licences associated with the bill run
+ * @returns {Boolean} - True if there are any licences matched to returns, false otherwise
  */
 async function go (billRun, billingPeriods) {
   const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0])
