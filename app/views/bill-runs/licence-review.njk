@@ -10,7 +10,7 @@
   {{
     govukBackLink({
       text: 'Go back to review licences',
-      href: '/system/bill-runs/' + id + '/review'
+      href: '/system/bill-runs/' + billRunId + '/review'
     })
   }}
 {% endblock %}
@@ -19,7 +19,7 @@
 {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <span class="govuk-caption-l">{{region}} {{billRunType}} bill run</span>
+      <span class="govuk-caption-l">{{region}} two-part tariff bill run</span>
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
 
       {# Status badge #}
@@ -55,16 +55,18 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
+      {% for chargePeriodDate in chargePeriodDates %}
         <ul class="govuk-list">
-        <li>
-          <a class="govuk-link" href="#">{{chargePeriodDate}}</a>
-        </li>
-      </ul>
+          <li>
+            <a class="govuk-link" href="#">{{chargePeriodDate}}</a>
+          </li>
+        </ul>
+      {% endfor %}
     </div>
   </div>
   <div class="divider govuk-!-margin-bottom-6"></div>
 
-{# Returns #}
+{# Matched Returns #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Returns</h2>
@@ -72,12 +74,14 @@
   </div>
 
       {% set tableRows = [] %}
-        {% for return in returns %}
+        {% for return in matchedReturns %}
 
-          {% if return.status == 'completed' %}
-            {% set colour = "govuk-tag--green" %}
+          {% if return.status == 'overdue' or return.status == 'query' %}
+            {% set colour = "govuk-tag--red"%}
+          {% elif return.status == 'void' %}
+            {% set colour = "govuk-tag--grey" %}
           {% else %}
-            {% set colour = "govuk-tag--blue" %}
+            {% set colour = "govuk-tag--green" %}
           {% endif %}
 
           {% set statusTag %}
@@ -95,7 +99,7 @@
           {html: action | safe + '<br>' + return.dates, classes: 'govuk-body-s' },
           {html: return.purpose + '<br>' + return.description, classes: 'govuk-body-s' },
           {html: statusTag, classes: 'govuk-body-s' },
-          {html: return.total + '<br>' + return.allocated, classes: 'govuk-body-s' }
+          {html: return.total + '<br>' + return.allocated, classes: "govuk-body-s govuk-!-text-align-right" }
           ]
         %}
 
@@ -125,6 +129,65 @@
         ],
         rows: tableRows
       }) }}
+
+      {# Unmatched Returns #}
+  {% if unmatchedReturns.length > 0 %}
+      {% set tableRows = [] %}
+        {% for return in unmatchedReturns %}
+
+          {% if return.status == 'overdue' or return.status == 'query' %}
+            {% set colour = "govuk-tag--red"%}
+          {% elif return.status == 'void' %}
+            {% set colour = "govuk-tag--grey" %}
+          {% else %}
+            {% set colour = "govuk-tag--green" %}
+          {% endif %}
+
+          {% set statusTag %}
+            {{govukTag({
+              text: return.status,
+              classes: colour + ' govuk-!-font-size-14'
+            })}}
+          {% endset %}
+
+        {% set action %}
+        <a class="govuk-link" href="/">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        {% endset %}
+
+        {% set tableRow = [
+          {html: action | safe + '<br>' + return.dates, classes: 'govuk-body-s' },
+          {html: return.purpose + '<br>' + return.description, classes: 'govuk-body-s' },
+          {html: statusTag, classes: 'govuk-body-s' },
+          {html: return.total, classes: "govuk-body-s govuk-!-text-align-right" }
+          ]
+        %}
+
+        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+        {% endfor %}
+
+      {# Table displaying details of the matched returns #}
+      {{ govukTable({
+        caption: "Unmatched returns",
+        captionClasses: "govuk-table__caption--m",
+        firstCellIsHeader: false,
+        head: [
+          {
+            text: 'Return reference and dates'
+          },
+          {
+            text: 'Purpose and description'
+          },
+          {
+            text: 'Status'
+          },
+          {
+            text: 'Return totals',
+            format: 'numeric'
+          }
+        ],
+        rows: tableRows
+      }) }}
+  {% endif %}
 
   <div class="divider govuk-!-margin-bottom-6"></div>
 {% endblock %}
