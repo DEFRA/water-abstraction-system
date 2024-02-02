@@ -6,13 +6,14 @@
  */
 
 const CrmSchemaService = require('./crm-schema.service.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../../app/lib/general.lib.js')
 const IdmSchemaService = require('./idm-schema.service.js')
 const PermitSchemaService = require('./permit-schema.service.js')
 const ReturnsSchemaService = require('./returns-schema.service.js')
 const WaterSchemaService = require('./water-schema.service.js')
 
 async function go () {
-  const startTime = process.hrtime.bigint()
+  const startTime = currentTimeInNanoseconds()
 
   await Promise.all([
     CrmSchemaService.go(),
@@ -22,15 +23,7 @@ async function go () {
     WaterSchemaService.go()
   ])
 
-  _calculateAndLogTime(startTime)
-}
-
-function _calculateAndLogTime (startTime) {
-  const endTime = process.hrtime.bigint()
-  const timeTakenNs = endTime - startTime
-  const timeTakenMs = timeTakenNs / 1000000n
-
-  global.GlobalNotifier.omg('Tear down complete', { timeTakenMs })
+  calculateAndLogTimeTaken(startTime, 'Tear down complete')
 }
 
 module.exports = {
