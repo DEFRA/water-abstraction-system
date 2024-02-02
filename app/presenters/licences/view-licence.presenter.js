@@ -58,12 +58,13 @@ function _generateLicenceHolder (licenceHolder) {
 }
 
 function _generatePurposes (licenceVersions) {
-  if (!licenceVersions || !licenceVersions[0] || !licenceVersions[0].purposes ||
-      licenceVersions[0].purposes.length === 0) {
+  if (!licenceVersions || !licenceVersions[0] || licenceVersions[0]?.purposes.length === 0) {
     return null
   }
 
-  const uniquePurposes = [...new Set(licenceVersions[0].purposes.map(item => item.description))]
+  const uniquePurposes = [...new Set(licenceVersions[0].purposes.map((item) => {
+    return item.description
+  }))]
 
   return {
     caption: uniquePurposes.length === 1 ? 'Purpose' : 'Purposes',
