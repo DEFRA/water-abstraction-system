@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../support/helpers/database.helper.js')
+const LicenceHelper = require('../support/helpers/licence.helper.js')
+const LicenceModel = require('../../app/models/licence.model.js')
 const ReviewChargeElementResultHelper = require('../support/helpers/review-charge-element-result.helper.js')
 const ReviewChargeElementResultModel = require('../../app/models/review-charge-element-result.model.js')
 const ReviewResultHelper = require('../support/helpers/review-result.helper.js')
@@ -93,6 +95,35 @@ describe('Review Result model', () => {
 
         expect(result.reviewReturnResults).to.be.instanceOf(ReviewReturnResultModel)
         expect(result.reviewReturnResults).to.equal(testReviewReturnResult)
+      })
+    })
+
+    describe('when linking to licence', () => {
+      let testLicence
+
+      beforeEach(async () => {
+        testLicence = await LicenceHelper.add()
+
+        testRecord = await ReviewResultHelper.add({ licenceId: testLicence.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReviewResultModel.query()
+          .innerJoinRelated('licence')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence', async () => {
+        const result = await ReviewResultModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licence')
+
+        expect(result).to.be.instanceOf(ReviewResultModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licence).to.be.instanceOf(LicenceModel)
+        expect(result.licence).to.equal(testLicence)
       })
     })
   })
