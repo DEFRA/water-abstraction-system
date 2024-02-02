@@ -61,10 +61,11 @@ function _generatePurposes (licenceVersions) {
   if (!licenceVersions || licenceVersions.length === 0 || licenceVersions[0]?.purposes.length === 0) {
     return null
   }
-
-  const uniquePurposes = [...new Set(licenceVersions[0].purposes.map((item) => {
+  const allPurposeDescriptions = licenceVersions[0].purposes.map((item) => {
     return item.description
-  }))]
+  })
+
+  const uniquePurposes = [...new Set(allPurposeDescriptions)]
 
   return {
     caption: uniquePurposes.length === 1 ? 'Purpose' : 'Purposes',

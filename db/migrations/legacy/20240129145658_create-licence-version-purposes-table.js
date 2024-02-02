@@ -29,9 +29,9 @@ exports.up = function (knex) {
       table.boolean('is_test')
 
       // Legacy timestamps
-      // NOTE: They are not automatically set and there are large numbers of records where these fields are null!
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      // NOTE: They are not automatically set
+      table.timestamp('created_at').notNullable()
+      table.timestamp('updated_at').notNullable()
 
       // Constraints
       table.unique(['external_id'], { useConstraint: true })

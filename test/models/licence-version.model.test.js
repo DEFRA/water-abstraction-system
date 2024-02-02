@@ -12,6 +12,10 @@ const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
+const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
+const PurposeModel = require('../../app/models/purpose.model.js')
 
 // Thing under test
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
@@ -62,6 +66,40 @@ describe('Licence Version model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to licence version purposes', () => {
+      let purpose
+
+      beforeEach(async () => {
+        testRecord = await LicenceVersionHelper.add()
+        purpose = await PurposeHelper.add()
+
+        const { id } = testRecord
+        await LicenceVersionPurposesHelper.add({
+          licenceVersionId: id,
+          purposeId: purpose.id
+        })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionModel.query()
+          .innerJoinRelated('purposes')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version', async () => {
+        const result = await LicenceVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('purposes')
+
+        expect(result).to.be.instanceOf(LicenceVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.purposes[0]).to.be.an.instanceOf(PurposeModel)
+        expect(result.purposes).to.equal([purpose])
       })
     })
   })
