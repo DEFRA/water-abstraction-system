@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
+const LicenceReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/licence-review-bill-run.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
@@ -182,13 +183,13 @@ describe('Bill Runs controller', () => {
     })
   })
 
-  describe('GET /bill-runs/{id}/licence-review', () => {
+  describe('GET /bill-runs/{id}/licence-review/{licenceId}/{status}', () => {
     let options
 
     beforeEach(async () => {
       options = {
         method: 'GET',
-        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/licence-review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/licence-review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/review',
         auth: {
           strategy: 'session',
           credentials: { scope: ['billing'] }
@@ -198,13 +199,16 @@ describe('Bill Runs controller', () => {
 
     describe('when a request is valid', () => {
       beforeEach(() => {
-        Sinon.stub(ReviewBillRunService, 'go').resolves(_licenceReviewData)
+        Sinon.stub(LicenceReviewBillRunService, 'go').resolves(_licenceReviewData())
       })
 
       it('returns a 200 response', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('1/11/10/*S/0084')
+        expect(response.payload).to.contain('two-part tariff')
+        expect(response.payload).to.contain('Test Road. Points 1 and 2.')
       })
     })
   })
@@ -212,7 +216,32 @@ describe('Bill Runs controller', () => {
 
 function _licenceReviewData () {
   return {
-
+    licenceRef: '1/11/10/*S/0084',
+    billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
+    status: 'review',
+    region: 'Southern (Test replica)',
+    matchedReturns: [
+      {
+        reference: '11142960',
+        dates: '1 November 2021 to 31 October 2022',
+        status: 'completed',
+        description: 'Test Road. Points 1 and 2.',
+        purpose: 'Spray Irrigation - Anti Frost',
+        total: '0 ML / 0 ML',
+        allocated: 'Fully allocated'
+      },
+      {
+        reference: '11142958',
+        dates: '1 November 2022 to 31 October 2023',
+        status: 'void',
+        description: 'Test Road. Points 1, 3 and 5.',
+        purpose: 'Spray Irrigation - Direct',
+        total: '/',
+        allocated: 'Not processed'
+      }
+    ],
+    chargePeriodDates: ['1 April 2022 to 31 March 2023'],
+    unmatchedReturns: []
   }
 }
 
