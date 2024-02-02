@@ -58,7 +58,7 @@ function _generateLicenceHolder (licenceHolder) {
 }
 
 function _generatePurposes (licenceVersions) {
-  if (!licenceVersions || !licenceVersions.length > 0 || licenceVersions[0]?.purposes.length === 0) {
+  if (!licenceVersions || licenceVersions.length > 0 || licenceVersions[0]?.purposes.length === 0) {
     return null
   }
 
