@@ -33,7 +33,6 @@ async function go (sessionId, payload) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    journey: session.data.journey,
     pageTitle: 'Why are no returns required?',
     ...formattedData
   }
