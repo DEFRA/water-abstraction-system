@@ -22,7 +22,7 @@
       errorList: [
         {
           text: error.text,
-          href: "#reasonNewRequirements-error"
+          href: "#no-returns-required-error"
         }
         ]
       }) }}
@@ -30,7 +30,7 @@
 
   <form method="post" class="form">
     {{ govukRadios({
-      name: "reasonNewRequirements",
+      name: "no-returns-required",
       errorMessage: error,
       fieldset: {
         legend: {

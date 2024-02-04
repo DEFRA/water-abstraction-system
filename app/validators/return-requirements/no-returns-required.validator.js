@@ -9,7 +9,7 @@ const Joi = require('joi')
 
 function go (data) {
   const schema = Joi.object({
-    reasonNewRequirements: Joi.string()
+    'no-returns-required': Joi.string()
       .required()
       .messages({
         'any.required': 'Select the reason for the return requirement',

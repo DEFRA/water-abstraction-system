@@ -17,7 +17,7 @@ describe('No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     reasonNewRequirementsFields.forEach(reason => {
       it(`confirms the data is valid (reason ${reason})`, () => {
-        const result = NoReturnsRequiredValidator.go({ reasonNewRequirements: reason })
+        const result = NoReturnsRequiredValidator.go({ 'no-returns-required': reason })
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -28,7 +28,7 @@ describe('No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     describe("because no 'reason' is given", () => {
       it('fails validation', () => {
-        const result = NoReturnsRequiredValidator.go({ reasonNewRequirements: '' })
+        const result = NoReturnsRequiredValidator.go({ 'no-returns-required': '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
