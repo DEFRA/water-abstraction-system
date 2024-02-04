@@ -7,15 +7,14 @@ const Code = require('@hapi/code')
 const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const { reasonNewRequirementsFields } = require('../../../app/lib/static-lookups.lib.js')
-
 // Thing under test
 const NoReturnsRequiredValidator = require('../../../app/validators/return-requirements/no-returns-required.validator.js')
 
 describe('No Returns Required validator', () => {
+  const values = ['bajor', 'risa', 'ferenginar']
+
   describe('when valid data is provided', () => {
-    reasonNewRequirementsFields.forEach(reason => {
+    values.forEach(reason => {
       it(`confirms the data is valid (reason ${reason})`, () => {
         const result = NoReturnsRequiredValidator.go({ 'no-returns-required': reason })
 
