@@ -68,7 +68,7 @@ describe('Licence Version model', () => {
       })
     })
 
-    describe('when linking to licence version purposes', () => {
+    describe('when linking through licence version purposes to purposes', () => {
       let purpose
 
       beforeEach(async () => {
@@ -89,7 +89,7 @@ describe('Licence Version model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the licence version', async () => {
+      it('can eager load the purposes', async () => {
         const result = await LicenceVersionModel.query()
           .findById(testRecord.id)
           .withGraphFetched('purposes')
