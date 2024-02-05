@@ -5,26 +5,13 @@
  * @module SelectReasonPresenter
  */
 
-function go (session, error = null) {
+function go (session) {
   const data = {
     id: session.id,
-    errorMessage: _error(error),
     licenceRef: session.data.licence.licenceRef
   }
 
   return data
-}
-
-function _error (error) {
-  if (!error) {
-    return null
-  }
-
-  const errorMessage = {
-    text: error.message
-  }
-
-  return errorMessage
 }
 
 module.exports = {
