@@ -6,9 +6,9 @@
  */
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
-const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const SessionModel = require('../models/session.model.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
+const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
@@ -227,10 +227,10 @@ async function submitFrequencyReported (request, h) {
 
 async function submitNoReturnsRequired (request, h) {
   const { sessionId } = request.params
-  const validation = NoReturnsRequiredValidator.go(request.payload)
 
-  if (validation.error) {
-    const pageData = await NoReturnsRequiredService.go(sessionId, validation.error)
+  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, request.payload)
+
+  if (pageData.error) {
     return h.view('return-requirements/no-returns-required.njk', pageData)
   }
 
