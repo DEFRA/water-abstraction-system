@@ -43,8 +43,8 @@ async function _fetchReturnLogs (billRunId, licenceId) {
   return ReviewResultModel.query()
     .where({ billRunId, licenceId })
     .whereNotNull('reviewReturnResultId')
-    .distinct('reviewReturnResultId')
     .select([
+      'reviewReturnResultId',
       'reviewChargeElementResultId',
       'chargeVersionId',
       'chargePeriodStartDate',
