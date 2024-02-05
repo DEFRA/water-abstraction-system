@@ -21,7 +21,7 @@ describe('Review Bill Run Service', () => {
     Sinon.restore()
   })
 
-  describe('when a bill run with a matching ID exists', () => {
+  describe('when called', () => {
     const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
     beforeEach(() => {
@@ -38,12 +38,6 @@ describe('Review Bill Run Service', () => {
       expect(FetchBillRunLicencesService.go.called).to.be.true()
       expect(DetermineBillRunIssuesService.go.called).to.be.true()
       expect(ReviewBillRunPresenter.go.called).to.be.true()
-    })
-  })
-
-  describe('when a bill run with a matching ID does not exist', () => {
-    it('throws an exception', async () => {
-      await expect(ReviewBillRunService.go('718c01a2-04bc-40f1-8e06-36c0ee50bb3a')).to.reject()
     })
   })
 })

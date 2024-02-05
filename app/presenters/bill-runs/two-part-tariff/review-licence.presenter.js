@@ -2,7 +2,7 @@
 
 /**
  * Formats the two part tariff review data ready for presenting in the review page
- * @module LicenceReviewBillRunPresenter
+ * @module ReviewLicencePresenter
  */
 
 const { formatLongDate } = require('../../base.presenter.js')
@@ -29,7 +29,6 @@ async function go (matchedReturns, unmatchedReturns, chargePeriods, licence, bil
 function _formatLicenceChargePeriods (chargePeriods) {
   const formattedChargePeriods = []
 
-  console.log('Charge Periods :', chargePeriods)
   for (const chargePeriod of chargePeriods) {
     if (chargePeriod.startDate !== null) {
       const formattedDates = _formatChargePeriods(chargePeriod)

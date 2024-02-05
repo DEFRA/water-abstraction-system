@@ -9,12 +9,12 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicenceReviewDataService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-licence-review-data.service.js')
-const LicenceReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/licence-review-bill-run.presenter.js')
-const PrepareLicenceReturnsService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-licence-returns.service.js')
+const FetchLicenceReviewDataService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
+const LicenceReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
+const PrepareLicenceReturnsService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-review-licence-results.service.js')
 
 // Thing under test
-const LicenceReviewBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/licence-review-bill-run.service.js')
+const ReviewLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 
 describe('Licence Review Bill Run Service', () => {
   afterEach(() => {
@@ -33,7 +33,7 @@ describe('Licence Review Bill Run Service', () => {
     })
 
     it('will fetch the licence charge data for the licence review page and return it once formatted by the presenter', async () => {
-      const result = await LicenceReviewBillRunService.go(billRunId, licenceId, status)
+      const result = await ReviewLicenceService.go(billRunId, licenceId, status)
 
       expect(result).to.equal('page data')
     })
@@ -41,7 +41,7 @@ describe('Licence Review Bill Run Service', () => {
 
   describe('when a licence with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(LicenceReviewBillRunService.go('718c01a2-04bc-40f1-8e06-36c0ee50bb3a')).to.reject()
+      await expect(ReviewLicenceService.go('718c01a2-04bc-40f1-8e06-36c0ee50bb3a')).to.reject()
     })
   })
 })

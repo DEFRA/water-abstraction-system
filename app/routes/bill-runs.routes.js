@@ -47,8 +47,8 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/licence-review/{licenceId}/{status}',
-    handler: BillRunsController.licenceReview,
+    path: '/bill-runs/{id}/review/{licenceId}',
+    handler: BillRunsController.reviewLicence,
     options: {
       auth: {
         access: {

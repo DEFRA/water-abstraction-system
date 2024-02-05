@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module FetchLicenceReviewDataService
+ * @module FetchReviewLicenceResultsService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')

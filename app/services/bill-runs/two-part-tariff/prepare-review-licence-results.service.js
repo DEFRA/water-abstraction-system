@@ -2,7 +2,7 @@
 
 /**
  * Formats the two part tariff review data ready for presenting in the review page
- * @module PrepareLicenceReturnsService
+ * @module PrepareReviewLicenceResultsService
  */
 
 async function go (returnLogs) {

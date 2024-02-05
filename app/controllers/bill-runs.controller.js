@@ -11,7 +11,7 @@ const CreateBillRunValidator = require('../validators/create-bill-run.validator.
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
-const LicenceReviewBillRunService = require('../services/bill-runs/two-part-tariff/licence-review-bill-run.service.js')
+const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 
 async function create (request, h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
@@ -30,12 +30,12 @@ async function create (request, h) {
   }
 }
 
-async function licenceReview (request, h) {
+async function reviewLicence (request, h) {
   const { id: billRunId, licenceId, status } = request.params
 
-  const pageData = await LicenceReviewBillRunService.go(billRunId, licenceId, status)
+  const pageData = await ReviewLicenceService.go(billRunId, licenceId, status)
 
-  return h.view('bill-runs/licence-review.njk', {
+  return h.view('bill-runs/review-licence.njk', {
     pageTitle: `Licence ${pageData.licenceRef}`,
     activeNavBar: 'bill-runs',
     ...pageData
@@ -83,5 +83,5 @@ module.exports = {
   create,
   review,
   view,
-  licenceReview
+  reviewLicence
 }

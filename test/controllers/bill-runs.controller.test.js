@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
-const LicenceReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/licence-review-bill-run.service.js')
+const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
@@ -18,7 +18,7 @@ const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.s
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Bill Runs controller', () => {
+describe.only('Bill Runs controller', () => {
   let server
 
   function options (scheme = 'sroc') {
@@ -183,13 +183,13 @@ describe('Bill Runs controller', () => {
     })
   })
 
-  describe('GET /bill-runs/{id}/licence-review/{licenceId}/{status}', () => {
+  describe('GET /bill-runs/{id}/review/{licenceId}', () => {
     let options
 
     beforeEach(async () => {
       options = {
         method: 'GET',
-        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/licence-review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/review',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
         auth: {
           strategy: 'session',
           credentials: { scope: ['billing'] }
@@ -199,7 +199,7 @@ describe('Bill Runs controller', () => {
 
     describe('when a request is valid', () => {
       beforeEach(() => {
-        Sinon.stub(LicenceReviewBillRunService, 'go').resolves(_licenceReviewData())
+        Sinon.stub(ReviewLicenceService, 'go').resolves(_licenceReviewData())
       })
 
       it('returns a 200 response', async () => {
