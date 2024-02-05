@@ -7,10 +7,10 @@
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
-const SelectReasonValidator = require('../validators/return-requirements/reason.validator.js')
 const SessionModel = require('../models/session.model.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
+const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
@@ -252,10 +252,9 @@ async function submitPurpose (request, h) {
 async function submitReason (request, h) {
   const { sessionId } = request.params
 
-  const validation = SelectReasonValidator.go(request.payload)
+  const pageData = await SubmitReasonService.go(sessionId, request.payload)
 
-  if (validation.error) {
-    const pageData = await SelectReasonService.go(sessionId, validation.error)
+  if (pageData.error) {
     return h.view('return-requirements/reason.njk', pageData)
   }
 
