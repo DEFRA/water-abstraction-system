@@ -15,7 +15,17 @@ const { formatLongDate } = require('../base.presenter.js')
  * @returns {Object} The data formatted for the view template
  */
 function go (licence) {
-  const { ends, expiredDate, id, licenceDocumentHeader, licenceHolder, licenceRef, region, startDate } = licence
+  const {
+    ends,
+    expiredDate,
+    id,
+    licenceDocumentHeader,
+    licenceHolder,
+    licenceRef,
+    licenceVersions,
+    region,
+    startDate
+  } = licence
 
   return {
     id,
@@ -24,6 +34,7 @@ function go (licence) {
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceRef,
     pageTitle: `Licence ${licenceRef}`,
+    purposes: _generatePurposes(licenceVersions),
     region: region.displayName,
     startDate: formatLongDate(startDate),
     warning: _generateWarningMessage(ends)
@@ -44,6 +55,22 @@ function _generateLicenceHolder (licenceHolder) {
   }
 
   return licenceHolder
+}
+
+function _generatePurposes (licenceVersions) {
+  if (!licenceVersions || licenceVersions.length === 0 || licenceVersions[0]?.purposes.length === 0) {
+    return null
+  }
+  const allPurposeDescriptions = licenceVersions[0].purposes.map((item) => {
+    return item.description
+  })
+
+  const uniquePurposes = [...new Set(allPurposeDescriptions)]
+
+  return {
+    caption: uniquePurposes.length === 1 ? 'Purpose' : 'Purposes',
+    data: uniquePurposes
+  }
 }
 
 function _generateWarningMessage (ends) {
