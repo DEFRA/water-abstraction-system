@@ -21,7 +21,7 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the start date page
+ * @returns {Promise<Object>} The page data for the no returns required page
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
