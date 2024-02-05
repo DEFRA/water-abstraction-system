@@ -4,36 +4,34 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/start-date"
+      href: '/system/return-requirements/' + id + '/start-date'
     })
   }}
 {% endblock %}
 
 {% block content %}
-  {% if errorMessage %}
+  {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: [
         {
-          text: errorMessage.text,
-          href: "#selectReason-error"
+          text: error.text,
+          href: "#reason-error"
         }
       ]
       }) }}
   {% endif %}
 
-  <form method="post">
-    {{ govukRadios({
-        idPrefix: "selectReason",
-        name: "selectReason",
-        errorMessage: errorMessage,
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukRadios({
+        name: "reason",
+        errorMessage: error,
         fieldset: {
           legend: {
             html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
@@ -43,65 +41,64 @@
         },
         items: [
           {
-            value: 'change_to_special_agreement',
             text: 'Change to special agreement',
+            value: 'change_to_special_agreement',
             checked: false
           },
           {
-            value: 'name_or_address_change',
             text: 'Licence holder name or address change',
+            value: 'name_or_address_change',
             checked: false
           },
           {
-            value: 'transfer_and_now_chargeable',
             text: 'Licence transferred and now chargeable',
+            value: 'transfer_and_now_chargeable',
             checked: false
           },
           {
-            value: 'extension_of_licence_validity',
             text: 'Limited extension of licence validity (LEV)',
+            value: 'extension_of_licence_validity',
             checked: false
           },
           {
-            value: 'major_change',
             text: 'Major change',
+            value: 'major_change',
             checked: false
           },
           {
-            value: 'minor_change',
             text: 'Minor change',
+            value: 'minor_change',
             checked: false
           },
           {
-            value: 'new_licence_in_part_succession_or_licence_apportionment',
             text: 'New licence in part succession or licence apportionment',
+            value: 'new_licence_in_part_succession_or_licence_apportionment',
             checked: false
           },
           {
-            value: 'new_licence',
             text: 'New licence',
+            value: 'new_licence',
             checked: false
           },
           {
-            value: 'new_special_agreement',
             text: 'New special agreement',
+            value: 'new_special_agreement',
             checked: false
           },
           {
-            value: 'succession_or_transfer_of_licence',
             text: 'Succession or transfer of licence',
+            value: 'succession_or_transfer_of_licence',
             checked: false
           },
           {
-            value: 'succession_to_remainder_licence_or_licence_apportionment',
             text: 'Succession to remainder licence or licence apportionment',
+            value: 'succession_to_remainder_licence_or_licence_apportionment',
             checked: false
           }
         ]
-        }) }}
+      }) }}
 
-    <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock %}
