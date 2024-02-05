@@ -2,7 +2,7 @@
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/reason` page
- * @module SelectReasonValidator
+ * @module ReasonValidator
  */
 
 const Joi = require('joi')
