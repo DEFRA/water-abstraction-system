@@ -55,6 +55,7 @@ async function _fetchLicence (id) {
         'id'
       ])
     })
+    .withGraphFetched('licenceVersions.[purposes]')
     .modify('licenceHolder')
 
   return result

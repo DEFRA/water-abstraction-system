@@ -37,6 +37,7 @@ describe('View Licence presenter', () => {
         licenceHolder: 'Unregistered licence',
         licenceRef: '01/123',
         pageTitle: 'Licence 01/123',
+        purposes: null,
         region: 'Narnia',
         startDate: '1 April 2019',
         warning: null
@@ -159,6 +160,77 @@ describe('View Licence presenter', () => {
           const result = ViewLicencePresenter.go(licence)
 
           expect(result.warning).to.equal('This licence was revoked on 1 April 2019')
+        })
+      })
+    })
+
+    describe("the 'purposes' property", () => {
+      describe('when there are no licenceVersions', () => {
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.purposes).to.equal(null)
+        })
+      })
+
+      describe('when the licenceVersions has one entry', () => {
+        beforeEach(() => {
+          licence.licenceVersions = [{
+            purposes: [{
+              description: 'Spray Irrigation - Storage'
+            }]
+          }]
+        })
+
+        it('returns an object with a caption and an array with one entry', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.purposes).to.equal({
+            caption: 'Purpose',
+            data: ['Spray Irrigation - Storage']
+          })
+        })
+      })
+
+      describe('when the licenceVersions has more than one entry of the same type', () => {
+        beforeEach(() => {
+          licence.licenceVersions = [{
+            purposes: [{
+              description: 'Spray Irrigation - Storage'
+            }, {
+              description: 'Spray Irrigation - Storage'
+            }]
+          }]
+        })
+
+        it('returns an object with a caption and an array with one entry', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.purposes).to.equal({
+            caption: 'Purpose',
+            data: ['Spray Irrigation - Storage']
+          })
+        })
+      })
+
+      describe('when the licenceVersions has more than one entry of different types', () => {
+        beforeEach(() => {
+          licence.licenceVersions = [{
+            purposes: [{
+              description: 'Spray Irrigation - Storage'
+            }, {
+              description: 'Make-Up Or Top Up Water'
+            }]
+          }]
+        })
+
+        it('returns an object with a caption and an array with two entries', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.purposes).to.equal({
+            caption: 'Purposes',
+            data: ['Spray Irrigation - Storage', 'Make-Up Or Top Up Water']
+          })
         })
       })
     })
