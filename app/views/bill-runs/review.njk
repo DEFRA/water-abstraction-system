@@ -114,6 +114,16 @@
     </section>
   {% endif %}
 
+  {# Cancel bill run button #}
+  <section class="govuk-!-margin-bottom-9">
+    <form method="post" action="review/cancel-bill-run" novalidate>
+      {{ govukButton({
+        text: "Cancel bill run",
+        classes: "govuk-button--secondary govuk-!-margin-bottom-0"
+      }) }}
+    </form>
+  </section>
+
   {# Generate the row data for the table #}
   {% set tableRows = [] %}
     {% if preparedLicences.length > 0 %}
