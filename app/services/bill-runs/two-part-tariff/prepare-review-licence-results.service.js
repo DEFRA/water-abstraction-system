@@ -1,27 +1,37 @@
 'use strict'
 
 /**
- * Formats the two part tariff review data ready for presenting in the review page
+ * Prepared the review return logs ready for presenting in the review page
  * @module PrepareReviewLicenceResultsService
  */
 
+/**
+ * Prepared the given review return logs, deduplicates them, and extracts matched and unmatched returns along with their
+ * corresponding charge periods for the licence being reviewed
+ *
+ * @param {module:ReviewReturnResultModel} returnLogs All the review return logs associated with the licence being reviewed
+ *
+ * @returns {Object[]} matched and unmatched return logs and the charge periods for that licence
+ */
 async function go (returnLogs) {
   const uniqueReturnLogs = _dedupeReturnLogs(returnLogs)
+
   const { matchedReturns, unmatchedReturns } = _splitReturns(uniqueReturnLogs)
+
   const chargePeriods = _fetchChargePeriods(returnLogs)
 
   return { matchedReturns, unmatchedReturns, chargePeriods }
 }
 
 function _dedupeReturnLogs (returnLogs) {
-  const uniqueIds = []
+  const uniqueReturnIds = new Set()
   const uniqueReturnLogs = []
 
   returnLogs.forEach(returnLog => {
     const id = returnLog.reviewReturnResultId
 
-    if (!uniqueIds.includes(id)) {
-      uniqueIds.push(id)
+    if (!uniqueReturnIds.has(id)) {
+      uniqueReturnIds.add(id)
       uniqueReturnLogs.push(returnLog)
     }
   })
@@ -29,15 +39,22 @@ function _dedupeReturnLogs (returnLogs) {
   return uniqueReturnLogs
 }
 
+// To generate a list of charge periods from the return logs, we need to eliminate duplicate charge versions and extract
+// unique charge periods based on their start and end dates.
 function _fetchChargePeriods (returnLogs) {
+  const uniqueChargeVersionIds = new Set()
   const chargePeriods = []
-  const chargeVersionIds = []
 
   for (const returnLog of returnLogs) {
     const id = returnLog.chargeVersionId
-    if (!chargeVersionIds.includes(id)) {
-      chargePeriods.push({ startDate: returnLog.chargePeriodStartDate, endDate: returnLog.chargePeriodEndDate })
-      chargeVersionIds.push(id)
+
+    if (!uniqueChargeVersionIds.has(id)) {
+      uniqueChargeVersionIds.add(id)
+
+      chargePeriods.push({
+        startDate: returnLog.chargePeriodStartDate,
+        endDate: returnLog.chargePeriodEndDate
+      })
     }
   }
 
@@ -45,16 +62,17 @@ function _fetchChargePeriods (returnLogs) {
 }
 
 function _splitReturns (returnLogs) {
-  const matchedReturns = []
-  const unmatchedReturns = []
+  // Filters the return logs to only return the ones where reviewChargeElementResultId exists (ie the return log
+  // matches to a charge element)
+  const matchedReturns = returnLogs.filter((returnLog) => {
+    return returnLog.reviewChargeElementResultId !== null
+  })
 
-  for (const returnLog of returnLogs) {
-    if (returnLog.reviewChargeElementResultId === null) {
-      unmatchedReturns.push(returnLog)
-    } else {
-      matchedReturns.push(returnLog)
-    }
-  }
+  // Filters the return logs to only return the ones where reviewChargeElementResultId is null (ie the return log
+  // does not match to a charge element)
+  const unmatchedReturns = returnLogs.filter((returnLog) => {
+    return returnLog.reviewChargeElementResultId === null
+  })
 
   return { matchedReturns, unmatchedReturns }
 }
