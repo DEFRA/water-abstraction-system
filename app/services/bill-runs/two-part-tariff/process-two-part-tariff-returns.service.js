@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Processes the licences for a two-part tariff bill run for the given billing periods
+ * Processes the two-part tariff match & allocate stage for the given bill run and billing period
  * @module ProcessTwoPartTariffReturnsService
  */
 
