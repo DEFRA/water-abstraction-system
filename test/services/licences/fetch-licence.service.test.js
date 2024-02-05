@@ -12,6 +12,8 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -39,8 +41,14 @@ describe('Fetch licence service', () => {
       await LicenceVersionHelper.add({
         licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
       })
-      await LicenceVersionHelper.add({
+      const licenceVersion = await LicenceVersionHelper.add({
         licenceId: licence.id, startDate: new Date('2022-05-01')
+      })
+
+      const purpose = await PurposeHelper.add()
+      await LicenceVersionPurposeHelper.add({
+        licenceVersionId: licenceVersion.id,
+        purposeId: purpose.id
       })
 
       // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
@@ -57,6 +65,7 @@ describe('Fetch licence service', () => {
       expect(result.revokedDate).to.equal(null)
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.licenceHolder).to.equal('Licence Holder Ltd')
+      expect(result.licenceVersions[1].purposes[0].description).to.equal('Spray Irrigation - Storage')
     })
   })
 })

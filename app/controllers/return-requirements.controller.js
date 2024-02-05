@@ -6,9 +6,11 @@
  */
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
-const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
+const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
+const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
+const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
@@ -130,12 +132,10 @@ async function purpose (request, h) {
 async function reason (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await SelectReasonService.go(sessionId)
 
   return h.view('return-requirements/reason.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the reason for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -227,10 +227,10 @@ async function submitFrequencyReported (request, h) {
 
 async function submitNoReturnsRequired (request, h) {
   const { sessionId } = request.params
-  const validation = NoReturnsRequiredValidator.go(request.payload)
 
-  if (validation.error) {
-    const pageData = await NoReturnsRequiredService.go(sessionId, validation.error)
+  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, request.payload)
+
+  if (pageData.error) {
     return h.view('return-requirements/no-returns-required.njk', pageData)
   }
 
@@ -251,6 +251,12 @@ async function submitPurpose (request, h) {
 
 async function submitReason (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitReasonService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/reason.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/setup`)
 }

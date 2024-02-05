@@ -8,12 +8,12 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const NoReturnsRequiredValidator = require('../../../app/validators/return-requirements/no-returns-required.validator.js')
+const ReasonValidator = require('../../../app/validators/return-requirements/reason.validator.js')
 
-describe('No Returns Required validator', () => {
+describe('Reason validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = NoReturnsRequiredValidator.go({ 'no-returns-required': 'transfer_licence' })
+      const result = ReasonValidator.go({ reason: 'major_change' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -23,7 +23,7 @@ describe('No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     describe("because no 'reason' is given", () => {
       it('fails validation', () => {
-        const result = NoReturnsRequiredValidator.go({ 'no-returns-required': '' })
+        const result = ReasonValidator.go({ reason: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -33,7 +33,7 @@ describe('No Returns Required validator', () => {
 
     describe("because an unknown 'reason' is given", () => {
       it('fails validation', () => {
-        const result = NoReturnsRequiredValidator.go({ 'no-returns-required': 'no-water' })
+        const result = ReasonValidator.go({ reason: 'just-because' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

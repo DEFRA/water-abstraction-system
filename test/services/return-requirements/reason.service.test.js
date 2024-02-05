@@ -12,9 +12,9 @@ const DatabaseHelper = require('../../support/helpers/database.helper.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const NoReturnsRequiredService = require('../../../app/services/return-requirements/no-returns-required.service.js')
+const SelectReasonService = require('../../../app/services/return-requirements/reason.service.js')
 
-describe('No Returns Required service', () => {
+describe('Select Reason service', () => {
   let session
 
   beforeEach(async () => {
@@ -35,17 +35,17 @@ describe('No Returns Required service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await NoReturnsRequiredService.go(session.id)
+      const result = await SelectReasonService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await NoReturnsRequiredService.go(session.id)
+      const result = await SelectReasonService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        pageTitle: 'Why are no returns required?',
+        pageTitle: 'Select the reason for the return requirement',
         licenceRef: '01/ABC'
       }, { skip: ['id'] })
     })

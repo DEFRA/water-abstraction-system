@@ -4,35 +4,34 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + '/start-date'
+      href: "/system/return-requirements/" + id + '/start-date'
     })
   }}
 {% endblock %}
 
 {% block content %}
-  {% if errorMessage %}
+  {% if error %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: [
         {
-          text: errorMessage.text,
-          href: "#reasonNewRequirements-error"
+          text: error.text,
+          href: "#no-returns-required-error"
         }
         ]
       }) }}
   {% endif %}
 
-  <form method="post" class="form">
-    {{ govukRadios({
-        idPrefix: "reasonNewRequirements",
-        name: "reasonNewRequirements",
-        errorMessage: errorMessage,
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukRadios({
+        name: "no-returns-required",
+        errorMessage: error,
         fieldset: {
           legend: {
             html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
@@ -40,12 +39,27 @@
             classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
           }
         },
-        items: radioItems
-        }) }}
+        items: [
+          {
+            text: 'Abstraction amount below 100 cubic metres per day',
+            value:  'abstraction_below_100_cubic_metres_per_day',
+            checked: false
+          },
+          {
+            text: 'Returns exception',
+            value: 'returns_exception',
+            checked: false
+          },
+          {
+            text: 'Transfer licence',
+            value: 'transfer_licence',
+            checked: false
+          }
+        ]
+      }) }}
 
-    <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 
 {% endblock %}

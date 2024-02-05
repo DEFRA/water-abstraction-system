@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/no-returns-required` page
- * @module NoReturnsRequiredPresenter
+ * Formats data for the `/return-requirements/{sessionId}/reason` page
+ * @module SelectReasonPresenter
  */
 
 function go (session) {

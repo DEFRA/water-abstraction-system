@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const StartDateService = require('../../app/services/return-requirements/start-date.service.js')
+const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -151,6 +152,11 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/reason', () => {
+    beforeEach(async () => {
+      Sinon.stub(SelectReasonService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the reason for the return requirement'
+      })
+    })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('reason'))
