@@ -28,7 +28,7 @@ function _dedupeReturnLogs (returnLogs) {
   const uniqueReturnIds = new Set()
   const uniqueReturnLogs = []
 
-  returnLogs.forEach(returnLog => {
+  returnLogs.forEach((returnLog) => {
     const id = returnLog.reviewReturnResultId
 
     if (!uniqueReturnIds.has(id)) {
