@@ -7,11 +7,11 @@
 
 const { formatLongDate } = require('../../base.presenter.js')
 
-async function go (matchedReturns, unmatchedReturns, chargePeriods, licence, billRun, status) {
+async function go (matchedReturns, unmatchedReturns, chargePeriods, billRun) {
   const pageData = {
-    licenceRef: licence.licenceRef,
+    licenceRef: matchedReturns[0].licence.licenceRef,
     billRunId: billRun.id,
-    status,
+    status: 'Review',
     region: billRun.region.displayName
   }
 
@@ -45,12 +45,12 @@ function _formattingUnmatchedReturns (unmatchedReturns) {
 
   for (const unmatchedReturn of unmatchedReturns) {
     preparedUnmatchedReturns.push({
-      reference: unmatchedReturn.reviewReturnResult.returnReference,
+      reference: unmatchedReturn.reviewReturnResults.returnReference,
       dates: _date(unmatchedReturn),
-      status: unmatchedReturn.reviewReturnResult.status,
-      description: unmatchedReturn.reviewReturnResult.description,
-      purpose: unmatchedReturn.reviewReturnResult.purposes[0].tertiary.description,
-      total: `${unmatchedReturn.reviewReturnResult.allocated} ML / ${unmatchedReturn.reviewReturnResult.quantity} ML`
+      status: unmatchedReturn.reviewReturnResults.status,
+      description: unmatchedReturn.reviewReturnResults.description,
+      purpose: unmatchedReturn.reviewReturnResults.purposes[0].tertiary.description,
+      total: `${unmatchedReturn.reviewReturnResults.allocated} ML / ${unmatchedReturn.reviewReturnResults.quantity} ML`
     })
   }
 
@@ -64,11 +64,11 @@ function _formattingMatchedReturns (matchedReturns) {
     const { status, total, allocated } = _checkStatusAndReturnTotal(returnLog)
 
     preparedReturns.push({
-      reference: returnLog.reviewReturnResult.returnReference,
+      reference: returnLog.reviewReturnResults.returnReference,
       dates: _date(returnLog),
       status,
-      description: returnLog.reviewReturnResult.description,
-      purpose: returnLog.reviewReturnResult.purposes[0].tertiary.description,
+      description: returnLog.reviewReturnResults.description,
+      purpose: returnLog.reviewReturnResults.purposes[0].tertiary.description,
       total,
       allocated
     })
@@ -80,16 +80,16 @@ function _formattingMatchedReturns (matchedReturns) {
 function _checkStatusAndReturnTotal (returnLog) {
   const allocated = _allocated(returnLog)
 
-  if (returnLog.reviewReturnResult.status === 'completed') {
-    return { status: returnLog.reviewReturnResult.status, total: `${returnLog.reviewReturnResult.allocated} ML / ${returnLog.reviewReturnResult.quantity} ML`, allocated }
-  } else if (returnLog.reviewReturnResult.underQuery === true) {
-    return { status: 'query', total: `${returnLog.reviewReturnResult.allocated} ML / ${returnLog.reviewReturnResult.quantity} ML`, allocated }
-  } else if (returnLog.reviewReturnResult.status === 'received') {
-    return { status: returnLog.reviewReturnResult.status, total: '/', allocated: 'Not processed' }
-  } else if (returnLog.reviewReturnResult.status === 'due') {
+  if (returnLog.reviewReturnResults.status === 'completed') {
+    return { status: returnLog.reviewReturnResults.status, total: `${returnLog.reviewReturnResults.allocated} ML / ${returnLog.reviewReturnResults.quantity} ML`, allocated }
+  } else if (returnLog.reviewReturnResults.underQuery === true) {
+    return { status: 'query', total: `${returnLog.reviewReturnResults.allocated} ML / ${returnLog.reviewReturnResults.quantity} ML`, allocated }
+  } else if (returnLog.reviewReturnResults.status === 'received') {
+    return { status: returnLog.reviewReturnResults.status, total: '/', allocated: 'Not processed' }
+  } else if (returnLog.reviewReturnResults.status === 'due') {
     return { status: 'overdue', total: '/', allocated: 'Not processed' }
   } else {
-    return { status: returnLog.reviewReturnResult.status, total: '/', allocated: 'Not processed' }
+    return { status: returnLog.reviewReturnResults.status, total: '/', allocated: 'Not processed' }
   }
 }
 
@@ -101,9 +101,9 @@ function _formatChargePeriods (chargePeriod) {
 }
 
 function _allocated (returnLog) {
-  if (returnLog.reviewReturnResult.quantity > returnLog.reviewReturnResult.allocated) {
+  if (returnLog.reviewReturnResults.quantity > returnLog.reviewReturnResults.allocated) {
     return 'Over abstraction'
-  } else if (returnLog.reviewReturnResult.quantity === returnLog.reviewReturnResult.allocated) {
+  } else if (returnLog.reviewReturnResults.quantity === returnLog.reviewReturnResults.allocated) {
     return 'Fully allocated'
   } else {
     return ''
@@ -111,8 +111,8 @@ function _allocated (returnLog) {
 }
 
 function _date (returnLog) {
-  const startDate = formatLongDate(returnLog.reviewReturnResult.startDate)
-  const endDate = formatLongDate(returnLog.reviewReturnResult.endDate)
+  const startDate = formatLongDate(returnLog.reviewReturnResults.startDate)
+  const endDate = formatLongDate(returnLog.reviewReturnResults.endDate)
 
   return `${startDate} to ${endDate}`
 }

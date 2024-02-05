@@ -31,9 +31,9 @@ async function create (request, h) {
 }
 
 async function reviewLicence (request, h) {
-  const { id: billRunId, licenceId, status } = request.params
+  const { id: billRunId, licenceId } = request.params
 
-  const pageData = await ReviewLicenceService.go(billRunId, licenceId, status)
+  const pageData = await ReviewLicenceService.go(billRunId, licenceId)
 
   return h.view('bill-runs/review-licence.njk', {
     pageTitle: `Licence ${pageData.licenceRef}`,
