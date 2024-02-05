@@ -12,7 +12,7 @@ const { expect } = Code
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 
 // Thing under test
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/supplementary/handle-errored-bill-run.service.js')
+const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 
 describe('Handle Errored Bill Run service', () => {
   let billRun
