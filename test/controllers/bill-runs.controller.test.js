@@ -18,7 +18,7 @@ const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.s
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Bill Runs controller', () => {
+describe('Bill Runs controller', () => {
   let server
 
   function options (scheme = 'sroc') {
