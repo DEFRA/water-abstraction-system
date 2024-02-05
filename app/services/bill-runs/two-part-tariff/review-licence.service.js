@@ -23,8 +23,6 @@ async function go (billRunId, licenceId) {
   // Status is currently hard coded, need to sort
   const { returnLogs, billRun } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
 
-  console.log('BillRun :', billRun)
-  console.log('ReturnLogs :', returnLogs)
   const { matchedReturns, unmatchedReturns, chargePeriods } = await PrepareReviewLicenceResultsService.go(returnLogs)
 
   const pageData = await ReviewLicencePresenter.go(matchedReturns, unmatchedReturns, chargePeriods, billRun)
