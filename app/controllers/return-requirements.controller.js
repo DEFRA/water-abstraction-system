@@ -6,7 +6,6 @@
  */
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
-const NoReturnsRequiredValidator = require('../validators/return-requirements/no-returns-required.validator.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SelectReasonValidator = require('../validators/return-requirements/reason.validator.js')
 const SessionModel = require('../models/session.model.js')

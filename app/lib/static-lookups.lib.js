@@ -28,12 +28,6 @@ const sources = [
   'wrls'
 ]
 
-const reasonNewRequirementsFields = [
-  'abstraction_below_100_cubic_metres_per_day',
-  'returns_exception',
-  'transfer_licence'
-]
-
 const selectReasonFields = [
   'change_to_special_agreement',
   'name_or_address_change',
@@ -53,7 +47,6 @@ module.exports = {
   companyTypes,
   contactTypes,
   organisationTypes,
-  reasonNewRequirementsFields,
   selectReasonFields,
   sources
 }
