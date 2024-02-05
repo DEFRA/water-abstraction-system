@@ -11,16 +11,12 @@ const { expect } = Code
 const ReasonValidator = require('../../../app/validators/return-requirements/reason.validator.js')
 
 describe('Select Reason validator', () => {
-  const values = ['bajor', 'risa', 'ferenginar']
-
   describe('when valid data is provided', () => {
-    values.forEach(reason => {
-      it(`confirms the data is valid (reason ${reason})`, () => {
-        const result = ReasonValidator.go({ reason })
+    it('confirms the data is valid', () => {
+      const result = ReasonValidator.go({ reason: 'major_change' })
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
-      })
+      expect(result.value).to.exist()
+      expect(result.error).not.to.exist()
     })
   })
 
@@ -28,6 +24,16 @@ describe('Select Reason validator', () => {
     describe("because no 'reason' is given", () => {
       it('fails validation', () => {
         const result = ReasonValidator.go({ reason: '' })
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Select the reason for the return requirement')
+      })
+    })
+
+    describe("because an unknown 'reason' is given", () => {
+      it('fails validation', () => {
+        const result = ReasonValidator.go({ reason: 'just-because' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
