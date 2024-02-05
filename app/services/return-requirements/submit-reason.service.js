@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/no-returns-required` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/reason` page
  * @module StartDateService
  */
 
-const NoReturnsRequiredPresenter = require('../../presenters/return-requirements/no-returns-required.presenter.js')
-const NoReturnsRequiredValidator = require('../../validators/return-requirements/no-returns-required.validator.js')
+const ReasonPresenter = require('../../presenters/return-requirements/reason.presenter.js')
+const ReasonValidator = require('../../validators/return-requirements/reason.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/no-returns-required` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/reason` page
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
@@ -21,25 +21,25 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the no returns required page
+ * @returns {Promise<Object>} The page data for the reason page
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
-  const formattedData = NoReturnsRequiredPresenter.go(session, payload)
+  const formattedData = ReasonPresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Why are no returns required?',
+    pageTitle: 'Select the reason for the return requirement',
     ...formattedData
   }
 }
 
 function _validate (payload) {
-  const validation = NoReturnsRequiredValidator.go(payload)
+  const validation = ReasonValidator.go(payload)
 
   if (!validation.error) {
     return null
