@@ -1,29 +1,26 @@
 'use strict'
 
 /**
+ * Fetches the review licence results and bill run data for a two-part tariff bill run
  * @module FetchReviewLicenceResultsService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
-const LicenceModel = require('../../../models/licence.model.js')
-const ReviewReturnResultModel = require('../../../models/review-return-result.model.js')
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
+/**
+ * Fetches the review return results data for an individual licence in the bill run
+ *
+ * @param {String} billRunId UUID of the bill run
+ * @param {String} licenceId UUID of the licence
+ *
+ * @returns {Object[]} Contains an array of bill run data and review licence data
+ */
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
-  const licence = await _fetchLicence(licenceId)
   const returnLogs = await _fetchReturnLogs(billRunId, licenceId)
-  await _fetchReviewReturns(returnLogs)
 
-  return { returnLogs, licence, billRun }
-}
-
-async function _fetchReviewReturns (returnLogs) {
-  for (const returnLog of returnLogs) {
-    const reviewReturnResult = await _fetchReturns(returnLog.reviewReturnResultId)
-
-    returnLog.reviewReturnResult = reviewReturnResult
-  }
+  return { returnLogs, billRun }
 }
 
 async function _fetchBillRun (billRunId) {
@@ -42,28 +39,43 @@ async function _fetchBillRun (billRunId) {
     })
 }
 
-async function _fetchLicence (licenceId) {
-  return LicenceModel.query()
-    .findById(licenceId)
-    .select('licenceRef')
-}
-
 async function _fetchReturnLogs (billRunId, licenceId) {
   return ReviewResultModel.query()
     .where({ billRunId, licenceId })
     .whereNotNull('reviewReturnResultId')
     .distinct('reviewReturnResultId')
     .select([
-      'reviewReturnResultId',
       'reviewChargeElementResultId',
       'chargeVersionId',
       'chargePeriodStartDate',
       'chargePeriodEndDate'])
-}
-
-async function _fetchReturns (id) {
-  return ReviewReturnResultModel.query()
-    .findById(id)
+    .withGraphFetched('reviewReturnResults')
+    .modifyGraph('reviewReturnResults', (builder) => {
+      builder.select([
+        'id',
+        'returnId',
+        'return_reference',
+        'startDate',
+        'endDate',
+        'dueDate',
+        'receivedDate',
+        'status',
+        'underQuery',
+        'nilReturn',
+        'description',
+        'purposes',
+        'quantity',
+        'allocated',
+        'abstractionOutsidePeriod'
+      ])
+    })
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (builder) => {
+      builder.select([
+        'id',
+        'licenceRef'
+      ])
+    })
 }
 
 module.exports = {
