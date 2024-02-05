@@ -23,15 +23,13 @@ exports.up = function (knex) {
       table.date('time_limited_end_date')
       table.text('notes')
       table.decimal('annual_quantity')
-      table.dateTime('date_created').notNullable()
-      table.dateTime('date_updated').notNullable()
       table.string('external_id')
       table.boolean('is_test')
 
       // Legacy timestamps
       // NOTE: They are not automatically set
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').notNullable()
+      table.dateTime('date_created').notNullable()
+      table.dateTime('date_updated').notNullable()
 
       // Constraints
       table.unique(['external_id'], { useConstraint: true })
