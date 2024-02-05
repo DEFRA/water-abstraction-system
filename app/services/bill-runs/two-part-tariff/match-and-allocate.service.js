@@ -1,5 +1,5 @@
 /**
- * Match and allocate licences to returns for a two-part tariff bill run for the given billing periods
+ * Match and allocate licences to returns for a two-part tariff bill run for the given billing period
  * @module MatchAndAllocateService
  */
 
@@ -21,27 +21,27 @@ const PersistAllocatedLicenceToResultsService = require('./persist-allocated-lic
  * After processing each license, the results are persisted using PersistAllocatedLicenceToResultsService.
  *
  * @param {module:BillRunModel} billRun - The bill run object containing billing information
- * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
+ * @param {Object} billingPeriod - A single billing period containing a `startDate` and `endDate`
  *
  * @returns {Boolean} - True if there are any licences matched to returns, false otherwise
  */
-async function go (billRun, billingPeriods) {
-  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0])
+async function go (billRun, billingPeriod) {
+  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriod)
 
   if (licences.length > 0) {
-    await _process(licences, billingPeriods, billRun)
+    await _process(licences, billingPeriod, billRun)
   }
 
   return licences.length > 0
 }
 
-async function _process (licences, billingPeriods, billRun) {
+async function _process (licences, billingPeriod, billRun) {
   for (const licence of licences) {
-    await PrepareReturnLogsService.go(licence, billingPeriods[0])
+    await PrepareReturnLogsService.go(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
     chargeVersions.forEach((chargeVersion) => {
-      PrepareChargeVersionService.go(chargeVersion, billingPeriods[0])
+      PrepareChargeVersionService.go(chargeVersion, billingPeriod)
 
       const { chargeReferences } = chargeVersion
       chargeReferences.forEach((chargeReference) => {
