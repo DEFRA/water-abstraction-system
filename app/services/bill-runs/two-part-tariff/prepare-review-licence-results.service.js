@@ -18,7 +18,8 @@ async function go (returnLogs) {
 
   const { matchedReturns, unmatchedReturns } = _splitReturns(uniqueReturnLogs)
 
-  const chargePeriods = _fetchChargePeriods(returnLogs)
+  // Only matched returns have a charge version and therefore chargePeriods
+  const chargePeriods = _fetchChargePeriods(matchedReturns)
 
   return { matchedReturns, unmatchedReturns, chargePeriods }
 }

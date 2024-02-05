@@ -64,8 +64,8 @@ function _returnLogData () {
       reviewReturnResultId: '10fgeec8-35de-4497-9502-3a7c6259d41a',
       reviewChargeElementResultId: null,
       chargeVersionId: 'f88dc360-7f7f-4ea2-ad77-f626f7b1e759',
-      chargePeriodStartDate: new Date('2022-04-01'),
-      chargePeriodEndDate: new Date('2023-03-31')
+      chargePeriodStartDate: null,
+      chargePeriodEndDate: null
     },
     {
       reviewReturnResultId: '89rgsec8-45de-7497-9502-3b7c8259d41a',
