@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReasonValidator = require('../../../app/validators/return-requirements/reason.validator.js')
 
-describe('Select Reason validator', () => {
+describe('Reason validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
       const result = ReasonValidator.go({ reason: 'major_change' })
