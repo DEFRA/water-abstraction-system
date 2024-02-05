@@ -28,25 +28,10 @@ const sources = [
   'wrls'
 ]
 
-const selectReasonFields = [
-  'change_to_special_agreement',
-  'name_or_address_change',
-  'transfer_and_now_chargeable',
-  'extension_of_licence_validity',
-  'major_change',
-  'minor_change',
-  'new_licence_in_part_succession_or_licence_apportionment',
-  'new_licence',
-  'new_special_agreement',
-  'succession_or_transfer_of_licence',
-  'succession_to_remainder_licence_or_licence_apportionment'
-]
-
 module.exports = {
   billRunTypes,
   companyTypes,
   contactTypes,
   organisationTypes,
-  selectReasonFields,
   sources
 }
