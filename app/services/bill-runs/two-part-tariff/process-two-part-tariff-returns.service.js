@@ -11,52 +11,57 @@ const HandleErroredBillRunService = require('../handle-errored-bill-run.service.
 const MatchAndAllocateService = require('./match-and-allocate.service.js')
 
 /**
- * Matches and allocates licences to returns for a two-part tariff bill run for the given billing periods. The results
- * of this matching process are then persisted to the database ready for the results to be reviewed. The bill run status
- * is then updated based on whether any licences were matched, or if the process has errored.
+ * Matches and allocates licences to returns for a two-part tariff bill run
  *
- * @param {module:BillRunModel} billRun
- * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`. For 2PT
+ * The results of the matching process are then persisted to the database ready for the results to be reviewed. The bill
+ * run status is also updated to 'review'.
+ *
+ * In the unlikely event of no licences match to returns it will set the status to 'empty'. It will also handle updating
+ * the bill run if an error occurs during the process.
+ *
+ * @param {module:BillRunModel} billRun - The two-part tariff bill run being processed
+ * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For 2PT
  * this will only ever contain a single period
  */
 async function go (billRun, billingPeriods) {
   const { id: billRunId } = billRun
+  // NOTE: billingPeriods come from `DetermineBillingPeriodsService` which always returns an array because it is used by
+  // all billing types. For two-part tariff we know it will only contain one because 2PT bill runs are only for a single
+  // financial year
+  const billingPeriod = billingPeriods[0]
 
   try {
     const startTime = currentTimeInNanoseconds()
 
     await _updateStatus(billRunId, 'processing')
 
-    // `isPopulated` will be set to true if `MatchAndAllocateService` matches at least one licence
-    const isPopulated = await MatchAndAllocateService.go(billRun, billingPeriods)
+    // `populated` will be set to true if `MatchAndAllocateService` processes at least one licence
+    const populated = await MatchAndAllocateService.go(billRun, billingPeriod)
 
-    await _setBillRunStatus(billRunId, isPopulated)
+    await _setBillRunStatus(billRunId, populated)
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_tariff' })
   } catch (error) {
     await HandleErroredBillRunService.go(billRunId)
-    _logError(billRun, error)
+    global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
   }
 }
 
-async function _setBillRunStatus (billRunId, isPopulated) {
-  // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
-  // this in the UI
-  if (!isPopulated) {
-    await _updateStatus(billRunId, 'empty')
-    return
+async function _setBillRunStatus (billRunId, populated) {
+  // It is highly unlikely no licences were matched to returns. So we default status to 'review'
+  let status = 'review'
+
+  // Just in case no licences were found to be matched to returns we set the status to 'empty'
+  if (!populated) {
+    status = 'empty'
   }
 
-  // If licences are successfully matched to returns then the bill run status is set to 'review'
-  await _updateStatus(billRunId, 'review')
-}
-
-function _logError (billRun, error) {
-  global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
+  // Update the bill run's status
+  return _updateStatus(billRunId, status)
 }
 
 async function _updateStatus (billRunId, status) {
-  await BillRunModel.query()
+  return BillRunModel.query()
     .findById(billRunId)
     .patch({ status })
 }
