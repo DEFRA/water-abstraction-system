@@ -4,7 +4,7 @@
 <h2 class="govuk-heading-l">Summary</h2>
 
 <dl class="govuk-summary-list">
-    <div class="govuk-summary-list__row">
+<div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Licence Holder</dt>
         <dd class="govuk-summary-list__value">
             <span class="govuk-form-group">{{ licenceHolder }}</span>
@@ -23,13 +23,28 @@
     {% endif %}
 
     <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            Billing region
-        </dt>
-        <dd class="govuk-summary-list__value">
-            {{ region }}
-        </dd>
+        <dt class="govuk-summary-list__key">Billing region</dt>
+        <dd class="govuk-summary-list__value">{{ region }}</dd>
     </div>
+
+    {% if purposes %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">{{ purposes.caption }}</dt>
+            <dd class="govuk-summary-list__value">
+                {% if purposes.data.length > 5 %}
+                    You have {{ purposes.data.length }} purposes
+                {% elseif purposes.data.length > 1 %}
+                    <ul class="govuk-list">
+                        {% for purpose in purposes.data %}
+                            <li>{{ purpose }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ purposes.data[0] }}
+                {% endif %}
+            </dd>
+        </div>
+    {% endif %}
 </dl>
 
 <div class="govuk-grid-row">
