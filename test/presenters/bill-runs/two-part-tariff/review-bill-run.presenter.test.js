@@ -19,7 +19,6 @@ describe('Review Bill Run presenter', () => {
       const result = ReviewBillRunPresenter.go(testBillRun, testLicences)
 
       expect(result).to.equal({
-        id: 'b21bd372-cd04-405d-824e-5180d854121c',
         region: 'Southern (Test replica)',
         status: 'review',
         dateCreated: '17 January 2024',

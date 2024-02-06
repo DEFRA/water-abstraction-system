@@ -30,18 +30,6 @@ async function create (request, h) {
   }
 }
 
-async function reviewLicence (request, h) {
-  const { id: billRunId, licenceId } = request.params
-
-  const pageData = await ReviewLicenceService.go(billRunId, licenceId)
-
-  return h.view('bill-runs/review-licence.njk', {
-    pageTitle: `Licence ${pageData.licenceRef}`,
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
 async function review (request, h) {
   const { id } = request.params
 
@@ -49,6 +37,18 @@ async function review (request, h) {
 
   return h.view('bill-runs/review.njk', {
     pageTitle: 'Review licences',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function reviewLicence (request, h) {
+  const { id: billRunId, licenceId } = request.params
+
+  const pageData = await ReviewLicenceService.go(billRunId, licenceId)
+
+  return h.view('bill-runs/review-licence.njk', {
+    pageTitle: `Licence ${pageData.licenceRef}`,
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -82,6 +82,6 @@ function _formattedInitiateBillRunError (error) {
 module.exports = {
   create,
   review,
-  view,
-  reviewLicence
+  reviewLicence,
+  view
 }

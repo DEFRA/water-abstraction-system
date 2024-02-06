@@ -46,7 +46,6 @@ function _prepareLicences (licences) {
 
 function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
   return {
-    id: billRun.id,
     region: billRun.region.displayName,
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
