@@ -20,8 +20,10 @@ describe('View Licence presenter', () => {
       expiredDate: null,
       licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
       licenceHolder: null,
+      licenceName: 'Unregistered licence',
       licenceRef: '01/123',
       region: { displayName: 'Narnia' },
+      registeredTo: null,
       startDate: new Date('2019-04-01')
     }
   })
@@ -35,9 +37,11 @@ describe('View Licence presenter', () => {
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
         licenceHolder: 'Unregistered licence',
+        licenceName: 'Unregistered licence',
         licenceRef: '01/123',
         pageTitle: 'Licence 01/123',
         purposes: null,
+        registeredTo: null,
         region: 'Narnia',
         startDate: '1 April 2019',
         warning: null
@@ -231,6 +235,50 @@ describe('View Licence presenter', () => {
             caption: 'Purposes',
             data: ['Spray Irrigation - Storage', 'Make-Up Or Top Up Water']
           })
+        })
+      })
+    })
+
+    describe("the 'registeredTo' property", () => {
+      describe('when there is no registeredTo property', () => {
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.registeredTo).to.equal(null)
+        })
+      })
+
+      describe('when there is a registeredTo property', () => {
+        beforeEach(() => {
+          licence.registeredTo = 'Company'
+        })
+
+        it('returns a string with the registered to name', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.registeredTo).to.equal('Company')
+        })
+      })
+    })
+
+    describe("the 'licenceName' property", () => {
+      describe('when there is no licenceName property', () => {
+        it('returns Unregistered licence', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.licenceName).to.equal('Unregistered licence')
+        })
+      })
+
+      describe('when there is a licenceName property', () => {
+        beforeEach(() => {
+          licence.licenceName = 'example@example.com'
+        })
+
+        it('returns a string with the licence name valus', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.licenceName).to.equal('example@example.com')
         })
       })
     })
