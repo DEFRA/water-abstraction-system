@@ -72,9 +72,9 @@ function _prepareMatchedReturns (matchedReturns) {
 function _checkStatusAndReturnTotal (returnLog) {
   const { status, allocated, quantity, underQuery } = returnLog.reviewReturnResults
 
+  let allocatedStatus
+  let total
   let returnStatus = underQuery ? 'query' : status
-  let total = `${allocated} ML / ${quantity} ML`
-  let allocatedStatus = _allocated(quantity, allocated)
 
   if (status === 'void' || status === 'received') {
     total = '/'
@@ -83,6 +83,9 @@ function _checkStatusAndReturnTotal (returnLog) {
     returnStatus = 'overdue'
     total = '/'
     allocatedStatus = 'Not processed'
+  } else {
+    total = `${allocated} ML / ${quantity} ML`
+    allocatedStatus = _allocated(quantity, allocated)
   }
 
   return { returnStatus, total, allocated: allocatedStatus }
