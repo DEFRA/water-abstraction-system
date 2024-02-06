@@ -10,13 +10,13 @@ const { expect } = Code
 // Thing under test
 const PrepareReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-review-licence-results.service.js')
 
-describe('Prepare Review Licence Results Service', () => {
+describe.only('Prepare Review Licence Results Service', () => {
   describe('when given return logs', () => {
     const returnLogs = _returnLogData()
 
     describe('to prepares them for the presenter', () => {
       it('deduplicates them and splits them into matched and unmatched returns', async () => {
-        const result = await PrepareReviewLicenceResultsService.go(returnLogs)
+        const result = PrepareReviewLicenceResultsService.go(returnLogs)
 
         expect(result.matchedReturns).to.have.length(2)
         expect(result.matchedReturns).to.equal([returnLogs[0], returnLogs[3]])
@@ -26,7 +26,7 @@ describe('Prepare Review Licence Results Service', () => {
       })
 
       it('works out the charge periods from the return logs', async () => {
-        const result = await PrepareReviewLicenceResultsService.go(returnLogs)
+        const result = PrepareReviewLicenceResultsService.go(returnLogs)
 
         expect(result.chargePeriods).to.equal([
           {

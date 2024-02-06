@@ -13,7 +13,7 @@
  *
  * @returns {Object[]} matched and unmatched return logs and the charge periods for that licence
  */
-async function go (returnLogs) {
+function go (returnLogs) {
   const uniqueReturnLogs = _dedupeReturnLogs(returnLogs)
 
   const { matchedReturns, unmatchedReturns } = _splitReturns(uniqueReturnLogs)
