@@ -16,6 +16,8 @@ const GenerateTransactionsService = require('./generate-transactions.service.js'
 const SendTransactionsService = require('./send-transactions.service.js')
 const TransactionModel = require('../../../models/transaction.model.js')
 
+const BillingConfig = require('../../../../config/billing.config.js')
+
 /**
  * Creates the bills and transactions in both WRLS and the Charging Module API
  *
@@ -30,20 +32,16 @@ async function go (billRun, billingPeriod, billingAccounts) {
     return false
   }
 
-  // const chunkSize = 10
-  // const billingAccountsCount = billingAccounts.length
-  // for (let i = 0; i < billingAccountsCount; i += chunkSize) {
-  //   const accountsToProcess = billingAccounts.slice(i, i + chunkSize)
+  const batchSize = BillingConfig.annual.batchSize
+  const billingAccountsCount = billingAccounts.length
+  for (let i = 0; i < billingAccountsCount; i += batchSize) {
+    const accountsToProcess = billingAccounts.slice(i, i + batchSize)
 
-  //   const processes = accountsToProcess.map((accountToProcess) => {
-  //     return _processBillingAccount(accountToProcess, billRun, billingPeriod)
-  //   })
+    const processes = accountsToProcess.map((accountToProcess) => {
+      return _processBillingAccount(accountToProcess, billRun, billingPeriod)
+    })
 
-  //   await Promise.all(processes)
-  // }
-
-  for (const billingAccount of billingAccounts) {
-    await _processBillingAccount(billingAccount, billRun, billingPeriod)
+    await Promise.all(processes)
   }
 
   return true
@@ -67,7 +65,7 @@ async function _processBillingAccount (billingAccount, billRun, billingPeriod) {
     financialYearEnding: billingPeriod.endDate.getFullYear()
   }
 
-  await _persistBillData(bill, billLicences, transactions)
+  return _persistBillData(bill, billLicences, transactions)
 }
 
 async function _createBillLicencesAndTransactions (billingAccount, billRunExternalId, billingPeriod) {
