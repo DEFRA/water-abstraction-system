@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const PrepareReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-review-licence-results.service.js')
 
-describe.only('Prepare Review Licence Results Service', () => {
+describe('Prepare Review Licence Results Service', () => {
   describe('when given return logs', () => {
     const returnLogs = _returnLogData()
 
