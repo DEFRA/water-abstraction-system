@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Prepared the review return logs ready for presenting in the review page
+ * Prepares the review return logs ready for presenting in the review page
  * @module PrepareReviewLicenceResultsService
  */
 
