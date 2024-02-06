@@ -32,7 +32,7 @@
             <dt class="govuk-summary-list__key">{{ purposes.caption }}</dt>
             <dd class="govuk-summary-list__value">
                 {% if purposes.data.length > 5 %}
-                    You have {{ purposes.data.length }} purposes
+                    There are {{ purposes.data.length }} purposes
                 {% elseif purposes.data.length > 1 %}
                     <ul class="govuk-list">
                         {% for purpose in purposes.data %}
