@@ -6,7 +6,7 @@
  */
 
 /**
- * Prepared the given review return logs, deduplicates them, and extracts matched and unmatched returns along with their
+ * Prepares the given review return logs, deduplicates them, and extracts matched and unmatched returns along with their
  * corresponding charge periods for the licence being reviewed
  *
  * @param {module:ReviewReturnResultModel} returnLogs All the review return logs associated with the licence being reviewed

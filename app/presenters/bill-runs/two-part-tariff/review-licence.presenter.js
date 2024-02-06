@@ -8,7 +8,7 @@
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Prepares the processes the bill run and review licence data for presentation
+ * Prepares and processes bill run and review licence data for presentation
  *
  * @param {module:ReviewReturnResultModel} matchedReturns matched return logs for an individual licence
  * @param {module:ReviewReturnResultModel} unmatchedReturns unmatched return logs for an individual licence

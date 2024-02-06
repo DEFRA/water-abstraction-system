@@ -20,7 +20,6 @@ const PrepareReviewLicenceResultsService = require('./prepare-review-licence-res
  * licence matched and unmatched returns and the licence charge data
  */
 async function go (billRunId, licenceId) {
-  // Status is currently hard coded, need to sort
   const { returnLogs, billRun } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
 
   const { matchedReturns, unmatchedReturns, chargePeriods } = PrepareReviewLicenceResultsService.go(returnLogs)

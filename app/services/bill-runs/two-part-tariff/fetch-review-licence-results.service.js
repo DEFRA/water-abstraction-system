@@ -9,7 +9,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewResultModel = require('../../../models/review-result.model.js')
 
 /**
- * Fetches the review return results data for an individual licence in the bill run
+ * Fetches the review return results data for an individual licence in the bill run and the bill run data
  *
  * @param {String} billRunId UUID of the bill run
  * @param {String} licenceId UUID of the licence
