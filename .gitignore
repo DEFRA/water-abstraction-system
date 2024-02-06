@@ -43,3 +43,6 @@ lcov.info
 
 # Build assets
 app/public/build
+
+# ignore husky config
+.husky/

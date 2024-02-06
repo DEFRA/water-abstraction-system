@@ -1,11 +1,10 @@
 /**
- * Match and allocate licences to returns for a two-part tariff bill run for the given billing periods
+ * Match and allocate licences to returns for a two-part tariff bill run for the given billing period
  * @module MatchAndAllocateService
  */
 
 const AllocateReturnsToChargeElementService = require('./allocate-returns-to-charge-element.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('./prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
@@ -14,39 +13,35 @@ const PersistAllocatedLicenceToResultsService = require('./persist-allocated-lic
 /**
  * Performs the two-part tariff matching and allocating
  *
- * This function initiates the processing of matching and allocating by fetching licenses within the specified region and billing period.
- * Each license undergoes individual processing, including fetching and preparing return logs, charge versions, and
- * charge references. The allocated quantity for each charge reference is set to 0, and matching return logs are allocated
- * to the corresponding charge elements.
+ * This function initiates the processing of matching and allocating by fetching licenses within the specified region
+ * and billing period. Each license undergoes individual processing, including fetching and preparing return logs,
+ * charge versions, and charge references. The allocated quantity for each charge reference is set to 0, and matching
+ * return logs are allocated to the corresponding charge elements.
  *
  * After processing each license, the results are persisted using PersistAllocatedLicenceToResultsService.
  *
  * @param {module:BillRunModel} billRun - The bill run object containing billing information
- * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
+ * @param {Object} billingPeriod - A single billing period containing a `startDate` and `endDate`
  *
- * @returns {Array} - An array of processed licences associated with the bill run
+ * @returns {Boolean} - True if there are any licences matched to returns, false otherwise
  */
-async function go (billRun, billingPeriods) {
-  const startTime = currentTimeInNanoseconds()
-
-  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriods[0])
+async function go (billRun, billingPeriod) {
+  const licences = await FetchLicencesService.go(billRun.regionId, billingPeriod)
 
   if (licences.length > 0) {
-    await _process(licences, billingPeriods, billRun)
+    await _process(licences, billingPeriod, billRun)
   }
 
-  calculateAndLogTimeTaken(startTime, 'Two part tariff matching complete', { billRunId: billRun.id })
-
-  return licences
+  return licences.length > 0
 }
 
-async function _process (licences, billingPeriods, billRun) {
+async function _process (licences, billingPeriod, billRun) {
   for (const licence of licences) {
-    await PrepareReturnLogsService.go(licence, billingPeriods[0])
+    await PrepareReturnLogsService.go(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
     chargeVersions.forEach((chargeVersion) => {
-      PrepareChargeVersionService.go(chargeVersion, billingPeriods[0])
+      PrepareChargeVersionService.go(chargeVersion, billingPeriod)
 
       const { chargeReferences } = chargeVersion
       chargeReferences.forEach((chargeReference) => {
@@ -58,7 +53,12 @@ async function _process (licences, billingPeriods, billRun) {
           const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
           if (matchingReturns.length > 0) {
-            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargeVersion.chargePeriod, chargeReference)
+            AllocateReturnsToChargeElementService.go(
+              chargeElement,
+              matchingReturns,
+              chargeVersion.chargePeriod,
+              chargeReference
+            )
           }
         })
       })

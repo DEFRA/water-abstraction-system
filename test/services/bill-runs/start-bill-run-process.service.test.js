@@ -13,7 +13,7 @@ const AnnualProcessBillRunService = require('../../../app/services/bill-runs/ann
 const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
 const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
-const TwoPartTariffProcessBillRunService = require('../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
+const ProcessTwoPartTariffReturnsService = require('../../../app/services/bill-runs/two-part-tariff/process-two-part-tariff-returns.service.js')
 
 // Thing under test
 const StartBillRunProcessService = require('../../../app/services/bill-runs/start-bill-run-process.service.js')
@@ -142,7 +142,7 @@ describe('Start Bill Run Process service', () => {
         }
         Sinon.stub(InitiateBillRunService, 'go').resolves(twoPartTariffBillRun)
 
-        Sinon.stub(TwoPartTariffProcessBillRunService, 'go')
+        Sinon.stub(ProcessTwoPartTariffReturnsService, 'go')
       })
 
       it('initiates a new bill run', async () => {
@@ -170,7 +170,7 @@ describe('Start Bill Run Process service', () => {
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
-        expect(TwoPartTariffProcessBillRunService.go.called).to.be.true()
+        expect(ProcessTwoPartTariffReturnsService.go.called).to.be.true()
       })
     })
   })
