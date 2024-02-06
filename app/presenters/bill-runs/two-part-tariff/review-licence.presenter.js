@@ -96,6 +96,7 @@ function _allocated (quantity, allocated) {
     return 'Over abstraction'
   } else {
     return 'Fully allocated'
+  }
 }
 
 function _prepareDate (startDate, endDate) {
