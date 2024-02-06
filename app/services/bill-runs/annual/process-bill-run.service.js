@@ -8,15 +8,14 @@
 const BillRunModel = require('../../../models/bill-run.model.js')
 const BillRunError = require('../../../errors/bill-run.error.js')
 const ChargingModuleGenerateService = require('../../charging-module/generate-bill-run.service.js')
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchBillingDataService = require('./fetch-billing-accounts.service.js')
+const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
 const LegacyRequestLib = require('../../../lib/legacy-request.lib.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 
-// TODO: needs to be move to root of bill-runs
-const HandleErroredBillRunService = require('../supplementary/handle-errored-bill-run.service.js')
-
-async function go (billRun, billingPeriod) {
+async function go (billRun, billingPeriods) {
   const { id: billRunId, batchType } = billRun
+  const billingPeriod = billingPeriods[0]
 
   try {
     const startTime = process.hrtime.bigint()
@@ -47,14 +46,16 @@ function _calculateAndLogTime (startTime, message, data) {
   global.GlobalNotifier.omg(message, logData)
 }
 
-async function _fetchChargeVersions (billRun, billingPeriod) {
+async function _fetchBillingAccounts (billRun, billingPeriod) {
   try {
-    const chargeVersionData = await FetchChargeVersionsService.go(billRun.regionId, billingPeriod)
+    const billingAccounts = await FetchBillingDataService.go(billRun.regionId, billingPeriod)
 
-    // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillRunService if it
+    // We don't just `return FetchBillingDataService.go()` as we need to call HandleErroredBillRunService if it
     // fails
-    return chargeVersionData
+    return billingAccounts
   } catch (error) {
+    // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
+    // is the closest one related to what stage we're at in the process
     throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeVersions)
   }
 }
@@ -71,13 +72,13 @@ async function _finaliseBillRun (billRun, billRunPopulated) {
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
   await ChargingModuleGenerateService.go(billRun.externalId)
 
-  // await LegacyRequestLib.post('water', `billing/batches/${billRun.id}/refresh`)
+  await LegacyRequestLib.post('water', `billing/batches/${billRun.id}/refresh`)
 }
 
 async function _processBillingPeriod (billingPeriod, billRun) {
-  const chargeVersions = await _fetchChargeVersions(billRun, billingPeriod)
+  const billingAccounts = await _fetchBillingAccounts(billRun, billingPeriod)
 
-  const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+  const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
 
   await _finaliseBillRun(billRun, billRunPopulated)
 }
