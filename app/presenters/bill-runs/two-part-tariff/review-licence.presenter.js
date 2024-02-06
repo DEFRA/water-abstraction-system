@@ -94,11 +94,8 @@ function _checkStatusAndReturnTotal (returnLog) {
 function _allocated (quantity, allocated) {
   if (quantity > allocated) {
     return 'Over abstraction'
-  } else if (quantity === allocated) {
-    return 'Fully allocated'
   } else {
-    return ''
-  }
+    return 'Fully allocated'
 }
 
 function _prepareDate (startDate, endDate) {
