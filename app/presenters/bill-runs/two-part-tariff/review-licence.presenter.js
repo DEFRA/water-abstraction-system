@@ -73,7 +73,7 @@ function _checkStatusAndReturnTotal (returnLog) {
   const { status, allocated, quantity, underQuery } = returnLog.reviewReturnResults
 
   let returnStatus = underQuery ? 'query' : status
-  let total = underQuery ? '/' : `${allocated} ML / ${quantity} ML`
+  let total = `${allocated} ML / ${quantity} ML`
   let allocatedStatus = _allocated(quantity, allocated)
 
   if (status === 'void' || status === 'received') {
