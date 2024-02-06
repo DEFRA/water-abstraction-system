@@ -25,7 +25,7 @@ async function go (billRunId, licenceId) {
 
   const { matchedReturns, unmatchedReturns, chargePeriods } = await PrepareReviewLicenceResultsService.go(returnLogs)
 
-  const pageData = await ReviewLicencePresenter.go(matchedReturns, unmatchedReturns, chargePeriods, billRun)
+  const pageData = ReviewLicencePresenter.go(matchedReturns, unmatchedReturns, chargePeriods, billRun)
 
   return pageData
 }

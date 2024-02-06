@@ -18,7 +18,7 @@ describe('Review Licence presenter', () => {
     const billRun = _billRun()
 
     it('correctly presents the data', async () => {
-      const result = await ReviewLicencePresenter.go(matchedReturns, unmatchedReturns, chargePeriods, billRun)
+      const result = ReviewLicencePresenter.go(matchedReturns, unmatchedReturns, chargePeriods, billRun)
 
       expect(result).to.equal({
         licenceRef: '7/34/10/*S/0084',

@@ -17,7 +17,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-async function go (matchedReturns, unmatchedReturns, chargePeriods, billRun) {
+function go (matchedReturns, unmatchedReturns, chargePeriods, billRun) {
   return {
     licenceRef: matchedReturns[0].licence.licenceRef,
     billRunId: billRun.id,
