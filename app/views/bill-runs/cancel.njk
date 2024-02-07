@@ -1,0 +1,92 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "macros/badge.njk" import badge %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to bill runs',
+      href: '/billing/batch/list'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-l">{{region}} {{billRunType}} bill run</span>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
+
+      {# Bill run meta-data #}
+      {{ govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: 'Date created',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: dateCreated,
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Region',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: region,
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Bill run type',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: billRunType | capitalize,
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Charge scheme',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: 'Current',
+                classes: "meta-data__value"
+              }
+            },
+            {
+              key: {
+                text: 'Financial year',
+                classes: "meta-data__label"
+              },
+              value: {
+                text: financialYear,
+                classes: "meta-data__value"
+              }
+            }
+          ]
+        }) }}
+    </div>
+  </div>
+
+  {# Cancel bill run button #}
+  <section class="govuk-!-margin-bottom-9">
+    <form method="post" action="cancel-bill-run">
+      {{ govukButton({
+        text: "Cancel bill run"
+      }) }}
+    </form>
+  </section>
+{% endblock %}

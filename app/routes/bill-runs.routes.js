@@ -34,6 +34,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/cancel',
+    handler: BillRunsController.cancelConfirmation,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Request confirmation to cancel a bill run'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/cancel',
+    handler: BillRunsController.cancel,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Cancel a bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.review,
     options: {

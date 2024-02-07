@@ -7,10 +7,35 @@
 
 const Boom = require('@hapi/boom')
 
+const CancelBillRunConfirmationService = require('../services/bill-runs/cancel-bill-run-confirmation.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
+
+async function cancel (request, h) {
+  const { id } = request.params
+
+  const pageData = await CancelBillRunConfirmationService.go(id)
+
+  return h.view('bill-runs/cancel.njk', {
+    pageTitle: "You're about to cancel this bill run",
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function cancelConfirmation (request, h) {
+  const { id } = request.params
+
+  const pageData = await CancelBillRunConfirmationService.go(id)
+
+  return h.view('bill-runs/cancel.njk', {
+    pageTitle: "You're about to cancel this bill run",
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
 
 async function create (request, h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
@@ -67,6 +92,8 @@ function _formattedInitiateBillRunError (error) {
 }
 
 module.exports = {
+  cancel,
+  cancelConfirmation,
   create,
   review,
   view

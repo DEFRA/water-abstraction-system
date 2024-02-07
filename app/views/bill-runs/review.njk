@@ -116,7 +116,7 @@
 
   {# Cancel bill run button #}
   <section class="govuk-!-margin-bottom-9">
-    <form method="post" action="review/cancel-bill-run" novalidate>
+    <form method="get" action="cancel">
       {{ govukButton({
         text: "Cancel bill run",
         classes: "govuk-button--secondary govuk-!-margin-bottom-0"
@@ -146,7 +146,7 @@
         {html: action | safe},
         {text: licence.licenceHolder},
         {text: licence.issue },
-        {html: statusTag, format: "numeric"}
+        {html: statusTag, classes: "govuk-!-text-align-right"}
       ] %}
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
       {% endfor %}
