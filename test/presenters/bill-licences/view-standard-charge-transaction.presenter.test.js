@@ -211,10 +211,10 @@ describe('View Standard Charge Transaction presenter', () => {
     })
 
     describe("'chargeReference' property", () => {
-      it("returns the charge category combined with the base line charge '4.5.13 (£11.62)'", () => {
+      it("returns the charge category combined with the base line charge '4.5.13 (£1162.00)'", () => {
         const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-        expect(result.chargeReference).to.equal('4.5.13 (£11.62)')
+        expect(result.chargeReference).to.equal('4.5.13 (£1162.00)')
       })
     })
 
@@ -239,7 +239,7 @@ describe('View Standard Charge Transaction presenter', () => {
           }
         ],
         chargePeriod: '1 April 2023 to 31 March 2024',
-        chargeReference: '4.5.13 (£11.62)',
+        chargeReference: '4.5.13 (£1162.00)',
         chargeType: 'standard',
         creditAmount: '',
         debitAmount: '£1,162.00',
