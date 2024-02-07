@@ -127,10 +127,7 @@ function _chargeElements (chargeElements) {
 }
 
 function _chargeReference (baselineCharge, chargeCategoryCode) {
-  // NOTE: The baseline charge is returned in pounds not pence. This is different to all other values we have to deal
-  // with. So, we have to convert the value before passing it to the formatter as it expects the value to be in pence.
-  const baselineChargeInPence = baselineCharge * 100
-  return `${chargeCategoryCode} (£${formatPounds(baselineChargeInPence)})`
+  return `${chargeCategoryCode} (£${formatPounds(baselineCharge)})`
 }
 
 function _presrocContent (transaction) {
@@ -203,8 +200,14 @@ function _srocContent (transaction) {
     volume
   } = transaction
 
+  // NOTE: These charges are returned from the Rules Service (via the Charging Module API) in pounds not pence. This is
+  // different to all other values we have to deal with. So, we have to convert the values before passing them to our
+  // formatter as it expects the values to be in pence.
+  const baselineChargeInPence = baselineCharge * 100
+  const supportedSourceChargeInPence = supportedSourceCharge * 100
+
   return {
-    additionalCharges: _additionalCharges(credit, waterCompanyCharge, supportedSourceCharge, supportedSourceName),
+    additionalCharges: _additionalCharges(credit, waterCompanyCharge, supportedSourceChargeInPence, supportedSourceName),
     adjustments: _adjustments(
       adjustmentFactor,
       aggregateFactor,
@@ -217,7 +220,7 @@ function _srocContent (transaction) {
     chargeCategoryDescription,
     chargeElements: _chargeElements(chargeReference.chargeElements),
     chargePeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
-    chargeReference: _chargeReference(baselineCharge, chargeCategoryCode),
+    chargeReference: _chargeReference(baselineChargeInPence, chargeCategoryCode),
     chargeType,
     creditAmount: credit ? formatMoney(netAmount) : '',
     debitAmount: credit ? '' : formatMoney(netAmount),
