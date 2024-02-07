@@ -56,10 +56,10 @@ describe('View Standard Charge Transaction presenter', () => {
             transaction.credit = true
           })
 
-          it("returns 'Supported source Candover (£-145.67)'", () => {
+          it("returns 'Supported source Candover (£-14567.00)'", () => {
             const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-            expect(result.additionalCharges).to.equal('Supported source Candover (£-145.67)')
+            expect(result.additionalCharges).to.equal('Supported source Candover (£-14567.00)')
           })
         })
 
@@ -68,10 +68,10 @@ describe('View Standard Charge Transaction presenter', () => {
             transaction.credit = false
           })
 
-          it("returns 'Supported source Candover (£145.67)'", () => {
+          it("returns 'Supported source Candover (£14567.00)'", () => {
             const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-            expect(result.additionalCharges).to.equal('Supported source Candover (£145.67)')
+            expect(result.additionalCharges).to.equal('Supported source Candover (£14567.00)')
           })
         })
       })
@@ -98,7 +98,7 @@ describe('View Standard Charge Transaction presenter', () => {
         it("returns 'Public Water Supply'", () => {
           const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-          expect(result.additionalCharges).to.equal('Supported source Candover (£145.67), Public Water Supply')
+          expect(result.additionalCharges).to.equal('Supported source Candover (£14567.00), Public Water Supply')
         })
       })
     })
