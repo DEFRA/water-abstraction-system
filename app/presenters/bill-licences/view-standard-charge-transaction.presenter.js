@@ -127,7 +127,10 @@ function _chargeElements (chargeElements) {
 }
 
 function _chargeReference (baselineCharge, chargeCategoryCode) {
-  return `${chargeCategoryCode} (£${formatPounds(baselineCharge)})`
+  // NOTE: The baseline charge is returned in pounds not pence. This is different to all other values we have to deal
+  // with. So, we have to convert the value before passing it to the formatter as it expects the value to be in pence.
+  const baselineChargeInPence = baselineCharge * 100
+  return `${chargeCategoryCode} (£${formatPounds(baselineChargeInPence)})`
 }
 
 function _presrocContent (transaction) {
