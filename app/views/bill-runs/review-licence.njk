@@ -75,6 +75,8 @@
 
       {% set tableRows = [] %}
         {% for return in matchedReturns %}
+          {# Set an easier to use index #}
+          {% set rowIndex = loop.index0 %}
 
           {% if return.status == 'overdue' or return.status == 'query' %}
             {% set colour = "govuk-tag--red"%}
@@ -96,11 +98,26 @@
         {% endset %}
 
         {% set tableRow = [
-          {html: action | safe + '<br>' + return.dates, classes: 'govuk-body-s' },
-          {html: return.purpose + '<br>' + return.description, classes: 'govuk-body-s' },
-          {html: statusTag, classes: 'govuk-body-s' },
-          {html: return.total + '<br>' + return.allocated, classes: "govuk-body-s govuk-!-text-align-right" }
-          ]
+          {
+            html: action | safe + '<br>' + return.dates,
+            classes: 'govuk-body-s',
+            attributes: { 'data-test': 'matched-return-' + rowIndex }
+          },
+          {
+            html: return.purpose + '<br>' + return.description,
+            classes: 'govuk-body-s',
+            attributes: { 'data-test': 'matched-return-' + rowIndex }
+            },
+          {
+            html: statusTag,
+            classes: 'govuk-body-s',
+            attributes: { 'data-test': 'matched-return-' + rowIndex }
+          },
+          {
+            html: return.total + '<br>' + return.allocated,
+            classes: "govuk-body-s govuk-!-text-align-right",
+            attributes: { 'data-test': 'matched-return-' + rowIndex }
+          }]
         %}
 
         {% set tableRows = (tableRows.push(tableRow), tableRows) %}
@@ -134,6 +151,8 @@
   {% if unmatchedReturns.length > 0 %}
       {% set tableRows = [] %}
         {% for return in unmatchedReturns %}
+          {# Set an easier to use index #}
+          {% set rowIndex = loop.index0 %}
 
           {% if return.status == 'overdue' or return.status == 'query' %}
             {% set colour = "govuk-tag--red"%}
@@ -155,10 +174,26 @@
         {% endset %}
 
         {% set tableRow = [
-          {html: action | safe + '<br>' + return.dates, classes: 'govuk-body-s' },
-          {html: return.purpose + '<br>' + return.description, classes: 'govuk-body-s' },
-          {html: statusTag, classes: 'govuk-body-s' },
-          {html: return.total, classes: "govuk-body-s govuk-!-text-align-right" }
+          {
+            html: action | safe + '<br>' + return.dates,
+            classes: 'govuk-body-s',
+            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          },
+          {
+            html: return.purpose + '<br>' + return.description,
+            classes: 'govuk-body-s',
+            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          },
+          {
+            html: statusTag,
+            classes: 'govuk-body-s',
+            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          },
+          {
+            html: return.total,
+            classes: "govuk-body-s govuk-!-text-align-right",
+            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          }
           ]
         %}
 
