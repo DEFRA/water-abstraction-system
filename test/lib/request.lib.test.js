@@ -112,36 +112,86 @@ describe('RequestLib', () => {
       })
 
       describe('because there was a network issue', () => {
-        beforeEach(() => {
-          Nock(testDomain).get('/').replyWithError({ code: 'ECONNRESET' })
-        })
-
-        it('logs and records the error', async () => {
-          await RequestLib.get(testDomain)
-
-          const logDataArg = notifierStub.omfg.args[0][1]
-
-          expect(notifierStub.omfg.calledWith('GET request errored')).to.be.true()
-          expect(logDataArg.method).to.equal('GET')
-          expect(logDataArg.url).to.equal('http://example.com')
-          expect(logDataArg.additionalOptions).to.equal({})
-          expect(logDataArg.result.succeeded).to.be.false()
-          expect(logDataArg.result.response).to.be.an.error()
-        })
-
-        describe('the result it returns', () => {
-          it("has a 'succeeded' property marked as false", async () => {
-            const result = await RequestLib.get(testDomain)
-
-            expect(result.succeeded).to.be.false()
+        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
+        // the timeout for this specific test to all it to complete
+        describe('and all retries fail', { timeout: 5000 }, () => {
+          beforeEach(async () => {
+            Nock(testDomain)
+              .get(() => true)
+              .replyWithError({ code: 'ECONNRESET' })
+              .persist()
           })
 
-          it("has a 'response' property containing the error", async () => {
-            const result = await RequestLib.get(testDomain)
+          it('logs when a retry has happened', async () => {
+            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(result.response).to.exist()
-            expect(result.response).to.be.an.error()
-            expect(result.response.code).to.equal('ECONNRESET')
+            expect(notifierStub.omg.callCount).to.equal(2)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          it('logs and records the error', async () => {
+            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            const logDataArg = notifierStub.omfg.args[0][1]
+
+            expect(notifierStub.omfg.calledWith('GET request errored')).to.be.true()
+            expect(logDataArg.method).to.equal('GET')
+            expect(logDataArg.url).to.equal('http://example.com')
+            expect(logDataArg.additionalOptions).to.exist()
+            expect(logDataArg.result.succeeded).to.be.false()
+            expect(logDataArg.result.response).to.be.an.error()
+          })
+
+          describe('the result it returns', () => {
+            it("has a 'succeeded' property marked as false", async () => {
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.succeeded).to.be.false()
+            })
+
+            it("has a 'response' property containing the error", async () => {
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.response).to.exist()
+              expect(result.response).to.be.an.error()
+              expect(result.response.code).to.equal('ECONNRESET')
+            })
+          })
+        })
+
+        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
+        // the timeout for this specific test to all it to complete
+        describe('and a retry succeeds', { timeout: 5000 }, () => {
+          beforeEach(async () => {
+            // The first response will error, the second response will return OK
+            Nock(testDomain)
+              .get(() => true)
+              .replyWithError({ code: 'ECONNRESET' })
+              .get(() => true)
+              .reply(200, { data: 'econnreset hello world' })
+          })
+
+          it('logs when a retry has happened', async () => {
+            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            expect(notifierStub.omg.callCount).to.equal(1)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          describe('the result it returns', () => {
+            it("has a 'succeeded' property marked as true", async () => {
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.succeeded).to.be.true()
+            })
+
+            it("has a 'response' property containing the web response", async () => {
+              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.response).to.exist()
+              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.body).to.equal('{"data":"econnreset hello world"}')
+            })
           })
         })
       })
@@ -153,7 +203,7 @@ describe('RequestLib', () => {
         })
 
         // Because of the fake delay in this test, Lab will timeout (by default tests have 2 seconds to finish). So, we
-        // have to override the timeout for this specific test to all it to complete
+        // have to override the timeout for this specific test to allow it to complete
         describe('and all retries fail', { timeout: 5000 }, () => {
           beforeEach(async () => {
             Nock(testDomain)
@@ -321,36 +371,86 @@ describe('RequestLib', () => {
       })
 
       describe('because there was a network issue', () => {
-        beforeEach(() => {
-          Nock(testDomain).patch('/').replyWithError({ code: 'ECONNRESET' })
-        })
-
-        it('logs and records the error', async () => {
-          await RequestLib.patch(testDomain)
-
-          const logDataArg = notifierStub.omfg.args[0][1]
-
-          expect(notifierStub.omfg.calledWith('PATCH request errored')).to.be.true()
-          expect(logDataArg.method).to.equal('PATCH')
-          expect(logDataArg.url).to.equal('http://example.com')
-          expect(logDataArg.additionalOptions).to.equal({})
-          expect(logDataArg.result.succeeded).to.be.false()
-          expect(logDataArg.result.response).to.be.an.error()
-        })
-
-        describe('the result it returns', () => {
-          it("has a 'succeeded' property marked as false", async () => {
-            const result = await RequestLib.patch(testDomain)
-
-            expect(result.succeeded).to.be.false()
+        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
+        // the timeout for this specific test to all it to complete
+        describe('and all retries fail', { timeout: 5000 }, () => {
+          beforeEach(async () => {
+            Nock(testDomain)
+              .patch(() => true)
+              .replyWithError({ code: 'ECONNRESET' })
+              .persist()
           })
 
-          it("has a 'response' property containing the error", async () => {
-            const result = await RequestLib.patch(testDomain)
+          it('logs when a retry has happened', async () => {
+            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(result.response).to.exist()
-            expect(result.response).to.be.an.error()
-            expect(result.response.code).to.equal('ECONNRESET')
+            expect(notifierStub.omg.callCount).to.equal(2)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          it('logs and records the error', async () => {
+            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            const logDataArg = notifierStub.omfg.args[0][1]
+
+            expect(notifierStub.omfg.calledWith('PATCH request errored')).to.be.true()
+            expect(logDataArg.method).to.equal('PATCH')
+            expect(logDataArg.url).to.equal('http://example.com')
+            expect(logDataArg.additionalOptions).to.exist()
+            expect(logDataArg.result.succeeded).to.be.false()
+            expect(logDataArg.result.response).to.be.an.error()
+          })
+
+          describe('the result it returns', () => {
+            it("has a 'succeeded' property marked as false", async () => {
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.succeeded).to.be.false()
+            })
+
+            it("has a 'response' property containing the error", async () => {
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.response).to.exist()
+              expect(result.response).to.be.an.error()
+              expect(result.response.code).to.equal('ECONNRESET')
+            })
+          })
+        })
+
+        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
+        // the timeout for this specific test to all it to complete
+        describe('and a retry succeeds', { timeout: 5000 }, () => {
+          beforeEach(async () => {
+            // The first response will error, the second response will return OK
+            Nock(testDomain)
+              .patch(() => true)
+              .replyWithError({ code: 'ECONNRESET' })
+              .patch(() => true)
+              .reply(200, { data: 'econnreset hello world' })
+          })
+
+          it('logs when a retry has happened', async () => {
+            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            expect(notifierStub.omg.callCount).to.equal(1)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          describe('the result it returns', () => {
+            it("has a 'succeeded' property marked as true", async () => {
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.succeeded).to.be.true()
+            })
+
+            it("has a 'response' property containing the web response", async () => {
+              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.response).to.exist()
+              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.body).to.equal('{"data":"econnreset hello world"}')
+            })
           })
         })
       })
@@ -530,36 +630,86 @@ describe('RequestLib', () => {
       })
 
       describe('because there was a network issue', () => {
-        beforeEach(() => {
-          Nock(testDomain).post('/').replyWithError({ code: 'ECONNRESET' })
-        })
-
-        it('logs and records the error', async () => {
-          await RequestLib.post(testDomain)
-
-          const logDataArg = notifierStub.omfg.args[0][1]
-
-          expect(notifierStub.omfg.calledWith('POST request errored')).to.be.true()
-          expect(logDataArg.method).to.equal('POST')
-          expect(logDataArg.url).to.equal('http://example.com')
-          expect(logDataArg.additionalOptions).to.equal({})
-          expect(logDataArg.result.succeeded).to.be.false()
-          expect(logDataArg.result.response).to.be.an.error()
-        })
-
-        describe('the result it returns', () => {
-          it("has a 'succeeded' property marked as false", async () => {
-            const result = await RequestLib.post(testDomain)
-
-            expect(result.succeeded).to.be.false()
+        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
+        // the timeout for this specific test to all it to complete
+        describe('and all retries fail', { timeout: 5000 }, () => {
+          beforeEach(async () => {
+            Nock(testDomain)
+              .post(() => true)
+              .replyWithError({ code: 'ECONNRESET' })
+              .persist()
           })
 
-          it("has a 'response' property containing the error", async () => {
-            const result = await RequestLib.post(testDomain)
+          it('logs when a retry has happened', async () => {
+            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(result.response).to.exist()
-            expect(result.response).to.be.an.error()
-            expect(result.response.code).to.equal('ECONNRESET')
+            expect(notifierStub.omg.callCount).to.equal(2)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          it('logs and records the error', async () => {
+            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            const logDataArg = notifierStub.omfg.args[0][1]
+
+            expect(notifierStub.omfg.calledWith('POST request errored')).to.be.true()
+            expect(logDataArg.method).to.equal('POST')
+            expect(logDataArg.url).to.equal('http://example.com')
+            expect(logDataArg.additionalOptions).to.exist()
+            expect(logDataArg.result.succeeded).to.be.false()
+            expect(logDataArg.result.response).to.be.an.error()
+          })
+
+          describe('the result it returns', () => {
+            it("has a 'succeeded' property marked as false", async () => {
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.succeeded).to.be.false()
+            })
+
+            it("has a 'response' property containing the error", async () => {
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.response).to.exist()
+              expect(result.response).to.be.an.error()
+              expect(result.response.code).to.equal('ECONNRESET')
+            })
+          })
+        })
+
+        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
+        // the timeout for this specific test to all it to complete
+        describe('and a retry succeeds', { timeout: 5000 }, () => {
+          beforeEach(async () => {
+            // The first response will error, the second response will return OK
+            Nock(testDomain)
+              .post(() => true)
+              .replyWithError({ code: 'ECONNRESET' })
+              .post(() => true)
+              .reply(200, { data: 'econnreset hello world' })
+          })
+
+          it('logs when a retry has happened', async () => {
+            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            expect(notifierStub.omg.callCount).to.equal(1)
+            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          describe('the result it returns', () => {
+            it("has a 'succeeded' property marked as true", async () => {
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.succeeded).to.be.true()
+            })
+
+            it("has a 'response' property containing the web response", async () => {
+              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+              expect(result.response).to.exist()
+              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.body).to.equal('{"data":"econnreset hello world"}')
+            })
           })
         })
       })
