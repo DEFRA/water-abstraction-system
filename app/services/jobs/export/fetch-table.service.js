@@ -12,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  * @param {String} tableName The name of the table to retrieve
  * @param {string} schemaName The schema that the table belongs to
  *
- * @returns {Object} The headers, query and table name from the table
+ * @returns {Promise<Object>} The headers, query and table name from the table
  */
 async function go (tableName, schemaName) {
   const data = {

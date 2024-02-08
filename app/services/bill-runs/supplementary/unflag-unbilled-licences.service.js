@@ -28,7 +28,8 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @param {String} billRunId The ID of the bill run being processed
  * @param {String[]} allLicenceIds All licence IDs being processed in the bill run
- * @returns {Number} count of records updated
+ *
+ * @returns {Promise<Number>} count of records updated
  */
 async function go (billRunId, allLicenceIds) {
   const result = await LicenceModel.query()

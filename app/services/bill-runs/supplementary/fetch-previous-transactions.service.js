@@ -18,7 +18,7 @@ const { db } = require('../../../../db/db.js')
  *  match against
  * @param {Number} financialYearEnding The year the financial billing period ends that we need to match against
  *
- * @returns {Object} The resulting matched transactions
+ * @returns {Promise<Object>} The resulting matched transactions
  */
 async function go (bill, billLicence, financialYearEnding) {
   const transactions = await _fetch(

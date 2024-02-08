@@ -12,7 +12,7 @@ const tar = require('tar')
  *
  * @param {String} schemaFolderPath
  *
- * @returns {String} The path to the created tarball file
+ * @returns {Promise<String>} The path to the created tarball file
  */
 async function go (schemaFolderPath) {
   const file = `${schemaFolderPath}.tgz`
