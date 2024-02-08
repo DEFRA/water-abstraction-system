@@ -16,13 +16,14 @@ const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/revi
 async function cancel (request, h) {
   const { id } = request.params
 
-  const pageData = await CancelBillRunConfirmationService.go(id)
+  return id
+  // const pageData = await CancelBillRunConfirmationService.go(id)
 
-  return h.view('bill-runs/cancel.njk', {
-    pageTitle: "You're about to cancel this bill run",
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  // return h.view('bill-runs/cancel.njk', {
+  //   pageTitle: "You're about to cancel this bill run",
+  //   activeNavBar: 'bill-runs',
+  //   ...pageData
+  // })
 }
 
 async function cancelConfirmation (request, h) {
