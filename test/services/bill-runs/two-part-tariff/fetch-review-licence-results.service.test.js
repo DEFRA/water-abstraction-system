@@ -59,7 +59,7 @@ describe('Fetch Review Licence Results Service', () => {
       it('returns details of the licence review results', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
-        expect(result.returnLogs).to.equal([{
+        expect(result.reviewReturnResults).to.equal([{
           reviewReturnResultId: reviewResult.reviewReturnResultId,
           reviewChargeElementResultId: reviewResult.reviewChargeElementResultId,
           chargeVersionId: reviewResult.chargeVersionId,
@@ -95,7 +95,7 @@ describe('Fetch Review Licence Results Service', () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, '56db85ed-767f-4c83-8174-5ad9c80fd00d')
 
         expect(result.billRun.id).to.equal(billRun.id)
-        expect(result.returnLogs).to.equal([])
+        expect(result.reviewReturnResults).to.equal([])
       })
     })
   })
@@ -109,7 +109,7 @@ describe('Fetch Review Licence Results Service', () => {
       const result = await FetchReviewLicenceResultsService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d', licence.id)
 
       expect(result.billRun).to.be.undefined()
-      expect(result.returnLogs).to.have.length(0)
+      expect(result.reviewReturnResults).to.have.length(0)
     })
   })
 })

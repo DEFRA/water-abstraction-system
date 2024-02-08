@@ -12,21 +12,21 @@ const PrepareReviewLicenceResultsService = require('../../../../app/services/bil
 
 describe('Prepare Review Licence Results Service', () => {
   describe('when given return logs', () => {
-    const returnLogs = _returnLogData()
+    const reviewReturnResults = _reviewReturnResultsData()
 
     describe('to prepares them for the presenter', () => {
       it('deduplicates them and splits them into matched and unmatched returns', async () => {
-        const result = PrepareReviewLicenceResultsService.go(returnLogs)
+        const result = PrepareReviewLicenceResultsService.go(reviewReturnResults)
 
         expect(result.matchedReturns).to.have.length(2)
-        expect(result.matchedReturns).to.equal([returnLogs[0], returnLogs[3]])
+        expect(result.matchedReturns).to.equal([reviewReturnResults[0], reviewReturnResults[3]])
 
         expect(result.unmatchedReturns).to.have.length(1)
-        expect(result.unmatchedReturns).to.equal([returnLogs[2]])
+        expect(result.unmatchedReturns).to.equal([reviewReturnResults[2]])
       })
 
       it('works out the charge periods from the return logs', async () => {
-        const result = PrepareReviewLicenceResultsService.go(returnLogs)
+        const result = PrepareReviewLicenceResultsService.go(reviewReturnResults)
 
         expect(result.chargePeriods).to.equal([
           {
@@ -43,7 +43,7 @@ describe('Prepare Review Licence Results Service', () => {
   })
 })
 
-function _returnLogData () {
+function _reviewReturnResultsData () {
   // Data consists of a duplicate return thats matched, an unmatched return and two different charge versions
   return [
     {
@@ -51,7 +51,10 @@ function _returnLogData () {
       reviewChargeElementResultId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
       chargeVersionId: 'f88dc360-7f7f-4ea2-ad77-f626f7b1e759',
       chargePeriodStartDate: new Date('2022-04-01'),
-      chargePeriodEndDate: new Date('2023-03-31')
+      chargePeriodEndDate: new Date('2023-03-31'),
+      licence: {
+        licenceRef: '7/34/10/*S/0084'
+      }
     },
     {
       reviewReturnResultId: '90eceec8-18de-4497-8102-3a7c6259d41a',

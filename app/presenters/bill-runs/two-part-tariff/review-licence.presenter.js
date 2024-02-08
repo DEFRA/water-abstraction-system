@@ -14,12 +14,13 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @param {module:ReviewReturnResultModel} unmatchedReturns unmatched return logs for an individual licence
  * @param {Object[]} chargePeriods chargePeriods with start and end date properties
  * @param {module:BillRunModel} billRun the data from the bill run
+ * @param {String} licenceRef the reference for the licence
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (matchedReturns, unmatchedReturns, chargePeriods, billRun) {
+function go (matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRef) {
   return {
-    licenceRef: matchedReturns[0].licence.licenceRef,
+    licenceRef,
     billRunId: billRun.id,
     status: 'Review',
     region: billRun.region.displayName,

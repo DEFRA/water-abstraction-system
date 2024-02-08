@@ -14,13 +14,13 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
  * @param {String} billRunId UUID of the bill run
  * @param {String} licenceId UUID of the licence
  *
- * @returns {Object[]} Contains an array of bill run data and review licence data
+ * @returns {Promise<Object[]>} Contains an array of bill run data and review licence data
  */
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
-  const returnLogs = await _fetchReturnLogs(billRunId, licenceId)
+  const reviewReturnResults = await _fetchReviewReturnResults(billRunId, licenceId)
 
-  return { returnLogs, billRun }
+  return { reviewReturnResults, billRun }
 }
 
 async function _fetchBillRun (billRunId) {
@@ -39,7 +39,7 @@ async function _fetchBillRun (billRunId) {
     })
 }
 
-async function _fetchReturnLogs (billRunId, licenceId) {
+async function _fetchReviewReturnResults (billRunId, licenceId) {
   return ReviewResultModel.query()
     .where({ billRunId, licenceId })
     .whereNotNull('reviewReturnResultId')
