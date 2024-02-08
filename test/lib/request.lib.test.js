@@ -112,9 +112,7 @@ describe('RequestLib', () => {
       })
 
       describe('because there was a network issue', () => {
-        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
-        // the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .get(() => true)
@@ -159,9 +157,7 @@ describe('RequestLib', () => {
           })
         })
 
-        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
-        // the timeout for this specific test to all it to complete
-        describe('and a retry succeeds', { timeout: 5000 }, () => {
+        describe('and a retry succeeds', () => {
           beforeEach(async () => {
             // The first response will error, the second response will return OK
             Nock(testDomain)
@@ -214,10 +210,23 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.get(testDomain)
+            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          it('logs and records the error', async () => {
+            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            const logDataArg = notifierStub.omfg.args[0][1]
+
+            expect(notifierStub.omfg.calledWith('GET request errored')).to.be.true()
+            expect(logDataArg.method).to.equal('GET')
+            expect(logDataArg.url).to.equal('http://example.com')
+            expect(logDataArg.additionalOptions).to.exist()
+            expect(logDataArg.result.succeeded).to.be.false()
+            expect(logDataArg.result.response).to.be.an.error()
           })
 
           describe('the result it returns', () => {
@@ -249,7 +258,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.get(testDomain)
+            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -371,9 +380,7 @@ describe('RequestLib', () => {
       })
 
       describe('because there was a network issue', () => {
-        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
-        // the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .patch(() => true)
@@ -418,9 +425,7 @@ describe('RequestLib', () => {
           })
         })
 
-        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
-        // the timeout for this specific test to all it to complete
-        describe('and a retry succeeds', { timeout: 5000 }, () => {
+        describe('and a retry succeeds', () => {
           beforeEach(async () => {
             // The first response will error, the second response will return OK
             Nock(testDomain)
@@ -473,10 +478,23 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.patch(testDomain)
+            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          it('logs and records the error', async () => {
+            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            const logDataArg = notifierStub.omfg.args[0][1]
+
+            expect(notifierStub.omfg.calledWith('PATCH request errored')).to.be.true()
+            expect(logDataArg.method).to.equal('PATCH')
+            expect(logDataArg.url).to.equal('http://example.com')
+            expect(logDataArg.additionalOptions).to.exist()
+            expect(logDataArg.result.succeeded).to.be.false()
+            expect(logDataArg.result.response).to.be.an.error()
           })
 
           describe('the result it returns', () => {
@@ -508,7 +526,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.patch(testDomain)
+            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -630,9 +648,7 @@ describe('RequestLib', () => {
       })
 
       describe('because there was a network issue', () => {
-        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
-        // the timeout for this specific test to all it to complete
-        describe('and all retries fail', { timeout: 5000 }, () => {
+        describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
               .post(() => true)
@@ -677,9 +693,7 @@ describe('RequestLib', () => {
           })
         })
 
-        // Because of the retries Lab will timeout (by default tests have 2 seconds to finish). So, we have to override
-        // the timeout for this specific test to all it to complete
-        describe('and a retry succeeds', { timeout: 5000 }, () => {
+        describe('and a retry succeeds', () => {
           beforeEach(async () => {
             // The first response will error, the second response will return OK
             Nock(testDomain)
@@ -732,10 +746,23 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.post(testDomain)
+            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+          })
+
+          it('logs and records the error', async () => {
+            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+
+            const logDataArg = notifierStub.omfg.args[0][1]
+
+            expect(notifierStub.omfg.calledWith('POST request errored')).to.be.true()
+            expect(logDataArg.method).to.equal('POST')
+            expect(logDataArg.url).to.equal('http://example.com')
+            expect(logDataArg.additionalOptions).to.exist()
+            expect(logDataArg.result.succeeded).to.be.false()
+            expect(logDataArg.result.response).to.be.an.error()
           })
 
           describe('the result it returns', () => {
@@ -767,7 +794,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.post(testDomain)
+            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
