@@ -6,6 +6,8 @@
  */
 
 const RequestLib = require('./request.lib.js')
+
+const requestConfig = require('../../config/request.config.js')
 const servicesConfig = require('../../config/services.config.js')
 
 /**
@@ -95,7 +97,10 @@ function _requestOptions (accessToken, body) {
       authorization: `Bearer ${accessToken}`
     },
     responseType: 'json',
-    json: body
+    json: body,
+    timeout: {
+      request: requestConfig.timeout * 2
+    }
   }
 }
 

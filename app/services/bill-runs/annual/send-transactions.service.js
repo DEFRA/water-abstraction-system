@@ -12,11 +12,26 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
 
 async function go (transactions, billRunExternalId, accountNumber, licence) {
   try {
-    const requests = transactions.map((transaction) => {
-      return _sendTransactionToChargingModule(transaction, billRunExternalId, accountNumber, licence)
-    })
+    for (const transaction of transactions) {
+      const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
+        transaction,
+        accountNumber,
+        licence
+      )
 
-    return Promise.all(requests)
+      const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(billRunExternalId, chargingModuleRequest)
+
+      transaction.status = 'charge_created'
+      transaction.externalId = chargingModuleResponse.response.body.transaction.id
+    }
+
+    return transactions
+
+    // const requests = transactions.map((transaction) => {
+    //   return _sendTransactionToChargingModule(transaction, billRunExternalId, accountNumber, licence)
+    // })
+
+    // return Promise.all(requests)
   } catch (error) {
     throw new BillRunError(error, BillRunModel.errorCodes.failedToCreateCharge)
   }

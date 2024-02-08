@@ -45,7 +45,7 @@ function defaultOptions () {
       // The default is also 2 retries before erroring. We specify it to make this fact visible
       limit: 2,
       // We ensure that the only network errors Got retries are timeout errors
-      errorCodes: ['ETIMEDOUT'],
+      errorCodes: ['ETIMEDOUT', 'ECONNRESET'],
       // By default, Got does not retry PATCH and POST requests. As we only retry timeouts there is no risk in retrying
       // our PATCH and POST requests. So, we set methods to be Got's defaults plus 'PATCH' and 'POST'
       methods: ['GET', 'PATCH', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
