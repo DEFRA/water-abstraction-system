@@ -52,11 +52,6 @@ async function _fetchLicence (id) {
       ])
     })
     .withGraphFetched('licenceDocumentHeader')
-    .modifyGraph('licenceDocumentHeader', (builder) => {
-      builder.select([
-        'id'
-      ])
-    })
     .withGraphFetched('licenceVersions.[licenceVersionPurposes, purposes]')
     .modify('licenceHolder')
     .modify('registeredToAndLicenceName')
