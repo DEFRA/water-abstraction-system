@@ -16,7 +16,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  * @param {module:ChargeElementModel} chargeElement - The charge element to match return logs against
  * @param {module:ReturnLogModel[]} returnLogs - All return logs from the charge element's licence
  *
- * @returns {module:ReturnLogModel[]} Return logs that matched the charge element
+ * @returns {Promise<module:ReturnLogModel[]>} Return logs that matched the charge element
  */
 function go (chargeElement, returnLogs) {
   const matchingReturns = _matchReturns(chargeElement, returnLogs)
