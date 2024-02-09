@@ -180,7 +180,33 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licenceVersions has one entry', () => {
+    describe('when there is an empty licenceVersions array', () => {
+      beforeEach(() => {
+        licence.licenceVersions = []
+      })
+
+      it('returns null', () => {
+        const result = ViewLicencePresenter.go(licence)
+
+        expect(result.purposes).to.equal(null)
+      })
+    })
+
+    describe('when there is an empty licenceVersions purposes array', () => {
+      beforeEach(() => {
+        licence.licenceVersions = [{
+          purposes: []
+        }]
+      })
+
+      it('returns null', () => {
+        const result = ViewLicencePresenter.go(licence)
+
+        expect(result.purposes).to.equal(null)
+      })
+    })
+
+    describe('when the licenceVersions has one purpose', () => {
       beforeEach(() => {
         licence.licenceVersions = [{
           purposes: [{
@@ -189,7 +215,7 @@ describe('View Licence presenter', () => {
         }]
       })
 
-      it('returns an object with a caption and an array with one entry', () => {
+      it('returns an object with a caption and an array with one purpose', () => {
         const result = ViewLicencePresenter.go(licence)
 
         expect(result.purposes).to.equal({
@@ -199,7 +225,7 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licenceVersions has more than one entry of the same type', () => {
+    describe('when the licenceVersions has more than one purpose of the same type', () => {
       beforeEach(() => {
         licence.licenceVersions = [{
           purposes: [{
@@ -220,7 +246,7 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licenceVersions has more than one entry of different types', () => {
+    describe('when the licenceVersions has more than one purpose of different types', () => {
       beforeEach(() => {
         licence.licenceVersions = [{
           purposes: [{
@@ -293,6 +319,36 @@ describe('View Licence presenter', () => {
 
         expect(result.abstractionPeriods).to.equal(null)
         expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
+      })
+    })
+
+    describe('when there are no licenceVersions so an empty array is returned', () => {
+      beforeEach(() => {
+        licence.licenceVersions = []
+      })
+
+      it('returns null', () => {
+        const result = ViewLicencePresenter.go(licence)
+
+        expect(result.abstractionPeriods).to.equal(null)
+        expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
+      })
+    })
+
+    describe('when the licenceVersionPurposes has no abstraction period and one purpose', () => {
+      beforeEach(() => {
+        licence.licenceVersions = [{
+          purposes: [{
+            description: 'Spray Irrigation - Storage'
+          }],
+          licenceVersionPurposes: []
+        }]
+      })
+
+      it('returns null', () => {
+        const result = ViewLicencePresenter.go(licence)
+
+        expect(result.abstractionPeriods).to.equal(null)
       })
     })
 
