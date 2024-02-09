@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ConsolidateDateRangesService = require('../../../../app/services/bill-runs/supplementary/consolidate-date-ranges.service')
+const ConsolidateDateRangesService = require('../../../app/services/bill-runs/consolidate-date-ranges.service')
 
 describe('ConsolidateDateRanges service', () => {
   describe('when the provided ranges are non-overlapping', () => {

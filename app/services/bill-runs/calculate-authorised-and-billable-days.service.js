@@ -6,7 +6,7 @@
  */
 
 const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
-const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
+const DetermineAbstractionPeriodService = require('./determine-abstraction-periods.service.js')
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
