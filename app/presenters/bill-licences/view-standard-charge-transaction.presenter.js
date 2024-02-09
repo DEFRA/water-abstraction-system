@@ -35,12 +35,7 @@ function _additionalCharges (credit, waterCompanyCharge, supportedSourceCharge, 
   const charges = []
 
   if (supportedSourceName) {
-    let chargeInPounds = 0
-    if (credit) {
-      chargeInPounds = formatPounds(supportedSourceCharge * -1)
-    } else {
-      chargeInPounds = formatPounds(supportedSourceCharge)
-    }
+    const chargeInPounds = formatPounds(supportedSourceCharge)
 
     charges.push(`Supported source ${supportedSourceName} (£${chargeInPounds})`)
   }

@@ -51,28 +51,10 @@ describe('View Standard Charge Transaction presenter', () => {
           transaction.supportedSourceCharge = '14567'
         })
 
-        describe('and the transaction is a credit', () => {
-          beforeEach(() => {
-            transaction.credit = true
-          })
+        it("returns 'Supported source Candover (£14567.00)'", () => {
+          const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-          it("returns 'Supported source Candover (£-14567.00)'", () => {
-            const result = ViewStandardChargeTransactionPresenter.go(transaction)
-
-            expect(result.additionalCharges).to.equal('Supported source Candover (£-14567.00)')
-          })
-        })
-
-        describe('and the transaction is a debit', () => {
-          beforeEach(() => {
-            transaction.credit = false
-          })
-
-          it("returns 'Supported source Candover (£14567.00)'", () => {
-            const result = ViewStandardChargeTransactionPresenter.go(transaction)
-
-            expect(result.additionalCharges).to.equal('Supported source Candover (£14567.00)')
-          })
+          expect(result.additionalCharges).to.equal('Supported source Candover (£14567.00)')
         })
       })
 
