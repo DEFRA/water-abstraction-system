@@ -15,7 +15,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  * ref.
  * @param {String} id The UUID for the bill run
  *
- * @returns {Object} an object containing the billRun data and an array of licences for the bill run
+ * @returns {Promise<Object>} an object containing the billRun data and an array of licences for the bill run
  */
 async function go (id) {
   const billRun = await _fetchBillRun(id)

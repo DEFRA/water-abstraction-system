@@ -23,7 +23,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
  * @param {String} batchType Type of bill run, for example, supplementary
  * @param {String} userEmail Email address of the user who initiated the bill run
  *
- * @returns {module:BillRunModel} The newly created bill run instance
+ * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */
 async function go (financialYearEndings, regionId, batchType, userEmail) {
   const liveBillRunExists = await CheckLiveBillRunService.go(regionId, financialYearEndings.toFinancialYearEnding, batchType)

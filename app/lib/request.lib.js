@@ -87,7 +87,7 @@ function defaultOptions () {
  * @param {string} url The full URL that you wish to connect to
  * @param {Object} additionalOptions Append to or replace the options passed to Got when making the request
  *
- * @returns {Object} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function get (url, additionalOptions = {}) {
   return _sendRequest('get', url, additionalOptions)

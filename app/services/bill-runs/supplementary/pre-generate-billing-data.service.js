@@ -19,7 +19,7 @@ const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
  * @param {String} billRunId The bill run id to be added to the billing invoices
  * @param {Object} billingPeriod The billing period of the billing invoices
  *
- * @returns {Object} An object containing arrays of bills and billLicences objects
+ * @returns {Promise<Object>} An object containing arrays of bills and billLicences objects
  */
 async function go (chargeVersions, billRunId, billingPeriod) {
   const billingAccounts = await FetchBillingAccountsService.go(chargeVersions)
