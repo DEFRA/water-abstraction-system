@@ -45,6 +45,30 @@
             </dd>
         </div>
     {% endif %}
+
+    {% if abstractionPeriods %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">{{ abstractionPeriods.caption }}</dt>
+            <dd class="govuk-summary-list__value">
+                {% if abstractionPeriods.uniqueAbstractionPeriods.length > 5 %}
+                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                        There are {{ abstractionPeriods.uniqueAbstractionPeriods.length }} purposes
+                    </span>
+                {% elseif abstractionPeriods.uniqueAbstractionPeriods.length > 1 %}
+                    <ul class="govuk-list govuk-!-margin-bottom-0">
+                        {% for abstractionPeriod in abstractionPeriods.uniqueAbstractionPeriods %}
+                            <li>{{ abstractionPeriod }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                        {{ abstractionPeriods.uniqueAbstractionPeriods[0] }}
+                    </span>
+                {% endif %}
+                <a href="/licences/{{ documentId }}/purposes">{{ abstractionPeriodsAndPurposesLinkText }}</a>
+            </dd>
+        </div>
+    {% endif %}
 </dl>
 
 <div class="govuk-grid-row">

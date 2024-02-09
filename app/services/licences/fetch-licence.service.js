@@ -51,7 +51,26 @@ async function _fetchLicence (id) {
         'displayName'
       ])
     })
-    .withGraphFetched('licenceVersions.[purposes]')
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select([
+        'licenceDocumentHeaders.id'
+      ])
+    })
+    .withGraphFetched('licenceVersions.[licenceVersionPurposes, purposes]')
+    .modifyGraph('[licenceVersionPurposes]', (builder) => {
+      builder.select([
+        'licenceVersionPurposes.abstractionPeriodStartDay',
+        'licenceVersionPurposes.abstractionPeriodStartMonth',
+        'licenceVersionPurposes.abstractionPeriodEndDay',
+        'licenceVersionPurposes.abstractionPeriodEndMonth'
+      ])
+    })
+    .modifyGraph('[purposes]', (builder) => {
+      builder.select([
+        'purposes.description'
+      ])
+    })
     .modify('licenceHolder')
     .modify('registeredToAndLicenceName')
 
