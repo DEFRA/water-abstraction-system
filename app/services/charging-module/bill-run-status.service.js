@@ -13,7 +13,7 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  * @param {string} billRunId The UUID of the bill run to view the status of. Note that this is the Charging
  * Module's UUID, ie. what we call the "external ID"
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response Details of the bill run status if successful; or the error response if not
  */

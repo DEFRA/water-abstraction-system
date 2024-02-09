@@ -28,7 +28,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * @param {String} regionId UUID of the region being billed that the charge version must have
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Object} Contains an array of SROC charge versions with linked licences, charge references, charge elements and related purpose
+ * @returns {Promise<Object>} Contains an array of SROC charge versions with linked licences, charge references, charge elements and related purpose
  */
 async function go (regionId, billingPeriod) {
   const regionCode = await _regionCode(regionId)

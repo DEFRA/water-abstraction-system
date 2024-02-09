@@ -19,7 +19,7 @@ const ContactModel = require('../../../app/models/contact.model.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:ContactModel} The instance of the newly created record
+ * @returns {Promise<module:ContactModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)

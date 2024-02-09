@@ -21,7 +21,7 @@ const BillRunModel = require('../../models/bill-run.model.js')
  * @param {String} [options.status=queued] The status that the bill run should be created with
  * @param {Number} [options.errorCode=null] Numeric error code
  *
- * @returns {module:BillRunModel} The newly created bill run instance with the `.region` property populated
+ * @returns {Promise<module:BillRunModel>} The newly created bill run instance with the `.region` property populated
  */
 async function go (regionId, financialYearEndings, options) {
   const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
