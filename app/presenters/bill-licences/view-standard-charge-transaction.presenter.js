@@ -31,16 +31,11 @@ function go (transaction) {
   return _presrocContent(transaction)
 }
 
-function _additionalCharges (credit, waterCompanyCharge, supportedSourceCharge, supportedSourceName) {
+function _additionalCharges (waterCompanyCharge, supportedSourceCharge, supportedSourceName) {
   const charges = []
 
   if (supportedSourceName) {
-    let chargeInPounds = 0
-    if (credit) {
-      chargeInPounds = formatPounds(supportedSourceCharge * -1)
-    } else {
-      chargeInPounds = formatPounds(supportedSourceCharge)
-    }
+    const chargeInPounds = formatPounds(supportedSourceCharge)
 
     charges.push(`Supported source ${supportedSourceName} (£${chargeInPounds})`)
   }
@@ -207,7 +202,7 @@ function _srocContent (transaction) {
   const supportedSourceChargeInPence = supportedSourceCharge * 100
 
   return {
-    additionalCharges: _additionalCharges(credit, waterCompanyCharge, supportedSourceChargeInPence, supportedSourceName),
+    additionalCharges: _additionalCharges(waterCompanyCharge, supportedSourceChargeInPence, supportedSourceName),
     adjustments: _adjustments(
       adjustmentFactor,
       aggregateFactor,
