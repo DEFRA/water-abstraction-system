@@ -31,7 +31,7 @@ function go (transaction) {
   return _presrocContent(transaction)
 }
 
-function _additionalCharges (credit, waterCompanyCharge, supportedSourceCharge, supportedSourceName) {
+function _additionalCharges (waterCompanyCharge, supportedSourceCharge, supportedSourceName) {
   const charges = []
 
   if (supportedSourceName) {
@@ -202,7 +202,7 @@ function _srocContent (transaction) {
   const supportedSourceChargeInPence = supportedSourceCharge * 100
 
   return {
-    additionalCharges: _additionalCharges(credit, waterCompanyCharge, supportedSourceChargeInPence, supportedSourceName),
+    additionalCharges: _additionalCharges(waterCompanyCharge, supportedSourceChargeInPence, supportedSourceName),
     adjustments: _adjustments(
       adjustmentFactor,
       aggregateFactor,
