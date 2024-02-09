@@ -44,10 +44,12 @@ function defaultOptions () {
     retry: {
       // The default is also 2 retries before erroring. We specify it to make this fact visible
       limit: 2,
-      // We ensure that the only network errors Got retries are timeout errors
-      errorCodes: ['ETIMEDOUT'],
-      // By default, Got does not retry PATCH and POST requests. As we only retry timeouts there is no risk in retrying
-      // our PATCH and POST requests. So, we set methods to be Got's defaults plus 'PATCH' and 'POST'
+      // We ensure that the only network errors Got retries are timeout and econnreset errors. Both can be a result of
+      // the other side being overloaded which can happen when we are trying to send high volumes of requests, for
+      // example, when creating a bill run
+      errorCodes: ['ECONNRESET', 'ETIMEDOUT'],
+      // By default, Got does not retry PATCH and POST requests. As we only retry certain errors there is no risk in
+      // retrying our PATCH and POST requests. So, we set the methods to be Got's defaults plus 'PATCH' and 'POST'
       methods: ['GET', 'PATCH', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
       // We set statusCodes as an empty array to ensure that 4xx, 5xx etc. errors are not retried
       statusCodes: []
@@ -85,7 +87,7 @@ function defaultOptions () {
  * @param {string} url The full URL that you wish to connect to
  * @param {Object} additionalOptions Append to or replace the options passed to Got when making the request
  *
- * @returns {Object} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function get (url, additionalOptions = {}) {
   return _sendRequest('get', url, additionalOptions)

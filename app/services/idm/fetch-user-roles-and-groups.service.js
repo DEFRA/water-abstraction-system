@@ -20,7 +20,7 @@ const UserModel = require('../../models/user.model.js')
  *
  * @param {Number} userId The user id to get roles and groups for
  *
- * @returns {Object} result The resulting roles and groups
+ * @returns {Promise<Object>} result The resulting roles and groups
  * @returns {UserModel} result.user Returns the UserModel representing the user, or `null` if the user is not found
  * @returns {RoleModel[]} result.roles An array of RoleModel objects representing the roles the user has
  * @returns {GroupModel[]} result.groups An array of GroupModel objects representing the groups the user is a member of

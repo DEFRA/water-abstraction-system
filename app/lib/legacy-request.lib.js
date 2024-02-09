@@ -66,7 +66,7 @@ const services = {
  * @param {string} path The path to send the request to (do not include the starting /)
  * @param {boolean} apiRequest whether the request is to the service's API endpoints
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response The legacy service's response if successful or the error response if not.
  */
@@ -83,7 +83,7 @@ async function get (serviceName, path, apiRequest = true) {
  * @param {boolean} apiRequest whether the request is to the service's API endpoints
  * @param {Object} [body] optional body to be sent to the service as json
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response The legacy service's response if successful or the error response if not.
  */

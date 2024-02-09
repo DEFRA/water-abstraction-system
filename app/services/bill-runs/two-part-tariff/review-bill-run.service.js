@@ -14,7 +14,7 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  *
  * @param {string} id The UUID for the bill run to review
  *
- * @returns {Object} an object representing the `pageData` needed by the review bill run template. It contains details of
+ * @returns {Promise<Object>} an object representing the `pageData` needed by the review bill run template. It contains details of
  * the bill run and the licences linked to it.
  */
 async function go (id) {

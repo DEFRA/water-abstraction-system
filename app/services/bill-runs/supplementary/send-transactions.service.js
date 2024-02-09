@@ -22,7 +22,7 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  * @param {Object[]} transactions The transactions to be sent to the Charging Module
  * @param {Object} billingPeriod The billing period of the transactions
  *
- * @returns {Object[]} Array of transactions which have been sent to the Charging Module
+ * @returns {Promise<Object[]>} Array of transactions which have been sent to the Charging Module
  */
 async function go (licence, bill, billLicence, billRunExternalId, transactions) {
   try {

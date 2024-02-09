@@ -33,7 +33,7 @@ const ReviewReturnResultModel = require('../../../app/models/review-return-resul
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:ReviewReturnResultModel} The instance of the newly created record
+ * @returns {Promise<module:ReviewReturnResultModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)

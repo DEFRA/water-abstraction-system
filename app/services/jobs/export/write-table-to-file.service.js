@@ -56,7 +56,7 @@ function _transformDataStream () {
  * @param {String} tableName The name of the table
  * @param {String} schemaFolderPath The folder path of the schema
  *
- * @returns {String} The full file path
+ * @returns {Promise<String>} The full file path
  */
 async function _filenameWithPath (tableName, schemaFolderPath) {
   await fsPromises.mkdir(schemaFolderPath, { recursive: true })

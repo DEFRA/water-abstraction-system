@@ -6,6 +6,8 @@
  */
 
 const RequestLib = require('./request.lib.js')
+
+const requestConfig = require('../../config/request.config.js')
 const servicesConfig = require('../../config/services.config.js')
 
 /**
@@ -13,7 +15,7 @@ const servicesConfig = require('../../config/services.config.js')
  *
  * @param {string} path The route to send the request to (do not include the starting /)
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response The Charging Module response if successful or the error response if not
  */
@@ -28,7 +30,7 @@ async function get (path) {
  *
  * @param {string} path The path to send the request to (do not include the starting /)
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response The Charging Module response if successful or the error response if not
  */
@@ -44,7 +46,7 @@ async function patch (path) {
  * @param {string} path The path to send the request to (do not include the starting /)
  * @param {Object} [body] The body of the request
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response The Charging Module response if successful or the error response if not.
  */
@@ -61,7 +63,7 @@ async function post (path, body = {}) {
  * @param {Object} method An instance of a RequestLib method which will be used to send the request
  * @param {Object} [body] Optional body to be sent to the route as json
  *
- * @returns {Object} The result of the request passed back from RequestLib
+ * @returns {Promise<Object>} The result of the request passed back from RequestLib
  */
 async function _sendRequest (path, method, body) {
   const authentication = await global.HapiServerMethods.getChargingModuleToken()
@@ -95,6 +97,9 @@ function _requestOptions (accessToken, body) {
       authorization: `Bearer ${accessToken}`
     },
     responseType: 'json',
+    timeout: {
+      request: requestConfig.chargingModuleTimeout
+    },
     json: body
   }
 }

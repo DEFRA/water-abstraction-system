@@ -27,7 +27,7 @@ const { randomInteger } = require('./general.helper.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:LicenceVersionPurposesModel} The instance of the newly created record
+ * @returns {Promise<module:LicenceVersionPurposesModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
