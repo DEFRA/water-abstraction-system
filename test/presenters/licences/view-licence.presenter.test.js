@@ -296,9 +296,12 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licenceVersionPurposes has one abstraction period', () => {
+    describe('when the licenceVersionPurposes has one abstraction period and one purpose', () => {
       beforeEach(() => {
         licence.licenceVersions = [{
+          purposes: [{
+            description: 'Spray Irrigation - Storage'
+          }],
           licenceVersionPurposes: [{
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 1,
@@ -345,9 +348,14 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licenceVersions has more than one purpose of different types', () => {
+    describe('when the licenceVersions has more than one abstraction period and purposes of different types', () => {
       beforeEach(() => {
         licence.licenceVersions = [{
+          purposes: [{
+            description: 'Spray Irrigation - Storage'
+          }, {
+            description: 'Make-Up Or Top Up Water'
+          }],
           licenceVersionPurposes: [{
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 1,
