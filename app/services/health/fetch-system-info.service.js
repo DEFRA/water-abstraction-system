@@ -14,7 +14,7 @@ const { version } = require('../../../package.json')
 /**
  * Returns information about the `system` repo in the format required by the info service
  *
- * @returns {Object} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
+ * @returns {Promise<Object>} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
  */
 async function go () {
   return {

@@ -12,7 +12,7 @@ const BillModel = require('../../../models/bill.model.js')
  *
  * @param {String} regionId The uuid of the region
  *
- * @returns {module:BillModel[]} An array of bills to be reissued
+ * @returns {Promise<module:BillModel[]>} An array of bills to be reissued
  */
 async function go (regionId) {
   try {

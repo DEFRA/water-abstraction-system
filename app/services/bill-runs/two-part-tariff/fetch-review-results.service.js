@@ -12,7 +12,7 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
  *
  * @param {String} licenceId the id of the licence
  *
- * @returns {module:ReviewResultModel} the review result data associated with the given licence
+ * @returns {Promise<module:ReviewResultModel>} the review result data associated with the given licence
  */
 async function go (licenceId) {
   const reviewResults = await _fetchReviewResults(licenceId)

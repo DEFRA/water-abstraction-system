@@ -20,7 +20,7 @@ const ReviewChargeElementResultModel = require('../../../app/models/review-charg
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:ReviewChargeElementResultModel} The instance of the newly created record
+ * @returns {Promise<module:ReviewChargeElementResultModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)

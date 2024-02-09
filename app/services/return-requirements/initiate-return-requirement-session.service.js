@@ -23,7 +23,7 @@ const SessionModel = require('../../models/session.model.js')
  * @param {String} licenceId - the ID of the licence the return requirement will be created for
  * @param {String} journey - whether the set up journey needed is 'no-returns-required' or 'returns-required'
  *
- * @returns {module:SessionModel} the newly created session record
+ * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go (licenceId, journey) {
   const licence = await _fetchLicence(licenceId)

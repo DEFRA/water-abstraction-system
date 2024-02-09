@@ -15,7 +15,7 @@ const GeneralLib = require('../../lib/general.lib.js')
  * @param {module:BillRunModel} billRun An instance of `BillRunModel` representing the initialised bill run
  * @param {String} issuer The email address of the user triggering the event
  *
- * @returns {Object} The newly created event record
+ * @returns {Promise<Object>} The newly created event record
  */
 async function go (billRun, issuer) {
   // The legacy `water.events` table does not have a default set for its timestamp fields. So, we have to manually set

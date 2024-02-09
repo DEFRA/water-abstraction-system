@@ -49,7 +49,7 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * @param {Object} [agentCompany] The validated agent company details
  * @param {Object} [contact] The validated contact details
  *
- * @returns {Object} contains a copy of the persisted address, agent company and contact if they were also changed
+ * @returns {Promise<Object>} contains a copy of the persisted address, agent company and contact if they were also changed
  */
 async function go (billingAccountId, address, agentCompany = {}, contact = {}) {
   const billingAccount = await _fetchBillingAccount(billingAccountId)
@@ -118,7 +118,7 @@ async function _fetchBillingAccount (billingAccountId) {
  * @param {module:CompanyModel} company the new agent company to be persisted (not expected to be populated)
  * @param {module:ContactModel} contact the new contact to be persisted (not expected to be populated)
  *
- * @returns {Object} a single object that contains the persisted billingAccountAddress, plus address, agent company and
+ * @returns {Promise<Object>} a single object that contains the persisted billingAccountAddress, plus address, agent company and
  * contact
  */
 async function _persist (timestamp, billingAccount, address, company, contact) {

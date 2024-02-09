@@ -17,7 +17,7 @@ const GroupModel = require('../../../app/models/group.model.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:GroupModel} The instance of the newly created record
+ * @returns {Promise<module:GroupModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)

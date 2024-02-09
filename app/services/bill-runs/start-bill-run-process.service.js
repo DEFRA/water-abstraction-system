@@ -20,7 +20,7 @@ const ProcessTwoPartTariffReturnsService = require('./two-part-tariff/process-tw
  * @param {String} userEmail Email address of the user who initiated the bill run
  * @param {Number} financialYearEnding End year of the bill run. Only populated for two-part-tariff
  *
- * @returns {Object} Object that will be the JSON response returned to the client
+ * @returns {Promise<Object>} Object that will be the JSON response returned to the client
  */
 async function go (regionId, batchType, userEmail, financialYearEnding) {
   const billingPeriods = DetermineBillingPeriodsService.go(financialYearEnding)
