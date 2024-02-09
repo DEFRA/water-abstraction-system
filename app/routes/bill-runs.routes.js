@@ -44,6 +44,19 @@ const routes = [
       },
       description: 'Review two-part tariff match and allocation results'
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}',
+    handler: BillRunsController.reviewLicence,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Review a two-part tariff licence'
+    }
   }
 ]
 
