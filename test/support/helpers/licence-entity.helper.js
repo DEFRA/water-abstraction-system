@@ -18,7 +18,7 @@ const LicenceEntityModel = require('../../../app/models/licence-entity.model.js'
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:LicenceEntityModel} The instance of the newly created record
+ * @returns {Promise<module:LicenceEntityModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)

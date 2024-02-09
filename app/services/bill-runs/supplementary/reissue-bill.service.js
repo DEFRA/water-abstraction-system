@@ -37,7 +37,7 @@ const GenerateBillService = require('./generate-bill.service.js')
  * licences and transactions
  * @param {module:BillRunModel} reissueBillRun The bill run that the new bills should belong to
  *
- * @returns {Object} dataToReturn Data that has been generated while reissuing the bill
+ * @returns {Promise<Object>} dataToReturn Data that has been generated while reissuing the bill
  * @returns {Object[]} dataToReturn.bills Array of bills
  * @returns {Object[]} dataToReturn.billLicences Array of bill licences
  * @returns {Object[]} dataToReturn.transactions Array of transactions

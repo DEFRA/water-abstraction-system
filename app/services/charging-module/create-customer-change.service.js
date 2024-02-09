@@ -14,7 +14,7 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  *
  * @param {Object} requestData The data that will be sent in the POST request
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the customer change request was successful
  * @returns {Object} result.response Just a 201 status code if successful; or the error response if not
  */
