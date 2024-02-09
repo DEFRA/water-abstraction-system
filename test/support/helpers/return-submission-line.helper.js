@@ -25,7 +25,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:ReturnSubmissionLineModel} The instance of the newly created record
+ * @returns {Promise<module:ReturnSubmissionLineModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
