@@ -67,8 +67,11 @@ function _endDate (expiredDate) {
 }
 
 function _generateAbstractionPeriods (licenceVersions) {
-  if (!licenceVersions || licenceVersions.length === 0 || licenceVersions[0]?.licenceVersionPurposes === undefined ||
-    licenceVersions[0]?.licenceVersionPurposes?.length === 0) {
+  if (!licenceVersions ||
+    licenceVersions.length === 0 ||
+    licenceVersions[0]?.licenceVersionPurposes === undefined ||
+    licenceVersions[0]?.licenceVersionPurposes?.length === 0
+  ) {
     return null
   }
 
@@ -95,8 +98,11 @@ function _generateLicenceHolder (licenceHolder) {
 }
 
 function _generatePurposes (licenceVersions) {
-  if (!licenceVersions || licenceVersions.length === 0 || licenceVersions[0]?.purposes === undefined ||
-    licenceVersions[0]?.purposes?.length === 0) {
+  if (!licenceVersions ||
+    licenceVersions.length === 0 ||
+    licenceVersions[0]?.purposes === undefined ||
+    licenceVersions[0]?.purposes?.length === 0
+  ) {
     return null
   }
   const allPurposeDescriptions = licenceVersions[0].purposes.map((item) => {
