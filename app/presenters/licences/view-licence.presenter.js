@@ -5,6 +5,7 @@
  * @module ViewLicencePresenter
  */
 
+const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -27,14 +28,26 @@ function go (licence) {
     startDate
   } = licence
 
+  const abstractionPeriods = _generateAbstractionPeriods(licenceVersions)
+  const purposes = _generatePurposes(licenceVersions)
+  let abstractionPeriodsAndPurposesLinkText = null
+
+  if (abstractionPeriods && purposes) {
+    const abstractionPeriodsLabel = abstractionPeriods.uniqueAbstractionPeriods.length > 1 ? 'periods' : 'period'
+    const purposesLabel = purposes.data.length > 1 ? 'purposes' : 'purpose'
+    abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
+  }
+
   return {
     id,
+    abstractionPeriods,
+    abstractionPeriodsAndPurposesLinkText,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceRef,
     pageTitle: `Licence ${licenceRef}`,
-    purposes: _generatePurposes(licenceVersions),
+    purposes,
     region: region.displayName,
     startDate: formatLongDate(startDate),
     warning: _generateWarningMessage(ends)
@@ -49,6 +62,26 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
+function _generateAbstractionPeriods (licenceVersions) {
+  if (!licenceVersions || licenceVersions.length === 0 || licenceVersions[0]?.licenceVersionPurposes === undefined ||
+    licenceVersions[0]?.licenceVersionPurposes?.length === 0) {
+    return null
+  }
+
+  const formattedAbstactionPeriods = licenceVersions[0].licenceVersionPurposes.map((purpose) => {
+    const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
+    const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
+    return `${startDate} to ${endDate}`
+  })
+
+  const uniqueAbstractionPeriods = [...new Set(formattedAbstactionPeriods)]
+
+  return {
+    caption: uniqueAbstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction',
+    uniqueAbstractionPeriods
+  }
+}
+
 function _generateLicenceHolder (licenceHolder) {
   if (!licenceHolder) {
     return 'Unregistered licence'
@@ -58,7 +91,8 @@ function _generateLicenceHolder (licenceHolder) {
 }
 
 function _generatePurposes (licenceVersions) {
-  if (!licenceVersions || licenceVersions.length === 0 || licenceVersions[0]?.purposes.length === 0) {
+  if (!licenceVersions || licenceVersions.length === 0 || licenceVersions[0]?.purposes === undefined ||
+    licenceVersions[0]?.purposes?.length === 0) {
     return null
   }
   const allPurposeDescriptions = licenceVersions[0].purposes.map((item) => {

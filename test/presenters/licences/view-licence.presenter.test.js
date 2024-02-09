@@ -31,6 +31,8 @@ describe('View Licence presenter', () => {
       const result = ViewLicencePresenter.go(licence)
 
       expect(result).to.equal({
+        abstractionPeriods: null,
+        abstractionPeriodsAndPurposesLinkText: null,
         id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
@@ -173,7 +175,7 @@ describe('View Licence presenter', () => {
         })
       })
 
-      describe('when the licenceVersions has one entry', () => {
+      describe('when the licenceVersions has one purpose', () => {
         beforeEach(() => {
           licence.licenceVersions = [{
             purposes: [{
@@ -182,7 +184,7 @@ describe('View Licence presenter', () => {
           }]
         })
 
-        it('returns an object with a caption and an array with one entry', () => {
+        it('returns an object with a caption and an array with one purpose', () => {
           const result = ViewLicencePresenter.go(licence)
 
           expect(result.purposes).to.equal({
@@ -192,7 +194,7 @@ describe('View Licence presenter', () => {
         })
       })
 
-      describe('when the licenceVersions has more than one entry of the same type', () => {
+      describe('when the licenceVersions has more than one purpose of the same type', () => {
         beforeEach(() => {
           licence.licenceVersions = [{
             purposes: [{
@@ -203,7 +205,7 @@ describe('View Licence presenter', () => {
           }]
         })
 
-        it('returns an object with a caption and an array with one entry', () => {
+        it('returns an object with a caption and an array with one purpose', () => {
           const result = ViewLicencePresenter.go(licence)
 
           expect(result.purposes).to.equal({
@@ -213,7 +215,7 @@ describe('View Licence presenter', () => {
         })
       })
 
-      describe('when the licenceVersions has more than one entry of different types', () => {
+      describe('when the licenceVersions has more than one purpose of different types', () => {
         beforeEach(() => {
           licence.licenceVersions = [{
             purposes: [{
@@ -224,12 +226,99 @@ describe('View Licence presenter', () => {
           }]
         })
 
-        it('returns an object with a caption and an array with two entries', () => {
+        it('returns an object with a caption and an array with two purposes', () => {
           const result = ViewLicencePresenter.go(licence)
 
           expect(result.purposes).to.equal({
             caption: 'Purposes',
             data: ['Spray Irrigation - Storage', 'Make-Up Or Top Up Water']
+          })
+        })
+      })
+    })
+
+    describe("the 'licenceVersionPurposes' property", () => {
+      describe('when there are no licenceVersions', () => {
+        it('returns null', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.abstractionPeriods).to.equal(null)
+          expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
+        })
+      })
+
+      describe('when the licenceVersionPurposes has one abstraction period', () => {
+        beforeEach(() => {
+          licence.licenceVersions = [{
+            licenceVersionPurposes: [{
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1,
+              abstractionPeriodEndDay: 28,
+              abstractionPeriodEndMonth: 2
+            }]
+          }]
+        })
+
+        it('returns an object with a caption and an array with one abstraction period', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.abstractionPeriods).to.equal({
+            caption: 'Period of abstraction',
+            uniqueAbstractionPeriods: ['1 January to 28 February']
+          })
+        })
+      })
+
+      describe('when the licenceVersions has more than one abstraction period of the same range', () => {
+        beforeEach(() => {
+          licence.licenceVersions = [{
+            licenceVersionPurposes: [{
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1,
+              abstractionPeriodEndDay: 28,
+              abstractionPeriodEndMonth: 2
+            }, {
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1,
+              abstractionPeriodEndDay: 28,
+              abstractionPeriodEndMonth: 2
+            }]
+          }]
+        })
+
+        it('returns an object with a caption and an array with one abstraction period', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.abstractionPeriods).to.equal({
+            caption: 'Period of abstraction',
+            uniqueAbstractionPeriods: ['1 January to 28 February']
+          })
+        })
+      })
+
+      describe('when the licenceVersions has more than one purpose of different types', () => {
+        beforeEach(() => {
+          licence.licenceVersions = [{
+            licenceVersionPurposes: [{
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1,
+              abstractionPeriodEndDay: 28,
+              abstractionPeriodEndMonth: 2
+            }, {
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 3,
+              abstractionPeriodEndDay: 28,
+              abstractionPeriodEndMonth: 4
+            }]
+          }]
+        })
+
+        it('returns an object with a caption and an array with two purposes', () => {
+          const result = ViewLicencePresenter.go(licence)
+
+          expect(result.abstractionPeriods).to.equal({
+            caption: 'Periods of abstraction',
+            uniqueAbstractionPeriods: ['1 January to 28 February', '1 March to 28 April']
           })
         })
       })
