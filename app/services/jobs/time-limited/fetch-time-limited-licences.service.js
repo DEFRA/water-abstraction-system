@@ -20,7 +20,7 @@ const { db } = require('../../../../db/db.js')
  * - not be linked to a licence in the workflow
  * - have a related `purpose` that is due to expire in less than 50 days
  *
- * @returns {Object[]} The licence IDs with time-limited elements & their current version ID (needed else we break the workflow)
+ * @returns {Promise<Object[]>} The licence IDs with time-limited elements & their current version ID (needed else we break the workflow)
  */
 async function go () {
   // NOTE: We've resorted to Knex rather than Objection JS due to just how many JOINS we need to get from licence to

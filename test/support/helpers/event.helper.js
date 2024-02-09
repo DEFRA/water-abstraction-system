@@ -30,7 +30,7 @@ const { generateUUID, timestampForPostgres } = require('../../../app/lib/general
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:EventModel} The instance of the newly created record
+ * @returns {Promise<module:EventModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)

@@ -14,7 +14,7 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  * @param {string} regionId The UUID of the region the bill run is to be created for
  * @param {string} ruleset The ruleset that the bill run is to be created for, either `sroc` or `presroc`
  *
- * @returns {Object} result An object representing the result of the request
+ * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the bill run creation request was successful
  * @returns {Object} result.response Details of the created bill run if successful; or the error response if not
  */

@@ -18,7 +18,7 @@ const ChangeReasonModel = require('../../../app/models/change-reason.model.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {module:ChangeReasonModel} The instance of the newly created record
+ * @returns {Promise<module:ChangeReasonModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)

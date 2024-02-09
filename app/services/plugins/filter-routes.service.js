@@ -38,7 +38,7 @@ function go (routes, environment) {
 }
 
 function _protectedEnvironment (environment) {
-  return ['prd'].includes(environment)
+  return ['prd', 'pre'].includes(environment)
 }
 
 function _filteredRoutes (routes) {

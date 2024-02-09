@@ -15,7 +15,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  * @param {String} licenceRef The reference of the licence that the return log relates to
  * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Object} Contains an array of `returnLogs` and the associated current `returnSubmissions`, and
+ * @returns {Promise<Object>} Contains an array of `returnLogs` and the associated current `returnSubmissions`, and
  * `returnSubmissionLines` if they exist
  */
 async function go (licenceRef, billingPeriod) {

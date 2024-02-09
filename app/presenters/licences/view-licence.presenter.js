@@ -21,9 +21,11 @@ function go (licence) {
     id,
     licenceDocumentHeader,
     licenceHolder,
+    licenceName,
     licenceRef,
     licenceVersions,
     region,
+    registeredTo,
     startDate
   } = licence
 
@@ -32,10 +34,12 @@ function go (licence) {
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
+    licenceName,
     licenceRef,
     pageTitle: `Licence ${licenceRef}`,
     purposes: _generatePurposes(licenceVersions),
     region: region.displayName,
+    registeredTo,
     startDate: formatLongDate(startDate),
     warning: _generateWarningMessage(ends)
   }

@@ -26,7 +26,7 @@ const ViewLicenceSummariesPresenter = require('../../presenters/bills/view-licen
  *
  * @param {string} id The UUID for the bill to view
  *
- * @returns {Object} a formatted representation of the bill, its bill run and billing account plus summaries for all
+ * @returns {Promise<Object>} a formatted representation of the bill, its bill run and billing account plus summaries for all
  * the licences linked to the bill for use in the bill view page
  */
 async function go (id) {
