@@ -42,10 +42,12 @@ describe('View Licence service', () => {
           documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
           endDate: null,
           licenceHolder: 'Unregistered licence',
+          licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
           pageTitle: 'Licence 01/130/R01',
           purposes: null,
           region: 'South West',
+          registeredTo: null,
           startDate: '7 March 2013',
           warning: null
         })
@@ -181,10 +183,12 @@ function _testLicence () {
       id: '40306a46-d4ce-4874-9c9e-30ab6469b3fe'
     },
     licenceRef: '01/130/R01',
+    licenceName: 'Unregistered licence',
     region: {
       id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
       displayName: 'South West'
     },
+    registeredTo: null,
     startDate: new Date('2013-03-07')
   })
 }

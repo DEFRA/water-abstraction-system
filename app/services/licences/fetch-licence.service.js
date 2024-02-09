@@ -27,7 +27,9 @@ async function _data (licence) {
   return {
     ...licence,
     ends: licence.$ends(),
-    licenceHolder: licence.$licenceHolder()
+    licenceHolder: licence.$licenceHolder(),
+    licenceName: licence.$licenceName() ?? 'Unregistered licence',
+    registeredTo: licence.$registeredTo() ?? null
   }
 }
 
@@ -56,8 +58,8 @@ async function _fetchLicence (id) {
       ])
     })
     .withGraphFetched('licenceVersions.[licenceVersionPurposes, purposes]')
-    // .withGraphFetched('licenceVersionPurposes')
     .modify('licenceHolder')
+    .modify('registeredToAndLicenceName')
 
   return result
 }

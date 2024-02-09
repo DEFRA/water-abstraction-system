@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, after, afterEach } = exports.lab = Lab
 const { expect } = Code
 
 // Things we need to stub
+const requestConfig = require('../../config/request.config.js')
 const RequestLib = require('../../app/lib/request.lib.js')
 
 // Thing under test
@@ -30,6 +31,13 @@ describe('ChargingModuleRequestLib', () => {
         expiresIn: 3600
       })
     }
+  })
+
+  beforeEach(() => {
+    // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
+    // uses it when making a request to the charging module, rather than the default request timeout config value
+    Sinon.replace(requestConfig, 'chargingModuleTimeout', 1234)
+    Sinon.replace(requestConfig, 'timeout', 1000)
   })
 
   afterEach(() => {
@@ -61,6 +69,14 @@ describe('ChargingModuleRequestLib', () => {
 
         expect(requestArgs[0]).to.endWith('TEST_ROUTE')
         expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
+      })
+
+      it('uses the charging module timeout', async () => {
+        await ChargingModuleRequestLib.get(testRoute)
+
+        const requestArgs = RequestLib.get.firstCall.args
+
+        expect(requestArgs[1].timeout).to.equal({ request: 1234 })
       })
 
       it('returns a `true` success status', async () => {
@@ -155,6 +171,14 @@ describe('ChargingModuleRequestLib', () => {
         expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
+      it('uses the charging module timeout', async () => {
+        await ChargingModuleRequestLib.patch(testRoute)
+
+        const requestArgs = RequestLib.patch.firstCall.args
+
+        expect(requestArgs[1].timeout).to.equal({ request: 1234 })
+      })
+
       it('returns a `true` success status', async () => {
         const result = await ChargingModuleRequestLib.patch(testRoute)
 
@@ -246,6 +270,14 @@ describe('ChargingModuleRequestLib', () => {
         expect(requestArgs[0]).to.endWith('TEST_ROUTE')
         expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
         expect(requestArgs[1].json).to.equal({ test: 'yes' })
+      })
+
+      it('uses the charging module timeout', async () => {
+        await ChargingModuleRequestLib.post(testRoute)
+
+        const requestArgs = RequestLib.post.firstCall.args
+
+        expect(requestArgs[1].timeout).to.equal({ request: 1234 })
       })
 
       it('returns a `true` success status', async () => {
