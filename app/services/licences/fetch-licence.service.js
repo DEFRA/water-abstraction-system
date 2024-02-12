@@ -28,7 +28,7 @@ async function _data (licence) {
     ...licence,
     ends: licence.$ends(),
     licenceHolder: licence.$licenceHolder(),
-    licenceName: licence.$licenceName() ?? 'Unregistered licence',
+    licenceName: licence.$licenceName() ?? null,
     registeredTo: licence.$registeredTo() ?? null
   }
 }
