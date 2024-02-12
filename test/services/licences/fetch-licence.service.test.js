@@ -70,7 +70,7 @@ describe('Fetch licence service', () => {
       expect(result.expiredDate).to.equal(null)
       expect(result.lapsedDate).to.equal(null)
       expect(result.licenceHolder).to.equal('Licence Holder Ltd')
-      expect(result.licenceName).to.equal(null)
+      expect(result.licenceName).to.equal('Unregistered licence')
       expect(result.licenceRef).to.equal(licence.licenceRef)
       expect(result.licenceVersions[1].purposes[0].description).to.equal('Spray Irrigation - Storage')
       expect(result.region.displayName).to.equal('Avalon')
