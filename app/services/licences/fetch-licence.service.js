@@ -24,12 +24,15 @@ async function go (id) {
 }
 
 async function _data (licence) {
+  const registeredTo = licence.$registeredTo() ?? null
+  const licenceName = registeredTo ? licence.$licenceName() : 'Unregistered licence'
+
   return {
     ...licence,
     ends: licence.$ends(),
     licenceHolder: licence.$licenceHolder(),
-    licenceName: licence.$licenceName() ?? null,
-    registeredTo: licence.$registeredTo() ?? null
+    licenceName,
+    registeredTo
   }
 }
 
