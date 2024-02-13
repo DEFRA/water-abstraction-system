@@ -10,7 +10,7 @@ const { expect } = Code
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Landing Page controller', () => {
+describe('Landing Page controller', () => {
   let server
 
   // Create server before each test
