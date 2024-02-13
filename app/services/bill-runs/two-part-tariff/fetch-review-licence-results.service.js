@@ -19,23 +19,44 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
   const reviewReturnResults = await _fetchReviewReturnResults(billRunId, licenceId)
+  const chargeVersions = await _fetchLicenceChargeVersions(licenceId, billRunId)
+  console.log('Charge Versions :', chargeVersions)
+
+  await _fetchChargePeriods(chargeVersions, licenceId, billRunId)
+
+  console.log('Charge Versions :', chargeVersions)
 
   return { reviewReturnResults, billRun }
+}
+
+async function _fetchChargePeriods (chargeVersions, licenceId, billRunId) {
+  for (const chargeVersion of chargeVersions) {
+    const chargeVersionId = chargeVersion.chargeVersionId
+
+    const chargePeriods = await ReviewResultModel.query()
+      .select('chargePeriodStartDate', 'chargePeriodEndDate')
+      .where({ billRunId, licenceId, chargeVersionId })
+
+    chargeVersion.chargePeriods = chargePeriods
+  }
+}
+
+async function _fetchLicenceChargeVersions (licenceId, billRunId) {
+  return ReviewResultModel.query()
+    .distinct('chargeVersionId')
+    .where({ billRunId, licenceId })
 }
 
 async function _fetchBillRun (billRunId) {
   return BillRunModel.query()
     .findById(billRunId)
-    .select([
+    .select(
       'id',
-      'batchType'
-    ])
+      'fromFinancialYearEnding',
+      'toFinancialYearEnding')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select('displayName')
     })
 }
 
