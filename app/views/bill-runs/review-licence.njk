@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-{# Main heading #}
+  {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-l">{{region}} two-part tariff bill run</span>
@@ -38,20 +38,20 @@
     </div>
   </div>
 
-{# Licence nav bar #}
-<ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
-  <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
-      Summary
-    </a></li>
-  <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
-      Returns
-    </a></li>
+  {# Licence nav bar #}
+  <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
     <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
-      Charge information
-    </a></li>
-</ul>
+        Summary
+      </a></li>
+    <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
+        Returns
+      </a></li>
+      <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="#">
+        Charge information
+      </a></li>
+  </ul>
 
-{# Charge Period #}
+  {# Charge Period #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
@@ -66,13 +66,14 @@
   </div>
   <div class="divider govuk-!-margin-bottom-6"></div>
 
-{# Matched Returns #}
+  {# Matched Returns #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Returns</h2>
     </div>
   </div>
 
+  {% if matchedReturns.length > 0 %}
       {% set tableRows = [] %}
         {% for return in matchedReturns %}
           {# Set an easier to use index #}
@@ -146,6 +147,7 @@
         ],
         rows: tableRows
       }) }}
+  {% endif %}
 
       {# Unmatched Returns #}
   {% if unmatchedReturns.length > 0 %}
@@ -222,6 +224,10 @@
         ],
         rows: tableRows
       }) }}
+  {% endif %}
+
+  {% if matchedReturns == 0 and unmatchedReturns == 0 %}
+      <h2 class="govuk-heading-m">No two-part tariff returns</h2>
   {% endif %}
 
   <div class="divider govuk-!-margin-bottom-6"></div>
