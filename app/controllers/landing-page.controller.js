@@ -5,7 +5,7 @@
  * @module LandingPageController
  */
 
-async function view (request, h) {
+async function view (_request, h) {
   return h.view('landing-page.njk', {
     pageTitle: 'Landing page'
   }
