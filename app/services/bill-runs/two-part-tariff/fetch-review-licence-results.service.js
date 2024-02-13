@@ -20,7 +20,7 @@ const LicenceModel = require('../../../models/licence.model.js')
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
   const reviewReturnResults = await _fetchReviewReturnResults(billRunId, licenceId)
-  const licenceRef = await _licenceRef(licenceId)
+  const { licenceRef } = await _licenceRef(licenceId)
 
   return { reviewReturnResults, billRun, licenceRef }
 }

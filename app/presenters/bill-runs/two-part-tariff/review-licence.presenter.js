@@ -20,7 +20,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  */
 function go (matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRef) {
   return {
-    licenceRef: licenceRef.licenceRef,
+    licenceRef,
     billRunId: billRun.id,
     status: 'Review',
     region: billRun.region.displayName,

@@ -59,7 +59,7 @@ describe('Fetch Review Licence Results Service', () => {
       it('returns the licence ref', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
-        expect(result.licenceRef).to.equal({ licenceRef: licence.licenceRef })
+        expect(result.licenceRef).to.equal(licence.licenceRef)
       })
 
       it('returns details of the licence review results', async () => {
@@ -93,8 +93,12 @@ describe('Fetch Review Licence Results Service', () => {
     })
 
     describe('and a valid licence but it is not included in the bill run', () => {
+      beforeEach(async () => {
+        licence = await LicenceHelper.add()
+      })
+
       it('returns the bill run but no licence results', async () => {
-        const result = await FetchReviewLicenceResultsService.go(billRun.id, '56db85ed-767f-4c83-8174-5ad9c80fd00d')
+        const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
         expect(result.billRun.id).to.equal(billRun.id)
         expect(result.reviewReturnResults).to.equal([])
