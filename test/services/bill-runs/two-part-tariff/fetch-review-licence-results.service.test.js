@@ -56,6 +56,12 @@ describe('Fetch Review Licence Results Service', () => {
         })
       })
 
+      it('returns the licence ref', async () => {
+        const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
+
+        expect(result.licenceRef).to.equal({ licenceRef: licence.licenceRef })
+      })
+
       it('returns details of the licence review results', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
@@ -81,10 +87,6 @@ describe('Fetch Review Licence Results Service', () => {
             startDate: reviewReturnResult.startDate,
             status: reviewReturnResult.status,
             underQuery: reviewReturnResult.underQuery
-          },
-          licence: {
-            id: licence.id,
-            licenceRef: licence.licenceRef
           }
         }])
       })
