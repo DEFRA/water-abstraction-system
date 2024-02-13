@@ -24,6 +24,7 @@ const JobRoutes = require('../routes/jobs.routes.js')
 const LicenceRoutes = require('../routes/licence.routes.js')
 const ReturnRequirementRoutes = require('../routes/return-requirement.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
+const LandingPageRoutes = require('../routes/landing-page.routes.js')
 
 const AirbrakeConfig = require('../../config/airbrake.config.js')
 
@@ -39,7 +40,8 @@ const routes = [
   ...JobRoutes,
   ...ReturnRequirementRoutes,
   ...CheckRoutes,
-  ...DataRoutes
+  ...DataRoutes,
+  ...LandingPageRoutes
 ]
 
 const RouterPlugin = {
