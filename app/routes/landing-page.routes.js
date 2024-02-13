@@ -8,6 +8,9 @@ const routes = [
     path: '/landing-page',
     handler: LandingPageController.view,
     options: {
+      app: {
+        excludeFromProd: true
+      },
       auth: false,
       description: 'Used to view landing page'
     }
