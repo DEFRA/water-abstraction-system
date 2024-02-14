@@ -14,7 +14,6 @@
  * @returns {Object[]} matched and unmatched return logs and the charge periods for that licence
  */
 function go (reviewReturnResults) {
-  const licenceRef = reviewReturnResults[0].licence.licenceRef
   const uniqueReturnLogs = _dedupeReturnLogs(reviewReturnResults)
 
   const { matchedReturns, unmatchedReturns } = _splitReturns(uniqueReturnLogs)
@@ -22,7 +21,7 @@ function go (reviewReturnResults) {
   // Only matched returns have a charge version and therefore chargePeriods
   const chargePeriods = _fetchChargePeriods(matchedReturns)
 
-  return { matchedReturns, unmatchedReturns, chargePeriods, licenceRef }
+  return { matchedReturns, unmatchedReturns, chargePeriods }
 }
 
 function _dedupeReturnLogs (reviewReturnResults) {

@@ -20,9 +20,9 @@ const PrepareReviewLicenceResultsService = require('./prepare-review-licence-res
  * licence matched and unmatched returns and the licence charge data
  */
 async function go (billRunId, licenceId) {
-  const { reviewReturnResults, billRun } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
+  const { reviewReturnResults, billRun, licenceRef } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
 
-  const { matchedReturns, unmatchedReturns, chargePeriods, licenceRef } = PrepareReviewLicenceResultsService.go(reviewReturnResults)
+  const { matchedReturns, unmatchedReturns, chargePeriods } = PrepareReviewLicenceResultsService.go(reviewReturnResults)
 
   const pageData = ReviewLicencePresenter.go(matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRef)
 

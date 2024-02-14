@@ -24,7 +24,7 @@ describe('Review Licence presenter', () => {
       expect(result).to.equal({
         licenceRef: '7/34/10/*S/0084',
         billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
-        status: 'Review',
+        status: 'review',
         region: 'Anglian',
         matchedReturns: [
           {
@@ -57,11 +57,20 @@ describe('Review Licence presenter', () => {
           {
             reference: '10042951',
             dates: '1 April 2022 to 31 March 2023',
-            status: 'query',
+            status: 'complete',
             description: 'Ormesby Broad - Point 1',
             purpose: 'Spray Irrigation - Storage',
             total: '1 ML / 10 ML',
             allocated: 'Over abstraction'
+          },
+          {
+            reference: '10042951',
+            dates: '1 April 2022 to 31 March 2023',
+            status: 'query',
+            description: 'Ormesby Broad - Point 1',
+            purpose: 'Spray Irrigation - Storage',
+            total: '0 ML / 10 ML',
+            allocated: ''
           }
         ],
         unmatchedReturns: [
@@ -71,7 +80,7 @@ describe('Review Licence presenter', () => {
             status: 'completed',
             description: 'Ormesby Broad - Point 1',
             purpose: 'Spray Irrigation - Storage',
-            total: '0 ML / 20 ML'
+            total: '20 ML'
           }
         ],
         chargePeriodDates: ['1 April 2022 to 31 March 2023']
@@ -190,7 +199,7 @@ function _matchingReturns () {
         dueDate: new Date('2023-04-28'),
         receivedDate: null,
         status: 'complete',
-        underQuery: true,
+        underQuery: false,
         nilReturn: false,
         description: 'Ormesby Broad - Point 1',
         purposes: [{
@@ -200,6 +209,32 @@ function _matchingReturns () {
         }],
         quantity: 10,
         allocated: 1,
+        abstractionOutsidePeriod: false
+      },
+      licence: {
+        licenceRef: '7/34/10/*S/0084'
+      }
+    },
+    {
+      chargePeriodStartDate: new Date('2022-04-01'),
+      chargePeriodEndDate: new Date('2023-03-31'),
+      reviewReturnResults: {
+        returnReference: '10042951',
+        startDate: new Date('2022-04-01'),
+        endDate: new Date('2023-03-31'),
+        dueDate: new Date('2023-04-28'),
+        receivedDate: null,
+        status: 'complete',
+        underQuery: true,
+        nilReturn: false,
+        description: 'Ormesby Broad - Point 1',
+        purposes: [{
+          tertiary: {
+            description: 'Spray Irrigation - Storage'
+          }
+        }],
+        quantity: 10,
+        allocated: 0,
         abstractionOutsidePeriod: false
       },
       licence: {

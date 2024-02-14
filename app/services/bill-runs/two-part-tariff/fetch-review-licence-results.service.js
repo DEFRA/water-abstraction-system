@@ -7,6 +7,7 @@
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewResultModel = require('../../../models/review-result.model.js')
+const LicenceModel = require('../../../models/licence.model.js')
 
 /**
  * Fetches the review return results data for an individual licence in the bill run and the bill run data
@@ -27,7 +28,9 @@ async function go (billRunId, licenceId) {
   console.log('Charge Versions 1 :', chargeVersions[0].chargeReferences[0].chargeElements[0])
   console.log('Charge Versions 2 :', chargeVersions[1].chargeReferences[0])
 
-  return { reviewReturnResults, billRun }
+  const { licenceRef } = await _licenceRef(licenceId)
+
+  return { reviewReturnResults, billRun, licenceRef }
 }
 
 async function _fetchChargePeriods (chargeVersions, licenceId, billRunId) {
@@ -83,6 +86,12 @@ async function _fetchBillRun (billRunId) {
     })
 }
 
+async function _licenceRef (licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select('licenceRef')
+}
+
 async function _fetchReviewReturnResults (billRunId, licenceId) {
   return ReviewResultModel.query()
     .where({ billRunId, licenceId })
@@ -111,13 +120,6 @@ async function _fetchReviewReturnResults (billRunId, licenceId) {
         'quantity',
         'allocated',
         'abstractionOutsidePeriod'
-      ])
-    })
-    .withGraphFetched('licence')
-    .modifyGraph('licence', (builder) => {
-      builder.select([
-        'id',
-        'licenceRef'
       ])
     })
 }
