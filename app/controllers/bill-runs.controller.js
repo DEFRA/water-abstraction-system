@@ -7,6 +7,7 @@
 
 const Boom = require('@hapi/boom')
 
+const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const CancelBillRunConfirmationService = require('../services/bill-runs/cancel-bill-run-confirmation.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
@@ -16,15 +17,11 @@ const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/revi
 
 async function cancel (request, h) {
   const { id } = request.params
+  const { billRunBatchType } = request.payload
 
-  return id
-  // const pageData = await CancelBillRunConfirmationService.go(id)
+  CancelBillRunService.go(id, billRunBatchType)
 
-  // return h.view('bill-runs/cancel.njk', {
-  //   pageTitle: "You're about to cancel this bill run",
-  //   activeNavBar: 'bill-runs',
-  //   ...pageData
-  // })
+  return h.redirect('/billing/batch/list')
 }
 
 async function cancelConfirmation (request, h) {
