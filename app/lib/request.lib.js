@@ -68,6 +68,12 @@ function defaultOptions () {
   }
 }
 
+// This function has been called `deleteRequest` here rather than `delete` as `delete` is a reserved word. It has been
+// renamed to `delete` in the export
+async function deleteRequest (url, additionalOptions = {}) {
+  return _sendRequest('delete', url, additionalOptions)
+}
+
 /**
  * Make a GET request to the specified URL
  *
@@ -194,6 +200,7 @@ async function _sendRequest (method, url, additionalOptions) {
 }
 
 module.exports = {
+  delete: deleteRequest,
   get,
   patch,
   post,
