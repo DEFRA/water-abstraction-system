@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
-describe('Review Licence presenter', () => {
+describe.only('Review Licence presenter', () => {
   describe('when there is data to be presented for review licence', () => {
     const matchedReturns = _matchingReturns()
     const unmatchedReturns = _unmatchedReturns()
@@ -24,7 +24,7 @@ describe('Review Licence presenter', () => {
       expect(result).to.equal({
         licenceRef: '7/34/10/*S/0084',
         billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
-        status: 'Review',
+        status: 'review',
         region: 'Anglian',
         matchedReturns: [
           {

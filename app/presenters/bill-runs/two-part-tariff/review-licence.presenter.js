@@ -22,7 +22,7 @@ function go (matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRe
   return {
     licenceRef,
     billRunId: billRun.id,
-    status: 'Review',
+    status: 'review',
     region: billRun.region.displayName,
     matchedReturns: _prepareMatchedReturns(matchedReturns),
     unmatchedReturns: _prepareUnmatchedReturns(unmatchedReturns),
