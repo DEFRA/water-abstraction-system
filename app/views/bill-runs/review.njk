@@ -116,12 +116,11 @@
 
   {# Cancel bill run button #}
   <section class="govuk-!-margin-bottom-9">
-    <form method="get" action="cancel">
-      {{ govukButton({
-        text: "Cancel bill run",
-        classes: "govuk-button--secondary govuk-!-margin-bottom-0"
-      }) }}
-    </form>
+    {{ govukButton({
+      classes: "govuk-button--secondary govuk-!-margin-bottom-0",
+      text: 'Cancel bill run',
+      href: 'cancel'
+    }) }}
   </section>
 
   {# Generate the row data for the table #}
@@ -142,7 +141,7 @@
         {% endset %}
 
         {% set action %}
-        <a class="govuk-link" href="review/{{ licence.id }}">{{ licence.licenceRef }}<span class="govuk-visually-hidden">View licence matching for licence {{ licence.licenceRef }} </a>
+          <a class="govuk-link" href="review/{{ licence.id }}">{{ licence.licenceRef }}<span class="govuk-visually-hidden">View licence matching for licence {{ licence.licenceRef }} </a>
         {% endset %}
 
       {% set tableRow = [

@@ -9,8 +9,8 @@
   {# Back link #}
   {{
     govukBackLink({
-      text: 'Go back to bill runs',
-      href: '/billing/batch/list'
+      text: 'Back',
+      href: './review'
     })
   }}
 {% endblock %}
@@ -84,6 +84,7 @@
   {# Cancel bill run button #}
   <section class="govuk-!-margin-bottom-9">
     <form method="post" action="cancel">
+      <input type="hidden" name="billRunBatchType" value="{{billRunBatchType}}">
       {{ govukButton({
         text: "Cancel bill run"
       }) }}
