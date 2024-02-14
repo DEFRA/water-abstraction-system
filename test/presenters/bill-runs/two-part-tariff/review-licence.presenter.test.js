@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
-describe.only('Review Licence presenter', () => {
+describe('Review Licence presenter', () => {
   describe('when there is data to be presented for review licence', () => {
     const matchedReturns = _matchingReturns()
     const unmatchedReturns = _unmatchedReturns()
