@@ -19,7 +19,8 @@ function go (billRun) {
     dateCreated: formatLongDate(billRun.createdAt),
     region: billRun.region.displayName,
     billRunType: billRun.batchType === 'two_part_tariff' ? 'two-part tariff' : billRun.batchType,
-    financialYear: _financialYear(billRun.toFinancialYearEnding)
+    financialYear: _financialYear(billRun.toFinancialYearEnding),
+    billRunBatchType: billRun.batchType
   }
 }
 
