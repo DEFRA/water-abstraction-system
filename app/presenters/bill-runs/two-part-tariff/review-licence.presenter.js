@@ -22,7 +22,7 @@ function go (matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRe
   return {
     licenceRef,
     billRunId: billRun.id,
-    status: 'Review',
+    status: 'review',
     region: billRun.region.displayName,
     matchedReturns: _prepareMatchedReturns(matchedReturns),
     unmatchedReturns: _prepareUnmatchedReturns(unmatchedReturns),
@@ -40,7 +40,7 @@ function _prepareLicenceChargePeriods (chargePeriods) {
 
 function _prepareUnmatchedReturns (unmatchedReturns) {
   return unmatchedReturns.map((unmatchedReturn) => {
-    const { returnReference, status, description, purposes, allocated, quantity, startDate, endDate } = unmatchedReturn.reviewReturnResults
+    const { returnReference, status, description, purposes, quantity, startDate, endDate } = unmatchedReturn.reviewReturnResults
 
     return {
       reference: returnReference,
@@ -48,14 +48,14 @@ function _prepareUnmatchedReturns (unmatchedReturns) {
       status,
       description,
       purpose: purposes[0].tertiary.description,
-      total: `${allocated} ML / ${quantity} ML`
+      total: `${quantity} ML`
     }
   })
 }
 
 function _prepareMatchedReturns (matchedReturns) {
   return matchedReturns.map((matchedReturn) => {
-    const { returnStatus, total, allocated } = _checkStatusAndReturnTotal(matchedReturn)
+    const { returnStatus, total } = _checkStatusAndReturnTotal(matchedReturn)
     const { returnReference, description, purposes, startDate, endDate } = matchedReturn.reviewReturnResults
 
     return {
@@ -65,7 +65,7 @@ function _prepareMatchedReturns (matchedReturns) {
       description,
       purpose: purposes[0].tertiary.description,
       total,
-      allocated
+      allocated: _allocated(matchedReturn)
     }
   })
 }
@@ -73,27 +73,28 @@ function _prepareMatchedReturns (matchedReturns) {
 function _checkStatusAndReturnTotal (returnLog) {
   const { status, allocated, quantity, underQuery } = returnLog.reviewReturnResults
 
-  let allocatedStatus
   let total
   let returnStatus = underQuery ? 'query' : status
 
   if (status === 'void' || status === 'received') {
     total = '/'
-    allocatedStatus = 'Not processed'
   } else if (status === 'due') {
     returnStatus = 'overdue'
     total = '/'
-    allocatedStatus = 'Not processed'
   } else {
     total = `${allocated} ML / ${quantity} ML`
-    allocatedStatus = _allocated(quantity, allocated)
   }
 
-  return { returnStatus, total, allocated: allocatedStatus }
+  return { returnStatus, total }
 }
 
-function _allocated (quantity, allocated) {
-  if (quantity > allocated) {
+function _allocated (returnLog) {
+  const { quantity, allocated, status, underQuery } = returnLog.reviewReturnResults
+  if (underQuery) {
+    return ''
+  } else if (status === 'void' || status === 'received' || status === 'due') {
+    return 'Not processed'
+  } else if (quantity > allocated) {
     return 'Over abstraction'
   } else {
     return 'Fully allocated'

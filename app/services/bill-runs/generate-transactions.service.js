@@ -5,7 +5,7 @@
  * @module GenerateTransactionsService
  */
 
-const { generateUUID } = require('../../../lib/general.lib.js')
+const { generateUUID } = require('../../lib/general.lib.js')
 
 const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-authorised-and-billable-days.service.js')
 

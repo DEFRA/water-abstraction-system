@@ -9,16 +9,16 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const ChargeCategoryHelper = require('../../support/helpers/charge-category.helper.js')
+const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Things we need to stub
-const CalculateAuthorisedAndBillableDaysService = require('../../../../app/services/bill-runs/supplementary/calculate-authorised-and-billable-days.service.js')
+const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
 
 // Thing under test
-const GenerateTransactionsService = require('../../../../app/services/bill-runs/supplementary/generate-transactions.service.js')
+const GenerateTransactionsService = require('../../../app/services/bill-runs/generate-transactions.service.js')
 
 describe('Generate Transactions service', () => {
   const reference = '4.4.5'

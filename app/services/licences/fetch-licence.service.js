@@ -24,12 +24,15 @@ async function go (id) {
 }
 
 async function _data (licence) {
+  const registeredTo = licence.$registeredTo() ?? null
+  const licenceName = registeredTo ? licence.$licenceName() : 'Unregistered licence'
+
   return {
     ...licence,
     ends: licence.$ends(),
     licenceHolder: licence.$licenceHolder(),
-    licenceName: licence.$licenceName() ?? 'Unregistered licence',
-    registeredTo: licence.$registeredTo() ?? null
+    licenceName,
+    registeredTo
   }
 }
 
@@ -51,7 +54,26 @@ async function _fetchLicence (id) {
         'displayName'
       ])
     })
-    .withGraphFetched('licenceVersions.[purposes]')
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select([
+        'licenceDocumentHeaders.id'
+      ])
+    })
+    .withGraphFetched('licenceVersions.[licenceVersionPurposes, purposes]')
+    .modifyGraph('[licenceVersionPurposes]', (builder) => {
+      builder.select([
+        'licenceVersionPurposes.abstractionPeriodStartDay',
+        'licenceVersionPurposes.abstractionPeriodStartMonth',
+        'licenceVersionPurposes.abstractionPeriodEndDay',
+        'licenceVersionPurposes.abstractionPeriodEndMonth'
+      ])
+    })
+    .modifyGraph('[purposes]', (builder) => {
+      builder.select([
+        'purposes.description'
+      ])
+    })
     .modify('licenceHolder')
     .modify('registeredToAndLicenceName')
 

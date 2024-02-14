@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
+const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
+const DatabaseHelper = require('../../support/helpers/database.helper.js')
 
 // Thing under test
-const CalculateAuthorisedAndBillableDaysService = require('../../../../app/services/bill-runs/supplementary/calculate-authorised-and-billable-days.service.js')
+const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
 
 // NOTE: You might find it helpful to refresh your understanding of abstraction periods and what the service is trying
 // to fathom when referencing them to the billing and charge periods. See the documentation in the service. Also, a
