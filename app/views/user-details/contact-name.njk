@@ -1,0 +1,62 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: '/system/landing-page'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+{% call govukFieldset({
+  legend: {
+    text: "What is your name?",
+    classes: "govuk-fieldset__legend--l",
+    isPageHeading: true
+  }
+}) %}
+
+{{ govukInput({
+  label: {
+    text: "First name"
+  },
+  hint: {
+    text: "Do not use abbreviations or nicknames"
+  },
+  id: "first-name",
+  name: "firstName",
+  autocomplete: "name",
+  spellcheck: false,
+  classes: "govuk-input--width-20",
+  id: "width-20",
+  name: "width20"
+}) }}
+
+{{ govukInput({
+  label: {
+    text: "Last name"
+  },
+  id: "last-name",
+  name: "lastName",
+  autocomplete: "name",
+  spellcheck: false,
+  classes: "govuk-input--width-20",
+  id: "width-20",
+  name: "width20"
+}) }}
+
+{% endcall %}
+
+{{ govukButton({
+  text: "Continue"
+}) }}
+
+{% endblock %}
