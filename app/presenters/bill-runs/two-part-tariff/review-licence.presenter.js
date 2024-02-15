@@ -18,7 +18,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRef) {
+function go (matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRef, chargeData) {
   return {
     licenceRef,
     billRunId: billRun.id,
@@ -26,8 +26,51 @@ function go (matchedReturns, unmatchedReturns, chargePeriods, billRun, licenceRe
     region: billRun.region.displayName,
     matchedReturns: _prepareMatchedReturns(matchedReturns),
     unmatchedReturns: _prepareUnmatchedReturns(unmatchedReturns),
-    chargePeriodDates: _prepareLicenceChargePeriods(chargePeriods)
+    chargePeriodDates: _prepareLicenceChargePeriods(chargePeriods),
+    chargeData: _prepareChargeData(chargeData)
   }
+}
+
+function _prepareChargeData (chargeData) {
+  const preparedChargeData = []
+  let index = 0
+
+  for (const chargeVersion of chargeData) {
+    const { chargePeriods, chargeReferences } = chargeVersion
+
+    preparedChargeData.push({
+      chargeVersion: chargeVersion.chargeVersionId,
+      chargePeriodDate: `Charge period ${_prepareDate(chargePeriods.chargePeriodStartDate, chargePeriods.chargePeriodEndDate)}`
+    })
+
+    // console.log('preparedChargeData :', preparedChargeData)
+
+    preparedChargeData[index].chargeReferences = []
+
+    let referenceIndex = 0
+    for (const chargeReference of chargeReferences) {
+      const { chargeElements } = chargeReference
+
+      preparedChargeData[index].chargeReferences.push({
+        chargeCategory: `Charge reference ${chargeReference.chargeReferenceData?.chargeCategory.reference}`,
+        chargeDescription: chargeReference.chargeReferenceData?.chargeCategory.shortDescription
+      })
+
+      preparedChargeData[index].chargeReferences[referenceIndex].chargeElements = []
+
+      for (const chargeElement of chargeElements) {
+        preparedChargeData[index].chargeReference[referenceIndex].chargeElements.push({
+
+        })
+      }
+
+      referenceIndex++
+    }
+    console.log('preparedChargeData :', preparedChargeData)
+    index++
+  }
+
+  return preparedChargeData
 }
 
 function _prepareLicenceChargePeriods (chargePeriods) {
