@@ -21,14 +21,15 @@ const VALID_VALUES = [
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (data) {
+  const errorMessage = 'Select how you want to set up the return requirement'
   const schema = Joi.object({
     reason: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select how you want to set up the return requirement',
-        'any.only': 'Select how you want to set up the return requirement',
-        'string.empty': 'Select how you want to set up the return requirement'
+        'any.required': errorMessage,
+        'any.only': errorMessage,
+        'string.empty': errorMessage
       })
   })
 
