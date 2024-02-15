@@ -23,7 +23,7 @@ const VALID_VALUES = [
 function go (data) {
   const errorMessage = 'Select how you want to set up the return requirement'
   const schema = Joi.object({
-    reason: Joi.string()
+    setup: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({

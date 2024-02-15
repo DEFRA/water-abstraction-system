@@ -10,10 +10,10 @@ const { expect } = Code
 // Thing under test
 const SetupValidator = require('../../../app/validators/return-requirements/setup.validator.js')
 
-describe('Reason validator', () => {
+describe.only('Setup validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = SetupValidator.go({ reason: 'use_abstraction_data' })
+      const result = SetupValidator.go({ setup: 'use_abstraction_data' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -21,9 +21,9 @@ describe('Reason validator', () => {
   })
 
   describe('when valid data is provided', () => {
-    describe("because no 'reason' is given", () => {
+    describe("because no 'setup' is given", () => {
       it('fails validation', () => {
-        const result = SetupValidator.go({ reason: '' })
+        const result = SetupValidator.go({ setup: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -31,9 +31,9 @@ describe('Reason validator', () => {
       })
     })
 
-    describe("because an unknown 'reason' is given", () => {
+    describe("because an unknown 'setup' is given", () => {
       it('fails validation', () => {
-        const result = SetupValidator.go({ reason: 'just-because' })
+        const result = SetupValidator.go({ setup: 'just-because' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

@@ -40,7 +40,7 @@ describe('Submit Setup service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          reason: 'use_abstraction_data'
+          setup: 'use_abstraction_data'
         }
       })
 

@@ -11,7 +11,7 @@
   {{
     govukBackLink({
       text: 'Back',
-      href: '/system/return-requirements/' + id + '/reason'
+      href: rootLink + '/reason'
     })
   }}
 {% endblock %}
@@ -32,7 +32,7 @@
   <div class="govuk-body">
     <form method="post">
       {{ govukRadios({
-        name: "reason",
+        name: "setup",
         errorMessage: error,
         fieldset: {
           legend: {
