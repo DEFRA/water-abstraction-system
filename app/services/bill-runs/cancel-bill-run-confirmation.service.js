@@ -27,7 +27,7 @@ async function go (id) {
 async function _fetchBillRun (id) {
   const billRun = await BillRunModel.query()
     .findById(id)
-    .select('createdAt', 'toFinancialYearEnding', 'batchType')
+    .select('createdAt', 'toFinancialYearEnding', 'batchType', 'externalId')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select('displayName')

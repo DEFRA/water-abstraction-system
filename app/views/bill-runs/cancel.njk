@@ -85,6 +85,7 @@
   <section class="govuk-!-margin-bottom-9">
     <form method="post" action="cancel">
       <input type="hidden" name="billRunBatchType" value="{{billRunBatchType}}">
+      <input type="hidden" name="chargingModuleBillRunId" value="{{chargingModuleBillRunId}}">
       {{ govukButton({
         text: "Cancel bill run"
       }) }}

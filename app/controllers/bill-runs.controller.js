@@ -17,9 +17,9 @@ const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/revi
 
 async function cancel (request, h) {
   const { id } = request.params
-  const { billRunBatchType } = request.payload
+  const { billRunBatchType, chargingModuleBillRunId } = request.payload
 
-  CancelBillRunService.go(id, billRunBatchType)
+  CancelBillRunService.go(id, billRunBatchType, chargingModuleBillRunId)
 
   return h.redirect('/billing/batch/list')
 }

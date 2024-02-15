@@ -20,7 +20,8 @@ function go (billRun) {
     region: billRun.region.displayName,
     billRunType: billRun.batchType === 'two_part_tariff' ? 'two-part tariff' : billRun.batchType,
     financialYear: _financialYear(billRun.toFinancialYearEnding),
-    billRunBatchType: billRun.batchType
+    billRunBatchType: billRun.batchType,
+    chargingModuleBillRunId: billRun.externalId
   }
 }
 
