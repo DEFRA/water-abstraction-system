@@ -17,6 +17,7 @@ const BillRoutes = require('../routes/bills.routes.js')
 const BillRunRoutes = require('../routes/bill-runs.routes.js')
 const BillingAccountRoutes = require('../routes/billing-accounts.routes.js')
 const CheckRoutes = require('../routes/check.routes.js')
+const ContactNameRoutes = require('../routes/contact-name.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const HealthRoutes = require('../routes/health.routes.js')
@@ -41,7 +42,8 @@ const routes = [
   ...ReturnRequirementRoutes,
   ...CheckRoutes,
   ...DataRoutes,
-  ...LandingPageRoutes
+  ...LandingPageRoutes,
+  ...ContactNameRoutes
 ]
 
 const RouterPlugin = {
