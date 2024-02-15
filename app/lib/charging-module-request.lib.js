@@ -11,6 +11,21 @@ const requestConfig = require('../../config/request.config.js')
 const servicesConfig = require('../../config/services.config.js')
 
 /**
+ * Sends a DELETE request to the Charging Module for the provided path
+ *
+ * @param {string} path The path to send the request to (do not include the starting /)
+ *
+ * @returns {Promise<Object>} result An object representing the result of the request
+ * @returns {boolean} result.succeeded Whether the request was successful
+ * @returns {Object} result.response The Charging Module response if successful or the error response if not
+ */
+async function deleteRequest (path) {
+  const result = await _sendRequest(path, RequestLib.delete)
+
+  return _parseResult(result)
+}
+
+/**
  * Sends a GET request to the Charging Module for the provided route
  *
  * @param {string} path The route to send the request to (do not include the starting /)
@@ -132,6 +147,7 @@ function _parseResult (result) {
 }
 
 module.exports = {
+  delete: deleteRequest,
   get,
   patch,
   post
