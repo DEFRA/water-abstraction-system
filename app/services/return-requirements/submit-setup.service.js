@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/setup` page
- * @module SetupService
+ * @module SubmitSetupService
  */
 
 const SessionModel = require('../../models/session.model.js')

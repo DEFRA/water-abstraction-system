@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SetupValidator = require('../../../app/validators/return-requirements/setup.validator.js')
 
-describe.only('Setup validator', () => {
+describe('Setup validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
       const result = SetupValidator.go({ setup: 'use_abstraction_data' })

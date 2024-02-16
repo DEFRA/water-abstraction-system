@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/reason` page
- * @module SelectReasonService
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/setup` page
+ * @module SetupService
  */
 const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
 const SessionModel = require('../../models/session.model.js')
