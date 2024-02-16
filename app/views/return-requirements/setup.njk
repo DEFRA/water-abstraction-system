@@ -1,6 +1,8 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -9,20 +11,51 @@
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/reason"
+      href: rootLink + '/reason'
     })
   }}
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#setup-error"
+        }
+      ]
+      }) }}
+  {% endif %}
 
-  <form method="post">
-    <div class="govuk-body">
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukRadios({
+        name: "setup",
+        errorMessage: error,
+        fieldset: {
+          legend: {
+            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+          }
+        },
+        items: [
+          {
+            value: "use_abstraction_data",
+            text: "Start by using abstraction data",
+            checked: false
+          },
+          {
+            value: "copy_an_existing_return_requirement",
+            text: "Copy an existing return requirement",
+            checked: false
+          }
+        ]
+      }) }}
+
       {{ govukButton({ text: "Continue" }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock %}
