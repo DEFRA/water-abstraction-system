@@ -5,19 +5,25 @@
  * @module CancelBillRunConfirmationService
  */
 
+const BillRunModel = require('../../models/bill-run.model.js')
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const ReviewChargeElementResultModel = require('../../models/review-charge-element-result.model.js')
+const ReviewResultModel = require('../../models/review-result.model.js')
+const ReviewReturnResultModel = require('../../models/review-return-result.model.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
+ * Cancels the bill run bu deleting the bill run from the Charging Module and then deleting all data relating to it from
+ * the database
  *
  * @param {string} id The UUID of the bill run to cancel
- *
- * @returns {Object} an object representing the `pageData` needed by the cancel bill run template. It contains details
- * of the bill run.
  */
 async function go (id, billRunBatchType, chargingModuleBillRunId) {
   if (billRunBatchType === 'two_part_tariff') {
-    _deleteChargingModuleBillRun(chargingModuleBillRunId)
+    await Promise.all([
+      _deleteChargingModuleBillRun(chargingModuleBillRunId),
+      BillRunModel.query().deleteById(id),
+      _deletePersistedData(id)
+    ])
   }
 }
 
@@ -27,6 +33,18 @@ async function _deleteChargingModuleBillRun (chargingModuleBillRunId) {
   if (!result.succeeded) {
     global.GlobalNotifier.omg(`Failed to delete bill run from Charging Module. ${result.response.body.message}`)
   }
+}
+
+async function _deletePersistedData (id) {
+  const reviewResults = await ReviewResultModel.query()
+    .select('id', 'reviewChargeElementResultId', 'reviewReturnResultId')
+    .where('billRunId', id)
+
+  reviewResults.forEach(async (reviewResult) => {
+    await ReviewResultModel.query().deleteById(reviewResult.id)
+    await ReviewChargeElementResultModel.query().deleteById(reviewResult.reviewChargeElementResultId)
+    await ReviewReturnResultModel.query().deleteById(reviewResult.reviewReturnResultId)
+  })
 }
 
 module.exports = {

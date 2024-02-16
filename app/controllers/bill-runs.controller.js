@@ -19,7 +19,7 @@ async function cancel (request, h) {
   const { id } = request.params
   const { billRunBatchType, chargingModuleBillRunId } = request.payload
 
-  CancelBillRunService.go(id, billRunBatchType, chargingModuleBillRunId)
+  await CancelBillRunService.go(id, billRunBatchType, chargingModuleBillRunId)
 
   return h.redirect('/billing/batch/list')
 }
