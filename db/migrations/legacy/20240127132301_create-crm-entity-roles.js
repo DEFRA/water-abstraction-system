@@ -18,7 +18,7 @@ exports.up = function (knex) {
       table.string('created_by')
 
       // Legacy timestamps
-      // NOTE: They are not automatically set and there are large numbers of records where these fields are null!
+      // NOTE: They are not automatically set
       table.timestamp('created_at').defaultTo(knex.fn.now())
     })
     // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
