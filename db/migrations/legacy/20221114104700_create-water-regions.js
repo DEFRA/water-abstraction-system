@@ -11,23 +11,15 @@ exports.up = function (knex) {
       table.uuid('region_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.string('charge_region_id')
-      table.integer('nald_region_id')
-      table.string('name')
-      table.string('display_name')
+      table.string('charge_region_id').notNullable()
+      table.integer('nald_region_id').notNullable()
+      table.string('name').notNullable()
+      table.string('display_name').notNullable()
+      table.boolean('is_test').notNullable().defaultTo(false)
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-    })
-    .then(() => {
-      knex.raw(`
-        CREATE TRIGGER update_timestamp
-        BEFORE UPDATE
-        ON water.${tableName}
-        FOR EACH ROW
-        EXECUTE PROCEDURE update_timestamp();
-      `)
     })
 }
 
