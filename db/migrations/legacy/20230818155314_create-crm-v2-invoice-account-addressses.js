@@ -22,6 +22,9 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created').notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated').notNullable().defaultTo(knex.fn.now())
+
+      // Constraints
+      table.unique(['invoice_account_id', 'start_date'], { useConstraint: true })
     })
 }
 
