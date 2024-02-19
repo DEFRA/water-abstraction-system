@@ -11,8 +11,8 @@ exports.up = function (knex) {
       table.string('return_id').primary()
 
       // Data
-      table.string('regime').notNullable()
-      table.string('licence_type').notNullable()
+      table.string('regime').notNullable().defaultTo('water')
+      table.string('licence_type').notNullable().defaultTo('abstraction')
       table.string('licence_ref').notNullable()
       table.date('start_date').notNullable()
       table.date('end_date').notNullable()
@@ -29,8 +29,12 @@ exports.up = function (knex) {
       table.uuid('return_cycle_id')
 
       // Legacy timestamps
-      table.timestamp('created_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-      table.timestamp('updated_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+      // NOTE: They are not automatically set
+      table.timestamp('created_at').notNullable()
+      table.timestamp('updated_at')
+
+      // Constraints
+      table.unique(['regime', 'licence_type', 'licence_ref', 'start_date', 'end_date', 'return_requirement'], { useConstraint: true })
     })
 }
 
