@@ -13,6 +13,7 @@ const { randomInteger } = require('./general.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
+ * - `waterUndertaker` - false
  * - `licenceRef` - [randomly generated - 01/123]
  * - `regionId` - [random UUID]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
@@ -40,6 +41,7 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
+    waterUndertaker: false,
     licenceRef: generateLicenceRef(),
     regionId: generateUUID(),
     regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },

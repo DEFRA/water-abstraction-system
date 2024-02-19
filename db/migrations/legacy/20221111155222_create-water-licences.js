@@ -11,13 +11,25 @@ exports.up = function (knex) {
       table.uuid('licence_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.string('licence_ref')
-      table.string('include_in_supplementary_billing')
-      table.uuid('region_id')
+      table.uuid('region_id').notNullable()
+      table.string('licence_ref').notNullable()
+      table.boolean('is_water_undertaker').notNullable()
+      table.jsonb('regions').notNullable()
+      table.date('start_date').notNullable()
+      table.date('expired_date')
+      table.date('lapsed_date')
+      table.date('revoked_date')
+      table.boolean('suspend_from_billing').notNullable().defaultTo(false)
+      table.boolean('is_test').notNullable().defaultTo(false)
+      table.string('include_in_supplementary_billing').notNullable().defaultTo('no')
+      table.boolean('include_in_sroc_supplementary_billing').notNullable().defaultTo(false)
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+
+      // Constraints
+      table.unique(['licence_ref'], { useConstraint: true })
     })
 }
 
