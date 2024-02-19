@@ -23,6 +23,7 @@ exports.up = function (knex) {
       table.date('billed_upto_date')
       table.integer('region_code').notNullable()
       table.string('source').notNullable()
+      table.boolean('is_test').notNullable().defaultTo(false)
       table.uuid('company_id')
       table.uuid('invoice_account_id')
       table.uuid('change_reason_id')
@@ -34,6 +35,9 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+
+      // Constraints
+      table.unique(['external_id'], { useConstraint: true })
     })
 }
 
