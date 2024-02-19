@@ -11,29 +11,23 @@ exports.up = function (knex) {
       table.uuid('billing_charge_category_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.string('reference')
-      table.integer('subsistence_charge')
-      table.string('description')
-      table.string('short_description')
-      table.boolean('is_tidal')
+      table.string('reference').notNullable()
+      table.integer('subsistence_charge').notNullable()
+      table.string('description').notNullable()
+      table.string('short_description').notNullable()
+      table.boolean('is_tidal').defaultTo(false)
       table.string('loss_factor')
       table.string('model_tier')
-      table.boolean('is_restricted_source')
-      table.bigInteger('min_volume')
-      table.bigInteger('max_volume')
+      table.boolean('is_restricted_source').defaultTo(false)
+      table.bigInteger('min_volume').notNullable().defaultTo(0)
+      table.bigInteger('max_volume').notNullable().defaultTo(0)
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable()
       table.timestamp('date_updated', { useTz: false })
-    })
-    .then(() => {
-      knex.raw(`
-        CREATE TRIGGER update_timestamp
-        BEFORE UPDATE
-        ON water.${tableName}
-        FOR EACH ROW
-        EXECUTE PROCEDURE update_timestamp();
-      `)
+
+      // Constraints
+      table.unique(['reference'], { useConstraint: true })
     })
 }
 
