@@ -12,7 +12,7 @@ exports.up = function (knex) {
 
       // Data
       table.uuid('charge_element_id').notNullable()
-      table.integer('financial_year').notNullable()
+      table.smallint('financial_year').notNullable()
       table.boolean('is_summer').notNullable()
       table.decimal('calculated_volume')
       table.boolean('two_part_tariff_error').notNullable().defaultTo(false)
@@ -20,9 +20,23 @@ exports.up = function (knex) {
       table.jsonb('two_part_tariff_review')
       table.boolean('is_approved').notNullable().defaultTo(false)
       table.uuid('billing_batch_id').notNullable()
-      table.decimal('volume')
+      // Specify the precision and scale
+      table.decimal('volume', 20, 6).defaultTo(0)
       table.timestamp('errored_on')
     })
+    // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
+    // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after
+    // Knex has created the table.
+    .raw(`
+      CREATE UNIQUE INDEX uniq_charge_element_id_financial_year_season_err
+      ON water.billing_volumes USING btree (
+        charge_element_id,
+        financial_year,
+        is_summer,
+        billing_batch_id
+      )
+      WHERE (errored_on IS NULL);
+    `)
 }
 
 exports.down = function (knex) {
