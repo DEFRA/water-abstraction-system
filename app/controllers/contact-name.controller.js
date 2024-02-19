@@ -12,6 +12,12 @@ async function view (_request, h) {
   )
 }
 
+async function saveInput (request, h) {
+  const { firstName, lastName } = request.payload
+  return h.response(`Form data received and processed successfully - FirstName: ${firstName}, LastName: ${lastName}`).code(200)
+}
+
 module.exports = {
-  view
+  view,
+  saveInput
 }
