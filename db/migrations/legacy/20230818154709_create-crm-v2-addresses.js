@@ -19,10 +19,10 @@ exports.up = function (knex) {
       table.string('county')
       table.string('postcode')
       table.string('country')
-      table.string('external_id')
+      table.string('external_id').unique()
       table.boolean('is_test').notNullable().defaultTo(false)
-      table.string('data_source')
-      table.integer('uprn')
+      table.string('data_source').notNullable()
+      table.integer('uprn').unique()
       table.string('last_hash')
       table.string('current_hash')
 
