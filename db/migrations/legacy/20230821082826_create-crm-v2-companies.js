@@ -13,8 +13,8 @@ exports.up = function (knex) {
       // Data
       table.string('name').notNullable()
       table.string('type')
-      table.string('company_number')
-      table.string('external_id')
+      table.string('company_number').unique()
+      table.string('external_id').unique()
       table.boolean('is_test').notNullable().defaultTo(false)
       table.string('organisation_type')
       table.string('last_hash')
