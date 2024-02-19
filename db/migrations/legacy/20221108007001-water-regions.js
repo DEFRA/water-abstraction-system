@@ -14,7 +14,7 @@ exports.up = function (knex) {
       table.string('charge_region_id').notNullable()
       table.integer('nald_region_id').notNullable()
       table.string('name').notNullable()
-      table.string('display_name').notNullable()
+      table.text('display_name').notNullable()
       table.boolean('is_test').notNullable().defaultTo(false)
 
       // Legacy timestamps
