@@ -13,7 +13,7 @@ exports.up = function (knex) {
       // Data
       table.string('licence_ref').notNullable()
       table.string('scheme').notNullable()
-      table.string('external_id')
+      table.string('external_id').unique()
       table.integer('version_number').notNullable()
       table.date('start_date').notNullable()
       table.string('status').notNullable()
@@ -35,9 +35,6 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-
-      // Constraints
-      table.unique(['external_id'], { useConstraint: true })
     })
 }
 

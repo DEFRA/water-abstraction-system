@@ -24,7 +24,7 @@ exports.up = function (knex) {
       table.uuid('external_id')
       table.boolean('is_summer').notNullable().defaultTo(false)
       table.string('source').notNullable().defaultTo('wrls')
-      table.string('legacy_id')
+      table.string('legacy_id').unique()
       table.jsonb('metadata')
       table.decimal('invoice_value')
       table.decimal('credit_note_value')
@@ -36,7 +36,6 @@ exports.up = function (knex) {
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
 
       // Constraints
-      table.unique(['legacy_id'], { useConstraint: true })
       table.check('?? >= 0', ['invoice_count'])
       table.check('?? >= 0', ['invoice_value'])
     })

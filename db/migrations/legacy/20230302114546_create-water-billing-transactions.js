@@ -35,7 +35,7 @@ exports.up = function (knex) {
       table.string('section_130_agreement')
       table.boolean('is_de_minimis').notNullable().defaultTo(false)
       table.boolean('is_new_licence').notNullable().defaultTo(false)
-      table.string('legacy_id')
+      table.string('legacy_id').unique()
       table.jsonb('metadata')
       table.uuid('source_transaction_id')
       table.decimal('calc_source_factor')
@@ -68,9 +68,6 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-
-      // Constraints
-      table.unique(['legacy_id'], { useConstraint: true })
     })
     // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
     // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after

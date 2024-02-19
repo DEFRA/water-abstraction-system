@@ -12,7 +12,7 @@ exports.up = function (knex) {
 
       // Data
       table.uuid('charge_version_id').notNullable()
-      table.string('external_id')
+      table.string('external_id').unique()
       table.smallint('abstraction_period_start_day')
       table.smallint('abstraction_period_start_month')
       table.smallint('abstraction_period_end_day')
@@ -46,9 +46,6 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-
-      // Constraints
-      table.unique(['external_id'], { useConstraint: true })
     })
     // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
     // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after

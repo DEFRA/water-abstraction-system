@@ -24,7 +24,7 @@ exports.up = function (knex) {
       table.decimal('credit_note_value')
       table.decimal('invoice_value')
       table.boolean('is_de_minimis').notNullable().defaultTo(false)
-      table.uuid('external_id')
+      table.uuid('external_id').unique()
       table.boolean('is_flagged_for_rebilling').notNullable().defaultTo(false)
       table.uuid('original_billing_invoice_id')
       table.string('rebilling_state')
@@ -32,9 +32,6 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-
-      // Constraints
-      table.unique(['external_id'], { useConstraint: true })
     })
     // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
     // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after

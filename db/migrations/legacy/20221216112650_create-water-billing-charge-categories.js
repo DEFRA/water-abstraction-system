@@ -11,7 +11,7 @@ exports.up = function (knex) {
       table.uuid('billing_charge_category_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.string('reference').notNullable()
+      table.string('reference').notNullable().unique()
       table.integer('subsistence_charge').notNullable()
       table.string('description').notNullable()
       table.string('short_description').notNullable()
@@ -25,9 +25,6 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable()
       table.timestamp('date_updated', { useTz: false })
-
-      // Constraints
-      table.unique(['reference'], { useConstraint: true })
     })
 }
 

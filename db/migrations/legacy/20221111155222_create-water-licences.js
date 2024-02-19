@@ -12,7 +12,7 @@ exports.up = function (knex) {
 
       // Data
       table.uuid('region_id').notNullable()
-      table.string('licence_ref').notNullable()
+      table.string('licence_ref').notNullable().unique()
       table.boolean('is_water_undertaker').notNullable()
       table.jsonb('regions').notNullable()
       table.date('start_date').notNullable()
@@ -27,9 +27,6 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
-
-      // Constraints
-      table.unique(['licence_ref'], { useConstraint: true })
     })
 }
 

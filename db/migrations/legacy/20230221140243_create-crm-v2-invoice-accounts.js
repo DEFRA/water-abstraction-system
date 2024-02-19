@@ -12,7 +12,7 @@ exports.up = function (knex) {
 
       // Data
       table.uuid('company_id').notNullable()
-      table.string('invoice_account_number').notNullable()
+      table.string('invoice_account_number').notNullable().unique()
       table.date('start_date')
       table.date('end_date')
       table.boolean('is_test').notNullable().defaultTo(false)
@@ -25,7 +25,6 @@ exports.up = function (knex) {
 
       // Constraints
       table.unique(['company_id', 'invoice_account_number'], { useConstraint: true })
-      table.unique(['invoice_account_number'], { useConstraint: true })
     })
 }
 
