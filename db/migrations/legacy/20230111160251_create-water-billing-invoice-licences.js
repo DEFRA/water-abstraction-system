@@ -11,13 +11,16 @@ exports.up = function (knex) {
       table.uuid('billing_invoice_licence_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.uuid('billing_invoice_id')
-      table.string('licence_ref')
-      table.uuid('licence_id')
+      table.uuid('billing_invoice_id').notNullable()
+      table.string('licence_ref').notNullable()
+      table.uuid('licence_id').notNullable()
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+
+      // Constraints
+      table.unique(['billing_invoice_id', 'licence_id'], { useConstraint: true })
     })
 }
 
