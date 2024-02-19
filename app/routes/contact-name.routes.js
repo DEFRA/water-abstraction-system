@@ -14,6 +14,18 @@ const routes = [
       auth: false,
       description: 'Used to view landing page'
     }
+  },
+  {
+    method: 'POST',
+    path: '/contact-name',
+    handler: ContactNameController.saveInput,
+    options: {
+      app: {
+        excludeFromProd: true
+      },
+      auth: false,
+      description: 'Used to add first name and last name'
+    }
   }
 ]
 
