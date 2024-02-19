@@ -25,10 +25,15 @@ exports.up = function (knex) {
       table.timestamp('date_created').notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated').notNullable().defaultTo(knex.fn.now())
 
+      // Constraints
       table.unique(
         ['system_id', 'system_internal_id', 'regime_entity_id'],
         { useConstraint: true, indexName: 'external_key' }
       )
+      table.unique([
+        'document_id', 'regime_entity_id', 'system_id', 'system_internal_id',
+        'system_external_id', 'company_entity_id', 'verification_id'
+      ])
     })
 }
 
