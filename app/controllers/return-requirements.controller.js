@@ -8,9 +8,11 @@
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
+const SetupService = require('../services/return-requirements/setup.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
+const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
@@ -154,12 +156,10 @@ async function returnsCycle (request, h) {
 async function setup (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await SetupService.go(sessionId)
 
   return h.view('return-requirements/setup.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'How do you want to set up the return requirement?',
-    ...session
+    ...pageData
   })
 }
 
@@ -269,6 +269,12 @@ async function submitReturnsCycle (request, h) {
 
 async function submitSetup (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitSetupService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/setup.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/purpose`)
 }
