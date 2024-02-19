@@ -12,11 +12,12 @@ exports.up = function (knex) {
 
       // Data
       table.string('reference_code')
-      table.string('type')
+      table.string('type').notNullable()
       table.string('subtype')
       table.string('issuer')
       table.jsonb('licences')
       table.jsonb('entities')
+      table.string('comment')
       table.jsonb('metadata')
       table.string('status')
 
