@@ -19,11 +19,13 @@ exports.up = function (knex) {
       table.boolean('nil_return').notNullable()
       table.boolean('current')
 
-      table.unique(['return_id', 'version_number'], { useConstraint: true })
-
       // Legacy timestamps
+      // NOTE: They are not automatically set
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at')
+
+      // Constraints
+      table.unique(['return_id', 'version_number'], { useConstraint: true })
     })
 }
 
