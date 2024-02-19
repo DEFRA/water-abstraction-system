@@ -12,9 +12,9 @@ exports.up = function (knex) {
 
       // Data
       table.string('version_id').notNullable()
-      table.string('substance').notNullable()
+      table.string('substance').notNullable().defaultTo('water')
       table.decimal('quantity').notNullable()
-      table.string('unit').notNullable()
+      table.string('unit').notNullable().defaultTo('m³')
       table.date('start_date').notNullable()
       table.date('end_date').notNullable()
       table.string('time_period').notNullable()
@@ -22,11 +22,13 @@ exports.up = function (knex) {
       table.string('reading_type')
       table.string('user_unit')
 
-      table.unique(['version_id', 'substance', 'start_date', 'end_date'], { useConstraint: true })
-
       // Legacy timestamps
+      // NOTE: They are not automatically set
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at')
+
+      // Constraints
+      table.unique(['version_id', 'substance', 'start_date', 'end_date'], { useConstraint: true })
     })
 }
 
