@@ -24,6 +24,7 @@ exports.up = function (knex) {
       table.timestamp('date_created').notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated').notNullable().defaultTo(knex.fn.now())
 
+      // Constraints
       table.unique(['regime', 'document_type', 'document_ref'], { useConstraint: true })
     })
 }
