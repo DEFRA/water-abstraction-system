@@ -7,22 +7,21 @@ exports.up = function (knex) {
     .schema
     .withSchema('crm')
     .createTable(tableName, (table) => {
-      // Primary Key
-      table.string('entity_id').primary()
-
       // Data
+      table.string('entity_id').notNullable()
       table.string('entity_nm').notNullable()
       table.string('entity_type').notNullable()
       table.jsonb('entity_definition')
       table.string('source')
 
       // Legacy timestamps
-      // NOTE: They are not automatically set and there are large numbers of records where these fields are null!
+      // NOTE: They are not automatically set
       table.timestamp('created_at')
       table.timestamp('updated_at')
 
-      // Constraints
-      table.unique(['entity_id', 'entity_nm', 'entity_type'], { useConstraint: true })
+      // Primary Key
+      // NOTE: It is not entity_id. The primary key is made up of all these columns
+      table.primary(['entity_id', 'entity_nm', 'entity_type'])
     })
 }
 
