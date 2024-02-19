@@ -15,7 +15,7 @@ exports.up = function (knex) {
       table.string('first_name')
       table.string('middle_initials')
       table.string('last_name')
-      table.string('external_id')
+      table.string('external_id').unique()
       table.string('initials')
       table.boolean('is_test').notNullable().defaultTo(false)
       table.string('data_source').notNullable()
