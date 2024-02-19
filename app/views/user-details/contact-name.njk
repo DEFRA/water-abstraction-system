@@ -16,47 +16,47 @@
 {% endblock %}
 
 {% block content %}
-{% call govukFieldset({
-  legend: {
-    text: "What is your name?",
-    classes: "govuk-fieldset__legend--l",
-    isPageHeading: true
-  }
-}) %}
+  <div class= "govuk-body">
 
-{{ govukInput({
-  label: {
-    text: "First name"
-  },
-  hint: {
-    text: "Do not use abbreviations or nicknames"
-  },
-  id: "first-name",
-  name: "firstName",
-  autocomplete: "name",
-  spellcheck: false,
-  classes: "govuk-input--width-20",
-  id: "width-20",
-  name: "width20"
-}) }}
+      {% call govukFieldset({
+        legend: {
+          text: "What is your name?",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
 
-{{ govukInput({
-  label: {
-    text: "Last name"
-  },
-  id: "last-name",
-  name: "lastName",
-  autocomplete: "name",
-  spellcheck: false,
-  classes: "govuk-input--width-20",
-  id: "width-20",
-  name: "width20"
-}) }}
+<form method="post">
+      {{ govukInput({
+        label: {
+          text: "First name"
+        },
+        hint: {
+          text: "Do not use abbreviations or nicknames"
+        },
+        autocomplete: "name",
+        spellcheck: false,
+        classes: "govuk-input--width-20",
+        id: "first-name",
+        name: "firstName"
+      }) }}
 
-{% endcall %}
+      {{ govukInput({
+        label: {
+          text: "Last name"
+        },
+        id: "last-name",
+        name: "lastName",
+        autocomplete: "name",
+        spellcheck: false,
+        classes: "govuk-input--width-20"
+      }) }}
 
-{{ govukButton({
-  text: "Continue"
-}) }}
+      {% endcall %}
 
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+  </div>
 {% endblock %}
