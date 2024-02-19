@@ -15,24 +15,21 @@ exports.up = function (knex) {
       table.uuid('purpose_primary_id').notNullable()
       table.uuid('purpose_secondary_id').notNullable()
       table.uuid('purpose_use_id').notNullable()
-      table.integer('abstraction_period_start_day').notNullable()
-      table.integer('abstraction_period_start_month').notNullable()
-      table.integer('abstraction_period_end_day').notNullable()
-      table.integer('abstraction_period_end_month').notNullable()
+      table.smallint('abstraction_period_start_day').notNullable()
+      table.smallint('abstraction_period_start_month').notNullable()
+      table.smallint('abstraction_period_end_day').notNullable()
+      table.smallint('abstraction_period_end_month').notNullable()
       table.date('time_limited_start_date')
       table.date('time_limited_end_date')
       table.text('notes')
       table.decimal('annual_quantity')
-      table.string('external_id')
+      table.string('external_id').unique()
       table.boolean('is_test')
 
       // Legacy timestamps
       // NOTE: They are not automatically set
       table.dateTime('date_created').notNullable()
       table.dateTime('date_updated').notNullable()
-
-      // Constraints
-      table.unique(['external_id'], { useConstraint: true })
     })
 }
 
