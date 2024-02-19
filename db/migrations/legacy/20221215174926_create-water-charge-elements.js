@@ -27,6 +27,7 @@ exports.up = function (knex) {
       table.date('time_limited_start_date')
       table.date('time_limited_end_date')
       table.string('description')
+      table.boolean('is_test').notNullable().defaultTo(false)
       table.uuid('purpose_primary_id')
       table.uuid('purpose_secondary_id')
       table.uuid('purpose_use_id')
@@ -45,7 +46,20 @@ exports.up = function (knex) {
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
       table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+
+      // Constraints
+      table.unique(['external_id'], { useConstraint: true })
     })
+    // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
+    // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after
+    // Knex has created the table.
+    .raw(`
+      ALTER TABLE water.charge_elements
+      ADD CONSTRAINT volume_authorised_annual_quantity
+      CHECK (
+        ((volume IS NOT NULL) OR (authorised_annual_quantity IS NOT NULL))
+      );
+    `)
 }
 
 exports.down = function (knex) {
