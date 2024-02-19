@@ -17,10 +17,11 @@ exports.up = function (knex) {
       table.string('status').notNullable()
       table.date('start_date').notNullable()
       table.date('end_date')
-      table.string('external_id').notNullable()
+      table.string('external_id').notNullable().unique()
       table.boolean('is_test').notNullable().defaultTo(false)
 
       // Legacy timestamps
+      // NOTE: They are not automatically set
       table.timestamp('date_created', { useTz: false }).notNullable()
       table.timestamp('date_updated', { useTz: false }).notNullable()
     })
