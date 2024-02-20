@@ -24,6 +24,7 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  * They will then be returned in an array for further processing before being persisted to the DB as
  * `billing_transactions`.
  *
+ * @param {String} billLicenceId The UUID of the bill licence the transaction will be linked to
  * @param {Object} chargeReference The charge reference the transaction generated from
  * @param {Object} billingPeriod A start and end date representing the billing period for the bill run
  * @param {Object} chargePeriod A start and end date representing the charge period for the charge version
@@ -32,7 +33,7 @@ const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-au
  *
  * @returns {Object[]} an array of 0, 1 or 2 transaction objects
  */
-function go (chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
+function go (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
     chargePeriod,
     billingPeriod,
@@ -46,7 +47,7 @@ function go (chargeReference, billingPeriod, chargePeriod, newLicence, waterUnde
   }
 
   const standardTransaction = _standardTransaction(
-    generateUUID(),
+    billLicenceId,
     authorisedDays,
     billableDays,
     chargeReference,
@@ -58,7 +59,7 @@ function go (chargeReference, billingPeriod, chargePeriod, newLicence, waterUnde
   transactions.push(standardTransaction)
 
   if (!waterUndertaker) {
-    const compensationTransaction = _compensationTransaction(generateUUID(), standardTransaction)
+    const compensationTransaction = _compensationTransaction(standardTransaction)
     transactions.push(compensationTransaction)
   }
 
@@ -69,10 +70,10 @@ function go (chargeReference, billingPeriod, chargePeriod, newLicence, waterUnde
  * Generates a compensation transaction by taking a standard transaction and overwriting it with the supplied billing id
  * and the correct charge type and description for a compensation charge.
  */
-function _compensationTransaction (transactionId, standardTransaction) {
+function _compensationTransaction (standardTransaction) {
   return {
     ...standardTransaction,
-    id: transactionId,
+    id: generateUUID(),
     chargeType: 'compensation',
     description: 'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
   }
@@ -102,7 +103,7 @@ function _generateElements (chargeReference) {
  * Generates a standard transaction based on the supplied data, along with some default fields (eg. status)
  */
 function _standardTransaction (
-  transactionId,
+  billLicenceId,
   authorisedDays,
   billableDays,
   chargeReference,
@@ -111,7 +112,8 @@ function _standardTransaction (
   waterUndertaker
 ) {
   return {
-    id: transactionId,
+    id: generateUUID(),
+    billLicenceId,
     authorisedDays,
     billableDays,
     newLicence,

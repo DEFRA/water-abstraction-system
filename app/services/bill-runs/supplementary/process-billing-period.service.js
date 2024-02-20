@@ -14,7 +14,7 @@ const DetermineMinimumChargeService = require('../determine-minimum-charge.servi
 const GenerateTransactionsService = require('../generate-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
 const ProcessTransactionsService = require('./process-transactions.service.js')
-const SendTransactionsService = require('./send-transactions.service.js')
+const SendTransactionsService = require('../send-transactions.service.js')
 const TransactionModel = require('../../../models/transaction.model.js')
 
 /**
@@ -62,11 +62,10 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
 
     if (cleansedTransactions.length !== 0) {
       const transactions = await SendTransactionsService.go(
-        currentBillingData.licence,
-        currentBillingData.bill,
-        currentBillingData.billLicence,
+        cleansedTransactions,
         billRunExternalId,
-        cleansedTransactions
+        currentBillingData.bill.accountNumber,
+        currentBillingData.licence
       )
 
       dataToPersist.transactions.push(...transactions)
@@ -119,7 +118,7 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
     // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
     // We fetch the previous transactions for `superseded` (REPLACED) charge versions later in the process
     if (chargeVersion.status === 'current') {
-      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
+      const calculatedTransactions = _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVersion)
       acc[billLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 
@@ -185,7 +184,7 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
   return cleansedTransactions
 }
 
-function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
+function _generateCalculatedTransactions (billLicenceId, billingPeriod, chargeVersion) {
   try {
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
@@ -199,6 +198,7 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
     // We use flatMap as GenerateTransactionsService returns an array of transactions
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
       return GenerateTransactionsService.go(
+        billLicenceId,
         chargeReference,
         billingPeriod,
         chargePeriod,
