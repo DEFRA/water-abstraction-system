@@ -11,20 +11,20 @@ const ChargingModuleCreateTransactionService = require('../../charging-module/cr
 const ChargingModuleCreateTransactionPresenter = require('../../../presenters/charging-module/create-transaction.presenter.js')
 
 /**
- * Sends the provided transactions to the Charging Module and returns an array of the sent transactions, each updated
- * with a status of `charge_created`; the external id returned by the Charging Module; and the appropriate bill licence
- * id
+ * Sends the provided transactions to the Charging Module and returns an array of the sent transactions
+ *
+ * Each sent transaction is updated with a status of `charge_created` and the external id returned by the
+ * Charging Module.
  *
  * @param {module:LicenceModel} licence The licence that each transaction is linked to
  * @param {module:BillModel} bill The bill each transaction is to be linked to
- * @param {module:BillLicenceModel} billLicence The bill licence each transaction is to be linked to
  * @param {string} billRunExternalId The Charging Module bill run id that the transactions are to be created on
  * @param {Object[]} transactions The transactions to be sent to the Charging Module
  * @param {Object} billingPeriod The billing period of the transactions
  *
  * @returns {Promise<Object[]>} Array of transactions which have been sent to the Charging Module
  */
-async function go (licence, bill, billLicence, billRunExternalId, transactions) {
+async function go (licence, bill, billRunExternalId, transactions) {
   try {
     const sentTransactions = []
 
@@ -36,7 +36,7 @@ async function go (licence, bill, billLicence, billRunExternalId, transactions) 
         billRunExternalId
       )
 
-      _updateTransaction(transaction, chargingModuleResponse, billLicence)
+      _updateTransaction(transaction, chargingModuleResponse)
 
       sentTransactions.push(transaction)
     }
@@ -57,10 +57,9 @@ async function _sendTransactionToChargingModule (transaction, bill, licence, bil
   return ChargingModuleCreateTransactionService.go(billRunExternalId, chargingModuleRequest)
 }
 
-function _updateTransaction (transaction, chargingModuleResponse, billLicence) {
+function _updateTransaction (transaction, chargingModuleResponse) {
   transaction.status = 'charge_created'
   transaction.externalId = chargingModuleResponse.response.body.transaction.id
-  transaction.billLicenceId = billLicence.id
 }
 
 module.exports = {

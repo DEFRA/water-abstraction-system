@@ -64,7 +64,6 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
       const transactions = await SendTransactionsService.go(
         currentBillingData.licence,
         currentBillingData.bill,
-        currentBillingData.billLicence,
         billRunExternalId,
         cleansedTransactions
       )
