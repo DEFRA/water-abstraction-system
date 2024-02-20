@@ -21,23 +21,6 @@ const { init } = require('../../app/server.js')
 describe('Bill Runs controller', () => {
   let server
 
-  function options (scheme = 'sroc') {
-    return {
-      method: 'POST',
-      url: '/bill-runs',
-      payload: {
-        type: 'supplementary',
-        scheme,
-        region: '07ae7f3a-2677-4102-b352-cc006828948c',
-        user: 'test.user@defra.gov.uk'
-      },
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-  }
-
   // Create server before each test
   beforeEach(async () => {
     server = await init()
@@ -55,6 +38,25 @@ describe('Bill Runs controller', () => {
   })
 
   describe('POST /bill-runs', () => {
+    let options
+
+    beforeEach(async () => {
+      options = {
+        method: 'POST',
+        url: '/bill-runs',
+        payload: {
+          type: 'supplementary',
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c',
+          user: 'test.user@defra.gov.uk'
+        },
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
     describe('when a request is valid', () => {
       const validResponse = {
         id: 'f561990b-b29a-42f4-b71a-398c52339f78',
@@ -69,7 +71,7 @@ describe('Bill Runs controller', () => {
       })
 
       it('returns a 200 response including details of the new bill run', async () => {
-        const response = await server.inject(options())
+        const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
 
         expect(response.statusCode).to.equal(200)
@@ -79,8 +81,12 @@ describe('Bill Runs controller', () => {
 
     describe('when the request fails', () => {
       describe('because the request is invalid', () => {
+        beforeEach(() => {
+          options.payload.scheme = 'INVALID'
+        })
+
         it('returns an error response', async () => {
-          const response = await server.inject(options('INVALID'))
+          const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
           expect(response.statusCode).to.equal(400)
@@ -95,7 +101,7 @@ describe('Bill Runs controller', () => {
         })
 
         it('returns an error response', async () => {
-          const response = await server.inject(options())
+          const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
           expect(response.statusCode).to.equal(500)
