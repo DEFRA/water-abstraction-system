@@ -91,6 +91,17 @@ describe('Return requirements controller', () => {
     })
   })
 
+  describe('GET /return-requirements/{sessionId}/existing', () => {
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(_options('existing'))
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Select an existing return requirement from')
+      })
+    })
+  })
+
   describe('GET /return-requirements/{sessionId}/frequency-collected', () => {
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
