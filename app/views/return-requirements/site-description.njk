@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -16,9 +17,17 @@
 
 {% block content %}
   {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+  <div class="govuk-form-group">
+  <span class="govuk-caption-l">  {# Licence Ref NO. #}  </span>
+  <h1 class="govuk-label-wrapper">
+    <label class="govuk-label govuk-label--l" for="event-name">
+      {{ pageTitle }} {# Missing s for requirements #}
+    </label>
+  </h1>
+  <span class="govuk-caption-m">This is the description that will appear on the return</span>
+  <br>
+  <input class="govuk-input govuk-!-width-three-quarters" id="event-name" name="eventName" type="text">
+</div>
 
   <form method="post">
     <div class="govuk-body">
