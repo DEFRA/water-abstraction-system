@@ -19,12 +19,8 @@ const ChargingModuleCreateTransactionService = require('../../../../app/services
 const SendTransactionsService = require('../../../../app/services/bill-runs/supplementary/send-transactions.service.js')
 
 describe('Send Transactions service', () => {
+  const accountNumber = 'ABC123'
   const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
-  const bill = { accountNumber: 'ABC123' }
-  const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
-  }
   const licence = {
     historicalAreaCode: 'DALES',
     licenceRef: 'AT/CURR/MONTHLY/02',
@@ -59,13 +55,7 @@ describe('Send Transactions service', () => {
     })
 
     it('updates the transactions with the responses from the Charging Module API', async () => {
-      const results = await SendTransactionsService.go(
-        licence,
-        bill,
-        billRunExternalId,
-        transactions,
-        billingPeriod
-      )
+      const results = await SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
 
       expect(results).length(2)
       expect(results[0].status).to.equal('charge_created')
@@ -85,13 +75,7 @@ describe('Send Transactions service', () => {
 
     it('throws a BillRunError with the correct code', async () => {
       const error = await expect(
-        SendTransactionsService.go(
-          licence,
-          bill,
-          billRunExternalId,
-          transactions,
-          billingPeriod
-        )
+        SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
       )
         .to
         .reject()

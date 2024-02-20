@@ -62,10 +62,10 @@ async function _buildDataToPersist (billingData, billingPeriod, billRunExternalI
 
     if (cleansedTransactions.length !== 0) {
       const transactions = await SendTransactionsService.go(
-        currentBillingData.licence,
-        currentBillingData.bill,
+        cleansedTransactions,
         billRunExternalId,
-        cleansedTransactions
+        currentBillingData.bill.accountNumber,
+        currentBillingData.licence
       )
 
       dataToPersist.transactions.push(...transactions)
