@@ -5,10 +5,10 @@
  * @module SendTransactionsService
  */
 
-const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ChargingModuleCreateTransactionService = require('../../charging-module/create-transaction.service.js')
-const ChargingModuleCreateTransactionPresenter = require('../../../presenters/charging-module/create-transaction.presenter.js')
+const BillRunError = require('../../errors/bill-run.error.js')
+const BillRunModel = require('../../models/bill-run.model.js')
+const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
+const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
 
 /**
  * Sends the provided transactions to the Charging Module and returns an array of the sent transactions

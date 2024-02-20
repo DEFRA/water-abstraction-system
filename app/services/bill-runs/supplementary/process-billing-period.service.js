@@ -14,7 +14,7 @@ const DetermineMinimumChargeService = require('../determine-minimum-charge.servi
 const GenerateTransactionsService = require('../generate-transactions.service.js')
 const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
 const ProcessTransactionsService = require('./process-transactions.service.js')
-const SendTransactionsService = require('./send-transactions.service.js')
+const SendTransactionsService = require('../send-transactions.service.js')
 const TransactionModel = require('../../../models/transaction.model.js')
 
 /**

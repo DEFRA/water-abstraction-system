@@ -9,14 +9,14 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+const BillRunError = require('../../../app/errors/bill-run.error.js')
+const BillRunModel = require('../../../app/models/bill-run.model.js')
 
 // Things we need to stub
-const ChargingModuleCreateTransactionService = require('../../../../app/services/charging-module/create-transaction.service.js')
+const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
 
 // Thing under test
-const SendTransactionsService = require('../../../../app/services/bill-runs/supplementary/send-transactions.service.js')
+const SendTransactionsService = require('../../../app/services/bill-runs/send-transactions.service.js')
 
 describe('Send Transactions service', () => {
   const accountNumber = 'ABC123'
