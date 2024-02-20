@@ -143,7 +143,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select an existing return requirement from'
+      description: 'Submit an existing return requirement from'
     }
   },
   {
