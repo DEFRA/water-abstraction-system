@@ -36,7 +36,8 @@ async function go (licence, bill, billRunExternalId, transactions) {
         billRunExternalId
       )
 
-      _updateTransaction(transaction, chargingModuleResponse)
+      transaction.status = 'charge_created'
+      transaction.externalId = chargingModuleResponse.response.body.transaction.id
 
       sentTransactions.push(transaction)
     }
@@ -55,11 +56,6 @@ async function _sendTransactionToChargingModule (transaction, bill, licence, bil
   )
 
   return ChargingModuleCreateTransactionService.go(billRunExternalId, chargingModuleRequest)
-}
-
-function _updateTransaction (transaction, chargingModuleResponse) {
-  transaction.status = 'charge_created'
-  transaction.externalId = chargingModuleResponse.response.body.transaction.id
 }
 
 module.exports = {
