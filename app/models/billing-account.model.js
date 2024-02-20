@@ -24,6 +24,14 @@ class BillingAccountModel extends BaseModel {
           to: 'billingAccountAddresses.billingAccountId'
         }
       },
+      chargeVersions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'charge-version.model',
+        join: {
+          from: 'billingAccounts.id',
+          to: 'chargeVersions.billingAccountId'
+        }
+      },
       company: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'company.model',
