@@ -26,22 +26,13 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  * response
  */
 async function go (licence, bill, billRunExternalId, transactions) {
-  const sendRequests = []
-
-  for (const transaction of transactions) {
-    // NOTE: we purposefully loop through all the transactions to send without awaiting them. This is for performance
-    // purposes. If for example we have 3 transactions to send we'll send the requests 1 straight after the other. We
-    // then wait for all 3 to complete. The overall process time will only be that of the one that takes the longest. If
-    // we await instead the overall time will be the sum of the time to complete each one.
-    const sendRequest = _sendTransactionToChargingModule(
-      transaction,
-      bill,
-      licence,
-      billRunExternalId
-    )
-
-    sendRequests.push(sendRequest)
-  }
+  // NOTE: we purposefully loop through all the transactions to send without awaiting them. This is for performance
+  // purposes. If for example we have 3 transactions to send we'll send the requests 1 straight after the other. We
+  // then wait for all 3 to complete. The overall process time will only be that of the one that takes the longest. If
+  // we await instead the overall time will be the sum of the time to complete each one.
+  const sendRequests = transactions.map((transaction) => {
+    return _sendTransactionToChargingModule(transaction, bill, licence, billRunExternalId)
+  })
 
   // We use Promise.all() to ensure we wait for all the send requests to resolve. The service that awaits the call to
   // SendTransactionsService.go() will still get the updated transactions as Promise.all() returns what each promise
