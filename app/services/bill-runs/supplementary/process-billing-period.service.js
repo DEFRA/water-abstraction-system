@@ -119,7 +119,7 @@ function _buildBillingDataWithTransactions (chargeVersions, preGeneratedData, bi
     // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED).
     // We fetch the previous transactions for `superseded` (REPLACED) charge versions later in the process
     if (chargeVersion.status === 'current') {
-      const calculatedTransactions = _generateCalculatedTransactions(billingPeriod, chargeVersion)
+      const calculatedTransactions = _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVersion)
       acc[billLicenceId].calculatedTransactions.push(...calculatedTransactions)
     }
 
@@ -185,7 +185,7 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
   return cleansedTransactions
 }
 
-function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
+function _generateCalculatedTransactions (billLicenceId, billingPeriod, chargeVersion) {
   try {
     const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
 
@@ -199,6 +199,7 @@ function _generateCalculatedTransactions (billingPeriod, chargeVersion) {
     // We use flatMap as GenerateTransactionsService returns an array of transactions
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
       return GenerateTransactionsService.go(
+        billLicenceId,
         chargeReference,
         billingPeriod,
         chargePeriod,
