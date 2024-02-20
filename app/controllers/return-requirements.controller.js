@@ -8,9 +8,11 @@
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
+const SetupService = require('../services/return-requirements/setup.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
+const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
@@ -67,6 +69,18 @@ async function checkYourAnswers (request, h) {
   return h.view('return-requirements/check-your-answers.njk', {
     activeNavBar: 'search',
     pageTitle: `Check the return requirements for ${session?.data?.licence?.licenceHolder}`,
+    ...session
+  })
+}
+
+async function existing (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/existing.njk', {
+    activeNavBar: 'search',
+    pageTitle: 'Select an existing return requirement from',
     ...session
   })
 }
@@ -154,12 +168,10 @@ async function returnsCycle (request, h) {
 async function setup (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await SetupService.go(sessionId)
 
   return h.view('return-requirements/setup.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'How do you want to set up the return requirement?',
-    ...session
+    ...pageData
   })
 }
 
@@ -211,6 +223,12 @@ async function submitCheckYourAnswers (request, h) {
   const { id: licenceId } = session.data.licence
 
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
+}
+
+async function submitExisting (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
 async function submitFrequencyCollected (request, h) {
@@ -270,6 +288,12 @@ async function submitReturnsCycle (request, h) {
 async function submitSetup (request, h) {
   const { sessionId } = request.params
 
+  const pageData = await SubmitSetupService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/setup.njk', pageData)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/purpose`)
 }
 
@@ -301,6 +325,7 @@ module.exports = {
   agreementsExceptions,
   approved,
   checkYourAnswers,
+  existing,
   frequencyCollected,
   frequencyReported,
   noReturnsRequired,
@@ -315,6 +340,7 @@ module.exports = {
   submitAddNote,
   submitAgreementsExceptions,
   submitCheckYourAnswers,
+  submitExisting,
   submitFrequencyCollected,
   submitFrequencyReported,
   submitNoReturnsRequired,
