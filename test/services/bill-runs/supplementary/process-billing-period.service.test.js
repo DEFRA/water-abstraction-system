@@ -131,7 +131,8 @@ describe('Process billing period service', () => {
             waterCompanyCharge: true,
             winterOnly: false,
             waterUndertaker: false,
-            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795'
+            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
+            purposes: [{}]
           }]
 
           Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
