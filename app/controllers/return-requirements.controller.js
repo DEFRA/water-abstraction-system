@@ -73,6 +73,18 @@ async function checkYourAnswers (request, h) {
   })
 }
 
+async function existing (request, h) {
+  const { sessionId } = request.params
+
+  const session = await SessionModel.query().findById(sessionId)
+
+  return h.view('return-requirements/existing.njk', {
+    activeNavBar: 'search',
+    pageTitle: 'Select an existing return requirement from',
+    ...session
+  })
+}
+
 async function frequencyCollected (request, h) {
   const { sessionId } = request.params
 
@@ -213,6 +225,12 @@ async function submitCheckYourAnswers (request, h) {
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
 }
 
+async function submitExisting (request, h) {
+  const { sessionId } = request.params
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+}
+
 async function submitFrequencyCollected (request, h) {
   const { sessionId } = request.params
 
@@ -307,6 +325,7 @@ module.exports = {
   agreementsExceptions,
   approved,
   checkYourAnswers,
+  existing,
   frequencyCollected,
   frequencyReported,
   noReturnsRequired,
@@ -321,6 +340,7 @@ module.exports = {
   submitAddNote,
   submitAgreementsExceptions,
   submitCheckYourAnswers,
+  submitExisting,
   submitFrequencyCollected,
   submitFrequencyReported,
   submitNoReturnsRequired,

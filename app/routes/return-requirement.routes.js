@@ -122,6 +122,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/existing',
+    handler: ReturnRequirementsController.existing,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select an existing return requirement from'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/existing',
+    handler: ReturnRequirementsController.submitExisting,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit an existing return requirement from'
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/frequency-collected',
     handler: ReturnRequirementsController.frequencyCollected,
     options: {
