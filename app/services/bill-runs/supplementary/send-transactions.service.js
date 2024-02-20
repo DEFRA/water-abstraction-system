@@ -22,40 +22,50 @@ const ChargingModuleCreateTransactionPresenter = require('../../../presenters/ch
  * @param {Object[]} transactions The transactions to be sent to the Charging Module
  * @param {Object} billingPeriod The billing period of the transactions
  *
- * @returns {Promise<Object[]>} Array of transactions which have been sent to the Charging Module
+ * @returns {Promise<Object[]>} Array of transactions which have been sent to the Charging Module and updated with its
+ * response
  */
 async function go (licence, bill, billRunExternalId, transactions) {
-  try {
-    const sentTransactions = []
+  const sendRequests = []
 
-    for (const transaction of transactions) {
-      const chargingModuleResponse = await _sendTransactionToChargingModule(
-        transaction,
-        bill,
-        licence,
-        billRunExternalId
-      )
+  for (const transaction of transactions) {
+    // NOTE: we purposefully loop through all the transactions to send without awaiting them. This is for performance
+    // purposes. If for example we have 3 transactions to send we'll send the requests 1 straight after the other. We
+    // then wait for all 3 to complete. The overall process time will only be that of the one that takes the longest. If
+    // we await instead the overall time will be the sum of the time to complete each one.
+    const sendRequest = _sendTransactionToChargingModule(
+      transaction,
+      bill,
+      licence,
+      billRunExternalId
+    )
 
-      transaction.status = 'charge_created'
-      transaction.externalId = chargingModuleResponse.response.body.transaction.id
-
-      sentTransactions.push(transaction)
-    }
-
-    return sentTransactions
-  } catch (error) {
-    throw new BillRunError(error, BillRunModel.errorCodes.failedToCreateCharge)
+    sendRequests.push(sendRequest)
   }
+
+  // We use Promise.all() to ensure we wait for all the send requests to resolve. The service that awaits the call to
+  // SendTransactionsService.go() will still get the updated transactions as Promise.all() returns what each promise
+  // resolves to as an array.
+  return Promise.all(sendRequests)
 }
 
 async function _sendTransactionToChargingModule (transaction, bill, licence, billRunExternalId) {
-  const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
-    transaction,
-    bill.accountNumber,
-    licence
-  )
+  try {
+    const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(
+      transaction,
+      bill.accountNumber,
+      licence
+    )
 
-  return ChargingModuleCreateTransactionService.go(billRunExternalId, chargingModuleRequest)
+    const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(billRunExternalId, chargingModuleRequest)
+
+    transaction.status = 'charge_created'
+    transaction.externalId = chargingModuleResponse.response.body.transaction.id
+
+    return transaction
+  } catch (error) {
+    throw new BillRunError(error, BillRunModel.errorCodes.failedToCreateCharge)
+  }
 }
 
 module.exports = {
