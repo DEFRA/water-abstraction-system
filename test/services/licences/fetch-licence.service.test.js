@@ -21,6 +21,7 @@ const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
+const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -76,6 +77,7 @@ describe('Fetch licence service', () => {
       expect(result.region.displayName).to.equal('Avalon')
       expect(result.registeredTo).to.equal(null)
       expect(result.revokedDate).to.equal(null)
+      expect(result.permitLicence).to.equal(null)
     })
   })
 
@@ -103,6 +105,8 @@ describe('Fetch licence service', () => {
         licenceVersionId: licenceVersion.id,
         purposeId: purpose.id
       })
+
+      await PermitLicenceHelper.add({ licenceRef: licence.licenceRef })
 
       const licenceRole = await LicenceRoleHelper.add()
       const licenceName = 'Test Company Ltd'

@@ -49,6 +49,7 @@ describe('View Licence service', () => {
           region: 'South West',
           registeredTo: null,
           startDate: '7 March 2013',
+          sourceOfSupply: null,
           warning: null
         })
       })
@@ -171,6 +172,130 @@ describe('View Licence service', () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.warning).to.be.null()
+      })
+    })
+
+    describe('and it has a source of supply', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.permitLicence = {
+          purposes: [{
+            purposePoints: [{
+              point_source: {
+                NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+              }
+            }]
+          }]
+        }
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the source of supply for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
+      })
+    })
+
+    describe('and it does not have a source of supply name', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.permitLicence = {
+          purposes: [{
+            purposePoints: [{
+              point_source: {}
+            }]
+          }]
+        }
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the source of supply for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it does not have a source of supply point_source', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.permitLicence = {
+          purposes: [{
+            purposePoints: [{}]
+          }]
+        }
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the source of supply for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it has an empty purposePoints array', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.permitLicence = {
+          purposes: [{
+            purposePoints: []
+          }]
+        }
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the source of supply for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it does not have a purposePoints array', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.permitLicence = {
+          purposes: [{}]
+        }
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the source of supply for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it has an empty purposes array', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.permitLicence = {
+          purposes: []
+        }
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the source of supply for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it does not have a purposes array', () => {
+      beforeEach(() => {
+        fetchLicenceResult = _testLicence()
+        fetchLicenceResult.permitLicence = undefined
+        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+      })
+
+      it('will return the source of supply for use in the licence summary page', async () => {
+        const result = await ViewLicenceService.go(testId)
+
+        expect(result.sourceOfSupply).to.equal(null)
       })
     })
   })

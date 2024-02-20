@@ -79,6 +79,14 @@ class LicenceModel extends BaseModel {
           from: 'licences.id',
           to: 'workflows.licenceId'
         }
+      },
+      permitLicence: {
+        relation: Model.HasOneRelation,
+        modelClass: 'permit-licence.model',
+        join: {
+          from: 'licences.licenceRef',
+          to: 'permitLicences.licenceRef'
+        }
       }
     }
   }
