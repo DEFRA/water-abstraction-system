@@ -6,6 +6,7 @@
 
 const { generateLicenceRef } = require('./licence.helper.js')
 const { randomInteger } = require('./general.helper.js')
+const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 
 /**
@@ -14,15 +15,17 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
  * If no `data` is provided, default values will be used. These are
  *
  * - `id` - v1:1:[the generated licenceRef]:[the generated returnRequirement]:2022-04-01:2023-03-31
- * - `licenceRef` - [randomly generated - 1/23/45/76/3672]
- * - `startDate` - 2022-04-01
+ * - `createdAt` - new Date()
+ * - `dueDate` - 2023-04-28
  * - `endDate` - 2023-03-31
- * - `returnsFrequency` - month
- * - `status` - completed
+ * - `licenceRef` - [randomly generated - 1/23/45/76/3672]
  * - `metadata` - {}
  * - `receivedDate` - 2023-04-12
  * - `returnRequirement` - [randomly generated - 10000321]
- * - `dueDate` - 2023-04-28
+ * - `returnsFrequency` - month
+ * - `startDate` - 2022-04-01
+ * - `status` - completed
+ * - `updatedAt` - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -47,18 +50,21 @@ function add (data = {}) {
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const returnRequirement = data.returnRequirement ? data.returnRequirement : randomInteger(10000000, 19999999)
+  const timestamp = timestampForPostgres()
 
   const defaults = {
     id: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnRequirement),
-    licenceRef,
-    startDate: new Date('2022-04-01'),
+    createdAt: timestamp,
+    dueDate: new Date('2023-04-28'),
     endDate: new Date('2023-03-31'),
-    returnsFrequency: 'month',
-    status: 'completed',
+    licenceRef,
     metadata: {},
     receivedDate: new Date('2023-04-12'),
     returnRequirement,
-    dueDate: new Date('2023-04-28')
+    returnsFrequency: 'month',
+    startDate: new Date('2022-04-01'),
+    status: 'completed',
+    updatedAt: timestamp
   }
 
   return {

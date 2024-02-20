@@ -30,6 +30,7 @@ describe('Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }
 
   let notifierStub
+  let reissueBillServiceStub
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
@@ -70,21 +71,16 @@ describe('Reissue Bills service', () => {
           { id: generateUUID() }
         ])
 
-        // This stub will result in one new bill, bill licence and transaction for each dummy invoice
-        Sinon.stub(ReissueBillService, 'go').resolves({
-          bills: [BillModel.fromJson(BillHelper.defaults())],
-          billLicences: [BillLicenceModel.fromJson(BillLicenceHelper.defaults())],
-          transactions: [TransactionModel.fromJson({
-            ...TransactionHelper.defaults(),
-            purposes: [{
-              id: '01adfc33-4ba9-4215-bbe0-97014730991b',
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 3,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4
-            }]
-          })]
-        })
+        // This stub will result in one new bill, bill licence and transaction for each dummy invoice returned by
+        // FetchBillsToBeReissuedService. We have to provide a different bill run id for each else we cause the error
+        // `duplicate key value violates unique constraint "unique_batch_year_invoice"`
+        reissueBillServiceStub = Sinon.stub(ReissueBillService, 'go')
+        reissueBillServiceStub.onFirstCall()
+          .resolves(_reissueBillServiceResponse('94e75ac4-111b-4600-8b2c-e3e39c5a8549'))
+        reissueBillServiceStub.onSecondCall()
+          .resolves(_reissueBillServiceResponse('6f21fce5-2f86-4939-909a-ce4339b5a448'))
+        reissueBillServiceStub.onThirdCall()
+          .resolves(_reissueBillServiceResponse('09aab25a-4fd2-42d5-8c7a-6a3777b01bba'))
       })
 
       it('returns `true`', async () => {
@@ -119,3 +115,20 @@ describe('Reissue Bills service', () => {
     })
   })
 })
+
+function _reissueBillServiceResponse (billRunId) {
+  return {
+    bills: [BillModel.fromJson({ ...BillHelper.defaults(), billRunId })],
+    billLicences: [BillLicenceModel.fromJson(BillLicenceHelper.defaults())],
+    transactions: [TransactionModel.fromJson({
+      ...TransactionHelper.defaults(),
+      purposes: [{
+        id: '01adfc33-4ba9-4215-bbe0-97014730991b',
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 4
+      }]
+    })]
+  }
+}
