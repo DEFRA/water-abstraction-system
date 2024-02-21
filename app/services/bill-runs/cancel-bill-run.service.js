@@ -12,7 +12,7 @@ const ReviewResultModel = require('../../models/review-result.model.js')
 const ReviewReturnResultModel = require('../../models/review-return-result.model.js')
 
 /**
- * Cancels the bill run bu deleting the bill run from the Charging Module and then deleting all data relating to it from
+ * Cancels the bill run by deleting the bill run from the Charging Module and then deleting all data relating to it from
  * the database
  *
  * @param {string} id The UUID of the bill run to cancel
@@ -21,8 +21,8 @@ async function go (id, billRunBatchType, chargingModuleBillRunId) {
   if (billRunBatchType === 'two_part_tariff') {
     await Promise.all([
       _deleteChargingModuleBillRun(chargingModuleBillRunId),
-      BillRunModel.query().deleteById(id),
-      _deletePersistedData(id)
+      _deletePersistedData(id),
+      BillRunModel.query().deleteById(id)
     ])
   }
 }
