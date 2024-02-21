@@ -19,9 +19,13 @@ async function cancel (request, h) {
   const { id } = request.params
   const { billRunBatchType, chargingModuleBillRunId } = request.payload
 
-  await CancelBillRunService.go(id, billRunBatchType, chargingModuleBillRunId)
+  try {
+    await CancelBillRunService.go(id, billRunBatchType, chargingModuleBillRunId)
 
-  return h.redirect('/billing/batch/list')
+    return h.redirect('/billing/batch/list')
+  } catch (error) {
+    global.GlobalNotifier.omfg('Failed to cancel bill run', { id }, error)
+  }
 }
 
 async function cancelConfirmation (request, h) {

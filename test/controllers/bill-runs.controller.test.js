@@ -10,6 +10,8 @@ const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
+const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
+const CancelBillRunConfirmationService = require('../../app/services/bill-runs/cancel-bill-run-confirmation.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
@@ -40,7 +42,7 @@ describe('Bill Runs controller', () => {
   describe('POST /bill-runs', () => {
     let options
 
-    beforeEach(async () => {
+    beforeEach(() => {
       options = {
         method: 'POST',
         url: '/bill-runs',
@@ -66,7 +68,7 @@ describe('Bill Runs controller', () => {
         status: 'processing'
       }
 
-      beforeEach(async () => {
+      beforeEach(() => {
         Sinon.stub(StartBillRunProcessService, 'go').resolves(validResponse)
       })
 
@@ -95,7 +97,7 @@ describe('Bill Runs controller', () => {
       })
 
       describe('because the bill run could not be initiated', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
           Sinon.stub(StartBillRunProcessService, 'go').rejects()
         })
@@ -114,7 +116,7 @@ describe('Bill Runs controller', () => {
   describe('GET /bill-runs/{id}', () => {
     let options
 
-    beforeEach(async () => {
+    beforeEach(() => {
       options = {
         method: 'GET',
         url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28',
@@ -127,7 +129,7 @@ describe('Bill Runs controller', () => {
 
     describe('when the request succeeds', () => {
       describe('and it is for a bill run with multiple bill groups', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ViewBillRunService, 'go').resolves(_multiGroupBillRun())
         })
 
@@ -142,7 +144,7 @@ describe('Bill Runs controller', () => {
       })
 
       describe('and it is for a bill run with a single bill group', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ViewBillRunService, 'go').resolves(_singleGroupBillRun())
         })
 
@@ -159,10 +161,106 @@ describe('Bill Runs controller', () => {
     })
   })
 
+  describe('GET /bill-runs/{id}/cancel', () => {
+    let options
+
+    beforeEach(() => {
+      options = {
+        method: 'GET',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/cancel',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+
+      Sinon.stub(CancelBillRunConfirmationService, 'go').resolves({
+        dateCreated: '20 February 2024',
+        region: 'Southern (Test replica)',
+        billRunType: 'Two-part tariff',
+        financialYear: '2022 to 2023',
+        billRunBatchType: 'two_part_tariff',
+        chargingModuleBillRunId: 'ee5adf04-3bc6-4c18-9e68-aaa6cde611ff'
+      })
+    })
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('20 February 2024')
+        expect(response.payload).to.contain('Southern (Test replica)')
+        expect(response.payload).to.contain('Two-part tariff')
+        expect(response.payload).to.contain('2022 to 2023')
+        expect(response.payload).to.contain('two_part_tariff')
+        expect(response.payload).to.contain('ee5adf04-3bc6-4c18-9e68-aaa6cde611ff')
+      })
+    })
+  })
+
+  describe('POST /bill-runs/{id}/cancel', () => {
+    let options
+
+    beforeEach(() => {
+      options = {
+        method: 'POST',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/cancel',
+        payload: {
+          billRunBatchType: 'two_part_tariff',
+          chargingModuleBillRunId: 'ee5adf04-3bc6-4c18-9e68-aaa6cde611ff'
+        },
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid', () => {
+      let cancelStub
+
+      beforeEach(() => {
+        cancelStub = Sinon.stub(CancelBillRunService, 'go').resolves()
+      })
+
+      it('cancels the bill run, returns a 302 response and redirects to the Bill runs page', async () => {
+        const response = await server.inject(options)
+        const { billRunBatchType, chargingModuleBillRunId } = options.payload
+
+        expect(cancelStub.calledWith(
+          '97db1a27-8308-4aba-b463-8a6af2558b28',
+          billRunBatchType,
+          chargingModuleBillRunId
+        )).to.be.true()
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal('/billing/batch/list')
+      })
+    })
+
+    describe('when the request fails because the `CancelBillRunService` throws an error', () => {
+      let notifierStub
+      beforeEach(() => {
+        Sinon.stub(CancelBillRunService, 'go').throws()
+
+        notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+        global.GlobalNotifier = notifierStub
+      })
+
+      it('returns an error response', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(notifierStub.omfg.calledWith('Failed to cancel bill run', { id: '97db1a27-8308-4aba-b463-8a6af2558b28' })).to.be.true()
+      })
+    })
+  })
+
   describe('GET /bill-runs/{id}/review', () => {
     let options
 
-    beforeEach(async () => {
+    beforeEach(() => {
       options = {
         method: 'GET',
         url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review',
@@ -192,7 +290,7 @@ describe('Bill Runs controller', () => {
   describe('GET /bill-runs/{id}/review/{licenceId}', () => {
     let options
 
-    beforeEach(async () => {
+    beforeEach(() => {
       options = {
         method: 'GET',
         url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
