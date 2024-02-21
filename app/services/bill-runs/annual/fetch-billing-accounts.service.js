@@ -52,7 +52,7 @@ async function _fetchNew (regionId, billingPeriod) {
       { column: 'billingAccounts.accountNumber' }
     ])
     .withGraphFetched('chargeVersions')
-    .modifyGraph('chargeVersions', builder => {
+    .modifyGraph('chargeVersions', (builder) => {
       builder
         .select([
           'id',
@@ -76,7 +76,7 @@ async function _fetchNew (regionId, billingPeriod) {
         ])
     })
     .withGraphFetched('chargeVersions.licence')
-    .modifyGraph('chargeVersions.licence', builder => {
+    .modifyGraph('chargeVersions.licence', (builder) => {
       builder.select([
         'id',
         'licenceRef',
@@ -90,21 +90,21 @@ async function _fetchNew (regionId, billingPeriod) {
       ])
     })
     .withGraphFetched('chargeVersions.licence.region')
-    .modifyGraph('chargeVersions.licence.region', builder => {
+    .modifyGraph('chargeVersions.licence.region', (builder) => {
       builder.select([
         'id',
         'chargeRegionId'
       ])
     })
     .withGraphFetched('chargeVersions.changeReason')
-    .modifyGraph('chargeVersions.changeReason', builder => {
+    .modifyGraph('chargeVersions.changeReason', (builder) => {
       builder.select([
         'id',
         'triggersMinimumCharge'
       ])
     })
     .withGraphFetched('chargeVersions.chargeReferences')
-    .modifyGraph('chargeVersions.chargeReferences', builder => {
+    .modifyGraph('chargeVersions.chargeReferences', (builder) => {
       builder.select([
         'id',
         'source',
@@ -116,7 +116,7 @@ async function _fetchNew (regionId, billingPeriod) {
       ])
     })
     .withGraphFetched('chargeVersions.chargeReferences.chargeCategory')
-    .modifyGraph('chargeVersions.chargeReferences.chargeCategory', builder => {
+    .modifyGraph('chargeVersions.chargeReferences.chargeCategory', (builder) => {
       builder.select([
         'id',
         'reference',
@@ -124,7 +124,7 @@ async function _fetchNew (regionId, billingPeriod) {
       ])
     })
     .withGraphFetched('chargeVersions.chargeReferences.chargeElements')
-    .modifyGraph('chargeVersions.chargeReferences.chargeElements', builder => {
+    .modifyGraph('chargeVersions.chargeReferences.chargeElements', (builder) => {
       builder.select([
         'id',
         'abstractionPeriodStartDay',
