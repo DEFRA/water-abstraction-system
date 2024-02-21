@@ -19,11 +19,17 @@ const ReviewReturnResultModel = require('../../models/review-return-result.model
  */
 async function go (id, billRunBatchType, chargingModuleBillRunId) {
   if (billRunBatchType === 'two_part_tariff') {
-    await Promise.all([
-      _deleteChargingModuleBillRun(chargingModuleBillRunId),
-      _deletePersistedData(id),
-      BillRunModel.query().deleteById(id)
-    ])
+    const chargingModuleSucceeded = await _deleteChargingModuleBillRun(chargingModuleBillRunId)
+
+    if (chargingModuleSucceeded) {
+      await Promise.all([
+        _deletePersistedData(id),
+        BillRunModel.query().deleteById(id)
+      ])
+      global.GlobalNotifier.omg(`Bill run ${id} has been cancelled`)
+    }
+  } else {
+    global.GlobalNotifier.omg(`Invalid batch type of ${billRunBatchType}. Bill run has not been cancelled`)
   }
 }
 
@@ -32,6 +38,10 @@ async function _deleteChargingModuleBillRun (chargingModuleBillRunId) {
 
   if (!result.succeeded) {
     global.GlobalNotifier.omg(`Failed to delete bill run from Charging Module. ${result.response.body.message}`)
+
+    return false
+  } else {
+    return true
   }
 }
 
