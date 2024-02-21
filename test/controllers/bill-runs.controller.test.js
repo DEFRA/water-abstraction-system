@@ -251,8 +251,9 @@ describe('Bill Runs controller', () => {
       it('returns an error response', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).to.equal(302)
         expect(notifierStub.omfg.calledWith('Failed to cancel bill run', { id: '97db1a27-8308-4aba-b463-8a6af2558b28' })).to.be.true()
+        expect(response.headers.location).to.equal('/billing/batch/list')
       })
     })
   })

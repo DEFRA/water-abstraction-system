@@ -21,13 +21,11 @@ async function cancel (request, h) {
 
   try {
     await CancelBillRunService.go(id, billRunBatchType, chargingModuleBillRunId)
-
-    return h.redirect('/billing/batch/list')
   } catch (error) {
     global.GlobalNotifier.omfg('Failed to cancel bill run', { id }, error)
-
-    return h.redirect('./review')
   }
+
+  return h.redirect('/billing/batch/list')
 }
 
 async function cancelConfirmation (request, h) {
