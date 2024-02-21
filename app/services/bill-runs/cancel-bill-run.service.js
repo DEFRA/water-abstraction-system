@@ -2,7 +2,7 @@
 
 /**
  * Cancels the bill run by removing all data relating to it from the database
- * @module CancelBillRunConfirmationService
+ * @module CancelBillRunService
  */
 
 const BillRunModel = require('../../models/bill-run.model.js')
