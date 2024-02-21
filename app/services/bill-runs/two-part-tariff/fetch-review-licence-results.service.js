@@ -9,7 +9,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewResultModel = require('../../../models/review-result.model.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
-const ReviewChargeElementResultModel = require('../../../models/review-charge-element-result.model.js')
+const ChargeElementModel = require('../../../models/charge-element.model.js')
 
 /**
  * Fetches the review return results data for an individual licence in the bill run and the bill run data
@@ -23,11 +23,10 @@ async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
   const reviewReturnResults = await _fetchReviewReturnResults(billRunId, licenceId)
   const chargeData = await _fetchChargeData(licenceId, billRunId)
-  console.log('Charge Data :', chargeData)
 
-  const { licenceRef } = await _licenceRef(licenceId)
+  const { licenceRef, licenceHolder } = await _licenceRef(licenceId)
 
-  return { reviewReturnResults, billRun, licenceRef, chargeData }
+  return { reviewReturnResults, billRun, licenceRef, licenceHolder, chargeData }
 }
 
 async function _fetchChargeData (licenceId, billRunId) {
@@ -42,6 +41,7 @@ async function _fetchChargeData (licenceId, billRunId) {
     const chargeReferences = await _fetchChargeReferences(billRunId, licenceId, chargeVersionId)
     chargeVersion.chargeReferences = []
 
+    let referenceIndex = 0
     for (const chargeReference of chargeReferences) {
       const { chargeReferenceId } = chargeReference
 
@@ -49,13 +49,24 @@ async function _fetchChargeData (licenceId, billRunId) {
       const chargeElements = []
       chargeVersion.chargeReferences.push({ chargeReferenceId, ...chargeReferenceData, chargeElements })
 
-      const chargeElement = await _fetchChargeElements(billRunId, licenceId, chargeVersionId, chargeReferenceId)
-      // CURRENTLY WORKING ON GETTING THE CHARGE ELEMENT INTO THE CHARGE REFERENCE
-      console.log('Charge Elements :', chargeElement)
-      console.log('AHHH :', chargeVersion.chargeReferences)
-      chargeVersion.chargeReferences.chargeElements.push(chargeElement)
+      const licenceChargeElements = await _fetchChargeElements(billRunId, licenceId, chargeVersionId, chargeReferenceId)
+
+      for (const chargeElement of licenceChargeElements) {
+        const chargeElementData = await _fetchChargeElementData(chargeElement.reviewChargeElementResults.chargeElementId)
+        chargeVersion.chargeReferences[referenceIndex].chargeElements.push({ ...chargeElement.reviewChargeElementResults, ...chargeElementData })
+      }
+
+      referenceIndex++
     }
   }
+
+  return chargeVersions
+}
+
+async function _fetchChargeElementData (chargeElementId) {
+  return await ChargeElementModel.query()
+    .findById(chargeElementId)
+    .select('description', 'abstractionPeriodStartDay', 'abstractionPeriodEndDay', 'abstractionPeriodStartMonth', 'abstractionPeriodEndMonth')
 }
 
 async function _fetchChargeElements (billRunId, licenceId, chargeVersionId, chargeReferenceId) {
@@ -88,74 +99,6 @@ async function _fetchChargePeriods (billRunId, licenceId, chargeVersionId) {
     .first()
 }
 
-// async function _fetchChargePeriods1 (chargeData, licenceId, billRunId) {
-  // for (const chargeVersion of chargeData) {
-    // const chargeVersionId = chargeVersion.chargeVersionId
-
-    // const chargePeriods = await ReviewResultModel.query()
-    //   .select('chargePeriodStartDate', 'chargePeriodEndDate')
-    //   .where({ billRunId, licenceId, chargeVersionId })
-    //   .first()
-
-    //  chargeVersion.chargePeriods = chargePeriods
-
-    // const chargeReferences = await ReviewResultModel.query()
-    //   .distinct('chargeReferenceId')
-    //   .where({ billRunId, licenceId, chargeVersionId })
-
-    // chargeVersion.chargeReferences = chargeReferences
-
-    // let index = 0
-    // for (const chargeReference of chargeReferences) {
-      // const chargeReferenceId = chargeReference.chargeReferenceId
-
-      // const chargeReferenceData = await ChargeReferenceModel.query()
-      //   .findById(chargeReferenceId)
-      //   .withGraphFetched('chargeCategory')
-      //   .modifyGraph('chargeCategory', (builder) => {
-      //     builder.select('reference', 'shortDescription', 'minVolume', 'maxVolume')
-      //   })
-      //   .select('billableAnnualQuantity')
-
-      // chargeVersion.chargeReferences[index].chargeReferenceData = chargeReferenceData
-
-      // const chargeElements = await ReviewResultModel.query()
-      //   .select('reviewChargeElementResultId', 'reviewReturnResultId')
-      //   .where({ billRunId, licenceId, chargeVersionId, chargeReferenceId })
-      //   .withGraphFetched('reviewChargeElementResults')
-      //   .modifyGraph('reviewChargeElementResults', (builder) => {
-      //     builder.select('*')
-      //   })
-
-      // const chargeElementIds = await ReviewResultModel.query()
-      //   .select('reviewChargeElementResultId')
-      //   .where({ billRunId, licenceId, chargeVersionId, chargeReferenceId })
-      //   .distinct('reviewChargeElementResultId')
-
-//       let chargeElementIndex = 0
-//       for (const chargeElementId of chargeElementIds) {
-//         const { reviewChargeElementResultId } = chargeElementId
-
-//         const chargeElementMatchingReturns = await ReviewResultModel.query()
-//           .where({ billRunId, licenceId, chargeVersionId, chargeReferenceId, reviewChargeElementResultId })
-//           .select('reviewReturnResultId')
-
-//         chargeElementIds[chargeElementIndex].chargeElementMatchingReturns = chargeElementMatchingReturns
-
-//         const reviewChargeElementResult = await ReviewChargeElementResultModel.query()
-//           .findById(reviewChargeElementResultId)
-
-//         chargeElementIds[chargeElementIndex].chargeElementMatchingReturns.reviewChargeElementResult = reviewChargeElementResult
-//         chargeElementIndex++
-//       }
-
-//       chargeVersion.chargeReferences[index].chargeElements = chargeElementIds
-
-//       index++
-//     }
-//   }
-// }
-
 async function _fetchLicenceChargeVersions (licenceId, billRunId) {
   return ReviewResultModel.query()
     .distinct('chargeVersionId')
@@ -177,9 +120,14 @@ async function _fetchBillRun (billRunId) {
 }
 
 async function _licenceRef (licenceId) {
-  return LicenceModel.query()
+  const licence = await LicenceModel.query()
     .findById(licenceId)
     .select('licenceRef')
+    .modify('licenceHolder')
+
+  licence.licenceHolder = licence.$licenceHolder()
+
+  return licence
 }
 
 async function _fetchReviewReturnResults (billRunId, licenceId) {
