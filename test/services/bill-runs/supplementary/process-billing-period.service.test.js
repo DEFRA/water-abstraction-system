@@ -26,7 +26,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
-const SendTransactionsService = require('../../../../app/services/bill-runs/supplementary/send-transactions.service.js')
+const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
