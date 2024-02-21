@@ -25,6 +25,8 @@ async function cancel (request, h) {
     return h.redirect('/billing/batch/list')
   } catch (error) {
     global.GlobalNotifier.omfg('Failed to cancel bill run', { id }, error)
+
+    return h.redirect('./review')
   }
 }
 
