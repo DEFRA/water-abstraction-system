@@ -45,6 +45,7 @@ describe('View Licence presenter', () => {
         purposes: null,
         registeredTo: null,
         region: 'Narnia',
+        sourceOfSupply: null,
         startDate: '1 April 2019',
         warning: null
       })
