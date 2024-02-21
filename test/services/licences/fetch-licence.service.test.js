@@ -106,7 +106,18 @@ describe('Fetch licence service', () => {
         purposeId: purpose.id
       })
 
-      await PermitLicenceHelper.add({ licenceRef: licence.licenceRef })
+      await PermitLicenceHelper.add({
+        licenceRef: licence.licenceRef,
+        licenceDataValue: {
+          data: {
+            current_version: {
+              purposes: [{
+                purposePoints: [{ point_source: { NAME: 'Ground water' } }]
+              }]
+            }
+          }
+        }
+      })
 
       const licenceRole = await LicenceRoleHelper.add()
       const licenceName = 'Test Company Ltd'
@@ -144,6 +155,9 @@ describe('Fetch licence service', () => {
       expect(result.region.displayName).to.equal('Avalon')
       expect(result.registeredTo).to.equal('grace.hopper@example.com')
       expect(result.revokedDate).to.equal(null)
+      expect(result.permitLicence.purposes).to.equal([{
+        purposePoints: [{ point_source: { NAME: 'Ground water' } }]
+      }])
     })
   })
 })
