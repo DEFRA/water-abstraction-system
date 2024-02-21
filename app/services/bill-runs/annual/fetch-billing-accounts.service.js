@@ -65,7 +65,7 @@ async function _fetchNew (regionId, billingPeriod) {
         .where('scheme', 'sroc')
         .where('startDate', '<=', billingPeriod.endDate)
         .where('status', 'current')
-        .where((builder) => {
+        .where(() => {
           builder
             .whereNull('endDate')
             .orWhere('endDate', '>=', billingPeriod.startDate)
