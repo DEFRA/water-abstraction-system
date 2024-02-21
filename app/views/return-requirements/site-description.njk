@@ -16,29 +16,26 @@
 {% endblock %}
 
 {% block content %}
-<div>
-  <span class="govuk-caption-l">  Licence </span>
-  {{ govukInput({
-    hint: {
-      text: "Licence"
-    },
-    label: {
-      text: pageTitle,
-      classes: "govuk-label--l",
-      isPageHeading: true
-    },
-    hint: {
-      text: "This is the description that will appear on the return"
-    },
-    id: "event-name",
-    name: "eventName"
-  }) }}
-</div>
+{# TODO: If block for error message #}
 
+  <div class="govuk-body">
+    <form method="post">
+      <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
+      {{ govukInput({
+        label: {
+          text: pageTitle,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        hint: {
+          text: "This is the description that will appear on the return"
+        },
+        id: "site-description",
+        name: "siteDescription",
+        errorMessage: error
+      }) }}
 
-  <form method="post">
-    <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock %}
