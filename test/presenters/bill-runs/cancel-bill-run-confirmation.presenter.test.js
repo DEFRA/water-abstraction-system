@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const CancelBillRunConfirmationPresenter = require('../../../app/presenters/bill-runs/cancel-bill-run-confirmation.presenter.js')
 
-describe.only('Cancel Bill Run Confirmation presenter', () => {
+describe('Cancel Bill Run Confirmation presenter', () => {
   describe('when there is data to be presented', () => {
     const testBillRun = {
       createdAt: new Date('2024-02-21'),
