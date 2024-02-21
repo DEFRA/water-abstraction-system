@@ -9,6 +9,8 @@ const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
+const licenceRef = 'licences.licenceRef'
+
 class LicenceModel extends BaseModel {
   static get tableName () {
     return 'licences'
@@ -36,7 +38,7 @@ class LicenceModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence-document.model',
         join: {
-          from: 'licences.licenceRef',
+          from: licenceRef,
           to: 'licenceDocuments.licenceRef'
         }
       },
@@ -44,7 +46,7 @@ class LicenceModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence-document-header.model',
         join: {
-          from: 'licences.licenceRef',
+          from: licenceRef,
           to: 'licenceDocumentHeaders.licenceRef'
         }
       },
@@ -84,7 +86,7 @@ class LicenceModel extends BaseModel {
         relation: Model.HasOneRelation,
         modelClass: 'permit-licence.model',
         join: {
-          from: 'licences.licenceRef',
+          from: licenceRef,
           to: 'permitLicences.licenceRef'
         }
       }
