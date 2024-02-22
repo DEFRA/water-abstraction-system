@@ -6,6 +6,7 @@
 
 const { randomInteger } = require('./general.helper.js')
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a new billing account
@@ -13,6 +14,7 @@ const BillingAccountModel = require('../../../app/models/billing-account.model.j
  * If no `data` is provided, default values will be used. These are
  *
  * - `accountNumber` - [randomly generated - T12345678A]
+ * - `companyId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -36,7 +38,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    accountNumber: generateAccountNumber()
+    accountNumber: generateAccountNumber(),
+    companyId: generateUUID()
   }
 
   return {
