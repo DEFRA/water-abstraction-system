@@ -151,8 +151,8 @@ async function _createTransactions (billLicenceId, billingPeriod, chargeVersion,
 function _findOrCreateBillLicence (billLicences, licence, billId) {
   const { id: licenceId, licenceRef } = licence
 
-  let billLicence = billLicences.find((billLicence) => {
-    return billLicence.licenceId === licenceId
+  let billLicence = billLicences.find((existingBillLicence) => {
+    return existingBillLicence.licenceId === licenceId
   })
 
   if (!billLicence) {
