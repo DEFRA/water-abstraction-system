@@ -118,7 +118,7 @@ describe('Fetch Charge Versions service', () => {
         },
         chargeReferences: [{
           id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
-          volume: 6.82,
+          volume: 6.819,
           description: 'Mineral washing',
           aggregate: 0.562114443,
           s127: 'true',
