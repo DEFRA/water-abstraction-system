@@ -49,19 +49,10 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    dateLicenceVersionPurposeConditionsLastCopied: null,
-    dateGaugingStationLinksLastCopied: null,
-    endDate: null,
-    licenceDataValue: null,
-    licenceSearchKey: null,
     licenceStatusId: 1,
     licenceTypeId: 8,
     licenceRef: generateLicenceRef(),
-    licenceRegimeId: 1,
-    licenceSummary: null,
-    metadata: null,
-    publicDomain: null,
-    startDate: null
+    licenceRegimeId: 1
   }
 
   return {

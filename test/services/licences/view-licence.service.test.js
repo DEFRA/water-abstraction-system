@@ -210,7 +210,7 @@ describe('View Licence service', () => {
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the source of supply for use in the licence summary page', async () => {
+      it('will return null for the source of supply', async () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.sourceOfSupply).to.equal(null)
@@ -228,7 +228,7 @@ describe('View Licence service', () => {
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the source of supply for use in the licence summary page', async () => {
+      it('will return null for the source of supply', async () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.sourceOfSupply).to.equal(null)
@@ -246,7 +246,7 @@ describe('View Licence service', () => {
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the source of supply for use in the licence summary page', async () => {
+      it('will return null for the source of supply', async () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.sourceOfSupply).to.equal(null)
@@ -262,7 +262,7 @@ describe('View Licence service', () => {
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the source of supply for use in the licence summary page', async () => {
+      it('will return null for the source of supply', async () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.sourceOfSupply).to.equal(null)
@@ -278,7 +278,7 @@ describe('View Licence service', () => {
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the source of supply for use in the licence summary page', async () => {
+      it('will return null for the source of supply', async () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.sourceOfSupply).to.equal(null)
@@ -292,7 +292,7 @@ describe('View Licence service', () => {
         Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
       })
 
-      it('will return the source of supply for use in the licence summary page', async () => {
+      it('will return null for the source of supply', async () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result.sourceOfSupply).to.equal(null)
