@@ -58,7 +58,7 @@ describe('Submit Setup service', () => {
           error: null,
           licenceRef: '01/ABC',
           pageTitle: 'How do you want to set up the return requirement?',
-          redirect: null
+          redirect: 'check-your-answers'
         }, { skip: ['id'] })
       })
     })
@@ -82,7 +82,7 @@ describe('Submit Setup service', () => {
             activeNavBar: 'search',
             licenceRef: '01/ABC',
             pageTitle: 'How do you want to set up the return requirement?',
-            redirect: null
+            redirect: undefined
           }, { skip: ['id', 'error'] })
         })
 
