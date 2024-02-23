@@ -16,7 +16,7 @@ const SetupValidator = require('../../validators/return-requirements/setup.valid
  *
  * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
  * If there was a validation error the controller will re-render the page so needs this information. If all is well the
- * controller will redirect to the next page in the journey.
+ * controller will redirect to the next page in the journey depending on which radio item was chosen.
  *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
@@ -34,8 +34,23 @@ async function go (sessionId, payload) {
     activeNavBar: 'search',
     error: validationResult,
     pageTitle: 'How do you want to set up the return requirement?',
+    redirect: _redirect(payload.setup),
     ...formattedData
   }
+}
+
+function _redirect (setup) {
+  let endpoint = 'check-your-answers'
+
+  if (setup === 'use_abstraction_data') {
+    endpoint = 'check-your-answers'
+  }
+
+  if (setup === 'set_up_manually') {
+    endpoint = 'purpose'
+  }
+
+  return endpoint
 }
 
 function _validate (payload) {
