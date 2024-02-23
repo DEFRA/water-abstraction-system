@@ -10,7 +10,7 @@
 
 const { db, dbConfig } = require('../../../db/db.js')
 
-const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'water', 'returns']
+const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 
 /**
  * Call to clean the database of all data

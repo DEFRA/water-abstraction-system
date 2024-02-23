@@ -5,6 +5,8 @@
  * @module FetchLicenceService
  */
 
+const { ref } = require('objection')
+
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
@@ -52,6 +54,12 @@ async function _fetchLicence (id) {
       builder.select([
         'id',
         'displayName'
+      ])
+    })
+    .withGraphFetched('permitLicence')
+    .modifyGraph('permitLicence', (builder) => {
+      builder.select([
+        ref('licenceDataValue:data.current_version.purposes').as('purposes')
       ])
     })
     .withGraphFetched('licenceDocumentHeader')
