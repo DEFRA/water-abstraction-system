@@ -34,8 +34,8 @@ function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
 
 function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines) {
   matchedLines.forEach((matchedLine) => {
-    const remainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
-    if (remainingAllocation > 0) {
+    const chargeElementRemainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
+    if (chargeElementRemainingAllocation > 0) {
       // We default how much to allocate to what is unallocated on the line i.e. remaining >= line.unallocated
       let qtyToAllocate = matchedLine.unallocated
 
@@ -45,8 +45,8 @@ function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeRef
 
       if (qtyToAllocate > chargeReferenceRemainingAllocation) {
         qtyToAllocate = chargeReferenceRemainingAllocation
-      } else if (remainingAllocation < matchedLine.unallocated) {
-        qtyToAllocate = remainingAllocation
+      } else if (chargeElementRemainingAllocation < matchedLine.unallocated) {
+        qtyToAllocate = chargeElementRemainingAllocation
       }
 
       // We do this check to prevent overwriting the value with false once it's been set to true as it only requires
