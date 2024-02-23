@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
 }
 
 function _redirect (setup) {
-  let endpoint = 'check-your-answers'
+  let endpoint
 
   if (setup === 'use_abstraction_data') {
     endpoint = 'check-your-answers'
