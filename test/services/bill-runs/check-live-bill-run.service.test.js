@@ -10,39 +10,70 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const { currentFinancialYear } = require('../../support/helpers/general.helper.js')
 
 // Thing under test
 const CheckLiveBillRunService = require('../../../app/services/bill-runs/check-live-bill-run.service.js')
 
 describe('Check Live Bill Run service', () => {
-  const batchType = 'supplementary'
-
-  let billRun
+  const billingPeriod = currentFinancialYear()
+  const regionId = '6ec2f8b5-70e2-4abf-8ba9-026971d9de52'
+  const toFinancialYearEnding = billingPeriod.endDate.getFullYear()
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
   })
 
   describe('when an sroc supplementary bill run exists for this region and financial year', () => {
-    describe('with a status considered to be "live"', () => {
+    const batchType = 'supplementary'
+
+    describe('with a status considered to be "live" (queued)', () => {
       beforeEach(async () => {
-        billRun = await BillRunHelper.add()
+        await BillRunHelper.add({ batchType, regionId, toFinancialYearEnding, status: 'queued' })
       })
 
       it('returns `true`', async () => {
-        const result = await CheckLiveBillRunService.go(billRun.regionId, 2023, batchType)
+        const result = await CheckLiveBillRunService.go(regionId, toFinancialYearEnding, batchType)
 
         expect(result).to.be.true()
       })
     })
 
-    describe('with a status not considered to be "live"', () => {
+    describe('with a status not considered to be "live" (sent)', () => {
       beforeEach(async () => {
-        billRun = await BillRunHelper.add({ status: 'sent' })
+        await BillRunHelper.add({ batchType, regionId, toFinancialYearEnding, status: 'sent' })
       })
 
       it('returns `false`', async () => {
-        const result = await CheckLiveBillRunService.go(billRun.regionId, 2023, batchType)
+        const result = await CheckLiveBillRunService.go(regionId, toFinancialYearEnding, batchType)
+
+        expect(result).to.be.false()
+      })
+    })
+  })
+
+  describe('when an sroc annual bill run exists for this region and financial year', () => {
+    const batchType = 'annual'
+
+    describe('with a status considered to be "live" (sent)', () => {
+      beforeEach(async () => {
+        await BillRunHelper.add({ batchType, regionId, toFinancialYearEnding, status: 'sent' })
+      })
+
+      it('returns `true`', async () => {
+        const result = await CheckLiveBillRunService.go(regionId, toFinancialYearEnding, batchType)
+
+        expect(result).to.be.true()
+      })
+    })
+
+    describe('with a status not considered to be "live" (empty)', () => {
+      beforeEach(async () => {
+        await BillRunHelper.add({ batchType, regionId, toFinancialYearEnding, status: 'empty' })
+      })
+
+      it('returns `false`', async () => {
+        const result = await CheckLiveBillRunService.go(regionId, toFinancialYearEnding, batchType)
 
         expect(result).to.be.false()
       })
@@ -50,37 +81,31 @@ describe('Check Live Bill Run service', () => {
   })
 
   describe('when an sroc bill run does not exist', () => {
-    describe('for this region', () => {
-      beforeEach(async () => {
-        billRun = await BillRunHelper.add()
-      })
+    const batchType = 'annual'
 
+    beforeEach(async () => {
+      await BillRunHelper.add({ batchType, regionId, toFinancialYearEnding })
+    })
+
+    describe('for this region', () => {
       it('returns `false`', async () => {
-        const result = await CheckLiveBillRunService.go('4f142d8d-ca04-48bc-8d03-31dcd05c7070', 2023, batchType)
+        const result = await CheckLiveBillRunService.go('4f142d8d-ca04-48bc-8d03-31dcd05c7070', toFinancialYearEnding, batchType)
 
         expect(result).to.be.false()
       })
     })
 
     describe('for this financialYear', () => {
-      beforeEach(async () => {
-        billRun = await BillRunHelper.add({ fromFinancialYearEnding: 2024, toFinancialYearEnding: 2024 })
-      })
-
       it('returns `false`', async () => {
-        const result = await CheckLiveBillRunService.go(billRun.regionId, 2023, batchType)
+        const result = await CheckLiveBillRunService.go(regionId, 2023, batchType)
 
         expect(result).to.be.false()
       })
     })
 
     describe('for this batch type', () => {
-      beforeEach(async () => {
-        billRun = await BillRunHelper.add({ batchType: 'annual' })
-      })
-
       it('returns `false`', async () => {
-        const result = await CheckLiveBillRunService.go(billRun.regionId, 2023, batchType)
+        const result = await CheckLiveBillRunService.go(regionId, toFinancialYearEnding, 'supplementary')
 
         expect(result).to.be.false()
       })
