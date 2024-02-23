@@ -16,6 +16,14 @@ class ChargeVersionModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      billingAccount: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'billing-account.model',
+        join: {
+          from: 'chargeVersions.billingAccountId',
+          to: 'billingAccounts.id'
+        }
+      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',

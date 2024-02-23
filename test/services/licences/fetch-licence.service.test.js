@@ -21,6 +21,7 @@ const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
+const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -76,6 +77,7 @@ describe('Fetch licence service', () => {
       expect(result.region.displayName).to.equal('Avalon')
       expect(result.registeredTo).to.equal(null)
       expect(result.revokedDate).to.equal(null)
+      expect(result.permitLicence).to.equal(null)
     })
   })
 
@@ -102,6 +104,19 @@ describe('Fetch licence service', () => {
       await LicenceVersionPurposeHelper.add({
         licenceVersionId: licenceVersion.id,
         purposeId: purpose.id
+      })
+
+      await PermitLicenceHelper.add({
+        licenceRef: licence.licenceRef,
+        licenceDataValue: {
+          data: {
+            current_version: {
+              purposes: [{
+                purposePoints: [{ point_source: { NAME: 'Ground water' } }]
+              }]
+            }
+          }
+        }
       })
 
       const licenceRole = await LicenceRoleHelper.add()
@@ -140,6 +155,9 @@ describe('Fetch licence service', () => {
       expect(result.region.displayName).to.equal('Avalon')
       expect(result.registeredTo).to.equal('grace.hopper@example.com')
       expect(result.revokedDate).to.equal(null)
+      expect(result.permitLicence.purposes).to.equal([{
+        purposePoints: [{ point_source: { NAME: 'Ground water' } }]
+      }])
     })
   })
 })

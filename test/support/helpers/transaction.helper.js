@@ -5,6 +5,7 @@
  */
 
 const { generateChargeReference } = require('./charge-category.helper.js')
+const { currentFinancialYear } = require('../helpers/general.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
@@ -22,14 +23,18 @@ const TransactionModel = require('../../../app/models/transaction.model.js')
  * - `billLicenceId` - [random UUID]
  * - `chargeCategoryCode` - [randomly generated - 4.4.5]
  * - `chargeCategoryDescription` - Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model
+ * - `chargeReferenceId` - [random UUID]
  * - `chargeType` - standard,
  * - `description` - Water abstraction charge: Agriculture other than spray irrigation at East Rudham
  * - `credit` - false
+ * - `endDate` - end date for the current financial year (31-MAR-20??)
  * - `loss` - medium
+ * - `purposes` - [{}]
  * - `season` - all year
  * - `section130Agreement` - false
  * - `scheme` - sroc
  * - `source` - non-tidal
+ * - `startDate` - start date for the current financial year (01-APR-20??)
  * - `volume` - 11
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -53,6 +58,8 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const { startDate, endDate } = currentFinancialYear()
+
   const defaults = {
     adjustmentFactor: 1,
     aggregateFactor: 1,
@@ -63,14 +70,18 @@ function defaults (data = {}) {
     billLicenceId: generateUUID(),
     chargeCategoryCode: generateChargeReference(),
     chargeCategoryDescription: 'Medium loss, non-tidal, restricted water, up to and including 25 ML/yr, Tier 2 model',
+    chargeReferenceId: generateUUID(),
     chargeType: 'standard',
-    description: 'Water abstraction charge: Agriculture other than spray irrigation at East Rudham',
     credit: false,
+    description: 'Water abstraction charge: Agriculture other than spray irrigation at East Rudham',
+    endDate,
     loss: 'medium',
+    purposes: [{}],
     season: 'all year',
     section130Agreement: 'false',
     scheme: 'sroc',
     source: 'non-tidal',
+    startDate,
     volume: 11
   }
 

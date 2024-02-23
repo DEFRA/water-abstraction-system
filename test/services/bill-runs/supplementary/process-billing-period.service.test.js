@@ -26,12 +26,12 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
-const SendTransactionsService = require('../../../../app/services/bill-runs/supplementary/send-transactions.service.js')
+const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
 
-describe('Process billing period service', () => {
+describe('Supplementary Process billing period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
@@ -131,7 +131,8 @@ describe('Process billing period service', () => {
             waterCompanyCharge: true,
             winterOnly: false,
             waterUndertaker: false,
-            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795'
+            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
+            purposes: [{}]
           }]
 
           Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
