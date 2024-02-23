@@ -17,7 +17,7 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 // Thing under test
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
-describe('View Licence service', () => {
+describe.only('View Licence service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
   let fetchLicenceResult
 
@@ -309,6 +309,15 @@ function _testLicence () {
     },
     licenceRef: '01/130/R01',
     licenceName: 'Unregistered licence',
+    permitLicence: {
+      purposes: [{
+        purposePoints: [{
+          point_source: {
+            NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+          }
+        }]
+      }]
+    },
     region: {
       id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
       displayName: 'South West'

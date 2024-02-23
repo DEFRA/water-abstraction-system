@@ -41,10 +41,16 @@ function go (licence) {
     abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
   }
 
+  const pointDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
+
+  console.log(pointDetails)
+
   return {
     id,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
+    abstractionPoints: pointDetails.abstractionPoints,
+    abstractionPointsCaption: pointDetails.abstractionPointsCaption,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
@@ -55,7 +61,7 @@ function go (licence) {
     region: region.displayName,
     registeredTo,
     startDate: formatLongDate(startDate),
-    sourceOfSupply: _generateSourceOfSupply(permitLicence),
+    sourceOfSupply: pointDetails.sourceOfSupply,
     warning: _generateWarningMessage(ends)
   }
 }
@@ -119,20 +125,6 @@ function _generatePurposes (licenceVersions) {
   }
 }
 
-function _generateSourceOfSupply (permitLicence) {
-  if (!permitLicence ||
-    permitLicence?.purposes === undefined ||
-    permitLicence.purposes.length === 0 ||
-    permitLicence.purposes[0]?.purposePoints === undefined ||
-    permitLicence.purposes[0]?.purposePoints.length === 0 ||
-    permitLicence.purposes[0]?.purposePoints[0]?.point_source?.NAME === undefined
-  ) {
-    return null
-  }
-
-  return permitLicence.purposes[0].purposePoints[0].point_source.NAME
-}
-
 function _generateWarningMessage (ends) {
   if (!ends) {
     return null
@@ -154,6 +146,57 @@ function _generateWarningMessage (ends) {
   }
 
   return `This licence expired on ${formatLongDate(date)}`
+}
+
+function _parseAbstractionsAndSourceOfSupply (permitLicence) {
+  if (!permitLicence ||
+    permitLicence?.purposes === undefined ||
+    permitLicence.purposes.length === 0 ||
+    permitLicence.purposes[0]?.purposePoints === undefined ||
+    permitLicence.purposes[0]?.purposePoints.length === 0
+  ) {
+    return null
+  }
+
+  const abstractionPoints = []
+
+  permitLicence.purposes[0].purposePoints.forEach((point) => {
+    const pointDetail = point.point_detail
+    let abstractionPoint = null
+
+    if (pointDetail.NGR4_SHEET) {
+      const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+      const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+      const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
+      const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
+
+      abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4} `
+    }
+
+    if (pointDetail.NGR2_SHEET) {
+      const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+      const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+
+      abstractionPoint = `Between National Grid References ${point1} and ${point2} `
+    }
+
+    if (pointDetail.NGR1_SHEET) {
+      const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+
+      abstractionPoint = `At National Grid Reference ${point1} `
+    }
+
+    abstractionPoint += pointDetail?.LOCAL_NAME ?? ''
+
+    abstractionPoints.push(abstractionPoint)
+  })
+
+  return {
+    abstractionPoints,
+    abstractionPointsCaption: abstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction',
+    sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null
+
+  }
 }
 
 module.exports = {
