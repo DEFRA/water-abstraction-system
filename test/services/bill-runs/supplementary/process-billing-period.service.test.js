@@ -31,7 +31,7 @@ const SendTransactionsService = require('../../../../app/services/bill-runs/send
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
 
-describe('Process billing period service', () => {
+describe('Supplementary Process billing period service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
