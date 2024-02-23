@@ -294,7 +294,7 @@ async function submitSetup (request, h) {
     return h.view('return-requirements/setup.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/purpose`)
+  return h.redirect(`/system/return-requirements/${sessionId}/${pageData.redirect}`)
 }
 
 async function submitSiteDescription (request, h) {
