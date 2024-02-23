@@ -21,6 +21,14 @@ const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
  * @returns {Boolean} Whether a "live" bill run exists
  */
 async function go (regionId, toFinancialYearEnding, batchType) {
+  const statuses = LIVE_STATUSES
+
+  // Only one annual bill run per region and financial year is allowed. So, we include sent and sending in the statues
+  // to check for
+  if (batchType === 'annual') {
+    statuses.push('sent', 'sending')
+  }
+
   const numberOfLiveBillRuns = await BillRunModel.query()
     .select(1)
     .where({
