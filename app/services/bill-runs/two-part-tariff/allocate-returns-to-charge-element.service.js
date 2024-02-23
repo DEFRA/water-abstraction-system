@@ -97,6 +97,21 @@ function _chargeDatesOverlap (matchedLine, chargePeriod) {
   return (lineStartDate < chargePeriodStartDate && lineEndDate > chargePeriodStartDate)
 }
 
+function _fullyAllocated (chargeElement, chargeReference) {
+  // We can only allocate up to the authorised volume on the charge reference, even if there is charge elements
+  // unallocated and returns to be allocated
+  if (chargeReference.allocatedQuantity >= chargeReference.volume) {
+    return true
+  }
+
+  // Finally, we can only allocate to the charge element if there is unallocated volume left!
+  if (chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity) {
+    return true
+  }
+
+  return false
+}
+
 function _matchLines (chargeElement, returnSubmissionLines) {
   return returnSubmissionLines.filter((returnSubmissionLine) => {
     if (returnSubmissionLine.unallocated === 0) {
@@ -115,14 +130,8 @@ function _processCompletedReturns (chargeElement, matchingReturns, chargePeriod,
       return
     }
 
-    // We can only allocate up to the authorised volume on the charge reference, even if there is charge elements
-    // unallocated and returns to be allocated
-    if (chargeReference.allocatedQuantity >= chargeReference.volume) {
-      return
-    }
-
-    // Finally, we can only allocate to the charge element if there is unallocated volume left!
-    if (chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity) {
+    // If the element/reference is fully allocated there is no further processing to do for the return
+    if (_fullyAllocated(chargeElement, chargeReference)) {
       return
     }
 
@@ -141,14 +150,8 @@ function _processDueReturns (chargeElement, matchingReturns, chargeReference) {
       return
     }
 
-    // We can only allocate up to the authorised volume on the charge reference, even if there is charge elements
-    // unallocated and returns to be allocated
-    if (chargeReference.allocatedQuantity >= chargeReference.volume) {
-      return
-    }
-
-    // Finally, we can only allocate to the charge element if there is unallocated volume left!
-    if (chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity) {
+    // If the element/reference is fully allocated there is no further processing to do for the return
+    if (_fullyAllocated(chargeElement, chargeReference)) {
       return
     }
 
