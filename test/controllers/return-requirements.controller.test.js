@@ -207,7 +207,7 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe.only('GET /return-requirements/{sessionId}/site-description', () => {
+  describe('GET /return-requirements/{sessionId}/site-description', () => {
     beforeEach(async () => {
       Sinon.stub(SiteDescriptionService, 'go').resolves({
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Enter a site description for the return requirement'
