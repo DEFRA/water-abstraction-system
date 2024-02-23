@@ -25,6 +25,7 @@ function go (licence) {
     licenceName,
     licenceRef,
     licenceVersions,
+    permitLicence,
     region,
     registeredTo,
     startDate
@@ -54,6 +55,7 @@ function go (licence) {
     region: region.displayName,
     registeredTo,
     startDate: formatLongDate(startDate),
+    sourceOfSupply: _generateSourceOfSupply(permitLicence),
     warning: _generateWarningMessage(ends)
   }
 }
@@ -115,6 +117,20 @@ function _generatePurposes (licenceVersions) {
     caption: uniquePurposes.length === 1 ? 'Purpose' : 'Purposes',
     data: uniquePurposes
   }
+}
+
+function _generateSourceOfSupply (permitLicence) {
+  if (!permitLicence ||
+    permitLicence?.purposes === undefined ||
+    permitLicence.purposes.length === 0 ||
+    permitLicence.purposes[0]?.purposePoints === undefined ||
+    permitLicence.purposes[0]?.purposePoints.length === 0 ||
+    permitLicence.purposes[0]?.purposePoints[0]?.point_source?.NAME === undefined
+  ) {
+    return null
+  }
+
+  return permitLicence.purposes[0].purposePoints[0].point_source.NAME
 }
 
 function _generateWarningMessage (ends) {
