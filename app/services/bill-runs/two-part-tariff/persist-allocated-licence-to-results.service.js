@@ -153,7 +153,8 @@ async function _persistReviewReturnResult (returnLog) {
     purposes: returnLog.purposes,
     quantity: returnLog.quantity,
     allocated: returnLog.allocatedQuantity,
-    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
+    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod,
+    issues: returnLog.issuesPersisted.join(', ')
   }
 
   const { id: reviewReturnResultId } = await ReviewReturnResultModel.query().insert(data).returning('id')
