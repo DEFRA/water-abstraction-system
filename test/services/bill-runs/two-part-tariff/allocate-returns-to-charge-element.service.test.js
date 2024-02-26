@@ -325,6 +325,38 @@ describe('Allocate Returns to Charge Element Service', () => {
             expect(matchingReturns[0].allocatedQuantity).to.equal(22)
           })
         })
+
+        describe('and reference/element has been fully allocated from another return', () => {
+          beforeEach(() => {
+            testData.chargeReference.allocatedQuantity = 32
+            testData.chargeElement.allocatedQuantity = 32
+          })
+
+          it('the fully allocated amount of 32 to the charge reference is unaltered by the due return', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(chargeReference.allocatedQuantity).to.equal(32)
+          })
+
+          it('the fully allocated amount of 32 to the charge element is unaltered by the due return', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(chargeElement.allocatedQuantity).to.equal(32)
+            expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+          })
+
+          it('allocates 0 from the return log', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+          })
+        })
       })
 
       describe('with a charge reference authorised up to 32, element authorised to 10, matched to a due return', () => {
