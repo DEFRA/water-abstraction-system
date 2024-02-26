@@ -205,7 +205,7 @@ function _generateAbstractionContent (pointDetail) {
     const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
 
     abstractionPoint = `Between National Grid References ${point1} and ${point2}`
-  } else if (pointDetail.NGR1_SHEET) {
+  } else {
     const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
 
     abstractionPoint = `At National Grid Reference ${point1}`
