@@ -246,7 +246,7 @@ describe('Fetch Billing Accounts service', () => {
     describe('because they are all linked to licences in workflow', () => {
       beforeEach(async () => {
         await ChargeVersionHelper.add({ billingAccountId, licenceId })
-        await WorkflowHelper.add({ licenceId })
+        await WorkflowHelper.add({ licenceId: '2f4b66a9-5992-4302-9707-bfb3ea1606c5' })
       })
 
       it('returns empty results', async () => {
