@@ -42,11 +42,6 @@ async function _fetchNew (regionId, billingPeriod) {
       'billingAccounts.id',
       'billingAccounts.accountNumber'
     ])
-    // NOTE: The WHERE EXISTS clause is a beast of a query in its own right so moved it to a function and have it return
-    // the QueryBuilder instance `whereExists()` can use.
-    // Bill runs are formed of 'bills' which are a 1-to-1 with billing accounts. But whether a billing account should
-    // be included is _all_ based on the charge versions they are linked to. So, all the work of filtering what will be
-    // considered is done there.
     .whereExists(_whereExistsClause(regionId, billingPeriod))
     .orderBy([
       { column: 'billingAccounts.accountNumber' }
@@ -55,25 +50,20 @@ async function _fetchNew (regionId, billingPeriod) {
     .modifyGraph('chargeVersions', (builder) => {
       builder
         .select([
-          'id',
-          'scheme',
-          'startDate',
-          'endDate',
-          'billingAccountId',
-          'status'
+          'chargeVersions.id',
+          'chargeVersions.scheme',
+          'chargeVersions.startDate',
+          'chargeVersions.endDate',
+          'chargeVersions.billingAccountId',
+          'chargeVersions.status'
         ])
-        .where('scheme', 'sroc')
-        .where('startDate', '<=', billingPeriod.endDate)
-        .where('status', 'current')
-        .where(() => {
-          builder
-            .whereNull('endDate')
-            .orWhere('endDate', '>=', billingPeriod.startDate)
-        })
-        .orderBy([
-          { column: 'licenceId', order: 'ASC' },
-          { column: 'startDate', order: 'ASC' }
-        ])
+
+      _whereClauseForChargeVersions(builder, regionId, billingPeriod)
+
+      builder.orderBy([
+        { column: 'licenceId', order: 'ASC' },
+        { column: 'startDate', order: 'ASC' }
+      ])
     })
     .withGraphFetched('chargeVersions.licence')
     .modifyGraph('chargeVersions.licence', (builder) => {
@@ -135,12 +125,24 @@ async function _fetchNew (regionId, billingPeriod) {
     })
 }
 
-function _whereExistsClause (regionId, billingPeriod) {
-  return ChargeVersionModel.query()
-    .select(1)
+/**
+ * Where clause to use when fetching charge versions within the main query
+ *
+ * We have to filter the applicable charge versions for a number of reasons and need to do it twice; once when
+ * determining which billing accounts to fetch and again, when grabbing their related charge versions.
+ *
+ * So, we have moved the 'WHERE' clause to its own function that we can then reuse.
+ *
+ * @param {module:QueryBuilder} query - an instance of the Objection QueryBuilder being generated
+ * @param {string} regionId - UUID of the region being billed that the licences must be linked to
+ * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
+ *
+ * @returns {module:QueryBuilder} the builder instance passed in with the additional `where` clauses added
+ */
+function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
+  return query
     .innerJoinRelated('licence')
     .where('licence.regionId', regionId)
-    .whereColumn('chargeVersions.billingAccountId', 'billingAccounts.id')
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
@@ -170,6 +172,20 @@ function _whereExistsClause (regionId, billingPeriod) {
         .whereColumn('chargeVersions.licenceId', 'workflows.licenceId')
         .whereNull('workflows.deletedAt')
     )
+}
+
+/**
+ * Bill runs are formed of 'bills' which are a 1-to-1 with billing accounts. But whether a billing account should
+ * be included is _all_ based on the charge versions they are linked to. So, all the work of filtering what will be
+ * considered is done here by combining a `select(1)` with our `_whereClauseForChargeVersions()` function.
+ */
+function _whereExistsClause (regionId, billingPeriod) {
+  let query = ChargeVersionModel.query().select(1)
+
+  query = _whereClauseForChargeVersions(query, regionId, billingPeriod)
+  query.whereColumn('chargeVersions.billingAccountId', 'billingAccounts.id')
+
+  return query
 }
 
 module.exports = {
