@@ -5,9 +5,7 @@
  * @module ReviewLicencePresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
-const DetermineBillingPeriodsService = require('../../../services/bill-runs/determine-billing-periods.service.js')
+const { formatLongDate, formatAbstractionPeriod} = require('../../base.presenter.js')
 
 /**
  * Prepares and processes bill run and review licence data for presentation
@@ -54,7 +52,7 @@ function _prepareChargeData (chargeData, licenceHolder, billRun) {
 
     preparedChargeData.push({
       financialYear: `Financial year ${_financialYear(billRun.toFinancialYearEnding)}`,
-      chargePeriodDate: `Charge period ${_prepareDate(chargePeriods.chargePeriodStartDate, chargePeriods.chargePeriodEndDate)}`,
+      chargePeriodDate: `Charge period ${await _prepareDate(chargePeriods.chargePeriodStartDate, chargePeriods.chargePeriodEndDate)}`,
       licenceHolderName: licenceHolder,
       chargeVersionSummary: _chargeVersionSummary(chargeVersion),
       // TO DO Billing Accounts
@@ -65,6 +63,7 @@ function _prepareChargeData (chargeData, licenceHolder, billRun) {
 
     chargeReferences.forEach(async (chargeReference, referenceIndex) => {
       const { chargeElements } = chargeReference
+      console.log('Charge Reference Count', chargeReference)
 
       preparedChargeData[chargeVersionIndex].chargeReferences.push({
         chargeCategory: `Charge reference ${chargeReference.reference}`,
@@ -77,45 +76,19 @@ function _prepareChargeData (chargeData, licenceHolder, billRun) {
           elementDescription: chargeElement.description,
           // TO DO Element status
           elementStatus: 'ready',
-          elementDates: _chargeElementDates(chargeElement, billRun.toFinancialYearEnding)
+          elementDates: _chargeElementDates(chargeElement)
         })
       })
     })
   })
 
-  // console.log('preparedChargeData :', preparedChargeData)
-  // console.log('preparedChargeData :', preparedChargeData[0])
-  console.log('preparedChargeData :', preparedChargeData[0].chargeReferences)
-
   return preparedChargeData
 }
 
-function _chargeElementDates (chargeElement, financialYearEnding) {
-  // toFinancialYearEnding = 2023
+function _chargeElementDates (chargeElement) {
   const { abstractionPeriodStartDay, abstractionPeriodEndDay, abstractionPeriodStartMonth, abstractionPeriodEndMonth } = chargeElement
-  const billingPeriods = DetermineBillingPeriodsService.go(financialYearEnding)
-  console.log('Billing Periods :', billingPeriods)
-  console.log('Charge Element Dets :', abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth)
-  const chargeElementDates = DetermineAbstractionPeriodService.go(billingPeriods[0], abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth)
-  console.log('Charge Elements Dates :', chargeElementDates)
-  // 1st of March to the 31st October
-  // 
-  // let startYear
-  // if (abstractionPeriodStartMonth < 4) {
-  //   startYear = financialYearEnding
-  // } else {
-  //   startYear = financialYearEnding - 1
-  // }
 
-  // let endYear
-  // if (abstractionPeriodEndMonth < 4) {
-  //   endYear = financialYearEnding
-  // } else {
-  //   endYear = financialYearEnding - 1
-  // }
-
-  // const startDate = new Date(startYear, abstractionPeriodStartMonth, abstractionPeriodStartDay)
-  // const endDate = new Date(endYear, abstractionPeriodEndMonth, abstractionPeriodEndDay)
+  return formatAbstractionPeriod(abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth)
 }
 
 function _financialYear (financialYearEnding) {
