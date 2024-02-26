@@ -28,6 +28,8 @@ const FetchBillingAccountsService = require('../../../../app/services/bill-runs/
 describe('Fetch Billing Accounts service', () => {
   const billingPeriod = currentFinancialYear()
 
+  let billingAccount
+  let billingAccountId
   let licence
   let licenceId
   let region
@@ -41,10 +43,12 @@ describe('Fetch Billing Accounts service', () => {
 
     licence = await LicenceHelper.add({ regionId })
     licenceId = licence.id
+
+    billingAccount = await BillingAccountHelper.add()
+    billingAccountId = billingAccount.id
   })
 
   describe('when there are billing accounts that should be considered for annual billing', () => {
-    let billingAccount
     let changeReason
     let chargeCategory
     let chargeElement
@@ -52,9 +56,6 @@ describe('Fetch Billing Accounts service', () => {
     let chargeVersion
 
     beforeEach(async () => {
-      billingAccount = await BillingAccountHelper.add()
-      const { id: billingAccountId } = billingAccount
-
       changeReason = await ChangeReasonHelper.add({ triggersMinimumCharge: true })
 
       const { id: licenceId, licenceRef } = licence
@@ -80,7 +81,7 @@ describe('Fetch Billing Accounts service', () => {
       expect(results).to.have.length(1)
 
       expect(results[0]).to.be.instanceOf(BillingAccountModel)
-      expect(results[0].id).to.equal(billingAccount.id)
+      expect(results[0].id).to.equal(billingAccountId)
       expect(results[0].accountNumber).to.equal(billingAccount.accountNumber)
     })
 
@@ -93,7 +94,7 @@ describe('Fetch Billing Accounts service', () => {
       expect(chargeVersions[0].scheme).to.equal('sroc')
       expect(chargeVersions[0].startDate).to.equal(new Date('2023-11-01'))
       expect(chargeVersions[0].endDate).to.be.null()
-      expect(chargeVersions[0].billingAccountId).to.equal(billingAccount.id)
+      expect(chargeVersions[0].billingAccountId).to.equal(billingAccountId)
       expect(chargeVersions[0].status).to.equal('current')
     })
 
@@ -156,7 +157,7 @@ describe('Fetch Billing Accounts service', () => {
   describe('when there are no billing accounts that should be considered for the annual bill run', () => {
     describe("because all their charge versions do not have a status of 'current", () => {
       beforeEach(async () => {
-        await ChargeVersionHelper.add({ status: 'draft', licenceId })
+        await ChargeVersionHelper.add({ status: 'draft', billingAccountId, licenceId })
       })
 
       it('returns empty results', async () => {
@@ -168,7 +169,7 @@ describe('Fetch Billing Accounts service', () => {
 
     describe("because all their charge versions are for the 'alcs' (presroc) scheme", () => {
       beforeEach(async () => {
-        await ChargeVersionHelper.add({ scheme: 'alcs', licenceId })
+        await ChargeVersionHelper.add({ scheme: 'alcs', billingAccountId, licenceId })
       })
 
       it('returns empty results', async () => {
@@ -180,11 +181,11 @@ describe('Fetch Billing Accounts service', () => {
 
     describe('because all their charge versions have start dates after the billing period', () => {
       beforeEach(async () => {
-        const financialEndYear = billingPeriod.endDate.getFullYear()
+        const financialStartYear = billingPeriod.endDate.getFullYear()
 
         // This creates an charge version with a start date after the billing period
         await ChargeVersionHelper.add(
-          { startDate: new Date(financialEndYear, 8, 15), licenceId }
+          { startDate: new Date(financialStartYear, 8, 15), billingAccountId, licenceId }
         )
       })
 
@@ -197,11 +198,11 @@ describe('Fetch Billing Accounts service', () => {
 
     describe('because all their charge versions have end dates before the billing period', () => {
       beforeEach(async () => {
-        const financialStartYear = billingPeriod.endDate.getFullYear()
+        const financialEndYear = billingPeriod.startDate.getFullYear()
 
         // This creates an charge version with a end date before the billing period starts
         await ChargeVersionHelper.add(
-          { endDate: new Date(financialStartYear, 2, 31), licenceId }
+          { endDate: new Date(financialEndYear, 2, 31), billingAccountId, licenceId }
         )
       })
 
@@ -217,7 +218,7 @@ describe('Fetch Billing Accounts service', () => {
         const { id: licenceId } = await LicenceHelper.add({ regionId: 'e117b501-e3c1-4337-ad35-21c60ed9ad73' })
 
         // This creates an charge version linked to a licence with an different region than selected
-        await ChargeVersionHelper.add({ licenceId })
+        await ChargeVersionHelper.add({ billingAccountId, licenceId })
       })
 
       it('returns empty results', async () => {
@@ -232,7 +233,7 @@ describe('Fetch Billing Accounts service', () => {
         const { id: licenceId } = await LicenceHelper.add({ revokedDate: new Date('2023-02-01') })
 
         // This creates a charge version linked to a licence that ends before the billing period
-        await ChargeVersionHelper.add({ licenceId })
+        await ChargeVersionHelper.add({ billingAccountId, licenceId })
       })
 
       it('returns empty results', async () => {
@@ -244,7 +245,7 @@ describe('Fetch Billing Accounts service', () => {
 
     describe('because they are all linked to licences in workflow', () => {
       beforeEach(async () => {
-        await ChargeVersionHelper.add({ licenceId })
+        await ChargeVersionHelper.add({ billingAccountId, licenceId })
         await WorkflowHelper.add({ licenceId })
       })
 
