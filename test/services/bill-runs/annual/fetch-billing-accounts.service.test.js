@@ -85,71 +85,92 @@ describe('Fetch Billing Accounts service', () => {
       expect(results[0].accountNumber).to.equal(billingAccount.accountNumber)
     })
 
-    it('includes the related charge versions in each result', async () => {
-      const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
+    describe('that have applicable related charge versions', () => {
+      it('includes the charge versions in each result', async () => {
+        const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-      const { chargeVersions } = results[0]
+        const { chargeVersions } = results[0]
 
-      expect(chargeVersions[0].id).to.equal(chargeVersion.id)
-      expect(chargeVersions[0].scheme).to.equal('sroc')
-      expect(chargeVersions[0].startDate).to.equal(new Date('2023-11-01'))
-      expect(chargeVersions[0].endDate).to.be.null()
-      expect(chargeVersions[0].billingAccountId).to.equal(billingAccountId)
-      expect(chargeVersions[0].status).to.equal('current')
+        expect(chargeVersions[0].id).to.equal(chargeVersion.id)
+        expect(chargeVersions[0].scheme).to.equal('sroc')
+        expect(chargeVersions[0].startDate).to.equal(new Date('2023-11-01'))
+        expect(chargeVersions[0].endDate).to.be.null()
+        expect(chargeVersions[0].billingAccountId).to.equal(billingAccountId)
+        expect(chargeVersions[0].status).to.equal('current')
+      })
+
+      it('includes the licence and region in each result', async () => {
+        const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
+
+        const { licence } = results[0].chargeVersions[0]
+
+        expect(licence.id).to.equal(licence.id)
+        expect(licence.licenceRef).to.equal(licence.licenceRef)
+        expect(licence.waterUndertaker).to.equal(false)
+        expect(licence.historicalAreaCode).to.equal('SAAR')
+        expect(licence.regionalChargeArea).to.equal('Southern')
+        expect(licence.region.id).to.equal(regionId)
+        expect(licence.region.chargeRegionId).to.equal('W')
+      })
+
+      it('includes the change reason in each result', async () => {
+        const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
+
+        const { changeReason } = results[0].chargeVersions[0]
+
+        expect(changeReason.id).to.equal(changeReason.id)
+        expect(changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
+      })
+
+      it('includes the charge references, charge category and charge elements in each result', async () => {
+        const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
+
+        const { chargeReferences } = results[0].chargeVersions[0]
+
+        expect(chargeReferences).to.have.length(1)
+
+        expect(chargeReferences[0]).to.equal({
+          id: chargeReference.id,
+          source: 'non-tidal',
+          loss: 'low',
+          volume: 6.819,
+          adjustments: {
+            s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443'
+          },
+          additionalCharges: { isSupplyPublicWater: true },
+          description: 'Mineral washing',
+          chargeCategory: {
+            id: chargeCategory.id,
+            reference: chargeCategory.reference,
+            shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model'
+          },
+          chargeElements: [{
+            id: chargeElement.id,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3
+          }]
+        })
+      })
     })
 
-    it('includes the related licence and region in each result', async () => {
-      const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
+    describe('that have inapplicable related charge versions', () => {
+      beforeEach(async () => {
+        const licenceInWorkflow = await LicenceHelper.add({ regionId })
+        const { id: licenceInWorkflowId, licenceRef } = licenceInWorkflow
 
-      const { licence } = results[0].chargeVersions[0]
+        await ChargeVersionHelper.add({ billingAccountId, licenceId: licenceInWorkflowId, licenceRef })
+        await WorkflowHelper.add({ licenceId: licenceInWorkflowId })
+      })
 
-      expect(licence.id).to.equal(licence.id)
-      expect(licence.licenceRef).to.equal(licence.licenceRef)
-      expect(licence.waterUndertaker).to.equal(false)
-      expect(licence.historicalAreaCode).to.equal('SAAR')
-      expect(licence.regionalChargeArea).to.equal('Southern')
-      expect(licence.region.id).to.equal(regionId)
-      expect(licence.region.chargeRegionId).to.equal('W')
-    })
+      it('excludes the charge versions in each result', async () => {
+        const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
 
-    it('includes the related change reason in each result', async () => {
-      const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
+        const { chargeVersions } = results[0]
 
-      const { changeReason } = results[0].chargeVersions[0]
-
-      expect(changeReason.id).to.equal(changeReason.id)
-      expect(changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
-    })
-
-    it('includes the related charge references, charge category and charge elements in each result', async () => {
-      const results = await FetchBillingAccountsService.go(regionId, billingPeriod)
-
-      const { chargeReferences } = results[0].chargeVersions[0]
-
-      expect(chargeReferences).to.have.length(1)
-
-      expect(chargeReferences[0]).to.equal({
-        id: chargeReference.id,
-        source: 'non-tidal',
-        loss: 'low',
-        volume: 6.819,
-        adjustments: {
-          s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443'
-        },
-        additionalCharges: { isSupplyPublicWater: true },
-        description: 'Mineral washing',
-        chargeCategory: {
-          id: chargeCategory.id,
-          reference: chargeCategory.reference,
-          shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model'
-        },
-        chargeElements: [{
-          id: chargeElement.id,
-          abstractionPeriodStartDay: 1,
-          abstractionPeriodStartMonth: 4,
-          abstractionPeriodEndDay: 31,
-          abstractionPeriodEndMonth: 3
-        }]
+        expect(chargeVersions.length).to.equal(1)
+        expect(chargeVersions[0].id).to.equal(chargeVersion.id)
       })
     })
   })
