@@ -90,8 +90,6 @@ async function _createBillLicencesAndTransactions (billId, billingAccount, billR
   const allBillLicences = []
   const transactions = []
 
-  const { accountNumber } = billingAccount
-
   for (const chargeVersion of billingAccount.chargeVersions) {
     const billLicence = _findOrCreateBillLicence(allBillLicences, chargeVersion.licence, billId)
 
@@ -100,7 +98,7 @@ async function _createBillLicencesAndTransactions (billId, billingAccount, billR
       billingPeriod,
       chargeVersion,
       billRunExternalId,
-      accountNumber
+      billingAccount.accountNumber
     )
 
     if (createdTransactions.length > 0) {
