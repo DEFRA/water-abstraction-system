@@ -87,24 +87,27 @@ async function go (billRun, billingPeriod, billingAccounts) {
  * we have to create a new one.
  */
 async function _createBillLicencesAndTransactions (billId, billingAccount, billRunExternalId, billingPeriod) {
-  const billLicences = []
+  const allBillLicences = []
   const transactions = []
 
-  const { accountNumber } = billingAccount
-
   for (const chargeVersion of billingAccount.chargeVersions) {
-    const billLicence = _findOrCreateBillLicence(billLicences, chargeVersion.licence, billId)
+    const billLicence = _findOrCreateBillLicence(allBillLicences, chargeVersion.licence, billId)
 
     const createdTransactions = await _createTransactions(
       billLicence.id,
       billingPeriod,
       chargeVersion,
       billRunExternalId,
-      accountNumber
+      billingAccount.accountNumber
     )
 
-    transactions.push(...createdTransactions)
+    if (createdTransactions.length > 0) {
+      billLicence.billable = true
+      transactions.push(...createdTransactions)
+    }
   }
+
+  const billLicences = _extractBillableLicences(allBillLicences)
 
   return { billLicences, transactions }
 }
@@ -122,6 +125,27 @@ async function _createTransactions (billLicenceId, billingPeriod, chargeVersion,
   const generatedTransactions = _generateTransactionData(billLicenceId, billingPeriod, chargePeriod, chargeVersion)
 
   return SendTransactionsService.go(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
+}
+
+/**
+ * Intended to be used in conjunction with _createBillLicencesAndTransactions() it extracts only those bill licences
+ * where we generated transactions. This avoids us persisting a bill licence record with no transaction records.
+ *
+ * A billing account can be linked to multiple licences but not all of them may be billable. We add a flag to each
+ * one that demotes if transactions were generated. So we can easily filter the billable ones out. But we also need
+ * to remove that flag because it doesn't exist in the DB and will cause issues if we try and persist the object.
+ */
+function _extractBillableLicences (allBillLicences) {
+  const billableBillLicences = []
+
+  allBillLicences.forEach((billLicence) => {
+    const { id, billId, licenceId, licenceRef, billable } = billLicence
+    if (billable) {
+      billableBillLicences.push({ id, billId, licenceId, licenceRef })
+    }
+  })
+
+  return billableBillLicences
 }
 
 /**
@@ -160,7 +184,8 @@ function _findOrCreateBillLicence (billLicences, licence, billId) {
       id: generateUUID(),
       billId,
       licenceId,
-      licenceRef
+      licenceRef,
+      billable: false
     }
 
     billLicences.push(billLicence)
