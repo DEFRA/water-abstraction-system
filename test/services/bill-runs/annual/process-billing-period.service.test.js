@@ -14,6 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { currentFinancialYear } = require('../../../support/helpers/general.helper.js')
 
 // Things we need to stub
+const BillModel = require('../../../../app/models/bill.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleCreateTransactionService = require('../../../../app/services/charging-module/create-transaction.service.js')
@@ -54,21 +55,23 @@ describe('Annual Process billing period service', () => {
     })
 
     describe('and there are billing accounts to process', () => {
+      beforeEach(async () => {
+        billingAccount = _testBillingAccount()
+
+        chargingModuleCreateTransactionServiceStub.onFirstCall().resolves({
+          ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
+        })
+        chargingModuleCreateTransactionServiceStub.onSecondCall().resolves({
+          ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
+        })
+      })
+
       describe('and they are billable', () => {
         beforeEach(async () => {
-          billingAccount = _testBillingAccount()
-
           // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
           // new one when processing a billing account. To to that we need a billing account with 2 charge versions
           // linked to the same licence
           billingAccount.chargeVersions = [_testChargeVersion(billingAccount.id), _testChargeVersion(billingAccount.id)]
-
-          chargingModuleCreateTransactionServiceStub.onFirstCall().resolves({
-            ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
-          })
-          chargingModuleCreateTransactionServiceStub.onSecondCall().resolves({
-            ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
-          })
         })
 
         it('returns true (bill run is not empty)', async () => {
@@ -78,9 +81,42 @@ describe('Annual Process billing period service', () => {
         })
       })
 
+      describe('and they are partially billable (some bill licences generate 0 transactions)', () => {
+        beforeEach(() => {
+          // Create a charge version with an abstraction period that starts in June but which is linked to a licence
+          // that was revoked at the start of May. The engine should calculate 0 billable days and therefore not attempt
+          // to create a bill licence for this record.
+          const unbillableChargeVersion = _testChargeVersion(billingAccount.id)
+          unbillableChargeVersion.licence.id = 'c3726e99-935e-4a36-ab2f-eef8bda9293a'
+          unbillableChargeVersion.licence.revokedDate = new Date(billingPeriod.startDate.getFullYear(), 4, 1)
+          unbillableChargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodStartDay = 1
+          unbillableChargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodStartMonth = 6
+
+          billingAccount.chargeVersions = [
+            _testChargeVersion(billingAccount.id),
+            _testChargeVersion(billingAccount.id),
+            unbillableChargeVersion
+          ]
+        })
+
+        it('returns true (bill run is not empty)', async () => {
+          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+          expect(result).to.be.true()
+        })
+
+        it('only persists the bill licences with transactions', async () => {
+          await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+          const result = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
+
+          expect(result.billLicences.length).to.equal(1)
+          expect(result.billLicences[0].licenceId).to.equal(billingAccount.chargeVersions[0].licence.id)
+        })
+      })
+
       describe('but they are not billable', () => {
         beforeEach(async () => {
-          billingAccount = _testBillingAccount()
           const chargeVersion = _testChargeVersion(billingAccount.id)
 
           // We update the billing account's charge information so that the engine calculates a charge period that
