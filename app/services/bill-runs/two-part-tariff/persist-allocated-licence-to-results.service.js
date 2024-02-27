@@ -107,7 +107,8 @@ async function _persistReviewChargeElementResult (chargeElement, chargeReference
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
     aggregate: chargeReference.aggregate ?? 1,
-    chargeDatesOverlap: chargeElement.chargeDatesOverlap
+    chargeDatesOverlap: chargeElement.chargeDatesOverlap,
+    issues: chargeElement.issuesPersisted.join(', ')
   }
 
   const { id: reviewChargeElementResultId } = await ReviewChargeElementResultModel.query().insert(data).returning('id')

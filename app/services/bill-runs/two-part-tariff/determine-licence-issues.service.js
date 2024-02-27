@@ -3,8 +3,55 @@
  */
 
 async function go (licence) {
-  const { returnLogs } = licence
-  _determineReturnLogsIssues(returnLogs)
+  const { returnLogs: licenceReturnLogs, chargeVersions } = licence
+
+  _determineReturnLogsIssues(licenceReturnLogs)
+  _determineElementIssues(chargeVersions, licenceReturnLogs)
+}
+
+function _determineElementIssues (chargeVersions, licenceReturnLogs) {
+  const elementIssues = []
+  for (const chargeVersion of chargeVersions) {
+    const { chargeReferences } = chargeVersion
+
+    for (const chargeReference of chargeReferences) {
+      const { chargeElements } = chargeReference
+
+      for (const chargeElement of chargeElements) {
+        const { returnLogs } = chargeElement
+
+        // Issue Aggregate
+        if (chargeReference.aggregate) {
+          elementIssues.push('Aggregate')
+        }
+
+        // Issue Overlap of charge dates
+        if (chargeElement.chargeDatesOverlap) {
+          elementIssues.push('Overlap of charge dates')
+        }
+
+        // Issue Some returns not received
+        if (_someReturnsNotReceived(returnLogs, licenceReturnLogs)) {
+          elementIssues.push('Some returns not received')
+        }
+
+        // Unable to match return
+        if (returnLogs.length < 1) {
+          elementIssues.push('Unable to match return')
+        }
+
+        chargeElement.issuesPersisted = elementIssues
+      }
+    }
+  }
+}
+
+function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
+  const returnLogIds = returnLogs.map(returnLog => returnLog.returnId)
+
+  licenceReturnLogs.some((licenceReturnLog) => {
+    return returnLogIds.includes(licenceReturnLog.id) && licenceReturnLog.status === 'due'
+  })
 }
 
 function _determineReturnLogsIssues (returnLogs, licence) {
@@ -51,41 +98,35 @@ function _determineReturnLogsIssues (returnLogs, licence) {
 }
 
 function _determineReturnSplitOverChargeReference (licence, returnLog) {
-  const returnLogId = returnLog.id
+  let chargeReferenceCounter = 0
 
+  const returnLogId = returnLog.id
   const { chargeVersions } = licence
-  const returnLogReferences = []
 
   for (const chargeVersion of chargeVersions) {
     const { chargeReferences } = chargeVersion
 
-    if (chargeReferences.length === 1) {
-      return false
-    }
-
     for (const chargeReference of chargeReferences) {
       const { chargeElements } = chargeReference
 
-      for (const chargeElement of chargeElements) {
+      // We do a .some here as we only care if the returnLog is present in the chargeReference at least once. If the
+      // return is present we increase our chargeReference counter by 1 to tally up how many unique chargeReference have
+      // matched to the return
+      const returnLogInChargeReference = chargeElements.some((chargeElement) => {
         const { returnLogs } = chargeElement
 
-        for (const returnLog of returnLogs) {
-          if (returnLog.id === returnLogId) {
-            returnLogReferences.push(chargeReference.id)
-          }
-        }
+        return returnLogs.some((returnLog) => {
+          return returnLog.id === returnLogId
+        })
+      })
+
+      if (returnLogInChargeReference) {
+        chargeReferenceCounter++
       }
     }
   }
 
-  // deduplicate charge references
-  const uniqueChargeReferences = [...new Set(returnLogReferences)]
-
-  if (uniqueChargeReferences.length > 1) {
-    return true
-  }
-
-  return false
+  return chargeReferenceCounter > 1
 }
 
 module.exports = {
