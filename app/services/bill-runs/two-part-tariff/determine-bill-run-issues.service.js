@@ -122,7 +122,7 @@ function _notProcessed (issues, licenceReviewResults) {
 
 function _noReturnsReceived (issues, licenceReviewResults) {
   const noReturnsReceived = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.status === 'due' || licenceReviewResult.reviewReturnResults?.status === 'overdue'
+    return licenceReviewResult.reviewReturnResults?.status === 'due'
   })
 
   if (noReturnsReceived) {
