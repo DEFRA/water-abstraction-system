@@ -39,7 +39,9 @@ describe('View Licence service', () => {
           abstractionPeriods: null,
           abstractionPeriodsAndPurposesLinkText: null,
           abstractionPointLinkText: 'View details of the abstraction point',
-          abstractionPoints: null,
+          abstractionPoints: [
+            'At National Grid Reference TL 23198 88603'
+          ],
           abstractionPointsCaption: 'Point of abstraction',
           id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
@@ -191,6 +193,11 @@ function _testLicence () {
     permitLicence: {
       purposes: [{
         purposePoints: [{
+          point_detail: {
+            NGR1_SHEET: 'TL',
+            NGR1_EAST: '23198',
+            NGR1_NORTH: '88603'
+          },
           point_source: {
             NAME: 'SURFACE WATER SOURCE OF SUPPLY'
           }

@@ -164,16 +164,14 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
 
   const abstractionPoints = []
 
-  if (permitLicence.purposes.length > 0) {
-    permitLicence.purposes.forEach((purpose) => {
-      purpose.purposePoints.forEach((point) => {
-        const pointDetail = point.point_detail
-        if (pointDetail) {
-          abstractionPoints.push(_generateAbstractionContent(pointDetail))
-        }
-      })
+  permitLicence.purposes.forEach((purpose) => {
+    purpose.purposePoints.forEach((point) => {
+      const pointDetail = point.point_detail
+      if (pointDetail) {
+        abstractionPoints.push(_generateAbstractionContent(pointDetail))
+      }
     })
-  }
+  })
 
   const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
 
