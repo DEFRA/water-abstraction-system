@@ -58,7 +58,6 @@ function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeRef
 
       chargeElement.allocatedQuantity += qtyToAllocate
       chargeElement.returnLogs[i].allocatedQuantity += qtyToAllocate
-
       matchedLine.unallocated -= qtyToAllocate
       matchedReturn.allocatedQuantity += qtyToAllocate
       chargeReference.allocatedQuantity += qtyToAllocate
@@ -81,7 +80,6 @@ function _allocateDueReturns (chargeElement, matchedReturn, chargeReference, i) 
 
     chargeElement.allocatedQuantity += qtyToAllocate
     chargeElement.returnLogs[i].allocatedQuantity += qtyToAllocate
-
     matchedReturn.allocatedQuantity += qtyToAllocate
     chargeReference.allocatedQuantity += qtyToAllocate
   }
@@ -106,11 +104,7 @@ function _fullyAllocated (chargeElement, chargeReference) {
   }
 
   // Finally, we can only allocate to the charge element if there is unallocated volume left!
-  if (chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity) {
-    return true
-  }
-
-  return false
+  return (chargeElement.allocatedQuantity >= chargeElement.authorisedAnnualQuantity)
 }
 
 function _matchLines (chargeElement, returnSubmissionLines) {
