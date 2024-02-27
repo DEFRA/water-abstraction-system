@@ -10,7 +10,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
 /**
  * For a chargeElement with matching returns any abstracted volume recorded on the return log will be allocated to the
  * charge element up to a maximum of the charge elements authorised volume, or the remaining authorised volume on the
- * charge reference, whichever is lower. If any "due" returns are are matched to a charge element, that element will
+ * charge reference, whichever is lower. If any "due" returns are matched to a charge element, that element will
  * have it's allocated volume increased to the authorised annual quantity or the references authorised annual quantity,
  * whichever is lower.
  *
