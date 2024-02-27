@@ -1,8 +1,25 @@
+/**
+ * Validates data submitted for the `/return-requirements/{sessionId}/site-description` page
+ * @module SiteDescriptionValidator
+ */
 'use strict'
 
+/**
+ * Validates data submitted for the `/return-requirements/{sessionId}/site-description` page
+ *
+ * When setting up a requirement users must specify a site description for the return requirement.
+ * User must enter a site description between 10 and 100 characters. If these requirements are not met
+ * the validation will return one of 3 errors, one for empty description and 2 more for above or below
+ * character limits.
+ *
+ * @param {Object} payload - The payload from the request to be validated
+ *
+ * @returns {Object} the result from calling Joi's schema.validate(). If any errors are found the
+ * `error:` property will also exist detailing what the issue is.
+ */
 const Joi = require('joi')
 
-function go (data) {
+function go (payload) {
   const errorMessage = {
     empty: 'Enter a description of the site',
     small: 'Site description must be 10 characters or more',
@@ -21,7 +38,7 @@ function go (data) {
       })
   })
 
-  return schema.validate(data, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 module.exports = {
