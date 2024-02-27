@@ -14,6 +14,7 @@ async function go (sessionId, payload) {
   return {
     activeNavBar: 'search',
     error: validationResult,
+    journey: session.data.journey,
     pageTitle: 'Enter a site description for the return requirement',
     ...formattedData
   }
