@@ -5,12 +5,30 @@
 async function go (licence) {
   const { returnLogs: licenceReturnLogs, chargeVersions } = licence
 
-  _determineReturnLogsIssues(licenceReturnLogs)
-  _determineElementIssues(chargeVersions, licenceReturnLogs)
+  const licenceIssues = []
+  _determineReturnLogsIssues(licenceReturnLogs, licenceIssues)
+  const elementStatus = _determineElementIssues(chargeVersions, licenceReturnLogs)
+
+  licence.status = _determineLicenceStatus(elementStatus)
+}
+
+function _determineLicenceStatus (elementStatus) {
+  const reviewStatus = elementStatus.some((status) => {
+    return status === 'Review'
+  })
+
+  if (reviewStatus) {
+    return 'Review'
+  }
+
+  return 'Ready'
 }
 
 function _determineElementIssues (chargeVersions, licenceReturnLogs) {
   const elementIssues = []
+  const elementsStatuses = []
+  let status = 'Ready'
+
   for (const chargeVersion of chargeVersions) {
     const { chargeReferences } = chargeVersion
 
@@ -23,11 +41,13 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
         // Issue Aggregate
         if (chargeReference.aggregate) {
           elementIssues.push('Aggregate')
+          status = 'Review'
         }
 
         // Issue Overlap of charge dates
         if (chargeElement.chargeDatesOverlap) {
           elementIssues.push('Overlap of charge dates')
+          status = 'Review'
         }
 
         // Issue Some returns not received
@@ -38,12 +58,17 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
         // Unable to match return
         if (returnLogs.length < 1) {
           elementIssues.push('Unable to match return')
+          status = 'Review'
         }
 
-        chargeElement.issuesPersisted = elementIssues
+        chargeElement.issues = elementIssues
+        chargeElement.status = status
+        elementsStatuses.push(status)
       }
     }
   }
+
+  return elementsStatuses
 }
 
 function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
@@ -93,7 +118,7 @@ function _determineReturnLogsIssues (returnLogs, licence) {
       returnLogIssues.push('Return split over charge references')
     }
 
-    returnLog.issuesPersisted = returnLogIssues
+    returnLog.issues = returnLogIssues
   }
 }
 

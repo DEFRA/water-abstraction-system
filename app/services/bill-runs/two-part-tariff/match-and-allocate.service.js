@@ -61,7 +61,6 @@ async function _process (licences, billingPeriod, billRun) {
               chargeReference
             )
           }
-          console.log('Charge Elements :', chargeElement)
         })
       })
     })
