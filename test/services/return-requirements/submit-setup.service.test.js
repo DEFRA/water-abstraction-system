@@ -96,6 +96,7 @@ describe('Submit Setup service', () => {
       })
     })
   })
+
   describe('with different setups', () => {
     describe('and setup is use_abstraction_data', () => {
       beforeEach(() => {
