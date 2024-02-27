@@ -36,17 +36,18 @@ function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeRef
   matchedLines.forEach((matchedLine) => {
     const chargeElementRemainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
     if (chargeElementRemainingAllocation > 0) {
-      // We default how much to allocate to what is unallocated on the line i.e. remaining >= line.unallocated
-      let qtyToAllocate = matchedLine.unallocated
+      let qtyToAllocate
 
-      // If what remains is actually less than the line we instead set qtyToAllocate to what remains. We check this
-      // on both the chargeReference and the element
+      // If what remains to allocate on the charge reference/element is actually less than the `matchedLine.unallocated`
+      // we set `qtyToAllocate` to what remains. Else the `qtyToAllocate` is equal to the `matchedLine.unallocated`.
       const chargeReferenceRemainingAllocation = chargeReference.volume - chargeReference.allocatedQuantity
 
-      if (qtyToAllocate > chargeReferenceRemainingAllocation) {
+      if (matchedLine.unallocated > chargeReferenceRemainingAllocation) {
         qtyToAllocate = chargeReferenceRemainingAllocation
-      } else if (chargeElementRemainingAllocation < matchedLine.unallocated) {
+      } else if (matchedLine.unallocated > chargeElementRemainingAllocation) {
         qtyToAllocate = chargeElementRemainingAllocation
+      } else {
+        qtyToAllocate = matchedLine.unallocated
       }
 
       // We do this check to prevent overwriting the value with false once it's been set to true as it only requires
