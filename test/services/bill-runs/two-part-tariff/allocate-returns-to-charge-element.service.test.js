@@ -19,251 +19,416 @@ describe('Allocate Returns to Charge Element Service', () => {
 
     let testData
 
-    describe('with a charge reference/element authorised upto 32, matched to a return with a quantity of 32', () => {
+    describe('and the return status is completed', () => {
       beforeEach(() => {
         testData = _generateTestData()
       })
 
-      it('correctly allocates 32 to the charge reference', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+      describe('with a charge reference/element authorised up to 32, matched to a return with a quantity of 32', () => {
+        it('allocates 32 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-        expect(chargeReference.allocatedQuantity).to.equal(32)
+          expect(chargeReference.allocatedQuantity).to.equal(32)
+        })
+
+        it('allocates 32 to the charge element and adds chargeDatesOverlap property as `false`', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.allocatedQuantity).to.equal(32)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+          expect(chargeElement.chargeDatesOverlap).to.be.false()
+        })
+
+        it('allocates all 32 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(32)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
+        })
       })
 
-      it('correctly allocates 32 to the charge element and adds chargeDatesOverlap property as `false`', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+      describe('with a charge reference authorised up to 10, matched to a return with a quantity of 32', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.chargeReference.volume = 10
+        })
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+        it('allocates 10 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        expect(chargeElement.allocatedQuantity).to.equal(32)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
-        expect(chargeElement.chargeDatesOverlap).to.be.false()
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.volume).to.equal(10)
+          expect(chargeReference.allocatedQuantity).to.equal(10)
+        })
+
+        it('allocates 10 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.authorisedAnnualQuantity).to.equal(32)
+          expect(chargeElement.allocatedQuantity).to.equal(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+        })
+
+        it('allocates 10 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+        })
       })
 
-      it('correctly allocates all 32 from the return log', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+      describe('with a charge element authorised up to 10, matched to a return with a quantity of 32', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.chargeElement.authorisedAnnualQuantity = 10
+        })
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+        it('allocates 10 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        expect(matchingReturns[0].allocatedQuantity).to.equal(32)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.volume).to.equal(32)
+          expect(chargeReference.allocatedQuantity).to.equal(10)
+        })
+
+        it('allocates 10 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.authorisedAnnualQuantity).to.equal(10)
+          expect(chargeElement.allocatedQuantity).to.equal(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+        })
+
+        it('allocates 10 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+        })
+      })
+
+      describe('with a `returnSubmissionLine` outside of the `chargePeriod`', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
+          testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].endDate = new Date('2022-03-30')
+        })
+
+        it('allocates 28 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.allocatedQuantity).to.equal(28)
+        })
+
+        it('allocates 28 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.allocatedQuantity).to.equal(28)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(28)
+        })
+
+        it('does not include the line outside of the charge period and allocates 28 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(28)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
+        })
+      })
+
+      describe('with a `returnSubmissionLine` with a `startDate` outside the charge period but endDate within', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
+          testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].endDate = new Date('2022-04-30')
+        })
+
+        it('allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.allocatedQuantity).to.equal(32)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+          expect(chargeElement.chargeDatesOverlap).to.be.true()
+        })
+      })
+
+      describe('with a `returnSubmissionLine` with a `endDate` outside the charge period but startDate within', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].startDate = new Date('2023-03-01')
+          testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].endDate = new Date('2023-04-31')
+        })
+
+        it('allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.allocatedQuantity).to.equal(32)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+          expect(chargeElement.chargeDatesOverlap).to.be.true()
+        })
+      })
+
+      describe('with a return that has issues', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.matchingReturns[0].issues = true
+        })
+
+        it('does not allocate anything from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.allocatedQuantity).to.equal(0)
+
+          expect(chargeElement.allocatedQuantity).to.equal(0)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
+        })
+      })
+
+      describe('with a nil return that has no `returnSubmissionLines`', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines = []
+        })
+
+        it('does not allocate anything from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.allocatedQuantity).to.equal(0)
+
+          expect(chargeElement.allocatedQuantity).to.equal(0)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+        })
       })
     })
 
-    describe('with a charge reference authorised upto 10, matched to a return with a quantity of 32', () => {
+    describe('and the return status is due', () => {
       beforeEach(() => {
-        testData = _generateTestData()
-        testData.chargeReference.volume = 10
+        testData = _generateTestData('due')
       })
 
-      it('correctly allocates 10 to the charge reference', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+      describe('with a charge reference/element authorised up to 32, matched to a due return', () => {
+        it('fully allocates up to authorised amount of 32 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-        expect(chargeReference.volume).to.equal(10)
-        expect(chargeReference.allocatedQuantity).to.equal(10)
+          expect(chargeReference.allocatedQuantity).to.equal(32)
+        })
+
+        it('fully allocates up to authorised amount of 32 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.allocatedQuantity).to.equal(32)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+        })
+
+        it('allocates 32 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(32)
+        })
+
+        describe('and 10 has already been allocated to the reference/element from another return', () => {
+          beforeEach(() => {
+            testData.chargeReference.allocatedQuantity = 10
+            testData.chargeElement.allocatedQuantity = 10
+          })
+
+          it('fully allocates up to authorised amount of 32 to the charge reference', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(chargeReference.allocatedQuantity).to.equal(32)
+          })
+
+          it('fully allocates up to authorised amount of 32 to the charge element', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(chargeElement.allocatedQuantity).to.equal(32)
+            expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(22)
+          })
+
+          it('allocates 22 from the return log', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(matchingReturns[0].allocatedQuantity).to.equal(22)
+          })
+        })
+
+        describe('and reference/element has been fully allocated from another return', () => {
+          beforeEach(() => {
+            testData.chargeReference.allocatedQuantity = 32
+            testData.chargeElement.allocatedQuantity = 32
+          })
+
+          it('the fully allocated amount of 32 to the charge reference is unaltered by the due return', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(chargeReference.allocatedQuantity).to.equal(32)
+          })
+
+          it('the fully allocated amount of 32 to the charge element is unaltered by the due return', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(chargeElement.allocatedQuantity).to.equal(32)
+            expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+          })
+
+          it('allocates 0 from the return log', () => {
+            const { chargeElement, chargeReference, matchingReturns } = testData
+
+            AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+            expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+          })
+        })
       })
 
-      it('correctly allocates 10 to the charge element', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+      describe('with a charge reference authorised up to 32, element authorised to 10, matched to a due return', () => {
+        beforeEach(() => {
+          testData.chargeElement.authorisedAnnualQuantity = 10
+        })
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+        it('allocates the charge elements authorised amount of 10 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        expect(chargeElement.authorisedAnnualQuantity).to.equal(32)
-        expect(chargeElement.allocatedQuantity).to.equal(10)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.volume).to.equal(32)
+          expect(chargeReference.allocatedQuantity).to.equal(10)
+        })
+
+        it('fully allocates up to authorised amount of 10 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.authorisedAnnualQuantity).to.equal(10)
+          expect(chargeElement.allocatedQuantity).to.equal(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+        })
+
+        it('allocates 10 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+        })
       })
 
-      it('correctly allocates 10 from the return log', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+      describe('with a charge reference authorised up to 10, element authorised to 32, matched to a due return', () => {
+        beforeEach(() => {
+          testData.chargeReference.volume = 10
+        })
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+        it('fully allocates up to authorised amount of 10 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        expect(matchingReturns[0].allocatedQuantity).to.equal(10)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
-      })
-    })
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-    describe('with a charge element authorised upto 10, matched to a return with a quantity of 32', () => {
-      beforeEach(() => {
-        testData = _generateTestData()
-        testData.chargeElement.authorisedAnnualQuantity = 10
-      })
+          expect(chargeReference.volume).to.equal(10)
+          expect(chargeReference.allocatedQuantity).to.equal(10)
+        })
 
-      it('correctly allocates 10 to the charge reference', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+        it('allocates the charge references authorised amount of 10 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-        expect(chargeReference.volume).to.equal(32)
-        expect(chargeReference.allocatedQuantity).to.equal(10)
-      })
+          expect(chargeElement.authorisedAnnualQuantity).to.equal(32)
+          expect(chargeElement.allocatedQuantity).to.equal(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+        })
 
-      it('correctly allocates 10 to the charge element', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
+        it('allocates 10 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
 
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-        expect(chargeElement.authorisedAnnualQuantity).to.equal(10)
-        expect(chargeElement.allocatedQuantity).to.equal(10)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
-      })
-
-      it('correctly allocates 10 from the return log', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(matchingReturns[0].allocatedQuantity).to.equal(10)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
-      })
-    })
-
-    describe('with a `returnSubmissionLine` outside of the `chargePeriod`', () => {
-      beforeEach(() => {
-        testData = _generateTestData()
-        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
-        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].endDate = new Date('2022-03-30')
-      })
-
-      it('correctly allocates 28 to the charge reference', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(chargeReference.allocatedQuantity).to.equal(28)
-      })
-
-      it('correctly allocates 28 to the charge element', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(chargeElement.allocatedQuantity).to.equal(28)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(28)
-      })
-
-      it('does not include the line outside of the charge period and allocates 28 from the return log', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(matchingReturns[0].allocatedQuantity).to.equal(28)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
-      })
-    })
-
-    describe('with a `returnSubmissionLine` with a `startDate` outside the charge period but endDate within', () => {
-      beforeEach(() => {
-        testData = _generateTestData()
-        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
-        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].endDate = new Date('2022-04-30')
-      })
-
-      it('correctly allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(chargeElement.allocatedQuantity).to.equal(32)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
-        expect(chargeElement.chargeDatesOverlap).to.be.true()
-      })
-    })
-
-    describe('with a `returnSubmissionLine` with a `endDate` outside the charge period but startDate within', () => {
-      beforeEach(() => {
-        testData = _generateTestData()
-        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].startDate = new Date('2023-03-01')
-        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].endDate = new Date('2023-04-31')
-      })
-
-      it('correctly allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(chargeElement.allocatedQuantity).to.equal(32)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
-        expect(chargeElement.chargeDatesOverlap).to.be.true()
-      })
-    })
-
-    describe('with a return that has issues', () => {
-      beforeEach(() => {
-        testData = _generateTestData()
-        testData.matchingReturns[0].issues = true
-      })
-
-      it('does not allocate anything from the return log', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(chargeReference.allocatedQuantity).to.equal(0)
-
-        expect(chargeElement.allocatedQuantity).to.equal(0)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
-
-        expect(matchingReturns[0].allocatedQuantity).to.equal(0)
-        expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
-      })
-    })
-
-    describe('with a nil return that has no `returnSubmissionLines`', () => {
-      beforeEach(() => {
-        testData = _generateTestData()
-        testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines = []
-      })
-
-      it('does not allocate anything from the return log', () => {
-        const { chargeElement, chargeReference, matchingReturns } = testData
-
-        AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
-
-        expect(chargeReference.allocatedQuantity).to.equal(0)
-
-        expect(chargeElement.allocatedQuantity).to.equal(0)
-        expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
-
-        expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+        })
       })
     })
   })
 })
 
-function _generateTestData () {
+function _generateTestData (returnStatus = 'complete') {
   // Data not required for the tests has been excluded from the generated data
   const chargeElement = {
     authorisedAnnualQuantity: 32,
@@ -290,56 +455,60 @@ function _generateTestData () {
     allocatedQuantity: 0
   }
 
+  const returnSubmissions = [
+    {
+      returnSubmissionLines: [
+        {
+          startDate: new Date('2022-04-01'),
+          endDate: new Date('2022-04-30'),
+          unallocated: 4
+        },
+        {
+          startDate: new Date('2022-05-01'),
+          endDate: new Date('2022-05-31'),
+          unallocated: 4
+        },
+        {
+          startDate: new Date('2022-06-01'),
+          endDate: new Date('2022-06-30'),
+          unallocated: 4
+        },
+        {
+          startDate: new Date('2022-07-01'),
+          endDate: new Date('2022-07-31'),
+          unallocated: 4
+        },
+        {
+          startDate: new Date('2022-08-01'),
+          endDate: new Date('2022-08-31'),
+          unallocated: 4
+        },
+        {
+          startDate: new Date('2022-09-01'),
+          endDate: new Date('2022-09-30'),
+          unallocated: 4
+        },
+        {
+          startDate: new Date('2022-10-01'),
+          endDate: new Date('2022-10-31'),
+          unallocated: 4
+        },
+        {
+          startDate: new Date('2023-03-01'),
+          endDate: new Date('2023-03-31'),
+          unallocated: 4
+        }
+      ]
+    }
+  ]
+
+  // If a returns status isn't `complete` it won't have any return submission lines and the `issues` will be `true`
   const matchingReturns = [
     {
-      returnSubmissions: [
-        {
-          returnSubmissionLines: [
-            {
-              startDate: new Date('2022-04-01'),
-              endDate: new Date('2022-04-30'),
-              unallocated: 4
-            },
-            {
-              startDate: new Date('2022-05-01'),
-              endDate: new Date('2022-05-31'),
-              unallocated: 4
-            },
-            {
-              startDate: new Date('2022-06-01'),
-              endDate: new Date('2022-06-30'),
-              unallocated: 4
-            },
-            {
-              startDate: new Date('2022-07-01'),
-              endDate: new Date('2022-07-31'),
-              unallocated: 4
-            },
-            {
-              startDate: new Date('2022-08-01'),
-              endDate: new Date('2022-08-31'),
-              unallocated: 4
-            },
-            {
-              startDate: new Date('2022-09-01'),
-              endDate: new Date('2022-09-30'),
-              unallocated: 4
-            },
-            {
-              startDate: new Date('2022-10-01'),
-              endDate: new Date('2022-10-31'),
-              unallocated: 4
-            },
-            {
-              startDate: new Date('2023-03-01'),
-              endDate: new Date('2023-03-31'),
-              unallocated: 4
-            }
-          ]
-        }
-      ],
+      returnSubmissions: returnStatus === 'complete' ? returnSubmissions : [],
       allocatedQuantity: 0,
-      issues: false
+      issues: returnStatus !== 'complete',
+      status: returnStatus
     }
   ]
 
