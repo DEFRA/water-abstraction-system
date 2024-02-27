@@ -35,7 +35,8 @@ exports.up = function (knex) {
       table.string('scheme').notNullable().defaultTo('alcs')
       table.boolean('is_restricted_source').defaultTo(false)
       table.string('water_model')
-      table.decimal('volume')
+      // Specifying a precision and scale of null means the value can be of any size
+      table.decimal('volume', null, null)
       table.uuid('billing_charge_category_id')
       table.jsonb('additional_charges')
       table.jsonb('adjustments')

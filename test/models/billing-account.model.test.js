@@ -11,6 +11,8 @@ const { expect } = Code
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
 const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
+const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
+const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const DatabaseHelper = require('../support/helpers/database.helper.js')
@@ -39,34 +41,6 @@ describe('Billing Account model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to company', () => {
-      let testCompany
-
-      beforeEach(async () => {
-        testCompany = await CompanyHelper.add()
-        testRecord = await BillingAccountHelper.add({ companyId: testCompany.id })
-      })
-
-      it('can successfully run a related query', async () => {
-        const query = await BillingAccountModel.query()
-          .innerJoinRelated('company')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the company', async () => {
-        const result = await BillingAccountModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('company')
-
-        expect(result).to.be.instanceOf(BillingAccountModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.company).to.be.an.instanceOf(CompanyModel)
-        expect(result.company).to.equal(testCompany)
-      })
-    })
-
     describe('when linking to billing account addresses', () => {
       let testBillingAccountAddresses
 
@@ -103,6 +77,70 @@ describe('Billing Account model', () => {
         expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+      })
+    })
+
+    describe('when linking to charge versions', () => {
+      let testChargeVersions
+
+      beforeEach(async () => {
+        testRecord = await BillingAccountHelper.add()
+        const { id: billingAccountId } = testRecord
+
+        testChargeVersions = []
+        for (let i = 0; i < 2; i++) {
+          const chargeVersion = await ChargeVersionHelper.add({ billingAccountId })
+          testChargeVersions.push(chargeVersion)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await BillingAccountModel.query()
+          .innerJoinRelated('chargeVersions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the charge versions', async () => {
+        const result = await BillingAccountModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersions')
+
+        expect(result).to.be.instanceOf(BillingAccountModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersions).to.be.an.array()
+        expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersions).to.include(testChargeVersions[0])
+        expect(result.chargeVersions).to.include(testChargeVersions[1])
+      })
+    })
+
+    describe('when linking to company', () => {
+      let testCompany
+
+      beforeEach(async () => {
+        testCompany = await CompanyHelper.add()
+        testRecord = await BillingAccountHelper.add({ companyId: testCompany.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await BillingAccountModel.query()
+          .innerJoinRelated('company')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the company', async () => {
+        const result = await BillingAccountModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('company')
+
+        expect(result).to.be.instanceOf(BillingAccountModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.company).to.be.an.instanceOf(CompanyModel)
+        expect(result.company).to.equal(testCompany)
       })
     })
   })
