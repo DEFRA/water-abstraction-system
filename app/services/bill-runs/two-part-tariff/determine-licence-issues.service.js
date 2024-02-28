@@ -33,13 +33,13 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
   const allElementIssues = []
   let status = 'Ready'
 
-  for (const chargeVersion of chargeVersions) {
+  chargeVersions.forEach((chargeVersion) => {
     const { chargeReferences } = chargeVersion
 
-    for (const chargeReference of chargeReferences) {
+    chargeReferences.forEach((chargeReference) => {
       const { chargeElements } = chargeReference
 
-      for (const chargeElement of chargeElements) {
+      chargeElements.forEach((chargeElement) => {
         const { returnLogs } = chargeElement
 
         const elementIssues = []
@@ -70,9 +70,9 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
         chargeElement.issues = elementIssues
         chargeElement.status = status
         allElementIssues.push(...elementIssues)
-      }
-    }
-  }
+      })
+    })
+  })
 
   return allElementIssues
 }
@@ -88,7 +88,7 @@ function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
 function _determineReturnLogsIssues (returnLogs, licence) {
   const allReturnsIssues = []
 
-  for (const returnLog of returnLogs) {
+  returnLogs.forEach((returnLog) => {
     const returnLogIssues = []
 
     // Abstraction outside period issue
@@ -128,7 +128,7 @@ function _determineReturnLogsIssues (returnLogs, licence) {
 
     returnLog.issues = returnLogIssues
     allReturnsIssues.push(...returnLogIssues)
-  }
+  })
 
   return allReturnsIssues
 }
@@ -139,10 +139,10 @@ function _determineReturnSplitOverChargeReference (licence, returnLog) {
   const returnLogId = returnLog.id
   const { chargeVersions } = licence
 
-  for (const chargeVersion of chargeVersions) {
+  chargeVersions.forEach((chargeVersion) => {
     const { chargeReferences } = chargeVersion
 
-    for (const chargeReference of chargeReferences) {
+    chargeReferences.forEach((chargeReference) => {
       const { chargeElements } = chargeReference
 
       // We do a .some here as we only care if the returnLog is present in the chargeReference at least once. If the
@@ -159,8 +159,8 @@ function _determineReturnSplitOverChargeReference (licence, returnLog) {
       if (returnLogInChargeReference) {
         chargeReferenceCounter++
       }
-    }
-  }
+    })
+  })
 
   return chargeReferenceCounter > 1
 }
