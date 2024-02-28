@@ -45,6 +45,7 @@ describe('Site Description presenter', () => {
 
     describe('and a populated payload', () => {
       let payload
+
       beforeEach(() => {
         payload = {
           siteDescription: 'This is a valid return requirement description'
