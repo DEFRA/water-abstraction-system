@@ -46,6 +46,7 @@ describe('Submit Site Description service', () => {
 
       it('fetches the current setup session record', async () => {
         const result = await SubmitSiteDescriptionService.go(session.id, payload)
+
         expect(result.id).to.equal(session.id)
       })
 
