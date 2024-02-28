@@ -136,6 +136,7 @@ describe('Submit Site Description service', () => {
 
       describe('because the user has entered a description more than 100 characters', () => {
         const invalidSiteDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.'
+
         beforeEach(() => {
           payload = {
             siteDescription: invalidSiteDescription
