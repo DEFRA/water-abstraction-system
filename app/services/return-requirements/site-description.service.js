@@ -24,7 +24,7 @@ async function go (sessionId) {
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'Enter a site description for the return requirement',
+    pageTitle: 'Enter a site description for the requirements for returns',
     ...formattedData
   }
 }
