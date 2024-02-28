@@ -41,10 +41,15 @@ function go (licence) {
     abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
   }
 
+  const pointDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
+
   return {
     id,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
+    abstractionPoints: pointDetails.abstractionPoints,
+    abstractionPointsCaption: pointDetails.abstractionPointsCaption,
+    abstractionPointLinkText: pointDetails.abstractionPointLinkText,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
@@ -55,7 +60,7 @@ function go (licence) {
     region: region.displayName,
     registeredTo,
     startDate: formatLongDate(startDate),
-    sourceOfSupply: _generateSourceOfSupply(permitLicence),
+    sourceOfSupply: pointDetails.sourceOfSupply,
     warning: _generateWarningMessage(ends)
   }
 }
@@ -119,20 +124,6 @@ function _generatePurposes (licenceVersions) {
   }
 }
 
-function _generateSourceOfSupply (permitLicence) {
-  if (!permitLicence ||
-    permitLicence?.purposes === undefined ||
-    permitLicence.purposes.length === 0 ||
-    permitLicence.purposes[0]?.purposePoints === undefined ||
-    permitLicence.purposes[0]?.purposePoints.length === 0 ||
-    permitLicence.purposes[0]?.purposePoints[0]?.point_source?.NAME === undefined
-  ) {
-    return null
-  }
-
-  return permitLicence.purposes[0].purposePoints[0].point_source.NAME
-}
-
 function _generateWarningMessage (ends) {
   if (!ends) {
     return null
@@ -154,6 +145,73 @@ function _generateWarningMessage (ends) {
   }
 
   return `This licence expired on ${formatLongDate(date)}`
+}
+
+function _parseAbstractionsAndSourceOfSupply (permitLicence) {
+  if (!permitLicence ||
+    permitLicence?.purposes === undefined ||
+    permitLicence.purposes.length === 0 ||
+    permitLicence.purposes[0]?.purposePoints === undefined ||
+    permitLicence.purposes[0]?.purposePoints.length === 0
+  ) {
+    return {
+      abstractionPoints: null,
+      abstractionPointsCaption: null,
+      abstractionPointLinkText: null,
+      sourceOfSupply: null
+    }
+  }
+
+  const abstractionPoints = []
+
+  permitLicence.purposes.forEach((purpose) => {
+    purpose.purposePoints.forEach((point) => {
+      const pointDetail = point.point_detail
+      if (pointDetail) {
+        abstractionPoints.push(_generateAbstractionContent(pointDetail))
+      }
+    })
+  })
+
+  const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
+
+  const abstractionLinkDefaultText = 'View details of the abstraction point'
+  const abstractionPointLinkText = uniqueAbstractionPoints.length > 1 ? abstractionLinkDefaultText + 's' : abstractionLinkDefaultText
+
+  const abstractionPointsCaption = uniqueAbstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
+
+  return {
+    abstractionPoints: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
+    abstractionPointsCaption,
+    abstractionPointLinkText,
+    sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null
+  }
+}
+
+function _generateAbstractionContent (pointDetail) {
+  let abstractionPoint = null
+
+  if (pointDetail.NGR4_SHEET && pointDetail.NGR4_NORTH !== 'null') {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+    const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
+    const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
+
+    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
+  } else if (pointDetail.NGR2_SHEET && pointDetail.NGR2_NORTH !== 'null') {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+
+    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
+  } else {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+
+    abstractionPoint = `At National Grid Reference ${point1}`
+  }
+
+  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` ${pointDetail.LOCAL_NAME}` : ''
+
+  return abstractionPoint
 }
 
 module.exports = {
