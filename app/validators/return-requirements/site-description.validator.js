@@ -5,6 +5,8 @@
  * @module SiteDescriptionValidator
  */
 
+const Joi = require('joi')
+
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/site-description` page
  *
@@ -18,8 +20,6 @@
  * @returns {Object} the result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-const Joi = require('joi')
-
 function go (payload) {
   const errorMessage = {
     empty: 'Enter a description of the site',
