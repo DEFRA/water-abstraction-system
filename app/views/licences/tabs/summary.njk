@@ -74,6 +74,30 @@
             </dd>
         </div>
     {% endif %}
+
+    {% if abstractionPoints %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">{{ abstractionPointsCaption }}</dt>
+            <dd class="govuk-summary-list__value">
+                {% if abstractionPoints.length > 5 %}
+                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                        There are {{ abstractionPoints.length }} abstraction points
+                    </span>
+                {% elseif abstractionPeriods.uniqueAbstractionPeriods.length > 1 %}
+                    <ul class="govuk-list govuk-!-margin-bottom-0">
+                        {% for abstractionPoint in abstractionPoints %}
+                            <li>{{ abstractionPoint }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                        {{ abstractionPoints[0] }}
+                    </span>
+                {% endif %}
+                <a href="/licences/{{ documentId }}/points">{{ abstractionPointLinkText }}</a>
+            </dd>
+        </div>
+    {% endif %}
 </dl>
 
 <div class="govuk-grid-row">
