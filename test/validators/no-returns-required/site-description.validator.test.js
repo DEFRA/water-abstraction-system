@@ -45,6 +45,7 @@ describe('Site Description validator', () => {
 
     describe('because the user provided a short site description', () => {
       const invalidSiteDescription = 'Too short'
+
       beforeEach(() => {
         payload = {
           siteDescription: invalidSiteDescription
@@ -61,6 +62,7 @@ describe('Site Description validator', () => {
 
     describe('because the user provided a long site description', () => {
       const invalidSiteDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.'
+
       beforeEach(() => {
         payload = {
           siteDescription: invalidSiteDescription
