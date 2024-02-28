@@ -7,6 +7,7 @@
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/site-description` page.
+ *
  * @param {module:SessionModel} session - The returns requirements session instance.
  * @param {Object} [payload] - The payload from the request.
  * @returns {Object} - The data formatted for the view template.
