@@ -57,7 +57,7 @@ describe('Submit Site Description service', () => {
           activeNavBar: 'search',
           error: null,
           journey: 'returns-required',
-          pageTitle: 'Enter a site description for the return requirement',
+          pageTitle: 'Enter a site description for the requirements for returns',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           licenceSiteDescription: 'This is a valid return requirement description'
@@ -83,7 +83,7 @@ describe('Submit Site Description service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             journey: 'returns-required',
-            pageTitle: 'Enter a site description for the return requirement',
+            pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             licenceSiteDescription: null
@@ -118,7 +118,7 @@ describe('Submit Site Description service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             journey: 'returns-required',
-            pageTitle: 'Enter a site description for the return requirement',
+            pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             licenceSiteDescription: 'Too short'
@@ -155,7 +155,7 @@ describe('Submit Site Description service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             journey: 'returns-required',
-            pageTitle: 'Enter a site description for the return requirement',
+            pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             licenceSiteDescription: invalidSiteDescription
