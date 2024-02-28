@@ -180,6 +180,9 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
 
   const abstractionPointsCaption = uniqueAbstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
 
+  console.log(abstractionPoints)
+  console.log(uniqueAbstractionPoints)
+
   return {
     abstractionPoints: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
     abstractionPointsCaption,
@@ -209,7 +212,7 @@ function _generateAbstractionContent (pointDetail) {
     abstractionPoint = `At National Grid Reference ${point1}`
   }
 
-  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` ${pointDetail.LOCAL_NAME}` : ''
+  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
 
   return abstractionPoint
 }
