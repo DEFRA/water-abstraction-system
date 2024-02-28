@@ -2,31 +2,35 @@
  * @module DetermineLicenceIssuesService
  */
 
+// A list of issues that would put a licence into a status of 'review'
+const REVIEW_STATUSES = [
+  'Aggregate factor', 'Checking query', 'Overlap of charge dates', 'Returns received but not processed',
+  'Returns split over charge references', 'Unable to match returns'
+]
+
 async function go (licence) {
   const { returnLogs: licenceReturnLogs, chargeVersions } = licence
 
-  const licenceIssues = []
-  _determineReturnLogsIssues(licenceReturnLogs, licenceIssues)
-  const elementStatus = _determineElementIssues(chargeVersions, licenceReturnLogs)
+  const allReturnIssues = _determineReturnLogsIssues(licenceReturnLogs, licence)
+  const allElementIssues = _determineElementIssues(chargeVersions, licenceReturnLogs)
 
-  licence.status = _determineLicenceStatus(elementStatus)
+  licence.status = _determineLicenceStatus(allElementIssues, allReturnIssues)
 }
 
-function _determineLicenceStatus (elementStatus) {
-  const reviewStatus = elementStatus.some((status) => {
-    return status === 'Review'
-  })
+function _determineLicenceStatus (allElementIssues, allReturnIssues) {
+  const allLicenceIssues = [...allElementIssues, ...allReturnIssues]
 
-  if (reviewStatus) {
+  // If a licence has more than one issue, or has 1 issue that is in the `REVIEW_STATUSES` array the licence status is
+  // set to 'Review' otherwise its 'Ready'
+  if (allLicenceIssues.length > 1 || REVIEW_STATUSES.includes(allLicenceIssues[0])) {
     return 'Review'
+  } else {
+    return 'Ready'
   }
-
-  return 'Ready'
 }
 
 function _determineElementIssues (chargeVersions, licenceReturnLogs) {
-  const elementIssues = []
-  const elementsStatuses = []
+  const allElementIssues = []
   let status = 'Ready'
 
   for (const chargeVersion of chargeVersions) {
@@ -37,6 +41,8 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
 
       for (const chargeElement of chargeElements) {
         const { returnLogs } = chargeElement
+
+        const elementIssues = []
 
         // Issue Aggregate
         if (chargeReference.aggregate) {
@@ -63,12 +69,12 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
 
         chargeElement.issues = elementIssues
         chargeElement.status = status
-        elementsStatuses.push(status)
+        allElementIssues.push(...elementIssues)
       }
     }
   }
 
-  return elementsStatuses
+  return allElementIssues
 }
 
 function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
@@ -80,6 +86,8 @@ function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
 }
 
 function _determineReturnLogsIssues (returnLogs, licence) {
+  const allReturnsIssues = []
+
   for (const returnLog of returnLogs) {
     const returnLogIssues = []
 
@@ -119,7 +127,10 @@ function _determineReturnLogsIssues (returnLogs, licence) {
     }
 
     returnLog.issues = returnLogIssues
+    allReturnsIssues.push(...returnLogIssues)
   }
+
+  return allReturnsIssues
 }
 
 function _determineReturnSplitOverChargeReference (licence, returnLog) {
