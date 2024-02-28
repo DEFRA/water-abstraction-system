@@ -1,8 +1,9 @@
+'use strict'
+
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/site-description` page
  * @module SiteDescriptionValidator
  */
-'use strict'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/site-description` page
