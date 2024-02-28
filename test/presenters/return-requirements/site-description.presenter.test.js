@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SiteDescriptionPresenter = require('../../../app/presenters/return-requirements/site-description.presenter')
+const SiteDescriptionPresenter = require('../../../app/presenters/return-requirements/site-description.presenter.js')
 
 describe('Site Description presenter', () => {
   let session
