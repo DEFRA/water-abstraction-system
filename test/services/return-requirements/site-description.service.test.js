@@ -19,6 +19,7 @@ describe('Site Description service', () => {
 
   beforeEach(async () => {
     await DatabaseHelper.clean()
+
     session = await SessionHelper.add({
       data: {
         licence: {
