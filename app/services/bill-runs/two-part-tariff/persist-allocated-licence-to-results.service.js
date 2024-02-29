@@ -107,8 +107,7 @@ async function _persistReviewChargeElementResult (chargeElement, chargeReference
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
     aggregate: chargeReference.aggregate ?? 1,
-    chargeDatesOverlap: chargeElement.chargeDatesOverlap,
-    issues: chargeElement.issues.join(', ')
+    chargeDatesOverlap: chargeElement.chargeDatesOverlap
   }
 
   const { id: reviewChargeElementResultId } = await ReviewChargeElementResultModel.query().insert(data).returning('id')
@@ -154,8 +153,7 @@ async function _persistReviewReturnResult (returnLog) {
     purposes: returnLog.purposes,
     quantity: returnLog.quantity,
     allocated: returnLog.allocatedQuantity,
-    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod,
-    issues: returnLog.issues.join(', ')
+    abstractionOutsidePeriod: returnLog.abstractionOutsidePeriod
   }
 
   const { id: reviewReturnResultId } = await ReviewReturnResultModel.query().insert(data).returning('id')
