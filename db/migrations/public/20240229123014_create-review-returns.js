@@ -18,7 +18,7 @@ exports.up = function (knex) {
       table.decimal('quantity', null, null).defaultTo(0)
       table.decimal('allocated', null, null).defaultTo(0)
       table.boolean('under_query').defaultTo(false)
-      table.string('status')
+      table.string('return_status')
       table.boolean('nil_return').defaultTo(false)
       table.boolean('abstraction_outside_period').defaultTo(false)
       table.date('received_date')
