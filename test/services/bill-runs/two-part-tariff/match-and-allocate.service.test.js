@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-charge-element.service.js')
+const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/two-part-tariff/determine-licence-issues.service.js')
 const FetchLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-licences.service.js')
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('../../../../app/services/bill-runs/two-part-tariff/prepare-charge-version.service.js')
@@ -52,6 +53,7 @@ describe('Match And Allocate Service', () => {
         Sinon.stub(PrepareReturnLogsService, 'go')
         Sinon.stub(PrepareChargeVersionService, 'go')
         Sinon.stub(AllocateReturnsToChargeElementService, 'go')
+        Sinon.stub(DetermineLicenceIssuesService, 'go')
         Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
       })
 
@@ -72,6 +74,7 @@ describe('Match And Allocate Service', () => {
           expect(MatchReturnsToChargeElementService.go.called).to.be.true()
           expect(AllocateReturnsToChargeElementService.go.called).to.be.true()
 
+          expect(DetermineLicenceIssuesService.go.called).to.be.true()
           expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
         })
 
@@ -97,6 +100,7 @@ describe('Match And Allocate Service', () => {
           expect(MatchReturnsToChargeElementService.go.called).to.be.true()
           expect(AllocateReturnsToChargeElementService.go.called).to.be.false()
 
+          expect(DetermineLicenceIssuesService.go.called).to.be.true()
           expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
         })
 
@@ -115,6 +119,7 @@ describe('Match And Allocate Service', () => {
         Sinon.stub(PrepareChargeVersionService, 'go')
         Sinon.stub(MatchReturnsToChargeElementService, 'go')
         Sinon.stub(AllocateReturnsToChargeElementService, 'go')
+        Sinon.stub(DetermineLicenceIssuesService, 'go')
         Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
       })
 
@@ -131,6 +136,7 @@ describe('Match And Allocate Service', () => {
         expect(PrepareChargeVersionService.go.called).to.be.false()
         expect(MatchReturnsToChargeElementService.go.called).to.be.false()
         expect(AllocateReturnsToChargeElementService.go.called).to.be.false()
+        expect(DetermineLicenceIssuesService.go.called).to.be.false()
         expect(PersistAllocatedLicenceToResultsService.go.called).to.be.false()
       })
 

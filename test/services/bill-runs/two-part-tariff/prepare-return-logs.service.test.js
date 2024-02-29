@@ -88,8 +88,7 @@ describe('Prepare Return Logs Service', () => {
               }
             ],
             abstractionOutsidePeriod: false,
-            matched: false,
-            issues: false
+            matched: false
           })
         })
       })
