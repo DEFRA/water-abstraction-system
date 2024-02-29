@@ -655,7 +655,7 @@ describe('View Licence presenter', () => {
         const result = await ViewLicencePresenter.go(licence)
 
         expect(result.abstractionPoints).to.equal([
-          'At National Grid Reference TL 23198 88603 Local'
+          'At National Grid Reference TL 23198 88603 (Local)'
         ])
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
         expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')

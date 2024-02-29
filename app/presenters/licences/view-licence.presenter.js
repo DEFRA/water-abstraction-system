@@ -209,7 +209,7 @@ function _generateAbstractionContent (pointDetail) {
     abstractionPoint = `At National Grid Reference ${point1}`
   }
 
-  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` ${pointDetail.LOCAL_NAME}` : ''
+  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
 
   return abstractionPoint
 }
