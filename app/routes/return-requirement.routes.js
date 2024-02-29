@@ -364,7 +364,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Enter a site description for the return requirement'
+      description: 'Enter a site description for the requirements for returns'
     }
   },
   {

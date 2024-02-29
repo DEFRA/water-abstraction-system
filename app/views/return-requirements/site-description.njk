@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -15,14 +16,24 @@
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
   <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+    <form method="post">
+      <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
+      {{ govukInput({
+        label: {
+          text: pageTitle,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        hint: {
+          text: "This is the description that will appear on the return"
+        },
+        id: "site-description",
+        name: "siteDescription",
+        errorMessage: error
+      }) }}
 
-  <form method="post">
-    <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock %}

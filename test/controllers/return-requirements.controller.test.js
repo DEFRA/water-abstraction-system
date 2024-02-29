@@ -12,6 +12,7 @@ const { expect } = Code
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
 const SetupService = require('../../app/services/return-requirements/setup.service.js')
+const SiteDescriptionService = require('../../app/services/return-requirements/site-description.service.js')
 const StartDateService = require('../../app/services/return-requirements/start-date.service.js')
 
 // For running our service
@@ -207,12 +208,17 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/site-description', () => {
+    beforeEach(async () => {
+      Sinon.stub(SiteDescriptionService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Enter a site description for the requirements for returns'
+      })
+    })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('site-description'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Enter a site description for the return requirement')
+        expect(response.payload).to.contain('Enter a site description for the requirements for returns')
       })
     })
   })
