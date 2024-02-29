@@ -56,8 +56,9 @@ describe('Submit Setup service', () => {
         expect(result).to.equal({
           activeNavBar: 'search',
           error: null,
+          licenceRef: '01/ABC',
           pageTitle: 'How do you want to set up the return requirement?',
-          licenceRef: '01/ABC'
+          redirect: 'check-your-answers'
         }, { skip: ['id'] })
       })
     })
@@ -79,8 +80,9 @@ describe('Submit Setup service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
+            licenceRef: '01/ABC',
             pageTitle: 'How do you want to set up the return requirement?',
-            licenceRef: '01/ABC'
+            redirect: undefined
           }, { skip: ['id', 'error'] })
         })
 
@@ -91,6 +93,34 @@ describe('Submit Setup service', () => {
             text: 'Select how you want to set up the return requirement'
           })
         })
+      })
+    })
+  })
+
+  describe('with different setups', () => {
+    describe('and setup is use_abstraction_data', () => {
+      beforeEach(() => {
+        payload = {
+          setup: 'use_abstraction_data'
+        }
+      })
+
+      it('redirects to the check your answers page', async () => {
+        const result = await SubmitSetupService.go(session.id, payload)
+        expect(result.redirect).to.equal('check-your-answers')
+      })
+    })
+
+    describe('and setup is set_up_manually', () => {
+      beforeEach(() => {
+        payload = {
+          setup: 'set_up_manually'
+        }
+      })
+
+      it('redirects to the purpose page', async () => {
+        const result = await SubmitSetupService.go(session.id, payload)
+        expect(result.redirect).to.equal('purpose')
       })
     })
   })
