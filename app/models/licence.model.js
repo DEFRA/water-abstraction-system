@@ -64,12 +64,12 @@ class LicenceModel extends BaseModel {
           to: 'regions.id'
         }
       },
-      reviewResults: {
+      reviewLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-result.model',
+        modelClass: 'review-licences.model',
         join: {
           from: 'licences.id',
-          to: 'reviewResults.licenceId'
+          to: 'reviewLicences.licenceId'
         }
       },
       workflows: {
