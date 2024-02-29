@@ -48,7 +48,7 @@ describe('View Standard Charge Transaction presenter', () => {
       describe('when supported source is set', () => {
         beforeEach(() => {
           transaction.supportedSourceName = 'Candover'
-          transaction.supportedSourceCharge = '14567'
+          transaction.supportedSourceChargeValue = '14567'
         })
 
         it("returns 'Supported source Candover (£14567.00)'", () => {
@@ -61,26 +61,28 @@ describe('View Standard Charge Transaction presenter', () => {
       describe('when is a water company charge is true', () => {
         beforeEach(() => {
           transaction.waterCompanyCharge = true
+          transaction.waterCompanyChargeValue = '2498'
         })
 
-        it("returns 'Public Water Supply'", () => {
+        it("returns 'Public Water Supply (£2498.00)'", () => {
           const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-          expect(result.additionalCharges).to.equal('Public Water Supply')
+          expect(result.additionalCharges).to.equal('Public Water Supply (£2498.00)')
         })
       })
 
       describe('when both supported source and is a water company charge are set', () => {
         beforeEach(() => {
           transaction.supportedSourceName = 'Candover'
-          transaction.supportedSourceCharge = '14567'
+          transaction.supportedSourceChargeValue = '14567'
           transaction.waterCompanyCharge = true
+          transaction.waterCompanyChargeValue = '2498'
         })
 
-        it("returns 'Public Water Supply'", () => {
+        it("returns 'Supported source Candover (£14567.00), Public Water Supply (£2498.00)'", () => {
           const result = ViewStandardChargeTransactionPresenter.go(transaction)
 
-          expect(result.additionalCharges).to.equal('Supported source Candover (£14567.00), Public Water Supply')
+          expect(result.additionalCharges).to.equal('Supported source Candover (£14567.00), Public Water Supply (£2498.00)')
         })
       })
     })
@@ -382,7 +384,8 @@ function _srocTransaction () {
     section130Agreement: 'false',
     supportedSourceName: null,
     baselineCharge: 1162,
-    supportedSourceCharge: 0
+    supportedSourceChargeValue: 0,
+    waterCompanyChargeValue: 0
   }
 
   transaction.chargeReference.chargeElements = [
