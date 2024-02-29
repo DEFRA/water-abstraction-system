@@ -23,15 +23,15 @@ function _determineLicenceStatus (allElementIssues, allReturnIssues) {
   // If a licence has more than one issue, or has 1 issue that is in the `REVIEW_STATUSES` array the licence status is
   // set to 'Review' otherwise its 'Ready'
   if (allLicenceIssues.length > 1 || REVIEW_STATUSES.includes(allLicenceIssues[0])) {
-    return 'Review'
+    return 'review'
   } else {
-    return 'Ready'
+    return 'ready'
   }
 }
 
 function _determineElementIssues (chargeVersions, licenceReturnLogs) {
   const allElementIssues = []
-  let status = 'Ready'
+  let status = 'ready'
 
   chargeVersions.forEach((chargeVersion) => {
     const { chargeReferences } = chargeVersion
@@ -45,15 +45,15 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
         const elementIssues = []
 
         // Issue Aggregate
-        if (chargeReference.aggregate) {
-          elementIssues.push('Aggregate')
-          status = 'Review'
+        if (chargeReference.aggregate !== 1) {
+          elementIssues.push('Aggregate factor')
+          status = 'review'
         }
 
         // Issue Overlap of charge dates
         if (chargeElement.chargeDatesOverlap) {
           elementIssues.push('Overlap of charge dates')
-          status = 'Review'
+          status = 'review'
         }
 
         // Issue Some returns not received
@@ -64,7 +64,7 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
         // Unable to match return
         if (returnLogs.length < 1) {
           elementIssues.push('Unable to match return')
-          status = 'Review'
+          status = 'review'
         }
 
         chargeElement.issues = elementIssues
@@ -80,7 +80,7 @@ function _determineElementIssues (chargeVersions, licenceReturnLogs) {
 function _someReturnsNotReceived (returnLogs, licenceReturnLogs) {
   const returnLogIds = returnLogs.map(returnLog => returnLog.returnId)
 
-  licenceReturnLogs.some((licenceReturnLog) => {
+  return licenceReturnLogs.some((licenceReturnLog) => {
     return returnLogIds.includes(licenceReturnLog.id) && licenceReturnLog.status === 'due'
   })
 }
@@ -152,7 +152,7 @@ function _determineReturnSplitOverChargeReference (licence, returnLog) {
         const { returnLogs } = chargeElement
 
         return returnLogs.some((returnLog) => {
-          return returnLog.id === returnLogId
+          return returnLog.returnId === returnLogId
         })
       })
 
