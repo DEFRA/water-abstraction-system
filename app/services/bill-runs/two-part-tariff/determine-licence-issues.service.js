@@ -76,8 +76,6 @@ function _determineReturnLogsIssues (returnLogs, licence) {
 
 function _determineReturnSplitOverChargeReference (licence, returnLog) {
   let chargeReferenceCounter = 0
-
-  const returnLogId = returnLog.id
   const { chargeVersions } = licence
 
   chargeVersions.forEach((chargeVersion) => {
@@ -93,7 +91,7 @@ function _determineReturnSplitOverChargeReference (licence, returnLog) {
         const { returnLogs: chargeElementReturnLogs } = chargeElement
 
         return chargeElementReturnLogs.some((chargeElementReturnLog) => {
-          return chargeElementReturnLog.returnId === returnLogId
+          return chargeElementReturnLog.returnId === returnLog.id
         })
       })
 
