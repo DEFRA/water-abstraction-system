@@ -57,46 +57,44 @@ describe('Determine Licence Issues Service', () => {
       })
     })
 
-    describe('that has 1 issue', () => {
-      describe('on the returns', () => {
-        describe("and the issues is a 'review' status", () => {
-          // Note: a licence can't have 1 issue on a charge element as the only issue on the element that is not a
-          // 'Review' status is `Some returns not received`. This is when a return has a status of `due`, and if this
-          // issue is present then the return will have an issue of `No returns received`, making the total issues on the
-          // licence 2 and not 1
-          beforeEach(() => {
-            licence = _generateOneIssueLicenceData('review')
-          })
-
-          it("sets the status on the licence to 'review'", () => {
-            DetermineLicenceIssuesService.go(licence)
-
-            expect(licence.status).to.equal('review')
-          })
-
-          it("sets the status on the element to 'ready'", () => {
-            DetermineLicenceIssuesService.go(licence)
-
-            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).to.equal('ready')
-          })
+    describe('that has 1 issue on the returns', () => {
+      describe("and the issues is a 'review' status", () => {
+        // Note: a licence can't have 1 issue on a charge element as the only issue on the element that is not a
+        // 'Review' status is `Some returns not received`. This is when a return has a status of `due`, and if this
+        // issue is present then the return will have an issue of `No returns received`, making the total issues on the
+        // licence 2 and not 1
+        beforeEach(() => {
+          licence = _generateOneIssueLicenceData('review')
         })
 
-        describe("and the issues is a 'ready' status", () => {
-          beforeEach(() => {
-            licence = _generateOneIssueLicenceData('ready')
-          })
+        it("sets the status on the licence to 'review'", () => {
+          DetermineLicenceIssuesService.go(licence)
 
-          it("sets the status on the licence to 'ready'", () => {
-            DetermineLicenceIssuesService.go(licence)
+          expect(licence.status).to.equal('review')
+        })
 
-            expect(licence.status).to.equal('ready')
-          })
+        it("sets the status on the element to 'ready'", () => {
+          DetermineLicenceIssuesService.go(licence)
 
-          it("sets the status on the element to 'ready'", () => {
-            DetermineLicenceIssuesService.go(licence)
+          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).to.equal('ready')
+        })
+      })
 
-            expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).to.equal('ready')
-          })
+      describe("and the issues is a 'ready' status", () => {
+        beforeEach(() => {
+          licence = _generateOneIssueLicenceData('ready')
+        })
+
+        it("sets the status on the licence to 'ready'", () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.status).to.equal('ready')
+        })
+
+        it("sets the status on the element to 'ready'", () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).to.equal('ready')
         })
       })
     })
