@@ -13,7 +13,7 @@ exports.up = function (knex) {
 
       // Data
       table.string('return_id').notNullable()
-      table.string('return_requirement')
+      table.string('return_reference')
       // Specifying `null, null` creates a decimal column that can store numbers of any precision and scale
       table.decimal('quantity', null, null).defaultTo(0)
       table.decimal('allocated', null, null).defaultTo(0)
