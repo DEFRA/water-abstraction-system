@@ -6,9 +6,11 @@ exports.up = function (knex) {
   return knex
     .schema
     .alterTable(tableName, (table) => {
-      table.dropColumns('bill_run_id', 'licence_id')
+      table.dropColumns('bill_run_id', 'licence_id', 'review_charge_element_result_id', 'review_return_result_id')
 
-      table.uuid('review_licence_result_id').after('id')
+      table.uuid('review_licence_result_id')
+      table.uuid('review_charge_element_id')
+      table.uuid('review_return_id')
     })
 }
 
@@ -16,9 +18,11 @@ exports.down = function (knex) {
   return knex
     .schema
     .alterTable(tableName, (table) => {
-      table.dropColumn('review_licence_result_id')
+      table.dropColumns('review_licence_result_id', 'review_charge_element_id', 'review_return_id')
 
-      table.uuid('bill_run_id').after('id')
-      table.uuid('licence_id').after('bill_run_id')
+      table.uuid('bill_run_id')
+      table.uuid('licence_id')
+      table.uuid('review_charge_element_result_id')
+      table.uuid('review_return_result_id')
     })
 }

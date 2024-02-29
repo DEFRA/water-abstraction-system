@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Model for review_return_results
- * @module ReviewReturnResultModel
+ * Model for review_returns
+ * @module ReviewReturnModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class ReviewReturnResultModel extends BaseModel {
+class ReviewReturnModel extends BaseModel {
   static get tableName () {
-    return 'reviewReturnResults'
+    return 'reviewReturns'
   }
 
   // Defining which fields contain json allows us to insert an object without needing to stringify it first
@@ -27,12 +27,12 @@ class ReviewReturnResultModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'review-result.model',
         join: {
-          from: 'reviewReturnResults.id',
-          to: 'reviewResults.reviewReturnResultId'
+          from: 'reviewReturns.id',
+          to: 'reviewResults.reviewReturnId'
         }
       }
     }
   }
 }
 
-module.exports = ReviewReturnResultModel
+module.exports = ReviewReturnModel

@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Model for review_charge_element_results
- * @module ReviewChargeElementResultModel
+ * Model for review_charge_elements
+ * @module ReviewChargeElementModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class ReviewChargeElementResultModel extends BaseModel {
+class ReviewChargeElementModel extends BaseModel {
   static get tableName () {
-    return 'reviewChargeElementResults'
+    return 'reviewChargeElements'
   }
 
   static get relationMappings () {
@@ -20,12 +20,12 @@ class ReviewChargeElementResultModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'review-result.model',
         join: {
-          from: 'reviewChargeElementResults.id',
-          to: 'reviewResults.reviewChargeElementResultId'
+          from: 'reviewChargeElements.id',
+          to: 'reviewResults.reviewChargeElementId'
         }
       }
     }
   }
 }
 
-module.exports = ReviewChargeElementResultModel
+module.exports = ReviewChargeElementModel
