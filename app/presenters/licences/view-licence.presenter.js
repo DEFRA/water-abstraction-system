@@ -180,9 +180,6 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
 
   const abstractionPointsCaption = uniqueAbstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
 
-  console.log(abstractionPoints)
-  console.log(uniqueAbstractionPoints)
-
   return {
     abstractionPoints: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
     abstractionPointsCaption,
