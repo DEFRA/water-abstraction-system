@@ -97,6 +97,7 @@ async function _fetch (regionCode, billingPeriod) {
         'revokedDate'
       ])
     })
+    // .modify('licenceHolder')
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', (builder) => {
       builder
@@ -142,6 +143,10 @@ async function _fetch (regionCode, billingPeriod) {
           'description'
         ])
     })
+
+  // for (const licence of licences) {
+  //   licence.licenceHolder = licence.$licenceHolder()
+  // }
 
   return chargeVersions
 }
