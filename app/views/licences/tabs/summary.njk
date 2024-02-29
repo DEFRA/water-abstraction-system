@@ -83,7 +83,7 @@
                     <span class="govuk-form-group govuk-!-margin-bottom-0">
                         There are {{ abstractionPoints.length }} abstraction points
                     </span>
-                {% elseif abstractionPeriods.uniqueAbstractionPeriods.length > 1 %}
+                {% elseif abstractionPoints.length > 1 %}
                     <ul class="govuk-list govuk-!-margin-bottom-0">
                         {% for abstractionPoint in abstractionPoints %}
                             <li>{{ abstractionPoint }}</li>
