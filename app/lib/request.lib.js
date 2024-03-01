@@ -69,6 +69,20 @@ function defaultOptions () {
 }
 
 /**
+ * Make a DELETE request to the specified URL
+ *
+ * > Note: This function has been called `deleteRequest` here rather than `delete` as `delete` is a reserved word.
+ *
+ * @param {string} url - The full URL that you wish to connect to
+ * @param {Object} additionalOptions - Append to or replace the options passed to Got when making the request
+ *
+ * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ */
+async function deleteRequest (url, additionalOptions = {}) {
+  return _sendRequest('delete', url, additionalOptions)
+}
+
+/**
  * Make a GET request to the specified URL
  *
  * Use when you need to make a GET request. It returns a result tuple
@@ -194,6 +208,7 @@ async function _sendRequest (method, url, additionalOptions) {
 }
 
 module.exports = {
+  delete: deleteRequest,
   get,
   patch,
   post,
