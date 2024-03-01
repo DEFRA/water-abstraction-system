@@ -44,7 +44,7 @@ describe('Prepare Return Logs Service', () => {
 
           expect(licence.returnLogs[0]).to.equal({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
-            returnRequirement: '14959864',
+            returnReference: '14959864',
             description: 'The Description',
             startDate: new Date('2022-04-01'),
             endDate: new Date('2023-03-31'),
@@ -226,7 +226,7 @@ function _testLicence () {
 function _testReturnLog () {
   return {
     id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
-    returnRequirement: '14959864',
+    returnReference: '14959864',
     description: 'The Description',
     startDate: new Date('2022-04-01T00:00:00.000Z'),
     endDate: new Date('2023-03-31T00:00:00.000Z'),
