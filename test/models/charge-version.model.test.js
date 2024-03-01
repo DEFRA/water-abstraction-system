@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
+const BillRunChargeVersionYearHelper = require('../support/helpers/bill-run-charge-version-year.helper.js')
+const BillRunChargeVersionYearModel = require('../../app/models/bill-run-charge-version-year.model.js')
 const ChangeReasonHelper = require('../support/helpers/change-reason.helper.js')
 const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
@@ -68,6 +70,41 @@ describe('Charge Version model', () => {
 
         expect(result.billingAccount).to.be.an.instanceOf(BillingAccountModel)
         expect(result.billingAccount).to.equal(testBillingAccount)
+      })
+    })
+
+    describe('when linking to bill run charge version years', () => {
+      let testBillRunChargeVersionYears
+
+      beforeEach(async () => {
+        const { id: chargeVersionId } = testRecord
+
+        testBillRunChargeVersionYears = []
+        for (let i = 0; i < 2; i++) {
+          const billRunChargeVersionYear = await BillRunChargeVersionYearHelper.add({ chargeVersionId })
+          testBillRunChargeVersionYears.push(billRunChargeVersionYear)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ChargeVersionModel.query()
+          .innerJoinRelated('billRunChargeVersionYears')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the charge references', async () => {
+        const result = await ChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('billRunChargeVersionYears')
+
+        expect(result).to.be.instanceOf(ChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.billRunChargeVersionYears).to.be.an.array()
+        expect(result.billRunChargeVersionYears[0]).to.be.an.instanceOf(BillRunChargeVersionYearModel)
+        expect(result.billRunChargeVersionYears).to.include(testBillRunChargeVersionYears[0])
+        expect(result.billRunChargeVersionYears).to.include(testBillRunChargeVersionYears[1])
       })
     })
 
