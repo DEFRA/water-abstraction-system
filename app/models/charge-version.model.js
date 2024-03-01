@@ -24,6 +24,14 @@ class ChargeVersionModel extends BaseModel {
           to: 'billingAccounts.id'
         }
       },
+      billRunChargeVersionYears: {
+        relation: Model.HasManyRelation,
+        modelClass: 'bill-run-charge-version-year.model',
+        join: {
+          from: 'chargeVersions.id',
+          to: 'billRunChargeVersionYears.chargeVersionId'
+        }
+      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
