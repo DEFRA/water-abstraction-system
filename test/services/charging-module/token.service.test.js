@@ -14,7 +14,7 @@ const RequestLib = require('../../../app/lib/request.lib.js')
 // Thing under test
 const ChargingModuleTokenService = require('../../../app/services/charging-module/token.service.js')
 
-describe('Charging module token service', () => {
+describe('Charging Module Token service', () => {
   afterEach(() => {
     Sinon.restore()
   })

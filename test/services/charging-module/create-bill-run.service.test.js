@@ -18,7 +18,7 @@ const ChargingModuleRequestLib = require('../../../app/lib/charging-module-reque
 // Thing under test
 const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
 
-describe('Charge module create bill run service', () => {
+describe('Charging Module Create Bill Run service', () => {
   let testRegion
 
   beforeEach(async () => {
