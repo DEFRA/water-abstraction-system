@@ -9,10 +9,11 @@ const Boom = require('@hapi/boom')
 
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
-const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
-const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
+const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
+const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
+const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
 async function cancel (request, h) {
   const { id } = request.params
@@ -30,7 +31,7 @@ async function create (request, h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
 
   if (validatedData.error) {
-    return _formattedValidationError(validatedData.error)
+    return Boom.badRequest(validatedData.error.details[0].message)
   }
 
   try {
@@ -39,7 +40,7 @@ async function create (request, h) {
 
     return h.response(result).code(200)
   } catch (error) {
-    return _formattedInitiateBillRunError(error)
+    return Boom.badImplementation(error.message)
   }
 }
 
@@ -67,6 +68,26 @@ async function reviewLicence (request, h) {
   })
 }
 
+async function submitCancel (request, h) {
+  const { id } = request.params
+
+  try {
+    // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
+    // `cancel'. If the bill run run is deemed small enough, we'll also wait for the cancelling to complete before
+    // we redirect. This avoids users always having to refresh the bill runs page to get rid of bill runs that have
+    // finished cancelling 1 second after the request is submitted.
+    //
+    // But for larger bill runs, especially annual, after the bill run status has been updated control will be returned
+    // to here and the cancel process will then happen in the background. Because of this if we didn't wrap the call
+    // in a try/catch and the process errored, we'd get an unhandled exception which will bring the service down!
+    await SubmitCancelBillRunService.go(id)
+
+    return h.redirect('/billing/batch/list')
+  } catch (error) {
+    return Boom.badImplementation(error.message)
+  }
+}
+
 async function view (request, h) {
   const { id } = request.params
 
@@ -78,24 +99,11 @@ async function view (request, h) {
   })
 }
 
-/**
- * Takes an error from a validator and returns a suitable Boom error
-*/
-function _formattedValidationError (error) {
-  return Boom.badRequest(error.details[0].message)
-}
-
-/**
- * Takes an error thrown during operation and returns a suitable Boom error
- */
-function _formattedInitiateBillRunError (error) {
-  return Boom.badImplementation(error.message)
-}
-
 module.exports = {
   cancel,
   create,
   review,
   reviewLicence,
+  submitCancel,
   view
 }

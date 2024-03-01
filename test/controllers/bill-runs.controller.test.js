@@ -10,9 +10,11 @@ const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
+const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
+const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 
 // For running our service
@@ -20,23 +22,6 @@ const { init } = require('../../app/server.js')
 
 describe('Bill Runs controller', () => {
   let server
-
-  function options (scheme = 'sroc') {
-    return {
-      method: 'POST',
-      url: '/bill-runs',
-      payload: {
-        type: 'supplementary',
-        scheme,
-        region: '07ae7f3a-2677-4102-b352-cc006828948c',
-        user: 'test.user@defra.gov.uk'
-      },
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-  }
 
   // Create server before each test
   beforeEach(async () => {
@@ -55,6 +40,25 @@ describe('Bill Runs controller', () => {
   })
 
   describe('POST /bill-runs', () => {
+    let options
+
+    beforeEach(() => {
+      options = {
+        method: 'POST',
+        url: '/bill-runs',
+        payload: {
+          type: 'supplementary',
+          scheme: 'sroc',
+          region: '07ae7f3a-2677-4102-b352-cc006828948c',
+          user: 'test.user@defra.gov.uk'
+        },
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
     describe('when a request is valid', () => {
       const validResponse = {
         id: 'f561990b-b29a-42f4-b71a-398c52339f78',
@@ -69,7 +73,7 @@ describe('Bill Runs controller', () => {
       })
 
       it('returns a 200 response including details of the new bill run', async () => {
-        const response = await server.inject(options())
+        const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
 
         expect(response.statusCode).to.equal(200)
@@ -79,8 +83,12 @@ describe('Bill Runs controller', () => {
 
     describe('when the request fails', () => {
       describe('because the request is invalid', () => {
+        beforeEach(() => {
+          options.payload.scheme = 'INVALID'
+        })
+
         it('returns an error response', async () => {
-          const response = await server.inject(options('INVALID'))
+          const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
           expect(response.statusCode).to.equal(400)
@@ -95,7 +103,7 @@ describe('Bill Runs controller', () => {
         })
 
         it('returns an error response', async () => {
-          const response = await server.inject(options())
+          const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
           expect(response.statusCode).to.equal(500)
@@ -148,6 +156,83 @@ describe('Bill Runs controller', () => {
           // NOTE: If we only have 1 bill group we show a single table with no caption
           expect(response.payload).not.to.contain('1 water company')
           expect(response.payload).not.to.contain('1 other abstractor')
+        })
+      })
+    })
+  })
+
+  describe('GET /bill-runs/{id}/cancel', () => {
+    let options
+
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/cancel',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid', () => {
+      beforeEach(() => {
+        Sinon.stub(CancelBillRunService, 'go').resolves({
+          id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+          billRunType: 'Two-part tariff',
+          pageTitle: "You're about to cancel this bill run"
+        })
+      })
+
+      it('returns a 200 response', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('You&#39;re about to cancel this bill run')
+        expect(response.payload).to.contain('Two-part tariff')
+      })
+    })
+  })
+
+  describe('POST /bill-runs/{id}/cancel', () => {
+    let options
+
+    beforeEach(() => {
+      options = {
+        method: 'POST',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/cancel',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid', () => {
+      beforeEach(async () => {
+        Sinon.stub(SubmitCancelBillRunService, 'go').resolves()
+      })
+
+      it('redirects to the bill runs page', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal('/billing/batch/list')
+      })
+    })
+
+    describe('when the request fails', () => {
+      describe('because the cancelling service threw an error', () => {
+        beforeEach(async () => {
+          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+          Sinon.stub(SubmitCancelBillRunService, 'go').rejects()
+        })
+
+        it('returns the error page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Sorry, there is a problem with the service')
         })
       })
     })
