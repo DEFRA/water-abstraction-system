@@ -116,7 +116,7 @@
 
   {# Confirm and cancel buttons #}
   {% if billRunStatus === 'ready' %}
-    {% set cancelBillRunLink = '/billing/batch/' + billRunId + '/cancel' %}
+    {% set cancelBillRunLink = '/system/bill-runs/' + billRunId + '/cancel' %}
     {% set confirmBillRunLink = '/billing/batch/' + billRunId + '/confirm' %}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-two-thirds">
