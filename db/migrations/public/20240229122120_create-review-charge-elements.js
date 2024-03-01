@@ -18,7 +18,7 @@ exports.up = function (knex) {
       table.decimal('aggregate', null, null).defaultTo(1)
       table.boolean('charge_dates_overlap').defaultTo(false)
       table.string('issues')
-      table.string('status')
+      table.string('status').notNullable()
 
       // Automatic timestamps
       table.timestamps(false, true)

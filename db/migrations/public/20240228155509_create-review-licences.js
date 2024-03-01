@@ -10,11 +10,11 @@ exports.up = function (knex) {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.uuid('bill_run_id')
-      table.uuid('licence_id')
-      table.string('licence_ref')
-      table.string('licence_holder')
-      table.string('status')
+      table.uuid('bill_run_id').notNullable()
+      table.uuid('licence_id').notNullable()
+      table.string('licence_ref').notNullable()
+      table.string('licence_holder').notNullable()
+      table.string('status').notNullable()
 
       // Automatic timestamps
       table.timestamps(false, true)
