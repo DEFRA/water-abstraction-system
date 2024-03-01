@@ -31,7 +31,7 @@ async function create (request, h) {
   const validatedData = CreateBillRunValidator.go(request.payload)
 
   if (validatedData.error) {
-    return _formattedValidationError(validatedData.error)
+    return Boom.badRequest(validatedData.error.details[0].message)
   }
 
   try {
@@ -40,7 +40,7 @@ async function create (request, h) {
 
     return h.response(result).code(200)
   } catch (error) {
-    return _formattedInitiateBillRunError(error)
+    return Boom.badImplementation(error.message)
   }
 }
 
@@ -97,20 +97,6 @@ async function view (request, h) {
     activeNavBar: 'bill-runs',
     ...pageData
   })
-}
-
-/**
- * Takes an error from a validator and returns a suitable Boom error
-*/
-function _formattedValidationError (error) {
-  return Boom.badRequest(error.details[0].message)
-}
-
-/**
- * Takes an error thrown during operation and returns a suitable Boom error
- */
-function _formattedInitiateBillRunError (error) {
-  return Boom.badImplementation(error.message)
 }
 
 module.exports = {
