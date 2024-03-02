@@ -93,7 +93,7 @@ async function view (request, h) {
 
   const pageData = await ViewBillRunService.go(id)
 
-  return h.view('bill-runs/view.njk', {
+  return h.view(pageData.view, {
     activeNavBar: 'bill-runs',
     ...pageData
   })

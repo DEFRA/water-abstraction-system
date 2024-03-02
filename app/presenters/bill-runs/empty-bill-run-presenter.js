@@ -1,12 +1,13 @@
 'use strict'
 
 /**
- * Formats the bill run data ready for presenting in the cancel bill run confirmation page
- * @module CancelBillRunPresenter
+ * Formats the bill run data ready for presenting in the empty bill run page
+ * @module EmptyBillRunPresenter
  */
 
 const {
   capitalize,
+  generateBillRunTitle,
   formatBillRunType,
   formatChargeScheme,
   formatFinancialYear,
@@ -34,7 +35,6 @@ function go (billRun) {
   } = billRun
 
   return {
-    backLink: _backLink(id, status),
     billRunId: id,
     billRunNumber,
     billRunStatus: status,
@@ -42,16 +42,9 @@ function go (billRun) {
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
+    pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     region: capitalize(region.displayName)
   }
-}
-
-function _backLink (id, status) {
-  if (status === 'review') {
-    return `/system/bill-runs/${id}/review`
-  }
-
-  return `/system/bill-runs/${id}`
 }
 
 module.exports = {

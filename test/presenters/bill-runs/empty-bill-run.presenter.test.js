@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CancelBillRunPresenter = require('../../../app/presenters/bill-runs/cancel-bill-run.presenter.js')
+const EmptyBillRunPresenter = require('../../../app/presenters/bill-runs/empty-bill-run-presenter.js')
 
-describe('Cancel Bill Run presenter', () => {
+describe('Empty Bill Run presenter', () => {
   let billRun
 
   describe('when provided with a populated bill run', () => {
@@ -19,40 +19,18 @@ describe('Cancel Bill Run presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CancelBillRunPresenter.go(billRun)
+      const result = EmptyBillRunPresenter.go(billRun)
 
       expect(result).to.equal({
-        backLink: '/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017',
         billRunId: '420e948f-1992-437e-8a47-74c0066cb017',
         billRunNumber: 10010,
-        billRunStatus: 'ready',
+        billRunStatus: 'empty',
         billRunType: 'Supplementary',
         chargeScheme: 'Current',
         dateCreated: '1 November 2023',
         financialYear: '2023 to 2024',
+        pageTitle: 'Wales supplementary',
         region: 'Wales'
-      })
-    })
-
-    describe("the 'backLink' property", () => {
-      describe('when the bill run status is review', () => {
-        beforeEach(() => {
-          billRun.status = 'review'
-        })
-
-        it('returns a link to the review page', () => {
-          const result = CancelBillRunPresenter.go(billRun)
-
-          expect(result.backLink).to.equal('/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017/review')
-        })
-      })
-
-      describe('when the bill run status is not review', () => {
-        it('returns a link to the bill run page', () => {
-          const result = CancelBillRunPresenter.go(billRun)
-
-          expect(result.backLink).to.equal('/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017')
-        })
       })
     })
   })
@@ -65,7 +43,7 @@ function _testBillRun () {
     billRunNumber: 10010,
     summer: false,
     scheme: 'sroc',
-    status: 'ready',
+    status: 'empty',
     toFinancialYearEnding: 2024,
     createdAt: new Date('2023-11-01'),
     region: {
