@@ -7,6 +7,7 @@
 
 const {
   capitalize,
+  generateBillRunTitle,
   formatBillRunType,
   formatChargeScheme,
   formatFinancialYear,
@@ -41,6 +42,7 @@ function go (billRun) {
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
+    pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     region: capitalize(region.displayName)
   }
 }

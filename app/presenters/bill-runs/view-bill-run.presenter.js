@@ -7,6 +7,7 @@
 
 const {
   capitalize,
+  generateBillRunTitle,
   formatBillRunType,
   formatChargeScheme,
   formatFinancialYear,
@@ -34,7 +35,6 @@ function go (billRun, billSummaries) {
   } = billRun
 
   const billRunType = formatBillRunType(batchType, scheme, summer)
-  const regionName = capitalize(region.displayName)
 
   return {
     billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billSummaries),
@@ -51,8 +51,8 @@ function go (billRun, billSummaries) {
     debitsTotal: formatMoney(invoiceValue),
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
     financialYear: formatFinancialYear(toFinancialYearEnding),
-    pageTitle: _pageTitle(regionName, billRunType),
-    region: regionName,
+    pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
+    region: capitalize(region.displayName),
     transactionFile: transactionFileReference
   }
 }
@@ -115,12 +115,6 @@ function _displayCreditDebitTotals (billRun) {
   const { batchType } = billRun
 
   return batchType === 'supplementary'
-}
-
-function _pageTitle (regionName, billRunType) {
-  const lowercaseBillRunType = billRunType.toLowerCase()
-
-  return `${regionName} ${lowercaseBillRunType}`
 }
 
 module.exports = {

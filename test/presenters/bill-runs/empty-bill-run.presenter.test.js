@@ -29,6 +29,7 @@ describe('Empty Bill Run presenter', () => {
         chargeScheme: 'Current',
         dateCreated: '1 November 2023',
         financialYear: '2023 to 2024',
+        pageTitle: 'Wales supplementary',
         region: 'Wales'
       })
     })

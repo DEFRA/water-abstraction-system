@@ -201,14 +201,6 @@ describe('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'pageTitle' property", () => {
-      it('returns the region name and bill run type (Wales supplementary)', () => {
-        const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-        expect(result.pageTitle).to.equal('Wales supplementary')
-      })
-    })
-
     describe("the 'region' property", () => {
       it("returns the bill run's region display name capitalized (Wales)", () => {
         const result = ViewBillRunPresenter.go(billRun, billSummaries)
