@@ -19,7 +19,7 @@ const {
  *
  * @param {module:BillRunModel} billRun - an instance of `BillRunModel`
  *
- * @returns {Object} - the prepared bill run data to be passed to the cancel bill run confirmation page
+ * @returns {Object} - the prepared bill run data to be passed to the empty bill run page
  */
 function go (billRun) {
   const {
