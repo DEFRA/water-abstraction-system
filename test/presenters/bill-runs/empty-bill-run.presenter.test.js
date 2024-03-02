@@ -33,14 +33,6 @@ describe('Empty Bill Run presenter', () => {
         region: 'Wales'
       })
     })
-
-    describe("the 'region' property", () => {
-      it("returns the bill run's region display name capitalized (Wales)", () => {
-        const result = EmptyBillRunPresenter.go(billRun)
-
-        expect(result.region).to.equal('Wales')
-      })
-    })
   })
 })
 

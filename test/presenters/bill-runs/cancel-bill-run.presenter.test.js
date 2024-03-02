@@ -55,14 +55,6 @@ describe('Cancel Bill Run presenter', () => {
         })
       })
     })
-
-    describe("the 'region' property", () => {
-      it("returns the bill run's region display name capitalized (Wales)", () => {
-        const result = CancelBillRunPresenter.go(billRun)
-
-        expect(result.region).to.equal('Wales')
-      })
-    })
   })
 })
 

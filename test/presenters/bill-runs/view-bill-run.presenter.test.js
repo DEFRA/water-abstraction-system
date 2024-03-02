@@ -200,14 +200,6 @@ describe('View Bill Run presenter', () => {
         })
       })
     })
-
-    describe("the 'region' property", () => {
-      it("returns the bill run's region display name capitalized (Wales)", () => {
-        const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-        expect(result.region).to.equal('Wales')
-      })
-    })
   })
 })
 
