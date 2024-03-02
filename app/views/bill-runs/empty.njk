@@ -4,7 +4,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% from "macros/badge.njk" import badge %}
+{% from "macros/badge.njk" import statusBadge %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -39,13 +39,8 @@
     <div class="govuk-grid-column-full">
 
       {# Status badge #}
-      {% if billRunStatus === 'ready' %}
-        {% set badgeType = 'info' %}
-      {% elif billRunStatus === 'sent' %}
-        {% set badgeType = 'success' %}
-      {% endif %}
       <p class="govuk-body">
-        {{ badge(billRunStatus, badgeType) }}
+        {{ statusBadge(billRunStatus) }}
       </p>
 
       {# Bill run meta-data #}
