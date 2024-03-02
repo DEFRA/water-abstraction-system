@@ -91,6 +91,19 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#generateBillRunTitle()', () => {
+    const regionName = 'anglian'
+    const batchType = 'two_part_tariff'
+    const scheme = 'sroc'
+    const summer = false
+
+    it("generates the page title for the bill run, for example, 'Anglian two-part tariff'", () => {
+      const result = BasePresenter.generateBillRunTitle(regionName, batchType, scheme, summer)
+
+      expect(result).to.equal('Anglian two-part tariff')
+    })
+  })
+
   describe('#formatAbstractionDate()', () => {
     const day = 12
     const month = 9
