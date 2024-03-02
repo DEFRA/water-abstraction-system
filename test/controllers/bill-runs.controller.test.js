@@ -377,7 +377,8 @@ function _multiGroupBillRun () {
           total: '£97.00'
         }]
       }
-    ]
+    ],
+    view: 'bill-runs/view.njk'
   }
 }
 
@@ -437,6 +438,7 @@ function _singleGroupBillRun () {
           total: '£97.00'
         }]
       }
-    ]
+    ],
+    view: 'bill-runs/view.njk'
   }
 }
