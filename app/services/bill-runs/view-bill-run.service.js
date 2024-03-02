@@ -6,6 +6,7 @@
  */
 
 const EmptyBillRunPresenter = require('../../presenters/bill-runs/empty-bill-run-presenter.js')
+const ErroredBillRunPresenter = require('../../presenters/bill-runs/errored-bill-run-presenter.js')
 const ViewBillRunPresenter = require('../../presenters/bill-runs/view-bill-run.presenter.js')
 const ViewBillSummariesPresenter = require('../../presenters/bill-runs/view-bill-summaries.presenter.js')
 const FetchBillRunService = require('./fetch-bill-run.service.js')
@@ -33,6 +34,13 @@ function _pageData (fetchResult) {
     return {
       view: 'bill-runs/empty.njk',
       ...EmptyBillRunPresenter.go(billRun)
+    }
+  }
+
+  if (billRun.status === 'error') {
+    return {
+      view: 'bill-runs/errored.njk',
+      ...ErroredBillRunPresenter.go(billRun)
     }
   }
 
