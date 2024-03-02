@@ -5,7 +5,13 @@
  * @module CancelBillRunPresenter
  */
 
-const { capitalize, formatLongDate } = require('../base.presenter.js')
+const {
+  capitalize,
+  formatBillRunType,
+  formatChargeScheme,
+  formatFinancialYear,
+  formatLongDate
+} = require('../base.presenter.js')
 
 /**
  * Prepares and processes bill run data for presentation
@@ -32,10 +38,10 @@ function go (billRun) {
     billRunId: id,
     billRunNumber,
     billRunStatus: status,
-    billRunType: _billRunType(batchType, summer, scheme),
-    chargeScheme: _chargeScheme(scheme),
+    billRunType: formatBillRunType(batchType, scheme, summer),
+    chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
-    financialYear: _financialYear(toFinancialYearEnding),
+    financialYear: formatFinancialYear(toFinancialYearEnding),
     region: capitalize(region.displayName)
   }
 }
@@ -46,34 +52,6 @@ function _backLink (id, status) {
   }
 
   return `/system/bill-runs/${id}`
-}
-
-function _billRunType (batchType, summer, scheme) {
-  if (batchType !== 'two_part_tariff') {
-    return capitalize(batchType)
-  }
-
-  if (scheme === 'sroc') {
-    return 'Two-part tariff'
-  }
-
-  if (summer) {
-    return 'Two-part tariff summer'
-  }
-
-  return 'Two-part tariff winter and all year'
-}
-
-function _chargeScheme (scheme) {
-  if (scheme === 'sroc') {
-    return 'Current'
-  }
-
-  return 'Old'
-}
-
-function _financialYear (financialYearEnding) {
-  return `${financialYearEnding - 1} to ${financialYearEnding}`
 }
 
 module.exports = {
