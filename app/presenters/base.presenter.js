@@ -69,6 +69,31 @@ function formatAbstractionPeriod (startDay, startMonth, endDay, endMonth) {
 }
 
 /**
+ * Formats how the bill run type for display in views
+ *
+ * @param {string} batchType - The type of bill run; annual, supplementary or two_part_tariff
+ * @param {string} scheme - Whether the bill run is PRESROC (alcs) or SROC (sroc)
+ * @param {boolean} summer - Applies to PRESROC two-part tariff bill runs. Whether the bill run is for summer only
+ *
+ * @returns {string} The bill run type formatted for display
+ */
+function formatBillRunType (batchType, scheme, summer) {
+  if (batchType !== 'two_part_tariff') {
+    return capitalize(batchType)
+  }
+
+  if (scheme === 'sroc') {
+    return 'Two-part tariff'
+  }
+
+  if (summer) {
+    return 'Two-part tariff summer'
+  }
+
+  return 'Two-part tariff winter and all year'
+}
+
+/**
  * Converts a date into the format required by the Charging Module, eg 25/03/2021 becomes 25-MAR-2021
  *
  * @param {Date} date The date to be formatted
@@ -88,6 +113,34 @@ function formatChargingModuleDate (date) {
   const year = date.getFullYear()
 
   return `${day}-${month}-${year}`
+}
+
+/**
+ * Formats a bill run's scheme (alcs or sroc) for display in a view (Old or Current)
+ *
+ * @param {string} scheme - The bill run scheme to format
+ *
+ * @returns {string} The scheme formatted for display
+ */
+function formatChargeScheme (scheme) {
+  if (scheme === 'sroc') {
+    return 'Current'
+  }
+
+  return 'Old'
+}
+
+/**
+ * Formats the financial year ending of a bill run for display in a view
+ *
+ * If a bill runs financial year ending is 2024 this function will return '2023 to 2024'.
+ *
+ * @param {number} financialYearEnding - The financial year ending of the bill run
+ *
+ * @returns {string} The financial year ending formatted for display
+ */
+function formatFinancialYear (financialYearEnding) {
+  return `${financialYearEnding - 1} to ${financialYearEnding}`
 }
 
 /**
@@ -178,7 +231,10 @@ module.exports = {
   convertPenceToPounds,
   formatAbstractionDate,
   formatAbstractionPeriod,
+  formatBillRunType,
   formatChargingModuleDate,
+  formatChargeScheme,
+  formatFinancialYear,
   formatLongDate,
   formatLongDateTime,
   formatMoney,
