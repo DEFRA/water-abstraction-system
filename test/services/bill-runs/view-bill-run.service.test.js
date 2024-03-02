@@ -31,7 +31,7 @@ describe('View Bill Run service', () => {
         Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
       })
 
-      it('will fetch the data and format it for use in the view bill run page', async () => {
+      it('will fetch the data and format it for use in the empty bill run page', async () => {
         const result = await ViewBillRunService.go(testId)
 
         expect(result).to.equal({
@@ -45,6 +45,33 @@ describe('View Bill Run service', () => {
           pageTitle: 'South West annual',
           region: 'South West',
           view: 'bill-runs/empty.njk'
+        })
+      })
+    })
+
+    describe("and it has a status of 'errored'", () => {
+      beforeEach(() => {
+        fetchBillRunResult = _singleGroupBillRun()
+        fetchBillRunResult.billRun.status = 'error'
+
+        Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+      })
+
+      it('will fetch the data and format it for use in the errored bill run page', async () => {
+        const result = await ViewBillRunService.go(testId)
+
+        expect(result).to.equal({
+          billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+          billRunNumber: 10003,
+          billRunStatus: 'error',
+          billRunType: 'Annual',
+          chargeScheme: 'Current',
+          dateCreated: '7 March 2023',
+          errorMessage: 'No error code was assigned. We have no further information at this time.',
+          financialYear: '2022 to 2023',
+          pageTitle: 'South West annual',
+          region: 'South West',
+          view: 'bill-runs/errored.njk'
         })
       })
     })
@@ -189,6 +216,7 @@ function _multipleGroupBillRun () {
       billRunNumber: 10003,
       creditNoteCount: 0,
       creditNoteValue: 0,
+      errorCode: null,
       invoiceCount: 2,
       invoiceValue: 21327500,
       summer: false,
@@ -219,6 +247,7 @@ function _singleGroupBillRun () {
       billRunNumber: 10003,
       creditNoteCount: 0,
       creditNoteValue: 0,
+      errorCode: null,
       invoiceCount: 1,
       invoiceValue: 9700,
       summer: false,
