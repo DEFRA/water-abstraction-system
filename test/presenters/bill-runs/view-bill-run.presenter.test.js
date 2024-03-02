@@ -135,90 +135,6 @@ describe('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'billRunType' property", () => {
-      describe('when the bill run is annual', () => {
-        beforeEach(() => {
-          billRun.batchType = 'annual'
-        })
-
-        it('returns Annual', () => {
-          const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-          expect(result.billRunType).to.equal('Annual')
-        })
-      })
-
-      describe('when the bill run is supplementary', () => {
-        it('returns Supplementary', () => {
-          const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-          expect(result.billRunType).to.equal('Supplementary')
-        })
-      })
-
-      describe('when the bill run is two_part_tariff', () => {
-        beforeEach(() => {
-          billRun.batchType = 'two_part_tariff'
-        })
-
-        describe('and the scheme is sroc', () => {
-          it('returns Supplementary', () => {
-            const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-            expect(result.billRunType).to.equal('Two-part tariff')
-          })
-        })
-
-        describe('and the scheme is alcs', () => {
-          beforeEach(() => {
-            billRun.scheme = 'alcs'
-          })
-
-          describe('and it is not summer only', () => {
-            it('returns Supplementary', () => {
-              const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-              expect(result.billRunType).to.equal('Two-part tariff winter and all year')
-            })
-          })
-
-          describe('and it is for summer only', () => {
-            beforeEach(() => {
-              billRun.summer = true
-            })
-
-            it('returns Supplementary', () => {
-              const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-              expect(result.billRunType).to.equal('Two-part tariff summer')
-            })
-          })
-        })
-      })
-    })
-
-    describe("the 'chargeScheme' property", () => {
-      describe('when the bill run is sroc', () => {
-        it('returns Current', () => {
-          const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-          expect(result.chargeScheme).to.equal('Current')
-        })
-      })
-
-      describe('when the bill run is alcs', () => {
-        beforeEach(() => {
-          billRun.scheme = 'alcs'
-        })
-
-        it('returns Old', () => {
-          const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-          expect(result.chargeScheme).to.equal('Old')
-        })
-      })
-    })
-
     describe("the 'creditsCount' property", () => {
       describe('when there is only 1 credit note', () => {
         beforeEach(() => {
@@ -282,14 +198,6 @@ describe('View Bill Run presenter', () => {
 
           expect(result.displayCreditDebitTotals).to.be.true()
         })
-      })
-    })
-
-    describe("the 'financialYear' property", () => {
-      it('returns the to and from financial year (2023 to 2024)', () => {
-        const result = ViewBillRunPresenter.go(billRun, billSummaries)
-
-        expect(result.financialYear).to.equal('2023 to 2024')
       })
     })
 
