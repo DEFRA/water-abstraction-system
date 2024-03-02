@@ -23,9 +23,11 @@ describe('View Bill Run service', () => {
   })
 
   describe('when a bill with a matching ID exists', () => {
-    describe('and it is linked to bills from both groups (water companies and other abstractors)', () => {
+    describe("and it has a status of 'empty'", () => {
       beforeEach(() => {
-        fetchBillRunResult = _multipleGroupBillRun()
+        fetchBillRunResult = _singleGroupBillRun()
+        fetchBillRunResult.billRun.status = 'empty'
+
         Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
       })
 
@@ -33,99 +35,127 @@ describe('View Bill Run service', () => {
         const result = await ViewBillRunService.go(testId)
 
         expect(result).to.equal({
-          billsCount: '2 Annual bills',
           billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           billRunNumber: 10003,
-          billRunStatus: 'sent',
-          billRunTotal: '£213,275.00',
+          billRunStatus: 'empty',
           billRunType: 'Annual',
           chargeScheme: 'Current',
-          creditsCount: '0 credit notes',
-          creditsTotal: '£0.00',
           dateCreated: '7 March 2023',
-          debitsCount: '2 invoices',
-          debitsTotal: '£213,275.00',
-          displayCreditDebitTotals: false,
           financialYear: '2022 to 2023',
           pageTitle: 'South West annual',
           region: 'South West',
-          transactionFile: 'nalei90002t',
-          billGroupsCount: 2,
-          billGroups: [
-            {
-              type: 'water-companies',
-              caption: '1 water company',
-              bills: [{
-                id: '64924759-8142-4a08-9d1e-1e902cd9d316',
-                accountNumber: 'E22288888A',
-                billingContact: 'Acme Water Services Ltd',
-                licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
-                licencesCount: 3,
-                financialYear: 2023,
-                total: '£213,178.00'
-              }]
-            },
-            {
-              type: 'other-abstractors',
-              caption: '1 other abstractor',
-              bills: [{
-                id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-                accountNumber: 'E11101999A',
-                billingContact: 'Geordie Leforge',
-                licences: ['17/53/001/G/782'],
-                licencesCount: 1,
-                financialYear: 2023,
-                total: '£97.00'
-              }]
-            }
-          ]
+          view: 'bill-runs/empty.njk'
         })
       })
     })
 
-    describe('and it is linked to bills from a single group (water companies or other abstractors)', () => {
-      beforeEach(() => {
-        fetchBillRunResult = _singleGroupBillRun()
-        Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+    describe("and it has a status of 'sent'", () => {
+      describe('and it is linked to bills from both groups (water companies and other abstractors)', () => {
+        beforeEach(() => {
+          fetchBillRunResult = _multipleGroupBillRun()
+          Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+        })
+
+        it('will fetch the data and format it for use in the view bill run page', async () => {
+          const result = await ViewBillRunService.go(testId)
+
+          expect(result).to.equal({
+            billsCount: '2 Annual bills',
+            billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+            billRunNumber: 10003,
+            billRunStatus: 'sent',
+            billRunTotal: '£213,275.00',
+            billRunType: 'Annual',
+            chargeScheme: 'Current',
+            creditsCount: '0 credit notes',
+            creditsTotal: '£0.00',
+            dateCreated: '7 March 2023',
+            debitsCount: '2 invoices',
+            debitsTotal: '£213,275.00',
+            displayCreditDebitTotals: false,
+            financialYear: '2022 to 2023',
+            pageTitle: 'South West annual',
+            region: 'South West',
+            transactionFile: 'nalei90002t',
+            billGroupsCount: 2,
+            billGroups: [
+              {
+                type: 'water-companies',
+                caption: '1 water company',
+                bills: [{
+                  id: '64924759-8142-4a08-9d1e-1e902cd9d316',
+                  accountNumber: 'E22288888A',
+                  billingContact: 'Acme Water Services Ltd',
+                  licences: ['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'],
+                  licencesCount: 3,
+                  financialYear: 2023,
+                  total: '£213,178.00'
+                }]
+              },
+              {
+                type: 'other-abstractors',
+                caption: '1 other abstractor',
+                bills: [{
+                  id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+                  accountNumber: 'E11101999A',
+                  billingContact: 'Geordie Leforge',
+                  licences: ['17/53/001/G/782'],
+                  licencesCount: 1,
+                  financialYear: 2023,
+                  total: '£97.00'
+                }]
+              }
+            ],
+            view: 'bill-runs/view.njk'
+          })
+        })
       })
 
-      it('will fetch the data and format it for use in the view bill run page', async () => {
-        const result = await ViewBillRunService.go(testId)
+      describe('and it is linked to bills from a single group (water companies or other abstractors)', () => {
+        beforeEach(() => {
+          fetchBillRunResult = _singleGroupBillRun()
+          Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+        })
 
-        expect(result).to.equal({
-          billsCount: '1 Annual bill',
-          billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
-          billRunNumber: 10003,
-          billRunStatus: 'sent',
-          billRunTotal: '£97.00',
-          billRunType: 'Annual',
-          chargeScheme: 'Current',
-          creditsCount: '0 credit notes',
-          creditsTotal: '£0.00',
-          dateCreated: '7 March 2023',
-          debitsCount: '1 invoice',
-          debitsTotal: '£97.00',
-          displayCreditDebitTotals: false,
-          financialYear: '2022 to 2023',
-          pageTitle: 'South West annual',
-          region: 'South West',
-          transactionFile: 'nalei90002t',
-          billGroupsCount: 1,
-          billGroups: [
-            {
-              type: 'other-abstractors',
-              caption: '1 other abstractor',
-              bills: [{
-                id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
-                accountNumber: 'E11101999A',
-                billingContact: 'Geordie Leforge',
-                licences: ['17/53/001/G/782'],
-                licencesCount: 1,
-                financialYear: 2023,
-                total: '£97.00'
-              }]
-            }
-          ]
+        it('will fetch the data and format it for use in the view bill run page', async () => {
+          const result = await ViewBillRunService.go(testId)
+
+          expect(result).to.equal({
+            billsCount: '1 Annual bill',
+            billRunId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
+            billRunNumber: 10003,
+            billRunStatus: 'sent',
+            billRunTotal: '£97.00',
+            billRunType: 'Annual',
+            chargeScheme: 'Current',
+            creditsCount: '0 credit notes',
+            creditsTotal: '£0.00',
+            dateCreated: '7 March 2023',
+            debitsCount: '1 invoice',
+            debitsTotal: '£97.00',
+            displayCreditDebitTotals: false,
+            financialYear: '2022 to 2023',
+            pageTitle: 'South West annual',
+            region: 'South West',
+            transactionFile: 'nalei90002t',
+            billGroupsCount: 1,
+            billGroups: [
+              {
+                type: 'other-abstractors',
+                caption: '1 other abstractor',
+                bills: [{
+                  id: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+                  accountNumber: 'E11101999A',
+                  billingContact: 'Geordie Leforge',
+                  licences: ['17/53/001/G/782'],
+                  licencesCount: 1,
+                  financialYear: 2023,
+                  total: '£97.00'
+                }]
+              }
+            ],
+            view: 'bill-runs/view.njk'
+          })
         })
       })
     })
