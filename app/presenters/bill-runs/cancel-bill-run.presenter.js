@@ -34,7 +34,7 @@ function go (billRun) {
   } = billRun
 
   return {
-    backLink: _backLink(id, status),
+    backLink: _backLink(id, scheme, status),
     billRunId: id,
     billRunNumber,
     billRunStatus: status,
@@ -46,8 +46,12 @@ function go (billRun) {
   }
 }
 
-function _backLink (id, status) {
+function _backLink (id, scheme, status) {
   if (status === 'review') {
+    if (scheme === 'alcs') {
+      return `/billing/batch/${id}/two-part-tariff-review`
+    }
+
     return `/system/bill-runs/${id}/review`
   }
 
