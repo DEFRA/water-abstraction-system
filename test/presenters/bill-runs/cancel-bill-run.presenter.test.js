@@ -40,10 +40,24 @@ describe('Cancel Bill Run presenter', () => {
           billRun.status = 'review'
         })
 
-        it('returns a link to the review page', () => {
-          const result = CancelBillRunPresenter.go(billRun)
+        describe('and the scheme is SROC', () => {
+          it('returns a link to the SROC review page', () => {
+            const result = CancelBillRunPresenter.go(billRun)
 
-          expect(result.backLink).to.equal('/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017/review')
+            expect(result.backLink).to.equal('/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017/review')
+          })
+        })
+
+        describe('and the scheme is PRESROC', () => {
+          beforeEach(() => {
+            billRun.scheme = 'alcs'
+          })
+
+          it('returns a link to the PRESROC review page', () => {
+            const result = CancelBillRunPresenter.go(billRun)
+
+            expect(result.backLink).to.equal('/billing/batch/420e948f-1992-437e-8a47-74c0066cb017/two-part-tariff-review')
+          })
         })
       })
 
