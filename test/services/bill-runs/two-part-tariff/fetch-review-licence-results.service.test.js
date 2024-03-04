@@ -13,7 +13,7 @@ const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewResultHelper = require('../../../support/helpers/review-result.helper.js')
-const ReviewReturnResultHelper = require('../../../support/helpers/review-return-result.helper.js')
+const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
 
 // Thing under test
 const FetchReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
@@ -35,12 +35,12 @@ describe('Fetch Review Licence Results Service', () => {
 
     describe('and a valid licence that is included in the bill run', () => {
       let reviewResult
-      let reviewReturnResult
+      let reviewReturn
 
       beforeEach(async () => {
         licence = await LicenceHelper.add()
-        reviewReturnResult = await ReviewReturnResultHelper.add()
-        reviewResult = await ReviewResultHelper.add({ reviewReturnResultId: reviewReturnResult.id, licenceId: licence.id, billRunId: billRun.id })
+        reviewReturn = await ReviewReturnHelper.add()
+        reviewResult = await ReviewResultHelper.add({ reviewReturnId: reviewReturn.id, licenceId: licence.id, billRunId: billRun.id })
       })
 
       it('returns details of the bill run', async () => {
@@ -65,28 +65,28 @@ describe('Fetch Review Licence Results Service', () => {
       it('returns details of the licence review results', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
-        expect(result.reviewReturnResults).to.equal([{
-          reviewReturnResultId: reviewResult.reviewReturnResultId,
-          reviewChargeElementResultId: reviewResult.reviewChargeElementResultId,
+        expect(result.reviewReturns).to.equal([{
+          reviewReturnId: reviewResult.reviewReturnId,
+          reviewChargeElementId: reviewResult.reviewChargeElementId,
           chargeVersionId: reviewResult.chargeVersionId,
           chargePeriodStartDate: reviewResult.chargePeriodStartDate,
           chargePeriodEndDate: reviewResult.chargePeriodEndDate,
-          reviewReturnResults: {
-            abstractionOutsidePeriod: reviewReturnResult.abstractionOutsidePeriod,
-            allocated: reviewReturnResult.allocated,
-            description: reviewReturnResult.description,
-            dueDate: reviewReturnResult.dueDate,
-            endDate: reviewReturnResult.endDate,
-            id: reviewReturnResult.id,
-            nilReturn: reviewReturnResult.nilReturn,
-            purposes: reviewReturnResult.purposes,
-            quantity: reviewReturnResult.quantity,
-            receivedDate: reviewReturnResult.receivedDate,
-            returnId: reviewReturnResult.returnId,
-            returnReference: reviewReturnResult.returnReference,
-            startDate: reviewReturnResult.startDate,
-            status: reviewReturnResult.status,
-            underQuery: reviewReturnResult.underQuery
+          reviewReturns: {
+            abstractionOutsidePeriod: reviewReturn.abstractionOutsidePeriod,
+            allocated: reviewReturn.allocated,
+            description: reviewReturn.description,
+            dueDate: reviewReturn.dueDate,
+            endDate: reviewReturn.endDate,
+            id: reviewReturn.id,
+            nilReturn: reviewReturn.nilReturn,
+            purposes: reviewReturn.purposes,
+            quantity: reviewReturn.quantity,
+            receivedDate: reviewReturn.receivedDate,
+            returnId: reviewReturn.returnId,
+            returnReference: reviewReturn.returnReference,
+            startDate: reviewReturn.startDate,
+            status: reviewReturn.status,
+            underQuery: reviewReturn.underQuery
           }
         }])
       })
@@ -101,7 +101,7 @@ describe('Fetch Review Licence Results Service', () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
         expect(result.billRun.id).to.equal(billRun.id)
-        expect(result.reviewReturnResults).to.equal([])
+        expect(result.reviewReturns).to.equal([])
       })
     })
   })
@@ -115,7 +115,7 @@ describe('Fetch Review Licence Results Service', () => {
       const result = await FetchReviewLicenceResultsService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d', licence.id)
 
       expect(result.billRun).to.be.undefined()
-      expect(result.reviewReturnResults).to.have.length(0)
+      expect(result.reviewReturns).to.have.length(0)
     })
   })
 })

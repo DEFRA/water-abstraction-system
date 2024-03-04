@@ -9,14 +9,14 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../support/helpers/database.helper.js')
+const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewResultHelper = require('../support/helpers/review-result.helper.js')
 const ReviewResultModel = require('../../app/models/review-result.model.js')
-const ReviewReturnResultHelper = require('../support/helpers/review-return-result.helper.js')
 
 // Thing under test
-const ReviewReturnResultModel = require('../../app/models/review-return-result.model.js')
+const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 
-describe('Review Return Result model', () => {
+describe('Review Charge Element model', () => {
   let testRecord
 
   beforeEach(async () => {
@@ -25,13 +25,13 @@ describe('Review Return Result model', () => {
 
   describe('Basic query', () => {
     beforeEach(async () => {
-      testRecord = await ReviewReturnResultHelper.add()
+      testRecord = await ReviewChargeElementHelper.add()
     })
 
     it('can successfully run a basic query', async () => {
-      const result = await ReviewReturnResultModel.query().findById(testRecord.id)
+      const result = await ReviewChargeElementModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReviewReturnResultModel)
+      expect(result).to.be.an.instanceOf(ReviewChargeElementModel)
       expect(result.id).to.equal(testRecord.id)
     })
   })
@@ -41,29 +41,29 @@ describe('Review Return Result model', () => {
       let testReviewResults
 
       beforeEach(async () => {
-        testRecord = await ReviewReturnResultHelper.add()
-        const { id: reviewReturnResultId } = testRecord
+        testRecord = await ReviewChargeElementHelper.add()
+        const { id: reviewChargeElementId } = testRecord
 
         testReviewResults = []
         for (let i = 0; i < 2; i++) {
-          const testReviewResult = await ReviewResultHelper.add({ reviewReturnResultId })
+          const testReviewResult = await ReviewResultHelper.add({ reviewChargeElementId })
           testReviewResults.push(testReviewResult)
         }
       })
 
       it('can successfully run a related query', async () => {
-        const query = await ReviewReturnResultModel.query()
+        const query = await ReviewChargeElementModel.query()
           .innerJoinRelated('reviewResults')
 
         expect(query).to.exist()
       })
 
       it('can eager load the review results', async () => {
-        const result = await ReviewReturnResultModel.query()
+        const result = await ReviewChargeElementModel.query()
           .findById(testRecord.id)
           .withGraphFetched('reviewResults')
 
-        expect(result).to.be.instanceOf(ReviewReturnResultModel)
+        expect(result).to.be.instanceOf(ReviewChargeElementModel)
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.reviewResults).to.be.an.array()

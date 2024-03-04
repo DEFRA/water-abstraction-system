@@ -10,7 +10,7 @@ const ReviewResultModel = require('../../../models/review-result.model.js')
 const LicenceModel = require('../../../models/licence.model.js')
 
 /**
- * Fetches the review return results data for an individual licence in the bill run and the bill run data
+ * Fetches the review returns data for an individual licence in the bill run and the bill run data
  *
  * @param {String} billRunId UUID of the bill run
  * @param {String} licenceId UUID of the licence
@@ -19,10 +19,10 @@ const LicenceModel = require('../../../models/licence.model.js')
  */
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
-  const reviewReturnResults = await _fetchReviewReturnResults(billRunId, licenceId)
+  const reviewReturns = await _fetchReviewReturns(billRunId, licenceId)
   const { licenceRef } = await _licenceRef(licenceId)
 
-  return { reviewReturnResults, billRun, licenceRef }
+  return { reviewReturns, billRun, licenceRef }
 }
 
 async function _fetchBillRun (billRunId) {
@@ -47,18 +47,18 @@ async function _licenceRef (licenceId) {
     .select('licenceRef')
 }
 
-async function _fetchReviewReturnResults (billRunId, licenceId) {
+async function _fetchReviewReturns (billRunId, licenceId) {
   return ReviewResultModel.query()
     .where({ billRunId, licenceId })
-    .whereNotNull('reviewReturnResultId')
+    .whereNotNull('reviewReturnId')
     .select([
-      'reviewReturnResultId',
-      'reviewChargeElementResultId',
+      'reviewReturnId',
+      'reviewChargeElementId',
       'chargeVersionId',
       'chargePeriodStartDate',
       'chargePeriodEndDate'])
-    .withGraphFetched('reviewReturnResults')
-    .modifyGraph('reviewReturnResults', (builder) => {
+    .withGraphFetched('reviewReturns')
+    .modifyGraph('reviewReturns', (builder) => {
       builder.select([
         'id',
         'returnId',

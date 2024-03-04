@@ -30,7 +30,7 @@ async function go (licences) {
 
 function _abstractionOutsidePeriod (issues, licenceReviewResults) {
   const abstractionOutsidePeriod = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.abstractionOutsidePeriod
+    return licenceReviewResult.reviewReturns?.abstractionOutsidePeriod
   })
 
   if (abstractionOutsidePeriod) {
@@ -82,7 +82,7 @@ function _determineIssueStatus (issues) {
 
 function _hasAggregate (issues, licenceReviewResults) {
   const hasAggregate = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewChargeElementResults?.aggregate !== 1
+    return licenceReviewResult.reviewChargeElements?.aggregate !== 1
   })
 
   if (hasAggregate) {
@@ -92,7 +92,7 @@ function _hasAggregate (issues, licenceReviewResults) {
 
 function _hasChargeDatesOverlap (issues, licenceReviewResults) {
   const hasChargeDatesOverlap = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewChargeElementResults?.chargeDatesOverlap
+    return licenceReviewResult.reviewChargeElements?.chargeDatesOverlap
   })
 
   if (hasChargeDatesOverlap) {
@@ -102,7 +102,7 @@ function _hasChargeDatesOverlap (issues, licenceReviewResults) {
 
 function _matchingReturns (issues, licenceReviewResults) {
   const matchingReturns = licenceReviewResults.some((licenceReviewResult) => {
-    return !(licenceReviewResult?.reviewChargeElementResultId && licenceReviewResult?.reviewReturnResultId)
+    return !(licenceReviewResult?.reviewChargeElementId && licenceReviewResult?.reviewReturnId)
   })
 
   if (matchingReturns) {
@@ -112,7 +112,7 @@ function _matchingReturns (issues, licenceReviewResults) {
 
 function _notProcessed (issues, licenceReviewResults) {
   const notProcessed = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.status === 'received'
+    return licenceReviewResult.reviewReturns?.status === 'received'
   })
 
   if (notProcessed) {
@@ -122,7 +122,7 @@ function _notProcessed (issues, licenceReviewResults) {
 
 function _noReturnsReceived (issues, licenceReviewResults) {
   const noReturnsReceived = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.status === 'due'
+    return licenceReviewResult.reviewReturns?.status === 'due'
   })
 
   if (noReturnsReceived) {
@@ -132,7 +132,7 @@ function _noReturnsReceived (issues, licenceReviewResults) {
 
 function _overAbstracted (issues, licenceReviewResults) {
   const overAbstracted = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.quantity > licenceReviewResult.reviewReturnResults?.allocated
+    return licenceReviewResult.reviewReturns?.quantity > licenceReviewResult.reviewReturns?.allocated
   })
 
   if (overAbstracted) {
@@ -142,7 +142,7 @@ function _overAbstracted (issues, licenceReviewResults) {
 
 function _receivedLate (issues, licenceReviewResults) {
   const receivedLate = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.receivedDate > licenceReviewResult.reviewReturnResults?.dueDate
+    return licenceReviewResult.reviewReturns?.receivedDate > licenceReviewResult.reviewReturns?.dueDate
   })
 
   if (receivedLate) {
@@ -152,7 +152,7 @@ function _receivedLate (issues, licenceReviewResults) {
 
 function _underQuery (issues, licenceReviewResults) {
   const underQuery = licenceReviewResults.some((licenceReviewResult) => {
-    return licenceReviewResult.reviewReturnResults?.underQuery
+    return licenceReviewResult.reviewReturns?.underQuery
   })
 
   if (underQuery) {
@@ -165,10 +165,10 @@ function _underQuery (issues, licenceReviewResults) {
  */
 function _returnsNotReceived (issues, licenceReviewResults) {
   const returnsNotReceived = licenceReviewResults.some((licenceReviewResult) => {
-    return (licenceReviewResult.reviewReturnResultId &&
-      licenceReviewResult.reviewChargeElementResultId &&
-      (licenceReviewResult.reviewReturnResults.status === 'due' ||
-      licenceReviewResult.reviewReturnResults.status === 'overdue')
+    return (licenceReviewResult.reviewReturnId &&
+      licenceReviewResult.reviewChargeElementId &&
+      (licenceReviewResult.reviewReturns.status === 'due' ||
+      licenceReviewResult.reviewReturns.status === 'overdue')
     )
   })
 
@@ -181,18 +181,18 @@ function _returnsNotReceived (issues, licenceReviewResults) {
  * Determines if there are multiple charge references associated with a matched return
  */
 function _returnsSplitOverChargeReference (issues, licenceReviewResults) {
-  const seenReviewReturnResults = {}
+  const seenReviewReturns = {}
   let returnsSplitOverChargeReference
 
   for (const result of licenceReviewResults) {
-    const { chargeReferenceId, reviewReturnResultId } = result
+    const { chargeReferenceId, reviewReturnId } = result
 
-    if (seenReviewReturnResults[reviewReturnResultId]) {
-      if (seenReviewReturnResults[reviewReturnResultId] !== chargeReferenceId) {
+    if (seenReviewReturns[reviewReturnId]) {
+      if (seenReviewReturns[reviewReturnId] !== chargeReferenceId) {
         returnsSplitOverChargeReference = true
       }
     } else {
-      seenReviewReturnResults[reviewReturnResultId] = chargeReferenceId
+      seenReviewReturns[reviewReturnId] = chargeReferenceId
     }
   }
 

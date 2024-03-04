@@ -24,20 +24,20 @@ async function _fetchReviewResults (licenceId) {
   return ReviewResultModel.query()
     .where('licenceId', licenceId)
     .select(
-      'reviewChargeElementResultId',
+      'reviewChargeElementId',
       'chargeReferenceId',
-      'reviewReturnResultId'
+      'reviewReturnId'
     )
-    .withGraphFetched('reviewChargeElementResults')
-    .modifyGraph('reviewChargeElementResults', (builder) => {
+    .withGraphFetched('reviewChargeElements')
+    .modifyGraph('reviewChargeElements', (builder) => {
       builder.select([
         'id',
         'chargeDatesOverlap',
         'aggregate'
       ])
     })
-    .withGraphFetched('reviewReturnResults')
-    .modifyGraph('reviewReturnResults', (builder) => {
+    .withGraphFetched('reviewReturns')
+    .modifyGraph('reviewReturns', (builder) => {
       builder.select([
         'id',
         'underQuery',

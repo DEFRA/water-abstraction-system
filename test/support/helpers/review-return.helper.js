@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * @module ReviewReturnResultHelper
+ * @module ReviewReturnHelper
  */
 
 const { randomInteger } = require('./general.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const { generateReturnLogId } = require('./return-log.helper.js')
-const ReviewReturnResultModel = require('../../../app/models/review-return-result.model.js')
+const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 
 /**
  * Add a new return result for 2pt matching
@@ -33,12 +33,12 @@ const ReviewReturnResultModel = require('../../../app/models/review-return-resul
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:ReviewReturnResultModel>} The instance of the newly created record
+ * @returns {Promise<module:ReviewReturnModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return ReviewReturnResultModel.query()
+  return ReviewReturnModel.query()
     .insert({ ...insertData })
     .returning('*')
 }

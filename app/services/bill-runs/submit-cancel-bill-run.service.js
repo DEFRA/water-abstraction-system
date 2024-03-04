@@ -13,9 +13,9 @@ const BillRunVolumeModel = require('../../models/bill-run-volume.model.js')
 const { db } = require('../../../db/db.js')
 const ChargingModuleDeleteBillRunService = require('../charging-module/delete-bill-run.service.js')
 const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
-const ReviewChargeElementResultModel = require('../../models/review-charge-element-result.model.js')
+const ReviewChargeElementModel = require('../../models/review-charge-element.model.js')
 const ReviewResultModel = require('../../models/review-result.model.js')
-const ReviewReturnResultModel = require('../../models/review-return-result.model.js')
+const ReviewReturnModel = require('../../models/review-return.model.js')
 
 /**
  * Orchestrates the cancelling of a bill run
@@ -183,16 +183,16 @@ async function _removeBillRunVolumes (billRunId) {
  */
 async function _removeReviewResults (billRunId) {
   try {
-    const deleteChargeElementsProcess = ReviewChargeElementResultModel.query()
+    const deleteChargeElementsProcess = ReviewChargeElementModel.query()
       .delete()
-      .whereExists(ReviewChargeElementResultModel
+      .whereExists(ReviewChargeElementModel
         .relatedQuery('reviewResults')
         .where('reviewResults.billRunId', billRunId)
       )
 
-    const deleteReturnsProcess = ReviewReturnResultModel.query()
+    const deleteReturnsProcess = ReviewReturnModel.query()
       .delete()
-      .whereExists(ReviewReturnResultModel
+      .whereExists(ReviewReturnModel
         .relatedQuery('reviewResults')
         .where('reviewResults.billRunId', billRunId)
       )

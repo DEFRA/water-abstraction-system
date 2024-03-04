@@ -22,12 +22,12 @@ const BillRunChargeVersionYearModel = require('../../../app/models/bill-run-char
 const BillRunVolumeHelper = require('../../support/helpers/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../../app/models/bill-run-volume.model.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const ReviewChargeElementResultHelper = require('../../support/helpers/review-charge-element-result.helper.js')
-const ReviewChargeElementResultModel = require('../../../app/models/review-charge-element-result.model.js')
+const ReviewChargeElementHelper = require('../../support/helpers/review-charge-element.helper.js')
+const ReviewChargeElementModel = require('../../../app/models/review-charge-element.model.js')
 const ReviewResultHelper = require('../../support/helpers/review-result.helper.js')
 const ReviewResultModel = require('../../../app/models/review-result.model.js')
-const ReviewReturnResultHelper = require('../../support/helpers/review-return-result.helper.js')
-const ReviewReturnResultModel = require('../../../app/models/review-return-result.model.js')
+const ReviewReturnHelper = require('../../support/helpers/review-return.helper.js')
+const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
@@ -61,9 +61,9 @@ describe('Submit Cancel Bill Run service', () => {
         const { id: billRunId } = billRun
 
         // Add records to all the tables the service deletes from
-        const { id: reviewChargeElementResultId } = await ReviewChargeElementResultHelper.add()
-        const { id: reviewReturnResultId } = await ReviewReturnResultHelper.add()
-        await ReviewResultHelper.add({ billRunId, reviewChargeElementResultId, reviewReturnResultId })
+        const { id: reviewChargeElementId } = await ReviewChargeElementHelper.add()
+        const { id: reviewReturnId } = await ReviewReturnHelper.add()
+        await ReviewResultHelper.add({ billRunId, reviewChargeElementId, reviewReturnId })
         await BillRunChargeVersionYearHelper.add({ billRunId })
         await BillRunVolumeHelper.add({ billRunId })
         const { id: billId } = await BillHelper.add({ billRunId })
@@ -95,13 +95,13 @@ describe('Submit Cancel Bill Run service', () => {
 
         await setTimeout(500)
 
-        const reviewChargeElementResultCount = await ReviewChargeElementResultModel.query().select('id').resultSize()
+        const reviewChargeElementCount = await ReviewChargeElementModel.query().select('id').resultSize()
         const reviewResultCount = await ReviewResultModel.query().select('id').resultSize()
-        const reviewReturnResultCount = await ReviewReturnResultModel.query().select('id').resultSize()
+        const reviewReturnCount = await ReviewReturnModel.query().select('id').resultSize()
 
-        expect(reviewChargeElementResultCount).to.equal(0)
+        expect(reviewChargeElementCount).to.equal(0)
         expect(reviewResultCount).to.equal(0)
-        expect(reviewReturnResultCount).to.equal(0)
+        expect(reviewReturnCount).to.equal(0)
       })
 
       it('deletes any billing data data', async () => {

@@ -70,15 +70,15 @@ describe('Determine Bill Run Issues Service', () => {
 function _reviewLicenceReviewResults () {
   return [
     {
-      reviewChargeElementResultId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
+      reviewChargeElementId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
       chargeReferenceId: '8b44bdb9-3417-4d20-b9b2-0ca3438b6abb',
-      reviewReturnResultId: '90eceec8-18de-4497-8102-3a7c6259d41a',
-      reviewChargeElementResults: {
+      reviewReturnId: '90eceec8-18de-4497-8102-3a7c6259d41a',
+      reviewChargeElement: {
         id: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
         chargeDatesOverlap: true,
         aggregate: 0.5
       },
-      reviewReturnResults: {
+      reviewReturns: {
         id: '90eceec8-18de-4497-8102-3a7c6259d41a',
         underQuery: true,
         quantity: 0,
@@ -90,15 +90,15 @@ function _reviewLicenceReviewResults () {
       }
     },
     {
-      reviewChargeElementResultId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
+      reviewChargeElementId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
       chargeReferenceId: '90eceec8-18de-4497-8102-3a7c6259d41a',
-      reviewReturnResultId: '90eceec8-18de-4497-8102-3a7c6259d41a',
-      reviewChargeElementResults: {
+      reviewReturnId: '90eceec8-18de-4497-8102-3a7c6259d41a',
+      reviewChargeElements: {
         id: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
         chargeDatesOverlap: true,
         aggregate: 0.5
       },
-      reviewReturnResults: {
+      reviewReturns: {
         id: '90eceec8-18de-4497-8102-3a7c6259d41a',
         underQuery: true,
         quantity: 0,
@@ -110,10 +110,10 @@ function _reviewLicenceReviewResults () {
       }
     },
     {
-      reviewChargeElementResultId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
+      reviewChargeElementId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
       chargeReferenceId: '90eceec8-18de-4497-8102-3a7c6259d41a',
-      reviewReturnResultId: null,
-      reviewChargeElementResults: {
+      reviewReturnId: null,
+      reviewChargeElements: {
         id: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
         chargeDatesOverlap: true,
         aggregate: 0.5
@@ -126,15 +126,15 @@ function _reviewLicenceReviewResults () {
 function _readyLicenceReviewResults () {
   return [
     {
-      reviewChargeElementResultId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
+      reviewChargeElementId: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
       chargeReferenceId: '8b44bdb9-3417-4d20-b9b2-0ca3438b6abb',
-      reviewReturnResultId: '90eceec8-18de-4497-8102-3a7c6259d41a',
-      reviewChargeElementResults: {
+      reviewReturnId: '90eceec8-18de-4497-8102-3a7c6259d41a',
+      reviewChargeElements: {
         id: '9f60684c-89fc-48d6-8a12-27dd2beaad36',
         chargeDatesOverlap: false,
         aggregate: 1
       },
-      reviewReturnResults: {
+      reviewReturn: {
         id: '90eceec8-18de-4497-8102-3a7c6259d41a',
         underQuery: false,
         quantity: 1,

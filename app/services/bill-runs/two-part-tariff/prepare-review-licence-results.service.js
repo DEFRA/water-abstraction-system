@@ -9,12 +9,12 @@
  * Prepares the given review return logs, deduplicates them, and extracts matched and unmatched returns along with their
  * corresponding charge periods for the licence being reviewed
  *
- * @param {module:ReviewReturnResultModel} reviewReturnResults All the review return logs associated with the licence being reviewed
+ * @param {module:ReviewReturnModel} reviewReturns All the review return logs associated with the licence being reviewed
  *
  * @returns {Object[]} matched and unmatched return logs and the charge periods for that licence
  */
-function go (reviewReturnResults) {
-  const uniqueReturnLogs = _dedupeReturnLogs(reviewReturnResults)
+function go (reviewReturns) {
+  const uniqueReturnLogs = _dedupeReturnLogs(reviewReturns)
 
   const { matchedReturns, unmatchedReturns } = _splitReturns(uniqueReturnLogs)
 
@@ -24,12 +24,12 @@ function go (reviewReturnResults) {
   return { matchedReturns, unmatchedReturns, chargePeriods }
 }
 
-function _dedupeReturnLogs (reviewReturnResults) {
+function _dedupeReturnLogs (reviewReturns) {
   const uniqueReturnIds = new Set()
   const uniqueReturnLogs = []
 
-  reviewReturnResults.forEach((returnLog) => {
-    const id = returnLog.reviewReturnResultId
+  reviewReturns.forEach((returnLog) => {
+    const id = returnLog.reviewReturnId
 
     if (!uniqueReturnIds.has(id)) {
       uniqueReturnIds.add(id)
@@ -63,16 +63,16 @@ function _fetchChargePeriods (matchedReturns) {
 }
 
 function _splitReturns (uniqueReturnLogs) {
-  // Filters the return logs to only return the ones where reviewChargeElementResultId exists (ie the return log
+  // Filters the return logs to only return the ones where reviewChargeElementId exists (ie the return log
   // matches to a charge element)
   const matchedReturns = uniqueReturnLogs.filter((returnLog) => {
-    return returnLog.reviewChargeElementResultId !== null
+    return returnLog.reviewChargeElementId !== null
   })
 
-  // Filters the return logs to only return the ones where reviewChargeElementResultId is null (ie the return log
+  // Filters the return logs to only return the ones where reviewChargeElementId is null (ie the return log
   // does not match to a charge element)
   const unmatchedReturns = uniqueReturnLogs.filter((returnLog) => {
-    return returnLog.reviewChargeElementResultId === null
+    return returnLog.reviewChargeElementId === null
   })
 
   return { matchedReturns, unmatchedReturns }

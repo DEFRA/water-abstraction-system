@@ -11,11 +11,11 @@ const { expect } = Code
 const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
-const ReviewChargeElementResultHelper = require('../support/helpers/review-charge-element-result.helper.js')
-const ReviewChargeElementResultModel = require('../../app/models/review-charge-element-result.model.js')
+const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
+const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 const ReviewResultHelper = require('../support/helpers/review-result.helper.js')
-const ReviewReturnResultHelper = require('../support/helpers/review-return-result.helper.js')
-const ReviewReturnResultModel = require('../../app/models/review-return-result.model.js')
+const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
+const ReviewReturnModel = require('../../app/models/review-return.model.js')
 
 // Thing under test
 const ReviewResultModel = require('../../app/models/review-result.model.js')
@@ -41,60 +41,60 @@ describe('Review Result model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to review charge element result', () => {
-      let testReviewChargeElementResult
+    describe('when linking to review charge element', () => {
+      let testReviewChargeElement
 
       beforeEach(async () => {
-        testReviewChargeElementResult = await ReviewChargeElementResultHelper.add()
-        testRecord = await ReviewResultHelper.add({ reviewChargeElementResultId: testReviewChargeElementResult.id })
+        testReviewChargeElement = await ReviewChargeElementHelper.add()
+        testRecord = await ReviewResultHelper.add({ reviewChargeElementId: testReviewChargeElement.id })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ReviewResultModel.query()
-          .innerJoinRelated('reviewChargeElementResults')
+          .innerJoinRelated('reviewChargeElements')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the review charge element result', async () => {
+      it('can eager load the review charge element', async () => {
         const result = await ReviewResultModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('reviewChargeElementResults')
+          .withGraphFetched('reviewChargeElements')
 
         expect(result).to.be.instanceOf(ReviewResultModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.reviewChargeElementResults).to.be.instanceOf(ReviewChargeElementResultModel)
-        expect(result.reviewChargeElementResults).to.equal(testReviewChargeElementResult)
+        expect(result.reviewChargeElements).to.be.instanceOf(ReviewChargeElementModel)
+        expect(result.reviewChargeElements).to.equal(testReviewChargeElement)
       })
     })
 
-    describe('when linking to review return result', () => {
-      let testReviewReturnResult
+    describe('when linking to review return', () => {
+      let testReviewReturn
 
       beforeEach(async () => {
-        testReviewReturnResult = await ReviewReturnResultHelper.add()
+        testReviewReturn = await ReviewReturnHelper.add()
 
-        testRecord = await ReviewResultHelper.add({ reviewReturnResultId: testReviewReturnResult.id })
+        testRecord = await ReviewResultHelper.add({ reviewReturnId: testReviewReturn.id })
       })
 
       it('can successfully run a related query', async () => {
         const query = await ReviewResultModel.query()
-          .innerJoinRelated('reviewReturnResults')
+          .innerJoinRelated('reviewReturns')
 
         expect(query).to.exist()
       })
 
-      it('can eager load the review return result', async () => {
+      it('can eager load the review return', async () => {
         const result = await ReviewResultModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('reviewReturnResults')
+          .withGraphFetched('reviewReturns')
 
         expect(result).to.be.instanceOf(ReviewResultModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.reviewReturnResults).to.be.instanceOf(ReviewReturnResultModel)
-        expect(result.reviewReturnResults).to.equal(testReviewReturnResult)
+        expect(result.reviewReturns).to.be.instanceOf(ReviewReturnModel)
+        expect(result.reviewReturns).to.equal(testReviewReturn)
       })
     })
 

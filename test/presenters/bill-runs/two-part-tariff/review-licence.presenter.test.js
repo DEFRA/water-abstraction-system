@@ -114,7 +114,7 @@ function _matchingReturns () {
     {
       chargePeriodStartDate: new Date('2022-04-01'),
       chargePeriodEndDate: new Date('2023-03-31'),
-      reviewReturnResults: {
+      reviewReturns: {
         returnReference: '10042959',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),
@@ -140,7 +140,7 @@ function _matchingReturns () {
     {
       chargePeriodStartDate: new Date('2022-04-01'),
       chargePeriodEndDate: new Date('2023-03-31'),
-      reviewReturnResults: {
+      reviewReturns: {
         returnReference: '10042953',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),
@@ -166,7 +166,7 @@ function _matchingReturns () {
     {
       chargePeriodStartDate: new Date('2022-04-01'),
       chargePeriodEndDate: new Date('2023-03-31'),
-      reviewReturnResults: {
+      reviewReturns: {
         returnReference: '10042952',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),
@@ -192,7 +192,7 @@ function _matchingReturns () {
     {
       chargePeriodStartDate: new Date('2022-04-01'),
       chargePeriodEndDate: new Date('2023-03-31'),
-      reviewReturnResults: {
+      reviewReturns: {
         returnReference: '10042951',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),
@@ -218,7 +218,7 @@ function _matchingReturns () {
     {
       chargePeriodStartDate: new Date('2022-04-01'),
       chargePeriodEndDate: new Date('2023-03-31'),
-      reviewReturnResults: {
+      reviewReturns: {
         returnReference: '10042951',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),
@@ -249,7 +249,7 @@ function _unmatchedReturns () {
     {
       chargePeriodStartDate: new Date('2022-04-01'),
       chargePeriodEndDate: new Date('2023-03-31'),
-      reviewReturnResults: {
+      reviewReturns: {
         returnReference: '10042959',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),

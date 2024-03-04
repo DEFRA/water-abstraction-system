@@ -10,8 +10,8 @@ const { formatLongDate } = require('../../base.presenter.js')
 /**
  * Prepares and processes bill run and review licence data for presentation
  *
- * @param {module:ReviewReturnResultModel} matchedReturns matched return logs for an individual licence
- * @param {module:ReviewReturnResultModel} unmatchedReturns unmatched return logs for an individual licence
+ * @param {module:ReviewReturnModel} matchedReturns matched return logs for an individual licence
+ * @param {module:ReviewReturnModel} unmatchedReturns unmatched return logs for an individual licence
  * @param {Object[]} chargePeriods chargePeriods with start and end date properties
  * @param {module:BillRunModel} billRun the data from the bill run
  * @param {String} licenceRef the reference for the licence
@@ -40,7 +40,7 @@ function _prepareLicenceChargePeriods (chargePeriods) {
 
 function _prepareUnmatchedReturns (unmatchedReturns) {
   return unmatchedReturns.map((unmatchedReturn) => {
-    const { returnReference, status, description, purposes, quantity, startDate, endDate } = unmatchedReturn.reviewReturnResults
+    const { returnReference, status, description, purposes, quantity, startDate, endDate } = unmatchedReturn.reviewReturns
 
     return {
       reference: returnReference,
@@ -56,7 +56,7 @@ function _prepareUnmatchedReturns (unmatchedReturns) {
 function _prepareMatchedReturns (matchedReturns) {
   return matchedReturns.map((matchedReturn) => {
     const { returnStatus, total } = _checkStatusAndReturnTotal(matchedReturn)
-    const { returnReference, description, purposes, startDate, endDate } = matchedReturn.reviewReturnResults
+    const { returnReference, description, purposes, startDate, endDate } = matchedReturn.reviewReturns
 
     return {
       reference: returnReference,
@@ -71,7 +71,7 @@ function _prepareMatchedReturns (matchedReturns) {
 }
 
 function _checkStatusAndReturnTotal (returnLog) {
-  const { status, allocated, quantity, underQuery } = returnLog.reviewReturnResults
+  const { status, allocated, quantity, underQuery } = returnLog.reviewReturns
 
   let total
   let returnStatus = underQuery ? 'query' : status
@@ -89,7 +89,7 @@ function _checkStatusAndReturnTotal (returnLog) {
 }
 
 function _allocated (returnLog) {
-  const { quantity, allocated, status, underQuery } = returnLog.reviewReturnResults
+  const { quantity, allocated, status, underQuery } = returnLog.reviewReturns
   if (underQuery) {
     return ''
   } else if (status === 'void' || status === 'received' || status === 'due') {

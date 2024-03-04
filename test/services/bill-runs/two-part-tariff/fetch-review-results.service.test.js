@@ -9,9 +9,9 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const ReviewChargeElementsResultsHelper = require('../../..//support/helpers/review-charge-element-result.helper.js')
+const ReviewChargeElementsHelper = require('../../..//support/helpers/review-charge-element.helper.js')
 const ReviewResultsHelper = require('../../..//support/helpers/review-result.helper.js')
-const ReviewReturnResultsHelper = require('../../../support/helpers/review-return-result.helper.js')
+const ReviewReturnsHelper = require('../../../support/helpers/review-return.helper.js')
 
 // Thing under test
 const FetchReviewResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-results.service.js')
@@ -24,18 +24,18 @@ describe('Fetch Review Results Service', () => {
   })
 
   describe('when the licence has data for review', () => {
-    let reviewChargeElementsResults
-    let reviewReturnResults
+    let reviewChargeElements
+    let reviewReturns
     let reviewResults
 
     describe('with related charge elements and returns', () => {
       beforeEach(async () => {
-        reviewChargeElementsResults = await ReviewChargeElementsResultsHelper.add()
-        reviewReturnResults = await ReviewReturnResultsHelper.add()
+        reviewChargeElements = await ReviewChargeElementsHelper.add()
+        reviewReturns = await ReviewReturnsHelper.add()
         reviewResults = await ReviewResultsHelper.add({
           licenceId,
-          reviewChargeElementResultId: reviewChargeElementsResults.id,
-          reviewReturnResultId: reviewReturnResults.id
+          reviewChargeElementId: reviewChargeElements.id,
+          reviewReturnId: reviewReturns.id
         })
       })
 
@@ -43,23 +43,23 @@ describe('Fetch Review Results Service', () => {
         const result = await FetchReviewResultsService.go(licenceId)
 
         expect(result[0]).to.equal({
-          reviewChargeElementResultId: reviewResults.reviewChargeElementResultId,
+          reviewChargeElementId: reviewResults.reviewChargeElementId,
           chargeReferenceId: reviewResults.chargeReferenceId,
-          reviewReturnResultId: reviewReturnResults.id,
-          reviewChargeElementResults: {
-            id: reviewChargeElementsResults.id,
-            chargeDatesOverlap: reviewChargeElementsResults.chargeDatesOverlap,
-            aggregate: reviewChargeElementsResults.aggregate
+          reviewReturnId: reviewReturns.id,
+          reviewChargeElements: {
+            id: reviewChargeElements.id,
+            chargeDatesOverlap: reviewChargeElements.chargeDatesOverlap,
+            aggregate: reviewChargeElements.aggregate
           },
-          reviewReturnResults: {
-            id: reviewReturnResults.id,
-            underQuery: reviewReturnResults.underQuery,
-            quantity: reviewReturnResults.quantity,
-            allocated: reviewReturnResults.allocated,
-            abstractionOutsidePeriod: reviewReturnResults.abstractionOutsidePeriod,
-            status: reviewReturnResults.status,
-            dueDate: reviewReturnResults.dueDate,
-            receivedDate: reviewReturnResults.receivedDate
+          reviewReturns: {
+            id: reviewReturns.id,
+            underQuery: reviewReturns.underQuery,
+            quantity: reviewReturns.quantity,
+            allocated: reviewReturns.allocated,
+            abstractionOutsidePeriod: reviewReturns.abstractionOutsidePeriod,
+            status: reviewReturns.status,
+            dueDate: reviewReturns.dueDate,
+            receivedDate: reviewReturns.receivedDate
           }
         })
       })
@@ -67,11 +67,11 @@ describe('Fetch Review Results Service', () => {
 
     describe('with related charge elements but no returns', () => {
       beforeEach(async () => {
-        reviewChargeElementsResults = await ReviewChargeElementsResultsHelper.add()
+        reviewChargeElements = await ReviewChargeElementsHelper.add()
         reviewResults = await ReviewResultsHelper.add({
           licenceId,
-          reviewChargeElementResultId: reviewChargeElementsResults.id,
-          reviewReturnResultId: null
+          reviewChargeElementId: reviewChargeElements.id,
+          reviewReturnId: null
         })
       })
 
@@ -79,27 +79,27 @@ describe('Fetch Review Results Service', () => {
         const result = await FetchReviewResultsService.go(licenceId)
 
         expect(result[0]).to.equal({
-          reviewChargeElementResultId: reviewResults.reviewChargeElementResultId,
+          reviewChargeElementId: reviewResults.reviewChargeElementId,
           chargeReferenceId: reviewResults.chargeReferenceId,
-          reviewReturnResultId: reviewResults.reviewReturnResultId,
-          reviewChargeElementResults: {
-            id: reviewChargeElementsResults.id,
-            chargeDatesOverlap: reviewChargeElementsResults.chargeDatesOverlap,
-            aggregate: reviewChargeElementsResults.aggregate
+          reviewReturnId: reviewResults.reviewReturnId,
+          reviewChargeElements: {
+            id: reviewChargeElements.id,
+            chargeDatesOverlap: reviewChargeElements.chargeDatesOverlap,
+            aggregate: reviewChargeElements.aggregate
           },
-          reviewReturnResults: null
+          reviewReturns: null
         })
       })
     })
 
     describe('with related returns but no charge elements', () => {
       beforeEach(async () => {
-        reviewReturnResults = await ReviewReturnResultsHelper.add()
+        reviewReturns = await ReviewReturnsHelper.add()
 
         reviewResults = await ReviewResultsHelper.add({
           licenceId,
-          reviewChargeElementResultId: null,
-          reviewReturnResultId: reviewReturnResults.id
+          reviewChargeElementId: null,
+          reviewReturnId: reviewReturns.id
         })
       })
 
@@ -107,19 +107,19 @@ describe('Fetch Review Results Service', () => {
         const result = await FetchReviewResultsService.go(licenceId)
 
         expect(result[0]).to.equal({
-          reviewChargeElementResultId: reviewResults.reviewChargeElementResultId,
+          reviewChargeElementId: reviewResults.reviewChargeElementId,
           chargeReferenceId: reviewResults.chargeReferenceId,
-          reviewReturnResultId: reviewResults.reviewReturnResultId,
-          reviewChargeElementResults: null,
-          reviewReturnResults: {
-            id: reviewReturnResults.id,
-            underQuery: reviewReturnResults.underQuery,
-            quantity: reviewReturnResults.quantity,
-            allocated: reviewReturnResults.allocated,
-            abstractionOutsidePeriod: reviewReturnResults.abstractionOutsidePeriod,
-            status: reviewReturnResults.status,
-            dueDate: reviewReturnResults.dueDate,
-            receivedDate: reviewReturnResults.receivedDate
+          reviewReturnId: reviewResults.reviewReturnId,
+          reviewChargeElements: null,
+          reviewReturns: {
+            id: reviewReturns.id,
+            underQuery: reviewReturns.underQuery,
+            quantity: reviewReturns.quantity,
+            allocated: reviewReturns.allocated,
+            abstractionOutsidePeriod: reviewReturns.abstractionOutsidePeriod,
+            status: reviewReturns.status,
+            dueDate: reviewReturns.dueDate,
+            receivedDate: reviewReturns.receivedDate
           }
         })
       })
