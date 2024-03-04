@@ -56,13 +56,14 @@ async function _persistLicenceData (licence, billRunId) {
     billRunId,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    // Dont actually have licence holder on the licence
     licenceHolder: licence.licenceHolder,
     status: licence.status
   }
 
   await ReviewLicenceModel.query().insert(data)
 }
+
+// Change the helpers!!!!!
 
 async function _persistChargeElement (
   billRunId,
