@@ -12,9 +12,7 @@ const ReviewResultModel = require('../../../app/models/review-result.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - [random UUID]
- * - `billRunId` - [random UUID]
- * - `licenceId` - [random UUID]
+ * - `reviewLicenceId` - [random UUID]
  * - `chargeVersionId` - [random UUID]
  * - `chargeReferenceId` - [random UUID]
  * - `chargePeriodStartDate` - 2022-04-01
@@ -45,9 +43,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    id: generateUUID(),
-    billRunId: generateUUID(),
-    licenceId: generateUUID(),
+    reviewLicenceId: generateUUID(),
     chargeVersionId: generateUUID(),
     chargeReferenceId: generateUUID(),
     chargePeriodStartDate: new Date('2022-04-01'),
