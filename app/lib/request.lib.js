@@ -69,6 +69,20 @@ function defaultOptions () {
 }
 
 /**
+ * Make a DELETE request to the specified URL
+ *
+ * > Note: This function has been called `deleteRequest` here rather than `delete` as `delete` is a reserved word.
+ *
+ * @param {string} url - The full URL that you wish to connect to
+ * @param {Object} additionalOptions - Append to or replace the options passed to Got when making the request
+ *
+ * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ */
+async function deleteRequest (url, additionalOptions = {}) {
+  return _sendRequest('delete', url, additionalOptions)
+}
+
+/**
  * Make a GET request to the specified URL
  *
  * Use when you need to make a GET request. It returns a result tuple
@@ -84,8 +98,8 @@ function defaultOptions () {
  * service responds, `response:` will be the full response Got returns. In the event of a network error `response:` will
  * be a Got error instance.
  *
- * @param {string} url The full URL that you wish to connect to
- * @param {Object} additionalOptions Append to or replace the options passed to Got when making the request
+ * @param {string} url - The full URL that you wish to connect to
+ * @param {Object} additionalOptions - Append to or replace the options passed to Got when making the request
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
@@ -125,10 +139,10 @@ async function _importGot () {
  * Errbit instance. We also output the full response to the log as it will be the Got error containing all the info
  * we need to diagnose the problem.
  *
- * @param {string} method the type of request made, for example, 'GET', 'POST, or 'PATCH'
- * @param {Object} result the result object we generate
- * @param {*} url the requested url
- * @param {*} additionalOptions any additional options that were passed to Got by the calling service
+ * @param {string} method - the type of request made, for example, 'GET', 'POST, or 'PATCH'
+ * @param {Object} result - the result object we generate
+ * @param {string} url - the requested url
+ * @param {Object} additionalOptions - any additional options that were passed to Got by the calling service
  */
 function _logFailure (method, result, url, additionalOptions) {
   const data = {
@@ -160,7 +174,7 @@ function _logFailure (method, result, url, additionalOptions) {
  *
  * Those that use this module can add to, extend or replace the options we pass to Got when a request is made.
  *
- * @param {Object} additionalOptions Object of custom options
+ * @param {Object} additionalOptions - Object of custom options
  */
 function _requestOptions (additionalOptions) {
   return { ...defaultOptions(), ...additionalOptions }
@@ -194,6 +208,7 @@ async function _sendRequest (method, url, additionalOptions) {
 }
 
 module.exports = {
+  delete: deleteRequest,
   get,
   patch,
   post,

@@ -31,17 +31,21 @@ function go (transaction) {
   return _presrocContent(transaction)
 }
 
-function _additionalCharges (waterCompanyCharge, supportedSourceCharge, supportedSourceName) {
+function _additionalCharges (
+  waterCompanyCharge, waterCompanyChargeValue, supportedSourceChargeValue, supportedSourceName
+) {
   const charges = []
 
   if (supportedSourceName) {
-    const chargeInPounds = formatPounds(supportedSourceCharge)
+    const chargeInPounds = formatPounds(supportedSourceChargeValue)
 
     charges.push(`Supported source ${supportedSourceName} (£${chargeInPounds})`)
   }
 
   if (waterCompanyCharge) {
-    charges.push('Public Water Supply')
+    const chargeInPounds = formatPounds(waterCompanyChargeValue)
+
+    charges.push(`Public Water Supply (£${chargeInPounds})`)
   }
 
   return charges.join(', ')
@@ -183,26 +187,30 @@ function _srocContent (transaction) {
     description,
     endDate,
     credit,
-    waterCompanyCharge,
-    winterOnly,
     netAmount,
     section126Factor,
     section127Agreement,
     section130Agreement,
     startDate,
-    supportedSourceCharge,
+    supportedSourceChargeValue,
     supportedSourceName,
-    volume
+    volume,
+    waterCompanyCharge,
+    waterCompanyChargeValue,
+    winterOnly
   } = transaction
 
   // NOTE: These charges are returned from the Rules Service (via the Charging Module API) in pounds not pence. This is
   // different to all other values we have to deal with. So, we have to convert the values before passing them to our
   // formatter as it expects the values to be in pence.
   const baselineChargeInPence = baselineCharge * 100
-  const supportedSourceChargeInPence = supportedSourceCharge * 100
+  const supportedSourceChargeInPence = supportedSourceChargeValue * 100
+  const waterCompanyChargeInPence = waterCompanyChargeValue * 100
 
   return {
-    additionalCharges: _additionalCharges(waterCompanyCharge, supportedSourceChargeInPence, supportedSourceName),
+    additionalCharges: _additionalCharges(
+      waterCompanyCharge, waterCompanyChargeInPence, supportedSourceChargeInPence, supportedSourceName
+    ),
     adjustments: _adjustments(
       adjustmentFactor,
       aggregateFactor,
