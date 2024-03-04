@@ -10,12 +10,14 @@ const { expect } = Code
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const GaugingStationHelper = require('../../support/helpers/gauging-station.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
+const LicenceGaugingStationHelper = require('../../support/helpers/licence-gauging-station.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -78,6 +80,7 @@ describe('Fetch licence service', () => {
       expect(result.registeredTo).to.equal(null)
       expect(result.revokedDate).to.equal(null)
       expect(result.permitLicence).to.equal(null)
+      expect(result.licenceGaugingStations).to.equal([])
     })
   })
 
@@ -139,6 +142,14 @@ describe('Fetch licence service', () => {
         companyId: company.id,
         startDate: new Date('2022-04-01')
       })
+
+      const gaugingStation = await GaugingStationHelper.add({
+        gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca'
+      })
+      await LicenceGaugingStationHelper.add({
+        gaugingStationId: gaugingStation.gaugingStationId,
+        licenceId: licence.id
+      })
     })
 
     it('returns results', async () => {
@@ -157,6 +168,10 @@ describe('Fetch licence service', () => {
       expect(result.revokedDate).to.equal(null)
       expect(result.permitLicence.purposes).to.equal([{
         purposePoints: [{ point_source: { NAME: 'Ground water' } }]
+      }])
+      expect(result.licenceGaugingStations).to.equal([{
+        gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+        label: 'MEVAGISSEY FIRE STATION'
       }])
     })
   })

@@ -84,6 +84,14 @@ async function _fetchLicence (id) {
     })
     .modify('licenceHolder')
     .modify('registeredToAndLicenceName')
+    .withGraphFetched('licenceGaugingStations')
+    .modifyGraph('licenceGaugingStations', (builder) => {
+      builder.select([
+        'gaugingStations.gaugingStationId',
+        'gaugingStations.label'
+      ])
+        .where('licenceGaugingStations.dateDeleted', null)
+    })
 
   return result
 }
