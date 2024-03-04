@@ -64,7 +64,7 @@ describe('Charging Module View Bill service', () => {
     })
   })
 
-  describe('when the service cannot create a bill run', () => {
+  describe('when the service cannot view a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         Sinon.stub(ChargingModuleRequestLib, 'get').resolves({

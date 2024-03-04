@@ -153,7 +153,7 @@ function _generateMatchingReturnsData () {
   return [
     {
       id: 'v1:1:5/31/14/*S/0116A:10021668:2022-04-01:2023-03-31',
-      returnRequirement: '10021668',
+      returnReference: '10021668',
       description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
       startDate: new Date('2022-04-01'),
       endDate: new Date('2023-03-31'),

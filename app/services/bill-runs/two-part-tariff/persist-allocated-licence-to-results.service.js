@@ -156,7 +156,7 @@ async function _persistReviewResult (
 async function _persistReviewReturn (returnLog) {
   const data = {
     returnId: returnLog.id,
-    returnReference: returnLog.returnRequirement,
+    returnReference: returnLog.returnReference,
     startDate: returnLog.startDate,
     endDate: returnLog.endDate,
     dueDate: returnLog.dueDate,

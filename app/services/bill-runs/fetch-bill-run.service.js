@@ -38,6 +38,7 @@ async function _fetchBillRun (id) {
       'createdAt',
       'creditNoteCount',
       'creditNoteValue',
+      'errorCode',
       'invoiceCount',
       'invoiceValue',
       'summer',

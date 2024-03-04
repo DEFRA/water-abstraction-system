@@ -169,7 +169,7 @@ function _formatReturnLogs (returnLogs) {
   return returnLogs.map((returnLog, index) => {
     const {
       id,
-      returnRequirement: requirement,
+      returnReference: reference,
       description,
       startDate,
       endDate,
@@ -213,7 +213,7 @@ function _formatReturnLogs (returnLogs) {
     return {
       simpleId,
       id,
-      requirement,
+      reference,
       status,
       description,
       starts: startDate.toLocaleDateString('en-GB'),
