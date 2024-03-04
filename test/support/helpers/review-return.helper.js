@@ -21,7 +21,7 @@ const ReviewReturnModel = require('../../../app/models/review-return.model.js')
  * - `quantity` - 0
  * - `allocated` - 0
  * - `underQuery` - false
- * - `status` - completed
+ * - `returnStatus` - completed
  * - `nilReturn` - false
  * - `abstractionOutsidePeriod` - false
  * - `receivedDate` - 2022-06-03
@@ -63,7 +63,7 @@ function defaults (data = {}) {
     quantity: 0,
     allocated: 0,
     underQuery: false,
-    status: 'completed',
+    returnStatus: 'completed',
     nilReturn: false,
     abstractionOutsidePeriod: false,
     receivedDate: new Date('2022-06-03'),
