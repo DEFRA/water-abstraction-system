@@ -14,6 +14,7 @@ const { db } = require('../../../db/db.js')
 const ChargingModuleDeleteBillRunService = require('../charging-module/delete-bill-run.service.js')
 const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
 const ReviewChargeElementModel = require('../../models/review-charge-element.model.js')
+const ReviewLicenceModel = require('../../models/review-licence.model.js')
 const ReviewResultModel = require('../../models/review-result.model.js')
 const ReviewReturnModel = require('../../models/review-return.model.js')
 
@@ -187,21 +188,37 @@ async function _removeReviewResults (billRunId) {
       .delete()
       .whereExists(ReviewChargeElementModel
         .relatedQuery('reviewResults')
-        .where('reviewResults.billRunId', billRunId)
+        .whereExists(
+          ReviewResultModel
+            .relatedQuery('reviewLicence')
+            .where('reviewLicences.billRunId', billRunId)
+        )
       )
 
+    // BROKEN NEEDS FIXING
     const deleteReturnsProcess = ReviewReturnModel.query()
       .delete()
       .whereExists(ReviewReturnModel
         .relatedQuery('reviewResults')
-        .where('reviewResults.billRunId', billRunId)
+        .whereExists(
+          ReviewResultModel
+            .relatedQuery('reviewLicence')
+            .where('reviewLicences.billRunId', billRunId)
+        )
+      )
+
+    const deleteReviewResultsProcess = ReviewResultModel.query()
+      .delete()
+      .whereExists(ReviewResultModel
+        .relatedQuery('reviewLicences')
+        .where('reviewLicences.billRunId', billRunId)
       )
 
     // To help performance we allow both these processes to run in parallel. Because their where clause depends on
     // `review_results` we have to wait for them to complete before we proceed.
-    await Promise.all([deleteChargeElementsProcess, deleteReturnsProcess])
+    await Promise.all([deleteChargeElementsProcess, deleteReturnsProcess, deleteReviewResultsProcess])
 
-    return ReviewResultModel.query().delete().where('billRunId', billRunId)
+    return ReviewLicenceModel.query().delete().where('billRunId', billRunId)
   } catch (error) {
     global.GlobalNotifier.omfg('Failed to remove review results', { billRunId }, error)
   }
