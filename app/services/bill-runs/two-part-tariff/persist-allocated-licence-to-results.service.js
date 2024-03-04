@@ -28,8 +28,8 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 async function go (billRunId, licence) {
   const { chargeVersions, returnLogs } = licence
 
-  _persistLicenceData(licence, billRunId)
-  const reviewReturnIds = await _persistReturnLogs(returnLogs, billRunId, licence)
+  const reviewLicenceId = await _persistLicenceData(licence, billRunId)
+  const reviewReturnIds = await _persistReturnLogs(returnLogs, billRunId, licence, reviewLicenceId)
 
   for (const chargeVersion of chargeVersions) {
     const { chargeReferences } = chargeVersion
@@ -39,8 +39,7 @@ async function go (billRunId, licence) {
 
       for (const chargeElement of chargeElements) {
         await _persistChargeElement(
-          billRunId,
-          licence,
+          reviewLicenceId,
           chargeVersion,
           chargeReference,
           chargeElement,
@@ -60,14 +59,15 @@ async function _persistLicenceData (licence, billRunId) {
     status: licence.status
   }
 
-  await ReviewLicenceModel.query().insert(data)
+  const { id: reviewLicenceId } = await ReviewLicenceModel.query().insert(data).returning('id')
+
+  return reviewLicenceId
 }
 
 // Change the helpers!!!!!
 
 async function _persistChargeElement (
-  billRunId,
-  licence,
+  reviewLicenceId,
   chargeVersion,
   chargeReference,
   chargeElement,
@@ -88,8 +88,7 @@ async function _persistChargeElement (
       })
 
       await _persistReviewResult(
-        billRunId,
-        licence,
+        reviewLicenceId,
         chargeVersion,
         chargeReference,
         reviewChargeElementId,
@@ -98,11 +97,11 @@ async function _persistChargeElement (
     }
   } else {
     // Persisting the charge element without any matching returns
-    await _persistReviewResult(billRunId, licence, chargeVersion, chargeReference, reviewChargeElementId, null)
+    await _persistReviewResult(reviewLicenceId, chargeVersion, chargeReference, reviewChargeElementId, null)
   }
 }
 
-async function _persistReturnLogs (returnLogs, billRunId, licence) {
+async function _persistReturnLogs (returnLogs, billRunId, licence, reviewLicenceId) {
   const reviewReturnIds = []
 
   for (const returnLog of returnLogs) {
@@ -111,7 +110,7 @@ async function _persistReturnLogs (returnLogs, billRunId, licence) {
 
     // Persisting the unmatched return logs
     if (returnLog.matched === false) {
-      _persistReviewResult(billRunId, licence, null, null, null, reviewReturnId)
+      _persistReviewResult(reviewLicenceId, null, null, null, reviewReturnId)
     }
   }
 
@@ -123,7 +122,9 @@ async function _persistReviewChargeElement (chargeElement, chargeReference) {
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
     aggregate: chargeReference.aggregate ?? 1,
-    chargeDatesOverlap: chargeElement.chargeDatesOverlap
+    chargeDatesOverlap: chargeElement.chargeDatesOverlap,
+    issues: chargeElement.issues.join(', '),
+    status: chargeElement.status
   }
 
   const { id: reviewChargeElementId } = await ReviewChargeElementModel.query().insert(data).returning('id')
@@ -132,16 +133,14 @@ async function _persistReviewChargeElement (chargeElement, chargeReference) {
 }
 
 async function _persistReviewResult (
-  billRunId,
-  licence,
+  reviewLicenceId,
   chargeVersion,
   chargeReference,
   reviewChargeElementId,
   reviewReturnId
 ) {
   const data = {
-    billRunId,
-    licenceId: licence.id,
+    reviewLicenceId,
     chargeVersionId: chargeVersion?.id,
     chargeReferenceId: chargeReference?.id,
     chargePeriodStartDate: chargeVersion?.chargePeriod.startDate,
