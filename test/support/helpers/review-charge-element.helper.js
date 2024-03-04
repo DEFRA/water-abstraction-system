@@ -12,7 +12,6 @@ const ReviewChargeElementModel = require('../../../app/models/review-charge-elem
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - [random UUID]
  * - `chargeElementId` - [random UUID]
  * - `allocated` - 0
  * - `aggregate` - 1
@@ -42,7 +41,6 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    id: generateUUID(),
     chargeElementId: generateUUID(),
     allocated: 0,
     aggregate: 1,

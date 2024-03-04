@@ -5,7 +5,6 @@
  */
 
 const { randomInteger } = require('./general.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const { generateReturnLogId } = require('./return-log.helper.js')
 const ReviewReturnModel = require('../../../app/models/review-return.model.js')
@@ -15,7 +14,6 @@ const ReviewReturnModel = require('../../../app/models/review-return.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - [random UUID]
  * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
  * - `returnReference` - `10031343`
  * - `quantity` - 0
@@ -57,7 +55,6 @@ function defaults (data = {}) {
   const returnReference = data.returnReference ? data.returnReference : randomInteger(10000000, 19999999)
 
   const defaults = {
-    id: generateUUID(),
     returnId: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
     returnReference: '10031343',
     quantity: 0,
