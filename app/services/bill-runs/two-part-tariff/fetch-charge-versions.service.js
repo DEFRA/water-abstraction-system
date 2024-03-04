@@ -96,8 +96,8 @@ async function _fetch (regionCode, billingPeriod) {
         'lapsedDate',
         'revokedDate'
       ])
+        .modify('licenceHolder')
     })
-    // .modify('licenceHolder')
     .withGraphFetched('chargeReferences')
     .modifyGraph('chargeReferences', (builder) => {
       builder

@@ -6,6 +6,7 @@
  */
 
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+// const LicenceModel = require('../../../models/licence.model.js')
 
 /**
  * Fetches 2PT Licences for the matching region and billing period plus the charge versions associated with them grouped
@@ -32,7 +33,7 @@ function _extractUniqueLicenceIds (chargeVersions) {
   return [...new Set(allLicenceIds)]
 }
 
-function _groupByLicence (chargeVersions, uniqueLicenceIds) {
+async function _groupByLicence (chargeVersions, uniqueLicenceIds) {
   // NOTE: We could have initialized licences as an empty array and pushed each new object. But for a big region
   // the number of licences we might be dealing will be in the hundreds, possibly thousands. In these cases we get a
   // performance bump if we create the array sized to our needs first, rather than asking Node to resize the array on
@@ -47,8 +48,11 @@ function _groupByLicence (chargeVersions, uniqueLicenceIds) {
 
     const { licenceRef, startDate, expiredDate, lapsedDate, revokedDate } = matchedChargeVersions[0].licence
 
+    const licenceHolder = matchedChargeVersions[0].licence.$licenceHolder()
+
     licences[i] = {
       id: licenceId,
+      licenceHolder,
       licenceRef,
       startDate,
       expiredDate,
