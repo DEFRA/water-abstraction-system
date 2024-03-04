@@ -31,14 +31,6 @@ class ReviewResultModel extends BaseModel {
           from: 'reviewResults.reviewReturnId',
           to: 'reviewReturns.id'
         }
-      },
-      reviewLicence: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'review-licence.model',
-        join: {
-          from: 'reviewResults.reviewLicenceId',
-          to: 'reviewLicences.id'
-        }
       }
     }
   }
