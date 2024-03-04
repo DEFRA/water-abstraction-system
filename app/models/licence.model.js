@@ -66,7 +66,7 @@ class LicenceModel extends BaseModel {
       },
       reviewLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-licences.model',
+        modelClass: 'review-licence.model',
         join: {
           from: 'licences.id',
           to: 'reviewLicences.licenceId'

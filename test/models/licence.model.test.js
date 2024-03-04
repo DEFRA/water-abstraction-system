@@ -27,8 +27,8 @@ const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 const RegisteredToAndLicenceNameSeeder = require('../support/seeders/registered-to-and-licence-name.seeder.js')
-const ReviewResultHelper = require('../support/helpers/review-result.helper.js')
-const ReviewResultModel = require('../../app/models/review-result.model.js')
+const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
+const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 
@@ -249,22 +249,22 @@ describe('Licence model', () => {
       })
     })
 
-    describe('when linking to review results', () => {
-      let testReviewResults
+    describe('when linking to review licences', () => {
+      let testReviewLicences
 
       beforeEach(async () => {
         const { id } = testRecord
 
-        testReviewResults = []
+        testReviewLicences = []
         for (let i = 0; i < 2; i++) {
-          const reviewResult = await ReviewResultHelper.add({ licenceId: id })
-          testReviewResults.push(reviewResult)
+          const reviewLicence = await ReviewLicenceHelper.add({ licenceId: id })
+          testReviewLicences.push(reviewLicence)
         }
       })
 
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query()
-          .innerJoinRelated('reviewResults')
+          .innerJoinRelated('reviewLicences')
 
         expect(query).to.exist()
       })
@@ -272,15 +272,15 @@ describe('Licence model', () => {
       it('can eager load the workflows', async () => {
         const result = await LicenceModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('reviewResults')
+          .withGraphFetched('reviewLicences')
 
         expect(result).to.be.instanceOf(LicenceModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.reviewResults).to.be.an.array()
-        expect(result.reviewResults[0]).to.be.an.instanceOf(ReviewResultModel)
-        expect(result.reviewResults).to.include(testReviewResults[0])
-        expect(result.reviewResults).to.include(testReviewResults[1])
+        expect(result.reviewLicences).to.be.an.array()
+        expect(result.reviewLicences[0]).to.be.an.instanceOf(ReviewLicenceModel)
+        expect(result.reviewLicences).to.include(testReviewLicences[0])
+        expect(result.reviewLicences).to.include(testReviewLicences[1])
       })
     })
 
