@@ -8,7 +8,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const ReviewChargeElementModel = require('../../../app/models/review-charge-element.model.js')
 
 /**
- * Add a new charge element result for 2pt matching
+ * Add a new review charge element for 2pt matching
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -17,6 +17,8 @@ const ReviewChargeElementModel = require('../../../app/models/review-charge-elem
  * - `allocated` - 0
  * - `aggregate` - 1
  * - `chargeDatesOverlap` - false
+ * - `issues` - null
+ * - `status` - ready
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -44,7 +46,9 @@ function defaults (data = {}) {
     chargeElementId: generateUUID(),
     allocated: 0,
     aggregate: 1,
-    chargeDatesOverlap: false
+    chargeDatesOverlap: false,
+    issues: null,
+    status: 'ready'
   }
 
   return {

@@ -8,7 +8,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const ReviewResultModel = require('../../../app/models/review-result.model.js')
 
 /**
- * Add a new review result record for 2pt matching
+ * Add a new review result for 2pt matching
  *
  * If no `data` is provided, default values will be used. These are
  *

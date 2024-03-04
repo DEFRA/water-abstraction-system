@@ -11,25 +11,26 @@ const { generateReturnLogId } = require('./return-log.helper.js')
 const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 
 /**
- * Add a new return result for 2pt matching
+ * Add a new review return for 2pt matching
  *
  * If no `data` is provided, default values will be used. These are
  *
  * - `id` - [random UUID]
  * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
  * - `returnReference` - `10031343`
- * - `startDate` - 2022-04-01
- * - `endDate` - 2022-05-06
- * - `dueDate` - 2022-06-03
- * - `receivedDate` - 2022-06-03
- * - `status` - completed
- * - `underQuery` - false
- * - `nilReturn` - false
- * - `description` - Lands at Mosshayne Farm, Exeter & Broadclyst
- * - `purposes` - {}
  * - `quantity` - 0
  * - `allocated` - 0
+ * - `underQuery` - false
+ * - `status` - completed
+ * - `nilReturn` - false
  * - `abstractionOutsidePeriod` - false
+ * - `receivedDate` - 2022-06-03
+ * - `dueDate` - 2022-06-03
+ * - `purposes` - {}
+ * - `description` - Lands at Mosshayne Farm, Exeter & Broadclyst
+ * - `startDate` - 2022-04-01
+ * - `endDate` - 2022-05-06
+ * - `issues` - null
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -59,18 +60,19 @@ function defaults (data = {}) {
     id: generateUUID(),
     returnId: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
     returnReference: '10031343',
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2022-05-06'),
-    dueDate: new Date('2022-06-03'),
-    receivedDate: new Date('2022-06-03'),
-    status: 'completed',
-    underQuery: false,
-    nilReturn: false,
-    description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
-    purposes: {},
     quantity: 0,
     allocated: 0,
-    abstractionOutsidePeriod: false
+    underQuery: false,
+    status: 'completed',
+    nilReturn: false,
+    abstractionOutsidePeriod: false,
+    receivedDate: new Date('2022-06-03'),
+    dueDate: new Date('2022-06-03'),
+    purposes: {},
+    description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
+    startDate: new Date('2022-04-01'),
+    endDate: new Date('2022-05-06'),
+    issues: null
   }
 
   return {
