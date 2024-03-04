@@ -109,7 +109,7 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   const elementIssues = []
 
   // Issue Aggregate factor
-  if (chargeReference.aggregate !== 1) {
+  if (chargeReference.aggregate !== null && chargeReference.aggregate !== 1) {
     elementIssues.push('Aggregate factor')
     status = 'review'
   }
