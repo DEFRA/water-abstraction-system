@@ -5,6 +5,8 @@
  * @module ViewBillService
  */
 
+const EmptyBillRunPresenter = require('../../presenters/bill-runs/empty-bill-run-presenter.js')
+const ErroredBillRunPresenter = require('../../presenters/bill-runs/errored-bill-run-presenter.js')
 const ViewBillRunPresenter = require('../../presenters/bill-runs/view-bill-run.presenter.js')
 const ViewBillSummariesPresenter = require('../../presenters/bill-runs/view-bill-summaries.presenter.js')
 const FetchBillRunService = require('./fetch-bill-run.service.js')
@@ -20,11 +22,33 @@ const FetchBillRunService = require('./fetch-bill-run.service.js')
 async function go (id) {
   const result = await FetchBillRunService.go(id)
 
-  const billRun = ViewBillRunPresenter.go(result.billRun, result.billSummaries)
-  const billGroups = ViewBillSummariesPresenter.go(result.billSummaries)
+  const pageData = _pageData(result)
+
+  return pageData
+}
+
+function _pageData (fetchResult) {
+  const { billRun, billSummaries } = fetchResult
+
+  if (billRun.status === 'empty') {
+    return {
+      view: 'bill-runs/empty.njk',
+      ...EmptyBillRunPresenter.go(billRun)
+    }
+  }
+
+  if (billRun.status === 'error') {
+    return {
+      view: 'bill-runs/errored.njk',
+      ...ErroredBillRunPresenter.go(billRun)
+    }
+  }
+
+  const billGroups = ViewBillSummariesPresenter.go(billSummaries)
 
   return {
-    ...billRun,
+    view: 'bill-runs/view.njk',
+    ...ViewBillRunPresenter.go(billRun, billSummaries),
     billGroupsCount: billGroups.length,
     billGroups
   }

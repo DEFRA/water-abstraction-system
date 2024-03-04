@@ -7,6 +7,10 @@
 
 const {
   capitalize,
+  generateBillRunTitle,
+  formatBillRunType,
+  formatChargeScheme,
+  formatFinancialYear,
   formatLongDate,
   formatMoney
 } = require('../base.presenter.js')
@@ -30,8 +34,7 @@ function go (billRun, billSummaries) {
     toFinancialYearEnding
   } = billRun
 
-  const billRunType = _billRunType(batchType, summer, scheme)
-  const regionName = capitalize(region.displayName)
+  const billRunType = formatBillRunType(batchType, scheme, summer)
 
   return {
     billsCount: _billsCount(creditNoteCount, invoiceCount, billRunType, billSummaries),
@@ -40,16 +43,16 @@ function go (billRun, billSummaries) {
     billRunStatus: status,
     billRunTotal: _billRunTotal(netTotal),
     billRunType,
-    chargeScheme: _chargeScheme(scheme),
+    chargeScheme: formatChargeScheme(scheme),
     creditsCount: _creditsCount(creditNoteCount),
     creditsTotal: formatMoney(creditNoteValue),
     dateCreated: formatLongDate(createdAt),
     debitsCount: _debitsCount(invoiceCount),
     debitsTotal: formatMoney(invoiceValue),
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
-    financialYear: _financialYear(toFinancialYearEnding),
-    pageTitle: _pageTitle(regionName, billRunType),
-    region: regionName,
+    financialYear: formatFinancialYear(toFinancialYearEnding),
+    pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
+    region: capitalize(region.displayName),
     transactionFile: transactionFileReference
   }
 }
@@ -92,30 +95,6 @@ function _billRunTotal (valueInPence) {
   return valueAsMoney
 }
 
-function _billRunType (batchType, summer, scheme) {
-  if (batchType !== 'two_part_tariff') {
-    return capitalize(batchType)
-  }
-
-  if (scheme === 'sroc') {
-    return 'Two-part tariff'
-  }
-
-  if (summer) {
-    return 'Two-part tariff summer'
-  }
-
-  return 'Two-part tariff winter and all year'
-}
-
-function _chargeScheme (scheme) {
-  if (scheme === 'sroc') {
-    return 'Current'
-  }
-
-  return 'Old'
-}
-
 function _creditsCount (count) {
   if (count === 1) {
     return '1 credit note'
@@ -136,16 +115,6 @@ function _displayCreditDebitTotals (billRun) {
   const { batchType } = billRun
 
   return batchType === 'supplementary'
-}
-
-function _financialYear (financialYearEnding) {
-  return `${financialYearEnding - 1} to ${financialYearEnding}`
-}
-
-function _pageTitle (regionName, billRunType) {
-  const lowercaseBillRunType = billRunType.toLowerCase()
-
-  return `${regionName} ${lowercaseBillRunType}`
 }
 
 module.exports = {

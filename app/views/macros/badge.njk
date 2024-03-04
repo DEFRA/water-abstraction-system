@@ -22,3 +22,17 @@
     })
   }}
 {% endmacro %}
+
+{% macro statusBadge(status) %}
+  {% if status === 'ready' %}
+    {% set badgeType = 'info' %}
+  {% elif status === 'sent' %}
+    {% set badgeType = 'success' %}
+  {% elif status === 'empty' %}
+    {% set badgeType = 'inactive' %}
+  {% elif status === 'error' %}
+    {% set badgeType = 'error' %}
+  {% endif %}
+
+  {{ badge(status, badgeType) }}
+{% endmacro %}
