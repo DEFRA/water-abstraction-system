@@ -144,10 +144,10 @@ describe('Fetch licence service', () => {
       })
 
       const gaugingStation = await GaugingStationHelper.add({
-        gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca'
+        id: 'ac075651-4781-4e24-a684-b943b98607ca'
       })
       await LicenceGaugingStationHelper.add({
-        gaugingStationId: gaugingStation.gaugingStationId,
+        gaugingStationId: gaugingStation.id,
         licenceId: licence.id
       })
     })
@@ -170,7 +170,7 @@ describe('Fetch licence service', () => {
         purposePoints: [{ point_source: { NAME: 'Ground water' } }]
       }])
       expect(result.licenceGaugingStations).to.equal([{
-        gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+        id: 'ac075651-4781-4e24-a684-b943b98607ca',
         label: 'MEVAGISSEY FIRE STATION'
       }])
     })

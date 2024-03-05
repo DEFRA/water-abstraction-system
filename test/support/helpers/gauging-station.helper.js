@@ -41,7 +41,7 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    gaugingStationId: generateUUID(),
+    id: generateUUID(),
     hydrologyStationId: generateUUID(),
     lat: 52.04436,
     long: -0.15477,

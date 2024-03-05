@@ -44,7 +44,7 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    licenceGaugingStationId: generateUUID(),
+    id: generateUUID(),
     licenceId: generateUUID(),
     licenceVersionPurposeConditionId: generateUUID(),
     source: 'wrls',

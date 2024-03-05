@@ -7,7 +7,7 @@ exports.up = function (knex) {
     .schema
     .createView(viewName, (view) => {
       view.as(knex('licence_gauging_stations').withSchema('water').select([
-        'licence_gauging_station_id',
+        'licence_gauging_station_id AS id',
         'licence_id',
         'gauging_station_id',
         'source',
@@ -23,9 +23,9 @@ exports.up = function (knex) {
         'date_status_updated',
         'date_deleted',
         'alert_type',
+        // 'is_test',
         'date_created AS created_at',
-        'date_updated AS updated_at',
-        'is_test'
+        'date_updated AS updated_at'
       ]))
     })
 }

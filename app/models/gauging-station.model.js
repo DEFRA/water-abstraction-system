@@ -1,17 +1,24 @@
 'use strict'
 
 /**
- * Model for gauginStations (water.gauging_stations)
- * @module GauginStationsnModel
+ * Model for gaugingStations (water.gauging_stations)
+ * @module GaugingStationsnModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class GauginStationsnModel extends BaseModel {
+class GaugingStationsnModel extends BaseModel {
   static get tableName () {
     return 'gaugingStations'
+  }
+
+  // Defining which fields contain json allows us to insert an object without needing to stringify it first
+  static get jsonAttributes () {
+    return [
+      'metadata'
+    ]
   }
 
   static get relationMappings () {
@@ -20,7 +27,7 @@ class GauginStationsnModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'licence-gauging-station.model',
         join: {
-          from: 'gaugingStations.gaugingStationId',
+          from: 'gaugingStations.id',
           to: 'licenceGaugingStations.gaugingStationId'
         }
       }
@@ -28,4 +35,4 @@ class GauginStationsnModel extends BaseModel {
   }
 }
 
-module.exports = GauginStationsnModel
+module.exports = GaugingStationsnModel

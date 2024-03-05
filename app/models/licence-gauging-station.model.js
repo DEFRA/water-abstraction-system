@@ -21,7 +21,7 @@ class LicenceGauginStationsnModel extends BaseModel {
         modelClass: 'gauging-station.model',
         join: {
           from: 'licenceGaugingStations.gaugingStationId',
-          to: 'gaugingStations.gaugingStationId'
+          to: 'gaugingStations.id'
         }
       }
     }

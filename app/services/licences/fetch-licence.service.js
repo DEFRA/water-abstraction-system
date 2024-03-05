@@ -87,7 +87,7 @@ async function _fetchLicence (id) {
     .withGraphFetched('licenceGaugingStations')
     .modifyGraph('licenceGaugingStations', (builder) => {
       builder.select([
-        'gaugingStations.gaugingStationId',
+        'gaugingStations.id',
         'gaugingStations.label'
       ])
         .where('licenceGaugingStations.dateDeleted', null)

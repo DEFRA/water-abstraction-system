@@ -97,7 +97,7 @@ class LicenceModel extends BaseModel {
             from: 'licenceGaugingStations.licenceId',
             to: 'licenceGaugingStations.gaugingStationId'
           },
-          to: 'gaugingStations.gaugingStationId'
+          to: 'gaugingStations.id'
         }
       }
     }
