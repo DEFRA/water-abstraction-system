@@ -1,32 +1,28 @@
 'use strict'
 
 /**
- * @module ReviewChargeElementHelper
+ * @module ReviewChargeVersionsHelper
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ReviewChargeElementModel = require('../../../app/models/review-charge-element.model.js')
+const ReviewChargeElementsReturnsModel = require('../../../app/models/review-charge-versions.model.js')
 
 /**
- * Add a new review charge element for 2pt matching
+ * Add a new review charge elements returns record for 2pt matching
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `chargeElementId` - [random UUID]
- * - `reviewChargeReferenceId` - [random UUID]
- * - `allocated` - 0
- * - `chargeDatesOverlap` - false
- * - `issues` - null
- * - `status` - ready
+ * - `reviewChargeElementId` - [random UUID]
+ * - `reviewReturnId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:ReviewChargeElementModel>} The instance of the newly created record
+ * @returns {Promise<module:ReviewChargeVersionsModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return ReviewChargeElementModel.query()
+  return ReviewChargeElementsReturnsModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -41,12 +37,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    chargeElementId: generateUUID(),
-    reviewChargeReferenceId: generateUUID(),
-    allocated: 0,
-    chargeDatesOverlap: false,
-    issues: null,
-    status: 'ready'
+    reviewChargeElementId: generateUUID(),
+    reviewReturnId: generateUUID()
   }
 
   return {
