@@ -1,6 +1,6 @@
 'use strict'
 
-const tableName = 'review_licences'
+const tableName = 'review_charge_elments_returns'
 
 exports.up = function (knex) {
   return knex
@@ -10,12 +10,8 @@ exports.up = function (knex) {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
-      table.uuid('bill_run_id').notNullable()
-      table.uuid('licence_id').notNullable()
-      table.string('licence_ref').notNullable()
-      table.string('licence_holder').notNullable()
-      table.string('issues')
-      table.string('status').notNullable()
+      table.uuid('review_charge_element_id').notNullable()
+      table.uuid('review_return_id').notNullable()
 
       // Automatic timestamps
       table.timestamps(false, true)

@@ -12,6 +12,7 @@ exports.up = function (knex) {
       table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
       // Data
+      table.uuid('review_licence_id').notNullable()
       table.string('return_id').notNullable()
       table.string('return_reference')
       // Specifying `null, null` creates a decimal column that can store numbers of any precision and scale
