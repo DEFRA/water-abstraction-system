@@ -12,6 +12,7 @@ exports.up = function (knex) {
       // Data
       table.uuid('review_charge_version_id').notNullable()
       table.uuid('charge_reference_id')
+      table.decimal('aggregate', null, null).defaultTo(1)
 
       // Automatic timestamps
       table.timestamps(false, true)
