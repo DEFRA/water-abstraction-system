@@ -6,6 +6,8 @@
  */
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const ExpandedError = require('../../errors/expanded.error.js')
+const WaitForStatusService = require('./wait-for-status.service.js')
 
 /**
  * Approve then send a bill run in the Charging Module API
@@ -15,29 +17,64 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  * run can be sent.
  *
  * Sending a bill run is the final step. Once sent a bill run cannot be changed or deleted. Sending involves the CHA
- * generating a bill number for every bill in the bill run. It then generates a transaction reference for the bill run
- * itself. This reference is used to name the transaction import file which the CHA also generates at this time. This
- * is the file that will make it's way to SOP and be used to generate the invoice and credit notes that customers
- * receive.
+ * generating a transaction reference for every bill in the bill run. It then generates a transaction reference for the
+ * bill run itself. This reference is used to name the transaction import file which the CHA also generates at this
+ * time. This is the file that will make it's way to SOP and be used to generate the invoice and credit notes that
+ * customers receive.
  *
  * For small bill runs the process is near instantaneous. Larger bill runs however it can take a number of seconds.
- * Because of this when the request is first made the CHA switches the bill run's status to `sending`. Only when the
- * process is complete does the status get set to `sent`.
- *
- * It's this we are waiting for because then we can extract the generated bill numbers and transaction file reference
- * and apply them to our bill run records.
+ * Because of this when the request is first made the CHA switches the bill run's status to `pending`. Only when the
+ * process is complete does the status get set to `billed` or `billing_not_required`.
  *
  * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/bill-run/SendBillRun | CHA API docs} for more
  * details
  * @param {string} billRunId - UUID of the charging module API bill run to send
  *
- * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
+ * @returns {Promise<Object>} the promise returned is not intended to resolve to any particular value
  */
 async function go (billRunId) {
-  const path = `v3/wrls/bill-runs/${billRunId}/generate`
+  await _approve(billRunId)
+  await _send(billRunId)
+
+  return _waitForSent(billRunId)
+}
+
+async function _approve (billRunId) {
+  const path = `v3/wrls/bill-runs/${billRunId}/approve`
   const result = await ChargingModuleRequestLib.patch(path)
 
-  return result
+  if (!result.succeeded) {
+    const error = new ExpandedError(
+      'Charging Module approve request failed',
+      { billRunExternalId: billRunId, responseBody: result.response.body }
+    )
+
+    throw error
+  }
+}
+
+async function _send (billRunId) {
+  const path = `v3/wrls/bill-runs/${billRunId}/send`
+  const result = await ChargingModuleRequestLib.patch(path)
+
+  if (!result.succeeded) {
+    const error = new ExpandedError(
+      'Charging Module send request failed',
+      { billRunExternalId: billRunId, responseBody: result.response.body }
+    )
+
+    throw error
+  }
+}
+
+async function _waitForSent (billRunId) {
+  const result = await WaitForStatusService.go(billRunId, ['billed', 'billing_not_required'])
+
+  if (!result.succeeded) {
+    const error = new ExpandedError('Charging Module waiting for sent took too long', result)
+
+    throw error
+  }
 }
 
 module.exports = {

@@ -83,6 +83,32 @@ const routes = [
       },
       description: 'Review a two-part tariff licence'
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/{id}/send',
+    handler: BillRunsController.send,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Confirm (send) a bill run'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/send',
+    handler: BillRunsController.submitSend,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit bill run (send) confirmation'
+    }
   }
 ]
 
