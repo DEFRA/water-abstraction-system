@@ -7,8 +7,10 @@
 
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 const ReviewReturnModel = require('../../../models/review-return.model.js')
-const ReviewResultModel = require('../../../models/review-result.model.js')
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
+const ReviewLicencesModel = require('../../../models/review-licence.model.js')
+const ReviewChargeVersionsModel = require('../../../models/review-charge-versions.mode.js')
+const ReviewChargeReferencesModel = require('../../../models/review-charge-references.model.js')
+const ReviewChargeElementsReturnsModel = require('../../../models/review-charge-elements-returns.model.js')
 
 /**
  * Persists results of matching and allocating return logs to licence charge elements for a two-part tariff bill run
@@ -29,25 +31,49 @@ async function go (billRunId, licence) {
   const { chargeVersions, returnLogs } = licence
 
   const reviewLicenceId = await _persistLicenceData(licence, billRunId)
-  const reviewReturnIds = await _persistReturnLogs(returnLogs, billRunId, licence, reviewLicenceId)
+  const reviewReturnIds = await _persistReturnLogs(returnLogs, reviewLicenceId)
 
   for (const chargeVersion of chargeVersions) {
+    const reviewChargeVersionId = _persistChargeVersion(chargeVersion, reviewLicenceId)
+
     const { chargeReferences } = chargeVersion
 
     for (const chargeReference of chargeReferences) {
+      const reviewChargeReferenceId = _persistChargeReference(chargeReference, reviewChargeVersionId)
+
       const { chargeElements } = chargeReference
 
       for (const chargeElement of chargeElements) {
-        await _persistChargeElement(
-          reviewLicenceId,
-          chargeVersion,
-          chargeReference,
-          chargeElement,
-          reviewReturnIds
-        )
+        await _persistChargeElement(chargeElement, reviewReturnIds, reviewChargeReferenceId)
       }
     }
   }
+}
+
+async function _persistChargeReference (chargeReference, reviewChargeVersionId) {
+  const data = {
+    reviewChargeVersionId,
+    chargeReferenceId: chargeReference.id,
+    aggregate: chargeReference.aggregate ?? 1
+  }
+
+  const { id: reviewChargeReferenceId } = await ReviewChargeReferencesModel.query().insert(data).returning('id')
+
+  return reviewChargeReferenceId
+}
+
+async function _persistChargeVersion (chargeVersion, reviewLicenceId) {
+  const data = {
+    reviewLicenceId,
+    chargeVersionId: chargeVersion.id,
+    changeReason: chargeVersion.changeReason.description,
+    chargePeriodStartDate: chargeVersion.chargePeriod.startDate,
+    chargePeriodEndDate: chargeVersion.chargePeriod.endDate
+  }
+
+  const { id: reviewChargeVersionId } = await ReviewChargeVersionsModel.query().insert(data).returning('id')
+
+  return reviewChargeVersionId
 }
 
 async function _persistLicenceData (licence, billRunId) {
@@ -56,72 +82,47 @@ async function _persistLicenceData (licence, billRunId) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     licenceHolder: licence.licenceHolder,
-    status: licence.status
+    status: licence.status,
+    issues: licence.issues.join(', ')
   }
 
-  const { id: reviewLicenceId } = await ReviewLicenceModel.query().insert(data).returning('id')
+  const { id: reviewLicenceId } = await ReviewLicencesModel.query().insert(data).returning('id')
 
   return reviewLicenceId
 }
 
-// Change the helpers!!!!!
+async function _persistChargeElement (chargeElement, reviewReturnIds, reviewChargeReferenceId) {
+  const reviewChargeElementId = await _persistReviewChargeElement(chargeElement, reviewChargeReferenceId)
+  for (const returnLog of chargeElement.returnLogs) {
+    // When we persist the review result we need the Id's for both the charge element and return log's review result
+    // records. Though it looks like we're iterating return logs here, these are copies assigned during matching and
+    // allocation. We don't create `ReviewReturn` records until this service is called, and those are based
+    // on the `returnLogs` property of each licence. Hence, we need to pass in the ID's created and search them for
+    // a match in order to get the `reviewReturnId`.
+    const { reviewReturnId } = reviewReturnIds.find((reviewReturnIds) => {
+      return reviewReturnIds.returnId === returnLog.returnId
+    })
 
-async function _persistChargeElement (
-  reviewLicenceId,
-  chargeVersion,
-  chargeReference,
-  chargeElement,
-  reviewReturnIds
-) {
-  const reviewChargeElementId = await _persistReviewChargeElement(chargeElement, chargeReference)
-
-  // Persisting the charge elements that have a matching return
-  if (chargeElement.returnLogs.length > 0) {
-    for (const returnLog of chargeElement.returnLogs) {
-      // When we persist the review result we need the Id's for both the charge element and return log's review result
-      // records. Though it looks like we're iterating return logs here, these are copies assigned during matching and
-      // allocation. We don't create `ReviewReturn` records until this service is called, and those are based
-      // on the `returnLogs` property of each licence. Hence, we need to pass in the ID's created and search them for
-      // a match in order to get the `reviewReturnId`.
-      const { reviewReturnId } = reviewReturnIds.find((reviewReturnIds) => {
-        return reviewReturnIds.returnId === returnLog.returnId
-      })
-
-      await _persistReviewResult(
-        reviewLicenceId,
-        chargeVersion,
-        chargeReference,
-        reviewChargeElementId,
-        reviewReturnId
-      )
-    }
-  } else {
-    // Persisting the charge element without any matching returns
-    await _persistReviewResult(reviewLicenceId, chargeVersion, chargeReference, reviewChargeElementId, null)
+    await _persistChargeElementsReturns(reviewChargeElementId, reviewReturnId)
   }
 }
 
-async function _persistReturnLogs (returnLogs, billRunId, licence, reviewLicenceId) {
+async function _persistReturnLogs (returnLogs, reviewLicenceId) {
   const reviewReturnIds = []
 
   for (const returnLog of returnLogs) {
-    const reviewReturnId = await _persistReviewReturn(returnLog)
+    const reviewReturnId = await _persistReviewReturn(returnLog, reviewLicenceId)
     reviewReturnIds.push({ returnId: returnLog.id, reviewReturnId })
-
-    // Persisting the unmatched return logs
-    if (returnLog.matched === false) {
-      _persistReviewResult(reviewLicenceId, null, null, null, reviewReturnId)
-    }
   }
 
   return reviewReturnIds
 }
 
-async function _persistReviewChargeElement (chargeElement, chargeReference) {
+async function _persistReviewChargeElement (chargeElement, reviewChargeReferenceId) {
   const data = {
+    reviewChargeReferenceId,
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
-    aggregate: chargeReference.aggregate ?? 1,
     chargeDatesOverlap: chargeElement.chargeDatesOverlap,
     issues: chargeElement.issues.join(', '),
     status: chargeElement.status
@@ -132,30 +133,19 @@ async function _persistReviewChargeElement (chargeElement, chargeReference) {
   return reviewChargeElementId
 }
 
-async function _persistReviewResult (
-  reviewLicenceId,
-  chargeVersion,
-  chargeReference,
-  reviewChargeElementId,
-  reviewReturnId
-) {
+async function _persistChargeElementsReturns (reviewChargeElementId, reviewReturnId) {
   const data = {
-    reviewLicenceId,
-    chargeVersionId: chargeVersion?.id,
-    chargeReferenceId: chargeReference?.id,
-    chargePeriodStartDate: chargeVersion?.chargePeriod.startDate,
-    chargePeriodEndDate: chargeVersion?.chargePeriod.endDate,
-    chargeVersionChangeReason: chargeVersion?.changeReason.description,
     reviewChargeElementId,
     reviewReturnId
   }
 
-  await ReviewResultModel.query().insert(data)
+  await ReviewChargeElementsReturnsModel.query().insert(data)
 }
 
-async function _persistReviewReturn (returnLog) {
+async function _persistReviewReturn (returnLog, reviewLicenceId) {
   const data = {
     returnId: returnLog.id,
+    reviewLicenceId,
     returnReference: returnLog.returnReference,
     startDate: returnLog.startDate,
     endDate: returnLog.endDate,

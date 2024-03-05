@@ -23,6 +23,7 @@ async function go (licence) {
   const allElementIssues = _determineChargeElementsIssues(chargeVersions, licenceReturnLogs)
 
   licence.status = _determineLicenceStatus(allElementIssues, allReturnIssues)
+  licence.issues = [...allElementIssues, ...allReturnIssues]
 }
 
 function _determineChargeElementsIssues (chargeVersions, licenceReturnLogs) {
