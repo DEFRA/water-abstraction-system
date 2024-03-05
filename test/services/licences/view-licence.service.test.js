@@ -49,6 +49,8 @@ describe('View Licence service', () => {
           licenceHolder: 'Unregistered licence',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
+          monitoringStationCaption: 'Monitoring station',
+          monitoringStations: [],
           pageTitle: 'Licence 01/130/R01',
           purposes: null,
           region: 'South West',
