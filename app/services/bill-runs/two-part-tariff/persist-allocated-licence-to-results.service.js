@@ -8,9 +8,9 @@
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 const ReviewReturnModel = require('../../../models/review-return.model.js')
 const ReviewLicencesModel = require('../../../models/review-licence.model.js')
-const ReviewChargeVersionsModel = require('../../../models/review-charge-versions.mode.js')
-const ReviewChargeReferencesModel = require('../../../models/review-charge-references.model.js')
-const ReviewChargeElementsReturnsModel = require('../../../models/review-charge-elements-returns.model.js')
+const ReviewChargeVersionModel = require('../../../models/review-charge-version.model.js')
+const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
+const ReviewChargeElementReturnModel = require('../../../models/review-charge-element-return.model.js')
 
 /**
  * Persists results of matching and allocating return logs to licence charge elements for a two-part tariff bill run
@@ -57,7 +57,7 @@ async function _persistChargeReference (chargeReference, reviewChargeVersionId) 
     aggregate: chargeReference.aggregate ?? 1
   }
 
-  const { id: reviewChargeReferenceId } = await ReviewChargeReferencesModel.query().insert(data).returning('id')
+  const { id: reviewChargeReferenceId } = await ReviewChargeReferenceModel.query().insert(data).returning('id')
 
   return reviewChargeReferenceId
 }
@@ -71,7 +71,7 @@ async function _persistChargeVersion (chargeVersion, reviewLicenceId) {
     chargePeriodEndDate: chargeVersion.chargePeriod.endDate
   }
 
-  const { id: reviewChargeVersionId } = await ReviewChargeVersionsModel.query().insert(data).returning('id')
+  const { id: reviewChargeVersionId } = await ReviewChargeVersionModel.query().insert(data).returning('id')
 
   return reviewChargeVersionId
 }
@@ -139,7 +139,7 @@ async function _persistChargeElementsReturns (reviewChargeElementId, reviewRetur
     reviewReturnId
   }
 
-  await ReviewChargeElementsReturnsModel.query().insert(data)
+  await ReviewChargeElementReturnModel.query().insert(data)
 }
 
 async function _persistReviewReturn (returnLog, reviewLicenceId) {
