@@ -7,7 +7,7 @@
 
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 const ReviewReturnModel = require('../../../models/review-return.model.js')
-const ReviewLicencesModel = require('../../../models/review-licence.model.js')
+const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 const ReviewChargeVersionModel = require('../../../models/review-charge-version.model.js')
 const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
 const ReviewChargeElementReturnModel = require('../../../models/review-charge-element-return.model.js')
@@ -34,12 +34,12 @@ async function go (billRunId, licence) {
   const reviewReturnIds = await _persistReturnLogs(returnLogs, reviewLicenceId)
 
   for (const chargeVersion of chargeVersions) {
-    const reviewChargeVersionId = _persistChargeVersion(chargeVersion, reviewLicenceId)
+    const reviewChargeVersionId = await _persistChargeVersion(chargeVersion, reviewLicenceId)
 
     const { chargeReferences } = chargeVersion
 
     for (const chargeReference of chargeReferences) {
-      const reviewChargeReferenceId = _persistChargeReference(chargeReference, reviewChargeVersionId)
+      const reviewChargeReferenceId = await _persistChargeReference(chargeReference, reviewChargeVersionId)
 
       const { chargeElements } = chargeReference
 
@@ -86,7 +86,7 @@ async function _persistLicenceData (licence, billRunId) {
     issues: licence.issues.join(', ')
   }
 
-  const { id: reviewLicenceId } = await ReviewLicencesModel.query().insert(data).returning('id')
+  const { id: reviewLicenceId } = await ReviewLicenceModel.query().insert(data).returning('id')
 
   return reviewLicenceId
 }
