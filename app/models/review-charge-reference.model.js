@@ -2,14 +2,14 @@
 
 /**
  * Model for review_charge_references
- * @module ReviewChargeReferencesModel
+ * @module ReviewChargeReferenceModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class ReviewChargeReferencesModel extends BaseModel {
+class ReviewChargeReferenceModel extends BaseModel {
   static get tableName () {
     return 'reviewChargeReferences'
   }
@@ -36,4 +36,4 @@ class ReviewChargeReferencesModel extends BaseModel {
   }
 }
 
-module.exports = ReviewChargeReferencesModel
+module.exports = ReviewChargeReferenceModel
