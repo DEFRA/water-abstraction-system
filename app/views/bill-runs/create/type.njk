@@ -1,0 +1,75 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to bill runs',
+      href: '/billing/batch/list'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.text,
+          href: '#type-error'
+        }
+      ]
+      }) }}
+  {% endif %}
+
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukRadios({
+        attributes: {
+          'data-test': 'bill-run-type'
+        },
+        name: 'type',
+        errorMessage: error,
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+          }
+        },
+        items: [
+          {
+            text: 'Annual',
+            value: 'annual',
+            checked: 'annual' == selectedType
+          },
+          {
+            text: 'Supplementary',
+            value: 'supplementary',
+            checked: 'supplementary' == selectedType
+          },
+          {
+            text: 'Two-part tariff',
+            value: 'two_part_tariff',
+            checked: 'two_part_tariff' == selectedType
+          },
+          {
+            text: 'Two-part tariff supplementary',
+            value: 'two_part_tariff_supplementary',
+            checked: 'two_part_tariff_supplementary' == selectedType,
+            hint: {
+              text: 'Current charge scheme only'
+            }
+          }
+        ]
+      }) }}
+
+      {{ govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}

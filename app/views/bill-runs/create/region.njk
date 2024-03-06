@@ -1,0 +1,59 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: '/system/bill-runs/create/' + id + '/type'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: '#region-error'
+        }
+      ]
+      }) }}
+  {% endif %}
+
+  <div class="govuk-body">
+    <form method="post">
+      {% set regionItems = [] %}
+      {% for region in regions %}
+        {% set regionItem = { text: region.displayName, value: region.id, checked: region.id == selectedRegion } %}
+
+        {# Push our item into the region items array #}
+        {% set regionItems = (regionItems.push(regionItem), regionItems) %}
+      {% endfor %}
+
+      {{ govukRadios({
+        attributes: {
+          'data-test': 'bill-run-region'
+        },
+        name: 'region',
+        errorMessage: error,
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            isPageHeading: true,
+            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+          }
+        },
+        items: regionItems
+      }) }}
+
+      {{govukButton({ text: 'Continue', preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}
