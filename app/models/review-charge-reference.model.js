@@ -26,7 +26,7 @@ class ReviewChargeReferenceModel extends BaseModel {
       },
       reviewChargeElements: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-charge-elements.model',
+        modelClass: 'review-charge-element.model',
         join: {
           from: 'reviewChargeReferences.id',
           to: 'reviewChargeElements.reviewChargeReferenceId'
