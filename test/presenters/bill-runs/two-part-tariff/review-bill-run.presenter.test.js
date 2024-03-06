@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-bill-run.presenter.js')
 
-describe.only('Review Bill Run presenter', () => {
+describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     const testBillRun = _testBillRun()
 
