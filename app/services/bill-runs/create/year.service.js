@@ -20,17 +20,12 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const years = await _fetchYears()
 
-  const formattedData = YearPresenter.go(session, years)
+  const formattedData = YearPresenter.go(session)
 
   return {
     ...formattedData
   }
-}
-
-async function _fetchYears () {
-  return [2022, 2021]
 }
 
 module.exports = {

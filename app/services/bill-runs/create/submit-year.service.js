@@ -25,9 +25,8 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
-  const years = await _fetchYears()
 
-  const validationResult = _validate(payload, years)
+  const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -35,16 +34,12 @@ async function go (sessionId, payload) {
     return {}
   }
 
-  const formattedData = YearPresenter.go(session, years)
+  const formattedData = YearPresenter.go(session)
 
   return {
     error: validationResult,
     ...formattedData
   }
-}
-
-async function _fetchYears () {
-  return [2022, 2021]
 }
 
 async function _save (session, payload) {

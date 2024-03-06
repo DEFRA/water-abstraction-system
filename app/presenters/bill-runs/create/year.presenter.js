@@ -12,21 +12,11 @@
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, outstandingYears) {
+function go (session) {
   return {
     id: session.id,
-    years: _years(outstandingYears),
     selectedYear: session.data.year
   }
-}
-
-function _years (outstandingYears) {
-  return outstandingYears.map((outstandingYear) => {
-    return {
-      display: `${outstandingYear - 1} to ${outstandingYear}`,
-      value: outstandingYear
-    }
-  })
 }
 
 module.exports = {
