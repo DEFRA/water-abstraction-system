@@ -58,7 +58,11 @@ async function submitRegion (request, h) {
     })
   }
 
-  return h.redirect(`/system/bill-runs/create/${sessionId}/year`)
+  if (pageData.type.startsWith('two')) {
+    return h.redirect(`/system/bill-runs/create/${sessionId}/year`)
+  }
+
+  return h.redirect('/billing/batch/list')
 }
 
 async function submitSeason (request, h) {

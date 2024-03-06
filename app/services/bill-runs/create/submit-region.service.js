@@ -33,7 +33,7 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return { type: session.data.type }
   }
 
   const formattedData = RegionPresenter.go(session, regions)
