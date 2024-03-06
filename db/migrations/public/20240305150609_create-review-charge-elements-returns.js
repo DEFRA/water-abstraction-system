@@ -1,6 +1,6 @@
 'use strict'
 
-const tableName = 'review_charge_elments_returns'
+const tableName = 'review_charge_elements_returns'
 
 exports.up = function (knex) {
   return knex
