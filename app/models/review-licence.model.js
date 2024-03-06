@@ -24,12 +24,12 @@ class ReviewLicenceModel extends BaseModel {
           to: 'licences.id'
         }
       },
-      reviewResults: {
+      reviewChargeVersions: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-result.model',
+        modelClass: 'review-charge-version.model',
         join: {
           from: 'reviewLicences.id',
-          to: 'reviewResults.reviewLicenceId'
+          to: 'reviewChargeVersions.reviewLicenceId'
         }
       }
     }

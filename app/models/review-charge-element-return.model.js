@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Model for review_charge_elements_returns
- * @module ReviewChargeElementsReturnModel
+ * Model for review_charge_element_return
+ * @module ReviewChargeElementReturnModel
  */
 
 const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
-class ReviewChargeElementsReturnModel extends BaseModel {
+class ReviewChargeElementReturnModel extends BaseModel {
   static get tableName () {
     return 'reviewChargeElementsReturns'
   }
@@ -17,7 +17,7 @@ class ReviewChargeElementsReturnModel extends BaseModel {
     return {
       reviewChargeElement: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'ReviewChargeElementModel',
+        modelClass: 'review-charge-element.model',
         join: {
           from: 'reviewChargeElementsReturns.reviewChargeElementId',
           to: 'reviewChargeElements.id'
@@ -25,7 +25,7 @@ class ReviewChargeElementsReturnModel extends BaseModel {
       },
       reviewReturn: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'ReviewReturnModel',
+        modelClass: 'review-return.model',
         join: {
           from: 'reviewChargeElementsReturns.reviewReturnId',
           to: 'reviewReturns.id'
@@ -35,6 +35,4 @@ class ReviewChargeElementsReturnModel extends BaseModel {
   }
 }
 
-module.exports = ReviewChargeElementsReturnModel
-
-// Need to sort the model for the join table, not sure on the relation!!!!
+module.exports = ReviewChargeElementReturnModel

@@ -16,12 +16,24 @@ class ReviewChargeElementModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      reviewResults: {
-        relation: Model.HasManyRelation,
-        modelClass: 'review-result.model',
+      reviewChargeReference: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'review-charge-reference.model',
+        join: {
+          from: 'reviewChargeElements.reviewChargeReferenceId',
+          to: 'reviewChargeReferences.id'
+        }
+      },
+      reviewReturns: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'review-return.model',
         join: {
           from: 'reviewChargeElements.id',
-          to: 'reviewResults.reviewChargeElementId'
+          through: {
+            from: 'reviewChargeElementsReturns.reviewChargeElementId',
+            to: 'reviewChargeElementsReturns.reviewReturnId'
+          },
+          to: 'reviewReturns.id'
         }
       }
     }
