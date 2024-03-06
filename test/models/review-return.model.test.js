@@ -40,7 +40,7 @@ describe('Review Return model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to Review Licence', () => {
+    describe('when linking to review licence', () => {
       let testReviewLicence
 
       beforeEach(async () => {
