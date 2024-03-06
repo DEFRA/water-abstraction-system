@@ -29,18 +29,16 @@ describe('Fetch Review Licence Results Service', () => {
       billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
     })
 
-    describe('and a valid licence that is included in the bill run', () => {
-      it('returns details of the bill run', async () => {
-        const result = await FetchReviewLicenceResultsService.go(billRun.id)
+    it('returns details of the bill run', async () => {
+      const result = await FetchReviewLicenceResultsService.go(billRun.id)
 
-        expect(result).to.equal({
-          id: billRun.id,
-          batchType: billRun.batchType,
-          region: {
-            id: billRun.regionId,
-            displayName: region.displayName
-          }
-        })
+      expect(result).to.equal({
+        id: billRun.id,
+        batchType: billRun.batchType,
+        region: {
+          id: billRun.regionId,
+          displayName: region.displayName
+        }
       })
     })
   })

@@ -6,7 +6,6 @@
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
-const LicenceModel = require('../../../models/licence.model.js')
 
 /**
  * Takes the bill run ID and fetches all the data needed to review the bill run
@@ -19,9 +18,8 @@ const LicenceModel = require('../../../models/licence.model.js')
  */
 async function go (id) {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchLicences(id)
 
-  return { billRun, licences }
+  return billRun
 }
 
 async function _fetchBillRun (id) {
@@ -43,23 +41,6 @@ async function _fetchBillRun (id) {
     })
 
   return billRun
-}
-
-async function _fetchLicences (id) {
-  const licences = await LicenceModel.query()
-    .distinct([
-      'licences.id',
-      'licenceRef'
-    ])
-    .innerJoinRelated('reviewResults')
-    .where('billRunId', id)
-    .modify('licenceHolder')
-
-  for (const licence of licences) {
-    licence.licenceHolder = licence.$licenceHolder()
-  }
-
-  return licences
 }
 
 module.exports = {

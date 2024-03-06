@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchLicenceReviewDataService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
-const LicenceReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
+const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
 // Thing under test
 const ReviewLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
@@ -25,7 +25,7 @@ describe('Licence Review Bill Run Service', () => {
 
     beforeEach(() => {
       Sinon.stub(FetchLicenceReviewDataService, 'go').resolves({ billRun: 'bill run data' })
-      Sinon.stub(LicenceReviewBillRunPresenter, 'go').resolves('page data')
+      Sinon.stub(ReviewLicencePresenter, 'go').resolves('page data')
     })
 
     it('will fetch the bill run data and return it once formatted by the presenter', async () => {
