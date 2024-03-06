@@ -33,7 +33,7 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return { type: session.data.type }
+    return { journeyComplete: !session.data.type.startsWith('two_part') }
   }
 
   const formattedData = RegionPresenter.go(session, regions)
