@@ -15,19 +15,44 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review page
  */
-function go (billRun, _licences) {
-  const preparedBillRun = _prepareBillRun(billRun)
+function go (billRun, licences) {
+  const { licencesToReviewCount, preparedLicences } = _prepareLicences(licences)
 
-  return { ...preparedBillRun }
+  const preparedBillRun = _prepareBillRun(billRun, preparedLicences, licencesToReviewCount)
+
+  return { ...preparedBillRun, preparedLicences }
 }
 
-function _prepareBillRun (billRun) {
+function _prepareLicences (licences) {
+  let licencesToReviewCount = 0
+  const preparedLicences = []
+
+  for (const licence of licences) {
+    if (licence.status === 'review') {
+      licencesToReviewCount++
+    }
+
+    preparedLicences.push({
+      id: licence.licenceId,
+      licenceRef: licence.licenceRef,
+      licenceHolder: licence.licenceHolder,
+      status: licence.status,
+      issue: _getIssueOnLicence(licence.issues)
+    })
+  }
+
+  return { preparedLicences, licencesToReviewCount }
+}
+
+function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
   return {
     region: billRun.region.displayName,
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
-    billRunType: 'two-part tariff'
+    billRunType: 'two-part tariff',
+    numberOfLicences: billRunLicences.length,
+    licencesToReviewCount
   }
 }
 
@@ -36,6 +61,16 @@ function _financialYear (financialYearEnding) {
   const endYear = financialYearEnding
 
   return `${startYear} to ${endYear}`
+}
+
+function _getIssueOnLicence (issues) {
+  if (issues.length > 1) {
+    return 'Multiple Issues'
+  } else if (issues.length === 1) {
+    return issues[0]
+  } else {
+    return ''
+  }
 }
 
 module.exports = {

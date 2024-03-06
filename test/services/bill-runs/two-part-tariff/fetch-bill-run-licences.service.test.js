@@ -11,6 +11,7 @@ const { expect } = Code
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
+const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
 // Thing under test
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-bill-run-licences.service.js')
@@ -29,15 +30,36 @@ describe('Fetch Bill Run Licences service', () => {
       billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
     })
 
-    it('returns details of the bill run', async () => {
-      const result = await FetchBillRunLicencesService.go(billRun.id)
+    describe('and there are licences in the bill run', () => {
+      let testLicenceReady
 
-      expect(result.id).to.equal(billRun.id)
-      expect(result.createdAt).to.equal(billRun.createdAt)
-      expect(result.status).to.equal(billRun.status)
-      expect(result.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-      expect(result.batchType).to.equal(billRun.batchType)
-      expect(result.region.displayName).to.equal(region.displayName)
+      beforeEach(async () => {
+        testLicenceReady = await ReviewLicenceHelper.add({ billRunId: billRun.id })
+        await ReviewLicenceHelper.add({ billRunId: billRun.id, status: 'review' })
+      })
+
+      it('returns details of the bill run and the licences in it', async () => {
+        const result = await FetchBillRunLicencesService.go(billRun.id)
+
+        expect(result.billRun.id).to.equal(billRun.id)
+        expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+        expect(result.billRun.status).to.equal(billRun.status)
+        expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+        expect(result.billRun.batchType).to.equal(billRun.batchType)
+        expect(result.billRun.region.displayName).to.equal(region.displayName)
+
+        expect(result.licences).to.have.length(2)
+        expect(result.licences[1].licenceId).to.equal(testLicenceReady.licenceId)
+        expect(result.licences[1].licenceHolder).to.equal('Licence Holder Ltd')
+        expect(result.licences[1].licenceRef).to.equal(testLicenceReady.licenceRef)
+      })
+
+      it("orders the licence by 'review status'", async () => {
+        const result = await FetchBillRunLicencesService.go(billRun.id)
+
+        expect(result.licences[0].status).to.equal('review')
+        expect(result.licences[1].status).to.equal('ready')
+      })
     })
   })
 
@@ -45,7 +67,8 @@ describe('Fetch Bill Run Licences service', () => {
     it('returns no results', async () => {
       const result = await FetchBillRunLicencesService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d')
 
-      expect(result).to.be.undefined()
+      expect(result.billRun).to.be.undefined()
+      expect(result.licences).to.have.length(0)
     })
   })
 })

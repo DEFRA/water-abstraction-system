@@ -24,7 +24,7 @@ describe('Review Bill Run Service', () => {
     const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
     beforeEach(() => {
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({ billRun: 'bill data', billRunLicences: 'licence data' })
+      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({ billRun: 'bill data', licences: 'licence data' })
       Sinon.stub(ReviewBillRunPresenter, 'go').returns('page data')
     })
 

@@ -45,7 +45,7 @@ function defaults (data = {}) {
     billRunId: generateUUID(),
     licenceId: generateUUID(),
     licenceRef: generateLicenceRef(),
-    licenceHolder: 'A LicenceHolder',
+    licenceHolder: 'Licence Holder Ltd',
     status: 'ready',
     issues: null
   }
