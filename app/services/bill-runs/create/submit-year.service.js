@@ -31,7 +31,7 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return { journeyComplete: ['2024', '2023'].includes(session.data.year) }
   }
 
   const formattedData = YearPresenter.go(session)

@@ -110,6 +110,10 @@ async function submitYear (request, h) {
     })
   }
 
+  if (pageData.journeyComplete) {
+    return h.redirect('/billing/batch/list')
+  }
+
   return h.redirect(`/system/bill-runs/create/${sessionId}/season`)
 }
 
