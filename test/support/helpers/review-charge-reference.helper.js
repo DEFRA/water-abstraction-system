@@ -39,7 +39,7 @@ function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     reviewChargeVersionId: generateUUID(),
-    chargeReference: generateUUID(),
+    chargeReferenceId: generateUUID(),
     aggregate: 1
   }
 
