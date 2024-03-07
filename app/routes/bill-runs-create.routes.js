@@ -18,6 +18,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/create/{sessionId}/generate',
+    handler: BillRunsCreateController.generate,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Attempt to generate a new bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/create/{sessionId}/region',
     handler: BillRunsCreateController.region,
     options: {

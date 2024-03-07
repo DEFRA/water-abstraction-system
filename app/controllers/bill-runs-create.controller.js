@@ -5,20 +5,37 @@
  * @module BillRunsCreateController
  */
 
+const ExistsService = require('../services/bill-runs/create/exists.service.js')
 const InitiateSessionService = require('../services/bill-runs/create/initiate-session.service.js')
 const RegionService = require('../services/bill-runs/create/region.service.js')
-const TypeService = require('../services/bill-runs/create/type.service.js')
 const SeasonService = require('../services/bill-runs/create/season.service.js')
-const YearService = require('../services/bill-runs/create/year.service.js')
+const TypeService = require('../services/bill-runs/create/type.service.js')
 const SubmitRegionService = require('../services/bill-runs/create/submit-region.service.js')
 const SubmitSeasonService = require('../services/bill-runs/create/submit-season.service.js')
 const SubmitTypeService = require('../services/bill-runs/create/submit-type.service.js')
 const SubmitYearService = require('../services/bill-runs/create/submit-year.service.js')
+const YearService = require('../services/bill-runs/create/year.service.js')
 
 async function create (_request, h) {
   const session = await InitiateSessionService.go()
 
   return h.redirect(`/system/bill-runs/create/${session.id}/type`)
+}
+
+async function generate (request, h) {
+  const { sessionId } = request.params
+
+  const results = await ExistsService.go(sessionId)
+
+  if (results.pageData) {
+    return h.view('bill-runs/create/exists.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'This bill run already exists',
+      ...results.pageData
+    })
+  }
+
+  return h.redirect('/billing/batch/list')
 }
 
 async function region (request, h) {
@@ -59,7 +76,7 @@ async function submitRegion (request, h) {
   }
 
   if (pageData.journeyComplete) {
-    return h.redirect('/billing/batch/list')
+    return h.redirect(`/system/bill-runs/create/${sessionId}/generate`)
   }
 
   return h.redirect(`/system/bill-runs/create/${sessionId}/year`)
@@ -78,7 +95,7 @@ async function submitSeason (request, h) {
     })
   }
 
-  return h.redirect('/billing/batch/list')
+  return h.redirect(`/system/bill-runs/create/${sessionId}/generate`)
 }
 
 async function submitType (request, h) {
@@ -111,7 +128,7 @@ async function submitYear (request, h) {
   }
 
   if (pageData.journeyComplete) {
-    return h.redirect('/billing/batch/list')
+    return h.redirect(`/system/bill-runs/create/${sessionId}/generate`)
   }
 
   return h.redirect(`/system/bill-runs/create/${sessionId}/season`)
@@ -143,6 +160,7 @@ async function year (request, h) {
 
 module.exports = {
   create,
+  generate,
   region,
   season,
   submitRegion,
