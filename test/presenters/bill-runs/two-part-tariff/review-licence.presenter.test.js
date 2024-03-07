@@ -13,14 +13,16 @@ const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two
 describe('Review Licence presenter', () => {
   describe('when there is data to be presented for the review licence page', () => {
     const billRun = _billRun()
+    const licence = [{ licenceRef: '7/34/10/*S/0084' }]
 
     it('correctly presents the data', async () => {
-      const result = ReviewLicencePresenter.go(billRun)
+      const result = ReviewLicencePresenter.go(billRun, licence)
 
       expect(result).to.equal({
         billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
         status: 'review',
-        region: 'Anglian'
+        region: 'Anglian',
+        licenceRef: '7/34/10/*S/0084'
       })
     })
   })
