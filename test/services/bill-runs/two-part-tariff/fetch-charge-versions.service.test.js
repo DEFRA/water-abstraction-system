@@ -16,6 +16,7 @@ const ChargeVersionHelper = require('../../../support/helpers/charge-version.hel
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -51,7 +52,7 @@ describe('Fetch Charge Versions service', () => {
     beforeEach(async () => {
       const { id: changeReasonId } = await ChangeReasonHelper.add()
 
-      await LicenceHelper.add({ id: licenceId, licenceRef, regionId, expiredDate: new Date('2024-05-01') })
+      const licence = await LicenceHelper.add({ id: licenceId, licenceRef, regionId, expiredDate: new Date('2024-05-01') })
 
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
       // second part is to create another charge version with a different licence ref so we can test the order of the
@@ -97,6 +98,9 @@ describe('Fetch Charge Versions service', () => {
         authorisedAnnualQuantity: 100,
         purposeId
       })
+
+      // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
+      await LicenceHolderSeeder.seed(licence.licenceRef)
     })
 
     it('returns the charge version with related licence, charge references and charge elements', async () => {
@@ -114,7 +118,21 @@ describe('Fetch Charge Versions service', () => {
           startDate: new Date('2022-01-01'),
           expiredDate: new Date('2024-05-01'),
           lapsedDate: null,
-          revokedDate: null
+          revokedDate: null,
+          licenceDocument: {
+            id: results[0].licence.licenceDocument.id,
+            licenceDocumentRoles: [
+              {
+                company: {
+                  id: results[0].licence.licenceDocument.licenceDocumentRoles[0].company.id,
+                  name: 'Licence Holder Ltd',
+                  type: 'organisation'
+                },
+                contact: null,
+                id: results[0].licence.licenceDocument.licenceDocumentRoles[0].id
+              }
+            ]
+          }
         },
         chargeReferences: [{
           id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
