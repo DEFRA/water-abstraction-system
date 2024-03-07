@@ -11,9 +11,11 @@ const { expect } = Code
 const DatabaseHelper = require('../support/helpers/database.helper.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
-const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
 const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
 const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
+const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
+const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
+const ReviewReturnModel = require('../../app/models/review-return.model.js')
 
 // Thing under test
 const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
@@ -101,6 +103,42 @@ describe('Review Licence model', () => {
         expect(result.reviewChargeVersions[0]).to.be.an.instanceOf(ReviewChargeVersionModel)
         expect(result.reviewChargeVersions).to.include(reviewChargeVersions[0])
         expect(result.reviewChargeVersions).to.include(reviewChargeVersions[1])
+      })
+    })
+
+    describe('when linking to review returns', () => {
+      let reviewReturns
+
+      beforeEach(async () => {
+        testRecord = await ReviewLicenceHelper.add()
+        const { id: reviewLicenceId } = testRecord
+
+        reviewReturns = []
+        for (let i = 0; i < 2; i++) {
+          const reviewReturn = await ReviewReturnHelper.add({ reviewLicenceId })
+          reviewReturns.push(reviewReturn)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReviewLicenceModel.query()
+          .innerJoinRelated('reviewReturns')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review returns', async () => {
+        const result = await ReviewLicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewReturns')
+
+        expect(result).to.be.instanceOf(ReviewLicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewReturns).to.be.an.array()
+        expect(result.reviewReturns[0]).to.be.an.instanceOf(ReviewReturnModel)
+        expect(result.reviewReturns).to.include(reviewReturns[0])
+        expect(result.reviewReturns).to.include(reviewReturns[1])
       })
     })
   })
