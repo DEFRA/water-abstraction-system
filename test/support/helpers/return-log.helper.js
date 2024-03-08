@@ -14,14 +14,14 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - v1:1:[the generated licenceRef]:[the generated returnRequirement]:2022-04-01:2023-03-31
+ * - `id` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
  * - `createdAt` - new Date()
  * - `dueDate` - 2023-04-28
  * - `endDate` - 2023-03-31
  * - `licenceRef` - [randomly generated - 1/23/45/76/3672]
  * - `metadata` - {}
  * - `receivedDate` - 2023-04-12
- * - `returnRequirement` - [randomly generated - 10000321]
+ * - `returnReference` - [randomly generated - 10000321]
  * - `returnsFrequency` - month
  * - `startDate` - 2022-04-01
  * - `status` - completed
@@ -49,18 +49,18 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnRequirement = data.returnRequirement ? data.returnRequirement : randomInteger(10000000, 19999999)
+  const returnReference = data.returnReference ? data.returnReference : randomInteger(10000000, 19999999)
   const timestamp = timestampForPostgres()
 
   const defaults = {
-    id: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnRequirement),
+    id: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
     createdAt: timestamp,
     dueDate: new Date('2023-04-28'),
     endDate: new Date('2023-03-31'),
     licenceRef,
     metadata: {},
     receivedDate: new Date('2023-04-12'),
-    returnRequirement,
+    returnReference,
     returnsFrequency: 'month',
     startDate: new Date('2022-04-01'),
     status: 'completed',
@@ -78,17 +78,17 @@ function generateReturnLogId (
   endDate = '2023-03-31',
   version = 1,
   licenceRef,
-  returnRequirement
+  returnReference
 ) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
 
-  if (!returnRequirement) {
-    returnRequirement = randomInteger(10000000, 19999999)
+  if (!returnReference) {
+    returnReference = randomInteger(10000000, 19999999)
   }
 
-  return `v${version}:1:${licenceRef}:${returnRequirement}:${startDate}:${endDate}`
+  return `v${version}:1:${licenceRef}:${returnReference}:${startDate}:${endDate}`
 }
 
 module.exports = {

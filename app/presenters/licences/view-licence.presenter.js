@@ -21,6 +21,7 @@ function go (licence) {
     expiredDate,
     id,
     licenceDocumentHeader,
+    licenceGaugingStations,
     licenceHolder,
     licenceName,
     licenceRef,
@@ -42,6 +43,7 @@ function go (licence) {
   }
 
   const pointDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
+  const monitoringStationDetails = _generateMonitoringStation(licenceGaugingStations)
 
   return {
     id,
@@ -55,6 +57,8 @@ function go (licence) {
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceName,
     licenceRef,
+    monitoringStationCaption: monitoringStationDetails.monitoringStationCaption,
+    monitoringStations: monitoringStationDetails.monitoringStations,
     pageTitle: `Licence ${licenceRef}`,
     purposes,
     region: region.displayName,
@@ -102,6 +106,23 @@ function _generateLicenceHolder (licenceHolder) {
   }
 
   return licenceHolder
+}
+
+function _generateMonitoringStation (stations) {
+  let monitoringStations = []
+  if (stations && stations.length !== undefined) {
+    const jsonArray = stations.map(JSON.stringify)
+    monitoringStations = Array.from(new Set(jsonArray)).map(JSON.parse)
+  }
+
+  const monitoringStationCaption = monitoringStations.length > 1
+    ? 'Monitoring stations'
+    : 'Monitoring station'
+
+  return {
+    monitoringStationCaption,
+    monitoringStations
+  }
 }
 
 function _generatePurposes (licenceVersions) {

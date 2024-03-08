@@ -16,7 +16,7 @@ const ReviewReturnResultModel = require('../../../app/models/review-return-resul
  * If no `data` is provided, default values will be used. These are
  *
  * - `id` - [random UUID]
- * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnRequirement]:2022-04-01:2023-03-31
+ * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
  * - `returnReference` - `10031343`
  * - `startDate` - 2022-04-01
  * - `endDate` - 2022-05-06
@@ -53,11 +53,11 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
-  const returnRequirement = data.returnRequirement ? data.returnRequirement : randomInteger(10000000, 19999999)
+  const returnReference = data.returnReference ? data.returnReference : randomInteger(10000000, 19999999)
 
   const defaults = {
     id: generateUUID(),
-    returnId: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnRequirement),
+    returnId: generateReturnLogId('2022-04-01', '2023-03-31', 1, licenceRef, returnReference),
     returnReference: '10031343',
     startDate: new Date('2022-04-01'),
     endDate: new Date('2022-05-06'),

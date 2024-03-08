@@ -60,7 +60,7 @@ describe('Persist Allocated Licence to Results service', () => {
         )
 
         expect(result[0].reviewReturnResults.returnId).to.equal(testLicence.returnLogs[0].id)
-        expect(result[0].reviewReturnResults.returnReference).to.equal(testLicence.returnLogs[0].returnRequirement)
+        expect(result[0].reviewReturnResults.returnReference).to.equal(testLicence.returnLogs[0].returnReference)
         expect(result[0].reviewReturnResults.startDate).to.equal(testLicence.returnLogs[0].startDate)
         expect(result[0].reviewReturnResults.endDate).to.equal(testLicence.returnLogs[0].endDate)
         expect(result[0].reviewReturnResults.dueDate).to.equal(testLicence.returnLogs[0].dueDate)
@@ -106,7 +106,7 @@ describe('Persist Allocated Licence to Results service', () => {
         expect(result[0].reviewChargeElementResults).to.be.null()
 
         expect(result[0].reviewReturnResults.returnId).to.equal(testLicence.returnLogs[0].id)
-        expect(result[0].reviewReturnResults.returnReference).to.equal(testLicence.returnLogs[0].returnRequirement)
+        expect(result[0].reviewReturnResults.returnReference).to.equal(testLicence.returnLogs[0].returnReference)
         expect(result[0].reviewReturnResults.startDate).to.equal(testLicence.returnLogs[0].startDate)
         expect(result[0].reviewReturnResults.endDate).to.equal(testLicence.returnLogs[0].endDate)
         expect(result[0].reviewReturnResults.dueDate).to.equal(testLicence.returnLogs[0].dueDate)
@@ -202,7 +202,7 @@ function _generateData (aggregate = null, returnMatched = true) {
     returnLogs: [
       {
         id: returnId,
-        returnRequirement: '10021668',
+        returnReference: '10021668',
         description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
         startDate: new Date('2022-04-01'),
         endDate: new Date('2023-03-31'),

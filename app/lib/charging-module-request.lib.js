@@ -11,9 +11,26 @@ const requestConfig = require('../../config/request.config.js')
 const servicesConfig = require('../../config/services.config.js')
 
 /**
+ * Sends a DELETE request to the Charging Module for the provided path
+ *
+ * > Note: This function has been called `deleteRequest` here rather than `delete` as `delete` is a reserved word.
+ *
+ * @param {string} path - The path to send the request to (do not include the starting /)
+ *
+ * @returns {Promise<Object>} An object representing the result of the request
+ * @returns {boolean} result.succeeded Whether the request was successful
+ * @returns {Object} result.response The Charging Module response if successful or the error response if not
+ */
+async function deleteRequest (path) {
+  const result = await _sendRequest(path, RequestLib.delete)
+
+  return _parseResult(result)
+}
+
+/**
  * Sends a GET request to the Charging Module for the provided route
  *
- * @param {string} path The route to send the request to (do not include the starting /)
+ * @param {string} path - The route to send the request to (do not include the starting /)
  *
  * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
@@ -28,7 +45,7 @@ async function get (path) {
 /**
  * Sends a PATCH request to the Charging Module for the provided path
  *
- * @param {string} path The path to send the request to (do not include the starting /)
+ * @param {string} path - The path to send the request to (do not include the starting /)
  *
  * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
@@ -43,8 +60,8 @@ async function patch (path) {
 /**
  * Sends a POST request to the Charging Module for the provided path
  *
- * @param {string} path The path to send the request to (do not include the starting /)
- * @param {Object} [body] The body of the request
+ * @param {string} path - The path to send the request to (do not include the starting /)
+ * @param {Object} [body] - The body of the request
  *
  * @returns {Promise<Object>} result An object representing the result of the request
  * @returns {boolean} result.succeeded Whether the request was successful
@@ -59,9 +76,9 @@ async function post (path, body = {}) {
 /**
  * Sends a request to the Charging Module using the provided RequestLib method
  *
- * @param {string} path The path that you wish to connect to (do not include the starting /)
- * @param {Object} method An instance of a RequestLib method which will be used to send the request
- * @param {Object} [body] Optional body to be sent to the route as json
+ * @param {string} path - The path that you wish to connect to (do not include the starting /)
+ * @param {Object} method - An instance of a RequestLib method which will be used to send the request
+ * @param {Object} [body] - Optional body to be sent to the route as json
  *
  * @returns {Promise<Object>} The result of the request passed back from RequestLib
  */
@@ -107,7 +124,7 @@ function _requestOptions (accessToken, body) {
 /**
  * Parses the charging module response returned from RequestLib
  *
- * @param {Object} result The result object returned by RequestLib
+ * @param {Object} result - The result object returned by RequestLib
  *
  * @returns {Object} If result was not an error, a parsed version of the response
  */
@@ -132,6 +149,7 @@ function _parseResult (result) {
 }
 
 module.exports = {
+  delete: deleteRequest,
   get,
   patch,
   post

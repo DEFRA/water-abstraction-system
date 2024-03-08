@@ -14,7 +14,7 @@ const ChargingModuleRequestLib = require('../../../app/lib/charging-module-reque
 // Thing under test
 const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
 
-describe('Charge module create transaction service', () => {
+describe('Charging Module Create Transaction service', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
   const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
 

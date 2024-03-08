@@ -9,6 +9,7 @@ const MatchReturnsToChargeElementService = require('./match-returns-to-charge-el
 const PrepareChargeVersionService = require('./prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
 const PersistAllocatedLicenceToResultsService = require('./persist-allocated-licence-to-results.service.js')
+const DetermineLicenceIssuesService = require('./determine-licence-issues.service.js')
 
 /**
  * Performs the two-part tariff matching and allocating
@@ -36,7 +37,7 @@ async function go (billRun, billingPeriod) {
 }
 
 async function _process (licences, billingPeriod, billRun) {
-  for (const licence of licences) {
+  licences.forEach(async (licence) => {
     await PrepareReturnLogsService.go(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
@@ -64,8 +65,9 @@ async function _process (licences, billingPeriod, billRun) {
       })
     })
 
+    await DetermineLicenceIssuesService.go(licence)
     await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
-  }
+  })
 }
 
 module.exports = {

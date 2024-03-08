@@ -26,7 +26,7 @@ async function _fetch (licenceRef, billingPeriod) {
   const returnLogs = await ReturnLogModel.query()
     .select([
       'id',
-      'returnRequirement',
+      'returnReference',
       ref('metadata:description').castText().as('description'),
       'startDate',
       'endDate',
@@ -47,7 +47,7 @@ async function _fetch (licenceRef, billingPeriod) {
     .where('endDate', '>=', billingPeriod.startDate)
     .whereJsonPath('metadata', '$.isTwoPartTariff', '=', true)
     .orderBy('startDate', 'ASC')
-    .orderBy('returnRequirement', 'ASC')
+    .orderBy('returnReference', 'ASC')
     .withGraphFetched('returnSubmissions')
     .modifyGraph('returnSubmissions', builder => {
       builder
