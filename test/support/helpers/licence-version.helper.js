@@ -6,7 +6,7 @@
 
 const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 
 /**
  * Add a new licence version

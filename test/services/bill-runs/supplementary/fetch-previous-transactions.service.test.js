@@ -12,7 +12,7 @@ const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
@@ -30,7 +30,7 @@ describe('Fetch Previous Transactions service', () => {
   const billRunSetupValues = { billingAccountId, accountNumber, licenceId, licenceRef }
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when there are no transactions', () => {

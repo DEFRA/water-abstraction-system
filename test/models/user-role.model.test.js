@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const RoleModel = require('../../app/models/role.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
 const UserRoleHelper = require('../support/helpers/user-role.helper.js')
@@ -22,7 +22,7 @@ describe('User Role model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('Basic query', () => {

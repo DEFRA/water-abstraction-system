@@ -14,7 +14,7 @@ const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
@@ -39,7 +39,7 @@ describe('Licence model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await LicenceHelper.add()
   })

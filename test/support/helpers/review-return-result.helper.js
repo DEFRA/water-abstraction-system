@@ -4,7 +4,7 @@
  * @module ReviewReturnResultHelper
  */
 
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const { generateReturnLogId } = require('./return-log.helper.js')

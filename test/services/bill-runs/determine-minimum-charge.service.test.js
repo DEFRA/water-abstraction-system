@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 
 // Thing under test
 const DetermineMinimumChargeService = require('../../../app/services/bill-runs/determine-minimum-charge.service.js')
@@ -23,7 +23,7 @@ describe('Determine Minimum Charge service', () => {
   let chargeVersion
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('where the charge version start date is the same as the charge period', () => {

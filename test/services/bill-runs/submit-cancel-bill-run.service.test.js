@@ -21,7 +21,7 @@ const BillRunChargeVersionYearHelper = require('../../support/helpers/bill-run-c
 const BillRunChargeVersionYearModel = require('../../../app/models/bill-run-charge-version-year.model.js')
 const BillRunVolumeHelper = require('../../support/helpers/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../../app/models/bill-run-volume.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const ReviewChargeElementResultHelper = require('../../support/helpers/review-charge-element-result.helper.js')
 const ReviewChargeElementResultModel = require('../../../app/models/review-charge-element-result.model.js')
 const ReviewResultHelper = require('../../support/helpers/review-result.helper.js')
@@ -42,7 +42,7 @@ describe('Submit Cancel Bill Run service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     chargingModuleDeleteBillRunServiceStub = Sinon.stub(ChargingModuleDeleteBillRunService, 'go')
   })

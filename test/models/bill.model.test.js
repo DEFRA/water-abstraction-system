@@ -13,7 +13,7 @@ const BillHelper = require('../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
 const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const BillModel = require('../../app/models/bill.model.js')
@@ -22,7 +22,7 @@ describe('Bill model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('Basic query', () => {

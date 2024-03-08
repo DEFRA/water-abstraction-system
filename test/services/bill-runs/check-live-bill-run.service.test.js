@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -21,7 +21,7 @@ describe('Check Live Bill Run service', () => {
   const toFinancialYearEnding = billingPeriod.endDate.getFullYear()
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when an sroc supplementary bill run exists for this region and financial year', () => {

@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const ReviewChargeElementsResultsHelper = require('../../..//support/helpers/review-charge-element-result.helper.js')
 const ReviewResultsHelper = require('../../..//support/helpers/review-result.helper.js')
 const ReviewReturnResultsHelper = require('../../../support/helpers/review-return-result.helper.js')
@@ -20,7 +20,7 @@ describe('Fetch Review Results Service', () => {
   const licenceId = '83fe31e7-2f16-4be7-b557-bbada2323d92'
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when the licence has data for review', () => {

@@ -4,7 +4,7 @@
  * @module BillingAccountHelper
  */
 
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
