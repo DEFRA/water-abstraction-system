@@ -12,7 +12,7 @@ const { expect } = Code
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const { currentFinancialYear } = require('../../../support/helpers/general.helper.js')
+const { currentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')

@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const { currentFinancialYear } = require('../../support/helpers/general.helper.js')
+const { currentFinancialYear } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const CheckLiveBillRunService = require('../../../app/services/bill-runs/check-live-bill-run.service.js')

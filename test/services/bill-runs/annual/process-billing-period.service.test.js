@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { currentFinancialYear } = require('../../../support/helpers/general.helper.js')
+const { currentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const BillModel = require('../../../../app/models/bill.model.js')

@@ -20,7 +20,7 @@ const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
-const { currentFinancialYear } = require('../../../support/helpers/general.helper.js')
+const { currentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')

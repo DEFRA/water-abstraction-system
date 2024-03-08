@@ -5,7 +5,7 @@
  */
 
 const { generateChargeReference } = require('./charge-category.helper.js')
-const { currentFinancialYear } = require('../helpers/general.helper.js')
+const { currentFinancialYear } = require('../../../app/lib/general.lib.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
