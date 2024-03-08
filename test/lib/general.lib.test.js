@@ -61,7 +61,22 @@ describe('GeneralLib', () => {
     })
   })
 
-  describe('#currentFinancialYear', () => {
+  describe('#currentTimeInNanoseconds', () => {
+    let timeBeforeTest
+
+    beforeEach(() => {
+      timeBeforeTest = process.hrtime.bigint()
+    })
+
+    it('returns the current date and time as an ISO string', () => {
+      const result = GeneralLib.currentTimeInNanoseconds()
+
+      expect(typeof result).to.equal('bigint')
+      expect(result).to.be.greaterThan(timeBeforeTest)
+    })
+  })
+
+  describe('#determineCurrentFinancialYear', () => {
     let clock
     let testDate
 
@@ -78,7 +93,7 @@ describe('GeneralLib', () => {
         })
 
         it('returns the correct start and end dates for the financial year', () => {
-          const result = GeneralLib.currentFinancialYear()
+          const result = GeneralLib.determineCurrentFinancialYear()
 
           expect(result.startDate).to.equal(new Date('2023-04-01'))
           expect(result.endDate).to.equal(new Date('2024-03-31'))
@@ -93,27 +108,12 @@ describe('GeneralLib', () => {
         })
 
         it('returns the correct start and end dates for the financial year', () => {
-          const result = GeneralLib.currentFinancialYear()
+          const result = GeneralLib.determineCurrentFinancialYear()
 
           expect(result.startDate).to.equal(new Date('2023-04-01'))
           expect(result.endDate).to.equal(new Date('2024-03-31'))
         })
       })
-    })
-  })
-
-  describe('#currentTimeInNanoseconds', () => {
-    let timeBeforeTest
-
-    beforeEach(() => {
-      timeBeforeTest = process.hrtime.bigint()
-    })
-
-    it('returns the current date and time as an ISO string', () => {
-      const result = GeneralLib.currentTimeInNanoseconds()
-
-      expect(typeof result).to.equal('bigint')
-      expect(result).to.be.greaterThan(timeBeforeTest)
     })
   })
 

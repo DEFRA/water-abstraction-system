@@ -10,13 +10,13 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const { currentFinancialYear } = require('../../../app/lib/general.lib.js')
+const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const CheckLiveBillRunService = require('../../../app/services/bill-runs/check-live-bill-run.service.js')
 
 describe('Check Live Bill Run service', () => {
-  const billingPeriod = currentFinancialYear()
+  const billingPeriod = determineCurrentFinancialYear()
   const regionId = '6ec2f8b5-70e2-4abf-8ba9-026971d9de52'
   const toFinancialYearEnding = billingPeriod.endDate.getFullYear()
 

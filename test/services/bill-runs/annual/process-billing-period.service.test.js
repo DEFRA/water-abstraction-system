@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const DatabaseHelper = require('../../../support/helpers/database.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { currentFinancialYear } = require('../../../../app/lib/general.lib.js')
+const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const BillModel = require('../../../../app/models/bill.model.js')
@@ -24,7 +24,7 @@ const GenerateTransactionsService = require('../../../../app/services/bill-runs/
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
 
 describe('Annual Process billing period service', () => {
-  const billingPeriod = currentFinancialYear()
+  const billingPeriod = determineCurrentFinancialYear()
   const billRun = {
     id: '8e0d4c8b-e9fe-4238-8f3e-dfca743316ef',
     externalId: 'f6e052f5-37f9-43f3-a649-ff6398cec1a3'

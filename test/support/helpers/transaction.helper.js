@@ -5,7 +5,7 @@
  */
 
 const { generateChargeReference } = require('./charge-category.helper.js')
-const { currentFinancialYear } = require('../../../app/lib/general.lib.js')
+const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
@@ -58,7 +58,7 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
-  const { startDate, endDate } = currentFinancialYear()
+  const { startDate, endDate } = determineCurrentFinancialYear()
 
   const defaults = {
     adjustmentFactor: 1,
