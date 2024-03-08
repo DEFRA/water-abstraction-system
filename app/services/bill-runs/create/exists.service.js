@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Used by the `/bill-runs/create/{sessionId}/generate` page to determine if a matching bill run already exists
+ * Determines if an existing bill run matches the one a user is trying to create
  * @module BillRunsCreateExistsService
  */
 
@@ -9,7 +9,7 @@ const BillRunModel = require('../../../models/bill-run.model.js')
 const ExistsPresenter = require('../../../presenters/bill-runs/create/exists.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
-const { currentFinancialYear } = require('../../../../test/support/helpers/general.helper.js')
+const { currentFinancialYear } = require('../../../lib/general.lib.js')
 
 /**
  * Determines if an existing bill run matches the one a user is trying to create
@@ -39,32 +39,17 @@ const { currentFinancialYear } = require('../../../../test/support/helpers/gener
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const year = _year(session)
-  const matchResults = await _fetchMatchingBillRun(session, year)
+  const yearToUse = _determineYear(session)
+  const matchResults = await _fetchMatchingBillRun(session, yearToUse)
 
   return {
     matchResults,
     pageData: _pageData(session, matchResults),
-    session
+    session,
+    // NOTE: Having determined which year a bill run is for, even for journeys like annual where the user doesn't select
+    // one it makes sense to include this for use by downstream services like GenerateService.
+    yearToUse
   }
-}
-
-function _pageData (session, matchResults) {
-  const { type } = session.data
-
-  // No matches so we can create the bill run
-  if (matchResults.length === 0) {
-    return null
-  }
-
-  // You can only have one SROC and PRESROC supplementary being processed at any time. If less than 2 then we can create
-  // a bill run
-  if (type === 'supplementary' && matchResults.length < 2) {
-    return null
-  }
-
-  // We have a match so format the bill run for the /exists page
-  return ExistsPresenter.go(session, matchResults[0])
 }
 
 function _applyAnnualWhereClauses (query, year) {
@@ -88,6 +73,18 @@ function _applyTwoPartTariffQuery (query, year, season) {
     .where('toFinancialYearEnding', year)
     .whereNotIn('status', ['cancel', 'empty', 'error'])
     .limit(1)
+}
+
+function _determineYear (session) {
+  const { type, year } = session.data
+
+  if (year && type.startsWith('two_part')) {
+    return year
+  }
+
+  const { endDate } = currentFinancialYear()
+
+  return endDate.getFullYear()
 }
 
 async function _fetchMatchingBillRun (session, year) {
@@ -129,16 +126,22 @@ async function _fetchMatchingBillRun (session, year) {
     })
 }
 
-function _year (session) {
-  const { type, year } = session.data
+function _pageData (session, matchResults) {
+  const { type } = session.data
 
-  if (year && type.startsWith('two_part')) {
-    return year
+  // No matches so we can create the bill run
+  if (matchResults.length === 0) {
+    return null
   }
 
-  const { endDate } = currentFinancialYear()
+  // You can only have one SROC and PRESROC supplementary being processed at any time. If less than 2 then we can create
+  // a bill run
+  if (type === 'supplementary' && matchResults.length < 2) {
+    return null
+  }
 
-  return endDate.getFullYear()
+  // We have a match so format the bill run for the /exists page
+  return ExistsPresenter.go(session, matchResults[0])
 }
 
 module.exports = {

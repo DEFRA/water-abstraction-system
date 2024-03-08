@@ -61,17 +61,18 @@ const services = {
 /**
  * Sends a GET request to the legacy service for the provided path
  *
- * @param {string} serviceName name of the legacy service to call (background, crm, external, idm, import, internal,
+ * @param {string} serviceName - Name of the legacy service to call (background, crm, external, idm, import, internal,
  * permits, reporting, returns or water)
- * @param {string} path The path to send the request to (do not include the starting /)
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
+ * @param {string} path - The path to send the request to (do not include the starting /)
+ * @param {string} [userId] - If the legacy endpoint needs to check a user's authorisation their ID to be added as a
+ * header. Defaults to null
+ * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
+ * response). Defaults to true
  *
- * @returns {Promise<Object>} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The legacy service's response if successful or the error response if not.
+ * @returns {Promise<Object>} An object representing the result of the request
  */
-async function get (serviceName, path, apiRequest = true) {
-  return _sendRequest(RequestLib.get, serviceName, path, apiRequest)
+async function get (serviceName, path, userId = null, apiRequest = true) {
+  return _sendRequest(RequestLib.get, serviceName, path, userId, apiRequest)
 }
 
 /**
@@ -79,32 +80,22 @@ async function get (serviceName, path, apiRequest = true) {
  *
  * @param {string} serviceName name of the legacy service to call (background, crm, external, idm, import, internal,
  * permits, reporting, returns or water)
- * @param {string} path the path to send the request to (do not include the starting /)
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
- * @param {Object} [body] optional body to be sent to the service as json
+ * @param {string} path - The path to send the request to (do not include the starting /)
+ * @param {string} [userId] - If the legacy endpoint needs to check a user's authorisation their ID to be added as a
+ * header. Defaults to null
+ * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
+ * response). Defaults to true
+ * @param {Object} [body] - Data to be sent in the request body to the service as JSON
  *
- * @returns {Promise<Object>} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The legacy service's response if successful or the error response if not.
+ * @returns {Promise<Object>} An object representing the result of the request
  */
-async function post (serviceName, path, apiRequest = true, body = {}) {
-  return _sendRequest(RequestLib.post, serviceName, path, apiRequest, body)
+async function post (serviceName, path, userId, apiRequest = true, body = {}) {
+  return _sendRequest(RequestLib.post, serviceName, path, userId, apiRequest, body)
 }
 
-/**
- * Sends a request to a legacy service using the provided RequestLib method
- *
- * @param {Object} method an instance of a RequestLib method which will be used to send the request
- * @param {string} serviceName name of the legacy service (see `services`)
- * @param {string} path the path that you wish to connect to (do not include the starting /)
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
- * @param {Object} body body to be sent to the service as json
- *
- * @returns {Object} The result of the request passed back from RequestLib
- */
-async function _sendRequest (method, serviceName, path, apiRequest, body) {
+async function _sendRequest (method, serviceName, path, userId, apiRequest, body) {
   const service = _service(serviceName)
-  const options = _requestOptions(service, apiRequest, body)
+  const options = _requestOptions(service, userId, apiRequest, body)
 
   const result = await method(path, options)
 
@@ -132,20 +123,41 @@ function _service (serviceName) {
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
  *   response to a JSON object for us
  *
- * @param {Object} service which legacy service we are connecting with
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
- * @param {Object} body the request body if applicable
+ * @param {Object} service - Which legacy service we are connecting with
+ * @param {string} userId - If the legacy endpoint needs to check a user's authorisation their ID to be added as a
+ * header
+ * @param {boolean} apiRequest - Whether the request is to the service's API endpoints (JSON response) or web (HTML
+ * response)
+ * @param {Object} body - Data to be sent in the request body to the service as JSON
  *
  * @returns Legacy specific options to be passed to RequestLib
  */
-function _requestOptions (service, apiRequest, body) {
+function _requestOptions (service, userId, apiRequest, body) {
   const prefixUrl = apiRequest ? new URL(service.api, service.base).href : service.base
+
+  const headers = {
+    authorization: `Bearer ${servicesConfig.legacyAuthToken}`
+  }
+
+  // NOTE: Just like in our project and water-abstraction-ui some of the internal legacy services also have an
+  // authorization strategy that applies scope to their routes. We authenticate with them using the shared JWT token the
+  // previous team left behind. But that is not enough for those routes which have, for example, 'billing' configured as
+  // their authorization scope.
+  //
+  // They expected the legacy UI to also let them know who the user was behind the request being made so they can
+  // confirm they have authorization to do that 'thing'. As this has already been checked by the UI it is pointless and
+  // wasteful. But it is what it is!
+  //
+  // water-abstraction-service for example appears to have a couple of strategies; decoding the user email from the JWT
+  // token being one of them. But we suspect this was abandoned in favour of adding the user's userId as a header in the
+  // request.
+  if (userId) {
+    headers['defra-internal-user-id'] = userId
+  }
 
   return {
     prefixUrl,
-    headers: {
-      authorization: `Bearer ${servicesConfig.legacyAuthToken}`
-    },
+    headers,
     responseType: 'json',
     json: body
   }

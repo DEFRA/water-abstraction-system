@@ -5,8 +5,11 @@
  * @module BillRunsCreateController
  */
 
+const Boom = require('@hapi/boom')
+
 const ExistsService = require('../services/bill-runs/create/exists.service.js')
 const InitiateSessionService = require('../services/bill-runs/create/initiate-session.service.js')
+const GenerateService = require('../services/bill-runs/create/generate.service.js')
 const RegionService = require('../services/bill-runs/create/region.service.js')
 const SeasonService = require('../services/bill-runs/create/season.service.js')
 const TypeService = require('../services/bill-runs/create/type.service.js')
@@ -27,12 +30,21 @@ async function generate (request, h) {
 
   const results = await ExistsService.go(sessionId)
 
+  // If the results includes a pageData property it's because `ExistsService` found a match and so has formatted page
+  // data for the `/exists` page. We direct there and don't generate a bill run
   if (results.pageData) {
     return h.view('bill-runs/create/exists.njk', {
       activeNavBar: 'bill-runs',
       pageTitle: 'This bill run already exists',
       ...results.pageData
     })
+  }
+
+  // If we get here then we are go for launch!
+  try {
+    await GenerateService.go(request.auth.credentials.user, results)
+  } catch (error) {
+    return Boom.badImplementation(error.message)
   }
 
   return h.redirect('/billing/batch/list')
