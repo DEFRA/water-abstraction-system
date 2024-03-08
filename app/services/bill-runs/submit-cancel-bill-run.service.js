@@ -187,6 +187,16 @@ async function _deleteChargeElements (billRunId) {
     .where('rl.billRunId', '=', billRunId)
 }
 
+/**
+ * As the `review_charge_elements` table has a join with the `review_charge_references` table we need to delete the
+ * `review_charge_elements` table first. This function does that so we can process in parallel the deletion of the
+ * elements and references whilst also deleting the records from the `review_charge_elements_returns` table.
+ */
+async function _deleteChargeElementsAndReferences (billRunId) {
+  await _deleteChargeElements(billRunId)
+  await _deleteChargeReferences(billRunId)
+}
+
 async function _deleteChargeElementReturns (billRunId) {
   return db
     .del()
@@ -211,9 +221,12 @@ async function _deleteChargeReferences (billRunId) {
  */
 async function _removeReviewResults (billRunId) {
   try {
-    await _deleteChargeElementReturns(billRunId)
-    await _deleteChargeElements(billRunId)
-    await _deleteChargeReferences(billRunId)
+    const deleteChargeElementReturnsProcess = _deleteChargeElementReturns(billRunId)
+    const deleteChargeElementsAndReferencesProcess = _deleteChargeElementsAndReferences(billRunId)
+
+    // To help performance we allow both these processes to run in parallel. Because their where clause depends on
+    // `review_charge_versions` and `review_returns` we have to wait for them to complete before we proceed.
+    await Promise.all([deleteChargeElementReturnsProcess, deleteChargeElementsAndReferencesProcess])
 
     const deleteChargeVersionsProcess = ReviewChargeVersionModel.query()
       .delete()
