@@ -70,8 +70,8 @@ const services = {
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response The legacy service's response if successful or the error response if not.
  */
-async function get (serviceName, path, apiRequest = true) {
-  return _sendRequest(RequestLib.get, serviceName, path, apiRequest)
+async function get (serviceName, path, userId = null, apiRequest = true) {
+  return _sendRequest(RequestLib.get, serviceName, path, userId, apiRequest)
 }
 
 /**
@@ -87,8 +87,8 @@ async function get (serviceName, path, apiRequest = true) {
  * @returns {boolean} result.succeeded Whether the request was successful
  * @returns {Object} result.response The legacy service's response if successful or the error response if not.
  */
-async function post (serviceName, path, apiRequest = true, body = {}) {
-  return _sendRequest(RequestLib.post, serviceName, path, apiRequest, body)
+async function post (serviceName, path, userId = null, apiRequest = true, body = {}) {
+  return _sendRequest(RequestLib.post, serviceName, path, userId, apiRequest, body)
 }
 
 /**
@@ -102,9 +102,9 @@ async function post (serviceName, path, apiRequest = true, body = {}) {
  *
  * @returns {Object} The result of the request passed back from RequestLib
  */
-async function _sendRequest (method, serviceName, path, apiRequest, body) {
+async function _sendRequest (method, serviceName, path, userId, apiRequest, body) {
   const service = _service(serviceName)
-  const options = _requestOptions(service, apiRequest, body)
+  const options = _requestOptions(service, userId, apiRequest, body)
 
   const result = await method(path, options)
 
@@ -138,14 +138,32 @@ function _service (serviceName) {
  *
  * @returns Legacy specific options to be passed to RequestLib
  */
-function _requestOptions (service, apiRequest, body) {
+function _requestOptions (service, userId, apiRequest, body) {
   const prefixUrl = apiRequest ? new URL(service.api, service.base).href : service.base
+
+  const headers = {
+    authorization: `Bearer ${servicesConfig.legacyAuthToken}`
+  }
+
+  // NOTE: Just like in our project and water-abstraction-ui some of the internal legacy services also have an
+  // authorization strategy that applies scope to their routes. We authenticate with them using the shared JWT token the
+  // previous team left behind. But that is not enough for those routes which have, for example, 'billing' configured as
+  // their authorization scope.
+  //
+  // They expect the legacy UI to also let them know who the user is behind the request being made so they can confirm
+  // they have authorization to do that 'thing'. As this has already been checked by the UI it is pointless and
+  // wasteful. But it is what it is!
+  //
+  // water-abstraction-service for example appears to have a couple of strategies; decoding the user email from the JWT
+  // token being one of them. But we suspect this was abandoned in favour of adding the user's userId as a header in the
+  // request.
+  if (userId) {
+    headers['defra-internal-user-id'] = userId
+  }
 
   return {
     prefixUrl,
-    headers: {
-      authorization: `Bearer ${servicesConfig.legacyAuthToken}`
-    },
+    headers,
     responseType: 'json',
     json: body
   }
