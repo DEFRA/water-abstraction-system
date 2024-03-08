@@ -1,6 +1,8 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -16,13 +18,37 @@
 
 {% block content %}
   {# Main heading #}
-  <div class="govuk-body">
+  <div>
+    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+
+  {% if error %}
+    {{ govukErrorMessage({
+      text: "Select any uses for the return requirement"
+    }) }}
+  {%endif%}
+
+    <div class="govuk-hint"> Select all that apply </div>
   </div>
 
+<div>
   <form method="post">
-    <div class="govuk-body">
-      {{ govukButton({ text: "Continue" }) }}
-    </div>
+      {% for purpose in licencePurposes %}
+        {{ govukCheckboxes({
+          name: "purposes",
+          errorMessage: {
+            text: error.text
+          },
+          items: [
+            {
+              value: purpose,
+              text: purpose,
+              checked: false
+            }
+          ]
+        }) }}
+      {% endfor %}
+    {{ govukButton({ text: "Continue" }) }}
   </form>
+</div>
 {% endblock %}
