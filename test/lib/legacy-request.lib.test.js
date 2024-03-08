@@ -180,7 +180,7 @@ describe('LegacyRequestLib', () => {
       it('can add the defra-user-id header', async () => {
         await LegacyRequestLib.post('import', testPath, 1234, false, requestBody)
 
-        const requestArgs = RequestLib.get.firstCall.args
+        const requestArgs = RequestLib.post.firstCall.args
 
         expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
       })
