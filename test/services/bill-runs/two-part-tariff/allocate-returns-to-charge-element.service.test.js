@@ -224,7 +224,7 @@ describe('Allocate Returns to Charge Element Service', () => {
       describe('with a return that has issues', () => {
         beforeEach(() => {
           testData = _generateTestData()
-          testData.matchingReturns[0].issues = true
+          testData.matchingReturns[0].underQuery = true
         })
 
         it('does not allocate anything from the return log', () => {
@@ -428,7 +428,7 @@ describe('Allocate Returns to Charge Element Service', () => {
   })
 })
 
-function _generateTestData (returnStatus = 'complete') {
+function _generateTestData (returnStatus = 'completed') {
   // Data not required for the tests has been excluded from the generated data
   const chargeElement = {
     authorisedAnnualQuantity: 32,
@@ -505,9 +505,8 @@ function _generateTestData (returnStatus = 'complete') {
   // If a returns status isn't `complete` it won't have any return submission lines and the `issues` will be `true`
   const matchingReturns = [
     {
-      returnSubmissions: returnStatus === 'complete' ? returnSubmissions : [],
+      returnSubmissions: returnStatus === 'completed' ? returnSubmissions : [],
       allocatedQuantity: 0,
-      issues: returnStatus !== 'complete',
       status: returnStatus
     }
   ]

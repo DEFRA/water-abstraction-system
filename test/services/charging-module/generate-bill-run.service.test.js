@@ -14,7 +14,7 @@ const ChargingModuleRequestLib = require('../../../app/lib/charging-module-reque
 // Thing under test
 const ChargingModuleGenerateBillRunService = require('../../../app/services/charging-module/generate-bill-run.service.js')
 
-describe('Charge module generate bill run service', () => {
+describe('Charging Module Generate Bill Run service', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
 
   afterEach(() => {
@@ -50,7 +50,7 @@ describe('Charge module generate bill run service', () => {
     })
   })
 
-  describe('when the service cannot create a transaction', () => {
+  describe('when the service cannot generate a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({

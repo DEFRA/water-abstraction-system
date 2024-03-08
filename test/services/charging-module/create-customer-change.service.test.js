@@ -14,7 +14,7 @@ const ChargingModuleRequestLib = require('../../../app/lib/charging-module-reque
 // Thing under test
 const ChargingModuleCreateCustomerChangeService = require('../../../app/services/charging-module/create-customer-change.service.js')
 
-describe('Charging module create customer change service', () => {
+describe('Charging Module Create Customer Change service', () => {
   const requestData = {
     region: 'B',
     customerReference: 'B88891136A',

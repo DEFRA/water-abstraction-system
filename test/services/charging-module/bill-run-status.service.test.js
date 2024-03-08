@@ -14,7 +14,7 @@ const ChargingModuleRequestLib = require('../../../app/lib/charging-module-reque
 // Thing under test
 const ChargingModuleBillRunStatusService = require('../../../app/services/charging-module/bill-run-status.service.js')
 
-describe('Charging Module bill run status service', () => {
+describe('Charging Module Bill Run Status service', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
   const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
 
@@ -52,7 +52,7 @@ describe('Charging Module bill run status service', () => {
     })
   })
 
-  describe('when the service cannot create a transaction', () => {
+  describe('when the service cannot get a bill run status', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         Sinon.stub(ChargingModuleRequestLib, 'get').resolves({

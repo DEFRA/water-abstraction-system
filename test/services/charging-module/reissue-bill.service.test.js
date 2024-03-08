@@ -71,7 +71,7 @@ describe('Charging Module Reissue Bill service', () => {
     })
   })
 
-  describe('when the service cannot create a bill run', () => {
+  describe('when the service cannot reissue a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({

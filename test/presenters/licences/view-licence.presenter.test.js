@@ -19,6 +19,10 @@ describe('View Licence presenter', () => {
       ends: null,
       expiredDate: null,
       licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
+      licenceGaugingStations: [{
+        gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+        label: 'MEVAGISSEY FIRE STATION'
+      }],
       licenceHolder: null,
       licenceName: 'Unregistered licence',
       licenceRef: '01/123',
@@ -58,6 +62,11 @@ describe('View Licence presenter', () => {
         licenceHolder: 'Unregistered licence',
         licenceName: 'Unregistered licence',
         licenceRef: '01/123',
+        monitoringStationCaption: 'Monitoring station',
+        monitoringStations: [{
+          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+          label: 'MEVAGISSEY FIRE STATION'
+        }],
         pageTitle: 'Licence 01/123',
         purposes: null,
         registeredTo: null,
@@ -714,6 +723,71 @@ describe('View Licence presenter', () => {
         ])
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
         expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
+      })
+    })
+  })
+
+  describe("the 'licenceGaugingStations' property", () => {
+    describe('and it has no monitoring station', () => {
+      beforeEach(() => {
+        licence.licenceGaugingStations = []
+      })
+
+      it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {
+        const result = await ViewLicencePresenter.go(licence)
+
+        expect(result.monitoringStationCaption).to.equal('Monitoring station')
+        expect(result.monitoringStations).to.equal([])
+      })
+    })
+
+    describe('and it has null for licenceGaugingStations', () => {
+      beforeEach(() => {
+        licence.licenceGaugingStations = null
+      })
+
+      it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {
+        const result = await ViewLicencePresenter.go(licence)
+
+        expect(result.monitoringStationCaption).to.equal('Monitoring station')
+        expect(result.monitoringStations).to.equal([])
+      })
+    })
+
+    describe('and it has a monitoring station', () => {
+      it('will return the correct caption and arrary of objects for use in the licence summary page', async () => {
+        const result = await ViewLicencePresenter.go(licence)
+
+        expect(result.monitoringStationCaption).to.equal('Monitoring station')
+        expect(result.monitoringStations).to.equal([{
+          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+          label: 'MEVAGISSEY FIRE STATION'
+        }])
+      })
+    })
+
+    describe('and it has two monitoring stations', () => {
+      beforeEach(() => {
+        licence.licenceGaugingStations = [{
+          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+          label: 'MEVAGISSEY FIRE STATION'
+        }, {
+          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607cb',
+          label: 'AVALON FIRE STATION'
+        }]
+      })
+
+      it('will return the correct caption and arrary of objects for use in the licence summary page', async () => {
+        const result = await ViewLicencePresenter.go(licence)
+
+        expect(result.monitoringStationCaption).to.equal('Monitoring stations')
+        expect(result.monitoringStations).to.equal([{
+          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
+          label: 'MEVAGISSEY FIRE STATION'
+        }, {
+          gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607cb',
+          label: 'AVALON FIRE STATION'
+        }])
       })
     })
   })

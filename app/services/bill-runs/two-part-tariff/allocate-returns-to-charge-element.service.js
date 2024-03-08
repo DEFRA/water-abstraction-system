@@ -118,10 +118,33 @@ function _matchLines (chargeElement, returnSubmissionLines) {
   })
 }
 
+/**
+ * Checks a return record for potential issues based on specific criteria and flags it accordingly
+ */
+function _checkReturnForIssues (matchedReturn) {
+  if (matchedReturn.nilReturn) {
+    return true
+  }
+
+  if (matchedReturn.underQuery) {
+    return true
+  }
+
+  if (matchedReturn.status !== 'completed') {
+    return true
+  }
+
+  if (matchedReturn.returnSubmissions.length === 0 || matchedReturn.returnSubmissions[0].returnSubmissionLines.length === 0) {
+    return true
+  }
+
+  return false
+}
+
 function _processCompletedReturns (chargeElement, matchingReturns, chargePeriod, chargeReference) {
   matchingReturns.forEach((matchedReturn, i) => {
     // We don't allocate returns with issues
-    if (matchedReturn.issues) {
+    if (_checkReturnForIssues(matchedReturn)) {
       return
     }
 
