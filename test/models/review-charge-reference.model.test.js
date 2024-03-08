@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
@@ -22,7 +22,7 @@ describe('Review Charge reference model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await ReviewChargeReferenceHelper.add()
   })
