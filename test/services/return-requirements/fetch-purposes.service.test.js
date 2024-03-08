@@ -15,7 +15,7 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 // Thing under test
 const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
 
-describe.only('Fetch purposes service', () => {
+describe('Fetch purposes service', () => {
   let session
   let purposes
   let purposeDescription
