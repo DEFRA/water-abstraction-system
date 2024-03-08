@@ -74,6 +74,14 @@ describe('LegacyRequestLib', () => {
 
         expect(requestArgs[1].prefixUrl).to.equal(servicesConfig.import.url)
       })
+
+      it('can add the defra-user-id header', async () => {
+        await LegacyRequestLib.get('import', testPath, 1234, false)
+
+        const requestArgs = RequestLib.get.firstCall.args
+
+        expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
+      })
     })
 
     describe('when the request fails', () => {
@@ -167,6 +175,14 @@ describe('LegacyRequestLib', () => {
         const requestArgs = RequestLib.post.firstCall.args
 
         expect(requestArgs[1].prefixUrl).to.equal(servicesConfig.import.url)
+      })
+
+      it('can add the defra-user-id header', async () => {
+        await LegacyRequestLib.post('import', testPath, 1234, false, requestBody)
+
+        const requestArgs = RequestLib.get.firstCall.args
+
+        expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
       })
     })
 
