@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 
 // Thing under test
 const GenerateBillService = require('../../../../app/services/bill-runs/supplementary/generate-bill.service.js')
@@ -22,7 +22,7 @@ describe('Generate Bill service', () => {
   let billingAccount
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     billingAccount = await BillingAccountHelper.add()
 

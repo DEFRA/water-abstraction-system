@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 
 // Things we need to stub
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
@@ -29,7 +29,7 @@ describe('Process Two Part Tariff Returns service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     billRun = await BillRunHelper.add()
 

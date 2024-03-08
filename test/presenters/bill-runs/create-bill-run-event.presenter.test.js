@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -18,7 +18,7 @@ const CreateBillRunEventPresenter = require('../../../app/presenters/bill-runs/c
 
 describe('Create Bill Run Event presenter', () => {
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when a BillRunModel instance is provided', () => {

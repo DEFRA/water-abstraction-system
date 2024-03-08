@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
@@ -20,7 +20,7 @@ describe('Licence Version Purposes model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await LicenceVersionPurposesHelper.add()
   })

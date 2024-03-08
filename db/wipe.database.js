@@ -7,7 +7,7 @@
 
 const { dbConfig } = require('./db.js')
 
-const { wipe } = require('../test/support/helpers/database.helper.js')
+const { wipe } = require('../test/support/database.js')
 
 /**
  * Wipe the test database of all tables, views and legacy schemas

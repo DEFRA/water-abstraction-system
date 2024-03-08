@@ -13,7 +13,7 @@ const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillModel = require('../../../../app/models/bill.model.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
 // Thing under test
@@ -24,7 +24,7 @@ describe('Fetch Bills To Be Reissued service', () => {
   let bill
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     billRun = await BillRunHelper.add()
     bill = await BillHelper.add({ billRunId: billRun.id })

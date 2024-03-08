@@ -20,7 +20,7 @@ const ChargeReferenceHelper = require('../../../support/helpers/charge-reference
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Things we need to stub
@@ -45,7 +45,7 @@ describe('Supplementary Process billing period service', () => {
   let licence
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     const { id: regionId } = await RegionHelper.add()
     licence = await LicenceHelper.add({ includeInSrocBilling: true, regionId })

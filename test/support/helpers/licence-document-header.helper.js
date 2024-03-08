@@ -4,7 +4,7 @@
  * @module LicenceDocumentHelper
  */
 
-const { randomInteger } = require('../helpers/general.helper.js')
+const { randomInteger } = require('../general.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
 const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')

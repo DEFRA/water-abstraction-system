@@ -17,7 +17,7 @@ const ChangeReasonModel = require('../../app/models/change-reason.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 
@@ -28,7 +28,7 @@ describe('Charge Version model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await ChargeVersionHelper.add()
   })

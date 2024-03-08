@@ -17,7 +17,7 @@ const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
 const ContactModel = require('../../app/models/contact.model.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
@@ -26,7 +26,7 @@ describe('Billing Account Address model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('Basic query', () => {
