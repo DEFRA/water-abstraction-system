@@ -184,7 +184,7 @@ async function _deleteChargeElements (billRunId) {
     .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
     .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
     .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', '=', billRunId)
+    .where('rl.billRunId', billRunId)
 }
 
 /**
@@ -203,7 +203,7 @@ async function _deleteChargeElementReturns (billRunId) {
     .from('reviewChargeElementsReturns AS rcer')
     .innerJoin('reviewReturns AS rr', 'rcer.reviewReturnId', 'rr.id')
     .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', '=', billRunId)
+    .where('rl.billRunId', billRunId)
 }
 
 async function _deleteChargeReferences (billRunId) {
@@ -212,7 +212,7 @@ async function _deleteChargeReferences (billRunId) {
     .from('reviewChargeReferences AS rcr')
     .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
     .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', '=', billRunId)
+    .where('rl.billRunId', billRunId)
 }
 
 /**
