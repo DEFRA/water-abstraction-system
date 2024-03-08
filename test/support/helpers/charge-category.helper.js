@@ -5,7 +5,7 @@
  */
 
 const ChargeCategoryModel = require('../../../app/models/charge-category.model.js')
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 
 /**
  * Add a new charge category

@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewResultHelper = require('../../../support/helpers/review-result.helper.js')
@@ -24,7 +24,7 @@ describe('Fetch Review Licence Results Service', () => {
   let licence
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when there is a valid bill run', () => {

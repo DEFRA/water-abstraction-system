@@ -11,7 +11,7 @@ const { expect } = Code
 const ChangeReasonHelper = require('../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
 const ChangeReasonModel = require('../../app/models/change-reason.model.js')
@@ -20,7 +20,7 @@ describe('Change Reason model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await ChangeReasonHelper.add()
   })

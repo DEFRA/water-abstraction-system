@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const GaugingStationHelper = require('../../support/helpers/gauging-station.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
@@ -33,7 +33,7 @@ describe('Fetch licence service', () => {
   let licence
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when there is no optional data in the model', () => {

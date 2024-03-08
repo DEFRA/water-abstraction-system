@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const GroupHelper = require('../../support/helpers/group.helper.js')
 const GroupRoleHelper = require('../../support/helpers/group-role.helper.js')
 const RoleHelper = require('../../support/helpers/role.helper.js')
@@ -26,7 +26,7 @@ describe('Fetch User Roles And Groups service', () => {
   let testGroup
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testUser = await UserHelper.add()
 

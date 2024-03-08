@@ -6,7 +6,7 @@
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 
 /**
  * Add a new licence

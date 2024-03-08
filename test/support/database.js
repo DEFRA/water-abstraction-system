@@ -5,10 +5,10 @@
  *
  * It's good practise to ensure the database is in a 'clean' state between tests to avoid any side effects caused by
  * data from one test being present in another.
- * @module DatabaseHelper
+ * @module DatabaseSupport
  */
 
-const { db, dbConfig } = require('../../../db/db.js')
+const { db, dbConfig } = require('../../db/db.js')
 
 const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 

@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
 const ReviewResultModel = require('../../../../app/models/review-result.model.js')
@@ -20,7 +20,7 @@ describe('Persist Allocated Licence to Results service', () => {
   const billRunId = generateUUID()
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when there are records to be persisted', () => {

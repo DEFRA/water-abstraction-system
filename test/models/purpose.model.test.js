@@ -12,7 +12,7 @@ const ChargeElementHelper = require('../support/helpers/charge-element.helper.js
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 
 // Thing under test
@@ -22,7 +22,7 @@ describe('Purpose model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await PurposeHelper.add()
   })

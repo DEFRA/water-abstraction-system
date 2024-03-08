@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
@@ -36,7 +36,7 @@ describe('Annual Process billing period service', () => {
   beforeEach(async () => {
     // NOTE: Although we don't rely on the helpers to create the data we pass into the service it does persist the
     // results. If we don't clean the DB it causes the tests to fail because of unique constraints on the legacy tables.
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     chargingModuleCreateTransactionServiceStub = Sinon.stub(ChargingModuleCreateTransactionService, 'go')
   })
