@@ -13,9 +13,8 @@ const BillRunVolumeModel = require('../../models/bill-run-volume.model.js')
 const { db } = require('../../../db/db.js')
 const ChargingModuleDeleteBillRunService = require('../charging-module/delete-bill-run.service.js')
 const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
-const ReviewChargeElementModel = require('../../models/review-charge-element.model.js')
+const ReviewChargeVersionModel = require('../../models/review-charge-version.model.js')
 const ReviewLicenceModel = require('../../models/review-licence.model.js')
-const ReviewResultModel = require('../../models/review-result.model.js')
 const ReviewReturnModel = require('../../models/review-return.model.js')
 
 /**
@@ -178,45 +177,57 @@ async function _removeBillRunVolumes (billRunId) {
   return BillRunVolumeModel.query().delete().where('billRunId', billRunId)
 }
 
+async function _deleteChargeElements (billRunId) {
+  return db
+    .del()
+    .from('reviewChargeElements AS rce')
+    .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
+    .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
+    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
+    .where('rl.billRunId', '=', billRunId)
+}
+
+async function _deleteChargeElementReturns (billRunId) {
+  return db
+    .del()
+    .from('reviewChargeElementsReturns AS rcer')
+    .innerJoin('reviewReturns AS rr', 'rcer.reviewReturnId', 'rr.id')
+    .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
+    .where('rl.billRunId', '=', billRunId)
+}
+
+async function _deleteChargeReferences (billRunId) {
+  return db
+    .del()
+    .from('reviewChargeReferences AS rcr')
+    .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
+    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
+    .where('rl.billRunId', '=', billRunId)
+}
+
 /**
  * We always call this function as part of cancelling a bill run. However, there will only be records if the bill run
  * is an SROC tw-part tariff bill run in 'review'.
  */
 async function _removeReviewResults (billRunId) {
   try {
-    const deleteChargeElementsProcess = ReviewChargeElementModel.query()
-      .delete()
-      .whereExists(ReviewChargeElementModel
-        .relatedQuery('reviewResults')
-        .whereExists(
-          ReviewResultModel
-            .relatedQuery('reviewLicence')
-            .where('reviewLicences.billRunId', billRunId)
-        )
-      )
+    await _deleteChargeElementReturns(billRunId)
+    await _deleteChargeElements(billRunId)
+    await _deleteChargeReferences(billRunId)
 
-    // BROKEN NEEDS FIXING
+    const deleteChargeVersionsProcess = ReviewChargeVersionModel.query()
+      .delete()
+      .innerJoinRelated('reviewLicence')
+      .where('reviewLicence.billRunId', billRunId)
+
     const deleteReturnsProcess = ReviewReturnModel.query()
       .delete()
-      .whereExists(ReviewReturnModel
-        .relatedQuery('reviewResults')
-        .whereExists(
-          ReviewResultModel
-            .relatedQuery('reviewLicence')
-            .where('reviewLicences.billRunId', billRunId)
-        )
-      )
-
-    const deleteReviewResultsProcess = ReviewResultModel.query()
-      .delete()
-      .whereExists(ReviewResultModel
-        .relatedQuery('reviewLicences')
-        .where('reviewLicences.billRunId', billRunId)
-      )
+      .innerJoinRelated('reviewLicence')
+      .where('reviewLicence.billRunId', billRunId)
 
     // To help performance we allow both these processes to run in parallel. Because their where clause depends on
-    // `review_results` we have to wait for them to complete before we proceed.
-    await Promise.all([deleteChargeElementsProcess, deleteReturnsProcess, deleteReviewResultsProcess])
+    // `review_licences` we have to wait for them to complete before we proceed.
+    await Promise.all([deleteChargeVersionsProcess, deleteReturnsProcess])
 
     return ReviewLicenceModel.query().delete().where('billRunId', billRunId)
   } catch (error) {
