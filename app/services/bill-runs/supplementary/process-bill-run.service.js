@@ -11,7 +11,7 @@ const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const LegacyRequest = require('../../../requests/legacy.request.js')
+const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const ReissueBillsService = require('./reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
@@ -116,7 +116,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
   await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
 
-  await LegacyRequest.post('water', `billing/batches/${billRun.id}/refresh`)
+  await LegacyRefreshBillRunRequest.send(billRun.id)
 }
 
 function _logError (billRun, error) {

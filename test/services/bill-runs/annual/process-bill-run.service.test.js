@@ -18,7 +18,7 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRequest = require('../../../../app/requests/legacy.request.js')
+const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
 
 // Thing under test
@@ -66,11 +66,11 @@ describe('Annual Process Bill Run service', () => {
 
     describe('and something is billed', () => {
       let chargingModuleGenerateRequestStub
-      let legacyRequestStub
+      let legacyRefreshBillRunRequestStub
 
       beforeEach(() => {
         chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
-        legacyRequestStub = Sinon.stub(LegacyRequest, 'post')
+        legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
 
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
       })
@@ -92,7 +92,7 @@ describe('Annual Process Bill Run service', () => {
       it('tells the legacy service to start its refresh job', async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
-        expect(legacyRequestStub.called).to.be.true()
+        expect(legacyRefreshBillRunRequestStub.called).to.be.true()
       })
     })
   })
