@@ -136,7 +136,7 @@ describe('Supplementary Process billing period service', () => {
           }]
 
           Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
-          Sinon.stub(ChargingModuleGenerateBillRunRequest, 'go').resolves({
+          Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send').resolves({
             succeeded: true,
             response: {}
           })

@@ -45,7 +45,7 @@ describe('Supplementary Process Bill Run service', () => {
     billRun = await BillRunHelper.add()
 
     handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
-    chargingModuleGenerateBillRunRequestStub = Sinon.stub(ChargingModuleGenerateBillRunRequest, 'go')
+    chargingModuleGenerateBillRunRequestStub = Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send')
     legacyRequestStub = Sinon.stub(LegacyRequest, 'post')
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js

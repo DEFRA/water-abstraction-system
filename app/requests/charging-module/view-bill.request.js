@@ -18,7 +18,7 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
 */
-async function go (billRunId, billId) {
+async function send (billRunId, billId) {
   const path = `v3/wrls/bill-runs/${billRunId}/invoices/${billId}`
   const result = await ChargingModuleRequest.get(path)
 
@@ -26,5 +26,5 @@ async function go (billRunId, billId) {
 }
 
 module.exports = {
-  go
+  send
 }

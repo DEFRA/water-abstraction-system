@@ -17,7 +17,7 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function go (billRunId) {
+async function send (billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}`
   const result = await ChargingModuleRequest.delete(path)
 
@@ -25,5 +25,5 @@ async function go (billRunId) {
 }
 
 module.exports = {
-  go
+  send
 }

@@ -43,7 +43,7 @@ async function _sendTransactionToChargingModule (transaction, billRunExternalId,
   try {
     const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(transaction, accountNumber, licence)
 
-    const chargingModuleResponse = await ChargingModuleCreateTransactionRequest.go(
+    const chargingModuleResponse = await ChargingModuleCreateTransactionRequest.send(
       billRunExternalId,
       chargingModuleRequest
     )

@@ -44,7 +44,7 @@ describe('Submit Cancel Bill Run service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'go')
+    chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'send')
   })
 
   afterEach(() => {

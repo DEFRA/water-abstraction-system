@@ -54,7 +54,7 @@ describe('Initiate Bill Run service', () => {
     }
 
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateBillRunRequest, 'go').resolves({
+      Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
         succeeded: true,
         response: {
           info: {
@@ -101,7 +101,7 @@ describe('Initiate Bill Run service', () => {
   describe('when initiating a bill run fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunRequest, 'go').resolves({
+        Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
           succeeded: false,
           response: {
             info: {

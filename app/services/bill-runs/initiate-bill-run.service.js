@@ -32,7 +32,7 @@ async function go (financialYearEndings, regionId, batchType, userEmail) {
     throw new ExpandedError('Batch already live for region', { regionId })
   }
 
-  const chargingModuleResult = await ChargingModuleCreateBillRunRequest.go(regionId, 'sroc')
+  const chargingModuleResult = await ChargingModuleCreateBillRunRequest.send(regionId, 'sroc')
 
   const billRunOptions = _billRunOptions(chargingModuleResult, batchType)
   const billRun = await CreateBillRunService.go(regionId, financialYearEndings, billRunOptions)

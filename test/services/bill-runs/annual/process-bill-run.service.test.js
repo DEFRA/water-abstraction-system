@@ -69,7 +69,7 @@ describe('Annual Process Bill Run service', () => {
       let legacyRequestStub
 
       beforeEach(() => {
-        chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'go')
+        chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
         legacyRequestStub = Sinon.stub(LegacyRequest, 'post')
 
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
@@ -172,7 +172,7 @@ describe('Annual Process Bill Run service', () => {
 
         Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
-        Sinon.stub(ChargingModuleGenerateRequest, 'go').rejects(thrownError)
+        Sinon.stub(ChargingModuleGenerateRequest, 'send').rejects(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {

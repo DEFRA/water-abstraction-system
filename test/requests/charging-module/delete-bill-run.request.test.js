@@ -37,13 +37,13 @@ describe('Charging Module Delete Bill Run request', () => {
     })
 
     it('returns a `true` success status', async () => {
-      const result = await DeleteBillRunRequest.go(billRunId)
+      const result = await DeleteBillRunRequest.send(billRunId)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns a 204 - no content', async () => {
-      const result = await DeleteBillRunRequest.go(billRunId)
+      const result = await DeleteBillRunRequest.send(billRunId)
 
       expect(result.response.statusCode).to.equal(204)
       expect(result.response.body).to.be.null()
@@ -72,13 +72,13 @@ describe('Charging Module Delete Bill Run request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await DeleteBillRunRequest.go(billRunId)
+        const result = await DeleteBillRunRequest.send(billRunId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await DeleteBillRunRequest.go(billRunId)
+        const result = await DeleteBillRunRequest.send(billRunId)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -95,13 +95,13 @@ describe('Charging Module Delete Bill Run request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await DeleteBillRunRequest.go(billRunId)
+        const result = await DeleteBillRunRequest.send(billRunId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await DeleteBillRunRequest.go(billRunId)
+        const result = await DeleteBillRunRequest.send(billRunId)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

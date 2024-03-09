@@ -42,7 +42,7 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is successful', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'go').resolves({
+      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'send').resolves({
         succeeded: true
       })
     })
@@ -54,7 +54,7 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is unsuccessful', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'go').resolves({
+      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'send').resolves({
         succeeded: false
       })
     })

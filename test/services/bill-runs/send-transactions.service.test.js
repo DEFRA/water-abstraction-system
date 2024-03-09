@@ -32,7 +32,7 @@ describe('Send Transactions service', () => {
   let transactions
 
   beforeEach(() => {
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'go')
+    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
 
     transactions = [
       _transaction('fca14c7e-c895-4991-9651-9a76f45b971d'),

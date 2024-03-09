@@ -15,7 +15,7 @@ const BaseRequest = require('../../app/requests/base.request.js')
 // Thing under test
 const ChargingModuleRequest = require('../../app/requests/charging-module.request.js')
 
-describe.only('Charging Module Request', () => {
+describe('Charging Module Request', () => {
   const headers = {
     'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
     'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'

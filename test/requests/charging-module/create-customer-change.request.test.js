@@ -47,7 +47,7 @@ describe('Charging Module Create Customer Change request', () => {
     })
 
     it('returns a `true` success status', async () => {
-      const result = await CreateCustomerChangeRequest.go(requestData)
+      const result = await CreateCustomerChangeRequest.send(requestData)
 
       expect(result.succeeded).to.be.true()
     })
@@ -75,13 +75,13 @@ describe('Charging Module Create Customer Change request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await CreateCustomerChangeRequest.go(requestData)
+        const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await CreateCustomerChangeRequest.go(requestData)
+        const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -98,13 +98,13 @@ describe('Charging Module Create Customer Change request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await CreateCustomerChangeRequest.go(requestData)
+        const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await CreateCustomerChangeRequest.go(requestData)
+        const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

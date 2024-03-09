@@ -114,7 +114,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
 
   // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-  await ChargingModuleGenerateBillRunRequest.go(billRun.externalId)
+  await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
 
   await LegacyRequest.post('water', `billing/batches/${billRun.id}/refresh`)
 }

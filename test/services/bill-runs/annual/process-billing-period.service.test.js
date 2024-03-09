@@ -38,7 +38,7 @@ describe('Annual Process billing period service', () => {
     // results. If we don't clean the DB it causes the tests to fail because of unique constraints on the legacy tables.
     await DatabaseSupport.clean()
 
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'go')
+    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
   })
 
   afterEach(() => {

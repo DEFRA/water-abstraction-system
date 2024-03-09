@@ -40,13 +40,13 @@ describe('Charging Module View Bill Run Status request', () => {
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ViewBillRunStatusRequest.go(billRunId, transactionData)
+      const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the bill run status in the `response`', async () => {
-      const result = await ViewBillRunStatusRequest.go(billRunId, transactionData)
+      const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
 
       expect(result.response.body.status).to.equal('initialised')
     })
@@ -74,13 +74,13 @@ describe('Charging Module View Bill Run Status request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ViewBillRunStatusRequest.go(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ViewBillRunStatusRequest.go(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -97,13 +97,13 @@ describe('Charging Module View Bill Run Status request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ViewBillRunStatusRequest.go(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ViewBillRunStatusRequest.go(billRunId, transactionData)
+        const result = await ViewBillRunStatusRequest.send(billRunId, transactionData)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

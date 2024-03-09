@@ -94,14 +94,14 @@ describe('Reissue Bill service', () => {
 
     reissueBillRun = { externalId: generateUUID() }
 
-    Sinon.stub(ChargingModuleReissueBillRequest, 'go')
+    Sinon.stub(ChargingModuleReissueBillRequest, 'send')
       .withArgs(reissueBillRun.externalId, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
         response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
       })
 
-    Sinon.stub(ChargingModuleViewBillRequest, 'go')
+    Sinon.stub(ChargingModuleViewBillRequest, 'send')
       .withArgs(reissueBillRun.externalId, CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
@@ -113,7 +113,7 @@ describe('Reissue Bill service', () => {
         response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
       })
 
-    Sinon.stub(ChargingModuleViewBillRunStatusRequest, 'go').resolves({
+    Sinon.stub(ChargingModuleViewBillRunStatusRequest, 'send').resolves({
       succeeded: true,
       response: {
         body: {
@@ -228,10 +228,10 @@ describe('Reissue Bill service', () => {
       let billRunStatusStub
 
       beforeEach(() => {
-        ChargingModuleViewBillRunStatusRequest.go.restore()
+        ChargingModuleViewBillRunStatusRequest.send.restore()
 
         billRunStatusStub = Sinon
-          .stub(ChargingModuleViewBillRunStatusRequest, 'go')
+          .stub(ChargingModuleViewBillRunStatusRequest, 'send')
           .onFirstCall().resolves({
             succeeded: true, response: { body: { status: 'pending' } }
           })
@@ -251,8 +251,8 @@ describe('Reissue Bill service', () => {
   describe('and the Charging Module returns an error', () => {
     describe('when sending the reissue request', () => {
       beforeEach(() => {
-        ChargingModuleReissueBillRequest.go.restore()
-        Sinon.stub(ChargingModuleReissueBillRequest, 'go').resolves({
+        ChargingModuleReissueBillRequest.send.restore()
+        Sinon.stub(ChargingModuleReissueBillRequest, 'send').resolves({
           succeeded: false,
           response: {
             body: {
@@ -287,8 +287,8 @@ describe('Reissue Bill service', () => {
 
     describe('when viewing a bill', () => {
       beforeEach(() => {
-        ChargingModuleViewBillRequest.go.restore()
-        Sinon.stub(ChargingModuleViewBillRequest, 'go').resolves({
+        ChargingModuleViewBillRequest.send.restore()
+        Sinon.stub(ChargingModuleViewBillRequest, 'send').resolves({
           succeeded: false,
           response: {
             body: {

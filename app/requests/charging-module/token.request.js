@@ -14,7 +14,7 @@ const servicesConfig = require('../../../config/services.config.js')
  *
  * @returns {Promise<Object>} An object containing the `accessToken:` to use in future Charging Module requests
  */
-async function go () {
+async function send () {
   const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)
 
   const result = await BaseRequest.post(url.href, _options())
@@ -58,5 +58,5 @@ function _parseResult (result) {
 }
 
 module.exports = {
-  go
+  send
 }

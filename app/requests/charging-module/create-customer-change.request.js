@@ -17,12 +17,12 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function go (customerChangeData) {
+async function send (customerChangeData) {
   const result = await ChargingModuleRequest.post('v3/wrls/customer-changes', customerChangeData)
 
   return result
 }
 
 module.exports = {
-  go
+  send
 }

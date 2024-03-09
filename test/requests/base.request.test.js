@@ -15,7 +15,7 @@ const requestConfig = require('../../config/request.config.js')
 // Thing under test
 const BaseRequest = require('../../app/requests/base.request.js')
 
-describe.only('Base Request', () => {
+describe('Base Request', () => {
   const testDomain = 'http://example.com'
 
   // NOTE: We make the tests run much faster by setting backoffLimit to 50 in Got's retry options. The time between

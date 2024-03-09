@@ -17,7 +17,7 @@ const BaseRequest = require('../../app/requests/base.request.js')
 // Thing under test
 const LegacyRequest = require('../../app/requests/legacy.request.js')
 
-describe.only('Legacy Request', () => {
+describe('Legacy Request', () => {
   const testPath = 'abstraction/info'
 
   afterEach(() => {

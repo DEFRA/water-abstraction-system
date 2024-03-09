@@ -132,7 +132,7 @@ async function _pauseUntilNotPending (billRunExternalId) {
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
-    const result = await ChargingModuleViewBillRunStatusRequest.go(billRunExternalId)
+    const result = await ChargingModuleViewBillRunStatusRequest.send(billRunExternalId)
 
     if (!result.succeeded) {
       const error = new ExpandedError(
@@ -290,7 +290,7 @@ function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, so
 }
 
 async function _sendReissueRequest (billRunExternalId, billExternalId) {
-  const result = await ChargingModuleReissueBillRequest.go(billRunExternalId, billExternalId)
+  const result = await ChargingModuleReissueBillRequest.send(billRunExternalId, billExternalId)
 
   if (!result.succeeded) {
     const error = new ExpandedError(
@@ -312,7 +312,7 @@ async function _sendReissueRequest (billRunExternalId, billExternalId) {
 }
 
 async function _sendViewBillRequest (billRun, reissueBillId) {
-  const result = await ChargingModuleViewBillRequest.go(billRun.externalId, reissueBillId)
+  const result = await ChargingModuleViewBillRequest.send(billRun.externalId, reissueBillId)
 
   if (!result.succeeded) {
     const error = new ExpandedError(

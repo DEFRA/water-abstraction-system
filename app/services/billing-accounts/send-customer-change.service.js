@@ -33,7 +33,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
 async function go (billingAccount, address, company, contact) {
   const requestData = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-  const result = await ChargingModuleCreateCustomerChangeRequest.go(requestData)
+  const result = await ChargingModuleCreateCustomerChangeRequest.send(requestData)
 
   if (!result.succeeded) {
     throw new ExpandedError('Customer change failed to send', { billingAccountId: billingAccount.id })

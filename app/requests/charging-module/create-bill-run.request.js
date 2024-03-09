@@ -19,7 +19,7 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function go (regionId, ruleset) {
+async function send (regionId, ruleset) {
   const region = await _getChargeRegionId(regionId)
 
   const result = await ChargingModuleRequest.post('v3/wrls/bill-runs', { region, ruleset })
@@ -39,5 +39,5 @@ async function _getChargeRegionId (regionId) {
 }
 
 module.exports = {
-  go
+  send
 }

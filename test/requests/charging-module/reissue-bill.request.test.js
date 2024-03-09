@@ -49,20 +49,20 @@ describe('Charging Module Reissue Bill request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await ReissueBillRequest.go(billRunId, billId)
+      await ReissueBillRequest.send(billRunId, billId)
       const endpoint = ChargingModuleRequest.patch.firstCall.firstArg
 
       expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`)
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ReissueBillRequest.go(billRunId, billId)
+      const result = await ReissueBillRequest.send(billRunId, billId)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the bill in the `response`', async () => {
-      const result = await ReissueBillRequest.go(billRunId, billId)
+      const result = await ReissueBillRequest.send(billRunId, billId)
 
       expect(result.response.body.invoices[0].id).to.equal('f62faabc-d65e-4242-a106-9777c1d57db7')
       expect(result.response.body.invoices[0].rebilledType).to.equal('C')
@@ -93,13 +93,13 @@ describe('Charging Module Reissue Bill request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ReissueBillRequest.go(billRunId, billId)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ReissueBillRequest.go(billRunId, billId)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -116,13 +116,13 @@ describe('Charging Module Reissue Bill request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ReissueBillRequest.go(billRunId, billId)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ReissueBillRequest.go(billRunId, billId)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

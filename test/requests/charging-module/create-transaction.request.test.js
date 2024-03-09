@@ -43,13 +43,13 @@ describe('Charging Module Create Transaction request', () => {
     })
 
     it('returns a `true` success status', async () => {
-      const result = await CreateTransactionRequest.go(billRunId, transactionData)
+      const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the CM transaction ID and our ID in the `response`', async () => {
-      const result = await CreateTransactionRequest.go(billRunId, transactionData)
+      const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
       expect(result.response.body.transaction.id).to.equal('fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3')
       expect(result.response.body.transaction.clientId).to.equal(transactionData.billingTransactionId)
@@ -78,13 +78,13 @@ describe('Charging Module Create Transaction request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await CreateTransactionRequest.go(billRunId, transactionData)
+        const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await CreateTransactionRequest.go(billRunId, transactionData)
+        const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -101,13 +101,13 @@ describe('Charging Module Create Transaction request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await CreateTransactionRequest.go(billRunId, transactionData)
+        const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await CreateTransactionRequest.go(billRunId, transactionData)
+        const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

@@ -63,7 +63,7 @@ async function _cancelBillRun (billRun) {
   await Promise.all([
     // If the Charging Module errors whilst doing this it shouldn't block us carrying on with deleting the bill run on
     // our side. It just means the the CHA will be storing an 'orphaned' bill run that will never get sent.
-    ChargingModuleDeleteBillRunRequest.go(externalId),
+    ChargingModuleDeleteBillRunRequest.send(externalId),
     // We can be deleting these records whilst getting on with deleting the other things. But should it fail we'll just
     // be left with orphaned review results. As long as it's an incidental occurrence this wouldn't be a problem.
     _removeReviewResults(billRunId),

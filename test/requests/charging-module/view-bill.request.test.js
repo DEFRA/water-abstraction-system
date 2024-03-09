@@ -44,20 +44,20 @@ describe('Charging Module View Bill request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await ViewBillRequest.go(billRunId, billId)
+      await ViewBillRequest.send(billRunId, billId)
       const endpoint = ChargingModuleRequest.get.firstCall.firstArg
 
       expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}`)
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ViewBillRequest.go(billRunId, billId)
+      const result = await ViewBillRequest.send(billRunId, billId)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the bill in the `response`', async () => {
-      const result = await ViewBillRequest.go(billRunId, billId)
+      const result = await ViewBillRequest.send(billRunId, billId)
 
       expect(result.response.body.invoice.id).to.equal(billId)
       expect(result.response.body.invoice.billRunId).to.equal(billRunId)
@@ -86,13 +86,13 @@ describe('Charging Module View Bill request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ViewBillRequest.go(billRunId, billId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ViewBillRequest.go(billRunId, billId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -109,13 +109,13 @@ describe('Charging Module View Bill request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ViewBillRequest.go(billRunId, billId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ViewBillRequest.go(billRunId, billId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()
