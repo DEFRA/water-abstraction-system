@@ -8,23 +8,32 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const DatabaseSupport = require('../../support/database.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
+
 // Things we need to stub
-const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
 
 // Thing under test
-const ChargingModuleReissueBillService = require('../../../app/services/charging-module/reissue-bill.service.js')
+const CreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
 
-describe('Charging Module Reissue Bill service', () => {
-  const billId = '45ddee2c-c423-4382-8abe-a6a9f284f829'
-  const billRunId = 'db82bf38-638a-44d3-b1b3-1ae8524d9c38'
+describe('Charging Module Create Bill Run request', () => {
+  let testRegion
+
+  beforeEach(async () => {
+    await DatabaseSupport.clean()
+
+    testRegion = await RegionHelper.add()
+  })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the service can reissue an bill', () => {
+  describe('when the request can create a bill run', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+      Sinon.stub(ChargingModuleRequest, 'post').resolves({
         succeeded: true,
         response: {
           info: {
@@ -33,48 +42,33 @@ describe('Charging Module Reissue Bill service', () => {
           },
           statusCode: 200,
           body: {
-            invoices: [
-              {
-                id: 'f62faabc-d65e-4242-a106-9777c1d57db7',
-                rebilledType: 'C'
-              },
-              {
-                id: 'db82bf38-638a-44d3-b1b3-1ae8524d9c38',
-                rebilledType: 'R'
-              }
-            ]
+            billRun: {
+              id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
+              billRunNumber: 10004
+            }
           }
         }
       })
     })
 
-    it('hits the correct endpoint', async () => {
-      await ChargingModuleReissueBillService.go(billRunId, billId)
-      const endpoint = ChargingModuleRequestLib.patch.firstCall.firstArg
-
-      expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`)
-    })
-
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleReissueBillService.go(billRunId, billId)
+      const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the bill in the `response`', async () => {
-      const result = await ChargingModuleReissueBillService.go(billRunId, billId)
+    it('returns the bill run id and number in the `response`', async () => {
+      const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-      expect(result.response.body.invoices[0].id).to.equal('f62faabc-d65e-4242-a106-9777c1d57db7')
-      expect(result.response.body.invoices[0].rebilledType).to.equal('C')
-      expect(result.response.body.invoices[1].id).to.equal('db82bf38-638a-44d3-b1b3-1ae8524d9c38')
-      expect(result.response.body.invoices[1].rebilledType).to.equal('R')
+      expect(result.response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
+      expect(result.response.body.billRun.billRunNumber).to.equal(10004)
     })
   })
 
-  describe('when the service cannot reissue a bill run', () => {
+  describe('when the request cannot create a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+        Sinon.stub(ChargingModuleRequest, 'post').resolves({
           succeeded: false,
           response: {
             info: {
@@ -93,13 +87,13 @@ describe('Charging Module Reissue Bill service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleReissueBillService.go(billRunId, billId)
+        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleReissueBillService.go(billRunId, billId)
+        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -109,20 +103,20 @@ describe('Charging Module Reissue Bill service', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+        Sinon.stub(ChargingModuleRequest, 'post').resolves({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleReissueBillService.go(billRunId, billId)
+        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleReissueBillService.go(billRunId, billId)
+        const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

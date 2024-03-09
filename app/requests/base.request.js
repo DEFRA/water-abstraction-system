@@ -2,7 +2,7 @@
 
 /**
  * Use for making http requests to other services
- * @module RequestLib
+ * @module BaseRequest
  */
 
 const { HttpsProxyAgent } = require('hpagent')

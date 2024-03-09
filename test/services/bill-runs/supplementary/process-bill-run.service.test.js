@@ -15,11 +15,11 @@ const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const DatabaseSupport = require('../../../support/database.js')
 
 // Things we need to stub
-const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
+const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
+const LegacyRequest = require('../../../../app/requests/legacy.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
 const ReissueBillsService = require('../../../../app/services/bill-runs/supplementary/reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-unbilled-licences.service.js')
@@ -34,9 +34,9 @@ describe('Supplementary Process Bill Run service', () => {
   ]
 
   let billRun
-  let chargingModuleGenerateServiceStub
+  let chargingModuleGenerateBillRunRequestStub
   let handleErroredBillRunStub
-  let legacyRequestLibStub
+  let legacyRequestStub
   let notifierStub
 
   beforeEach(async () => {
@@ -45,8 +45,8 @@ describe('Supplementary Process Bill Run service', () => {
     billRun = await BillRunHelper.add()
 
     handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
-    chargingModuleGenerateServiceStub = Sinon.stub(ChargingModuleGenerateService, 'go')
-    legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'post')
+    chargingModuleGenerateBillRunRequestStub = Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send')
+    legacyRequestStub = Sinon.stub(LegacyRequest, 'post')
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -120,13 +120,13 @@ describe('Supplementary Process Bill Run service', () => {
       it("tells the charging module API to 'generate' the bill run", async () => {
         await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(chargingModuleGenerateServiceStub.called).to.be.true()
+        expect(chargingModuleGenerateBillRunRequestStub.called).to.be.true()
       })
 
       it('tells the legacy service to start its refresh job', async () => {
         await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(legacyRequestLibStub.called).to.be.true()
+        expect(legacyRequestStub.called).to.be.true()
       })
 
       it('it logs the time taken', async () => {

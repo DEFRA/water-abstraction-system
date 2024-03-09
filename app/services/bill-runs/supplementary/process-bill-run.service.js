@@ -7,11 +7,11 @@
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const BillRunError = require('../../../errors/bill-run.error.js')
-const ChargingModuleGenerateService = require('../../charging-module/generate-bill-run.service.js')
+const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const LegacyRequestLib = require('../../../lib/legacy-request.lib.js')
+const LegacyRequest = require('../../../requests/legacy.request.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const ReissueBillsService = require('./reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
@@ -114,9 +114,9 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
 
   // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-  await ChargingModuleGenerateService.go(billRun.externalId)
+  await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
 
-  await LegacyRequestLib.post('water', `billing/batches/${billRun.id}/refresh`)
+  await LegacyRequest.post('water', `billing/batches/${billRun.id}/refresh`)
 }
 
 function _logError (billRun, error) {

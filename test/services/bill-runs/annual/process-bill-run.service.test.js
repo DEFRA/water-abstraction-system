@@ -15,10 +15,10 @@ const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
+const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
+const LegacyRequest = require('../../../../app/requests/legacy.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
 
 // Thing under test
@@ -37,7 +37,7 @@ describe('Annual Process Bill Run service', () => {
       batchType: 'annual', fromFinancialYearEnding: financialYearEnd, toFinancialYearEnding: financialYearEnd
     })
 
-    // RequestLib depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
@@ -65,12 +65,12 @@ describe('Annual Process Bill Run service', () => {
     })
 
     describe('and something is billed', () => {
-      let chargingModuleGenerateServiceStub
-      let legacyRequestLibStub
+      let chargingModuleGenerateRequestStub
+      let legacyRequestStub
 
       beforeEach(() => {
-        chargingModuleGenerateServiceStub = Sinon.stub(ChargingModuleGenerateService, 'go')
-        legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'post')
+        chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
+        legacyRequestStub = Sinon.stub(LegacyRequest, 'post')
 
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
       })
@@ -86,13 +86,13 @@ describe('Annual Process Bill Run service', () => {
       it("tells the charging module API to 'generate' the bill run", async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
-        expect(chargingModuleGenerateServiceStub.called).to.be.true()
+        expect(chargingModuleGenerateRequestStub.called).to.be.true()
       })
 
       it('tells the legacy service to start its refresh job', async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
-        expect(legacyRequestLibStub.called).to.be.true()
+        expect(legacyRequestStub.called).to.be.true()
       })
     })
   })
@@ -172,7 +172,7 @@ describe('Annual Process Bill Run service', () => {
 
         Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
-        Sinon.stub(ChargingModuleGenerateService, 'go').rejects(thrownError)
+        Sinon.stub(ChargingModuleGenerateRequest, 'send').rejects(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {

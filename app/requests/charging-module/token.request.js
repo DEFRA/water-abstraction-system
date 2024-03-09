@@ -2,17 +2,22 @@
 
 /**
  * Connects with the Charging Module API's Cognito service to get a JWT for authentication
- * @module ChargingModuleTokenService
+ * @module TokenRequest
  */
 
-const RequestLib = require('../../lib/request.lib.js')
+const BaseRequest = require('../base.request.js')
 
 const servicesConfig = require('../../../config/services.config.js')
 
-async function go () {
+/**
+ * Connects with the Charging Module API's Cognito service to get a JWT for authentication
+ *
+ * @returns {Promise<Object>} An object containing the `accessToken:` to use in future Charging Module requests
+ */
+async function send () {
   const url = new URL('/oauth2/token', servicesConfig.chargingModule.token.url)
 
-  const result = await RequestLib.post(url.href, _options())
+  const result = await BaseRequest.post(url.href, _options())
 
   return _parseResult(result)
 }
@@ -53,5 +58,5 @@ function _parseResult (result) {
 }
 
 module.exports = {
-  go
+  send
 }

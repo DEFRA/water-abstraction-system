@@ -2,10 +2,10 @@
 
 /**
  * Use for making http requests to the legacy web services
- * @module LegacyRequestLib
+ * @module LegacyRequest
  */
 
-const RequestLib = require('./request.lib.js')
+const BaseRequest = require('./base.request.js')
 
 const servicesConfig = require('../../config/services.config.js')
 
@@ -61,17 +61,18 @@ const services = {
 /**
  * Sends a GET request to the legacy service for the provided path
  *
- * @param {string} serviceName name of the legacy service to call (background, crm, external, idm, import, internal,
+ * @param {string} serviceName - Name of the legacy service to call (background, crm, external, idm, import, internal,
  * permits, reporting, returns or water)
- * @param {string} path The path to send the request to (do not include the starting /)
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
+ * @param {string} path - The path to send the request to (do not include the starting /)
+ * @param {string} [userId] - If the legacy endpoint needs to check a user's authorisation their ID to be added as a
+ * header. Defaults to null
+ * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
+ * response). Defaults to true
  *
- * @returns {Promise<Object>} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The legacy service's response if successful or the error response if not.
+ * @returns {Promise<Object>} An object representing the result of the request
  */
 async function get (serviceName, path, userId = null, apiRequest = true) {
-  return _sendRequest(RequestLib.get, serviceName, path, userId, apiRequest)
+  return _sendRequest(BaseRequest.get, serviceName, path, userId, apiRequest)
 }
 
 /**
@@ -79,28 +80,21 @@ async function get (serviceName, path, userId = null, apiRequest = true) {
  *
  * @param {string} serviceName name of the legacy service to call (background, crm, external, idm, import, internal,
  * permits, reporting, returns or water)
- * @param {string} path the path to send the request to (do not include the starting /)
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
- * @param {Object} [body] optional body to be sent to the service as json
+ * @param {string} path - The path to send the request to (do not include the starting /)
+ * @param {string} [userId] - If the legacy endpoint needs to check a user's authorisation their ID to be added as a
+ * header. Defaults to null
+ * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
+ * response). Defaults to true
+ * @param {Object} [body] - Data to be sent in the request body to the service as JSON
  *
- * @returns {Promise<Object>} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The legacy service's response if successful or the error response if not.
+ * @returns {Promise<Object>} An object representing the result of the request
  */
 async function post (serviceName, path, userId = null, apiRequest = true, body = {}) {
-  return _sendRequest(RequestLib.post, serviceName, path, userId, apiRequest, body)
+  return _sendRequest(BaseRequest.post, serviceName, path, userId, apiRequest, body)
 }
 
 /**
- * Sends a request to a legacy service using the provided RequestLib method
- *
- * @param {Object} method an instance of a RequestLib method which will be used to send the request
- * @param {string} serviceName name of the legacy service (see `services`)
- * @param {string} path the path that you wish to connect to (do not include the starting /)
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
- * @param {Object} body body to be sent to the service as json
- *
- * @returns {Object} The result of the request passed back from RequestLib
+ * Sends a request to a legacy service using the provided BaseRequest method
  */
 async function _sendRequest (method, serviceName, path, userId, apiRequest, body) {
   const service = _service(serviceName)
@@ -122,7 +116,7 @@ function _service (serviceName) {
 }
 
 /**
- * Additional options that will be added to the default options used by RequestLib
+ * Additional options that will be added to the default options used by BaseRequest
  *
  * We use it to set
  *
@@ -131,12 +125,6 @@ function _service (serviceName) {
  * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
  *   response to a JSON object for us
- *
- * @param {Object} service which legacy service we are connecting with
- * @param {boolean} apiRequest whether the request is to the service's API endpoints
- * @param {Object} body the request body if applicable
- *
- * @returns Legacy specific options to be passed to RequestLib
  */
 function _requestOptions (service, userId, apiRequest, body) {
   const prefixUrl = apiRequest ? new URL(service.api, service.base).href : service.base
@@ -170,11 +158,7 @@ function _requestOptions (service, userId, apiRequest, body) {
 }
 
 /**
- * Parses the charging module response returned from RequestLib
- *
- * @param {Object} result The result object returned by RequestLib
- *
- * @returns {Object} If result was not an error, a parsed version of the response
+ * Parses the charging module response returned from BaseRequest
  */
 function _parseResult (result) {
   const { body, statusCode } = result.response

@@ -9,51 +9,65 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
 
 // Thing under test
-const ChargingModuleGenerateBillRunService = require('../../../app/services/charging-module/generate-bill-run.service.js')
+const ViewBillRequest = require('../../../app/requests/charging-module/view-bill.request.js')
 
-describe('Charging Module Generate Bill Run service', () => {
-  const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
+describe('Charging Module View Bill request', () => {
+  const billId = '45ddee2c-c423-4382-8abe-a6a9f284f829'
+  const billRunId = 'db82bf38-638a-44d3-b1b3-1ae8524d9c38'
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the service can generate a bill run', () => {
+  describe('when the request can view an invoice', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+      Sinon.stub(ChargingModuleRequest, 'get').resolves({
         succeeded: true,
         response: {
           info: {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 204,
-          body: null
+          statusCode: 200,
+          body: {
+            // truncated invoice, see CM docs for full invoice https://defra.github.io/sroc-charging-module-api-docs
+            invoice: {
+              id: billId,
+              billRunId
+            }
+          }
         }
       })
     })
 
+    it('hits the correct endpoint', async () => {
+      await ViewBillRequest.send(billRunId, billId)
+      const endpoint = ChargingModuleRequest.get.firstCall.firstArg
+
+      expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}`)
+    })
+
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleGenerateBillRunService.go(billRunId)
+      const result = await ViewBillRequest.send(billRunId, billId)
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns a 204 - no content', async () => {
-      const result = await ChargingModuleGenerateBillRunService.go(billRunId)
+    it('returns the bill in the `response`', async () => {
+      const result = await ViewBillRequest.send(billRunId, billId)
 
-      expect(result.response.statusCode).to.equal(204)
-      expect(result.response.body).to.be.null()
+      expect(result.response.body.invoice.id).to.equal(billId)
+      expect(result.response.body.invoice.billRunId).to.equal(billRunId)
     })
   })
 
-  describe('when the service cannot generate a bill run', () => {
+  describe('when the request cannot view a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+        Sinon.stub(ChargingModuleRequest, 'get').resolves({
           succeeded: false,
           response: {
             info: {
@@ -72,13 +86,13 @@ describe('Charging Module Generate Bill Run service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleGenerateBillRunService.go(billRunId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleGenerateBillRunService.go(billRunId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -88,20 +102,20 @@ describe('Charging Module Generate Bill Run service', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'patch').resolves({
+        Sinon.stub(ChargingModuleRequest, 'get').resolves({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleGenerateBillRunService.go(billRunId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleGenerateBillRunService.go(billRunId)
+        const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

@@ -17,7 +17,7 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 const BillModel = require('../../../../app/models/bill.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleCreateTransactionService = require('../../../../app/services/charging-module/create-transaction.service.js')
+const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
 
 // Thing under test
@@ -31,14 +31,14 @@ describe('Annual Process billing period service', () => {
   }
 
   let billingAccount
-  let chargingModuleCreateTransactionServiceStub
+  let chargingModuleCreateTransactionRequestStub
 
   beforeEach(async () => {
     // NOTE: Although we don't rely on the helpers to create the data we pass into the service it does persist the
     // results. If we don't clean the DB it causes the tests to fail because of unique constraints on the legacy tables.
     await DatabaseSupport.clean()
 
-    chargingModuleCreateTransactionServiceStub = Sinon.stub(ChargingModuleCreateTransactionService, 'go')
+    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
   })
 
   afterEach(() => {
@@ -58,10 +58,10 @@ describe('Annual Process billing period service', () => {
       beforeEach(async () => {
         billingAccount = _testBillingAccount()
 
-        chargingModuleCreateTransactionServiceStub.onFirstCall().resolves({
+        chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
           ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
-        chargingModuleCreateTransactionServiceStub.onSecondCall().resolves({
+        chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
           ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
         })
       })
@@ -159,7 +159,7 @@ describe('Annual Process billing period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionServiceStub.rejects()
+        chargingModuleCreateTransactionRequestStub.rejects()
       })
 
       it('throws a BillRunError with the correct code', async () => {

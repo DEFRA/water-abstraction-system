@@ -9,54 +9,72 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
 
 // Thing under test
-const ChargingModuleCreateCustomerChangeService = require('../../../app/services/charging-module/create-customer-change.service.js')
+const ReissueBillRequest = require('../../../app/requests/charging-module/reissue-bill.request.js')
 
-describe('Charging Module Create Customer Change service', () => {
-  const requestData = {
-    region: 'B',
-    customerReference: 'B88891136A',
-    customerName: 'SCP ESTATE LIMITED',
-    addressLine1: 'FAO Mr V P Anderson MBE',
-    addressLine2: 'ENVIRONMENT AGENCY',
-    addressLine3: 'HORIZON HOUSE',
-    addressLine4: 'DEANERY ROAD',
-    addressLine5: 'BRISTOL',
-    addressLine6: 'United Kingdom',
-    postcode: 'BS1 5AH'
-  }
+describe('Charging Module Reissue Bill request', () => {
+  const billId = '45ddee2c-c423-4382-8abe-a6a9f284f829'
+  const billRunId = 'db82bf38-638a-44d3-b1b3-1ae8524d9c38'
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the service can create a customer change', () => {
+  describe('when the request can reissue an bill', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
+      Sinon.stub(ChargingModuleRequest, 'patch').resolves({
         succeeded: true,
         response: {
           info: {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 201
+          statusCode: 200,
+          body: {
+            invoices: [
+              {
+                id: 'f62faabc-d65e-4242-a106-9777c1d57db7',
+                rebilledType: 'C'
+              },
+              {
+                id: 'db82bf38-638a-44d3-b1b3-1ae8524d9c38',
+                rebilledType: 'R'
+              }
+            ]
+          }
         }
       })
     })
 
+    it('hits the correct endpoint', async () => {
+      await ReissueBillRequest.send(billRunId, billId)
+      const endpoint = ChargingModuleRequest.patch.firstCall.firstArg
+
+      expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`)
+    })
+
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleCreateCustomerChangeService.go(requestData)
+      const result = await ReissueBillRequest.send(billRunId, billId)
 
       expect(result.succeeded).to.be.true()
     })
+
+    it('returns the bill in the `response`', async () => {
+      const result = await ReissueBillRequest.send(billRunId, billId)
+
+      expect(result.response.body.invoices[0].id).to.equal('f62faabc-d65e-4242-a106-9777c1d57db7')
+      expect(result.response.body.invoices[0].rebilledType).to.equal('C')
+      expect(result.response.body.invoices[1].id).to.equal('db82bf38-638a-44d3-b1b3-1ae8524d9c38')
+      expect(result.response.body.invoices[1].rebilledType).to.equal('R')
+    })
   })
 
-  describe('when the service cannot create a customer change', () => {
+  describe('when the request cannot reissue a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
+        Sinon.stub(ChargingModuleRequest, 'patch').resolves({
           succeeded: false,
           response: {
             info: {
@@ -75,13 +93,13 @@ describe('Charging Module Create Customer Change service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateCustomerChangeService.go(requestData)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateCustomerChangeService.go(requestData)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -91,20 +109,20 @@ describe('Charging Module Create Customer Change service', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'post').resolves({
+        Sinon.stub(ChargingModuleRequest, 'patch').resolves({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleCreateCustomerChangeService.go(requestData)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleCreateCustomerChangeService.go(requestData)
+        const result = await ReissueBillRequest.send(billRunId, billId)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

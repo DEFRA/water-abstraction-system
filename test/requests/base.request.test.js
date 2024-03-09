@@ -13,9 +13,9 @@ const { expect } = Code
 const requestConfig = require('../../config/request.config.js')
 
 // Thing under test
-const RequestLib = require('../../app/lib/request.lib.js')
+const BaseRequest = require('../../app/requests/base.request.js')
 
-describe('RequestLib', () => {
+describe('Base Request', () => {
   const testDomain = 'http://example.com'
 
   // NOTE: We make the tests run much faster by setting backoffLimit to 50 in Got's retry options. The time between
@@ -29,14 +29,14 @@ describe('RequestLib', () => {
   // The behaviour doesn't change; we are still retrying requests. But now we are only waiting a maximum of 50ms between
   // them.
   const shortBackoffLimitRetryOptions = {
-    ...RequestLib.defaultOptions.retry,
+    ...BaseRequest.defaultOptions.retry,
     backoffLimit: 50
   }
 
   let notifierStub
 
   beforeEach(() => {
-    // RequestLib depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
@@ -57,13 +57,13 @@ describe('RequestLib', () => {
 
       describe('the result it returns', () => {
         it("has a 'succeeded' property marked as true", async () => {
-          const result = await RequestLib.delete(testDomain)
+          const result = await BaseRequest.delete(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
         it("has a 'response' property containing the web response", async () => {
-          const result = await RequestLib.delete(testDomain)
+          const result = await BaseRequest.delete(testDomain)
 
           expect(result.response).to.exist()
           expect(result.response.statusCode).to.equal(200)
@@ -79,7 +79,7 @@ describe('RequestLib', () => {
         })
 
         it('logs the failure', async () => {
-          await RequestLib.delete(testDomain)
+          await BaseRequest.delete(testDomain)
 
           const logDataArg = notifierStub.omg.args[0][1]
 
@@ -96,13 +96,13 @@ describe('RequestLib', () => {
 
         describe('the result it returns', () => {
           it("has a 'succeeded' property marked as false", async () => {
-            const result = await RequestLib.delete(testDomain)
+            const result = await BaseRequest.delete(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
           it("has a 'response' property containing the web response", async () => {
-            const result = await RequestLib.delete(testDomain)
+            const result = await BaseRequest.delete(testDomain)
 
             expect(result.response).to.exist()
             expect(result.response.statusCode).to.equal(500)
@@ -121,14 +121,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -142,13 +142,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -168,7 +168,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -176,13 +176,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -210,14 +210,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -231,13 +231,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -258,7 +258,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -266,13 +266,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -293,7 +293,7 @@ describe('RequestLib', () => {
           // We tell Got to return the response as json rather than text. We can confirm the option has been applied by
           // checking the result.response.body below.
           const options = { responseType: 'json' }
-          const result = await RequestLib.delete(testDomain, options)
+          const result = await BaseRequest.delete(testDomain, options)
 
           expect(result.succeeded).to.be.true()
           expect(result.response.body).to.equal({ data: 'hello world' })
@@ -308,7 +308,7 @@ describe('RequestLib', () => {
         it('uses them in the options used when making the request', async () => {
           // We tell Got throw an error if the response is not 2xx or 3xx
           const options = { throwHttpErrors: true }
-          const result = await RequestLib.delete(testDomain, options)
+          const result = await BaseRequest.delete(testDomain, options)
 
           expect(result.succeeded).to.be.false()
           expect(result.response).to.be.an.error()
@@ -325,13 +325,13 @@ describe('RequestLib', () => {
 
       describe('the result it returns', () => {
         it("has a 'succeeded' property marked as true", async () => {
-          const result = await RequestLib.get(testDomain)
+          const result = await BaseRequest.get(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
         it("has a 'response' property containing the web response", async () => {
-          const result = await RequestLib.get(testDomain)
+          const result = await BaseRequest.get(testDomain)
 
           expect(result.response).to.exist()
           expect(result.response.statusCode).to.equal(200)
@@ -347,7 +347,7 @@ describe('RequestLib', () => {
         })
 
         it('logs the failure', async () => {
-          await RequestLib.get(testDomain)
+          await BaseRequest.get(testDomain)
 
           const logDataArg = notifierStub.omg.args[0][1]
 
@@ -364,13 +364,13 @@ describe('RequestLib', () => {
 
         describe('the result it returns', () => {
           it("has a 'succeeded' property marked as false", async () => {
-            const result = await RequestLib.get(testDomain)
+            const result = await BaseRequest.get(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
           it("has a 'response' property containing the web response", async () => {
-            const result = await RequestLib.get(testDomain)
+            const result = await BaseRequest.get(testDomain)
 
             expect(result.response).to.exist()
             expect(result.response.statusCode).to.equal(500)
@@ -389,14 +389,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -410,13 +410,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -436,7 +436,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -444,13 +444,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -478,14 +478,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -499,13 +499,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -526,7 +526,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -534,13 +534,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.get(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -561,7 +561,7 @@ describe('RequestLib', () => {
           // We tell Got to return the response as json rather than text. We can confirm the option has been applied by
           // checking the result.response.body below.
           const options = { responseType: 'json' }
-          const result = await RequestLib.get(testDomain, options)
+          const result = await BaseRequest.get(testDomain, options)
 
           expect(result.succeeded).to.be.true()
           expect(result.response.body).to.equal({ data: 'hello world' })
@@ -576,7 +576,7 @@ describe('RequestLib', () => {
         it('uses them in the options used when making the request', async () => {
           // We tell Got throw an error if the response is not 2xx or 3xx
           const options = { throwHttpErrors: true }
-          const result = await RequestLib.get(testDomain, options)
+          const result = await BaseRequest.get(testDomain, options)
 
           expect(result.succeeded).to.be.false()
           expect(result.response).to.be.an.error()
@@ -593,13 +593,13 @@ describe('RequestLib', () => {
 
       describe('the result it returns', () => {
         it("has a 'succeeded' property marked as true", async () => {
-          const result = await RequestLib.patch(testDomain)
+          const result = await BaseRequest.patch(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
         it("has a 'response' property containing the web response", async () => {
-          const result = await RequestLib.patch(testDomain)
+          const result = await BaseRequest.patch(testDomain)
 
           expect(result.response).to.exist()
           expect(result.response.statusCode).to.equal(200)
@@ -615,7 +615,7 @@ describe('RequestLib', () => {
         })
 
         it('logs the failure', async () => {
-          await RequestLib.patch(testDomain)
+          await BaseRequest.patch(testDomain)
 
           const logDataArg = notifierStub.omg.args[0][1]
 
@@ -632,13 +632,13 @@ describe('RequestLib', () => {
 
         describe('the result it returns', () => {
           it("has a 'succeeded' property marked as false", async () => {
-            const result = await RequestLib.patch(testDomain)
+            const result = await BaseRequest.patch(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
           it("has a 'response' property containing the web response", async () => {
-            const result = await RequestLib.patch(testDomain)
+            const result = await BaseRequest.patch(testDomain)
 
             expect(result.response).to.exist()
             expect(result.response.statusCode).to.equal(500)
@@ -657,14 +657,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -678,13 +678,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -704,7 +704,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -712,13 +712,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -746,14 +746,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -767,13 +767,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -794,7 +794,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -802,13 +802,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -829,7 +829,7 @@ describe('RequestLib', () => {
           // We tell Got to return the response as json rather than text. We can confirm the option has been applied by
           // checking the result.response.body below.
           const options = { responseType: 'json' }
-          const result = await RequestLib.patch(testDomain, options)
+          const result = await BaseRequest.patch(testDomain, options)
 
           expect(result.succeeded).to.be.true()
           expect(result.response.body).to.equal({ data: 'hello world' })
@@ -844,7 +844,7 @@ describe('RequestLib', () => {
         it('uses them in the options used when making the request', async () => {
           // We tell Got throw an error if the response is not 2xx or 3xx
           const options = { throwHttpErrors: true }
-          const result = await RequestLib.patch(testDomain, options)
+          const result = await BaseRequest.patch(testDomain, options)
 
           expect(result.succeeded).to.be.false()
           expect(result.response).to.be.an.error()
@@ -861,13 +861,13 @@ describe('RequestLib', () => {
 
       describe('the result it returns', () => {
         it("has a 'succeeded' property marked as true", async () => {
-          const result = await RequestLib.post(testDomain)
+          const result = await BaseRequest.post(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
         it("has a 'response' property containing the web response", async () => {
-          const result = await RequestLib.post(testDomain)
+          const result = await BaseRequest.post(testDomain)
 
           expect(result.response).to.exist()
           expect(result.response.statusCode).to.equal(200)
@@ -883,7 +883,7 @@ describe('RequestLib', () => {
         })
 
         it('logs the failure', async () => {
-          await RequestLib.post(testDomain)
+          await BaseRequest.post(testDomain)
 
           const logDataArg = notifierStub.omg.args[0][1]
 
@@ -900,13 +900,13 @@ describe('RequestLib', () => {
 
         describe('the result it returns', () => {
           it("has a 'succeeded' property marked as false", async () => {
-            const result = await RequestLib.post(testDomain)
+            const result = await BaseRequest.post(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
           it("has a 'response' property containing the web response", async () => {
-            const result = await RequestLib.post(testDomain)
+            const result = await BaseRequest.post(testDomain)
 
             expect(result.response).to.exist()
             expect(result.response.statusCode).to.equal(500)
@@ -925,14 +925,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -946,13 +946,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -972,7 +972,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -980,13 +980,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -1014,14 +1014,14 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(2)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
-            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             const logDataArg = notifierStub.omfg.args[0][1]
 
@@ -1035,13 +1035,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as false", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
             it("has a 'response' property containing the error", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response).to.be.an.error()
@@ -1062,7 +1062,7 @@ describe('RequestLib', () => {
           })
 
           it('logs when a retry has happened', async () => {
-            await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+            await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg.callCount).to.equal(1)
             expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
@@ -1070,13 +1070,13 @@ describe('RequestLib', () => {
 
           describe('the result it returns', () => {
             it("has a 'succeeded' property marked as true", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
             it("has a 'response' property containing the web response", async () => {
-              const result = await RequestLib.post(testDomain, { retry: shortBackoffLimitRetryOptions })
+              const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
               expect(result.response.statusCode).to.equal(200)
@@ -1097,7 +1097,7 @@ describe('RequestLib', () => {
           // We tell Got to return the response as json rather than text. We can confirm the option has been applied by
           // checking the result.response.body below.
           const options = { responseType: 'json' }
-          const result = await RequestLib.post(testDomain, options)
+          const result = await BaseRequest.post(testDomain, options)
 
           expect(result.succeeded).to.be.true()
           expect(result.response.body).to.equal({ data: 'hello world' })
@@ -1112,7 +1112,7 @@ describe('RequestLib', () => {
         it('uses them in the options used when making the request', async () => {
           // We tell Got throw an error if the response is not 2xx or 3xx
           const options = { throwHttpErrors: true }
-          const result = await RequestLib.post(testDomain, options)
+          const result = await BaseRequest.post(testDomain, options)
 
           expect(result.succeeded).to.be.false()
           expect(result.response).to.be.an.error()

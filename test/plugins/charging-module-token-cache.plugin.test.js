@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = exports.lab = Lab.script
 const { expect } = Code
 
 // Things we need to stub
-const ChargingModuleTokenService = require('../../app/services/charging-module/token.service')
+const ChargingModuleTokenRequest = require('../../app/requests/charging-module/token.request.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -32,7 +32,7 @@ describe('Charging Module Token Cache plugin', () => {
   describe('When the first call returns a valid token', () => {
     describe('and the second request is made before the cache expires', () => {
       before(() => {
-        Sinon.stub(ChargingModuleTokenService, 'go')
+        Sinon.stub(ChargingModuleTokenRequest, 'send')
           .onFirstCall().resolves({ accessToken: 'FIRST_TOKEN', expiresIn: LONG_EXPIRY_TIME })
           .onSecondCall().resolves({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
@@ -48,7 +48,7 @@ describe('Charging Module Token Cache plugin', () => {
 
     describe('and the second request is made after the cache expires', () => {
       before(() => {
-        Sinon.stub(ChargingModuleTokenService, 'go')
+        Sinon.stub(ChargingModuleTokenRequest, 'send')
           .onFirstCall().resolves({ accessToken: 'FIRST_TOKEN', expiresIn: SHORT_EXPIRY_TIME })
           .onSecondCall().resolves({ accessToken: 'SECOND_TOKEN', expiresIn: LONG_EXPIRY_TIME })
       })
@@ -64,7 +64,7 @@ describe('Charging Module Token Cache plugin', () => {
 
   describe('When the first call returns an invalid token', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleTokenService, 'go')
+      Sinon.stub(ChargingModuleTokenRequest, 'send')
         .onFirstCall().resolves({ accessToken: null, expiresIn: null })
         .onSecondCall().resolves({ accessToken: 'VALID_TOKEN', expiresIn: LONG_EXPIRY_TIME })
     })

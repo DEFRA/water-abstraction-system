@@ -32,19 +32,19 @@ const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
 // Things we need to stub
-const ChargingModuleDeleteBillRunService = require('../../../app/services/charging-module/delete-bill-run.service.js')
+const ChargingModuleDeleteBillRunRequest = require('../../../app/requests/charging-module/delete-bill-run.request.js')
 
 // Thing under test
 const SubmitCancelBillBunService = require('../../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 
 describe('Submit Cancel Bill Run service', () => {
-  let chargingModuleDeleteBillRunServiceStub
+  let chargingModuleDeleteBillRunRequestStub
   let notifierStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    chargingModuleDeleteBillRunServiceStub = Sinon.stub(ChargingModuleDeleteBillRunService, 'go')
+    chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'send')
   })
 
   afterEach(() => {
@@ -70,7 +70,7 @@ describe('Submit Cancel Bill Run service', () => {
         const { id: billLicenceId } = await BillLicenceHelper.add({ billId })
         await TransactionHelper.add({ billLicenceId })
 
-        chargingModuleDeleteBillRunServiceStub.resolves()
+        chargingModuleDeleteBillRunRequestStub.resolves()
 
         // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
         // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -87,7 +87,7 @@ describe('Submit Cancel Bill Run service', () => {
         // so is to give the background process time to complete.
         await setTimeout(500)
 
-        expect(chargingModuleDeleteBillRunServiceStub.called).to.be.true()
+        expect(chargingModuleDeleteBillRunRequestStub.called).to.be.true()
       })
 
       it('deletes any two-part tariff review data', async () => {
@@ -137,7 +137,7 @@ describe('Submit Cancel Bill Run service', () => {
 
         expect(refreshedBillRun).to.exist()
         expect(refreshedBillRun.status).to.equal('sent')
-        expect(chargingModuleDeleteBillRunServiceStub.called).to.be.false()
+        expect(chargingModuleDeleteBillRunRequestStub.called).to.be.false()
       })
     })
   })

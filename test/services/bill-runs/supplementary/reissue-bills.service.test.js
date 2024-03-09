@@ -19,7 +19,7 @@ const TransactionHelper = require('../../../support/helpers/transaction.helper.j
 const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Things we need to stub
-const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
+const LegacyRequest = require('../../../../app/requests/legacy.request.js')
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/supplementary/fetch-bills-to-be-reissued.service.js')
 const ReissueBillService = require('../../../../app/services/bill-runs/supplementary/reissue-bill.service.js')
 
@@ -35,7 +35,7 @@ describe('Reissue Bills service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    Sinon.stub(LegacyRequestLib, 'post')
+    Sinon.stub(LegacyRequest, 'post')
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this

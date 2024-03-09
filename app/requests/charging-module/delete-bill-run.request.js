@@ -5,7 +5,7 @@
  * @module ChargingModuleDeleteBillRunService
  */
 
-const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../charging-module.request.js')
 
 /**
  * Delete a bill run in the Charging Module API
@@ -13,17 +13,17 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/bill-run/DeleteBillRun | CHA API docs} for more
  * details
  *
- * @param {string} billRunId - UUID of the charging module API bill run to delete
+ * @param {string} billRunId - UUID of the Charging Module API bill run to delete
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function go (billRunId) {
+async function send (billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}`
-  const result = await ChargingModuleRequestLib.delete(path)
+  const result = await ChargingModuleRequest.delete(path)
 
   return result
 }
 
 module.exports = {
-  go
+  send
 }

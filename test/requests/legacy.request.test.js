@@ -12,12 +12,12 @@ const { expect } = Code
 const servicesConfig = require('../../config/services.config.js')
 
 // Things we need to stub
-const RequestLib = require('../../app/lib/request.lib.js')
+const BaseRequest = require('../../app/requests/base.request.js')
 
 // Thing under test
-const LegacyRequestLib = require('../../app/lib/legacy-request.lib.js')
+const LegacyRequest = require('../../app/requests/legacy.request.js')
 
-describe('LegacyRequestLib', () => {
+describe('Legacy Request', () => {
   const testPath = 'abstraction/info'
 
   afterEach(() => {
@@ -27,7 +27,7 @@ describe('LegacyRequestLib', () => {
   describe('#get()', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'get').resolves({
+        Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -37,9 +37,9 @@ describe('LegacyRequestLib', () => {
       })
 
       it('calls the legacy service with the required options', async () => {
-        await LegacyRequestLib.get('import', testPath)
+        await LegacyRequest.get('import', testPath)
 
-        const requestArgs = RequestLib.get.firstCall.args
+        const requestArgs = BaseRequest.get.firstCall.args
 
         expect(requestArgs[0]).to.equal(testPath)
         expect(requestArgs[1].prefixUrl).to.equal(`${servicesConfig.import.url}/import/1.0`)
@@ -49,36 +49,36 @@ describe('LegacyRequestLib', () => {
       })
 
       it('returns a `true` success status', async () => {
-        const result = await LegacyRequestLib.get('import', testPath)
+        const result = await LegacyRequest.get('import', testPath)
 
         expect(result.succeeded).to.be.true()
       })
 
       it('returns the response body as an object', async () => {
-        const result = await LegacyRequestLib.get('import', testPath)
+        const result = await LegacyRequest.get('import', testPath)
 
         expect(result.response.body.version).to.equal('3.1.2')
         expect(result.response.body.commit).to.equal('70708cff586cc410c11af25cf8fd296f987d7f36')
       })
 
       it('returns the status code', async () => {
-        const result = await LegacyRequestLib.get('import', testPath)
+        const result = await LegacyRequest.get('import', testPath)
 
         expect(result.response.statusCode).to.equal(200)
       })
 
       it('can handle none API requests', async () => {
-        await LegacyRequestLib.get('import', testPath, null, false)
+        await LegacyRequest.get('import', testPath, null, false)
 
-        const requestArgs = RequestLib.get.firstCall.args
+        const requestArgs = BaseRequest.get.firstCall.args
 
         expect(requestArgs[1].prefixUrl).to.equal(servicesConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {
-        await LegacyRequestLib.get('import', testPath, 1234, false)
+        await LegacyRequest.get('import', testPath, 1234, false)
 
-        const requestArgs = RequestLib.get.firstCall.args
+        const requestArgs = BaseRequest.get.firstCall.args
 
         expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
       })
@@ -86,7 +86,7 @@ describe('LegacyRequestLib', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'get').resolves({
+        Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: false,
           response: {
             statusCode: 404,
@@ -97,19 +97,19 @@ describe('LegacyRequestLib', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await LegacyRequestLib.get('import', testPath)
+        const result = await LegacyRequest.get('import', testPath)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error response', async () => {
-        const result = await LegacyRequestLib.get('import', testPath)
+        const result = await LegacyRequest.get('import', testPath)
 
         expect(result.response.body.message).to.equal('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await LegacyRequestLib.get('import', testPath)
+        const result = await LegacyRequest.get('import', testPath)
 
         expect(result.response.statusCode).to.equal(404)
       })
@@ -117,7 +117,7 @@ describe('LegacyRequestLib', () => {
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequestLib.get('foobar', testPath))
+        await expect(LegacyRequest.get('foobar', testPath))
           .to
           .reject(Error, 'Request to unknown legacy service foobar')
       })
@@ -129,7 +129,7 @@ describe('LegacyRequestLib', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'post').resolves({
+        Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: true,
           response: {
             statusCode: 200,
@@ -139,9 +139,9 @@ describe('LegacyRequestLib', () => {
       })
 
       it('calls the legacy service with the required options', async () => {
-        await LegacyRequestLib.post('import', testPath, null, true, requestBody)
+        await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        const requestArgs = RequestLib.post.firstCall.args
+        const requestArgs = BaseRequest.post.firstCall.args
 
         expect(requestArgs[0]).to.equal(testPath)
         expect(requestArgs[1].prefixUrl).to.equal(`${servicesConfig.import.url}/import/1.0`)
@@ -151,36 +151,36 @@ describe('LegacyRequestLib', () => {
       })
 
       it('returns a `true` success status', async () => {
-        const result = await LegacyRequestLib.post('import', testPath, null, true, requestBody)
+        const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.succeeded).to.be.true()
       })
 
       it('returns the response body as an object', async () => {
-        const result = await LegacyRequestLib.post('import', testPath, null, true, requestBody)
+        const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.response.body.version).to.equal('3.1.2')
         expect(result.response.body.commit).to.equal('70708cff586cc410c11af25cf8fd296f987d7f36')
       })
 
       it('returns the status code', async () => {
-        const result = await LegacyRequestLib.post('import', testPath, null, true, requestBody)
+        const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.response.statusCode).to.equal(200)
       })
 
       it('can handle none API requests', async () => {
-        await LegacyRequestLib.post('import', testPath, null, false, requestBody)
+        await LegacyRequest.post('import', testPath, null, false, requestBody)
 
-        const requestArgs = RequestLib.post.firstCall.args
+        const requestArgs = BaseRequest.post.firstCall.args
 
         expect(requestArgs[1].prefixUrl).to.equal(servicesConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {
-        await LegacyRequestLib.post('import', testPath, 1234, false, requestBody)
+        await LegacyRequest.post('import', testPath, 1234, false, requestBody)
 
-        const requestArgs = RequestLib.post.firstCall.args
+        const requestArgs = BaseRequest.post.firstCall.args
 
         expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
       })
@@ -188,7 +188,7 @@ describe('LegacyRequestLib', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(RequestLib, 'post').resolves({
+        Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: false,
           response: {
             statusCode: 404,
@@ -199,19 +199,19 @@ describe('LegacyRequestLib', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await LegacyRequestLib.post('import', testPath, null, true, requestBody)
+        const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error response', async () => {
-        const result = await LegacyRequestLib.post('import', testPath, null, true, requestBody)
+        const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.response.body.message).to.equal('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await LegacyRequestLib.post('import', testPath, null, true, requestBody)
+        const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.response.statusCode).to.equal(404)
       })
@@ -219,7 +219,7 @@ describe('LegacyRequestLib', () => {
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequestLib.post('foobar', testPath, null, true, requestBody))
+        await expect(LegacyRequest.post('foobar', testPath, null, true, requestBody))
           .to
           .reject(Error, 'Request to unknown legacy service foobar')
       })

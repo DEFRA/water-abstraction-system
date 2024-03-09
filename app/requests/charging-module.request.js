@@ -2,10 +2,10 @@
 
 /**
  * Use for making http requests to the Charging Module
- * @module ChargingModuleRequestLib
+ * @module ChargingModuleRequest
  */
 
-const RequestLib = require('./request.lib.js')
+const BaseRequest = require('./base.request.js')
 
 const requestConfig = require('../../config/request.config.js')
 const servicesConfig = require('../../config/services.config.js')
@@ -18,11 +18,9 @@ const servicesConfig = require('../../config/services.config.js')
  * @param {string} path - The path to send the request to (do not include the starting /)
  *
  * @returns {Promise<Object>} An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The Charging Module response if successful or the error response if not
  */
 async function deleteRequest (path) {
-  const result = await _sendRequest(path, RequestLib.delete)
+  const result = await _sendRequest(path, BaseRequest.delete)
 
   return _parseResult(result)
 }
@@ -32,12 +30,10 @@ async function deleteRequest (path) {
  *
  * @param {string} path - The route to send the request to (do not include the starting /)
  *
- * @returns {Promise<Object>} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The Charging Module response if successful or the error response if not
+ * @returns {Promise<Object>} An object representing the result of the request
  */
 async function get (path) {
-  const result = await _sendRequest(path, RequestLib.get)
+  const result = await _sendRequest(path, BaseRequest.get)
 
   return _parseResult(result)
 }
@@ -47,12 +43,10 @@ async function get (path) {
  *
  * @param {string} path - The path to send the request to (do not include the starting /)
  *
- * @returns {Promise<Object>} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The Charging Module response if successful or the error response if not
+ * @returns {Promise<Object>} An object representing the result of the request
  */
 async function patch (path) {
-  const result = await _sendRequest(path, RequestLib.patch)
+  const result = await _sendRequest(path, BaseRequest.patch)
 
   return _parseResult(result)
 }
@@ -63,24 +57,16 @@ async function patch (path) {
  * @param {string} path - The path to send the request to (do not include the starting /)
  * @param {Object} [body] - The body of the request
  *
- * @returns {Promise<Object>} result An object representing the result of the request
- * @returns {boolean} result.succeeded Whether the request was successful
- * @returns {Object} result.response The Charging Module response if successful or the error response if not.
+ * @returns {Promise<Object>} An object representing the result of the request
  */
 async function post (path, body = {}) {
-  const result = await _sendRequest(path, RequestLib.post, body)
+  const result = await _sendRequest(path, BaseRequest.post, body)
 
   return _parseResult(result)
 }
 
 /**
- * Sends a request to the Charging Module using the provided RequestLib method
- *
- * @param {string} path - The path that you wish to connect to (do not include the starting /)
- * @param {Object} method - An instance of a RequestLib method which will be used to send the request
- * @param {Object} [body] - Optional body to be sent to the route as json
- *
- * @returns {Promise<Object>} The result of the request passed back from RequestLib
+ * Sends a request to the Charging Module using the provided BaseRequest method
  */
 async function _sendRequest (path, method, body) {
   const authentication = await global.HapiServerMethods.getChargingModuleToken()
@@ -92,7 +78,7 @@ async function _sendRequest (path, method, body) {
 }
 
 /**
- * Additional options that will be added to the default options used by RequestLib
+ * Additional options that will be added to the default options used by BaseRequest
  *
  * We use it to set
  *
@@ -101,11 +87,6 @@ async function _sendRequest (path, method, body) {
  * - the body (which is always a JSON object) for our POST requests
  * - the option to tell Got that we expect JSON responses. This means Got will automatically handle parsing the
  *   response to a JSON object for us
- *
- * @param {string} accessToken
- * @param {Object} body
- *
- * @returns Charging Module API specific options to be passed to RequestLib
  */
 function _requestOptions (accessToken, body) {
   return {
@@ -122,11 +103,7 @@ function _requestOptions (accessToken, body) {
 }
 
 /**
- * Parses the charging module response returned from RequestLib
- *
- * @param {Object} result - The result object returned by RequestLib
- *
- * @returns {Object} If result was not an error, a parsed version of the response
+ * Parses the charging module response returned from BaseRequest
  */
 function _parseResult (result) {
   const { body, headers, statusCode } = result.response

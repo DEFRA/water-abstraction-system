@@ -10,13 +10,13 @@ const ChildProcess = require('child_process')
 const util = require('util')
 const exec = util.promisify(ChildProcess.exec)
 
-const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../../requests/charging-module.request.js')
 const CreateRedisClientService = require('./create-redis-client.service.js')
 const FetchImportJobsService = require('./fetch-import-jobs.service.js')
 const FetchSystemInfoService = require('./fetch-system-info.service.js')
 const { formatLongDateTime } = require('../../presenters/base.presenter.js')
-const RequestLib = require('../../lib/request.lib.js')
-const LegacyRequestLib = require('../../lib/legacy-request.lib.js')
+const BaseRequest = require('../../requests/base.request.js')
+const LegacyRequest = require('../../requests/legacy.request.js')
 
 const servicesConfig = require('../../../config/services.config.js')
 
@@ -53,7 +53,7 @@ async function _addSystemInfoToLegacyAppData (appData) {
 
 async function _getAddressFacadeData () {
   const statusUrl = new URL('/address-service/hola', servicesConfig.addressFacade.url)
-  const result = await RequestLib.get(statusUrl.href)
+  const result = await BaseRequest.get(statusUrl.href)
 
   if (result.succeeded) {
     return result.response.body
@@ -78,7 +78,7 @@ async function _getLegacyAppData () {
   ]
 
   for (const service of services) {
-    const result = await LegacyRequestLib.get(service.serviceName, healthInfoPath, false)
+    const result = await LegacyRequest.get(service.serviceName, healthInfoPath, false)
 
     if (result.succeeded) {
       service.version = result.response.body.version
@@ -94,7 +94,7 @@ async function _getLegacyAppData () {
 }
 
 async function _getChargingModuleData () {
-  const result = await ChargingModuleRequestLib.get('status')
+  const result = await ChargingModuleRequest.get('status')
 
   if (result.succeeded) {
     return result.response.info.dockerTag
