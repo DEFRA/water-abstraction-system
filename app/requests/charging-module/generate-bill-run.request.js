@@ -8,17 +8,17 @@
 const ChargingModuleRequest = require('../charging-module.request.js')
 
 /**
- * Delete a bill run in the Charging Module API
+ * Generate a bill run in the Charging Module API
  *
- * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/bill-run/DeleteBillRun | CHA API docs} for more
+ * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/bill-run/GenerateBillRun | CHA API docs} for more
  * details
  *
  * @param {string} billRunId - UUID of the Charging Module API bill run to generate
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send (billingRunId) {
-  const path = `v3/wrls/bill-runs/${billingRunId}/generate`
+async function send (billRunId) {
+  const path = `v3/wrls/bill-runs/${billRunId}/generate`
   const result = await ChargingModuleRequest.patch(path)
 
   return result
