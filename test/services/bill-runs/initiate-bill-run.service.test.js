@@ -15,7 +15,7 @@ const EventModel = require('../../../app/models/event.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
-const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
+const ChargingModuleCreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
 const CheckLiveBillRunService = require('../../../app/services/bill-runs/check-live-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
 
@@ -54,7 +54,7 @@ describe('Initiate Bill Run service', () => {
     }
 
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+      Sinon.stub(ChargingModuleCreateBillRunRequest, 'go').resolves({
         succeeded: true,
         response: {
           info: {
@@ -101,7 +101,7 @@ describe('Initiate Bill Run service', () => {
   describe('when initiating a bill run fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+        Sinon.stub(ChargingModuleCreateBillRunRequest, 'go').resolves({
           succeeded: false,
           response: {
             info: {

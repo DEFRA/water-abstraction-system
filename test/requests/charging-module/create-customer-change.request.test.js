@@ -9,53 +9,54 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
 
 // Thing under test
-const ChargingModuleBillRunStatusService = require('../../../app/services/charging-module/bill-run-status.service.js')
+const CreateCustomerChangeRequest = require('../../../app/requests/charging-module/create-customer-change.request.js')
 
-describe('Charging Module Bill Run Status service', () => {
-  const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
-  const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
+describe('Charging Module Create Customer Change request', () => {
+  const requestData = {
+    region: 'B',
+    customerReference: 'B88891136A',
+    customerName: 'SCP ESTATE LIMITED',
+    addressLine1: 'FAO Mr V P Anderson MBE',
+    addressLine2: 'ENVIRONMENT AGENCY',
+    addressLine3: 'HORIZON HOUSE',
+    addressLine4: 'DEANERY ROAD',
+    addressLine5: 'BRISTOL',
+    addressLine6: 'United Kingdom',
+    postcode: 'BS1 5AH'
+  }
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the service can get a bill run status', () => {
+  describe('when the request can create a customer change', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequestLib, 'get').resolves({
+      Sinon.stub(ChargingModuleRequest, 'post').resolves({
         succeeded: true,
         response: {
           info: {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 200,
-          body: {
-            status: 'initialised'
-          }
+          statusCode: 201
         }
       })
     })
 
     it('returns a `true` success status', async () => {
-      const result = await ChargingModuleBillRunStatusService.go(billRunId, transactionData)
+      const result = await CreateCustomerChangeRequest.go(requestData)
 
       expect(result.succeeded).to.be.true()
     })
-
-    it('returns the bill run status in the `response`', async () => {
-      const result = await ChargingModuleBillRunStatusService.go(billRunId, transactionData)
-
-      expect(result.response.body.status).to.equal('initialised')
-    })
   })
 
-  describe('when the service cannot get a bill run status', () => {
+  describe('when the request cannot create a customer change', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'get').resolves({
+        Sinon.stub(ChargingModuleRequest, 'post').resolves({
           succeeded: false,
           response: {
             info: {
@@ -74,13 +75,13 @@ describe('Charging Module Bill Run Status service', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleBillRunStatusService.go(billRunId, transactionData)
+        const result = await CreateCustomerChangeRequest.go(requestData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleBillRunStatusService.go(billRunId, transactionData)
+        const result = await CreateCustomerChangeRequest.go(requestData)
 
         expect(result.response.body.statusCode).to.equal(401)
         expect(result.response.body.error).to.equal('Unauthorized')
@@ -90,20 +91,20 @@ describe('Charging Module Bill Run Status service', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequestLib, 'get').resolves({
+        Sinon.stub(ChargingModuleRequest, 'post').resolves({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })
       })
 
       it('returns a `false` success status', async () => {
-        const result = await ChargingModuleBillRunStatusService.go(billRunId, transactionData)
+        const result = await CreateCustomerChangeRequest.go(requestData)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the `response`', async () => {
-        const result = await ChargingModuleBillRunStatusService.go(billRunId, transactionData)
+        const result = await CreateCustomerChangeRequest.go(requestData)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

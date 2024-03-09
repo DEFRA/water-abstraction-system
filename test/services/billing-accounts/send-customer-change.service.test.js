@@ -13,7 +13,7 @@ const ExpandedError = require('../../../app/errors/expanded.error.js')
 
 // Things we need to stub
 const ChargingModuleCreateCustomerChangePresenter = require('../../../app/presenters/charging-module/create-customer-change.presenter.js')
-const ChargingModuleCreateCustomerChangeService = require('../../../app/services/charging-module/create-customer-change.service.js')
+const ChargingModuleCreateCustomerChangeRequest = require('../../../app/requests/charging-module/create-customer-change.request.js')
 
 // Thing under test
 const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
@@ -42,7 +42,7 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is successful', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateCustomerChangeService, 'go').resolves({
+      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'go').resolves({
         succeeded: true
       })
     })
@@ -54,7 +54,7 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is unsuccessful', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateCustomerChangeService, 'go').resolves({
+      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'go').resolves({
         succeeded: false
       })
     })

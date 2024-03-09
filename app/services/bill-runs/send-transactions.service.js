@@ -7,7 +7,7 @@
 
 const BillRunError = require('../../errors/bill-run.error.js')
 const BillRunModel = require('../../models/bill-run.model.js')
-const ChargingModuleCreateTransactionService = require('../charging-module/create-transaction.service.js')
+const ChargingModuleCreateTransactionRequest = require('../../requests/charging-module/create-transaction.request.js')
 const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
 
 /**
@@ -43,7 +43,7 @@ async function _sendTransactionToChargingModule (transaction, billRunExternalId,
   try {
     const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(transaction, accountNumber, licence)
 
-    const chargingModuleResponse = await ChargingModuleCreateTransactionService.go(
+    const chargingModuleResponse = await ChargingModuleCreateTransactionRequest.go(
       billRunExternalId,
       chargingModuleRequest
     )

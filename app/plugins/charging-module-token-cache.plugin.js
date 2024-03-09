@@ -1,6 +1,6 @@
 'use strict'
 
-const ChargingModuleTokenService = require('../services/charging-module/token.service')
+const ChargingModuleTokenRequest = require('../requests/charging-module/token.request.js')
 
 /**
  * Adds a server method which returns a Cognito token for the Charging Module.
@@ -19,7 +19,7 @@ const ChargingModuleTokenCachePlugin = {
     // `flags` is passed to our server method automatically by hapi. Overwriting `flags.ttl` in our method lets us
     // override the cache default expiry time
     server.method('getChargingModuleToken', async (flags) => {
-      const token = await ChargingModuleTokenService.go()
+      const token = await ChargingModuleTokenRequest.go()
 
       // If the token request was successful it returns an expiry time, so use this to set the cache expiry
       // Otherwise, set the expiry time to 0 to avoid caching the unsuccessful attempt

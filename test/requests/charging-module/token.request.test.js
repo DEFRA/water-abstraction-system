@@ -9,19 +9,19 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const RequestLib = require('../../../app/lib/request.lib.js')
+const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
-const ChargingModuleTokenService = require('../../../app/services/charging-module/token.service.js')
+const TokenRequest = require('../../../app/requests/charging-module/token.request.js')
 
-describe('Charging Module Token service', () => {
+describe('Charging Module Token request', () => {
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the service is able to generate a token', () => {
+  describe('when the request is able to generate a token', () => {
     beforeEach(() => {
-      Sinon.stub(RequestLib, 'post').resolves({
+      Sinon.stub(BaseRequest, 'post').resolves({
         succeeded: true,
         response: {
           statusCode: 200,
@@ -31,16 +31,16 @@ describe('Charging Module Token service', () => {
     })
 
     it('returns an object with the access token and how long till it expires', async () => {
-      const result = await ChargingModuleTokenService.go()
+      const result = await TokenRequest.go()
 
       expect(result.accessToken).to.equal('reallylong.stringoflettersandnumbers.in3parts')
       expect(result.expiresIn).to.equal(3600)
     })
   })
 
-  describe('when the service cannot generate a token', () => {
+  describe('when the request cannot generate a token', () => {
     beforeEach(() => {
-      Sinon.stub(RequestLib, 'post').resolves({
+      Sinon.stub(BaseRequest, 'post').resolves({
         succeeded: false,
         response: {
           statusCode: 500,
@@ -50,7 +50,7 @@ describe('Charging Module Token service', () => {
     })
 
     it('returns an object with empty access token expires in properties', async () => {
-      const result = await ChargingModuleTokenService.go()
+      const result = await TokenRequest.go()
 
       expect(result.accessToken).to.be.null()
       expect(result.expiresIn).to.be.null()
