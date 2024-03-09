@@ -19,7 +19,7 @@ const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/c
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRequest = require('../../../../app/requests/legacy.request.js')
+const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
 const ReissueBillsService = require('../../../../app/services/bill-runs/supplementary/reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-unbilled-licences.service.js')
@@ -36,7 +36,7 @@ describe('Supplementary Process Bill Run service', () => {
   let billRun
   let chargingModuleGenerateBillRunRequestStub
   let handleErroredBillRunStub
-  let legacyRequestStub
+  let legacyRefreshBillRunRequestStub
   let notifierStub
 
   beforeEach(async () => {
@@ -46,7 +46,7 @@ describe('Supplementary Process Bill Run service', () => {
 
     handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
     chargingModuleGenerateBillRunRequestStub = Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send')
-    legacyRequestStub = Sinon.stub(LegacyRequest, 'post')
+    legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -126,7 +126,7 @@ describe('Supplementary Process Bill Run service', () => {
       it('tells the legacy service to start its refresh job', async () => {
         await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(legacyRequestStub.called).to.be.true()
+        expect(legacyRefreshBillRunRequestStub.called).to.be.true()
       })
 
       it('it logs the time taken', async () => {
