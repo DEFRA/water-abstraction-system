@@ -20,9 +20,8 @@ const ChargingModuleRequest = require('../charging-module.request.js')
  */
 async function send (billRunId, transactionData) {
   const path = `v3/wrls/bill-runs/${billRunId}/transactions`
-  const result = await ChargingModuleRequest.post(path, transactionData)
 
-  return result
+  return ChargingModuleRequest.post(path, transactionData)
 }
 
 module.exports = {
