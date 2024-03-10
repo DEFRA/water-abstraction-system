@@ -23,9 +23,8 @@ const LegacyRequest = require('../legacy.request.js')
  */
 async function send (billRunId) {
   const path = `billing/batches/${billRunId}/refresh`
-  const result = await LegacyRequest.post('water', path)
 
-  return result
+  return LegacyRequest.post('water', path)
 }
 
 module.exports = {
