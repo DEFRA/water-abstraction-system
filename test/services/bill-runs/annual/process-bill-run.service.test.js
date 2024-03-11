@@ -16,6 +16,7 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 
 // Things we need to stub
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
+const DatabaseSupport = require('../../../support/database.js')
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
@@ -31,6 +32,7 @@ describe('Annual Process Bill Run service', () => {
   let notifierStub
 
   beforeEach(async () => {
+    await DatabaseSupport.clean()
     const financialYearEnd = billingPeriod.startDate.getFullYear()
 
     billRun = await BillRunHelper.add({
