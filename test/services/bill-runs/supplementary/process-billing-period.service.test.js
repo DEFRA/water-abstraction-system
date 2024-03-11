@@ -24,7 +24,7 @@ const DatabaseSupport = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Things we need to stub
-const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
+const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
 const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 
@@ -136,7 +136,7 @@ describe('Supplementary Process billing period service', () => {
           }]
 
           Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
-          Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
+          Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send').resolves({
             succeeded: true,
             response: {}
           })

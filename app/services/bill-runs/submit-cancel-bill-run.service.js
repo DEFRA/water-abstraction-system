@@ -11,7 +11,7 @@ const BillRunModel = require('../../models/bill-run.model.js')
 const BillRunChargeVersionYearModel = require('../../models/bill-run-charge-version-year.model.js')
 const BillRunVolumeModel = require('../../models/bill-run-volume.model.js')
 const { db } = require('../../../db/db.js')
-const ChargingModuleDeleteBillRunService = require('../charging-module/delete-bill-run.service.js')
+const ChargingModuleDeleteBillRunRequest = require('../../requests/charging-module/delete-bill-run.request.js')
 const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
 const ReviewChargeVersionModel = require('../../models/review-charge-version.model.js')
 const ReviewLicenceModel = require('../../models/review-licence.model.js')
@@ -63,7 +63,7 @@ async function _cancelBillRun (billRun) {
   await Promise.all([
     // If the Charging Module errors whilst doing this it shouldn't block us carrying on with deleting the bill run on
     // our side. It just means the the CHA will be storing an 'orphaned' bill run that will never get sent.
-    ChargingModuleDeleteBillRunService.go(externalId),
+    ChargingModuleDeleteBillRunRequest.send(externalId),
     // We can be deleting these records whilst getting on with deleting the other things. But should it fail we'll just
     // be left with orphaned review results. As long as it's an incidental occurrence this wouldn't be a problem.
     _removeReviewResults(billRunId),
