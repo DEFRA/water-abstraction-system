@@ -6,6 +6,7 @@
  */
 
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
+const TypeService = require('../services/bill-runs/setup/type.service.js')
 
 async function setup (_request, h) {
   const session = await InitiateSessionService.go()
@@ -13,6 +14,19 @@ async function setup (_request, h) {
   return h.redirect(`/system/bill-runs/setup/${session.id}/type`)
 }
 
+async function type (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await TypeService.go(sessionId)
+
+  return h.view('bill-runs/setup/type.njk', {
+    activeNavBar: 'bill-runs',
+    pageTitle: 'Select a bill run type',
+    ...pageData
+  })
+}
+
 module.exports = {
-  setup
+  setup,
+  type
 }

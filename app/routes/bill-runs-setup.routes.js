@@ -15,6 +15,19 @@ const routes = [
       },
       description: 'Create a bill run (start of journey)'
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/setup/{sessionId}/type',
+    handler: BillRunsSetupController.type,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the bill run type'
+    }
   }
 ]
 
