@@ -12,6 +12,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * Fetches the review returns data for an individual licence in the bill run and the bill run data
  *
  * @param {String} billRunId UUID of the bill run
+ * @param {String} licenceId UUID of the licence
  *
  * @returns {Promise<Object[]>} Contains an array of bill run data and review licence data
  */
