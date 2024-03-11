@@ -32,7 +32,7 @@ function _extractUniqueLicenceIds (chargeVersions) {
   return [...new Set(allLicenceIds)]
 }
 
-async function _groupByLicence (chargeVersions, uniqueLicenceIds) {
+function _groupByLicence (chargeVersions, uniqueLicenceIds) {
   // NOTE: We could have initialized licences as an empty array and pushed each new object. But for a big region
   // the number of licences we might be dealing will be in the hundreds, possibly thousands. In these cases we get a
   // performance bump if we create the array sized to our needs first, rather than asking Node to resize the array on
