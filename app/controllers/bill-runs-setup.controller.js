@@ -1,17 +1,34 @@
 'use strict'
 
 /**
- * Controller for /bill-runs/create endpoints
- * @module BillRunsCreateController
+ * Controller for /bill-runs/setup endpoints
+ * @module BillRunsSetupController
  */
 
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
+const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
 
 async function setup (_request, h) {
   const session = await InitiateSessionService.go()
 
   return h.redirect(`/system/bill-runs/setup/${session.id}/type`)
+}
+
+async function submitType (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitTypeService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/setup/type.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'Select a bill run type',
+      ...pageData
+    })
+  }
+
+  return h.redirect(`/system/bill-runs/setup/${sessionId}/region`)
 }
 
 async function type (request, h) {
@@ -28,5 +45,6 @@ async function type (request, h) {
 
 module.exports = {
   setup,
+  submitType,
   type
 }

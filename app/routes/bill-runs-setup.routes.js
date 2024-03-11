@@ -28,6 +28,19 @@ const routes = [
       },
       description: 'Select the bill run type'
     }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/setup/{sessionId}/type',
+    handler: BillRunsSetupController.submitType,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the bill run type for the bill run'
+    }
   }
 ]
 
