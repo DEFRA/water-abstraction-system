@@ -14,7 +14,7 @@ const { randomInteger } = require('../general.js')
  * If no `data` is provided, default values will be used. These are
  *
  * - `waterUndertaker` - false
- * - `licenceRef` - [randomly generated - 01/123]
+ * - `licenceRef` - [randomly generated - 01/12/34/1000]
  * - `regionId` - [random UUID]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
  * - `startDate` - new Date('2022-01-01')
@@ -55,9 +55,11 @@ function defaults (data = {}) {
 }
 
 function generateLicenceRef () {
-  const secondPart = randomInteger(100, 999)
+  const secondPart = randomInteger(10, 99)
+  const thirdPart = randomInteger(10, 99)
+  const fourthPart = randomInteger(1000, 9999)
 
-  return `01/${secondPart}`
+  return `01/${secondPart}/${thirdPart}/${fourthPart}`
 }
 
 module.exports = {
