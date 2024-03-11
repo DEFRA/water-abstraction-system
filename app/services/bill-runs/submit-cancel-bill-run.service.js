@@ -197,7 +197,7 @@ async function _removeChargeElementsAndReferences (billRunId) {
   await _removeChargeReferences(billRunId)
 }
 
-async function _removeChargeElementReturns (billRunId) {
+async function _removeChargeElementsReturns (billRunId) {
   return db
     .del()
     .from('reviewChargeElementsReturns AS rcer')
@@ -238,7 +238,7 @@ async function _removeReviewResults (billRunId) {
     // To help performance we allow both these processes to run in parallel. Because their where clause depends on
     // `review_charge_versions` and `review_returns` we have to wait for them to complete before we proceed. This is
     // the same for deleting the charge versions and returns.
-    await Promise.all([_removeChargeElementReturns(billRunId), _removeChargeElementsAndReferences(billRunId)])
+    await Promise.all([_removeChargeElementsReturns(billRunId), _removeChargeElementsAndReferences(billRunId)])
     await Promise.all([_removeChargeVersions(billRunId), _removeReturns(billRunId)])
 
     return ReviewLicenceModel.query().delete().where('billRunId', billRunId)
