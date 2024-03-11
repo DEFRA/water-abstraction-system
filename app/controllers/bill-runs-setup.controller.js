@@ -6,8 +6,21 @@
  */
 
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
+const RegionService = require('../services/bill-runs/setup/region.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
+
+async function region (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await RegionService.go(sessionId)
+
+  return h.view('bill-runs/setup/region.njk', {
+    activeNavBar: 'bill-runs',
+    pageTitle: 'Select the region',
+    ...pageData
+  })
+}
 
 async function setup (_request, h) {
   const session = await InitiateSessionService.go()
@@ -44,6 +57,7 @@ async function type (request, h) {
 }
 
 module.exports = {
+  region,
   setup,
   submitType,
   type

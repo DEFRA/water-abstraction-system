@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
+const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
 const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
 const TypeService = require('../../app/services/bill-runs/setup/type.service.js')
 
@@ -55,6 +56,32 @@ describe('Bill Runs Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/bill-runs/setup/${session.id}/type`)
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/region', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('region')
+
+        Sinon.stub(RegionService, 'go').resolves({
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          regions: [
+            { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
+            { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'Stormlands' }
+          ],
+          selectedRegion: null
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the region')
         })
       })
     })

@@ -5,6 +5,19 @@ const BillRunsSetupController = require('../controllers/bill-runs-setup.controll
 const routes = [
   {
     method: 'GET',
+    path: '/bill-runs/setup/{sessionId}/region',
+    handler: BillRunsSetupController.region,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the region for the bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/setup',
     handler: BillRunsSetupController.setup,
     options: {
