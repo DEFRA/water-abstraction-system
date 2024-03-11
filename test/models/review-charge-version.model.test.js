@@ -37,7 +37,7 @@ describe('Review Charge Version model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to charge reference', () => {
+    describe('when linking to review charge reference', () => {
       let testChargeReference
 
       beforeEach(async () => {
@@ -67,7 +67,7 @@ describe('Review Charge Version model', () => {
       })
     })
 
-    describe('when linking to licence', () => {
+    describe('when linking to review licence', () => {
       let testReviewLicence
 
       beforeEach(async () => {
@@ -82,7 +82,7 @@ describe('Review Charge Version model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the region', async () => {
+      it('can eager load the review licence', async () => {
         const result = await ReviewChargeVersionModel.query()
           .findById(testRecord.id)
           .withGraphFetched('reviewLicence')
