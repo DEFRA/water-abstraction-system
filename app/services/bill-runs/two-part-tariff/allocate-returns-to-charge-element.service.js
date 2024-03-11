@@ -35,6 +35,7 @@ function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
 function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines) {
   matchedLines.forEach((matchedLine) => {
     const chargeElementRemainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
+
     if (chargeElementRemainingAllocation > 0) {
       let qtyToAllocate
 
@@ -67,6 +68,7 @@ function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeRef
 
 function _allocateDueReturns (chargeElement, matchedReturn, chargeReference, i) {
   const chargeElementRemainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
+
   if (chargeElementRemainingAllocation > 0) {
     let qtyToAllocate = chargeElementRemainingAllocation
 
@@ -114,6 +116,7 @@ function _matchLines (chargeElement, returnSubmissionLines) {
     }
 
     const { startDate, endDate } = returnSubmissionLine
+
     return periodsOverlap(chargeElement.abstractionPeriods, [{ startDate, endDate }])
   })
 }
