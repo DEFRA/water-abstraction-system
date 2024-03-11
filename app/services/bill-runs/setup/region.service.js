@@ -5,7 +5,7 @@
  * @module RegionService
  */
 
-const RegionModel = require('../../../models/region.model.js')
+const FetchRegionsService = require('./fetch-regions.service.js')
 const RegionPresenter = require('../../../presenters/bill-runs/setup/region.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -21,24 +21,13 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const regions = await _fetchRegions()
+  const regions = await FetchRegionsService.go()
 
   const formattedData = RegionPresenter.go(session, regions)
 
   return {
     ...formattedData
   }
-}
-
-async function _fetchRegions () {
-  return RegionModel.query()
-    .select([
-      'id',
-      'displayName'
-    ])
-    .orderBy([
-      { column: 'displayName', order: 'asc' }
-    ])
 }
 
 module.exports = {
