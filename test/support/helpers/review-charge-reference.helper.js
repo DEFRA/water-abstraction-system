@@ -8,7 +8,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const ReviewChargeReferenceModel = require('../../../app/models/review-charge-reference.model.js')
 
 /**
- * Add a new review charge version record for 2pt matching
+ * Add a new review charge reference record for 2pt matching
  *
  * If no `data` is provided, default values will be used. These are
  *
