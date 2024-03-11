@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Processes the two-part tariff match & allocate stage for the given bill run and billing period
- * @module ProcessTwoPartTariffReturnsService
+ * Process a given two-part tariff bill run for the given billing periods
+ * @module ProcessBillRunService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')

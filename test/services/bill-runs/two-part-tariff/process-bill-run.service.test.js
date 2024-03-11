@@ -18,9 +18,9 @@ const HandleErroredBillRunService = require('../../../../app/services/bill-runs/
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/two-part-tariff/match-and-allocate.service.js')
 
 // Thing under test
-const ProcessTwoPartTariffReturnsService = require('../../../../app/services/bill-runs/two-part-tariff/process-two-part-tariff-returns.service.js')
+const TwoPartTariffProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
 
-describe('Process Two Part Tariff Returns service', () => {
+describe('Two Part Tariff Process Bill Run service', () => {
   const billingPeriods = [
     { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
   ]
@@ -52,7 +52,7 @@ describe('Process Two Part Tariff Returns service', () => {
       })
 
       it('sets the Bill Run status to empty', async () => {
-        await ProcessTwoPartTariffReturnsService.go(billRun, billingPeriods)
+        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
 
         const result = await BillRunModel.query().findById(billRun.id)
 
@@ -66,7 +66,7 @@ describe('Process Two Part Tariff Returns service', () => {
       })
 
       it('sets the Bill Run status to review', async () => {
-        await ProcessTwoPartTariffReturnsService.go(billRun, billingPeriods)
+        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
 
         const result = await BillRunModel.query().findById(billRun.id)
 
@@ -83,13 +83,13 @@ describe('Process Two Part Tariff Returns service', () => {
       })
 
       it('calls HandleErroredBillRunService', async () => {
-        await ProcessTwoPartTariffReturnsService.go(billRun, billingPeriods)
+        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
 
         expect(HandleErroredBillRunService.go.called).to.be.true()
       })
 
       it('logs the error', async () => {
-        await ProcessTwoPartTariffReturnsService.go(billRun, billingPeriods)
+        await TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 
