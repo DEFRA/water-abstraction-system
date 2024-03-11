@@ -55,9 +55,11 @@ function defaults (data = {}) {
 }
 
 function generateLicenceRef () {
-  const secondPart = randomInteger(100, 999)
+  const secondPart = randomInteger(10, 99)
+  const thirdPart = randomInteger(10, 99)
+  const fourthPart = randomInteger(1000, 9999)
 
-  return `01/${secondPart}`
+  return `01/${secondPart}/${thirdPart}/${fourthPart}`
 }
 
 module.exports = {
