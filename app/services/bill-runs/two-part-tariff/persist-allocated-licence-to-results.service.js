@@ -99,8 +99,8 @@ async function _persistChargeElement (chargeElement, reviewReturnIds, reviewChar
     // allocation. We don't create `ReviewReturn` records until this service is called, and those are based
     // on the `returnLogs` property of each licence. Hence, we need to pass in the ID's created and search them for
     // a match in order to get the `reviewReturnId`.
-    const { reviewReturnId } = reviewReturnIds.find((reviewReturnIds) => {
-      return reviewReturnIds.returnId === returnLog.returnId
+    const { reviewReturnId } = reviewReturnIds.find((reviewReturnId) => {
+      return reviewReturnId.returnId === returnLog.returnId
     })
 
     await _persistChargeElementsReturns(reviewChargeElementId, reviewReturnId)

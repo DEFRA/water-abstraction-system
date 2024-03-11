@@ -144,10 +144,6 @@ async function _fetch (regionCode, billingPeriod) {
         ])
     })
 
-  // for (const licence of licences) {
-  //   licence.licenceHolder = licence.$licenceHolder()
-  // }
-
   return chargeVersions
 }
 

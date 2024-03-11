@@ -6,7 +6,6 @@
  */
 
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-// const LicenceModel = require('../../../models/licence.model.js')
 
 /**
  * Fetches 2PT Licences for the matching region and billing period plus the charge versions associated with them grouped

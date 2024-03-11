@@ -26,13 +26,13 @@ async function go (id) {
 }
 
 async function _fetchBillRunLicences (id) {
-  return await ReviewLicenceModel.query()
+  return ReviewLicenceModel.query()
     .where('billRunId', id)
     .orderBy('status', 'desc')
 }
 
 async function _fetchBillRun (id) {
-  return await BillRunModel.query()
+  return BillRunModel.query()
     .findById(id)
     .select([
       'id',
