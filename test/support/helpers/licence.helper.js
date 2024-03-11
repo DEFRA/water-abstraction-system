@@ -14,7 +14,7 @@ const { randomInteger } = require('../general.js')
  * If no `data` is provided, default values will be used. These are
  *
  * - `waterUndertaker` - false
- * - `licenceRef` - [randomly generated - 01/123]
+ * - `licenceRef` - [randomly generated - 01/12/34/1000]
  * - `regionId` - [random UUID]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
  * - `startDate` - new Date('2022-01-01')
