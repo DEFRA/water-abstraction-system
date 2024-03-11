@@ -10,11 +10,14 @@ const { expect } = Code
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
+const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
+const TypeService = require('../../app/services/bill-runs/setup/type.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Bill Runs Setup controller', () => {
+  let options
   let server
 
   // Create server before each test
@@ -33,33 +36,109 @@ describe('Bill Runs Setup controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /bill-runs/setup', () => {
-    const session = { id: 'e009b394-8405-4358-86af-1a9eb31298a5', data: {} }
+  describe('/bill-runs/setup', () => {
+    describe('GET', () => {
+      const session = { id: 'e009b394-8405-4358-86af-1a9eb31298a5', data: {} }
 
-    let options
-
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/bill-runs/setup',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: ['billing'] }
-        }
-      }
-    })
-
-    describe('when a request is valid', () => {
       beforeEach(async () => {
-        Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        options = _getOptions('')
+        options.url = '/bill-runs/setup'
       })
 
-      it('redirects to select bill run type page', async () => {
-        const response = await server.inject(options)
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(session)
+        })
 
-        expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal(`/system/bill-runs/setup/${session.id}/type`)
+        it('redirects to select bill run type page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/system/bill-runs/setup/${session.id}/type`)
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/type', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('type')
+
+        Sinon.stub(TypeService, 'go').resolves({
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          selectedType: null
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select a bill run type')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          options = _postOptions('type', { type: 'annual' })
+
+          Sinon.stub(SubmitTypeService, 'go').resolves({})
+        })
+
+        it('redirects to select a region page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/region')
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          options = _postOptions('type', { type: '' })
+
+          Sinon.stub(SubmitTypeService, 'go').resolves({
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedType: null,
+            error: { text: 'Select a bill run type' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select a bill run type')
+          expect(response.payload).to.contain('There is a problem')
+        })
       })
     })
   })
 })
+
+function _getOptions (path) {
+  return {
+    method: 'GET',
+    url: `/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['billing'] }
+    }
+  }
+}
+
+function _postOptions (path, payload) {
+  return {
+    method: 'POST',
+    url: `/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/${path}`,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['billing'] }
+    },
+    payload
+  }
+}
