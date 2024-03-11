@@ -1,36 +1,31 @@
 'use strict'
 
 /**
- * @module ReviewResultHelper
+ * @module ReviewChargeVersionHelper
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ReviewResultModel = require('../../../app/models/review-result.model.js')
+const ReviewChargeVersionModel = require('../../../app/models/review-charge-version.model.js')
 
 /**
- * Add a new review result record for 2pt matching
+ * Add a new review charge version record for 2pt matching
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - [random UUID]
- * - `billRunId` - [random UUID]
- * - `licenceId` - [random UUID]
+ * - `reviewLicenceId` - [random UUID]
  * - `chargeVersionId` - [random UUID]
- * - `chargeReferenceId` - [random UUID]
+ * - `changeReason` - Strategic review of charges (SRoC)
  * - `chargePeriodStartDate` - 2022-04-01
  * - `chargePeriodEndDate` - 2022-06-05
- * - `chargeVersionChangeReason` - Strategic review of charges (SRoC)
- * - `reviewChargeElementResultId` - [random UUID]
- * - `reviewReturnResultId` - [random UUID]
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:ReviewResultModel>} The instance of the newly created record
+ * @returns {Promise<module:ReviewChargeVersionModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return ReviewResultModel.query()
+  return ReviewChargeVersionModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -45,16 +40,11 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    id: generateUUID(),
-    billRunId: generateUUID(),
-    licenceId: generateUUID(),
+    reviewLicenceId: generateUUID(),
     chargeVersionId: generateUUID(),
-    chargeReferenceId: generateUUID(),
+    changeReason: 'Strategic review of charges (SRoC)',
     chargePeriodStartDate: new Date('2022-04-01'),
-    chargePeriodEndDate: new Date('2022-06-05'),
-    chargeVersionChangeReason: 'Strategic review of charges (SRoC)',
-    reviewChargeElementResultId: generateUUID(),
-    reviewReturnResultId: generateUUID()
+    chargePeriodEndDate: new Date('2022-06-05')
   }
 
   return {

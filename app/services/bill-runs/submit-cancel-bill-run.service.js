@@ -13,9 +13,9 @@ const BillRunVolumeModel = require('../../models/bill-run-volume.model.js')
 const { db } = require('../../../db/db.js')
 const ChargingModuleDeleteBillRunRequest = require('../../requests/charging-module/delete-bill-run.request.js')
 const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
-const ReviewChargeElementResultModel = require('../../models/review-charge-element-result.model.js')
-const ReviewResultModel = require('../../models/review-result.model.js')
-const ReviewReturnResultModel = require('../../models/review-return-result.model.js')
+const ReviewChargeVersionModel = require('../../models/review-charge-version.model.js')
+const ReviewLicenceModel = require('../../models/review-licence.model.js')
+const ReviewReturnModel = require('../../models/review-return.model.js')
 
 /**
  * Orchestrates the cancelling of a bill run
@@ -177,31 +177,71 @@ async function _removeBillRunVolumes (billRunId) {
   return BillRunVolumeModel.query().delete().where('billRunId', billRunId)
 }
 
+async function _removeChargeElements (billRunId) {
+  return db
+    .del()
+    .from('reviewChargeElements AS rce')
+    .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
+    .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
+    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
+    .where('rl.billRunId', billRunId)
+}
+
+/**
+ * As the `review_charge_elements` table has a join with the `review_charge_references` table we need to delete the
+ * `review_charge_elements` table first. This function does that so we can process in parallel the deletion of the
+ * elements and references whilst also deleting the records from the `review_charge_elements_returns` table.
+ */
+async function _removeChargeElementsAndReferences (billRunId) {
+  await _removeChargeElements(billRunId)
+  await _removeChargeReferences(billRunId)
+}
+
+async function _removeChargeElementsReturns (billRunId) {
+  return db
+    .del()
+    .from('reviewChargeElementsReturns AS rcer')
+    .innerJoin('reviewReturns AS rr', 'rcer.reviewReturnId', 'rr.id')
+    .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
+    .where('rl.billRunId', billRunId)
+}
+
+async function _removeChargeReferences (billRunId) {
+  return db
+    .del()
+    .from('reviewChargeReferences AS rcr')
+    .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
+    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
+    .where('rl.billRunId', billRunId)
+}
+
+async function _removeChargeVersions (billRunId) {
+  return ReviewChargeVersionModel.query()
+    .delete()
+    .innerJoinRelated('reviewLicence')
+    .where('reviewLicence.billRunId', billRunId)
+}
+
+async function _removeReturns (billRunId) {
+  return ReviewReturnModel.query()
+    .delete()
+    .innerJoinRelated('reviewLicence')
+    .where('reviewLicence.billRunId', billRunId)
+}
+
 /**
  * We always call this function as part of cancelling a bill run. However, there will only be records if the bill run
  * is an SROC tw-part tariff bill run in 'review'.
  */
 async function _removeReviewResults (billRunId) {
   try {
-    const deleteChargeElementsProcess = ReviewChargeElementResultModel.query()
-      .delete()
-      .whereExists(ReviewChargeElementResultModel
-        .relatedQuery('reviewResults')
-        .where('reviewResults.billRunId', billRunId)
-      )
-
-    const deleteReturnsProcess = ReviewReturnResultModel.query()
-      .delete()
-      .whereExists(ReviewReturnResultModel
-        .relatedQuery('reviewResults')
-        .where('reviewResults.billRunId', billRunId)
-      )
-
     // To help performance we allow both these processes to run in parallel. Because their where clause depends on
-    // `review_results` we have to wait for them to complete before we proceed.
-    await Promise.all([deleteChargeElementsProcess, deleteReturnsProcess])
+    // `review_charge_versions` and `review_returns` we have to wait for them to complete before we proceed. This is
+    // the same for deleting the charge versions and returns.
+    await Promise.all([_removeChargeElementsReturns(billRunId), _removeChargeElementsAndReferences(billRunId)])
+    await Promise.all([_removeChargeVersions(billRunId), _removeReturns(billRunId)])
 
-    return ReviewResultModel.query().delete().where('billRunId', billRunId)
+    return ReviewLicenceModel.query().delete().where('billRunId', billRunId)
   } catch (error) {
     global.GlobalNotifier.omfg('Failed to remove review results', { billRunId }, error)
   }

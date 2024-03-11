@@ -4,6 +4,7 @@
  * Prepares the charge version for matching
  * @module PrepareChargeVersionService
  */
+
 const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
 const DetermineChargePeriodService = require('../determine-charge-period.service.js')
 

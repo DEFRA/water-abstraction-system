@@ -12,8 +12,7 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewResultHelper = require('../../../support/helpers/review-result.helper.js')
-const ReviewReturnResultHelper = require('../../../support/helpers/review-return-result.helper.js')
+const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
 // Thing under test
 const FetchReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
@@ -34,13 +33,11 @@ describe('Fetch Review Licence Results Service', () => {
     })
 
     describe('and a valid licence that is included in the bill run', () => {
-      let reviewResult
-      let reviewReturnResult
+      let reviewLicence
 
       beforeEach(async () => {
         licence = await LicenceHelper.add()
-        reviewReturnResult = await ReviewReturnResultHelper.add()
-        reviewResult = await ReviewResultHelper.add({ reviewReturnResultId: reviewReturnResult.id, licenceId: licence.id, billRunId: billRun.id })
+        reviewLicence = await ReviewLicenceHelper.add({ licenceId: licence.id })
       })
 
       it('returns details of the bill run', async () => {
@@ -59,49 +56,7 @@ describe('Fetch Review Licence Results Service', () => {
       it('returns the licence ref', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
-        expect(result.licenceRef).to.equal(licence.licenceRef)
-      })
-
-      it('returns details of the licence review results', async () => {
-        const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
-
-        expect(result.reviewReturnResults).to.equal([{
-          reviewReturnResultId: reviewResult.reviewReturnResultId,
-          reviewChargeElementResultId: reviewResult.reviewChargeElementResultId,
-          chargeVersionId: reviewResult.chargeVersionId,
-          chargePeriodStartDate: reviewResult.chargePeriodStartDate,
-          chargePeriodEndDate: reviewResult.chargePeriodEndDate,
-          reviewReturnResults: {
-            abstractionOutsidePeriod: reviewReturnResult.abstractionOutsidePeriod,
-            allocated: reviewReturnResult.allocated,
-            description: reviewReturnResult.description,
-            dueDate: reviewReturnResult.dueDate,
-            endDate: reviewReturnResult.endDate,
-            id: reviewReturnResult.id,
-            nilReturn: reviewReturnResult.nilReturn,
-            purposes: reviewReturnResult.purposes,
-            quantity: reviewReturnResult.quantity,
-            receivedDate: reviewReturnResult.receivedDate,
-            returnId: reviewReturnResult.returnId,
-            returnReference: reviewReturnResult.returnReference,
-            startDate: reviewReturnResult.startDate,
-            status: reviewReturnResult.status,
-            underQuery: reviewReturnResult.underQuery
-          }
-        }])
-      })
-    })
-
-    describe('and a valid licence but it is not included in the bill run', () => {
-      beforeEach(async () => {
-        licence = await LicenceHelper.add()
-      })
-
-      it('returns the bill run but no licence results', async () => {
-        const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
-
-        expect(result.billRun.id).to.equal(billRun.id)
-        expect(result.reviewReturnResults).to.equal([])
+        expect(result.licence[0].licenceRef).to.equal(reviewLicence.licenceRef)
       })
     })
   })
@@ -115,7 +70,7 @@ describe('Fetch Review Licence Results Service', () => {
       const result = await FetchReviewLicenceResultsService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d', licence.id)
 
       expect(result.billRun).to.be.undefined()
-      expect(result.reviewReturnResults).to.have.length(0)
+      expect(result.licence).to.have.length(0)
     })
   })
 })

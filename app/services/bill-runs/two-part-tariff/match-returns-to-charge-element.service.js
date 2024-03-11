@@ -20,6 +20,7 @@ const { periodsOverlap } = require('../../../lib/general.lib.js')
  */
 function go (chargeElement, returnLogs) {
   const matchingReturns = _matchReturns(chargeElement, returnLogs)
+
   if (matchingReturns.length > 0) {
     _addMatchingReturnsToElement(matchingReturns, chargeElement)
   }

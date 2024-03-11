@@ -10,10 +10,8 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewResultHelper = require('../../../support/helpers/review-result.helper.js')
+const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
 // Thing under test
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-bill-run-licences.service.js')
@@ -33,12 +31,11 @@ describe('Fetch Bill Run Licences service', () => {
     })
 
     describe('and there are licences in the bill run', () => {
-      let testLicence
+      let testLicenceReady
 
       beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-        await LicenceHolderSeeder.seed(testLicence.licenceRef)
-        await ReviewResultHelper.add({ billRunId: billRun.id, licenceId: testLicence.id })
+        testLicenceReady = await ReviewLicenceHelper.add({ billRunId: billRun.id })
+        await ReviewLicenceHelper.add({ billRunId: billRun.id, status: 'review' })
       })
 
       it('returns details of the bill run and the licences in it', async () => {
@@ -51,10 +48,17 @@ describe('Fetch Bill Run Licences service', () => {
         expect(result.billRun.batchType).to.equal(billRun.batchType)
         expect(result.billRun.region.displayName).to.equal(region.displayName)
 
-        expect(result.licences).to.have.length(1)
-        expect(result.licences[0].id).to.equal(testLicence.id)
-        expect(result.licences[0].licenceHolder).to.equal('Licence Holder Ltd')
-        expect(result.licences[0].licenceRef).to.equal(testLicence.licenceRef)
+        expect(result.licences).to.have.length(2)
+        expect(result.licences[1].licenceId).to.equal(testLicenceReady.licenceId)
+        expect(result.licences[1].licenceHolder).to.equal('Licence Holder Ltd')
+        expect(result.licences[1].licenceRef).to.equal(testLicenceReady.licenceRef)
+      })
+
+      it("orders the licence by 'review status'", async () => {
+        const result = await FetchBillRunLicencesService.go(billRun.id)
+
+        expect(result.licences[0].status).to.equal('review')
+        expect(result.licences[1].status).to.equal('ready')
       })
     })
   })
