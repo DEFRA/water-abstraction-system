@@ -17,6 +17,19 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/bill-runs/setup/{sessionId}/region',
+    handler: BillRunsSetupController.submitRegion,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the region for the bill run'
+    }
+  },
+  {
     method: 'GET',
     path: '/bill-runs/setup',
     handler: BillRunsSetupController.setup,
