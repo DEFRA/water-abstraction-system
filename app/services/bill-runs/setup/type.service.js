@@ -11,8 +11,8 @@ const TypePresenter = require('../../../presenters/bill-runs/setup/type.presente
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/type` page
  *
- * Supports generating the data needed for the type page in the setup bill run journey. It fetches the current session
- * record and combines it with the radio buttons and other information needed for the form.
+ * Supports generating the data needed for the type page in the setup bill run journey. It fetches the current
+ * session record and formats the data needed for the form.
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  *
