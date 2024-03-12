@@ -4,32 +4,67 @@
  * @module FetchPurposesService
  */
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
+// const LicenceVersionModel = require('../../models/licence-version.model.js')
+const PurposeModel = require('../../models/purpose.model.js')
 
-async function go (session) {
-  const licenceId = session.data.licence.id
+async function go (licenceId) {
   const data = await _fetchPurpose(licenceId)
 
   return data
 }
 
 async function _fetchPurpose (licenceId) {
-  const result = await LicenceVersionModel.query()
-    .select('id')
-    .where('licence_id', licenceId)
-    .andWhere('status', 'current')
-    .withGraphFetched('licenceVersionPurposes')
-    .modifyGraph('licenceVersionPurposes', (builder) => {
-      builder.select([
-        'licenceVersionPurposes.purposeId'
-      ])
-    })
-    .withGraphFetched('purposes')
-    .modifyGraph('purposes', (builder) => {
-      builder.select([
-        'purposes.description'
-      ])
-    })
+  // const result = await LicenceVersionModel.query()
+  //   .select('id')
+  //   .where('licenceId', licenceId)
+  //   .andWhere('status', 'current')
+  //   .limit(1)
+  //   .withGraphFetched('licenceVersionPurposes')
+  //   .modifyGraph('licenceVersionPurposes', (builder) => {
+  //     builder.select([
+  //       'licenceVersionPurposes.purposeId'
+  //     ])
+  //   })
+  //   .withGraphFetched('purposes')
+  //   .modifyGraph('purposes', (builder) => {
+  //     builder.select([
+  //       'purposes.description'
+  //     ])
+  //   })
+  //   .first()
+
+  // const result = await PurposeModel.query()
+  //   .select('description')
+  //   .distinct()
+  //   .withGraphFetched('licenceVersionPurposes')
+  //   .modifyGraph('licenceVersionPurposes', builder => {
+  //     builder.select(['licenceVersionPurposes.licenceVersionId'])
+  //   })
+  //   .withGraphFetched('licenceVersionPurposes.licenceVersion')
+  //   .modifyGraph('licenceVersions', builder => {
+  //     builder.select(['licenceVersions.licenceId'])
+  //       .where('licenceId', licenceId)
+  //       .andWhere('status', 'current')
+  //   })
+
+  // const result = await PurposeModel.query()
+  //   .select('description')
+  //   .distinct()
+  //   .innerJoinRelated('licenceVersionPurposes')
+  //   .where('licenceVersionPurposes.purposeId', 'purposes.id')
+  //   .innerJoinRelated('licenceVersionPurposes.licenceVersion')
+  //   .where('licenceVersions.id', 'licenceVersionPurposes.licenceVersion.id')
+  //   .where('licenceVersionPurposes.licenceVersion.licenceId', licenceId)
+  //   .where('licenceVersionPurpose.licenceVersion.licence.status', 'current')
+
+  const result = await PurposeModel.query()
+    .distinct('description')
+    .joinRelated('licenceVersionPurposes')
+    .joinRelated('licenceVersionPurposes.licenceVersion')
+    .where('licenceVersionPurposes.licenceVersion.licence_id', 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5')
+    .where('licenceVersionPurposes.licenceVersion.status', 'current')
+
+  console.log('🚀🚀🚀 ~ result:', result)
 
   const purposes = await _extractPurposes(result)
 
@@ -39,32 +74,22 @@ async function _fetchPurpose (licenceId) {
 async function _extractPurposes (result) {
   const descriptions = []
 
-  if (result[0] && result[0].purposes) {
-    for (let i = 0; i < result[0].purposes.length; i++) {
-      const description = result[0].purposes[i].description
+  const { purposes } = result
 
-      if (!descriptions.includes(description)) {
-        descriptions.push(description)
-      }
-    }
-  }
+  purposes.forEach((purpose) => {
+    descriptions.push(purpose.description)
+  })
 
   return descriptions
 }
+
 module.exports = {
   go
 }
 
-// Licence Id
-// licenceId = 08a4c9ea-e380-4266-b701-5b981bc0d005
-// search licenceVersionId where status = 'current' && licenceId = '08a4c9ea-e380-4266-b701-5b981bc0d005' grab licenceVersionId
-// licenceVersionId = 9c2d9b71-e09a-4ec5-b33a-1c21314d5175
-// licenceVersionPurposes where licenceVersionId = '9c2d9b71-e09a-4ec5-b33a-1c21314d5175'
-// 01/130/R01
-
-// select p.description from licence_versions
-// inner join licence_version_purposes lvp
-// on licence_versions.id = lvp.licence_version_id
-// inner join purposes p
-// on lvp.purpose_id = p.id
-// where licence_id  = '08a4c9ea-e380-4266-b701-5b981bc0d005' and status = 'current'
+// SELECT
+// DISTINCT p.description
+// FROM public.purposes p
+// INNER JOIN public.licence_version_purposes lvp ON lvp.purpose_id = p.id
+// INNER JOIN public.licence_versions lv ON lv.id = lvp.licence_version_id
+// WHERE lv.licence_id = 'c32ab7c6-e342-47b2-9c2e-d178ca89c5e5' AND lv.status = 'current';

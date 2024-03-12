@@ -10,7 +10,9 @@ const SelectPurposePresenter = require('../../presenters/return-requirements/pur
 
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const purposesData = await FetchPurposesService.go(session)
+  const purposesData = await FetchPurposesService.go(session.data.licence.id)
+  console.log('🚀🚀🚀 ~ purposesData:', purposesData)
+
   const formattedData = SelectPurposePresenter.go(session, purposesData)
 
   return {

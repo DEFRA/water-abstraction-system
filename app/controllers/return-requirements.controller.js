@@ -139,6 +139,7 @@ async function purpose (request, h) {
   const { sessionId } = request.params
 
   const pageData = await SelectPurposeService.go(sessionId)
+  console.log('🚀🚀🚀 ~ Purpose pageData:', pageData)
 
   return h.view('return-requirements/purpose.njk', {
     ...pageData
@@ -265,6 +266,7 @@ async function submitPurpose (request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitPurposeService.go(sessionId, request.payload)
+  console.log('🚀🚀🚀 ~ SubmitPurpose pageData:', pageData)
 
   if (pageData.error) {
     return h.view('return-requirements/purpose.njk', pageData)

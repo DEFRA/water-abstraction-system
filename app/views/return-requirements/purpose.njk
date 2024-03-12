@@ -33,21 +33,25 @@
 
 <div>
   <form method="post">
+      {% set checkBoxItems = [] %}
       {% for purpose in licencePurposes %}
+        {% set rowIndex = loop.index0 %}
+
+        {% set checkBoxItem = {
+          value: purpose,
+          text: purpose,
+          checked: false
+        } %}
+
+      {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
+
+      {% endfor %}
         {{ govukCheckboxes({
           name: "purposes",
-          errorMessage: {
-            text: error.text
-          },
-          items: [
-            {
-              value: purpose,
-              text: purpose,
-              checked: false
-            }
-          ]
+          errorMessage: error,
+          items: checkBoxItems
         }) }}
-      {% endfor %}
+
     {{ govukButton({ text: "Continue" }) }}
   </form>
 </div>
