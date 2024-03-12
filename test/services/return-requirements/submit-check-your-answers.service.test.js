@@ -17,11 +17,9 @@ const SubmitCheckYourAnswersService = require('../../../app/services/return-requ
 
 describe('Submit Check Your Answers service', () => {
   let session
-  let sandbox
   let sessionId
 
   beforeEach(async () => {
-    sandbox = Sinon.createSandbox()
     session = await SessionHelper.add({
       data: {
         licence: {
@@ -33,28 +31,29 @@ describe('Submit Check Your Answers service', () => {
   })
 
   afterEach(() => {
-    sandbox.restore()
+    Sinon.restore()
   })
+  describe('POST /return-requirements/{sessionDd}/check-your-answers', () => {
+    describe('When called with a valid licence', () => {
+      it('returns a valid licence', async () => {
+        const licenceId = session.data.licence.id
 
-  describe('When called with a valid licence', () => {
-    it('returns a valid licence', async () => {
-      const licenceId = session.data.licence.id
+        Sinon.stub(SubmitCheckYourAnswersService, 'go').resolves({ data: { licence: { id: licenceId } } })
 
-      Sinon.stub(SubmitCheckYourAnswersService, 'go').resolves({ data: { licence: { id: licenceId } } })
-
-      const result = await SubmitCheckYourAnswersService.go(sessionId)
-      expect(result.data.licence.id).to.equal(licenceId)
+        const result = await SubmitCheckYourAnswersService.go(sessionId)
+        expect(result.data.licence.id).to.equal(licenceId)
+      })
     })
-  })
 
-  describe('When called with an invalid (revoked, expired or lapsed) licence', () => {
-    beforeEach(async () => {
-      Sinon.stub(SubmitCheckYourAnswersService, 'go').rejects(new ExpandedError('Invalid return requirement'))
-    })
-    it('throws an error', async () => {
-      const response = await expect(SubmitCheckYourAnswersService.go(sessionId)).to.reject()
-      expect(response).to.be.an.instanceOf(ExpandedError)
-      expect(response).to.contain('Invalid return requirement')
+    describe('When called with an invalid (revoked, expired or lapsed) licence', () => {
+      beforeEach(async () => {
+        Sinon.stub(SubmitCheckYourAnswersService, 'go').rejects(new ExpandedError('Invalid return requirement', {}))
+      })
+      it('throws an error', async () => {
+        const response = await expect(SubmitCheckYourAnswersService.go(sessionId)).to.reject()
+        expect(response).to.be.an.instanceOf(ExpandedError)
+        expect(response.message).to.equal('Invalid return requirement')
+      })
     })
   })
 })
