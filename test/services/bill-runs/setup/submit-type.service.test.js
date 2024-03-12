@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitTypeService = require('../../../../app/services/bill-runs/setup/submit-type.service.js')
 
-describe('Submit No Returns Required service', () => {
+describe('Bill Runs Setup Submit Type service', () => {
   let payload
   let session
 
