@@ -44,6 +44,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/setup/{sessionId}/season',
+    handler: BillRunsSetupController.season,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the season for the bill run'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/setup/{sessionId}/season',
+    handler: BillRunsSetupController.submitSeason,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the season for the bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/setup',
     handler: BillRunsSetupController.setup,
     options: {

@@ -8,7 +8,9 @@
 const ExistsService = require('../services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../services/bill-runs/setup/region.service.js')
+const SeasonService = require('../services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
+const SubmitSeasonService = require('../services/bill-runs/setup/submit-season.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
 const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
@@ -44,6 +46,18 @@ async function region (request, h) {
   })
 }
 
+async function season (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SeasonService.go(sessionId)
+
+  return h.view('bill-runs/setup/season.njk', {
+    activeNavBar: 'bill-runs',
+    pageTitle: 'Select the season',
+    ...pageData
+  })
+}
+
 async function setup (_request, h) {
   const session = await InitiateSessionService.go()
 
@@ -68,6 +82,22 @@ async function submitRegion (request, h) {
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
+}
+
+async function submitSeason (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitSeasonService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/setup/season.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'Select the season',
+      ...pageData
+    })
+  }
+
+  return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
 }
 
 async function submitType (request, h) {
@@ -133,8 +163,10 @@ async function year (request, h) {
 module.exports = {
   create,
   region,
+  season,
   setup,
   submitRegion,
+  submitSeason,
   submitType,
   submitYear,
   type,
