@@ -67,6 +67,19 @@ const routes = [
       },
       description: 'Submit the bill run type for the bill run'
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/setup/{sessionId}/year',
+    handler: BillRunsSetupController.year,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the financial year for the bill run'
+    }
   }
 ]
 

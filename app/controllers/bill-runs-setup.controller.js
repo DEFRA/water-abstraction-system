@@ -10,6 +10,7 @@ const RegionService = require('../services/bill-runs/setup/region.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
+const YearService = require('../services/bill-runs/setup/year.service.js')
 
 async function region (request, h) {
   const { sessionId } = request.params
@@ -77,10 +78,23 @@ async function type (request, h) {
   })
 }
 
+async function year (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await YearService.go(sessionId)
+
+  return h.view('bill-runs/setup/year.njk', {
+    activeNavBar: 'bill-runs',
+    pageTitle: 'Select the financial year',
+    ...pageData
+  })
+}
+
 module.exports = {
   region,
   setup,
   submitRegion,
   submitType,
-  type
+  type,
+  year
 }

@@ -14,6 +14,7 @@ const RegionService = require('../../app/services/bill-runs/setup/region.service
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
 const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
 const TypeService = require('../../app/services/bill-runs/setup/type.service.js')
+const YearService = require('../../app/services/bill-runs/setup/year.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -197,6 +198,28 @@ describe('Bill Runs Setup controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select a bill run type')
           expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/year', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('year')
+
+        Sinon.stub(YearService, 'go').resolves({
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          selectedYear: null
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the financial year')
         })
       })
     })
