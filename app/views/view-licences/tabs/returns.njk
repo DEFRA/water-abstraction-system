@@ -1,0 +1,78 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+<h2 class="govuk-heading-l">Returns</h2>
+
+{% for return in returns.data %}
+    <div class="phone--show">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+            {% if return.path %}
+                <a href="{{ return.path }}">
+                    <span class="govuk-visually-hidden">{{ return.badge.text }} return</span>
+                    {{ return.returnRequirement.legacyId }}
+                    <span class="govuk-visually-hidden">due {{ return.dueDate | date }}</span>
+                </a>
+            {% else %}
+                {{ return.returnRequirement.legacyId }}
+            {% endif %}
+        </h3>
+
+        <p>
+            {% for purpose in return.returnRequirement.returnRequirementPurposes %}
+                {{ ', ' if not loop.first }}
+                {{ purpose.purposeAlias | titleCase if purpose.purposeAlias else purpose.purposeUse.name | titleCase }}
+            {% endfor %}
+        </p>
+        <p><span class="govuk-caption-m link--no-underline">Due {{ return.dueDate | date }}</span></p>
+        {{ govukTag(return | returnBadge) }}
+    </div>
+{% endfor %}
+
+{% if returns.data.length %}
+    <table class="govuk-table phone--hide">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Return reference</th>
+            <th class="govuk-table__header" scope="col">Purpose</th>
+            <th class="govuk-table__header" scope="col">Due</th>
+            <th class="govuk-table__header" scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            {% for return in returns.data %}
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" scope="row">
+                        {% if return.path %}
+                            <a href="{{ return.path }}">
+                                <span class="govuk-visually-hidden">{{ return.badge.text }} return</span>
+                                {{ return.returnRequirement.legacyId }}
+                                <span class="govuk-visually-hidden">due {{ return.dueDate | date }}</span>
+                            </a>
+                        {% else %}
+                            {{ return.returnRequirement.legacyId }}
+                        {% endif %}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ returnRequirementPurposes(return) }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ return.dueDate | date }}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ govukTag(return | returnBadge) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+  <p>No returns for this licence.</p>
+{% endif %}
+
+<hr class="phone--show govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+{% if returns.pagination | hasMorePages %}
+    <p>
+        <a href="{{ links.returns }}">View all returns</a>
+    </p>
+{% endif %}
