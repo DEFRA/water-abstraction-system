@@ -13,7 +13,7 @@ const SessionModel = require('../../../models/session.model.js')
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/region` page
  *
  * Supports generating the data needed for the region page in the setup bill run journey. It fetches the current
- * session record and combines it with the radio buttons and other information needed for the form.
+ * session record and formats the data needed for the form.
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  *
