@@ -9,6 +9,7 @@ const InitiateSessionService = require('../services/bill-runs/setup/initiate-ses
 const RegionService = require('../services/bill-runs/setup/region.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
+const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
 const YearService = require('../services/bill-runs/setup/year.service.js')
 
@@ -66,6 +67,26 @@ async function submitType (request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/region`)
 }
 
+async function submitYear (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitYearService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/setup/year.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'Select the financial year',
+      ...pageData
+    })
+  }
+
+  if (pageData.setupComplete) {
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
+  }
+
+  return h.redirect(`/system/bill-runs/setup/${sessionId}/season`)
+}
+
 async function type (request, h) {
   const { sessionId } = request.params
 
@@ -95,6 +116,7 @@ module.exports = {
   setup,
   submitRegion,
   submitType,
+  submitYear,
   type,
   year
 }

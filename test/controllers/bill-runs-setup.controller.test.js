@@ -13,6 +13,7 @@ const InitiateSessionService = require('../../app/services/bill-runs/setup/initi
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
 const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
+const SubmitYearService = require('../../app/services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../../app/services/bill-runs/setup/type.service.js')
 const YearService = require('../../app/services/bill-runs/setup/year.service.js')
 
@@ -220,6 +221,60 @@ describe('Bill Runs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select the financial year')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          options = _postOptions('year', { year: '2023' })
+        })
+
+        describe('and the bill run setup is complete', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitYearService, 'go').resolves({ setupComplete: true })
+          })
+
+          it('redirects to the generate bill run endpoint', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/generate')
+          })
+        })
+
+        describe('and the bill run setup is not complete', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitYearService, 'go').resolves({ setupComplete: false })
+          })
+
+          it('redirects to the select season', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/season')
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          options = _postOptions('year', { year: '' })
+
+          Sinon.stub(SubmitYearService, 'go').resolves({
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedYear: null,
+            error: { text: 'Select a financial year' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select a financial year')
+          expect(response.payload).to.contain('There is a problem')
         })
       })
     })
