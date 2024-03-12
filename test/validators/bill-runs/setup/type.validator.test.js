@@ -21,7 +21,7 @@ describe('Bill Runs Setup Type validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe("because no 'reason' is given", () => {
+    describe("because no 'type' is given", () => {
       it('fails validation', () => {
         const result = TypeValidator.go({ type: '' })
 
@@ -31,7 +31,7 @@ describe('Bill Runs Setup Type validator', () => {
       })
     })
 
-    describe("because an unknown 'reason' is given", () => {
+    describe("because an unknown 'type' is given", () => {
       it('fails validation', () => {
         const result = TypeValidator.go({ type: 'free_one' })
 

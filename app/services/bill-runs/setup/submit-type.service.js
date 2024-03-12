@@ -15,7 +15,7 @@ const TypeValidator = require('../../../validators/bill-runs/setup/type.validato
  * It first retrieves the session instance for the setup bill run journey in progress. It then validates the payload of
  * the submitted request.
  *
- * If there is validation error it will save the selected value to the session then return an empty object. This will
+ * If there is no validation error it will save the selected value to the session then return an empty object. This will
  * indicate to the controller that the submission was successful triggering it to redirect to the next page in the
  * journey.
  *
