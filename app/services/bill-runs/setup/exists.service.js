@@ -5,7 +5,7 @@
  * @module ExistsService
  */
 
-const ExistsPresenter = require('../../../presenters/bill-runs/setup/exists.presenter.js')
+const CreatePresenter = require('../../../presenters/bill-runs/setup/create.presenter.js')
 const FetchMatchingBillRunService = require('./fetch-matching-bill-run.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -21,8 +21,7 @@ const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
  * tariff depending on the year you can have either 2 or 1.
  *
  * All this needs to be taken into account when determining if a 'matching' bill run exists. If it does we prepare
- * `pageData` and the controller will redirect the user to the `/bill-runs/setup/{sessionId}/exists` page. If it
- * doesn't it will kick off generating the bill run.
+ * `pageData` and the controller will render the `create` page. If it doesn't it will kick off generating the bill run.
  *
  * @param {string} sessionId - The UUID for setup bill run session record
  *
@@ -86,7 +85,7 @@ function _pageData (session, matchResults) {
   }
 
   // We have a match so format the bill run for the /exists page
-  return ExistsPresenter.go(session, matchResults[0])
+  return CreatePresenter.go(session, matchResults[0])
 }
 
 module.exports = {

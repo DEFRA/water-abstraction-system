@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ExistsPresenter = require('../../../../app/presenters/bill-runs/setup/exists.presenter.js')
+const CreatePresenter = require('../../../../app/presenters/bill-runs/setup/create.presenter.js')
 
-describe('Bill Runs Setup Exists presenter', () => {
+describe('Bill Runs Setup Create presenter', () => {
   let matchingBillRun
   let session
 
@@ -35,7 +35,7 @@ describe('Bill Runs Setup Exists presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ExistsPresenter.go(session, matchingBillRun)
+      const result = CreatePresenter.go(session, matchingBillRun)
 
       expect(result).to.equal({
         backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
@@ -58,7 +58,7 @@ describe('Bill Runs Setup Exists presenter', () => {
         })
 
         it('returns a link to the region page', () => {
-          const result = ExistsPresenter.go(session, matchingBillRun)
+          const result = CreatePresenter.go(session, matchingBillRun)
 
           expect(result.backLink).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region')
         })
@@ -75,7 +75,7 @@ describe('Bill Runs Setup Exists presenter', () => {
           })
 
           it('returns a link to the financial year page', () => {
-            const result = ExistsPresenter.go(session, matchingBillRun)
+            const result = CreatePresenter.go(session, matchingBillRun)
 
             expect(result.backLink).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year')
           })
@@ -87,7 +87,7 @@ describe('Bill Runs Setup Exists presenter', () => {
           })
 
           it('returns a link to the season page', () => {
-            const result = ExistsPresenter.go(session, matchingBillRun)
+            const result = CreatePresenter.go(session, matchingBillRun)
 
             expect(result.backLink).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/season')
           })
@@ -102,7 +102,7 @@ describe('Bill Runs Setup Exists presenter', () => {
         })
 
         it("returns the 'You need to confirm or cancel this [..]' message", () => {
-          const result = ExistsPresenter.go(session, matchingBillRun)
+          const result = CreatePresenter.go(session, matchingBillRun)
 
           expect(result.warningMessage).to.equal('You need to confirm or cancel this bill run before you can create a new one')
         })
@@ -119,7 +119,7 @@ describe('Bill Runs Setup Exists presenter', () => {
           })
 
           it("returns the 'You can only have one [..]' message", () => {
-            const result = ExistsPresenter.go(session, matchingBillRun)
+            const result = CreatePresenter.go(session, matchingBillRun)
 
             expect(result.warningMessage).to.equal('You can only have one Two-part tariff per region in a financial year')
           })
@@ -131,7 +131,7 @@ describe('Bill Runs Setup Exists presenter', () => {
           })
 
           it("returns the 'You need to cancel this [..]' message", () => {
-            const result = ExistsPresenter.go(session, matchingBillRun)
+            const result = CreatePresenter.go(session, matchingBillRun)
 
             expect(result.warningMessage).to.equal('You need to cancel this bill run before you can create a new one')
           })

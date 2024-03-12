@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the `/bill-runs/setup/{sessionId}/exists` page
- * @module CancelBillRunPresenter
+ * Formats data for the `/bill-runs/setup/{sessionId}/create` page
+ * @module CreatePresenter
  */
 
 const {
@@ -14,7 +14,7 @@ const {
 } = require('../../base.presenter.js')
 
 /**
- * Formats data for the `/bill-runs/setup/{sessionId}/exists` page
+ * Formats data for the `/bill-runs/setup/{sessionId}/create` page
  *
  * @param {module:SessionModel} session - The session instance for the setup bill run journey
  * @param {module:BillRunModel} billRun - The matching instance of `BillRunModel` to the setup options selected
