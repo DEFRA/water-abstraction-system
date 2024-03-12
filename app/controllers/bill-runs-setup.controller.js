@@ -7,6 +7,7 @@
 
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../services/bill-runs/setup/region.service.js')
+const SeasonService = require('../services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
 const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
@@ -21,6 +22,18 @@ async function region (request, h) {
   return h.view('bill-runs/setup/region.njk', {
     activeNavBar: 'bill-runs',
     pageTitle: 'Select the region',
+    ...pageData
+  })
+}
+
+async function season (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SeasonService.go(sessionId)
+
+  return h.view('bill-runs/setup/season.njk', {
+    activeNavBar: 'bill-runs',
+    pageTitle: 'Select the season',
     ...pageData
   })
 }
@@ -113,6 +126,7 @@ async function year (request, h) {
 
 module.exports = {
   region,
+  season,
   setup,
   submitRegion,
   submitType,

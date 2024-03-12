@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
+const SeasonService = require('../../app/services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
 const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
 const SubmitYearService = require('../../app/services/bill-runs/setup/submit-year.service.js')
@@ -59,6 +60,28 @@ describe('Bill Runs Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/bill-runs/setup/${session.id}/type`)
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/season', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('season')
+
+        Sinon.stub(SeasonService, 'go').resolves({
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          selectedSeason: null
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the season')
         })
       })
     })
