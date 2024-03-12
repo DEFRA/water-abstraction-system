@@ -224,11 +224,11 @@ describe('Bill Runs Setup controller', () => {
           Sinon.stub(SubmitSeasonService, 'go').resolves({})
         })
 
-        it('redirects to the generate bill run endpoint', async () => {
+        it('redirects to the create bill run endpoint', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/generate')
+          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
         })
       })
 

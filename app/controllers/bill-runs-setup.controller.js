@@ -97,7 +97,7 @@ async function submitSeason (request, h) {
     })
   }
 
-  return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
+  return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
 }
 
 async function submitType (request, h) {
