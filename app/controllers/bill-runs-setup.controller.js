@@ -5,6 +5,7 @@
  * @module BillRunsSetupController
  */
 
+const ExistsService = require('../services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../services/bill-runs/setup/region.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
@@ -12,6 +13,24 @@ const SubmitTypeService = require('../services/bill-runs/setup/submit-type.servi
 const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
 const YearService = require('../services/bill-runs/setup/year.service.js')
+
+async function create (request, h) {
+  const { sessionId } = request.params
+
+  const results = await ExistsService.go(sessionId)
+
+  // If the results include a pageData property it's because `ExistsService` found a match and so has formatted page
+  // data for the create view to display the matching bill run to the user
+  if (results.pageData) {
+    return h.view('bill-runs/setup/create.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'This bill run already exists',
+      ...results.pageData
+    })
+  }
+
+  return h.redirect('/billing/batch/list')
+}
 
 async function region (request, h) {
   const { sessionId } = request.params
@@ -45,7 +64,7 @@ async function submitRegion (request, h) {
   }
 
   if (pageData.setupComplete) {
-    return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
@@ -81,7 +100,7 @@ async function submitYear (request, h) {
   }
 
   if (pageData.setupComplete) {
-    return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/season`)
@@ -112,6 +131,7 @@ async function year (request, h) {
 }
 
 module.exports = {
+  create,
   region,
   setup,
   submitRegion,

@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const ExistsService = require('../../app/services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
@@ -64,6 +65,53 @@ describe('Bill Runs Setup controller', () => {
     })
   })
 
+  describe('/bill-runs/setup/{sessionId}/create', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('create')
+      })
+
+      describe('when the request succeeds', () => {
+        describe('but there is an existing bill run', () => {
+          beforeEach(() => {
+            Sinon.stub(ExistsService, 'go').resolves({
+              matchResults: [{ id: '81e97369-e744-44c9-ad2e-75e8e632e61c' }],
+              pageData: { billRunId: '81e97369-e744-44c9-ad2e-75e8e632e61c' },
+              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
+              yearToUse: 2024
+            })
+          })
+
+          it("returns the 'create' page displaying the existing bill run", async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('This bill run already exists')
+            expect(response.payload).to.contain('81e97369-e744-44c9-ad2e-75e8e632e61c')
+          })
+        })
+
+        describe('and there is no existing bill run', () => {
+          beforeEach(() => {
+            Sinon.stub(ExistsService, 'go').resolves({
+              matchResults: [],
+              pageData: null,
+              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
+              yearToUse: 2024
+            })
+          })
+
+          it('redirects to the bill runs page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/billing/batch/list')
+          })
+        })
+      })
+    })
+  })
+
   describe('/bill-runs/setup/{sessionId}/region', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -100,11 +148,11 @@ describe('Bill Runs Setup controller', () => {
             Sinon.stub(SubmitRegionService, 'go').resolves({ setupComplete: true })
           })
 
-          it('redirects to the generate bill run endpoint', async () => {
+          it('redirects to the create bill run endpoint', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/generate')
+            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
           })
         })
 
@@ -236,11 +284,11 @@ describe('Bill Runs Setup controller', () => {
             Sinon.stub(SubmitYearService, 'go').resolves({ setupComplete: true })
           })
 
-          it('redirects to the generate bill run endpoint', async () => {
+          it('redirects to the create bill run endpoint', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/generate')
+            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
           })
         })
 
