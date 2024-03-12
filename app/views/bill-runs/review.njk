@@ -13,12 +13,10 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {{
-    govukBackLink({
+  {{ govukBackLink({
       text: 'Go back to bill runs',
       href: '/billing/batch/list'
-    })
-  }}
+  }) }}
 {% endblock %}
 
 {% block content %}
@@ -36,10 +34,10 @@
       {% endif %}
 
       <p class="govuk-body">
-        {{govukTag({
+        {{ govukTag({
           text: status,
           classes: colour
-        })}}
+        }) }}
       </p>
 
       {# Bill run meta-data #}
@@ -122,6 +120,43 @@
       href: 'cancel'
     }) }}
   </section>
+
+
+  {% set filtersForm %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
+
+    <form  method="post" novalidate action="review">
+      {{ govukInput({
+        label: {
+          text: "Licence holder",
+          classes: "govuk-label--s",
+          isPageHeading: false
+        },
+        classes: "govuk-input--width-20",
+        id: "licenceHolder",
+        name: "licenceHolder"
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Apply filters"
+        }) }}
+
+        {{ govukButton({
+          text: "Clear filters",
+          classes: "govuk-button--secondary ",
+          name: "clearFilters",
+          type: "reset"
+        }) }}
+      </div>
+    </form>
+  {% endset %}
+
+  {{ govukDetails({
+    summaryText: "Filter licences",
+    html: filtersForm | safe,
+    classes: "govuk-!-margin-bottom-2"
+  }) }}
 
   {# Generate the row data for the table #}
   {% set tableRows = [] %}
