@@ -71,7 +71,7 @@ function _testLicences () {
   return [
     // Licence with no issues
     {
-      id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
+      licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
       licenceRef: '1/11/11/*11/1111',
       licenceHolder: 'Big Farm Ltd',
       issues: [],
@@ -79,7 +79,7 @@ function _testLicences () {
     },
     // Licence with a single issue
     {
-      id: '395bdc01-605b-44f5-9d90-5836cc013799',
+      licenceId: '395bdc01-605b-44f5-9d90-5836cc013799',
       licenceRef: '2/22/22/*S2/2222',
       licenceHolder: 'Bob Bobbles',
       issues: ['Abstraction outside period'],
@@ -87,7 +87,7 @@ function _testLicences () {
     },
     // Licence with multiple issues
     {
-      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+      licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
       licenceRef: '3/33/33/*3/3333',
       licenceHolder: 'Farmer Palmer',
       issues: [

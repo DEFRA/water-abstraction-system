@@ -11,7 +11,7 @@ const { expect } = Code
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
 const ContactHelper = require('../support/helpers/contact.helper.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 
@@ -22,7 +22,7 @@ describe('Contact model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('Basic query', () => {

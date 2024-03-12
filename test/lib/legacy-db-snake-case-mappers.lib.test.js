@@ -13,7 +13,7 @@ const LegacyDbSnakeCaseMappersLib = require('../../app/lib/legacy-db-snake-case-
 // NOTE: Ideally, we would have liked to spy on the Objection snakeCase and camelCase methods to confirm they are or are
 // not being called depending on the circumstance. But all our attempts with Sinon failed (a common issue we have when
 // testing with Objection.js)
-describe('RequestLib', () => {
+describe('Legacy DB Snake Case Mappers lib', () => {
   describe('#legacyDbSnakeCaseMappers', () => {
     // We always pass in these options. See knexfile.application.js and how legacyDbSnakeCaseMappers() is called
     const options = { underscoreBeforeDigits: true }

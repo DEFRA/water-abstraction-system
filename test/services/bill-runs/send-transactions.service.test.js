@@ -13,7 +13,7 @@ const BillRunError = require('../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
 
 // Things we need to stub
-const ChargingModuleCreateTransactionService = require('../../../app/services/charging-module/create-transaction.service.js')
+const ChargingModuleCreateTransactionRequest = require('../../../app/requests/charging-module/create-transaction.request.js')
 
 // Thing under test
 const SendTransactionsService = require('../../../app/services/bill-runs/send-transactions.service.js')
@@ -28,11 +28,11 @@ describe('Send Transactions service', () => {
     region: { chargeRegionId: 'N' }
   }
 
-  let chargingModuleCreateTransactionServiceStub
+  let chargingModuleCreateTransactionRequestStub
   let transactions
 
   beforeEach(() => {
-    chargingModuleCreateTransactionServiceStub = Sinon.stub(ChargingModuleCreateTransactionService, 'go')
+    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
 
     transactions = [
       _transaction('fca14c7e-c895-4991-9651-9a76f45b971d'),
@@ -46,10 +46,10 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is successful', () => {
     beforeEach(async () => {
-      chargingModuleCreateTransactionServiceStub.onFirstCall().resolves({
+      chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
         ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
       })
-      chargingModuleCreateTransactionServiceStub.onSecondCall().resolves({
+      chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
         ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
       })
     })
@@ -67,10 +67,10 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is unsuccessful', () => {
     beforeEach(async () => {
-      chargingModuleCreateTransactionServiceStub.onFirstCall().resolves({
+      chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
         ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
       })
-      chargingModuleCreateTransactionServiceStub.onSecondCall().rejects()
+      chargingModuleCreateTransactionRequestStub.onSecondCall().rejects()
     })
 
     it('throws a BillRunError with the correct code', async () => {

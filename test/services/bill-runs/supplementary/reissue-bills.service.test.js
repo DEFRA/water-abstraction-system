@@ -13,13 +13,12 @@ const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillModel = require('../../../../app/models/bill.model.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Things we need to stub
-const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/supplementary/fetch-bills-to-be-reissued.service.js')
 const ReissueBillService = require('../../../../app/services/bill-runs/supplementary/reissue-bill.service.js')
 
@@ -33,9 +32,7 @@ describe('Reissue Bills service', () => {
   let reissueBillServiceStub
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
-
-    Sinon.stub(LegacyRequestLib, 'post')
+    await DatabaseSupport.clean()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this

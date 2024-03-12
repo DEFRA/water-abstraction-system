@@ -23,7 +23,7 @@ describe('GeneralLib', () => {
     beforeEach(() => {
       startTime = GeneralLib.currentTimeInNanoseconds()
 
-      // RequestLib depends on the GlobalNotifier to have been set. This happens in
+      // BaseRequest depends on the GlobalNotifier to have been set. This happens in
       // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
       // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our own
       // stub
@@ -73,6 +73,47 @@ describe('GeneralLib', () => {
 
       expect(typeof result).to.equal('bigint')
       expect(result).to.be.greaterThan(timeBeforeTest)
+    })
+  })
+
+  describe('#determineCurrentFinancialYear', () => {
+    let clock
+    let testDate
+
+    afterEach(() => {
+      clock.restore()
+    })
+
+    describe('when the current financial year is 2023 to 2024', () => {
+      describe('and the current date is between April and December', () => {
+        beforeEach(() => {
+          testDate = new Date(2023, 7, 21, 20, 31, 57)
+
+          clock = Sinon.useFakeTimers(testDate)
+        })
+
+        it('returns the correct start and end dates for the financial year', () => {
+          const result = GeneralLib.determineCurrentFinancialYear()
+
+          expect(result.startDate).to.equal(new Date('2023-04-01'))
+          expect(result.endDate).to.equal(new Date('2024-03-31'))
+        })
+      })
+
+      describe('and the current date is between January and March', () => {
+        beforeEach(() => {
+          testDate = new Date(2024, 2, 21, 20, 31, 57)
+
+          clock = Sinon.useFakeTimers(testDate)
+        })
+
+        it('returns the correct start and end dates for the financial year', () => {
+          const result = GeneralLib.determineCurrentFinancialYear()
+
+          expect(result.startDate).to.equal(new Date('2023-04-01'))
+          expect(result.endDate).to.equal(new Date('2024-03-31'))
+        })
+      })
     })
   })
 

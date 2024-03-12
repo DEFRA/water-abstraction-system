@@ -33,7 +33,7 @@ function _prepareLicences (licences) {
     }
 
     preparedLicences.push({
-      id: licence.id,
+      id: licence.licenceId,
       licenceRef: licence.licenceRef,
       licenceHolder: licence.licenceHolder,
       status: licence.status,

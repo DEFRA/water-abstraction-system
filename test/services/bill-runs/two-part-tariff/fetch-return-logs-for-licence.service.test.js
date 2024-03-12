@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
@@ -21,7 +21,7 @@ describe('Fetch Return Logs for Licence service', () => {
   let returnLogRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when there are valid return logs that should be considered', () => {
