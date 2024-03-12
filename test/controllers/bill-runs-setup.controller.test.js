@@ -13,6 +13,7 @@ const InitiateSessionService = require('../../app/services/bill-runs/setup/initi
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
 const SeasonService = require('../../app/services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
+const SubmitSeasonService = require('../../app/services/bill-runs/setup/submit-season.service.js')
 const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
 const SubmitYearService = require('../../app/services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../../app/services/bill-runs/setup/type.service.js')
@@ -60,28 +61,6 @@ describe('Bill Runs Setup controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal(`/system/bill-runs/setup/${session.id}/type`)
-        })
-      })
-    })
-  })
-
-  describe('/bill-runs/setup/{sessionId}/season', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        options = _getOptions('season')
-
-        Sinon.stub(SeasonService, 'go').resolves({
-          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
-          selectedSeason: null
-        })
-      })
-
-      describe('when the request succeeds', () => {
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select the season')
         })
       })
     })
@@ -162,6 +141,65 @@ describe('Bill Runs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select a region')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/season', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('season')
+
+        Sinon.stub(SeasonService, 'go').resolves({
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          selectedSeason: null
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the season')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          options = _postOptions('season', { season: 'summer' })
+
+          Sinon.stub(SubmitSeasonService, 'go').resolves({})
+        })
+
+        it('redirects to the generate bill run endpoint', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/generate')
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          options = _postOptions('season', { type: '' })
+
+          Sinon.stub(SubmitSeasonService, 'go').resolves({
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedSeason: null,
+            error: { text: 'Select the season' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the season')
           expect(response.payload).to.contain('There is a problem')
         })
       })

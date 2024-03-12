@@ -9,6 +9,7 @@ const InitiateSessionService = require('../services/bill-runs/setup/initiate-ses
 const RegionService = require('../services/bill-runs/setup/region.service.js')
 const SeasonService = require('../services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
+const SubmitSeasonService = require('../services/bill-runs/setup/submit-season.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
 const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
@@ -62,6 +63,22 @@ async function submitRegion (request, h) {
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
+}
+
+async function submitSeason (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitSeasonService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/setup/season.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'Select the season',
+      ...pageData
+    })
+  }
+
+  return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
 }
 
 async function submitType (request, h) {
@@ -129,6 +146,7 @@ module.exports = {
   season,
   setup,
   submitRegion,
+  submitSeason,
   submitType,
   submitYear,
   type,
