@@ -134,7 +134,8 @@
         },
         classes: "govuk-input--width-20",
         id: "licenceHolder",
-        name: "licenceHolder"
+        name: "licenceHolder",
+        value: filter.licenceHolder
       }) }}
 
       <div class="govuk-button-group">
@@ -155,7 +156,8 @@
   {{ govukDetails({
     summaryText: "Filter licences",
     html: filtersForm | safe,
-    classes: "govuk-!-margin-bottom-2"
+    classes: "govuk-!-margin-bottom-2",
+    open: openFilter
   }) }}
 
   {# Generate the row data for the table #}

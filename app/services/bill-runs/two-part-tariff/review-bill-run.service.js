@@ -16,8 +16,8 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  * @returns {Promise<Object>} an object representing the `pageData` needed by the review bill run template. It contains details of
  * the bill run and the licences linked to it.
  */
-async function go (id) {
-  const { billRun, licences } = await FetchBillRunLicencesService.go(id)
+async function go (id, payload = null) {
+  const { billRun, licences } = await FetchBillRunLicencesService.go(id, payload)
 
   const pageData = ReviewBillRunPresenter.go(billRun, licences)
 

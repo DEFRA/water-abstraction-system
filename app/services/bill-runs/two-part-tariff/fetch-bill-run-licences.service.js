@@ -18,17 +18,13 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  *
  * @returns {Promise<Object>} an object containing the billRun data and an array of licences for the bill run
  */
-async function go (id) {
+async function go (id, payload) {
+  const licenceHolder = payload?.licenceHolder
+
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id)
+  const licences = await _fetchBillRunLicences(id, licenceHolder)
 
   return { billRun, licences }
-}
-
-async function _fetchBillRunLicences (id) {
-  return ReviewLicenceModel.query()
-    .where('billRunId', id)
-    .orderBy('status', 'desc')
 }
 
 async function _fetchBillRun (id) {
@@ -48,6 +44,18 @@ async function _fetchBillRun (id) {
         'displayName'
       ])
     })
+}
+
+async function _fetchBillRunLicences (id, licenceHolder) {
+  const reviewLicenceQuery = ReviewLicenceModel.query()
+    .where('billRunId', id)
+    .orderBy('status', 'desc')
+
+  if (licenceHolder) {
+    reviewLicenceQuery.whereILike('licenceHolder', `%${licenceHolder}%`)
+  }
+
+  return reviewLicenceQuery
 }
 
 module.exports = {
