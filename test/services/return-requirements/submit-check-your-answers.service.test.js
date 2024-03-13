@@ -36,10 +36,13 @@ describe('Submit Check Your Answers service', () => {
   afterEach(() => {
     Sinon.restore()
   })
+
   describe('POST /return-requirements/{sessionDd}/check-your-answers', () => {
-    Sinon.stub(FetchLicenceService, 'go').resolves({
-      id: licenceId,
-      ends: null
+    beforeEach(() => {
+      Sinon.stub(FetchLicenceService, 'go').resolves({
+        id: licenceId,
+        ends: null
+      })
     })
 
     describe('When called with a valid licence', () => {
@@ -74,6 +77,7 @@ describe('Submit Check Your Answers service', () => {
       beforeEach(async () => {
         Sinon.stub(SubmitCheckYourAnswersService, 'go').rejects(new ExpandedError('Invalid return requirement', {}))
       })
+
       it('throws an error', async () => {
         const response = await expect(SubmitCheckYourAnswersService.go(sessionId)).to.reject()
         expect(response).to.be.an.instanceOf(ExpandedError)
