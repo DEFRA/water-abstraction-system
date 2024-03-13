@@ -25,7 +25,6 @@ async function go (id, payload) {
   const filterLicenceHolder = payload?.filterLicenceHolder
 
   const billRun = await _fetchBillRun(id)
-  console.log('🚀 ~ go ~ billRun:', billRun)
   const licences = await _fetchBillRunLicences(id, filterLicenceHolder)
 
   return { billRun, licences, filterLicenceHolder }

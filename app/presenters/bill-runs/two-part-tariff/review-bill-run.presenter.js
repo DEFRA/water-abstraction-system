@@ -51,15 +51,16 @@ function _prepareLicences (licences) {
   return { preparedLicences, licencesToReviewCount }
 }
 
-function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
+function _prepareBillRun (billRun, preparedLicences, licencesToReviewCount) {
   return {
     region: billRun.region.displayName,
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     billRunType: 'two-part tariff',
-    numberOfLicences: billRunLicences.length,
-    licencesToReviewCount
+    numberOfLicencesDisplayed: preparedLicences.length,
+    licencesToReviewCount,
+    totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
 }
 
