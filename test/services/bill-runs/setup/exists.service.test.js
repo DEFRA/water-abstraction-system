@@ -60,7 +60,7 @@ describe('Bill Runs Setup Exists service', () => {
           expect(matchResults).to.be.empty()
           expect(pageData).to.be.null()
           expect(session).to.equal(session)
-          expect(yearToUse).to.equal(session.data.year)
+          expect(yearToUse).to.equal(2022)
         })
       })
 
@@ -87,7 +87,7 @@ describe('Bill Runs Setup Exists service', () => {
           expect(matchResults[0].id).to.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
           expect(pageData.billRunId).to.be.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
           expect(session).to.equal(session)
-          expect(yearToUse).to.equal(session.data.year)
+          expect(yearToUse).to.equal(2022)
         })
       })
     })

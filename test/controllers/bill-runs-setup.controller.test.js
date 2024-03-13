@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const CreateService = require('../../app/services/bill-runs/setup/create.service.js')
 const ExistsService = require('../../app/services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
@@ -101,6 +102,7 @@ describe('Bill Runs Setup controller', () => {
               session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
               yearToUse: 2024
             })
+            Sinon.stub(CreateService, 'go').resolves()
           })
 
           it('redirects to the bill runs page', async () => {

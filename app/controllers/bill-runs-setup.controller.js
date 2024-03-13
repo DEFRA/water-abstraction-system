@@ -5,6 +5,9 @@
  * @module BillRunsSetupController
  */
 
+const Boom = require('@hapi/boom')
+
+const CreateService = require('../services/bill-runs/setup/create.service.js')
 const ExistsService = require('../services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../services/bill-runs/setup/region.service.js')
@@ -31,7 +34,14 @@ async function create (request, h) {
     })
   }
 
-  return h.redirect('/billing/batch/list')
+  // If we get here then we are go for launch!
+  try {
+    await CreateService.go(request.auth.credentials.user, results)
+
+    return h.redirect('/billing/batch/list')
+  } catch (error) {
+    return Boom.badImplementation(error.message)
+  }
 }
 
 async function region (request, h) {

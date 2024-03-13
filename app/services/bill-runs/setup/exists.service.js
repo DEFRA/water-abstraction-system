@@ -55,7 +55,7 @@ function _determineYear (session) {
   const { type, year } = session.data
 
   if (year && type.startsWith('two_part')) {
-    return year
+    return Number(year)
   }
 
   const { endDate } = determineCurrentFinancialYear()
