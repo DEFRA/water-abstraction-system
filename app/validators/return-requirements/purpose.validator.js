@@ -26,16 +26,18 @@ function go (payload) {
     purposes = [purposes]
   }
 
+  const errorMessage = 'Select any uses for the return requirement'
+
   const schema = Joi.object({
     purposes: Joi.array()
       .items(Joi.string().valid(...VALID_VALUES))
       .required()
       .messages({
-        'any.required': 'Select any uses for the return requirement',
-        'any.only': 'Select any uses for the return requirement',
-        'array.includesOne': 'Select any uses for the return requirement',
-        'array.includes': 'Select any uses for the return requirement',
-        'array.sparse': 'Select any uses for the return requirement'
+        'any.required': errorMessage,
+        'any.only': errorMessage,
+        'array.includesOne': errorMessage,
+        'array.includes': errorMessage,
+        'array.sparse': errorMessage
       })
   })
 
