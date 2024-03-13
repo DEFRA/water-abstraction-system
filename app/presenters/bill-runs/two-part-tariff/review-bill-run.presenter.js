@@ -10,10 +10,11 @@ const { formatLongDate } = require('../../base.presenter.js')
 /**
  * Prepares and processes bill run and licence data for presentation
  *
- * @param {module:BillRunModel} billRun the data from the bill run
- * @param {module:LicenceModel} licences the licences data asociated with the bill run
+ * @param {module:BillRunModel} billRun The data from the bill run
+ * @param {module:LicenceModel} licences The licences data asociated with the bill run
+ * @param {String} filterLicenceHolder The string that the licence holder is to be filtered on if any
  *
- * @returns {Object} the prepared bill run and licence data to be passed to the review page
+ * @returns {Object} The prepared bill run and licence data to be passed to the review page
  */
 function go (billRun, licences, filterLicenceHolder) {
   const { licencesToReviewCount, preparedLicences } = _prepareLicences(licences)

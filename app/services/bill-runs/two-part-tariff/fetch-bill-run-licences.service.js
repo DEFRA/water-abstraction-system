@@ -15,8 +15,11 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * ref.
  *
  * @param {String} id The UUID for the bill run
+ * @param {Object} payload The `request.payload` containing the filter data. This only contains data when there is a
+ * POST request, which only occurs when a filter is applied to the results.
  *
- * @returns {Promise<Object>} an object containing the billRun data and an array of licences for the bill run
+ * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run. Also
+ * included is any data that has been used to filter the results
  */
 async function go (id, payload) {
   const filterLicenceHolder = payload?.filterLicenceHolder
