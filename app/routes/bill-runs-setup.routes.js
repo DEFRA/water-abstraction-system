@@ -5,6 +5,19 @@ const BillRunsSetupController = require('../controllers/bill-runs-setup.controll
 const routes = [
   {
     method: 'GET',
+    path: '/bill-runs/setup/{sessionId}/create',
+    handler: BillRunsSetupController.create,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Attempt to create a new bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/setup/{sessionId}/region',
     handler: BillRunsSetupController.region,
     options: {
@@ -27,6 +40,32 @@ const routes = [
         }
       },
       description: 'Submit the region for the bill run'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/setup/{sessionId}/season',
+    handler: BillRunsSetupController.season,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select the season for the bill run'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/setup/{sessionId}/season',
+    handler: BillRunsSetupController.submitSeason,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the season for the bill run'
     }
   },
   {

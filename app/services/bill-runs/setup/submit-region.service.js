@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/bill-runs/setup/{sessionId}/region` page
+ * Handles the user submission for the `/bill-runs/setup/{sessionId}/region` page
  * @module SubmitRegionService
  */
 
@@ -11,7 +11,7 @@ const RegionValidator = require('../../../validators/bill-runs/setup/region.vali
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `/bill-runs/setup/{sessionId}/region` page
+ * Handles the user submission for the `/bill-runs/setup/{sessionId}/region` page
  *
  * It first retrieves the session instance for the setup bill run journey in progress. It then validates the payload of
  * the submitted request.
