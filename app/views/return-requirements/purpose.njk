@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -16,17 +17,26 @@
   }}
 {% endblock %}
 
+
 {% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: "Select any uses for the return requirement",
+          href: "#purposes"
+        }
+      ]
+    }) }}
+  {%endif%}
+
   {# Main heading #}
   <div>
     <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
 
-  {% if error %}
-    {{ govukErrorMessage({
-      text: "Select any uses for the return requirement"
-    }) }}
-  {%endif%}
 
     <div class="govuk-hint"> Select all that apply </div>
   </div>
