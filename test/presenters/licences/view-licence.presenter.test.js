@@ -791,4 +791,40 @@ describe('View Licence presenter', () => {
       })
     })
   })
+
+  describe("the 'abstractionConditions' property", () => {
+    describe('and it has no abstraction conditions', () => {
+      it('will return the correct caption, link text and an empty arrary for use in the licence summary page', async () => {
+        const result = await ViewLicencePresenter.go(licence, [])
+
+        expect(result.abstractionConditions.caption).to.equal('Abstraction condition')
+        expect(result.abstractionConditions.linkText).to.equal('View details of the abstraction condition')
+        expect(result.abstractionConditions.conditions).to.equal([])
+      })
+    })
+
+    describe('and it has one abstraction condition', () => {
+      const abstractionCondtion = { abstractionConditions: ['Level cessation condition'] }
+
+      it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {
+        const result = await ViewLicencePresenter.go(licence, abstractionCondtion)
+
+        expect(result.abstractionConditions.caption).to.equal('Abstraction condition')
+        expect(result.abstractionConditions.linkText).to.equal('View details of the abstraction condition')
+        expect(result.abstractionConditions.conditions).to.equal(['Level cessation condition'])
+      })
+    })
+
+    describe('and it has two abstraction conditions', () => {
+      const abstractionCondtion = { abstractionConditions: ['Level cessation condition', 'Cessation dependant on releases from schemes / other licences'] }
+
+      it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {
+        const result = await ViewLicencePresenter.go(licence, abstractionCondtion)
+
+        expect(result.abstractionConditions.caption).to.equal('Abstraction conditions')
+        expect(result.abstractionConditions.linkText).to.equal('View details of the abstraction conditions')
+        expect(result.abstractionConditions.conditions).to.equal(['Level cessation condition', 'Cessation dependant on releases from schemes / other licences'])
+      })
+    })
+  })
 })

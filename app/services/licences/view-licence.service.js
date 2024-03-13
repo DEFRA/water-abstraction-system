@@ -6,6 +6,7 @@
  */
 
 const FetchLicenceService = require('./fetch-licence.service.js')
+const FetchLicenceVersionPurposeConditionService = require('./fetch-licence-version-purpose-condition.service.js')
 const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter.js')
 
 /**
@@ -18,7 +19,10 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
 async function go (id) {
   const licenceData = await FetchLicenceService.go(id)
 
-  const pageData = ViewLicencePresenter.go(licenceData)
+  const licenceVersionPurposeId = licenceData.licenceVersions[0].licenceVersionPurposes[0].id
+  const licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceVersionPurposeId)
+
+  const pageData = ViewLicencePresenter.go(licenceData, licenceVersionPurposeConditionData)
 
   return {
     ...pageData

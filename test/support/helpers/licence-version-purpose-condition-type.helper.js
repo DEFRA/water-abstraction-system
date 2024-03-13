@@ -1,0 +1,66 @@
+'use strict'
+
+/**
+ * @module LicenceVersionPurposeConditionTypeHelper
+ */
+
+const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
+const LicenceVersionPurposeConditionTypesModel = require('../../../app/models/licence-version-purpose-condition-type.model.js')
+
+/**
+ * Add a new licence version purpose
+ *
+ * If no `data` is provided, default values will be used. These are
+ *
+ * - `licenceVersionPurposeConditionTypeId` - [random UUID]
+ * - `code` - [COMB]
+ * - `subcode` - [LINK]
+ * - `description` - [Condition To Indicate Licence  Split On Nald]
+ * - `subcode_description` - [Link Between Split Licences]
+ * - `display_title` - [Link between split licences]
+ * - `dateCreated` - new Date()
+ * - `dateUpdated` - new Date()
+ *
+ * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ *
+ * @returns {Promise<module:LicenceVersionPurposeConditionTypesModel>} The instance of the newly created record
+ */
+async function add (data = {}) {
+  const insertData = defaults(data)
+
+  return LicenceVersionPurposeConditionTypesModel.query()
+    .insert({ ...insertData })
+    .returning('*')
+}
+
+/**
+ * Returns the defaults used
+ *
+ * It will override or append to them any data provided. Mainly used by the `add()` method, we make it available
+ * for use in tests to avoid having to duplicate values.
+ *
+ * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
+ */
+function defaults (data = {}) {
+  const timestamp = timestampForPostgres()
+
+  const defaults = {
+    code: 'COMB',
+    subcode: 'LINK',
+    description: 'Condition To Indicate Licence  Split On Nald',
+    subcode_description: 'Link Between Split Licences',
+    display_title: 'Link between split licences',
+    createdAt: timestamp,
+    updatedAt: timestamp
+  }
+
+  return {
+    ...defaults,
+    ...data
+  }
+}
+
+module.exports = {
+  add,
+  defaults
+}

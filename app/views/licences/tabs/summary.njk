@@ -118,6 +118,26 @@
             {% endif %}
         </dd>
     </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{{ abstractionConditions.caption }}</dt>
+        <dd class="govuk-summary-list__value">
+            <div class="govuk-form-group govuk-!-margin-bottom-0">
+                {% if abstractionConditions.conditions.length > 5 %}
+                    There are {{ abstractionConditions.conditions.length }} abstraction conditions
+                {% elseif abstractionConditions.conditions.length > 1 %}
+                    <ul class="govuk-list govuk-!-margin-bottom-0">
+                        {% for condition in abstractionConditions.conditions %}
+                            <li>{{ condition }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ abstractionConditions.conditions[0] }}
+                {% endif %}
+                <a href="/licences/{{ documentId }}/conditions">{{ abstractionConditions.linkText }}</a>
+            </div>
+        </dd>
+    </div>
 </dl>
 
 <div class="govuk-grid-row">
