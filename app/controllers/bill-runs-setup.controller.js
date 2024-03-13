@@ -5,13 +5,44 @@
  * @module BillRunsSetupController
  */
 
+const Boom = require('@hapi/boom')
+
+const CreateService = require('../services/bill-runs/setup/create.service.js')
+const ExistsService = require('../services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../services/bill-runs/setup/region.service.js')
+const SeasonService = require('../services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
+const SubmitSeasonService = require('../services/bill-runs/setup/submit-season.service.js')
 const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
 const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../services/bill-runs/setup/type.service.js')
 const YearService = require('../services/bill-runs/setup/year.service.js')
+
+async function create (request, h) {
+  const { sessionId } = request.params
+
+  const results = await ExistsService.go(sessionId)
+
+  // If the results include a pageData property it's because `ExistsService` found a match and so has formatted page
+  // data for the create view to display the matching bill run to the user
+  if (results.pageData) {
+    return h.view('bill-runs/setup/create.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'This bill run already exists',
+      ...results.pageData
+    })
+  }
+
+  // If we get here then we are go for launch!
+  try {
+    await CreateService.go(request.auth.credentials.user, results)
+
+    return h.redirect('/billing/batch/list')
+  } catch (error) {
+    return Boom.badImplementation(error.message)
+  }
+}
 
 async function region (request, h) {
   const { sessionId } = request.params
@@ -21,6 +52,18 @@ async function region (request, h) {
   return h.view('bill-runs/setup/region.njk', {
     activeNavBar: 'bill-runs',
     pageTitle: 'Select the region',
+    ...pageData
+  })
+}
+
+async function season (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SeasonService.go(sessionId)
+
+  return h.view('bill-runs/setup/season.njk', {
+    activeNavBar: 'bill-runs',
+    pageTitle: 'Select the season',
     ...pageData
   })
 }
@@ -45,10 +88,26 @@ async function submitRegion (request, h) {
   }
 
   if (pageData.setupComplete) {
-    return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
+}
+
+async function submitSeason (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitSeasonService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/setup/season.njk', {
+      activeNavBar: 'bill-runs',
+      pageTitle: 'Select the season',
+      ...pageData
+    })
+  }
+
+  return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
 }
 
 async function submitType (request, h) {
@@ -81,7 +140,7 @@ async function submitYear (request, h) {
   }
 
   if (pageData.setupComplete) {
-    return h.redirect(`/system/bill-runs/setup/${sessionId}/generate`)
+    return h.redirect(`/system/bill-runs/setup/${sessionId}/create`)
   }
 
   return h.redirect(`/system/bill-runs/setup/${sessionId}/season`)
@@ -112,9 +171,12 @@ async function year (request, h) {
 }
 
 module.exports = {
+  create,
   region,
+  season,
   setup,
   submitRegion,
+  submitSeason,
   submitType,
   submitYear,
   type,
