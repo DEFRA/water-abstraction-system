@@ -25,6 +25,7 @@ async function go (id, payload) {
   const filterLicenceHolder = payload?.filterLicenceHolder
 
   const billRun = await _fetchBillRun(id)
+  console.log('🚀 ~ go ~ billRun:', billRun)
   const licences = await _fetchBillRunLicences(id, filterLicenceHolder)
 
   return { billRun, licences, filterLicenceHolder }
@@ -33,19 +34,24 @@ async function go (id, payload) {
 async function _fetchBillRun (id) {
   return BillRunModel.query()
     .findById(id)
-    .select([
+    .select(
       'id',
       'createdAt',
       'status',
       'toFinancialYearEnding',
       'batchType'
-    ])
+    )
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select([
+      builder.select(
         'id',
         'displayName'
-      ])
+      )
+    })
+    .withGraphFetched('reviewLicences')
+    .modifyGraph('reviewLicences', (builder) => {
+      builder.count('licenceId as totalNumberOfLicences')
+        .groupBy('billRunId')
     })
 }
 
