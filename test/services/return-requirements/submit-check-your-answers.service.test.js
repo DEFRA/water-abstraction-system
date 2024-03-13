@@ -53,25 +53,6 @@ describe('Submit Check Your Answers service', () => {
         expect(result.data.licence.id).to.equal(licenceId)
       })
     })
-    describe('when the licence expired date is null', () => {
-      it('returns licence expired date is null', async () => {
-        const result = await SubmitCheckYourAnswersService.go(sessionId)
-
-        expect(result.ends).to.be.null()
-      })
-    })
-
-    describe('when the licence does have an end date but it is in the future (expired, lapsed or revoked)', () => {
-      beforeEach(() => {
-        session.data.licence.expiredDate = new Date('2099-04-01')
-      })
-
-      it('returns null', async () => {
-        const result = await SubmitCheckYourAnswersService.go(sessionId)
-
-        expect(result.ends).to.be.null()
-      })
-    })
 
     describe('When called with an invalid licence (expired, lapsed or revoked)', () => {
       beforeEach(async () => {
