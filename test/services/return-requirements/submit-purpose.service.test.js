@@ -3,13 +3,18 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
+
+// Things we need to stub
+const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
+const PurposeValidation = require('../../../app/validators/return-requirements/purpose.validator.js')
 
 // Thing under test
 const SubmitPurposeService = require('../../../app/services/return-requirements/submit-purpose.service.js')
@@ -40,12 +45,22 @@ describe('Submit Purpose service', () => {
     })
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
           licencePurposes: 'Potable Water Supply - Direct'
         }
+
+        Sinon.stub(FetchPurposesService, 'go').resolves(
+          'Potable Water Supply - Direct'
+        )
+
+        Sinon.stub(PurposeValidation, 'go').resolves(null)
       })
 
       it('fetches the current setup session record', async () => {
@@ -88,10 +103,7 @@ describe('Submit Purpose service', () => {
             pageTitle: 'Select the purpose for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            licencePurposes: [
-              'Transfer Between Sources (Pre Water Act 2003)',
-              'Potable Water Supply - Direct'
-            ]
+            licencePurposes: []
           }, { skip: ['id', 'error'] })
         })
 
