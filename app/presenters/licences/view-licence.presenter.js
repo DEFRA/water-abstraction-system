@@ -45,7 +45,7 @@ function go (licence, licenceVersionPurposeConditionData) {
   const pointDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
   const monitoringStationDetails = _generateMonitoringStation(licenceGaugingStations)
 
-  const abstractionConditions = _parseAbstractionConditionData(licenceVersionPurposeConditionData)
+  const abstractionConditions = _generateAbstractionConditions(licenceVersionPurposeConditionData)
 
   return {
     id,
@@ -80,7 +80,7 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
-function _parseAbstractionConditionData (conditionsData) {
+function _generateAbstractionConditions (conditionsData) {
   if (!conditionsData ||
       conditionsData.abstractionConditions === undefined ||
       conditionsData.abstractionConditions.length === 0) {

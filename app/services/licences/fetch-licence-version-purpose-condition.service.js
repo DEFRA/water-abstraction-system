@@ -2,15 +2,15 @@
 
 /**
  * Fetches data needed for the view '/licences/{id}` page
- * @module FetchLicencePurposeConditionService
+ * @module FetchLicenceVersionPurposeConditionService
  */
 
 const LicenceVersionPurposeCondtionModel = require('../../models/licence-version-purpose-condition.model.js')
 
 /**
- * Fetch the matching licence purpose conditions and return data needed for the view licence page
+ * Fetch the matching licence version purpose conditions and return data needed for the view licence page
  *
- * @param {string} id The UUID for the licence version purpose id to fetch
+ * @param {string} id The UUID for the licence_version_purpose_id to fetch
  *
  * @returns {Promise<Object>} the data needed to populate the view licence page and some elements of the summary tab
  */
