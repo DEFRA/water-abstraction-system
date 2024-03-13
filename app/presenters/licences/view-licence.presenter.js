@@ -82,7 +82,7 @@ function _endDate (expiredDate) {
 
 function _generateAbstractionConditions (conditionsData) {
   if (!conditionsData ||
-      conditionsData.abstractionConditions === undefined ||
+      conditionsData?.abstractionConditions === undefined ||
       conditionsData.abstractionConditions.length === 0) {
     return {
       caption: 'Abstraction condition',
