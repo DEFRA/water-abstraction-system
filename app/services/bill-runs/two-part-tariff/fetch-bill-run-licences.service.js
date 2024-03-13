@@ -19,12 +19,12 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {Promise<Object>} an object containing the billRun data and an array of licences for the bill run
  */
 async function go (id, payload) {
-  const licenceHolder = payload?.licenceHolder
+  const filterLicenceHolder = payload?.filterLicenceHolder
 
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id, licenceHolder)
+  const licences = await _fetchBillRunLicences(id, filterLicenceHolder)
 
-  return { billRun, licences }
+  return { billRun, licences, filterLicenceHolder }
 }
 
 async function _fetchBillRun (id) {
@@ -46,13 +46,13 @@ async function _fetchBillRun (id) {
     })
 }
 
-async function _fetchBillRunLicences (id, licenceHolder) {
+async function _fetchBillRunLicences (id, filterLicenceHolder) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .where('billRunId', id)
     .orderBy('status', 'desc')
 
-  if (licenceHolder) {
-    reviewLicenceQuery.whereILike('licenceHolder', `%${licenceHolder}%`)
+  if (filterLicenceHolder) {
+    reviewLicenceQuery.whereILike('licenceHolder', `%${filterLicenceHolder}%`)
   }
 
   return reviewLicenceQuery

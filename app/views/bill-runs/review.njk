@@ -116,8 +116,8 @@
   <section class="govuk-!-margin-bottom-9">
     {{ govukButton({
       classes: "govuk-button--secondary govuk-!-margin-bottom-0",
-      text: 'Cancel bill run',
-      href: 'cancel'
+      text: "Cancel bill run",
+      href: "cancel"
     }) }}
   </section>
 
@@ -133,9 +133,9 @@
           isPageHeading: false
         },
         classes: "govuk-input--width-20",
-        id: "licenceHolder",
-        name: "licenceHolder",
-        value: filter.licenceHolder
+        id: "filterLicenceHolder",
+        name: "filterLicenceHolder",
+        value: filterData.licenceHolder
       }) }}
 
       <div class="govuk-button-group">
@@ -147,7 +147,8 @@
           text: "Clear filters",
           classes: "govuk-button--secondary ",
           name: "clearFilters",
-          type: "reset"
+          type: "reset",
+          href: "review"
         }) }}
       </div>
     </form>
@@ -157,7 +158,7 @@
     summaryText: "Filter licences",
     html: filtersForm | safe,
     classes: "govuk-!-margin-bottom-2",
-    open: openFilter
+    open: filterData.openFilter
   }) }}
 
   {# Generate the row data for the table #}

@@ -17,9 +17,9 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  * the bill run and the licences linked to it.
  */
 async function go (id, payload = null) {
-  const { billRun, licences } = await FetchBillRunLicencesService.go(id, payload)
+  const { billRun, licences, filterLicenceHolder } = await FetchBillRunLicencesService.go(id, payload)
 
-  const pageData = ReviewBillRunPresenter.go(billRun, licences)
+  const pageData = ReviewBillRunPresenter.go(billRun, licences, filterLicenceHolder)
 
   return pageData
 }
