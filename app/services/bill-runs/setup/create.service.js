@@ -46,7 +46,7 @@ async function _triggerBillRun (regionId, batchType, user, year, existingBillRun
   }
 
   // We do not bother to send requests for PRESROC 2PT bill runs to our engine
-  if (batchType === 'two_part_tariff' && ['2021', '2022'].includes(year)) {
+  if (batchType === 'two_part_tariff' && [2021, 2022].includes(year)) {
     return null
   }
 
@@ -67,11 +67,11 @@ async function _triggerLegacyBillRun (regionId, batchType, user, year, summer, e
   }
 
   // We do not bother to send requests for SROC 2PT bill runs to the legacy service
-  if (batchType === 'two_part_tariff' && ['2024', '2023'].includes(year)) {
+  if (batchType === 'two_part_tariff' && [2024, 2023].includes(year)) {
     return null
   }
 
-  return LegacyCreateBillRunRequest.go(batchType, regionId, year, user, summer)
+  return LegacyCreateBillRunRequest.send(batchType, regionId, year, user, summer)
 }
 
 module.exports = {
