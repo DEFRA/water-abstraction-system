@@ -23,6 +23,7 @@ async function go (licence) {
   const allElementIssues = _determineChargeElementsIssues(chargeVersions, licenceReturnLogs)
 
   licence.status = _determineLicenceStatus(allElementIssues, allReturnIssues)
+  licence.issues = [...allElementIssues, ...allReturnIssues]
 }
 
 function _determineChargeElementsIssues (chargeVersions, licenceReturnLogs) {
@@ -109,7 +110,7 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   const elementIssues = []
 
   // Issue Aggregate factor
-  if (chargeReference.aggregate !== 1) {
+  if (chargeReference.aggregate !== null && chargeReference.aggregate !== 1) {
     elementIssues.push('Aggregate factor')
     status = 'review'
   }

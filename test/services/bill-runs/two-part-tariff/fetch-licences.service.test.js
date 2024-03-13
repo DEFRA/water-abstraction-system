@@ -26,13 +26,16 @@ describe('Fetch Licences service', () => {
   })
 
   describe('when at least one 2PT licence exists for the region and billing period', () => {
+    const licenceHolderStub = Sinon.stub().returns('Mock Licence Holder')
+
     const licenceOne = {
       id: '301d4ef9-41b9-4ec9-927b-0c78d9ece5ba',
       licenceRef: '11/11/11/1111',
       startDate: '1967-02-13T00:00:00.000Z',
       expiredDate: '2050-04-01T00:00:00.000Z',
       lapsedDate: null,
-      revokedDate: null
+      revokedDate: null,
+      $licenceHolder: licenceHolderStub
     }
 
     describe('and there is a single licence linked to a single charge version', () => {
@@ -60,6 +63,7 @@ describe('Fetch Licences service', () => {
         expect(result[0].expiredDate).to.equal(licenceOne.expiredDate)
         expect(result[0].lapsedDate).to.equal(licenceOne.lapsedDate)
         expect(result[0].revokedDate).to.equal(licenceOne.revokedDate)
+        expect(result[0].licenceHolder).to.equal('Mock Licence Holder')
 
         expect(result[0].chargeVersions).to.have.length(1)
         expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
@@ -77,7 +81,8 @@ describe('Fetch Licences service', () => {
         startDate: '1971-02-13T00:00:00.000Z',
         expiredDate: null,
         lapsedDate: null,
-        revokedDate: null
+        revokedDate: null,
+        $licenceHolder: licenceHolderStub
       }
 
       beforeEach(() => {

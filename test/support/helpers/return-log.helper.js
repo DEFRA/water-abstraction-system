@@ -5,7 +5,7 @@
  */
 
 const { generateLicenceRef } = require('./licence.helper.js')
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 

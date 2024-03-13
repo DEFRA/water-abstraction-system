@@ -11,7 +11,7 @@ const { expect } = Code
 const BillHelper = require('../support/helpers/bill.helper.js')
 const BillModel = require('../../app/models/bill.model.js')
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
@@ -24,7 +24,7 @@ describe('Bill Licence model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await BillLicenceHelper.add()
   })

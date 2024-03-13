@@ -6,7 +6,7 @@
  */
 
 const BillRunModel = require('../../models/bill-run.model.js')
-const ChargingModuleCreateBillRunService = require('../charging-module/create-bill-run.service.js')
+const ChargingModuleCreateBillRunRequest = require('../../requests/charging-module/create-bill-run.request.js')
 const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
 const CreateBillRunService = require('./create-bill-run.service.js')
 const CreateBillRunEventService = require('./create-bill-run-event.service.js')
@@ -32,7 +32,7 @@ async function go (financialYearEndings, regionId, batchType, userEmail) {
     throw new ExpandedError('Batch already live for region', { regionId })
   }
 
-  const chargingModuleResult = await ChargingModuleCreateBillRunService.go(regionId, 'sroc')
+  const chargingModuleResult = await ChargingModuleCreateBillRunRequest.send(regionId, 'sroc')
 
   const billRunOptions = _billRunOptions(chargingModuleResult, batchType)
   const billRun = await CreateBillRunService.go(regionId, financialYearEndings, billRunOptions)

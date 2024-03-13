@@ -12,7 +12,7 @@ const { expect } = Code
 const ChargeCategoryHelper = require('../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 
 // Things we need to stub
 const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
@@ -36,7 +36,7 @@ describe('Generate Transactions service', () => {
   }
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     const chargeCategory = await ChargeCategoryHelper.add({ reference })
     const { id: chargeCategoryId } = chargeCategory

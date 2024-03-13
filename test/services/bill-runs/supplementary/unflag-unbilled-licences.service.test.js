@@ -12,7 +12,7 @@ const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../../app/models/licence.model.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 
 // Thing under test
 const UnflagUnbilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-unbilled-licences.service.js')
@@ -21,7 +21,7 @@ describe('Unflag unbilled licences service', () => {
   const billRunId = '42e7a42b-8a9a-42b4-b527-2baaedf952f2'
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when there are licences flagged for SROC supplementary billing', () => {

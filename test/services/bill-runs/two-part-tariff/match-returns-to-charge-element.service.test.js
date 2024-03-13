@@ -178,7 +178,7 @@ function _testReturnLogs () {
         }
       ],
       matched: false,
-      reviewReturnResultId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
+      reviewReturnId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
     },
     {
       id: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2023-10-01',
