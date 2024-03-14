@@ -6,8 +6,8 @@
  */
 
 const FetchPurposesService = require('../../services/return-requirements/fetch-purposes.service.js')
-const PurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
 const PurposeValidation = require('../../validators/return-requirements/purpose.validator.js')
+const SelectPurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -29,7 +29,7 @@ async function go (sessionId, payload) {
 
   const purposesData = await FetchPurposesService.go(session.data.licence.id)
   const validationResult = _validate(payload)
-  const formattedData = PurposePresenter.go(session, purposesData, payload)
+  const formattedData = SelectPurposePresenter.go(session, purposesData, payload)
 
   return {
     activeNavBar: 'search',
