@@ -51,6 +51,11 @@ describe('View Licence presenter', () => {
       const result = ViewLicencePresenter.go(licence)
 
       expect(result).to.equal({
+        abstractionConditions: {
+          caption: 'Abstraction condition',
+          conditions: [],
+          linkText: 'View details of the abstraction condition'
+        },
         abstractionPeriods: null,
         abstractionPeriodsAndPurposesLinkText: null,
         abstractionPointLinkText: 'View details of the abstraction point',

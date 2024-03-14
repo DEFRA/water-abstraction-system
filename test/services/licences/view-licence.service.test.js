@@ -36,6 +36,11 @@ describe('View Licence service', () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result).to.equal({
+          abstractionConditions: {
+            caption: 'Abstraction condition',
+            conditions: [],
+            linkText: 'View details of the abstraction condition'
+          },
           abstractionPeriods: null,
           abstractionPeriodsAndPurposesLinkText: null,
           abstractionPointLinkText: 'View details of the abstraction point',
@@ -192,6 +197,7 @@ function _testLicence () {
     },
     licenceRef: '01/130/R01',
     licenceName: 'Unregistered licence',
+    licenceVersions: [],
     permitLicence: {
       purposes: [{
         purposePoints: [{

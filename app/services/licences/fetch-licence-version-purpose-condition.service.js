@@ -15,6 +15,11 @@ const LicenceVersionPurposeCondtionModel = require('../../models/licence-version
  * @returns {Promise<Object>} the data needed to populate the view licence page and some elements of the summary tab
  */
 async function go (id) {
+  if (!id || id === undefined) {
+    return {
+      abstractionConditions: []
+    }
+  }
   const LicenceVersionPurposeCondition = await _fetchLicenceVersionPurposeCondition(id)
   const data = await _data(LicenceVersionPurposeCondition)
 

@@ -19,8 +19,16 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
 async function go (id) {
   const licenceData = await FetchLicenceService.go(id)
 
-  const licenceVersionPurposeId = licenceData.licenceVersions[0].licenceVersionPurposes[0].id
-  const licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceVersionPurposeId)
+  let licenceVersionPurposeConditionData = null
+
+  if (!licenceData ||
+    licenceData?.licenceVersions === undefined ||
+    licenceData.licenceVersions.length > 0 ||
+    licenceData.licenceVersions[0]?.licenceVersionPurposes === undefined ||
+    licenceData.licenceVersions[0]?.licenceVersionPurposes?.length === 0) {
+    const licenceVersionPurposeId = licenceData?.licenceVersions[0]?.licenceVersionPurposes[0]?.id
+    licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceVersionPurposeId)
+  }
 
   const pageData = ViewLicencePresenter.go(licenceData, licenceVersionPurposeConditionData)
 
