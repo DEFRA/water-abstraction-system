@@ -25,7 +25,7 @@ describe('Review Bill Run presenter', () => {
         financialYear: '2022 to 2023',
         billRunType: 'two-part tariff',
         numberOfLicencesDisplayed: 3,
-        licencesToReviewCount: 1,
+        numberOfLicencesToReview: 1,
         totalNumberOfLicences: 3,
         preparedLicences: [
           {

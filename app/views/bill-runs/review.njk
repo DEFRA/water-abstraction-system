@@ -100,10 +100,10 @@
   </div>
 
   {# Dynamic message either telling the user they have issues to deal with or that they can generate bills #}
-  {% if licencesToReviewCount > 0 %}
+  {% if numberOfLicencesToReview > 0 %}
     <section class="govuk-!-margin-bottom-9">
       {{ govukInsetText({
-        text: 'You need to review ' + licencesToReviewCount + ' licences with returns data issues. You can then continue and send the bill run.'
+        text: 'You need to review ' + numberOfLicencesToReview + ' licences with returns data issues. You can then continue and send the bill run.'
       }) }}
     </section>
   {% else %}

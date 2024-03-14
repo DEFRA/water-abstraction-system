@@ -17,9 +17,9 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {Object} The prepared bill run and licence data to be passed to the review page
  */
 function go (billRun, licences, filterLicenceHolder) {
-  const { licencesToReviewCount, preparedLicences } = _prepareLicences(licences)
+  const { numberOfLicencesToReview, preparedLicences } = _prepareLicences(licences)
 
-  const preparedBillRun = _prepareBillRun(billRun, preparedLicences, licencesToReviewCount)
+  const preparedBillRun = _prepareBillRun(billRun, preparedLicences, numberOfLicencesToReview)
   const filterData = { openFilter: false }
 
   if (filterLicenceHolder) {
@@ -31,12 +31,12 @@ function go (billRun, licences, filterLicenceHolder) {
 }
 
 function _prepareLicences (licences) {
-  let licencesToReviewCount = 0
+  let numberOfLicencesToReview = 0
   const preparedLicences = []
 
   for (const licence of licences) {
     if (licence.status === 'review') {
-      licencesToReviewCount++
+      numberOfLicencesToReview++
     }
 
     preparedLicences.push({
@@ -48,10 +48,10 @@ function _prepareLicences (licences) {
     })
   }
 
-  return { preparedLicences, licencesToReviewCount }
+  return { preparedLicences, numberOfLicencesToReview }
 }
 
-function _prepareBillRun (billRun, preparedLicences, licencesToReviewCount) {
+function _prepareBillRun (billRun, preparedLicences, numberOfLicencesToReview) {
   return {
     region: billRun.region.displayName,
     status: billRun.status,
@@ -59,7 +59,7 @@ function _prepareBillRun (billRun, preparedLicences, licencesToReviewCount) {
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     billRunType: 'two-part tariff',
     numberOfLicencesDisplayed: preparedLicences.length,
-    licencesToReviewCount,
+    numberOfLicencesToReview,
     totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
 }
