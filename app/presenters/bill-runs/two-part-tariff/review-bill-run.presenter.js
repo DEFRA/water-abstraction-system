@@ -75,9 +75,9 @@ function _getIssueOnLicence (issues) {
   // if there is more than one issue the issues will be seperated by a comma
   if (issues.includes(',')) {
     return 'Multiple Issues'
-  } else {
-    return issues
   }
+
+  return issues
 }
 
 module.exports = {
