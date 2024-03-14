@@ -16,7 +16,7 @@ const Joi = require('joi')
  *
  * @param {Object} payload - The payload from the request to be validated
  *
- * @returns {Object} the result from calling Joi's schema.validate(). If any errors are found the
+ * @returns {Object} The result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
 function go (payload) {
