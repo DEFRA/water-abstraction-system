@@ -33,19 +33,10 @@ async function go (id, payload) {
 async function _fetchBillRun (id) {
   return BillRunModel.query()
     .findById(id)
-    .select(
-      'id',
-      'createdAt',
-      'status',
-      'toFinancialYearEnding',
-      'batchType'
-    )
+    .select('id', 'createdAt', 'status', 'toFinancialYearEnding', 'batchType')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select(
-        'id',
-        'displayName'
-      )
+      builder.select('id', 'displayName')
     })
     .withGraphFetched('reviewLicences')
     .modifyGraph('reviewLicences', (builder) => {
