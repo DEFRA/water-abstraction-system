@@ -9,9 +9,9 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 
 // Thing under test
 const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
