@@ -7,6 +7,8 @@
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 
+const LAST_PRESROC_YEAR = 2022
+
 /**
  * Fetch live bill run(s) that match the options provided
  *
@@ -79,7 +81,7 @@ function _matchLiveBillRuns (liveBillRuns, financialYearEnding, supplementary) {
 
     // Because of the check above this will only be applied to supplementary bill runs. This is where we check the
     // live bill run against both the specified financial year ending and the last year of PRESROC 2022
-    if (liveBillRun.toFinancialYearEnding === financialYearEnding || liveBillRun.toFinancialYearEnding === 2022) {
+    if (liveBillRun.toFinancialYearEnding === financialYearEnding || liveBillRun.toFinancialYearEnding === LAST_PRESROC_YEAR) {
       matches.push(liveBillRun)
     }
   }
