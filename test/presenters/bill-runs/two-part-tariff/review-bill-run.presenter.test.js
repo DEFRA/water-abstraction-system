@@ -24,8 +24,9 @@ describe('Review Bill Run presenter', () => {
         dateCreated: '17 January 2024',
         financialYear: '2022 to 2023',
         billRunType: 'two-part tariff',
-        numberOfLicences: 3,
+        numberOfLicencesDisplayed: 3,
         licencesToReviewCount: 1,
+        totalNumberOfLicences: 3,
         preparedLicences: [
           {
             id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
@@ -48,7 +49,19 @@ describe('Review Bill Run presenter', () => {
             status: 'review',
             issue: 'Multiple Issues'
           }
-        ]
+        ],
+        filterData: { openFilter: false }
+      })
+    })
+
+    describe('and a filter has been applied', () => {
+      const filterLicenceHolder = 'big farm'
+
+      it('correctly presents the data', () => {
+        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, filterLicenceHolder)
+
+        expect(result.filterData.openFilter).to.equal(true)
+        expect(result.filterData.licenceHolder).to.equal(filterLicenceHolder)
       })
     })
   })
@@ -63,7 +76,8 @@ function _testBillRun () {
     batchType: 'two_part_tariff',
     region: {
       displayName: 'Southern (Test replica)'
-    }
+    },
+    reviewLicences: [{ totalNumberOfLicences: 3 }]
   }
 }
 
@@ -74,7 +88,7 @@ function _testLicences () {
       licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
       licenceRef: '1/11/11/*11/1111',
       licenceHolder: 'Big Farm Ltd',
-      issues: [],
+      issues: '',
       status: 'ready'
     },
     // Licence with a single issue
@@ -82,7 +96,7 @@ function _testLicences () {
       licenceId: '395bdc01-605b-44f5-9d90-5836cc013799',
       licenceRef: '2/22/22/*S2/2222',
       licenceHolder: 'Bob Bobbles',
-      issues: ['Abstraction outside period'],
+      issues: 'Abstraction outside period',
       status: 'ready'
     },
     // Licence with multiple issues
@@ -90,11 +104,7 @@ function _testLicences () {
       licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
       licenceRef: '3/33/33/*3/3333',
       licenceHolder: 'Farmer Palmer',
-      issues: [
-        'Abstraction outside period',
-        'Over abstraction',
-        'Overlap of charge dates'
-      ],
+      issues: 'Abstraction outside period, Over abstraction, Overlap of charge dates',
       status: 'review'
     }
   ]
