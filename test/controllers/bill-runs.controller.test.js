@@ -263,7 +263,66 @@ describe('Bill Runs controller', () => {
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('two-part tariff')
         expect(response.payload).to.contain('Southern (Test replica)')
-        expect(response.payload).to.contain('Showing all 1 licences')
+        expect(response.payload).to.contain('Showing all 2 licences')
+      })
+    })
+  })
+
+  describe('POST /bill-runs/{id}/review', () => {
+    let options
+
+    beforeEach(async () => {
+      options = {
+        method: 'POST',
+        url: '/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid', () => {
+      describe('and no filters have been applied', () => {
+        beforeEach(() => {
+          Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('two-part tariff')
+          expect(response.payload).to.contain('Southern (Test replica)')
+          expect(response.payload).to.contain(
+            'You need to review 1 licences with returns data issues. You can then continue and send the bill run.'
+          )
+          expect(response.payload).to.contain('Showing all 2 licences')
+        })
+      })
+
+      describe('and a filter has been applied', () => {
+        beforeEach(() => {
+          const reviewBillRunData = _reviewBillRunData()
+
+          // edit the data to represent the filter being applied
+          reviewBillRunData.filterData = { openFilter: true, licenceHolder: 'big' }
+          reviewBillRunData.numberOfLicencesDisplayed = 1
+
+          Sinon.stub(ReviewBillRunService, 'go').resolves(reviewBillRunData)
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('two-part tariff')
+          expect(response.payload).to.contain('Southern (Test replica)')
+          expect(response.payload).to.contain(
+            'You need to review 1 licences with returns data issues. You can then continue and send the bill run.'
+          )
+          expect(response.payload).to.contain('Showing 1 of 2 licences')
+        })
       })
     })
   })
@@ -387,19 +446,27 @@ function _reviewBillRunData () {
     status: 'review',
     dateCreated: '6 November 2023',
     financialYear: '2021 to 2022',
-    chargeScheme: 'Current',
     billRunType: 'two-part tariff',
-    numberOfLicences: 1,
+    numberOfLicencesDisplayed: 2,
     licencesToReviewCount: 1,
-    licences: [
+    totalNumberOfLicences: 2,
+    preparedLicences: [
       {
         licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
         licenceRef: '1/11/11/*1/1111',
         licenceHolder: 'Big Farm Ltd',
-        licenceIssues: 'Multiple Issues',
-        licenceStatus: 'review'
+        status: 'review',
+        issue: 'Multiple Issues'
+      },
+      {
+        licenceId: '9442527a-64f3-471a-a3e4-fa0683a3d505',
+        licenceRef: '2/22/22/*2/2222',
+        licenceHolder: 'Small Farm Ltd',
+        status: 'ready',
+        issue: 'Multiple Issues'
       }
-    ]
+    ],
+    filterData: { openFilter: false }
   }
 }
 

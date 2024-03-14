@@ -81,7 +81,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'POST request recieved when filtering applied to Review two-part tariff match and allocation results'
+      description: 'POST request recieved when filtering applied to review two-part tariff match and allocation results'
     }
   },
   {
