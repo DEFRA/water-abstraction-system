@@ -9,11 +9,17 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const CreateService = require('../../app/services/bill-runs/setup/create.service.js')
+const ExistsService = require('../../app/services/bill-runs/setup/exists.service.js')
 const InitiateSessionService = require('../../app/services/bill-runs/setup/initiate-session.service.js')
 const RegionService = require('../../app/services/bill-runs/setup/region.service.js')
+const SeasonService = require('../../app/services/bill-runs/setup/season.service.js')
 const SubmitRegionService = require('../../app/services/bill-runs/setup/submit-region.service.js')
+const SubmitSeasonService = require('../../app/services/bill-runs/setup/submit-season.service.js')
 const SubmitTypeService = require('../../app/services/bill-runs/setup/submit-type.service.js')
+const SubmitYearService = require('../../app/services/bill-runs/setup/submit-year.service.js')
 const TypeService = require('../../app/services/bill-runs/setup/type.service.js')
+const YearService = require('../../app/services/bill-runs/setup/year.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -62,6 +68,54 @@ describe('Bill Runs Setup controller', () => {
     })
   })
 
+  describe('/bill-runs/setup/{sessionId}/create', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('create')
+      })
+
+      describe('when the request succeeds', () => {
+        describe('but there is an existing bill run', () => {
+          beforeEach(() => {
+            Sinon.stub(ExistsService, 'go').resolves({
+              matchResults: [{ id: '81e97369-e744-44c9-ad2e-75e8e632e61c' }],
+              pageData: { billRunId: '81e97369-e744-44c9-ad2e-75e8e632e61c' },
+              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
+              yearToUse: 2024
+            })
+          })
+
+          it("returns the 'create' page displaying the existing bill run", async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('This bill run already exists')
+            expect(response.payload).to.contain('81e97369-e744-44c9-ad2e-75e8e632e61c')
+          })
+        })
+
+        describe('and there is no existing bill run', () => {
+          beforeEach(() => {
+            Sinon.stub(ExistsService, 'go').resolves({
+              matchResults: [],
+              pageData: null,
+              session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
+              yearToUse: 2024
+            })
+            Sinon.stub(CreateService, 'go').resolves()
+          })
+
+          it('redirects to the bill runs page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/billing/batch/list')
+          })
+        })
+      })
+    })
+  })
+
   describe('/bill-runs/setup/{sessionId}/region', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -98,11 +152,11 @@ describe('Bill Runs Setup controller', () => {
             Sinon.stub(SubmitRegionService, 'go').resolves({ setupComplete: true })
           })
 
-          it('redirects to the generate bill run endpoint', async () => {
+          it('redirects to the create bill run endpoint', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(302)
-            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/generate')
+            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
           })
         })
 
@@ -137,6 +191,65 @@ describe('Bill Runs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select a region')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/season', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('season')
+
+        Sinon.stub(SeasonService, 'go').resolves({
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          selectedSeason: null
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the season')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          options = _postOptions('season', { season: 'summer' })
+
+          Sinon.stub(SubmitSeasonService, 'go').resolves({})
+        })
+
+        it('redirects to the create bill run endpoint', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          options = _postOptions('season', { type: '' })
+
+          Sinon.stub(SubmitSeasonService, 'go').resolves({
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedSeason: null,
+            error: { text: 'Select the season' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the season')
           expect(response.payload).to.contain('There is a problem')
         })
       })
@@ -196,6 +309,82 @@ describe('Bill Runs Setup controller', () => {
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select a bill run type')
+          expect(response.payload).to.contain('There is a problem')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/setup/{sessionId}/year', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions('year')
+
+        Sinon.stub(YearService, 'go').resolves({
+          sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+          selectedYear: null
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select the financial year')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          options = _postOptions('year', { year: '2023' })
+        })
+
+        describe('and the bill run setup is complete', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitYearService, 'go').resolves({ setupComplete: true })
+          })
+
+          it('redirects to the create bill run endpoint', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/create')
+          })
+        })
+
+        describe('and the bill run setup is not complete', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitYearService, 'go').resolves({ setupComplete: false })
+          })
+
+          it('redirects to the select season', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/season')
+          })
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          options = _postOptions('year', { year: '' })
+
+          Sinon.stub(SubmitYearService, 'go').resolves({
+            sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
+            selectedYear: null,
+            error: { text: 'Select a financial year' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Select a financial year')
           expect(response.payload).to.contain('There is a problem')
         })
       })

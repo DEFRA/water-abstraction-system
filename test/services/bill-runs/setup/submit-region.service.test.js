@@ -18,7 +18,7 @@ const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fe
 // Thing under test
 const SubmitRegionService = require('../../../../app/services/bill-runs/setup/submit-region.service.js')
 
-describe('Submit No Returns Required service', () => {
+describe('Bill Runs Setup Submit Region service', () => {
   const regions = [
     { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
     { id: '19a027c6-4aad-47d3-80e3-3917a4579a5b', displayName: 'Stormlands' },
