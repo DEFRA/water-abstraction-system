@@ -13,7 +13,6 @@ const SelectPurposePresenter = require('../../../app/presenters/return-requireme
 describe('Select Purpose presenter', () => {
   let session
   let purposesData
-  let payload
 
   beforeEach(() => {
     session = {
@@ -58,7 +57,7 @@ describe('Select Purpose presenter', () => {
     })
 
     describe('and with a payload', () => {
-      payload = {
+      const payload = {
         purposes: [
           'Heat Pump',
           'Horticultural Watering'
