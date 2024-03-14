@@ -23,6 +23,7 @@ describe('Select Purpose service', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+
     session = await SessionHelper.add({
       data: {
         licence: {
@@ -31,11 +32,7 @@ describe('Select Purpose service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          startDate: '2022-04-01T00:00:00.000Z',
-          licencePurposes: [
-            'Transfer Between Sources (Pre Water Act 2003)',
-            'Potable Water Supply - Direct'
-          ]
+          startDate: '2022-04-01T00:00:00.000Z'
         }
       }
     })
