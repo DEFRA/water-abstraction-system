@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const PurposeValidator = require('../../../app/validators/return-requirements/purpose.validator.js')
 
-describe.only('Purpose validator', () => {
+describe('Purpose validator', () => {
   let payload
   describe('when valid data is provided', () => {
     payload = {
