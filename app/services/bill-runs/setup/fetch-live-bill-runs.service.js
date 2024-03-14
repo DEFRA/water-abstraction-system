@@ -66,6 +66,13 @@ async function _fetchLiveBillRuns (regionId) {
       { column: 'toFinancialYearEnding', order: 'desc' },
       { column: 'createdAt', order: 'desc' }
     ])
+    .withGraphFetched('region')
+    .modifyGraph('region', (builder) => {
+      builder.select([
+        'id',
+        'displayName'
+      ])
+    })
 }
 
 function _matchLiveBillRuns (liveBillRuns, financialYearEnding, supplementary) {
