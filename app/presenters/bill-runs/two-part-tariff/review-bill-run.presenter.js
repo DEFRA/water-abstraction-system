@@ -17,9 +17,6 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {Object} The prepared bill run and licence data to be passed to the review page
  */
 function go (billRun, licences, filterLicenceHolder) {
-  console.log('🚀 ~ go ~ billRun:', billRun)
-  console.log('🚀 ~ go ~ licences:', licences)
-  console.log('🚀 ~ go ~ filterLicenceHolder:', filterLicenceHolder)
   const { licencesToReviewCount, preparedLicences } = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, preparedLicences, licencesToReviewCount)
