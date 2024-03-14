@@ -45,7 +45,6 @@
   <form method="post">
       {% set checkBoxItems = [] %}
       {% for purpose in licencePurposes %}
-        {% set rowIndex = loop.index0 %}
 
         {% set checkBoxItem = {
           value: purpose,
