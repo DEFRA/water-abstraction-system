@@ -16,7 +16,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 // Thing under test
 const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
 
-describe.only('Bill Runs Setup Determine Blocking Bill Run service', () => {
+describe('Bill Runs Setup Determine Blocking Bill Run service', () => {
   let batchType
   let financialEndYear
   let regionId
