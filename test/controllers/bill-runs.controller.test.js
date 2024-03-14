@@ -448,7 +448,7 @@ function _reviewBillRunData () {
     financialYear: '2021 to 2022',
     billRunType: 'two-part tariff',
     numberOfLicencesDisplayed: 2,
-    licencesToReviewCount: 1,
+    numberOfLicencesToReview: 1,
     totalNumberOfLicences: 2,
     preparedLicences: [
       {
