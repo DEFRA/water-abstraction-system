@@ -5,6 +5,7 @@
  * @module ReviewLicencePresenter
  */
 
+const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
@@ -14,7 +15,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (billRun, licence) {
+function go (billRun, licence, billingAccount) {
   return {
     billRunId: billRun.id,
     status: 'review',
@@ -28,7 +29,7 @@ function go (billRun, licence) {
     chargePeriodDates: _prepareLicenceChargePeriods(licence),
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
-    chargeData: _prepareChargeData(licence)
+    chargeData: _prepareChargeData(licence, billRun)
   }
 }
 
@@ -44,23 +45,166 @@ function _chargeVersionSummary (reviewChargeVersion) {
   return `${chargeReferenceSentence} ${chargeElementSentence}`
 }
 
-function _prepareChargeData (licence) {
+function _prepareChargeData (licence, billRun) {
   const preparedChargeData = []
 
   const { reviewChargeVersions } = licence[0]
   for (const reviewChargeVersion of reviewChargeVersions) {
+    const chargePeriod = {
+      startDate: reviewChargeVersion.chargePeriodStartDate,
+      endDate: reviewChargeVersion.chargePeriodEndDate
+    }
+
     preparedChargeData.push({
-      financialYear: '',
+      financialYear: `Financial year ${_financialYear(billRun.toFinancialYearEnding)}`,
       chargePeriodDate: `Charge period ${_prepareDate(reviewChargeVersion.chargePeriodStartDate, reviewChargeVersion.chargePeriodEndDate)}`,
       licenceHolderName: licence[0].licenceHolder,
       chargeVersionSummary: _chargeVersionSummary(reviewChargeVersion),
-      billingAccountDetails: '',
-      chargeVersion: '',
-      chargeReferences: []
+      billingAccountDetails: _billingAccountDetails(reviewChargeVersion.billingAccountDetails),
+      chargeReferences: _chargeReferenceDetails(reviewChargeVersion, chargePeriod)
     })
   }
 
   return preparedChargeData
+}
+
+function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
+  const chargeReference = []
+
+  const { reviewChargeReferences } = reviewChargeVersion
+
+  for (const reviewChargeReference of reviewChargeReferences) {
+    chargeReference.push({
+      chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
+      chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
+      totalBillableReturns: '12345678123456',
+      chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
+    })
+  }
+
+  return chargeReference
+}
+
+function _chargeElementDetails (reviewChargeReference, chargePeriod) {
+  const { reviewChargeElements } = reviewChargeReference
+
+  const chargeElementLength = reviewChargeElements.length
+  const chargeElements = []
+
+  let i = 1
+  for (const reviewChargeElement of reviewChargeElements) {
+    console.log('Review Charge Element :', reviewChargeElement)
+    chargeElements.push({
+      elementNumber: `Element ${i} of ${chargeElementLength}`,
+      elementStatus: reviewChargeElement.status,
+      elementDescription: reviewChargeElement.chargeElement.description,
+      dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
+      issues: reviewChargeElement.issues,
+      billableReturns: '',
+      returnVolume: _prepareReturnVolume(reviewChargeElement)
+    })
+
+    i++
+  }
+  return chargeElements
+}
+
+function _prepareReturnVolume (reviewChargeElement) {
+  // const { reviewReturns } = reviewChargeElement
+
+  // const returnReferences = []
+  // let returnVolume
+
+  // if (reviewReturns) {
+  //   reviewReturns.forEach((reviewReturn) => {
+  //     returnVolume += reviewReturn.quantity
+  //     returnReference.push(reviewReturn.returnReference)
+  //   })
+  // } else {
+  //   return ''
+  // }
+
+  return ''
+}
+
+function _prepareChargeElementDates (chargeElement, chargePeriod) {
+  const {
+    abstractionPeriodStartDay,
+    abstractionPeriodStartMonth,
+    abstractionPeriodEndDay,
+    abstractionPeriodEndMonth
+  } = chargeElement
+
+  const abstractionPeriods = DetermineAbstractionPeriodService.go(
+    chargePeriod,
+    abstractionPeriodStartDay,
+    abstractionPeriodStartMonth,
+    abstractionPeriodEndDay,
+    abstractionPeriodEndMonth
+  )
+
+  let dates
+
+  // Need to sort if the dates are more than 1
+  if (abstractionPeriods.length === 1) {
+    dates = _prepareDate(abstractionPeriods[0].startDate, abstractionPeriods[0].endDate)
+  }
+
+  return dates
+}
+
+function _financialYear (financialYearEnding) {
+  const startYear = financialYearEnding - 1
+  const endYear = financialYearEnding
+
+  return `${startYear} to ${endYear}`
+}
+
+function _billingAccountDetails (billingAccount) {
+  return {
+    billingAccountId: billingAccount.id,
+    accountNumber: billingAccount.accountNumber,
+    accountName: _accountName(billingAccount),
+    contactName: _contactName(billingAccount),
+    addressLines: _addressLines(billingAccount)
+  }
+}
+
+function _addressLines (billingAccount) {
+  const { address } = billingAccount.billingAccountAddresses[0]
+
+  const addressParts = [
+    address.address1,
+    address.address2,
+    address.address3,
+    address.address4,
+    address.address5,
+    address.address6,
+    address.postcode,
+    address.country
+  ]
+
+  return addressParts.filter((part) => part)
+}
+
+function _contactName (billingAccount) {
+  const contact = billingAccount.billingAccountAddresses[0].contact
+
+  if (contact) {
+    return contact.$name()
+  }
+
+  return null
+}
+
+function _accountName (billingAccount) {
+  const accountAddress = billingAccount.billingAccountAddresses[0]
+
+  if (accountAddress.company) {
+    return accountAddress.company.name
+  }
+
+  return billingAccount.company.name
 }
 
 function _prepareLicenceChargePeriods (licence) {

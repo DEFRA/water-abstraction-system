@@ -7,6 +7,7 @@
 
 const FetchReviewLicenceResultsService = require('./fetch-review-licence-results.service.js')
 const ReviewLicencePresenter = require('../../../presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
+const FetchBillingAccountService = require('../../bills/fetch-billing-account.service.js')
 
 /**
  * Orchestrated fetching and presenting the data needed for the licence review page
@@ -19,6 +20,12 @@ const ReviewLicencePresenter = require('../../../presenters/bill-runs/two-part-t
  */
 async function go (billRunId, licenceId) {
   const { billRun, licence } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
+  const { reviewChargeVersions } = licence[0]
+
+  for (const reviewChargeVersion of reviewChargeVersions) {
+    const billingAccount = await FetchBillingAccountService.go(reviewChargeVersion.chargeVersion.billingAccountId)
+    reviewChargeVersion.billingAccountDetails = billingAccount
+  }
 
   const pageData = ReviewLicencePresenter.go(billRun, licence)
 
