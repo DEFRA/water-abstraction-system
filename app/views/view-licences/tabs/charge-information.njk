@@ -1,0 +1,118 @@
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% macro renderLinks(links) %}
+    {% for link in links %}
+        {% if not loop.first %} | {% endif %}
+        <a class="govuk-link" href="{{ link.path }}">{{ link.text }}</a>
+    {% endfor %}
+{% endmacro %}
+
+{% if chargeVersions.length %}
+    {% for chargeVersion in chargeVersions %}
+        <div class="phone--show">
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+            <p>Start date: {{ chargeVersion.dateRange.startDate | date }}</p>
+            <p>End date: {{ chargeVersion.dateRange.endDate | date }}</p>
+            {# TO DO why is reason empty? #}
+            <p>Reason:</p>
+            {# TO DO check tag works as expected #}
+            <p>Status: {{ govukTag(chargeVersion | chargeVersionBadge) }}</p>
+            <p>Action: {{ renderLinks(chargeVersion.links) }}</p>
+        </div>
+    {% endfor %}
+
+  <table class="govuk-table phone--hide">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col">Start date</th>
+        <th class="govuk-table__header" scope="col">End date</th>
+        <th class="govuk-table__header" scope="col">Reason</th>
+        <th class="govuk-table__header" scope="col">Status</th>
+        <th class="govuk-table__header" scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for chargeVersion in chargeVersions %}
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+                {{ chargeVersion.dateRange.startDate | date | default('-') }}
+            </td>
+            <td class="govuk-table__cell">
+                {{ chargeVersion.dateRange.endDate | date | default('-') }}
+            </td>
+            <td class="govuk-table__cell">
+                {{ chargeVersion.changeReason.description }}
+            </td>
+            <td class="govuk-table__cell">
+                {{ badge(chargeVersion | chargeVersionBadge) }}
+            </td>
+            <td class="govuk-table__cell">
+                {{ renderLinks(chargeVersion.links) }}
+            </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No charge information for this licence.</p>
+{% endif %}
+
+{% if links.setupCharge %}
+  <a href="{{ links.setupCharge }}" role="button" draggable="false" class="govuk-button govuk-!-margin-right-3" data-module="govuk-button">
+    Set up a new charge
+  </a>
+{% endif %}
+{% if links.makeNonChargeable %}
+  <a href="{{ links.makeNonChargeable }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+    Make licence non-chargeable
+  </a>
+{% endif %}
+
+{% if agreements.length %}
+  <h2 class="govuk-heading-l">Agreements</h2>
+
+  {% for agreement in agreements %}
+    <div class="phone--show">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+        <p>Start date: {{ agreement.dateRange.startDate | date }}</p>
+        <p>End date: {{ agreement.dateRange.endDate | date }}</p>
+        <p>Agreement: {{ agreement.agreement.description | default(agreement.agreement.code) }}</p>
+        <p>Date signed: {{ agreement.dateSigned | date }}</p>
+        <p>Action: {{ renderLinks(agreement.links) }}</p>
+    </div>
+  {% endfor %}
+
+  <table class="govuk-table phone--hide">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col">Start date</th>
+        <th class="govuk-table__header" scope="col">End date</th>
+        <th class="govuk-table__header" scope="col">Agreement</th>
+        <th class="govuk-table__header" scope="col">Date signed</th>
+        <th class="govuk-table__header" scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for agreement in agreements %}
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{ agreement.dateRange.startDate | date }}</td>
+            <td class="govuk-table__cell">{{ agreement.dateRange.endDate | date }}</td>
+            <td class="govuk-table__cell">{{ agreement.agreement.description | default(agreement.agreement.code) }}</td>
+            <td class="govuk-table__cell">{{ agreement.dateSigned | date }}</td>
+            <td class="govuk-table__cell">{{ renderLinks(agreement.links) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No agreements for this licence.</p>
+{% endif %}
+{% if links.addAgreement %}
+  {{ govukButton({
+  href : links.addAgreement,
+  text: 'Set up a new agreement',
+  classes: 'govuk-button--secondary'
+    })}}
+{% endif %}
