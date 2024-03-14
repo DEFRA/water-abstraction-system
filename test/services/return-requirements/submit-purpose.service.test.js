@@ -34,10 +34,6 @@ describe('Submit Purpose service', () => {
           endDate: null,
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
-          licencePurposes: [
-            'Transfer Between Sources (Pre Water Act 2003)',
-            'Potable Water Supply - Direct'
-          ],
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required'
@@ -53,11 +49,16 @@ describe('Submit Purpose service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          licencePurposes: 'Potable Water Supply - Direct'
+          licencePurposes: [
+            'Potable Water Supply - Direct',
+            'Transfer Between Sources (Pre Water Act 2003)'
+          ]
         }
 
-        Sinon.stub(FetchPurposesService, 'go').resolves(
-          'Potable Water Supply - Direct'
+        Sinon.stub(FetchPurposesService, 'go').resolves([
+          'Potable Water Supply - Direct',
+          'Transfer Between Sources (Pre Water Act 2003)'
+        ]
         )
 
         Sinon.stub(PurposeValidation, 'go').resolves(null)
@@ -78,7 +79,10 @@ describe('Submit Purpose service', () => {
           pageTitle: 'Select the purpose for the requirements for returns',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
-          licencePurposes: 'Potable Water Supply - Direct'
+          licencePurposes: [
+            'Potable Water Supply - Direct',
+            'Transfer Between Sources (Pre Water Act 2003)'
+          ]
         }, { skip: ['id'] })
       })
     })
@@ -87,6 +91,13 @@ describe('Submit Purpose service', () => {
       describe('because the user has not selected anything', () => {
         beforeEach(() => {
           payload = {}
+
+          Sinon.stub(FetchPurposesService, 'go').resolves(
+            [
+              'Transfer Between Sources (Pre Water Act 2003)',
+              'Potable Water Supply - Direct'
+            ]
+          )
         })
 
         it('fetches the current setup session record', async () => {
@@ -103,7 +114,10 @@ describe('Submit Purpose service', () => {
             pageTitle: 'Select the purpose for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            licencePurposes: []
+            licencePurposes: [
+              'Transfer Between Sources (Pre Water Act 2003)',
+              'Potable Water Supply - Direct'
+            ]
           }, { skip: ['id', 'error'] })
         })
 
