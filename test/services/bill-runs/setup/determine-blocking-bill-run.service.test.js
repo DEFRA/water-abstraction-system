@@ -14,9 +14,9 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
-const MatchService = require('../../../../app/services/bill-runs/setup/bill-run-match.service.js')
+const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
 
-describe.only('Bill Runs Setup Bill Run Match service', () => {
+describe.only('Bill Runs Setup Determine Blocking Bill Run service', () => {
   let batchType
   let financialEndYear
   let regionId
@@ -49,7 +49,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
       })
 
       it('returns the matching bill run', async () => {
-        const results = await MatchService.go(regionId, batchType, financialEndYear)
+        const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
         expect(results).to.have.length(1)
         expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -65,7 +65,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
         })
 
         it('returns the live bill run', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.have.length(1)
           expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -80,7 +80,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
         })
 
         it('returns no matches', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.be.empty()
         })
@@ -88,7 +88,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
 
       describe('and no live bill runs', () => {
         it('returns no matches', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.be.empty()
         })
@@ -113,7 +113,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
         })
 
         it('returns the matching bill run', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.have.length(1)
           expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -129,7 +129,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
           })
 
           it('returns the live bill run', async () => {
-            const results = await MatchService.go(regionId, batchType, financialEndYear)
+            const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
             expect(results).to.have.length(1)
             expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -138,7 +138,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
 
         describe('and no live bill runs', () => {
           it('returns no matches', async () => {
-            const results = await MatchService.go(regionId, batchType, financialEndYear)
+            const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
             expect(results).to.be.empty()
           })
@@ -163,7 +163,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
         })
 
         it('returns the matching bill run', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear, season)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear, season)
 
           expect(results).to.have.length(1)
           expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -179,7 +179,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
           })
 
           it('returns the live bill run', async () => {
-            const results = await MatchService.go(regionId, batchType, financialEndYear, season)
+            const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear, season)
 
             expect(results).to.have.length(1)
             expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -194,7 +194,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
           })
 
           it('returns no matches', async () => {
-            const results = await MatchService.go(regionId, batchType, financialEndYear, season)
+            const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear, season)
 
             expect(results).to.be.empty()
           })
@@ -202,7 +202,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
 
         describe('and no live bill runs', () => {
           it('returns no matches', async () => {
-            const results = await MatchService.go(regionId, batchType, financialEndYear, season)
+            const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear, season)
 
             expect(results).to.be.empty()
           })
@@ -230,7 +230,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
       })
 
       it('returns multiple bill run matches', async () => {
-        const results = await MatchService.go(regionId, batchType, financialEndYear)
+        const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
         expect(results).to.have.length(2)
         expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -247,7 +247,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
 
       describe('and no live PRESROC bill runs', () => {
         it('returns just the single match', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.have.length(1)
           expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -262,7 +262,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
         })
 
         it('returns both the matched and live bill runs', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.have.length(2)
           expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -280,7 +280,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
 
       describe('and no live SROC bill runs', () => {
         it('returns just the single match', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.have.length(1)
           expect(results[0].id).to.equal('b65bb671-8961-4d0c-93f4-d19e1998e778')
@@ -295,7 +295,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
         })
 
         it('returns both the matched and live bill runs', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.have.length(2)
           expect(results[1].id).to.equal('b65bb671-8961-4d0c-93f4-d19e1998e778')
@@ -326,7 +326,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
             })
 
             it('returns just the single match', async () => {
-              const results = await MatchService.go(regionId, batchType, financialEndYear)
+              const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
               expect(results).to.have.length(1)
               expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
@@ -342,7 +342,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
           })
 
           it('returns no matches', async () => {
-            const results = await MatchService.go(regionId, batchType, financialEndYear)
+            const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
             expect(results).to.be.empty()
           })
@@ -356,7 +356,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
           })
 
           it('returns just the single match', async () => {
-            const results = await MatchService.go(regionId, batchType, financialEndYear)
+            const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
             expect(results).to.have.length(1)
             expect(results[0].id).to.equal('b65bb671-8961-4d0c-93f4-d19e1998e778')
@@ -366,7 +366,7 @@ describe.only('Bill Runs Setup Bill Run Match service', () => {
 
       describe('and no live bill runs', () => {
         it('returns no matches', async () => {
-          const results = await MatchService.go(regionId, batchType, financialEndYear)
+          const results = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
 
           expect(results).to.be.empty()
         })

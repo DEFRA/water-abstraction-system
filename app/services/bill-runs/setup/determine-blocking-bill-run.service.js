@@ -1,13 +1,39 @@
 'use strict'
 
 /**
- * Determines if an existing bill run matches the one a user is trying to setup
+ * Determines if an existing bill run will block the one a user is trying to setup
  * @module ExistsService
  */
 
 const FetchLiveBillRunsService = require('./fetch-live-bill-runs.service.js')
 const FetchMatchingBillRunService = require('./fetch-matching-bill-run.service.js')
 
+/**
+ * Determines if an existing bill run will block the one a user is trying to setup
+ *
+ * This service is used in conjunction with `ExistsService` to determine if an existing bill run will block the user
+ * from creating the one they have setup.
+ *
+ * The first check is to deal with those where the bill run already exists. For example, a user is trying to create
+ * an annual bill run but one has already been created for that region and year.
+ *
+ * If no match is found it then moves on to checking if _any_ bill runs are in progress, regardless of type. If neither
+ * match is found the user is free to create the bill run.
+ *
+ * Where things get complex is supplementary billing. Because we are always having to manage two, PRESROC and SROC, we
+ * have to deal with there only being one of them present. If that is the case we also need to let the user create the
+ * bill run, but only the supplementary that doesn't exist.
+ *
+ * @param {string} regionId - UUID of the region to fetch live bill runs for
+ * @param {string} batchType - The type of bill run
+ * @param {number} financialEndYear - The end year of the financial period to look at
+ * @param {string} [season] - Applies only to PRESROC two-part tariff. Whether the bill run is summer or winter
+ * all-year
+ *
+ * @returns {Promise<Object[]>} The matching bill run(s) if any. For annual and two-part tariff only one bill run
+ * instance will be returned. For supplementary 2 bill runs may be returned depending on whether there is both an SROC
+ * and PRESROC match.
+ */
 async function go (regionId, batchType, financialEndYear, season = null) {
   const supplementary = batchType === 'supplementary'
 
