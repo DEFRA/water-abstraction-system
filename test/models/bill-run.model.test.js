@@ -16,6 +16,8 @@ const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
 const DatabaseSupport = require('../support/database.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
+const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
+const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
 
 // Thing under test
 const BillRunModel = require('../../app/models/bill-run.model.js')
@@ -138,6 +140,42 @@ describe('Bill Run model', () => {
         expect(result.billRunVolumes[0]).to.be.an.instanceOf(BillRunVolumeModel)
         expect(result.billRunVolumes).to.include(testBillRunVolumes[0])
         expect(result.billRunVolumes).to.include(testBillRunVolumes[1])
+      })
+    })
+
+    describe('when linking to review Licences', () => {
+      let testReviewLicences
+
+      beforeEach(async () => {
+        testRecord = await BillRunHelper.add()
+        const { id } = testRecord
+
+        testReviewLicences = []
+        for (let i = 0; i < 2; i++) {
+          const reviewLicence = await ReviewLicenceHelper.add({ billRunId: id })
+          testReviewLicences.push(reviewLicence)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await BillRunModel.query()
+          .innerJoinRelated('reviewLicences')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review licences', async () => {
+        const result = await BillRunModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewLicences')
+
+        expect(result).to.be.instanceOf(BillRunModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewLicences).to.be.an.array()
+        expect(result.reviewLicences[0]).to.be.an.instanceOf(ReviewLicenceModel)
+        expect(result.reviewLicences).to.include(testReviewLicences[0])
+        expect(result.reviewLicences).to.include(testReviewLicences[1])
       })
     })
   })

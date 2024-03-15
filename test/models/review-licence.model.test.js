@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../support/database.js')
+const BillRunHelper = require('../support/helpers/bill-run.helper.js')
+const BillRunModel = require('../../app/models/bill-run.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
@@ -41,7 +43,36 @@ describe('Review Licence model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to licence', () => {
+    describe('when linking to a bill run', () => {
+      let testBillRun
+
+      beforeEach(async () => {
+        testBillRun = await BillRunHelper.add()
+
+        testRecord = await ReviewLicenceHelper.add({ billRunId: testBillRun.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReviewLicenceModel.query()
+          .innerJoinRelated('billRun')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the bill run', async () => {
+        const result = await ReviewLicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('billRun')
+
+        expect(result).to.be.instanceOf(ReviewLicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.billRun).to.be.instanceOf(BillRunModel)
+        expect(result.billRun).to.equal(testBillRun)
+      })
+    })
+
+    describe('when linking to a licence', () => {
       let testLicence
 
       beforeEach(async () => {

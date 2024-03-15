@@ -16,12 +16,12 @@ class BillRunModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      region: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'region.model',
+      billRunVolumes: {
+        relation: Model.HasManyRelation,
+        modelClass: 'bill-run-volume.model',
         join: {
-          from: 'billRuns.regionId',
-          to: 'regions.id'
+          from: 'billRuns.id',
+          to: 'billRunVolumes.billRunId'
         }
       },
       bills: {
@@ -32,12 +32,20 @@ class BillRunModel extends BaseModel {
           to: 'bills.billRunId'
         }
       },
-      billRunVolumes: {
+      region: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'region.model',
+        join: {
+          from: 'billRuns.regionId',
+          to: 'regions.id'
+        }
+      },
+      reviewLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'bill-run-volume.model',
+        modelClass: 'review-licence.model',
         join: {
           from: 'billRuns.id',
-          to: 'billRunVolumes.billRunId'
+          to: 'reviewLicences.billRunId'
         }
       }
     }

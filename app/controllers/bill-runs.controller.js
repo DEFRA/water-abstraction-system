@@ -46,8 +46,7 @@ async function create (request, h) {
 
 async function review (request, h) {
   const { id } = request.params
-
-  const pageData = await ReviewBillRunService.go(id)
+  const pageData = await ReviewBillRunService.go(id, request.payload)
 
   return h.view('bill-runs/review.njk', {
     pageTitle: 'Review licences',
