@@ -7,7 +7,7 @@
 
 const FetchReviewLicenceResultsService = require('./fetch-review-licence-results.service.js')
 const ReviewLicencePresenter = require('../../../presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
-const FetchBillingAccountService = require('../../bills/fetch-billing-account.service.js')
+const FetchBillingAccountService = require('../../fetch-billing-account.service.js')
 
 /**
  * Orchestrated fetching and presenting the data needed for the licence review page

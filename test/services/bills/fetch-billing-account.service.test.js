@@ -21,7 +21,7 @@ const ContactModel = require('../../../app/models/contact.model.js')
 const DatabaseSupport = require('../../support/database.js')
 
 // Thing under test
-const FetchBillingAccountService = require('../../../app/services/bills/fetch-billing-account.service.js')
+const FetchBillingAccountService = require('../../../app/services/fetch-billing-account.service.js')
 
 describe('Fetch Billing Account service', () => {
   let linkedCompany
