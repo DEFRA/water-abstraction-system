@@ -15,7 +15,7 @@ const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two
 // Thing under test
 const ReviewLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 
-describe.only('Review Licence Service', () => {
+describe('Review Licence Service', () => {
   afterEach(() => {
     Sinon.restore()
   })
