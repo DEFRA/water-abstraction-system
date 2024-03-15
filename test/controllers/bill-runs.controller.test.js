@@ -327,7 +327,7 @@ describe('Bill Runs controller', () => {
     })
   })
 
-  describe.only('GET /bill-runs/{id}/review/{licenceId}', () => {
+  describe('GET /bill-runs/{id}/review/{licenceId}', () => {
     let options
 
     beforeEach(async () => {
