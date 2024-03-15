@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
+const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const DatabaseSupport = require('../support/database.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
@@ -19,7 +20,6 @@ const ReviewReturnModel = require('../../app/models/review-return.model.js')
 
 // Thing under test
 const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
-const ChargeElementModel = require('../../app/models/charge-element.model.js')
 
 describe('Review Charge Element model', () => {
   let testRecord
