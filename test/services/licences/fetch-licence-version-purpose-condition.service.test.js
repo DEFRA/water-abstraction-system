@@ -15,7 +15,7 @@ const LicenceVersionPurposeConditionTypesHelper = require('../../support/helpers
 // Thing under test
 const FetchLicenceVersionPurposeConstionService = require('../../../app/services/licences/fetch-licence-version-purpose-condition.service.js')
 
-describe('Fetch licence service', () => {
+describe('Fetch licence version purpose condition service', () => {
   let abstractConditions
   let abstractConditionsTypes
 
