@@ -327,6 +327,12 @@
                     </div>
                     {% endset %}
 
+                    {# set the return volumes#}
+                    {% set returnVolumes = '' %}
+                    {% for chargeElementReturnVolume in chargeElement.returnVolumes %}
+                      {% set returnVolumes = returnVolumes + chargeElementReturnVolume + '<br>' %}
+                    {% endfor %}
+
                     {#set the element rows in the summary list #}
                     {% set elementRow = [{
                         key: {
@@ -357,7 +363,7 @@
                           text: 'Return volume'
                         },
                         value: {
-                          text: chargeElement.returnVolume
+                          html: returnVolumes | safe
                         }
                       }]
                     %}

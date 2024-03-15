@@ -110,21 +110,18 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
 }
 
 function _prepareReturnVolume (reviewChargeElement) {
-  // const { reviewReturns } = reviewChargeElement
+  const { reviewReturns } = reviewChargeElement
+  const returnVolumes = []
 
-  // const returnReferences = []
-  // let returnVolume
+  if (reviewReturns) {
+    reviewReturns.forEach((reviewReturn) => {
+      returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
+    })
+  } else {
+    return ''
+  }
 
-  // if (reviewReturns) {
-  //   reviewReturns.forEach((reviewReturn) => {
-  //     returnVolume += reviewReturn.quantity
-  //     returnReference.push(reviewReturn.returnReference)
-  //   })
-  // } else {
-  //   return ''
-  // }
-
-  return ''
+  return returnVolumes
 }
 
 function _prepareChargeElementDates (chargeElement, chargePeriod) {
