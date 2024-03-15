@@ -24,7 +24,7 @@
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
 
       {# Status badge #}
-      {% if status == 'review' %}
+      {% if licence.status == 'review' %}
         {% set colour = "govuk-tag--blue govuk-!-font-size-16" %}
       {% else %}
         {% set colour = "govuk-tag--green govuk-!-font-size-16" %}
@@ -32,7 +32,7 @@
 
       <p class="govuk-body">
         {{govukTag({
-          text: status,
+          text: licence.status,
           classes: colour
         })}}
       </p>
@@ -117,7 +117,7 @@
             attributes: { 'data-test': 'matched-return-' + rowIndex }
           },
           {
-            html: return.total + '<br>' + return.allocated | join('<br>'),
+            html: return.total + '<br>' + return.issues | join('<br>'),
             classes: "govuk-body-s govuk-!-text-align-right",
             attributes: { 'data-test': 'matched-return-' + rowIndex }
           }]
@@ -194,7 +194,7 @@
             attributes: { 'data-test': 'unmatched-return-' + rowIndex }
           },
           {
-            html: return.total + '<br>' + return.allocated | join('<br>'),
+            html: return.total + '<br>' + return.issues | join('<br>'),
             classes: "govuk-body-s govuk-!-text-align-right",
             attributes: { 'data-test': 'unmatched-return-' + rowIndex }
           }

@@ -15,10 +15,9 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (billRun, licence, billingAccount) {
+function go (billRun, licence) {
   return {
     billRunId: billRun.id,
-    status: 'review',
     region: billRun.region.displayName,
     licence: {
       licenceId: licence[0].licenceId,
@@ -247,7 +246,7 @@ function _matchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           total,
-          allocated: returnLog.issues.split(', ')
+          issues: returnLog.issues.split(', ')
         }
       )
     }
@@ -270,7 +269,7 @@ function _unmatchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           total: `${returnLog.quantity} ML`,
-          allocated: returnLog.issues.split(', ')
+          issues: returnLog.issues.split(', ')
         }
       )
     }
