@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Fetches the bill run data for a two-part tariff bill run
+ * Fetches the individual review licence data for a two-part tariff bill run
  * @module FetchReviewLicenceResultsService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
+const FetchBillingAccountService = require('../../fetch-billing-account.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
-// const BillingAccountModel = require('../../../models/billing-account.model.js')
 
 /**
- * Fetches the review returns data for an individual licence in the bill run and the bill run data
+ * Fetches the bill run and an individual licences review data for a two-part tariff bill run
  *
  * @param {String} billRunId UUID of the bill run
  *
@@ -19,8 +19,15 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
   const licence = await _fetchReviewLicence(licenceId, billRunId)
+  await _fetchBillingAccountDetails(licence[0].reviewChargeVersions)
 
   return { billRun, licence }
+}
+
+async function _fetchBillingAccountDetails (reviewChargeVersions) {
+  for (const reviewChargeVersion of reviewChargeVersions) {
+    reviewChargeVersion.billingAccountDetails = await FetchBillingAccountService.go(reviewChargeVersion.chargeVersion.billingAccountId)
+  }
 }
 
 async function _fetchBillRun (billRunId) {

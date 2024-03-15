@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchLicenceReviewDataService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
+const FetchReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
 const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
 // Thing under test
 const ReviewLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 
-describe('Licence Review Bill Run Service', () => {
+describe.only('Review Licence Service', () => {
   afterEach(() => {
     Sinon.restore()
   })
@@ -24,7 +24,7 @@ describe('Licence Review Bill Run Service', () => {
     const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
     beforeEach(() => {
-      Sinon.stub(FetchLicenceReviewDataService, 'go').resolves({ billRun: 'bill run data', licence: [{ licenceRef: '7/34/10/*S/0084' }] })
+      Sinon.stub(FetchReviewLicenceResultsService, 'go').resolves({ billRun: 'bill run data', licence: [{ licenceRef: '7/34/10/*S/0084' }] })
       Sinon.stub(ReviewLicencePresenter, 'go').resolves('page data')
     })
 
