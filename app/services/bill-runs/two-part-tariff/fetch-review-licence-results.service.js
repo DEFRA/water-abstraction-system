@@ -70,7 +70,8 @@ async function _fetchReviewLicence (licenceId, billRunId) {
         'abstractionPeriodStartDay',
         'abstractionPeriodStartMonth',
         'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth'
+        'abstractionPeriodEndMonth',
+        'authorisedAnnualQuantity'
       ])
     })
     .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')

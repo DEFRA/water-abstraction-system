@@ -117,7 +117,7 @@
             attributes: { 'data-test': 'matched-return-' + rowIndex }
           },
           {
-            html: return.total + '<br>' + return.allocated,
+            html: return.total + '<br>' + return.allocated | join('<br>'),
             classes: "govuk-body-s govuk-!-text-align-right",
             attributes: { 'data-test': 'matched-return-' + rowIndex }
           }]
@@ -194,7 +194,7 @@
             attributes: { 'data-test': 'unmatched-return-' + rowIndex }
           },
           {
-            html: return.total,
+            html: return.total + '<br>' + return.allocated | join('<br>'),
             classes: "govuk-body-s govuk-!-text-align-right",
             attributes: { 'data-test': 'unmatched-return-' + rowIndex }
           }
@@ -286,7 +286,7 @@
                       text: "Total billable returns"
                     },
                     value: {
-                      text: chargeReference.totalBillableReturns + "ML / " + "ML"
+                      text: chargeReference.totalBillableReturns
                     }
                     }
                   %}
@@ -327,19 +327,13 @@
                     </div>
                     {% endset %}
 
-                    {# set the return volumes#}
-                    {% set returnVolumes = '' %}
-                    {% for chargeElementReturnVolume in chargeElement.returnVolumes %}
-                      {% set returnVolumes = returnVolumes + chargeElementReturnVolume + '<br>' %}
-                    {% endfor %}
-
                     {#set the element rows in the summary list #}
                     {% set elementRow = [{
                         key: {
                           text: 'Issues'
                         },
                         value: {
-                          text: chargeElement.issues
+                          html: chargeElement.issues | join('<br>')
                         }
                       },
                       {
@@ -363,7 +357,7 @@
                           text: 'Return volume'
                         },
                         value: {
-                          html: returnVolumes | safe
+                          html: chargeElement.returnVolume | join('<br>')
                         }
                       }]
                     %}

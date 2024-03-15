@@ -77,12 +77,25 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
     chargeReference.push({
       chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
       chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
-      totalBillableReturns: '12345678123456',
+      totalBillableReturns: _totalBillableReturns(reviewChargeReference),
       chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
     })
   }
 
   return chargeReference
+}
+
+function _totalBillableReturns (reviewChargeReference) {
+  const { reviewChargeElements } = reviewChargeReference
+
+  let totalBillableReturns = 0
+  let totalQuantity = 0
+  for (const reviewChargeElement of reviewChargeElements) {
+    totalBillableReturns += reviewChargeElement.allocated
+    totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
+  }
+
+  return `${totalBillableReturns} ML / ${totalQuantity} ML`
 }
 
 function _chargeElementDetails (reviewChargeReference, chargePeriod) {
@@ -93,14 +106,13 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
 
   let i = 1
   for (const reviewChargeElement of reviewChargeElements) {
-    console.log('Review Charge Element :', reviewChargeElement)
     chargeElements.push({
       elementNumber: `Element ${i} of ${chargeElementLength}`,
       elementStatus: reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
       dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
-      issues: reviewChargeElement.issues,
-      billableReturns: '',
+      issues: reviewChargeElement.issues.split(', '),
+      billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
       returnVolume: _prepareReturnVolume(reviewChargeElement)
     })
 
@@ -235,7 +247,7 @@ function _matchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           total,
-          allocated: _allocated(returnLog)
+          allocated: returnLog.issues.split(', ')
         }
       )
     }
@@ -257,7 +269,8 @@ function _unmatchedReturns (returnLogs) {
           status: returnLog.returnStatus,
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
-          total: `${returnLog.quantity} ML`
+          total: `${returnLog.quantity} ML`,
+          allocated: returnLog.issues.split(', ')
         }
       )
     }
@@ -282,19 +295,6 @@ function _checkStatusAndReturnTotal (returnLog) {
   }
 
   return { returnStatus, total }
-}
-
-function _allocated (returnLog) {
-  const { quantity, allocated, status, underQuery } = returnLog
-  if (underQuery) {
-    return ''
-  } else if (status === 'void' || status === 'received' || status === 'due') {
-    return 'Not processed'
-  } else if (quantity > allocated) {
-    return 'Over abstraction'
-  } else {
-    return 'Fully allocated'
-  }
 }
 
 function _prepareDate (startDate, endDate) {
