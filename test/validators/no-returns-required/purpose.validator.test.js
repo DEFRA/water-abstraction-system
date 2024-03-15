@@ -11,9 +11,8 @@ const { expect } = Code
 const PurposeValidator = require('../../../app/validators/return-requirements/purpose.validator.js')
 
 describe('Purpose validator', () => {
-  let payload
   describe('when valid data is provided', () => {
-    payload = {
+    const payload = {
       purposes: [
         'Heat Pump',
         'Horticultural Watering',
@@ -25,7 +24,6 @@ describe('Purpose validator', () => {
 
     it('confirms the data is valid', () => {
       const result = PurposeValidator.go(payload)
-      console.log('🚀🚀🚀 ~ result:', result)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -33,7 +31,7 @@ describe('Purpose validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    payload = {
+    const payload = {
       purposes: [
         'Invalid purpose',
         'Invalid purpose',
@@ -53,7 +51,7 @@ describe('Purpose validator', () => {
   })
 
   describe('when no data is provided', () => {
-    payload = {}
+    const payload = {}
 
     it('fails validation', () => {
       const result = PurposeValidator.go(payload)
