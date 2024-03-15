@@ -12,7 +12,8 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 /**
  * Fetches the bill run and an individual licences review data for a two-part tariff bill run
  *
- * @param {String} billRunId UUID of the bill run
+ * @param {module:BillRunModel} billRunId UUID of the bill run
+ * @param {module:LicenceModel} licenceId UUID of the individual licence to review
  *
  * @returns {Promise<Object[]>} Contains an array of bill run data and review licence data
  */
