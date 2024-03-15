@@ -31,6 +31,14 @@ class PurposeModel extends BaseModel {
           from: 'purposes.id',
           to: 'chargeReferences.purposeId'
         }
+      },
+      licenceVersionPurposes: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-version-purpose.model',
+        join: {
+          from: 'purposes.id',
+          to: 'licenceVersionPurposes.purposeId'
+        }
       }
     }
   }

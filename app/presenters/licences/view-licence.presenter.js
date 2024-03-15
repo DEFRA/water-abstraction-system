@@ -15,7 +15,7 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (licence) {
+function go (licence, licenceVersionPurposeConditionData) {
   const {
     ends,
     expiredDate,
@@ -45,8 +45,11 @@ function go (licence) {
   const pointDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
   const monitoringStationDetails = _generateMonitoringStation(licenceGaugingStations)
 
+  const abstractionConditions = _generateAbstractionConditions(licenceVersionPurposeConditionData)
+
   return {
     id,
+    abstractionConditions,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
     abstractionPoints: pointDetails.abstractionPoints,
@@ -75,6 +78,26 @@ function _endDate (expiredDate) {
   }
 
   return formatLongDate(expiredDate)
+}
+
+function _generateAbstractionConditions (conditionsData) {
+  if (!conditionsData ||
+      conditionsData?.abstractionConditions === undefined ||
+      conditionsData.abstractionConditions.length === 0) {
+    return {
+      caption: 'Abstraction condition',
+      linkText: 'View details of the abstraction condition',
+      conditions: []
+    }
+  }
+
+  return {
+    caption: conditionsData.abstractionConditions.length > 1 ? 'Abstraction conditions' : 'Abstraction condition',
+    linkText: conditionsData.abstractionConditions.length > 1
+      ? 'View details of the abstraction conditions'
+      : 'View details of the abstraction condition',
+    conditions: conditionsData.abstractionConditions
+  }
 }
 
 function _generateAbstractionPeriods (licenceVersions) {

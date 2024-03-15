@@ -74,7 +74,8 @@ async function _fetchLicence (id) {
         'licenceVersionPurposes.abstractionPeriodStartDay',
         'licenceVersionPurposes.abstractionPeriodStartMonth',
         'licenceVersionPurposes.abstractionPeriodEndDay',
-        'licenceVersionPurposes.abstractionPeriodEndMonth'
+        'licenceVersionPurposes.abstractionPeriodEndMonth',
+        'licenceVersionPurposes.licenceVersionId'
       ])
     })
     .modifyGraph('[purposes]', (builder) => {
