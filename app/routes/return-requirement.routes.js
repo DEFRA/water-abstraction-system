@@ -260,7 +260,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the purpose for the return requirement'
+      description: 'Select the purpose for the requirement for returns'
     }
   },
   {
