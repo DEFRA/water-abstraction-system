@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillHelper = require('../support/helpers/bill.helper.js')
+const BillModel = require('../../app/models/bill.model.js')
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
 const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
@@ -77,6 +79,42 @@ describe('Billing Account model', () => {
         expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
         expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+      })
+    })
+
+    describe('when linking to bills', () => {
+      let testBills
+
+      beforeEach(async () => {
+        testRecord = await BillingAccountHelper.add()
+        const { id: billingAccountId } = testRecord
+
+        testBills = []
+        for (let i = 0; i < 2; i++) {
+          const bill = await BillHelper.add({ billingAccountId })
+          testBills.push(bill)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await BillingAccountModel.query()
+          .innerJoinRelated('bills')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the bills', async () => {
+        const result = await BillingAccountModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('bills')
+
+        expect(result).to.be.instanceOf(BillingAccountModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.bills).to.be.an.array()
+        expect(result.bills[0]).to.be.an.instanceOf(BillModel)
+        expect(result.bills).to.include(testBills[0])
+        expect(result.bills).to.include(testBills[1])
       })
     })
 
