@@ -95,19 +95,19 @@ describe('Legacy Request', () => {
       })
 
       it('returns a `false` success status', async () => {
-        const result = await LegacyRequest.delete('water', testPath)
+        const result = await LegacyRequest.delete('import', testPath)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error response', async () => {
-        const result = await LegacyRequest.delete('water', testPath)
+        const result = await LegacyRequest.delete('import', testPath)
 
         expect(result.response.body.message).to.equal('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await LegacyRequest.delete('water', testPath)
+        const result = await LegacyRequest.delete('import', testPath)
 
         expect(result.response.statusCode).to.equal(404)
       })
