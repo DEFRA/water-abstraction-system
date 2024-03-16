@@ -16,6 +16,14 @@ class BillingAccountModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      bills: {
+        relation: Model.HasManyRelation,
+        modelClass: 'bill.model',
+        join: {
+          from: 'billingAccounts.id',
+          to: 'bills.billingAccountId'
+        }
+      },
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
         modelClass: 'billing-account-address.model',
