@@ -24,6 +24,104 @@ describe('Legacy Request', () => {
     Sinon.restore()
   })
 
+  describe('#delete()', () => {
+    describe('when the request succeeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(BaseRequest, 'delete').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 204,
+            body: {}
+          }
+        })
+      })
+
+      it('calls the legacy service with the required options', async () => {
+        await LegacyRequest.delete('import', testPath)
+
+        const requestArgs = BaseRequest.delete.firstCall.args
+
+        expect(requestArgs[0]).to.equal(testPath)
+        expect(requestArgs[1].prefixUrl).to.equal(`${servicesConfig.import.url}/import/1.0`)
+        expect(requestArgs[1].headers).to.equal({ authorization: `Bearer ${servicesConfig.legacyAuthToken}` })
+        expect(requestArgs[1].responseType).to.equal('json')
+      })
+
+      it('returns a `true` success status', async () => {
+        const result = await LegacyRequest.delete('import', testPath)
+
+        expect(result.succeeded).to.be.true()
+      })
+
+      it('returns the response body as an object', async () => {
+        const result = await LegacyRequest.delete('import', testPath)
+
+        expect(result.response.body).to.equal({})
+      })
+
+      it('returns the status code', async () => {
+        const result = await LegacyRequest.delete('import', testPath)
+
+        expect(result.response.statusCode).to.equal(204)
+      })
+
+      it('can handle none API requests', async () => {
+        await LegacyRequest.delete('import', testPath, null, false)
+
+        const requestArgs = BaseRequest.delete.firstCall.args
+
+        expect(requestArgs[1].prefixUrl).to.equal(servicesConfig.import.url)
+      })
+
+      it('can add the defra-user-id header', async () => {
+        await LegacyRequest.delete('import', testPath, 1234, true)
+
+        const requestArgs = BaseRequest.delete.firstCall.args
+
+        expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
+      })
+    })
+
+    describe('when the request fails', () => {
+      beforeEach(async () => {
+        Sinon.stub(BaseRequest, 'delete').resolves({
+          succeeded: false,
+          response: {
+            statusCode: 404,
+            statusMessage: 'Not Found',
+            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+          }
+        })
+      })
+
+      it('returns a `false` success status', async () => {
+        const result = await LegacyRequest.delete('water', testPath)
+
+        expect(result.succeeded).to.be.false()
+      })
+
+      it('returns the error response', async () => {
+        const result = await LegacyRequest.delete('water', testPath)
+
+        expect(result.response.body.message).to.equal('Not Found')
+      })
+
+      it('returns the status code', async () => {
+        const result = await LegacyRequest.delete('water', testPath)
+
+        expect(result.response.statusCode).to.equal(404)
+      })
+    })
+
+    describe('when the request is to an unknown legacy service', () => {
+      it('throws an error', async () => {
+        await expect(LegacyRequest.delete('foobar', testPath))
+          .to
+          .reject(Error, 'Request to unknown legacy service foobar')
+      })
+    })
+  })
+
   describe('#get()', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
