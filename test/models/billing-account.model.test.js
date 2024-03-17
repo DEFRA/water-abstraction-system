@@ -118,6 +118,42 @@ describe('Billing Account model', () => {
       })
     })
 
+    describe('when linking to bills', () => {
+      let testBills
+
+      beforeEach(async () => {
+        testRecord = await BillingAccountHelper.add()
+        const { id: billingAccountId } = testRecord
+
+        testBills = []
+        for (let i = 0; i < 2; i++) {
+          const bill = await BillHelper.add({ billingAccountId })
+          testBills.push(bill)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await BillingAccountModel.query()
+          .innerJoinRelated('bills')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the bills', async () => {
+        const result = await BillingAccountModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('bills')
+
+        expect(result).to.be.instanceOf(BillingAccountModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.bills).to.be.an.array()
+        expect(result.bills[0]).to.be.an.instanceOf(BillModel)
+        expect(result.bills).to.include(testBills[0])
+        expect(result.bills).to.include(testBills[1])
+      })
+    })
+
     describe('when linking to charge versions', () => {
       let testChargeVersions
 
