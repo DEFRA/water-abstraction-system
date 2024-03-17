@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const RemoveBillLicenceService = require('../../app/services/bill-licences/remove-bill-licence.service.js')
+const SubmitRemoveBillLicenceService = require('../../app/services/bill-licences/submit-remove-bill-licence.service.js')
 const ViewBillLicenceService = require('../../app/services/bill-licences/view-bill-licence.service.js')
 
 // For running our service
@@ -94,6 +95,25 @@ describe('Bill Licences controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('about to remove AT/SROC/SUPB/02 from the bill run')
         })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        options = _options('POST', 'remove')
+
+        Sinon.stub(SubmitRemoveBillLicenceService, 'go').resolves(
+          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
+        )
+      })
+
+      it('redirects to the legacy processing bill run page', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal(
+          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
+        )
       })
     })
   })
