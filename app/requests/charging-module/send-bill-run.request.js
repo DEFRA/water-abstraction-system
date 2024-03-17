@@ -2,12 +2,12 @@
 
 /**
  * Connects with the Charging Module to send a bill run
- * @module ChargingModuleSendBillRunService
+ * @module ChargingModuleSendBillRunRequest
  */
 
-const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const ChargingModuleRequestLib = require('../charging-module.request.js')
 const ExpandedError = require('../../errors/expanded.error.js')
-const WaitForStatusService = require('./wait-for-status.service.js')
+const WaitForStatusRequest = require('./wait-for-status.request.js')
 
 /**
  * Approve then send a bill run in the Charging Module API
@@ -28,11 +28,12 @@ const WaitForStatusService = require('./wait-for-status.service.js')
  *
  * See {@link https://defra.github.io/sroc-charging-module-api-docs/#/bill-run/SendBillRun | CHA API docs} for more
  * details
+ *
  * @param {string} billRunId - UUID of the charging module API bill run to send
  *
  * @returns {Promise<Object>} the promise returned is not intended to resolve to any particular value
  */
-async function go (billRunId) {
+async function send (billRunId) {
   await _approve(billRunId)
   await _send(billRunId)
 
@@ -68,7 +69,7 @@ async function _send (billRunId) {
 }
 
 async function _waitForSent (billRunId) {
-  const result = await WaitForStatusService.go(billRunId, ['billed', 'billing_not_required'])
+  const result = await WaitForStatusRequest.go(billRunId, ['billed', 'billing_not_required'])
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module waiting for sent took too long', result)
@@ -78,5 +79,5 @@ async function _waitForSent (billRunId) {
 }
 
 module.exports = {
-  go
+  send
 }

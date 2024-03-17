@@ -2,7 +2,7 @@
 
 /**
  * Connects with the Charging Module to get a bill run summary
- * @module ChargingModuleViewBillRunService
+ * @module ChargingModuleViewBillRunRequest
  */
 
 const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
@@ -17,7 +17,7 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  *
  * @returns {Promise<Object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function go (billRunId) {
+async function send (billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}`
   const result = await ChargingModuleRequestLib.get(path)
 
@@ -25,5 +25,5 @@ async function go (billRunId) {
 }
 
 module.exports = {
-  go
+  send
 }

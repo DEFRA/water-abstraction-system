@@ -2,7 +2,7 @@
 
 /**
  * Use to wait for a Charging Module bill run to be in a certain state
- * @module ChargingModuleWaitForStatusService
+ * @module ChargingModuleWaitForStatusRequest
  */
 
 const { setTimeout } = require('node:timers/promises')
@@ -45,7 +45,7 @@ const billingConfig = require('../../../config/billing.config.js')
  *
  * @returns {Promise<Object>} returns the results of the wait
  */
-async function go (billRunId, statusesToWaitFor, maximumAttempts = 120) {
+async function send (billRunId, statusesToWaitFor, maximumAttempts = 120) {
   let attempts = 0
   let status
 
@@ -93,5 +93,5 @@ function _requestFailed (billRunId, result) {
 }
 
 module.exports = {
-  go
+  send
 }
