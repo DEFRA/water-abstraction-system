@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -19,7 +19,7 @@ describe('Send Bill Run service', () => {
   let testBillRunId
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     const { id: regionId } = await RegionHelper.add()
     const billRun = await BillRunHelper.add({
