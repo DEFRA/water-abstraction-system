@@ -12,7 +12,8 @@ require('dotenv').config()
 const config = {
   annual: {
     batchSize: parseInt(process.env.BILLING_ANNUAL_BATCH_SIZE) || 5
-  }
+  },
+  waitForStatusPauseInMs: parseInt(process.env.BILLING_WAIT_FOR_STATUS_PAUSE_IN_MS) || 1000
 }
 
 module.exports = config
