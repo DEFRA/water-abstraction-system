@@ -5,7 +5,7 @@
  * @module ChargingModuleSendBillRunRequest
  */
 
-const ChargingModuleRequestLib = require('../charging-module.request.js')
+const ChargingModuleRequest = require('../charging-module.request.js')
 const ExpandedError = require('../../errors/expanded.error.js')
 const WaitForStatusRequest = require('./wait-for-status.request.js')
 
@@ -42,7 +42,7 @@ async function send (billRunId) {
 
 async function _approve (billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/approve`
-  const result = await ChargingModuleRequestLib.patch(path)
+  const result = await ChargingModuleRequest.patch(path)
 
   if (!result.succeeded) {
     const error = new ExpandedError(
@@ -56,7 +56,7 @@ async function _approve (billRunId) {
 
 async function _send (billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/send`
-  const result = await ChargingModuleRequestLib.patch(path)
+  const result = await ChargingModuleRequest.patch(path)
 
   if (!result.succeeded) {
     const error = new ExpandedError(
@@ -69,13 +69,18 @@ async function _send (billRunId) {
 }
 
 async function _waitForSent (billRunId) {
-  const result = await WaitForStatusRequest.go(billRunId, ['billed', 'billing_not_required'])
+  const result = await WaitForStatusRequest.send(billRunId, ['billed', 'billing_not_required'])
 
   if (!result.succeeded) {
-    const error = new ExpandedError('Charging Module waiting for sent took too long', result)
+    const error = new ExpandedError(
+      'Charging Module wait request failed',
+      { billRunExternalId: billRunId, attempts: result.attempts, responseBody: result.response.body }
+    )
 
     throw error
   }
+
+  return result
 }
 
 module.exports = {

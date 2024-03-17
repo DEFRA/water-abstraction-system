@@ -5,7 +5,7 @@
  * @module ChargingModuleViewBillRunRequest
  */
 
-const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../../requests/charging-module.request.js')
 
 /**
  * View a bill run in the Charging Module API
@@ -19,7 +19,7 @@ const ChargingModuleRequestLib = require('../../lib/charging-module-request.lib.
  */
 async function send (billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}`
-  const result = await ChargingModuleRequestLib.get(path)
+  const result = await ChargingModuleRequest.get(path)
 
   return result
 }

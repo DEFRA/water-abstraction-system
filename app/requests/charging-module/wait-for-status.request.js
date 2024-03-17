@@ -7,8 +7,8 @@
 
 const { setTimeout } = require('node:timers/promises')
 
-const BillRunStatusService = require('./bill-run-status.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
+const ViewBillRunStatusRequest = require('./view-bill-run-status.request.js')
 
 const billingConfig = require('../../../config/billing.config.js')
 
@@ -50,7 +50,7 @@ async function send (billRunId, statusesToWaitFor, maximumAttempts = 120) {
   let status
 
   for (let i = 1; i <= maximumAttempts; i++) {
-    const result = await BillRunStatusService.go(billRunId)
+    const result = await ViewBillRunStatusRequest.send(billRunId)
 
     attempts = i
 
