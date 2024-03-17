@@ -410,11 +410,11 @@ describe('Bill Runs controller', () => {
         Sinon.stub(SubmitSendBillRunService, 'go').resolves()
       })
 
-      it('redirects to the bill runs page', async () => {
+      it('redirects to the legacy processing bill run page', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(302)
-        expect(response.headers.location).to.equal('/billing/batch/list')
+        expect(response.headers.location).to.equal('/billing/batch/97db1a27-8308-4aba-b463-8a6af2558b28/processing')
       })
     })
 

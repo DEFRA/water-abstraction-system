@@ -103,7 +103,8 @@ async function submitSend (request, h) {
     // `sending'.
     await SubmitSendBillRunService.go(id)
 
-    return h.redirect('/billing/batch/list')
+    // Redirect to the legacy processing page
+    return h.redirect(`/billing/batch/${id}/processing`)
   } catch (error) {
     return Boom.badImplementation(error.message)
   }
