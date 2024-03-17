@@ -9,12 +9,15 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const RemoveBillLicenceService = require('../../app/services/bill-licences/remove-bill-licence.service.js')
+const SubmitRemoveBillLicenceService = require('../../app/services/bill-licences/submit-remove-bill-licence.service.js')
 const ViewBillLicenceService = require('../../app/services/bill-licences/view-bill-licence.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Bill Licences controller', () => {
+  let options
   let server
 
   beforeEach(async () => {
@@ -33,51 +36,102 @@ describe('Bill Licences controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /bill-licences', () => {
-    const options = {
-      method: 'GET',
-      url: '/bill-licences/64924759-8142-4a08-9d1e-1e902cd9d316',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
-    describe('when the request succeeds', () => {
-      describe('and is for a PRESROC bill licence', () => {
-        beforeEach(async () => {
-          Sinon.stub(ViewBillLicenceService, 'go').resolves(_presrocPageData())
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Transactions for WA/055/0017/999')
-
-          // Only the presroc view has this data attribute tag
-          expect(response.payload).to.contain('data-test="charge-element-season-0"')
-        })
+  describe('/bill-licences', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = _options('GET')
       })
 
-      describe('and is for an SROC bill licence', () => {
-        beforeEach(async () => {
-          Sinon.stub(ViewBillLicenceService, 'go').resolves(_srocPageData())
+      describe('when the request succeeds', () => {
+        describe('and is for a PRESROC bill licence', () => {
+          beforeEach(async () => {
+            Sinon.stub(ViewBillLicenceService, 'go').resolves(_presrocPageData())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Transactions for WA/055/0017/999')
+
+            // Only the presroc view has this data attribute tag
+            expect(response.payload).to.contain('data-test="charge-element-season-0"')
+          })
         })
 
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
+        describe('and is for an SROC bill licence', () => {
+          beforeEach(async () => {
+            Sinon.stub(ViewBillLicenceService, 'go').resolves(_srocPageData())
+          })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Transactions for 03/28/72/0099/1')
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
 
-          // Only the SROC view has this data attribute tag
-          expect(response.payload).to.contain('data-test="charge-reference-0"')
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Transactions for 03/28/72/0099/1')
+
+            // Only the SROC view has this data attribute tag
+            expect(response.payload).to.contain('data-test="charge-reference-0"')
+          })
         })
       })
     })
   })
+
+  describe('/bill-licences/{billLicenceId}/remove', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = _options('GET', 'remove')
+
+        Sinon.stub(RemoveBillLicenceService, 'go').resolves({
+          pageTitle: "You're about to remove AT/SROC/SUPB/02 from the bill run"
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('about to remove AT/SROC/SUPB/02 from the bill run')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        options = _options('POST', 'remove')
+
+        Sinon.stub(SubmitRemoveBillLicenceService, 'go').resolves(
+          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
+        )
+      })
+
+      it('redirects to the legacy processing bill run page', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal(
+          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
+        )
+      })
+    })
+  })
 })
+
+function _options (method, path) {
+  const root = '/bill-licences/64924759-8142-4a08-9d1e-1e902cd9d316'
+  const url = path ? `${root}/${path}` : root
+
+  return {
+    method,
+    url,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['billing'] }
+    }
+  }
+}
 
 function _presrocPageData () {
   return {
