@@ -5,7 +5,19 @@
  * @module BillLicencesController
  */
 
+const RemoveBillLicenceService = require('../services/bill-licences/remove-bill-licence.service.js')
 const ViewBillLicenceService = require('../services/bill-licences/view-bill-licence.service.js')
+
+async function remove (request, h) {
+  const { id } = request.params
+
+  const pageData = await RemoveBillLicenceService.go(id)
+
+  return h.view('bill-licences/remove.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
 
 async function view (request, h) {
   const { id } = request.params
@@ -22,5 +34,6 @@ async function view (request, h) {
 }
 
 module.exports = {
+  remove,
   view
 }
