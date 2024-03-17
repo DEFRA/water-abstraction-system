@@ -9,8 +9,8 @@ const BillModel = require('../../models/bill.model.js')
 const BillRunModel = require('../../models/bill-run.model.js')
 const ExpandedError = require('../../errors/expanded.error.js')
 const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
-const ChargingModuleSendBillRunService = require('../charging-module/send-bill-run.service.js')
-const ChargingModuleViewBillRunService = require('../charging-module/view-bill-run.service.js')
+const ChargingModuleSendBillRunRequest = require('../../requests/charging-module/send-bill-run.request.js')
+const ChargingModuleViewBillRunRequest = require('../../requests/charging-module/view-bill-run.request.js')
 
 /**
  * Orchestrates the sending of a bill run
@@ -42,22 +42,6 @@ async function go (billRunId) {
   _sendBillRun(billRun)
 }
 
-async function _updateBillRunData (billRun, externalBillRun) {
-  const { transactionFileReference } = externalBillRun
-
-  return billRun.$query().patch({ status: 'sent', transactionFileReference })
-}
-
-async function _updateInvoiceData (externalBillRun) {
-  const { invoices } = externalBillRun
-
-  for (const invoice of invoices) {
-    const { id, transactionReference: invoiceNumber } = invoice
-
-    await BillModel.query().patch({ invoiceNumber }).where('externalId', id)
-  }
-}
-
 /**
  * This service handles the POST request from the confirm sent bill run page. We _could_ have included the
  * externalId as a hidden field in the form and included it in the request. This would give the impression we could
@@ -77,7 +61,7 @@ async function _fetchBillRun (id) {
 }
 
 async function _fetchChargingModuleBillRun (externalId) {
-  const result = await ChargingModuleViewBillRunService.go(externalId)
+  const result = await ChargingModuleViewBillRunRequest.send(externalId)
 
   if (!result.succeeded) {
     const error = new ExpandedError(
@@ -96,7 +80,7 @@ async function _sendBillRun (billRun) {
 
   const { id: billRunId, externalId } = billRun
 
-  await ChargingModuleSendBillRunService.go(externalId)
+  await ChargingModuleSendBillRunRequest.send(externalId)
 
   const externalBillRun = await _fetchChargingModuleBillRun(externalId)
 
@@ -105,6 +89,22 @@ async function _sendBillRun (billRun) {
   await _updateBillRunData(billRun, externalBillRun)
 
   calculateAndLogTimeTaken(startTime, 'Send bill run complete', { billRunId })
+}
+
+async function _updateBillRunData (billRun, externalBillRun) {
+  const { transactionFileReference } = externalBillRun
+
+  return billRun.$query().patch({ status: 'sent', transactionFileReference })
+}
+
+async function _updateInvoiceData (externalBillRun) {
+  const { invoices } = externalBillRun
+
+  for (const invoice of invoices) {
+    const { id, transactionReference: invoiceNumber } = invoice
+
+    await BillModel.query().patch({ invoiceNumber }).where('externalId', id)
+  }
 }
 
 async function _updateStatus (billRunId, status) {
