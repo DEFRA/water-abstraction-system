@@ -20,11 +20,11 @@ const ChargeReferenceHelper = require('../../../support/helpers/charge-reference
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Things we need to stub
-const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
+const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
 const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 
@@ -45,7 +45,7 @@ describe('Supplementary Process billing period service', () => {
   let licence
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     const { id: regionId } = await RegionHelper.add()
     licence = await LicenceHelper.add({ includeInSrocBilling: true, regionId })
@@ -136,7 +136,7 @@ describe('Supplementary Process billing period service', () => {
           }]
 
           Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
-          Sinon.stub(ChargingModuleGenerateService, 'go').resolves({
+          Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send').resolves({
             succeeded: true,
             response: {}
           })

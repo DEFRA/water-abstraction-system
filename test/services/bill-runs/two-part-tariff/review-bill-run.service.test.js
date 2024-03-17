@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const DetermineBillRunIssuesService = require('../../../../app/services/bill-runs/two-part-tariff/determine-bill-run-issues.service.js')
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-bill-run-licences.service.js')
 const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-bill-run.presenter.js')
 
@@ -25,8 +24,7 @@ describe('Review Bill Run Service', () => {
     const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
     beforeEach(() => {
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({ billRun: 'bill data', billRunLicences: 'licence data' })
-      Sinon.stub(DetermineBillRunIssuesService, 'go').resolves()
+      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({ billRun: 'bill data', licences: 'licence data' })
       Sinon.stub(ReviewBillRunPresenter, 'go').returns('page data')
     })
 
@@ -36,7 +34,6 @@ describe('Review Bill Run Service', () => {
       expect(result).to.equal('page data')
 
       expect(FetchBillRunLicencesService.go.called).to.be.true()
-      expect(DetermineBillRunIssuesService.go.called).to.be.true()
       expect(ReviewBillRunPresenter.go.called).to.be.true()
     })
   })

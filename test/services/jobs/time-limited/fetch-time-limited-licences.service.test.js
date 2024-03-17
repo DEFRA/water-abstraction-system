@@ -11,7 +11,7 @@ const { expect } = Code
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -24,7 +24,7 @@ describe('Fetch Time Limited Licences service', () => {
   let regionId
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     const region = await RegionHelper.add()
     regionId = region.id

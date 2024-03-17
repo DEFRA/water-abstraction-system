@@ -7,9 +7,9 @@
 
 const { generateUUID } = require('../../../lib/general.lib.js')
 
-const ChargingModuleBillRunStatusService = require('../../charging-module/bill-run-status.service.js')
-const ChargingModuleReissueBillService = require('../../charging-module/reissue-bill.service.js')
-const ChargingModuleViewBillService = require('../../charging-module/view-bill.service.js')
+const ChargingModuleReissueBillRequest = require('../../../requests/charging-module/reissue-bill.request.js')
+const ChargingModuleViewBillRequest = require('../../../requests/charging-module/view-bill.request.js')
+const ChargingModuleViewBillRunStatusRequest = require('../../../requests/charging-module/view-bill-run-status.request.js')
 const ExpandedError = require('../../../errors/expanded.error.js')
 const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
 const GenerateBillService = require('./generate-bill.service.js')
@@ -132,7 +132,7 @@ async function _pauseUntilNotPending (billRunExternalId) {
       await new Promise((resolve) => setTimeout(resolve, 1000))
     }
 
-    const result = await ChargingModuleBillRunStatusService.go(billRunExternalId)
+    const result = await ChargingModuleViewBillRunStatusRequest.send(billRunExternalId)
 
     if (!result.succeeded) {
       const error = new ExpandedError(
@@ -290,7 +290,7 @@ function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, so
 }
 
 async function _sendReissueRequest (billRunExternalId, billExternalId) {
-  const result = await ChargingModuleReissueBillService.go(billRunExternalId, billExternalId)
+  const result = await ChargingModuleReissueBillRequest.send(billRunExternalId, billExternalId)
 
   if (!result.succeeded) {
     const error = new ExpandedError(
@@ -312,7 +312,7 @@ async function _sendReissueRequest (billRunExternalId, billExternalId) {
 }
 
 async function _sendViewBillRequest (billRun, reissueBillId) {
-  const result = await ChargingModuleViewBillService.go(billRun.externalId, reissueBillId)
+  const result = await ChargingModuleViewBillRequest.send(billRun.externalId, reissueBillId)
 
   if (!result.succeeded) {
     const error = new ExpandedError(

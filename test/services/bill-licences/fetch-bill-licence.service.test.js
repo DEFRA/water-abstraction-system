@@ -18,7 +18,7 @@ const ChargeElementHelper = require('../../support/helpers/charge-element.helper
 const ChargeElementModel = require('../../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../../app/models/purpose.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
@@ -35,7 +35,7 @@ describe('Fetch Bill Licence service', () => {
   let testBillLicence
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     linkedBillRun = await BillRunHelper.add()
     linkedBill = await BillHelper.add({ billRunId: linkedBillRun.id })

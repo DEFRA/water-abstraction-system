@@ -4,7 +4,7 @@
  * @module RegionHelper
  */
 
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 const RegionModel = require('../../../app/models/region.model.js')
 
 /**

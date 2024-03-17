@@ -23,6 +23,14 @@ class LicenceVersionPurposes extends BaseModel {
           from: 'licenceVersionPurposes.licenceVersionId',
           to: 'licenceVersions.id'
         }
+      },
+      purpose: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'purpose.model.js',
+        join: {
+          from: 'licenceVersionPurposes.purposeId',
+          to: 'purposes.id'
+        }
       }
     }
   }

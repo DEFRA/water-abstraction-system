@@ -21,30 +21,36 @@ const BillRunChargeVersionYearHelper = require('../../support/helpers/bill-run-c
 const BillRunChargeVersionYearModel = require('../../../app/models/bill-run-charge-version-year.model.js')
 const BillRunVolumeHelper = require('../../support/helpers/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../../app/models/bill-run-volume.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
-const ReviewChargeElementResultHelper = require('../../support/helpers/review-charge-element-result.helper.js')
-const ReviewChargeElementResultModel = require('../../../app/models/review-charge-element-result.model.js')
-const ReviewResultHelper = require('../../support/helpers/review-result.helper.js')
-const ReviewResultModel = require('../../../app/models/review-result.model.js')
-const ReviewReturnResultHelper = require('../../support/helpers/review-return-result.helper.js')
-const ReviewReturnResultModel = require('../../../app/models/review-return-result.model.js')
+const DatabaseSupport = require('../../support/database.js')
+const ReviewChargeElementHelper = require('../../support/helpers/review-charge-element.helper.js')
+const ReviewChargeElementModel = require('../../../app/models/review-charge-element.model.js')
+const ReviewChargeElementReturnHelper = require('../../support/helpers/review-charge-element-return.helper.js')
+const ReviewChargeElementReturnModel = require('../../../app/models/review-charge-element-return.model.js')
+const ReviewChargeReferenceHelper = require('../../support/helpers/review-charge-reference.helper.js')
+const ReviewChargeReferenceModel = require('../../../app/models/review-charge-reference.model.js')
+const ReviewChargeVersionHelper = require('../../support/helpers/review-charge-version.helper.js')
+const ReviewChargeVersionModel = require('../../../app/models/review-charge-version.model.js')
+const ReviewLicenceHelper = require('../../support/helpers/review-licence.helper.js')
+const ReviewLicenceModel = require('../../../app/models/review-licence.model.js')
+const ReviewReturnHelper = require('../../support/helpers/review-return.helper.js')
+const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 const TransactionHelper = require('../../support/helpers/transaction.helper.js')
 const TransactionModel = require('../../../app/models/transaction.model.js')
 
 // Things we need to stub
-const ChargingModuleDeleteBillRunService = require('../../../app/services/charging-module/delete-bill-run.service.js')
+const ChargingModuleDeleteBillRunRequest = require('../../../app/requests/charging-module/delete-bill-run.request.js')
 
 // Thing under test
 const SubmitCancelBillBunService = require('../../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 
 describe('Submit Cancel Bill Run service', () => {
-  let chargingModuleDeleteBillRunServiceStub
+  let chargingModuleDeleteBillRunRequestStub
   let notifierStub
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
-    chargingModuleDeleteBillRunServiceStub = Sinon.stub(ChargingModuleDeleteBillRunService, 'go')
+    chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'send')
   })
 
   afterEach(() => {
@@ -61,16 +67,19 @@ describe('Submit Cancel Bill Run service', () => {
         const { id: billRunId } = billRun
 
         // Add records to all the tables the service deletes from
-        const { id: reviewChargeElementResultId } = await ReviewChargeElementResultHelper.add()
-        const { id: reviewReturnResultId } = await ReviewReturnResultHelper.add()
-        await ReviewResultHelper.add({ billRunId, reviewChargeElementResultId, reviewReturnResultId })
+        const { id: reviewLicenceId } = await ReviewLicenceHelper.add({ billRunId })
+        const { id: reviewReturnId } = await ReviewReturnHelper.add({ reviewLicenceId })
+        const { id: reviewChargeVersionId } = await ReviewChargeVersionHelper.add({ reviewLicenceId })
+        const { id: reviewChargeReferenceId } = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId })
+        const { id: reviewChargeElementId } = await ReviewChargeElementHelper.add({ reviewChargeReferenceId })
+        await ReviewChargeElementReturnHelper.add({ reviewChargeElementId, reviewReturnId })
         await BillRunChargeVersionYearHelper.add({ billRunId })
         await BillRunVolumeHelper.add({ billRunId })
         const { id: billId } = await BillHelper.add({ billRunId })
         const { id: billLicenceId } = await BillLicenceHelper.add({ billId })
         await TransactionHelper.add({ billLicenceId })
 
-        chargingModuleDeleteBillRunServiceStub.resolves()
+        chargingModuleDeleteBillRunRequestStub.resolves()
 
         // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
         // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -87,7 +96,7 @@ describe('Submit Cancel Bill Run service', () => {
         // so is to give the background process time to complete.
         await setTimeout(500)
 
-        expect(chargingModuleDeleteBillRunServiceStub.called).to.be.true()
+        expect(chargingModuleDeleteBillRunRequestStub.called).to.be.true()
       })
 
       it('deletes any two-part tariff review data', async () => {
@@ -95,13 +104,19 @@ describe('Submit Cancel Bill Run service', () => {
 
         await setTimeout(500)
 
-        const reviewChargeElementResultCount = await ReviewChargeElementResultModel.query().select('id').resultSize()
-        const reviewResultCount = await ReviewResultModel.query().select('id').resultSize()
-        const reviewReturnResultCount = await ReviewReturnResultModel.query().select('id').resultSize()
+        const reviewChargeElementCount = await ReviewChargeElementModel.query().select('id').resultSize()
+        const reviewChargeElementReturnCount = await ReviewChargeElementReturnModel.query().select('id').resultSize()
+        const reviewChargeReferenceCount = await ReviewChargeReferenceModel.query().select('id').resultSize()
+        const reviewChargeVersionCount = await ReviewChargeVersionModel.query().select('id').resultSize()
+        const reviewLicenceCount = await ReviewLicenceModel.query().select('id').resultSize()
+        const reviewReturnCount = await ReviewReturnModel.query().select('id').resultSize()
 
-        expect(reviewChargeElementResultCount).to.equal(0)
-        expect(reviewResultCount).to.equal(0)
-        expect(reviewReturnResultCount).to.equal(0)
+        expect(reviewChargeElementCount).to.equal(0)
+        expect(reviewChargeElementReturnCount).to.equal(0)
+        expect(reviewChargeReferenceCount).to.equal(0)
+        expect(reviewChargeVersionCount).to.equal(0)
+        expect(reviewLicenceCount).to.equal(0)
+        expect(reviewReturnCount).to.equal(0)
       })
 
       it('deletes any billing data data', async () => {
@@ -137,7 +152,7 @@ describe('Submit Cancel Bill Run service', () => {
 
         expect(refreshedBillRun).to.exist()
         expect(refreshedBillRun.status).to.equal('sent')
-        expect(chargingModuleDeleteBillRunServiceStub.called).to.be.false()
+        expect(chargingModuleDeleteBillRunRequestStub.called).to.be.false()
       })
     })
   })

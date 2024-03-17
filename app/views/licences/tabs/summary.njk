@@ -106,7 +106,7 @@
                 <ul class="govuk-list govuk-!-margin-bottom-0">
                     {% for monitoringStation in monitoringStations %}
                         <li>
-                            <a href="/monitoring-stations/{{ monitoringStation.gaugingStationId }}">{{ monitoringStation.label }}</a>
+                            <a href="/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -116,6 +116,24 @@
                 </span>
                 <a href="/licences">Search for a monitoring station and tag this licence</a>
             {% endif %}
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{{ abstractionConditions.caption }}</dt>
+        <dd class="govuk-summary-list__value">
+            {% if abstractionConditions.conditions.length > 5 %}
+                There are {{ abstractionConditions.conditions.length }} abstraction conditions
+            {% elseif abstractionConditions.conditions.length > 1 %}
+                <ul class="govuk-list govuk-!-margin-bottom-0">
+                    {% for condition in abstractionConditions.conditions %}
+                        <li>{{ condition }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ abstractionConditions.conditions[0] }}
+            {% endif %}
+            <a href="/licences/{{ documentId }}/conditions">{{ abstractionConditions.linkText }}</a>
         </dd>
     </div>
 </dl>

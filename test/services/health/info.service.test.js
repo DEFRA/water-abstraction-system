@@ -13,11 +13,11 @@ const { expect } = Code
 const servicesConfig = require('../../../config/services.config.js')
 
 // Things we need to stub
-const ChargingModuleRequestLib = require('../../../app/lib/charging-module-request.lib.js')
+const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
 const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
 const FetchImportJobsService = require('../../../app/services/health/fetch-import-jobs.service.js')
-const LegacyRequestLib = require('../../../app/lib/legacy-request.lib.js')
-const RequestLib = require('../../../app/lib/request.lib.js')
+const LegacyRequest = require('../../../app/requests/legacy.request.js')
+const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
@@ -57,32 +57,32 @@ describe('Info service', () => {
     }
   ]
 
-  let chargingModuleRequestLibStub
+  let chargingModuleRequestStub
   let fetchImportJobsStub
-  let legacyRequestLibStub
-  let requestLibStub
+  let legacyRequestStub
+  let baseRequestStub
   let redisStub
 
   beforeEach(() => {
-    chargingModuleRequestLibStub = Sinon.stub(ChargingModuleRequestLib, 'get')
+    chargingModuleRequestStub = Sinon.stub(ChargingModuleRequest, 'get')
     fetchImportJobsStub = Sinon.stub(FetchImportJobsService, 'go')
-    legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'get')
-    requestLibStub = Sinon.stub(RequestLib, 'get')
+    legacyRequestStub = Sinon.stub(LegacyRequest, 'get')
+    baseRequestStub = Sinon.stub(BaseRequest, 'get')
     redisStub = Sinon.stub(CreateRedisClientService, 'go')
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    legacyRequestLibStub.withArgs('background', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('reporting', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('import', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('crm', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('external', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('internal', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('idm', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('permits', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestLibStub.withArgs('returns', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('background', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('reporting', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('import', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('crm', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('external', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('internal', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('idm', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('permits', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('returns', 'health/info', false).resolves(goodRequestResults.app)
 
-    chargingModuleRequestLibStub
+    chargingModuleRequestStub
       .withArgs('status')
       .resolves(goodRequestResults.chargingModule)
   })
@@ -97,10 +97,10 @@ describe('Info service', () => {
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
-      requestLibStub
+      baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the module under test.
@@ -159,10 +159,10 @@ describe('Info service', () => {
       fetchImportJobsStub.resolves(goodFetchImportJobsResults)
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      requestLibStub
+      baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
 
       const execStub = Sinon
         .stub()
@@ -205,10 +205,10 @@ describe('Info service', () => {
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      requestLibStub
+      baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -274,10 +274,10 @@ describe('Info service', () => {
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
-      requestLibStub
+      baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
 
       const execStub = Sinon
         .stub()
@@ -353,10 +353,10 @@ describe('Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
-        requestLibStub
+        baseRequestStub
           .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
           .resolves(badResult)
-        legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(badResult)
+        legacyRequestStub.withArgs('water', 'health/info', false).resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -380,10 +380,10 @@ describe('Info service', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
 
-        requestLibStub
+        baseRequestStub
           .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
           .resolves(badResult)
-        legacyRequestLibStub.withArgs('water', 'health/info', false).resolves(badResult)
+        legacyRequestStub.withArgs('water', 'health/info', false).resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {

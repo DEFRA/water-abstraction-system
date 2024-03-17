@@ -15,6 +15,32 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/bill-licences/{id}/remove',
+    options: {
+      handler: BillLicencesController.remove,
+      description: 'Confirm licence should be removed from bill run page',
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-licences/{id}/remove',
+    options: {
+      handler: BillLicencesController.submitRemove,
+      description: 'Submit confirm licence should be removed from bill run',
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
+    }
   }
 ]
 

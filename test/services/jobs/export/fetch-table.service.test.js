@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 
 // Thing under test
 const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
@@ -32,7 +32,7 @@ const billingChargeCategoriesColumnInfo = [
 
 describe('Fetch table service', () => {
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     await ChargeCategoryHelper.add()
   })

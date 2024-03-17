@@ -17,7 +17,7 @@ const BillingAccountHelper = require('../../support/helpers/billing-account.help
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const CompanyModel = require('../../../app/models/company.model.js')
 const ContactModel = require('../../../app/models/contact.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 
 // Things we need to stub
 const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
@@ -56,7 +56,7 @@ describe('Change address service', () => {
   let contact
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     billingAccount = await BillingAccountHelper.add({ id: billingAccountId })
   })

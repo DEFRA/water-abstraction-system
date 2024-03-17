@@ -4,7 +4,7 @@
  * @module UserHelper
  */
 
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 const UserModel = require('../../../app/models/user.model.js')
 
 /**

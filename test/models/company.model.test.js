@@ -13,7 +13,7 @@ const BillingAccountAddressModel = require('../../app/models/billing-account-add
 const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 
@@ -24,7 +24,7 @@ describe('Company model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('Basic query', () => {

@@ -6,12 +6,14 @@
  */
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
+const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
 const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
+const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
@@ -136,12 +138,10 @@ async function points (request, h) {
 async function purpose (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await SelectPurposeService.go(sessionId)
 
   return h.view('return-requirements/purpose.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the purpose for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -263,6 +263,12 @@ async function submitPoints (request, h) {
 
 async function submitPurpose (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitPurposeService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/purpose.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/points`)
 }

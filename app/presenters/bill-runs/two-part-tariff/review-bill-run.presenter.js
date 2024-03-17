@@ -10,30 +10,37 @@ const { formatLongDate } = require('../../base.presenter.js')
 /**
  * Prepares and processes bill run and licence data for presentation
  *
- * @param {module:BillRunModel} billRun the data from the bill run
- * @param {module:LicenceModel} licences the licences data asociated with the bill run
+ * @param {module:BillRunModel} billRun The data from the bill run
+ * @param {module:LicenceModel} licences The licences data asociated with the bill run
+ * @param {String} filterLicenceHolder The string that the licence holder is to be filtered on if any
  *
- * @returns {Object} the prepared bill run and licence data to be passed to the review page
+ * @returns {Object} The prepared bill run and licence data to be passed to the review page
  */
-function go (billRun, licences) {
-  const { licencesToReviewCount, preparedLicences } = _prepareLicences(licences)
+function go (billRun, licences, filterLicenceHolder) {
+  const { numberOfLicencesToReview, preparedLicences } = _prepareLicences(licences)
 
-  const preparedBillRun = _prepareBillRun(billRun, preparedLicences, licencesToReviewCount)
+  const preparedBillRun = _prepareBillRun(billRun, preparedLicences, numberOfLicencesToReview)
+  const filterData = { openFilter: false }
 
-  return { ...preparedBillRun, preparedLicences }
+  if (filterLicenceHolder) {
+    filterData.openFilter = true
+    filterData.licenceHolder = filterLicenceHolder
+  }
+
+  return { ...preparedBillRun, preparedLicences, filterData }
 }
 
 function _prepareLicences (licences) {
-  let licencesToReviewCount = 0
+  let numberOfLicencesToReview = 0
   const preparedLicences = []
 
   for (const licence of licences) {
     if (licence.status === 'review') {
-      licencesToReviewCount++
+      numberOfLicencesToReview++
     }
 
     preparedLicences.push({
-      id: licence.id,
+      id: licence.licenceId,
       licenceRef: licence.licenceRef,
       licenceHolder: licence.licenceHolder,
       status: licence.status,
@@ -41,18 +48,19 @@ function _prepareLicences (licences) {
     })
   }
 
-  return { preparedLicences, licencesToReviewCount }
+  return { preparedLicences, numberOfLicencesToReview }
 }
 
-function _prepareBillRun (billRun, billRunLicences, licencesToReviewCount) {
+function _prepareBillRun (billRun, preparedLicences, numberOfLicencesToReview) {
   return {
     region: billRun.region.displayName,
     status: billRun.status,
     dateCreated: formatLongDate(billRun.createdAt),
     financialYear: _financialYear(billRun.toFinancialYearEnding),
     billRunType: 'two-part tariff',
-    numberOfLicences: billRunLicences.length,
-    licencesToReviewCount
+    numberOfLicencesDisplayed: preparedLicences.length,
+    numberOfLicencesToReview,
+    totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
 }
 
@@ -64,13 +72,12 @@ function _financialYear (financialYearEnding) {
 }
 
 function _getIssueOnLicence (issues) {
-  if (issues.length > 1) {
+  // if there is more than one issue the issues will be seperated by a comma
+  if (issues.includes(',')) {
     return 'Multiple Issues'
-  } else if (issues.length === 1) {
-    return issues[0]
-  } else {
-    return ''
   }
+
+  return issues
 }
 
 module.exports = {

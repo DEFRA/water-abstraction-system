@@ -1,0 +1,98 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { expect } = Code
+
+// Test helpers
+const DatabaseSupport = require('../support/database.js')
+const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
+const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
+const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
+const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
+const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
+
+// Thing under test
+const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
+
+describe('Review Charge Version model', () => {
+  let testRecord
+
+  beforeEach(async () => {
+    await DatabaseSupport.clean()
+
+    testRecord = await ReviewChargeVersionHelper.add()
+  })
+
+  describe('Basic query', () => {
+    it('can successfully run a basic query', async () => {
+      const result = await ReviewChargeVersionModel.query().findById(testRecord.id)
+
+      expect(result).to.be.an.instanceOf(ReviewChargeVersionModel)
+      expect(result.id).to.equal(testRecord.id)
+    })
+  })
+
+  describe('Relationships', () => {
+    describe('when linking to review charge reference', () => {
+      let testChargeReference
+
+      beforeEach(async () => {
+        testRecord = await ReviewChargeVersionHelper.add()
+        testChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: testRecord.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeVersionModel.query()
+          .innerJoinRelated('reviewChargeReferences')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge reference', async () => {
+        const result = await ReviewChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeReferences')
+
+        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeReferences).to.be.an.array()
+        expect(result.reviewChargeReferences).to.have.length(1)
+        expect(result.reviewChargeReferences[0]).to.be.an.instanceOf(ReviewChargeReferenceModel)
+        expect(result.reviewChargeReferences[0]).to.equal(testChargeReference)
+      })
+    })
+
+    describe('when linking to review licence', () => {
+      let testReviewLicence
+
+      beforeEach(async () => {
+        testReviewLicence = await ReviewLicenceHelper.add()
+        testRecord = await ReviewChargeVersionHelper.add({ reviewLicenceId: testReviewLicence.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeVersionModel.query()
+          .innerJoinRelated('reviewLicence')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review licence', async () => {
+        const result = await ReviewChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewLicence')
+
+        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewLicence).to.be.an.instanceOf(ReviewLicenceModel)
+        expect(result.reviewLicence).to.equal(testReviewLicence)
+      })
+    })
+  })
+})

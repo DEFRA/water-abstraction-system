@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const { db } = require('../../../../db/db.js')
 const fs = require('fs')
 const path = require('path')
@@ -72,7 +72,7 @@ describe('Write table to file service', () => {
 
   describe('when successful', () => {
     beforeEach(async () => {
-      await DatabaseHelper.clean()
+      await DatabaseSupport.clean()
 
       await ChargeCategoryHelper.add({ id: chargeCategoryId, createdAt: date, reference: '4.4.5' })
 
