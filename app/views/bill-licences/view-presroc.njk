@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
@@ -25,6 +26,13 @@
     <div class="govuk-grid-column-full">
       <section>
         <div class="govuk-button-group">
+          {% if removeLicenceLink %}
+            {{ govukButton({
+                classes: 'govuk-button--secondary govuk-!-margin-right-3',
+                text: 'Remove licence',
+                href: removeLicenceLink
+            }) }}
+          {% endif %}
           <a class="govuk-link" href="/licences/{{ licenceId }}">View licence summary</a>
         </div>
       </section>
