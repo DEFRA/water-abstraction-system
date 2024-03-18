@@ -45,7 +45,7 @@ async function _fetchBillRun (billRunId) {
 }
 
 async function _fetchReviewLicence (licenceId, billRunId) {
-  return await ReviewLicenceModel.query()
+  return ReviewLicenceModel.query()
     .where('licenceId', licenceId)
     .where('billRunId', billRunId)
     .withGraphFetched('reviewReturns.reviewChargeElements')

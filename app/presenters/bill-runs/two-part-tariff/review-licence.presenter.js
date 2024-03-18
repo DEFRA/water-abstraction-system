@@ -56,7 +56,9 @@ function _addressLines (billingAccount) {
     address.country
   ]
 
-  return addressParts.filter((part) => part)
+  return addressParts.filter((part) => {
+    return part
+  })
 }
 
 function _billingAccountDetails (billingAccount) {
