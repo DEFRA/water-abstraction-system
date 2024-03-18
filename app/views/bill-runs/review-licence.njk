@@ -3,7 +3,6 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
 {% from "macros/badge.njk" import badge %}
 
 {% block breadcrumbs %}
@@ -17,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
+  {#  --------------- Main heading  --------------- #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-l">{{region}} two-part tariff bill run</span>
@@ -56,10 +55,10 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
-      {% for chargePeriodDate in chargePeriodDates %}
+      {% for chargeVersion in chargeData %}
         <ul class="govuk-list">
           <li>
-            <a class="govuk-link" href="#">{{chargePeriodDate}}</a>
+            <a class="govuk-link" href="#">{{chargeVersion.chargePeriodDate}}</a>
           </li>
         </ul>
       {% endfor %}
@@ -68,186 +67,187 @@
 
   <div class="divider govuk-!-margin-bottom-6"></div>
 
-  {# ------------- Matched Returns --------------- #}
+  {# ------------- Returns --------------- #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Returns</h2>
     </div>
   </div>
 
+  {# ------------- Matched Returns --------------- #}
   {% if matchedReturns.length > 0 %}
-      {% set tableRows = [] %}
-        {% for return in matchedReturns %}
-          {# Set an easier to use index #}
-          {% set rowIndex = loop.index0 %}
+    {% set tableRows = [] %}
+    {% for return in matchedReturns %}
+      {% set rowIndex = loop.index0 %}
 
-          {% if return.status == 'overdue' or return.status == 'query' %}
-            {% set colour = "govuk-tag--red"%}
-          {% elif return.status == 'void' %}
-            {% set colour = "govuk-tag--grey" %}
-          {% else %}
-            {% set colour = "govuk-tag--green" %}
-          {% endif %}
+      {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
+        {% set colour = "govuk-tag--red"%}
+      {% elif return.status == 'void' %}
+        {% set colour = "govuk-tag--grey" %}
+      {% else %}
+        {% set colour = "govuk-tag--green" %}
+      {% endif %}
 
-          {% set statusTag %}
-            {{govukTag({
-              text: return.status,
-              classes: colour + ' govuk-!-font-size-14'
-            })}}
-          {% endset %}
+      {% set statusTag %}
+        {{govukTag({
+          text: return.returnStatus,
+          classes: colour + ' govuk-!-font-size-14'
+        })}}
+      {% endset %}
 
-        {% set action %}
+      {% set action %}
         <a class="govuk-link" href="/licences/{{ licence.licenceId }}#returns">{{ return.reference }}<span class="govuk-visually-hidden"></a>
-        {% endset %}
+      {% endset %}
 
-        {% set tableRow = [
-          {
-            html: action | safe + '<br>' + return.dates,
-            classes: 'govuk-body-s',
-            attributes: { 'data-test': 'matched-return-' + rowIndex }
+      {% set tableRow = [
+        {
+          html: action | safe + '<br>' + return.dates,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-' + rowIndex }
+        },
+        {
+          html: return.purpose + '<br>' + return.description,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-' + rowIndex }
           },
-          {
-            html: return.purpose + '<br>' + return.description,
-            classes: 'govuk-body-s',
-            attributes: { 'data-test': 'matched-return-' + rowIndex }
-            },
-          {
-            html: statusTag,
-            classes: 'govuk-body-s',
-            attributes: { 'data-test': 'matched-return-' + rowIndex }
-          },
-          {
-            html: return.total + '<br>' + return.issues | join('<br>'),
-            classes: "govuk-body-s govuk-!-text-align-right",
-            attributes: { 'data-test': 'matched-return-' + rowIndex }
-          }]
-        %}
+        {
+          html: statusTag,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-' + rowIndex }
+        },
+        {
+          html: return.returnTotal + '<br>' + return.issues | join('<br>'),
+          classes: "govuk-body-s govuk-!-text-align-right",
+          attributes: { 'data-test': 'matched-return-' + rowIndex }
+        }]
+      %}
 
-        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
-        {% endfor %}
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
 
-      {# Table displaying details of the matched returns #}
-      {{ govukTable({
-        caption: "Matched returns",
-        captionClasses: "govuk-table__caption--m",
-        firstCellIsHeader: false,
-        head: [
-          {
-            text: 'Return reference and dates'
-          },
-          {
-            text: 'Purpose and description'
-          },
-          {
-            text: 'Status'
-          },
-          {
-            text: 'Return totals Allocated/Total',
-            format: 'numeric',
-            classes: 'width-one-tenth'
-          }
-        ],
+    {# Table displaying details of the matched returns #}
+    {{ govukTable({
+      caption: "Matched returns",
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: 'Return reference and dates'
+        },
+        {
+          text: 'Purpose and description'
+        },
+        {
+          text: 'Status'
+        },
+        {
+          text: 'Return totals Allocated/Total',
+          format: 'numeric',
+          classes: 'width-one-tenth'
+        }
+      ],
         rows: tableRows
       }) }}
   {% endif %}
 
   {# ------------- Unmatched Returns --------------- #}
   {% if unmatchedReturns.length > 0 %}
-      {% set tableRows = [] %}
-        {% for return in unmatchedReturns %}
-          {# Set an easier to use index #}
-          {% set rowIndex = loop.index0 %}
+    {% set tableRows = [] %}
+    {% for return in unmatchedReturns %}
+      {% set rowIndex = loop.index0 %}
 
-          {% if return.status == 'overdue' or return.status == 'query' %}
-            {% set colour = "govuk-tag--red"%}
-          {% elif return.status == 'void' %}
-            {% set colour = "govuk-tag--grey" %}
-          {% else %}
-            {% set colour = "govuk-tag--green" %}
-          {% endif %}
+      {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
+        {% set colour = "govuk-tag--red"%}
+      {% elif return.status == 'void' %}
+        {% set colour = "govuk-tag--grey" %}
+      {% else %}
+        {% set colour = "govuk-tag--green" %}
+      {% endif %}
 
-          {% set statusTag %}
-            {{govukTag({
-              text: return.status,
-              classes: colour + ' govuk-!-font-size-14'
-            })}}
-          {% endset %}
+      {% set statusTag %}
+        {{govukTag({
+          text: return.returnStatus,
+          classes: colour + ' govuk-!-font-size-14'
+        })}}
+      {% endset %}
 
-        {% set action %}
+      {% set action %}
         <a class="govuk-link" href="/licences/{{ licence.licenceId }}#returns">{{ return.reference }}<span class="govuk-visually-hidden"></a>
-        {% endset %}
+      {% endset %}
 
-        {% set tableRow = [
-          {
-            html: action | safe + '<br>' + return.dates,
-            classes: 'govuk-body-s',
-            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
-          },
-          {
-            html: return.purpose + '<br>' + return.description,
-            classes: 'govuk-body-s',
-            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
-          },
-          {
-            html: statusTag,
-            classes: 'govuk-body-s',
-            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
-          },
-          {
-            html: return.total + '<br>' + return.issues | join('<br>'),
-            classes: "govuk-body-s govuk-!-text-align-right",
-            attributes: { 'data-test': 'unmatched-return-' + rowIndex }
-          }
-          ]
-        %}
+      {% set tableRow = [
+        {
+          html: action | safe + '<br>' + return.dates,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+        },
+        {
+          html: return.purpose + '<br>' + return.description,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+        },
+        {
+          html: statusTag,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+        },
+        {
+          html: return.total + '<br>' + return.issues | join('<br>'),
+          classes: "govuk-body-s govuk-!-text-align-right",
+          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+        }
+        ]
+      %}
 
-        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
-        {% endfor %}
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
 
-      {# Table displaying details of the matched returns #}
-      {{ govukTable({
-        caption: "Unmatched returns",
-        captionClasses: "govuk-table__caption--m",
-        firstCellIsHeader: false,
-        head: [
-          {
-            text: 'Return reference and dates'
-          },
-          {
-            text: 'Purpose and description'
-          },
-          {
-            text: 'Status'
-          },
-          {
-            text: 'Return totals',
-            format: 'numeric'
-          }
-        ],
-        rows: tableRows
-      }) }}
+    {# Table displaying details of the unmatched returns #}
+    {{ govukTable({
+      caption: "Unmatched returns",
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: 'Return reference and dates'
+        },
+        {
+          text: 'Purpose and description'
+        },
+        {
+          text: 'Status'
+        },
+        {
+          text: 'Return totals',
+          format: 'numeric'
+        }
+      ],
+      rows: tableRows
+    }) }}
   {% endif %}
 
+  {# ------------- No Returns --------------- #}
   {% if matchedReturns == 0 and unmatchedReturns == 0 %}
       <h2 class="govuk-heading-m">No two-part tariff returns</h2>
   {% endif %}
 
   <div class="divider govuk-!-margin-bottom-6"></div>
 
-  {# Chris Code Attempt #}
-  {# Loop through Charge Reference #}
-
+  {# Loop through Charge Versions #}
   <div class="govuk-grid-row ">
     <div class="govuk-grid-column-full">
       {% for chargeVersion in chargeData %}
-        <div class ="govuk-caption-l">{{chargeVersion.financialYear}}</div>
-        <h2 class="govuk-heading-l">{{chargeVersion.chargePeriodDate}}</h2>
-
+        <div class ="govuk-caption-l">Financial year {{chargeVersion.financialYear}}</div>
+        <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriodDate}}</h2>
         <div class="govuk-caption-m">{{chargeVersion.licenceHolderName}}</div>
-        <div class="govuk-heading-m govuk-!-margin-bottom-1">{{chargeVersion.chargeVersionSummary}}</div>
+
+        {% set chargeReferenceText = "charge references " if chargeVersion.chargeReferences.length > 1 else "charge reference " %}
+        {% set chargeElementText = "charge elements " if chargeVersion.chargeElementCount > 1 else "charge element "%}
+
+        <div class="govuk-heading-m govuk-!-margin-bottom-1">{{chargeVersion.chargeReferences.length}} {{chargeReferenceText}} with {{chargeVersion.chargeElementCount}} two-part tariff {{chargeElementText}}</div>
 
         {# Billing account details #}
-      {% set billingAccountLink = '/billing-accounts/' + chargeVersion.billingAccountDetails.billingAccountId %}
+        {% set billingAccountLink = '/billing-accounts/' + chargeVersion.billingAccountDetails.billingAccountId %}
         <details class="govuk-details govuk-!-margin-bottom-6" data-module="govuk-details">
           <summary class="govuk-details__summary">
             <span class="govuk-details__summary-text">
@@ -258,10 +258,12 @@
             <p class="govuk-body ">
               <span class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></span><br>
               <span data-test="account-name">{{ chargeVersion.billingAccountDetails.accountName }}</span><br>
+
               {# billing account contact name #}
               {% if chargeVersion.billingAccountDetails.contactName %}
                 <span data-test="contact-name">FAO {{chargeVersion.billingAccountDetails.contactName}}</span><br>
               {% endif %}
+
               {# billing account address #}
               <span data-test="address">
                 {{ chargeVersion.billingAccountDetails.addressLines.join("<br>") | safe }}
@@ -270,6 +272,7 @@
           </div>
         </details>
 
+        {# Loop through Charge References #}
         {% for chargeReference in chargeVersion.chargeReferences %}
           <div class="govuk-grid-row govuk-!-margin-bottom-3">
             <div class="govuk-grid-column-full">
@@ -295,12 +298,12 @@
 
                   <div class="govuk-!-margin-top-0">
                     {{ govukSummaryList({
-                      classes: "govuk-!-margin-bottom-9",
+                      classes: "govuk-!-margin-bottom-9 govuk-section-break govuk-section-break--visible",
                       rows: rows
                     }) }}
                   </div>
 
-                  {# Loop through the charge elements #}
+                  {# Loop through charge elements #}
                   {% for chargeElement in chargeReference.chargeElements %}
                     {% set elementRows = [] %}
 
@@ -323,11 +326,11 @@
                     <div class="tag-wrapper">
                       <span class="govuk-body govuk-!-font-weight-regular">{{chargeElement.elementNumber}}</span>
                       <span class="float-right govuk-!-margin-left-9 govuk-!-margin-top-3 tag-element">{{statusTag|safe}} </span>
-                        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}<br> {{chargeElement.dates |safe}} </h3>
+                      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}<br> {{chargeElement.dates |safe}} </h3>
                     </div>
                     {% endset %}
 
-                    {#set the element rows in the summary list #}
+                    {# set the element rows in the summary list #}
                     {% set elementRow = [{
                         key: {
                           text: 'Issues'
@@ -380,5 +383,4 @@
       {% endfor%}
     </div>
   </div>
-
 {% endblock%}
