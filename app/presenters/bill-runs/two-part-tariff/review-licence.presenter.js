@@ -12,6 +12,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  * Prepares and processes bill run and review licence data for presentation
  *
  * @param {module:BillRunModel} billRun the data from the bill run
+ * @param {module:ReviewLicenceModel} licence the data from review licence
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
@@ -25,76 +26,47 @@ function go (billRun, licence) {
       status: licence[0].status,
       licenceHolder: licence[0].licenceHolder
     },
-    chargePeriodDates: _prepareLicenceChargePeriods(licence),
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
     chargeData: _prepareChargeData(licence, billRun)
   }
 }
 
-function _chargeVersionSummary (reviewChargeVersion) {
-  const { reviewChargeReferences } = reviewChargeVersion
+function _accountName (billingAccount) {
+  const accountAddress = billingAccount.billingAccountAddresses[0]
 
-  const chargeReferenceCount = reviewChargeReferences.length
-  const chargeElementCount = reviewChargeReferences.reduce((total, reviewChargeReference) => total + reviewChargeReference.reviewChargeElements.length, 0)
-
-  const chargeReferenceSentence = `${chargeReferenceCount} charge reference${chargeReferenceCount !== 1 ? 's' : ''} with`
-  const chargeElementSentence = `${chargeElementCount} two-part tariff element${chargeElementCount !== 1 ? 's' : ''}`
-
-  return `${chargeReferenceSentence} ${chargeElementSentence}`
-}
-
-function _prepareChargeData (licence, billRun) {
-  const preparedChargeData = []
-
-  const { reviewChargeVersions } = licence[0]
-  for (const reviewChargeVersion of reviewChargeVersions) {
-    const chargePeriod = {
-      startDate: reviewChargeVersion.chargePeriodStartDate,
-      endDate: reviewChargeVersion.chargePeriodEndDate
-    }
-
-    preparedChargeData.push({
-      financialYear: `Financial year ${_financialYear(billRun.toFinancialYearEnding)}`,
-      chargePeriodDate: `Charge period ${_prepareDate(reviewChargeVersion.chargePeriodStartDate, reviewChargeVersion.chargePeriodEndDate)}`,
-      licenceHolderName: licence[0].licenceHolder,
-      chargeVersionSummary: _chargeVersionSummary(reviewChargeVersion),
-      billingAccountDetails: _billingAccountDetails(reviewChargeVersion.billingAccountDetails),
-      chargeReferences: _chargeReferenceDetails(reviewChargeVersion, chargePeriod)
-    })
+  if (accountAddress.company) {
+    return accountAddress.company.name
   }
 
-  return preparedChargeData
+  return billingAccount.company.name
 }
 
-function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
-  const chargeReference = []
+function _addressLines (billingAccount) {
+  const { address } = billingAccount.billingAccountAddresses[0]
 
-  const { reviewChargeReferences } = reviewChargeVersion
+  const addressParts = [
+    address.address1,
+    address.address2,
+    address.address3,
+    address.address4,
+    address.address5,
+    address.address6,
+    address.postcode,
+    address.country
+  ]
 
-  for (const reviewChargeReference of reviewChargeReferences) {
-    chargeReference.push({
-      chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
-      chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
-      totalBillableReturns: _totalBillableReturns(reviewChargeReference),
-      chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
-    })
-  }
-
-  return chargeReference
+  return addressParts.filter((part) => part)
 }
 
-function _totalBillableReturns (reviewChargeReference) {
-  const { reviewChargeElements } = reviewChargeReference
-
-  let totalBillableReturns = 0
-  let totalQuantity = 0
-  for (const reviewChargeElement of reviewChargeElements) {
-    totalBillableReturns += reviewChargeElement.allocated
-    totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
+function _billingAccountDetails (billingAccount) {
+  return {
+    billingAccountId: billingAccount.id,
+    accountNumber: billingAccount.accountNumber,
+    accountName: _accountName(billingAccount),
+    contactName: _contactName(billingAccount),
+    addressLines: _addressLines(billingAccount)
   }
-
-  return `${totalBillableReturns} ML / ${totalQuantity} ML`
 }
 
 function _chargeElementDetails (reviewChargeReference, chargePeriod) {
@@ -120,19 +92,114 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
   return chargeElements
 }
 
-function _prepareReturnVolume (reviewChargeElement) {
-  const { reviewReturns } = reviewChargeElement
-  const returnVolumes = []
+function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
+  const chargeReference = []
 
-  if (reviewReturns) {
-    reviewReturns.forEach((reviewReturn) => {
-      returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
+  const { reviewChargeReferences } = reviewChargeVersion
+
+  for (const reviewChargeReference of reviewChargeReferences) {
+    chargeReference.push({
+      chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
+      chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
+      totalBillableReturns: _totalBillableReturns(reviewChargeReference),
+      chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
     })
-  } else {
-    return ''
   }
 
-  return returnVolumes
+  return chargeReference
+}
+
+function _chargeElementCount (reviewChargeVersion) {
+  const { reviewChargeReferences } = reviewChargeVersion
+
+  const chargeElementCount = reviewChargeReferences.reduce((total, reviewChargeReference) => {
+    return total + reviewChargeReference.reviewChargeElements.length
+  }, 0)
+
+  return chargeElementCount
+}
+
+function _checkStatusAndReturnTotal (returnLog) {
+  const { returnStatus: status, allocated, quantity, underQuery } = returnLog
+
+  let returnTotal
+  let returnStatus = underQuery ? 'query' : status
+
+  if (status === 'void' || status === 'received') {
+    returnTotal = '/'
+  } else if (status === 'due') {
+    returnStatus = 'overdue'
+    returnTotal = '/'
+  } else {
+    returnTotal = `${allocated} ML / ${quantity} ML`
+  }
+
+  return { returnStatus, returnTotal }
+}
+
+function _contactName (billingAccount) {
+  const contact = billingAccount.billingAccountAddresses[0].contact
+
+  if (contact) {
+    return contact.$name()
+  }
+
+  return null
+}
+
+function _financialYear (financialYearEnding) {
+  const startYear = financialYearEnding - 1
+  const endYear = financialYearEnding
+
+  return `${startYear} to ${endYear}`
+}
+
+function _matchedReturns (returnLogs) {
+  const matchedReturns = []
+
+  for (const returnLog of returnLogs) {
+    if (returnLog.reviewChargeElements.length > 0) {
+      const { returnStatus, returnTotal } = _checkStatusAndReturnTotal(returnLog)
+
+      matchedReturns.push(
+        {
+          returnId: returnLog.returnId,
+          reference: returnLog.returnReference,
+          dates: _prepareDate(returnLog.startDate, returnLog.endDate),
+          returnStatus,
+          description: returnLog.description,
+          purpose: returnLog.purposes[0].tertiary.description,
+          returnTotal,
+          issues: returnLog.issues.split(', ')
+        }
+      )
+    }
+  }
+
+  return matchedReturns
+}
+
+function _prepareChargeData (licence, billRun) {
+  const { reviewChargeVersions } = licence[0]
+  const chargeData = []
+
+  for (const reviewChargeVersion of reviewChargeVersions) {
+    const chargePeriod = {
+      startDate: reviewChargeVersion.chargePeriodStartDate,
+      endDate: reviewChargeVersion.chargePeriodEndDate
+    }
+
+    chargeData.push({
+      financialYear: _financialYear(billRun.toFinancialYearEnding),
+      chargePeriodDate: _prepareDate(reviewChargeVersion.chargePeriodStartDate, reviewChargeVersion.chargePeriodEndDate),
+      licenceHolderName: licence[0].licenceHolder,
+      chargeElementCount: _chargeElementCount(reviewChargeVersion),
+      billingAccountDetails: _billingAccountDetails(reviewChargeVersion.billingAccountDetails),
+      chargeReferences: _chargeReferenceDetails(reviewChargeVersion, chargePeriod)
+    })
+  }
+
+  return chargeData
 }
 
 function _prepareChargeElementDates (chargeElement, chargePeriod) {
@@ -161,98 +228,39 @@ function _prepareChargeElementDates (chargeElement, chargePeriod) {
   return dates
 }
 
-function _financialYear (financialYearEnding) {
-  const startYear = financialYearEnding - 1
-  const endYear = financialYearEnding
+function _prepareDate (startDate, endDate) {
+  const preparedStartDate = formatLongDate(startDate)
+  const preparedEndDate = formatLongDate(endDate)
 
-  return `${startYear} to ${endYear}`
+  return `${preparedStartDate} to ${preparedEndDate}`
 }
 
-function _billingAccountDetails (billingAccount) {
-  return {
-    billingAccountId: billingAccount.id,
-    accountNumber: billingAccount.accountNumber,
-    accountName: _accountName(billingAccount),
-    contactName: _contactName(billingAccount),
-    addressLines: _addressLines(billingAccount)
-  }
-}
+function _prepareReturnVolume (reviewChargeElement) {
+  const { reviewReturns } = reviewChargeElement
+  const returnVolumes = []
 
-function _addressLines (billingAccount) {
-  const { address } = billingAccount.billingAccountAddresses[0]
-
-  const addressParts = [
-    address.address1,
-    address.address2,
-    address.address3,
-    address.address4,
-    address.address5,
-    address.address6,
-    address.postcode,
-    address.country
-  ]
-
-  return addressParts.filter((part) => part)
-}
-
-function _contactName (billingAccount) {
-  const contact = billingAccount.billingAccountAddresses[0].contact
-
-  if (contact) {
-    return contact.$name()
+  if (reviewReturns) {
+    reviewReturns.forEach((reviewReturn) => {
+      returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
+    })
+  } else {
+    return ''
   }
 
-  return null
+  return returnVolumes
 }
 
-function _accountName (billingAccount) {
-  const accountAddress = billingAccount.billingAccountAddresses[0]
+function _totalBillableReturns (reviewChargeReference) {
+  const { reviewChargeElements } = reviewChargeReference
 
-  if (accountAddress.company) {
-    return accountAddress.company.name
+  let totalBillableReturns = 0
+  let totalQuantity = 0
+  for (const reviewChargeElement of reviewChargeElements) {
+    totalBillableReturns += reviewChargeElement.allocated
+    totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
   }
 
-  return billingAccount.company.name
-}
-
-function _prepareLicenceChargePeriods (licence) {
-  const { reviewChargeVersions } = licence[0]
-  const chargePeriodDates = []
-
-  for (const reviewChargeVersion of reviewChargeVersions) {
-    const startDate = reviewChargeVersion.chargePeriodStartDate
-    const endDate = reviewChargeVersion.chargePeriodEndDate
-
-    const dates = _prepareDate(startDate, endDate)
-    chargePeriodDates.push(dates)
-  }
-
-  return chargePeriodDates
-}
-
-function _matchedReturns (returnLogs) {
-  const matchedReturns = []
-
-  for (const returnLog of returnLogs) {
-    if (returnLog.reviewChargeElements.length > 0) {
-      const { returnStatus, total } = _checkStatusAndReturnTotal(returnLog)
-
-      matchedReturns.push(
-        {
-          returnId: returnLog.returnId,
-          reference: returnLog.returnReference,
-          dates: _prepareDate(returnLog.startDate, returnLog.endDate),
-          status: returnStatus,
-          description: returnLog.description,
-          purpose: returnLog.purposes[0].tertiary.description,
-          total,
-          issues: returnLog.issues.split(', ')
-        }
-      )
-    }
-  }
-
-  return matchedReturns
+  return `${totalBillableReturns} ML / ${totalQuantity} ML`
 }
 
 function _unmatchedReturns (returnLogs) {
@@ -265,10 +273,10 @@ function _unmatchedReturns (returnLogs) {
           returnId: returnLog.returnId,
           reference: returnLog.returnReference,
           dates: _prepareDate(returnLog.startDate, returnLog.endDate),
-          status: returnLog.returnStatus,
+          returnStatus: returnLog.returnStatus,
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
-          total: `${returnLog.quantity} ML`,
+          total: `${returnLog.allocated} / ${returnLog.quantity} ML`,
           issues: returnLog.issues.split(', ')
         }
       )
@@ -276,31 +284,6 @@ function _unmatchedReturns (returnLogs) {
   }
 
   return unmatchedReturns
-}
-
-function _checkStatusAndReturnTotal (returnLog) {
-  const { returnStatus: status, allocated, quantity, underQuery } = returnLog
-
-  let total
-  let returnStatus = underQuery ? 'query' : status
-
-  if (status === 'void' || status === 'received') {
-    total = '/'
-  } else if (status === 'due') {
-    returnStatus = 'overdue'
-    total = '/'
-  } else {
-    total = `${allocated} ML / ${quantity} ML`
-  }
-
-  return { returnStatus, total }
-}
-
-function _prepareDate (startDate, endDate) {
-  const preparedStartDate = formatLongDate(startDate)
-  const preparedEndDate = formatLongDate(endDate)
-
-  return `${preparedStartDate} to ${preparedEndDate}`
 }
 
 module.exports = {
