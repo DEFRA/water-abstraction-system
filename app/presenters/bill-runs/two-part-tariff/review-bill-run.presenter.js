@@ -12,20 +12,18 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @param {module:BillRunModel} billRun The data from the bill run
  * @param {module:LicenceModel} licences The licences data asociated with the bill run
- * @param {String} filterLicenceHolder The string that the licence holder is to be filtered on if any
+ * @param {Object} filterData The data returned from the filter form on the review bill run page
  *
  * @returns {Object} The prepared bill run and licence data to be passed to the review page
  */
-function go (billRun, licences, filterLicenceHolder) {
+function go (billRun, licences, filterData) {
   const { numberOfLicencesToReview, preparedLicences } = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, preparedLicences, numberOfLicencesToReview)
-  const filterData = { openFilter: false }
 
-  if (filterLicenceHolder) {
-    filterData.openFilter = true
-    filterData.licenceHolder = filterLicenceHolder
-  }
+  const { filterLicenceHolder, filterLicenceStatus } = filterData
+  // this opens the filter on the page if any filter data has been received so the user can see the applied filters
+  filterData.openFilter = (filterLicenceHolder || filterLicenceStatus)
 
   return { ...preparedBillRun, preparedLicences, filterData }
 }

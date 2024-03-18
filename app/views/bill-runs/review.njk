@@ -137,13 +137,13 @@
         classes: "govuk-input--width-20",
         id: "filterLicenceHolder",
         name: "filterLicenceHolder",
-        value: filterData.licenceHolder
+        value: filterData.filterLicenceHolder
       }) }}
 
       {# Filter by licence status #}
       {{ govukRadios({
         classes: "govuk-radios--small",
-        name: "licenceStatus",
+        name: "filterLicenceStatus",
         fieldset: {
           legend: {
             text: "Status",
@@ -155,12 +155,12 @@
           {
             value: "review",
             text: "Review",
-            checked: licenceStatus === 'review'
+            checked: filterData.filterLicenceStatus === 'review'
           },
           {
             value: "ready",
             text: "Ready",
-            checked: licenceStatus === 'ready'
+            checked: filterData.filterLicenceStatus === 'ready'
           }
         ]
       }) }}
