@@ -176,7 +176,6 @@ function _presrocContent (transaction) {
 }
 
 function _srocContent (transaction) {
-  console.log('🚀 ~ _srocContent ~ transaction:', transaction)
   const {
     adjustmentFactor,
     aggregateFactor,
