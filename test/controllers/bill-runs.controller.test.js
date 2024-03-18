@@ -299,10 +299,10 @@ describe('Bill Runs controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('1/11/10/*S/0084')
-        expect(response.payload).to.contain('two-part tariff')
-        expect(response.payload).to.contain('Test Road. Points 1 and 2.')
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('1/11/10/*S/0084')
+          expect(response.payload).to.contain('two-part tariff')
+          expect(response.payload).to.contain('Test Road. Points 1 and 2.')
         })
       })
     })
