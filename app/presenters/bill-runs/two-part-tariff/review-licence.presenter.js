@@ -84,7 +84,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
       elementStatus: reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
       dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
-      issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : '',
+      issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : [''],
       billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
       returnVolume: _prepareReturnVolume(reviewChargeElement)
     })
@@ -121,22 +121,23 @@ function _chargeElementCount (reviewChargeVersion) {
   return chargeElementCount
 }
 
-function _checkStatusAndReturnTotal (returnLog) {
-  const { returnStatus: status, allocated, quantity, underQuery } = returnLog
-
-  let returnTotal
-  let returnStatus = underQuery ? 'query' : status
-
-  if (status === 'void' || status === 'received') {
-    returnTotal = '/'
-  } else if (status === 'due') {
-    returnStatus = 'overdue'
-    returnTotal = '/'
+function _returnStatus (returnLog) {
+  if (returnLog.returnStatus === 'due') {
+    return 'overdue'
+  } else if (returnLog.underQuery) {
+    return 'query'
   } else {
-    returnTotal = `${allocated} ML / ${quantity} ML`
+    return returnLog.returnStatus
   }
+}
 
-  return { returnStatus, returnTotal }
+function _returnTotal (returnLog) {
+  const { returnStatus, allocated, quantity } = returnLog
+  if (returnStatus === 'void' || returnStatus === 'received' || returnStatus === 'due') {
+    return '/'
+  } else {
+    return `${allocated} ML / ${quantity} ML`
+  }
 }
 
 function _contactName (billingAccount) {
@@ -161,18 +162,16 @@ function _matchedReturns (returnLogs) {
 
   for (const returnLog of returnLogs) {
     if (returnLog.reviewChargeElements.length > 0) {
-      const { returnStatus, returnTotal } = _checkStatusAndReturnTotal(returnLog)
-
       matchedReturns.push(
         {
           returnId: returnLog.returnId,
           reference: returnLog.returnReference,
           dates: _prepareDate(returnLog.startDate, returnLog.endDate),
-          returnStatus,
+          returnStatus: _returnStatus(returnLog),
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
-          returnTotal,
-          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ''
+          returnTotal: _returnTotal(returnLog),
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ['']
         }
       )
     }
@@ -245,8 +244,6 @@ function _prepareReturnVolume (reviewChargeElement) {
     reviewReturns.forEach((reviewReturn) => {
       returnVolumes.push(`${reviewReturn.quantity} ML (${reviewReturn.returnReference})`)
     })
-  } else {
-    return ''
   }
 
   return returnVolumes
@@ -275,11 +272,11 @@ function _unmatchedReturns (returnLogs) {
           returnId: returnLog.returnId,
           reference: returnLog.returnReference,
           dates: _prepareDate(returnLog.startDate, returnLog.endDate),
-          returnStatus: returnLog.returnStatus,
+          returnStatus: _returnStatus(returnLog),
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           total: `${returnLog.allocated} / ${returnLog.quantity} ML`,
-          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ''
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ['']
         }
       )
     }
