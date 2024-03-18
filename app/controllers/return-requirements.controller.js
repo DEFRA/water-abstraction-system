@@ -6,6 +6,7 @@
  */
 
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
+const SelectPointsService = require('../services/return-requirements/points.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
@@ -126,12 +127,10 @@ async function noReturnsRequired (request, h) {
 async function points (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await SelectPointsService.go(sessionId)
 
   return h.view('return-requirements/points.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the points for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
