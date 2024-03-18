@@ -82,7 +82,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
       elementStatus: reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
       dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
-      issues: reviewChargeElement.issues.split(', '),
+      issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : '',
       billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
       returnVolume: _prepareReturnVolume(reviewChargeElement)
     })
@@ -170,7 +170,7 @@ function _matchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           returnTotal,
-          issues: returnLog.issues.split(', ')
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ''
         }
       )
     }
@@ -277,7 +277,7 @@ function _unmatchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           total: `${returnLog.allocated} / ${returnLog.quantity} ML`,
-          issues: returnLog.issues.split(', ')
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ''
         }
       )
     }
