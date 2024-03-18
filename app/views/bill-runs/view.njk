@@ -112,15 +112,15 @@
   {# Confirm and cancel buttons #}
   {% if billRunStatus === 'ready' %}
     {% set cancelBillRunLink = '/system/bill-runs/' + billRunId + '/cancel' %}
-    {% set confirmBillRunLink = '/billing/batch/' + billRunId + '/confirm' %}
+    {% set sendBillRunLink = '/system/bill-runs/' + billRunId + '/send' %}
     <div class="govuk-grid-row govuk-!-margin-bottom-3">
       <div class="govuk-grid-column-two-thirds">
         <section class="govuk-!-margin-bottom-6">
           {{
             govukButton({
               classes: 'govuk-!-margin-right-1',
-              text: "Confirm bill run",
-              href: confirmBillRunLink
+              text: "Send bill run",
+              href: sendBillRunLink
             })
           }}
           {{
