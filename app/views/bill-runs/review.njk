@@ -122,10 +122,12 @@
   </section>
 
 
+  {# Licence filter #}
   {% set filtersForm %}
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
 
     <form  method="post" novalidate action="review">
+      {# Filter by licence holder #}
       {{ govukInput({
         label: {
           text: "Licence holder",
@@ -136,6 +138,31 @@
         id: "filterLicenceHolder",
         name: "filterLicenceHolder",
         value: filterData.licenceHolder
+      }) }}
+
+      {# Filter by licence status #}
+      {{ govukRadios({
+        classes: "govuk-radios--small",
+        name: "licenceStatus",
+        fieldset: {
+          legend: {
+            text: "Status",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            value: "review",
+            text: "Review",
+            checked: licenceStatus === 'review'
+          },
+          {
+            value: "ready",
+            text: "Ready",
+            checked: licenceStatus === 'ready'
+          }
+        ]
       }) }}
 
       <div class="govuk-button-group">
