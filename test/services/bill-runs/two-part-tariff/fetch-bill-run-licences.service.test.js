@@ -82,7 +82,7 @@ describe('Fetch Bill Run Licences service', () => {
           payload = { filterLicenceHolder: 'ready licence' }
         })
 
-        it('returns details of the bill run and the licences in it', async () => {
+        it('returns details of the bill run and the licences that match the filter', async () => {
           const result = await FetchBillRunLicencesService.go(billRun.id, payload)
 
           expect(result.billRun.id).to.equal(billRun.id)
@@ -98,13 +98,71 @@ describe('Fetch Bill Run Licences service', () => {
           expect(result.licences[0].licenceHolder).to.equal('Ready Licence Holder Ltd')
           expect(result.licences[0].licenceRef).to.equal(testLicenceReady.licenceRef)
 
-          expect(result.filterLicenceHolder).to.equal('ready licence')
+          expect(result.filterData.filterLicenceHolder).to.equal('ready licence')
         })
 
         it("orders the licence by 'review status'", async () => {
           const result = await FetchBillRunLicencesService.go(billRun.id, payload)
 
           expect(result.licences[0].status).to.equal('ready')
+        })
+      })
+
+      describe('and a filter has been applied to the licence status', () => {
+        let payload
+
+        beforeEach(async () => {
+          payload = { filterLicenceStatus: 'review' }
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, payload)
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+
+          expect(result.licences).to.have.length(1)
+          expect(result.licences[0].licenceId).to.equal(testLicenceReview.licenceId)
+          expect(result.licences[0].licenceHolder).to.equal('Review Licence Holder Ltd')
+          expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
+
+          expect(result.filterData.filterLicenceStatus).to.equal('review')
+        })
+
+        it("orders the licence by 'review status'", async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, payload)
+
+          expect(result.licences[0].status).to.equal('review')
+        })
+      })
+
+      describe('and filters have been applied that will return no results', () => {
+        let payload
+
+        beforeEach(async () => {
+          payload = { filterLicenceHolder: 'ready licence', filterLicenceStatus: 'review' }
+        })
+
+        it('returns details of the bill run and no licences', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, payload)
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+
+          expect(result.licences).to.have.length(0)
+
+          expect(result.filterData.filterLicenceHolder).to.equal('ready licence')
+          expect(result.filterData.filterLicenceStatus).to.equal('review')
         })
       })
     })
