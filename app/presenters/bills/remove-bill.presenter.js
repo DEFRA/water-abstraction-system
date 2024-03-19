@@ -52,6 +52,7 @@ function go (bill) {
     licencesText,
     pageTitle: _pageTitle(accountNumber),
     region,
+    supplementaryMessage: _supplementaryMessage(licencesText),
     total: formatMoney(bill.netAmount, true)
   }
 }
@@ -99,6 +100,10 @@ function _licences (billLicences) {
 
 function _pageTitle (accountName) {
   return `You're about to remove the bill for ${accountName} from the bill run`
+}
+
+function _supplementaryMessage (licencesText) {
+  return `The ${licencesText.toLowerCase()} will go into the next supplementary bill run.`
 }
 
 module.exports = {

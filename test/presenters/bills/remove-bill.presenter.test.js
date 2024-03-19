@@ -40,6 +40,7 @@ describe('Remove Bill presenter', () => {
         licencesText: 'Licences',
         pageTitle: "You're about to remove the bill for T65757520A from the bill run",
         region: 'Stormlands',
+        supplementaryMessage: 'The licences will go into the next supplementary bill run.',
         total: '£10.45'
       })
     })
@@ -119,6 +120,28 @@ describe('Remove Bill presenter', () => {
         const result = RemoveBillPresenter.go(bill)
 
         expect(result.pageTitle).to.equal("You're about to remove the bill for T65757520A from the bill run")
+      })
+    })
+
+    describe("the 'supplementaryMessage' property", () => {
+      describe('when there is more than one licence', () => {
+        it("returns the message with 'licences' (plural)", () => {
+          const result = RemoveBillPresenter.go(bill)
+
+          expect(result.supplementaryMessage).to.equal('The licences will go into the next supplementary bill run.')
+        })
+      })
+
+      describe('when there is only one licence', () => {
+        beforeEach(() => {
+          bill.billLicences.pop()
+        })
+
+        it("returns the message with 'licence' (singular)", () => {
+          const result = RemoveBillPresenter.go(bill)
+
+          expect(result.supplementaryMessage).to.equal('The licence will go into the next supplementary bill run.')
+        })
       })
     })
   })
