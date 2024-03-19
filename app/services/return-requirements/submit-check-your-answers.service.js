@@ -13,13 +13,12 @@
  */
 const CheckLicenceEndedService = require('./check-licence-ended.service.js')
 const SessionModel = require('../../models/session.model.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
 
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const licenceData = await FetchLicenceService.go(session.data.licence.id)
-  const isLicenceEnded = await CheckLicenceEndedService.checkLicenceEnded(licenceData)
+  const licenceData = await CheckLicenceEndedService.go(session.data.licence.id)
+  const isLicenceEnded = await licenceData.ended
 
   if (isLicenceEnded) {
     throw new ExpandedError('Invalid return requirement', { licenceData })

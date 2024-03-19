@@ -13,7 +13,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const ExpandedError = require('../../../app/errors/expanded.error.js')
 
 // Thing under test
-const FetchLicenceService = require('../../../app/services/return-requirements/fetch-licence.service.js')
+const CheckLicenceEndedService = require('../../../app/services/return-requirements/check-licence-ended.service.js')
 const SubmitCheckYourAnswersService = require('../../../app/services/return-requirements/submit-check-your-answers.service.js')
 
 describe('Submit Check Your Answers service', () => {
@@ -39,10 +39,7 @@ describe('Submit Check Your Answers service', () => {
 
   describe('POST /return-requirements/{sessionDd}/check-your-answers', () => {
     beforeEach(() => {
-      Sinon.stub(FetchLicenceService, 'go').resolves({
-        id: licenceId,
-        ends: null
-      })
+      Sinon.stub(CheckLicenceEndedService, 'go').resolves(false)
     })
 
     describe('When called with a valid licence', () => {
