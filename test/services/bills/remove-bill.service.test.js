@@ -42,6 +42,7 @@ describe('Remove Bill service', () => {
         licences: '01/01/26/9400, 01/02/26/9400',
         licencesText: 'Licences',
         pageTitle: "You're about to remove the bill for T65757520A from the bill run",
+        supplementaryMessage: 'The licences will go into the next supplementary bill run.',
         region: 'Stormlands',
         total: '£10.45'
       })
