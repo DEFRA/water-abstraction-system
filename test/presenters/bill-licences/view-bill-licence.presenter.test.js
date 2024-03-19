@@ -54,6 +54,32 @@ describe('View Bill Licence presenter', () => {
       })
     })
 
+    describe("the 'removeLicenceLink' property", () => {
+      describe("when the linked bill run has a status of 'ready'", () => {
+        beforeEach(() => {
+          billLicence.bill.billRun.status = 'ready'
+        })
+
+        it('returns the path to the remove bill licence endpoint', () => {
+          const result = ViewBillLicencePresenter.go(billLicence)
+
+          expect(result.removeLicenceLink).to.equal('/system/bill-licences/a4fbaa27-a91c-4328-a1b8-774ade11027b/remove')
+        })
+      })
+
+      describe("when the linked bill run has a status of 'sent'", () => {
+        beforeEach(() => {
+          billLicence.bill.billRun.status = 'sent'
+        })
+
+        it('returns null', () => {
+          const result = ViewBillLicencePresenter.go(billLicence)
+
+          expect(result.removeLicenceLink).to.be.null()
+        })
+      })
+    })
+
     describe("the 'tableCaption' property", () => {
       describe('when there is only 1 transaction', () => {
         beforeEach(() => {
@@ -92,6 +118,7 @@ describe('View Bill Licence presenter', () => {
           displayCreditDebitTotals: true,
           licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
           licenceRef: 'WA/055/0017/013',
+          removeLicenceLink: '/system/bill-licences/a4fbaa27-a91c-4328-a1b8-774ade11027b/remove',
           scheme: 'alcs',
           tableCaption: '4 transactions',
           transactions: [
@@ -128,6 +155,7 @@ describe('View Bill Licence presenter', () => {
           displayCreditDebitTotals: true,
           licenceId: '2eaa831d-7bd6-4b0a-aaf1-3aacafec6bf2',
           licenceRef: 'WA/055/0017/013',
+          removeLicenceLink: '/system/bill-licences/a4fbaa27-a91c-4328-a1b8-774ade11027b/remove',
           scheme: 'alcs',
           tableCaption: '4 transactions',
           transactions: [
@@ -155,6 +183,7 @@ function _testBillLicence () {
         id: '0e61c36f-f22f-4534-8247-b73a97f551b5',
         batchType: 'supplementary',
         scheme: 'alcs',
+        status: 'ready',
         source: 'wrls'
       }
     },

@@ -77,7 +77,9 @@ function _adjustments (
     adjustments.push('Two-part tariff (0.5)')
   }
 
-  if (section130Agreement === 'true') {
+  // NOTE: Not only is this 'boolean' value held in a string field in the DB, when the legacy code sets the value
+  // it likes to add a space to the end!
+  if (section130Agreement.trim() === 'true') {
     adjustments.push('Canal and River Trust (0.5)')
   }
 
