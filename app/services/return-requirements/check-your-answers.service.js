@@ -17,8 +17,8 @@ async function go (sessionId) {
 
   return {
     activeNavBar: 'search',
-    licence_id: session?.data?.licence?.licenceRef,
-    pageTitle: `Check the return requirements for ${session?.data?.licence?.licenceHolder}`,
+    licence_id: session.data.licence.licenceRef,
+    pageTitle: `Check the return requirements for ${session.data.licence.licenceHolder}`,
     ...formattedData
   }
 }
