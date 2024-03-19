@@ -5,7 +5,9 @@
  * @module FetchPointsService
  */
 
-const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
+const { ref } = require('objection')
+
+const LicenceModel = require('../../models/licence.model.js')
 
 async function go (licenceId) {
   const data = await _fetchPoints(licenceId)
@@ -14,20 +16,25 @@ async function go (licenceId) {
 }
 
 async function _fetchPoints (licenceId) {
-  const result = await LicenceVersionPurposeConditionModel.query()
-    .where('licenceVersionPurposeId', licenceId)
-    .select([
-      'id'
-    ])
-    .withGraphFetched('licenceVersionPurposeConditionTypes')
-    .modifyGraph('licenceVersionPurposeConditionTypes', (builder) => {
+  const result = await LicenceModel.query()
+    .findById(licenceId)
+    .withGraphFetched('region')
+    .modifyGraph('region', (builder) => {
       builder.select([
-        'displayTitle'
+        'id',
+        'displayName'
+      ])
+    })
+    .withGraphFetched('permitLicence')
+    .modifyGraph('permitLicence', (builder) => {
+      builder.select([
+        ref('licenceDataValue:data.current_version.purposes').as('purposes')
       ])
     })
 
-  return result
+  return result.permitLicence
 }
+
 module.exports = {
   go
 }
