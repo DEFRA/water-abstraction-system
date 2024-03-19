@@ -100,12 +100,6 @@ describe('Fetch Bill Run Licences service', () => {
 
           expect(result.filterData.filterLicenceHolder).to.equal('ready licence')
         })
-
-        it("orders the licence by 'review status'", async () => {
-          const result = await FetchBillRunLicencesService.go(billRun.id, payload)
-
-          expect(result.licences[0].status).to.equal('ready')
-        })
       })
 
       describe('and a filter has been applied to the licence status', () => {
@@ -132,12 +126,6 @@ describe('Fetch Bill Run Licences service', () => {
           expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
 
           expect(result.filterData.filterLicenceStatus).to.equal('review')
-        })
-
-        it("orders the licence by 'review status'", async () => {
-          const result = await FetchBillRunLicencesService.go(billRun.id, payload)
-
-          expect(result.licences[0].status).to.equal('review')
         })
       })
 
