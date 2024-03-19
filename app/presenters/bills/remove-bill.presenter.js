@@ -15,7 +15,7 @@ const {
 } = require('../base.presenter.js')
 
 /**
- * Formats data for the confirm remove a bill licence page
+ * Formats data for the confirm remove a bill page
  *
  * @param {module:BillModel} bill - an instance of `BillModel` with associated billing data
  *
