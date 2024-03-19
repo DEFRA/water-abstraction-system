@@ -20,7 +20,7 @@ const StartDateService = require('../../app/services/return-requirements/start-d
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Return requirements controller', () => {
+describe('Return requirements controller', () => {
   let server
 
   beforeEach(async () => {
