@@ -23,7 +23,7 @@ function go (billRun, licences, filterData) {
 
   const { filterLicenceHolder, filterLicenceStatus } = filterData
   // this opens the filter on the page if any filter data has been received so the user can see the applied filters
-  filterData.openFilter = (filterLicenceHolder || filterLicenceStatus)
+  filterData.openFilter = (filterLicenceHolder || filterLicenceStatus) !== undefined
 
   return { ...preparedBillRun, preparedLicences, filterData }
 }

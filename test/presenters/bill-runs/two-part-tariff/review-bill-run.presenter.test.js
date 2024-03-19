@@ -14,9 +14,13 @@ describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     const testBillRun = _testBillRun()
     const testLicences = _testLicences()
+    const testFilterData = {
+      filterLicenceHolder: undefined,
+      filterLicenceStatus: undefined
+    }
 
     it('correctly presents the data', () => {
-      const result = ReviewBillRunPresenter.go(testBillRun, testLicences)
+      const result = ReviewBillRunPresenter.go(testBillRun, testLicences, testFilterData)
 
       expect(result).to.equal({
         region: 'Southern (Test replica)',
@@ -50,18 +54,26 @@ describe('Review Bill Run presenter', () => {
             issue: 'Multiple Issues'
           }
         ],
-        filterData: { openFilter: false }
+        filterData: {
+          filterLicenceHolder: undefined,
+          filterLicenceStatus: undefined,
+          openFilter: false
+        }
       })
     })
 
     describe('and a filter has been applied', () => {
-      const filterLicenceHolder = 'big farm'
+      const testFilterData = {
+        filterLicenceHolder: 'bob',
+        filterLicenceStatus: 'ready'
+      }
 
       it('correctly presents the data', () => {
-        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, filterLicenceHolder)
+        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, testFilterData)
 
         expect(result.filterData.openFilter).to.equal(true)
-        expect(result.filterData.licenceHolder).to.equal(filterLicenceHolder)
+        expect(result.filterData.filterLicenceHolder).to.equal(testFilterData.filterLicenceHolder)
+        expect(result.filterData.filterLicenceStatus).to.equal(testFilterData.filterLicenceStatus)
       })
     })
   })
