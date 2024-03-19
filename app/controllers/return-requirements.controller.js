@@ -14,6 +14,7 @@ const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
+const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
@@ -256,6 +257,12 @@ async function submitNoReturnsRequired (request, h) {
 
 async function submitPoints (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitPointsService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/points.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period`)
 }
