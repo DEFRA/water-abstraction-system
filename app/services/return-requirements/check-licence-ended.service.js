@@ -2,7 +2,7 @@
 
 /**
  * Checks if a licence is 'ended' (expired, lapsed or revoked)
- * @module CheckLicenceService
+ * @module CheckLicenceEndedService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
