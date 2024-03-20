@@ -21,8 +21,7 @@ async function _fetchPoints (licenceId) {
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
       builder.select([
-        'id',
-        'displayName'
+        'id'
       ])
     })
     .withGraphFetched('permitLicence')
