@@ -234,7 +234,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the points for the return requirement'
+      description: 'Select the points for the requirements for returns'
     }
   },
   {
