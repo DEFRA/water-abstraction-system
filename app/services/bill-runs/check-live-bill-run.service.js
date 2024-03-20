@@ -19,14 +19,14 @@ const LIVE_STATUSES = ['processing', 'ready', 'review', 'queued']
  * The process is that an annual bill run is generated at the start of the financial year then multiple supplementary
  * bill runs to deal with any changes after the annual bill run has been processed.
  *
- * @param {String} regionId The id of the region to be checked
- * @param {Number} toFinancialYearEnding The financial year to be checked
- * @param {String} batchType The bill run type to be checked
+ * @param {String} regionId - The UUID of the region to be checked
+ * @param {Number} toFinancialYearEnding - The financial year to be checked
+ * @param {String} batchType - The bill run type to be checked
  *
- * @returns {Boolean} Whether a "live" bill run exists
+ * @returns {Promise<Boolean>} true if a live bill run is found else false
  */
 async function go (regionId, toFinancialYearEnding, batchType) {
-  const statuses = LIVE_STATUSES
+  const statuses = [...LIVE_STATUSES]
 
   // Only one annual bill run per region and financial year is allowed. So, we include sent and sending in the statues
   // to check for
@@ -42,7 +42,7 @@ async function go (regionId, toFinancialYearEnding, batchType) {
       batchType,
       scheme: 'sroc'
     })
-    .whereIn('status', LIVE_STATUSES)
+    .whereIn('status', statuses)
     .resultSize()
 
   return numberOfLiveBillRuns !== 0
