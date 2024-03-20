@@ -5,6 +5,7 @@
  * @module ReturnRequirementsController
  */
 
+const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const SelectPointsService = require('../services/return-requirements/points.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
@@ -13,6 +14,7 @@ const SessionModel = require('../models/session.model.js')
 const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
+const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
@@ -70,12 +72,10 @@ async function approved (request, h) {
 async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await CheckYourAnswersService.go(sessionId)
 
   return h.view('return-requirements/check-your-answers.njk', {
-    activeNavBar: 'search',
-    pageTitle: `Check the return requirements for ${session?.data?.licence?.licenceHolder}`,
-    ...session
+    ...pageData
   })
 }
 
@@ -217,10 +217,7 @@ async function submitAgreementsExceptions (request, h) {
 
 async function submitCheckYourAnswers (request, h) {
   const { sessionId } = request.params
-
-  const session = await SessionModel.query().findById(sessionId)
-
-  const { id: licenceId } = session.data.licence
+  const licenceId = await SubmitCheckYourAnswersService.go(sessionId)
 
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
 }
