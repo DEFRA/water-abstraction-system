@@ -5,7 +5,7 @@
  * @module FetchBillRunsForRegionService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 const LAST_PRESROC_YEAR = 2022
 
