@@ -42,7 +42,7 @@ async function go (regionId, toFinancialYearEnding, batchType) {
       batchType,
       scheme: 'sroc'
     })
-    .whereIn('status', LIVE_STATUSES)
+    .whereIn('status', statuses)
     .resultSize()
 
   return numberOfLiveBillRuns !== 0
