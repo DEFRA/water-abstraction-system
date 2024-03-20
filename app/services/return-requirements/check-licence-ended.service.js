@@ -8,13 +8,17 @@
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetch the matching licence and return data needed for the check your answers page
+ * Checks if a licence is 'ended' (expired, lapsed or revoked)
  *
- * Was built to provide the data needed for the '/return-requirements/{id}/check-your-answers' page
+ * A licence ended if it has expired, lapsed or revoked on or before the current date. Because we need to check this
+ * in a number of places we have the `LicenceModel` instance method `$ends()` to do this for us.
+ * 
+ * But for that to work you have to fetch the licence and the 3 dates from the licence record. This service combines
+ * fetching the licence and the dates then returning the result of `$ends()` to whatever service calls it.
  *
- * @param {string} id The UUID for the licence to fetch
+ * @param {string} id - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed for "check your answers" page when user submits for approval
+ * @returns {Promise<boolean>} true if the licence has ended else false
  */
 async function go (id) {
   const licence = await _fetchLicence(id)
