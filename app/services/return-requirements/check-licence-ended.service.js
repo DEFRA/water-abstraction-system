@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches and checks data needed for the view `/return-requirements/{sessionId}/check-your-answers` page
+ * Checks if a licence is 'ended' (expired, lapsed or revoked)
  * @module CheckLicenceService
  */
 
