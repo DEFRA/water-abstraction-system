@@ -40,30 +40,30 @@ function _licencePoints (pointsData, payload) {
   return abstractionPoints
 }
 
-function _generateAbstractionContent (pointDetail) {
-  let abstractionPoint = null
+function _generateAbstractionContent (pointDetails) {
+  let abstractionPoints = null
 
-  if (pointDetail.NGR4_SHEET && pointDetail.NGR4_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
-    const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
-    const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
+  if (pointDetails.NGR4_SHEET && pointDetails.NGR4_NORTH !== 'null') {
+    const point1 = `${pointDetails.NGR1_SHEET} ${pointDetails.NGR1_EAST} ${pointDetails.NGR1_NORTH}`
+    const point2 = `${pointDetails.NGR2_SHEET} ${pointDetails.NGR2_EAST} ${pointDetails.NGR2_NORTH}`
+    const point3 = `${pointDetails.NGR3_SHEET} ${pointDetails.NGR3_EAST} ${pointDetails.NGR3_NORTH}`
+    const point4 = `${pointDetails.NGR4_SHEET} ${pointDetails.NGR4_EAST} ${pointDetails.NGR4_NORTH}`
 
-    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
-  } else if (pointDetail.NGR2_SHEET && pointDetail.NGR2_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+    abstractionPoints = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
+  } else if (pointDetails.NGR2_SHEET && pointDetails.NGR2_NORTH !== 'null') {
+    const point1 = `${pointDetails.NGR1_SHEET} ${pointDetails.NGR1_EAST} ${pointDetails.NGR1_NORTH}`
+    const point2 = `${pointDetails.NGR2_SHEET} ${pointDetails.NGR2_EAST} ${pointDetails.NGR2_NORTH}`
 
-    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
+    abstractionPoints = `Between National Grid References ${point1} and ${point2}`
   } else {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+    const point1 = `${pointDetails.NGR1_SHEET} ${pointDetails.NGR1_EAST} ${pointDetails.NGR1_NORTH}`
 
-    abstractionPoint = `At National Grid Reference ${point1}`
+    abstractionPoints = `At National Grid Reference ${point1}`
   }
 
-  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
+  abstractionPoints += pointDetails.LOCAL_NAME !== undefined ? ` (${pointDetails.LOCAL_NAME})` : ''
 
-  return abstractionPoint
+  return abstractionPoints
 }
 
 module.exports = {
