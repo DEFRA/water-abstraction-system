@@ -39,7 +39,7 @@ async function _fetchLicence (id) {
     ])
 }
 
-function _checkLicenceEnded (licence) {
+function _licenceEnded (licence) {
   const { $ends: ends } = licence
 
   if (!ends) {
