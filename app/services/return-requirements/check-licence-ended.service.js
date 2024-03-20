@@ -39,14 +39,6 @@ async function _fetchLicence (id) {
     ])
 }
 
-/**
- * Check if a licence has ended.
- * If it's not within range, we assume it's either lapsed, expired or revoked
- * It returns true if the licence has ended, false otherwise.
- *
- * @param {object} licenceData - The licence data object
- * @returns {boolean} - True if the licence has ended, false otherwise
- */
 function _checkLicenceEnded (licence) {
   const { $ends: ends } = licence
 
