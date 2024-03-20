@@ -17,7 +17,7 @@ const {
 /**
  * Formats data for the confirm remove a bill licence page
  *
- * @param {module:BillLicenceModel} bilLicence - an instance of `BillLicenceModel` with associated billing data
+ * @param {module:BillLicenceModel} billLicence - an instance of `BillLicenceModel` with associated billing data
  *
  * @returns {Object} - the prepared bill licence summary data to be passed to the confirm remove a bill licence page
  */

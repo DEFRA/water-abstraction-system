@@ -9,12 +9,15 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const RemoveBillService = require('../../app/services/bills/remove-bill.service.js')
+const SubmitRemoveBillService = require('../../app/services/bills/submit-remove-bill.service.js')
 const ViewBillService = require('../../app/services/bills/view-bill.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Bills controller', () => {
+  let options
   let server
 
   beforeEach(async () => {
@@ -33,47 +36,98 @@ describe('Bills controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /bills', () => {
-    const options = {
-      method: 'GET',
-      url: '/bills/64924759-8142-4a08-9d1e-1e902cd9d316',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
-      }
-    }
-
-    describe('when the request succeeds', () => {
-      describe('and it is for a bill with multiple licences', () => {
-        beforeEach(async () => {
-          Sinon.stub(ViewBillService, 'go').resolves(_testMultiLicenceBill())
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Bill for Mr B Blobby')
-          expect(response.payload).to.contain('2 licences')
-        })
+  describe('/bills', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = _options('GET')
       })
 
-      describe('and it is for a bill with a single licence', () => {
-        beforeEach(async () => {
-          Sinon.stub(ViewBillService, 'go').resolves(_testSingleLicenceBill())
+      describe('when the request succeeds', () => {
+        describe('and it is for a bill with multiple licences', () => {
+          beforeEach(async () => {
+            Sinon.stub(ViewBillService, 'go').resolves(_testMultiLicenceBill())
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Bill for Mr B Blobby')
+            expect(response.payload).to.contain('2 licences')
+          })
         })
 
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
+        describe('and it is for a bill with a single licence', () => {
+          beforeEach(async () => {
+            Sinon.stub(ViewBillService, 'go').resolves(_testSingleLicenceBill())
+          })
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Bill for Mr B Blobby')
-          expect(response.payload).to.contain('2 transactions')
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Bill for Mr B Blobby')
+            expect(response.payload).to.contain('2 transactions')
+          })
         })
       })
     })
   })
+
+  describe('/bill/{billId}/remove', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = _options('GET', 'remove')
+
+        Sinon.stub(RemoveBillService, 'go').resolves({
+          pageTitle: "You're about to remove the bill for T65757520A from the bill run"
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('about to remove the bill for T65757520A from the bill run')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        options = _options('POST', 'remove')
+
+        Sinon.stub(SubmitRemoveBillService, 'go').resolves(
+          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing'
+        )
+      })
+
+      it('redirects to the legacy processing bill run page', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(302)
+        expect(response.headers.location).to.equal(
+          '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing'
+        )
+      })
+    })
+  })
 })
+
+function _options (method, path) {
+  const root = '/bills/64924759-8142-4a08-9d1e-1e902cd9d316'
+  const url = path ? `${root}/${path}` : root
+
+  return {
+    method,
+    url,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['billing'] }
+    }
+  }
+}
 
 function _testMultiLicenceBill () {
   return {
