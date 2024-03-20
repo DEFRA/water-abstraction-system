@@ -29,31 +29,37 @@ describe.only('Select Points presenter', () => {
       }
     }
 
-    pointsData = {
-      purposes: [{
-        purposePoints: [{
-          point_detail: {
-            NGR1_SHEET: 'TL',
-            NGR1_EAST: '23198',
-            NGR1_NORTH: '88603'
-          },
-          point_source: {
-            NAME: 'SURFACE WATER SOURCE OF SUPPLY'
-          }
-        },
-        {
-          point_detail: {
-            NGR1_SHEET: 'TQ',
-            NGR1_EAST: '72080',
-            NGR1_NORTH: '75530'
-          },
-          point_source: {
-            NAME: 'RIVER MEDWAY AT SPRINGFIELD'
-          }
-        }
-        ]
-      }]
+    pointsData = [{
+      NGR1_EAST: '69212',
+      NGR2_EAST: 'null',
+      NGR3_EAST: 'null',
+      NGR4_EAST: 'null',
+      LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
+      NGR1_NORTH: '50394',
+      NGR1_SHEET: 'TQ',
+      NGR2_NORTH: 'null',
+      NGR2_SHEET: 'null',
+      NGR3_NORTH: 'null',
+      NGR3_SHEET: 'null',
+      NGR4_NORTH: 'null',
+      NGR4_SHEET: 'null'
+    },
+    {
+      NGR1_EAST: '68083',
+      NGR2_EAST: 'null',
+      NGR3_EAST: 'null',
+      NGR4_EAST: 'null',
+      LOCAL_NAME: 'BEWL WATER RESERVOIR',
+      NGR1_NORTH: '33604',
+      NGR1_SHEET: 'TQ',
+      NGR2_NORTH: 'null',
+      NGR2_SHEET: 'null',
+      NGR3_NORTH: 'null',
+      NGR3_SHEET: 'null',
+      NGR4_NORTH: 'null',
+      NGR4_SHEET: 'null'
     }
+    ]
   })
 
   describe('when provided with a populated session', () => {
@@ -66,10 +72,31 @@ describe.only('Select Points presenter', () => {
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           licencePoints: [
-            'At National Grid Reference TL 23198 88603',
-            'At National Grid Reference TQ 72080 75530'
+            'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
+            'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
           ]
         })
+      })
+    })
+  })
+
+  describe('and with a payload', () => {
+    const payload = {
+      points: [
+        'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
+      ]
+    }
+
+    it('correctly presents the data', () => {
+      const result = SelectPointsPresenter.go(session, pointsData, payload)
+
+      expect(result).to.equal({
+        id: '61e07498-f309-4829-96a9-72084a54996d',
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC',
+        licencePoints: [
+          'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
+        ]
       })
     })
   })
