@@ -14,13 +14,11 @@ describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     const testBillRun = _testBillRun()
     const testLicences = _testLicences()
-    const testFilterData = {
-      filterLicenceHolder: undefined,
-      filterLicenceStatus: undefined
-    }
+    const licenceHolder = undefined
+    const licenceStatus = undefined
 
     it('correctly presents the data', () => {
-      const result = ReviewBillRunPresenter.go(testBillRun, testLicences, testFilterData)
+      const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
 
       expect(result).to.equal({
         region: 'Southern (Test replica)',
@@ -54,26 +52,24 @@ describe('Review Bill Run presenter', () => {
             issue: 'Multiple Issues'
           }
         ],
-        filterData: {
-          filterLicenceHolder: undefined,
-          filterLicenceStatus: undefined,
+        filter: {
+          licenceHolder: undefined,
+          licenceStatus: undefined,
           openFilter: false
         }
       })
     })
 
     describe('and a filter has been applied', () => {
-      const testFilterData = {
-        filterLicenceHolder: 'bob',
-        filterLicenceStatus: 'ready'
-      }
+      const licenceHolder = 'bob'
+      const licenceStatus = 'ready'
 
       it('correctly presents the data', () => {
-        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, testFilterData)
+        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
 
-        expect(result.filterData.openFilter).to.equal(true)
-        expect(result.filterData.filterLicenceHolder).to.equal(testFilterData.filterLicenceHolder)
-        expect(result.filterData.filterLicenceStatus).to.equal(testFilterData.filterLicenceStatus)
+        expect(result.filter.openFilter).to.equal(true)
+        expect(result.filter.licenceHolder).to.equal(licenceHolder)
+        expect(result.filter.licenceStatus).to.equal(licenceStatus)
       })
     })
   })

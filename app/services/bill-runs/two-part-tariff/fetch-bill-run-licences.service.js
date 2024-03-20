@@ -15,22 +15,19 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * ref.
  *
  * @param {String} id The UUID for the bill run
- * @param {Object} payload The `request.payload` containing the filter data. This only contains data when there is a
- * POST request, which only occurs when a filter is applied to the results.
+ * @param {String} licenceHolder The licence holder to filter the results by. This will only contain data when
+ * there is a POST request, which only occurs when a filter is applied to the results.
+ * @param {String} licenceStatus The status of the licence to filter the results by. This also only contains data
+ * when there is a POST request.
  *
  * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run. Also
  * included is any data that has been used to filter the results
  */
-async function go (id, payload) {
-  const filterLicenceHolder = payload?.filterLicenceHolder
-  const filterLicenceStatus = payload?.filterLicenceStatus
-
-  const filterData = { filterLicenceHolder, filterLicenceStatus }
-
+async function go (id, licenceHolder, licenceStatus) {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id, filterData)
+  const licences = await _fetchBillRunLicences(id, licenceHolder, licenceStatus)
 
-  return { billRun, licences, filterData }
+  return { billRun, licences }
 }
 
 async function _fetchBillRun (id) {
@@ -48,17 +45,17 @@ async function _fetchBillRun (id) {
     })
 }
 
-async function _fetchBillRunLicences (id, filterData) {
+async function _fetchBillRunLicences (id, licenceHolder, licenceStatus) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .where('billRunId', id)
     .orderBy('status', 'desc')
 
-  if (filterData.filterLicenceHolder) {
-    reviewLicenceQuery.whereILike('licenceHolder', `%${filterData.filterLicenceHolder}%`)
+  if (licenceHolder) {
+    reviewLicenceQuery.whereILike('licenceHolder', `%${licenceHolder}%`)
   }
 
-  if (filterData.filterLicenceStatus) {
-    reviewLicenceQuery.where('status', filterData.filterLicenceStatus)
+  if (licenceStatus) {
+    reviewLicenceQuery.where('status', licenceStatus)
   }
 
   return reviewLicenceQuery

@@ -137,7 +137,7 @@
         classes: "govuk-input--width-20",
         id: "filter-licence-holder",
         name: "filterLicenceHolder",
-        value: filterData.filterLicenceHolder
+        value: filter.licenceHolder
       }) }}
 
       {# Filter by licence status #}
@@ -155,12 +155,12 @@
           {
             value: "review",
             text: "Review",
-            checked: filterData.filterLicenceStatus === 'review'
+            checked: filter.licenceStatus === 'review'
           },
           {
             value: "ready",
             text: "Ready",
-            checked: filterData.filterLicenceStatus === 'ready'
+            checked: filter.licenceStatus === 'ready'
           }
         ]
       }) }}
@@ -185,7 +185,7 @@
     summaryText: "Filter licences",
     html: filtersForm,
     classes: "govuk-!-margin-bottom-2",
-    open: filterData.openFilter
+    open: filter.openFilter
   }) }}
 
   {# Generate the row data for the table #}
