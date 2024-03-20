@@ -14,9 +14,11 @@ describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     const testBillRun = _testBillRun()
     const testLicences = _testLicences()
+    const licenceHolder = undefined
+    const licenceStatus = undefined
 
     it('correctly presents the data', () => {
-      const result = ReviewBillRunPresenter.go(testBillRun, testLicences)
+      const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
 
       expect(result).to.equal({
         region: 'Southern (Test replica)',
@@ -50,18 +52,24 @@ describe('Review Bill Run presenter', () => {
             issue: 'Multiple Issues'
           }
         ],
-        filterData: { openFilter: false }
+        filter: {
+          licenceHolder: undefined,
+          licenceStatus: undefined,
+          openFilter: false
+        }
       })
     })
 
     describe('and a filter has been applied', () => {
-      const filterLicenceHolder = 'big farm'
+      const licenceHolder = 'bob'
+      const licenceStatus = 'ready'
 
       it('correctly presents the data', () => {
-        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, filterLicenceHolder)
+        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
 
-        expect(result.filterData.openFilter).to.equal(true)
-        expect(result.filterData.licenceHolder).to.equal(filterLicenceHolder)
+        expect(result.filter.openFilter).to.equal(true)
+        expect(result.filter.licenceHolder).to.equal(licenceHolder)
+        expect(result.filter.licenceStatus).to.equal(licenceStatus)
       })
     })
   })
