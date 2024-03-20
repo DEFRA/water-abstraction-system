@@ -12,7 +12,7 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * A licence ended if it has expired, lapsed or revoked on or before the current date. Because we need to check this
  * in a number of places we have the `LicenceModel` instance method `$ends()` to do this for us.
- * 
+ *
  * But for that to work you have to fetch the licence and the 3 dates from the licence record. This service combines
  * fetching the licence and the dates then returning the result of `$ends()` to whatever service calls it.
  *
@@ -22,7 +22,7 @@ const LicenceModel = require('../../models/licence.model.js')
  */
 async function go (id) {
   const licence = await _fetchLicence(id)
-  const licenceEnded = _checkLicenceEnded(licence)
+  const licenceEnded = _licenceEnded(licence)
   return licenceEnded
 }
 

@@ -19,7 +19,6 @@ const SubmitCheckYourAnswersService = require('../../../app/services/return-requ
 describe('Submit Check Your Answers service', () => {
   let session
   let sessionId
-  let licenceId
 
   beforeEach(async () => {
     session = await SessionHelper.add({
@@ -30,7 +29,6 @@ describe('Submit Check Your Answers service', () => {
       }
     })
     sessionId = session.id
-    licenceId = session.data.licence.id
   })
 
   afterEach(() => {
@@ -44,10 +42,8 @@ describe('Submit Check Your Answers service', () => {
 
     describe('When called with a valid licence', () => {
       it('returns a valid licence', async () => {
-        Sinon.stub(SubmitCheckYourAnswersService, 'go').resolves({ data: { licence: { id: licenceId } } })
-
         const result = await SubmitCheckYourAnswersService.go(sessionId)
-        expect(result.data.licence.id).to.equal(licenceId)
+        expect(result).to.be.false()
       })
     })
 

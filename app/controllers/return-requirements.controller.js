@@ -217,9 +217,9 @@ async function submitAgreementsExceptions (request, h) {
 
 async function submitCheckYourAnswers (request, h) {
   const { sessionId } = request.params
-  const licenceId = await SubmitCheckYourAnswersService.go(sessionId)
+  await SubmitCheckYourAnswersService.go(sessionId)
 
-  return h.redirect(`/system/return-requirements/${licenceId}/approved`)
+  return h.redirect(`/system/return-requirements/${sessionId}/approved`)
 }
 
 async function submitExisting (request, h) {

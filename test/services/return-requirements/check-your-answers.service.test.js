@@ -22,12 +22,9 @@ describe('Check Your Answers service', () => {
     session = await SessionHelper.add({
       data: {
         licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
-          licenceHolder: 'Astro Boy',
-          startDate: '2022-04-01T00:00:00.000Z'
+          licenceHolder: 'Astro Boy'
         }
       }
     })
@@ -46,8 +43,7 @@ describe('Check Your Answers service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Check the return requirements for Astro Boy',
-        licenceRef: '01/ABC',
-        licence_id: '01/ABC'
+        licenceRef: '01/ABC'
       }, { skip: ['id'] })
     })
   })
