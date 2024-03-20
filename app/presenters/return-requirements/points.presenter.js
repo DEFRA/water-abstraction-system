@@ -23,12 +23,7 @@ function _licencePoints (pointsData, payload) {
     return points
   }
 
-  if (!pointsData ||
-    pointsData?.purposes === undefined ||
-    pointsData.purposes.length === 0 ||
-    pointsData.purposes[0]?.purposePoints === undefined ||
-    pointsData.purposes[0]?.purposePoints.length === 0
-  ) {
+  if (!pointsData || pointsData === undefined) {
     return {
       abstractionPoints: null
     }
@@ -36,14 +31,10 @@ function _licencePoints (pointsData, payload) {
 
   const abstractionPoints = []
 
-  pointsData.purposes.forEach((purpose) => {
-    purpose.purposePoints.forEach((point) => {
-      const pointDetail = point.point_detail
-
-      if (pointDetail) {
-        abstractionPoints.push(_generateAbstractionContent(pointDetail))
-      }
-    })
+  pointsData.forEach((pointDetail) => {
+    if (pointDetail) {
+      abstractionPoints.push(_generateAbstractionContent(pointDetail))
+    }
   })
 
   return abstractionPoints
