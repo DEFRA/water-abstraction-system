@@ -12,8 +12,8 @@ const SelectReasonService = require('../services/return-requirements/reason.serv
 const SessionModel = require('../models/session.model.js')
 const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
-const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
+const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
@@ -217,9 +217,9 @@ async function submitAgreementsExceptions (request, h) {
 
 async function submitCheckYourAnswers (request, h) {
   const { sessionId } = request.params
-  await SubmitCheckYourAnswersService.go(sessionId)
+  const licenceId = await SubmitCheckYourAnswersService.go(sessionId)
 
-  return h.redirect(`/system/return-requirements/${sessionId}/approved`)
+  return h.redirect(`/system/return-requirements/${licenceId}/approved`)
 }
 
 async function submitExisting (request, h) {

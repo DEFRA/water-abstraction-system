@@ -1,4 +1,5 @@
 'use strict'
+
 /**
  * Manages converting the session data to return requirement records when check your answers is confirmed
  * @module SubmitCheckYoursAnswersService
@@ -24,14 +25,20 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const licenceData = await CheckLicenceEndedService.go(session.data.licence.id)
-  const isLicenceEnded = await licenceData
 
-  if (isLicenceEnded) {
-    throw new ExpandedError('Invalid return requirement', { licenceData })
+  await _validateLicence(session.data.licence.id)
+
+  return session.data.licence.id
+}
+
+async function _validateLicence (licenceId) {
+  const licenceEnded = await CheckLicenceEndedService.go(licenceId)
+
+  if (!licenceEnded) {
+    return
   }
 
-  return licenceData
+  throw new ExpandedError('Invalid licence for return requirements', { licenceId, licenceEnded })
 }
 
 module.exports = {

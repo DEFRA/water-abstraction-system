@@ -35,28 +35,26 @@ describe('Submit Check Your Answers service', () => {
     Sinon.restore()
   })
 
-  describe('POST /return-requirements/{sessionDd}/check-your-answers', () => {
+  describe('When called with a valid licence', () => {
     beforeEach(() => {
       Sinon.stub(CheckLicenceEndedService, 'go').resolves(false)
     })
 
-    describe('When called with a valid licence', () => {
-      it('returns a valid licence', async () => {
-        const result = await SubmitCheckYourAnswersService.go(sessionId)
-        expect(result).to.be.false()
-      })
+    it('returns a valid licence', async () => {
+      const result = await SubmitCheckYourAnswersService.go(sessionId)
+      expect(result).to.equal(session.data.licence.id)
+    })
+  })
+
+  describe('When called with an invalid licence (expired, lapsed or revoked)', () => {
+    beforeEach(async () => {
+      Sinon.stub(CheckLicenceEndedService, 'go').resolves(true)
     })
 
-    describe('When called with an invalid licence (expired, lapsed or revoked)', () => {
-      beforeEach(async () => {
-        Sinon.stub(SubmitCheckYourAnswersService, 'go').rejects(new ExpandedError('Invalid return requirement', {}))
-      })
-
-      it('throws an error', async () => {
-        const response = await expect(SubmitCheckYourAnswersService.go(sessionId)).to.reject()
-        expect(response).to.be.an.instanceOf(ExpandedError)
-        expect(response.message).to.equal('Invalid return requirement')
-      })
+    it('throws an error', async () => {
+      const response = await expect(SubmitCheckYourAnswersService.go(sessionId)).to.reject()
+      expect(response).to.be.an.instanceOf(ExpandedError)
+      expect(response.message).to.equal('Invalid licence for return requirements')
     })
   })
 })
