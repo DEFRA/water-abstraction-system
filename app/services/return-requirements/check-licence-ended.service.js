@@ -40,17 +40,16 @@ async function _fetchLicence (id) {
 }
 
 function _licenceEnded (licence) {
-  const { $ends: ends } = licence
+  const ends = licence.$ends()
 
   if (!ends) {
     return false
   }
 
-  const endDate = new Date(ends.date)
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  return endDate <= today
+  return ends.date <= today
 }
 
 module.exports = {
