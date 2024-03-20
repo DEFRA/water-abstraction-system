@@ -32,7 +32,20 @@ async function _fetchPoints (licenceId) {
       ])
     })
 
-  return result.permitLicence
+  return _abstractPointsData(result.permitLicence)
+}
+
+function _abstractPointsData (result) {
+  const pointsData = []
+
+  result.purposes.forEach((purpose) => {
+    purpose.purposePoints.forEach((point) => {
+      const pointDetail = point.point_detail
+      pointsData.push(pointDetail)
+    })
+  })
+
+  return pointsData
 }
 
 module.exports = {
