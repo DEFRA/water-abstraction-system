@@ -11,8 +11,8 @@
   {# Back link #}
   {{
     govukBackLink({
-      text: 'Go back to transactions for ' + licenceRef,
-      href: '/system/bill-licences/' + billLicenceId
+      text: 'Go back to bill for ' + accountNumber,
+      href: '/system/bills/' + billId
     })
   }}
 {% endblock %}
@@ -25,7 +25,7 @@
     </h1>
 
     {{ govukInsetText({
-      text: 'The licence will go into the next supplementary bill run.'
+      text: supplementaryMessage
     }) }}
   </div>
 
@@ -79,27 +79,31 @@
         govukSummaryList({
           classes: 'govuk-summary-list--no-border',
           attributes: {
-            'data-test': 'bill-licence-meta-data'
+            'data-test': 'bill-meta-data'
           },
           rows: [
             {
               key: { text: "Billing account", classes: "meta-data__label" },
-              value: { html: '<span data-test="bill-licence-meta-data-billing-account">' + accountNumber + '</span>', classes: "meta-data__value" }
+              value: { html: '<span data-test="bill-meta-data-billing-account">' + accountNumber + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Bill for", classes: "meta-data__label" },
-              value: { html: '<span data-test="bill-licence-meta-data-bill-for">' + accountName + '</span>', classes: "meta-data__value" }
+              value: { html: '<span data-test="bill-meta-data-bill-for">' + accountName + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: licencesText, classes: "meta-data__label" },
+              value: { html: '<span data-test="bill-meta-data-licences">' + licences + '</span>', classes: "meta-data__value" }
             },
             {
               key: { text: "Total", classes: "meta-data__label" },
-              value: { html: '<span data-test="bill-licence-meta-data-total">' + transactionsTotal + '</span>', classes: "meta-data__value" }
+              value: { html: '<span data-test="bill-meta-data-total">' + total + '</span>', classes: "meta-data__value" }
             }
           ]
         })
       }}
 
       <form method="post">
-        {{ govukButton({ text: "Remove this licence", preventDoubleClick: true }) }}
+        {{ govukButton({ text: "Remove this bill", preventDoubleClick: true }) }}
       </form>
     </div>
   </div>
