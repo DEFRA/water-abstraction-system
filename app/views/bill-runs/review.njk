@@ -1,13 +1,14 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -138,6 +139,76 @@
         id: "filter-licence-holder",
         name: "filterLicenceHolder",
         value: filter.licenceHolder
+      }) }}
+
+      {# Filter by licence issues #}
+      {{ govukCheckboxes({
+        classes: "govuk-checkboxes--small",
+        name: "issues",
+        fieldset: {
+          legend: {
+            text: "Issue",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            value: "abs-outside-period",
+            text: "Abstraction outside period",
+            checked: filter.absOutsidePeriod
+          },
+          {
+            value: "aggregate-factor",
+            text: "Aggregate",
+            checked: filter.aggregateFactor
+          },
+          {
+            value: "checking-query",
+            text: "Checking query",
+            checked: filter.checkingQuery
+          },
+          {
+            value: "no-returns-received",
+            text: "No returns received",
+            checked: filter.noReturnsReceived
+          },
+          {
+            value: "over-abstraction",
+            text: "Over abstraction",
+            checked: filter.overAbstraction
+          },
+          {
+            value: "overlap-of-charge-dates",
+            text: "Overlap of charge dates",
+            checked: filter.overlapOfChargeDates
+          },
+          {
+            value: "returns-received-not-processed",
+            text: "Returns received but not processed",
+            checked: filter.returnsReceivedNotProcessed
+          },
+          {
+            value: "returns-late",
+            text: "Returns received late",
+            checked: filter.returnsLate
+          },
+          {
+            value: "return-split-over-refs",
+            text: "Return split over charge references",
+            checked: filter.returnSplitOverRefs
+          },
+          {
+            value: "some-returns-not-received",
+            text: "Some returns IDs not received",
+            checked: filter.someReturnsNotReceived
+          },
+          {
+            value: "unable-to-match-return",
+            text: "Unable to match return",
+            checked: filter.unableToMatchReturn
+          }
+        ]
       }) }}
 
       {# Filter by licence status #}
