@@ -21,14 +21,23 @@ const StartDatePresenter = require('../../presenters/return-requirements/start-d
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const formattedData = StartDatePresenter.go(session)
+  const pageTitle = _pageTitle(session.data.journey)
 
   return {
     activeNavBar: 'search',
-    pageTitle: 'Select the start date for the return requirement',
+    pageTitle,
     ...formattedData
   }
 }
 
 module.exports = {
   go
+}
+
+function _pageTitle (journey) {
+  if (journey === 'returns-required') {
+    return 'Select the start date for the return requirement'
+  }
+
+  return 'Select the start date'
 }
