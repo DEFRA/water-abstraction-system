@@ -5,7 +5,7 @@
  * @module ExistsService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 /**
  * Fetch bill run(s) that match the options provided

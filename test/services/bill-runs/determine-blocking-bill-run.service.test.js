@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const DatabaseSupport = require('../../support/database.js')
+const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
-const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+const DetermineBlockingBillRunService = require('../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
 
-describe('Bill Runs Setup Determine Blocking Bill Run service', () => {
+describe('Determine Blocking Bill Run service', () => {
   let batchType
   let financialEndYear
   let regionId
