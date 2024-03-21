@@ -7,9 +7,9 @@
 
 const BillRunModel = require('../../models/bill-run.model.js')
 const ChargingModuleCreateBillRunRequest = require('../../requests/charging-module/create-bill-run.request.js')
-const CheckLiveBillRunService = require('./check-live-bill-run.service.js')
 const CreateBillRunService = require('./create-bill-run.service.js')
 const CreateBillRunEventService = require('./create-bill-run-event.service.js')
+const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
 
 /**
@@ -26,11 +26,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */
 async function go (financialYearEndings, regionId, batchType, userEmail) {
-  const liveBillRunExists = await CheckLiveBillRunService.go(regionId, financialYearEndings.toFinancialYearEnding, batchType)
-
-  if (liveBillRunExists) {
-    throw new ExpandedError('Batch already live for region', { regionId })
-  }
+  await _billRunBlocked(regionId, batchType, financialYearEndings.toFinancialYearEnding)
 
   const chargingModuleResult = await ChargingModuleCreateBillRunRequest.send(regionId, 'sroc')
 
@@ -59,6 +55,23 @@ function _billRunOptions (chargingModuleResult, batchType) {
   options.errorCode = BillRunModel.errorCodes.failedToCreateBillRun
 
   return options
+}
+
+async function _billRunBlocked (regionId, batchType, financialEndYear) {
+  const matchResults = await DetermineBlockingBillRunService.go(regionId, batchType, financialEndYear)
+
+  // No matches so we can create the bill run
+  if (matchResults.length === 0) {
+    return
+  }
+
+  // You can only have one SROC and PRESROC supplementary being processed at any time. If less than 2 then we can create
+  // a bill run
+  if (batchType === 'supplementary' && matchResults.length < 2) {
+    return
+  }
+
+  throw new ExpandedError('Batch already live for region', { billRunId: matchResults[0].id })
 }
 
 module.exports = {

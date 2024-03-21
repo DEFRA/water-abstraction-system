@@ -2,7 +2,7 @@
 
 /**
  * Determines if an existing bill run will block the one a user is trying to setup
- * @module ExistsService
+ * @module DetermineBlockingBillRunService
  */
 
 const FetchLiveBillRunsService = require('./fetch-live-bill-runs.service.js')
