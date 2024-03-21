@@ -247,7 +247,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Submit the points for the return requirement'
+      description: 'Submit the points for the requirements for returns'
     }
   },
   {
@@ -260,7 +260,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the purpose for the requirement for returns'
+      description: 'Select the purpose for the requirements for returns'
     }
   },
   {
@@ -273,7 +273,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Submit the purpose for the return requirement'
+      description: 'Submit the purpose for the requirements for returns'
     }
   },
   {
