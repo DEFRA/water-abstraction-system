@@ -82,7 +82,6 @@ function _matchLiveBillRuns (liveBillRuns, financialYearEnding, supplementary) {
     // Regardless of bill run type if the years match we have a matching live bill run
     if (liveBillRun.toFinancialYearEnding === financialYearEnding) {
       matches.push(liveBillRun)
-      break
     }
 
     // If the bill run we are checking for is supplementary we also need to check if there is a match for the last year
