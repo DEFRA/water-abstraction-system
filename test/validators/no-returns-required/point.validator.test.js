@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const PointValidator = require('../../../app/validators/return-requirements/point.validator')
+const PointValidator = require('../../../app/validators/return-requirements/point.validator.js')
 
 describe('Point validator', () => {
   describe('when valid data is provided', () => {
