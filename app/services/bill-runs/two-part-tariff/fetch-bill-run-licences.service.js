@@ -7,6 +7,7 @@
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
+const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Takes the bill run ID and fetches all the data needed to review the bill run
@@ -15,6 +16,8 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * ref.
  *
  * @param {String} id The UUID for the bill run
+ * @param {{Object[]}} issues An array of issues to filter the results by. This will only contain data when
+ * there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} licenceHolder The licence holder to filter the results by. This will only contain data when
  * there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} licenceStatus The status of the licence to filter the results by. This also only contains data
@@ -23,9 +26,9 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run. Also
  * included is any data that has been used to filter the results
  */
-async function go (id, licenceHolder, licenceStatus) {
+async function go (id, issues, licenceHolder, licenceStatus) {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id, licenceHolder, licenceStatus)
+  const licences = await _fetchBillRunLicences(id, issues, licenceHolder, licenceStatus)
 
   return { billRun, licences }
 }
@@ -45,10 +48,22 @@ async function _fetchBillRun (id) {
     })
 }
 
-async function _fetchBillRunLicences (id, licenceHolder, licenceStatus) {
+async function _fetchBillRunLicences (id, issues, licenceHolder, licenceStatus) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .where('billRunId', id)
     .orderBy('status', 'desc')
+
+  if (issues) {
+    const lookupIssues = issues.map((issue) => twoPartTariffReviewIssues[issue])
+
+    lookupIssues.forEach((lookupIssue, index) => {
+      if (index === 0) {
+        reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
+      } else {
+        reviewLicenceQuery.orWhereLike('issues', `%${lookupIssue}%`)
+      }
+    })
+  }
 
   if (licenceHolder) {
     reviewLicenceQuery.whereILike('licenceHolder', `%${licenceHolder}%`)
