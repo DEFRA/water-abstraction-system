@@ -5,6 +5,15 @@
  * @module PointsPresenter
 */
 
+/**
+ * Formats data for the `/return-requirements/{sessionId}/points` page
+ *
+ * @param {module:SessionModel} session - The returns requirements session instance
+ * @param {Object} [pointsData] - The points for the licence
+ * @param {Object} [payload] - The payload from the request
+ *
+ * @returns {Object} - The data formatted for the view template
+ */
 function go (session, pointsData, payload = {}) {
   const data = {
     id: session.id,
@@ -17,6 +26,11 @@ function go (session, pointsData, payload = {}) {
 }
 
 function _licencePoints (pointsData, payload) {
+  // NOTE: 'points' is the payload value that tells us whether the user selected any purposes
+  // for the return requirement.
+  // If it is not set then it is because the presenter has been called from 'PointsService' and it's the first
+  // load. Else it has been called by the 'SubmitPointsService' and the user has not checked a point from the list.
+  // Either way, we use it to tell us wether there is anything in the payload worth transforming.
   const points = payload.points
 
   if (points) {
