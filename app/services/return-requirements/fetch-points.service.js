@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches points descriptions needed for `/return-requirements/{sessionId}/points` page
+ * Fetches points details needed for `/return-requirements/{sessionId}/points` page
  * @module FetchPointsService
  */
 
@@ -9,6 +9,13 @@ const { ref } = require('objection')
 
 const LicenceModel = require('../../models/licence.model.js')
 
+/**
+ * Fetches points details needed for `/return-requirements/{sessionId}/points` page
+ *
+ * @param {string} licenceId The UUID for the licence to fetch
+ *
+ * @returns {Promise<Object>} The points details for the matching licenceId
+ */
 async function go (licenceId) {
   const data = await _fetchPoints(licenceId)
 
