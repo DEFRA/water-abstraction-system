@@ -136,9 +136,9 @@ describe('View Standard Charge Transaction presenter', () => {
         })
       })
 
-      describe("when the section 130 agreement is 'true' (they stored it as a string!)", () => {
+      describe("when the section 130 agreement is 'true ' (they stored it as a string!)", () => {
         beforeEach(() => {
-          transaction.section130Agreement = 'true'
+          transaction.section130Agreement = 'true '
         })
 
         it("returns 'Canal and River Trust (0.5)'", () => {

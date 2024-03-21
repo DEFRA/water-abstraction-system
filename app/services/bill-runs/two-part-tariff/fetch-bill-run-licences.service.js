@@ -15,39 +15,50 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * ref.
  *
  * @param {String} id The UUID for the bill run
+ * @param {String} licenceHolder The licence holder to filter the results by. This will only contain data when
+ * there is a POST request, which only occurs when a filter is applied to the results.
+ * @param {String} licenceStatus The status of the licence to filter the results by. This also only contains data
+ * when there is a POST request.
  *
- * @returns {Promise<Object>} an object containing the billRun data and an array of licences for the bill run
+ * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run. Also
+ * included is any data that has been used to filter the results
  */
-async function go (id) {
+async function go (id, licenceHolder, licenceStatus) {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id)
+  const licences = await _fetchBillRunLicences(id, licenceHolder, licenceStatus)
 
   return { billRun, licences }
-}
-
-async function _fetchBillRunLicences (id) {
-  return ReviewLicenceModel.query()
-    .where('billRunId', id)
-    .orderBy('status', 'desc')
 }
 
 async function _fetchBillRun (id) {
   return BillRunModel.query()
     .findById(id)
-    .select([
-      'id',
-      'createdAt',
-      'status',
-      'toFinancialYearEnding',
-      'batchType'
-    ])
+    .select('id', 'createdAt', 'status', 'toFinancialYearEnding', 'batchType')
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {
-      builder.select([
-        'id',
-        'displayName'
-      ])
+      builder.select('id', 'displayName')
     })
+    .withGraphFetched('reviewLicences')
+    .modifyGraph('reviewLicences', (builder) => {
+      builder.count('licenceId as totalNumberOfLicences')
+        .groupBy('billRunId')
+    })
+}
+
+async function _fetchBillRunLicences (id, licenceHolder, licenceStatus) {
+  const reviewLicenceQuery = ReviewLicenceModel.query()
+    .where('billRunId', id)
+    .orderBy('status', 'desc')
+
+  if (licenceHolder) {
+    reviewLicenceQuery.whereILike('licenceHolder', `%${licenceHolder}%`)
+  }
+
+  if (licenceStatus) {
+    reviewLicenceQuery.where('status', licenceStatus)
+  }
+
+  return reviewLicenceQuery
 }
 
 module.exports = {

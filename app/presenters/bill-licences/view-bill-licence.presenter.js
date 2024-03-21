@@ -20,7 +20,7 @@ const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-t
  * view bill-licence page
  */
 function go (billLicence) {
-  const { bill, licenceId, licenceRef, transactions } = billLicence
+  const { id: billLicenceId, bill, licenceId, licenceRef, transactions } = billLicence
 
   const displayCreditDebitTotals = _displayCreditDebitTotals(bill.billRun)
 
@@ -34,6 +34,7 @@ function go (billLicence) {
     displayCreditDebitTotals,
     licenceId,
     licenceRef,
+    removeLicenceLink: _removeLicenceLink(bill.billRun, billLicenceId),
     scheme: bill.billRun.scheme,
     tableCaption: _tableCaption(transactions),
     transactions: _transactions(transactions),
@@ -45,6 +46,16 @@ function _displayCreditDebitTotals (billRun) {
   const { batchType } = billRun
 
   return batchType === 'supplementary'
+}
+
+function _removeLicenceLink (billRun, billLicenceId) {
+  const { status } = billRun
+
+  if (status !== 'ready') {
+    return null
+  }
+
+  return `/system/bill-licences/${billLicenceId}/remove`
 }
 
 function _tableCaption (transactions) {

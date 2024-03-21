@@ -9,24 +9,20 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% from "macros/badge.njk" import badge %}
-
 {% block breadcrumbs %}
   {# Back link #}
-  {{
-    govukBackLink({
+  {{ govukBackLink({
       text: 'Go back to bill runs',
       href: '/billing/batch/list'
-    })
-  }}
+  }) }}
 {% endblock %}
 
 {% block content %}
   {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <span class="govuk-caption-l">{{region}} {{billRunType}} bill run</span>
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
+      <span class="govuk-caption-l">{{ region }} {{ billRunType }} bill run</span>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
 
       {# Status badge #}
       {% if status == 'review' %}
@@ -36,10 +32,10 @@
       {% endif %}
 
       <p class="govuk-body">
-        {{govukTag({
+        {{ govukTag({
           text: status,
           classes: colour
-        })}}
+        }) }}
       </p>
 
       {# Bill run meta-data #}
@@ -52,7 +48,7 @@
                 classes: "meta-data__label"
               },
               value: {
-                text: dateCreated,
+                html: '<span data-test="meta-data-created">' + dateCreated + '</span>',
                 classes: "meta-data__value"
               }
             },
@@ -62,7 +58,7 @@
                 classes: "meta-data__label"
               },
               value: {
-                text: region,
+                html: '<span data-test="meta-data-region">' + region + '</span>',
                 classes: "meta-data__value"
               }
             },
@@ -72,7 +68,7 @@
                 classes: "meta-data__label"
               },
               value: {
-                text: billRunType | capitalize,
+                html: '<span data-test="meta-data-type">' + billRunType | capitalize + '</span>',
                 classes: "meta-data__value"
               }
             },
@@ -82,7 +78,7 @@
                 classes: "meta-data__label"
               },
               value: {
-                text: 'Current',
+                html: '<span data-test="meta-data-scheme">Current</span>',
                 classes: "meta-data__value"
               }
             },
@@ -92,7 +88,7 @@
                 classes: "meta-data__label"
               },
               value: {
-                text: financialYear,
+                html: '<span data-test="meta-data-year">' + financialYear + '</span>',
                 classes: "meta-data__value"
               }
             }
@@ -102,15 +98,17 @@
   </div>
 
   {# Dynamic message either telling the user they have issues to deal with or that they can generate bills #}
-  {% if licencesToReviewCount > 0 %}
+  {% if numberOfLicencesToReview > 0 %}
     <section class="govuk-!-margin-bottom-9">
       {{ govukInsetText({
-        text: 'You need to review ' + licencesToReviewCount + ' licences with returns data issues. You can then continue and send the bill run.'
+        html: '<span data-test="licences-to-review">You need to review ' + numberOfLicencesToReview + ' licences with returns data issues. You can then continue and send the bill run.</span>'
       }) }}
     </section>
   {% else %}
     <section class="govuk-!-margin-bottom-9">
-      <p class="govuk-body ">You have resolved all returns data issues. Continue to generate bills.</p>
+      {{ govukInsetText({
+        html: '<span data-test="licences-to-review">You have resolved all returns data issues. Continue to generate bills.</span>'
+      }) }}
     </section>
   {% endif %}
 
@@ -118,10 +116,77 @@
   <section class="govuk-!-margin-bottom-9">
     {{ govukButton({
       classes: "govuk-button--secondary govuk-!-margin-bottom-0",
-      text: 'Cancel bill run',
-      href: 'cancel'
+      text: "Cancel bill run",
+      href: "cancel"
     }) }}
   </section>
+
+
+  {# Licence filter #}
+  {% set filtersForm %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
+
+    <form  method="post" novalidate action="review">
+      {# Filter by licence holder #}
+      {{ govukInput({
+        label: {
+          text: "Licence holder",
+          classes: "govuk-label--s",
+          isPageHeading: false
+        },
+        classes: "govuk-input--width-20",
+        id: "filter-licence-holder",
+        name: "filterLicenceHolder",
+        value: filter.licenceHolder
+      }) }}
+
+      {# Filter by licence status #}
+      {{ govukRadios({
+        classes: "govuk-radios--small",
+        name: "filterLicenceStatus",
+        fieldset: {
+          legend: {
+            text: "Status",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: [
+          {
+            value: "review",
+            text: "Review",
+            checked: filter.licenceStatus === 'review'
+          },
+          {
+            value: "ready",
+            text: "Ready",
+            checked: filter.licenceStatus === 'ready'
+          }
+        ]
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Apply filters"
+        }) }}
+
+        {{ govukButton({
+          text: "Clear filters",
+          classes: "govuk-button--secondary ",
+          name: "clearFilters",
+          type: "reset",
+          href: "review"
+        }) }}
+      </div>
+    </form>
+  {% endset %}
+
+  {{ govukDetails({
+    summaryText: "Filter licences",
+    html: filtersForm,
+    classes: "govuk-!-margin-bottom-2",
+    open: filter.openFilter
+  }) }}
 
   {# Generate the row data for the table #}
   {% set tableRows = [] %}
@@ -145,18 +210,37 @@
         {% endset %}
 
       {% set tableRow = [
-        {html: action | safe},
-        {text: licence.licenceHolder},
-        {text: licence.issue },
-        {html: statusTag, classes: "govuk-!-text-align-right"}
+        {
+          html: action,
+          attributes: { 'data-test': 'licence-' + loop.index }
+        },
+        {
+          text: licence.licenceHolder,
+          attributes: { 'data-test': 'licence-holder-' + loop.index }
+        },
+        {
+          text: licence.issue,
+          attributes: { 'data-test': 'licence-issue-' + loop.index }
+        },
+        {
+          html: statusTag, classes: "govuk-!-text-align-right",
+          attributes: { 'data-test': 'licence-status-' + loop.index }
+          }
       ] %}
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
       {% endfor %}
     {% endif %}
 
+  {# Sets the caption to be used in the table below #}
+  {% if totalNumberOfLicences > numberOfLicencesDisplayed %}
+    {% set caption = "Showing " + numberOfLicencesDisplayed + " of " + totalNumberOfLicences + " licences" %}
+  {% else %}
+    {% set caption = "Showing all " + totalNumberOfLicences + " licences" %}
+  {% endif %}
+
   {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
   {{ govukTable({
-    caption: "Showing all " + numberOfLicences + " licences",
+    caption: caption,
     captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
     firstCellIsHeader: false,
     head: [

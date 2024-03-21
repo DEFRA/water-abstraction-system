@@ -5,7 +5,34 @@
  * @module BillsController
  */
 
+const Boom = require('@hapi/boom')
+
+const RemoveBillService = require('../services/bills/remove-bill.service.js')
+const SubmitRemoveBillService = require('../services/bills/submit-remove-bill.service.js')
 const ViewBillService = require('../services/bills/view-bill.service.js')
+
+async function remove (request, h) {
+  const { id } = request.params
+
+  const pageData = await RemoveBillService.go(id)
+
+  return h.view('bills/remove.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function submitRemove (request, h) {
+  const { id } = request.params
+
+  try {
+    const redirectPath = await SubmitRemoveBillService.go(id, request.auth.credentials.user)
+
+    return h.redirect(redirectPath)
+  } catch (error) {
+    return Boom.badImplementation(error.message)
+  }
+}
 
 async function view (request, h) {
   const { id } = request.params
@@ -34,5 +61,7 @@ function _determineView (pageData) {
 }
 
 module.exports = {
+  remove,
+  submitRemove,
   view
 }

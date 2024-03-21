@@ -59,6 +59,23 @@ const services = {
 }
 
 /**
+ * Sends a DELETE request to the legacy service for the provided path
+ *
+ * @param {string} serviceName - Name of the legacy service to call (background, crm, external, idm, import, internal,
+ * permits, reporting, returns or water)
+ * @param {string} path - The path to send the request to (do not include the starting /)
+ * @param {string} [userId] - If the legacy endpoint needs to check a user's authorisation their ID to be added as a
+ * header. Defaults to null
+ * @param {boolean} [apiRequest] - Whether the request is to the service's API endpoints (JSON response) or web (HTML
+ * response). Defaults to true
+ *
+ * @returns {Promise<Object>} An object representing the result of the request
+ */
+async function deleteRequest (serviceName, path, userId = null, apiRequest = true) {
+  return _sendRequest(BaseRequest.delete, serviceName, path, userId, apiRequest)
+}
+
+/**
  * Sends a GET request to the legacy service for the provided path
  *
  * @param {string} serviceName - Name of the legacy service to call (background, crm, external, idm, import, internal,
@@ -177,6 +194,7 @@ function _parseResult (result) {
 }
 
 module.exports = {
+  delete: deleteRequest,
   get,
   post
 }

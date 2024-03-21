@@ -9,7 +9,9 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
+const SelectPurposeService = require('../../app/services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
 const SetupService = require('../../app/services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../../app/services/return-requirements/site-description.service.js')
@@ -82,6 +84,12 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/check-your-answers', () => {
+    beforeEach(async () => {
+      Sinon.stub(CheckYourAnswersService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Check the return requirements for Acme Corp.'
+      })
+    })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('check-your-answers'))
@@ -154,12 +162,17 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/purpose', () => {
+    beforeEach(async () => {
+      Sinon.stub(SelectPurposeService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the purpose for the requirement for returns'
+      })
+    })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('purpose'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select the purpose for the return requirement')
+        expect(response.payload).to.contain('Select the purpose for the requirement for returns')
       })
     })
   })

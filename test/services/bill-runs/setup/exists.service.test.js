@@ -14,7 +14,7 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FetchMatchingBillRunService = require('../../../../app/services/bill-runs/setup/fetch-matching-bill-run.service.js')
+const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
 
 // Thing under test
 const ExistsService = require('../../../../app/services/bill-runs/setup/exists.service.js')
@@ -49,7 +49,7 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and no matching bill runs exist', () => {
         beforeEach(async () => {
-          Sinon.stub(FetchMatchingBillRunService, 'go').resolves([])
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
         it("returns an object with an empty 'matchResults:', a null 'pageData:' property and year to use is as selected", async () => {
@@ -60,13 +60,13 @@ describe('Bill Runs Setup Exists service', () => {
           expect(matchResults).to.be.empty()
           expect(pageData).to.be.null()
           expect(session).to.equal(session)
-          expect(yearToUse).to.equal(session.data.year)
+          expect(yearToUse).to.equal(2022)
         })
       })
 
       describe('and a matching bill run exists', () => {
         beforeEach(async () => {
-          Sinon.stub(FetchMatchingBillRunService, 'go').resolves([{
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{
             id: 'dfbbc7ac-b15b-483a-afcf-a7c01ac377d1',
             batchType: 'two_part_tariff',
             billRunNumber: 12345,
@@ -87,7 +87,7 @@ describe('Bill Runs Setup Exists service', () => {
           expect(matchResults[0].id).to.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
           expect(pageData.billRunId).to.be.equal('dfbbc7ac-b15b-483a-afcf-a7c01ac377d1')
           expect(session).to.equal(session)
-          expect(yearToUse).to.equal(session.data.year)
+          expect(yearToUse).to.equal(2022)
         })
       })
     })
@@ -109,7 +109,7 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and no matching bill runs exist', () => {
         beforeEach(async () => {
-          Sinon.stub(FetchMatchingBillRunService, 'go').resolves([])
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
         it("returns an object with an empty 'matchResults:', a null 'pageData:' property and year to use is the current financial year end", async () => {
@@ -126,7 +126,7 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and a matching bill run exists', () => {
         beforeEach(async () => {
-          Sinon.stub(FetchMatchingBillRunService, 'go').resolves([{
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{
             id: '5612815f-9f67-4ac1-b697-d9ab7789274c',
             batchType: 'annual',
             billRunNumber: 12345,
@@ -169,7 +169,7 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and no matching bill runs exist', () => {
         beforeEach(async () => {
-          Sinon.stub(FetchMatchingBillRunService, 'go').resolves([])
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
         it("returns an object with an empty 'matchResults:', a null 'pageData:' property and year to use is the current financial year end", async () => {
@@ -186,7 +186,7 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and one matching bill run exists', () => {
         beforeEach(async () => {
-          Sinon.stub(FetchMatchingBillRunService, 'go').resolves([{
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{
             id: '7b8a518b-ee0c-4c12-acfe-3b99f99d4c53',
             batchType: 'supplementary',
             billRunNumber: 12345,
@@ -215,7 +215,7 @@ describe('Bill Runs Setup Exists service', () => {
 
       describe('and two matching bill runs exist', () => {
         beforeEach(async () => {
-          Sinon.stub(FetchMatchingBillRunService, 'go').resolves([
+          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([
             {
               id: '7b8a518b-ee0c-4c12-acfe-3b99f99d4c53',
               batchType: 'supplementary',

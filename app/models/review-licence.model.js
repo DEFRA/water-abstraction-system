@@ -16,6 +16,14 @@ class ReviewLicenceModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      billRun: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'bill-run.model',
+        join: {
+          from: 'reviewLicences.billRunId',
+          to: 'billRuns.id'
+        }
+      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',

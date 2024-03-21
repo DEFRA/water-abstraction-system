@@ -6,7 +6,7 @@
  */
 
 const CreatePresenter = require('../../../presenters/bill-runs/setup/create.presenter.js')
-const FetchMatchingBillRunService = require('./fetch-matching-bill-run.service.js')
+const DetermineBlockingBillRunService = require('../determine-blocking-bill-run.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
@@ -55,7 +55,7 @@ function _determineYear (session) {
   const { type, year } = session.data
 
   if (year && type.startsWith('two_part')) {
-    return year
+    return Number(year)
   }
 
   const { endDate } = determineCurrentFinancialYear()
@@ -65,9 +65,8 @@ function _determineYear (session) {
 
 async function _fetchMatchingBillRun (session, year) {
   const { region, season, type } = session.data
-  const summer = season === 'summer'
 
-  return FetchMatchingBillRunService.go(region, type, year, summer)
+  return DetermineBlockingBillRunService.go(region, type, year, season)
 }
 
 function _pageData (session, matchResults) {
