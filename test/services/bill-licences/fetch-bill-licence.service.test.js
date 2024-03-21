@@ -37,13 +37,37 @@ describe('Fetch Bill Licence service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    linkedBillRun = await BillRunHelper.add()
+    linkedBillRun = await BillRunHelper.add({ status: 'ready' })
     linkedBill = await BillHelper.add({ billRunId: linkedBillRun.id })
 
     testBillLicence = await BillLicenceHelper.add({ billId: linkedBill.id })
   })
 
   describe('when a bill licence with a matching ID exists', () => {
+    it('will fetch the data and format it for use in the bill licence page', async () => {
+      const result = await FetchBillLicenceService.go(testBillLicence.id)
+
+      // NOTE: Transactions would not ordinarily be empty. But the format of the transactions will differ depending on
+      // scheme so we get into that in later tests.
+      expect(result).to.equal({
+        id: testBillLicence.id,
+        licenceId: testBillLicence.licenceId,
+        licenceRef: testBillLicence.licenceRef,
+        bill: {
+          id: linkedBill.id,
+          accountNumber: linkedBill.accountNumber,
+          billRun: {
+            id: linkedBillRun.id,
+            batchType: 'supplementary',
+            scheme: 'sroc',
+            source: 'wrls',
+            status: 'ready'
+          }
+        },
+        transactions: []
+      })
+    })
+
     it('returns the matching instance of BillLicenceModel', async () => {
       const result = await FetchBillLicenceService.go(testBillLicence.id)
 

@@ -5,7 +5,7 @@
  * @module FetchBillRunsForRegionService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
+const BillRunModel = require('../../models/bill-run.model.js')
 
 const LAST_PRESROC_YEAR = 2022
 
@@ -79,16 +79,15 @@ function _matchLiveBillRuns (liveBillRuns, financialYearEnding, supplementary) {
   const matches = []
 
   for (const liveBillRun of liveBillRuns) {
-    // If it's not supplementary we are looking on behalf of annual or 2PT. This means as soon as we have a match we
-    // can break the loop and return the result
-    if (!supplementary && liveBillRun.toFinancialYearEnding === financialYearEnding) {
+    // Regardless of bill run type if the years match we have a matching live bill run
+    if (liveBillRun.toFinancialYearEnding === financialYearEnding) {
       matches.push(liveBillRun)
-      break
     }
 
-    // Because of the check above this will only be applied to supplementary bill runs. This is where we check the
-    // live bill run against both the specified financial year ending and the last year of PRESROC 2022
-    if (liveBillRun.toFinancialYearEnding === financialYearEnding || liveBillRun.toFinancialYearEnding === LAST_PRESROC_YEAR) {
+    // If the bill run we are checking for is supplementary we also need to check if there is a match for the last year
+    // of PRESROC. This won't necessarily block the bill run from being created. But it will help the calling service
+    // determine whether to ping the legacy app or not to create a PRESROC bill run
+    if (supplementary && liveBillRun.toFinancialYearEnding === LAST_PRESROC_YEAR) {
       matches.push(liveBillRun)
     }
   }

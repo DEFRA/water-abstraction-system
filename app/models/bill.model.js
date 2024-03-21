@@ -16,6 +16,14 @@ class BillModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      billingAccount: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'billing-account.model',
+        join: {
+          from: 'bills.billingAccountId',
+          to: 'billingAccounts.id'
+        }
+      },
       billRun: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'bill-run.model',
