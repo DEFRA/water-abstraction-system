@@ -18,6 +18,7 @@ const FetchLicenceVersionPurposeConstionService = require('../../../app/services
 describe('Fetch licence version purpose condition service', () => {
   let abstractConditions
   let abstractConditionsTypes
+  const licenceVersionPurposeIds = []
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -29,12 +30,17 @@ describe('Fetch licence version purpose condition service', () => {
       abstractConditions = await LicenceVersionPurposeConditionHelper.add({
         licenceVersionPurposeConditionTypeId: abstractConditionsTypes.id
       })
+      licenceVersionPurposeIds.push({
+        licenceVersionPurposeId: abstractConditions.licenceVersionPurposeId,
+        purposeId: 'ac075651-4781-4e24-a684-b943b98607cb'
+      })
     })
 
     it('returns results', async () => {
-      const result = await FetchLicenceVersionPurposeConstionService.go(abstractConditions.licenceVersionPurposeId)
+      const result = await FetchLicenceVersionPurposeConstionService.go(licenceVersionPurposeIds)
 
-      expect(result.abstractionConditions).to.equal(['Link between split licences'])
+      expect(result.numberOfAbstractionConditions).to.equal(1)
+      expect(result.uniqueAbstractionConditions).to.equal(['Link between split licences'])
     })
   })
 })

@@ -809,7 +809,10 @@ describe('View Licence presenter', () => {
     })
 
     describe('and it has one abstraction condition', () => {
-      const abstractionCondtion = { abstractionConditions: ['Level cessation condition'] }
+      const abstractionCondtion = {
+        numberOfAbstractionConditions: 1,
+        uniqueAbstractionConditions: ['Level cessation condition']
+      }
 
       it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {
         const result = await ViewLicencePresenter.go(licence, abstractionCondtion)
@@ -817,11 +820,15 @@ describe('View Licence presenter', () => {
         expect(result.abstractionConditions.caption).to.equal('Abstraction condition')
         expect(result.abstractionConditions.linkText).to.equal('View details of the abstraction condition')
         expect(result.abstractionConditions.conditions).to.equal(['Level cessation condition'])
+        expect(result.abstractionConditions.numberOfAbstractionConditions).to.equal(1)
       })
     })
 
     describe('and it has two abstraction conditions', () => {
-      const abstractionCondtion = { abstractionConditions: ['Level cessation condition', 'Cessation dependant on releases from schemes / other licences'] }
+      const abstractionCondtion = {
+        numberOfAbstractionConditions: 2,
+        uniqueAbstractionConditions: ['Level cessation condition', 'Cessation dependant on releases from schemes / other licences']
+      }
 
       it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {
         const result = await ViewLicencePresenter.go(licence, abstractionCondtion)
@@ -829,6 +836,7 @@ describe('View Licence presenter', () => {
         expect(result.abstractionConditions.caption).to.equal('Abstraction conditions')
         expect(result.abstractionConditions.linkText).to.equal('View details of the abstraction conditions')
         expect(result.abstractionConditions.conditions).to.equal(['Level cessation condition', 'Cessation dependant on releases from schemes / other licences'])
+        expect(result.abstractionConditions.numberOfAbstractionConditions).to.equal(2)
       })
     })
   })

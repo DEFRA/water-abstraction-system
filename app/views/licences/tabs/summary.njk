@@ -114,9 +114,9 @@
         <dt class="govuk-summary-list__key">{{ abstractionConditions.caption }}</dt>
         <dd class="govuk-summary-list__value">
             <div>
-                {% if abstractionConditions.conditions.length > 5 %}
-                    There are {{ abstractionConditions.conditions.length }} abstraction conditions
-                {% elseif abstractionConditions.conditions.length > 1 %}
+                {% if abstractionConditions.numberOfAbstractionConditions > 5 %}
+                    There are {{ abstractionConditions.numberOfAbstractionConditions }} abstraction conditions
+                {% elseif abstractionConditions.numberOfAbstractionConditions > 1 %}
                     <ul class="govuk-list govuk-!-margin-bottom-0">
                         {% for condition in abstractionConditions.conditions %}
                             <li>{{ condition }}</li>

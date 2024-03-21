@@ -10,45 +10,70 @@ const LicenceVersionPurposeCondtionModel = require('../../models/licence-version
 /**
  * Fetch the matching licence version purpose conditions and return data needed for the view licence page
  *
- * @param {string} id The UUID for the licence_version_purpose_id to fetch
+ * @param {object} ids The object contains the UUIDs for the licence_version_purpose_id and the purpose_id
  *
  * @returns {Promise<Object>} the data needed to populate the view licence page and some elements of the summary tab
  */
-async function go (id) {
-  if (!id) {
+async function go (ids) {
+  if (!ids) {
     return {
       abstractionConditions: []
     }
   }
-  const LicenceVersionPurposeCondition = await _fetchLicenceVersionPurposeCondition(id)
-  const data = await _data(LicenceVersionPurposeCondition)
+
+  const licenceVersionIds = []
+
+  ids.forEach((item) => { licenceVersionIds.push(item.licenceVersionPurposeId) })
+
+  const LicenceVersionPurposeCondition = await _fetchLicenceVersionPurposeCondition(licenceVersionIds)
+  const data = await _data(LicenceVersionPurposeCondition, ids)
 
   return data
 }
 
-async function _data (licenceVersionPurposeConditions) {
+async function _data (licenceVersionPurposeConditions, licenceVersionPuroseAndPurposeUseIds) {
   const abstractionConditions = []
 
   if (!licenceVersionPurposeConditions) {
     return abstractionConditions
   }
 
-  licenceVersionPurposeConditions.forEach((purposeConditions) => {
-    purposeConditions.licenceVersionPurposeConditionTypes.forEach((licenceVersionPurposeConditionType) => {
-      abstractionConditions.push(licenceVersionPurposeConditionType.displayTitle)
+  licenceVersionPurposeConditions.forEach((purposeCondition) => {
+    // Get the purposeUseId from the LicenceVersionPurpose table using the licenceVersionPurposeId of the current purposeCondition
+    const { purposeId: purposeUseId } = licenceVersionPuroseAndPurposeUseIds.find((item) =>
+      item.licenceVersionPurposeId === purposeCondition.licenceVersionPurposeId)
+
+    // Loop through each of the condition types and check to see if there is already a set of those conditions in the array
+    purposeCondition.licenceVersionPurposeConditionTypes.forEach((licenceVersionPurposeConditionType) => {
+      if (!abstractionConditions.find((element) =>
+        element.displayTitle === licenceVersionPurposeConditionType.displayTitle &&
+        element.purposeUseId === purposeUseId
+      )) {
+        abstractionConditions.push({
+          displayTitle: licenceVersionPurposeConditionType.displayTitle,
+          purposeUseId
+        })
+      }
     })
   })
 
+  const abstractionConditionDisplayTitles = []
+  abstractionConditions.forEach((condition) => {
+    abstractionConditionDisplayTitles.push(condition.displayTitle)
+  })
+
   return {
-    abstractionConditions: [...new Set(abstractionConditions)]
+    numberOfAbstractionConditions: abstractionConditions.length,
+    uniqueAbstractionConditions: [...new Set(abstractionConditionDisplayTitles)]
   }
 }
 
-async function _fetchLicenceVersionPurposeCondition (id) {
+async function _fetchLicenceVersionPurposeCondition (ids) {
   const result = await LicenceVersionPurposeCondtionModel.query()
-    .where('licenceVersionPurposeId', id)
+    .whereIn('licenceVersionPurposeId', ids)
     .select([
-      'id'
+      'id',
+      'licenceVersionPurposeId'
     ])
     .withGraphFetched('licenceVersionPurposeConditionTypes')
     .modifyGraph('licenceVersionPurposeConditionTypes', (builder) => {

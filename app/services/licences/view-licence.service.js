@@ -26,8 +26,14 @@ async function go (id) {
     licenceData.licenceVersions.length > 0 ||
     licenceData.licenceVersions[0]?.licenceVersionPurposes === undefined ||
     licenceData.licenceVersions[0]?.licenceVersionPurposes?.length === 0) {
-    const licenceVersionPurposeId = licenceData?.licenceVersions[0]?.licenceVersionPurposes[0]?.id
-    licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceVersionPurposeId)
+    const licenceVersionPurposeIds = []
+    licenceData?.licenceVersions[0]?.licenceVersionPurposes.forEach((licenceVersionPurpose) => {
+      licenceVersionPurposeIds.push({
+        licenceVersionPurposeId: licenceVersionPurpose.id,
+        purposeId: licenceVersionPurpose.purposeId
+      })
+    })
+    licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceVersionPurposeIds)
   }
 
   const pageData = ViewLicencePresenter.go(licenceData, licenceVersionPurposeConditionData)

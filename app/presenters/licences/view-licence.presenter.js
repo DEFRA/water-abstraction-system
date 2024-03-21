@@ -82,8 +82,8 @@ function _endDate (expiredDate) {
 
 function _generateAbstractionConditions (conditionsData) {
   if (!conditionsData ||
-      conditionsData?.abstractionConditions === undefined ||
-      conditionsData.abstractionConditions.length === 0) {
+      conditionsData?.uniqueAbstractionConditions === undefined ||
+      conditionsData.uniqueAbstractionConditions.length === 0) {
     return {
       caption: 'Abstraction condition',
       linkText: 'View details of the abstraction condition',
@@ -92,11 +92,12 @@ function _generateAbstractionConditions (conditionsData) {
   }
 
   return {
-    caption: conditionsData.abstractionConditions.length > 1 ? 'Abstraction conditions' : 'Abstraction condition',
-    linkText: conditionsData.abstractionConditions.length > 1
-      ? 'View details of the abstraction conditions'
-      : 'View details of the abstraction condition',
-    conditions: conditionsData.abstractionConditions
+    caption: conditionsData.numberOfAbstractionConditions === 1 ? 'Abstraction condition' : 'Abstraction conditions',
+    conditions: conditionsData.uniqueAbstractionConditions,
+    linkText: conditionsData.numberOfAbstractionConditions === 1
+      ? 'View details of the abstraction condition'
+      : 'View details of the abstraction conditions',
+    numberOfAbstractionConditions: conditionsData.numberOfAbstractionConditions
   }
 }
 

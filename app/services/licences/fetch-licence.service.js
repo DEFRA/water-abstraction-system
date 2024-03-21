@@ -68,6 +68,11 @@ async function _fetchLicence (id) {
         'licenceDocumentHeaders.id'
       ])
     })
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (builder) => {
+      builder.select(['licenceVersions.id'])
+        .where('licenceVersions.status', 'current')
+    })
     .withGraphFetched('licenceVersions.[licenceVersionPurposes, purposes]')
     .modifyGraph('[licenceVersionPurposes]', (builder) => {
       builder.select([
