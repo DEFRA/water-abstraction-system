@@ -43,4 +43,15 @@ describe('Fetch licence version purpose condition service', () => {
       expect(result.uniqueAbstractionConditions).to.equal(['Link between split licences'])
     })
   })
+
+  describe('when there is ids passed to the function', () => {
+    it('returns an empty array', async () => {
+      const result = await FetchLicenceVersionPurposeConstionService.go(undefined)
+
+      expect(result).to.equal({
+        numberOfAbstractionConditions: 0,
+        uniqueAbstractionConditions: []
+      })
+    })
+  })
 })

@@ -17,7 +17,8 @@ const LicenceVersionPurposeCondtionModel = require('../../models/licence-version
 async function go (ids) {
   if (!ids) {
     return {
-      abstractionConditions: []
+      numberOfAbstractionConditions: 0,
+      uniqueAbstractionConditions: []
     }
   }
 
@@ -35,7 +36,10 @@ async function _data (licenceVersionPurposeConditions, licenceVersionPuroseAndPu
   const abstractionConditions = []
 
   if (!licenceVersionPurposeConditions) {
-    return abstractionConditions
+    return {
+      numberOfAbstractionConditions: 0,
+      uniqueAbstractionConditions: []
+    }
   }
 
   licenceVersionPurposeConditions.forEach((purposeCondition) => {

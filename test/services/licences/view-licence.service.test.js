@@ -41,7 +41,12 @@ describe('View Licence service', () => {
             conditions: [],
             linkText: 'View details of the abstraction condition'
           },
-          abstractionPeriods: null,
+          abstractionPeriods: {
+            caption: 'Period of abstraction',
+            uniqueAbstractionPeriods: [
+              '1 January to 28 February'
+            ]
+          },
           abstractionPeriodsAndPurposesLinkText: null,
           abstractionPointLinkText: 'View details of the abstraction point',
           abstractionPoints: [
@@ -197,7 +202,16 @@ function _testLicence () {
     },
     licenceRef: '01/130/R01',
     licenceName: 'Unregistered licence',
-    licenceVersions: [],
+    licenceVersions: [{
+      licenceVersionPurposes: [{
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 1,
+        abstractionPeriodEndDay: 28,
+        abstractionPeriodEndMonth: 2,
+        id: '3c80bd22-a005-4cf4-a2a2-73812a9861df',
+        purposeId: '4c80bd22-a005-4cf4-a2a2-73812a9861dg'
+      }]
+    }],
     permitLicence: {
       purposes: [{
         purposePoints: [{
