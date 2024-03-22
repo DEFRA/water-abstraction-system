@@ -16,7 +16,7 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Thing under test
 const FetchPointsService = require('../../../app/services/return-requirements/fetch-points.service.js')
 
-describe('Fetch points service', () => {
+describe('Return requirements Fetch Points service', () => {
   let licence
   let region
 
@@ -61,23 +61,25 @@ describe('Fetch points service', () => {
     })
   })
 
-  it('returns result', async () => {
-    const result = await FetchPointsService.go(licence.id)
+  describe('when called', () => {
+    it('returns result', async () => {
+      const result = await FetchPointsService.go(licence.id)
 
-    expect(result).to.equal([{
-      NGR1_EAST: '69212',
-      NGR2_EAST: 'null',
-      NGR3_EAST: 'null',
-      NGR4_EAST: 'null',
-      LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-      NGR1_NORTH: '50394',
-      NGR1_SHEET: 'TQ',
-      NGR2_NORTH: 'null',
-      NGR2_SHEET: 'null',
-      NGR3_NORTH: 'null',
-      NGR3_SHEET: 'null',
-      NGR4_NORTH: 'null',
-      NGR4_SHEET: 'null'
-    }])
+      expect(result).to.equal([{
+        NGR1_EAST: '69212',
+        NGR2_EAST: 'null',
+        NGR3_EAST: 'null',
+        NGR4_EAST: 'null',
+        LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
+        NGR1_NORTH: '50394',
+        NGR1_SHEET: 'TQ',
+        NGR2_NORTH: 'null',
+        NGR2_SHEET: 'null',
+        NGR3_NORTH: 'null',
+        NGR3_SHEET: 'null',
+        NGR4_NORTH: 'null',
+        NGR4_SHEET: 'null'
+      }])
+    })
   })
 })
