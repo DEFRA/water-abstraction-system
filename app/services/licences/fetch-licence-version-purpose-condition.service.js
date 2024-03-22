@@ -70,7 +70,7 @@ function _addUniqueAbstractionCondition (licenceVersionPurposeAndPurposeUseIds, 
 async function _data (licenceVersionPurposeConditions, licenceVersionPurposeAndPurposeUseIds) {
   const abstractionConditions = []
 
-  if (!licenceVersionPurposeConditions) {
+  if (licenceVersionPurposeConditions.length === 0) {
     return {
       numberOfAbstractionConditions: 0,
       uniqueAbstractionConditionTitles: []
