@@ -11,6 +11,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
 const { calculateAndLogTimeTaken, timestampForPostgres } = require('../../lib/general.lib.js')
 const ChargingModuleSendBillRunRequest = require('../../requests/charging-module/send-bill-run.request.js')
 const ChargingModuleViewBillRunRequest = require('../../requests/charging-module/view-bill-run.request.js')
+const UnflagBilledLicencesService = require('./supplementary/unflag-billed-licences.service.js')
 
 /**
  * Orchestrates the sending of a bill run
@@ -55,7 +56,10 @@ async function _fetchBillRun (id) {
     .findById(id)
     .select([
       'id',
+      'createdAt',
       'externalId',
+      'regionId',
+      'scheme',
       'status'
     ])
 }
@@ -87,6 +91,8 @@ async function _sendBillRun (billRun) {
   await _updateInvoiceData(externalBillRun)
 
   await _updateBillRunData(billRun, externalBillRun)
+
+  await UnflagBilledLicencesService.go(billRun)
 
   calculateAndLogTimeTaken(startTime, 'Send bill run complete', { billRunId })
 }
