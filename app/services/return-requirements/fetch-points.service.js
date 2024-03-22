@@ -12,7 +12,7 @@ const LicenceModel = require('../../models/licence.model.js')
 /**
  * Fetches points details needed for `/return-requirements/{sessionId}/points` page
  *
- * @param {string} licenceId The UUID for the licence to fetch
+ * @param {string} licenceId - The UUID for the licence to fetch
  *
  * @returns {Promise<Object>} The points details for the matching licenceId
  */
