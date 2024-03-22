@@ -36,12 +36,11 @@
     <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
 
-
     <div class="govuk-hint"> Select all that apply </div>
   </div>
 
-<div>
-  <form method="post">
+  <div>
+    <form method="post">
       {% set checkBoxItems = [] %}
       {% for point in licencePoints %}
 
@@ -51,7 +50,7 @@
           checked: false
         } %}
 
-      {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
+        {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
 
       {% endfor %}
         {{ govukCheckboxes({
@@ -61,8 +60,6 @@
         }) }}
 
     {{ govukButton({ text: "Continue" }) }}
-  </form>
-</div>
-
-
+    </form>
+  </div>
 {% endblock %}
