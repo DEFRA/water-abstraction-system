@@ -78,7 +78,7 @@ async function _data (licenceVersionPurposeConditions, licenceVersionPurposeAndP
   }
 
   licenceVersionPurposeConditions.forEach((purposeCondition) => {
-    _addUniqueAbstractionCondition(licenceVersionPurposeConditions, abstractionConditions, purposeCondition)
+    _addUniqueAbstractionCondition(licenceVersionPurposeAndPurposeUseIds, abstractionConditions, purposeCondition)
   })
 
   const abstractionConditionDisplayTitles = []
