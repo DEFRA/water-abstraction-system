@@ -31,12 +31,14 @@ const LicenceModel = require('../../../models/licence.model.js')
  * Unlike `UnflagBilledLicencesService` the chances of these events happening between bill run creation and this service
  * running are slim. But we feel it prudent to still check plus it keeps the services consistent.
  *
- * @param {String} billRunId - The UUID of the bill run being processed
+ * @param {module:BillRunModel} billRun - Instance of the bill run being processed
  * @param {String[]} allLicenceIds - All licence UUIDs being processed in the bill run
  *
  * @returns {Promise<Number>} Resolves to the count of records updated
  */
-async function go (billRunId, allLicenceIds) {
+async function go (billRun, allLicenceIds) {
+  const { id: billRunId, createdAt } = billRun
+
   const result = await LicenceModel.query()
     .patch({ includeInSrocBilling: false })
     .whereIn('id', allLicenceIds)
@@ -49,6 +51,7 @@ async function go (billRunId, allLicenceIds) {
       LicenceModel.relatedQuery('workflows')
         .whereNull('workflows.deletedAt')
     )
+    .where('updatedAt', '<=', createdAt)
 
   return result
 }
