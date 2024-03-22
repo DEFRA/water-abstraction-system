@@ -72,14 +72,14 @@ async function _updateCurrentScheme (billRun) {
   return LicenceModel.query()
     .patch({ includeInSrocBilling: false })
     .where('updatedAt', '<=', createdAt)
+    .whereNotExists(
+      LicenceModel.relatedQuery('workflows')
+        .whereNull('workflows.deletedAt')
+    )
     .whereExists(
       LicenceModel.relatedQuery('billLicences')
         .join('bills', 'bills.id', 'billLicences.billId')
         .where('bills.billRunId', billRunId)
-    )
-    .whereNotExists(
-      LicenceModel.relatedQuery('workflows')
-        .whereNull('workflows.deletedAt')
     )
 }
 

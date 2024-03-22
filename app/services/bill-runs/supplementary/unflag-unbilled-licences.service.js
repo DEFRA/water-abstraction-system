@@ -41,17 +41,17 @@ async function go (billRun, allLicenceIds) {
 
   const result = await LicenceModel.query()
     .patch({ includeInSrocBilling: false })
-    .whereIn('id', allLicenceIds)
+    .where('updatedAt', '<=', createdAt)
+    .whereNotExists(
+      LicenceModel.relatedQuery('workflows')
+        .whereNull('workflows.deletedAt')
+    )
     .whereNotExists(
       LicenceModel.relatedQuery('billLicences')
         .join('bills', 'bills.id', '=', 'billLicences.billId')
         .where('bills.billRunId', '=', billRunId)
     )
-    .whereNotExists(
-      LicenceModel.relatedQuery('workflows')
-        .whereNull('workflows.deletedAt')
-    )
-    .where('updatedAt', '<=', createdAt)
+    .whereIn('id', allLicenceIds)
 
   return result
 }
