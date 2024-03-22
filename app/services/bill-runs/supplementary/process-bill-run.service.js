@@ -100,7 +100,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   // .findByIds() so we spread it into an array
   const allLicenceIds = [...new Set(accumulatedLicenceIds)]
 
-  await UnflagUnbilledLicencesService.go(billRun.id, allLicenceIds)
+  await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
 
   // We set `isPopulated` to `true` if at least one processing result was truthy
   const isPopulated = resultsOfProcessing.some(result => result)
