@@ -56,10 +56,11 @@ async function _updateOldScheme (billRun) {
  * SROC
  */
 async function _updateCurrentScheme (billRun) {
-  const { id: billRunId } = billRun
+  const { id: billRunId, createdAt } = billRun
 
   return LicenceModel.query()
     .patch({ includeInSrocBilling: false })
+    .where('updatedAt', '<=', createdAt)
     .whereExists(
       LicenceModel.relatedQuery('billLicences')
         .join('bills', 'bills.id', 'billLicences.billId')
