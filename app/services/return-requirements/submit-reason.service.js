@@ -28,6 +28,11 @@ async function go (sessionId, payload) {
 
   const validationResult = _validate(payload)
 
+  if (!validationResult) {
+    await _save(session, payload)
+    return {}
+  }
+
   const formattedData = ReasonPresenter.go(session, payload)
 
   return {
@@ -36,6 +41,14 @@ async function go (sessionId, payload) {
     pageTitle: 'Select the reason for the return requirement',
     ...formattedData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.reason = payload.reason
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {

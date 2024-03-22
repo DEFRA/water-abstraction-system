@@ -69,7 +69,6 @@ async function approved (request, h) {
 
 async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
-
   const pageData = await CheckYourAnswersService.go(sessionId)
 
   return h.view('return-requirements/check-your-answers.njk', {

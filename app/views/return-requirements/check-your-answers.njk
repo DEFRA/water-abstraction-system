@@ -4,6 +4,16 @@
 
 {% set baseURL = "/system/return-requirements/" + id %}
 
+{% set reasonText %}
+  {% if reason == 'abstraction_below_100_cubic_metres_per_day' %}
+    Abstraction amount below 100 cubic metres per day
+  {% elif reason == 'returns_exception' %}
+    Returns exception
+  {% elif reason == 'transfer_licence' %}
+    Transfer licence
+  {% endif %}
+{% endset %}
+
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
@@ -25,7 +35,7 @@
                 text: "Start date"
               },
               value: {
-                text: "start_date_from_session"
+                text: startDate
               },
               actions: {
                 items: [
@@ -43,7 +53,7 @@
                 text: "Reason"
               },
               value: {
-                text: "reason_from_session"
+                text: reasonText
               },
               actions: {
                 items: [
@@ -90,18 +100,20 @@
     </div>
 
     <div class="govuk-body">
-      <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
-      <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
-        {{ govukButton({
-          text: "Approve returns requirements",
-          classes: "govuk-!-margin-right-6"
-          }) }}
+      {% if journey == 'no-returns-required' %}
+        <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+        <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
+      {% endif %}
+      {{ govukButton({
+        text: "Approve returns requirements",
+        classes: "govuk-!-margin-right-6"
+        }) }}
 
-        {{ govukButton({
-          text: "Cancel return requirements",
-          classes: "govuk-button--secondary",
-          href: "#"
-          }) }}
+      {{ govukButton({
+        text: "Cancel return requirements",
+        classes: "govuk-button--secondary",
+        href: "#"
+        }) }}
     </div>
   </form>
 {% endblock %}

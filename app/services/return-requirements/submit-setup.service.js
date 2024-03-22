@@ -28,13 +28,19 @@ async function go (sessionId, payload) {
 
   const validationResult = _validate(payload)
 
+  if (!validationResult) {
+    await _save(session, payload)
+    return {
+      redirect: _redirect(payload.setup)
+    }
+  }
+
   const formattedData = SetupPresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
     pageTitle: 'How do you want to set up the return requirement?',
-    redirect: _redirect(payload.setup),
     ...formattedData
   }
 }
@@ -51,6 +57,14 @@ function _redirect (setup) {
   }
 
   return endpoint
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.setup = payload.setup
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {

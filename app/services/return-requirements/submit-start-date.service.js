@@ -30,6 +30,13 @@ async function go (sessionId, payload) {
   const { endDate, startDate } = session.data.licence
   const validationResult = _validate(payload, startDate, endDate)
 
+  if (!validationResult) {
+    await _save(session, payload)
+    return {
+      journey: session.data.journey
+    }
+  }
+
   const formattedData = StartDatePresenter.go(session, payload)
 
   return {
@@ -39,6 +46,21 @@ async function go (sessionId, payload) {
     pageTitle: 'Select the start date for the return requirement',
     ...formattedData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+  const selectedOption = payload['start-date-options']
+
+  currentData.startDateOptions = selectedOption
+
+  if (selectedOption === 'anotherStartDate') {
+    currentData.startDateDay = payload['start-date-day']
+    currentData.startDateMonth = payload['start-date-month']
+    currentData.startDateYear = payload['start-date-year']
+  }
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload, licenceStartDate, licenceEndDate) {
