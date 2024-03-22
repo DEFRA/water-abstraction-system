@@ -11,11 +11,14 @@ const { expect } = Code
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const DatabaseSupport = require('../../support/database.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
+const { determineCurrentFinancialYear } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchLiveBillRunsService = require('../../../app/services/bill-runs/fetch-live-bill-runs.service.js')
 
 describe('Fetch Live Bill Runs service', () => {
+  const currentFinancialYear = determineCurrentFinancialYear()
+
   let financialYearEnding
   let regionId
 
@@ -27,23 +30,23 @@ describe('Fetch Live Bill Runs service', () => {
   })
 
   describe('when there is a live bill run', () => {
-    beforeEach(() => {
-      financialYearEnding = 2024
-    })
-
-    describe('and it matches the financial year end requested', () => {
+    describe('and it is for the current year (SROC)', () => {
       beforeEach(async () => {
         await BillRunHelper.add({
           id: '1021c5bc-673c-48fa-98dd-733b46c84f90',
           regionId,
-          batchType: 'two_part_tariff',
-          status: 'review',
-          toFinancialYearEnding: financialYearEnding,
+          batchType: 'supplementary',
+          status: 'ready',
+          toFinancialYearEnding: currentFinancialYear.endDate.getFullYear(),
           scheme: 'sroc'
         })
       })
 
-      describe('and we are not setting up a supplementary bill run (supplementary is false)', () => {
+      describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear()
+        })
+
         it('returns the live bill run as the match', async () => {
           const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
 
@@ -52,54 +55,49 @@ describe('Fetch Live Bill Runs service', () => {
         })
       })
 
-      describe('and we are setting up a supplementary bill run (supplementary is true)', () => {
-        describe('and there is also a live bill run in 2022 (last year for PRESROC)', () => {
-          beforeEach(async () => {
-            await BillRunHelper.add({
-              id: 'b65bb671-8961-4d0c-93f4-d19e1998e778',
-              regionId,
-              batchType: 'supplementary',
-              status: 'ready',
-              toFinancialYearEnding: 2022,
-              scheme: 'alcs'
-            })
-          })
-
-          it('returns multiple live bill run matches', async () => {
-            const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, true)
-
-            expect(results).to.have.length(2)
-            expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
-            expect(results[1].id).to.equal('b65bb671-8961-4d0c-93f4-d19e1998e778')
-          })
+      describe('and we are checking for a supplementary bill run for the current year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear()
         })
 
-        describe('and there are no PRESROC live bill runs', () => {
-          it('returns just the live bill run as the match', async () => {
-            const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
+        it('returns the live bill run as the match', async () => {
+          const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, true)
 
-            expect(results).to.have.length(1)
-            expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
-          })
+          expect(results).to.have.length(1)
+          expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
+        })
+      })
+
+      describe('and we are checking for a backlog two-part tariff bill run for the previous year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear() - 1
+        })
+
+        it('returns no matches', async () => {
+          const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
+
+          expect(results).to.be.empty()
         })
       })
     })
 
-    describe('but it does not match the financial year end requested', () => {
+    describe('and it is for the previous year (SROC)', () => {
       beforeEach(async () => {
-        financialYearEnding = 2024
-
         await BillRunHelper.add({
           id: '1021c5bc-673c-48fa-98dd-733b46c84f90',
           regionId,
-          batchType: 'two_part_tariff',
-          status: 'review',
-          toFinancialYearEnding: 2023,
+          batchType: 'supplementary',
+          status: 'ready',
+          toFinancialYearEnding: currentFinancialYear.endDate.getFullYear() - 1,
           scheme: 'sroc'
         })
       })
 
-      describe('and we are not setting up a supplementary bill run (supplementary is false)', () => {
+      describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear()
+        })
+
         it('returns no matches', async () => {
           const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
 
@@ -107,33 +105,78 @@ describe('Fetch Live Bill Runs service', () => {
         })
       })
 
-      describe('and we are setting up a supplementary bill run (supplementary is true)', () => {
-        describe('and there is also a live bill run in 2022 (last year for PRESROC)', () => {
-          beforeEach(async () => {
-            await BillRunHelper.add({
-              id: 'b65bb671-8961-4d0c-93f4-d19e1998e778',
-              regionId,
-              batchType: 'supplementary',
-              status: 'ready',
-              toFinancialYearEnding: 2022,
-              scheme: 'alcs'
-            })
-          })
-
-          it('returns just the PRESROC live bill as the match', async () => {
-            const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, true)
-
-            expect(results).to.have.length(1)
-            expect(results[0].id).to.equal('b65bb671-8961-4d0c-93f4-d19e1998e778')
-          })
+      describe('and we are checking for a supplementary bill run for the current year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear()
         })
 
-        describe('and there are no PRESROC live bill runs', () => {
-          it('returns no matches', async () => {
-            const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
+        it('returns no matches', async () => {
+          const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, true)
 
-            expect(results).to.be.empty()
-          })
+          expect(results).to.be.empty()
+        })
+      })
+
+      describe('and we are checking for a backlog two-part tariff bill run for the previous year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear() - 1
+        })
+
+        it('returns the live bill run as the match', async () => {
+          const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
+
+          expect(results).to.have.length(1)
+          expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
+        })
+      })
+    })
+
+    describe('and it is for the last PRESROC year (PRESROC)', () => {
+      beforeEach(async () => {
+        await BillRunHelper.add({
+          id: '1021c5bc-673c-48fa-98dd-733b46c84f90',
+          regionId,
+          batchType: 'supplementary',
+          status: 'ready',
+          toFinancialYearEnding: 2022,
+          scheme: 'alcs'
+        })
+      })
+
+      describe('and we are checking for an annual or two-part tariff bill run for the current year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear()
+        })
+
+        it('returns no matches', async () => {
+          const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
+
+          expect(results).to.be.empty()
+        })
+      })
+
+      describe('and we are checking for a supplementary bill run for the current year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear()
+        })
+
+        it('returns the live bill run as the match', async () => {
+          const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, true)
+
+          expect(results).to.have.length(1)
+          expect(results[0].id).to.equal('1021c5bc-673c-48fa-98dd-733b46c84f90')
+        })
+      })
+
+      describe('and we are checking for a backlog two-part tariff bill run for the previous year', () => {
+        beforeEach(async () => {
+          financialYearEnding = currentFinancialYear.endDate.getFullYear() - 1
+        })
+
+        it('returns no matches', async () => {
+          const results = await FetchLiveBillRunsService.go(regionId, financialYearEnding, false)
+
+          expect(results).to.be.empty()
         })
       })
     })
