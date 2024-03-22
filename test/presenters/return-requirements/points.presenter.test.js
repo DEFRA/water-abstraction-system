@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SelectPointsPresenter = require('../../../app/presenters/return-requirements/points.presenter.js')
+const PointsPresenter = require('../../../app/presenters/return-requirements/points.presenter.js')
 
 describe('Select Points presenter', () => {
   let session
@@ -65,7 +65,7 @@ describe('Select Points presenter', () => {
   describe('when provided with a populated session', () => {
     describe('and no payload', () => {
       it('correctly presents the data', () => {
-        const result = SelectPointsPresenter.go(session, pointsData)
+        const result = PointsPresenter.go(session, pointsData)
 
         expect(result).to.equal({
           id: '61e07498-f309-4829-96a9-72084a54996d',
@@ -88,7 +88,7 @@ describe('Select Points presenter', () => {
     }
 
     it('correctly presents the data', () => {
-      const result = SelectPointsPresenter.go(session, pointsData, payload)
+      const result = PointsPresenter.go(session, pointsData, payload)
 
       expect(result).to.equal({
         id: '61e07498-f309-4829-96a9-72084a54996d',
