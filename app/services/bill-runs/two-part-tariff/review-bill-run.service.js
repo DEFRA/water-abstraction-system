@@ -19,12 +19,7 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
 async function go (id, payload) {
-  let issues
-
-  if (payload?.filterIssues) {
-    issues = Array.from(payload.filterIssues)
-  }
-
+  const issues = payload?.filterIssues
   const licenceHolder = payload?.filterLicenceHolder
   const licenceStatus = payload?.filterLicenceStatus
 

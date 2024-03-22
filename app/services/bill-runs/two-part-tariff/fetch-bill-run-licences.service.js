@@ -54,15 +54,30 @@ async function _fetchBillRunLicences (id, issues, licenceHolder, licenceStatus) 
     .orderBy('status', 'desc')
 
   if (issues) {
-    const lookupIssues = issues.map((issue) => twoPartTariffReviewIssues[issue])
+    // if only a single issue is checked in the filter then a string is returned, otherwise it is an array
+    if (typeof issues === 'string') {
+      const lookupIssue = twoPartTariffReviewIssues[issues]
+      reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
+    } else {
+      // if we have got here then `issues` must be an array containing at least 2 records
+      const lookupIssues = issues.map((issue) => twoPartTariffReviewIssues[issue])
 
-    lookupIssues.forEach((lookupIssue, index) => {
-      if (index === 0) {
-        reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
-      } else {
-        reviewLicenceQuery.orWhereLike('issues', `%${lookupIssue}%`)
-      }
-    })
+      // the number of issues to check for in the where clause will vary depending on the number of issues selected.
+      reviewLicenceQuery.where((builder) => {
+        builder
+          .whereLike('issues', `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', `%${lookupIssues[1]}%`)
+          .orWhereLike('issues', lookupIssues[2] ? `%${lookupIssues[2]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[3] ? `%${lookupIssues[3]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[4] ? `%${lookupIssues[4]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[5] ? `%${lookupIssues[5]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[6] ? `%${lookupIssues[6]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[7] ? `%${lookupIssues[7]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[8] ? `%${lookupIssues[8]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[9] ? `%${lookupIssues[9]}%` : `%${lookupIssues[0]}%`)
+          .orWhereLike('issues', lookupIssues[10] ? `%${lookupIssues[10]}%` : `%${lookupIssues[0]}%`)
+      })
+    }
   }
 
   if (licenceHolder) {
