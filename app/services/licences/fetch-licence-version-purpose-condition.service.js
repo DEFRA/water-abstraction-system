@@ -55,10 +55,10 @@ function _addUniqueAbstractionCondition (licenceVersionPurposeAndPurposeUseIds, 
 
   // Loop through each of the condition types and check to see if there is already a set of those conditions in the array
   purposeCondition.licenceVersionPurposeConditionTypes.forEach((licenceVersionPurposeConditionType) => {
-    if (!abstractionConditions.find((element) =>
-      element.displayTitle === licenceVersionPurposeConditionType.displayTitle &&
+    if (!abstractionConditions.find((element) => {
+      return element.displayTitle === licenceVersionPurposeConditionType.displayTitle &&
       element.purposeUseId === purposeUseId
-    )) {
+    })) {
       abstractionConditions.push({
         displayTitle: licenceVersionPurposeConditionType.displayTitle,
         purposeUseId

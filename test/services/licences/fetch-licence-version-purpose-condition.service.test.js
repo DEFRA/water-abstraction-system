@@ -30,6 +30,43 @@ describe('Fetch licence version purpose condition service', () => {
     await DatabaseSupport.clean()
   })
 
+  describe('when there is no linked purpose data in the model', () => {
+    beforeEach(async () => {
+      licence = await LicenceHelper.add()
+
+      // Create 2 licence versions so we can test the service only gets the 'current' version
+      await LicenceVersionHelper.add({
+        licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
+      })
+      const licenceVersion = await LicenceVersionHelper.add({
+        licenceId: licence.id, startDate: new Date('2022-05-01')
+      })
+
+      const purpose = await PurposeHelper.add()
+      await LicenceVersionPurposeHelper.add({
+        licenceVersionId: licenceVersion.id,
+        purposeId: purpose.id
+      })
+
+      // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
+      await LicenceHolderSeeder.seed(licence.licenceRef)
+
+      abstractConditionsTypes = await LicenceVersionPurposeConditionTypesHelper.add()
+      await LicenceVersionPurposeConditionHelper.add({
+        licenceVersionPurposeConditionTypeId: abstractConditionsTypes.id
+      })
+
+      licenceData = await FetchLicenceService.go(licence.id)
+    })
+
+    it('returns results', async () => {
+      const result = await FetchLicenceVersionPurposeConstionService.go(licenceData)
+
+      expect(result.numberOfAbstractionConditions).to.equal(0)
+      expect(result.uniqueAbstractionConditionTitles).to.equal([])
+    })
+  })
+
   describe('when there is no optional data in the model', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
