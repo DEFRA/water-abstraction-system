@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const PointValidator = require('../../../app/validators/return-requirements/point.validator.js')
+const PointsValidator = require('../../../app/validators/return-requirements/points.validator.js')
 
 describe('Point validator', () => {
   describe('when valid data is provided', () => {
@@ -20,7 +20,7 @@ describe('Point validator', () => {
     }
 
     it('confirms the data is valid', () => {
-      const result = PointValidator.go(payload)
+      const result = PointsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -39,7 +39,7 @@ describe('Point validator', () => {
     }
 
     it('fails validation', () => {
-      const result = PointValidator.go(payload)
+      const result = PointsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
@@ -51,7 +51,7 @@ describe('Point validator', () => {
     const payload = {}
 
     it('fails validation', () => {
-      const result = PointValidator.go(payload)
+      const result = PointsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
