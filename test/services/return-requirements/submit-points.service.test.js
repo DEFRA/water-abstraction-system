@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchPointsService = require('../../../app/services/return-requirements/fetch-points.service.js')
-const PointsValidation = require('../../../app/validators/return-requirements/point.validator.js')
+const PointsValidation = require('../../../app/validators/return-requirements/points.validator.js')
 
 // Thing under test
 const SubmitPointsService = require('../../../app/services/return-requirements/submit-points.service.js')
@@ -54,38 +54,7 @@ describe('Submit Points service', () => {
           ]
         }
 
-        Sinon.stub(FetchPointsService, 'go').resolves([
-          {
-            NGR1_EAST: '69212',
-            NGR2_EAST: 'null',
-            NGR3_EAST: 'null',
-            NGR4_EAST: 'null',
-            LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-            NGR1_NORTH: '50394',
-            NGR1_SHEET: 'TQ',
-            NGR2_NORTH: 'null',
-            NGR2_SHEET: 'null',
-            NGR3_NORTH: 'null',
-            NGR3_SHEET: 'null',
-            NGR4_NORTH: 'null',
-            NGR4_SHEET: 'null'
-          },
-          {
-            NGR1_EAST: '68083',
-            NGR2_EAST: 'null',
-            NGR3_EAST: 'null',
-            NGR4_EAST: 'null',
-            LOCAL_NAME: 'BEWL WATER RESERVOIR',
-            NGR1_NORTH: '33604',
-            NGR1_SHEET: 'TQ',
-            NGR2_NORTH: 'null',
-            NGR2_SHEET: 'null',
-            NGR3_NORTH: 'null',
-            NGR3_SHEET: 'null',
-            NGR4_NORTH: 'null',
-            NGR4_SHEET: 'null'
-          }
-        ])
+        Sinon.stub(FetchPointsService, 'go').resolves(_testFetchPointsService())
 
         Sinon.stub(PointsValidation, 'go').resolves(null)
       })
@@ -118,38 +87,7 @@ describe('Submit Points service', () => {
       beforeEach(() => {
         payload = {}
 
-        Sinon.stub(FetchPointsService, 'go').resolves([
-          {
-            NGR1_EAST: '69212',
-            NGR2_EAST: 'null',
-            NGR3_EAST: 'null',
-            NGR4_EAST: 'null',
-            LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
-            NGR1_NORTH: '50394',
-            NGR1_SHEET: 'TQ',
-            NGR2_NORTH: 'null',
-            NGR2_SHEET: 'null',
-            NGR3_NORTH: 'null',
-            NGR3_SHEET: 'null',
-            NGR4_NORTH: 'null',
-            NGR4_SHEET: 'null'
-          },
-          {
-            NGR1_EAST: '68083',
-            NGR2_EAST: 'null',
-            NGR3_EAST: 'null',
-            NGR4_EAST: 'null',
-            LOCAL_NAME: 'BEWL WATER RESERVOIR',
-            NGR1_NORTH: '33604',
-            NGR1_SHEET: 'TQ',
-            NGR2_NORTH: 'null',
-            NGR2_SHEET: 'null',
-            NGR3_NORTH: 'null',
-            NGR3_SHEET: 'null',
-            NGR4_NORTH: 'null',
-            NGR4_SHEET: 'null'
-          }
-        ])
+        Sinon.stub(FetchPointsService, 'go').resolves(_testFetchPointsService())
       })
 
       it('fetches the current setup session record', async () => {
@@ -183,3 +121,38 @@ describe('Submit Points service', () => {
     })
   })
 })
+
+function _testFetchPointsService () {
+  return [
+    {
+      NGR1_EAST: '69212',
+      NGR2_EAST: 'null',
+      NGR3_EAST: 'null',
+      NGR4_EAST: 'null',
+      LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
+      NGR1_NORTH: '50394',
+      NGR1_SHEET: 'TQ',
+      NGR2_NORTH: 'null',
+      NGR2_SHEET: 'null',
+      NGR3_NORTH: 'null',
+      NGR3_SHEET: 'null',
+      NGR4_NORTH: 'null',
+      NGR4_SHEET: 'null'
+    },
+    {
+      NGR1_EAST: '68083',
+      NGR2_EAST: 'null',
+      NGR3_EAST: 'null',
+      NGR4_EAST: 'null',
+      LOCAL_NAME: 'BEWL WATER RESERVOIR',
+      NGR1_NORTH: '33604',
+      NGR1_SHEET: 'TQ',
+      NGR2_NORTH: 'null',
+      NGR2_SHEET: 'null',
+      NGR3_NORTH: 'null',
+      NGR3_SHEET: 'null',
+      NGR4_NORTH: 'null',
+      NGR4_SHEET: 'null'
+    }
+  ]
+}
