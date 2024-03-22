@@ -11,7 +11,6 @@ const { expect } = Code
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../../app/models/licence.model.js')
 const DatabaseSupport = require('../../../support/database.js')
 
 // Thing under test
@@ -25,19 +24,17 @@ describe('Unflag unbilled licences service', () => {
   })
 
   describe('when there are licences flagged for SROC supplementary billing', () => {
-    const licences = {
-      notInBillRun: null,
-      notBilledInBillRun: null,
-      billedInBillRun: null
-    }
     let allLicenceIds
+    let licenceNotInBillRun
+    let licenceNotBilledInBillRun
+    let licenceBilledInBillRun
 
     beforeEach(async () => {
-      licences.notInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
-      licences.notBilledInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
-      licences.billedInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
+      licenceNotInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
+      licenceNotBilledInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
+      licenceBilledInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
 
-      allLicenceIds = [licences.notBilledInBillRun.id, licences.billedInBillRun.id]
+      allLicenceIds = [licenceNotBilledInBillRun.id, licenceBilledInBillRun.id]
     })
 
     describe('those licences in the current bill run', () => {
@@ -45,7 +42,7 @@ describe('Unflag unbilled licences service', () => {
         it('are unflagged (include_in_sroc_billing set to false)', async () => {
           await UnflagUnbilledLicencesService.go(billRunId, allLicenceIds)
 
-          const licenceToBeChecked = await LicenceModel.query().findById(licences.notBilledInBillRun.id)
+          const licenceToBeChecked = await licenceNotBilledInBillRun.$query()
 
           expect(licenceToBeChecked.includeInSrocBilling).to.be.false()
         })
@@ -54,13 +51,13 @@ describe('Unflag unbilled licences service', () => {
       describe('which were billed', () => {
         beforeEach(async () => {
           const { id: billId } = await BillHelper.add({ billRunId })
-          await BillLicenceHelper.add({ billId, licenceId: licences.billedInBillRun.id })
+          await BillLicenceHelper.add({ billId, licenceId: licenceBilledInBillRun.id })
         })
 
         it('are left flagged (include_in_sroc_billing still true)', async () => {
           await UnflagUnbilledLicencesService.go(billRunId, allLicenceIds)
 
-          const licenceToBeChecked = await LicenceModel.query().findById(licences.billedInBillRun.id)
+          const licenceToBeChecked = await licenceBilledInBillRun.$query()
 
           expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
         })
@@ -71,7 +68,7 @@ describe('Unflag unbilled licences service', () => {
       it('leaves flagged (include_in_sroc_billing still true)', async () => {
         await UnflagUnbilledLicencesService.go(billRunId, allLicenceIds)
 
-        const licenceToBeChecked = await LicenceModel.query().findById(licences.notInBillRun.id)
+        const licenceToBeChecked = await licenceNotInBillRun.$query()
 
         expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
       })
