@@ -88,6 +88,8 @@ describe('Unflag Billed Licences service', () => {
     let licenceInBillRun
 
     beforeEach(async () => {
+      licenceInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
+
       licenceNotInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
 
       licenceInBillRunAndWorkflow = await LicenceHelper.add({ includeInSrocBilling: true })
@@ -96,8 +98,6 @@ describe('Unflag Billed Licences service', () => {
       licenceInBillRunAndFlaggedAfterBillRunCreated = await LicenceHelper.add({
         includeInSrocBilling: true, updatedAt: new Date('2099-01-01')
       })
-
-      licenceInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
 
       billRun = {
         id: 'fa5b8225-b616-4057-a268-1927c2f3eef1',
