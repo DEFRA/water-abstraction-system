@@ -65,6 +65,10 @@ async function _updateCurrentScheme (billRun) {
         .join('bills', 'bills.id', 'billLicences.billId')
         .where('bills.billRunId', billRunId)
     )
+    .whereNotExists(
+      LicenceModel.relatedQuery('workflows')
+        .whereNull('workflows.deletedAt')
+    )
 }
 
 module.exports = {
