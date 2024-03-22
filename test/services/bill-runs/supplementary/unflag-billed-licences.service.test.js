@@ -58,7 +58,7 @@ describe('Unflag Billed Licences service', () => {
       }
     })
 
-    it('unflags those in the same region, not in workflow, and that were last updated before the bill bun was created', async () => {
+    it('unflags those in the same region, not in workflow, and that were last updated before the bill run was created', async () => {
       await UnflagBilledLicencesService.go(billRun)
 
       let licenceBeingChecked
@@ -83,9 +83,22 @@ describe('Unflag Billed Licences service', () => {
 
   describe('when there are licences flagged for SROC supplementary billing', () => {
     let licenceNotInBillRun
+    let licenceInBillRunAndWorkflow
+    let licenceInBillRunAndFlaggedAfterBillRunCreated
     let licenceInBillRun
 
     beforeEach(async () => {
+      licenceInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
+
+      licenceNotInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
+
+      licenceInBillRunAndWorkflow = await LicenceHelper.add({ includeInSrocBilling: true })
+      await WorkflowHelper.add({ licenceId: licenceInBillRunAndWorkflow.id, deletedAt: null })
+
+      licenceInBillRunAndFlaggedAfterBillRunCreated = await LicenceHelper.add({
+        includeInSrocBilling: true, updatedAt: new Date('2099-01-01')
+      })
+
       billRun = {
         id: 'fa5b8225-b616-4057-a268-1927c2f3eef1',
         createdAt: new Date(),
@@ -93,14 +106,13 @@ describe('Unflag Billed Licences service', () => {
         scheme: 'sroc'
       }
 
-      licenceNotInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
-      licenceInBillRun = await LicenceHelper.add({ includeInSrocBilling: true })
-
       const { id: billId } = await BillHelper.add({ billRunId: billRun.id })
+      await BillLicenceHelper.add({ billId, licenceId: licenceInBillRunAndWorkflow.id })
+      await BillLicenceHelper.add({ billId, licenceId: licenceInBillRunAndFlaggedAfterBillRunCreated.id })
       await BillLicenceHelper.add({ billId, licenceId: licenceInBillRun.id })
     })
 
-    it('unflags only those licences in the bill run)', async () => {
+    it('unflags only those licences in the bill run that are not in workflow, and that were last updated before the bill run was created)', async () => {
       await UnflagBilledLicencesService.go(billRun)
 
       let licenceBeingChecked
@@ -109,7 +121,15 @@ describe('Unflag Billed Licences service', () => {
       licenceBeingChecked = await licenceNotInBillRun.$query()
       expect(licenceBeingChecked.includeInSrocBilling).to.be.true()
 
-      // Finally check the licence in the bill run has been unflagged
+      // Check licence in bill run but also in workflow still flagged
+      licenceBeingChecked = await licenceInBillRunAndWorkflow.$query()
+      expect(licenceBeingChecked.includeInSrocBilling).to.be.true()
+
+      // Check licence in bill run but updated after bill run was created (e.g. charge version approved) still flagged
+      licenceBeingChecked = await licenceInBillRunAndFlaggedAfterBillRunCreated.$query()
+      expect(licenceBeingChecked.includeInSrocBilling).to.be.true()
+
+      // Finally check the licence in the bill run with no other issues has been unflagged
       licenceBeingChecked = await licenceInBillRun.$query()
       expect(licenceBeingChecked.includeInSrocBilling).to.be.false()
     })
