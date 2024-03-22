@@ -7,7 +7,7 @@
 
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
-const SelectPointsService = require('../services/return-requirements/points.service.js')
+const PointsService = require('../services/return-requirements/points.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
@@ -128,7 +128,7 @@ async function noReturnsRequired (request, h) {
 async function points (request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SelectPointsService.go(sessionId)
+  const pageData = await PointsService.go(sessionId)
 
   return h.view('return-requirements/points.njk', {
     ...pageData
