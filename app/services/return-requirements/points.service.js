@@ -15,7 +15,7 @@ const SessionModel = require('../../models/session.model.js')
  * Supports generating the data needed for the points page in the return requirements setup journey. It fetches the
  * current session record and combines it with the checkboxes and other information needed for the form.
  *
- * @param {string} sessionId - The id of the current session
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<Object>} The view data for the points page
 */
