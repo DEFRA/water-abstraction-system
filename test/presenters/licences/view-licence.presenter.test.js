@@ -811,7 +811,7 @@ describe('View Licence presenter', () => {
     describe('and it has one abstraction condition', () => {
       const abstractionCondtion = {
         numberOfAbstractionConditions: 1,
-        uniqueAbstractionConditions: ['Level cessation condition']
+        uniqueAbstractionConditionTitles: ['Level cessation condition']
       }
 
       it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {
@@ -827,7 +827,7 @@ describe('View Licence presenter', () => {
     describe('and it has two abstraction conditions', () => {
       const abstractionCondtion = {
         numberOfAbstractionConditions: 2,
-        uniqueAbstractionConditions: ['Level cessation condition', 'Cessation dependant on releases from schemes / other licences']
+        uniqueAbstractionConditionTitles: ['Level cessation condition', 'Cessation dependant on releases from schemes / other licences']
       }
 
       it('will return the correct caption and an empty arrary of objects for use in the licence summary page', async () => {

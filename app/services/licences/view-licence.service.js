@@ -19,22 +19,7 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
 async function go (id) {
   const licenceData = await FetchLicenceService.go(id)
 
-  let licenceVersionPurposeConditionData = null
-
-  if (!licenceData ||
-    licenceData?.licenceVersions === undefined ||
-    licenceData.licenceVersions.length > 0 ||
-    licenceData.licenceVersions[0]?.licenceVersionPurposes === undefined ||
-    licenceData.licenceVersions[0]?.licenceVersionPurposes?.length === 0) {
-    const licenceVersionPurposeIds = []
-    licenceData?.licenceVersions[0]?.licenceVersionPurposes.forEach((licenceVersionPurpose) => {
-      licenceVersionPurposeIds.push({
-        licenceVersionPurposeId: licenceVersionPurpose.id,
-        purposeId: licenceVersionPurpose.purposeId
-      })
-    })
-    licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceVersionPurposeIds)
-  }
+  const licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceData)
 
   const pageData = ViewLicencePresenter.go(licenceData, licenceVersionPurposeConditionData)
 
