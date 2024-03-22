@@ -30,25 +30,21 @@ function _licencePoints (pointsData, payload) {
   // for the return requirement.
   // If it is not set then it is because the presenter has been called from 'PointsService' and it's the first
   // load. Else it has been called by the 'SubmitPointsService' and the user has not checked a point from the list.
-  // Either way, we use it to tell us wether there is anything in the payload worth transforming.
+  // Either way, we use it to tell us whether there is anything in the payload worth transforming.
   const points = payload.points
 
   if (points) {
     return points
   }
 
-  if (!pointsData || pointsData === undefined) {
-    return {
-      abstractionPoints: null
-    }
-  }
-
   const abstractionPoints = []
 
+  if (!pointsData) {
+    return abstractionPoints
+  }
+
   pointsData.forEach((pointDetail) => {
-    if (pointDetail) {
-      abstractionPoints.push(_generateAbstractionContent(pointDetail))
-    }
+    abstractionPoints.push(_generateAbstractionContent(pointDetail))
   })
 
   return abstractionPoints
