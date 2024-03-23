@@ -18,7 +18,7 @@ const LicenceVersionPurposeConditionTypesHelper = require('../../support/helpers
 // Thing under test
 const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
 
-describe.only('Fetch Licence Abstraction Conditions service', () => {
+describe('Fetch Licence Abstraction Conditions service', () => {
   let currentLicenceVersionId
   let purposeIds
 
