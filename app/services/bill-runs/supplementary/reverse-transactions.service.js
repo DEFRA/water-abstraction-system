@@ -25,30 +25,17 @@ function go (transactions, billLicenceId) {
 
 /**
  * Receives an array of debit transactions and returns transactions that will reverse them. These transactions are
- * identical except the `credit` flag is set to 'true', the status is set to `candidate`, the `billLicenceId` is set
- * to the id of the supplied bill licence, and a new transaction ID is generated.
+ * identical except the `credit` flag is set to 'true', the status is set to `candidate`, the `billLicenceId` is for the
+ * bill licence we are creating, and a new transaction ID is generated.
  */
 function _reverseTransactions (transactions, billLicenceId) {
   return transactions.map((transaction) => {
-    // TODO: The FetchTransactionsService which we use to get the transactions to reverse adds the billing account ID
-    // and number to each transaction returned. This is a performance measure to avoid an extra query to the DB. But if
-    // we don't strip them from the result when we try to persist our reversed versions, they fail because the
-    // transactions table doesn't have these fields. We do the stripping here to avoid iterating through the
-    // collection multiple times. Ideally, we'd look to return a result from FetchTransactionsService that avoids us
-    // having to do this.
-    const { billingAccountId, accountNumber, ...propertiesToKeep } = transaction
-
     return {
-      ...propertiesToKeep,
+      ...transaction,
       id: generateUUID(),
       billLicenceId,
       credit: true,
-      status: 'candidate',
-      // TODO: Our query result seems to return the transaction's `purposes:` property as [Object]. Clearly, we need
-      // to re-jig something or give Knex some more instructions on dealing with this JSONB field. But just to prove
-      // the process is working we use this service to deal with the issue and extract the JSON from the array we've
-      // been provided.
-      purposes: transaction.purposes[0]
+      status: 'candidate'
     }
   })
 }
