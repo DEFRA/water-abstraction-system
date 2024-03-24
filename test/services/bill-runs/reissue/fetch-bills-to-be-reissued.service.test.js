@@ -17,7 +17,7 @@ const DatabaseSupport = require('../../../support/database.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
 // Thing under test
-const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/supplementary/fetch-bills-to-be-reissued.service.js')
+const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
 
 describe('Fetch Bills To Be Reissued service', () => {
   let billRun
