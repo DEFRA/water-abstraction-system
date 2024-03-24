@@ -6,8 +6,7 @@
  */
 
 const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
-const GenerateBillService = require('./generate-bill.service.js')
-const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Pre-generates empty billing data which will be populated during billing processing. Returns an object which comprises
@@ -30,6 +29,27 @@ async function go (chargeVersions, billRunId, billingPeriod) {
   return { bills, billLicences }
 }
 
+function _generateBill (billingAccountId, accountNumber, billRunId, financialYearEnding) {
+  return {
+    id: generateUUID(),
+    accountNumber,
+    address: {}, // Address is set to an empty object for SROC billing invoices
+    billingAccountId,
+    billRunId,
+    credit: false,
+    financialYearEnding
+  }
+}
+
+function _generateBillLicence (billId, licenceId, licenceRef) {
+  return {
+    id: generateUUID(),
+    billId,
+    licenceId,
+    licenceRef
+  }
+}
+
 /**
   * We pre-generate bill licences for every combination of bill and licence in the charge versions so that we don't
   * need to fetch any data from the db during the main charge version processing loop. This function generates the
@@ -44,9 +64,9 @@ async function go (chargeVersions, billRunId, billingPeriod) {
 function _preGenerateBillLicences (chargeVersions, bills) {
   const keyedBillLicences = chargeVersions.reduce((acc, chargeVersion) => {
     const { id: billId } = bills[chargeVersion.billingAccountId]
-    const { licence } = chargeVersion
+    const { id: licenceId, licenceRef } = chargeVersion.licence
 
-    const key = _billLicenceKey(billId, licence.id)
+    const key = _billLicenceKey(billId, licenceId)
 
     // The charge versions may contain a combination of bill and licence multiple times, so we check to see if this
     // combination has already had a bill licence generated for it and return early if so
@@ -56,7 +76,7 @@ function _preGenerateBillLicences (chargeVersions, bills) {
 
     return {
       ...acc,
-      [key]: GenerateBillLicenceService.go(billId, licence)
+      [key]: _generateBillLicence(billId, licenceId, licenceRef)
     }
   }, {})
 
@@ -79,12 +99,14 @@ function _billLicenceKey (billId, licenceId) {
   */
 function _preGenerateBills (billingAccounts, billRunId, billingPeriod) {
   const keyedBills = billingAccounts.reduce((acc, billingAccount) => {
+    const { id: billingAccountId, accountNumber } = billingAccount
     // Note that the array of billing accounts will already have been deduped so we don't need to check whether a
     // bill licence already exists in the object before generating one
     return {
       ...acc,
-      [billingAccount.id]: GenerateBillService.go(
-        billingAccount,
+      [billingAccountId]: _generateBill(
+        billingAccountId,
+        accountNumber,
         billRunId,
         billingPeriod.endDate.getFullYear()
       )

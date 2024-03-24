@@ -5,14 +5,11 @@
  * @module ReissueBillService
  */
 
-const { generateUUID } = require('../../../lib/general.lib.js')
-
 const ChargingModuleReissueBillRequest = require('../../../requests/charging-module/reissue-bill.request.js')
 const ChargingModuleViewBillRequest = require('../../../requests/charging-module/view-bill.request.js')
 const ChargingModuleViewBillRunStatusRequest = require('../../../requests/charging-module/view-bill-run-status.request.js')
 const ExpandedError = require('../../../errors/expanded.error.js')
-const GenerateBillLicenceService = require('../supplementary/generate-bill-licence.service.js')
-const GenerateBillService = require('../supplementary/generate-bill.service.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Handles the reissuing of a single bill
@@ -111,6 +108,27 @@ async function go (sourceBill, reissueBillRun) {
   await _markSourceBillAsRebilled(sourceBill)
 
   return dataToReturn
+}
+
+function _generateBill (billingAccountId, accountNumber, billRunId, financialYearEnding) {
+  return {
+    id: generateUUID(),
+    accountNumber,
+    address: {}, // Address is set to an empty object for SROC billing invoices
+    billingAccountId,
+    billRunId,
+    credit: false,
+    financialYearEnding
+  }
+}
+
+function _generateBillLicence (billId, licenceId, licenceRef) {
+  return {
+    id: generateUUID(),
+    billId,
+    licenceId,
+    licenceRef
+  }
 }
 
 /**
@@ -236,15 +254,9 @@ function _retrieveOrGenerateBill (dataToReturn, sourceBill, reissueBillRun, char
 
   const translatedChargingModuleInvoice = _mapChargingModuleInvoice(chargingModuleReissueInvoice)
 
-  // GenerateBillService expects a BillingAccount instance and was built for supplementary billing. We only have the
-  // Bill object. So, we create a 'billing account' from its data that GenerateBillService can then use.
-  const billingAccount = {
-    id: sourceBill.billingAccountId,
-    accountNumber: sourceBill.accountNumber
-  }
-
-  const generatedBill = GenerateBillService.go(
-    billingAccount,
+  const generatedBill = _generateBill(
+    sourceBill.billingAccountId,
+    sourceBill.accountNumber,
     reissueBillRun.id,
     sourceBill.financialYearEnding
   )
@@ -275,14 +287,9 @@ function _retrieveOrGenerateBillLicence (dataToReturn, sourceBill, billingId, so
     return existingBillLicence
   }
 
-  // GenerateBillLicenceService expects a Licence object and was built for supplementary billing. We only have the
-  // BillLicence object. So, we create a 'licence' from its data that GenerateBillLicenceService can then use.
-  const licence = {
-    id: sourceBillLicence.licenceId,
-    licenceRef: sourceBillLicence.licenceRef
-  }
+  const { licenceId, licenceRef } = sourceBillLicence
 
-  const newBillLicence = GenerateBillLicenceService.go(billingId, licence)
+  const newBillLicence = _generateBillLicence(billingId, licenceId, licenceRef)
 
   dataToReturn.billLicences.push(newBillLicence)
 
