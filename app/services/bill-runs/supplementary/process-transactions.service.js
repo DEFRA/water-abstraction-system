@@ -28,13 +28,14 @@ const ReverseTransactionsService = require('./reverse-transactions.service.js')
  *  previous matching credit)
  */
 async function go (calculatedTransactions, bill, billLicence, billingPeriod) {
+  const { id: billLicenceId } = billLicence
   const previousTransactions = await _fetchPreviousTransactions(bill, billLicence, billingPeriod)
 
   if (previousTransactions.length === 0) {
     return calculatedTransactions
   }
 
-  const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicence)
+  const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicenceId)
 
   return _cleanseTransactions(calculatedTransactions, reversedTransactions)
 }

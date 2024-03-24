@@ -22,13 +22,11 @@ describe('Reverse Transactions service', () => {
     }
   ]
 
-  const billLicence = {
-    id: '8affaa71-c185-4b6c-9814-4c615c235611'
-  }
+  const billLicenceId = '8affaa71-c185-4b6c-9814-4c615c235611'
 
   describe('when the service is called', () => {
     it('returns reversing transactions', () => {
-      const result = ReverseTransactionsService.go(transactions, billLicence)
+      const result = ReverseTransactionsService.go(transactions, billLicenceId)
 
       expect(result).to.have.length(transactions.length)
 
@@ -38,7 +36,7 @@ describe('Reverse Transactions service', () => {
       expect(result[0].name).to.equal('DEBIT')
       expect(result[0].credit).to.be.true()
       expect(result[0].status).to.equal('candidate')
-      expect(result[0].billLicenceId).to.equal(billLicence.id)
+      expect(result[0].billLicenceId).to.equal('8affaa71-c185-4b6c-9814-4c615c235611')
       expect(result[0].id).to.exist().and.to.be.a.string()
       expect(result[0].purposes).to.equal('foo')
     })

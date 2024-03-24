@@ -11,17 +11,16 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * Takes an array of transactions and returns an array of transactions which will reverse them.
  *
  * In some situations we need to "reverse" transactions; this is done by issuing new transactions which cancel them out.
- * This service takes an array of transactions and a bill licence, and returns an array of transactions which
- * will reverse the original transactions, with their bill licence id set to the id of the supplied billing licence.
+ * This service takes an array of transactions and a bill licence, and returns an array of transactions which will
+ * reverse the original transactions, with their bill licence id set to the ID of the supplied billing licence.
  *
- * @param {module:TransactionModel[]} transactions Array of transactions to be reversed
- * @param {module:BillLicenceModel} billLicence The bill licence these transactions are intended to be added to
+ * @param {module:TransactionModel[]} transactions - Array of transactions to be reversed
+ * @param {string} billLicenceId - The bill licence UUID these transactions are to be added to
  *
- * @returns {Object[]} Array of reversing transactions with `billLicenceId` set to the id of the supplied
- *  `billLicence`
+ * @returns {Object[]} Array of reversed transactions with `billLicenceId` set to the id of the supplied `billLicence`
  */
-function go (transactions, billLicence) {
-  return _reverseTransactions(transactions, billLicence)
+function go (transactions, billLicenceId) {
+  return _reverseTransactions(transactions, billLicenceId)
 }
 
 /**
@@ -29,7 +28,7 @@ function go (transactions, billLicence) {
  * identical except the `credit` flag is set to 'true', the status is set to `candidate`, the `billLicenceId` is set
  * to the id of the supplied bill licence, and a new transaction ID is generated.
  */
-function _reverseTransactions (transactions, billLicence) {
+function _reverseTransactions (transactions, billLicenceId) {
   return transactions.map((transaction) => {
     // TODO: The FetchTransactionsService which we use to get the transactions to reverse adds the billing account ID
     // and number to each transaction returned. This is a performance measure to avoid an extra query to the DB. But if
@@ -42,7 +41,7 @@ function _reverseTransactions (transactions, billLicence) {
     return {
       ...propertiesToKeep,
       id: generateUUID(),
-      billLicenceId: billLicence.id,
+      billLicenceId,
       credit: true,
       status: 'candidate',
       // TODO: Our query result seems to return the transaction's `purposes:` property as [Object]. Clearly, we need
