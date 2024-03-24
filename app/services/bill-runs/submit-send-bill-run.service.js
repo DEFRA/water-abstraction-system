@@ -35,12 +35,19 @@ async function go (billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status !== 'ready') {
-    return
+    throw new ExpandedError('Cannot send a bill run that is not ready', { billRunId })
   }
 
   await _updateStatus(billRunId, 'sending')
 
-  _sendBillRun(billRun)
+  // NOTE: We originally believed that should anything error in _sendBillRun() the try/catch in the controller would
+  // catch it. However, when testing this theory we found it crashed the test framework. So, we tried it for real and
+  // again confirmed we'd crash the service. The controller would never see the error. It is because we are not awaiting
+  // this call that any errors thrown are considered uncaught. However, if we instead use the ES6 variant the error _is_
+  // caught. All we can do at this point is log it.
+  _sendBillRun(billRun).catch((error) => {
+    global.GlobalNotifier.omfg(error.message, { billRunId }, error)
+  })
 }
 
 /**
@@ -68,12 +75,7 @@ async function _fetchChargingModuleBillRun (externalId) {
   const result = await ChargingModuleViewBillRunRequest.send(externalId)
 
   if (!result.succeeded) {
-    const error = new ExpandedError(
-      'Charging Module view bill run request failed',
-      { billRunExternalId: externalId, responseBody: result.response.body }
-    )
-
-    throw error
+    throw new ExpandedError('Charging Module view bill run request failed', { billRunExternalId: externalId })
   }
 
   return result.response.body.billRun
