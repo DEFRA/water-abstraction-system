@@ -11,8 +11,8 @@ const ChargingModuleReissueBillRequest = require('../../../requests/charging-mod
 const ChargingModuleViewBillRequest = require('../../../requests/charging-module/view-bill.request.js')
 const ChargingModuleViewBillRunStatusRequest = require('../../../requests/charging-module/view-bill-run-status.request.js')
 const ExpandedError = require('../../../errors/expanded.error.js')
-const GenerateBillLicenceService = require('./generate-bill-licence.service.js')
-const GenerateBillService = require('./generate-bill.service.js')
+const GenerateBillLicenceService = require('../supplementary/generate-bill-licence.service.js')
+const GenerateBillService = require('../supplementary/generate-bill.service.js')
 
 /**
  * Handles the reissuing of a single bill
