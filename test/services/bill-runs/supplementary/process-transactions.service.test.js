@@ -15,8 +15,11 @@ const FetchPreviousTransactionsService = require('../../../../app/services/bill-
 const ProcessTransactionsService = require('../../../../app/services/bill-runs/supplementary/process-transactions.service.js')
 
 describe('Process Transactions service', () => {
-  const bill = { id: 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f' }
-  const billLicence = { id: '110ab2e2-6076-4d5a-a56f-b17a048eb269' }
+  const billingAccountId = 'a56ef6d9-370a-4224-b6ec-0fca8bfa4d1f'
+  const billLicence = {
+    id: '110ab2e2-6076-4d5a-a56f-b17a048eb269',
+    licenceId: '9d587a65-aa00-4be6-969e-5bbb9fc6c885'
+  }
 
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
@@ -55,7 +58,7 @@ describe('Process Transactions service', () => {
           it('returns the unmatched calculated transactions', async () => {
             const result = await ProcessTransactionsService.go(
               calculatedTransactions,
-              bill,
+              billingAccountId,
               billLicence,
               billingPeriod
             )
@@ -79,7 +82,7 @@ describe('Process Transactions service', () => {
           it('returns no transactions', async () => {
             const result = await ProcessTransactionsService.go(
               calculatedTransactions,
-              bill,
+              billingAccountId,
               billLicence,
               billingPeriod
             )
@@ -101,14 +104,14 @@ describe('Process Transactions service', () => {
           it('returns only the previous transactions', async () => {
             const result = await ProcessTransactionsService.go(
               [],
-              bill,
+              billingAccountId,
               billLicence,
               billingPeriod
             )
 
             expect(result).to.have.length(2)
-            expect(result[0].purposes).to.equal('I_WILL_NOT_BE_REMOVED_1')
-            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED_2')
+            expect(result[0].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_1'])
+            expect(result[1].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_2'])
           })
         })
 
@@ -126,14 +129,14 @@ describe('Process Transactions service', () => {
           it('returns the unmatched calculated transactions and previous transactions (reversed)', async () => {
             const result = await ProcessTransactionsService.go(
               calculatedTransactions,
-              bill,
+              billingAccountId,
               billLicence,
               billingPeriod
             )
 
             expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
-            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
+            expect(result[1].purposes).to.equal(['I_WILL_NOT_BE_REMOVED'])
             expect(result[1].credit).to.be.true()
           })
         })
@@ -148,7 +151,7 @@ describe('Process Transactions service', () => {
       it('returns the calculated transactions unchanged', async () => {
         const result = await ProcessTransactionsService.go(
           calculatedTransactions,
-          bill,
+          billingAccountId,
           billLicence,
           billingPeriod
         )

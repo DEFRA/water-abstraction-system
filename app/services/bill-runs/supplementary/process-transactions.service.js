@@ -1,9 +1,7 @@
 'use strict'
 
 /**
- * Fetches the matching debit transactions from a previous bill run and reverses them as credits; removes any which
- * would be cancelled out by the supplied calculated debit transactions; combines the remaining transactions and returns
- * them all
+ * Fetches the matching debit transactions from a previous bill run and reverses them as credits
  * @module ProcessTransactionsService
  */
 
@@ -19,22 +17,23 @@ const ReverseTransactionsService = require('./reverse-transactions.service.js')
  * sent to the Charging Module) and any matching pairs of transactions which would cancel each other out are removed.
  * Any remaining reversed credits and calculated debits are returned.
  *
- * @param {Object[]} calculatedTransactions The calculated transactions to be processed
- * @param {Object} bill A generated bill that identifies the invoice account ID we need to match against
- * @param {Object} billLicence A generated bill licence that identifies the licence we need to match against
- * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {Object[]} calculatedTransactions - The calculated transactions to be processed
+ * @param {string} billingAccountId - The UUID that identifies the billing account we are processing transactions for
+ * @param {Object} billLicence - A generated bill licence that identifies the licence we need to match against
+ * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Promise<Object[]>} An array of the remaining calculated transactions (ie. those which were not cancelled out by a
- *  previous matching credit)
+ * @returns {Promise<Object[]>} An array of the remaining calculated transactions (ie. those which were not cancelled
+ *  out by a previous matching credit)
  */
-async function go (calculatedTransactions, bill, billLicence, billingPeriod) {
-  const previousTransactions = await _fetchPreviousTransactions(bill, billLicence, billingPeriod)
+async function go (calculatedTransactions, billingAccountId, billLicence, billingPeriod) {
+  const { id: billLicenceId, licenceId } = billLicence
+  const previousTransactions = await _fetchPreviousTransactions(billingAccountId, licenceId, billingPeriod)
 
   if (previousTransactions.length === 0) {
     return calculatedTransactions
   }
 
-  const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicence)
+  const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicenceId)
 
   return _cleanseTransactions(calculatedTransactions, reversedTransactions)
 }
@@ -88,10 +87,10 @@ function _cleanseTransactions (calculatedTransactions, reverseTransactions) {
   return cleansedTransactionLines
 }
 
-async function _fetchPreviousTransactions (bill, billLicence, billingPeriod) {
+async function _fetchPreviousTransactions (billingAccountId, licenceId, billingPeriod) {
   const financialYearEnding = billingPeriod.endDate.getFullYear()
 
-  const transactions = await FetchPreviousTransactionsService.go(bill, billLicence, financialYearEnding)
+  const transactions = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
   return transactions
 }
