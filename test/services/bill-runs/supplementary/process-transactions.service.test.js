@@ -110,8 +110,8 @@ describe('Process Transactions service', () => {
             )
 
             expect(result).to.have.length(2)
-            expect(result[0].purposes).to.equal('I_WILL_NOT_BE_REMOVED_1')
-            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED_2')
+            expect(result[0].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_1'])
+            expect(result[1].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_2'])
           })
         })
 
@@ -136,7 +136,7 @@ describe('Process Transactions service', () => {
 
             expect(result).to.have.length(2)
             expect(result[0].purposes).to.equal('CALCULATED_TRANSACTION_3')
-            expect(result[1].purposes).to.equal('I_WILL_NOT_BE_REMOVED')
+            expect(result[1].purposes).to.equal(['I_WILL_NOT_BE_REMOVED'])
             expect(result[1].credit).to.be.true()
           })
         })
