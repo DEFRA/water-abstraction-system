@@ -7,6 +7,7 @@
  */
 
 const { db } = require('../../../../db/db.js')
+const { transactionsMatch } = require('../../../lib/general.lib.js')
 
 /**
  * Fetches the previously billed transactions that match the bill, licence and year provided, removing any debits
@@ -42,7 +43,7 @@ function _cleanse (transactions) {
 
   credits.forEach((credit) => {
     const debitIndex = debits.findIndex((debit) => {
-      return _matchTransactions(debit, credit)
+      return transactionsMatch(debit, credit)
     })
 
     if (debitIndex > -1) {
@@ -51,55 +52,6 @@ function _cleanse (transactions) {
   })
 
   return debits
-}
-
-/**
- * Compares a debit transaction to a credit transaction
- *
- * We compare those properties which determine the charge value calculated by the charging module. If the debit
- * transaction's properties matches the credit's we return true. This will tell the calling method
- * to remove the debit from the service's final results.
- *
- * The key properties are charge type, category code, and billable days. But we also need to compare agreements and
- * additional charges because if those have changed, we'll need to credit the previous transaction and calculate the
- * new debit value. Because what we are checking does not match up to what you see in the UI we have this reference
- *
- * - Abatement agreement - section126Factor
- * - Two-part tariff agreement - section127Agreement
- * - Canal and River Trust agreement - section130Agreement
- * - Aggregate - aggregateFactor
- * - Charge Adjustment - adjustmentFactor
- * - Winter discount - winterOnly
- *
- * - Additional charges - supportedSource
- * - Additional charges - supportedSourceName
- * - Additional charges - waterCompanyCharge
- */
-function _matchTransactions (debit, credit) {
-  // TODO: This logic is a duplicate of what we are doing in
-  // app/services/supplementary-billing/process-transactions.service.js. This also means we are running the
-  // same kind of unit tests on 2 places. We need to refactor this duplication in the code and the tests out.
-
-  // When we put together this matching logic our instincts was to try and do something 'better' than this long,
-  // chained && statement. But whatever we came up with was
-  //
-  // - more complex
-  // - less performant
-  //
-  // We found this easy to see what properties are being compared. Plus the moment something doesn't match we bail. So,
-  // much as it feels 'wrong', we are sticking with it!
-  return debit.chargeType === credit.chargeType &&
-    debit.chargeCategoryCode === credit.chargeCategoryCode &&
-    debit.billableDays === credit.billableDays &&
-    debit.section126Factor === credit.section126Factor &&
-    debit.section127Agreement === credit.section127Agreement &&
-    debit.section130Agreement === credit.section130Agreement &&
-    debit.aggregateFactor === credit.aggregateFactor &&
-    debit.adjustmentFactor === credit.adjustmentFactor &&
-    debit.winterOnly === credit.winterOnly &&
-    debit.supportedSource === credit.supportedSource &&
-    debit.supportedSourceName === credit.supportedSourceName &&
-    debit.waterCompanyCharge === credit.waterCompanyCharge
 }
 
 async function _fetch (licenceId, billingAccountId, financialYearEnding) {
