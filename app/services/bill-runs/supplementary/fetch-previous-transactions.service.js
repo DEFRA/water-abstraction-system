@@ -13,18 +13,17 @@ const { transactionsMatch } = require('../../../lib/general.lib.js')
  * Fetches the previously billed transactions that match the bill, licence and year provided, removing any debits
  * which are cancelled out by previous credits.
  *
- * @param {Object} bill A generated bill that identifies the billing account ID we need to match
- *  against
- * @param {Object} billLicence A generated bill licence that identifies the licence we need to
- *  match against
- * @param {Number} financialYearEnding The year the financial billing period ends that we need to match against
+ * @param {string} billingAccountId - The UUID that identifies the billing account we need to fetch transactions for
+ * @param {string} licenceId - The UUID that identifies the licence we need to fetch transactions for
+ * @param {Number} financialYearEnding - The year the financial billing period ends that we need to fetch transactions
+ * for
  *
- * @returns {Promise<Object>} The resulting matched transactions
+ * @returns {Promise<Object[]>} The resulting matched transactions
  */
-async function go (bill, billLicence, financialYearEnding) {
+async function go (billingAccountId, licenceId, financialYearEnding) {
   const transactions = await _fetch(
-    billLicence.licenceId,
-    bill.billingAccountId,
+    billingAccountId,
+    licenceId,
     financialYearEnding
   )
 
@@ -54,7 +53,7 @@ function _cleanse (transactions) {
   return debits
 }
 
-async function _fetch (licenceId, billingAccountId, financialYearEnding) {
+async function _fetch (billingAccountId, licenceId, financialYearEnding) {
   return db
     .select(
       't.authorisedDays',
