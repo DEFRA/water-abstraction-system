@@ -21,7 +21,6 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/s
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
-const ReissueBillsService = require('../../../../app/services/bill-runs/supplementary/reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-unbilled-licences.service.js')
 
 // Thing under test
@@ -74,39 +73,18 @@ describe('Supplementary Process Bill Run service', () => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
       })
 
-      describe('and there are no invoices to reissue', () => {
-        beforeEach(() => {
-          Sinon.stub(ReissueBillsService, 'go').resolves(false)
-        })
+      it('sets the Bill Run status to empty', async () => {
+        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        it('sets the Bill Run status to empty', async () => {
-          await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        const result = await BillRunModel.query().findById(billRun.id)
 
-          const result = await BillRunModel.query().findById(billRun.id)
-
-          expect(result.status).to.equal('empty')
-        })
-      })
-
-      describe('and there are invoices to reissue', () => {
-        beforeEach(() => {
-          Sinon.stub(ReissueBillsService, 'go').resolves(true)
-        })
-
-        it('sets the Bill Run status to processing', async () => {
-          await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
-
-          const result = await BillRunModel.query().findById(billRun.id)
-
-          expect(result.status).to.equal('processing')
-        })
+        expect(result.status).to.equal('empty')
       })
     })
 
     describe('and some charge versions are billed', () => {
       beforeEach(() => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
-        Sinon.stub(ReissueBillsService, 'go').resolves(true)
       })
 
       it('sets the Bill Run status to processing', async () => {
@@ -143,10 +121,6 @@ describe('Supplementary Process Bill Run service', () => {
 
   describe('when the service errors', () => {
     let thrownError
-
-    beforeEach(() => {
-      Sinon.stub(ReissueBillsService, 'go')
-    })
 
     describe('because fetching the charge versions fails', () => {
       beforeEach(() => {

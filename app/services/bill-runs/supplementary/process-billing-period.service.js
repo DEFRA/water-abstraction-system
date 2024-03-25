@@ -176,7 +176,7 @@ async function _cleanseTransactions (currentBillingData, billingPeriod) {
 
   const cleansedTransactions = await ProcessTransactionsService.go(
     currentBillingData.calculatedTransactions,
-    currentBillingData.bill,
+    currentBillingData.bill.billingAccountId,
     currentBillingData.billLicence,
     billingPeriod
   )
