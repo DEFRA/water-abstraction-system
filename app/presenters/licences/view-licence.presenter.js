@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the view `/licences/{id}/` page
+ * Formats data for the `/licences/{id}` page's summary tab
  * @module ViewLicencePresenter
  */
 
@@ -9,13 +9,13 @@ const { formatAbstractionDate } = require('../base.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
- * Formats data for the `/licences/{id}/` page
+ * Formats data for the `/licences/{id}` page's summary tab
  *
  * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (licence, licenceVersionPurposeConditionData) {
+function go (licence, licenceAbstractionConditions) {
   const {
     ends,
     expiredDate,
@@ -45,11 +45,11 @@ function go (licence, licenceVersionPurposeConditionData) {
   const pointDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
   const monitoringStationDetails = _generateMonitoringStation(licenceGaugingStations)
 
-  const abstractionConditions = _generateAbstractionConditions(licenceVersionPurposeConditionData)
+  const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
 
   return {
     id,
-    abstractionConditions,
+    abstractionConditionDetails,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
     abstractionPoints: pointDetails.abstractionPoints,
@@ -66,8 +66,8 @@ function go (licence, licenceVersionPurposeConditionData) {
     purposes,
     region: region.displayName,
     registeredTo,
-    startDate: formatLongDate(startDate),
     sourceOfSupply: pointDetails.sourceOfSupply,
+    startDate: formatLongDate(startDate),
     warning: _generateWarningMessage(ends)
   }
 }
@@ -80,23 +80,16 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
-function _generateAbstractionConditions (conditionsData) {
-  if (!conditionsData ||
-      conditionsData?.abstractionConditions === undefined ||
-      conditionsData.abstractionConditions.length === 0) {
-    return {
-      caption: 'Abstraction condition',
-      linkText: 'View details of the abstraction condition',
-      conditions: []
-    }
-  }
+function _abstractionConditionDetails (licenceAbstractionConditions) {
+  const { conditions, numberOfConditions } = licenceAbstractionConditions
+
+  const conditionText = numberOfConditions === 1 ? 'condition' : 'conditions'
 
   return {
-    caption: conditionsData.abstractionConditions.length > 1 ? 'Abstraction conditions' : 'Abstraction condition',
-    linkText: conditionsData.abstractionConditions.length > 1
-      ? 'View details of the abstraction conditions'
-      : 'View details of the abstraction condition',
-    conditions: conditionsData.abstractionConditions
+    caption: `Abstraction ${conditionText}`,
+    conditions,
+    linkText: `View details of the abstraction ${conditionText}`,
+    numberOfConditions
   }
 }
 
