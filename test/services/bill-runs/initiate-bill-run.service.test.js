@@ -10,31 +10,30 @@ const { expect } = Code
 
 // Test helpers
 const BillRunModel = require('../../../app/models/bill-run.model.js')
-const DatabaseHelper = require('../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../support/database.js')
 const EventModel = require('../../../app/models/event.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
-const ChargingModuleCreateBillRunService = require('../../../app/services/charging-module/create-bill-run.service.js')
-const CheckLiveBillRunService = require('../../../app/services/bill-runs/check-live-bill-run.service.js')
+const ChargingModuleCreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
+const DetermineBlockingBillRunService = require('../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
 const SupplementaryProcessBillRunService = require('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
 
 // Thing under test
 const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
 
 describe('Initiate Bill Run service', () => {
-  const batchType = 'supplementary'
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
   const user = 'test.user@defra.gov.uk'
+
+  let batchType
   let regionId
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     const region = await RegionHelper.add()
     regionId = region.id
-
-    Sinon.stub(CheckLiveBillRunService, 'go').resolves(false)
 
     // The InitiateBillRun service does not await the call to the ProcessBillRunService. It is intended to
     // kick of the process and then move on. This is why we simply stub it in the tests.
@@ -54,7 +53,11 @@ describe('Initiate Bill Run service', () => {
     }
 
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+      batchType = 'supplementary'
+
+      Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
+
+      Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
         succeeded: true,
         response: {
           info: {
@@ -101,7 +104,9 @@ describe('Initiate Bill Run service', () => {
   describe('when initiating a bill run fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunService, 'go').resolves({
+        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
+
+        Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
           succeeded: false,
           response: {
             info: {
@@ -132,9 +137,11 @@ describe('Initiate Bill Run service', () => {
       })
     })
 
-    describe('because a bill run already exists for this region, financial year and type', () => {
+    describe('because a live bill run already exists for this region, financial year and type', () => {
       beforeEach(() => {
-        CheckLiveBillRunService.go.resolves(true)
+        batchType = 'annual'
+
+        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([{ id: 'becf430d-f6dd-45a3-b943-42683f7bb889' }])
       })
 
       it('rejects with an appropriate error', async () => {
@@ -142,7 +149,7 @@ describe('Initiate Bill Run service', () => {
 
         expect(err).to.be.an.error()
         expect(err.message).to.equal('Batch already live for region')
-        expect(err.regionId).to.equal(regionId)
+        expect(err.billRunId).to.equal('becf430d-f6dd-45a3-b943-42683f7bb889')
       })
     })
   })

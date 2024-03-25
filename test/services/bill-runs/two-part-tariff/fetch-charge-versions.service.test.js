@@ -14,8 +14,10 @@ const ChargeElementHelper = require('../../../support/helpers/charge-element.hel
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
@@ -35,15 +37,13 @@ describe('Fetch Charge Versions service', () => {
   let regionId
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     const chargeCategory = await ChargeCategoryHelper.add({ reference: '4.3.41' })
     chargeCategoryId = chargeCategory.id
 
     const region = await RegionHelper.add({ naldRegionId: regionCode })
     regionId = region.id
-
-    await LicenceHelper.add({ id: licenceId, licenceRef, regionId, expiredDate: new Date('2024-05-01') })
   })
 
   describe('when there are applicable charge versions', () => {
@@ -51,6 +51,8 @@ describe('Fetch Charge Versions service', () => {
 
     beforeEach(async () => {
       const { id: changeReasonId } = await ChangeReasonHelper.add()
+
+      const licence = await LicenceHelper.add({ id: licenceId, licenceRef, regionId, expiredDate: new Date('2024-05-01') })
 
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
       // second part is to create another charge version with a different licence ref so we can test the order of the
@@ -96,6 +98,9 @@ describe('Fetch Charge Versions service', () => {
         authorisedAnnualQuantity: 100,
         purposeId
       })
+
+      // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
+      await LicenceHolderSeeder.seed(licence.licenceRef)
     })
 
     it('returns the charge version with related licence, charge references and charge elements', async () => {
@@ -113,11 +118,25 @@ describe('Fetch Charge Versions service', () => {
           startDate: new Date('2022-01-01'),
           expiredDate: new Date('2024-05-01'),
           lapsedDate: null,
-          revokedDate: null
+          revokedDate: null,
+          licenceDocument: {
+            id: results[0].licence.licenceDocument.id,
+            licenceDocumentRoles: [
+              {
+                company: {
+                  id: results[0].licence.licenceDocument.licenceDocumentRoles[0].company.id,
+                  name: 'Licence Holder Ltd',
+                  type: 'organisation'
+                },
+                contact: null,
+                id: results[0].licence.licenceDocument.licenceDocumentRoles[0].id
+              }
+            ]
+          }
         },
         chargeReferences: [{
           id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
-          volume: 6.82,
+          volume: 6.819,
           description: 'Mineral washing',
           aggregate: 0.562114443,
           s127: 'true',
@@ -179,6 +198,10 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are no applicable charge versions', () => {
+    beforeEach(async () => {
+      await LicenceHelper.add({ id: licenceId, licenceRef, regionId })
+    })
+
     describe("because the scheme is 'presroc'", () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
@@ -284,17 +307,14 @@ describe('Fetch Charge Versions service', () => {
     describe('because the licence ended (expired, lapsed or revoked) before the billing period', () => {
       beforeEach(async () => {
         // NOTE: To make things spicy (!) we have the licence expire _after_ the billing period starts but revoked
-        // before it. Where The licence has dates in more than one of these fields, it is considered ended on the
+        // before it. Where the licence has dates in more than one of these fields, it is considered ended on the
         // earliest of them (we have found real examples that confirm this is possible)
-        const licence = await LicenceHelper.add({
-          licenceRef,
-          regionId,
-          expiredDate: new Date('2019-05-01'),
-          revokedDate: new Date('2022-06-01')
-        })
+        await LicenceModel.query()
+          .update({ expiredDate: new Date('2019-05-01'), revokedDate: new Date('2022-06-01') })
+          .where('id', licenceId)
 
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { licenceId: licence.id, licenceRef, regionCode }
+          { licenceId, licenceRef, regionCode }
         )
 
         await ChargeReferenceHelper.add({

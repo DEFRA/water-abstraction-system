@@ -14,9 +14,11 @@ describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     const testBillRun = _testBillRun()
     const testLicences = _testLicences()
+    const licenceHolder = undefined
+    const licenceStatus = undefined
 
     it('correctly presents the data', () => {
-      const result = ReviewBillRunPresenter.go(testBillRun, testLicences)
+      const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
 
       expect(result).to.equal({
         region: 'Southern (Test replica)',
@@ -24,8 +26,9 @@ describe('Review Bill Run presenter', () => {
         dateCreated: '17 January 2024',
         financialYear: '2022 to 2023',
         billRunType: 'two-part tariff',
-        numberOfLicences: 3,
-        licencesToReviewCount: 1,
+        numberOfLicencesDisplayed: 3,
+        numberOfLicencesToReview: 1,
+        totalNumberOfLicences: 3,
         preparedLicences: [
           {
             id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
@@ -48,7 +51,25 @@ describe('Review Bill Run presenter', () => {
             status: 'review',
             issue: 'Multiple Issues'
           }
-        ]
+        ],
+        filter: {
+          licenceHolder: undefined,
+          licenceStatus: undefined,
+          openFilter: false
+        }
+      })
+    })
+
+    describe('and a filter has been applied', () => {
+      const licenceHolder = 'bob'
+      const licenceStatus = 'ready'
+
+      it('correctly presents the data', () => {
+        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
+
+        expect(result.filter.openFilter).to.equal(true)
+        expect(result.filter.licenceHolder).to.equal(licenceHolder)
+        expect(result.filter.licenceStatus).to.equal(licenceStatus)
       })
     })
   })
@@ -63,7 +84,8 @@ function _testBillRun () {
     batchType: 'two_part_tariff',
     region: {
       displayName: 'Southern (Test replica)'
-    }
+    },
+    reviewLicences: [{ totalNumberOfLicences: 3 }]
   }
 }
 
@@ -71,30 +93,26 @@ function _testLicences () {
   return [
     // Licence with no issues
     {
-      id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
+      licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
       licenceRef: '1/11/11/*11/1111',
       licenceHolder: 'Big Farm Ltd',
-      issues: [],
+      issues: '',
       status: 'ready'
     },
     // Licence with a single issue
     {
-      id: '395bdc01-605b-44f5-9d90-5836cc013799',
+      licenceId: '395bdc01-605b-44f5-9d90-5836cc013799',
       licenceRef: '2/22/22/*S2/2222',
       licenceHolder: 'Bob Bobbles',
-      issues: ['Abstraction outside period'],
+      issues: 'Abstraction outside period',
       status: 'ready'
     },
     // Licence with multiple issues
     {
-      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
+      licenceId: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
       licenceRef: '3/33/33/*3/3333',
       licenceHolder: 'Farmer Palmer',
-      issues: [
-        'Abstraction outside period',
-        'Over abstraction',
-        'Overlap of charge dates'
-      ],
+      issues: 'Abstraction outside period, Over abstraction, Overlap of charge dates',
       status: 'review'
     }
   ]

@@ -14,7 +14,7 @@ module.exports = {
     '__exportStar', '__createBinding', '__values', '__read', '__spread', '__spreadArrays', '__spreadArray', '__await',
     '__asyncGenerator', '__asyncDelegator', '__asyncValues', '__makeTemplateObject', '__importStar', '__importDefault',
     '__classPrivateFieldGet', '__classPrivateFieldSet', '__esDecorate', '__runInitializers', '__propKey',
-    '__setFunctionName', '__classPrivateFieldIn',
+    '__setFunctionName', '__classPrivateFieldIn', '__addDisposableResource', '__disposeResources',
     // We also ignore globals exposed by global-agent:
     'GLOBAL_AGENT', 'ROARR',
     // GlobalNotifier is added by us a global in a server plugin. It's how we make logging available anywhere in the app

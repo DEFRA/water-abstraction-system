@@ -34,6 +34,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/cancel',
+    handler: BillRunsController.cancel,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Confirm cancel a bill run'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/cancel',
+    handler: BillRunsController.submitCancel,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit bill run cancellation'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.review,
     options: {
@@ -43,6 +69,19 @@ const routes = [
         }
       },
       description: 'Review two-part tariff match and allocation results'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/review',
+    handler: BillRunsController.review,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'POST request recieved when filtering applied to review two-part tariff match and allocation results'
     }
   },
   {
@@ -56,6 +95,32 @@ const routes = [
         }
       },
       description: 'Review a two-part tariff licence'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/{id}/send',
+    handler: BillRunsController.send,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Confirm (send) a bill run'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/send',
+    handler: BillRunsController.submitSend,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit bill run (send) confirmation'
     }
   }
 ]

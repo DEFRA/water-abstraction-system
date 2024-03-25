@@ -12,7 +12,7 @@ const ContactModel = require('../../../app/models/contact.model.js')
  * If no `data` is provided, default values will be used. These are
  *
  * - `firstName` - Amara
- * - `surname` - Gupta
+ * - `lastName` - Gupta
  * - `dataSource` - wrls
  * - `contactType` - person
  * - `email` - amara.gupta@example.com

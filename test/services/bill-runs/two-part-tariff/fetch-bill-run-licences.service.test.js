@@ -9,23 +9,23 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
+const DatabaseSupport = require('../../../support/database.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewResultHelper = require('../../../support/helpers/review-result.helper.js')
+const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
 
 // Thing under test
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-bill-run-licences.service.js')
 
 describe('Fetch Bill Run Licences service', () => {
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
   })
 
   describe('when there is a valid bill run', () => {
     let billRun
     let region
+    let licenceHolder
+    let licenceStatus
 
     beforeEach(async () => {
       region = await RegionHelper.add()
@@ -33,16 +33,27 @@ describe('Fetch Bill Run Licences service', () => {
     })
 
     describe('and there are licences in the bill run', () => {
-      let testLicence
+      let testLicenceReady
+      let testLicenceReview
 
       beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-        await LicenceHolderSeeder.seed(testLicence.licenceRef)
-        await ReviewResultHelper.add({ billRunId: billRun.id, licenceId: testLicence.id })
+        testLicenceReady = await ReviewLicenceHelper.add({
+          billRunId: billRun.id,
+          licenceHolder: 'Ready Licence Holder Ltd'
+        })
+        testLicenceReview = await ReviewLicenceHelper.add({
+          billRunId: billRun.id,
+          licenceHolder: 'Review Licence Holder Ltd',
+          status: 'review'
+        })
+
+        // no filters are being applied so these are undefined
+        licenceHolder = undefined
+        licenceStatus = undefined
       })
 
       it('returns details of the bill run and the licences in it', async () => {
-        const result = await FetchBillRunLicencesService.go(billRun.id)
+        const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
 
         expect(result.billRun.id).to.equal(billRun.id)
         expect(result.billRun.createdAt).to.equal(billRun.createdAt)
@@ -50,18 +61,100 @@ describe('Fetch Bill Run Licences service', () => {
         expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
         expect(result.billRun.batchType).to.equal(billRun.batchType)
         expect(result.billRun.region.displayName).to.equal(region.displayName)
+        expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
 
-        expect(result.licences).to.have.length(1)
-        expect(result.licences[0].id).to.equal(testLicence.id)
-        expect(result.licences[0].licenceHolder).to.equal('Licence Holder Ltd')
-        expect(result.licences[0].licenceRef).to.equal(testLicence.licenceRef)
+        expect(result.licences).to.have.length(2)
+        expect(result.licences[0].licenceId).to.equal(testLicenceReview.licenceId)
+        expect(result.licences[0].licenceHolder).to.equal('Review Licence Holder Ltd')
+        expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
+        expect(result.licences[1].licenceId).to.equal(testLicenceReady.licenceId)
+        expect(result.licences[1].licenceHolder).to.equal('Ready Licence Holder Ltd')
+        expect(result.licences[1].licenceRef).to.equal(testLicenceReady.licenceRef)
+
+        expect(result.filterLicenceHolder).to.be.undefined()
+      })
+
+      it("orders the licence by 'review status'", async () => {
+        const result = await FetchBillRunLicencesService.go(billRun.id)
+
+        expect(result.licences[0].status).to.equal('review')
+        expect(result.licences[1].status).to.equal('ready')
+      })
+
+      describe('and a filter has been applied to the licence holder', () => {
+        beforeEach(async () => {
+          licenceHolder = 'ready licence'
+          licenceStatus = undefined
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+
+          expect(result.licences).to.have.length(1)
+          expect(result.licences[0].licenceId).to.equal(testLicenceReady.licenceId)
+          expect(result.licences[0].licenceHolder).to.equal('Ready Licence Holder Ltd')
+          expect(result.licences[0].licenceRef).to.equal(testLicenceReady.licenceRef)
+        })
+      })
+
+      describe('and a filter has been applied to the licence status', () => {
+        beforeEach(async () => {
+          licenceHolder = undefined
+          licenceStatus = 'review'
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+
+          expect(result.licences).to.have.length(1)
+          expect(result.licences[0].licenceId).to.equal(testLicenceReview.licenceId)
+          expect(result.licences[0].licenceHolder).to.equal('Review Licence Holder Ltd')
+          expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
+        })
+      })
+
+      describe('and filters have been applied that will return no results', () => {
+        beforeEach(async () => {
+          licenceHolder = 'ready licence'
+          licenceStatus = 'review'
+        })
+
+        it('returns details of the bill run and no licences', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+
+          expect(result.licences).to.have.length(0)
+        })
       })
     })
   })
 
   describe('when there is an invalid bill run id passed to the service', () => {
     it('returns no results', async () => {
-      const result = await FetchBillRunLicencesService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d')
+      const result = await FetchBillRunLicencesService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d', undefined, undefined)
 
       expect(result.billRun).to.be.undefined()
       expect(result.licences).to.have.length(0)

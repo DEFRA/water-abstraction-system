@@ -6,14 +6,15 @@
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 
 /**
  * Add a new licence
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceRef` - [randomly generated - 01/123]
+ * - `waterUndertaker` - false
+ * - `licenceRef` - [randomly generated - 01/12/34/1000]
  * - `regionId` - [random UUID]
  * - `regions` - { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' }
  * - `startDate` - new Date('2022-01-01')
@@ -40,6 +41,7 @@ async function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
+    waterUndertaker: false,
     licenceRef: generateLicenceRef(),
     regionId: generateUUID(),
     regions: { historicalAreaCode: 'SAAR', regionalChargeArea: 'Southern' },
@@ -53,9 +55,11 @@ function defaults (data = {}) {
 }
 
 function generateLicenceRef () {
-  const secondPart = randomInteger(100, 999)
+  const secondPart = randomInteger(10, 99)
+  const thirdPart = randomInteger(10, 99)
+  const fourthPart = randomInteger(1000, 9999)
 
-  return `01/${secondPart}`
+  return `01/${secondPart}/${thirdPart}/${fourthPart}`
 }
 
 module.exports = {

@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
@@ -20,7 +20,7 @@ describe('Return Log model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await ReturnLogHelper.add()
   })

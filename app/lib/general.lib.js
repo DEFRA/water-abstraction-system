@@ -69,6 +69,36 @@ function currentTimeInNanoseconds () {
 }
 
 /**
+ * Determine the start and end date for the current financial year
+ *
+ * We often need to work out what the start and end date for the current financial year is. But because the financial
+ * year starts on 01-APR and finishes on 31-MAR what that year is will change dependent on the current date.
+ *
+ * @returns {Object} An object containing a `startDate` and `endDate`
+ */
+function determineCurrentFinancialYear () {
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
+
+  let startYear
+  let endYear
+
+  // IMPORTANT! getMonth returns an integer (0-11). So, January is represented as 0 and December as 11. This is why
+  // we use 2 rather than 3 to refer to March
+  if (currentDate.getMonth() <= 2) {
+    // For example, if currentDate was 2022-02-15 it would fall in financial year 2021-04-01 to 2022-03-31
+    startYear = currentYear - 1
+    endYear = currentYear
+  } else {
+    // For example, if currentDate was 2022-06-15 it would fall in financial year 2022-04-01 to 2023-03-31
+    startYear = currentYear
+    endYear = currentYear + 1
+  }
+
+  return { startDate: new Date(startYear, 3, 1), endDate: new Date(endYear, 2, 31) }
+}
+
+/**
  * Generate a Universally Unique Identifier (UUID)
  *
  * The service uses these as the IDs for most records in the DB. Most tables will automatically generate them when
@@ -150,10 +180,67 @@ function timestampForPostgres () {
   return new Date().toISOString()
 }
 
+/**
+ * Compare key properties of 2 transactions and determine if they are a 'match'
+ *
+ * We compare those properties which determine the charge value calculated by the charging module. If the properties
+ * are the same we return true. Else we return false.
+ *
+ * This is used in the billing engines to determine 2 transactions within the same bill, often a debit and a credit,
+ * and whether they match. If they do we don't send either to the charge module or include them in the bill as they
+ * 'cancel' each other out.
+ *
+ * The key properties are charge type, category code, and billable days. But we also need to compare agreements and
+ * additional charges because if those have changed, we need to credit the previous transaction and calculate the
+ * new debit value.
+ *
+ * Because what we are checking does not match up to what you see in the UI we have this reference
+ *
+ * - Abatement agreement - section126Factor
+ * - Two-part tariff agreement - section127Agreement
+ * - Canal and River Trust agreement - section130Agreement
+ * - Aggregate - aggregateFactor
+ * - Charge Adjustment - adjustmentFactor
+ * - Winter discount - winterOnly
+ *
+ * - Additional charges - supportedSource
+ * - Additional charges - supportedSourceName
+ * - Additional charges - waterCompanyCharge
+ *
+ * @param {Object} left - First transaction to match
+ * @param {Object} right - Second transaction to match
+ *
+ * @returns {boolean} true if a match else false
+ */
+function transactionsMatch (left, right) {
+  // When we put together this matching logic our instincts were to try and do something 'better' than this long,
+  // chained `&&` statement. But whatever we came up with was
+  //
+  // - more complex
+  // - less performant
+  //
+  // We also believe this makes it easy to see what properties are being compared. Plus the moment something doesn't
+  // match we bail. So, much as it feels 'wrong', we are sticking with it!
+  return left.chargeType === right.chargeType &&
+    left.chargeCategoryCode === right.chargeCategoryCode &&
+    left.billableDays === right.billableDays &&
+    left.section126Factor === right.section126Factor &&
+    left.section127Agreement === right.section127Agreement &&
+    left.section130Agreement === right.section130Agreement &&
+    left.aggregateFactor === right.aggregateFactor &&
+    left.adjustmentFactor === right.adjustmentFactor &&
+    left.winterOnly === right.winterOnly &&
+    left.supportedSource === right.supportedSource &&
+    left.supportedSourceName === right.supportedSourceName &&
+    left.waterCompanyCharge === right.waterCompanyCharge
+}
+
 module.exports = {
   calculateAndLogTimeTaken,
   currentTimeInNanoseconds,
+  determineCurrentFinancialYear,
   generateUUID,
   periodsOverlap,
-  timestampForPostgres
+  timestampForPostgres,
+  transactionsMatch
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence review page
  * @module ReviewLicenceService

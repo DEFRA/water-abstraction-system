@@ -44,7 +44,8 @@ async function _fetchBillLicence (id) {
         'id',
         'batchType',
         'scheme',
-        'source'
+        'source',
+        'status'
       ])
     })
     .withGraphFetched('transactions')
@@ -79,7 +80,8 @@ async function _fetchBillLicence (id) {
         ref('abstractionPeriod:startMonth').castInt().as('abstractionPeriodStartMonth'),
         ref('abstractionPeriod:endDay').castInt().as('abstractionPeriodEndDay'),
         ref('abstractionPeriod:endMonth').castInt().as('abstractionPeriodEndMonth'),
-        ref('grossValuesCalculated:supportedSourceCharge').castInt().as('supportedSourceCharge')
+        ref('grossValuesCalculated:supportedSourceCharge').castInt().as('supportedSourceChargeValue'),
+        ref('grossValuesCalculated:waterCompanyCharge').castInt().as('waterCompanyChargeValue')
       ])
         .orderBy([
           { column: 'chargeCategoryCode', order: 'desc' },

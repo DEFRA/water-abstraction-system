@@ -5,7 +5,7 @@
  */
 
 const PurposeModel = require('../../../app/models/purpose.model.js')
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 
 /**
  * Add a new purpose
@@ -52,7 +52,7 @@ function defaults (data = {}) {
 }
 
 function generateLegacyId () {
-  const numbering = randomInteger(10, 99)
+  const numbering = randomInteger(10, 999)
 
   return `${numbering}0`
 }

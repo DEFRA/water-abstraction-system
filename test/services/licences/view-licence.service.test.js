@@ -12,6 +12,7 @@ const { expect } = Code
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
+const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
@@ -19,7 +20,16 @@ const ViewLicenceService = require('../../../app/services/licences/view-licence.
 
 describe('View Licence service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
+
   let fetchLicenceResult
+
+  beforeEach(() => {
+    Sinon.stub(FetchLicenceAbstractionConditionsService, 'go').resolves({
+      conditions: [],
+      purposeIds: [],
+      numberOfConditions: 0
+    })
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -36,19 +46,33 @@ describe('View Licence service', () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result).to.equal({
+          abstractionConditionDetails: {
+            caption: 'Abstraction conditions',
+            conditions: [],
+            linkText: 'View details of the abstraction conditions',
+            numberOfConditions: 0
+          },
           abstractionPeriods: null,
           abstractionPeriodsAndPurposesLinkText: null,
+          abstractionPointLinkText: 'View details of the abstraction point',
+          abstractionPoints: [
+            'At National Grid Reference TL 23198 88603'
+          ],
+          abstractionPointsCaption: 'Point of abstraction',
           id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
           endDate: null,
           licenceHolder: 'Unregistered licence',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
+          monitoringStationCaption: 'Monitoring station',
+          monitoringStations: [],
           pageTitle: 'Licence 01/130/R01',
           purposes: null,
           region: 'South West',
           registeredTo: null,
           startDate: '7 March 2013',
+          sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
           warning: null
         })
       })
@@ -184,6 +208,21 @@ function _testLicence () {
     },
     licenceRef: '01/130/R01',
     licenceName: 'Unregistered licence',
+    licenceVersions: [],
+    permitLicence: {
+      purposes: [{
+        purposePoints: [{
+          point_detail: {
+            NGR1_SHEET: 'TL',
+            NGR1_EAST: '23198',
+            NGR1_NORTH: '88603'
+          },
+          point_source: {
+            NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+          }
+        }]
+      }]
+    },
     region: {
       id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
       displayName: 'South West'

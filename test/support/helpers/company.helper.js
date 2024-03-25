@@ -5,7 +5,7 @@
  */
 
 const CompanyModel = require('../../../app/models/company.model.js')
-const { randomInteger } = require('./general.helper.js')
+const { randomInteger } = require('../general.js')
 
 /**
  * Add a new company

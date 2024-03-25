@@ -64,12 +64,12 @@ class LicenceModel extends BaseModel {
           to: 'regions.id'
         }
       },
-      reviewResults: {
+      reviewLicences: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-result.model',
+        modelClass: 'review-licence.model',
         join: {
           from: 'licences.id',
-          to: 'reviewResults.licenceId'
+          to: 'reviewLicences.licenceId'
         }
       },
       workflows: {
@@ -78,6 +78,26 @@ class LicenceModel extends BaseModel {
         join: {
           from: 'licences.id',
           to: 'workflows.licenceId'
+        }
+      },
+      permitLicence: {
+        relation: Model.HasOneRelation,
+        modelClass: 'permit-licence.model',
+        join: {
+          from: 'licences.licenceRef',
+          to: 'permitLicences.licenceRef'
+        }
+      },
+      licenceGaugingStations: {
+        relation: Model.ManyToManyRelation,
+        modelClass: 'gauging-station.model',
+        join: {
+          from: 'licences.id',
+          through: {
+            from: 'licenceGaugingStations.licenceId',
+            to: 'licenceGaugingStations.gaugingStationId'
+          },
+          to: 'gaugingStations.id'
         }
       }
     }

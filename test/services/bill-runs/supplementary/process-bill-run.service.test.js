@@ -12,16 +12,15 @@ const { expect } = Code
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const DatabaseHelper = require('../../../support/helpers/database.helper.js')
+const DatabaseSupport = require('../../../support/database.js')
 
 // Things we need to stub
-const ChargingModuleGenerateService = require('../../../../app/services/charging-module/generate-bill-run.service.js')
+const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRequestLib = require('../../../../app/lib/legacy-request.lib.js')
+const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
-const ReissueBillsService = require('../../../../app/services/bill-runs/supplementary/reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('../../../../app/services/bill-runs/supplementary/unflag-unbilled-licences.service.js')
 
 // Thing under test
@@ -34,19 +33,19 @@ describe('Supplementary Process Bill Run service', () => {
   ]
 
   let billRun
-  let chargingModuleGenerateServiceStub
+  let chargingModuleGenerateBillRunRequestStub
   let handleErroredBillRunStub
-  let legacyRequestLibStub
+  let legacyRefreshBillRunRequestStub
   let notifierStub
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     billRun = await BillRunHelper.add()
 
     handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
-    chargingModuleGenerateServiceStub = Sinon.stub(ChargingModuleGenerateService, 'go')
-    legacyRequestLibStub = Sinon.stub(LegacyRequestLib, 'post')
+    chargingModuleGenerateBillRunRequestStub = Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send')
+    legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -74,39 +73,18 @@ describe('Supplementary Process Bill Run service', () => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(false)
       })
 
-      describe('and there are no invoices to reissue', () => {
-        beforeEach(() => {
-          Sinon.stub(ReissueBillsService, 'go').resolves(false)
-        })
+      it('sets the Bill Run status to empty', async () => {
+        await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        it('sets the Bill Run status to empty', async () => {
-          await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+        const result = await BillRunModel.query().findById(billRun.id)
 
-          const result = await BillRunModel.query().findById(billRun.id)
-
-          expect(result.status).to.equal('empty')
-        })
-      })
-
-      describe('and there are invoices to reissue', () => {
-        beforeEach(() => {
-          Sinon.stub(ReissueBillsService, 'go').resolves(true)
-        })
-
-        it('sets the Bill Run status to processing', async () => {
-          await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
-
-          const result = await BillRunModel.query().findById(billRun.id)
-
-          expect(result.status).to.equal('processing')
-        })
+        expect(result.status).to.equal('empty')
       })
     })
 
     describe('and some charge versions are billed', () => {
       beforeEach(() => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
-        Sinon.stub(ReissueBillsService, 'go').resolves(true)
       })
 
       it('sets the Bill Run status to processing', async () => {
@@ -120,13 +98,13 @@ describe('Supplementary Process Bill Run service', () => {
       it("tells the charging module API to 'generate' the bill run", async () => {
         await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(chargingModuleGenerateServiceStub.called).to.be.true()
+        expect(chargingModuleGenerateBillRunRequestStub.called).to.be.true()
       })
 
       it('tells the legacy service to start its refresh job', async () => {
         await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(legacyRequestLibStub.called).to.be.true()
+        expect(legacyRefreshBillRunRequestStub.called).to.be.true()
       })
 
       it('it logs the time taken', async () => {
@@ -143,10 +121,6 @@ describe('Supplementary Process Bill Run service', () => {
 
   describe('when the service errors', () => {
     let thrownError
-
-    beforeEach(() => {
-      Sinon.stub(ReissueBillsService, 'go')
-    })
 
     describe('because fetching the charge versions fails', () => {
       beforeEach(() => {

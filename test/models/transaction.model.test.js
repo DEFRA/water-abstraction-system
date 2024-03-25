@@ -12,7 +12,7 @@ const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const DatabaseHelper = require('../support/helpers/database.helper.js')
+const DatabaseSupport = require('../support/database.js')
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
 
 // Thing under test
@@ -22,7 +22,7 @@ describe('Transaction model', () => {
   let testRecord
 
   beforeEach(async () => {
-    await DatabaseHelper.clean()
+    await DatabaseSupport.clean()
 
     testRecord = await TransactionHelper.add()
   })

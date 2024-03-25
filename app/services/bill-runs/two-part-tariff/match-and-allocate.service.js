@@ -1,14 +1,17 @@
+'use strict'
+
 /**
  * Match and allocate licences to returns for a two-part tariff bill run for the given billing period
  * @module MatchAndAllocateService
  */
 
 const AllocateReturnsToChargeElementService = require('./allocate-returns-to-charge-element.service.js')
+const DetermineLicenceIssuesService = require('./determine-licence-issues.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
 const MatchReturnsToChargeElementService = require('./match-returns-to-charge-element.service.js')
+const PersistAllocatedLicenceToResultsService = require('./persist-allocated-licence-to-results.service.js')
 const PrepareChargeVersionService = require('./prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('./prepare-return-logs.service.js')
-const PersistAllocatedLicenceToResultsService = require('./persist-allocated-licence-to-results.service.js')
 
 /**
  * Performs the two-part tariff matching and allocating
@@ -23,7 +26,7 @@ const PersistAllocatedLicenceToResultsService = require('./persist-allocated-lic
  * @param {module:BillRunModel} billRun - The bill run object containing billing information
  * @param {Object} billingPeriod - A single billing period containing a `startDate` and `endDate`
  *
- * @returns {Boolean} - True if there are any licences matched to returns, false otherwise
+ * @returns {Promise<Boolean>} - True if there are any licences matched to returns, false otherwise
  */
 async function go (billRun, billingPeriod) {
   const licences = await FetchLicencesService.go(billRun.regionId, billingPeriod)
@@ -36,7 +39,7 @@ async function go (billRun, billingPeriod) {
 }
 
 async function _process (licences, billingPeriod, billRun) {
-  for (const licence of licences) {
+  licences.forEach(async (licence) => {
     await PrepareReturnLogsService.go(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
@@ -64,8 +67,9 @@ async function _process (licences, billingPeriod, billRun) {
       })
     })
 
+    await DetermineLicenceIssuesService.go(licence)
     await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
-  }
+  })
 }
 
 module.exports = {
