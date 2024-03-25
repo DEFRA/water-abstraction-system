@@ -30,13 +30,13 @@ function _licenceAbstractionPeriod (payload) {
   // If it is not set then it is because the presenter has been called from 'AbstractionPeriodService' and it's the first
   // load. Else it has been called by the 'SubmitAbstractionPeriod' and the user has not inputted an abstraction period.
   // Either way, we use it to tell us wether there is anything in the payload worth transforming.
-  const abstractionPeriod = payload.abstractionPeriod
 
-  if (!abstractionPeriod) {
-    return null
+  return {
+    fromDay: payload['fromAbstractionPeriod-day'] ? payload['fromAbstractionPeriod-day'] : null,
+    fromMonth: payload['fromAbstractionPeriod-month'] ? payload['fromAbstractionPeriod-month'] : null,
+    toDay: payload['toAbstractionPeriod-day'] ? payload['toAbstractionPeriod-day'] : null,
+    toMonth: payload['toAbstractionPeriod-month'] ? payload['toAbstractionPeriod-month'] : null
   }
-
-  return abstractionPeriod
 }
 
 module.exports = {
