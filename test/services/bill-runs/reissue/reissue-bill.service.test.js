@@ -21,7 +21,7 @@ const ChargingModuleViewBillRequest = require('../../../../app/requests/charging
 const ChargingModuleViewBillRunStatusRequest = require('../../../../app/requests/charging-module/view-bill-run-status.request.js')
 
 // Thing under test
-const ReissueBillService = require('../../../../app/services/bill-runs/supplementary/reissue-bill.service.js')
+const ReissueBillService = require('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
 
 const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = generateUUID()
 const INVOICE_EXTERNAL_ID = generateUUID()
