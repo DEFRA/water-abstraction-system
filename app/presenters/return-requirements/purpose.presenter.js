@@ -29,8 +29,8 @@ function _licencePurposes (purposesData, payload) {
   // NOTE: 'purposes' is the payload value that tells us whether the user selected any purposes
   // for the return requirement.
   // If it is not set then it is because the presenter has been called from 'PurposeService' and it's the first
-  // load. Else it has been called by the 'SubmitPurposeService' and the user has not inputted a site description.
-  // Either way, we use it to tell us wether there is anything in the payload worth transforming.
+  // load. Else it has been called by the 'SubmitPurposeService' and the user has not checked a purpose from the list.
+  // Either way, we use it to tell us whether there is anything in the payload worth transforming.
   const purposes = payload.purposes
 
   if (!purposes) {
