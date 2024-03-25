@@ -1,50 +1,132 @@
 'use strict'
 
 /**
- * Fetches all billing accounts for the supplied charge versions
+ * Fetches all billing accounts to be processed as part of supplementary billing for a region and billing period
  * @module FetchBillingAccountsService
  */
 
+const { ref } = require('objection')
+
 const BillingAccountModel = require('../../../models/billing-account.model.js')
+const ChargeVersionModel = require('../../../models/charge-version.model.js')
+const Workflow = require('../../../models/workflow.model.js')
 
-/**
- * Fetch all billing accounts for the supplied charge versions
- *
- * @param {module:ChargeVersionModel[]} chargeVersions An array of charge versions
- *
- * @returns {Promise<Object[]>} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
- */
-async function go (chargeVersions) {
-  const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)
-  const billingAccountModels = await _fetch(uniqueBillingAccountIds)
-
-  // The results come back from Objection as BillingAccountModels. Since we want to be clear that these are not
-  // full-blown models, we turn them into plain objects using Objection's .toJSON() method
-  const billingAccountObjects = _makeObjects(billingAccountModels)
-
-  return billingAccountObjects
+async function go (regionId, billingPeriod) {
+  return _fetch(regionId, billingPeriod)
 }
 
-function _extractUniqueBillingAccountIds (chargeVersions) {
-  const allBillingAccountIds = chargeVersions.map((chargeVersion) => {
-    return chargeVersion.billingAccountId
-  })
-
-  // Creating a new set from allBillingAccountIds gives us just the unique ids. Objection does not accept sets in
-  // .findByIds() so we spread it into an array
-  return [...new Set(allBillingAccountIds)]
-}
-
-function _fetch (uniqueBillingAccountIds) {
+async function _fetch (regionId, billingPeriod) {
   return BillingAccountModel.query()
-    .select('id', 'accountNumber')
-    .findByIds([...uniqueBillingAccountIds])
+    .select([
+      'billingAccounts.id',
+      'billingAccounts.accountNumber'
+    ])
+    .whereExists(_whereExistsClause(regionId, billingPeriod))
+    .orderBy([
+      { column: 'billingAccounts.accountNumber' }
+    ])
+    .withGraphFetched('chargeVersions')
+    .modifyGraph('chargeVersions', (builder) => {
+      builder
+        .select([
+          'chargeVersions.id',
+          'chargeVersions.scheme',
+          'chargeVersions.startDate',
+          'chargeVersions.endDate',
+          'chargeVersions.billingAccountId',
+          'chargeVersions.status'
+        ])
+
+      _whereClauseForChargeVersions(builder, regionId, billingPeriod)
+
+      builder.orderBy([
+        { column: 'licenceId', order: 'ASC' },
+        { column: 'startDate', order: 'ASC' }
+      ])
+    })
+    .withGraphFetched('chargeVersions.licence')
+    .modifyGraph('chargeVersions.licence', (builder) => {
+      builder.select([
+        'id',
+        'licenceRef',
+        'waterUndertaker',
+        ref('licences.regions:historicalAreaCode').castText().as('historicalAreaCode'),
+        ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea'),
+        'startDate',
+        'expiredDate',
+        'lapsedDate',
+        'revokedDate'
+      ])
+    })
+    .withGraphFetched('chargeVersions.licence.region')
+    .modifyGraph('chargeVersions.licence.region', (builder) => {
+      builder.select([
+        'id',
+        'chargeRegionId'
+      ])
+    })
+    .withGraphFetched('chargeVersions.changeReason')
+    .modifyGraph('chargeVersions.changeReason', (builder) => {
+      builder.select([
+        'id',
+        'triggersMinimumCharge'
+      ])
+    })
+    .withGraphFetched('chargeVersions.chargeReferences')
+    .modifyGraph('chargeVersions.chargeReferences', (builder) => {
+      builder.select([
+        'id',
+        'source',
+        'loss',
+        'volume',
+        'adjustments',
+        'additionalCharges',
+        'description'
+      ])
+    })
+    .withGraphFetched('chargeVersions.chargeReferences.chargeCategory')
+    .modifyGraph('chargeVersions.chargeReferences.chargeCategory', (builder) => {
+      builder.select([
+        'id',
+        'reference',
+        'shortDescription'
+      ])
+    })
+    .withGraphFetched('chargeVersions.chargeReferences.chargeElements')
+    .modifyGraph('chargeVersions.chargeReferences.chargeElements', (builder) => {
+      builder.select([
+        'id',
+        'abstractionPeriodStartDay',
+        'abstractionPeriodStartMonth',
+        'abstractionPeriodEndDay',
+        'abstractionPeriodEndMonth'
+      ])
+    })
 }
 
-function _makeObjects (models) {
-  return models.map(model => {
-    return model.toJSON()
-  })
+function _whereClauseForChargeVersions (query, regionId, billingPeriod) {
+  return query
+    .innerJoinRelated('licence')
+    .where('licence.regionId', regionId)
+    .where('licence.includeInSrocBilling', true)
+    .where('chargeVersions.scheme', 'sroc')
+    .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
+    .whereNot('chargeVersions.status', 'draft')
+    .whereNotExists(
+      Workflow.query()
+        .select(1)
+        .whereColumn('chargeVersions.licenceId', 'workflows.licenceId')
+        .whereNull('workflows.deletedAt')
+    )
+}
+
+function _whereExistsClause (regionId, billingPeriod) {
+  let query = ChargeVersionModel.query().select(1)
+
+  query = _whereClauseForChargeVersions(query, regionId, billingPeriod)
+  query.whereColumn('chargeVersions.billingAccountId', 'billingAccounts.id')
+
+  return query
 }
 
 module.exports = {
