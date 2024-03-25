@@ -5,7 +5,7 @@
  * @module ReviewLicencePresenter
  */
 
-const { formatLongDate, formatAbstractionPeriod} = require('../../base.presenter.js')
+const { formatLongDate, formatAbstractionPeriod } = require('../../base.presenter.js')
 
 /**
  * Prepares and processes bill run and review licence data for presentation
