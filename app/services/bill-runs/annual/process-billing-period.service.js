@@ -212,7 +212,7 @@ function _generateTransactionData (billLicenceId, billingPeriod, chargePeriod, c
     const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions (depending on if a compensation
-    // transaction is also created) and we
+    // transaction is also created) and we need to return a 'flat' array of all transactions
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
       return GenerateTransactionsService.go(
         billLicenceId,
