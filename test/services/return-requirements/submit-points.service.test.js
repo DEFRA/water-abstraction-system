@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchPointsService = require('../../../app/services/return-requirements/fetch-points.service.js')
-const PointsValidation = require('../../../app/validators/return-requirements/points.validator.js')
+const PointsValidator = require('../../../app/validators/return-requirements/points.validator.js')
 
 // Thing under test
 const SubmitPointsService = require('../../../app/services/return-requirements/submit-points.service.js')
@@ -56,7 +56,7 @@ describe('Submit Points service', () => {
 
         Sinon.stub(FetchPointsService, 'go').resolves(_testFetchPointsService())
 
-        Sinon.stub(PointsValidation, 'go').resolves(null)
+        Sinon.stub(PointsValidator, 'go').resolves(null)
       })
 
       it('fetches the current setup session record', async () => {

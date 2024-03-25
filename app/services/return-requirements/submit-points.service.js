@@ -6,7 +6,7 @@
  */
 
 const FetchPointsService = require('../../services/return-requirements/fetch-points.service.js')
-const PointsValidation = require('../../validators/return-requirements/points.validator.js')
+const PointsValidator = require('../../validators/return-requirements/points.validator.js')
 const SelectPointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
 }
 
 function _validate (payload) {
-  const validation = PointsValidation.go(payload)
+  const validation = PointsValidator.go(payload)
 
   if (!validation.error) {
     return null
