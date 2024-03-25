@@ -17,27 +17,27 @@ function go (session) {
   return data
 }
 
-function _reason (data) {
-  let reason = data.returnsRequired
-  if (data.journey === 'no-returns-required') {
-    reason = data.noReturnsRequired
+function _reason (sessionData) {
+  let reason = sessionData.returnsRequired
+  if (sessionData.journey === 'no-returns-required') {
+    reason = sessionData.noReturnsRequired
   }
 
   return reason
 }
 
-function _startDate (data) {
-  const selectedOption = data.startDateOptions
+function _startDate (sessionData) {
+  const selectedOption = sessionData.startDateOptions
   let date
 
   if (selectedOption === 'licenceStartDate') {
-    date = new Date(data.licence.currentVersionStartDate)
+    date = new Date(sessionData.licence.currentVersionStartDate)
   }
 
   if (selectedOption === 'anotherStartDate') {
-    const day = data.startDateDay
-    const month = data.startDateMonth
-    const year = data.startDateYear
+    const day = sessionData.startDateDay
+    const month = sessionData.startDateMonth
+    const year = sessionData.startDateYear
 
     date = new Date(`${year}-${month}-${day}`)
   }
