@@ -9,51 +9,36 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
+const BillModel = require('../../../../app/models/bill.model.js')
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
+const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
-const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
 
-describe('Supplementary Process billing period service', () => {
-  const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+describe('Supplementary Process Billing Period service', () => {
+  const billingPeriod = determineCurrentFinancialYear()
+  const billRun = {
+    id: '8e0d4c8b-e9fe-4238-8f3e-dfca743316ef',
+    externalId: 'f6e052f5-37f9-43f3-a649-ff6398cec1a3'
   }
 
-  let billRun
   let billingAccount
-  let chargeCategory
-  let changeReason
-  let chargeVersions
-  let licence
+  let chargingModuleCreateTransactionRequestStub
 
   beforeEach(async () => {
+    // NOTE: Although we don't rely on the helpers to create the data we pass into the service it does persist the
+    // results. If we don't clean the DB it causes the tests to fail because of unique constraints on the legacy tables.
     await DatabaseSupport.clean()
 
-    const { id: regionId } = await RegionHelper.add()
-    licence = await LicenceHelper.add({ includeInSrocBilling: true, regionId })
-    changeReason = await ChangeReasonHelper.add()
-    billingAccount = await BillingAccountHelper.add()
-    chargeCategory = await ChargeCategoryHelper.add()
-
-    billRun = await BillRunHelper.add({ regionId })
+    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
   })
 
   afterEach(() => {
@@ -61,162 +46,95 @@ describe('Supplementary Process billing period service', () => {
   })
 
   describe('when the service is called', () => {
-    describe('and there are no charge versions to process', () => {
-      beforeEach(() => {
-        chargeVersions = []
-      })
-
+    describe('and there are no billing accounts to process', () => {
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
 
         expect(result).to.be.false()
       })
     })
 
-    describe('and there are charge versions to process', () => {
+    describe('and there are billing accounts to process', () => {
+      beforeEach(async () => {
+        billingAccount = _testBillingAccount()
+
+        chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
+          ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
+        })
+        chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
+          ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
+        })
+      })
+
       describe('and they are billable', () => {
         beforeEach(async () => {
-          const { id: chargeVersionId } = await ChargeVersionHelper.add(
-            {
-              changeReasonId: changeReason.id,
-              billingAccountId: billingAccount.id,
-              startDate: new Date(2022, 7, 1, 9),
-              licenceId: licence.id
-            }
-          )
-          const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
-            { chargeCategoryId: chargeCategory.id, chargeVersionId }
-          )
-          await ChargeElementHelper.add({
-            chargeReferenceId,
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 4,
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3
-          })
-
-          const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-          chargeVersions = chargeVersionData.chargeVersions
-
-          const sentTransactions = [{
-            id: '9b092372-1a26-436a-bf1f-b5eb3f9aca44',
-            billLicenceId: '594fc25e-99c1-440a-8b88-b507ee17738a',
-            chargeReferenceId: '32058a19-4813-4ee7-808b-a0559deb8469',
-            startDate: new Date('2022-04-01'),
-            endDate: new Date('2022-10-31'),
-            source: 'non-tidal',
-            season: 'all year',
-            loss: 'low',
-            credit: false,
-            chargeType: 'standard',
-            authorisedQuantity: 6.82,
-            billableQuantity: 6.82,
-            authorisedDays: 365,
-            billableDays: 214,
-            status: 'charge_created',
-            description: 'Water abstraction charge: Mineral washing',
-            volume: 6.82,
-            section126Factor: 1,
-            section127Agreement: false,
-            section130Agreement: false,
-            newLicence: false,
-            secondPartCharge: false,
-            scheme: 'sroc',
-            aggregateFactor: 0.562114443,
-            adjustmentFactor: 1,
-            chargeCategoryCode: '4.4.5',
-            chargeCategoryDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
-            supportedSource: false,
-            supportedSourceName: null,
-            waterCompanyCharge: true,
-            winterOnly: false,
-            waterUndertaker: false,
-            externalId: '7e752fa6-a19c-4779-b28c-6e536f028795',
-            purposes: [{}]
-          }]
-
-          Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
-          Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send').resolves({
-            succeeded: true,
-            response: {}
-          })
+          // We want to ensure there is coverage of the functionality that finds an existing bill licence or creates a
+          // new one when processing a billing account. To to that we need a billing account with at least 2 charge versions
+          // linked to the same licence.
+          // But we also want coverage for charge versions that do not have a status of 'current'. These are processed
+          // by the service though only for any previous transactions associated with them.
+          const supersededChargeVersion = _testChargeVersion(billingAccount.id)
+          supersededChargeVersion.status = 'superseded'
+          billingAccount.chargeVersions = [supersededChargeVersion, _testChargeVersion(billingAccount.id), _testChargeVersion(billingAccount.id)]
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
           expect(result).to.be.true()
         })
       })
 
-      describe('but none of them are billable', () => {
-        describe('because the billable days calculated as 0', () => {
-          beforeEach(async () => {
-            const { id: chargeVersionId } = await ChargeVersionHelper.add(
-              {
-                changeReasonId: changeReason.id,
-                billingAccountId: billingAccount.id,
-                startDate: new Date(2022, 7, 1, 9),
-                licenceId: licence.id
-              }
-            )
-            const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
-              { chargeCategoryId: chargeCategory.id, chargeVersionId }
-            )
-            await ChargeElementHelper.add({
-              chargeReferenceId,
-              abstractionPeriodStartDay: 1,
-              abstractionPeriodStartMonth: 4,
-              abstractionPeriodEndDay: 31,
-              abstractionPeriodEndMonth: 5
-            })
+      describe('and they are partially billable (some bill licences generate 0 transactions)', () => {
+        beforeEach(() => {
+          // Create a charge version with an abstraction period that starts in June but which is linked to a licence
+          // that was revoked at the start of May. The engine should calculate 0 billable days and therefore not attempt
+          // to create a bill licence for this record.
+          const unbillableChargeVersion = _testChargeVersion(billingAccount.id)
+          unbillableChargeVersion.licence.id = 'c3726e99-935e-4a36-ab2f-eef8bda9293a'
+          unbillableChargeVersion.licence.revokedDate = new Date(billingPeriod.startDate.getFullYear(), 4, 1)
+          unbillableChargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodStartDay = 1
+          unbillableChargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodStartMonth = 6
 
-            const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-            chargeVersions = chargeVersionData.chargeVersions
-          })
-
-          describe('and there are no previous billed transactions', () => {
-            it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
-
-              expect(result).to.be.false()
-            })
-          })
+          billingAccount.chargeVersions = [
+            _testChargeVersion(billingAccount.id),
+            _testChargeVersion(billingAccount.id),
+            unbillableChargeVersion
+          ]
         })
 
-        describe('because the charge version status is `superseded`', () => {
-          describe('and there are no previously billed transactions', () => {
-            beforeEach(async () => {
-              const { id: chargeVersionId } = await ChargeVersionHelper.add(
-                {
-                  changeReasonId: changeReason.id,
-                  billingAccountId: billingAccount.id,
-                  startDate: new Date(2022, 7, 1, 9),
-                  licenceId: licence.id,
-                  status: 'superseded'
-                }
-              )
-              const { chargeElementId } = await ChargeReferenceHelper.add(
-                { chargeCategoryId: chargeCategory.id, chargeVersionId }
-              )
-              await ChargeElementHelper.add({
-                chargeElementId,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 4,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3
-              })
+        it('returns true (bill run is not empty)', async () => {
+          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-              const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-              chargeVersions = chargeVersionData.chargeVersions
-            })
+          expect(result).to.be.true()
+        })
 
-            it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+        it('only persists the bill licences with transactions', async () => {
+          await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-              expect(result).to.be.false()
-            })
-          })
+          const result = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
+
+          expect(result.billLicences.length).to.equal(1)
+          expect(result.billLicences[0].licenceId).to.equal(billingAccount.chargeVersions[0].licence.id)
+        })
+      })
+
+      describe('but they are not billable', () => {
+        beforeEach(async () => {
+          const chargeVersion = _testChargeVersion(billingAccount.id)
+
+          // We update the billing account's charge information so that the engine calculates a charge period that
+          // starts after the abstraction period i.e. nothing to bill
+          chargeVersion.startDate = new Date(billingPeriod.endDate.getFullYear(), 7, 1)
+          chargeVersion.chargeReferences[0].chargeElements[0].abstractionPeriodEndMonth = 5
+
+          billingAccount.chargeVersions = [chargeVersion]
+        })
+
+        it('returns false (bill run is empty)', async () => {
+          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+
+          expect(result).to.be.false()
         })
       })
     })
@@ -224,18 +142,8 @@ describe('Supplementary Process billing period service', () => {
 
   describe('when the service errors', () => {
     beforeEach(async () => {
-      const { id: chargeVersionId } = await ChargeVersionHelper.add({
-        changeReasonId: changeReason.id,
-        billingAccountId: billingAccount.id,
-        licenceId: licence.id
-      })
-      const { id: chargeReferenceId } = await ChargeReferenceHelper.add(
-        { chargeCategoryId: chargeCategory.id, chargeVersionId }
-      )
-      await ChargeElementHelper.add({ chargeReferenceId })
-
-      const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
-      chargeVersions = chargeVersionData.chargeVersions
+      billingAccount = _testBillingAccount()
+      billingAccount.chargeVersions = [_testChargeVersion(billingAccount.id)]
     })
 
     describe('because generating the calculated transactions fails', () => {
@@ -244,7 +152,7 @@ describe('Supplementary Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]))
           .to
           .reject()
 
@@ -255,12 +163,11 @@ describe('Supplementary Process billing period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        const thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToCreateCharge)
-        Sinon.stub(SendTransactionsService, 'go').rejects(thrownError)
+        chargingModuleCreateTransactionRequestStub.rejects()
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions))
+        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]))
           .to
           .reject()
 
@@ -270,3 +177,79 @@ describe('Supplementary Process billing period service', () => {
     })
   })
 })
+
+function _chargingModuleResponse (transactionId) {
+  return {
+    succeeded: true,
+    response: {
+      body: { transaction: { id: transactionId } }
+    }
+  }
+}
+
+function _testBillingAccount () {
+  return {
+    id: '973a5852-9c06-4c14-b1e2-d32b88d3e878',
+    accountNumber: 'T71117364A'
+  }
+}
+
+function _testChargeVersion (billingAccountId) {
+  return {
+    id: generateUUID(),
+    scheme: 'sroc',
+    startDate: new Date('2022-04-01'),
+    endDate: null,
+    billingAccountId,
+    status: 'current',
+    licence: {
+      id: '1b605a4e-a065-4b17-80eb-47179b99a4e8',
+      licenceRef: '01/684',
+      waterUndertaker: true,
+      historicalAreaCode: 'SAAR',
+      regionalChargeArea: 'Southern',
+      startDate: new Date('2022-01-01'),
+      expiredDate: null,
+      lapsedDate: null,
+      revokedDate: null,
+      region: {
+        id: '03d3a38b-0213-43eb-9ab4-d83f26d3b111',
+        chargeRegionId: 'A'
+      }
+    },
+    changeReason: {
+      id: '9107791e-b4b2-481c-b768-fb66d0b5d22e',
+      triggersMinimumCharge: false
+    },
+    chargeReferences: [
+      {
+        id: generateUUID(),
+        source: 'non-tidal',
+        loss: 'low',
+        volume: '6.819',
+        adjustments: {
+          s126: null, s127: false, s130: false, charge: null, winter: false, aggregate: '0.562114443'
+        },
+        additionalCharges: { isSupplyPublicWater: true },
+        description: 'Mineral washing',
+        chargeCategory: {
+          id: 'cc4a66da-efdb-4882-b18a-daf000131349',
+          reference: '4.4.1',
+          shortDescription: 'Low loss, non-tidal, up to and including 5,000 ML/yr'
+        },
+        chargeElements: [
+          {
+            id: generateUUID(),
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 4,
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 10,
+            // NOTE: We are faking an Objection model which comes with a toJSON() method that gets called as part
+            // of processing the billing account.
+            toJSON: () => { return '{}' }
+          }
+        ]
+      }
+    ]
+  }
+}
