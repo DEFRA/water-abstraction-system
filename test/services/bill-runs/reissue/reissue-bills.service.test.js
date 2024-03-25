@@ -19,11 +19,11 @@ const TransactionHelper = require('../../../support/helpers/transaction.helper.j
 const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Things we need to stub
-const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/supplementary/fetch-bills-to-be-reissued.service.js')
-const ReissueBillService = require('../../../../app/services/bill-runs/supplementary/reissue-bill.service.js')
+const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
+const ReissueBillService = require('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
 
 // Thing under test
-const ReissueBillsService = require('../../../../app/services/bill-runs/supplementary/reissue-bills.service.js')
+const ReissueBillsService = require('../../../../app/services/bill-runs/reissue/reissue-bills.service.js')
 
 describe('Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }

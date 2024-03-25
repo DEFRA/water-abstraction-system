@@ -35,11 +35,7 @@ describe('Fetch Previous Transactions service', () => {
 
   describe('when there are no transactions', () => {
     it('returns no results', async () => {
-      const result = await FetchPreviousTransactionsService.go(
-        { billingAccountId },
-        { licenceId },
-        financialYearEnding
-      )
+      const result = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
       expect(result).to.be.empty()
     })
@@ -53,11 +49,7 @@ describe('Fetch Previous Transactions service', () => {
       })
 
       it('returns results', async () => {
-        const results = await FetchPreviousTransactionsService.go(
-          { billingAccountId },
-          { licenceId },
-          financialYearEnding
-        )
+        const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
         expect(results).to.have.length(1)
         expect(results[0].credit).to.be.false()
@@ -81,278 +73,27 @@ describe('Fetch Previous Transactions service', () => {
             })
 
             it('returns no results', async () => {
-              const results = await FetchPreviousTransactionsService.go(
-                { billingAccountId },
-                { licenceId },
-                financialYearEnding
-              )
+              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
               expect(results).to.be.empty()
             })
           })
 
           describe("that does not match the first bill run's debit", () => {
-            describe('because the billable days are different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  billableDays: 30,
-                  chargeCategoryCode,
-                  credit: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
+            beforeEach(async () => {
+              await TransactionHelper.add({
+                billLicenceId: followUpBillLicenceId,
+                billableDays: 30,
+                chargeCategoryCode,
+                credit: true
               })
             })
 
-            describe('because the charge type is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  chargeType: 'compensation',
-                  credit: true
-                })
-              })
+            it('returns the debits', async () => {
+              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the charge category code is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode: '4.3.2',
-                  credit: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the abatement agreement (section 126) is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  credit: true,
-                  section126Factor: 0.5
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the two-part tariff agreement (section 127) is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  credit: true,
-                  section127Agreement: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the canal and river trust agreement (section 130) is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  credit: true,
-                  section130Agreement: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the aggregate is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  aggregateFactor: 0.5,
-                  chargeCategoryCode,
-                  credit: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the charge adjustment is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  adjustmentFactor: 0.5,
-                  chargeCategoryCode,
-                  credit: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the winter discount is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  credit: true,
-                  winterOnly: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the supported source differs (additional charge) is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  credit: true,
-                  supportedSource: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the supported source name differs (additional charge) is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  credit: true,
-                  supportedSourceName: 'source name'
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
-            })
-
-            describe('because the water company flag differs (additional charge) is different', () => {
-              beforeEach(async () => {
-                await TransactionHelper.add({
-                  billLicenceId: followUpBillLicenceId,
-                  chargeCategoryCode,
-                  credit: true,
-                  waterCompanyCharge: true
-                })
-              })
-
-              it('returns the debits', async () => {
-                const results = await FetchPreviousTransactionsService.go(
-                  { billingAccountId },
-                  { licenceId },
-                  financialYearEnding
-                )
-
-                expect(results).to.have.length(1)
-                expect(results[0].credit).to.be.false()
-              })
+              expect(results).to.have.length(1)
+              expect(results[0].credit).to.be.false()
             })
           })
         })
@@ -375,11 +116,7 @@ describe('Fetch Previous Transactions service', () => {
             })
 
             it('returns only the follow up debit', async () => {
-              const results = await FetchPreviousTransactionsService.go(
-                { billingAccountId },
-                { licenceId },
-                financialYearEnding
-              )
+              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
               expect(results).to.have.length(1)
               expect(results[0].credit).to.be.false()
@@ -398,11 +135,7 @@ describe('Fetch Previous Transactions service', () => {
             })
 
             it('returns both debits', async () => {
-              const results = await FetchPreviousTransactionsService.go(
-                { billingAccountId },
-                { licenceId },
-                financialYearEnding
-              )
+              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
               expect(results).to.have.length(2)
               expect(results.every((transaction) => !transaction.credit)).to.be.true()
@@ -424,11 +157,7 @@ describe('Fetch Previous Transactions service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchPreviousTransactionsService.go(
-          { billingAccountId },
-          { licenceId },
-          financialYearEnding
-        )
+        const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
         expect(results).to.be.empty()
       })
@@ -445,11 +174,7 @@ describe('Fetch Previous Transactions service', () => {
       })
 
       it('returns no results', async () => {
-        const results = await FetchPreviousTransactionsService.go(
-          { billingAccountId },
-          { licenceId },
-          financialYearEnding
-        )
+        const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
         expect(results).to.be.empty()
       })

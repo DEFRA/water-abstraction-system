@@ -5,32 +5,25 @@
  * @module ViewLicenceService
  */
 
+const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchLicenceVersionPurposeConditionService = require('./fetch-licence-version-purpose-condition.service.js')
 const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *
- * @param {string} id The UUID of the licence
+ * @param {string} licenceId - The UUID of the licence
  *
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
-async function go (id) {
-  const licenceData = await FetchLicenceService.go(id)
+async function go (licenceId) {
+  const licenceData = await FetchLicenceService.go(licenceId)
 
-  let licenceVersionPurposeConditionData = null
+  const currentLicenceVersionId = licenceData?.licenceVersions[0]?.id
 
-  if (!licenceData ||
-    licenceData?.licenceVersions === undefined ||
-    licenceData.licenceVersions.length > 0 ||
-    licenceData.licenceVersions[0]?.licenceVersionPurposes === undefined ||
-    licenceData.licenceVersions[0]?.licenceVersionPurposes?.length === 0) {
-    const licenceVersionPurposeId = licenceData?.licenceVersions[0]?.licenceVersionPurposes[0]?.id
-    licenceVersionPurposeConditionData = await FetchLicenceVersionPurposeConditionService.go(licenceVersionPurposeId)
-  }
+  const licenceAbstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
 
-  const pageData = ViewLicencePresenter.go(licenceData, licenceVersionPurposeConditionData)
+  const pageData = ViewLicencePresenter.go(licenceData, licenceAbstractionConditions)
 
   return {
     ...pageData
