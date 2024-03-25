@@ -44,7 +44,8 @@ async function _fetchBillLicence (id) {
         'id',
         'batchType',
         'scheme',
-        'source'
+        'source',
+        'status'
       ])
     })
     .withGraphFetched('transactions')

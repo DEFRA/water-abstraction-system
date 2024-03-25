@@ -27,11 +27,6 @@
         <dd class="govuk-summary-list__value">{{ sourceOfSupply }}</dd>
     </div>
 
-    <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Billing region</dt>
-        <dd class="govuk-summary-list__value">{{ region }}</dd>
-    </div>
-
     {% if purposes %}
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">{{ purposes.caption }}</dt>
@@ -55,21 +50,19 @@
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">{{ abstractionPeriods.caption }}</dt>
             <dd class="govuk-summary-list__value">
-                {% if abstractionPeriods.uniqueAbstractionPeriods.length > 5 %}
-                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                <div>
+                    {% if abstractionPeriods.uniqueAbstractionPeriods.length > 5 %}
                         There are {{ abstractionPeriods.uniqueAbstractionPeriods.length }} periods of abstraction
-                    </span>
-                {% elseif abstractionPeriods.uniqueAbstractionPeriods.length > 1 %}
-                    <ul class="govuk-list govuk-!-margin-bottom-0">
-                        {% for abstractionPeriod in abstractionPeriods.uniqueAbstractionPeriods %}
-                            <li>{{ abstractionPeriod }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                    {% elseif abstractionPeriods.uniqueAbstractionPeriods.length > 1 %}
+                        <ul class="govuk-list govuk-!-margin-bottom-0">
+                            {% for abstractionPeriod in abstractionPeriods.uniqueAbstractionPeriods %}
+                                <li>{{ abstractionPeriod }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
                         {{ abstractionPeriods.uniqueAbstractionPeriods[0] }}
-                    </span>
-                {% endif %}
+                    {% endif %}
+                </div>
                 <a href="/licences/{{ documentId }}/purposes">{{ abstractionPeriodsAndPurposesLinkText }}</a>
             </dd>
         </div>
@@ -79,21 +72,19 @@
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">{{ abstractionPointsCaption }}</dt>
             <dd class="govuk-summary-list__value">
-                {% if abstractionPoints.length > 5 %}
-                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                <div>
+                    {% if abstractionPoints.length > 5 %}
                         There are {{ abstractionPoints.length }} abstraction points
-                    </span>
-                {% elseif abstractionPoints.length > 1 %}
-                    <ul class="govuk-list govuk-!-margin-bottom-0">
-                        {% for abstractionPoint in abstractionPoints %}
-                            <li>{{ abstractionPoint }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <span class="govuk-form-group govuk-!-margin-bottom-0">
+                    {% elseif abstractionPoints.length > 1 %}
+                        <ul class="govuk-list govuk-!-margin-bottom-0">
+                            {% for abstractionPoint in abstractionPoints %}
+                                <li>{{ abstractionPoint }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
                         {{ abstractionPoints[0] }}
-                    </span>
-                {% endif %}
+                    {% endif %}
+                </div>
                 <a href="/licences/{{ documentId }}/points">{{ abstractionPointLinkText }}</a>
             </dd>
         </div>
@@ -120,21 +111,28 @@
     </div>
 
     <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{{ abstractionConditions.caption }}</dt>
+        <dt class="govuk-summary-list__key">{{ abstractionConditionDetails.caption }}</dt>
         <dd class="govuk-summary-list__value">
-            {% if abstractionConditions.conditions.length > 5 %}
-                There are {{ abstractionConditions.conditions.length }} abstraction conditions
-            {% elseif abstractionConditions.conditions.length > 1 %}
-                <ul class="govuk-list govuk-!-margin-bottom-0">
-                    {% for condition in abstractionConditions.conditions %}
-                        <li>{{ condition }}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                {{ abstractionConditions.conditions[0] }}
-            {% endif %}
-            <a href="/licences/{{ documentId }}/conditions">{{ abstractionConditions.linkText }}</a>
+            <div>
+                {% if abstractionConditionDetails.numberOfConditions > 5 %}
+                    There are {{ abstractionConditionDetails.numberOfConditions }} abstraction conditions
+                {% elif abstractionConditionDetails.numberOfConditions > 1 %}
+                    <ul class="govuk-list govuk-!-margin-bottom-0">
+                        {% for condition in abstractionConditionDetails.conditions %}
+                            <li>{{ condition }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ abstractionConditionDetails.conditions[0] }}
+                {% endif %}
+            </div>
+            <a href="/licences/{{ documentId }}/conditions">{{ abstractionConditionDetails.linkText }}</a>
         </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Billing region</dt>
+        <dd class="govuk-summary-list__value">{{ region }}</dd>
     </div>
 </dl>
 

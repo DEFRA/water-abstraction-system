@@ -48,7 +48,14 @@ async function go (billRunId) {
 
   await _updateStatusToCancel(billRunId)
 
-  _cancelBillRun(billRun)
+  // NOTE: We originally believed that should anything error in _cancelBillRun() the try/catch in the controller would
+  // catch it. However, when testing this theory we found it crashed the test framework. So, we tried it for real and
+  // again confirmed we'd crash the service. The controller would never see the error. It is because we are not awaiting
+  // this call that any errors thrown are considered uncaught. However, if we instead use the ES6 variant the error _is_
+  // caught. All we can do at this point is log it.
+  _cancelBillRun(billRun).catch((error) => {
+    global.GlobalNotifier.omfg(error.message, { billRunId }, error)
+  })
 }
 
 async function _cancelBillRun (billRun) {
