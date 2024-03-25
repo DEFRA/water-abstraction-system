@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -21,6 +22,50 @@
   </div>
 
   <form method="post">
+    {# From #}
+    {{ govukDateInput({
+      id: "abstraction-period-from",
+      namePrefix: "fromAbstractionPeriod",
+      fieldset: {
+        legend: {
+          text: "From",
+          classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+        }
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2"
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2"
+        }
+      ]
+    }) }}
+
+    {# To #}
+    {{ govukDateInput({
+      id: "abstraction-period-to",
+      namePrefix: "toAbstractionPeriod",
+      fieldset: {
+        legend: {
+          text: "To",
+          classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+        }
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2"
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2"
+        }
+      ]
+    }) }}
+
     <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
     </div>
