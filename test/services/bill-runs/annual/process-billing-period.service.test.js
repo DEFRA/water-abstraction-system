@@ -9,21 +9,21 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const BillModel = require('../../../../app/models/bill.model.js')
+const BillRunError = require('../../../../app/errors/bill-run.error.js')
+const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const DatabaseSupport = require('../../../support/database.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
 const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
 
 // Thing under test
 const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
 
-describe('Annual Process billing period service', () => {
+describe('Annual Process Billing Period service', () => {
   const billingPeriod = determineCurrentFinancialYear()
   const billRun = {
     id: '8e0d4c8b-e9fe-4238-8f3e-dfca743316ef',
