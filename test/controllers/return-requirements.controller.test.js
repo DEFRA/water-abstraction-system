@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
+const PointsService = require('../../app/services/return-requirements/points.service.js')
 const SelectPurposeService = require('../../app/services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
 const SetupService = require('../../app/services/return-requirements/setup.service.js')
@@ -151,12 +152,18 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/points', () => {
+    beforeEach(async () => {
+      Sinon.stub(PointsService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the points for the requirements for returns'
+      })
+    })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('points'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select the points for the return requirement')
+        expect(response.payload).to.contain('Select the points for the requirements for returns')
       })
     })
   })
