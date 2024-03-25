@@ -28,6 +28,7 @@ async function go (sessionId, payload) {
 
   const validationResult = _validate(payload)
   const formattedData = AbstractionPeriodPresenter.go(session, payload)
+  console.log('🚀🚀🚀 ~ formattedData:', formattedData)
 
   return {
     activeNavBar: 'search',
