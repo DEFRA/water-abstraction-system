@@ -33,27 +33,32 @@ describe('Fetch Bill Run Licences service', () => {
     })
 
     describe('and there are licences in the bill run', () => {
+      let issues
       let testLicenceReady
       let testLicenceReview
 
       beforeEach(async () => {
         testLicenceReady = await ReviewLicenceHelper.add({
           billRunId: billRun.id,
-          licenceHolder: 'Ready Licence Holder Ltd'
+          licenceHolder: 'Ready Licence Holder Ltd',
+          status: 'ready',
+          issues: 'Returns received late'
         })
         testLicenceReview = await ReviewLicenceHelper.add({
           billRunId: billRun.id,
           licenceHolder: 'Review Licence Holder Ltd',
-          status: 'review'
+          status: 'review',
+          issues: 'Over abstraction, Returns received but not processed'
         })
 
         // no filters are being applied so these are undefined
+        issues = undefined
         licenceHolder = undefined
         licenceStatus = undefined
       })
 
       it('returns details of the bill run and the licences in it', async () => {
-        const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
+        const result = await FetchBillRunLicencesService.go(billRun.id, issues, licenceHolder, licenceStatus)
 
         expect(result.billRun.id).to.equal(billRun.id)
         expect(result.billRun.createdAt).to.equal(billRun.createdAt)
@@ -67,15 +72,17 @@ describe('Fetch Bill Run Licences service', () => {
         expect(result.licences[0].licenceId).to.equal(testLicenceReview.licenceId)
         expect(result.licences[0].licenceHolder).to.equal('Review Licence Holder Ltd')
         expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
+        expect(result.licences[0].issues).to.equal('Over abstraction, Returns received but not processed')
+        expect(result.licences[0].status).to.equal('review')
         expect(result.licences[1].licenceId).to.equal(testLicenceReady.licenceId)
         expect(result.licences[1].licenceHolder).to.equal('Ready Licence Holder Ltd')
         expect(result.licences[1].licenceRef).to.equal(testLicenceReady.licenceRef)
-
-        expect(result.filterLicenceHolder).to.be.undefined()
+        expect(result.licences[1].issues).to.equal('Returns received late')
+        expect(result.licences[1].status).to.equal('ready')
       })
 
       it("orders the licence by 'review status'", async () => {
-        const result = await FetchBillRunLicencesService.go(billRun.id)
+        const result = await FetchBillRunLicencesService.go(billRun.id, issues, licenceHolder, licenceStatus)
 
         expect(result.licences[0].status).to.equal('review')
         expect(result.licences[1].status).to.equal('ready')
@@ -83,12 +90,13 @@ describe('Fetch Bill Run Licences service', () => {
 
       describe('and a filter has been applied to the licence holder', () => {
         beforeEach(async () => {
+          issues = undefined
           licenceHolder = 'ready licence'
           licenceStatus = undefined
         })
 
         it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
+          const result = await FetchBillRunLicencesService.go(billRun.id, issues, licenceHolder, licenceStatus)
 
           expect(result.billRun.id).to.equal(billRun.id)
           expect(result.billRun.createdAt).to.equal(billRun.createdAt)
@@ -102,17 +110,20 @@ describe('Fetch Bill Run Licences service', () => {
           expect(result.licences[0].licenceId).to.equal(testLicenceReady.licenceId)
           expect(result.licences[0].licenceHolder).to.equal('Ready Licence Holder Ltd')
           expect(result.licences[0].licenceRef).to.equal(testLicenceReady.licenceRef)
+          expect(result.licences[0].issues).to.equal('Returns received late')
+          expect(result.licences[0].status).to.equal('ready')
         })
       })
 
       describe('and a filter has been applied to the licence status', () => {
         beforeEach(async () => {
+          issues = undefined
           licenceHolder = undefined
           licenceStatus = 'review'
         })
 
         it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
+          const result = await FetchBillRunLicencesService.go(billRun.id, issues, licenceHolder, licenceStatus)
 
           expect(result.billRun.id).to.equal(billRun.id)
           expect(result.billRun.createdAt).to.equal(billRun.createdAt)
@@ -126,17 +137,78 @@ describe('Fetch Bill Run Licences service', () => {
           expect(result.licences[0].licenceId).to.equal(testLicenceReview.licenceId)
           expect(result.licences[0].licenceHolder).to.equal('Review Licence Holder Ltd')
           expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
+          expect(result.licences[0].issues).to.equal('Over abstraction, Returns received but not processed')
+          expect(result.licences[0].status).to.equal('review')
         })
       })
 
+      describe('and a single filter has been applied to the licence issues', () => {
+        beforeEach(async () => {
+          issues = 'over-abstraction'
+          licenceHolder = undefined
+          licenceStatus = undefined
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, issues, licenceHolder, licenceStatus)
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+
+          expect(result.licences).to.have.length(1)
+          expect(result.licences[0].licenceId).to.equal(testLicenceReview.licenceId)
+          expect(result.licences[0].licenceHolder).to.equal('Review Licence Holder Ltd')
+          expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
+          expect(result.licences[0].issues).to.equal('Over abstraction, Returns received but not processed')
+          expect(result.licences[0].status).to.equal('review')
+        })
+      })
+
+      describe('and multiple filters have been applied to the licence issues', () => {
+        beforeEach(async () => {
+          issues = ['returns-received-not-processed', 'returns-late']
+          licenceHolder = undefined
+          licenceStatus = undefined
+        })
+
+        it('returns details of the bill run and the licences that match the filter', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, issues, licenceHolder, licenceStatus)
+
+          expect(result.billRun.id).to.equal(billRun.id)
+          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
+          expect(result.billRun.status).to.equal(billRun.status)
+          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
+          expect(result.billRun.batchType).to.equal(billRun.batchType)
+          expect(result.billRun.region.displayName).to.equal(region.displayName)
+          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
+
+          expect(result.licences).to.have.length(2)
+          expect(result.licences[0].licenceId).to.equal(testLicenceReview.licenceId)
+          expect(result.licences[0].licenceHolder).to.equal('Review Licence Holder Ltd')
+          expect(result.licences[0].licenceRef).to.equal(testLicenceReview.licenceRef)
+          expect(result.licences[0].issues).to.equal('Over abstraction, Returns received but not processed')
+          expect(result.licences[0].status).to.equal('review')
+          expect(result.licences[1].licenceId).to.equal(testLicenceReady.licenceId)
+          expect(result.licences[1].licenceHolder).to.equal('Ready Licence Holder Ltd')
+          expect(result.licences[1].licenceRef).to.equal(testLicenceReady.licenceRef)
+          expect(result.licences[1].issues).to.equal('Returns received late')
+          expect(result.licences[1].status).to.equal('ready')
+        })
+      })
       describe('and filters have been applied that will return no results', () => {
         beforeEach(async () => {
+          issues = undefined
           licenceHolder = 'ready licence'
           licenceStatus = 'review'
         })
 
         it('returns details of the bill run and no licences', async () => {
-          const result = await FetchBillRunLicencesService.go(billRun.id, licenceHolder, licenceStatus)
+          const result = await FetchBillRunLicencesService.go(billRun.id, issues, licenceHolder, licenceStatus)
 
           expect(result.billRun.id).to.equal(billRun.id)
           expect(result.billRun.createdAt).to.equal(billRun.createdAt)
@@ -154,7 +226,12 @@ describe('Fetch Bill Run Licences service', () => {
 
   describe('when there is an invalid bill run id passed to the service', () => {
     it('returns no results', async () => {
-      const result = await FetchBillRunLicencesService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d', undefined, undefined)
+      const result = await FetchBillRunLicencesService.go(
+        '56db85ed-767f-4c83-8174-5ad9c80fd00d',
+        undefined,
+        undefined,
+        undefined
+      )
 
       expect(result.billRun).to.be.undefined()
       expect(result.licences).to.have.length(0)
