@@ -33,6 +33,20 @@ async function go (id, issues, licenceHolder, licenceStatus) {
   return { billRun, licences }
 }
 
+function _applyFilters (reviewLicenceQuery, issues, licenceHolder, licenceStatus) {
+  if (issues) {
+    _filterIssues(issues, reviewLicenceQuery)
+  }
+
+  if (licenceHolder) {
+    reviewLicenceQuery.whereILike('licenceHolder', `%${licenceHolder}%`)
+  }
+
+  if (licenceStatus) {
+    reviewLicenceQuery.where('status', licenceStatus)
+  }
+}
+
 async function _fetchBillRun (id) {
   return BillRunModel.query()
     .findById(id)
@@ -53,17 +67,7 @@ async function _fetchBillRunLicences (id, issues, licenceHolder, licenceStatus) 
     .where('billRunId', id)
     .orderBy('status', 'desc')
 
-  if (issues) {
-    _filterIssues(issues, reviewLicenceQuery)
-  }
-
-  if (licenceHolder) {
-    reviewLicenceQuery.whereILike('licenceHolder', `%${licenceHolder}%`)
-  }
-
-  if (licenceStatus) {
-    reviewLicenceQuery.where('status', licenceStatus)
-  }
+  _applyFilters(reviewLicenceQuery, issues, licenceHolder, licenceStatus)
 
   return reviewLicenceQuery
 }
