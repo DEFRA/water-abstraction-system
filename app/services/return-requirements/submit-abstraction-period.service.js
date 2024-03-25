@@ -40,14 +40,14 @@ async function go (sessionId, payload) {
 function _validate (payload) {
   const validation = AbstractionPeriodValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
+  const fromResult = validation.fromResult.error ? validation.fromResult.error.details[0].message : null
+  const toResult = validation.toResult.error ? validation.toResult.error.details[0].message : null
 
   return {
-    text: message
+    text: {
+      fromResult,
+      toResult
+    }
   }
 }
 
