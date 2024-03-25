@@ -13,7 +13,7 @@ const LicenceVersionPurposeModel = require('../../models/licence-version-purpose
  * Each time a licence is changed in the upstream NALD system a new 'version is generated, the latest of which becomes
  * the 'current' version.
  *
- * Linked each version could be multiple purposes for the abstraction, for example, spray irrigation and mineral
+ * Linked to each version could be multiple purposes for the abstraction, for example, spray irrigation and mineral
  * washing.
  *
  * Then each purpose might have one or more conditions attached to it. Where things get complex is the same condition
@@ -22,7 +22,7 @@ const LicenceVersionPurposeModel = require('../../models/licence-version-purpose
  *
  * This service is able to determine the purposes for the current licence version and their conditions then extract the
  * display title for each one. The total number of results gives us the abstraction condition count we need. As there
- * may be duplicates in the titles we process the results to determine the distinct list needed. Finally, just in
+ * may be duplicates in the titles we process the results to determine the distinct list needed. Finally, just in case
  * we also provide a distinct list of the purpose IDs :-)
  *
  * @param {string} licenceVersionId - The UUID for the 'current' licence version record of the licence being viewed
