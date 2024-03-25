@@ -36,11 +36,11 @@ function _parsePayload (fromDay, fromMonth, toDay, toMonth) {
   const parsePayload = {
     fromDate: {
       entry: `${parsedFromDay}${parsedFromMonth}`,
-      fullDate: `2023-${parsedFromDay}-${parsedFromMonth}`
+      fullDate: `2023-${parsedFromMonth}-${parsedFromDay}`
     },
     toDate: {
       entry: `${parsedToDay}${parsedToMonth}`,
-      fullDate: `2023-${parsedToDay}-${parsedToMonth}`
+      fullDate: `2023-${parsedToMonth}-${parsedToDay}`
     }
   }
 
