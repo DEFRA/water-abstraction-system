@@ -25,7 +25,7 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 // Thing under test
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
 
-describe.only('Supplementary Fetch Billing Accounts service', () => {
+describe('Supplementary Fetch Billing Accounts service', () => {
   const billingPeriod = determineCurrentFinancialYear()
 
   let billingAccount
