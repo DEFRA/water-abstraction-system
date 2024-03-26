@@ -56,7 +56,9 @@
     {{ govukDateInput({
       id: "abstraction-period-from",
       namePrefix: "fromAbstractionPeriod",
-      errorMessage: error.text.fromResult,
+      errorMessage: {
+        text: error.text.fromResult
+      },
       fieldset: {
         legend: {
           text: "From",
@@ -79,7 +81,9 @@
     {{ govukDateInput({
       id: "abstraction-period-to",
       namePrefix: "toAbstractionPeriod",
-      errorMessage: error.text.toResult,
+      errorMessage: {
+        text: error.text.toResult
+      },
       fieldset: {
         legend: {
           text: "To",
