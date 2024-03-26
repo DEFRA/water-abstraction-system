@@ -127,22 +127,22 @@ describe('Billing Periods service', () => {
     })
   })
 
-  describe('when the `financialYearEnding` of 2023 is passed to the service', () => {
-    const financialYearEnding = 2023
+  describe('when a financial year is provided', () => {
+    const financialYearEnding = 2025
 
     beforeEach(() => {
-      testDate = new Date('2023-10-10')
+      testDate = new Date('2024-10-10')
       expectedResult = [
         {
-          startDate: new Date('2022-04-01'),
-          endDate: new Date('2023-03-31')
+          startDate: new Date('2024-04-01'),
+          endDate: new Date('2025-03-31')
         }
       ]
 
       clock = Sinon.useFakeTimers(testDate)
     })
 
-    it('returns the expected date range', () => {
+    it('only returns the billing period for that financial year', () => {
       const result = DetermineBillingPeriodsService.go(financialYearEnding)
 
       expect(result).to.have.length(1)
