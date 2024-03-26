@@ -47,7 +47,9 @@ function _licencePoints (pointsData, payload) {
     abstractionPoints.push(_generateAbstractionContent(pointDetail))
   })
 
-  return abstractionPoints
+  const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
+
+  return uniqueAbstractionPoints
 }
 
 function _generateAbstractionContent (pointDetails) {
