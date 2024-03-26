@@ -21,7 +21,7 @@ const StartBillRunProcessService = require('../../../../app/services/bill-runs/s
 const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
 
 describe('Bill Runs Setup Create service', () => {
-  const user = { useremail: 'carol.shaw@atari.com' }
+  const user = { username: 'carol.shaw@atari.com' }
 
   let existsResults
   let legacyCreateBillRunRequestStub
@@ -66,11 +66,16 @@ describe('Bill Runs Setup Create service', () => {
       existsResults = { matchResults: [], session, yearToUse: 2024 }
     })
 
-    it('only triggers our bill run process', async () => {
+    it.only('only triggers our bill run process', async () => {
       await CreateService.go(user, existsResults)
 
       expect(legacyCreateBillRunRequestStub.called).to.be.false()
-      expect(startBillRunProcessServiceStub.called).to.be.true()
+      expect(startBillRunProcessServiceStub.calledWith(
+        '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+        'annual',
+        'carol.shaw@atari.com',
+        null)
+      ).to.be.true()
     })
   })
 
@@ -90,7 +95,12 @@ describe('Bill Runs Setup Create service', () => {
         await CreateService.go(user, existsResults)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.true()
-        expect(startBillRunProcessServiceStub.called).to.be.true()
+        expect(startBillRunProcessServiceStub.calledWith(
+          '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+          'supplementary',
+          'carol.shaw@atari.com',
+          null)
+        ).to.be.true()
       })
     })
 
@@ -103,7 +113,12 @@ describe('Bill Runs Setup Create service', () => {
         await CreateService.go(user, existsResults)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
-        expect(startBillRunProcessServiceStub.called).to.be.true()
+        expect(startBillRunProcessServiceStub.calledWith(
+          '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+          'supplementary',
+          'carol.shaw@atari.com',
+          null)
+        ).to.be.true()
       })
     })
 
@@ -161,7 +176,12 @@ describe('Bill Runs Setup Create service', () => {
         await CreateService.go(user, existsResults)
 
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
-        expect(startBillRunProcessServiceStub.called).to.be.true()
+        expect(startBillRunProcessServiceStub.calledWith(
+          '19a027c6-4aad-47d3-80e3-3917a4579a5b',
+          'supplementary',
+          'carol.shaw@atari.com',
+          2023)
+        ).to.be.true()
       })
     })
   })
