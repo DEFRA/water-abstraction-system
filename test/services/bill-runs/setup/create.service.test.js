@@ -66,7 +66,7 @@ describe('Bill Runs Setup Create service', () => {
       existsResults = { matchResults: [], session, yearToUse: 2024 }
     })
 
-    it.only('only triggers our bill run process', async () => {
+    it('only triggers our bill run process', async () => {
       await CreateService.go(user, existsResults)
 
       expect(legacyCreateBillRunRequestStub.called).to.be.false()
@@ -178,7 +178,7 @@ describe('Bill Runs Setup Create service', () => {
         expect(legacyCreateBillRunRequestStub.called).to.be.false()
         expect(startBillRunProcessServiceStub.calledWith(
           '19a027c6-4aad-47d3-80e3-3917a4579a5b',
-          'supplementary',
+          'two_part_tariff',
           'carol.shaw@atari.com',
           2023)
         ).to.be.true()
