@@ -44,21 +44,18 @@ describe('Submit Reason service', () => {
         }
       })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitReasonService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitReasonService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data.reason).to.equal('new_licence')
       })
 
-      it('returns page data for the view', async () => {
+      it('returns page data for the journey', async () => {
         const result = await SubmitReasonService.go(session.id, payload)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          pageTitle: 'Select the reason for the return requirement',
-          licenceRef: '01/ABC'
-        }, { skip: ['id'] })
+        expect(result).to.equal({})
       })
     })
 

@@ -21,7 +21,14 @@ describe('Check Your Answers presenter', () => {
           id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
           licenceRef: '01/123',
           licenceHolder: 'Astro Boy'
-        }
+        },
+        journey: 'no-returns-required',
+        noReturnsRequired: 'returns_exception',
+        startDate: '2008-02-08',
+        startDateDay: '08',
+        startDateMonth: '02',
+        startDateOptions: 'anotherStartDate',
+        startDateYear: '2008'
       }
     }
   })
@@ -31,9 +38,11 @@ describe('Check Your Answers presenter', () => {
       const result = CheckYourAnswersPresenter.go(session)
 
       expect(result).to.equal({
-        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licenceRef: '01/123'
-      })
+        journey: 'no-returns-required',
+        licenceRef: '01/123',
+        reason: 'returns_exception',
+        startDate: '8 February 2008'
+      }, { skip: ['id'] })
     })
   })
 })

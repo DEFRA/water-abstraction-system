@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/start-date` page
- * @module StartDatedPresenter
+ * @module StartDatePresenter
 */
 
 const { formatLongDate } = require('../base.presenter.js')
