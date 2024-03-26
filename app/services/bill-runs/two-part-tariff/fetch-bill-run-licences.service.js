@@ -80,23 +80,21 @@ function _filterIssues (filterIssues, reviewLicenceQuery) {
     reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
   } else {
     // if we have got here then `issues` must be an array containing at least 2 records
-    const lookupIssues = filterIssues.map((filterIssue) => twoPartTariffReviewIssues[filterIssue])
+    const lookupIssues = filterIssues.map((filterIssue) => {
+      return twoPartTariffReviewIssues[filterIssue]
+    })
 
-    // the number of issues to check for in the where clause will vary depending on the number of issues selected. The
-    // maximum number of issues that can be checked for is 11
+    // the number of issues to check for in the where clause will vary depending on the number of issues checked. But
+    // there will always be at least 2
     reviewLicenceQuery.where((builder) => {
       builder
         .whereLike('issues', `%${lookupIssues[0]}%`)
         .orWhereLike('issues', `%${lookupIssues[1]}%`)
-        .orWhereLike('issues', lookupIssues[2] ? `%${lookupIssues[2]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[3] ? `%${lookupIssues[3]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[4] ? `%${lookupIssues[4]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[5] ? `%${lookupIssues[5]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[6] ? `%${lookupIssues[6]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[7] ? `%${lookupIssues[7]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[8] ? `%${lookupIssues[8]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[9] ? `%${lookupIssues[9]}%` : `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', lookupIssues[10] ? `%${lookupIssues[10]}%` : `%${lookupIssues[0]}%`)
+      if (lookupIssues.length > 2) {
+        for (let i = 2; i < lookupIssues.length; i++) {
+          builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
+        }
+      }
     })
   }
 }

@@ -171,7 +171,7 @@ describe('Fetch Bill Run Licences service', () => {
 
       describe('and multiple filters have been applied to the licence issues', () => {
         beforeEach(async () => {
-          filterIssues = ['returns-received-not-processed', 'returns-late']
+          filterIssues = ['abs-outside-period', 'returns-received-not-processed', 'returns-late']
           filterLicenceHolder = undefined
           filterLicenceStatus = undefined
         })

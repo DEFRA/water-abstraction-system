@@ -148,7 +148,9 @@ function _getReviewStatuses () {
     'unable-to-match-return'
   ]
 
-  const reviewStatuses = reviewStatusKeys.map((reviewStatusKey) => twoPartTariffReviewIssues[reviewStatusKey])
+  const reviewStatuses = reviewStatusKeys.map((reviewStatusKey) => {
+    return twoPartTariffReviewIssues[reviewStatusKey]
+  })
 
   return reviewStatuses
 }
