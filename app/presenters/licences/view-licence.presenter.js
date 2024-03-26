@@ -42,7 +42,7 @@ function go (licence, licenceAbstractionConditions) {
     abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
   }
 
-  const pointDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
+  const abstractionDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
   const monitoringStationDetails = _generateMonitoringStation(licenceGaugingStations)
 
   const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
@@ -52,9 +52,11 @@ function go (licence, licenceAbstractionConditions) {
     abstractionConditionDetails,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
-    abstractionPoints: pointDetails.abstractionPoints,
-    abstractionPointsCaption: pointDetails.abstractionPointsCaption,
-    abstractionPointLinkText: pointDetails.abstractionPointLinkText,
+    abstractionPoints: abstractionDetails.points,
+    abstractionPointsCaption: abstractionDetails.pointsCaption,
+    abstractionPointLinkText: abstractionDetails.pointLinkText,
+    abstractionQuantities: abstractionDetails.quantities,
+    abstractionQuantityCaption: abstractionDetails.quantityCaption,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
@@ -66,7 +68,7 @@ function go (licence, licenceAbstractionConditions) {
     purposes,
     region: region.displayName,
     registeredTo,
-    sourceOfSupply: pointDetails.sourceOfSupply,
+    sourceOfSupply: abstractionDetails.sourceOfSupply,
     startDate: formatLongDate(startDate),
     warning: _generateWarningMessage(ends)
   }
@@ -78,6 +80,29 @@ function _endDate (expiredDate) {
   }
 
   return formatLongDate(expiredDate)
+}
+
+function _abstractionAmountDetails (purpose) {
+  const abstractionAmountDetails = []
+  const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
+
+  if (ANNUAL_QTY !== 'null') {
+    abstractionAmountDetails.push(`${ANNUAL_QTY} cubic metres per year`)
+  }
+
+  if (DAILY_QTY !== 'null') {
+    abstractionAmountDetails.push(`${DAILY_QTY} cubic metres per day`)
+  }
+
+  if (HOURLY_QTY !== 'null') {
+    abstractionAmountDetails.push(`${HOURLY_QTY} cubic metres per hour`)
+  }
+
+  if (INST_QTY !== 'null') {
+    abstractionAmountDetails.push(`${INST_QTY} litres per second`)
+  }
+
+  return abstractionAmountDetails
 }
 
 function _abstractionConditionDetails (licenceAbstractionConditions) {
@@ -192,14 +217,17 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
     permitLicence.purposes[0]?.purposePoints.length === 0
   ) {
     return {
-      abstractionPoints: null,
-      abstractionPointsCaption: null,
-      abstractionPointLinkText: null,
+      points: null,
+      pointsCaption: null,
+      pointLinkText: null,
+      quantities: null,
+      quantityCaption: null,
       sourceOfSupply: null
     }
   }
 
   const abstractionPoints = []
+  const abstractionQuantities = []
 
   permitLicence.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
@@ -208,19 +236,26 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
         abstractionPoints.push(_generateAbstractionContent(pointDetail))
       }
     })
+
+    const abstractionAmounts = _abstractionAmountDetails(purpose)
+    abstractionQuantities.push(...abstractionAmounts)
   })
+
+  const uniqueAbstractionQuantities = [...new Set(abstractionQuantities)]
 
   const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
 
   const abstractionLinkDefaultText = 'View details of the abstraction point'
-  const abstractionPointLinkText = uniqueAbstractionPoints.length > 1 ? abstractionLinkDefaultText + 's' : abstractionLinkDefaultText
+  const pointLinkText = uniqueAbstractionPoints.length > 1 ? abstractionLinkDefaultText + 's' : abstractionLinkDefaultText
 
-  const abstractionPointsCaption = uniqueAbstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
+  const pointsCaption = uniqueAbstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
 
   return {
-    abstractionPoints: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
-    abstractionPointsCaption,
-    abstractionPointLinkText,
+    points: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
+    pointsCaption,
+    pointLinkText,
+    quantities: uniqueAbstractionQuantities.length === 0 ? null : uniqueAbstractionQuantities,
+    quantityCaption: uniqueAbstractionQuantities.length === 1 ? 'Abstraction amount' : 'Abstraction amounts',
     sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null
   }
 }

@@ -36,6 +36,8 @@ describe('View Licence presenter', () => {
         abstractionPointLinkText: 'View details of the abstraction point',
         abstractionPoints: ['At National Grid Reference TL 23198 88603'],
         abstractionPointsCaption: 'Point of abstraction',
+        abstractionQuantities: null,
+        abstractionQuantityCaption: 'Abstraction amounts',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
         licenceHolder: 'Unregistered licence',
@@ -591,6 +593,8 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
+        expect(result.abstractionQuantities).to.equal(null)
+        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -608,6 +612,8 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
+        expect(result.abstractionQuantities).to.equal(null)
+        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -625,6 +631,8 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
+        expect(result.abstractionQuantities).to.equal(null)
+        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -640,6 +648,8 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
+        expect(result.abstractionQuantities).to.equal(null)
+        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -791,6 +801,42 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
       })
     })
+
+    describe('and it has abstraction quantities', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].ANNUAL_QTY = 265
+        licence.permitLicence.purposes[0].DAILY_QTY = 24
+        licence.permitLicence.purposes[0].HOURLY_QTY = 60
+        licence.permitLicence.purposes[0].INST_QTY = 6
+      })
+
+      it('will display the formatted strings with the rates per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '265 cubic metres per year',
+          '24 cubic metres per day',
+          '60 cubic metres per hour',
+          '6 litres per second'
+        ])
+        expect(result.abstractionQuantityCaption).to.equal('Abstraction amounts')
+      })
+    })
+
+    describe('and it has one abstraction quantity', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].ANNUAL_QTY = 265
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '265 cubic metres per year'
+        ])
+        expect(result.abstractionQuantityCaption).to.equal('Abstraction amount')
+      })
+    })
   })
 
   describe("the 'warning' property", () => {
@@ -875,6 +921,10 @@ function _licence () {
     licenceRef: '01/123',
     permitLicence: {
       purposes: [{
+        ANNUAL_QTY: 'null',
+        DAILY_QTY: 'null',
+        HOURLY_QTY: 'null',
+        INST_QTY: 'null',
         purposePoints: [{
           point_detail: {
             NGR1_SHEET: 'TL',
