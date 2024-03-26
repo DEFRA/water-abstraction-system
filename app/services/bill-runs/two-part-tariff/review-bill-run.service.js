@@ -19,13 +19,13 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
 async function go (id, payload) {
-  const issues = payload?.filterIssues
-  const licenceHolder = payload?.filterLicenceHolder
-  const licenceStatus = payload?.filterLicenceStatus
+  const filterIssues = payload?.filterIssues
+  const filterLicenceHolder = payload?.filterLicenceHolder
+  const filterLicenceStatus = payload?.filterLicenceStatus
 
-  const { billRun, licences } = await FetchBillRunLicencesService.go(id, issues, licenceHolder, licenceStatus)
+  const { billRun, licences } = await FetchBillRunLicencesService.go(id, filterIssues, filterLicenceHolder, filterLicenceStatus)
 
-  const pageData = ReviewBillRunPresenter.go(billRun, licences, licenceHolder, licenceStatus)
+  const pageData = ReviewBillRunPresenter.go(billRun, filterIssues, filterLicenceHolder, filterLicenceStatus, licences)
 
   return pageData
 }

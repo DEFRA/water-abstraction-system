@@ -11,22 +11,25 @@ const { formatLongDate } = require('../../base.presenter.js')
  * Prepares and processes bill run and licence data for presentation
  *
  * @param {module:BillRunModel} billRun The data from the bill run
- * @param {module:LicenceModel} licences The licences data asociated with the bill run
- * @param {String} licenceHolder The licence holder to filter the results by. This will only contain data when
+ * @param {{Object[]}} filterIssues An array of issues to filter the results by. This will only contain data when
+ * there is a POST request, which only occurs when a filter is applied to the results. NOTE: if there is only a single
+ * issue this will be a string, not an array
+ * @param {String} filterLicenceHolder The licence holder to filter the results by. This will only contain data when
  * there is a POST request, which only occurs when a filter is applied to the results.
- * @param {String} licenceStatus The status of the licence to filter the results by. This also only contains data
+ * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
  * when there is a POST request.
+ * @param {module:LicenceModel} licences The licences data asociated with the bill run
  *
  * @returns {Object} The prepared bill run,licence and filter data to be passed to the review page
  */
-function go (billRun, licences, licenceHolder, licenceStatus) {
+function go (billRun, filterIssues, filterLicenceHolder, filterLicenceStatus, licences) {
   const { numberOfLicencesToReview, preparedLicences } = _prepareLicences(licences)
 
   const preparedBillRun = _prepareBillRun(billRun, preparedLicences, numberOfLicencesToReview)
 
-  const filter = { licenceHolder, licenceStatus }
+  const filter = { licenceHolder: filterLicenceHolder, licenceStatus: filterLicenceStatus }
   // this opens the filter on the page if any filter data has been received so the user can see the applied filters
-  filter.openFilter = (licenceHolder || licenceStatus) !== undefined
+  filter.openFilter = (filterIssues || filterLicenceHolder || filterLicenceStatus) !== undefined
 
   return { ...preparedBillRun, preparedLicences, filter }
 }
