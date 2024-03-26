@@ -3,7 +3,9 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "macros/badge.njk" import badge %}
+
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -56,9 +58,10 @@
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
       {% for chargeVersion in chargeData %}
+        {% set chargeDateIndex = loop.index0 %}
         <ul class="govuk-list">
           <li>
-            <a class="govuk-link" href="#">{{chargeVersion.chargePeriodDate}}</a>
+            <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}">{{chargeVersion.chargePeriodDate}}</a>
           </li>
         </ul>
       {% endfor %}
@@ -78,15 +81,30 @@
   {% if matchedReturns.length > 0 %}
     {% set tableRows = [] %}
     {% for return in matchedReturns %}
-      {% set rowIndex = loop.index0 %}
+      {% set matchedReturnIndex = loop.index0 %}
 
       {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
         {% set colour = "govuk-tag--red"%}
+        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
       {% elif return.status == 'void' %}
         {% set colour = "govuk-tag--grey" %}
+        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
       {% else %}
         {% set colour = "govuk-tag--green" %}
+        {% set returnLink = "/returns/return?id=" + return.returnId%}
       {% endif %}
+
+      {% set action %}
+        <a class="govuk-link" href="{{returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        <div>{{return.dates}}</div>
+      {% endset %}
+
+      {% set returnSummary %}
+        <div>
+          {{ return.purpose }}
+        </div>
+          {{ return.description }}
+      {% endset %}
 
       {% set statusTag %}
         {{govukTag({
@@ -95,31 +113,31 @@
         })}}
       {% endset %}
 
-      {% set action %}
-        <a class="govuk-link" href="/licences/{{ licence.licenceId }}#returns">{{ return.reference }}<span class="govuk-visually-hidden"></a>
-        <div>{{return.dates}}</div>
-      {% endset %}
+      {% set issues = '' %}
+      {% for issue in return.issues %}
+        {% set issues = issues + '<div>' + issue + '</div>' %}
+      {% endfor %}
 
       {% set tableRow = [
         {
           html: action,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-' + rowIndex }
+          attributes: { 'data-test': 'matched-return-action' + matchedReturnIndex }
         },
         {
-          html: return.purpose + '<div></div>' + return.description,
+          html: returnSummary,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-' + rowIndex }
+          attributes: { 'data-test': 'matched-return-summary' + matchedReturnIndex }
           },
         {
           html: statusTag,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-' + rowIndex }
+          attributes: { 'data-test': 'matched-return-status' + matchedReturnIndex }
         },
         {
-          html: '<div>' + return.returnTotal + '</div>' + return.issues | join('<div></div>'),
+          html: "<div>" + return.total + "</div>" + issues,
           classes: "govuk-body-s govuk-!-text-align-right",
-          attributes: { 'data-test': 'matched-return-' + rowIndex }
+          attributes: { 'data-test': 'matched-return-total' + matchedReturnIndex}
         }]
       %}
 
@@ -130,6 +148,7 @@
     {{ govukTable({
       caption: "Matched returns",
       captionClasses: "govuk-table__caption--m",
+      attributes: { 'data-test': 'matched-returns' },
       firstCellIsHeader: false,
       head: [
         {
@@ -155,7 +174,7 @@
   {% if unmatchedReturns.length > 0 %}
     {% set tableRows = [] %}
     {% for return in unmatchedReturns %}
-      {% set rowIndex = loop.index0 %}
+      {% set unmatchedReturnIndex = loop.index0 %}
 
       {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
         {% set colour = "govuk-tag--red"%}
@@ -165,6 +184,18 @@
         {% set colour = "govuk-tag--green" %}
       {% endif %}
 
+      {% set action %}
+        <a class="govuk-link" href="/licences/{{ licence.licenceId }}#returns">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        <div>{{return.dates}}</div>
+      {% endset %}
+
+      {% set returnSummary %}
+        <div>
+          {{ return.purpose }}
+        </div>
+          {{ return.description }}
+      {% endset %}
+
       {% set statusTag %}
         {{govukTag({
           text: return.returnStatus,
@@ -172,31 +203,31 @@
         })}}
       {% endset %}
 
-      {% set action %}
-        <a class="govuk-link" href="/licences/{{ licence.licenceId }}#returns">{{ return.reference }}<span class="govuk-visually-hidden"></a>
-        <div>{{return.dates}}</div>
-      {% endset %}
+      {% set issues = '' %}
+      {% for issue in return.issues %}
+        {% set issues = issues + '<div>' + issue + '</div>' %}
+      {% endfor %}
 
       {% set tableRow = [
         {
           html: action,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          attributes: { 'data-test': 'unmatched-return-action' + unmatchedReturnIndex }
         },
         {
-          html: return.purpose + '<br>' + return.description,
+          html: returnSummary,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          attributes: { 'data-test': 'unmatched-return-summary' + unmatchedReturnIndex }
         },
         {
           html: statusTag,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          attributes: { 'data-test': 'unmatched-return-status' + unmatchedReturnIndex }
         },
         {
-          html: return.total + '<br>' + return.issues | join('<br>'),
+          html: "<div>" + return.returnTotal + "</div>" + issues,
           classes: "govuk-body-s govuk-!-text-align-right",
-          attributes: { 'data-test': 'unmatched-return-' + rowIndex }
+          attributes: { 'data-test': 'unmatched-return-total' + unmatchedReturnIndex }
         }
         ]
       %}
@@ -208,6 +239,7 @@
     {{ govukTable({
       caption: "Unmatched returns",
       captionClasses: "govuk-table__caption--m",
+      attributes: { 'data-test': 'unmatched-returns' },
       firstCellIsHeader: false,
       head: [
         {
@@ -239,8 +271,11 @@
   <div class="govuk-grid-row ">
     <div class="govuk-grid-column-full">
       {% for chargeVersion in chargeData %}
+      {% set chargeVersionIndex = loop.index0 %}
         <div class ="govuk-caption-l">Financial year {{chargeVersion.financialYear}}</div>
-        <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriodDate}}</h2>
+        <section id="chargeVersion{{chargeVersionIndex}}"
+          <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriodDate}}</h2>
+        </section>
         <div class="govuk-caption-m">{{chargeVersion.licenceHolderName}}</div>
 
         {% set chargeReferenceText = "charge references " if chargeVersion.chargeReferences.length > 1 else "charge reference " %}
@@ -250,32 +285,33 @@
 
         {# Billing account details #}
         {% set billingAccountLink = '/billing-accounts/' + chargeVersion.billingAccountDetails.billingAccountId %}
-        <details class="govuk-details govuk-!-margin-bottom-6" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-              Billing account details
-            </span>
-          </summary>
-          <div class="govuk-details__text">
-            <p class="govuk-body ">
-              <div><span class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></span></div>
-              <div><span data-test="account-name">{{ chargeVersion.billingAccountDetails.accountName }}</span></div>
+        {% set billingAccountText %}
+          <div><span class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></span></div>
+          <div><span data-test="account-name">{{ chargeVersion.billingAccountDetails.accountName }}</span></div>
 
-              {# billing account contact name #}
-              {% if chargeVersion.billingAccountDetails.contactName %}
-                <div><span data-test="contact-name">FAO {{chargeVersion.billingAccountDetails.contactName}}</span></div>
-              {% endif %}
+          {# billing account contact name #}
+          {% if chargeVersion.billingAccountDetails.contactName %}
+            <div><span data-test="contact-name">FAO {{chargeVersion.billingAccountDetails.contactName}}</span></div>
+          {% endif %}
 
-              {# billing account address #}
-              <span data-test="address">
-                {{ chargeVersion.billingAccountDetails.addressLines.join("<br>") | safe }}
-              </span>
-            </p>
+          {# billing account address #}
+          <div>
+            {% for addressLine in chargeVersion.billingAccountDetails.addressLines %}
+            {% set addressLineIndex = loop.index0 %}
+              <div><span data-test="address-line" + addressLineIndex>{{addressLine}}</span></div>
+            {% endfor %}
           </div>
-        </details>
+        {% endset%}
+
+        {{ govukDetails({
+          attributes: { 'data-test': 'billing-account-details' },
+          summaryText: "Billing account details",
+          html: billingAccountText
+        }) }}
 
         {# Loop through Charge References #}
         {% for chargeReference in chargeVersion.chargeReferences %}
+          {% set chargeReferenceIndex = loop.index0 %}
           <div class="govuk-grid-row govuk-!-margin-bottom-3">
             <div class="govuk-grid-column-full">
               <div class="govuk-summary-card ">
@@ -288,10 +324,12 @@
                   {% set row = {
                     classes: "border-bottom",
                     key: {
-                      text: "Total billable returns"
+                      text: "Total billable returns",
+                      attributes: { 'data-test': 'total' }
                     },
                     value: {
-                      text: chargeReference.totalBillableReturns
+                      text: chargeReference.totalBillableReturns,
+                      attributes: { 'data-test': 'total-billable-returns' }
                     }
                     }
                   %}
@@ -300,6 +338,7 @@
 
                   <div class="govuk-!-margin-top-0">
                     {{ govukSummaryList({
+                      attributes: { 'data-test': 'charge-reference' + chargeReferenceIndex },
                       classes: "govuk-!-margin-bottom-9 govuk-section-break govuk-section-break--visible",
                       rows: rows
                     }) }}
@@ -307,6 +346,7 @@
 
                   {# Loop through charge elements #}
                   {% for chargeElement in chargeReference.chargeElements %}
+                  {% set chargeElementIndex = loop.index0 %}
                     {% set elementRows = [] %}
 
                     {# Status badge #}
@@ -316,19 +356,33 @@
                       {% set elementColour = "govuk-tag--green govuk-!-font-size-16" %}
                     {% endif %}
 
-                    {% set statusTag %}
-                      {{govukTag({
-                        text: chargeElement.elementStatus,
-                        classes: elementColour
-                      })}}
-                    {% endset %}
-
                     <div class="govuk-!-margin-top-6">
                       <div class="tag-wrapper">
                         <span class="govuk-body govuk-!-font-weight-regular">{{chargeElement.elementNumber}}</span>
-                        <span class="govuk-!-margin-left-9 govuk-!-margin-top-3 tag-element">{{statusTag|safe}} </span>
-                        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}<div>{{chargeElement.dates}}</div></h3>
+                        <span class="tag-element">
+                          {{govukTag({
+                            text: chargeElement.elementStatus,
+                            classes: elementColour
+                          })}}
+                        </span>
+                        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}
+                          <div>
+                            {% for chargeElementDate in chargeElement.dates %}
+                              <div>{{ chargeElementDate }}</div>
+                            {% endfor %}
+                          </div>
+                        </h3>
                       </div>
+
+                      {% set issues = '' %}
+                      {% for issue in chargeElement.issues %}
+                        {% set issues = issues + '<div>' + issue + '</div>' %}
+                      {% endfor %}
+
+                      {% set returnVolumes  = '' %}
+                      {% for returnVolume  in chargeElement.returnVolume  %}
+                        {% set returnVolumes = returnVolumes + '<div>' + returnVolume  + '</div>' %}
+                      {% endfor %}
 
                       {# set the element rows in the summary list #}
                       {% set elementRow = [{
@@ -336,7 +390,8 @@
                             text: 'Issues'
                           },
                           value: {
-                            html: chargeElement.issues | join('<br>')
+                            html: issues,
+                            attributes: { 'data-test': 'charge-element-issues' + chargeElementIndex }
                           }
                         },
                         {
@@ -344,7 +399,8 @@
                             text: 'Billable returns'
                           },
                           value: {
-                            text: chargeElement.billableReturns
+                            text: chargeElement.billableReturns,
+                            attributes: { 'data-test': 'charge-element-billable-returns' + chargeElementIndex }
                           },
                           actions: {
                             items: [
@@ -360,14 +416,14 @@
                             text: 'Return volume'
                           },
                           value: {
-                            html: chargeElement.returnVolume | join('<br>')
+                            html: returnVolumes,
+                            attributes: { 'data-test': 'charge-element-return-volumes' + chargeElementIndex }
                           }
                         }]
                       %}
 
-                      {% set elementRows = (elementRows.push(elementRow), elementRows) %}
-
                       {{ govukSummaryList({
+                        attributes: { 'data-test': 'charge-elements' },
                         classes: "govuk-!-margin-bottom-9",
                         rows: elementRow
                       }) }}
