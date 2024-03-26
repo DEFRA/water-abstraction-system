@@ -8,14 +8,14 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseSupport = require('../../../support/database.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const DatabaseSupport = require('../../support/database.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
-const FetchMatchingBillRunService = require('../../../../app/services/bill-runs/setup/fetch-matching-bill-run.service.js')
+const FetchMatchingBillRunService = require('../../../app/services/bill-runs/fetch-matching-bill-run.service.js')
 
-describe('Bill Runs Setup Fetch Matching Bill Run service', () => {
+describe('Fetch Matching Bill Run service', () => {
   let matchingBillRunId
   let regionId
 

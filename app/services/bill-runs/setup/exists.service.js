@@ -6,7 +6,7 @@
  */
 
 const CreatePresenter = require('../../../presenters/bill-runs/setup/create.presenter.js')
-const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
+const DetermineBlockingBillRunService = require('../determine-blocking-bill-run.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')

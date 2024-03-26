@@ -14,7 +14,7 @@ const { determineCurrentFinancialYear } = require('../../../../app/lib/general.l
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
 
 // Thing under test
 const ExistsService = require('../../../../app/services/bill-runs/setup/exists.service.js')

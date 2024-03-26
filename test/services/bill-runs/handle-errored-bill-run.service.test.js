@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 
 // Thing under test
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
+const HandleErroredBillRunService = require('../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 
 describe('Handle Errored Bill Run service', () => {
   let billRun
