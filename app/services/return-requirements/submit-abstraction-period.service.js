@@ -28,7 +28,6 @@ async function go (sessionId, payload) {
 
   const validationResult = _validate(payload)
   const formattedData = AbstractionPeriodPresenter.go(session, payload)
-  console.log('🚀🚀🚀 ~ formattedData:', formattedData)
 
   return {
     activeNavBar: 'search',
@@ -40,6 +39,10 @@ async function go (sessionId, payload) {
 
 function _validate (payload) {
   const validation = AbstractionPeriodValidator.go(payload)
+
+  if (!validation.fromResult.error && !validation.toResult.error) {
+    return null
+  }
 
   const fromResult = validation.fromResult.error ? validation.fromResult.error.details[0].message : null
   const toResult = validation.toResult.error ? validation.toResult.error.details[0].message : null
