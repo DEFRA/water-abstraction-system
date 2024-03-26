@@ -12,13 +12,20 @@ const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two
 
 describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
+    const filterIssues = undefined
+    const filterLicenceHolder = undefined
+    const filterLicenceStatus = undefined
     const testBillRun = _testBillRun()
     const testLicences = _testLicences()
-    const licenceHolder = undefined
-    const licenceStatus = undefined
 
     it('correctly presents the data', () => {
-      const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
+      const result = ReviewBillRunPresenter.go(
+        testBillRun,
+        filterIssues,
+        filterLicenceHolder,
+        filterLicenceStatus,
+        testLicences
+      )
 
       expect(result).to.equal({
         region: 'Southern (Test replica)',
@@ -53,6 +60,7 @@ describe('Review Bill Run presenter', () => {
           }
         ],
         filter: {
+          issues: undefined,
           licenceHolder: undefined,
           licenceStatus: undefined,
           openFilter: false
@@ -60,16 +68,36 @@ describe('Review Bill Run presenter', () => {
       })
     })
 
-    describe('and a filter has been applied', () => {
-      const licenceHolder = 'bob'
-      const licenceStatus = 'ready'
+    describe('and filters have been applied', () => {
+      const filterIssues = ['abs-outside-period', 'over-abstraction']
+      const filterLicenceHolder = 'bob'
+      const filterLicenceStatus = 'ready'
 
       it('correctly presents the data', () => {
-        const result = ReviewBillRunPresenter.go(testBillRun, testLicences, licenceHolder, licenceStatus)
+        const result = ReviewBillRunPresenter.go(
+          testBillRun,
+          filterIssues,
+          filterLicenceHolder,
+          filterLicenceStatus,
+          testLicences
+        )
 
         expect(result.filter.openFilter).to.equal(true)
-        expect(result.filter.licenceHolder).to.equal(licenceHolder)
-        expect(result.filter.licenceStatus).to.equal(licenceStatus)
+        expect(result.filter.licenceHolder).to.equal(filterLicenceHolder)
+        expect(result.filter.licenceStatus).to.equal(filterLicenceStatus)
+        expect(result.filter.issues).to.equal({
+          absOutsidePeriod: true,
+          aggregateFactor: false,
+          checkingQuery: false,
+          noReturnsReceived: false,
+          overAbstraction: true,
+          overlapOfChargeDates: false,
+          returnsReceivedNotProcessed: false,
+          returnsLate: false,
+          returnSplitOverRefs: false,
+          someReturnsNotReceived: false,
+          unableToMatchReturn: false
+        })
       })
     })
   })

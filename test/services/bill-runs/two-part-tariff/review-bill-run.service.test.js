@@ -36,6 +36,7 @@ describe('Review Bill Run Service', () => {
       preparedBillRun: 'bill run data',
       preparedLicences: 'licence data',
       filter: {
+        issues: undefined,
         licenceHolder: undefined,
         licenceStatus: undefined,
         openFilter: false
@@ -57,12 +58,29 @@ describe('Review Bill Run Service', () => {
   })
 
   describe('when called with a filter applied', () => {
-    const payload = { filterLicenceHolder: 'A Licence Holder Ltd', filterLicenceStatus: 'review' }
+    const payload = {
+      filterIssues: ['abs-outside-period', 'aggregate-factor'],
+      filterLicenceHolder: 'A Licence Holder Ltd',
+      filterLicenceStatus: 'review'
+    }
 
     const presenterStubData = {
       preparedBillRun: 'bill run data',
       preparedLicences: 'licence data',
       filter: {
+        issues: {
+          absOutsidePeriod: true,
+          aggregateFactor: true,
+          checkingQuery: false,
+          noReturnsReceived: false,
+          overAbstraction: false,
+          overlapOfChargeDates: false,
+          returnsReceivedNotProcessed: false,
+          returnsLate: false,
+          returnSplitOverRefs: false,
+          someReturnsNotReceived: false,
+          unableToMatchReturn: false
+        },
         licenceHolder: 'A Licence Holder Ltd',
         licenceStatus: 'review',
         openFilter: true
