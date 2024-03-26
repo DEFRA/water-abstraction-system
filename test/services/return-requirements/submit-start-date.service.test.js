@@ -37,7 +37,29 @@ describe('Submit Start Date service', () => {
   })
 
   describe('when called', () => {
-    describe('with a valid payload', () => {
+    describe('with a valid payload for currentStartDate', () => {
+      beforeEach(() => {
+        payload = {
+          'start-date-options': 'licenceStartDate'
+        }
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitStartDateService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data.startDateOptions).to.equal('licenceStartDate')
+      })
+
+      it('returns the correct journey for the no returns required journey', async () => {
+        const result = await SubmitStartDateService.go(session.id, payload)
+
+        expect(result).to.equal({ journey: 'no-returns-required' })
+      })
+    })
+
+    describe('with a valid payload for anotherStartDate', () => {
       beforeEach(() => {
         payload = {
           'start-date-options': 'anotherStartDate',
@@ -58,7 +80,7 @@ describe('Submit Start Date service', () => {
         expect(refreshedSession.data.startDateYear).to.equal('2023')
       })
 
-      it('returns the correct journey for the redirect route)', async () => {
+      it('returns the correct journey for the no returns required journey', async () => {
         const result = await SubmitStartDateService.go(session.id, payload)
 
         expect(result).to.equal({ journey: 'no-returns-required' })

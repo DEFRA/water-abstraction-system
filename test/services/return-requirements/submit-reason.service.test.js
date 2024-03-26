@@ -31,7 +31,8 @@ describe('Submit Reason service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required'
+        journey: 'returns-required',
+        returnsRequired: 'new-licence'
       }
     })
   })
@@ -49,13 +50,17 @@ describe('Submit Reason service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.reason).to.equal('new_licence')
+        expect(refreshedSession.data.returnsRequired).to.equal('new-licence')
       })
 
       it('returns page data for the journey', async () => {
         const result = await SubmitReasonService.go(session.id, payload)
 
-        expect(result).to.equal({})
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Select the reason for the return requirement',
+          licenceRef: '01/ABC'
+        }, { skip: ['id', 'error'] })
       })
     })
 
