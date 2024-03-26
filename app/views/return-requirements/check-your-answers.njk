@@ -48,7 +48,7 @@
               actions: {
                 items: [
                   {
-                    href: baseURL + "/reason",
+                    href: baseURL + "/no-returns-required",
                     text: "Change",
                     visuallyHiddenText: "the reason for the return requirement"
                   }
@@ -69,7 +69,8 @@
           {
             classes: 'govuk-summary-list govuk-summary-list__row--no-border',
             key: {
-              text: "No notes added"
+              text: "No notes added",
+              classes: "govuk-body govuk-!-font-weight-regular"
             },
             value: {
               text: ""
@@ -77,9 +78,8 @@
             actions: {
               items: [
                 {
-                  href: "#",
-                  text: "Change",
-                  visuallyHiddenText: "the note"
+                  href: "add-note",
+                  text: "Add a note"
                 }
               ]
             }
@@ -88,7 +88,10 @@
       }) }}
       <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
     </div>
+
     <div class="govuk-body">
+      <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+      <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
         {{ govukButton({
           text: "Approve returns requirements",
           classes: "govuk-!-margin-right-6"
@@ -97,7 +100,7 @@
         {{ govukButton({
           text: "Cancel return requirements",
           classes: "govuk-button--secondary",
-          href: ""
+          href: "#"
           }) }}
     </div>
   </form>

@@ -11,35 +11,47 @@ const LicenceModel = require('../../../models/licence.model.js')
  * Unflag any licences that were not billed as part of a bill run
  *
  * Some licences will not result in an invoice (`billing_invoice_licence`) being created. For example, you could add a
- * new charge version that does nothing but change the description of the previous one. In isolation, this would
- * result in an `EMPTY` bill run. If others are being processed at the same time, it would just mean no records are
- * added to the bill run for this licence.
+ * new charge version that does nothing but change the description of the previous one. In isolation, this would result
+ * in an `EMPTY` bill run. If others are being processed at the same time, it would just mean no records are added to
+ * the bill run for this licence.
  *
  * If this is the case, we can remove the 'Include in SROC Supplementary Billing' flag from the licence now. Even if the
  * bill run gets cancelled and re-run later the result will be the same.
  *
- * What it also means is we can be accurate with which licences get unflagged when the bill run is finally **SENT**. In
- * the old logic they simply unflag any licence in a region where `date_updated` is less than the bill run's created
- * date. But we know this is flawed because a licence can be updated after a bill run is created, for example the NALD
- * import process updates them all. If this happens the flag remains on.
+ * What it also means is we can be accurate with which licences get unflagged when the bill run is finally **SENT**. The
+ * PRESROC process doesn't restrict to licences in the bill run. This is because they don't deal with licences that were
+ * processed but resulted in no bill in their engine. So, they are forced to consider all flagged licences when the bill
+ * run gets 'sent'.
  *
- * The query we run during the **SEND** process unflags only those which are linked to the bill run being sent. We can
- * do this because we know this service has handled anything that was unbilled and not represented.
+ * There are two scenarios of when _not_ to unflag an unbilled licence
  *
- * @param {String} billRunId The ID of the bill run being processed
- * @param {String[]} allLicenceIds All licence IDs being processed in the bill run
+ * - if the licence is in workflow
+ * - if the licence was updated after the bill run was created
  *
- * @returns {Promise<Number>} count of records updated
+ * Unlike `UnflagBilledLicencesService` the chances of these events happening between bill run creation and this service
+ * running are slim. But we feel it prudent to still check plus it keeps the services consistent.
+ *
+ * @param {module:BillRunModel} billRun - Instance of the bill run being processed
+ * @param {String[]} allLicenceIds - All licence UUIDs being processed in the bill run
+ *
+ * @returns {Promise<Number>} Resolves to the count of records updated
  */
-async function go (billRunId, allLicenceIds) {
+async function go (billRun, allLicenceIds) {
+  const { id: billRunId, createdAt } = billRun
+
   const result = await LicenceModel.query()
     .patch({ includeInSrocBilling: false })
-    .whereIn('id', allLicenceIds)
+    .where('updatedAt', '<=', createdAt)
+    .whereNotExists(
+      LicenceModel.relatedQuery('workflows')
+        .whereNull('workflows.deletedAt')
+    )
     .whereNotExists(
       LicenceModel.relatedQuery('billLicences')
         .join('bills', 'bills.id', '=', 'billLicences.billId')
         .where('bills.billRunId', '=', billRunId)
     )
+    .whereIn('id', allLicenceIds)
 
   return result
 }

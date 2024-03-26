@@ -12,6 +12,7 @@ const { expect } = Code
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
+const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
@@ -19,7 +20,16 @@ const ViewLicenceService = require('../../../app/services/licences/view-licence.
 
 describe('View Licence service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
+
   let fetchLicenceResult
+
+  beforeEach(() => {
+    Sinon.stub(FetchLicenceAbstractionConditionsService, 'go').resolves({
+      conditions: [],
+      purposeIds: [],
+      numberOfConditions: 0
+    })
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -36,10 +46,11 @@ describe('View Licence service', () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result).to.equal({
-          abstractionConditions: {
-            caption: 'Abstraction condition',
+          abstractionConditionDetails: {
+            caption: 'Abstraction conditions',
             conditions: [],
-            linkText: 'View details of the abstraction condition'
+            linkText: 'View details of the abstraction conditions',
+            numberOfConditions: 0
           },
           abstractionPeriods: null,
           abstractionPeriodsAndPurposesLinkText: null,
@@ -48,6 +59,8 @@ describe('View Licence service', () => {
             'At National Grid Reference TL 23198 88603'
           ],
           abstractionPointsCaption: 'Point of abstraction',
+          abstractionQuantities: null,
+          abstractionQuantityCaption: 'Abstraction amounts',
           id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
           endDate: null,
@@ -200,6 +213,10 @@ function _testLicence () {
     licenceVersions: [],
     permitLicence: {
       purposes: [{
+        ANNUAL_QTY: 'null',
+        DAILY_QTY: 'null',
+        HOURLY_QTY: 'null',
+        INST_QTY: 'null',
         purposePoints: [{
           point_detail: {
             NGR1_SHEET: 'TL',

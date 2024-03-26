@@ -7,6 +7,7 @@
 
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
+const PointsService = require('../services/return-requirements/points.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
@@ -15,6 +16,7 @@ const SiteDescriptionService = require('../services/return-requirements/site-des
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
+const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
 const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
@@ -126,12 +128,10 @@ async function noReturnsRequired (request, h) {
 async function points (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await PointsService.go(sessionId)
 
   return h.view('return-requirements/points.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the points for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -254,6 +254,12 @@ async function submitNoReturnsRequired (request, h) {
 
 async function submitPoints (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitPointsService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/points.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period`)
 }
