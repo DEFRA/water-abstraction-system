@@ -130,6 +130,19 @@
         </dd>
     </div>
 
+    {% if abstractionQuantities %}
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">{{ abstractionQuantityCaption }}</dt>
+            <dd class="govuk-summary-list__value">
+                <ul class="govuk-list govuk-!-margin-bottom-0">
+                    {% for quantity in abstractionQuantities %}
+                        <li>{{ quantity }}</li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        </div>
+    {% endif %}
+
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Billing region</dt>
         <dd class="govuk-summary-list__value">{{ region }}</dd>
