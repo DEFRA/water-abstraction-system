@@ -36,7 +36,7 @@ describe('Review Licence presenter', () => {
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             purpose: 'Site description',
             returnTotal: '0 ML / 0 ML',
-            issues: ''
+            issues: ['']
           }
         ],
         unmatchedReturns: [],
@@ -70,8 +70,8 @@ describe('Review Licence presenter', () => {
                     elementNumber: 'Element 1 of 1',
                     elementStatus: 'ready',
                     elementDescription: 'Trickle Irrigation - Direct',
-                    dates: '1 April 2022 to 5 June 2022',
-                    issues: '',
+                    dates: ['1 April 2022 to 5 June 2022'],
+                    issues: [''],
                     billableReturns: '0 ML / 200 ML',
                     returnVolume: ['0 ML (10031343)']
                   }
