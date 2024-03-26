@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const PointsPresenter = require('../../../app/presenters/return-requirements/points.presenter.js')
 
-describe.only('Select Points presenter', () => {
+describe('Select Points presenter', () => {
   let session
   let pointsData
 
