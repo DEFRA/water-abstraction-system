@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const PointsPresenter = require('../../../app/presenters/return-requirements/points.presenter.js')
 
-describe('Select Points presenter', () => {
+describe.only('Select Points presenter', () => {
   let session
   let pointsData
 
@@ -30,6 +30,21 @@ describe('Select Points presenter', () => {
     }
 
     pointsData = [{
+      NGR1_EAST: '69212',
+      NGR2_EAST: 'null',
+      NGR3_EAST: 'null',
+      NGR4_EAST: 'null',
+      LOCAL_NAME: 'RIVER MEDWAY AT YALDING INTAKE',
+      NGR1_NORTH: '50394',
+      NGR1_SHEET: 'TQ',
+      NGR2_NORTH: 'null',
+      NGR2_SHEET: 'null',
+      NGR3_NORTH: 'null',
+      NGR3_SHEET: 'null',
+      NGR4_NORTH: 'null',
+      NGR4_SHEET: 'null'
+    },
+    {
       NGR1_EAST: '69212',
       NGR2_EAST: 'null',
       NGR3_EAST: 'null',
