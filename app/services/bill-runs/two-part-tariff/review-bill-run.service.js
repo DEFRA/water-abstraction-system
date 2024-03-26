@@ -23,7 +23,12 @@ async function go (id, payload) {
   const filterLicenceHolder = payload?.filterLicenceHolder
   const filterLicenceStatus = payload?.filterLicenceStatus
 
-  const { billRun, licences } = await FetchBillRunLicencesService.go(id, filterIssues, filterLicenceHolder, filterLicenceStatus)
+  const { billRun, licences } = await FetchBillRunLicencesService.go(
+    id,
+    filterIssues,
+    filterLicenceHolder,
+    filterLicenceStatus
+  )
 
   const pageData = ReviewBillRunPresenter.go(billRun, filterIssues, filterLicenceHolder, filterLicenceStatus, licences)
 
