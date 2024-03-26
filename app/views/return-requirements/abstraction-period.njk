@@ -2,6 +2,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -15,7 +16,36 @@
   }}
 {% endblock %}
 
+{% if error.fromResult %}
+    {% set fromResultErrorClass = " govuk-input--error" %}
+  {% else %}
+    {% set fromResultErrorClass = "" %}
+{% endif %}
+
+{% if error.toResult %}
+    {% set toResultErrorClass = " govuk-input--error" %}
+  {% else %}
+    {% set toResultErrorClass = "" %}
+{% endif %}
+
 {% block content %}
+{# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text:error.text.fromResult,
+          href: "#abstraction-period-from"
+        },
+        {
+          text:error.text.toResult,
+          href: "#abstraction-period-to"
+        }
+      ]
+    }) }}
+  {%endif%}
+
   {# Main heading #}
   <div class="govuk-body">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
@@ -26,6 +56,7 @@
     {{ govukDateInput({
       id: "abstraction-period-from",
       namePrefix: "fromAbstractionPeriod",
+      errorMessage: error.text.fromResult,
       fieldset: {
         legend: {
           text: "From",
@@ -35,11 +66,11 @@
       items: [
         {
           name: "day",
-          classes: "govuk-input--width-2"
+          classes: "govuk-input--width-2" + fromResultErrorClass
         },
         {
           name: "month",
-          classes: "govuk-input--width-2"
+          classes: "govuk-input--width-2" + fromResultErrorClass
         }
       ]
     }) }}
@@ -48,6 +79,7 @@
     {{ govukDateInput({
       id: "abstraction-period-to",
       namePrefix: "toAbstractionPeriod",
+      errorMessage: error.text.toResult,
       fieldset: {
         legend: {
           text: "To",
@@ -57,11 +89,11 @@
       items: [
         {
           name: "day",
-          classes: "govuk-input--width-2"
+          classes: "govuk-input--width-2" + toResultErrorClass
         },
         {
           name: "month",
-          classes: "govuk-input--width-2"
+          classes: "govuk-input--width-2" + toResultErrorClass
         }
       ]
     }) }}
