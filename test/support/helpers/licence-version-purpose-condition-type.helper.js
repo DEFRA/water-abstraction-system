@@ -12,14 +12,13 @@ const LicenceVersionPurposeConditionTypesModel = require('../../../app/models/li
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `licenceVersionPurposeConditionTypeId` - [random UUID]
- * - `code` - [COMB]
- * - `subcode` - [LINK]
- * - `description` - [Condition To Indicate Licence  Split On Nald]
- * - `subcode_description` - [Link Between Split Licences]
- * - `display_title` - [Link between split licences]
- * - `dateCreated` - new Date()
- * - `dateUpdated` - new Date()
+ * - `code` - COMB
+ * - `subcode` - LINK
+ * - `description` - Condition To Indicate Licence  Split On Nald
+ * - `subcodeDescription` - Link Between Split Licences
+ * - `displayTitle` - Link between split licences
+ * - `createdAt` - new Date()
+ * - `updatedAt` - new Date()
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -48,8 +47,8 @@ function defaults (data = {}) {
     code: 'COMB',
     subcode: 'LINK',
     description: 'Condition To Indicate Licence  Split On Nald',
-    subcode_description: 'Link Between Split Licences',
-    display_title: 'Link between split licences',
+    subcodeDescription: 'Link Between Split Licences',
+    displayTitle: 'Link between split licences',
     createdAt: timestamp,
     updatedAt: timestamp
   }

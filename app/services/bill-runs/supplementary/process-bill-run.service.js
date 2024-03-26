@@ -13,10 +13,7 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../..
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
-const ReissueBillsService = require('./reissue-bills.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
-
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
  * Process a given bill run for the given billing periods. In this case, "process" means that we create the
@@ -33,9 +30,7 @@ async function go (billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    const resultOfReissuing = await _reissueBills(billRun)
-
-    await _processBillingPeriods(billingPeriods, billRun, resultOfReissuing)
+    await _processBillingPeriods(billingPeriods, billRun)
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'supplementary' })
   } catch (error) {
@@ -44,13 +39,12 @@ async function go (billRun, billingPeriods) {
   }
 }
 
-async function _processBillingPeriods (billingPeriods, billRun, resultOfReissuing) {
+async function _processBillingPeriods (billingPeriods, billRun) {
   const accumulatedLicenceIds = []
 
   // We use `results` to check if any db changes have been made (which is indicated by a billing period being processed
-  // and returning `true`). We populate it with the result of reissuing as this also indicates whether db changes have
-  // been made.
-  const results = [resultOfReissuing]
+  // and returning `true`).
+  const results = []
 
   for (const billingPeriod of billingPeriods) {
     const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billRun, billingPeriod)
@@ -61,21 +55,6 @@ async function _processBillingPeriods (billingPeriods, billRun, resultOfReissuin
   }
 
   await _finaliseBillRun(billRun, accumulatedLicenceIds, results)
-}
-
-/**
- * Call `ReissueBillsService` and log the time taken. We return `true` if any bills have been reissued (which will
- * have resulted in db changes), otherwise we return `false` (to indicate there have been no db changes)
- */
-async function _reissueBills (billRun) {
-  // If reissuing isn't enabled then simply return `false` to indicate no db change has been made
-  if (!FeatureFlagsConfig.enableReissuingBillingBatches) {
-    return false
-  }
-
-  const result = await ReissueBillsService.go(billRun)
-
-  return result
 }
 
 async function _fetchChargeVersions (billRun, billingPeriod) {

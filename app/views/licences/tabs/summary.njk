@@ -111,22 +111,22 @@
     </div>
 
     <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{{ abstractionConditions.caption }}</dt>
+        <dt class="govuk-summary-list__key">{{ abstractionConditionDetails.caption }}</dt>
         <dd class="govuk-summary-list__value">
             <div>
-                {% if abstractionConditions.conditions.length > 5 %}
-                    There are {{ abstractionConditions.conditions.length }} abstraction conditions
-                {% elseif abstractionConditions.conditions.length > 1 %}
+                {% if abstractionConditionDetails.numberOfConditions > 5 %}
+                    There are {{ abstractionConditionDetails.numberOfConditions }} abstraction conditions
+                {% elif abstractionConditionDetails.numberOfConditions > 1 %}
                     <ul class="govuk-list govuk-!-margin-bottom-0">
-                        {% for condition in abstractionConditions.conditions %}
+                        {% for condition in abstractionConditionDetails.conditions %}
                             <li>{{ condition }}</li>
                         {% endfor %}
                     </ul>
                 {% else %}
-                    {{ abstractionConditions.conditions[0] }}
+                    {{ abstractionConditionDetails.conditions[0] }}
                 {% endif %}
             </div>
-            <a href="/licences/{{ documentId }}/conditions">{{ abstractionConditions.linkText }}</a>
+            <a href="/licences/{{ documentId }}/conditions">{{ abstractionConditionDetails.linkText }}</a>
         </dd>
     </div>
 
