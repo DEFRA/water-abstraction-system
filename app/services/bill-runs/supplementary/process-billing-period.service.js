@@ -100,13 +100,7 @@ async function _createTransactions (billingAccount, billLicence, billingPeriod, 
   const { id: billingAccountId, accountNumber } = billingAccount
   const { id: billLicenceId } = billLicence
 
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
-
-  if (!chargePeriod.startDate) {
-    return []
-  }
-
-  const generatedTransactions = _generateTransactionData(billLicenceId, billingPeriod, chargePeriod, chargeVersion)
+  const generatedTransactions = _generateTransactionData(billLicenceId, billingPeriod, chargeVersion)
   const cleansedTransactions = await ProcessTransactionsService.go(generatedTransactions, billingAccountId, billLicence, billingPeriod)
 
   if (cleansedTransactions.length === 0) {
@@ -151,12 +145,21 @@ function _findOrCreateBillLicence (billLicences, licence, billId) {
   return billLicence
 }
 
-function _generateTransactionData (billLicenceId, billingPeriod, chargePeriod, chargeVersion) {
+function _generateTransactionData (billLicenceId, billingPeriod, chargeVersion) {
   try {
     // We only need to calculate the transactions for charge versions with a status of `current` (APPROVED). We still
     // check and possibly return previous transactions when ProcessTransactionsService is called next in
     // _createTransactions()
     if (chargeVersion.status !== 'current') {
+      return []
+    }
+
+    // NOTE: There is a chance of creating an empty (invalid) chargePeriod. For example, the charge version has an
+    // abstraction period of 1 Aug to 30 Sept but was revoked on 15 July. DetermineChargePeriodService will determine
+    // there is no charge period in this scenario.
+    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+
+    if (!chargePeriod.startDate) {
       return []
     }
 
