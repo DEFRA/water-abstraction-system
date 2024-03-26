@@ -8,7 +8,7 @@
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Prepares and processes bill run, licence data for presentation
+ * Prepares and processes bill run, licence and filter data for presentation
  *
  * @param {module:BillRunModel} billRun The data from the bill run
  * @param {{Object[]}} filterIssues An array of issues to filter the results by. This will only contain data when
@@ -37,7 +37,7 @@ function go (billRun, filterIssues, filterLicenceHolder, filterLicenceStatus, li
 }
 
 /**
- * Returns true/false values for each issue in the Issue filter based on the filters applied, to determine which
+ * Returns true/false values for each issue in the Issue filter based on the filters applied to determine which
  * checkboxes if any should be checked upon loading the page
  */
 function _prepareIssues (filterIssues) {
