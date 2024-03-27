@@ -26,9 +26,7 @@ describe('View Licence presenter', () => {
       expect(result).to.equal({
         id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         abstractionConditionDetails: {
-          caption: 'Abstraction conditions',
           conditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
-          linkText: 'View details of the abstraction conditions',
           numberOfConditions: 4
         },
         abstractionPeriods: null,
@@ -43,7 +41,6 @@ describe('View Licence presenter', () => {
         licenceHolder: 'Unregistered licence',
         licenceName: 'Unregistered licence',
         licenceRef: '01/123',
-        monitoringStationCaption: 'Monitoring station',
         monitoringStations: [{
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
@@ -71,9 +68,7 @@ describe('View Licence presenter', () => {
           const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
           expect(result.abstractionConditionDetails).to.equal({
-            caption: 'Abstraction conditions',
             conditions: ['Derogation clause', 'General conditions'],
-            linkText: 'View details of the abstraction conditions',
             numberOfConditions: 2
           })
         })
@@ -89,9 +84,7 @@ describe('View Licence presenter', () => {
           const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
           expect(result.abstractionConditionDetails).to.equal({
-            caption: 'Abstraction conditions',
             conditions: ['Derogation clause'],
-            linkText: 'View details of the abstraction conditions',
             numberOfConditions: 2
           })
         })
@@ -108,12 +101,7 @@ describe('View Licence presenter', () => {
         const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionConditionDetails).to.equal({
-          caption: 'Abstraction condition',
           conditions: ['Derogation clause'],
-          linkText: 'View details of the abstraction condition',
-          // NOTE: We set this to 2 on purpose as a reminder. A licence could have two purposes but the same condition
-          // applied to both. In number terms the licence has 2 conditions applied to it but from a UI point of view we
-          // display a distinct list of them
           numberOfConditions: 1
         })
       })
@@ -130,9 +118,7 @@ describe('View Licence presenter', () => {
         const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionConditionDetails).to.equal({
-          caption: 'Abstraction conditions',
           conditions: [],
-          linkText: 'View details of the abstraction conditions',
           numberOfConditions: 0
         })
       })
@@ -354,10 +340,9 @@ describe('View Licence presenter', () => {
         licence.licenceGaugingStations = []
       })
 
-      it('will return the a singular caption and an empty array of monitoring station details', async () => {
+      it('will return an empty array of monitoring station details', async () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.monitoringStationCaption).to.equal('Monitoring station')
         expect(result.monitoringStations).to.equal([])
       })
     })
@@ -367,19 +352,17 @@ describe('View Licence presenter', () => {
         licence.licenceGaugingStations = null
       })
 
-      it('will return the a singular caption and an empty array of monitoring station details', async () => {
+      it('will return an empty array of monitoring station details', async () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.monitoringStationCaption).to.equal('Monitoring station')
         expect(result.monitoringStations).to.equal([])
       })
     })
 
     describe('when the licence has a gauging station', () => {
-      it('will return the a singular caption and an array populated with monitoring station details', async () => {
+      it('will return an array populated with monitoring station details', async () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.monitoringStationCaption).to.equal('Monitoring station')
         expect(result.monitoringStations).to.equal([{
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
@@ -398,10 +381,9 @@ describe('View Licence presenter', () => {
         }]
       })
 
-      it('will return the a plural caption and an array populated with multiple monitoring station details', async () => {
+      it('will return an array populated with multiple monitoring station details', async () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
-        expect(result.monitoringStationCaption).to.equal('Monitoring stations')
         expect(result.monitoringStations).to.equal([{
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
