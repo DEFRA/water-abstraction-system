@@ -16,16 +16,22 @@
   }}
 {% endblock %}
 
-{% if error.fromResult %}
-    {% set fromResultErrorClass = " govuk-input--error" %}
-  {% else %}
-    {% set fromResultErrorClass = "" %}
+{# If there is a fromAbstractionPeriod error, the error class and message are set #}
+{% if error.text.fromResult %}
+  {% set fromResultErrorClass = " govuk-input--error" %}
+  {% set fromResultErrorMessage = { text: error.text.fromResult } %}
+{% else %}
+  {% set fromResultErrorClass = "" %}
+  {% set fromResultErrorMessage = null %}
 {% endif %}
 
-{% if error.toResult %}
+{# If there is a toAbstractionPeriod error, the error class and message are set #}
+{% if error.text.toResult %}
     {% set toResultErrorClass = " govuk-input--error" %}
-  {% else %}
-    {% set toResultErrorClass = "" %}
+    {% set toResultErrorMessage = { text: error.text.toResult } %}
+{% else %}
+  {% set toResultErrorClass = "" %}
+  {% set toResultErrorMessage = null %}
 {% endif %}
 
 {% block content %}
@@ -56,9 +62,7 @@
     {{ govukDateInput({
       id: "abstraction-period-from",
       namePrefix: "fromAbstractionPeriod",
-      errorMessage: {
-        text: error.text.fromResult
-      },
+      errorMessage: fromResultErrorMessage,
       fieldset: {
         legend: {
           text: "From",
@@ -81,9 +85,7 @@
     {{ govukDateInput({
       id: "abstraction-period-to",
       namePrefix: "toAbstractionPeriod",
-      errorMessage: {
-        text: error.text.toResult
-      },
+      errorMessage: toResultErrorMessage,
       fieldset: {
         legend: {
           text: "To",
