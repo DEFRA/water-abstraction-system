@@ -89,11 +89,8 @@ function _filterIssues (filterIssues, reviewLicenceQuery) {
     reviewLicenceQuery.where((builder) => {
       builder
         .whereLike('issues', `%${lookupIssues[0]}%`)
-        .orWhereLike('issues', `%${lookupIssues[1]}%`)
-      if (lookupIssues.length > 2) {
-        for (let i = 2; i < lookupIssues.length; i++) {
-          builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
-        }
+      for (let i = 1; i < lookupIssues.length; i++) {
+        builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
       }
     })
   }

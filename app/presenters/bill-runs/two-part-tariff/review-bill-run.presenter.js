@@ -18,7 +18,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  * there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
  * when there is a POST request.
- * @param {module:LicenceModel} licences The licences data asociated with the bill run
+ * @param {module:LicenceModel} licences The licences data associated with the bill run
  *
  * @returns {Object} The prepared bill run,licence and filter data to be passed to the review page
  */
