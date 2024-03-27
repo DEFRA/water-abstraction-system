@@ -5,8 +5,8 @@
  * @module AbstractionPeriodService
  */
 
-const SessionModel = require('../../models/session.model.js')
 const AbstractionPeriodPresenter = require('../../presenters/return-requirements/abstraction-period.presenter.js')
+const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/abstraction-period` page
