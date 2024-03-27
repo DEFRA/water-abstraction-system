@@ -25,7 +25,7 @@ describe('Determine Licence Issues Service', () => {
 
           expect(licence.issues).to.equal([
             'Abstraction outside period',
-            'Aggregate factor',
+            'Aggregate',
             'Checking query',
             'No returns received',
             'Over abstraction',
