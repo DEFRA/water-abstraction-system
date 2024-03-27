@@ -28,7 +28,7 @@ function go (payload) {
 }
 
 function _parsePayload (fromDay, fromMonth, toDay, toMonth) {
-  const parsedFromDay = fromDay ? leftPadZeroes(fromMonth, 2) : ''
+  const parsedFromDay = fromDay ? leftPadZeroes(fromDay, 2) : ''
   const parsedFromMonth = fromMonth ? leftPadZeroes(fromMonth, 2) : ''
   const parsedToDay = toDay ? leftPadZeroes(toDay, 2) : ''
   const parsedToMonth = toMonth ? leftPadZeroes(toMonth, 2) : ''
