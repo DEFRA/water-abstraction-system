@@ -79,7 +79,10 @@ describe('Bill Runs Setup controller', () => {
           beforeEach(() => {
             Sinon.stub(ExistsService, 'go').resolves({
               matchResults: [{ id: '81e97369-e744-44c9-ad2e-75e8e632e61c' }],
-              pageData: { billRunId: '81e97369-e744-44c9-ad2e-75e8e632e61c' },
+              pageData: {
+                billRunId: '81e97369-e744-44c9-ad2e-75e8e632e61c',
+                billRunLink: '/system/bill-runs/81e97369-e744-44c9-ad2e-75e8e632e61c'
+              },
               session: { id: 'e009b394-8405-4358-86af-1a9eb31298a5' },
               yearToUse: 2024
             })
