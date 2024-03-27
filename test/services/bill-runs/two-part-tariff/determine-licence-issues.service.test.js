@@ -59,8 +59,8 @@ describe('Determine Licence Issues Service', () => {
         it('sets all the issues on the element object', () => {
           DetermineLicenceIssuesService.go(licence)
 
-          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Aggregate factor', 'Overlap of charge dates', 'Some returns not received'])
-          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[1].issues).to.equal(['Aggregate factor', 'Unable to match return'])
+          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Aggregate', 'Overlap of charge dates', 'Some returns not received'])
+          expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[1].issues).to.equal(['Aggregate', 'Unable to match return'])
         })
 
         it("sets the status of the charge element to 'review'", () => {

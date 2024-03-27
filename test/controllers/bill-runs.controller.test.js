@@ -262,8 +262,8 @@ describe('Bill Runs controller', () => {
           beforeEach(() => {
             const reviewBillRunData = _reviewBillRunData()
 
-            // edit the data to represent the filter being applied
-            reviewBillRunData.filterData = { openFilter: true, licenceHolder: 'big' }
+            // edit the data to represent a filter being applied
+            reviewBillRunData.filter = { openFilter: true, licenceHolder: 'big' }
             reviewBillRunData.numberOfLicencesDisplayed = 1
 
             Sinon.stub(ReviewBillRunService, 'go').resolves(reviewBillRunData)
@@ -492,7 +492,12 @@ function _reviewBillRunData () {
         issue: 'Multiple Issues'
       }
     ],
-    filterData: { openFilter: false }
+    filter: {
+      issues: undefined,
+      licenceHolder: undefined,
+      licenceStatus: undefined,
+      openFilter: false
+    }
   }
 }
 

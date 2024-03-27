@@ -5,11 +5,7 @@
  * @module DetermineLicenceIssuesService
  */
 
-// A list of issues that would put a licence into a status of 'review'
-const REVIEW_STATUSES = [
-  'Aggregate factor', 'Checking query', 'Overlap of charge dates', 'Returns received but not processed',
-  'Returns split over charge references', 'Unable to match returns'
-]
+const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Determines the issues on a licence for a two-part tariff bill run
@@ -65,10 +61,11 @@ function _determineChargeElementsIssues (chargeVersions, licenceReturnLogs) {
 
 function _determineLicenceStatus (allElementIssues, allReturnIssues) {
   const allLicenceIssues = [...allElementIssues, ...allReturnIssues]
+  const reviewStatuses = _getReviewStatuses()
 
   // If a licence has more than one issue, or has 1 issue that is in the `REVIEW_STATUSES` array the licence status is
   // set to 'Review' otherwise its 'Ready'
-  if (allLicenceIssues.length > 1 || REVIEW_STATUSES.includes(allLicenceIssues[0])) {
+  if (allLicenceIssues.length > 1 || reviewStatuses.includes(allLicenceIssues[0])) {
     return 'review'
   } else {
     return 'ready'
@@ -122,30 +119,53 @@ function _elementIssues (chargeReference, chargeElement, licenceReturnLogs, retu
   let status = 'ready'
   const elementIssues = []
 
-  // Issue Aggregate factor
+  // Issue Aggregate
   if (chargeReference.aggregate !== null && chargeReference.aggregate !== 1) {
-    elementIssues.push('Aggregate factor')
+    elementIssues.push(twoPartTariffReviewIssues['aggregate-factor'])
     status = 'review'
   }
 
   // Issue Overlap of charge dates
   if (chargeElement.chargeDatesOverlap) {
-    elementIssues.push('Overlap of charge dates')
+    elementIssues.push(twoPartTariffReviewIssues['overlap-of-charge-dates'])
     status = 'review'
   }
 
   // Issue Some returns not received
   if (_someReturnsNotReceived(returnLogs, licenceReturnLogs)) {
-    elementIssues.push('Some returns not received')
+    elementIssues.push(twoPartTariffReviewIssues['some-returns-not-received'])
   }
 
   // Unable to match return
   if (returnLogs.length < 1) {
-    elementIssues.push('Unable to match return')
+    elementIssues.push(twoPartTariffReviewIssues['unable-to-match-return'])
     status = 'review'
   }
 
   return { elementIssues, status }
+}
+
+/**
+ * Returns a list of issues that would put a licence into a status of 'review'
+ *
+ * @returns {Object[]} An array of issues that would put a licence into a status of 'review'
+ */
+function _getReviewStatuses () {
+  // the keys for the issues that will put the licence into review status
+  const reviewStatusKeys = [
+    'aggregate-factor',
+    'checking-query',
+    'overlap-of-charge-dates',
+    'returns-received-not-processed',
+    'return-split-over-refs',
+    'unable-to-match-return'
+  ]
+
+  const reviewStatuses = reviewStatusKeys.map((reviewStatusKey) => {
+    return twoPartTariffReviewIssues[reviewStatusKey]
+  })
+
+  return reviewStatuses
 }
 
 function _licenceIssues (allElementIssues, allReturnIssues) {
@@ -160,37 +180,37 @@ function _returnLogIssues (returnLog, licence) {
 
   // Abstraction outside period issue
   if (returnLog.abstractionOutsidePeriod) {
-    returnLogIssues.push('Abstraction outside period')
+    returnLogIssues.push(twoPartTariffReviewIssues['abs-outside-period'])
   }
 
   // Checking query issue
   if (returnLog.underQuery) {
-    returnLogIssues.push('Checking query')
+    returnLogIssues.push(twoPartTariffReviewIssues['checking-query'])
   }
 
   // No returns received
   if (returnLog.status === 'due') {
-    returnLogIssues.push('No returns received')
+    returnLogIssues.push(twoPartTariffReviewIssues['no-returns-received'])
   }
 
   // Over abstraction
   if (returnLog.quantity > returnLog.allocatedQuantity) {
-    returnLogIssues.push('Over abstraction')
+    returnLogIssues.push(twoPartTariffReviewIssues['over-abstraction'])
   }
 
   // Returns received but not processed
   if (returnLog.status === 'received') {
-    returnLogIssues.push('Returns received but not processed')
+    returnLogIssues.push(twoPartTariffReviewIssues['returns-received-not-processed'])
   }
 
   // Returns received late
   if (returnLog.receivedDate > returnLog.dueDate) {
-    returnLogIssues.push('Returns received late')
+    returnLogIssues.push(twoPartTariffReviewIssues['returns-late'])
   }
 
   // Returns split over charge references
   if (_determineReturnSplitOverChargeReference(licence, returnLog)) {
-    returnLogIssues.push('Return split over charge references')
+    returnLogIssues.push(twoPartTariffReviewIssues['return-split-over-refs'])
   }
 
   return returnLogIssues
