@@ -25,11 +25,10 @@ function go (session, payload = {}) {
 }
 
 function _licenceAbstractionPeriod (payload) {
-  // NOTE: 'abstractionPeriod' is the payload value that tells us whether the user inputted an abstraction period for
-  // the return requirement site. If it is not set then it is because the presenter has been called from
-  // 'AbstractionPeriodService' and it's the first load. Else it has been called by the 'SubmitAbstractionPeriod' and
-  // the user has not inputted an abstraction period. Either way, we use it to tell us wether there is anything in the
-  // payload worth transforming.
+  // NOTE: This following checks whether a user has inputted any values for the abstraction period for the returns requirements.
+  // If the values have not been set, then it is because the presenter has been called from 'AbstractionPeriodService'
+  // and it's the first load. Else it has been called by the 'SubmitAbstractionPeriod' and the user has not inputted any values for the
+  // abstraction period. Either way, we use it to tell us wether there is anything in the payload worth transforming.
 
   return {
     fromDay: payload['fromAbstractionPeriod-day'] ? payload['fromAbstractionPeriod-day'] : null,
