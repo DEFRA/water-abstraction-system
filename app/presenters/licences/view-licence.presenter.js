@@ -43,7 +43,7 @@ function go (licence, licenceAbstractionConditions) {
   }
 
   const abstractionDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
-  const monitoringStationDetails = _generateMonitoringStation(licenceGaugingStations)
+  const monitoringStations = _generateMonitoringStation(licenceGaugingStations)
 
   const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
 
@@ -62,8 +62,7 @@ function go (licence, licenceAbstractionConditions) {
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceName,
     licenceRef,
-    monitoringStationCaption: monitoringStationDetails.monitoringStationCaption,
-    monitoringStations: monitoringStationDetails.monitoringStations,
+    monitoringStations,
     pageTitle: `Licence ${licenceRef}`,
     purposes,
     region: region.displayName,
@@ -108,12 +107,8 @@ function _abstractionAmountDetails (purpose) {
 function _abstractionConditionDetails (licenceAbstractionConditions) {
   const { conditions, numberOfConditions } = licenceAbstractionConditions
 
-  const conditionText = numberOfConditions === 1 ? 'condition' : 'conditions'
-
   return {
-    caption: `Abstraction ${conditionText}`,
     conditions,
-    linkText: `View details of the abstraction ${conditionText}`,
     numberOfConditions
   }
 }
@@ -156,14 +151,7 @@ function _generateMonitoringStation (stations) {
     monitoringStations = Array.from(new Set(jsonArray)).map(JSON.parse)
   }
 
-  const monitoringStationCaption = monitoringStations.length > 1
-    ? 'Monitoring stations'
-    : 'Monitoring station'
-
-  return {
-    monitoringStationCaption,
-    monitoringStations
-  }
+  return monitoringStations
 }
 
 function _generatePurposes (licenceVersions) {
