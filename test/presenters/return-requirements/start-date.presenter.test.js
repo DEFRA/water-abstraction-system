@@ -7,10 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
-// Test helpers
-const DatabaseSupport = require('../../support/database.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
-
 // Thing under test
 const StartDatePresenter = require('../../../app/presenters/return-requirements/start-date.presenter.js')
 
@@ -19,9 +15,8 @@ describe('Start Date presenter', () => {
     let session
 
     beforeEach(async () => {
-      await DatabaseSupport.clean()
-
-      session = await SessionHelper.add({
+      session = {
+        id: 'd3fr4-f3ad-4cb6-a058-78abc4w4t3r',
         data: {
           licence: {
             id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
@@ -32,7 +27,7 @@ describe('Start Date presenter', () => {
             startDate: '2023-11-126T00:00:00.000Z'
           }
         }
-      })
+      }
     })
 
     it('correctly presents the data', () => {
@@ -56,9 +51,8 @@ describe('Start Date presenter', () => {
     let session
 
     beforeEach(async () => {
-      await DatabaseSupport.clean()
-
-      session = await SessionHelper.add({
+      session = {
+        id: 'd3fr4-f3ad-4cb6-a058-78abc4w4t3r',
         data: {
           licence: {
             id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
@@ -73,7 +67,7 @@ describe('Start Date presenter', () => {
           startDateOptions: 'anotherStartDate',
           startDateYear: '2023'
         }
-      })
+      }
     })
 
     it('correctly presents the data', () => {
