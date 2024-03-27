@@ -5,8 +5,8 @@
  * @module SubmitAbstractionPeriod
  */
 
-const AbstractionPeriodValidator = require('../../validators/return-requirements/abstraction-period.validator.js')
 const AbstractionPeriodPresenter = require('../../presenters/return-requirements/abstraction-period.presenter.js')
+const AbstractionPeriodValidator = require('../../validators/return-requirements/abstraction-period.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
