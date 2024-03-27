@@ -78,7 +78,7 @@ async function _getLegacyAppData () {
   ]
 
   for (const service of services) {
-    const result = await LegacyRequest.get(service.serviceName, healthInfoPath, false)
+    const result = await LegacyRequest.get(service.serviceName, healthInfoPath, null, false)
 
     if (result.succeeded) {
       service.version = result.response.body.version
