@@ -26,8 +26,8 @@ const FetchChargeVersionsService = require('../../../../app/services/bill-runs/t
 
 describe('Fetch Charge Versions service', () => {
   const billingPeriod = {
-    startDate: new Date('2022-04-01'),
-    endDate: new Date('2023-03-31')
+    startDate: new Date('2023-04-01'),
+    endDate: new Date('2024-03-31')
   }
   const regionCode = 5
   const licenceId = 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd'
@@ -225,7 +225,7 @@ describe('Fetch Charge Versions service', () => {
     describe('because the start date is after the billing period ends', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode }
+          { startDate: new Date('2024-04-01'), licenceId, licenceRef, regionCode }
         )
 
         await ChargeReferenceHelper.add({
