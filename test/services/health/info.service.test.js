@@ -21,7 +21,7 @@ const BaseRequest = require('../../../app/requests/base.request.js')
 
 // Thing under test
 // Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
-// `child_process.exec()` behaves in the service, after it's been promisfied we have to use proxyquire.
+// `child_process.exec()` behaves in the service, after it's been promisified we have to use proxyquire.
 let InfoService // = require('../../app/services/health/info.service')
 
 describe('Info service', () => {
@@ -72,15 +72,15 @@ describe('Info service', () => {
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    legacyRequestStub.withArgs('background', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('reporting', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('import', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('crm', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('external', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('internal', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('idm', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('permits', 'health/info', false).resolves(goodRequestResults.app)
-    legacyRequestStub.withArgs('returns', 'health/info', false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('background', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('reporting', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('import', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('crm', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('external', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('internal', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('idm', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('permits', 'health/info', null, false).resolves(goodRequestResults.app)
+    legacyRequestStub.withArgs('returns', 'health/info', null, false).resolves(goodRequestResults.app)
 
     chargingModuleRequestStub
       .withArgs('status')
@@ -100,7 +100,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
       // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
       // `child-process.exec()` behaves in the module under test.
@@ -162,7 +162,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
       const execStub = Sinon
         .stub()
@@ -208,7 +208,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -277,7 +277,7 @@ describe('Info service', () => {
       baseRequestStub
         .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
         .resolves(goodRequestResults.addressFacade)
-      legacyRequestStub.withArgs('water', 'health/info', false).resolves(goodRequestResults.app)
+      legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(goodRequestResults.app)
 
       const execStub = Sinon
         .stub()
@@ -356,7 +356,7 @@ describe('Info service', () => {
         baseRequestStub
           .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
           .resolves(badResult)
-        legacyRequestStub.withArgs('water', 'health/info', false).resolves(badResult)
+        legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -383,7 +383,7 @@ describe('Info service', () => {
         baseRequestStub
           .withArgs(`${servicesConfig.addressFacade.url}/address-service/hola`)
           .resolves(badResult)
-        legacyRequestStub.withArgs('water', 'health/info', false).resolves(badResult)
+        legacyRequestStub.withArgs('water', 'health/info', null, false).resolves(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
