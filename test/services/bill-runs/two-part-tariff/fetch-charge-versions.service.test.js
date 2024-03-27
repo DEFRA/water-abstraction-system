@@ -29,7 +29,6 @@ describe('Fetch Charge Versions service', () => {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
   }
-  const regionCode = 5
   const licenceId = 'cee9ff5f-813a-49c7-ba04-c65cfecf67dd'
   const licenceRef = '01/128'
 
@@ -42,7 +41,7 @@ describe('Fetch Charge Versions service', () => {
     const chargeCategory = await ChargeCategoryHelper.add({ reference: '4.3.41' })
     chargeCategoryId = chargeCategory.id
 
-    const region = await RegionHelper.add({ naldRegionId: regionCode })
+    const region = await RegionHelper.add()
     regionId = region.id
   })
 
@@ -57,7 +56,7 @@ describe('Fetch Charge Versions service', () => {
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
       // second part is to create another charge version with a different licence ref so we can test the order of the
       // results
-      await ChargeVersionHelper.add({ id: chargeVersionId, licenceId, licenceRef, regionCode, changeReasonId })
+      await ChargeVersionHelper.add({ id: chargeVersionId, licenceId, licenceRef, changeReasonId })
 
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add({
         id: 'a86837fa-cf25-42fe-8216-ea8c2d2c939d',
@@ -86,7 +85,7 @@ describe('Fetch Charge Versions service', () => {
       // Second charge version to test ordering
       const otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId })
       const chargeVersion = await ChargeVersionHelper.add(
-        { licenceId: otherLicence.id, licenceRef: '01/130', regionCode, changeReasonId }
+        { licenceId: otherLicence.id, licenceRef: '01/130', changeReasonId }
       )
       const chargeReference = await ChargeReferenceHelper.add({
         chargeVersionId: chargeVersion.id,
@@ -205,7 +204,7 @@ describe('Fetch Charge Versions service', () => {
     describe("because the scheme is 'presroc'", () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { scheme: 'alcs', licenceId, licenceRef, regionCode: 5 }
+          { scheme: 'alcs', licenceId, licenceRef }
         )
 
         await ChargeReferenceHelper.add({
@@ -225,7 +224,7 @@ describe('Fetch Charge Versions service', () => {
     describe('because the start date is after the billing period ends', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { startDate: new Date('2023-04-01'), licenceId, licenceRef, regionCode }
+          { startDate: new Date('2023-04-01'), licenceId, licenceRef }
         )
 
         await ChargeReferenceHelper.add({
@@ -245,7 +244,7 @@ describe('Fetch Charge Versions service', () => {
     describe("because the status is not 'current'", () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { licenceId, licenceRef, regionCode, status: 'superseded' }
+          { licenceId, licenceRef, status: 'superseded' }
         )
 
         await ChargeReferenceHelper.add({
@@ -264,8 +263,9 @@ describe('Fetch Charge Versions service', () => {
 
     describe('because the region is different', () => {
       beforeEach(async () => {
+        const { id: otherLicenceId, licenceRef: otherLicenceRef } = await LicenceHelper.add({ regionId: 'eee44502-dd6f-4b13-8885-ebc50a7f54dc' })
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { licenceId, licenceRef, regionCode: 9 }
+          { licenceId: otherLicenceId, licenceRef: otherLicenceRef }
         )
 
         await ChargeReferenceHelper.add({
@@ -285,7 +285,7 @@ describe('Fetch Charge Versions service', () => {
     describe('because the licence is linked to a workflow', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { licenceId, licenceRef, regionCode }
+          { licenceId, licenceRef }
         )
 
         await ChargeReferenceHelper.add({
@@ -314,7 +314,7 @@ describe('Fetch Charge Versions service', () => {
           .where('id', licenceId)
 
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
-          { licenceId, licenceRef, regionCode }
+          { licenceId, licenceRef }
         )
 
         await ChargeReferenceHelper.add({

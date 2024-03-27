@@ -9,7 +9,6 @@ const { ref } = require('objection')
 
 const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
 const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const RegionModel = require('../../../models/region.model.js')
 const Workflow = require('../../../models/workflow.model.js')
 
 /**
@@ -32,12 +31,10 @@ const Workflow = require('../../../models/workflow.model.js')
  * references, charge elements and related purpose
  */
 async function go (regionId, billingPeriod) {
-  const regionCode = await _regionCode(regionId)
-
-  return _fetch(regionCode, billingPeriod)
+  return _fetch(regionId, billingPeriod)
 }
 
-async function _fetch (regionCode, billingPeriod) {
+async function _fetch (regionId, billingPeriod) {
   const chargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.id',
@@ -46,10 +43,10 @@ async function _fetch (regionCode, billingPeriod) {
       'chargeVersions.status'
     ])
     .innerJoinRelated('licence')
+    .where('licence.regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
-    .where('chargeVersions.regionCode', regionCode)
     .where((builder) => {
       builder
         .whereNull('licence.expiredDate')
@@ -146,12 +143,6 @@ async function _fetch (regionCode, billingPeriod) {
     })
 
   return chargeVersions
-}
-
-async function _regionCode (regionId) {
-  const { naldRegionId } = await RegionModel.query().findById(regionId).select('naldRegionId')
-
-  return naldRegionId
 }
 
 module.exports = {
