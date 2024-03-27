@@ -47,9 +47,7 @@ describe('View Licence service', () => {
 
         expect(result).to.equal({
           abstractionConditionDetails: {
-            caption: 'Abstraction conditions',
             conditions: [],
-            linkText: 'View details of the abstraction conditions',
             numberOfConditions: 0
           },
           abstractionPeriods: null,
@@ -67,7 +65,6 @@ describe('View Licence service', () => {
           licenceHolder: 'Unregistered licence',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
-          monitoringStationCaption: 'Monitoring station',
           monitoringStations: [],
           pageTitle: 'Licence 01/130/R01',
           purposes: null,
