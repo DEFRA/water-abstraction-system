@@ -7,6 +7,8 @@
 
 const BillRunModel = require('../../models/bill-run.model.js')
 
+const LAST_PRESROC_YEAR = 2022
+
 /**
  * Fetch bill run(s) that match the options provided
  *
@@ -70,7 +72,7 @@ function _applySupplementaryWhereClauses (query) {
 }
 
 function _applyTwoPartTariffWhereClauses (query, financialYearEnding, summer) {
-  if (financialYearEnding <= 2022) {
+  if (financialYearEnding <= LAST_PRESROC_YEAR) {
     query.where('summer', summer)
   }
 
