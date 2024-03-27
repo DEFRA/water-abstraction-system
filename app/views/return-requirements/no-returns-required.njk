@@ -30,7 +30,7 @@
   <div class="govuk-body">
     <form method="post">
       {{ govukRadios({
-        name: "no-returns-required",
+        name: "reason",
         errorMessage: error,
         fieldset: {
           legend: {
@@ -42,17 +42,17 @@
         items: [
           {
             text: 'Abstraction amount below 100 cubic metres per day',
-            value:  'abstraction_below_100_cubic_metres_per_day',
+            value:  'abstraction-below-100-cubic-metres-per-day',
             checked: false
           },
           {
             text: 'Returns exception',
-            value: 'returns_exception',
+            value: 'returns-exception',
             checked: false
           },
           {
             text: 'Transfer licence',
-            value: 'transfer_licence',
+            value: 'transfer-licence',
             checked: false
           }
         ]

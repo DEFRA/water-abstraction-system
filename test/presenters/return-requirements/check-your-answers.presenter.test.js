@@ -22,7 +22,7 @@ describe('Check Your Answers presenter - No Returns Required', () => {
           licenceHolder: 'Astro Boy'
         },
         journey: 'no-returns-required',
-        noReturnsRequired: 'returns-exception',
+        reason: 'returns-exception',
         startDate: '2008-02-08',
         startDateDay: '08',
         startDateMonth: '02',
@@ -58,7 +58,7 @@ describe('Check Your Answers presenter - Returns Required', () => {
           licenceRef: '01/123',
           licenceHolder: 'Astro Boy'
         },
-        returnsRequired: 'major-change',
+        reason: 'major-change',
         journey: 'returns-required',
         startDateOptions: 'licenceStartDate'
       }

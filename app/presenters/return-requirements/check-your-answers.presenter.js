@@ -10,20 +10,11 @@ function go (session) {
     id: session.id,
     journey: session.data.journey,
     licenceRef: session.data.licence.licenceRef,
-    reason: _reason(session.data),
+    reason: session.data.reason,
     startDate: _startDate(session.data)
   }
 
   return data
-}
-
-function _reason (sessionData) {
-  let reason = sessionData.returnsRequired
-  if (sessionData.journey === 'no-returns-required') {
-    reason = sessionData.noReturnsRequired
-  }
-
-  return reason
 }
 
 function _startDate (sessionData) {

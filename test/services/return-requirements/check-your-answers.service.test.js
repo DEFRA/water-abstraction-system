@@ -27,7 +27,7 @@ describe('Check Your Answers service', () => {
           licenceHolder: 'Astro Boy',
           currentVersionStartDate: '2023-02-08T00:00:00.000Z'
         },
-        noReturnsRequired: 'abstraction_below_100_cubic_metres_per_day',
+        reason: 'abstraction-below-100-cubic-metres-per-day',
         journey: 'no-returns-required',
         startDateOptions: 'licenceStartDate'
       }
@@ -49,7 +49,7 @@ describe('Check Your Answers service', () => {
         pageTitle: 'Check the return requirements for Astro Boy',
         journey: 'no-returns-required',
         licenceRef: '01/ABC',
-        reason: 'abstraction_below_100_cubic_metres_per_day',
+        reason: 'abstraction-below-100-cubic-metres-per-day',
         startDate: '8 February 2023'
       }, { skip: ['id'] })
     })

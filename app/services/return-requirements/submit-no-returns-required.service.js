@@ -47,7 +47,7 @@ async function go (sessionId, payload) {
 async function _save (session, payload) {
   const currentData = session.data
 
-  currentData.noReturnsRequired = payload['no-returns-required']
+  currentData.reason = payload.reason
 
   return session.$query().patch({ data: currentData })
 }

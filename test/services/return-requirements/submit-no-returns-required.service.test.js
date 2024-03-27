@@ -40,7 +40,7 @@ describe('Submit No Returns Required service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'no-returns-required': 'abstraction_below_100_cubic_metres_per_day'
+          reason: 'abstraction-below-100-cubic-metres-per-day'
         }
       })
 
@@ -49,7 +49,7 @@ describe('Submit No Returns Required service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.noReturnsRequired).to.equal('abstraction_below_100_cubic_metres_per_day')
+        expect(refreshedSession.data.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
       })
 
       it('returns the journey to redirect the page', async () => {
