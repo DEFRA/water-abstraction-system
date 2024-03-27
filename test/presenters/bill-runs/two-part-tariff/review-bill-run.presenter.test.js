@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { beforeEach, describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
@@ -12,13 +12,23 @@ const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two
 
 describe('Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
-    const testBillRun = _testBillRun()
-    const testLicences = _testLicences()
+    let filterIssues
+    let filterLicenceHolder
+    let filterLicenceStatus
+    let testBillRun
+    let testLicences
+
+    beforeEach(() => {
+      testBillRun = _testBillRun()
+      testLicences = _testLicences()
+    })
 
     describe('and no filter has been applied', () => {
-      const filterIssues = undefined
-      const filterLicenceHolder = undefined
-      const filterLicenceStatus = undefined
+      beforeEach(() => {
+        filterIssues = undefined
+        filterLicenceHolder = undefined
+        filterLicenceStatus = undefined
+      })
 
       it('correctly presents the data', () => {
         const result = ReviewBillRunPresenter.go(
@@ -72,9 +82,11 @@ describe('Review Bill Run presenter', () => {
     })
 
     describe('and filters have been applied', () => {
-      const filterIssues = ['abs-outside-period', 'over-abstraction']
-      const filterLicenceHolder = 'bob'
-      const filterLicenceStatus = 'ready'
+      beforeEach(() => {
+        filterIssues = ['abs-outside-period', 'over-abstraction']
+        filterLicenceHolder = 'bob'
+        filterLicenceStatus = 'ready'
+      })
 
       it('correctly presents the data', () => {
         const result = ReviewBillRunPresenter.go(
