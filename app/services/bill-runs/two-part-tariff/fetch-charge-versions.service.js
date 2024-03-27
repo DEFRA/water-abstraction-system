@@ -20,6 +20,7 @@ const Workflow = require('../../../models/workflow.model.js')
  * - have the scheme 'sroc'
  * - be linked to a licence with is linked to the selected region
  * - have a start date before the end of the billing period
+ * - have an end date on or after the start of the billing period
  * - not be linked to a licence in the workflow
  * - not be linked to a licence that 'ended' before the billing period
  * - have a status of current
@@ -49,6 +50,11 @@ async function _fetch (regionCode, billingPeriod) {
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
     .where('chargeVersions.regionCode', regionCode)
+    .where((builder) => {
+      builder
+        .whereNull('chargeVersions.endDate')
+        .orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
+    })
     .where((builder) => {
       builder
         .whereNull('licence.expiredDate')
