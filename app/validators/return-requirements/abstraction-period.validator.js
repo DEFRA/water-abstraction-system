@@ -9,6 +9,17 @@ const Joi = require('joi').extend(require('@joi/date'))
 
 const { leftPadZeroes } = require('../../presenters/base.presenter.js')
 
+/**
+ * Validates data submitted for the `/return-requirements/{sessionId}/abstraction-period` page
+ *
+ * When setting up a requirement, users must specify an abstraction period for the return requirement. Users must input a valid from and to
+ * date for the licence. If there requirements are not met the validation will return an error.
+ *
+ * @param {Object} payload - The payload from the request to be validated.
+ *
+ * @returns {Object} - The result from calling Joi's schema.validate(). If any error are found the 'error: ' property will
+ * also exist detailing what the issue is.
+ */
 function go (payload) {
   const {
     'fromAbstractionPeriod-day': fromDay,
@@ -20,6 +31,9 @@ function go (payload) {
   const parsedPayload = _parsePayload(fromDay, fromMonth, toDay, toMonth)
 
   const result = {
+    // NOTE: Because the fromDate and toDate both return slightly different error messages, the payloads are passed to
+    // two separate Joi validation schemas which return the appropriate error message. Once validated, they are passed
+    // back to the result and returned.
     fromResult: _validateAbstractionFromDate(parsedPayload.fromDate),
     toResult: _validateAbstractionToDate(parsedPayload.toDate)
   }
