@@ -19,6 +19,7 @@ async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   const formattedData = CheckYourAnswersPresenter.go(session)
+
   return {
     activeNavBar: 'search',
     licenceRef: session.data.licence.licenceRef,
