@@ -20,6 +20,24 @@ describe('Determine Licence Issues Service', () => {
       })
 
       describe('on the licence', () => {
+        it("sets 'issues' to a comma separated unique list in alphabetical order of the issues found", () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.issues).to.equal([
+            'Abstraction outside period',
+            'Aggregate factor',
+            'Checking query',
+            'No returns received',
+            'Over abstraction',
+            'Overlap of charge dates',
+            'Return split over charge references',
+            'Returns received but not processed',
+            'Returns received late',
+            'Some returns not received',
+            'Unable to match return'
+          ])
+        })
+
         it("sets the status of the licence to 'review'", () => {
           DetermineLicenceIssuesService.go(licence)
 
