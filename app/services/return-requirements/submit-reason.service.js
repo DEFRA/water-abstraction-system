@@ -30,6 +30,7 @@ async function go (sessionId, payload) {
 
   if (!validationResult) {
     await _save(session, payload)
+
     return {}
   }
 
