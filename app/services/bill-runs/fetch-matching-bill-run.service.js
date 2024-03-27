@@ -70,7 +70,7 @@ function _applySupplementaryWhereClauses (query) {
 }
 
 function _applyTwoPartTariffWhereClauses (query, financialYearEnding, summer) {
-  if (['2022', '2021'].includes(financialYearEnding)) {
+  if (financialYearEnding <= 2022) {
     query.where('summer', summer)
   }
 
