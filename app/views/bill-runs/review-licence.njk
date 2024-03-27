@@ -57,14 +57,14 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
-      {% for chargeVersion in chargeData %}
-        {% set chargeDateIndex = loop.index0 %}
         <ul class="govuk-list">
-          <li>
-            <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}">{{chargeVersion.chargePeriodDate}}</a>
-          </li>
+        {% for chargeVersion in chargeData %}
+          {% set chargeDateIndex = loop.index0 %}
+            <li>
+              <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}">{{chargeVersion.chargePeriodDate}}</a>
+            </li>
+        {% endfor %}
         </ul>
-      {% endfor %}
     </div>
   </div>
 
@@ -273,32 +273,32 @@
       {% for chargeVersion in chargeData %}
       {% set chargeVersionIndex = loop.index0 %}
         <div class ="govuk-caption-l">Financial year {{chargeVersion.financialYear}}</div>
-        <section id="chargeVersion{{chargeVersionIndex}}"
+        <section id="chargeVersion{{chargeVersionIndex}}">
           <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriodDate}}</h2>
         </section>
         <div class="govuk-caption-m">{{chargeVersion.licenceHolderName}}</div>
 
         {% set chargeReferenceText = "charge references " if chargeVersion.chargeReferences.length > 1 else "charge reference " %}
-        {% set chargeElementText = "charge elements " if chargeVersion.chargeElementCount > 1 else "charge element "%}
+        {% set chargeElementText = "charge elements " if chargeVersion.chargeElementCount > 1 else "charge element " %}
 
         <div class="govuk-heading-m govuk-!-margin-bottom-1">{{chargeVersion.chargeReferences.length}} {{chargeReferenceText}} with {{chargeVersion.chargeElementCount}} two-part tariff {{chargeElementText}}</div>
 
         {# Billing account details #}
         {% set billingAccountLink = '/billing-accounts/' + chargeVersion.billingAccountDetails.billingAccountId %}
         {% set billingAccountText %}
-          <div><span class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></span></div>
-          <div><span data-test="account-name">{{ chargeVersion.billingAccountDetails.accountName }}</span></div>
+          <div class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></div>
+          <div data-test="account-name">{{ chargeVersion.billingAccountDetails.accountName }}</div>
 
           {# billing account contact name #}
           {% if chargeVersion.billingAccountDetails.contactName %}
-            <div><span data-test="contact-name">FAO {{chargeVersion.billingAccountDetails.contactName}}</span></div>
+            <div data-test="contact-name">FAO {{chargeVersion.billingAccountDetails.contactName}}</div>
           {% endif %}
 
           {# billing account address #}
           <div>
             {% for addressLine in chargeVersion.billingAccountDetails.addressLines %}
             {% set addressLineIndex = loop.index0 %}
-              <div><span data-test="address-line" + addressLineIndex>{{addressLine}}</span></div>
+              <div data-test="address-line" + addressLineIndex>{{addressLine}}</div>
             {% endfor %}
           </div>
         {% endset%}
