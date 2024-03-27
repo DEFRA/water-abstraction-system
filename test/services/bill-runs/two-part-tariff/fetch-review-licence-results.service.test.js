@@ -65,18 +65,30 @@ describe('Fetch Review Licence Results Service', () => {
         reviewLicence = await ReviewLicenceHelper.add({ licenceId: licence.id, billRunId: billRun.id })
 
         chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
-        reviewChargeVersion = await ReviewChargeVersionHelper.add({ reviewLicenceId: reviewLicence.id, chargeVersionId: chargeVersion.id })
+        reviewChargeVersion = await ReviewChargeVersionHelper.add({
+          reviewLicenceId: reviewLicence.id,
+          chargeVersionId: chargeVersion.id
+        })
 
         chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id })
-        reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: reviewChargeVersion.id, chargeReferenceId: chargeReference.id })
+        reviewChargeReference = await ReviewChargeReferenceHelper.add({
+          reviewChargeVersionId: reviewChargeVersion.id,
+          chargeReferenceId: chargeReference.id
+        })
 
         chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
-        reviewChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId: reviewChargeReference.id, chargeElementId: chargeElement.id })
+        reviewChargeElement = await ReviewChargeElementHelper.add({
+          reviewChargeReferenceId: reviewChargeReference.id,
+          chargeElementId: chargeElement.id
+        })
 
         returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
         reviewReturn = await ReviewReturnHelper.add({ returnId: returnLog.id, reviewLicenceId: reviewLicence.id })
 
-        await ReviewChargeElementReturnHelper.add({ reviewChargeElementId: reviewChargeElement.id, reviewReturnId: reviewReturn.id })
+        await ReviewChargeElementReturnHelper.add({
+          reviewChargeElementId: reviewChargeElement.id,
+          reviewReturnId: reviewReturn.id
+        })
 
         Sinon.stub(FetchBillingAccountService, 'go').resolves([])
       })
