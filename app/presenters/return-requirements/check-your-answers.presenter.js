@@ -25,9 +25,7 @@ function _startDate (sessionData) {
 
   if (selectedOption === 'licenceStartDate') {
     date = new Date(sessionData.licence.currentVersionStartDate)
-  }
-
-  if (selectedOption === 'anotherStartDate') {
+  } else {
     const day = sessionData.startDateDay
     const month = sessionData.startDateMonth
     const year = sessionData.startDateYear
