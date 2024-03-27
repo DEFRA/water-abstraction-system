@@ -19,6 +19,14 @@ describe('Determine Licence Issues Service', () => {
         licence = _generateMultipleIssuesLicenceData()
       })
 
+      describe('on the licence', () => {
+        it("sets the status of the licence to 'review'", () => {
+          DetermineLicenceIssuesService.go(licence)
+
+          expect(licence.status).to.equal('review')
+        })
+      })
+
       describe('on the returns', () => {
         it('sets all the issues on the returns object', () => {
           DetermineLicenceIssuesService.go(licence)
@@ -26,12 +34,6 @@ describe('Determine Licence Issues Service', () => {
           expect(licence.returnLogs[0].issues).to.equal(['Abstraction outside period', 'Checking query', 'Over abstraction', 'Returns received late', 'Return split over charge references'])
           expect(licence.returnLogs[1].issues).to.equal(['No returns received'])
           expect(licence.returnLogs[2].issues).to.equal(['Returns received but not processed'])
-        })
-
-        it("sets the status of the licence to 'review'", () => {
-          DetermineLicenceIssuesService.go(licence)
-
-          expect(licence.status).to.equal('review')
         })
       })
 
@@ -41,12 +43,6 @@ describe('Determine Licence Issues Service', () => {
 
           expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Aggregate factor', 'Overlap of charge dates', 'Some returns not received'])
           expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[1].issues).to.equal(['Aggregate factor', 'Unable to match return'])
-        })
-
-        it("sets the status of the licence to 'review'", () => {
-          DetermineLicenceIssuesService.go(licence)
-
-          expect(licence.status).to.equal('review')
         })
 
         it("sets the status of the charge element to 'review'", () => {
