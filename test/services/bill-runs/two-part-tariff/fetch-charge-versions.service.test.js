@@ -242,6 +242,26 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
+    describe('because the end date is before the billing period starts', () => {
+      beforeEach(async () => {
+        const { id: chargeVersionId } = await ChargeVersionHelper.add(
+          { endDate: new Date('2023-03-31'), licenceId, licenceRef, regionCode }
+        )
+
+        await ChargeReferenceHelper.add({
+          chargeVersionId,
+          chargeCategoryId,
+          adjustments: { s127: true }
+        })
+      })
+
+      it('returns no records', async () => {
+        const results = await FetchChargeVersionsService.go(regionId, billingPeriod)
+
+        expect(results).to.be.empty()
+      })
+    })
+
     describe("because the status is not 'current'", () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
