@@ -4,7 +4,9 @@
  * Formats data for the `/return-requirements/{sessionId}/check-your-answers` page
  * @module CheckYourAnswersPresenter
  */
+
 const { formatLongDate } = require('../base.presenter.js')
+
 function go (session) {
   const data = {
     id: session.id,
