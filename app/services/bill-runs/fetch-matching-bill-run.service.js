@@ -2,7 +2,7 @@
 
 /**
  * Fetch bill run(s) that match the options provided
- * @module ExistsService
+ * @module FetchMatchingBillRunService
  */
 
 const BillRunModel = require('../../models/bill-run.model.js')
