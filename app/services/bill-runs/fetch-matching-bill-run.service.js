@@ -52,7 +52,7 @@ async function go (regionId, batchType, financialYearEnding, summer = false) {
     .where('regionId', regionId)
     .where('batchType', batchType)
 
-  _applyWhereClauses(baseQuery, batchType, summer, financialYearEnding)
+  _applyWhereClauses(baseQuery, batchType, financialYearEnding, summer)
 
   return _fetch(baseQuery)
 }
@@ -80,7 +80,7 @@ function _applyTwoPartTariffWhereClauses (query, financialYearEnding, summer) {
     .limit(1)
 }
 
-function _applyWhereClauses (baseQuery, batchType, summer, financialYearEnding) {
+function _applyWhereClauses (baseQuery, batchType, financialYearEnding, summer) {
   if (batchType === 'annual') {
     _applyAnnualWhereClauses(baseQuery, financialYearEnding)
   } else if (batchType === 'supplementary') {
