@@ -40,6 +40,7 @@ describe('Bill Runs Setup Create presenter', () => {
       expect(result).to.equal({
         backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
         billRunId: 'c0608545-9870-4605-a407-5ff49f8a5182',
+        billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
         billRunNumber: 12345,
         billRunStatus: 'sent',
         billRunType: 'Annual',
@@ -90,6 +91,43 @@ describe('Bill Runs Setup Create presenter', () => {
             const result = CreatePresenter.go(session, matchingBillRun)
 
             expect(result.backLink).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/season')
+          })
+        })
+      })
+    })
+
+    describe("the 'billRunLink' property", () => {
+      describe("when the matching bill run's status is not 'review'", () => {
+        it('returns a link to the bill run page', () => {
+          const result = CreatePresenter.go(session, matchingBillRun)
+
+          expect(result.billRunLink).to.equal('/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182')
+        })
+      })
+
+      describe("when the matching bill run's status is 'review'", () => {
+        beforeEach(() => {
+          matchingBillRun.batchType = 'two_part_tariff'
+          matchingBillRun.status = 'review'
+        })
+
+        describe("and the matching bill run's financial year is in the SROC period", () => {
+          it('returns a link to the SROC review page', () => {
+            const result = CreatePresenter.go(session, matchingBillRun)
+
+            expect(result.billRunLink).to.equal('/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182/review')
+          })
+        })
+
+        describe("and the matching bill run's financial year is in the PRESROC period", () => {
+          beforeEach(() => {
+            matchingBillRun.toFinancialYearEnding = '2022'
+          })
+
+          it('returns a link to the PRESROC review page', () => {
+            const result = CreatePresenter.go(session, matchingBillRun)
+
+            expect(result.billRunLink).to.equal('/billing/batch/c0608545-9870-4605-a407-5ff49f8a5182/two-part-tariff-review')
           })
         })
       })

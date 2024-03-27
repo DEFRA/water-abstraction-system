@@ -13,6 +13,8 @@ const {
   formatLongDate
 } = require('../../base.presenter.js')
 
+const LAST_PRESROC_YEAR = 2022
+
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/create` page
  *
@@ -39,6 +41,7 @@ function go (session, billRun) {
   return {
     backLink: _backLink(session),
     billRunId: id,
+    billRunLink: _billRunLink(billRun),
     billRunNumber,
     billRunStatus: status,
     billRunType,
@@ -62,6 +65,20 @@ function _backLink (session) {
   }
 
   return `/system/bill-runs/setup/${session.id}/season`
+}
+
+function _billRunLink (billRun) {
+  const { id: billRunId, status, toFinancialYearEnding } = billRun
+
+  if (status !== 'review') {
+    return `/system/bill-runs/${billRunId}`
+  }
+
+  if (toFinancialYearEnding > LAST_PRESROC_YEAR) {
+    return `/system/bill-runs/${billRunId}/review`
+  }
+
+  return `/billing/batch/${billRunId}/two-part-tariff-review`
 }
 
 function _warningMessage (billRunType, status) {
