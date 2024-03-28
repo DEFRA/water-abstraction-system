@@ -2,10 +2,12 @@
 
 /**
  * Fetch bill run(s) that match the options provided
- * @module ExistsService
+ * @module FetchMatchingBillRunService
  */
 
 const BillRunModel = require('../../models/bill-run.model.js')
+
+const LAST_PRESROC_YEAR = 2022
 
 /**
  * Fetch bill run(s) that match the options provided
@@ -52,7 +54,7 @@ async function go (regionId, batchType, financialYearEnding, summer = false) {
     .where('regionId', regionId)
     .where('batchType', batchType)
 
-  _applyWhereClauses(baseQuery, batchType, summer, financialYearEnding)
+  _applyWhereClauses(baseQuery, batchType, financialYearEnding, summer)
 
   return _fetch(baseQuery)
 }
@@ -70,7 +72,7 @@ function _applySupplementaryWhereClauses (query) {
 }
 
 function _applyTwoPartTariffWhereClauses (query, financialYearEnding, summer) {
-  if (['2022', '2021'].includes(financialYearEnding)) {
+  if (financialYearEnding <= LAST_PRESROC_YEAR) {
     query.where('summer', summer)
   }
 
@@ -80,7 +82,7 @@ function _applyTwoPartTariffWhereClauses (query, financialYearEnding, summer) {
     .limit(1)
 }
 
-function _applyWhereClauses (baseQuery, batchType, summer, financialYearEnding) {
+function _applyWhereClauses (baseQuery, batchType, financialYearEnding, summer) {
   if (batchType === 'annual') {
     _applyAnnualWhereClauses(baseQuery, financialYearEnding)
   } else if (batchType === 'supplementary') {
