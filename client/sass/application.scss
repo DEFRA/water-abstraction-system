@@ -148,3 +148,16 @@ $govuk-global-styles: true;
     width: 10% !important;
   }
 }
+
+// ========== ========== ========== ========== ==========
+// Tag
+// ========== ========== ========== ========== ==========
+.tag-wrapper {
+  position:relative;
+}
+
+.tag-element {
+  position:absolute;
+  top:0;
+  right:0;
+}

@@ -8,6 +8,8 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
+const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const DatabaseSupport = require('../support/database.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
@@ -92,6 +94,34 @@ describe('Review Charge Version model', () => {
 
         expect(result.reviewLicence).to.be.an.instanceOf(ReviewLicenceModel)
         expect(result.reviewLicence).to.equal(testReviewLicence)
+      })
+    })
+
+    describe('when linking to review licence', () => {
+      let testChargeVersion
+
+      beforeEach(async () => {
+        testChargeVersion = await ChargeVersionHelper.add()
+        testRecord = await ReviewChargeVersionHelper.add({ chargeVersionId: testChargeVersion.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeVersionModel.query()
+          .innerJoinRelated('chargeVersion')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the charge version', async () => {
+        const result = await ReviewChargeVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('chargeVersion')
+
+        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).to.equal(testChargeVersion)
       })
     })
   })

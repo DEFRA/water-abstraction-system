@@ -5,7 +5,7 @@
  * @module ViewBillService
  */
 
-const FetchBillingAccountService = require('./fetch-billing-account.service.js')
+const FetchBillingAccountService = require('../fetch-billing-account.service.js')
 const FetchBillLicence = require('../bill-licences/fetch-bill-licence.service.js')
 const FetchBillService = require('./fetch-bill-service.js')
 const ViewBillPresenter = require('../../presenters/bills/view-bill.presenter.js')
