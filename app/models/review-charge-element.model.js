@@ -35,6 +35,14 @@ class ReviewChargeElementModel extends BaseModel {
           },
           to: 'reviewReturns.id'
         }
+      },
+      chargeElement: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'charge-element.model',
+        join: {
+          from: 'reviewChargeElements.chargeElementId',
+          to: 'chargeElements.id'
+        }
       }
     }
   }
