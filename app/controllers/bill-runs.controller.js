@@ -75,7 +75,7 @@ async function reviewLicence (request, h) {
   const pageData = await ReviewLicenceService.go(billRunId, licenceId)
 
   return h.view('bill-runs/review-licence.njk', {
-    pageTitle: `Licence ${pageData.licenceRef}`,
+    pageTitle: `Licence ${pageData.licence.licenceRef}`,
     activeNavBar: 'bill-runs',
     ...pageData
   })
