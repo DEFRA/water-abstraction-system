@@ -44,22 +44,10 @@ describe('Submit Setup service', () => {
         }
       })
 
-      it('fetches the current setup session record', async () => {
+      it('returns redirect route for Returns required journey', async () => {
         const result = await SubmitSetupService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
-      })
-
-      it('returns page data for the view', async () => {
-        const result = await SubmitSetupService.go(session.id, payload)
-
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          licenceRef: '01/ABC',
-          pageTitle: 'How do you want to set up the return requirement?',
-          redirect: 'check-your-answers'
-        }, { skip: ['id'] })
+        expect(result).to.equal({ redirect: 'check-your-answers' })
       })
     })
 
@@ -81,8 +69,7 @@ describe('Submit Setup service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             licenceRef: '01/ABC',
-            pageTitle: 'How do you want to set up the return requirement?',
-            redirect: undefined
+            pageTitle: 'How do you want to set up the return requirement?'
           }, { skip: ['id', 'error'] })
         })
 

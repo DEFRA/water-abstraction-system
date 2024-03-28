@@ -13,7 +13,7 @@ const ReasonValidator = require('../../../app/validators/return-requirements/rea
 describe('Reason validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = ReasonValidator.go({ reason: 'major_change' })
+      const result = ReasonValidator.go({ reason: 'new-licence' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()

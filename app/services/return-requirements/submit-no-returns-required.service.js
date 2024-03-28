@@ -25,8 +25,15 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
-
   const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {
+      journey: session.data.journey
+    }
+  }
 
   const formattedData = NoReturnsRequiredPresenter.go(session, payload)
 
@@ -36,6 +43,14 @@ async function go (sessionId, payload) {
     pageTitle: 'Why are no returns required?',
     ...formattedData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.reason = payload.reason
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {

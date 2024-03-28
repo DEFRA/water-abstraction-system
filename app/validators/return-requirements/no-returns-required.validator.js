@@ -8,9 +8,9 @@
 const Joi = require('joi')
 
 const VALID_VALUES = [
-  'abstraction_below_100_cubic_metres_per_day',
-  'returns_exception',
-  'transfer_licence'
+  'abstraction-below-100-cubic-metres-per-day',
+  'returns-exception',
+  'transfer-licence'
 ]
 
 /**
@@ -23,7 +23,7 @@ const VALID_VALUES = [
  */
 function go (data) {
   const schema = Joi.object({
-    'no-returns-required': Joi.string()
+    reason: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({
