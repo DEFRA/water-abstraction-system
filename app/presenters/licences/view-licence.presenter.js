@@ -72,39 +72,6 @@ function go (licence, licenceAbstractionConditions) {
   }
 }
 
-function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
-  const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
-  const purposeAbstractionQuantities = {
-    ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY
-  }
-
-  if (!abstractionAmountSet &&
-    (purposeAbstractionQuantities.DAILY_QTY !== 'null' ||
-    purposeAbstractionQuantities.ANNUAL_QTY !== 'null' ||
-    purposeAbstractionQuantities.HOURLY_QTY !== 'null' ||
-    purposeAbstractionQuantities.INST_QTY !== 'null')) {
-    return [purposeAbstractionQuantities]
-  }
-
-  if (abstractionAmountSet &&
-    (abstractionAmountSet.ANNUAL_QTY !== purposeAbstractionQuantities.ANNUAL_QTY ||
-    abstractionAmountSet.DAILY_QTY !== purposeAbstractionQuantities.DAILY_QTY ||
-    abstractionAmountSet.HOURLY_QTY !== purposeAbstractionQuantities.HOURLY_QTY ||
-    abstractionAmountSet.INST_QTY !== purposeAbstractionQuantities.INST_QTY)) {
-    return abstractionAmountSet.push(purposeAbstractionQuantities)
-  }
-
-  return abstractionAmountSet
-}
-
-function _endDate (expiredDate) {
-  if (!expiredDate || expiredDate < Date.now()) {
-    return null
-  }
-
-  return formatLongDate(expiredDate)
-}
-
 function _abstractionAmountDetails (purpose) {
   const abstractionAmountDetails = []
   const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
@@ -135,6 +102,40 @@ function _abstractionConditionDetails (licenceAbstractionConditions) {
     conditions,
     numberOfConditions
   }
+}
+
+function _endDate (expiredDate) {
+  if (!expiredDate || expiredDate < Date.now()) {
+    return null
+  }
+
+  return formatLongDate(expiredDate)
+}
+
+function _generateAbstractionContent (pointDetail) {
+  let abstractionPoint = null
+
+  if (pointDetail.NGR4_SHEET && pointDetail.NGR4_NORTH !== 'null') {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+    const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
+    const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
+
+    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
+  } else if (pointDetail.NGR2_SHEET && pointDetail.NGR2_NORTH !== 'null') {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+
+    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
+  } else {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+
+    abstractionPoint = `At National Grid Reference ${point1}`
+  }
+
+  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
+
+  return abstractionPoint
 }
 
 function _generateAbstractionPeriods (licenceVersions) {
@@ -269,30 +270,29 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
   }
 }
 
-function _generateAbstractionContent (pointDetail) {
-  let abstractionPoint = null
-
-  if (pointDetail.NGR4_SHEET && pointDetail.NGR4_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
-    const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
-    const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
-
-    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
-  } else if (pointDetail.NGR2_SHEET && pointDetail.NGR2_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
-
-    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
-  } else {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-
-    abstractionPoint = `At National Grid Reference ${point1}`
+function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
+  const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
+  const purposeAbstractionQuantities = {
+    ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY
   }
 
-  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
+  if (!abstractionAmountSet &&
+    (purposeAbstractionQuantities.DAILY_QTY !== 'null' ||
+    purposeAbstractionQuantities.ANNUAL_QTY !== 'null' ||
+    purposeAbstractionQuantities.HOURLY_QTY !== 'null' ||
+    purposeAbstractionQuantities.INST_QTY !== 'null')) {
+    return [purposeAbstractionQuantities]
+  }
 
-  return abstractionPoint
+  if (abstractionAmountSet &&
+    (abstractionAmountSet.ANNUAL_QTY !== purposeAbstractionQuantities.ANNUAL_QTY ||
+    abstractionAmountSet.DAILY_QTY !== purposeAbstractionQuantities.DAILY_QTY ||
+    abstractionAmountSet.HOURLY_QTY !== purposeAbstractionQuantities.HOURLY_QTY ||
+    abstractionAmountSet.INST_QTY !== purposeAbstractionQuantities.INST_QTY)) {
+    return abstractionAmountSet.push(purposeAbstractionQuantities)
+  }
+
+  return abstractionAmountSet
 }
 
 module.exports = {
