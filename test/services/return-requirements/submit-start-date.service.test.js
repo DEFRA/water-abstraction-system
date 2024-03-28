@@ -37,14 +37,14 @@ describe('Submit Start Date service', () => {
   })
 
   describe('when called', () => {
-    describe('with a valid payload for currentStartDate', () => {
+    describe('with a valid payload for licenceStartDate', () => {
       beforeEach(() => {
         payload = {
           'start-date-options': 'licenceStartDate'
         }
       })
 
-      it('saves the submitted value', async () => {
+      it('saves the submitted option', async () => {
         await SubmitStartDateService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
@@ -69,7 +69,7 @@ describe('Submit Start Date service', () => {
         }
       })
 
-      it('saves the submitted value', async () => {
+      it('saves the submitted values', async () => {
         await SubmitStartDateService.go(session.id, payload)
 
         const refreshedSession = await session.$query()

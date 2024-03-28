@@ -73,7 +73,7 @@ describe('Submit Purpose service', () => {
         expect(refreshedSession.data.purpose).to.equal('Potable Water Supply - Direct')
       })
 
-      it('returns page data for the journey', async () => {
+      it('returns page data for the view', async () => {
         const result = await SubmitPurposeService.go(session.id, payload)
 
         expect(result).to.equal({})
