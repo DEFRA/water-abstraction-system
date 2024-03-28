@@ -8,20 +8,20 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const AddressModel = require('../../../app/models/address.model.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../../app/models/billing-account-address.model.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const CompanyModel = require('../../../app/models/company.model.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const ContactModel = require('../../../app/models/contact.model.js')
-const DatabaseSupport = require('../../support/database.js')
+const AddressHelper = require('../support/helpers/address.helper.js')
+const AddressModel = require('../../app/models/address.model.js')
+const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
+const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
+const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
+const BillingAccountModel = require('../../app/models/billing-account.model.js')
+const CompanyHelper = require('../support/helpers/company.helper.js')
+const CompanyModel = require('../../app/models/company.model.js')
+const ContactHelper = require('../support/helpers/contact.helper.js')
+const ContactModel = require('../../app/models/contact.model.js')
+const DatabaseSupport = require('../support/database.js')
 
 // Thing under test
-const FetchBillingAccountService = require('../../../app/services/bills/fetch-billing-account.service.js')
+const FetchBillingAccountService = require('../../app/services/fetch-billing-account.service.js')
 
 describe('Fetch Billing Account service', () => {
   let linkedCompany
