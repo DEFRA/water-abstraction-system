@@ -16,6 +16,7 @@ const StartBillRunProcessService = require('../services/bill-runs/start-bill-run
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
+const ViewMatchDetailsService = require('../services/bill-runs/two-part-tariff/view-match-details.service.js')
 
 async function cancel (request, h) {
   const { id } = request.params
@@ -81,6 +82,14 @@ async function reviewLicence (request, h) {
   })
 }
 
+async function viewMatchDetails (request, h) {
+  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
+
+  const pageData = await ViewMatchDetailsService.go(billRunId, licenceId, reviewChargeElementId)
+
+  return h.response(pageData).code(200)
+}
+
 async function submitCancel (request, h) {
   const { id } = request.params
 
@@ -129,5 +138,6 @@ module.exports = {
   send,
   submitCancel,
   submitSend,
-  view
+  view,
+  viewMatchDetails
 }
