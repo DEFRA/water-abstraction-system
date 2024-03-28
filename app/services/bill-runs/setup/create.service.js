@@ -50,15 +50,7 @@ async function _triggerBillRun (regionId, batchType, user, year, existingBillRun
     return null
   }
 
-  // TODO: We do want to send the year through. However, the billing engine was written initially for supplementary
-  // then extended for annual and soon to be amended again for two-part tariff. 2PT has a short term requirement to
-  // handle a year being provided by the user but once a back log of bill runs has been completed this will no longer
-  // be the case (it will work like the other and just use the current year). Providing a year breaks supplementary
-  // and isn't the intended expectation for annual. So, until we update our billing engine (soon to be because of
-  // WATER-4403) we trigger the start of the process in the same way the legacy create bill run process would.
-  const yearForBillRun = batchType === 'two_part_tariff' ? year : null
-
-  return StartBillRunProcessService.go(regionId, batchType, userEmail, yearForBillRun)
+  return StartBillRunProcessService.go(regionId, batchType, userEmail, year)
 }
 
 async function _triggerLegacyBillRun (regionId, batchType, user, year, summer, existingBillRun = null) {

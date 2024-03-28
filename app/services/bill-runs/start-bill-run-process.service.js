@@ -23,7 +23,7 @@ const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bi
  * @returns {Promise<Object>} Object that will be the JSON response returned to the client
  */
 async function go (regionId, batchType, userEmail, financialYearEnding) {
-  const billingPeriods = DetermineBillingPeriodsService.go(financialYearEnding)
+  const billingPeriods = DetermineBillingPeriodsService.go(batchType, financialYearEnding)
   const financialYearEndings = _financialYearEndings(billingPeriods)
 
   const billRun = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, userEmail)
