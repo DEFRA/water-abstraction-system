@@ -302,6 +302,7 @@ describe('Bill Runs controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('1/11/10/*S/0084')
           expect(response.payload).to.contain('two-part tariff')
+          expect(response.payload).to.contain('Test Road. Points 1 and 2.')
         })
       })
     })
@@ -385,32 +386,29 @@ function _options (method, path) {
 
 function _licenceReviewData () {
   return {
-    licenceRef: '1/11/10/*S/0084',
     billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
-    status: 'review',
     region: 'Southern (Test replica)',
+    licence: {
+      licenceId: '7c8a248c-b71e-463c-bea8-bc5e0a5d95e2',
+      licenceRef: '1/11/10/*S/0084',
+      status: 'review',
+      licenceHolder: 'Licence Holder Ltd'
+    },
+    chargePeriodDates: ['1 April 2022 to 31 March 2023'],
     matchedReturns: [
       {
+        returnId: '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2',
         reference: '11142960',
         dates: '1 November 2021 to 31 October 2022',
         status: 'completed',
         description: 'Test Road. Points 1 and 2.',
         purpose: 'Spray Irrigation - Anti Frost',
         total: '0 ML / 0 ML',
-        allocated: 'Fully allocated'
-      },
-      {
-        reference: '11142958',
-        dates: '1 November 2022 to 31 October 2023',
-        status: 'void',
-        description: 'Test Road. Points 1, 3 and 5.',
-        purpose: 'Spray Irrigation - Direct',
-        total: '/',
-        allocated: 'Not processed'
+        issues: ['Returns received late']
       }
     ],
-    chargePeriodDates: ['1 April 2022 to 31 March 2023'],
-    unmatchedReturns: []
+    unmatchedReturns: [],
+    chargeData: []
   }
 }
 

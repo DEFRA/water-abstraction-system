@@ -1,16 +1,29 @@
 'use strict'
 
 /**
- * Determines the issues on a licences for a two-part tariff bill run
+ * Determines the issues on a licence for a two-part tariff bill run
  * @module DetermineLicenceIssuesService
  */
 
 const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Determines the issues on a licence charge elements and return logs and sets the status based on them
+ * Determines the issues on a licence for a two-part tariff bill run
  *
- * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run
+ * The issues we determine are not related directly to the licence. They are with either the returns or the charge
+ * elements linked to the licence.
+ *
+ * But the review screens in the UI work from the context of a licence and the main page needs to show whether a licence
+ * has any issues and whether it is in 'review'. Only when a user clicks through to look at a the results for a licence
+ * will they see which of its returns and charge elements have the issues.
+ *
+ * If only one issue is found we still assign it to the licence (an the charge element or return in question) for later
+ * persisting in a `ReviewLicence` record. We also check the issue against a list of those that will flag the licence
+ * for review. Should a licence have multiple issues we flag it for review regardless.
+ *
+ * > No result is returned. The issues are directly assigned to the licence and its relevant properties
+ *
+ * @param {module:LicenceModel} licence - The two-part tariff licence to determine issues for
  */
 function go (licence) {
   const { returnLogs: licenceReturnLogs, chargeVersions } = licence
@@ -19,7 +32,7 @@ function go (licence) {
   const allElementIssues = _determineChargeElementsIssues(chargeVersions, licenceReturnLogs)
 
   licence.status = _determineLicenceStatus(allElementIssues, allReturnIssues)
-  licence.issues = [...allElementIssues, ...allReturnIssues]
+  licence.issues = _licenceIssues(allElementIssues, allReturnIssues)
 }
 
 function _determineChargeElementsIssues (chargeVersions, licenceReturnLogs) {
@@ -153,6 +166,13 @@ function _getReviewStatuses () {
   })
 
   return reviewStatuses
+}
+
+function _licenceIssues (allElementIssues, allReturnIssues) {
+  const allIssues = [...allElementIssues, ...allReturnIssues]
+  const uniqueIssues = new Set(allIssues)
+
+  return [...uniqueIssues].sort()
 }
 
 function _returnLogIssues (returnLog, licence) {
