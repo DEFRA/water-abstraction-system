@@ -5,7 +5,7 @@
  * @module FetchBillingAccountService
  */
 
-const BillingAccount = require('../../models/billing-account.model.js')
+const BillingAccount = require('../models/billing-account.model.js')
 
 /**
  * Fetch the matching Billing account plus the current billing account address record linked to it
