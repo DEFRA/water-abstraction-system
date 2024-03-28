@@ -56,7 +56,6 @@ function go (licence, licenceAbstractionConditions) {
     abstractionPointsCaption: abstractionDetails.pointsCaption,
     abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionQuantities: abstractionDetails.quantities,
-    abstractionQuantityCaption: abstractionDetails.quantityCaption,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
@@ -73,6 +72,31 @@ function go (licence, licenceAbstractionConditions) {
   }
 }
 
+function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
+  const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
+  const purposeAbstractionQuantities = {
+    ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY
+  }
+
+  if (!abstractionAmountSet &&
+    (purposeAbstractionQuantities.DAILY_QTY !== 'null' ||
+    purposeAbstractionQuantities.ANNUAL_QTY !== 'null' ||
+    purposeAbstractionQuantities.HOURLY_QTY !== 'null' ||
+    purposeAbstractionQuantities.INST_QTY !== 'null')) {
+    return [purposeAbstractionQuantities]
+  }
+
+  if (abstractionAmountSet &&
+    (abstractionAmountSet.ANNUAL_QTY !== purposeAbstractionQuantities.ANNUAL_QTY ||
+    abstractionAmountSet.DAILY_QTY !== purposeAbstractionQuantities.DAILY_QTY ||
+    abstractionAmountSet.HOURLY_QTY !== purposeAbstractionQuantities.HOURLY_QTY ||
+    abstractionAmountSet.INST_QTY !== purposeAbstractionQuantities.INST_QTY)) {
+    return abstractionAmountSet.push(purposeAbstractionQuantities)
+  }
+
+  return abstractionAmountSet
+}
+
 function _endDate (expiredDate) {
   if (!expiredDate || expiredDate < Date.now()) {
     return null
@@ -86,19 +110,19 @@ function _abstractionAmountDetails (purpose) {
   const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
 
   if (ANNUAL_QTY !== 'null') {
-    abstractionAmountDetails.push(`${ANNUAL_QTY} cubic metres per year`)
+    abstractionAmountDetails.push(`${parseFloat(ANNUAL_QTY).toFixed(2)} cubic metres per year`)
   }
 
   if (DAILY_QTY !== 'null') {
-    abstractionAmountDetails.push(`${DAILY_QTY} cubic metres per day`)
+    abstractionAmountDetails.push(`${parseFloat(DAILY_QTY).toFixed(2)} cubic metres per day`)
   }
 
   if (HOURLY_QTY !== 'null') {
-    abstractionAmountDetails.push(`${HOURLY_QTY} cubic metres per hour`)
+    abstractionAmountDetails.push(`${parseFloat(HOURLY_QTY).toFixed(2)} cubic metres per hour`)
   }
 
   if (INST_QTY !== 'null') {
-    abstractionAmountDetails.push(`${INST_QTY} litres per second`)
+    abstractionAmountDetails.push(`${parseFloat(INST_QTY).toFixed(2)} litres per second`)
   }
 
   return abstractionAmountDetails
@@ -215,7 +239,7 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
   }
 
   const abstractionPoints = []
-  const abstractionQuantities = []
+  let abstractionQuantities
 
   permitLicence.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
@@ -224,12 +248,8 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
         abstractionPoints.push(_generateAbstractionContent(pointDetail))
       }
     })
-
-    const abstractionAmounts = _abstractionAmountDetails(purpose)
-    abstractionQuantities.push(...abstractionAmounts)
+    abstractionQuantities = _setAbstractionAmountDetails(abstractionQuantities, purpose)
   })
-
-  const uniqueAbstractionQuantities = [...new Set(abstractionQuantities)]
 
   const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
 
@@ -242,8 +262,9 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
     points: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
     pointsCaption,
     pointLinkText,
-    quantities: uniqueAbstractionQuantities.length === 0 ? null : uniqueAbstractionQuantities,
-    quantityCaption: uniqueAbstractionQuantities.length === 1 ? 'Abstraction amount' : 'Abstraction amounts',
+    quantities: abstractionQuantities && abstractionQuantities.length === 1
+      ? _abstractionAmountDetails(abstractionQuantities[0])
+      : null,
     sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null
   }
 }

@@ -35,7 +35,6 @@ describe('View Licence presenter', () => {
         abstractionPoints: ['At National Grid Reference TL 23198 88603'],
         abstractionPointsCaption: 'Point of abstraction',
         abstractionQuantities: null,
-        abstractionQuantityCaption: 'Abstraction amounts',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
         licenceHolder: 'Unregistered licence',
@@ -576,7 +575,6 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -595,7 +593,6 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -614,7 +611,6 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -631,7 +627,6 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -796,12 +791,11 @@ describe('View Licence presenter', () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
-          '265 cubic metres per year',
-          '24 cubic metres per day',
-          '60 cubic metres per hour',
-          '6 litres per second'
+          '265.00 cubic metres per year',
+          '24.00 cubic metres per day',
+          '60.00 cubic metres per hour',
+          '6.00 litres per second'
         ])
-        expect(result.abstractionQuantityCaption).to.equal('Abstraction amounts')
       })
     })
 
@@ -814,9 +808,8 @@ describe('View Licence presenter', () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
-          '265 cubic metres per year'
+          '265.00 cubic metres per year'
         ])
-        expect(result.abstractionQuantityCaption).to.equal('Abstraction amount')
       })
     })
   })
