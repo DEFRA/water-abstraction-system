@@ -12,11 +12,11 @@ const { expect } = Code
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
+const DatabaseSupport = require('../../../support/database.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const DatabaseSupport = require('../../../support/database.js')
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
@@ -39,7 +39,7 @@ describe('Annual Process Bill Run service', () => {
       batchType: 'annual', fromFinancialYearEnding: financialYearEnd, toFinancialYearEnding: financialYearEnd
     })
 
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
@@ -95,6 +95,16 @@ describe('Annual Process Bill Run service', () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
         expect(legacyRefreshBillRunRequestStub.called).to.be.true()
+      })
+
+      it('it logs the time taken', async () => {
+        await ProcessBillRunService.go(billRun, [billingPeriod])
+
+        const args = notifierStub.omg.firstCall.args
+
+        expect(args[0]).to.equal('Process bill run complete')
+        expect(args[1].timeTakenMs).to.exist()
+        expect(args[1].billRunId).to.equal(billRun.id)
       })
     })
   })

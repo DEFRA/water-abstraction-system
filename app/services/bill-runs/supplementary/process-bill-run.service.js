@@ -8,7 +8,7 @@
 const BillRunModel = require('../../../models/bill-run.model.js')
 const BillRunError = require('../../../errors/bill-run.error.js')
 const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
@@ -16,11 +16,26 @@ const ProcessBillingPeriodService = require('./process-billing-period.service.js
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
 
 /**
- * Process a given bill run for the given billing periods. In this case, "process" means that we create the
- * required bills and transactions for it in both this service and the Charging Module.
+ * Process a given bill run for the given billing periods
  *
- * @param {module:BillRunModel} billRun
- * @param {Object[]} billingPeriods An array of billing periods each containing a `startDate` and `endDate`
+ * In this case, "process" means that we create the required bills and transactions for it in both this service and the
+ * Charging Module.
+ *
+ * For each billing period we need to process we first fetch all the billing accounts applicable to this bill run and their charge information. We pass these to
+ * `ProcessBillingPeriodService` which will generate the bill for each billing account both in WRLS and the
+ * {@link https://github.com/DEFRA/sroc-charging-module-api | Charging Module API (CHA)}.
+ *
+ * Once all bill periods are processed we tell the CHA to generate the bill run (this calculates final
+ * values for each bill and the bill run overall).
+ *
+ * The final step is to ping the legacy
+ * {@link https://github.com/DEFRA/water-abstraction-service | water-abstraction-service} 'refresh' endpoint. That
+ * service will extract the final values from the CHA and update the records on our side finally marking the bill run
+ * as **Ready**.
+ *
+ * @param {module:BillRunModel} billRun - The supplementary bill run being processed
+ * @param {Object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For
+ * annual this will only ever contain a single period
  */
 async function go (billRun, billingPeriods) {
   const { id: billRunId } = billRun
@@ -35,35 +50,24 @@ async function go (billRun, billingPeriods) {
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'supplementary' })
   } catch (error) {
     await HandleErroredBillRunService.go(billRunId, error.code)
-    _logError(billRun, error)
+    global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
   }
 }
 
-async function _processBillingPeriods (billingPeriods, billRun) {
-  const accumulatedLicenceIds = []
-
-  // We use `results` to check if any db changes have been made (which is indicated by a billing period being processed
-  // and returning `true`).
-  const results = []
-
-  for (const billingPeriod of billingPeriods) {
-    const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billRun, billingPeriod)
-    const isPeriodPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
-
-    accumulatedLicenceIds.push(...licenceIdsForPeriod)
-    results.push(isPeriodPopulated)
-  }
-
-  await _finaliseBillRun(billRun, accumulatedLicenceIds, results)
-}
-
-async function _fetchChargeVersions (billRun, billingPeriod) {
+async function _fetchBillingAccounts (billRun, billingPeriod) {
   try {
-    const chargeVersionData = await FetchChargeVersionsService.go(billRun.regionId, billingPeriod)
-
-    // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillRunService if it
+    // We don't just `return FetchBillingDataService.go()` as we need to call HandleErroredBillRunService if it
     // fails
-    return chargeVersionData
+    const billingAccounts = await FetchBillingAccountsService.go(billRun.regionId, billingPeriod)
+
+    const allLicenceIds = []
+    for (const billingAccount of billingAccounts) {
+      for (const chargeVersion of billingAccount.chargeVersions) {
+        allLicenceIds.push(chargeVersion.licence.id)
+      }
+    }
+
+    return { billingAccounts, licenceIds: [...new Set(allLicenceIds)] }
   } catch (error) {
     throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeVersions)
   }
@@ -81,12 +85,12 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
 
   await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
 
-  // We set `isPopulated` to `true` if at least one processing result was truthy
-  const isPopulated = resultsOfProcessing.some(result => result)
+  // We set `populated` to `true` if at least one process billing period result was true
+  const populated = resultsOfProcessing.some(result => result)
 
-  // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
+  // If there are no bills then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
-  if (!isPopulated) {
+  if (!populated) {
     await _updateStatus(billRun.id, 'empty')
     return
   }
@@ -98,8 +102,22 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   await LegacyRefreshBillRunRequest.send(billRun.id)
 }
 
-function _logError (billRun, error) {
-  global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
+async function _processBillingPeriods (billingPeriods, billRun) {
+  const accumulatedLicenceIds = []
+
+  // We use `results` to check if any db changes have been made (which is indicated by a billing period being processed
+  // and returning `true`).
+  const results = []
+
+  for (const billingPeriod of billingPeriods) {
+    const { billingAccounts, licenceIds } = await _fetchBillingAccounts(billRun, billingPeriod)
+    const billRunIsPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+
+    accumulatedLicenceIds.push(...licenceIds)
+    results.push(billRunIsPopulated)
+  }
+
+  await _finaliseBillRun(billRun, accumulatedLicenceIds, results)
 }
 
 async function _updateStatus (billRunId, status) {
