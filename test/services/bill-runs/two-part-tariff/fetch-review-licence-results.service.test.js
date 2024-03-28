@@ -3,16 +3,29 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
+const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
+const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
+const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
+const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
+const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
+
+// Things we need to stub
+const FetchBillingAccountService = require('../../../../app/services/fetch-billing-account.service.js')
 
 // Thing under test
 const FetchReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
@@ -20,10 +33,13 @@ const FetchReviewLicenceResultsService = require('../../../../app/services/bill-
 describe('Fetch Review Licence Results Service', () => {
   let billRun
   let region
-  let licence
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when there is a valid bill run', () => {
@@ -33,11 +49,48 @@ describe('Fetch Review Licence Results Service', () => {
     })
 
     describe('and a valid licence that is included in the bill run', () => {
+      let licence
       let reviewLicence
+      let chargeVersion
+      let reviewChargeVersion
+      let chargeReference
+      let reviewChargeReference
+      let chargeElement
+      let reviewChargeElement
+      let returnLog
+      let reviewReturn
 
       beforeEach(async () => {
         licence = await LicenceHelper.add()
-        reviewLicence = await ReviewLicenceHelper.add({ licenceId: licence.id })
+        reviewLicence = await ReviewLicenceHelper.add({ licenceId: licence.id, billRunId: billRun.id })
+
+        chargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, licenceRef: licence.licenceRef })
+        reviewChargeVersion = await ReviewChargeVersionHelper.add({
+          reviewLicenceId: reviewLicence.id,
+          chargeVersionId: chargeVersion.id
+        })
+
+        chargeReference = await ChargeReferenceHelper.add({ chargeVersionId: chargeVersion.id })
+        reviewChargeReference = await ReviewChargeReferenceHelper.add({
+          reviewChargeVersionId: reviewChargeVersion.id,
+          chargeReferenceId: chargeReference.id
+        })
+
+        chargeElement = await ChargeElementHelper.add({ chargeReferenceId: chargeReference.id })
+        reviewChargeElement = await ReviewChargeElementHelper.add({
+          reviewChargeReferenceId: reviewChargeReference.id,
+          chargeElementId: chargeElement.id
+        })
+
+        returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
+        reviewReturn = await ReviewReturnHelper.add({ returnId: returnLog.id, reviewLicenceId: reviewLicence.id })
+
+        await ReviewChargeElementReturnHelper.add({
+          reviewChargeElementId: reviewChargeElement.id,
+          reviewReturnId: reviewReturn.id
+        })
+
+        Sinon.stub(FetchBillingAccountService, 'go').resolves([])
       })
 
       it('returns details of the bill run', async () => {
@@ -45,32 +98,127 @@ describe('Fetch Review Licence Results Service', () => {
 
         expect(result.billRun).to.equal({
           id: billRun.id,
-          batchType: billRun.batchType,
+          fromFinancialYearEnding: 2023,
+          toFinancialYearEnding: 2023,
           region: {
-            id: billRun.regionId,
             displayName: region.displayName
           }
         })
       })
 
-      it('returns the licence ref', async () => {
+      it('returns the licence review data', async () => {
         const result = await FetchReviewLicenceResultsService.go(billRun.id, licence.id)
 
-        expect(result.licence[0].licenceRef).to.equal(reviewLicence.licenceRef)
+        expect(result.licence).to.equal([{
+          id: reviewLicence.id,
+          billRunId: billRun.id,
+          licenceId: licence.id,
+          licenceRef: reviewLicence.licenceRef,
+          licenceHolder: reviewLicence.licenceHolder,
+          issues: reviewLicence.issues,
+          status: reviewLicence.status,
+          createdAt: reviewLicence.createdAt,
+          updatedAt: reviewLicence.updatedAt,
+          reviewReturns: [{
+            id: reviewReturn.id,
+            reviewLicenceId: reviewReturn.reviewLicenceId,
+            returnId: reviewReturn.returnId,
+            returnReference: reviewReturn.returnReference,
+            quantity: reviewReturn.quantity,
+            allocated: reviewReturn.allocated,
+            underQuery: reviewReturn.underQuery,
+            returnStatus: reviewReturn.returnStatus,
+            nilReturn: reviewReturn.nilReturn,
+            abstractionOutsidePeriod: reviewReturn.abstractionOutsidePeriod,
+            receivedDate: reviewReturn.receivedDate,
+            dueDate: reviewReturn.dueDate,
+            purposes: reviewReturn.purposes,
+            description: reviewReturn.description,
+            startDate: reviewReturn.startDate,
+            endDate: reviewReturn.endDate,
+            issues: reviewReturn.issues,
+            createdAt: reviewReturn.createdAt,
+            updatedAt: reviewReturn.updatedAt,
+            reviewChargeElements: [{
+              id: reviewChargeElement.id,
+              reviewChargeReferenceId: reviewChargeElement.reviewChargeReferenceId,
+              chargeElementId: reviewChargeElement.chargeElementId,
+              allocated: reviewChargeElement.allocated,
+              chargeDatesOverlap: reviewChargeElement.chargeDatesOverlap,
+              issues: reviewChargeElement.issues,
+              status: reviewChargeElement.status,
+              createdAt: reviewChargeElement.createdAt,
+              updatedAt: reviewChargeElement.updatedAt
+            }]
+          }],
+          reviewChargeVersions: [{
+            id: reviewChargeVersion.id,
+            reviewLicenceId: reviewLicence.id,
+            chargeVersionId: chargeVersion.id,
+            changeReason: reviewChargeVersion.changeReason,
+            chargePeriodStartDate: reviewChargeVersion.chargePeriodStartDate,
+            chargePeriodEndDate: reviewChargeVersion.chargePeriodEndDate,
+            createdAt: reviewChargeVersion.createdAt,
+            updatedAt: reviewChargeVersion.updatedAt,
+            reviewChargeReferences: [{
+              id: reviewChargeReference.id,
+              reviewChargeVersionId: reviewChargeVersion.id,
+              chargeReferenceId: reviewChargeReference.chargeReferenceId,
+              aggregate: reviewChargeReference.aggregate,
+              createdAt: reviewChargeReference.createdAt,
+              updatedAt: reviewChargeReference.updatedAt,
+              chargeReference: {
+                chargeCategoryId: chargeReference.chargeCategoryId,
+                chargeCategory: null
+              },
+              reviewChargeElements: [{
+                id: reviewChargeElement.id,
+                reviewChargeReferenceId: reviewChargeElement.reviewChargeReferenceId,
+                chargeElementId: reviewChargeElement.chargeElementId,
+                allocated: reviewChargeElement.allocated,
+                chargeDatesOverlap: reviewChargeElement.chargeDatesOverlap,
+                issues: reviewChargeElement.issues,
+                status: reviewChargeElement.status,
+                createdAt: reviewChargeElement.createdAt,
+                updatedAt: reviewChargeElement.updatedAt,
+                chargeElement: {
+                  description: chargeElement.description,
+                  abstractionPeriodStartDay: chargeElement.abstractionPeriodStartDay,
+                  abstractionPeriodStartMonth: chargeElement.abstractionPeriodStartMonth,
+                  abstractionPeriodEndDay: chargeElement.abstractionPeriodEndDay,
+                  abstractionPeriodEndMonth: chargeElement.abstractionPeriodEndMonth,
+                  authorisedAnnualQuantity: chargeElement.authorisedAnnualQuantity
+                },
+                reviewReturns: [{
+                  id: reviewReturn.id,
+                  reviewLicenceId: reviewReturn.reviewLicenceId,
+                  returnId: reviewReturn.returnId,
+                  returnReference: reviewReturn.returnReference,
+                  quantity: reviewReturn.quantity,
+                  allocated: reviewReturn.allocated,
+                  underQuery: reviewReturn.underQuery,
+                  returnStatus: reviewReturn.returnStatus,
+                  nilReturn: reviewReturn.nilReturn,
+                  abstractionOutsidePeriod: reviewReturn.abstractionOutsidePeriod,
+                  receivedDate: reviewReturn.receivedDate,
+                  dueDate: reviewReturn.dueDate,
+                  purposes: reviewReturn.purposes,
+                  description: reviewReturn.description,
+                  startDate: reviewReturn.startDate,
+                  endDate: reviewReturn.endDate,
+                  issues: reviewReturn.issues,
+                  createdAt: reviewReturn.createdAt,
+                  updatedAt: reviewReturn.updatedAt
+                }]
+              }]
+            }],
+            chargeVersion: {
+              billingAccountId: chargeVersion.billingAccountId
+            },
+            billingAccountDetails: []
+          }]
+        }])
       })
-    })
-  })
-
-  describe('when there is an invalid bill run id', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add()
-    })
-
-    it('returns no results', async () => {
-      const result = await FetchReviewLicenceResultsService.go('56db85ed-767f-4c83-8174-5ad9c80fd00d', licence.id)
-
-      expect(result.billRun).to.be.undefined()
-      expect(result.licence).to.have.length(0)
     })
   })
 })

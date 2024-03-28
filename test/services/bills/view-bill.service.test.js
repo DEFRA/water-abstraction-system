@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
-const FetchBillingAccountService = require('../../../app/services/bills/fetch-billing-account.service.js')
+const FetchBillingAccountService = require('../../../app/services/fetch-billing-account.service.js')
 const FetchBillService = require('../../../app/services/bills/fetch-bill-service.js')
 const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
 const ViewLicenceSummariesPresenter = require('../../../app/presenters/bills/view-licence-summaries.presenter.js')

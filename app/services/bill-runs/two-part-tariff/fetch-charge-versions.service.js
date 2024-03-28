@@ -9,34 +9,33 @@ const { ref } = require('objection')
 
 const ChargeReferenceModel = require('../../../models/charge-reference.model.js')
 const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const RegionModel = require('../../../models/region.model.js')
 const Workflow = require('../../../models/workflow.model.js')
 
 /**
- * Fetches SROC charge versions based on region and billing period
+ * Fetches two-part tariff charge versions for the region and billing period being billed
  *
  * To be selected for billing charge versions must
  *
  * - have the scheme 'sroc'
  * - be linked to a licence with is linked to the selected region
  * - have a start date before the end of the billing period
+ * - have an end date on or after the start of the billing period
  * - not be linked to a licence in the workflow
  * - not be linked to a licence that 'ended' before the billing period
  * - have a status of current
  * - be linked to a charge reference that is marked as two-part-tariff
  *
- * @param {String} regionId UUID of the region being billed that the charge version must have
- * @param {Object} billingPeriod Object with a `startDate` and `endDate` property representing the period being billed
+ * @param {String} regionId - UUID of the region being billed
+ * @param {Object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  *
- * @returns {Promise<Object>} Contains an array of SROC charge versions with linked licences, charge references, charge elements and related purpose
+ * @returns {Promise<Object>} Contains an array of two-part tariff charge versions with linked licences, charge
+ * references, charge elements and related purpose
  */
 async function go (regionId, billingPeriod) {
-  const regionCode = await _regionCode(regionId)
-
-  return _fetch(regionCode, billingPeriod)
+  return _fetch(regionId, billingPeriod)
 }
 
-async function _fetch (regionCode, billingPeriod) {
+async function _fetch (regionId, billingPeriod) {
   const chargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.id',
@@ -45,10 +44,15 @@ async function _fetch (regionCode, billingPeriod) {
       'chargeVersions.status'
     ])
     .innerJoinRelated('licence')
+    .where('licence.regionId', regionId)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
-    .where('chargeVersions.regionCode', regionCode)
+    .where((builder) => {
+      builder
+        .whereNull('chargeVersions.endDate')
+        .orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
+    })
     .where((builder) => {
       builder
         .whereNull('licence.expiredDate')
@@ -145,12 +149,6 @@ async function _fetch (regionCode, billingPeriod) {
     })
 
   return chargeVersions
-}
-
-async function _regionCode (regionId) {
-  const { naldRegionId } = await RegionModel.query().findById(regionId).select('naldRegionId')
-
-  return naldRegionId
 }
 
 module.exports = {
