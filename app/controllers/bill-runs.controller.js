@@ -87,7 +87,11 @@ async function viewMatchDetails (request, h) {
 
   const pageData = await ViewMatchDetailsService.go(billRunId, licenceId, reviewChargeElementId)
 
-  return h.response(pageData).code(200)
+  return h.view('bill-runs/view-match-details.njk', {
+    pageTitle: 'View match details',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
 }
 
 async function submitCancel (request, h) {
