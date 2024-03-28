@@ -101,14 +101,14 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
 
   const { reviewChargeReferences } = reviewChargeVersion
 
-  for (const reviewChargeReference of reviewChargeReferences) {
+  reviewChargeReferences.forEach((reviewChargeReference) => {
     chargeReference.push({
       chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
       chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference),
       chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
     })
-  }
+  })
 
   return chargeReference
 }
@@ -163,7 +163,7 @@ function _financialYear (financialYearEnding) {
 function _matchedReturns (returnLogs) {
   const matchedReturns = []
 
-  for (const returnLog of returnLogs) {
+  returnLogs.forEach((returnLog) => {
     if (returnLog.reviewChargeElements.length > 0) {
       matchedReturns.push(
         {
@@ -178,7 +178,7 @@ function _matchedReturns (returnLogs) {
         }
       )
     }
-  }
+  })
 
   return matchedReturns
 }
@@ -186,7 +186,7 @@ function _matchedReturns (returnLogs) {
 function _prepareChargeData (licence, billRun) {
   const chargeData = []
 
-  for (const reviewChargeVersion of licence[0].reviewChargeVersions) {
+  licence[0].reviewChargeVersions.forEach((reviewChargeVersion) => {
     const chargePeriod = {
       startDate: reviewChargeVersion.chargePeriodStartDate,
       endDate: reviewChargeVersion.chargePeriodEndDate
@@ -194,13 +194,16 @@ function _prepareChargeData (licence, billRun) {
 
     chargeData.push({
       financialYear: _financialYear(billRun.toFinancialYearEnding),
-      chargePeriodDate: _prepareDate(reviewChargeVersion.chargePeriodStartDate, reviewChargeVersion.chargePeriodEndDate),
+      chargePeriodDate: _prepareDate(
+        reviewChargeVersion.chargePeriodStartDate,
+        reviewChargeVersion.chargePeriodEndDate
+      ),
       licenceHolderName: licence[0].licenceHolder,
       chargeElementCount: _chargeElementCount(reviewChargeVersion),
       billingAccountDetails: _billingAccountDetails(reviewChargeVersion.billingAccountDetails),
       chargeReferences: _chargeReferenceDetails(reviewChargeVersion, chargePeriod)
     })
-  }
+  })
 
   return chargeData
 }
@@ -255,10 +258,10 @@ function _totalBillableReturns (reviewChargeReference) {
   let totalBillableReturns = 0
   let totalQuantity = 0
 
-  for (const reviewChargeElement of reviewChargeReference.reviewChargeElements) {
+  reviewChargeReference.reviewChargeElements.forEach((reviewChargeElement) => {
     totalBillableReturns += reviewChargeElement.allocated
     totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
-  }
+  })
 
   return `${totalBillableReturns} ML / ${totalQuantity} ML`
 }
@@ -266,7 +269,7 @@ function _totalBillableReturns (reviewChargeReference) {
 function _unmatchedReturns (returnLogs) {
   const unmatchedReturns = []
 
-  for (const returnLog of returnLogs) {
+  returnLogs.forEach((returnLog) => {
     // If the reviewChargeElement length is less than 1 it means the return did not match to a charge element and
     // therefore belongs in the unmatchedReturns section
     if (returnLog.reviewChargeElements.length < 1) {
@@ -283,7 +286,7 @@ function _unmatchedReturns (returnLogs) {
         }
       )
     }
-  }
+  })
 
   return unmatchedReturns
 }

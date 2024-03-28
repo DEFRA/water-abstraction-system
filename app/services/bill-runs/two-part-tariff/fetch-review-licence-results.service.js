@@ -27,7 +27,9 @@ async function go (billRunId, licenceId) {
 
 async function _fetchBillingAccountDetails (reviewChargeVersions) {
   for (const reviewChargeVersion of reviewChargeVersions) {
-    reviewChargeVersion.billingAccountDetails = await FetchBillingAccountService.go(reviewChargeVersion.chargeVersion.billingAccountId)
+    reviewChargeVersion.billingAccountDetails = await FetchBillingAccountService.go(
+      reviewChargeVersion.chargeVersion.billingAccountId
+    )
   }
 }
 
