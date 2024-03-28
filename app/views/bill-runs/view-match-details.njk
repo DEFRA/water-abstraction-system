@@ -1,0 +1,10 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{ govukBackLink({
+      text: 'Go back to bill runs',
+      href: '/billing/batch/list'
+  }) }}
+{% endblock %}

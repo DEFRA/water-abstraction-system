@@ -346,7 +346,7 @@
 
                   {# Loop through charge elements #}
                   {% for chargeElement in chargeReference.chargeElements %}
-                  {% set chargeElementIndex = loop.index0 %}
+                    {% set chargeElementIndex = loop.index0 %}
                     {% set elementRows = [] %}
 
                     {# Status badge #}
@@ -405,7 +405,7 @@
                           actions: {
                             items: [
                             {
-                              href: '#',
+                              href: licence.licenceId + '/view-match-details/' + chargeElement.reviewChargeElementId,
                               text: 'View match details',
                               visuallyHiddenText: ''
                             }

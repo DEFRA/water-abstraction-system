@@ -82,6 +82,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
     const returnVolume = _prepareReturnVolume(reviewChargeElement)
 
     return {
+      reviewChargeElementId: reviewChargeElement.id,
       elementNumber,
       elementStatus: reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
@@ -123,6 +124,23 @@ function _chargeElementCount (reviewChargeVersion) {
   return chargeElementCount
 }
 
+function _contactName (billingAccount) {
+  const contact = billingAccount.billingAccountAddresses[0].contact
+
+  if (contact) {
+    return contact.$name()
+  }
+
+  return null
+}
+
+function _financialYear (financialYearEnding) {
+  const startYear = financialYearEnding - 1
+  const endYear = financialYearEnding
+
+  return `${startYear} to ${endYear}`
+}
+
 function _returnStatus (returnLog) {
   if (returnLog.returnStatus === 'due') {
     return 'overdue'
@@ -141,23 +159,6 @@ function _returnTotal (returnLog) {
   } else {
     return `${allocated} ML / ${quantity} ML`
   }
-}
-
-function _contactName (billingAccount) {
-  const contact = billingAccount.billingAccountAddresses[0].contact
-
-  if (contact) {
-    return contact.$name()
-  }
-
-  return null
-}
-
-function _financialYear (financialYearEnding) {
-  const startYear = financialYearEnding - 1
-  const endYear = financialYearEnding
-
-  return `${startYear} to ${endYear}`
 }
 
 function _matchedReturns (returnLogs) {
