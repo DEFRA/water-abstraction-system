@@ -8,9 +8,10 @@
 const BillRunModel = require('../../../models/bill-run.model.js')
 const BillRunError = require('../../../errors/bill-run.error.js')
 const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
+// const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
+const GenerateBillsService = require('./generate-bills.service.js')
 const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
 const ProcessBillingPeriodService = require('./process-billing-period.service.js')
 const UnflagUnbilledLicencesService = require('./unflag-unbilled-licences.service.js')
@@ -54,24 +55,24 @@ async function go (billRun, billingPeriods) {
   }
 }
 
-async function _fetchBillingAccounts (billRun, billingPeriod) {
-  try {
-    // We don't just `return FetchBillingDataService.go()` as we need to call HandleErroredBillRunService if it
-    // fails
-    const billingAccounts = await FetchBillingAccountsService.go(billRun.regionId, billingPeriod)
+// async function _fetchBillingAccounts (billRun, billingPeriod) {
+//   try {
+//     // We don't just `return FetchBillingDataService.go()` as we need to call HandleErroredBillRunService if it
+//     // fails
+//     const billingAccounts = await FetchBillingAccountsService.go(billRun.regionId, billingPeriod)
 
-    const allLicenceIds = []
-    for (const billingAccount of billingAccounts) {
-      for (const chargeVersion of billingAccount.chargeVersions) {
-        allLicenceIds.push(chargeVersion.licence.id)
-      }
-    }
+//     const allLicenceIds = []
+//     for (const billingAccount of billingAccounts) {
+//       for (const chargeVersion of billingAccount.chargeVersions) {
+//         allLicenceIds.push(chargeVersion.licence.id)
+//       }
+//     }
 
-    return { billingAccounts, licenceIds: [...new Set(allLicenceIds)] }
-  } catch (error) {
-    throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeVersions)
-  }
-}
+//     return { billingAccounts, licenceIds: [...new Set(allLicenceIds)] }
+//   } catch (error) {
+//     throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeVersions)
+//   }
+// }
 
 /**
  * Finalises the bill run by unflagging all unbilled licences, requesting the Charging Module run its generate
@@ -102,6 +103,18 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   await LegacyRefreshBillRunRequest.send(billRun.id)
 }
 
+async function _generateBills (billRun, billingPeriod) {
+  try {
+    // We don't just `return GenerateBillsService.go()` as we need to call HandleErroredBillRunService if it
+    // fails
+    const { bills, licenceIds } = await GenerateBillsService.go(billRun, billingPeriod)
+
+    return { bills, licenceIds }
+  } catch (error) {
+    throw new BillRunError(error, BillRunModel.errorCodes.failedToProcessChargeVersions)
+  }
+}
+
 async function _processBillingPeriods (billingPeriods, billRun) {
   const accumulatedLicenceIds = []
 
@@ -110,8 +123,8 @@ async function _processBillingPeriods (billingPeriods, billRun) {
   const results = []
 
   for (const billingPeriod of billingPeriods) {
-    const { billingAccounts, licenceIds } = await _fetchBillingAccounts(billRun, billingPeriod)
-    const billRunIsPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+    const { bills, licenceIds } = await _generateBills(billRun, billingPeriod)
+    const billRunIsPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, bills)
 
     accumulatedLicenceIds.push(...licenceIds)
     results.push(billRunIsPopulated)

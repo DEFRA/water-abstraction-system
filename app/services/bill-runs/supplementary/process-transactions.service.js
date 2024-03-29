@@ -34,8 +34,9 @@ async function go (calculatedTransactions, billingAccountId, billLicence, billin
   }
 
   const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicenceId)
+  const cleansedTransactions = _cleanseTransactions(calculatedTransactions, reversedTransactions)
 
-  return _cleanseTransactions(calculatedTransactions, reversedTransactions)
+  return cleansedTransactions
 }
 
 /**
