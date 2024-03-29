@@ -116,13 +116,7 @@ async function _createBillLicencesAndTransactions (billId, billingAccount, billR
  * Handles generating the transaction data for a given charge version and then sending it to the Charging Module API.
  */
 async function _createTransactions (billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
-
-  if (!chargePeriod.startDate) {
-    return []
-  }
-
-  const generatedTransactions = _generateTransactionData(billLicenceId, billingPeriod, chargePeriod, chargeVersion)
+  const generatedTransactions = _generateTransactionData(billLicenceId, billingPeriod, chargeVersion)
 
   return SendTransactionsService.go(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
 }
@@ -207,12 +201,21 @@ function _findOrCreateBillLicence (billLicences, licence, billId) {
  * This function iterates the charge references and combines the transactions generated into a 'flat' array of all
  * the transactions for the charge version and returns it.
  */
-function _generateTransactionData (billLicenceId, billingPeriod, chargePeriod, chargeVersion) {
+function _generateTransactionData (billLicenceId, billingPeriod, chargeVersion) {
   try {
+    // NOTE: There is a chance of creating an empty (invalid) chargePeriod. For example, the charge version has an
+    // abstraction period of 1 Aug to 30 Sept but was revoked on 15 July. DetermineChargePeriodService will determine
+    // there is no charge period in this scenario.
+    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+
+    if (!chargePeriod.startDate) {
+      return []
+    }
+
     const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions (depending on if a compensation
-    // transaction is also created) and we
+    // transaction is also created) and we need to return a 'flat' array of all transactions
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
       return GenerateTransactionsService.go(
         billLicenceId,
