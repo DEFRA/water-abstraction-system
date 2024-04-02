@@ -8,6 +8,7 @@
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
+const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
@@ -19,6 +20,7 @@ const SubmitNoReturnsRequiredService = require('../services/return-requirements/
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
+const SubmitReturnsCycleService = require('../services/return-requirements/submit-returns-cycle.service.js')
 const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
@@ -158,12 +160,10 @@ async function reason (request, h) {
 async function returnsCycle (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await ReturnsCycleService.go(sessionId)
 
   return h.view('return-requirements/returns-cycle.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the returns cycle for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -290,6 +290,12 @@ async function submitReason (request, h) {
 
 async function submitReturnsCycle (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitReturnsCycleService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/returns-cycle.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/site-description`)
 }
