@@ -89,36 +89,37 @@ describe('Fetch Matching Bill Run service', () => {
         })
 
         describe('and the financial year is in the PRESROC period', () => {
-          describe("and 'summer' is set to false", () => {
-            describe('and a bill run for the same financial year exists', () => {
-              beforeEach(async () => {
-                const billRun = await BillRunHelper.add({
-                  regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2022, summer: false
-                })
-                matchingBillRunId = billRun.id
-              })
+          let matchingSummerBillRunId
+          let matchingWinterBillRunId
 
-              it('returns the matching bill run', async () => {
-                const results = await FetchMatchingBillRunService.go(regionId, 'two_part_tariff', 2022, false)
-
-                expect(results[0].id).to.equal(matchingBillRunId)
-              })
+          beforeEach(async () => {
+            let billRun = await BillRunHelper.add({
+              regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2022, summer: true
             })
+            matchingSummerBillRunId = billRun.id
+
+            billRun = await BillRunHelper.add({
+              regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2022, summer: false
+            })
+            matchingWinterBillRunId = billRun.id
           })
 
           describe("and 'summer' is set to true", () => {
             describe('and a bill run for the same financial year exists', () => {
-              beforeEach(async () => {
-                const billRun = await BillRunHelper.add({
-                  regionId, batchType: 'two_part_tariff', status: 'sent', toFinancialYearEnding: 2022, summer: true
-                })
-                matchingBillRunId = billRun.id
-              })
-
               it('returns the matching bill run', async () => {
                 const results = await FetchMatchingBillRunService.go(regionId, 'two_part_tariff', 2022, true)
 
-                expect(results[0].id).to.equal(matchingBillRunId)
+                expect(results[0].id).to.equal(matchingSummerBillRunId)
+              })
+            })
+          })
+
+          describe("and 'summer' is set to false", () => {
+            describe('and a bill run for the same financial year exists', () => {
+              it('returns the matching bill run', async () => {
+                const results = await FetchMatchingBillRunService.go(regionId, 'two_part_tariff', 2022, false)
+
+                expect(results[0].id).to.equal(matchingWinterBillRunId)
               })
             })
           })

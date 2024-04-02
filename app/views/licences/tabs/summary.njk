@@ -91,7 +91,7 @@
     {% endif %}
 
     <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{{ monitoringStationCaption }}</dt>
+        <dt class="govuk-summary-list__key">Monitoring stations</dt>
         <dd class="govuk-summary-list__value">
             {% if monitoringStations.length > 0 %}
                 <ul class="govuk-list govuk-!-margin-bottom-0">
@@ -111,7 +111,7 @@
     </div>
 
     <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{{ abstractionConditionDetails.caption }}</dt>
+        <dt class="govuk-summary-list__key">Abstraction conditions</dt>
         <dd class="govuk-summary-list__value">
             <div>
                 {% if abstractionConditionDetails.numberOfConditions > 5 %}
@@ -126,7 +126,7 @@
                     {{ abstractionConditionDetails.conditions[0] }}
                 {% endif %}
             </div>
-            <a href="/licences/{{ documentId }}/conditions">{{ abstractionConditionDetails.linkText }}</a>
+            <a href="/licences/{{ documentId }}/conditions">View details of the abstraction conditions</a>
         </dd>
     </div>
 
