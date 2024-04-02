@@ -812,6 +812,41 @@ describe('View Licence presenter', () => {
         ])
       })
     })
+
+    describe('and it has abstraction ANNUAL_QTY and DAILY_QTY set to null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].ANNUAL_QTY = 'null'
+        licence.permitLicence.purposes[0].DAILY_QTY = 'null'
+        licence.permitLicence.purposes[0].HOURLY_QTY = 60
+        licence.permitLicence.purposes[0].INST_QTY = 6
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '60.00 cubic metres per hour',
+          '6.00 litres per second'
+        ])
+      })
+    })
+
+    describe('and it has abstraction DAILY_QTY set to null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].ANNUAL_QTY = 'null'
+        licence.permitLicence.purposes[0].DAILY_QTY = 'null'
+        licence.permitLicence.purposes[0].HOURLY_QTY = 'null'
+        licence.permitLicence.purposes[0].INST_QTY = 6
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '6.00 litres per second'
+        ])
+      })
+    })
   })
 
   describe("the 'warning' property", () => {
