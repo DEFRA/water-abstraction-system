@@ -1,10 +1,208 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block breadcrumbs %}
   {# Back link #}
   {{ govukBackLink({
-      text: 'Go back to bill runs',
-      href: '/billing/batch/list'
+      text: 'Go back to licence',
+      href: '/system/bill-runs/' + billRunId + '/review/' + licenceId
   }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-5">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
+        {{ chargeElement.description }}
+        <div> {{ chargeElement.dates }} </div>
+      </h1>
+
+      {# Status badge #}
+      {% if chargeElement.status == 'review' %}
+        {% set colour = "govuk-tag--blue" %}
+      {% else %}
+        {% set colour = "govuk-tag--green" %}
+      {% endif %}
+
+      <p class="govuk-body">
+        {{ govukTag({
+          text: chargeElement.status,
+          classes: colour
+        }) }}
+      </p>
+
+      {# ------------- Licence nav bars --------------- #}
+      <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
+        <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licenceId }}#summary">
+            Summary
+          </a></li>
+        <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licenceId }}#returns">
+            Returns
+          </a></li>
+          <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licenceId }}#charge">
+            Charge information
+          </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="govuk-caption-m"> Financial year {{ financialYear }}</div>
+  <h2 class="govuk-heading-m">Charge period {{ chargePeriod }}</h2>
+
+  {# ---------- Billable returns and volume ----------- #}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <div class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">
+            {{chargeElement.billableVolume}}ML
+          </div>
+          <div class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">
+            Billable returns
+          </div>
+        </h3>
+      </div>
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <div class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">
+            /
+          </div>
+        </h3>
+      </div>
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          <div class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">
+            {{chargeElement.authorisedVolume}}ML
+          </div>
+          <div class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">
+            Authorised volume
+          </div>
+        </h3>
+      </div>
+      <div class="govuk-!-margin-right-6 float-left">
+        <h3>
+          {% if chargeElement.issues.length > 0 %}
+            <div class="govuk-inset-text">
+              <h4 class="govuk-heading-s govuk-!-font-weight-bold">
+                Issue
+              </h4>
+              {% for issue in chargeElement.issues %}
+                <div> {{ issue }} </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  {# ---------- Billable returns button ----------- #}
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+    <div class="govuk-grid-column-full">
+      <button class="govuk-button govuk-button--secondary">
+        Edit the billable returns
+      </button>
+    </div>
+  </div>
+
+  {# ------------- Matched Returns --------------- #}
+  {% if matchedReturns.length > 0 %}
+    {% set tableRows = [] %}
+    {% for return in matchedReturns %}
+      {% set matchedReturnIndex = loop.index0 %}
+
+      {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
+        {% set colour = "govuk-tag--red"%}
+        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
+      {% elif return.status == 'void' %}
+        {% set colour = "govuk-tag--grey" %}
+        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
+      {% else %}
+        {% set colour = "govuk-tag--green" %}
+        {% set returnLink = "/returns/return?id=" + return.returnId %}
+      {% endif %}
+
+      {% set action %}
+        <a class="govuk-link" href="{{returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        <div>{{ return.dates }}</div>
+      {% endset %}
+
+      {% set returnSummary %}
+        <div>
+          {{ return.purpose }}
+        </div>
+          {{ return.description }}
+      {% endset %}
+
+      {% set statusTag %}
+        {{govukTag({
+          text: return.returnStatus,
+          classes: colour + ' govuk-!-font-size-14'
+        })}}
+      {% endset %}
+
+      {% set issues = '' %}
+      {% for issue in return.issues %}
+        {% set issues = issues + '<div>' + issue + '</div>' %}
+      {% endfor %}
+
+      {% set tableRow = [
+        {
+          html: action,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-action' + matchedReturnIndex }
+        },
+        {
+          html: returnSummary,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-summary' + matchedReturnIndex }
+          },
+        {
+          html: statusTag,
+          classes: 'govuk-body-s',
+          attributes: { 'data-test': 'matched-return-status' + matchedReturnIndex }
+        },
+        {
+          html: "<div>" + return.returnTotal + "</div>" + issues,
+          classes: "govuk-body-s govuk-!-text-align-right",
+          attributes: { 'data-test': 'matched-return-total' + matchedReturnIndex}
+        }]
+      %}
+
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    {# Table displaying details of the matched returns #}
+    {{ govukTable({
+      caption: "Matched returns",
+      captionClasses: "govuk-table__caption--m",
+      attributes: { 'data-test': 'matched-returns' },
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: 'Return reference and dates'
+        },
+        {
+          text: 'Purpose and description'
+        },
+        {
+          text: 'Status'
+        },
+        {
+          text: 'Return totals Allocated/Total',
+          format: 'numeric',
+          classes: 'width-one-tenth'
+        }
+      ],
+        rows: tableRows
+      }) }}
+  {% endif %}
+
+  {# ------------- No Returns --------------- #}
+  {% if matchedReturns == 0 %}
+      <h2 class="govuk-heading-m">No two-part tariff returns</h2>
+  {% endif %}
 {% endblock %}
