@@ -27,8 +27,17 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const purposesData = await FetchPurposesService.go(session.data.licence.id)
+  _handleOneOptionSelected(payload)
+
   const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {}
+  }
+
+  const purposesData = await FetchPurposesService.go(session.data.licence.id)
   const formattedData = SelectPurposePresenter.go(session, purposesData, payload)
 
   return {
@@ -37,6 +46,25 @@ async function go (sessionId, payload) {
     pageTitle: 'Select the purpose for the requirements for returns',
     ...formattedData
   }
+}
+
+/**
+ * When a single purpose is checked by the user, it returns as a string. When multiple purposes are checked, the
+ * 'purposes' is returned as an array. This function works to make those single selected string 'purposes' into an array
+ * for uniformity.
+ */
+function _handleOneOptionSelected (payload) {
+  if (!Array.isArray(payload.purposes)) {
+    payload.purposes = [payload.purposes]
+  }
+}
+
+function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.purposes = payload.purposes
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {
