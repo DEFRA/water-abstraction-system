@@ -334,6 +334,18 @@ describe('View Licence presenter', () => {
   })
 
   describe("the 'monitoringStations' property", () => {
+    describe('when the licenceGaugingStations property is not an array', () => {
+      beforeEach(() => {
+        licence.licenceGaugingStations = {}
+      })
+
+      it('will return an empty array of monitoring station details', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.monitoringStations).to.equal([])
+      })
+    })
+
     describe('when the licence has no gauging stations', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = []
@@ -615,9 +627,25 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('and it does not have a purposes array', () => {
+    describe('and it does not have a permitLicence object', () => {
       beforeEach(() => {
         licence.permitLicence = undefined
+      })
+
+      it('will return null for the source of supply and abstraction point information', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPoints).to.equal(null)
+        expect(result.abstractionPointsCaption).to.equal(null)
+        expect(result.abstractionPointLinkText).to.equal(null)
+        expect(result.abstractionQuantities).to.equal(null)
+        expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it does not have a purposes array', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes = undefined
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
