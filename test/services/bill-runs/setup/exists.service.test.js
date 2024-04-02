@@ -15,6 +15,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/determine-blocking-bill-run.service.js')
+const DetermineFinancialYearEndService = require('../../../../app/services/bill-runs/setup/determine-financial-year-end.service.js')
 
 // Thing under test
 const ExistsService = require('../../../../app/services/bill-runs/setup/exists.service.js')
@@ -45,6 +46,8 @@ describe('Bill Runs Setup Exists service', () => {
             season: 'summer'
           }
         })
+
+        Sinon.stub(DetermineFinancialYearEndService, 'go').resolves(2022)
       })
 
       describe('and no matching bill runs exist', () => {
@@ -105,6 +108,8 @@ describe('Bill Runs Setup Exists service', () => {
             season: 'summer'
           }
         })
+
+        Sinon.stub(DetermineFinancialYearEndService, 'go').resolves(currentFinancialEndYear)
       })
 
       describe('and no matching bill runs exist', () => {
@@ -165,6 +170,8 @@ describe('Bill Runs Setup Exists service', () => {
             season: 'summer'
           }
         })
+
+        Sinon.stub(DetermineFinancialYearEndService, 'go').resolves(currentFinancialEndYear)
       })
 
       describe('and no matching bill runs exist', () => {

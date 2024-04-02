@@ -39,7 +39,7 @@ async function go (billRun, billingPeriod) {
 }
 
 async function _process (licences, billingPeriod, billRun) {
-  licences.forEach(async (licence) => {
+  for (const licence of licences) {
     await PrepareReturnLogsService.go(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
@@ -67,9 +67,9 @@ async function _process (licences, billingPeriod, billRun) {
       })
     })
 
-    await DetermineLicenceIssuesService.go(licence)
+    DetermineLicenceIssuesService.go(licence)
     await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
-  })
+  }
 }
 
 module.exports = {
