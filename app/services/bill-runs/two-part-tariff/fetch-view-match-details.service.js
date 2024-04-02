@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the individual charge elements match details during the review stage of a two-part tariff bill run
+ * Fetches the individual charge element match details during the review stage of a two-part tariff bill run
  * @module FetchViewMatchDetailsService
  */
 
@@ -15,7 +15,7 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * @param {module:LicenceModel} licenceId UUID of the individual licence to review
  * @param {module:ReviewChargeElementModel} reviewChargeElementId The UUID of the review charge element being viewed
  *
- * @returns {Promise<Object[]>} Contains an array of bill run data and review licence data
+ * @returns {Promise<Object[]>} Contains an array of bill run data and review charge element data
  */
 async function go (billRunId, reviewChargeElementId) {
   const billRun = await _fetchBillRun(billRunId)

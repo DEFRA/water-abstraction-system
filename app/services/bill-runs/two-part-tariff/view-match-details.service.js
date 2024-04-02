@@ -10,7 +10,7 @@ const FetchViewMatchDetailsService = require('./fetch-view-match-details.service
 const ViewMatchDetailsPresenter = require('../../../presenters/bill-runs/two-part-tariff/view-match-details.presenter.js')
 
 /**
- * Orchestrated fetching and presenting the data needed for the view match details page on a charge element
+ * Orchestrates fetching and presenting the data needed for the view match details page for a charge element
  *
  * @param {module:BillRunModel} billRunId The UUID for the bill run
  * @param {module:LicenceModel} licenceId The UUID of the licence that is being reviewed

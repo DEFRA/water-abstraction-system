@@ -71,6 +71,16 @@ function _billingAccountDetails (billingAccount) {
   }
 }
 
+function _chargeElementCount (reviewChargeVersion) {
+  const { reviewChargeReferences } = reviewChargeVersion
+
+  const chargeElementCount = reviewChargeReferences.reduce((total, reviewChargeReference) => {
+    return total + reviewChargeReference.reviewChargeElements.length
+  }, 0)
+
+  return chargeElementCount
+}
+
 function _chargeElementDetails (reviewChargeReference, chargePeriod) {
   const { reviewChargeElements } = reviewChargeReference
 
@@ -107,16 +117,6 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
   return chargeReference
 }
 
-function _chargeElementCount (reviewChargeVersion) {
-  const { reviewChargeReferences } = reviewChargeVersion
-
-  const chargeElementCount = reviewChargeReferences.reduce((total, reviewChargeReference) => {
-    return total + reviewChargeReference.reviewChargeElements.length
-  }, 0)
-
-  return chargeElementCount
-}
-
 function _contactName (billingAccount) {
   const contact = billingAccount.billingAccountAddresses[0].contact
 
@@ -132,26 +132,6 @@ function _financialYear (financialYearEnding) {
   const endYear = financialYearEnding
 
   return `${startYear} to ${endYear}`
-}
-
-function _returnStatus (returnLog) {
-  if (returnLog.returnStatus === 'due') {
-    return 'overdue'
-  } else if (returnLog.underQuery) {
-    return 'query'
-  } else {
-    return returnLog.returnStatus
-  }
-}
-
-function _returnTotal (returnLog) {
-  const { returnStatus, allocated, quantity } = returnLog
-
-  if (returnStatus === 'void' || returnStatus === 'received' || returnStatus === 'due') {
-    return '/'
-  } else {
-    return `${allocated} ML / ${quantity} ML`
-  }
 }
 
 function _matchedReturns (returnLogs) {
@@ -246,6 +226,26 @@ function _prepareReturnVolume (reviewChargeElement) {
   }
 
   return returnVolumes
+}
+
+function _returnStatus (returnLog) {
+  if (returnLog.returnStatus === 'due') {
+    return 'overdue'
+  } else if (returnLog.underQuery) {
+    return 'query'
+  } else {
+    return returnLog.returnStatus
+  }
+}
+
+function _returnTotal (returnLog) {
+  const { returnStatus, allocated, quantity } = returnLog
+
+  if (returnStatus === 'void' || returnStatus === 'received' || returnStatus === 'due') {
+    return '/'
+  } else {
+    return `${allocated} ML / ${quantity} ML`
+  }
 }
 
 function _totalBillableReturns (reviewChargeReference) {

@@ -37,6 +37,8 @@ describe('View Match Details Service', () => {
     it('will fetch the charge element data and return it once formatted by the presenter', async () => {
       const result = await ViewMatchDetailsService.go(billRunId, licenceId, reviewChargeElementId)
 
+      expect(FetchViewMatchDetailsService.go.called).to.be.true()
+      expect(ViewMatchDetailsPresenter.go.called).to.be.true()
       expect(result).to.equal('page data')
     })
   })
