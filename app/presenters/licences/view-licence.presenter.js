@@ -285,10 +285,10 @@ function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
   }
 
   if (abstractionAmountSet &&
-    (abstractionAmountSet.ANNUAL_QTY !== purposeAbstractionQuantities.ANNUAL_QTY ||
-    abstractionAmountSet.DAILY_QTY !== purposeAbstractionQuantities.DAILY_QTY ||
-    abstractionAmountSet.HOURLY_QTY !== purposeAbstractionQuantities.HOURLY_QTY ||
-    abstractionAmountSet.INST_QTY !== purposeAbstractionQuantities.INST_QTY)) {
+    (abstractionAmountSet[0].ANNUAL_QTY !== purposeAbstractionQuantities.ANNUAL_QTY ||
+    abstractionAmountSet[0].DAILY_QTY !== purposeAbstractionQuantities.DAILY_QTY ||
+    abstractionAmountSet[0].HOURLY_QTY !== purposeAbstractionQuantities.HOURLY_QTY ||
+    abstractionAmountSet[0].INST_QTY !== purposeAbstractionQuantities.INST_QTY)) {
     return abstractionAmountSet.push(purposeAbstractionQuantities)
   }
 

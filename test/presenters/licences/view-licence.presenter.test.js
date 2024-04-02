@@ -925,6 +925,95 @@ describe('View Licence presenter', () => {
         ])
       })
     })
+
+    describe('and it has two purposes with the same abstraction information', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes = [{
+          ANNUAL_QTY: 265,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }, {
+          ANNUAL_QTY: 265,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }]
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '265.00 cubic metres per year',
+          '24.00 cubic metres per day',
+          '60.00 cubic metres per hour',
+          '6.00 litres per second'
+        ])
+      })
+    })
+
+    describe('and it has two purposes with different abstraction information', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes = [{
+          ANNUAL_QTY: 265,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }, {
+          ANNUAL_QTY: 266,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }]
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal(null)
+      })
+    })
   })
 
   describe("the 'warning' property", () => {
