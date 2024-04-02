@@ -35,7 +35,7 @@ function go (billRun, reviewChargeElement, licenceId) {
       status: reviewChargeElement.status,
       billableVolume: reviewChargeElement.allocated,
       authorisedVolume: reviewChargeElement.chargeElement.authorisedAnnualQuantity,
-      issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : []
+      issues: reviewChargeElement.issues?.length > 0 ? reviewChargeElement.issues.split(', ') : []
     },
     matchedReturns: _matchedReturns(reviewChargeElement)
   }
@@ -57,11 +57,11 @@ function _matchedReturns (reviewChargeElement) {
       returnId: reviewReturn.returnId,
       reference: reviewReturn.returnReference,
       dates: _prepareDate(reviewReturn.startDate, reviewReturn.endDate),
-      purpose: reviewReturn.purposes[0].tertiary.description,
+      purpose: reviewReturn.purposes[0]?.tertiary.description,
       description: reviewReturn.description,
       returnStatus: _returnStatus(reviewReturn),
       returnTotal: _returnTotal(reviewReturn),
-      issues: reviewReturn.issues.length > 0 ? reviewReturn.issues.split(', ') : ['']
+      issues: reviewReturn.issues?.length > 0 ? reviewReturn.issues.split(', ') : ['']
     })
   })
 
@@ -70,8 +70,8 @@ function _matchedReturns (reviewChargeElement) {
 
 function _prepareChargeElementDates (chargeElement, chargeVersion) {
   const chargePeriod = {
-    startDate: chargeVersion.startDate,
-    endDate: chargeVersion.endDate
+    startDate: chargeVersion.chargePeriodStartDate,
+    endDate: chargeVersion.chargePeriodEndDate
   }
 
   const {
