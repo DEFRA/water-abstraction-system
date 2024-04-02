@@ -17,20 +17,21 @@ const { formatLongDate } = require('../../base.presenter.js')
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
 function go (billRun, reviewChargeElement, licenceId) {
-  const chargePeriod = {
-    startDate: reviewChargeElement.reviewChargeReference.reviewChargeVersion.chargePeriodStartDate,
-    endDate: reviewChargeElement.reviewChargeReference.reviewChargeVersion.chargePeriodEndDate
-  }
-
   return {
     billRunId: billRun.id,
     financialYear: _financialYear(billRun.toFinancialYearEnding),
-    chargePeriod: _prepareDate(chargePeriod.startDate, chargePeriod.endDate),
+    chargePeriod: _prepareDate(
+      reviewChargeElement.reviewChargeReference.reviewChargeVersion.chargePeriodStartDate,
+      reviewChargeElement.reviewChargeReference.reviewChargeVersion.chargePeriodEndDate
+    ),
     licenceId,
     chargeElement: {
       chargeElementId: reviewChargeElement.id,
       description: reviewChargeElement.chargeElement.description,
-      dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
+      dates: _prepareChargeElementDates(
+        reviewChargeElement.chargeElement,
+        reviewChargeElement.reviewChargeReference.reviewChargeVersion
+      ),
       status: reviewChargeElement.status,
       billableVolume: reviewChargeElement.allocated,
       authorisedVolume: reviewChargeElement.chargeElement.authorisedAnnualQuantity,
@@ -67,7 +68,12 @@ function _matchedReturns (reviewChargeElement) {
   return matchedReturns
 }
 
-function _prepareChargeElementDates (chargeElement, chargePeriod) {
+function _prepareChargeElementDates (chargeElement, chargeVersion) {
+  const chargePeriod = {
+    startDate: chargeVersion.startDate,
+    endDate: chargeVersion.endDate
+  }
+
   const {
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,

@@ -75,22 +75,15 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
   const { reviewChargeElements } = reviewChargeReference
 
   const chargeElements = reviewChargeElements.map((reviewChargeElement, index) => {
-    const elementNumber = `Element ${index + 1} of ${reviewChargeElements.length}`
-    const dates = _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod)
-    const issues = reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : ['']
-    const billableReturns = `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`
-    const returnVolume = _prepareReturnVolume(reviewChargeElement)
-
     return {
       reviewChargeElementId: reviewChargeElement.id,
-      elementNumber,
+      elementNumber: `Element ${index + 1} of ${reviewChargeElements.length}`,
       elementStatus: reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
-      dates,
-      issues,
-      billableReturns,
-      returnVolume
-
+      dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
+      issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : [''],
+      billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
+      returnVolume: _prepareReturnVolume(reviewChargeElement)
     }
   })
 
