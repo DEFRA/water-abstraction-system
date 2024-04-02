@@ -79,7 +79,7 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
         })
       })
 
-      it('returns the current financial year end', async () => {
+      it('returns the previous financial year end', async () => {
         const result = await DetermineFinancialYearEndService.go(regionId, 'supplementary')
 
         expect(result).to.equal(currentFinancialYearEnd - 1)
