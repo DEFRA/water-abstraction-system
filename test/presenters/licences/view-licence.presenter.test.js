@@ -659,6 +659,35 @@ describe('View Licence presenter', () => {
       })
     })
 
+    describe('and it has an abstraction point with 4 national grid references but NGR4_NORTH is null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].purposePoints[0].point_detail = {
+          NGR1_SHEET: 'TL',
+          NGR2_SHEET: 'TM',
+          NGR3_SHEET: 'TN',
+          NGR4_SHEET: 'TO',
+          NGR1_EAST: '23198',
+          NGR2_EAST: '23197',
+          NGR3_EAST: '23196',
+          NGR4_EAST: '23195',
+          NGR1_NORTH: '88603',
+          NGR2_NORTH: '88602',
+          NGR3_NORTH: '88601',
+          NGR4_NORTH: 'null'
+        }
+      })
+
+      it('will return the correct information for the abstraction point', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPoints).to.equal([
+          'Between National Grid References TL 23198 88603 and TM 23197 88602'
+        ])
+        expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
+        expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
+      })
+    })
+
     describe('and it has an abstraction point with 4 national grid references', () => {
       beforeEach(() => {
         licence.permitLicence.purposes[0].purposePoints[0].point_detail = {
@@ -706,6 +735,27 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPoints).to.equal([
           'Between National Grid References TL 23198 88603 and TM 23197 88602'
         ])
+        expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
+        expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
+      })
+    })
+
+    describe('and it has an NGR2_SHEET abstraction point but NGR2_NORTH is null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].purposePoints[0].point_detail = {
+          NGR1_SHEET: 'TL',
+          NGR2_SHEET: 'TM',
+          NGR1_EAST: '23198',
+          NGR2_EAST: '23197',
+          NGR1_NORTH: '88603',
+          NGR2_NORTH: 'null'
+        }
+      })
+
+      it('will return the information for the abstraction point', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
         expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
       })
