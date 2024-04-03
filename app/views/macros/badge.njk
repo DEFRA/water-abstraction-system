@@ -11,6 +11,9 @@
     {% set classes = "govuk-tag--orange govuk-!-font-size-27" %}
   {% elif type === 'success' %}
     {% set classes = "govuk-tag--green govuk-!-font-size-27" %}
+  {% elif type === 'reviewReady' %}
+    {% set classes = "govuk-tag--green govuk-!-font-size-27" %}
+    {% set text = 'ready' %}
   {% else %}
     {% set classes = "govuk-tag--blue govuk-!-font-size-27" %}
   {% endif %}
@@ -24,7 +27,7 @@
 {% endmacro %}
 
 {% macro statusBadge(status) %}
-  {% if status === 'ready' %}
+  {% if status === 'ready' or status === 'review' %}
     {% set badgeType = 'info' %}
   {% elif status === 'sent' %}
     {% set badgeType = 'success' %}
@@ -32,6 +35,9 @@
     {% set badgeType = 'inactive' %}
   {% elif status === 'error' %}
     {% set badgeType = 'error' %}
+  {# two part tariff review screens have a green `ready` status hence this is called `reviewReady`#}
+  {% elif status === 'reviewReady' %}
+    {% set badgeType = 'reviewReady' %}
   {% endif %}
 
   {{ badge(status, badgeType) }}
