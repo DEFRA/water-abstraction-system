@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% from "macros/badge.njk" import statusBadge %}
+{% from "macros/bill-run-status-tag.njk" import statusTag %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -26,9 +26,9 @@
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
     <div class="govuk-grid-column-full">
 
-      {# Status badge #}
+      {# Status tag #}
       <p class="govuk-body">
-        {{ statusBadge(billRunStatus) }}
+        {{ statusTag(billRunStatus) }}
       </p>
 
       {# Bill run meta-data #}
