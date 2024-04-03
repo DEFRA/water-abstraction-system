@@ -21,7 +21,7 @@ const ReviewReturnHelper = require('../../../support/helpers/review-return.helpe
 // Thing under test
 const FetchMatchDetailsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-match-details.service.js')
 
-describe('Fetch View Match Details service', () => {
+describe('Fetch Match Details service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })

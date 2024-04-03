@@ -15,7 +15,7 @@ const MatchDetailsPresenter = require('../../../../app/presenters/bill-runs/two-
 // Thing under test
 const MatchDetailsService = require('../../../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 
-describe('View Match Details Service', () => {
+describe('Match Details Service', () => {
   afterEach(() => {
     Sinon.restore()
   })

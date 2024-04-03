@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const MatchDetailsPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/match-details.presenter.js')
 
-describe('View Match Details presenter', () => {
+describe('Match Details presenter', () => {
   describe('when there is data to be presented for the view match details page', () => {
     const billRun = _billRun()
     const reviewChargeElement = _reviewChargeElementData()
