@@ -19,11 +19,12 @@ const ExpandedError = require('../../../app/errors/expanded.error.js')
 // Things we need to stub
 const ChargingModuleSendBillRunRequest = require('../../../app/requests/charging-module/send-bill-run.request.js')
 const ChargingModuleViewBillRunRequest = require('../../../app/requests/charging-module/view-bill-run.request.js')
+const UnflagBilledLicencesService = require('../../../app/services/bill-runs/supplementary/unflag-billed-licences.service.js')
 
 // Thing under test
 const SubmitSendBillBunService = require('../../../app/services/bill-runs/submit-send-bill-run.service.js')
 
-describe('Submit Cancel Bill Run service', () => {
+describe('Submit Send Bill Run service', () => {
   // NOTE: introducing a delay in the tests is not ideal. But the service is written such that the send happens in the
   // background and is not awaited. We want to confirm things like the records have been updated. But the only way to do
   // so is to give the background process time to complete.
@@ -32,12 +33,14 @@ describe('Submit Cancel Bill Run service', () => {
   let chargingModuleSendBillRunRequestStub
   let chargingModuleViewBillRunRequestStub
   let notifierStub
+  let unflagBilledLicencesServiceStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
     chargingModuleSendBillRunRequestStub = Sinon.stub(ChargingModuleSendBillRunRequest, 'send').resolves()
     chargingModuleViewBillRunRequestStub = Sinon.stub(ChargingModuleViewBillRunRequest, 'send')
+    unflagBilledLicencesServiceStub = Sinon.stub(UnflagBilledLicencesService, 'go').resolves()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -122,6 +125,34 @@ describe('Submit Cancel Bill Run service', () => {
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.billRunId).to.exist()
+        })
+
+        describe("when the bill run's batch type is 'supplementary'", () => {
+          it('removes the SROC supplementary billing flag from those licences billed', async () => {
+            await SubmitSendBillBunService.go(billRun.id)
+
+            await setTimeout(delay)
+
+            expect(unflagBilledLicencesServiceStub.called).to.be.true()
+          })
+        })
+
+        describe("when the bill run's batch type is not 'supplementary'", () => {
+          let annualBillRun
+
+          beforeEach(async () => {
+            annualBillRun = await BillRunHelper.add({
+              batchType: 'annual', externalId: '76ed78bd-c104-4ad7-8842-4b660df02331', status: 'ready'
+            })
+          })
+
+          it('leaves the SROC supplementary billing flag for those licences billed', async () => {
+            await SubmitSendBillBunService.go(annualBillRun.id)
+
+            await setTimeout(delay)
+
+            expect(unflagBilledLicencesServiceStub.called).to.be.false()
+          })
         })
       })
 
