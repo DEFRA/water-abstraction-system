@@ -4,7 +4,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "macros/badge.njk" import badge %}
+{% from "macros/review-status-tag.njk" import statusTag %}
 
 
 {% block breadcrumbs %}
@@ -24,18 +24,8 @@
       <span class="govuk-caption-l">{{region}} two-part tariff bill run</span>
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
 
-      {# Status badge #}
-      {% if licence.status == 'review' %}
-        {% set colour = "govuk-tag--blue govuk-!-font-size-16" %}
-      {% else %}
-        {% set colour = "govuk-tag--green govuk-!-font-size-16" %}
-      {% endif %}
-
       <p class="govuk-body">
-        {{govukTag({
-          text: licence.status,
-          classes: colour
-        })}}
+        {{ statusTag(licence.status) }}
       </p>
     </div>
   </div>
@@ -106,11 +96,8 @@
           {{ return.description }}
       {% endset %}
 
-      {% set statusTag %}
-        {{govukTag({
-          text: return.returnStatus,
-          classes: colour + ' govuk-!-font-size-14'
-        })}}
+      {% set tag %}
+        {{ statusTag(return.returnStatus) }}
       {% endset %}
 
       {% set issues = '' %}
@@ -130,7 +117,7 @@
           attributes: { 'data-test': 'matched-return-summary' + matchedReturnIndex }
           },
         {
-          html: statusTag,
+          html: tag,
           classes: 'govuk-body-s',
           attributes: { 'data-test': 'matched-return-status' + matchedReturnIndex }
         },
@@ -349,21 +336,11 @@
                   {% set chargeElementIndex = loop.index0 %}
                     {% set elementRows = [] %}
 
-                    {# Status badge #}
-                    {% if chargeElement.elementStatus == 'review' %}
-                      {% set elementColour = "govuk-tag--blue govuk-!-font-size-16" %}
-                    {% else %}
-                      {% set elementColour = "govuk-tag--green govuk-!-font-size-16" %}
-                    {% endif %}
-
                     <div class="govuk-!-margin-top-6">
                       <div class="tag-wrapper">
                         <span class="govuk-body govuk-!-font-weight-regular">{{chargeElement.elementNumber}}</span>
                         <span class="tag-element">
-                          {{govukTag({
-                            text: chargeElement.elementStatus,
-                            classes: elementColour
-                          })}}
+                          {{ statusTag(chargeElement.elementStatus) }}
                         </span>
                         <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}
                           <div>
