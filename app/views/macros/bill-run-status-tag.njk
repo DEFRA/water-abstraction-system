@@ -1,40 +1,24 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
-{% macro tag(text, type) %}
-  {% if type === 'error' %}
-    {% set classes = "govuk-tag--red govuk-!-font-size-27" %}
-  {% elif type === 'inactive' %}
-    {% set classes = "govuk-tag--grey govuk-!-font-size-27" %}
-  {% elif type === 'info' %}
+{% macro statusTag(status) %}
+  {% if status === 'ready' %}
     {% set classes = "govuk-tag--blue govuk-!-font-size-27" %}
-  {% elif type === 'warning' %}
-    {% set classes = "govuk-tag--orange govuk-!-font-size-27" %}
-  {% elif type === 'success' %}
+  {% elif status === 'review' %}
+    {% set classes = "govuk-tag--blue govuk-!-font-size-27" %}
+  {% elif status === 'sent' %}
     {% set classes = "govuk-tag--green govuk-!-font-size-27" %}
+  {% elif status === 'empty' %}
+    {% set classes = "govuk-tag--grey govuk-!-font-size-27" %}
+  {% elif status === 'error' %}
+    {% set classes = "govuk-tag--red govuk-!-font-size-27" %}
   {% else %}
     {% set classes = "govuk-tag--blue govuk-!-font-size-27" %}
   {% endif %}
 
   {{
     govukTag({
-      text: text,
+      text: status,
       classes: classes
     })
   }}
-{% endmacro %}
-
-{% macro statusTag(status) %}
-  {% if status === 'ready' %}
-    {% set tagType = 'info' %}
-  {% elif status === 'review' %}
-    {% set tagType = 'info' %}
-  {% elif status === 'sent' %}
-    {% set tagType = 'success' %}
-  {% elif status === 'empty' %}
-    {% set tagType = 'inactive' %}
-  {% elif status === 'error' %}
-    {% set tagType = 'error' %}
-  {% endif %}
-
-  {{ tag(status, tagType) }}
 {% endmacro %}
