@@ -121,13 +121,39 @@ async function view (request, h) {
   })
 }
 
+async function editBillableReturns (request, h) {
+  /// const { id } = request.params
+
+  // const pageData = await ViewBillRunService.go(id)
+
+  return h.view('bill-runs/edit-billable-returns.njk', {
+    pageTitle: 'Set the billable returns quantity for this bill run',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function submitEditedBillableReturns (request, h) {
+  const { id, licenceId, reviewChargeElementId } = request.params
+
+  // const pageData = await ViewBillRunService.go(id)
+
+  if (pageData.error) {
+    return h.view('/edit-billable-returns.njk', pageData)
+  }
+
+  return h.redirect(`bill-runs/${id}/review${licenceId}/view-match-details/${reviewChargeElementId}`)
+}
+
 module.exports = {
   cancel,
   create,
+  editBillableReturns,
   review,
   reviewLicence,
   send,
   submitCancel,
+  submitEditedBillableReturns,
   submitSend,
   view
 }
