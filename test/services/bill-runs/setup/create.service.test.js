@@ -74,7 +74,7 @@ describe('Bill Runs Setup Create service', () => {
         '19a027c6-4aad-47d3-80e3-3917a4579a5b',
         'annual',
         'carol.shaw@atari.com',
-        null)
+        2024)
       ).to.be.true()
     })
   })
@@ -99,7 +99,7 @@ describe('Bill Runs Setup Create service', () => {
           '19a027c6-4aad-47d3-80e3-3917a4579a5b',
           'supplementary',
           'carol.shaw@atari.com',
-          null)
+          2024)
         ).to.be.true()
       })
     })
@@ -117,7 +117,7 @@ describe('Bill Runs Setup Create service', () => {
           '19a027c6-4aad-47d3-80e3-3917a4579a5b',
           'supplementary',
           'carol.shaw@atari.com',
-          null)
+          2024)
         ).to.be.true()
       })
     })
