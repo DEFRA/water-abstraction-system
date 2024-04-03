@@ -1,0 +1,38 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#licence-ref-error"
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukInput({
+        classes: "govuk-!-width-one-third",
+        errorMessage: error,
+        label: {
+          text: pageTitle,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        hint: {
+          text: "Enter the licence reference for de-duping"
+        },
+        name: "licence-ref"
+      }) }}
+
+      {{ govukButton({ text: "Remove duplicate" }) }}
+    </form>
+  </div>
+{% endblock %}
