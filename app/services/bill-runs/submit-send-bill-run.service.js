@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates the sending of a bill run
- * @module SubmitCancelBillRunService
+ * @module SubmitSendBillRunService
  */
 
 const BillModel = require('../../models/bill.model.js')
