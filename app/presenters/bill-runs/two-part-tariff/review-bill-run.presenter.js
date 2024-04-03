@@ -69,7 +69,9 @@ function _prepareLicences (licences) {
       id: licence.licenceId,
       licenceRef: licence.licenceRef,
       licenceHolder: licence.licenceHolder,
-      status: licence.status,
+      // Note: to use the badge macro in the view the status for 'ready' needs to be changed to 'reviewReady' as ready
+      // already exists in the macro with a different colour
+      status: licence.status === 'ready' ? 'reviewReady' : licence.status,
       issue: _getIssueOnLicence(licence.issues)
     })
   }
