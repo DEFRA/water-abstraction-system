@@ -1,6 +1,6 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
-{% macro badge(text, type) %}
+{% macro tag(text, type) %}
   {% if type === 'error' %}
     {% set classes = "govuk-tag--red govuk-!-font-size-27" %}
   {% elif type === 'inactive' %}
@@ -23,16 +23,16 @@
   }}
 {% endmacro %}
 
-{% macro statusBadge(status) %}
+{% macro statusTag(status) %}
   {% if status === 'ready' %}
-    {% set badgeType = 'info' %}
+    {% set tagType = 'info' %}
   {% elif status === 'sent' %}
-    {% set badgeType = 'success' %}
+    {% set tagType = 'success' %}
   {% elif status === 'empty' %}
-    {% set badgeType = 'inactive' %}
+    {% set tagType = 'inactive' %}
   {% elif status === 'error' %}
-    {% set badgeType = 'error' %}
+    {% set tagType = 'error' %}
   {% endif %}
 
-  {{ badge(status, badgeType) }}
+  {{ tag(status, tagType) }}
 {% endmacro %}
