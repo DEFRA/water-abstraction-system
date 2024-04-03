@@ -2,7 +2,7 @@
 
 /**
  * Unflag all licences in a bill run that resulted in a billing invoice (they are billed)
- * @module UnflagUnbilledLicencesService
+ * @module UnflagBilledLicencesService
  */
 
 const LicenceModel = require('../../../models/licence.model.js')
