@@ -19,7 +19,7 @@ const ReviewChargeVersionHelper = require('../../../support/helpers/review-charg
 const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
 
 // Thing under test
-const FetchViewMatchDetailsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-view-match-details.service.js')
+const FetchMatchDetailsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-match-details.service.js')
 
 describe('Fetch View Match Details service', () => {
   beforeEach(async () => {
@@ -64,7 +64,7 @@ describe('Fetch View Match Details service', () => {
         })
 
         it('returns details of the bill run', async () => {
-          const result = await FetchViewMatchDetailsService.go(billRun.id, reviewChargeElement.id)
+          const result = await FetchMatchDetailsService.go(billRun.id, reviewChargeElement.id)
 
           expect(result.billRun).to.equal({
             id: billRun.id,
@@ -74,7 +74,7 @@ describe('Fetch View Match Details service', () => {
         })
 
         it('returns details of the charge element and its matched returns', async () => {
-          const result = await FetchViewMatchDetailsService.go(billRun.id, reviewChargeElement.id)
+          const result = await FetchMatchDetailsService.go(billRun.id, reviewChargeElement.id)
 
           expect(result.reviewChargeElement).to.equal({
             id: reviewChargeElement.id,
@@ -130,7 +130,7 @@ describe('Fetch View Match Details service', () => {
 
       describe('with a charge element that did not match to a return', () => {
         it('does not return any matching return details', async () => {
-          const result = await FetchViewMatchDetailsService.go(billRun.id, reviewChargeElement.id)
+          const result = await FetchMatchDetailsService.go(billRun.id, reviewChargeElement.id)
 
           expect(result.reviewChargeElement).to.equal({
             id: reviewChargeElement.id,

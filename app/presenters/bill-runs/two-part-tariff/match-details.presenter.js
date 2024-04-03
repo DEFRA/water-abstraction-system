@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats the charge element and returns data ready for presenting in the view match details page
- * @module ViewMatchDetailsPresenter
+ * Formats the charge element and returns data ready for presenting in the match details page
+ * @module MatchDetailsPresenter
  */
 
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
@@ -11,10 +11,10 @@ const { formatLongDate } = require('../../base.presenter.js')
 /**
  * Prepares and processes bill run and review charge element and returns data for presentation
  *
- * @param {module:BillRunModel} billRun the data from the bill run
- * @param {module:ReviewChargeElement} reviewChargeElement the data from review charge element
+ * @param {module:BillRunModel} billRun - the data from the bill run
+ * @param {module:ReviewChargeElement} reviewChargeElement - the data from the review charge element
  *
- * @returns {Object} the prepared bill run and charge element data to be passed to the view match details page
+ * @returns {Object} the prepared bill run and charge element data to be passed to the match details page
  */
 function go (billRun, reviewChargeElement, licenceId) {
   return {

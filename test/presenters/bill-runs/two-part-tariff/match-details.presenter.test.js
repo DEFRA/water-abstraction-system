@@ -8,7 +8,7 @@ const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ViewMatchDetailsPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/view-match-details.presenter.js')
+const MatchDetailsPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/match-details.presenter.js')
 
 describe('View Match Details presenter', () => {
   describe('when there is data to be presented for the view match details page', () => {
@@ -17,7 +17,7 @@ describe('View Match Details presenter', () => {
     const licenceId = '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
 
     it('correctly presents the data', async () => {
-      const result = ViewMatchDetailsPresenter.go(billRun, reviewChargeElement, licenceId)
+      const result = MatchDetailsPresenter.go(billRun, reviewChargeElement, licenceId)
 
       expect(result).to.equal({
         billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',

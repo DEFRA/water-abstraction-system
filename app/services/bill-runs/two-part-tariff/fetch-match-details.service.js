@@ -2,7 +2,7 @@
 
 /**
  * Fetches the individual charge element match details during the review stage of a two-part tariff bill run
- * @module FetchViewMatchDetailsService
+ * @module FetchMatchDetailsService
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
@@ -11,9 +11,9 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
 /**
  * Fetches the match details for an individual charge element
  *
- * @param {module:BillRunModel} billRunId UUID of the bill run
- * @param {module:LicenceModel} licenceId UUID of the individual licence to review
- * @param {module:ReviewChargeElementModel} reviewChargeElementId The UUID of the review charge element being viewed
+ * @param {String} billRunId - UUID of the bill run
+ * @param {String} licenceId - UUID of the individual licence to review
+ * @param {String} reviewChargeElementId - The UUID of the review charge element being viewed
  *
  * @returns {Promise<Object[]>} Contains an array of bill run data and review charge element data
  */

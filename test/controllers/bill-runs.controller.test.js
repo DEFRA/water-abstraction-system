@@ -18,7 +18,7 @@ const StartBillRunProcessService = require('../../app/services/bill-runs/start-b
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
-const ViewMatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/view-match-details.service.js')
+const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -309,15 +309,15 @@ describe('Bill Runs controller', () => {
     })
   })
 
-  describe('/bill-runs/{id}/review/{licenceId}/view-match-details/{reviewChargeElementId}', () => {
+  describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/view-match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
       })
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ViewMatchDetailsService, 'go').resolves(_chargeElementDetails())
+          Sinon.stub(MatchDetailsService, 'go').resolves(_chargeElementDetails())
         })
 
         it('returns a 200 response', async () => {

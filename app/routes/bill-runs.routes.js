@@ -99,8 +99,8 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/view-match-details/{reviewChargeElementId}',
-    handler: BillRunsController.viewMatchDetails,
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
+    handler: BillRunsController.matchDetails,
     options: {
       auth: {
         access: {
