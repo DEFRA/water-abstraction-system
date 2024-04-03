@@ -12,17 +12,17 @@ const CheckYourAnswersPresenter = require('../../../app/presenters/return-requir
 
 describe('Check Your Answers presenter - No Returns Required', () => {
   let session
-
   beforeEach(() => {
     session = {
       data: {
+        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licence: {
           id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
           licenceRef: '01/123',
           licenceHolder: 'Astro Boy'
         },
-        journey: 'no-returns-required',
-        reason: 'returns-exception',
+        journey: '',
+        reason: '',
         startDate: '2008-02-08',
         startDateDay: '08',
         startDateMonth: '02',
@@ -32,8 +32,11 @@ describe('Check Your Answers presenter - No Returns Required', () => {
     }
   })
 
-  describe('when provided with a populated session', () => {
+  describe('when the no-returns-required journey was selected', () => {
     it('correctly presents the data', () => {
+      session.data.journey = 'no-returns-required'
+      session.data.reason = 'returns-exception'
+
       const result = CheckYourAnswersPresenter.go(session)
 
       expect(result).to.equal({
@@ -44,29 +47,12 @@ describe('Check Your Answers presenter - No Returns Required', () => {
       }, { skip: ['id'] })
     })
   })
-})
 
-describe('Check Your Answers presenter - Returns Required', () => {
-  let session
-
-  beforeEach(() => {
-    session = {
-      data: {
-        licence: {
-          currentVersionStartDate: '2008-02-08T00:00:00.000Z',
-          id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
-          licenceRef: '01/123',
-          licenceHolder: 'Astro Boy'
-        },
-        reason: 'major-change',
-        journey: 'returns-required',
-        startDateOptions: 'licenceStartDate'
-      }
-    }
-  })
-
-  describe('when provided with a populated session', () => {
+  describe('when the returns-required journey was selected', () => {
     it('correctly presents the data', () => {
+      session.data.journey = 'returns-required'
+      session.data.reason = 'major-change'
+
       const result = CheckYourAnswersPresenter.go(session)
 
       expect(result).to.equal({
