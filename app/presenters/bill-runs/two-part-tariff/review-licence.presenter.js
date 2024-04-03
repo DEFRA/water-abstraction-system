@@ -23,7 +23,7 @@ function go (billRun, licence) {
     licence: {
       licenceId: licence[0].licenceId,
       licenceRef: licence[0].licenceRef,
-      status: licence[0].status,
+      status: licence[0].status === 'ready' ? 'reviewReady' : licence[0].status,
       licenceHolder: licence[0].licenceHolder
     },
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
@@ -83,7 +83,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
 
     return {
       elementNumber,
-      elementStatus: reviewChargeElement.status,
+      elementStatus: reviewChargeElement.status === 'ready' ? 'reviewReady' : reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
       dates,
       issues,

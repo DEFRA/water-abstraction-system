@@ -4,7 +4,8 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "macros/badge.njk" import badge %}
+{% from "macros/badge.njk" import statusBadge %}
+
 
 
 {% block breadcrumbs %}
@@ -25,17 +26,8 @@
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{pageTitle}}</h1>
 
       {# Status badge #}
-      {% if licence.status == 'review' %}
-        {% set colour = "govuk-tag--blue govuk-!-font-size-16" %}
-      {% else %}
-        {% set colour = "govuk-tag--green govuk-!-font-size-16" %}
-      {% endif %}
-
       <p class="govuk-body">
-        {{govukTag({
-          text: licence.status,
-          classes: colour
-        })}}
+        {{ statusBadge(licence.status) }}
       </p>
     </div>
   </div>
@@ -83,15 +75,10 @@
     {% for return in matchedReturns %}
       {% set matchedReturnIndex = loop.index0 %}
 
-      {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
-        {% set colour = "govuk-tag--red"%}
-        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
-      {% elif return.status == 'void' %}
-        {% set colour = "govuk-tag--grey" %}
-        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
+      {% if return.status == 'completed' %}
+        {% set returnLink = "/returns/return?id=" + return.returnId %}
       {% else %}
-        {% set colour = "govuk-tag--green" %}
-        {% set returnLink = "/returns/return?id=" + return.returnId%}
+        {% set returnLink = "/return/internal?returnId=" + return.returnId%}
       {% endif %}
 
       {% set action %}
@@ -107,10 +94,7 @@
       {% endset %}
 
       {% set statusTag %}
-        {{govukTag({
-          text: return.returnStatus,
-          classes: colour + ' govuk-!-font-size-14'
-        })}}
+        {{ statusBadge(return.returnStatus) }}
       {% endset %}
 
       {% set issues = '' %}
@@ -176,16 +160,14 @@
     {% for return in unmatchedReturns %}
       {% set unmatchedReturnIndex = loop.index0 %}
 
-      {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
-        {% set colour = "govuk-tag--red"%}
-      {% elif return.status == 'void' %}
-        {% set colour = "govuk-tag--grey" %}
+      {% if return.status == 'completed' %}
+        {% set returnLink = "/returns/return?id=" + return.returnId %}
       {% else %}
-        {% set colour = "govuk-tag--green" %}
+        {% set returnLink = "/return/internal?returnId=" + return.returnId%}
       {% endif %}
 
       {% set action %}
-        <a class="govuk-link" href="/licences/{{ licence.licenceId }}#returns">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        <a class="govuk-link" href="{{returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
         <div>{{return.dates}}</div>
       {% endset %}
 
@@ -197,10 +179,7 @@
       {% endset %}
 
       {% set statusTag %}
-        {{govukTag({
-          text: return.returnStatus,
-          classes: colour + ' govuk-!-font-size-14'
-        })}}
+        {{ statusBadge(return.returnStatus) }}
       {% endset %}
 
       {% set issues = '' %}
@@ -349,21 +328,12 @@
                   {% set chargeElementIndex = loop.index0 %}
                     {% set elementRows = [] %}
 
-                    {# Status badge #}
-                    {% if chargeElement.elementStatus == 'review' %}
-                      {% set elementColour = "govuk-tag--blue govuk-!-font-size-16" %}
-                    {% else %}
-                      {% set elementColour = "govuk-tag--green govuk-!-font-size-16" %}
-                    {% endif %}
-
                     <div class="govuk-!-margin-top-6">
                       <div class="tag-wrapper">
                         <span class="govuk-body govuk-!-font-weight-regular">{{chargeElement.elementNumber}}</span>
                         <span class="tag-element">
-                          {{govukTag({
-                            text: chargeElement.elementStatus,
-                            classes: elementColour
-                          })}}
+                          {# Status badge #}
+                          {{ statusBadge(chargeElement.elementStatus) }}
                         </span>
                         <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}
                           <div>
