@@ -23,6 +23,8 @@ function go (billRun, licence) {
     licence: {
       licenceId: licence[0].licenceId,
       licenceRef: licence[0].licenceRef,
+      // Note: to use the badge macro in the view the status for 'ready' needs to be changed to 'reviewReady' as ready
+      // already exists in the macro with a different colour
       status: licence[0].status === 'ready' ? 'reviewReady' : licence[0].status,
       licenceHolder: licence[0].licenceHolder
     },
@@ -83,6 +85,8 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
 
     return {
       elementNumber,
+      // Note: to use the badge macro in the view the status for 'ready' needs to be changed to 'reviewReady' as ready
+      // already exists in the macro with a different colour
       elementStatus: reviewChargeElement.status === 'ready' ? 'reviewReady' : reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
       dates,
