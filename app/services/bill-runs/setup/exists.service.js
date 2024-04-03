@@ -7,9 +7,8 @@
 
 const CreatePresenter = require('../../../presenters/bill-runs/setup/create.presenter.js')
 const DetermineBlockingBillRunService = require('../determine-blocking-bill-run.service.js')
+const DetermineFinancialYearEndService = require('./determine-financial-year-end.service.js')
 const SessionModel = require('../../../models/session.model.js')
-
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
 
 /**
  * Determines if an existing bill run matches the one a user is trying to setup
@@ -38,7 +37,10 @@ const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const yearToUse = _determineYear(session)
+
+  const { region, type, year } = session.data
+  const yearToUse = await DetermineFinancialYearEndService.go(region, type, year)
+
   const matchResults = await _fetchMatchingBillRun(session, yearToUse)
 
   return {
@@ -49,18 +51,6 @@ async function go (sessionId) {
     // one it makes sense to include this for use by downstream services like GenerateService.
     yearToUse
   }
-}
-
-function _determineYear (session) {
-  const { type, year } = session.data
-
-  if (year && type.startsWith('two_part')) {
-    return Number(year)
-  }
-
-  const { endDate } = determineCurrentFinancialYear()
-
-  return endDate.getFullYear()
 }
 
 async function _fetchMatchingBillRun (session, year) {
