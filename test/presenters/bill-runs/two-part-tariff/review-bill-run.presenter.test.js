@@ -53,14 +53,14 @@ describe('Review Bill Run presenter', () => {
               id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
               licenceRef: '1/11/11/*11/1111',
               licenceHolder: 'Big Farm Ltd',
-              status: 'ready',
+              status: 'reviewReady',
               issue: ''
             },
             {
               id: '395bdc01-605b-44f5-9d90-5836cc013799',
               licenceRef: '2/22/22/*S2/2222',
               licenceHolder: 'Bob Bobbles',
-              status: 'ready',
+              status: 'reviewReady',
               issue: 'Abstraction outside period'
             },
             {

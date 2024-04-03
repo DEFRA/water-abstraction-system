@@ -24,7 +24,7 @@ describe('Review Licence presenter', () => {
         licence: {
           licenceId: '786f0d83-eaf7-43c3-9de5-ec59e3de05ee',
           licenceRef: '01/49/80/4608',
-          status: 'ready',
+          status: 'reviewReady',
           licenceHolder: 'Licence Holder Ltd'
         },
         matchedReturns: [
@@ -68,7 +68,7 @@ describe('Review Licence presenter', () => {
                 chargeElements: [
                   {
                     elementNumber: 'Element 1 of 1',
-                    elementStatus: 'ready',
+                    elementStatus: 'reviewReady',
                     elementDescription: 'Trickle Irrigation - Direct',
                     dates: ['1 April 2022 to 5 June 2022'],
                     issues: [''],
