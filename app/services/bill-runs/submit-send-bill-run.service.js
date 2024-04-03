@@ -63,6 +63,7 @@ async function _fetchBillRun (id) {
     .findById(id)
     .select([
       'id',
+      'batchType',
       'createdAt',
       'externalId',
       'regionId',
@@ -94,7 +95,9 @@ async function _sendBillRun (billRun) {
 
   await _updateBillRunData(billRun, externalBillRun)
 
-  await UnflagBilledLicencesService.go(billRun)
+  if (billRun.batchType === 'supplementary') {
+    await UnflagBilledLicencesService.go(billRun)
+  }
 
   calculateAndLogTimeTaken(startTime, 'Send bill run complete', { billRunId })
 }
