@@ -12,6 +12,7 @@ const CheckYourAnswersPresenter = require('../../../app/presenters/return-requir
 
 describe('Check Your Answers presenter', () => {
   let session
+
   beforeEach(() => {
     session = {
       data: {
