@@ -15,7 +15,7 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * @param {String} licenceId - UUID of the individual licence to review
  * @param {String} reviewChargeElementId - The UUID of the review charge element being viewed
  *
- * @returns {Promise<Object[]>} Contains an array of bill run data and review charge element data
+ * @returns {Promise<Object>} An object containing the bill run and review charge element instances
  */
 async function go (billRunId, reviewChargeElementId) {
   const billRun = await _fetchBillRun(billRunId)
@@ -34,7 +34,7 @@ async function _fetchBillRun (billRunId) {
 }
 
 async function _fetchReviewChargeElement (reviewChargeElementId) {
-  const chargeElement = ReviewChargeElementModel.query()
+  return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
     .withGraphFetched('reviewReturns')
     .withGraphFetched('chargeElement')
@@ -61,8 +61,6 @@ async function _fetchReviewChargeElement (reviewChargeElementId) {
         'chargePeriodEndDate'
       ])
     })
-
-  return chargeElement
 }
 
 module.exports = {

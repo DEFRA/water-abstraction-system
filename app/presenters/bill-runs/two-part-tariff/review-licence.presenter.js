@@ -231,21 +231,21 @@ function _prepareReturnVolume (reviewChargeElement) {
 function _returnStatus (returnLog) {
   if (returnLog.returnStatus === 'due') {
     return 'overdue'
-  } else if (returnLog.underQuery) {
-    return 'query'
-  } else {
-    return returnLog.returnStatus
   }
+
+  if (returnLog.underQuery) {
+    return 'query'
+  }
+  return returnLog.returnStatus
 }
 
 function _returnTotal (returnLog) {
   const { returnStatus, allocated, quantity } = returnLog
 
-  if (returnStatus === 'void' || returnStatus === 'received' || returnStatus === 'due') {
+  if (['due', 'received', 'void'].includes(returnStatus)) {
     return '/'
-  } else {
-    return `${allocated} ML / ${quantity} ML`
   }
+  return `${allocated} ML / ${quantity} ML`
 }
 
 function _totalBillableReturns (reviewChargeReference) {

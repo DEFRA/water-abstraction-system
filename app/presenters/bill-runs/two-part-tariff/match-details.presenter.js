@@ -13,6 +13,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @param {module:BillRunModel} billRun - the data from the bill run
  * @param {module:ReviewChargeElement} reviewChargeElement - the data from the review charge element
+ * @param {String} licenceId - the UUID of the licence the charge element is linked to
  *
  * @returns {Object} the prepared bill run and charge element data to be passed to the match details page
  */
@@ -109,21 +110,23 @@ function _prepareDate (startDate, endDate) {
 function _returnStatus (returnLog) {
   if (returnLog.returnStatus === 'due') {
     return 'overdue'
-  } else if (returnLog.underQuery) {
-    return 'query'
-  } else {
-    return returnLog.returnStatus
   }
+
+  if (returnLog.underQuery) {
+    return 'query'
+  }
+
+  return returnLog.returnStatus
 }
 
 function _returnTotal (returnLog) {
   const { returnStatus, allocated, quantity } = returnLog
 
-  if (returnStatus === 'void' || returnStatus === 'received' || returnStatus === 'due') {
+  if (['due', 'received', 'void'].includes(returnStatus)) {
     return '/'
-  } else {
-    return `${allocated} ML / ${quantity} ML`
   }
+
+  return `${allocated} ML / ${quantity} ML`
 }
 
 module.exports = {
