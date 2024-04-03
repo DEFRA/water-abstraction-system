@@ -26,6 +26,8 @@
 {% macro statusTag(status) %}
   {% if status === 'ready' %}
     {% set tagType = 'info' %}
+  {% elif status === 'review' %}
+    {% set tagType = 'info' %}
   {% elif status === 'sent' %}
     {% set tagType = 'success' %}
   {% elif status === 'empty' %}
