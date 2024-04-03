@@ -4,6 +4,32 @@ const DataController = require('../controllers/data.controller.js')
 
 const routes = [
   {
+    method: 'GET',
+    path: '/data/deduplicate',
+    handler: DataController.deduplicate,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'De-duplicate a licence page'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/data/deduplicate',
+    handler: DataController.submitDeduplicate,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the licence for de-duping'
+    }
+  },
+  {
     method: 'POST',
     path: '/data/seed',
     handler: DataController.seed,
