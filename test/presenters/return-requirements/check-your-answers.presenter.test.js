@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const CheckYourAnswersPresenter = require('../../../app/presenters/return-requirements/check-your-answers.presenter.js')
 
-describe('Check Your Answers presenter - No Returns Required', () => {
+describe('Check Your Answers presenter', () => {
   let session
   beforeEach(() => {
     session = {
