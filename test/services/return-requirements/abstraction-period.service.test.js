@@ -19,6 +19,7 @@ describe('Abstraction Period service', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+
     session = await SessionHelper.add({
       data: {
         licence: {

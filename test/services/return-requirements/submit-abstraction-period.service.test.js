@@ -245,7 +245,7 @@ describe('Submit Abstraction Period service', () => {
           }, { skip: ['id', 'error'] })
         })
 
-        it('returns page data with an error for the data input form element', async () => {
+        it('returns page data with an error', async () => {
           const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
           expect(result.error).to.equal({

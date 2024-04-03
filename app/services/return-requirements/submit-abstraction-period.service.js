@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/abstraction-period` page
- * @module SubmitAbstractionPeriod
+ * @module SubmitAbstractionPeriodService
  */
 
 const AbstractionPeriodPresenter = require('../../presenters/return-requirements/abstraction-period.presenter.js')
@@ -14,9 +14,9 @@ const SessionModel = require('../../models/session.model.js')
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
- * The user input is then validated and the result is then combined with the output of the presenter to generate the page data needed by the view.
- * If there was a validation error the controller will re-render the page so needs this information. If all is well the
- * controller will redirect to the next page in the journey.
+ * The user input is then validated and the result is then combined with the output of the presenter to generate the
+ * page data needed by the view. If there was a validation error the controller will re-render the page so needs this
+ * information. If all is well the controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
