@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const SeedService = require('../../app/services/data/seed/seed.service.js')
+const SubmitDeduplicateService = require('../../app/services/data/deduplicate/submit-deduplicate.service.js')
 const TearDownService = require('../../app/services/data/tear-down/tear-down.service.js')
 
 // For running our service
@@ -34,67 +35,144 @@ describe('Data controller', () => {
     Sinon.restore()
   })
 
-  describe('POST /data/seed', () => {
-    const options = {
-      method: 'POST',
-      url: '/data/seed'
+  describe('/data/deduplicate', () => {
+    const auth = {
+      strategy: 'session',
+      credentials: { scope: ['billing'] }
     }
 
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(SeedService, 'go').resolves()
+    let options
+
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: '/data/deduplicate',
+          auth
+        }
       })
 
-      it('displays the correct message', async () => {
-        const response = await server.inject(options)
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('De-duplicate a licence')
+        })
       })
     })
 
-    describe('when the request fails', () => {
-      describe('because the SeedService errors', () => {
+    describe('POST', () => {
+      const licenceRef = '01/120'
+
+      beforeEach(() => {
+        options = {
+          method: 'POST',
+          url: '/data/deduplicate',
+          auth
+        }
+      })
+
+      describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(SeedService, 'go').rejects()
+          options.payload = { 'licence-ref': licenceRef }
+
+          Sinon.stub(SubmitDeduplicateService, 'go').resolves({ licenceRef })
         })
 
-        it('returns a 500 status', async () => {
+        it('redirects to the search page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(`/licences?query=${licenceRef}`)
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(async () => {
+          options.payload = {}
+
+          Sinon.stub(SubmitDeduplicateService, 'go').resolves({
+            error: { text: 'Enter a licence reference to de-dupe' }
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('There is a problem')
+          expect(response.payload).to.contain('Enter a licence reference to de-dupe')
         })
       })
     })
   })
 
-  describe('POST /data/tear-down', () => {
-    const options = {
-      method: 'POST',
-      url: '/data/tear-down'
-    }
+  describe('/data/seed', () => {
+    describe('POST', () => {
+      const options = {
+        method: 'POST',
+        url: '/data/seed'
+      }
 
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(TearDownService, 'go').resolves()
-      })
-
-      it('returns a 204 status', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(204)
-      })
-    })
-
-    describe('when the request fails', () => {
-      describe('because the TearDownService errors', () => {
+      describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(TearDownService, 'go').rejects()
+          Sinon.stub(SeedService, 'go').resolves()
         })
 
-        it('returns a 500 status', async () => {
+        it('displays the correct message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the SeedService errors', () => {
+          beforeEach(async () => {
+            Sinon.stub(SeedService, 'go').rejects()
+          })
+
+          it('returns a 500 status', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(500)
+          })
+        })
+      })
+    })
+  })
+
+  describe('/data/tear-down', () => {
+    describe('POST', () => {
+      const options = {
+        method: 'POST',
+        url: '/data/tear-down'
+      }
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(TearDownService, 'go').resolves()
+        })
+
+        it('returns a 204 status', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the TearDownService errors', () => {
+          beforeEach(async () => {
+            Sinon.stub(TearDownService, 'go').rejects()
+          })
+
+          it('returns a 500 status', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(500)
+          })
         })
       })
     })
