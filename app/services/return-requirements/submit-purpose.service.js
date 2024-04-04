@@ -59,7 +59,7 @@ function _handleOneOptionSelected (payload) {
   }
 }
 
-function _save (session, payload) {
+async function _save (session, payload) {
   const currentData = session.data
 
   currentData.purposes = payload.purposes

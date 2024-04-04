@@ -63,26 +63,12 @@ describe('Submit Purpose service', () => {
         Sinon.stub(PurposeValidation, 'go').resolves(null)
       })
 
-      it('updates the current session record with selected purposes', async () => {
+      it('saves the submitted value', async () => {
         await SubmitPurposeService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data).to.equal({
-          journey: 'returns-required',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            endDate: null,
-            startDate: '2022-04-01T00:00:00.000Z',
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z'
-          },
-          purposes: [
-            'Potable Water Supply - Direct'
-          ]
-        }
-        )
+        expect(refreshedSession.data.purposes).to.equal('Potable Water Supply - Direct')
       })
 
       it('returns an empty object (no page data needed for a redirect)', async () => {

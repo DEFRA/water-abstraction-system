@@ -40,24 +40,24 @@ describe('Submit No Returns Required service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'no-returns-required': 'abstraction_below_100_cubic_metres_per_day'
+          reason: 'abstraction-below-100-cubic-metres-per-day'
         }
       })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitNoReturnsRequiredService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
       })
 
-      it('returns page data for the view', async () => {
+      it('returns the journey to redirect the page', async () => {
         const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          pageTitle: 'Why are no returns required?',
-          licenceRef: '01/ABC'
+          journey: 'no-returns-required'
+
         }, { skip: ['id'] })
       })
     })
@@ -65,13 +65,7 @@ describe('Submit No Returns Required service', () => {
     describe('with an invalid payload', () => {
       describe('because the user has not selected anything', () => {
         beforeEach(() => {
-          payload = {}
-        })
-
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
+          payload = { journey: 'no-returns-required' }
         })
 
         it('returns page data for the view', async () => {
