@@ -14,7 +14,7 @@
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, purposesData, payload = {}) {
+function go (session, purposesData) {
   const data = {
     id: session.id,
     licenceId: session.data.licence.id,
