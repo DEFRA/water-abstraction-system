@@ -39,8 +39,6 @@ describe('Check Your Answers service', () => {
     it('fetches the current setup session record', async () => {
       const result = await CheckYourAnswersService.go(session.id)
 
-      console.log('-----sESSION----', session.data)
-
       expect(result.id).to.equal(session.id)
       expect(session.data.checkYourAnswersVisited).to.equal(true)
     })
