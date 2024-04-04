@@ -60,45 +60,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review',
-    handler: BillRunsController.review,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Review two-part tariff match and allocation results'
-    }
-  },
-  {
-    method: 'POST',
-    path: '/bill-runs/{id}/review',
-    handler: BillRunsController.review,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'POST request recieved when filtering applied to review two-part tariff match and allocation results'
-    }
-  },
-  {
-    method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}',
-    handler: BillRunsController.reviewLicence,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Review a two-part tariff licence'
-    }
-  },
-  {
-    method: 'GET',
     path: '/bill-runs/{id}/send',
     handler: BillRunsController.send,
     options: {
