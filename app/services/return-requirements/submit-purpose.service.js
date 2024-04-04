@@ -38,7 +38,7 @@ async function go (sessionId, payload) {
   }
 
   const purposesData = await FetchPurposesService.go(session.data.licence.id)
-  const formattedData = SelectPurposePresenter.go(session, purposesData, payload)
+  const formattedData = SelectPurposePresenter.go(session, purposesData)
 
   return {
     activeNavBar: 'search',
