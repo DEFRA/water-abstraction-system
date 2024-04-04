@@ -42,7 +42,8 @@ describe('Match Details presenter', () => {
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             returnStatus: 'completed',
             returnTotal: '0 ML / 0 ML',
-            issues: ['']
+            issues: [''],
+            returnLink: '/returns/return?id=v1:1:01/57/14/1646:15584914:2022-04-01:2023-03-31'
           }
         ]
       })

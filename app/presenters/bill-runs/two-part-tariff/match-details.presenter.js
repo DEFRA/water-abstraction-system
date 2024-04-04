@@ -38,7 +38,7 @@ function go (billRun, reviewChargeElement, licenceId) {
       authorisedVolume: reviewChargeElement.chargeElement.authorisedAnnualQuantity,
       issues: reviewChargeElement.issues?.length > 0 ? reviewChargeElement.issues.split(', ') : []
     },
-    matchedReturns: _matchedReturns(reviewChargeElement)
+    matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns)
   }
 }
 
@@ -49,20 +49,22 @@ function _financialYear (financialYearEnding) {
   return `${startYear} to ${endYear}`
 }
 
-function _matchedReturns (reviewChargeElement) {
-  const { reviewReturns } = reviewChargeElement
+function _matchedReturns (reviewReturns) {
   const matchedReturns = []
 
-  reviewReturns.forEach((reviewReturn) => {
+  reviewReturns.forEach((returnLog) => {
+    const { returnLink, returnTotal } = _returnLinkAndTotal(returnLog)
+
     matchedReturns.push({
-      returnId: reviewReturn.returnId,
-      reference: reviewReturn.returnReference,
-      dates: _prepareDate(reviewReturn.startDate, reviewReturn.endDate),
-      purpose: reviewReturn.purposes[0]?.tertiary.description,
-      description: reviewReturn.description,
-      returnStatus: _returnStatus(reviewReturn),
-      returnTotal: _returnTotal(reviewReturn),
-      issues: reviewReturn.issues?.length > 0 ? reviewReturn.issues.split(', ') : ['']
+      returnId: returnLog.returnId,
+      reference: returnLog.returnReference,
+      dates: _prepareDate(returnLog.startDate, returnLog.endDate),
+      purpose: returnLog.purposes[0]?.tertiary.description,
+      description: returnLog.description,
+      returnStatus: _returnStatus(returnLog),
+      returnTotal,
+      issues: returnLog.issues?.length > 0 ? returnLog.issues.split(', ') : [''],
+      returnLink
     })
   })
 
@@ -107,6 +109,16 @@ function _prepareDate (startDate, endDate) {
   return `${preparedStartDate} to ${preparedEndDate}`
 }
 
+function _returnLinkAndTotal (returnLog) {
+  const { returnStatus, allocated, quantity } = returnLog
+
+  if (['due', 'received', 'void'].includes(returnStatus)) {
+    return { returnTotal: '/', returnLink: `/return/internal?returnId=${returnLog.returnId}` }
+  }
+
+  return { returnTotal: `${allocated} ML / ${quantity} ML`, returnLink: `/returns/return?id=${returnLog.returnId}` }
+}
+
 function _returnStatus (returnLog) {
   if (returnLog.returnStatus === 'due') {
     return 'overdue'
@@ -117,16 +129,6 @@ function _returnStatus (returnLog) {
   }
 
   return returnLog.returnStatus
-}
-
-function _returnTotal (returnLog) {
-  const { returnStatus, allocated, quantity } = returnLog
-
-  if (['due', 'received', 'void'].includes(returnStatus)) {
-    return '/'
-  }
-
-  return `${allocated} ML / ${quantity} ML`
 }
 
 module.exports = {
