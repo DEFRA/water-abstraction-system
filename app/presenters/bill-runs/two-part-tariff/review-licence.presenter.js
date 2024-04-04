@@ -123,26 +123,6 @@ function _chargeElementCount (reviewChargeVersion) {
   return chargeElementCount
 }
 
-function _returnStatus (returnLog) {
-  if (returnLog.returnStatus === 'due') {
-    return 'overdue'
-  } else if (returnLog.underQuery) {
-    return 'query'
-  } else {
-    return returnLog.returnStatus
-  }
-}
-
-function _returnTotal (returnLog) {
-  const { returnStatus, allocated, quantity } = returnLog
-
-  if (returnStatus === 'void' || returnStatus === 'received' || returnStatus === 'due') {
-    return '/'
-  } else {
-    return `${allocated} ML / ${quantity} ML`
-  }
-}
-
 function _contactName (billingAccount) {
   const contact = billingAccount.billingAccountAddresses[0].contact
 
@@ -174,7 +154,8 @@ function _matchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           returnTotal: _returnTotal(returnLog),
-          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ['']
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : [''],
+          returnLink: _returnLink(returnLog)
         }
       )
     }
@@ -254,6 +235,34 @@ function _prepareReturnVolume (reviewChargeElement) {
   return returnVolumes
 }
 
+function _returnLink (returnLog) {
+  if (['due', 'received', 'void'].includes(returnLog.returnStatus)) {
+    return `/return/internal?returnId=${returnLog.returnId}`
+  }
+
+  return `/returns/return?id=${returnLog.returnId}`
+}
+
+function _returnStatus (returnLog) {
+  if (returnLog.returnStatus === 'due') {
+    return 'overdue'
+  }
+
+  if (returnLog.underQuery) {
+    return 'query'
+  }
+  return returnLog.returnStatus
+}
+
+function _returnTotal (returnLog) {
+  const { returnStatus, allocated, quantity } = returnLog
+
+  if (['due', 'received', 'void'].includes(returnStatus)) {
+    return '/'
+  }
+  return `${allocated} ML / ${quantity} ML`
+}
+
 function _totalBillableReturns (reviewChargeReference) {
   let totalBillableReturns = 0
   let totalQuantity = 0
@@ -282,7 +291,8 @@ function _unmatchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           returnTotal: `${returnLog.allocated} / ${returnLog.quantity} ML`,
-          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ['']
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : [''],
+          returnLink: _returnLink(returnLog)
         }
       )
     }
