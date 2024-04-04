@@ -49,9 +49,8 @@ describe('Submit Purpose service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          licencePurposes: [
-            'Potable Water Supply - Direct',
-            'Transfer Between Sources (Pre Water Act 2003)'
+          purposes: [
+            'Potable Water Supply - Direct'
           ]
         }
 
@@ -64,26 +63,32 @@ describe('Submit Purpose service', () => {
         Sinon.stub(PurposeValidation, 'go').resolves(null)
       })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitPurposeService.go(session.id, payload)
+      it('updates the current session record with selected purposes', async () => {
+        await SubmitPurposeService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal({
+          journey: 'returns-required',
+          licence: {
+            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            endDate: null,
+            startDate: '2022-04-01T00:00:00.000Z',
+            licenceRef: '01/ABC',
+            licenceHolder: 'Turbo Kid',
+            currentVersionStartDate: '2023-01-01T00:00:00.000Z'
+          },
+          purposes: [
+            'Potable Water Supply - Direct'
+          ]
+        }
+        )
       })
 
-      it('returns page data for the view', async () => {
+      it('returns an empty object (no page data needed for a redirect)', async () => {
         const result = await SubmitPurposeService.go(session.id, payload)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          pageTitle: 'Select the purpose for the requirements for returns',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          licencePurposes: [
-            'Potable Water Supply - Direct',
-            'Transfer Between Sources (Pre Water Act 2003)'
-          ]
-        }, { skip: ['id'] })
+        expect(result).to.equal({})
       })
     })
 
@@ -117,7 +122,8 @@ describe('Submit Purpose service', () => {
             licencePurposes: [
               'Transfer Between Sources (Pre Water Act 2003)',
               'Potable Water Supply - Direct'
-            ]
+            ],
+            selectedPurposes: ''
           }, { skip: ['id', 'error'] })
         })
 
