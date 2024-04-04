@@ -71,16 +71,8 @@
     {% for return in matchedReturns %}
       {% set matchedReturnIndex = loop.index0 %}
 
-      {% if return.returnStatus == 'overdue' or return.returnStatus == 'query' %}
-        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
-      {% elif return.status == 'void' %}
-        {% set returnLink = "/return/internal?returnId=" + return.returnId %}
-      {% else %}
-        {% set returnLink = "/returns/return?id=" + return.returnId%}
-      {% endif %}
-
       {% set action %}
-        <a class="govuk-link" href="{{returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
         <div>{{return.dates}}</div>
       {% endset %}
 
@@ -159,7 +151,7 @@
       {% set unmatchedReturnIndex = loop.index0 %}
 
       {% set action %}
-        <a class="govuk-link" href="/licences/{{ licence.licenceId }}#returns">{{ return.reference }}<span class="govuk-visually-hidden"></a>
+        <a class="govuk-link" href="{{return.returnLink}}">{{ return.reference }}<span class="govuk-visually-hidden"></a>
         <div>{{return.dates}}</div>
       {% endset %}
 
