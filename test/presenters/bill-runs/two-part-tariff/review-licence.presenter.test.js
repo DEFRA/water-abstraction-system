@@ -127,6 +127,12 @@ describe('Review Licence presenter', () => {
 
           expect(result.matchedReturns[0].returnTotal).to.equal('/')
         })
+
+        it('formats the returns link correctly', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].returnLink).to.equal('/return/internal?returnId=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
+        })
       })
     })
   })
