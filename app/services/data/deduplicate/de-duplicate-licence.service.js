@@ -42,15 +42,15 @@ async function go (licenceRef) {
   // NOTE: In theory there could be more than one 'bad' licence for the matching licence reference! But mainly we do
   // this as a loop because it is an easy way to deal with the fact we have an array.
   for (const invalidLicence of invalidLicences) {
-    const { id: licenceId, licenceRef } = invalidLicence
+    const { id: licenceId, licenceRef: invalidLicenceRef } = invalidLicence
 
     // NOTE: Order is important. Some tables have to be cleared before others. So resist trying to make the calls
     // alphabetical!
-    await _documentRoles(licenceRef)
-    await _documents(licenceRef)
-    await _documentHeaders(licenceRef)
-    await _permitLicences(licenceRef)
-    await _returns(licenceRef)
+    await _documentRoles(invalidLicenceRef)
+    await _documents(invalidLicenceRef)
+    await _documentHeaders(invalidLicenceRef)
+    await _permitLicences(invalidLicenceRef)
+    await _returns(invalidLicenceRef)
     await _licenceVersionPurposeConditions(licenceId)
     await _licenceVersionPurposes(licenceId)
     await _licenceVersions(licenceId)
@@ -72,12 +72,13 @@ async function _determineInvalidLicences (licenceRef) {
   // NOTE: Match any string which has whitespace at the start or the end of the string
   // ^  asserts position at start of the string
   // \s matches any whitespace character
-  // |  alternate - match either a or b
+  const whitespaceAtStartRegex = /^\s/
   // \s matches any whitespace character
   // $  asserts position at end of the string
-  const whitespaceRegex = /^\s|\s$/
+  const whitespaceAtEndRegex = /\s$/
+
   const invalidLicences = licences.filter((licence) => {
-    return whitespaceRegex.test(licence.licenceRef)
+    return whitespaceAtStartRegex.test(licence.licenceRef) || whitespaceAtEndRegex.test(licence.licenceRef)
   })
 
   return invalidLicences
