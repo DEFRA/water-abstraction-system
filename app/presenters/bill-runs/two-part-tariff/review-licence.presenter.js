@@ -245,6 +245,7 @@ function _returnStatus (returnLog) {
   if (returnLog.underQuery) {
     return 'query'
   }
+
   return returnLog.returnStatus
 }
 
@@ -254,6 +255,7 @@ function _returnTotal (returnLog) {
   if (['due', 'received', 'void'].includes(returnStatus)) {
     return '/'
   }
+
   return `${allocated} ML / ${quantity} ML`
 }
 

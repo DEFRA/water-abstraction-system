@@ -12,7 +12,6 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * Fetches the match details for an individual charge element
  *
  * @param {String} billRunId - UUID of the bill run
- * @param {String} licenceId - UUID of the individual licence to review
  * @param {String} reviewChargeElementId - The UUID of the review charge element being viewed
  *
  * @returns {Promise<Object>} An object containing the bill run and review charge element instances
