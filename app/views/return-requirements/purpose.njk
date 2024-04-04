@@ -9,10 +9,14 @@
 
 {% block breadcrumbs %}
   {# Back link #}
+  {% set backLink %}
+    /system/return-requirements/{{ id }}/{{ 'check-your-answers' if checkYourAnswersVisited else 'setup' }}
+  {% endset %}
+
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/setup"
+      href: backLink
     })
   }}
 {% endblock %}

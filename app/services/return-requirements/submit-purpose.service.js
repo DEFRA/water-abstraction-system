@@ -33,7 +33,9 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+    }
   }
 
   const formattedData = SelectPurposePresenter.go(session, purposesData, payload)
@@ -49,7 +51,7 @@ async function go (sessionId, payload) {
 async function _save (session, payload) {
   const currentData = session.data
 
-  currentData.purpose = payload.purpose
+  currentData.purposes = payload.purposes
 
   return session.$query().patch({ data: currentData })
 }

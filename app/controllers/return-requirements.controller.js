@@ -190,7 +190,6 @@ async function startDate (request, h) {
   const { sessionId } = request.params
 
   const pageData = await StartDateService.go(sessionId)
-
   return h.view('return-requirements/start-date.njk', {
     ...pageData
   })
@@ -260,6 +259,10 @@ async function submitPoints (request, h) {
     return h.view('return-requirements/points.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period`)
 }
 
@@ -272,6 +275,10 @@ async function submitPurpose (request, h) {
     return h.view('return-requirements/purpose.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/points`)
 }
 
@@ -282,6 +289,10 @@ async function submitReason (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/reason.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/setup`)
@@ -314,6 +325,10 @@ async function submitSiteDescription (request, h) {
     return h.view('return-requirements/site-description.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-collected`)
 }
 
@@ -324,6 +339,10 @@ async function submitStartDate (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/start-date.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   if (pageData.journey === 'returns-required') {

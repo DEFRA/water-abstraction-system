@@ -27,6 +27,7 @@ async function go (sessionId) {
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     pageTitle: 'Select the purpose for the requirements for returns',
     ...formattedData
   }

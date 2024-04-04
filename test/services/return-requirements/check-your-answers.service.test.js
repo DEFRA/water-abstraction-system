@@ -21,6 +21,7 @@ describe('Check Your Answers service', () => {
     await DatabaseSupport.clean()
     session = await SessionHelper.add({
       data: {
+        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licence: {
           endDate: null,
           licenceRef: '01/ABC',
@@ -38,7 +39,10 @@ describe('Check Your Answers service', () => {
     it('fetches the current setup session record', async () => {
       const result = await CheckYourAnswersService.go(session.id)
 
+      console.log('-----sESSION----', session.data)
+
       expect(result.id).to.equal(session.id)
+      expect(session.data.checkYourAnswersVisited).to.equal(true)
     })
 
     it('returns page data for the view', async () => {
@@ -46,6 +50,7 @@ describe('Check Your Answers service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        id: session.id,
         pageTitle: 'Check the return requirements for Astro Boy',
         journey: 'no-returns-required',
         licenceRef: '01/ABC',

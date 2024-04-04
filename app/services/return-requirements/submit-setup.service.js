@@ -32,6 +32,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited,
       redirect: _redirect(payload.setup)
     }
   }
@@ -40,6 +41,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'How do you want to set up the return requirement?',
     ...formattedData
