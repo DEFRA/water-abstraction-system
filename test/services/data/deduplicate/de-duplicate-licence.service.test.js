@@ -166,7 +166,10 @@ describe('De-duplicate Licence service', () => {
 
   describe('when there is no matching licence', () => {
     it('removes no licences', async () => {
-      await DeDuplicateLicenceService.go(licenceRef)
+      // NOTE: We also pondered what happens if someone enters a reference that is invalid for other reasons like
+      // they put a space in the middle. We definitely have no licences with this kind of reference so it will be
+      // treated in the same way as a reference that matches no licences.
+      await DeDuplicateLicenceService.go('01/ 120')
 
       const allLicences = await LicenceModel.query().select('id')
       const allLicenceIds = allLicences.map((licence) => {
