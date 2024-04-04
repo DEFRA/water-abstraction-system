@@ -47,9 +47,7 @@ describe('View Licence service', () => {
 
         expect(result).to.equal({
           abstractionConditionDetails: {
-            caption: 'Abstraction conditions',
             conditions: [],
-            linkText: 'View details of the abstraction conditions',
             numberOfConditions: 0
           },
           abstractionPeriods: null,
@@ -60,14 +58,12 @@ describe('View Licence service', () => {
           ],
           abstractionPointsCaption: 'Point of abstraction',
           abstractionQuantities: null,
-          abstractionQuantityCaption: 'Abstraction amounts',
           id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
           endDate: null,
           licenceHolder: 'Unregistered licence',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
-          monitoringStationCaption: 'Monitoring station',
           monitoringStations: [],
           pageTitle: 'Licence 01/130/R01',
           purposes: null,

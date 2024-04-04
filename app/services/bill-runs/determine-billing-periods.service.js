@@ -7,47 +7,64 @@
 
 const { determineCurrentFinancialYear } = require('../../lib/general.lib.js')
 
+// NOTE: Because of the unique qualities of Javascript, Year and Day are literal values, month is an index! So,
+// January is actually 0, February is 1 etc. This is why we are always deducting 1 from the months.
+const APRIL = 3
+const MARCH = 2
+const NO_OF_YEARS_TO_LOOK_BACK = 5
+const SROC_FIRST_FIN_YEAR_END = 2023
+
 /**
- * Returns the billing periods needed when generating a bill run
+ * Determine the billing periods needed when generating a bill run
  *
- * Using the current date at the time the service is called, it calculates the billing periods to use. As we permit
- * changes to charge versions to be retroactively applied for up to 5 years. This service will calculate the billing
- * periods for the current year plus a maximum of the previous 5 years. Or to the earliest possible `endYear` for SROC
- * which is 2023, whichever is the greatest.
+ * Using the `financialYearEnding` provided we first determine the financial start and end date for that financial year. If
+ * no `financialYearEnding` is provided we use the current financial year.
  *
- * If a `financialYearEnding` is passed to this service a single billing period will be generated based on that value.
+ * If the bill run type is 'annual' or 'two_part_tariff' we just return that billing period.
  *
- * @param {Number} financialYearEnding End year of the bill run. Only populated for two-part-tariff
+ * If the bill run type is 'supplementary' we then need to calculate a range of up to 6 billing periods back to 2022-2023.
+ * The service supports corrections and changes being made to charge version information in the current financial year
+ * plus 5. We limit this to 2022-2023 as that is the first SROC year (and we don't handle PRESROC!)
+ *
+ * Our 3 billing engines then use these periods to generate the bill run.
+ *
+ * @param {string} billRunType - The type of bill run, for example, 'annual' or 'supplementary'
+ * @param {Number} [financialYearEnding] - End year of the bill run. Only populated for two-part-tariff
  *
  * @returns {Object[]} An array of billing periods each containing a `startDate` and `endDate`.
  */
-function go (financialYearEnding) {
-  const SROC_FIRST_FIN_YEAR_END = 2023
-  const NO_OF_YEARS_TO_LOOK_BACK = 5
+function go (billRunType, financialYearEnding) {
+  const financialYear = _financialYear(financialYearEnding)
 
-  const currentFinancialYear = determineCurrentFinancialYear()
+  return _billingPeriods(billRunType, financialYear)
+}
 
+function _addBillingPeriod (billingPeriods, startYear, endYear) {
+  billingPeriods.push({
+    startDate: new Date(startYear, APRIL, 1),
+    endDate: new Date(endYear, MARCH, 31)
+  })
+}
+
+function _billingPeriods (billRunType, financialYear) {
   const billingPeriods = []
 
-  // 01-APR to 31-MAR
-  const financialPeriod = {
-    start: { day: 1, month: 3 },
-    end: { day: 31, month: 2 }
-  }
+  const years = { startYear: financialYear.startDate.getFullYear(), endYear: financialYear.endDate.getFullYear() }
 
-  // Two-part-tariff bill runs will always be a single period and will provide a value for `financialYearEnding` so we
-  // just return a single period based on that value. `financialYearEnding` is null for other bill run types.
-  if (financialYearEnding) {
-    _addBillingPeriod(billingPeriods, financialPeriod, financialYearEnding - 1, financialYearEnding)
+  // Annual and two-part-tariff bill runs will always be a single period
+  if (['annual', 'two_part_tariff'].includes(billRunType)) {
+    _addBillingPeriod(billingPeriods, years.startYear, years.endYear)
 
     return billingPeriods
   }
 
-  const years = { startYear: currentFinancialYear.startDate.getFullYear(), endYear: currentFinancialYear.endDate.getFullYear() }
+  // For example, years.endYear is 2024. So Math.max(2023, 2019) results in 2023 being the earliest year
+  // If years.endYear is 2029. So Math.max(2023, 2024) results in 2024 being the earliest year we go back to
+  // It means we'll never pick a PRESROC for our billing periods. But also we are future proofed should we still be
+  // here in 2029!
   const earliestSrocFinYearEnd = Math.max(SROC_FIRST_FIN_YEAR_END, (years.endYear - NO_OF_YEARS_TO_LOOK_BACK))
-
   while (earliestSrocFinYearEnd <= years.endYear) {
-    _addBillingPeriod(billingPeriods, financialPeriod, years.startYear, years.endYear)
+    _addBillingPeriod(billingPeriods, years.startYear, years.endYear)
 
     years.startYear--
     years.endYear--
@@ -56,11 +73,20 @@ function go (financialYearEnding) {
   return billingPeriods
 }
 
-function _addBillingPeriod (billingPeriods, financialPeriod, startYear, endYear) {
-  billingPeriods.push({
-    startDate: new Date(startYear, financialPeriod.start.month, financialPeriod.start.day),
-    endDate: new Date(endYear, financialPeriod.end.month, financialPeriod.end.day)
-  })
+/**
+ * TODO: Whilst we still have `POST /bill-runs` to support bill runs created using the legacy setup bill run journey we
+ * can receive requests where financialYearEnding has not been set. This exists to handle that scenario and can be
+ * deleted when we are confident we can delete that end point.
+ */
+function _financialYear (financialYearEnding) {
+  if (financialYearEnding) {
+    return {
+      startDate: new Date(financialYearEnding - 1, APRIL, 1),
+      endDate: new Date(financialYearEnding, MARCH, 31)
+    }
+  }
+
+  return determineCurrentFinancialYear()
 }
 
 module.exports = {
