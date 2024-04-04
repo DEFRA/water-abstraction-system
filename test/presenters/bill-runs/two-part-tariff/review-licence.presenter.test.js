@@ -36,7 +36,8 @@ describe('Review Licence presenter', () => {
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             purpose: 'Site description',
             returnTotal: '0 ML / 0 ML',
-            issues: ['']
+            issues: [''],
+            returnLink: '/returns/return?id=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31'
           }
         ],
         unmatchedReturns: [],
