@@ -19,17 +19,18 @@
   <div class="govuk-body">
     <form method="post">
       {{ govukInput({
-        classes: "govuk-!-width-one-third",
+        classes: 'govuk-!-width-one-third',
         errorMessage: error,
         label: {
           text: pageTitle,
-          classes: "govuk-label--l",
+          classes: 'govuk-label--l',
           isPageHeading: true
         },
         hint: {
-          text: "Enter the licence reference for de-duping"
+          text: 'Enter the licence reference for de-duping'
         },
-        name: "licence-ref"
+        id: 'licence-ref',
+        name: 'licence-ref'
       }) }}
 
       {{ govukButton({ text: "Remove duplicate" }) }}
