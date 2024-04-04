@@ -13,7 +13,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'De-duplicate a licence page'
+      description: 'De-duplicate a licence'
     }
   },
   {
@@ -26,7 +26,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Submit the licence for de-duping'
+      description: 'Submit licence to be de-duped'
     }
   },
   {
