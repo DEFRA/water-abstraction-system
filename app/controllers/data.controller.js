@@ -24,7 +24,6 @@ async function seed (_request, h) {
 
 async function submitDeduplicate (request, h) {
   const pageData = await SubmitDeduplicateService.go(request.payload)
-  console.log('🚀 ~ submitDeduplicate ~ pageData:', pageData)
 
   if (pageData.error) {
     return h.view('data/deduplicate.njk', {
