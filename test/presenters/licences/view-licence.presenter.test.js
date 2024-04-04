@@ -35,7 +35,6 @@ describe('View Licence presenter', () => {
         abstractionPoints: ['At National Grid Reference TL 23198 88603'],
         abstractionPointsCaption: 'Point of abstraction',
         abstractionQuantities: null,
-        abstractionQuantityCaption: 'Abstraction amounts',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
         licenceHolder: 'Unregistered licence',
@@ -335,6 +334,18 @@ describe('View Licence presenter', () => {
   })
 
   describe("the 'monitoringStations' property", () => {
+    describe('when the licenceGaugingStations property is not an array', () => {
+      beforeEach(() => {
+        licence.licenceGaugingStations = {}
+      })
+
+      it('will return an empty array of monitoring station details', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.monitoringStations).to.equal([])
+      })
+    })
+
     describe('when the licence has no gauging stations', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = []
@@ -576,7 +587,6 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -595,7 +605,6 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
@@ -614,12 +623,11 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
       })
     })
 
-    describe('and it does not have a purposes array', () => {
+    describe('and it does not have a permitLicence object', () => {
       beforeEach(() => {
         licence.permitLicence = undefined
       })
@@ -631,8 +639,52 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPointsCaption).to.equal(null)
         expect(result.abstractionPointLinkText).to.equal(null)
         expect(result.abstractionQuantities).to.equal(null)
-        expect(result.abstractionQuantityCaption).to.equal(null)
         expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it does not have a purposes array', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes = undefined
+      })
+
+      it('will return null for the source of supply and abstraction point information', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPoints).to.equal(null)
+        expect(result.abstractionPointsCaption).to.equal(null)
+        expect(result.abstractionPointLinkText).to.equal(null)
+        expect(result.abstractionQuantities).to.equal(null)
+        expect(result.sourceOfSupply).to.equal(null)
+      })
+    })
+
+    describe('and it has an abstraction point with 4 national grid references but NGR4_NORTH is null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].purposePoints[0].point_detail = {
+          NGR1_SHEET: 'TL',
+          NGR2_SHEET: 'TM',
+          NGR3_SHEET: 'TN',
+          NGR4_SHEET: 'TO',
+          NGR1_EAST: '23198',
+          NGR2_EAST: '23197',
+          NGR3_EAST: '23196',
+          NGR4_EAST: '23195',
+          NGR1_NORTH: '88603',
+          NGR2_NORTH: '88602',
+          NGR3_NORTH: '88601',
+          NGR4_NORTH: 'null'
+        }
+      })
+
+      it('will return the correct information for the abstraction point', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPoints).to.equal([
+          'Between National Grid References TL 23198 88603 and TM 23197 88602'
+        ])
+        expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
+        expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
       })
     })
 
@@ -683,6 +735,27 @@ describe('View Licence presenter', () => {
         expect(result.abstractionPoints).to.equal([
           'Between National Grid References TL 23198 88603 and TM 23197 88602'
         ])
+        expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
+        expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
+      })
+    })
+
+    describe('and it has an NGR2_SHEET abstraction point but NGR2_NORTH is null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].purposePoints[0].point_detail = {
+          NGR1_SHEET: 'TL',
+          NGR2_SHEET: 'TM',
+          NGR1_EAST: '23198',
+          NGR2_EAST: '23197',
+          NGR1_NORTH: '88603',
+          NGR2_NORTH: 'null'
+        }
+      })
+
+      it('will return the information for the abstraction point', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
         expect(result.abstractionPointLinkText).to.equal('View details of the abstraction point')
       })
@@ -796,12 +869,11 @@ describe('View Licence presenter', () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
-          '265 cubic metres per year',
-          '24 cubic metres per day',
-          '60 cubic metres per hour',
-          '6 litres per second'
+          '265.00 cubic metres per year',
+          '24.00 cubic metres per day',
+          '60.00 cubic metres per hour',
+          '6.00 litres per second'
         ])
-        expect(result.abstractionQuantityCaption).to.equal('Abstraction amounts')
       })
     })
 
@@ -814,9 +886,132 @@ describe('View Licence presenter', () => {
         const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
-          '265 cubic metres per year'
+          '265.00 cubic metres per year'
         ])
-        expect(result.abstractionQuantityCaption).to.equal('Abstraction amount')
+      })
+    })
+
+    describe('and it has abstraction ANNUAL_QTY and DAILY_QTY set to null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].ANNUAL_QTY = 'null'
+        licence.permitLicence.purposes[0].DAILY_QTY = 'null'
+        licence.permitLicence.purposes[0].HOURLY_QTY = 60
+        licence.permitLicence.purposes[0].INST_QTY = 6
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '60.00 cubic metres per hour',
+          '6.00 litres per second'
+        ])
+      })
+    })
+
+    describe('and it has abstraction DAILY_QTY set to null', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes[0].ANNUAL_QTY = 'null'
+        licence.permitLicence.purposes[0].DAILY_QTY = 'null'
+        licence.permitLicence.purposes[0].HOURLY_QTY = 'null'
+        licence.permitLicence.purposes[0].INST_QTY = 6
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '6.00 litres per second'
+        ])
+      })
+    })
+
+    describe('and it has two purposes with the same abstraction information', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes = [{
+          ANNUAL_QTY: 265,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }, {
+          ANNUAL_QTY: 265,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }]
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal([
+          '265.00 cubic metres per year',
+          '24.00 cubic metres per day',
+          '60.00 cubic metres per hour',
+          '6.00 litres per second'
+        ])
+      })
+    })
+
+    describe('and it has two purposes with different abstraction information', () => {
+      beforeEach(() => {
+        licence.permitLicence.purposes = [{
+          ANNUAL_QTY: 265,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }, {
+          ANNUAL_QTY: 266,
+          DAILY_QTY: 24,
+          HOURLY_QTY: 60,
+          INST_QTY: 6,
+          purposePoints: [{
+            point_detail: {
+              NGR1_SHEET: 'TL',
+              NGR1_EAST: '23198',
+              NGR1_NORTH: '88603'
+            },
+            point_source: {
+              NAME: 'SURFACE WATER SOURCE OF SUPPLY'
+            }
+          }]
+        }]
+      })
+
+      it('will display the formatted string with the rate per period and the correct caption', async () => {
+        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.abstractionQuantities).to.equal(null)
       })
     })
   })
