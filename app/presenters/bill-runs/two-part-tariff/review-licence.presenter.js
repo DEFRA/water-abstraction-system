@@ -148,7 +148,8 @@ function _matchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           returnTotal: _returnTotal(returnLog),
-          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ['']
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : [''],
+          returnLink: _returnLink(returnLog)
         }
       )
     }
@@ -228,6 +229,14 @@ function _prepareReturnVolume (reviewChargeElement) {
   return returnVolumes
 }
 
+function _returnLink (returnLog) {
+  if (['due', 'received', 'void'].includes(returnLog.returnStatus)) {
+    return `/return/internal?returnId=${returnLog.returnId}`
+  }
+
+  return `/returns/return?id=${returnLog.returnId}`
+}
+
 function _returnStatus (returnLog) {
   if (returnLog.returnStatus === 'due') {
     return 'overdue'
@@ -276,7 +285,8 @@ function _unmatchedReturns (returnLogs) {
           description: returnLog.description,
           purpose: returnLog.purposes[0].tertiary.description,
           returnTotal: `${returnLog.allocated} / ${returnLog.quantity} ML`,
-          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : ['']
+          issues: returnLog.issues.length > 0 ? returnLog.issues.split(', ') : [''],
+          returnLink: _returnLink(returnLog)
         }
       )
     }

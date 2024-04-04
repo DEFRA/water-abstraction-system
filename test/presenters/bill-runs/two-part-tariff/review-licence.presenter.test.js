@@ -4,16 +4,21 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
 describe('Review Licence presenter', () => {
+  let billRun
+  let licence
+
   describe('when there is data to be presented for the review licence page', () => {
-    const billRun = _billRun()
-    const licence = _licenceData()
+    beforeEach(() => {
+      billRun = _billRun()
+      licence = _licenceData()
+    })
 
     it('correctly presents the data', async () => {
       const result = ReviewLicencePresenter.go(billRun, licence)
@@ -36,10 +41,23 @@ describe('Review Licence presenter', () => {
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             purpose: 'Site description',
             returnTotal: '0 ML / 0 ML',
-            issues: ['']
+            issues: [''],
+            returnLink: '/returns/return?id=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31'
           }
         ],
-        unmatchedReturns: [],
+        unmatchedReturns: [
+          {
+            dates: '1 April 2022 to 6 May 2022',
+            description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
+            issues: [''],
+            purpose: 'Site description',
+            reference: '10031343',
+            returnId: 'v2:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
+            returnLink: '/returns/return?id=v2:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
+            returnStatus: 'completed',
+            returnTotal: '0 / 0 ML'
+          }
+        ],
         chargeData: [
           {
             financialYear: '2022 to 2023',
@@ -83,6 +101,84 @@ describe('Review Licence presenter', () => {
         ]
       })
     })
+
+    describe("the 'issues' property", () => {
+      describe('when the charge element has multiple issues', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].issues = 'Over abstraction, no returns'
+        })
+
+        it('correctly splits the issues into an array', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Over abstraction', 'no returns'])
+        })
+      })
+
+      describe('when the matched returns has multiple issues', () => {
+        beforeEach(() => {
+          licence[0].reviewReturns[0].issues = 'Over abstraction, no returns'
+        })
+
+        it('correctly splits the issues into an array', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].issues).to.equal(['Over abstraction', 'no returns'])
+        })
+      })
+
+      describe('when the unmatched returns has multiple issues', () => {
+        beforeEach(() => {
+          licence[0].reviewReturns[1].issues = 'Over abstraction, no returns'
+        })
+
+        it('correctly splits the issues into an array', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.unmatchedReturns[0].issues).to.equal(['Over abstraction', 'no returns'])
+        })
+      })
+    })
+
+    describe("the 'returnStatus' property", () => {
+      describe("when a return has a status of 'due'", () => {
+        beforeEach(() => {
+          licence[0].reviewReturns[0].returnStatus = 'due'
+        })
+
+        it("changes the status text to 'overdue'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].returnStatus).to.equal('overdue')
+        })
+
+        it('formats the returns total correctly', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].returnTotal).to.equal('/')
+        })
+
+        it('formats the returns link correctly', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].returnLink).to.equal('/return/internal?returnId=v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
+        })
+      })
+    })
+
+    describe("the 'underQuery' property", () => {
+      describe('when a return is under query', () => {
+        beforeEach(() => {
+          licence[0].reviewReturns[0].underQuery = true
+        })
+
+        it("changes the returns status to be 'under query'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].returnStatus).to.equal('query')
+        })
+      })
+    })
   })
 })
 
@@ -104,7 +200,7 @@ function _licenceData () {
     licenceId: '786f0d83-eaf7-43c3-9de5-ec59e3de05ee',
     licenceRef: '01/49/80/4608',
     licenceHolder: 'Licence Holder Ltd',
-    issues: null,
+    issues: '',
     status: 'ready',
     reviewReturns: [{
       id: '2264f443-5c16-4ca9-8522-f63e2d4e38be',
@@ -127,16 +223,40 @@ function _licenceData () {
       description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
       startDate: new Date(' 2022-04-01'),
       endDate: new Date('2022-05-06'),
-      issues: [],
+      issues: '',
       reviewChargeElements: [{
         id: 'e840f418-ca6b-4d96-9f36-bf684c78590f',
         reviewChargeReferenceId: '7759e0f9-5763-4b94-8d45-0621aea3edc1',
         chargeElementId: 'b1cd4f98-ad96-4901-9e21-4432f032492a',
         allocated: 0,
         chargeDatesOverlap: false,
-        issues: [],
+        issues: '',
         status: 'ready'
       }]
+    },
+    {
+      id: '4864f643-5c16-5ca9-8512-f63e1d4e58be',
+      reviewLicenceId: '78a99c1c-26d3-4163-ab58-084cd78594ab',
+      returnId: 'v2:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
+      returnReference: '10031343',
+      quantity: 0,
+      allocated: 0,
+      underQuery: false,
+      returnStatus: 'completed',
+      nilReturn: false,
+      abstractionOutsidePeriod: false,
+      receivedDate: new Date('2022-06-03'),
+      dueDate: new Date('2022-06-03'),
+      purposes: [{
+        tertiary: {
+          description: 'Site description'
+        }
+      }],
+      description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
+      startDate: new Date(' 2022-04-01'),
+      endDate: new Date('2022-05-06'),
+      issues: '',
+      reviewChargeElements: []
     }],
     reviewChargeVersions: [{
       id: '3de5634a-da26-4241-87e9-7248a4b83a69',
@@ -165,7 +285,7 @@ function _licenceData () {
           chargeElementId: 'b1001716-cfb4-43c6-91f0-1863f4529223',
           allocated: 0,
           chargeDatesOverlap: false,
-          issues: [],
+          issues: '',
           status: 'ready',
           chargeElement: {
             description: 'Trickle Irrigation - Direct',
@@ -192,7 +312,7 @@ function _licenceData () {
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             startDate: new Date(' 2022-04-01'),
             endDate: new Date('2022-05-06'),
-            issues: []
+            issues: ''
           }]
         }]
       }],

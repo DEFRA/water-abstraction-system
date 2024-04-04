@@ -13,7 +13,7 @@ const NoReturnsRequiredValidator = require('../../../app/validators/return-requi
 describe('No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = NoReturnsRequiredValidator.go({ 'no-returns-required': 'transfer_licence' })
+      const result = NoReturnsRequiredValidator.go({ reason: 'transfer-licence' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -23,7 +23,7 @@ describe('No Returns Required validator', () => {
   describe('when valid data is provided', () => {
     describe("because no 'reason' is given", () => {
       it('fails validation', () => {
-        const result = NoReturnsRequiredValidator.go({ 'no-returns-required': '' })
+        const result = NoReturnsRequiredValidator.go({ reason: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -33,7 +33,7 @@ describe('No Returns Required validator', () => {
 
     describe("because an unknown 'reason' is given", () => {
       it('fails validation', () => {
-        const result = NoReturnsRequiredValidator.go({ 'no-returns-required': 'no-water' })
+        const result = NoReturnsRequiredValidator.go({ reason: 'no-water' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
