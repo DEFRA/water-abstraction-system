@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
@@ -83,6 +83,52 @@ describe('Review Licence presenter', () => {
         ]
       })
     })
+
+    describe("the 'issues' property", () => {
+      describe('when the charge element has multiple issues', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].issues = 'Over abstraction, no returns'
+        })
+
+        it('correctly splits the issues into an array', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeElements[0].issues).to.equal(['Over abstraction', 'no returns'])
+        })
+      })
+
+      describe('when the matched returns has multiple issues', () => {
+        beforeEach(() => {
+          licence[0].reviewReturns[0].issues = 'Over abstraction, no returns'
+        })
+
+        it('correctly splits the issues into an array', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].issues).to.equal(['Over abstraction', 'no returns'])
+        })
+      })
+    })
+
+    describe("the 'returnStatus' property", () => {
+      describe("when a return has a status of 'due'", () => {
+        beforeEach(() => {
+          licence[0].reviewReturns[0].returnStatus = 'due'
+        })
+
+        it("changes the status text to 'overdue'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].returnStatus).to.equal('overdue')
+        })
+
+        it('formats the returns total correctly', () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.matchedReturns[0].returnTotal).to.equal('/')
+        })
+      })
+    })
   })
 })
 
@@ -104,7 +150,7 @@ function _licenceData () {
     licenceId: '786f0d83-eaf7-43c3-9de5-ec59e3de05ee',
     licenceRef: '01/49/80/4608',
     licenceHolder: 'Licence Holder Ltd',
-    issues: null,
+    issues: '',
     status: 'ready',
     reviewReturns: [{
       id: '2264f443-5c16-4ca9-8522-f63e2d4e38be',
@@ -127,14 +173,14 @@ function _licenceData () {
       description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
       startDate: new Date(' 2022-04-01'),
       endDate: new Date('2022-05-06'),
-      issues: [],
+      issues: '',
       reviewChargeElements: [{
         id: 'e840f418-ca6b-4d96-9f36-bf684c78590f',
         reviewChargeReferenceId: '7759e0f9-5763-4b94-8d45-0621aea3edc1',
         chargeElementId: 'b1cd4f98-ad96-4901-9e21-4432f032492a',
         allocated: 0,
         chargeDatesOverlap: false,
-        issues: [],
+        issues: '',
         status: 'ready'
       }]
     }],
@@ -165,7 +211,7 @@ function _licenceData () {
           chargeElementId: 'b1001716-cfb4-43c6-91f0-1863f4529223',
           allocated: 0,
           chargeDatesOverlap: false,
-          issues: [],
+          issues: '',
           status: 'ready',
           chargeElement: {
             description: 'Trickle Irrigation - Direct',
@@ -192,7 +238,7 @@ function _licenceData () {
             description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
             startDate: new Date(' 2022-04-01'),
             endDate: new Date('2022-05-06'),
-            issues: []
+            issues: ''
           }]
         }]
       }],
