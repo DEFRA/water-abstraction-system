@@ -99,7 +99,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review{licenceId}/view-match-details/{reviewChargeElementId}/edit-billable-returns',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/edit-billable-returns',
     handler: BillRunsController.editBillableReturns,
     options: {
       auth: {
@@ -108,19 +108,6 @@ const routes = [
         }
       },
       description: 'Edit the billable return volumes on a charge element'
-    }
-  },
-  {
-    method: 'POST',
-    path: '/bill-runs/{id}/review{licenceId}/view-match-details/{reviewChargeElementId}/edit-billable-returns',
-    handler: BillRunsController.submitEditedBillableReturns,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Submit the edited billable return volumes on a charge element'
     }
   },
   {

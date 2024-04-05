@@ -1,0 +1,90 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Go back to review licences',
+      href: '/system/bill-runs/' + billRunId + '/review'
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-9">
+  <div class="govuk-grid-column-full">
+    <fieldset class="govuk-fieldset">
+      {% set heading %}
+        <h1 class="govuk-fieldset__heading">
+          <span class="govuk-caption-l">
+            Spray irrigation - storage, Abstraction from borehole at Chipping Norton, 25 July 2022 to 29 December 2022
+          </span>
+            Set the billable returns quantity for this bill run
+        </h1>
+
+        {% set insertText %}
+          <div>
+            Financial year 2022 to 2023
+          </div>
+          Charge period 1 April 2022 to 31 March 2023
+        {%endset%}
+
+        {{ govukInsetText({
+          html: insertText
+        }) }}
+      {% endset %}
+
+      {% set customQuantityHtml %}
+        {{ govukInput({
+          id: "custom-quantity-input",
+          name: "customQuantity",
+          classes: "govuk-!-width-one-third",
+          label: {
+            text: "Billable returns quantity"
+          },
+          hint: {
+            text: "Enter a number with no more than 6 decimal places. For example, 20.123456"
+          },
+          suffix: {
+            text: "ML"
+          }
+        }) }}
+      {% endset %}
+
+      {{ govukRadios({
+        name: "billableReturnsQuantity",
+        fieldset: {
+          legend: {
+            html: heading,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        items: [
+          {
+            value: "authorisedVolume",
+            text: "Authorised 41ML"
+          },
+          {
+            value: "customQuantity",
+            text: "Custom quantity",
+            conditional: {
+              html: customQuantityHtml
+            }
+          }
+        ]
+      }) }}
+    </fieldset>
+
+    {{ govukButton({
+      text: "Confirm"
+    }) }}
+  </div>
+</div>
+
+{% endblock %}
