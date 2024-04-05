@@ -99,15 +99,15 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/edit-billable-returns',
-    handler: BillRunsController.editBillableReturns,
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
+    handler: BillRunsController.amendBillableReturns,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Edit the billable return volumes on a charge element'
+      description: 'Amend the billable return volumes on a charge element'
     }
   },
   {

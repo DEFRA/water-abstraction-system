@@ -9,6 +9,7 @@ const Boom = require('@hapi/boom')
 
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
+const AmendBillableReturnsService = require('../services/bill-runs/amend-billable-returns.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
@@ -121,21 +122,22 @@ async function view (request, h) {
   })
 }
 
-async function editBillableReturns (request, h) {
-  const { id } = request.params
+async function amendBillableReturns (request, h) {
+  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  // const pageData = await ViewBillRunService.go(id)
+  const pageData = await AmendBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId)
 
-  return h.view('bill-runs/edit-billable-returns.njk', {
+  return h.view('bill-runs/amend-billable-returns.njk', {
     pageTitle: 'Set the billable returns quantity for this bill run',
-    activeNavBar: 'bill-runs'
+    activeNavBar: 'bill-runs',
+    ...pageData
   })
 }
 
 module.exports = {
   cancel,
   create,
-  editBillableReturns,
+  amendBillableReturns,
   review,
   reviewLicence,
   send,
