@@ -28,7 +28,7 @@ const sessionData = {
   }
 }
 
-describe.only('Start Date service', () => {
+describe('Start Date service', () => {
   let session
 
   describe('when called', () => {

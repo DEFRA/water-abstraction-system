@@ -150,14 +150,20 @@ $govuk-global-styles: true;
 }
 
 // ========== ========== ========== ========== ==========
-// Tag
+// Float
 // ========== ========== ========== ========== ==========
-.tag-wrapper {
-  position:relative;
+.float-right {
+  float: right;
 }
 
-.tag-element {
-  position:absolute;
-  top:0;
-  right:0;
+.float-left{
+  float:left;
+}
+
+// ========== ========== ========== ========== ==========
+// Font
+// ========== ========== ========== ========== ==========
+.govuk-font-size-64{
+  font-size: 64px !important;
+  font-size: 4rem !important;
 }

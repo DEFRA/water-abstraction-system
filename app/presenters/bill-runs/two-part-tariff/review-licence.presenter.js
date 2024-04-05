@@ -71,25 +71,29 @@ function _billingAccountDetails (billingAccount) {
   }
 }
 
+function _chargeElementCount (reviewChargeVersion) {
+  const { reviewChargeReferences } = reviewChargeVersion
+
+  const chargeElementCount = reviewChargeReferences.reduce((total, reviewChargeReference) => {
+    return total + reviewChargeReference.reviewChargeElements.length
+  }, 0)
+
+  return chargeElementCount
+}
+
 function _chargeElementDetails (reviewChargeReference, chargePeriod) {
   const { reviewChargeElements } = reviewChargeReference
 
   const chargeElements = reviewChargeElements.map((reviewChargeElement, index) => {
-    const elementNumber = `Element ${index + 1} of ${reviewChargeElements.length}`
-    const dates = _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod)
-    const issues = reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : ['']
-    const billableReturns = `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`
-    const returnVolume = _prepareReturnVolume(reviewChargeElement)
-
     return {
-      elementNumber,
+      reviewChargeElementId: reviewChargeElement.id,
+      elementNumber: `Element ${index + 1} of ${reviewChargeElements.length}`,
       elementStatus: reviewChargeElement.status,
       elementDescription: reviewChargeElement.chargeElement.description,
-      dates,
-      issues,
-      billableReturns,
-      returnVolume
-
+      dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
+      issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : [''],
+      billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
+      returnVolume: _prepareReturnVolume(reviewChargeElement)
     }
   })
 
@@ -111,16 +115,6 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
   })
 
   return chargeReference
-}
-
-function _chargeElementCount (reviewChargeVersion) {
-  const { reviewChargeReferences } = reviewChargeVersion
-
-  const chargeElementCount = reviewChargeReferences.reduce((total, reviewChargeReference) => {
-    return total + reviewChargeReference.reviewChargeElements.length
-  }, 0)
-
-  return chargeElementCount
 }
 
 function _contactName (billingAccount) {
@@ -251,6 +245,7 @@ function _returnStatus (returnLog) {
   if (returnLog.underQuery) {
     return 'query'
   }
+
   return returnLog.returnStatus
 }
 
@@ -260,6 +255,7 @@ function _returnTotal (returnLog) {
   if (['due', 'received', 'void'].includes(returnStatus)) {
     return '/'
   }
+
   return `${allocated} ML / ${quantity} ML`
 }
 
