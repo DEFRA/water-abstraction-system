@@ -10,6 +10,7 @@ const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const AmendBillableReturnsService = require('../services/bill-runs/amend-billable-returns.service.js')
+const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
@@ -45,6 +46,18 @@ async function create (request, h) {
   } catch (error) {
     return Boom.badImplementation(error.message)
   }
+}
+
+async function matchDetails (request, h) {
+  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
+
+  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId)
+
+  return h.view('bill-runs/match-details.njk', {
+    pageTitle: 'View match details',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
 }
 
 async function review (request, h) {
@@ -138,6 +151,7 @@ module.exports = {
   cancel,
   create,
   amendBillableReturns,
+  matchDetails,
   review,
   reviewLicence,
   send,
