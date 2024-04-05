@@ -49,11 +49,9 @@ describe('Submit Purpose service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          licencePurposes: [
-            'Potable Water Supply - Direct',
-            'Transfer Between Sources (Pre Water Act 2003)'
-          ],
-          purpose: 'Potable Water Supply - Direct'
+          purposes: [
+            'Potable Water Supply - Direct'
+          ]
         }
 
         Sinon.stub(FetchPurposesService, 'go').resolves([
@@ -70,10 +68,10 @@ describe('Submit Purpose service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.purpose).to.equal('Potable Water Supply - Direct')
+        expect(refreshedSession.data.purposes).to.equal(['Potable Water Supply - Direct'])
       })
 
-      it('returns page data for the view', async () => {
+      it('returns an empty object (no page data needed for a redirect)', async () => {
         const result = await SubmitPurposeService.go(session.id, payload)
 
         expect(result).to.equal({})
@@ -110,7 +108,8 @@ describe('Submit Purpose service', () => {
             licencePurposes: [
               'Transfer Between Sources (Pre Water Act 2003)',
               'Potable Water Supply - Direct'
-            ]
+            ],
+            selectedPurposes: ''
           }, { skip: ['id', 'error'] })
         })
 
