@@ -4,6 +4,38 @@
 
 {% set baseURL = "/system/return-requirements/" + id %}
 
+{% set reasonText %}
+  {% if reason == 'abstraction-below-100-cubic-metres-per-day' %}
+    Abstraction amount below 100 cubic metres per day
+  {% elif reason == 'returns-exception' %}
+    Returns exception
+  {% elif reason == 'transfer-licence' %}
+    Transfer licence
+  {% elif reason == 'change-to-special-agreement' %}
+    Change to special agreement
+  {% elif reason == 'name-or-address-change' %}
+    Licence holder name or address change
+  {% elif reason == 'transfer-and-now-chargeable' %}
+    Licence transferred and now chargeable
+  {% elif reason == 'extension-of-licence-validity' %}
+    Limited extension of licence validity (LEV)
+  {% elif reason == 'major-change' %}
+    Major change
+  {% elif reason == 'minor-change' %}
+    Minor change
+  {% elif reason == 'new-licence-in-part-succession-or-licence-apportionment' %}
+    New licence in part succession or licence apportionment
+  {% elif reason == 'new-licence' %}
+    New licence
+  {% elif reason == 'new-special-agreement' %}
+    New special agreement
+  {% elif reason == 'succession-or-transfer-of-licence' %}
+    Succession or transfer of licence
+  {% elif reason == 'succession-to-remainder-licence-or-licence-apportionment' %}
+    Succession to remainder licence or licence apportionment
+  {% endif %}
+{% endset %}
+
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
@@ -25,7 +57,7 @@
                 text: "Start date"
               },
               value: {
-                text: "start_date_from_session"
+                text: startDate
               },
               actions: {
                 items: [
@@ -43,7 +75,7 @@
                 text: "Reason"
               },
               value: {
-                text: "reason_from_session"
+                text: reasonText
               },
               actions: {
                 items: [
@@ -90,18 +122,20 @@
     </div>
 
     <div class="govuk-body">
-      <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
-      <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
-        {{ govukButton({
-          text: "Approve returns requirements",
-          classes: "govuk-!-margin-right-6"
-          }) }}
+      {% if journey == 'no-returns-required' %}
+        <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+        <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
+      {% endif %}
+      {{ govukButton({
+        text: "Approve returns requirements",
+        classes: "govuk-!-margin-right-6"
+        }) }}
 
-        {{ govukButton({
-          text: "Cancel return requirements",
-          classes: "govuk-button--secondary",
-          href: "#"
-          }) }}
+      {{ govukButton({
+        text: "Cancel return requirements",
+        classes: "govuk-button--secondary",
+        href: "#"
+        }) }}
     </div>
   </form>
 {% endblock %}

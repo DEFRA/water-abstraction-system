@@ -29,6 +29,13 @@ async function go (sessionId, payload) {
 
   const purposesData = await FetchPurposesService.go(session.data.licence.id)
   const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {}
+  }
+
   const formattedData = SelectPurposePresenter.go(session, purposesData, payload)
 
   return {
@@ -37,6 +44,14 @@ async function go (sessionId, payload) {
     pageTitle: 'Select the purpose for the requirements for returns',
     ...formattedData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.purpose = payload.purpose
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {

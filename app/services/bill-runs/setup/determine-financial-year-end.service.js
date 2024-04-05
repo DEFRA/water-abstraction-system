@@ -55,6 +55,7 @@ async function _determineSupplementaryEndYear (regionId, currentFinancialYearEnd
       'toFinancialYearEnding'
     ])
     .where('regionId', regionId)
+    .where('batchType', 'annual')
     .where('status', 'sent')
     // NOTE: We would never have an annual bill run with a toFinancialYearEnding greater than the current one in a
     // 'real' environment. But we often manipulate bill run dates whilst testing to move annual bill runs out of the

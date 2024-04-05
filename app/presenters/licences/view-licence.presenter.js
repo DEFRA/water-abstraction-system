@@ -56,7 +56,6 @@ function go (licence, licenceAbstractionConditions) {
     abstractionPointsCaption: abstractionDetails.pointsCaption,
     abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionQuantities: abstractionDetails.quantities,
-    abstractionQuantityCaption: abstractionDetails.quantityCaption,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     licenceHolder: _generateLicenceHolder(licenceHolder),
@@ -73,32 +72,24 @@ function go (licence, licenceAbstractionConditions) {
   }
 }
 
-function _endDate (expiredDate) {
-  if (!expiredDate || expiredDate < Date.now()) {
-    return null
-  }
-
-  return formatLongDate(expiredDate)
-}
-
 function _abstractionAmountDetails (purpose) {
   const abstractionAmountDetails = []
   const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
 
   if (ANNUAL_QTY !== 'null') {
-    abstractionAmountDetails.push(`${ANNUAL_QTY} cubic metres per year`)
+    abstractionAmountDetails.push(`${parseFloat(ANNUAL_QTY).toFixed(2)} cubic metres per year`)
   }
 
   if (DAILY_QTY !== 'null') {
-    abstractionAmountDetails.push(`${DAILY_QTY} cubic metres per day`)
+    abstractionAmountDetails.push(`${parseFloat(DAILY_QTY).toFixed(2)} cubic metres per day`)
   }
 
   if (HOURLY_QTY !== 'null') {
-    abstractionAmountDetails.push(`${HOURLY_QTY} cubic metres per hour`)
+    abstractionAmountDetails.push(`${parseFloat(HOURLY_QTY).toFixed(2)} cubic metres per hour`)
   }
 
   if (INST_QTY !== 'null') {
-    abstractionAmountDetails.push(`${INST_QTY} litres per second`)
+    abstractionAmountDetails.push(`${parseFloat(INST_QTY).toFixed(2)} litres per second`)
   }
 
   return abstractionAmountDetails
@@ -111,6 +102,40 @@ function _abstractionConditionDetails (licenceAbstractionConditions) {
     conditions,
     numberOfConditions
   }
+}
+
+function _endDate (expiredDate) {
+  if (!expiredDate || expiredDate < Date.now()) {
+    return null
+  }
+
+  return formatLongDate(expiredDate)
+}
+
+function _generateAbstractionContent (pointDetail) {
+  let abstractionPoint = null
+
+  if (pointDetail.NGR4_SHEET && pointDetail.NGR4_NORTH !== 'null') {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+    const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
+    const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
+
+    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
+  } else if (pointDetail.NGR2_SHEET && pointDetail.NGR2_NORTH !== 'null') {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
+
+    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
+  } else {
+    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
+
+    abstractionPoint = `At National Grid Reference ${point1}`
+  }
+
+  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
+
+  return abstractionPoint
 }
 
 function _generateAbstractionPeriods (licenceVersions) {
@@ -215,7 +240,7 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
   }
 
   const abstractionPoints = []
-  const abstractionQuantities = []
+  let abstractionQuantities
 
   permitLicence.purposes.forEach((purpose) => {
     purpose.purposePoints.forEach((point) => {
@@ -224,12 +249,8 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
         abstractionPoints.push(_generateAbstractionContent(pointDetail))
       }
     })
-
-    const abstractionAmounts = _abstractionAmountDetails(purpose)
-    abstractionQuantities.push(...abstractionAmounts)
+    abstractionQuantities = _setAbstractionAmountDetails(abstractionQuantities, purpose)
   })
-
-  const uniqueAbstractionQuantities = [...new Set(abstractionQuantities)]
 
   const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
 
@@ -242,36 +263,36 @@ function _parseAbstractionsAndSourceOfSupply (permitLicence) {
     points: uniqueAbstractionPoints.length === 0 ? null : uniqueAbstractionPoints,
     pointsCaption,
     pointLinkText,
-    quantities: uniqueAbstractionQuantities.length === 0 ? null : uniqueAbstractionQuantities,
-    quantityCaption: uniqueAbstractionQuantities.length === 1 ? 'Abstraction amount' : 'Abstraction amounts',
+    quantities: abstractionQuantities && abstractionQuantities.length === 1
+      ? _abstractionAmountDetails(abstractionQuantities[0])
+      : null,
     sourceOfSupply: permitLicence.purposes[0].purposePoints[0]?.point_source?.NAME ?? null
   }
 }
 
-function _generateAbstractionContent (pointDetail) {
-  let abstractionPoint = null
-
-  if (pointDetail.NGR4_SHEET && pointDetail.NGR4_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
-    const point3 = `${pointDetail.NGR3_SHEET} ${pointDetail.NGR3_EAST} ${pointDetail.NGR3_NORTH}`
-    const point4 = `${pointDetail.NGR4_SHEET} ${pointDetail.NGR4_EAST} ${pointDetail.NGR4_NORTH}`
-
-    abstractionPoint = `Within the area formed by the straight lines running between National Grid References ${point1} ${point2} ${point3} and ${point4}`
-  } else if (pointDetail.NGR2_SHEET && pointDetail.NGR2_NORTH !== 'null') {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-    const point2 = `${pointDetail.NGR2_SHEET} ${pointDetail.NGR2_EAST} ${pointDetail.NGR2_NORTH}`
-
-    abstractionPoint = `Between National Grid References ${point1} and ${point2}`
-  } else {
-    const point1 = `${pointDetail.NGR1_SHEET} ${pointDetail.NGR1_EAST} ${pointDetail.NGR1_NORTH}`
-
-    abstractionPoint = `At National Grid Reference ${point1}`
+function _setAbstractionAmountDetails (abstractionAmountSet, purpose) {
+  const { ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY } = purpose
+  const purposeAbstractionQuantities = {
+    ANNUAL_QTY, DAILY_QTY, HOURLY_QTY, INST_QTY
   }
 
-  abstractionPoint += pointDetail.LOCAL_NAME !== undefined ? ` (${pointDetail.LOCAL_NAME})` : ''
+  if (!abstractionAmountSet &&
+    (purposeAbstractionQuantities.DAILY_QTY !== 'null' ||
+    purposeAbstractionQuantities.ANNUAL_QTY !== 'null' ||
+    purposeAbstractionQuantities.HOURLY_QTY !== 'null' ||
+    purposeAbstractionQuantities.INST_QTY !== 'null')) {
+    return [purposeAbstractionQuantities]
+  }
 
-  return abstractionPoint
+  if (abstractionAmountSet &&
+    (abstractionAmountSet[0].ANNUAL_QTY !== purposeAbstractionQuantities.ANNUAL_QTY ||
+    abstractionAmountSet[0].DAILY_QTY !== purposeAbstractionQuantities.DAILY_QTY ||
+    abstractionAmountSet[0].HOURLY_QTY !== purposeAbstractionQuantities.HOURLY_QTY ||
+    abstractionAmountSet[0].INST_QTY !== purposeAbstractionQuantities.INST_QTY)) {
+    return abstractionAmountSet.push(purposeAbstractionQuantities)
+  }
+
+  return abstractionAmountSet
 }
 
 module.exports = {
