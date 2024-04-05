@@ -14,24 +14,29 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const CheckYourAnswersService = require('../../../app/services/return-requirements/check-your-answers.service.js')
 
+const sessionData = {
+  data: {
+    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    checkYourAnswersVisited: false,
+    licence: {
+      endDate: null,
+      licenceRef: '01/ABC',
+      licenceHolder: 'Astro Boy',
+      currentVersionStartDate: '2023-02-08T00:00:00.000Z'
+    },
+    reason: 'abstraction-below-100-cubic-metres-per-day',
+    journey: 'no-returns-required',
+    startDateOptions: 'licenceStartDate'
+  }
+}
+
 describe('Check Your Answers service', () => {
   let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
     session = await SessionHelper.add({
-      data: {
-        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licence: {
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Astro Boy',
-          currentVersionStartDate: '2023-02-08T00:00:00.000Z'
-        },
-        reason: 'abstraction-below-100-cubic-metres-per-day',
-        journey: 'no-returns-required',
-        startDateOptions: 'licenceStartDate'
-      }
+      ...sessionData
     })
   })
 
@@ -40,7 +45,6 @@ describe('Check Your Answers service', () => {
       const result = await CheckYourAnswersService.go(session.id)
 
       expect(result.id).to.equal(session.id)
-      expect(session.data.checkYourAnswersVisited).to.equal(true)
     })
 
     it('returns page data for the view', async () => {

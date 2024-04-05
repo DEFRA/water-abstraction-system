@@ -34,7 +34,10 @@ async function _checkYourAnswersVisited (session) {
   const currentData = session.data
 
   currentData.checkYourAnswersVisited = true
-  return session.$query().patch({ data: currentData })
+  await session.$query().patch({ data: currentData })
+
+  const updatedSession = await SessionModel.query().findById(session.id)
+  return updatedSession
 }
 
 module.exports = {

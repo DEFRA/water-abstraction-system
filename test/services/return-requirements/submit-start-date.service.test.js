@@ -13,6 +13,20 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitStartDateService = require('../../../app/services/return-requirements/submit-start-date.service.js')
+const sessionData = {
+  data: {
+    checkYourAnswersVisited: false,
+    licence: {
+      id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+      currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+      endDate: null,
+      licenceRef: '01/ABC',
+      licenceHolder: 'Turbo Kid',
+      startDate: '2022-04-01T00:00:00.000Z'
+    },
+    journey: 'no-returns-required'
+  }
+}
 
 describe('Submit Start Date service', () => {
   let payload
@@ -20,25 +34,12 @@ describe('Submit Start Date service', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    session = await SessionHelper.add({
-      data: {
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          startDate: '2022-04-01T00:00:00.000Z'
-        },
-        journey: 'no-returns-required'
-      }
-    })
   })
 
   describe('when called', () => {
     describe('with a valid payload for licenceStartDate', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({ ...sessionData })
         payload = {
           'start-date-options': 'licenceStartDate'
         }
@@ -52,15 +53,16 @@ describe('Submit Start Date service', () => {
         expect(refreshedSession.data.startDateOptions).to.equal('licenceStartDate')
       })
 
-      it('returns the correct journey for the no returns required journey', async () => {
+      it('returns the correct journey for the no-returns-required journey', async () => {
         const result = await SubmitStartDateService.go(session.id, payload)
 
-        expect(result).to.equal({ journey: 'no-returns-required' })
+        expect(result).to.equal({ checkYourAnswersVisited: false, journey: 'no-returns-required' })
       })
     })
 
     describe('with a valid payload for anotherStartDate', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({ ...sessionData })
         payload = {
           'start-date-options': 'anotherStartDate',
           'start-date-day': '26',
@@ -83,13 +85,38 @@ describe('Submit Start Date service', () => {
       it('returns the correct journey for the no returns required journey', async () => {
         const result = await SubmitStartDateService.go(session.id, payload)
 
-        expect(result).to.equal({ journey: 'no-returns-required' })
+        expect(result).to.equal({ checkYourAnswersVisited: false, journey: 'no-returns-required' })
+      })
+    })
+    describe('when the user has visited check-your-answers', () => {
+      beforeEach(async () => {
+        session = await SessionHelper.add({
+          ...sessionData,
+          data: {
+            ...sessionData.data,
+            checkYourAnswersVisited: true
+          }
+        })
+
+        payload = {
+          'start-date-options': 'anotherStartDate',
+          'start-date-day': '26',
+          'start-date-month': '11',
+          'start-date-year': '2023'
+        }
+      })
+
+      it('redirects the user back to check-your-answers', async () => {
+        const result = await SubmitStartDateService.go(session.id, payload)
+
+        expect(result).to.equal({ checkYourAnswersVisited: true, journey: 'no-returns-required' })
       })
     })
 
     describe('with an invalid payload', () => {
       describe('because the user has not selected anything', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ ...sessionData })
           payload = {}
         })
 
@@ -104,6 +131,7 @@ describe('Submit Start Date service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
+            checkYourAnswersVisited: false,
             anotherStartDateDay: null,
             anotherStartDateMonth: null,
             anotherStartDateSelected: false,
@@ -129,7 +157,8 @@ describe('Submit Start Date service', () => {
       })
 
       describe('because the user has entered invalid data', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ ...sessionData })
           payload = {
             'start-date-options': 'anotherStartDate',
             'start-date-day': 'a',
@@ -149,6 +178,7 @@ describe('Submit Start Date service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
+            checkYourAnswersVisited: false,
             journey: 'no-returns-required',
             pageTitle: 'Select the start date for the return requirement',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',

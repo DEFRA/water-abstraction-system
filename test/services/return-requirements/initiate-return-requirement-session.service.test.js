@@ -45,14 +45,6 @@ describe('Initiate Return Requirement Session service', () => {
         journey = 'returns-required'
       })
 
-      it('creates a new session record and checkYourAnswers page has not been visited', async () => {
-        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-        const { data } = result
-
-        expect(data.licence.checkYourAnswersVisited).to.equal(false)
-      })
-
       it('creates a new session record containing details of the licence and licence holder', async () => {
         const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
@@ -61,7 +53,7 @@ describe('Initiate Return Requirement Session service', () => {
         expect(data.licence.id).to.equal(licence.id)
         expect(data.licence.licenceRef).to.equal(licence.licenceRef)
         expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
-        expect(data.checkYourAnswersVisited).to.equal(false)
+        expect(data.checkYourAnswersVisited).to.be.false()
       })
 
       it("creates a new session record containing the licence's 'current version' start date", async () => {
