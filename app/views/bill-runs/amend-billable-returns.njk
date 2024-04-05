@@ -7,12 +7,10 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Go back to review licences',
-      href: '/system/bill-runs/' + billRunId + '/review'
-    })
-  }}
+  {{ govukBackLink({
+      text: 'Go back to licence',
+      href: '/system/bill-runs/' + billRun.id + '/review/' + licenceId + '/match-details/' + chargeElement.reviewChargeElementId
+  }) }}
 {% endblock %}
 
 {% block content %}
@@ -22,16 +20,16 @@
       {% set heading %}
         <h1 class="govuk-fieldset__heading">
           <span class="govuk-caption-l">
-            Spray irrigation - storage, Abstraction from borehole at Chipping Norton, 25 July 2022 to 29 December 2022
+            {{ chargeElement.description }}, {{chargeElement.dates}}
           </span>
             Set the billable returns quantity for this bill run
         </h1>
 
         {% set insertText %}
           <div>
-            Financial year 2022 to 2023
+            Financial year {{billRun.financialYear}}
           </div>
-          Charge period 1 April 2022 to 31 March 2023
+          Charge period {{chargeVersion.chargePeriod}}
         {%endset%}
 
         {{ govukInsetText({
@@ -68,7 +66,7 @@
         items: [
           {
             value: "authorisedVolume",
-            text: "Authorised 41ML"
+            text: "Authorised " + chargeElement.authorisedQuantity + "ML"
           },
           {
             value: "customQuantity",

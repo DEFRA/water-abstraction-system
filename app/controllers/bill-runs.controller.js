@@ -7,9 +7,9 @@
 
 const Boom = require('@hapi/boom')
 
+const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
-const AmendBillableReturnsService = require('../services/bill-runs/amend-billable-returns.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
@@ -18,6 +18,18 @@ const StartBillRunProcessService = require('../services/bill-runs/start-bill-run
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
+
+async function amendBillableReturns (request, h) {
+  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
+
+  const pageData = await AmendBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId)
+
+  return h.view('bill-runs/amend-billable-returns.njk', {
+    pageTitle: 'Set the billable returns quantity for this bill run',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
 
 async function cancel (request, h) {
   const { id } = request.params
@@ -130,18 +142,6 @@ async function view (request, h) {
   const pageData = await ViewBillRunService.go(id)
 
   return h.view(pageData.view, {
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
-async function amendBillableReturns (request, h) {
-  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
-
-  const pageData = await AmendBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId)
-
-  return h.view('bill-runs/amend-billable-returns.njk', {
-    pageTitle: 'Set the billable returns quantity for this bill run',
     activeNavBar: 'bill-runs',
     ...pageData
   })

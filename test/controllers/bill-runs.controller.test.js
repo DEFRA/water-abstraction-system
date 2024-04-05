@@ -9,8 +9,10 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const AmendBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
+const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
@@ -18,7 +20,6 @@ const StartBillRunProcessService = require('../../app/services/bill-runs/start-b
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
-const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -327,6 +328,41 @@ describe('Bill Runs controller', () => {
           expect(response.payload).to.contain('Charge period 1 April 2022 to 31 March 2023')
           expect(response.payload).to.contain('Financial year 2022 to 2023')
           expect(response.payload).to.contain('River Test and tributaries near Fullerton Grange, Andover')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(AmendBillableReturnsService, 'go').resolves({
+            chargeElement: {
+              description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
+              dates: '25 July 2022 to 29 December 2022',
+              authorisedQuantity: 40
+            },
+            billRun: {
+              financialYear: '2022 to 2023'
+            },
+            chargeVersion: {
+              chargePeriod: '1 April 2022 to 31 March 2023'
+            }
+          })
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Spray irrigation - storage, Abstraction from borehole at Chipping Norton')
+          expect(response.payload).to.contain('Financial year 2022 to 2023')
+          expect(response.payload).to.contain('Authorised 40ML')
         })
       })
     })

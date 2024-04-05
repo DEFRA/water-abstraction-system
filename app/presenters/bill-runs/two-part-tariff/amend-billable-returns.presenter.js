@@ -29,6 +29,7 @@ function go (billRun, reviewChargeElement, licenceId) {
       reviewChargeElementId: reviewChargeElement.id
     },
     billRun: {
+      id: billRun.id,
       financialYear: _financialYear(billRun.toFinancialYearEnding)
     },
     chargeVersion: {
