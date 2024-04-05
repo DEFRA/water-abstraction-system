@@ -91,7 +91,8 @@ describe('Review Licence presenter', () => {
                     dates: ['1 April 2022 to 5 June 2022'],
                     issues: [''],
                     billableReturns: '0 ML / 200 ML',
-                    returnVolume: ['0 ML (10031343)']
+                    returnVolume: ['0 ML (10031343)'],
+                    reviewChargeElementId: '8bc0cd32-400e-4a45-9dd7-fbce3d486031'
                   }
                 ]
               }

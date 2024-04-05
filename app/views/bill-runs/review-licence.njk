@@ -309,23 +309,21 @@
 
                   {# Loop through charge elements #}
                   {% for chargeElement in chargeReference.chargeElements %}
-                  {% set chargeElementIndex = loop.index0 %}
+                    {% set chargeElementIndex = loop.index0 %}
                     {% set elementRows = [] %}
 
                     <div class="govuk-!-margin-top-6">
-                      <div class="tag-wrapper">
-                        <span class="govuk-body govuk-!-font-weight-regular">{{chargeElement.elementNumber}}</span>
-                        <span class="tag-element">
-                          {{ statusTag(chargeElement.elementStatus) }}
-                        </span>
-                        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}
-                          <div>
-                            {% for chargeElementDate in chargeElement.dates %}
-                              <div>{{ chargeElementDate }}</div>
-                            {% endfor %}
-                          </div>
-                        </h3>
-                      </div>
+                      <span class="govuk-body govuk-!-font-weight-regular">{{chargeElement.elementNumber}}</span>
+                      <span class="float-right">
+                        {{ statusTag(chargeElement.elementStatus) }}
+                      </span>
+                      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}
+                        <div>
+                          {% for chargeElementDate in chargeElement.dates %}
+                            <div>{{ chargeElementDate }}</div>
+                          {% endfor %}
+                        </div>
+                      </h3>
 
                       {% set issues = '' %}
                       {% for issue in chargeElement.issues %}
@@ -358,7 +356,7 @@
                           actions: {
                             items: [
                             {
-                              href: '#',
+                              href: licence.licenceId + '/match-details/' + chargeElement.reviewChargeElementId,
                               text: 'View match details',
                               visuallyHiddenText: ''
                             }
