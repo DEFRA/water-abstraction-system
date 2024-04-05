@@ -108,6 +108,23 @@ describe('Bill Runs Setup Determine Financial Year End service', () => {
       })
     })
 
+    describe("and the last 'sent' bill run is not an annual", () => {
+      beforeEach(async () => {
+        await BillRunHelper.add({
+          batchType: 'two_part_tariff', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd
+        })
+        await BillRunHelper.add({
+          batchType: 'annual', regionId, status: 'sent', toFinancialYearEnding: currentFinancialYearEnd - 1
+        })
+      })
+
+      it("ignores the other bill run and returns the financial year end of the first matching 'sent' annual", async () => {
+        const result = await DetermineFinancialYearEndService.go(regionId, 'supplementary')
+
+        expect(result).to.equal(currentFinancialYearEnd - 1)
+      })
+    })
+
     // NOTE: This would never happen in a 'real' environment. All regions have 'sent' annual bill runs so a result
     // would always be found
     describe("and there is no 'sent' annual bill run for the same region", () => {
