@@ -31,16 +31,13 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
-    }
+    return {}
   }
 
   const formattedData = ReasonPresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select the reason for the return requirement',
     ...formattedData

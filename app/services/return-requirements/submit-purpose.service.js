@@ -33,9 +33,7 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
-    }
+    return {}
   }
 
   const formattedData = SelectPurposePresenter.go(session, purposesData, payload)
