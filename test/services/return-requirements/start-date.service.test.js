@@ -34,7 +34,7 @@ describe('Start Date service', () => {
   describe('when called', () => {
     beforeEach(async () => {
       await DatabaseSupport.clean()
-      session = await SessionHelper.add(sessionData)
+      session = await SessionHelper.add({ ...sessionData })
     })
 
     it('fetches the current setup session record', async () => {
@@ -66,7 +66,7 @@ describe('Start Date service', () => {
     beforeEach(async () => {
       await DatabaseSupport.clean()
       sessionData.data.checkYourAnswersVisited = true
-      session = await SessionHelper.add(sessionData)
+      session = await SessionHelper.add({ ...sessionData })
     })
 
     it('redirects back to check-your-answers', async () => {

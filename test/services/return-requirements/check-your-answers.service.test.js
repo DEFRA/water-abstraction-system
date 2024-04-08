@@ -13,6 +13,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
 const CheckYourAnswersService = require('../../../app/services/return-requirements/check-your-answers.service.js')
+const SessionModel = require('../../../app/models/session.model.js')
 
 const sessionData = {
   data: {
@@ -59,6 +60,13 @@ describe('Check Your Answers service', () => {
         reason: 'abstraction-below-100-cubic-metres-per-day',
         startDate: '8 February 2023'
       }, { skip: ['id'] })
+    })
+
+    it('updates the session record to indicate user has visited check-your-answers', async () => {
+      await CheckYourAnswersService.go(session.id)
+      const updatedSession = await SessionModel.query().findById(session.id)
+
+      expect(updatedSession.data.checkYourAnswersVisited).to.be.true()
     })
   })
 })
