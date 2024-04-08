@@ -4,6 +4,8 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -13,76 +15,162 @@
   }) }}
 {% endblock %}
 
-{% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-9">
-  <div class="govuk-grid-column-full">
-    <fieldset class="govuk-fieldset">
-      {% set heading %}
-        <h1 class="govuk-fieldset__heading">
-          <span class="govuk-caption-l">
-            {{ chargeElement.description }}, {{chargeElement.dates}}
-          </span>
-            Set the billable returns quantity for this bill run
-        </h1>
+{# {% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-9">
+    <div class="govuk-grid-column-full">
+      <fieldset class="govuk-fieldset">
+        {% set heading %}
+          <h1 class="govuk-fieldset__heading">
+            <span class="govuk-caption-l">
+              {{ chargeElement.description }}, {{chargeElement.dates}}
+            </span>
+              Set the billable returns quantity for this bill run
+          </h1>
 
-        {% set insertText %}
-          <div>
-            Financial year {{billRun.financialYear}}
-          </div>
-          Charge period {{chargeVersion.chargePeriod}}
-        {%endset%}
+          {% set insertText %}
+            <div>
+              Financial year {{billRun.financialYear}}
+            </div>
+            Charge period {{chargeVersion.chargePeriod}}
+          {%endset%}
 
-        {{ govukInsetText({
-          html: insertText
-        }) }}
-      {% endset %}
+          {{ govukInsetText({
+            html: insertText
+          }) }}
+        {% endset %}
 
-      {% set customQuantityHtml %}
-        {{ govukInput({
-          id: "custom-quantity-input",
-          name: "customQuantity",
-          classes: "govuk-!-width-one-third",
-          label: {
-            text: "Billable returns quantity"
-          },
-          hint: {
-            text: "Enter a number with no more than 6 decimal places. For example, 20.123456"
-          },
-          suffix: {
-            text: "ML"
-          }
-        }) }}
-      {% endset %}
-
-      {{ govukRadios({
-        name: "billableReturnsQuantity",
-        fieldset: {
-          legend: {
-            html: heading,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--xl"
-          }
-        },
-        items: [
-          {
-            value: "authorisedVolume",
-            text: "Authorised " + chargeElement.authorisedQuantity + "ML"
-          },
-          {
-            value: "customQuantity",
-            text: "Custom quantity",
-            conditional: {
-              html: customQuantityHtml
+        {% set customQuantityHtml %}
+          {{ govukInput({
+            id: "custom-quantity-input",
+            name: "customQuantity",
+            classes: "govuk-!-width-one-third",
+            label: {
+              text: "Billable returns quantity"
+            },
+            hint: {
+              text: "Enter a number with no more than 6 decimal places. For example, 20.123456"
+            },
+            suffix: {
+              text: "ML"
             }
-          }
-        ]
+          }) }}
+        {% endset %}
+
+        {{ govukRadios({
+          name: "billableReturnsQuantity",
+          fieldset: {
+            legend: {
+              html: heading,
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--xl"
+            }
+          },
+          items: [
+            {
+              value: "authorisedVolume",
+              text: "Authorised " + chargeElement.authorisedQuantity + "ML"
+            },
+            {
+              value: "customQuantity",
+              text: "Custom quantity",
+              conditional: {
+                html: customQuantityHtml
+              }
+            }
+          ]
+        }) }}
+      </fieldset>
+
+      {{ govukButton({
+        text: "Confirm"
       }) }}
-    </fieldset>
-
-    {{ govukButton({
-      text: "Confirm"
-    }) }}
+    </div>
   </div>
-</div>
+{% endblock %} #}
 
+{% set quantityInputHTML %}
+  {% if error %}
+    {% set errorClass = 'govuk-input--error' %}
+  {% else %}
+    {% set errorClass = '' %}
+  {% endif %}
+
+  {{ govukInput({
+  id: "custom-quantity-input",
+  name: "customQuantity",
+  errorMessage: error.quanitityInputFormElement,
+  classes: "govuk-!-width-one-third",
+  label: {
+    text: "Billable returns quantity"
+  },
+  hint: {
+    text: "Enter a number with no more than 6 decimal places. For example, 20.123456"
+  },
+  suffix: {
+    text: "ML"
+  }
+  }) }}
+
+{% endset %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.message,
+          href: '#billable-volumes-error'
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  {% set insertText %}
+    <div>
+      Financial year {{billRun.financialYear}}
+    </div>
+    Charge period {{chargeVersion.chargePeriod}}
+  {%endset%}
+
+  {% set secondHeader %}
+    {{ govukInsetText({
+      html: insertText
+    }) }}
+  {% endset %}
+
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukRadios({
+          name: 'quantity-options',
+          errorMessage: error.radioFormElement,
+          fieldset: {
+            legend: {
+              html: '<span class="govuk-caption-l">' + chargeElement.description + ' ' +  chargeElement.dates + '</span>' + 'Set the billable returns quantity for this bill run' + secondHeader,
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--l'
+            }
+          },
+          items: [
+            {
+              id: 'authorised-quantity',
+              value: chargeElement.authorisedQuantity,
+              html: 'Authorised ' + chargeElement.authorisedQuantity + 'ML',
+              checked: authorisedQuantitySelected
+            },
+            {
+              id: 'custom-quantity',
+              value: 'customQuantity',
+              text: 'Custom quantity',
+              checked: customQuantitySelected,
+              conditional: {
+                html: quantityInputHTML
+              }
+            }
+          ]
+        }) }}
+
+      {{ govukButton({ text: 'Confirm' }) }}
+    </form>
+  </div>
 {% endblock %}

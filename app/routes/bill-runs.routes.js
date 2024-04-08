@@ -124,6 +124,19 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
+    handler: BillRunsController.submitAmendedBillableReturns,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Amend the billable return volumes on a charge element'
+    }
+  },
+  {
     method: 'GET',
     path: '/bill-runs/{id}/send',
     handler: BillRunsController.send,
