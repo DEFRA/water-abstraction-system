@@ -49,9 +49,8 @@ describe('Submit Purpose service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          licencePurposes: [
-            'Potable Water Supply - Direct',
-            'Transfer Between Sources (Pre Water Act 2003)'
+          purposes: [
+            'Potable Water Supply - Direct'
           ]
         }
 
@@ -64,26 +63,18 @@ describe('Submit Purpose service', () => {
         Sinon.stub(PurposeValidation, 'go').resolves(null)
       })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitPurposeService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitPurposeService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data.purposes).to.equal(['Potable Water Supply - Direct'])
       })
 
-      it('returns page data for the view', async () => {
+      it('returns an empty object (no page data needed for a redirect)', async () => {
         const result = await SubmitPurposeService.go(session.id, payload)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          pageTitle: 'Select the purpose for the requirements for returns',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          licencePurposes: [
-            'Potable Water Supply - Direct',
-            'Transfer Between Sources (Pre Water Act 2003)'
-          ]
-        }, { skip: ['id'] })
+        expect(result).to.equal({})
       })
     })
 
@@ -117,7 +108,8 @@ describe('Submit Purpose service', () => {
             licencePurposes: [
               'Transfer Between Sources (Pre Water Act 2003)',
               'Potable Water Supply - Direct'
-            ]
+            ],
+            selectedPurposes: ''
           }, { skip: ['id', 'error'] })
         })
 

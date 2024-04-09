@@ -5,13 +5,35 @@
  * @module CheckYourAnswersPresenter
  */
 
+const { formatLongDate } = require('../base.presenter.js')
+
 function go (session) {
   const data = {
     id: session.id,
-    licenceRef: session.data.licence.licenceRef
+    journey: session.data.journey,
+    licenceRef: session.data.licence.licenceRef,
+    reason: session.data.reason,
+    startDate: _startDate(session.data)
   }
 
   return data
+}
+
+function _startDate (sessionData) {
+  const selectedOption = sessionData.startDateOptions
+  let date
+
+  if (selectedOption === 'licenceStartDate') {
+    date = new Date(sessionData.licence.currentVersionStartDate)
+  } else {
+    const day = sessionData.startDateDay
+    const month = sessionData.startDateMonth
+    const year = sessionData.startDateYear
+
+    date = new Date(`${year}-${month}-${day}`)
+  }
+
+  return formatLongDate(date)
 }
 
 module.exports = {

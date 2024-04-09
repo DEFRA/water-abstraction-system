@@ -16,9 +16,9 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
 
 // Thing under test
-const SelectPurposeService = require('../../../app/services/return-requirements/purpose.service.js')
+const PurposeService = require('../../../app/services/return-requirements/purpose.service.js')
 
-describe('Select Purpose service', () => {
+describe('Purpose service', () => {
   let session
 
   beforeEach(async () => {
@@ -49,13 +49,13 @@ describe('Select Purpose service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SelectPurposeService.go(session.id)
+      const result = await PurposeService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SelectPurposeService.go(session.id)
+      const result = await PurposeService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -65,7 +65,8 @@ describe('Select Purpose service', () => {
         licencePurposes: [
           'Transfer Between Sources (Pre Water Act 2003)',
           'Potable Water Supply - Direct'
-        ]
+        ],
+        selectedPurposes: ''
       }, { skip: ['id'] })
     })
   })

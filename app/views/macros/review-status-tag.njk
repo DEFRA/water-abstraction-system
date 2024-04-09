@@ -1,0 +1,28 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro statusTag(status) %}
+  {% if status === 'ready' %}
+    {% set classes = "govuk-tag--green" %}
+  {% elif status === 'review' %}
+    {% set classes = "govuk-tag--blue" %}
+  {% elif status === 'completed' %}
+    {% set classes = "govuk-tag--green govuk-!-font-size-14" %}
+  {% elif status === 'overdue' %}
+    {% set classes = "govuk-tag--red govuk-!-font-size-14" %}
+  {% elif status === 'query' %}
+    {% set classes = "govuk-tag--red govuk-!-font-size-14" %}
+  {% elif status === 'received' %}
+    {% set classes = "govuk-tag--blue govuk-!-font-size-14" %}
+  {% elif status === 'void' %}
+    {% set classes = "govuk-tag--grey govuk-!-font-size-14" %}
+  {% else %}
+    {% set classes = "govuk-tag--blue govuk-!-font-size-14" %}
+  {% endif %}
+
+  {{
+    govukTag({
+      text: status,
+      classes: classes
+    })
+  }}
+{% endmacro %}
