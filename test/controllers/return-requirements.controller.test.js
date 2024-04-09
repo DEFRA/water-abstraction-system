@@ -151,7 +151,6 @@ describe('Return requirements controller', () => {
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('no-returns-required'))
-
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Why are no returns required?')
       })

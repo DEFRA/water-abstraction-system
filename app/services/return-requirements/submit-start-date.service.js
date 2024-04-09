@@ -34,6 +34,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited,
       journey: session.data.journey
     }
   }
@@ -42,6 +43,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     journey: session.data.journey,
     pageTitle: 'Select the start date for the return requirement',

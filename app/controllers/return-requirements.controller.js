@@ -190,7 +190,6 @@ async function startDate (request, h) {
   const { sessionId } = request.params
 
   const pageData = await StartDateService.go(sessionId)
-
   return h.view('return-requirements/start-date.njk', {
     ...pageData
   })
@@ -330,6 +329,10 @@ async function submitStartDate (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/start-date.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   if (pageData.journey === 'returns-required') {
