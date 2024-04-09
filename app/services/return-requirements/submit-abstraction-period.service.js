@@ -27,6 +27,13 @@ async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {}
+  }
+
   const formattedData = AbstractionPeriodPresenter.go(session, payload)
 
   return {
@@ -35,6 +42,14 @@ async function go (sessionId, payload) {
     pageTitle: 'Select the abstraction period for the requirements for returns',
     ...formattedData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.abstractionPeriod = payload
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {
