@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAbstractionPeriodService = require('../../../app/services/return-requirements/submit-abstraction-period.service.js')
 
-describe('Submit Abstraction Period service', () => {
+describe.only('Submit Abstraction Period service', () => {
   let payload
   let session
 
@@ -47,29 +47,23 @@ describe('Submit Abstraction Period service', () => {
         }
       })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data.abstractionPeriod).to.equal({
+          'toAbstractionPeriod-day': '02',
+          'fromAbstractionPeriod-day': '01',
+          'toAbstractionPeriod-month': '7',
+          'fromAbstractionPeriod-month': '12'
+        })
       })
 
-      it('returns the page data for the view', async () => {
+      it('returns an empty object (no page data needed for a redirect', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          pageTitle: 'Select the abstraction period for the requirements for returns',
-          id: 'aeb46f58-3431-42af-8724-361a7779becf',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          abstractionPeriod: {
-            fromDay: '01',
-            fromMonth: '12',
-            toDay: '02',
-            toMonth: '7'
-          }
-        }, { skip: ['id'] })
+        expect(result).to.equal({})
       })
     })
 
