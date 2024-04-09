@@ -25,17 +25,34 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
-
   const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+      journey: session.data.journey
+    }
+  }
 
   const formattedData = NoReturnsRequiredPresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Why are no returns required?',
     ...formattedData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.reason = payload.reason
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {

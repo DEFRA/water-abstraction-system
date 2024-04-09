@@ -58,7 +58,6 @@ describe('View Licence service', () => {
           ],
           abstractionPointsCaption: 'Point of abstraction',
           abstractionQuantities: null,
-          abstractionQuantityCaption: 'Abstraction amounts',
           id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
           endDate: null,

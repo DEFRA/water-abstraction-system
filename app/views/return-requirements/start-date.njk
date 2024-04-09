@@ -7,10 +7,18 @@
 
 {% block breadcrumbs %}
   {# Back link #}
+  {% set backLink %}
+    {% if checkYourAnswersVisited %}
+      /system/return-requirements/{{ id }}/check-your-answers
+    {% else %}
+      /licences/{{ licenceId }}#charge
+    {% endif %}
+  {% endset %}
+
   {{
     govukBackLink({
       text: 'Back',
-      href: '/licences/' + licenceId + '#charge'
+      href: backLink
     })
   }}
 {% endblock %}

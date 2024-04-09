@@ -13,6 +13,23 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
 const CheckYourAnswersService = require('../../../app/services/return-requirements/check-your-answers.service.js')
+const SessionModel = require('../../../app/models/session.model.js')
+
+const sessionData = {
+  data: {
+    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    checkYourAnswersVisited: false,
+    licence: {
+      endDate: null,
+      licenceRef: '01/ABC',
+      licenceHolder: 'Astro Boy',
+      currentVersionStartDate: '2023-02-08T00:00:00.000Z'
+    },
+    reason: 'abstraction-below-100-cubic-metres-per-day',
+    journey: 'no-returns-required',
+    startDateOptions: 'licenceStartDate'
+  }
+}
 
 describe('Check Your Answers service', () => {
   let session
@@ -20,13 +37,7 @@ describe('Check Your Answers service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
     session = await SessionHelper.add({
-      data: {
-        licence: {
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Astro Boy'
-        }
-      }
+      ...sessionData
     })
   })
 
@@ -42,9 +53,20 @@ describe('Check Your Answers service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        id: session.id,
         pageTitle: 'Check the return requirements for Astro Boy',
-        licenceRef: '01/ABC'
+        journey: 'no-returns-required',
+        licenceRef: '01/ABC',
+        reason: 'abstraction-below-100-cubic-metres-per-day',
+        startDate: '8 February 2023'
       }, { skip: ['id'] })
+    })
+
+    it('updates the session record to indicate user has visited check-your-answers', async () => {
+      await CheckYourAnswersService.go(session.id)
+      const updatedSession = await SessionModel.query().findById(session.id)
+
+      expect(updatedSession.data.checkYourAnswersVisited).to.be.true()
     })
   })
 })

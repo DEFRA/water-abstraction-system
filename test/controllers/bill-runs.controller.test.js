@@ -18,6 +18,7 @@ const StartBillRunProcessService = require('../../app/services/bill-runs/start-b
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
+const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -308,6 +309,29 @@ describe('Bill Runs controller', () => {
     })
   })
 
+  describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(MatchDetailsService, 'go').resolves(_chargeElementDetails())
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Charge period 1 April 2022 to 31 March 2023')
+          expect(response.payload).to.contain('Financial year 2022 to 2023')
+          expect(response.payload).to.contain('River Test and tributaries near Fullerton Grange, Andover')
+        })
+      })
+    })
+  })
+
   describe('/bill-runs/{id}/send', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -381,6 +405,24 @@ function _options (method, path) {
       strategy: 'session',
       credentials: { scope: ['billing'] }
     }
+  }
+}
+
+function _chargeElementDetails () {
+  return {
+    billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
+    financialYear: '2022 to 2023',
+    chargePeriod: '1 April 2022 to 31 March 2023',
+    chargeElement: {
+      chargeElementId: '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2',
+      description: 'River Test and tributaries near Fullerton Grange, Andover',
+      dates: '1 April 2022 to 31 October 2022',
+      status: 'Ready',
+      billableVolume: 10,
+      authorisedVolume: 10,
+      issues: []
+    },
+    matchedReturns: {}
   }
 }
 

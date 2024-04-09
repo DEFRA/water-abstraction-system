@@ -17,7 +17,10 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+
   const formattedData = CheckYourAnswersPresenter.go(session)
+
+  await _checkYourAnswersVisited(session)
 
   return {
     activeNavBar: 'search',
@@ -25,6 +28,16 @@ async function go (sessionId) {
     pageTitle: `Check the return requirements for ${session.data.licence.licenceHolder}`,
     ...formattedData
   }
+}
+
+async function _checkYourAnswersVisited (session) {
+  const currentData = session.data
+
+  currentData.checkYourAnswersVisited = true
+  await session.$query().patch({ data: currentData })
+
+  const updatedSession = await SessionModel.query().findById(session.id)
+  return updatedSession
 }
 
 module.exports = {
