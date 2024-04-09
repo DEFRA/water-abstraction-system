@@ -277,7 +277,13 @@
           attributes: { 'data-test': 'licence-issue-' + loop.index }
         },
         {
-          html: statusTag, classes: "govuk-!-text-align-right",
+          text: licence.progress,
+          classes: "govuk-!-text-align-centre",
+          attributes: { 'data-test': 'licence-progress-' + loop.index }
+        },
+        {
+          html: statusTag,
+          classes: "govuk-!-text-align-right",
           attributes: { 'data-test': 'licence-status-' + loop.index }
           }
       ] %}
@@ -308,8 +314,12 @@
         text: 'Issue'
       },
       {
+        text: 'Progress',
+        classes: "govuk-!-text-align-centre"
+      },
+      {
         text: 'Status',
-        format: "numeric"
+        classes: "govuk-!-text-align-right"
       }
     ],
     rows: tableRows
