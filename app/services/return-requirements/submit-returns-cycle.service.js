@@ -27,7 +27,14 @@ async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
-  const formattedData = ReturnsCyclePresenter.go(session, payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {}
+  }
+
+  const formattedData = ReturnsCyclePresenter.go(session)
 
   return {
     activeNavBar: 'search',
@@ -35,6 +42,14 @@ async function go (sessionId, payload) {
     pageTitle: 'Select the returns cycle for the requirements for returns',
     ...formattedData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.returnsCycle = payload.returnsCycle
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {
