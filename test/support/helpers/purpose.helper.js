@@ -52,7 +52,7 @@ function defaults (data = {}) {
 }
 
 function generateLegacyId () {
-  const numbering = randomInteger(10, 999)
+  const numbering = randomInteger(1, 999)
 
   return `${numbering}0`
 }
