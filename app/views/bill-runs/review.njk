@@ -110,7 +110,8 @@
     {{ govukButton({
       classes: "govuk-button--secondary govuk-!-margin-bottom-0",
       text: "Cancel bill run",
-      href: "cancel"
+      href: "cancel",
+      preventDoubleClick: true
     }) }}
   </section>
 
@@ -230,7 +231,8 @@
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Apply filters"
+          text: "Apply filters",
+          preventDoubleClick: true
         }) }}
 
         {{ govukButton({
@@ -238,7 +240,8 @@
           classes: "govuk-button--secondary ",
           name: "clearFilters",
           type: "reset",
-          href: "review"
+          href: "review",
+          preventDoubleClick: true
         }) }}
       </div>
     </form>
