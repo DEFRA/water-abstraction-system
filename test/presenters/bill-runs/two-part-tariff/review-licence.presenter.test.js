@@ -32,7 +32,7 @@ describe('Review Licence presenter', () => {
           status: 'ready',
           licenceHolder: 'Licence Holder Ltd'
         },
-        elementsInReview: 'false',
+        elementsInReview: false,
         matchedReturns: [
           {
             returnId: 'v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
