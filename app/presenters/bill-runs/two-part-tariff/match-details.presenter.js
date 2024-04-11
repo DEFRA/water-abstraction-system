@@ -17,7 +17,8 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {Object} the prepared bill run and charge element data to be passed to the match details page
  */
-function go (billRun, reviewChargeElement, licenceId) {
+function go (billRun, reviewChargeElement, licenceId, showBanner) {
+  console.log('Show Banner :', showBanner)
   return {
     billRunId: billRun.id,
     financialYear: _financialYear(billRun.toFinancialYearEnding),
@@ -38,7 +39,8 @@ function go (billRun, reviewChargeElement, licenceId) {
       authorisedVolume: reviewChargeElement.chargeElement.authorisedAnnualQuantity,
       issues: reviewChargeElement.issues?.length > 0 ? reviewChargeElement.issues.split(', ') : []
     },
-    matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns)
+    matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns),
+    showBanner: `${showBanner}`
   }
 }
 

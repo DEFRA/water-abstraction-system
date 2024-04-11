@@ -5,51 +5,22 @@
  * @module SubmitAmendedBillableReturnsService
 */
 
-const AmendBillableReturnsService = require('../../../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
-const BillableReturnsValidator = require('../../../validators/bill-runs/two-part-tariff/billable-returns.validator.js')
+const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
 /**
- *
- * @param {*} billRunId 
- * @param {*} licenceId 
+ * 
  * @param {*} reviewChargeElementId 
  * @param {*} payload 
+ * @returns 
  */
-async function go (billRunId, licenceId, reviewChargeElementId, payload) {
-  console.log('Payload: ', payload)
-  const validationResult = await _validate(payload)
+async function go (reviewChargeElementId, payload) {
+  const { 'quantity-options': selectedOption } = payload
 
-  console.log('AHHHH :', validationResult)
-  if (validationResult === null) {
-    console.log('Returning from null')
-    return { error: null }
-  }
+  const volume = selectedOption === 'customQuantity' ? payload.customQuantity : selectedOption
 
-  const pageData = await AmendBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId)
-  console.log('Returning page data')
-  return {
-    activeNavBar: 'search',
-    error: validationResult,
-    ...pageData
-  }
-}
-
-async function _validate (payload) {
-  const validation = BillableReturnsValidator.go(payload)
-
-  if (!validation.error) {
-    await _persistAmendedBillableReturns()
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
-}
-
-async function _persistAmendedBillableReturns () {
+  return ReviewChargeElementModel.query()
+    .findById(reviewChargeElementId)
+    .patch({ allocated: volume })
 }
 
 module.exports = {

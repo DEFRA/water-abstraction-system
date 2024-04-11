@@ -62,9 +62,9 @@ async function create (request, h) {
 }
 
 async function matchDetails (request, h) {
-  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
+  const { id: billRunId, licenceId, reviewChargeElementId, showBanner } = request.params
 
-  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId)
+  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId, showBanner)
 
   return h.view('bill-runs/match-details.njk', {
     pageTitle: 'View match details',
@@ -125,14 +125,9 @@ async function submitCancel (request, h) {
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload)
+  await SubmitAmendedBillableReturnsService.go(reviewChargeElementId, request.payload)
 
-  if (pageData.error) {
-    console.log('Inside controller pageData')
-    return h.view('bill-runs/amend-billable-returns.njk', pageData)
-  }
-
-  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}`)
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}/true`)
 }
 
 async function submitSend (request, h) {

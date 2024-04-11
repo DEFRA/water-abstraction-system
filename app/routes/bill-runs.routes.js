@@ -99,7 +99,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/{showBanner}',
     handler: BillRunsController.matchDetails,
     options: {
       auth: {
