@@ -4,6 +4,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "macros/review-status-tag.njk" import statusTag %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -40,6 +41,13 @@
         Charge information
       </a></li>
   </ul>
+
+  {# ------------- Licence in review text --------------- #}
+  {% if elementsInReview === 'true' %}
+    {{ govukInsetText({
+      text: "There are elements in review"
+    }) }}
+  {% endif %}
 
   {# ------------- Charge Periods --------------- #}
   <div class="govuk-grid-row">
