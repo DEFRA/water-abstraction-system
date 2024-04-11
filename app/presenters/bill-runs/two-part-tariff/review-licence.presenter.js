@@ -33,18 +33,6 @@ function go (billRun, licence) {
   }
 }
 
-function _elementsInReview (licence) {
-  const hasReviewStatus = licence.reviewChargeVersions.some((chargeVersion) => {
-    return chargeVersion.reviewChargeReferences.some((chargeReference) => {
-      return chargeReference.reviewChargeElements.some((chargeElement) => {
-        return chargeElement.status === 'review'
-      })
-    })
-  })
-
-  return `${hasReviewStatus}`
-}
-
 function _accountName (billingAccount) {
   const accountAddress = billingAccount.billingAccountAddresses[0]
 
@@ -138,6 +126,18 @@ function _contactName (billingAccount) {
   }
 
   return null
+}
+
+function _elementsInReview (licence) {
+  const hasReviewStatus = licence.reviewChargeVersions.some((chargeVersion) => {
+    return chargeVersion.reviewChargeReferences.some((chargeReference) => {
+      return chargeReference.reviewChargeElements.some((chargeElement) => {
+        return chargeElement.status === 'review'
+      })
+    })
+  })
+
+  return hasReviewStatus
 }
 
 function _financialYear (financialYearEnding) {
