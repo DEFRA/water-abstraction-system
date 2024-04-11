@@ -24,7 +24,8 @@ function go (billRun, licence) {
       licenceId: licence[0].licenceId,
       licenceRef: licence[0].licenceRef,
       status: licence[0].status,
-      licenceHolder: licence[0].licenceHolder
+      licenceHolder: licence[0].licenceHolder,
+      progress: licence[0].progress
     },
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
