@@ -85,7 +85,7 @@ async function send (request, h) {
 async function reviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
-  const pageData = await ReviewLicenceService.go(billRunId, licenceId)
+  const pageData = await ReviewLicenceService.go(billRunId, licenceId, request.payload)
 
   return h.view('bill-runs/review-licence.njk', {
     pageTitle: `Licence ${pageData.licence.licenceRef}`,

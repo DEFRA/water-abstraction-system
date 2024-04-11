@@ -47,12 +47,16 @@
     {% if licence.progress %}
       {{ govukButton({
         text: "Remove progress mark",
-        classes: "govuk-button--secondary"
+        classes: "govuk-button--secondary",
+        name: "marKProgress",
+        value: false
       }) }}
     {% else %}
       {{ govukButton({
         text: "Mark progress",
-        classes: "govuk-button--secondary"
+        classes: "govuk-button--secondary",
+        name: "marKProgress",
+        value: true
       }) }}
     {% endif %}
   </form>

@@ -17,7 +17,8 @@ const ReviewLicencePresenter = require('../../../presenters/bill-runs/two-part-t
  * @returns {Object} an object representing the 'pageData' needed to review the individual licence. It contains the
  * licence, bill run, matched and unmatched returns and the licence charge data
  */
-async function go (billRunId, licenceId) {
+async function go (billRunId, licenceId, payload) {
+  console.log('🚀 ~ go ~ payload:', payload)
   const { billRun, licence } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
 
   const pageData = ReviewLicencePresenter.go(billRun, licence)
