@@ -125,9 +125,10 @@ async function submitCancel (request, h) {
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  const pageData = SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload)
+  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload)
 
   if (pageData.error) {
+    console.log('Inside controller pageData')
     return h.view('bill-runs/amend-billable-returns.njk', pageData)
   }
 
