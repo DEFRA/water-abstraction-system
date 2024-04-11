@@ -36,6 +36,9 @@ async function go (regionId, billingPeriod) {
 }
 
 async function _fetch (regionId, billingPeriod) {
+  // LicenceId that Shabbir wants testing
+  const licenceRef = '16/52/003/S/201'
+
   const chargeVersions = await ChargeVersionModel.query()
     .select([
       'chargeVersions.id',
@@ -44,7 +47,8 @@ async function _fetch (regionId, billingPeriod) {
       'chargeVersions.status'
     ])
     .innerJoinRelated('licence')
-    .where('licence.regionId', regionId)
+    // Change to the licence you want to search for
+    .where('licence.licenceRef', licenceRef)
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')

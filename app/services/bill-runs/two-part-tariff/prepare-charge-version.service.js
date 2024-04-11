@@ -41,6 +41,8 @@ function go (chargeVersion, billingPeriod) {
 
 function _prepareChargeElementsForMatching (chargeElements, chargePeriod) {
   chargeElements.forEach((chargeElement) => {
+    global.GlobalNotifier.omg('TwoPartTariffLicenceObject prepareChargeVersionService prep charge element flag :', chargeElement)
+
     const {
       abstractionPeriodStartDay,
       abstractionPeriodStartMonth,

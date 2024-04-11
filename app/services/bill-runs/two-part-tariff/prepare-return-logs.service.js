@@ -37,6 +37,8 @@ async function _prepareReturnLogs (licence, billingPeriod) {
 
 function _prepReturnsForMatching (returnLogs, billingPeriod) {
   returnLogs.forEach((returnLog) => {
+    global.GlobalNotifier.omg('TwoPartTariffLicenceObject prepareReturnLogService prep return log flag :', returnLog)
+
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth, returnSubmissions } = returnLog
     const abstractionPeriods = DetermineAbstractionPeriodService.go(
       billingPeriod,
