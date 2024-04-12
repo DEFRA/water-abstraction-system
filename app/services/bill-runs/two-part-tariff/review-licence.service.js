@@ -24,17 +24,23 @@ async function go (billRunId, licenceId, payload) {
   const markProgress = payload?.marKProgress
 
   if (markProgress === 'mark' || markProgress === 'unmark') {
-    await ReviewLicenceModel.query()
-      .patch({ progress: markProgress === 'mark' })
-      .where('billRunId', billRunId)
-      .andWhere('licenceId', licenceId)
+    await _updateProgress(billRunId, licenceId, markProgress)
   }
 
   const { billRun, licence } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
 
-  const pageData = ReviewLicencePresenter.go(billRun, licence)
+  const pageData = ReviewLicencePresenter.go(billRun, licence, markProgress)
 
   return pageData
+}
+
+async function _updateProgress (billRunId, licenceId, marKProgress) {
+  const progress = marKProgress === 'mark'
+
+  await ReviewLicenceModel.query()
+    .patch({ progress })
+    .where('billRunId', billRunId)
+    .andWhere('licenceId', licenceId)
 }
 
 module.exports = {

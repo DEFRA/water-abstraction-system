@@ -13,10 +13,13 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @param {module:BillRunModel} billRun the data from the bill run
  * @param {module:ReviewLicenceModel} licence the data from review licence
+ * @param {String} markProgress will contain the string 'mark' or 'unmark' if the mark/unmark progress button has been
+ * clicked, otherwise it will be null. Is passed back to the view to determine if the 'Licence updated' banner should be
+ * displayed
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (billRun, licence) {
+function go (billRun, licence, markProgress) {
   return {
     billRunId: billRun.id,
     region: billRun.region.displayName,
@@ -27,6 +30,7 @@ function go (billRun, licence) {
       licenceHolder: licence[0].licenceHolder,
       progress: licence[0].progress
     },
+    licenceUpdated: _licenceUpdated(markProgress),
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
     chargeData: _prepareChargeData(licence, billRun)
@@ -133,6 +137,16 @@ function _financialYear (financialYearEnding) {
   const endYear = financialYearEnding
 
   return `${startYear} to ${endYear}`
+}
+
+function _licenceUpdated (markProgress) {
+  if (markProgress === 'mark') {
+    return 'This licence has been marked.'
+  } else if (markProgress === 'unmark') {
+    return 'The progress mark for this licence has been removed.'
+  } else {
+    return null
+  }
 }
 
 function _matchedReturns (returnLogs) {
