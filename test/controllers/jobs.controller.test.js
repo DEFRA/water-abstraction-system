@@ -10,12 +10,14 @@ const { expect } = Code
 
 // Things we need to stub
 const ExportService = require('../../app/services/jobs/export/export.service.js')
+const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Jobs controller', () => {
+  let options
   let server
 
   beforeEach(async () => {
@@ -34,40 +36,62 @@ describe('Jobs controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /jobs/export', () => {
-    const options = {
-      method: 'GET',
-      url: '/jobs/export'
-    }
-
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(ExportService, 'go').resolves()
+  describe('/jobs/export', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = { method: 'GET', url: '/jobs/export' }
       })
 
-      it('displays the correct message', async () => {
-        const response = await server.inject(options)
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ExportService, 'go').resolves()
+        })
 
-        expect(response.statusCode).to.equal(204)
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
       })
     })
   })
 
-  describe('POST /jobs/time-limited', () => {
-    const options = {
-      method: 'POST',
-      url: '/jobs/time-limited'
-    }
-
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
+  describe('/jobs/licence-updates', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/licence-updates' }
       })
 
-      it('displays the correct message', async () => {
-        const response = await server.inject(options)
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessLicenceUpdatesService, 'go').resolves()
+        })
 
-        expect(response.statusCode).to.equal(204)
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/time-limited', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/time-limited' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
       })
     })
   })
