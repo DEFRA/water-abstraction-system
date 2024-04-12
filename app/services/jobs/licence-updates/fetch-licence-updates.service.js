@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 /**
  * Fetches licence versions that were created in last two months that have no matching `to_setup` workflow record
  *
- * If a licence was created in the last two moths and and doesn't have a `to_setup` record in workflow it is deemed to
+ * If a licence was created in the last two moths and doesn't have a `to_setup` record in workflow it is deemed to
  * have been 'updated.
  *
  * Note, if the licence version is linked to a licence that is part of an in-progress PRESROC bill run it will be

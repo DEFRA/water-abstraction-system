@@ -23,12 +23,12 @@ const Workflow = require('../../../models/workflow.model.js')
  * runs were added to workflow (this is not an issue for our SROC billing engines).
  *
  * Instead, a job is run that looks for licence versions created in the last 2 months (we think the 2 month window was
- * to allow those licences linked to bill runs still get flagged once the bill run is completed). If there is no
+ * to allow those licences linked to bill runs to still get flagged once the bill run is completed). If there is no
  * workflow record with a status of `to_setup` the licence is deemed to have been updated.
  *
  * This means a workflow record for the licence version needs to be created. This stops the licence from being included
- * in future bill runs until billing & data have had a chance to review the existing charge versions. The change to the
- * licence might require changes to the charge versions be made.
+ * in future bill runs until Billing & Data have had a chance to review the existing charge versions. This is because
+ * the change to the licence might require changes to the charge versions.
  */
 async function go () {
   try {
