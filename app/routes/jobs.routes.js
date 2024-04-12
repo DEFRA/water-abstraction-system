@@ -17,6 +17,18 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/jobs/licence-updates',
+    handler: JobsController.licenceUpdates,
+    options: {
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      description: 'Puts a licence into workflow when a new licence version has been created for it'
+    }
+  },
+  {
+    method: 'POST',
     path: '/jobs/time-limited',
     handler: JobsController.timeLimited,
     options: {
