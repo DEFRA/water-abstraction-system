@@ -47,7 +47,7 @@ describe('Jobs controller', () => {
           Sinon.stub(ExportService, 'go').resolves()
         })
 
-        it('displays the correct message', async () => {
+        it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(204)
@@ -67,7 +67,7 @@ describe('Jobs controller', () => {
           Sinon.stub(ProcessLicenceUpdatesService, 'go').resolves()
         })
 
-        it('displays the correct message', async () => {
+        it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(204)
@@ -87,7 +87,7 @@ describe('Jobs controller', () => {
           Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
         })
 
-        it('displays the correct message', async () => {
+        it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(204)
