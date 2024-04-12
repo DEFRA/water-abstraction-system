@@ -34,6 +34,6 @@ async function licenceUpdates (_request, h) {
 
 module.exports = {
   exportDb,
-  timeLimited,
-  licenceUpdates
+  licenceUpdates,
+  timeLimited
 }

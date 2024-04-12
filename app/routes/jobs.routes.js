@@ -17,18 +17,6 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/time-limited',
-    handler: JobsController.timeLimited,
-    options: {
-      app: {
-        plainOutput: true
-      },
-      auth: false,
-      description: 'Puts a licence into workflow when a charge element has a `timeLimitedEndDate` which is < 50 days away'
-    }
-  },
-  {
-    method: 'POST',
     path: '/jobs/licence-updates',
     handler: JobsController.licenceUpdates,
     options: {
@@ -37,6 +25,18 @@ const routes = [
       },
       auth: false,
       description: 'Puts a licence into workflow when a new licence version has been created for it'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/jobs/time-limited',
+    handler: JobsController.timeLimited,
+    options: {
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      description: 'Puts a licence into workflow when a charge element has a `timeLimitedEndDate` which is < 50 days away'
     }
   }
 ]
