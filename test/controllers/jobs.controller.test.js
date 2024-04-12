@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const ExportService = require('../../app/services/jobs/export/export.service.js')
+const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
@@ -44,6 +45,26 @@ describe('Jobs controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(ExportService, 'go').resolves()
+        })
+
+        it('displays the correct message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/licence-updates', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/licence-updates' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessLicenceUpdatesService, 'go').resolves()
         })
 
         it('displays the correct message', async () => {
