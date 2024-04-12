@@ -35,7 +35,7 @@ describe('Review Licence Service', () => {
     Sinon.restore()
   })
 
-  describe('when the page is loaded', () => {
+  describe('when there is data to process', () => {
     const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
     const licenceId = '082f528e-4ae4-4f41-ba64-b740a0a210ff'
     const payload = undefined
@@ -47,7 +47,7 @@ describe('Review Licence Service', () => {
     })
   })
 
-  describe('when the page is loaded following the user clicking the "Mark progress" button', () => {
+  describe('when there is data to process following the user clicking the "Mark progress" button', () => {
     const payload = { marKProgress: 'mark' }
     let billRunId
     let licenceId
@@ -71,7 +71,7 @@ describe('Review Licence Service', () => {
     })
   })
 
-  describe('when the page is loaded following the user clicking the "Remove progress mark" button', () => {
+  describe('when there is data to process following the user clicking the "Remove progress mark" button', () => {
     const payload = { marKProgress: 'unmark' }
     let billRunId
     let licenceId

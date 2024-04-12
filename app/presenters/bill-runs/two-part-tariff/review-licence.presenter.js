@@ -140,12 +140,13 @@ function _financialYear (financialYearEnding) {
 }
 
 function _licenceUpdated (markProgress) {
-  if (markProgress === 'mark') {
-    return 'This licence has been marked.'
-  } else if (markProgress === 'unmark') {
-    return 'The progress mark for this licence has been removed.'
-  } else {
-    return null
+  switch (markProgress) {
+    case 'mark':
+      return 'This licence has been marked.'
+    case 'unmark':
+      return 'The progress mark for this licence has been removed.'
+    default:
+      return null
   }
 }
 

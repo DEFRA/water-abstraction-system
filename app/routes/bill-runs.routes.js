@@ -107,7 +107,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'POST request recieved when progress marking is applied to review a two-part tariff licence'
+      description: 'POST request received when progress marking is applied to review a two-part tariff licence'
     }
   },
   {
