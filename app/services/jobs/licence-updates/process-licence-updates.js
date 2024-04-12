@@ -33,18 +33,18 @@ const Workflow = require('../../../models/workflow.model.js')
 async function go () {
   try {
     const startTime = currentTimeInNanoseconds()
-    const licenceVersions = await FetchLicenceUpdatesService.go()
 
-    if (licenceVersions.length) {
-      await _addLicenceVersionsToWorkflow(licenceVersions)
-    }
-    calculateAndLogTimeTaken(startTime, 'Licence updates job complete', { count: licenceVersions.length })
+    const licenceUpdateResults = await FetchLicenceUpdatesService.go()
+
+    await _addWorkflowRecords(licenceUpdateResults)
+
+    calculateAndLogTimeTaken(startTime, 'Licence updates job complete', { count: licenceUpdateResults.length })
   } catch (error) {
     global.GlobalNotifier.omfg('Licence updates job failed', null, error)
   }
 }
 
-async function _addLicenceVersionsToWorkflow (licenceVersions) {
+async function _addWorkflowRecords (licenceVersions) {
   const timestamp = timestampForPostgres()
 
   for (const licenceVersion of licenceVersions) {
