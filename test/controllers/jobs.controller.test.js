@@ -16,6 +16,7 @@ const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-
 const { init } = require('../../app/server.js')
 
 describe('Jobs controller', () => {
+  let options
   let server
 
   beforeEach(async () => {
@@ -34,40 +35,42 @@ describe('Jobs controller', () => {
     Sinon.restore()
   })
 
-  describe('GET /jobs/export', () => {
-    const options = {
-      method: 'GET',
-      url: '/jobs/export'
-    }
-
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(ExportService, 'go').resolves()
+  describe('/jobs/export', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = { method: 'GET', url: '/jobs/export' }
       })
 
-      it('displays the correct message', async () => {
-        const response = await server.inject(options)
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ExportService, 'go').resolves()
+        })
 
-        expect(response.statusCode).to.equal(204)
+        it('displays the correct message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
       })
     })
   })
 
-  describe('POST /jobs/time-limited', () => {
-    const options = {
-      method: 'POST',
-      url: '/jobs/time-limited'
-    }
-
-    describe('when the request succeeds', () => {
-      beforeEach(async () => {
-        Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
+  describe('/jobs/time-limited', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/time-limited' }
       })
 
-      it('displays the correct message', async () => {
-        const response = await server.inject(options)
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
+        })
 
-        expect(response.statusCode).to.equal(204)
+        it('displays the correct message', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(204)
+        })
       })
     })
   })
