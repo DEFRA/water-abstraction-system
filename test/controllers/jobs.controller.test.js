@@ -37,9 +37,9 @@ describe('Jobs controller', () => {
   })
 
   describe('/jobs/export', () => {
-    describe('GET', () => {
+    describe('POST', () => {
       beforeEach(() => {
-        options = { method: 'GET', url: '/jobs/export' }
+        options = { method: 'POST', url: '/jobs/export' }
       })
 
       describe('when the request succeeds', () => {
