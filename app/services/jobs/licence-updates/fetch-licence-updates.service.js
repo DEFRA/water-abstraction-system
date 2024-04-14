@@ -39,7 +39,6 @@ async function go () {
       db
         .select(1)
         .from('workflows as w')
-        .where('w.status', 'to_setup')
         .whereColumn('w.licenceVersionId', 'lv.id')
     )
     // This is only relevant for PRESROC bill runs (see WATER-3528). If a licence is linked to an in-progress PRESROC
