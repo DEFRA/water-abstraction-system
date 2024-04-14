@@ -16,30 +16,31 @@ async function go () {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const licencesForWorkflow = await FetchTimeLimitedLicencesService.go()
+    const timeLimitedResults = await FetchTimeLimitedLicencesService.go()
 
-    if (licencesForWorkflow.length) {
-      await _addLicenceToWorkflow(licencesForWorkflow)
-    }
+    await _addWorkflowRecords(timeLimitedResults)
 
-    calculateAndLogTimeTaken(startTime, 'Time limited job complete', { count: licencesForWorkflow.length })
+    calculateAndLogTimeTaken(startTime, 'Time limited job complete', { count: timeLimitedResults.length })
   } catch (error) {
     global.GlobalNotifier.omfg('Time limited job failed', null, error)
   }
 }
 
-async function _addLicenceToWorkflow (licencesForWorkflow) {
+async function _addWorkflowRecords (timeLimitedResults) {
   const timestamp = timestampForPostgres()
 
-  // Attach additional data to the array that the chargeVersionWorkflow table requires to create a valid record
-  licencesForWorkflow.forEach((licenceForWorkflow) => {
-    licenceForWorkflow.status = 'to_setup'
-    licenceForWorkflow.data = { chargeVersion: null }
-    licenceForWorkflow.createdAt = timestamp
-    licenceForWorkflow.updatedAt = timestamp
-  })
+  for (const timeLimitedResult of timeLimitedResults) {
+    const { id: licenceId, chargeVersionId: timeLimitedChargeVersionId, licenceVersionId } = timeLimitedResult
 
-  await Workflow.query().insert(licencesForWorkflow)
+    await Workflow.query().insert({
+      data: { chargeVersion: null, timeLimitedChargeVersionId },
+      licenceId,
+      licenceVersionId,
+      status: 'to_setup',
+      createdAt: timestamp,
+      updatedAt: timestamp
+    })
+  }
 }
 
 module.exports = {
