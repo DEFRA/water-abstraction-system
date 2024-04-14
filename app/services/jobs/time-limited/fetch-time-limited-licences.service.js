@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches licences that have a related `purpose` that is due to expire in less than 50 days
+ * Fetches licences that have a related charge element that is due to expire in less than 50 days
  * @module FetchTimeLimitedLicencesService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetch licences that have a related `purpose` that is due to expire in less than 50 days
+ * Fetches licences that have a related charge element that is due to expire in less than 50 days
  *
  * To be selected the licence must
  *
@@ -20,13 +20,14 @@ const { db } = require('../../../../db/db.js')
  * - not be linked to a licence in the workflow
  * - have a related `purpose` that is due to expire in less than 50 days
  *
- * @returns {Promise<Object[]>} The licence IDs with time-limited elements & their current version ID (needed else we break the workflow)
+ * @returns {Promise<Object[]>} The licence IDs with time-limited elements and their current licence version ID (needed
+ * else we break the workflow). Also the ID of the charge version that has the time limited charge element
  */
 async function go () {
   // NOTE: We've resorted to Knex rather than Objection JS due to just how many JOINS we need to get from licence to
   // charge purposes! Our Objection JS skills failed us as we could not get the query to work using innerJoinRelated()
   return db
-    .distinct('l.id', 'lv.id AS licenceVersionId')
+    .distinct('l.id', 'lv.id AS licenceVersionId', 'cv.id AS chargeVersionId')
     .from('licences as l')
     .innerJoin('licenceVersions as lv', 'l.id', 'lv.licenceId')
     .innerJoin('chargeVersions as cv', 'l.id', 'cv.licenceId')
