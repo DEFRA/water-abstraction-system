@@ -1,23 +1,26 @@
 'use strict'
 
 /**
- * Fetches licence versions that were created in last 2 months that have no matching `to_setup` workflow record
+ * Fetches licence versions that were created in last 2 months that have no matching workflow record
  * @module FetchLicenceUpdatesService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches licence versions that were created in last two months that have no matching `to_setup` workflow record
+ * Fetches licence versions that were created in last two months that have no matching workflow record
  *
- * If a licence was created in the last two moths and doesn't have a `to_setup` record in workflow it is deemed to
- * have been 'updated.
+ * If a licence was created in the last two moths and doesn't have a `to_setup` record in workflow it is deemed to have
+ * been 'updated.
  *
  * Note, if the licence version is linked to a licence that is part of an in-progress PRESROC bill run it will be
  * excluded from the results (see {@link https://eaflood.atlassian.net/browse/WATER-3528 | WATER-3528}).
  *
- * @returns {Promise<Object[]>} The ID for each licence version created in the last 2 months without a `to_setup`
- * workflow record, plus associated licence ID and whether a charge version exists for the licence
+ * Also, if a workflow record already exists for the licence version, for example, it is already under review, it will
+ * also be excluded from the results.
+ *
+ * @returns {Promise<Object[]>} The ID for each licence version created in the last 2 months without a workflow record,
+ * plus associated licence ID and whether a charge version exists for the licence
  */
 async function go () {
   const twoMonthsAgo = _twoMonthsAgo()
@@ -34,12 +37,10 @@ async function go () {
       db.raw('EXISTS(SELECT 1 FROM public.charge_versions cv WHERE cv.licence_id = lv.licence_id) AS charge_version_exists')
     )
     .from('licenceVersions AS lv')
-    // We only care about licence versions that don't have an existing `to_setup` workflow record
     .whereNotExists(
       db
         .select(1)
         .from('workflows as w')
-        .where('w.status', 'to_setup')
         .whereColumn('w.licenceVersionId', 'lv.id')
     )
     // This is only relevant for PRESROC bill runs (see WATER-3528). If a licence is linked to an in-progress PRESROC

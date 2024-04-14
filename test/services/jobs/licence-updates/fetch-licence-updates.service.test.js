@@ -76,10 +76,10 @@ describe('Fetch Licence Updates service', () => {
       })
     })
 
-    describe("because they are already linked to 'to_setup' workflow records", () => {
+    describe('because they are already linked to a workflow records', () => {
       beforeEach(async () => {
         licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
-        await WorkflowHelper.add({ licenceId: licence.id, licenceVersionId: licenceVersion.id, status: 'to_setup' })
+        await WorkflowHelper.add({ licenceId: licence.id, licenceVersionId: licenceVersion.id, status: 'review' })
       })
 
       it('returns no results', async () => {
