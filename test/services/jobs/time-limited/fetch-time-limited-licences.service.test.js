@@ -31,6 +31,7 @@ describe('Fetch Time Limited Licences service', () => {
   })
 
   describe('when there are licences with elements due to expire in < 50 days that should be added to workflow', () => {
+    let chargeVersionId
     let licenceId
     let licenceVersionId
 
@@ -42,7 +43,8 @@ describe('Fetch Time Limited Licences service', () => {
       licenceVersionId = licenceVersion.id
 
       // This creates a 'current' SROC charge version
-      const { id: chargeVersionId } = await ChargeVersionHelper.add({ licenceId })
+      const chargeVersion = await ChargeVersionHelper.add({ licenceId })
+      chargeVersionId = chargeVersion.id
 
       const { id: chargeReferenceId } = await ChargeReferenceHelper.add({ chargeVersionId })
 
@@ -50,12 +52,13 @@ describe('Fetch Time Limited Licences service', () => {
       await ChargeElementHelper.add({ chargeReferenceId, timeLimitedEndDate: _offSetCurrentDateByDays(49) })
     })
 
-    it('returns the licenceId and licenceVersionId for the SROC licence with an expiring element', async () => {
+    it('returns the licenceId, licenceVersionId and chargeVersionId for the SROC licence with an expiring element', async () => {
       const result = await FetchTimeLimitedLicencesService.go()
 
       expect(result).to.have.length(1)
       expect(result[0].id).to.equal(licenceId)
       expect(result[0].licenceVersionId).to.equal(licenceVersionId)
+      expect(result[0].chargeVersionId).to.equal(chargeVersionId)
     })
 
     describe('including those linked to soft-deleted workflow records', () => {
@@ -63,12 +66,13 @@ describe('Fetch Time Limited Licences service', () => {
         await WorkflowHelper.add({ licenceId, deletedAt: new Date('2022-04-01') })
       })
 
-      it('returns the licenceId and licenceVersionId for the SROC licence with an expiring element', async () => {
+      it('returns the licenceId, licenceVersionId and chargeVersionId for the SROC licence with an expiring element', async () => {
         const result = await FetchTimeLimitedLicencesService.go()
 
         expect(result).to.have.length(1)
         expect(result[0].id).to.equal(licenceId)
         expect(result[0].licenceVersionId).to.equal(licenceVersionId)
+        expect(result[0].chargeVersionId).to.equal(chargeVersionId)
       })
     })
   })

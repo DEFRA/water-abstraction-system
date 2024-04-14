@@ -18,7 +18,7 @@ const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licenc
 // Thing under test
 const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/process-licence-updates.js')
 
-describe('Process Time Limited Licences service', () => {
+describe('Process Licence Updates service', () => {
   let fetchResults
   let notifierStub
 
@@ -61,15 +61,15 @@ describe('Process Time Limited Licences service', () => {
 
       expect(results).to.have.length(2)
 
-      expect(results[0].licenceVersionId).to.equal(fetchResults[0].id)
-      expect(results[0].licenceId).to.equal(fetchResults[0].licenceId)
+      expect(results[0].licenceVersionId).to.equal('ece3a745-d7b8-451e-8434-9977fbaa3bc1')
+      expect(results[0].licenceId).to.equal('a3f0bdeb-edcb-427d-9f79-c345d19d8aa1')
       expect(results[0].status).to.equal('to_setup')
-      expect(results[0].data).to.equal({ chargeVersion: null, chargeVersionExists: fetchResults[0].chargeVersionExists })
+      expect(results[0].data).to.equal({ chargeVersion: null, chargeVersionExists: false })
 
-      expect(results[1].licenceVersionId).to.equal(fetchResults[1].id)
-      expect(results[1].licenceId).to.equal(fetchResults[1].licenceId)
+      expect(results[1].licenceVersionId).to.equal('cbd2195f-17c4-407d-b7ed-c3cd729c3dca')
+      expect(results[1].licenceId).to.equal('fa25c580-710e-48f0-8932-b2d18e391994')
       expect(results[1].status).to.equal('to_setup')
-      expect(results[1].data).to.equal({ chargeVersion: null, chargeVersionExists: fetchResults[1].chargeVersionExists })
+      expect(results[1].data).to.equal({ chargeVersion: null, chargeVersionExists: true })
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
