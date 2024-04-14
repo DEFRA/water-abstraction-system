@@ -6,7 +6,7 @@
  */
 
 const FetchTimeLimitedLicencesService = require('./fetch-time-limited-licences.service.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../../lib/general.lib.js')
 const Workflow = require('../../../models/workflow.model.js')
 
 /**
@@ -14,13 +14,17 @@ const Workflow = require('../../../models/workflow.model.js')
  */
 async function go () {
   try {
+    const startTime = currentTimeInNanoseconds()
+
     const licencesForWorkflow = await FetchTimeLimitedLicencesService.go()
 
     if (licencesForWorkflow.length) {
       await _addLicenceToWorkflow(licencesForWorkflow)
     }
+
+    calculateAndLogTimeTaken(startTime, 'Time limited job complete', { count: licencesForWorkflow.length })
   } catch (error) {
-    global.GlobalNotifier.omfg('ProcessTimeLimitedLicencesService failed to run', null, error)
+    global.GlobalNotifier.omfg('Time limited job failed', null, error)
   }
 }
 
