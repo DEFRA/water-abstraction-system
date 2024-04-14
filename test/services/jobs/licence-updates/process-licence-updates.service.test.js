@@ -18,7 +18,7 @@ const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licenc
 // Thing under test
 const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/process-licence-updates.js')
 
-describe('Process Time Limited Licences service', () => {
+describe('Process Licence Updates service', () => {
   let fetchResults
   let notifierStub
 
