@@ -6,6 +6,7 @@
  */
 
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
+const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
@@ -15,6 +16,7 @@ const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
+const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
@@ -105,12 +107,10 @@ async function frequencyCollected (request, h) {
 async function frequencyReported (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await FrequencyReportedService.go(sessionId)
 
   return h.view('return-requirements/frequency-reported.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select how often collected readings or volumes are reported',
-    ...session
+    ...pageData
   })
 }
 
@@ -234,6 +234,12 @@ async function submitFrequencyCollected (request, h) {
 
 async function submitFrequencyReported (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitFrequencyReportedService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/frequency-reported.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
 }
