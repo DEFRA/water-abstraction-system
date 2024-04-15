@@ -58,6 +58,8 @@
   </div>
 
   <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
     {# From #}
     {{ govukDateInput({
       id: "abstraction-period-from",
