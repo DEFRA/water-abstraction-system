@@ -31,6 +31,7 @@
   {# Main heading #}
   <div class="govuk-body">
     <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
       <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
       {{ govukInput({
         label: {
