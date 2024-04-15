@@ -4,7 +4,7 @@ const JobsController = require('../controllers/jobs.controller.js')
 
 const routes = [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/jobs/export',
     handler: JobsController.exportDb,
     options: {
@@ -13,6 +13,18 @@ const routes = [
       },
       auth: false,
       description: 'Used to export the database and upload the file to our AWS S3 bucket'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/jobs/licence-updates',
+    handler: JobsController.licenceUpdates,
+    options: {
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      description: 'Puts a licence into workflow when a new licence version has been created for it'
     }
   },
   {
