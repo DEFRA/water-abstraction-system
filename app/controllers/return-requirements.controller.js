@@ -6,6 +6,7 @@
  */
 
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
+const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
@@ -15,6 +16,7 @@ const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
+const SubmitFrequencyCollected = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
@@ -93,12 +95,10 @@ async function existing (request, h) {
 async function frequencyCollected (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await FrequencyCollectedService.go(sessionId)
 
   return h.view('return-requirements/frequency-collected.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select how often readings or volumes are collected',
-    ...session
+    ...pageData
   })
 }
 
@@ -228,6 +228,12 @@ async function submitExisting (request, h) {
 
 async function submitFrequencyCollected (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitFrequencyCollected.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/frequency-collected.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported`)
 }
