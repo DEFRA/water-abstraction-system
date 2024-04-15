@@ -50,7 +50,7 @@ async function go (sessionId, payload) {
 async function _save (session, payload) {
   const currentData = session.data
 
-  currentData.reason = payload.reason
+  currentData.addNote = payload.addNote
 
   return session.$query().patch({ data: currentData })
 }
