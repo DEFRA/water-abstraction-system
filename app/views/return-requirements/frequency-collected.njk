@@ -17,7 +17,6 @@
 {% endblock %}
 
 {% block content %}
-
 {# Error summary #}
   {% if error %}
     {{ govukErrorSummary({
@@ -45,17 +44,17 @@
         {
           value: "daily",
           text: "Daily",
-          checked: "daily" in frequencyCollected
+          checked: "daily" === frequencyCollected
         },
         {
           value: "weekly",
           text: "Weekly",
-          checked: "weekly" in frequencyCollected
+          checked: "weekly" === frequencyCollected
         },
         {
           value: "monthly",
           text: "Monthly",
-          checked: "monthly" in frequencyCollected
+          checked: "monthly" === frequencyCollected
         }
       ]
   }) }}
