@@ -1,26 +1,41 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
+{% set backLink = "/system/return-requirements/" + id + "/check-your-answers" %}
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/check-your-answers"
+      href: backLink
     })
   }}
 {% endblock %}
 
 {% block content %}
   {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+  {% set pageHeader %}
+    <div class="govuk-body">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+    </div>
+  {% endset %}
 
   <form method="post">
     <div class="govuk-body">
+      {{ govukCharacterCount({
+        name: "addAnote",
+        id: "add-a-note",
+        maxlength: 200,
+        label: {
+          html: pageHeader,
+          isPageHeading: true
+        },
+        hint: {
+          text: "Provide a short explanation about the setup of these requirements for returns."
+        }
+      }) }}
       {{ govukButton({ text: "Confirm" }) }}
     </div>
   </form>
