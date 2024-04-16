@@ -11,8 +11,8 @@ const SessionModel = require('../../models/session.model.js')
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/abstraction-period` page
  *
- * Supports generating the data needed for the abstraction period page in the return requirements setup journey. It fetches the
- * current session record and combines it with the date fields and other information needed for the form.
+ * Supports generating the data needed for the abstraction period page in the return requirements setup journey. It
+ * fetches the current session record and combines it with the date fields and other information needed for the form.
  *
  * @param {string} sessionId - The UUID of the current session
  *
