@@ -4,20 +4,24 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const AbstractionPeriodValidator = require('../../../app/validators/return-requirements/abstraction-period.validator.js')
 
 describe('Abstraction Period validator', () => {
+  let payload
+
   describe('when valid data is provided', () => {
-    const payload = {
-      'from-abstraction-period-day': '01',
-      'from-abstraction-period-month': '12',
-      'to-abstraction-period-day': '02',
-      'to-abstraction-period-month': '7'
-    }
+    beforeEach(() => {
+      payload = {
+        'from-abstraction-period-day': '01',
+        'from-abstraction-period-month': '12',
+        'to-abstraction-period-day': '02',
+        'to-abstraction-period-month': '7'
+      }
+    })
 
     it('confirms the data is valid', () => {
       const result = AbstractionPeriodValidator.go(payload)
@@ -30,12 +34,14 @@ describe('Abstraction Period validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    const payload = {
-      'from-abstraction-period-day': 'abc',
-      'from-abstraction-period-month': '123',
-      'to-abstraction-period-day': 'def',
-      'to-abstraction-period-month': '456'
-    }
+    beforeEach(() => {
+      payload = {
+        'from-abstraction-period-day': 'abc',
+        'from-abstraction-period-month': '123',
+        'to-abstraction-period-day': 'def',
+        'to-abstraction-period-month': '456'
+      }
+    })
 
     it('fails validation', () => {
       const result = AbstractionPeriodValidator.go(payload)
@@ -48,12 +54,14 @@ describe('Abstraction Period validator', () => {
   })
 
   describe('when only from abstraction period data is provided', () => {
-    const payload = {
-      'from-abstraction-period-day': '01',
-      'from-abstraction-period-month': '12',
-      'to-abstraction-period-day': null,
-      'to-abstraction-period-month': null
-    }
+    beforeEach(() => {
+      payload = {
+        'from-abstraction-period-day': '01',
+        'from-abstraction-period-month': '12',
+        'to-abstraction-period-day': null,
+        'to-abstraction-period-month': null
+      }
+    })
 
     it('fails validation', () => {
       const result = AbstractionPeriodValidator.go(payload)
@@ -66,12 +74,14 @@ describe('Abstraction Period validator', () => {
   })
 
   describe('when only to abstraction period data is provided', () => {
-    const payload = {
-      'from-abstraction-period-day': null,
-      'from-abstraction-period-month': null,
-      'to-abstraction-period-day': '02',
-      'to-abstraction-period-month': '7'
-    }
+    beforeEach(() => {
+      payload = {
+        'from-abstraction-period-day': null,
+        'from-abstraction-period-month': null,
+        'to-abstraction-period-day': '02',
+        'to-abstraction-period-month': '7'
+      }
+    })
 
     it('fails validation', () => {
       const result = AbstractionPeriodValidator.go(payload)
@@ -84,7 +94,9 @@ describe('Abstraction Period validator', () => {
   })
 
   describe('when no data is provided', () => {
-    const payload = {}
+    beforeEach(() => {
+      payload = {}
+    })
 
     it('fails validation', () => {
       const result = AbstractionPeriodValidator.go(payload)
