@@ -36,6 +36,7 @@ describe('Review Licence presenter', () => {
           licenceHolder: 'Licence Holder Ltd'
         },
         licenceUpdated: null,
+        elementsInReview: false,
         matchedReturns: [
           {
             returnId: 'v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31',
@@ -235,6 +236,7 @@ function _licenceData () {
     issues: '',
     status: 'ready',
     progress: false,
+    hasReviewStatus: false,
     reviewReturns: [{
       id: '2264f443-5c16-4ca9-8522-f63e2d4e38be',
       reviewLicenceId: '78a99c1c-26d3-4163-ab58-084cd78594ab',
