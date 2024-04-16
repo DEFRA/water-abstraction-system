@@ -213,6 +213,34 @@ describe('Review Licence presenter', () => {
       })
     })
   })
+
+  describe('when there is data to be presented and the user has clicked the "Mark progress" button', () => {
+    beforeEach(() => {
+      billRun = _billRun()
+      licence = _licenceData()
+      markProgress = 'mark'
+    })
+
+    it('correctly returns the text for the "Licence updated" notification banner', async () => {
+      const result = ReviewLicencePresenter.go(billRun, licence, markProgress)
+
+      expect(result.licenceUpdated).to.equal('This licence has been marked.')
+    })
+  })
+
+  describe('when there is data to be presented and the user has clicked the "Remove progress mark" button', () => {
+    beforeEach(() => {
+      billRun = _billRun()
+      licence = _licenceData()
+      markProgress = 'unmark'
+    })
+
+    it('correctly returns the text for the "Licence updated" notification banner', async () => {
+      const result = ReviewLicencePresenter.go(billRun, licence, markProgress)
+
+      expect(result.licenceUpdated).to.equal('The progress mark for this licence has been removed.')
+    })
+  })
 })
 
 function _billRun () {
