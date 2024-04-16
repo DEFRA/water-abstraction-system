@@ -60,7 +60,7 @@ describe('Submit Abstraction Period service', () => {
         })
       })
 
-      it('returns an empty object (no page data needed for a redirect', async () => {
+      it('returns an empty object (no page data needed for a redirect)', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
         expect(result).to.equal({})
