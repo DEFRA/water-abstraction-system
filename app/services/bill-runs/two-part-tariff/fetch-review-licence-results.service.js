@@ -56,6 +56,7 @@ async function _fetchReviewLicence (licenceId, billRunId) {
       'licenceHolder',
       'issues',
       'status',
+      'progress',
       ReviewLicenceModel.raw(`
       EXISTS (SELECT 1
         FROM review_charge_elements rce
