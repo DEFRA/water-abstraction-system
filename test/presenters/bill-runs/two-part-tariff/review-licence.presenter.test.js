@@ -13,15 +13,17 @@ const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two
 describe('Review Licence presenter', () => {
   let billRun
   let licence
+  let markProgress
 
   describe('when there is data to be presented for the review licence page', () => {
     beforeEach(() => {
       billRun = _billRun()
       licence = _licenceData()
+      markProgress = undefined
     })
 
     it('correctly presents the data', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence)
+      const result = ReviewLicencePresenter.go(billRun, licence, markProgress)
 
       expect(result).to.equal({
         billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
@@ -29,9 +31,11 @@ describe('Review Licence presenter', () => {
         licence: {
           licenceId: '786f0d83-eaf7-43c3-9de5-ec59e3de05ee',
           licenceRef: '01/49/80/4608',
+          progress: false,
           status: 'ready',
           licenceHolder: 'Licence Holder Ltd'
         },
+        licenceUpdated: null,
         elementsInReview: false,
         matchedReturns: [
           {
@@ -180,6 +184,34 @@ describe('Review Licence presenter', () => {
         })
       })
     })
+
+    describe('when there is data to be presented and the user has clicked the "Mark progress" button', () => {
+      beforeEach(() => {
+        billRun = _billRun()
+        licence = _licenceData()
+        markProgress = 'mark'
+      })
+
+      it('correctly returns the text for the "Licence updated" notification banner', async () => {
+        const result = ReviewLicencePresenter.go(billRun, licence, markProgress)
+
+        expect(result.licenceUpdated).to.equal('This licence has been marked.')
+      })
+    })
+
+    describe('when there is data to be presented and the user has clicked the "Remove progress mark" button', () => {
+      beforeEach(() => {
+        billRun = _billRun()
+        licence = _licenceData()
+        markProgress = 'unmark'
+      })
+
+      it('correctly returns the text for the "Licence updated" notification banner', async () => {
+        const result = ReviewLicencePresenter.go(billRun, licence, markProgress)
+
+        expect(result.licenceUpdated).to.equal('The progress mark for this licence has been removed.')
+      })
+    })
   })
 })
 
@@ -203,6 +235,7 @@ function _licenceData () {
     licenceHolder: 'Licence Holder Ltd',
     issues: '',
     status: 'ready',
+    progress: false,
     hasReviewStatus: false,
     reviewReturns: [{
       id: '2264f443-5c16-4ca9-8522-f63e2d4e38be',

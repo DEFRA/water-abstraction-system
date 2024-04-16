@@ -117,6 +117,7 @@ describe('Fetch Review Licence Results Service', () => {
           licenceHolder: reviewLicence.licenceHolder,
           issues: reviewLicence.issues,
           status: reviewLicence.status,
+          progress: false,
           hasReviewStatus: false,
           reviewReturns: [{
             id: reviewReturn.id,

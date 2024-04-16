@@ -1,9 +1,11 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "macros/review-status-tag.njk" import statusTag %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block breadcrumbs %}
@@ -17,6 +19,14 @@
 {% endblock %}
 
 {% block content %}
+  {# Licence updated banner #}
+  {% if licenceUpdated %}
+    {{ govukNotificationBanner({
+      titleText: 'Licence updated',
+      text: licenceUpdated
+    }) }}
+  {% endif %}
+
   {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -48,6 +58,25 @@
       text: "There are elements in review"
     }) }}
   {% endif %}
+
+  {# Mark progress #}
+  {% if licence.progress %}
+    {% set progressButtonText = 'Remove progress mark' %}
+    {% set progressButtonValue = 'unmark' %}
+  {% else %}
+    {% set progressButtonText = 'Mark progress' %}
+    {% set progressButtonValue = 'mark' %}
+  {% endif %}
+
+  <form method="post">
+    {{ govukButton({
+      text: progressButtonText,
+      classes: "govuk-button--secondary",
+      preventDoubleClick: true,
+      name: "marKProgress",
+      value: progressButtonValue
+    }) }}
+  </form>
 
   {# Charge Periods #}
   <div class="govuk-grid-row">
