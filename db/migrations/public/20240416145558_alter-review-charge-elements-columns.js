@@ -1,9 +1,11 @@
 'use strict'
 
+const tableName = 'review_charge_elements'
+
 exports.up = async function (knex) {
   return knex
     .schema
-    .table('review_charge_elements', (table) => {
+    .alterTable(tableName, (table) => {
       table.decimal('calculated')
     })
 }
@@ -11,7 +13,7 @@ exports.up = async function (knex) {
 exports.down = async function (knex) {
   return knex
     .schema
-    .table('review_charge_elements', (table) => {
+    .alterTable(tableName, (table) => {
       table.dropColumn('calculated')
     })
 }
