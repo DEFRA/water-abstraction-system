@@ -203,6 +203,7 @@ function _licenceData () {
     licenceHolder: 'Licence Holder Ltd',
     issues: '',
     status: 'ready',
+    hasReviewStatus: false,
     reviewReturns: [{
       id: '2264f443-5c16-4ca9-8522-f63e2d4e38be',
       reviewLicenceId: '78a99c1c-26d3-4163-ab58-084cd78594ab',

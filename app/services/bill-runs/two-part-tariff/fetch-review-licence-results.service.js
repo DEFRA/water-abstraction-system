@@ -48,6 +48,23 @@ async function _fetchBillRun (billRunId) {
 
 async function _fetchReviewLicence (licenceId, billRunId) {
   return ReviewLicenceModel.query()
+    .select(
+      'id',
+      'billRunId',
+      'licenceId',
+      'licenceRef',
+      'licenceHolder',
+      'issues',
+      'status',
+      ReviewLicenceModel.raw(`
+      EXISTS (SELECT 1
+        FROM review_charge_elements rce
+        INNER JOIN review_charge_references rcr ON rce.review_charge_reference_id = rcr.id
+        INNER JOIN review_charge_versions rcv ON rcr.review_charge_version_id = rcv.id
+        WHERE rce.status = 'review'
+        AND rcv.review_licence_id = review_licences.id) AS has_review_status
+        `)
+    )
     .where('licenceId', licenceId)
     .where('billRunId', billRunId)
     .withGraphFetched('reviewReturns.reviewChargeElements')

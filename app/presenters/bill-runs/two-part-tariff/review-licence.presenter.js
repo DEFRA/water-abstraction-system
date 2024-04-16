@@ -26,7 +26,7 @@ function go (billRun, licence) {
       status: licence[0].status,
       licenceHolder: licence[0].licenceHolder
     },
-    elementsInReview: _elementsInReview(licence[0]),
+    elementsInReview: licence[0].hasReviewStatus,
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
     chargeData: _prepareChargeData(licence, billRun)
@@ -126,18 +126,6 @@ function _contactName (billingAccount) {
   }
 
   return null
-}
-
-function _elementsInReview (licence) {
-  const hasReviewStatus = licence.reviewChargeVersions.some((chargeVersion) => {
-    return chargeVersion.reviewChargeReferences.some((chargeReference) => {
-      return chargeReference.reviewChargeElements.some((chargeElement) => {
-        return chargeElement.status === 'review'
-      })
-    })
-  })
-
-  return hasReviewStatus
 }
 
 function _financialYear (financialYearEnding) {
