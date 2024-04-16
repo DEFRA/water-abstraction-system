@@ -13,10 +13,10 @@ const AbstractionPeriodValidator = require('../../../app/validators/return-requi
 describe('Abstraction Period validator', () => {
   describe('when valid data is provided', () => {
     const payload = {
-      'fromAbstractionPeriod-day': '01',
-      'fromAbstractionPeriod-month': '12',
-      'toAbstractionPeriod-day': '02',
-      'toAbstractionPeriod-month': '7'
+      'from-abstraction-period-day': '01',
+      'from-abstraction-period-month': '12',
+      'to-abstraction-period-day': '02',
+      'to-abstraction-period-month': '7'
     }
 
     it('confirms the data is valid', () => {
@@ -31,10 +31,10 @@ describe('Abstraction Period validator', () => {
 
   describe('when invalid data is provided', () => {
     const payload = {
-      'fromAbstractionPeriod-day': 'abc',
-      'fromAbstractionPeriod-month': '123',
-      'toAbstractionPeriod-day': 'def',
-      'toAbstractionPeriod-month': '456'
+      'from-abstraction-period-day': 'abc',
+      'from-abstraction-period-month': '123',
+      'to-abstraction-period-day': 'def',
+      'to-abstraction-period-month': '456'
     }
 
     it('fails validation', () => {
@@ -49,10 +49,10 @@ describe('Abstraction Period validator', () => {
 
   describe('when only from abstraction period data is provided', () => {
     const payload = {
-      'fromAbstractionPeriod-day': '01',
-      'fromAbstractionPeriod-month': '12',
-      'toAbstractionPeriod-day': null,
-      'toAbstractionPeriod-month': null
+      'from-abstraction-period-day': '01',
+      'from-abstraction-period-month': '12',
+      'to-abstraction-period-day': null,
+      'to-abstraction-period-month': null
     }
 
     it('fails validation', () => {
@@ -67,10 +67,10 @@ describe('Abstraction Period validator', () => {
 
   describe('when only to abstraction period data is provided', () => {
     const payload = {
-      'fromAbstractionPeriod-day': null,
-      'fromAbstractionPeriod-month': null,
-      'toAbstractionPeriod-day': '02',
-      'toAbstractionPeriod-month': '7'
+      'from-abstraction-period-day': null,
+      'from-abstraction-period-month': null,
+      'to-abstraction-period-day': '02',
+      'to-abstraction-period-month': '7'
     }
 
     it('fails validation', () => {

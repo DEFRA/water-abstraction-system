@@ -32,10 +32,10 @@ function _licenceAbstractionPeriod (payload) {
   // anything in the payload worth transforming.
 
   return {
-    fromDay: payload['fromAbstractionPeriod-day'] ? payload['fromAbstractionPeriod-day'] : null,
-    fromMonth: payload['fromAbstractionPeriod-month'] ? payload['fromAbstractionPeriod-month'] : null,
-    toDay: payload['toAbstractionPeriod-day'] ? payload['toAbstractionPeriod-day'] : null,
-    toMonth: payload['toAbstractionPeriod-month'] ? payload['toAbstractionPeriod-month'] : null
+    fromDay: payload['from-abstraction-period-day'] ? payload['from-abstraction-period-day'] : null,
+    fromMonth: payload['from-abstraction-period-month'] ? payload['from-abstraction-period-month'] : null,
+    toDay: payload['to-abstraction-period-day'] ? payload['to-abstraction-period-day'] : null,
+    toMonth: payload['to-abstraction-period-month'] ? payload['to-abstraction-period-month'] : null
   }
 }
 

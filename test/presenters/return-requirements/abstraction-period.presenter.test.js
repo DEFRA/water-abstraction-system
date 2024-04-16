@@ -51,10 +51,10 @@ describe('Abstraction Period presenter', () => {
 
   describe('and with a payload', () => {
     const payload = {
-      'fromAbstractionPeriod-day': '01',
-      'fromAbstractionPeriod-month': '12',
-      'toAbstractionPeriod-day': '02',
-      'toAbstractionPeriod-month': '7'
+      'from-abstraction-period-day': '01',
+      'from-abstraction-period-month': '12',
+      'to-abstraction-period-day': '02',
+      'to-abstraction-period-month': '7'
     }
 
     it('correctly presents the data', () => {

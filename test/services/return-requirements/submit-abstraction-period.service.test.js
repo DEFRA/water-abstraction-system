@@ -40,10 +40,10 @@ describe('Submit Abstraction Period service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'fromAbstractionPeriod-day': '01',
-          'fromAbstractionPeriod-month': '12',
-          'toAbstractionPeriod-day': '02',
-          'toAbstractionPeriod-month': '7'
+          'from-abstraction-period-day': '01',
+          'from-abstraction-period-month': '12',
+          'to-abstraction-period-day': '02',
+          'to-abstraction-period-month': '7'
         }
       })
 
@@ -53,10 +53,10 @@ describe('Submit Abstraction Period service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.data.abstractionPeriod).to.equal({
-          'toAbstractionPeriod-day': '02',
-          'fromAbstractionPeriod-day': '01',
-          'toAbstractionPeriod-month': '7',
-          'fromAbstractionPeriod-month': '12'
+          'to-abstraction-period-day': '02',
+          'from-abstraction-period-day': '01',
+          'to-abstraction-period-month': '7',
+          'from-abstraction-period-month': '12'
         })
       })
 
@@ -113,10 +113,10 @@ describe('Submit Abstraction Period service', () => {
       describe('because the user has not inputted a from abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'fromAbstractionPeriod-day': null,
-            'fromAbstractionPeriod-month': null,
-            'toAbstractionPeriod-day': '02',
-            'toAbstractionPeriod-month': '7'
+            'from-abstraction-period-day': null,
+            'from-abstraction-period-month': null,
+            'to-abstraction-period-day': '02',
+            'to-abstraction-period-month': '7'
           }
         })
 
@@ -160,10 +160,10 @@ describe('Submit Abstraction Period service', () => {
       describe('because the user has not inputted a to abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'fromAbstractionPeriod-day': '08',
-            'fromAbstractionPeriod-month': '12',
-            'toAbstractionPeriod-day': null,
-            'toAbstractionPeriod-month': null
+            'from-abstraction-period-day': '08',
+            'from-abstraction-period-month': '12',
+            'to-abstraction-period-day': null,
+            'to-abstraction-period-month': null
           }
         })
 
@@ -207,10 +207,10 @@ describe('Submit Abstraction Period service', () => {
       describe('because the user has inputted invalid from and to abstraction periods', () => {
         beforeEach(() => {
           payload = {
-            'fromAbstractionPeriod-day': 'abc',
-            'fromAbstractionPeriod-month': '123',
-            'toAbstractionPeriod-day': 'abc',
-            'toAbstractionPeriod-month': '123'
+            'from-abstraction-period-day': 'abc',
+            'from-abstraction-period-month': '123',
+            'to-abstraction-period-day': 'abc',
+            'to-abstraction-period-month': '123'
           }
         })
 
@@ -254,10 +254,10 @@ describe('Submit Abstraction Period service', () => {
       describe('because the user has inputted invalid from abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'fromAbstractionPeriod-day': 'abc',
-            'fromAbstractionPeriod-month': '123',
-            'toAbstractionPeriod-day': '02',
-            'toAbstractionPeriod-month': '07'
+            'from-abstraction-period-day': 'abc',
+            'from-abstraction-period-month': '123',
+            'to-abstraction-period-day': '02',
+            'to-abstraction-period-month': '07'
           }
         })
 
@@ -301,10 +301,10 @@ describe('Submit Abstraction Period service', () => {
       describe('because the user has inputted invalid to abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'fromAbstractionPeriod-day': '08',
-            'fromAbstractionPeriod-month': '12',
-            'toAbstractionPeriod-day': 'abc',
-            'toAbstractionPeriod-month': '123'
+            'from-abstraction-period-day': '08',
+            'from-abstraction-period-month': '12',
+            'to-abstraction-period-day': 'abc',
+            'to-abstraction-period-month': '123'
           }
         })
 
