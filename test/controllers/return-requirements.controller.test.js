@@ -44,7 +44,8 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/abstraction-period', () => {
     beforeEach(async () => {
       Sinon.stub(AbstractionPeriodService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Enter the abstraction period for the requirements for returns'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'Enter the abstraction period for the requirements for returns'
       })
     })
 
@@ -236,7 +237,8 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/site-description', () => {
     beforeEach(async () => {
       Sinon.stub(SiteDescriptionService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Enter a site description for the requirements for returns'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'Enter a site description for the requirements for returns'
       })
     })
     describe('when the request succeeds', () => {
