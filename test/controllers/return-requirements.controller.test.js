@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
@@ -42,12 +43,19 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/abstraction-period', () => {
+    beforeEach(async () => {
+      Sinon.stub(AbstractionPeriodService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'Enter the abstraction period for the requirements for returns'
+      })
+    })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('abstraction-period'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Enter the abstraction period for the return requirement')
+        expect(response.payload).to.contain('Enter the abstraction period for the requirements for returns')
       })
     })
   })
@@ -236,7 +244,8 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/site-description', () => {
     beforeEach(async () => {
       Sinon.stub(SiteDescriptionService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Enter a site description for the requirements for returns'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'Enter a site description for the requirements for returns'
       })
     })
     describe('when the request succeeds', () => {
