@@ -335,7 +335,10 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+        options = _options(
+          'GET',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
+        )
       })
 
       describe('when a request is valid', () => {
@@ -358,7 +361,10 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns')
+        options = _options(
+          'GET',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns'
+        )
       })
 
       describe('when a request is valid', () => {
@@ -391,7 +397,10 @@ describe('Bill Runs controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = _options('POST', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns')
+        options = _options(
+          'POST',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns'
+        )
       })
 
       describe('when a request is valid', () => {
@@ -403,7 +412,9 @@ describe('Bill Runs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
+          )
         })
       })
 
