@@ -5,6 +5,9 @@
  * @module ReturnsCycleService
  */
 
+const ReturnsCyclePresenter = require('../../presenters/return-requirements/returns-cycle.presenter.js')
+const SessionModel = require('../../models/session.model.js')
+
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/returns-cycle` page
  *
@@ -15,9 +18,6 @@
  *
  * @returns {Promise<Object>} The view data for the returns cycle page
 */
-const ReturnsCyclePresenter = require('../../presenters/return-requirements/returns-cycle.presenter.js')
-const SessionModel = require('../../models/session.model.js')
-
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
