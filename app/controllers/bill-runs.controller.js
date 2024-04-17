@@ -62,9 +62,9 @@ async function create (request, h) {
 }
 
 async function matchDetails (request, h) {
-  const { id: billRunId, licenceId, reviewChargeElementId, showBanner } = request.params
+  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId, showBanner)
+  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId)
 
   return h.view('bill-runs/match-details.njk', {
     pageTitle: 'View match details',
