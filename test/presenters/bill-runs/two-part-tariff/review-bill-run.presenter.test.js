@@ -54,6 +54,7 @@ describe('Review Bill Run presenter', () => {
               licenceRef: '1/11/11/*11/1111',
               licenceHolder: 'Big Farm Ltd',
               status: 'ready',
+              progress: '',
               issue: ''
             },
             {
@@ -61,6 +62,7 @@ describe('Review Bill Run presenter', () => {
               licenceRef: '2/22/22/*S2/2222',
               licenceHolder: 'Bob Bobbles',
               status: 'ready',
+              progress: '✓',
               issue: 'Abstraction outside period'
             },
             {
@@ -68,6 +70,7 @@ describe('Review Bill Run presenter', () => {
               licenceRef: '3/33/33/*3/3333',
               licenceHolder: 'Farmer Palmer',
               status: 'review',
+              progress: '',
               issue: 'Multiple Issues'
             }
           ],
@@ -140,6 +143,7 @@ function _testLicences () {
       licenceRef: '1/11/11/*11/1111',
       licenceHolder: 'Big Farm Ltd',
       issues: '',
+      progress: false,
       status: 'ready'
     },
     // Licence with a single issue
@@ -148,6 +152,7 @@ function _testLicences () {
       licenceRef: '2/22/22/*S2/2222',
       licenceHolder: 'Bob Bobbles',
       issues: 'Abstraction outside period',
+      progress: true,
       status: 'ready'
     },
     // Licence with multiple issues
@@ -156,6 +161,7 @@ function _testLicences () {
       licenceRef: '3/33/33/*3/3333',
       licenceHolder: 'Farmer Palmer',
       issues: 'Abstraction outside period, Over abstraction, Overlap of charge dates',
+      progress: false,
       status: 'review'
     }
   ]
