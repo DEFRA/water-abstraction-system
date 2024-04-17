@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitFrequencyReportedService = require('../../../app/services/return-requirements/submit-frequency-reported.service.js')
 
-describe('Submit Frequency reported service', () => {
+describe('Submit Frequency Reported service', () => {
   let session
 
   beforeEach(async () => {
