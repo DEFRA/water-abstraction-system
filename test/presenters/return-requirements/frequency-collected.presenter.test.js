@@ -14,7 +14,7 @@ describe('Frequency Collected presenter', () => {
   let session
 
   describe('when provided with a populated session', () => {
-    describe('and no returns cycle is session data', () => {
+    describe('and no frequency collected is session data', () => {
       beforeEach(() => {
         session = {
           id: '61e07498-f309-4829-96a9-72084a54996d',
