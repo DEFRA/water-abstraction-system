@@ -174,7 +174,7 @@ describe('Allocate Returns to Charge Element Service', () => {
           expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(3)
         })
 
-        it('allocates 10 from the return log', () => {
+        it('allocates 3 from the return log', () => {
           const { chargeElement, chargeReference, matchingReturns } = testData
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
