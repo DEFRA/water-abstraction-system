@@ -23,7 +23,8 @@ describe('Frequency reported validator', () => {
     it('confirms the data is valid', async () => {
       const result = FrequencyReportedValidator.go(payload)
 
-      expect(result.value.frequencyReported).to.exist()
+      expect(result.value.frequencyReported).to.equal('monthly')
+      expect(result.error).not.to.exist()
     })
   })
 
