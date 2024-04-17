@@ -1,7 +1,8 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% set backLink = "/system/return-requirements/" + id + "/check-your-answers" %}
 {% block breadcrumbs %}
@@ -15,6 +16,18 @@
 {% endblock %}
 
 {% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.text,
+          href: '#note'
+        }
+      ]
+    }) }}
+  {% endif %}
+
   {# Main heading #}
   {% set pageHeader %}
     <span class="govuk-heading-l govuk-!-margin-bottom-3">

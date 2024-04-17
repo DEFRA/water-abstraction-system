@@ -17,13 +17,16 @@ const Joi = require('joi')
  */
 function go (data) {
   const errorMessage = 'Text must be entered'
+  const maxErrorMessage = 'Textarea should have a value with character count less than 500'
   const schema = Joi.object({
     note: Joi.string()
       .required()
+      .max(500)
       .messages({
         'any.required': errorMessage,
         'any.only': errorMessage,
-        'string.empty': errorMessage
+        'string.empty': errorMessage,
+        'string.max': maxErrorMessage
       })
   })
 
