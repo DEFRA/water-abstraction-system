@@ -87,6 +87,8 @@ describe('Persist Allocated Licence to Results service', () => {
         // Check the charge element persisted correctly
         expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements).to.have.length(1)
         expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewChargeReferenceId).to.equal(result[0].reviewChargeVersions[0].reviewChargeReferences[0].id)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].allocated).to.equal(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].calculated).to.equal(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].allocatedQuantity)
         expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].chargeElementId).to.equal(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].id)
         expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].chargeDatesOverlap).to.equal(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].chargeDatesOverlap)
         expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].issues).to.equal('')

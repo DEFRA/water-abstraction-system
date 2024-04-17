@@ -98,6 +98,19 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/bill-runs/{id}/review/{licenceId}',
+    handler: BillRunsController.reviewLicence,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'POST request received when progress marking is applied to review a two-part tariff licence'
+    }
+  },
+  {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/{showBanner}',
     handler: BillRunsController.matchDetails,

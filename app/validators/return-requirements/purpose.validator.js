@@ -20,11 +20,7 @@ const Joi = require('joi')
  * `error:` property will also exist detailing what the issue is.
  */
 function go (payload) {
-  let purposes = payload.purposes
-
-  if (!Array.isArray(purposes)) {
-    purposes = [purposes]
-  }
+  const purposes = payload.purposes
 
   const errorMessage = 'Select any uses for the return requirement'
 

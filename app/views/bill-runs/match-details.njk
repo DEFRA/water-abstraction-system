@@ -34,7 +34,7 @@
         {{ statusTag(chargeElement.status) }}
       </p>
 
-      {# ------------- Licence nav bars --------------- #}
+      {# Licence nav bars #}
       <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
         <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licenceId }}#summary">
             Summary
@@ -52,7 +52,7 @@
   <div class="govuk-caption-m"> Financial year {{ financialYear }}</div>
   <h2 class="govuk-heading-m">Charge period {{ chargePeriod }}</h2>
 
-  {# ---------- Billable returns and volume ----------- #}
+  {# Billable returns and volume #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-!-margin-right-6 float-left">
@@ -99,7 +99,7 @@
     </div>
   </div>
 
-  {# ---------- Billable returns button ----------- #}
+  {# Billable returns button #}
   <div class="govuk-grid-row govuk-!-margin-bottom-6">
     <div class="govuk-grid-column-full">
       {{ govukButton({
@@ -111,7 +111,7 @@
   </div>
 
 
-  {# ------------- Matched Returns --------------- #}
+  {# Matched Returns #}
   {% if matchedReturns.length > 0 %}
     {% set tableRows = [] %}
     {% for return in matchedReturns %}
@@ -190,7 +190,7 @@
       }) }}
   {% endif %}
 
-  {# ------------- No Returns --------------- #}
+  {# No Returns #}
   {% if matchedReturns == 0 %}
       <h2 class="govuk-heading-m">No two-part tariff returns</h2>
   {% endif %}

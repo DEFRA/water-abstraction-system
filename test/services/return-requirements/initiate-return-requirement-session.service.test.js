@@ -53,6 +53,7 @@ describe('Initiate Return Requirement Session service', () => {
         expect(data.licence.id).to.equal(licence.id)
         expect(data.licence.licenceRef).to.equal(licence.licenceRef)
         expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
+        expect(data.checkYourAnswersVisited).to.be.false()
       })
 
       it("creates a new session record containing the licence's 'current version' start date", async () => {

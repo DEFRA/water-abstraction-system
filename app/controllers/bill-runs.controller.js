@@ -84,6 +84,18 @@ async function review (request, h) {
   })
 }
 
+async function reviewLicence (request, h) {
+  const { id: billRunId, licenceId } = request.params
+
+  const pageData = await ReviewLicenceService.go(billRunId, licenceId, request.payload)
+
+  return h.view('bill-runs/review-licence.njk', {
+    pageTitle: `Licence ${pageData.licence.licenceRef}`,
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
 async function send (request, h) {
   const { id } = request.params
 
@@ -91,18 +103,6 @@ async function send (request, h) {
 
   return h.view('bill-runs/send.njk', {
     pageTitle: "You're about to send this bill run",
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
-async function reviewLicence (request, h) {
-  const { id: billRunId, licenceId } = request.params
-
-  const pageData = await ReviewLicenceService.go(billRunId, licenceId)
-
-  return h.view('bill-runs/review-licence.njk', {
-    pageTitle: `Licence ${pageData.licence.licenceRef}`,
     activeNavBar: 'bill-runs',
     ...pageData
   })

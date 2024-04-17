@@ -1,9 +1,13 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "macros/review-status-tag.njk" import statusTag %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -16,7 +20,15 @@
 {% endblock %}
 
 {% block content %}
-  {#  --------------- Main heading  --------------- #}
+  {# Licence updated banner #}
+  {% if licenceUpdated %}
+    {{ govukNotificationBanner({
+      titleText: 'Licence updated',
+      text: licenceUpdated
+    }) }}
+  {% endif %}
+
+  {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-l">{{region}} two-part tariff bill run</span>
@@ -28,7 +40,7 @@
     </div>
   </div>
 
-  {# ------------- Licence nav bars --------------- #}
+  {# Licence nav bars #}
   <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
     <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#summary">
         Summary
@@ -41,7 +53,33 @@
       </a></li>
   </ul>
 
-  {# ------------- Charge Periods --------------- #}
+  {# Licence in review text #}
+  {% if elementsInReview === true %}
+    {{ govukInsetText({
+      text: "There are elements in review"
+    }) }}
+  {% endif %}
+
+  {# Mark progress #}
+  {% if licence.progress %}
+    {% set progressButtonText = 'Remove progress mark' %}
+    {% set progressButtonValue = 'unmark' %}
+  {% else %}
+    {% set progressButtonText = 'Mark progress' %}
+    {% set progressButtonValue = 'mark' %}
+  {% endif %}
+
+  <form method="post">
+    {{ govukButton({
+      text: progressButtonText,
+      classes: "govuk-button--secondary",
+      preventDoubleClick: true,
+      name: "marKProgress",
+      value: progressButtonValue
+    }) }}
+  </form>
+
+  {# Charge Periods #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Charge periods</h2>
@@ -58,14 +96,14 @@
 
   <div class="divider govuk-!-margin-bottom-6"></div>
 
-  {# ------------- Returns --------------- #}
+  {# Returns #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Returns</h2>
     </div>
   </div>
 
-  {# ------------- Matched Returns --------------- #}
+  {# Matched Returns #}
   {% if matchedReturns.length > 0 %}
     {% set tableRows = [] %}
     {% for return in matchedReturns %}
@@ -144,7 +182,7 @@
       }) }}
   {% endif %}
 
-  {# ------------- Unmatched Returns --------------- #}
+  {# Unmatched Returns #}
   {% if unmatchedReturns.length > 0 %}
     {% set tableRows = [] %}
     {% for return in unmatchedReturns %}
@@ -223,7 +261,7 @@
     }) }}
   {% endif %}
 
-  {# ------------- No Returns --------------- #}
+  {# No Returns #}
   {% if matchedReturns == 0 and unmatchedReturns == 0 %}
       <h2 class="govuk-heading-m">No two-part tariff returns</h2>
   {% endif %}

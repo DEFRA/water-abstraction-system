@@ -110,7 +110,8 @@
     {{ govukButton({
       classes: "govuk-button--secondary govuk-!-margin-bottom-0",
       text: "Cancel bill run",
-      href: "cancel"
+      href: "cancel",
+      preventDoubleClick: true
     }) }}
   </section>
 
@@ -119,7 +120,7 @@
   {% set filtersForm %}
     <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
 
-    <form  method="post" novalidate action="review">
+    <form  method="post" action="review">
       {# Filter by licence holder #}
       {{ govukInput({
         label: {
@@ -230,7 +231,8 @@
 
       <div class="govuk-button-group">
         {{ govukButton({
-          text: "Apply filters"
+          text: "Apply filters",
+          preventDoubleClick: true
         }) }}
 
         {{ govukButton({
@@ -238,7 +240,8 @@
           classes: "govuk-button--secondary ",
           name: "clearFilters",
           type: "reset",
-          href: "review"
+          href: "review",
+          preventDoubleClick: true
         }) }}
       </div>
     </form>
@@ -277,7 +280,13 @@
           attributes: { 'data-test': 'licence-issue-' + loop.index }
         },
         {
-          html: statusTag, classes: "govuk-!-text-align-right",
+          text: licence.progress,
+          classes: "govuk-!-text-align-centre",
+          attributes: { 'data-test': 'licence-progress-' + loop.index }
+        },
+        {
+          html: statusTag,
+          classes: "govuk-!-text-align-right",
           attributes: { 'data-test': 'licence-status-' + loop.index }
           }
       ] %}
@@ -308,8 +317,12 @@
         text: 'Issue'
       },
       {
+        text: 'Progress',
+        classes: "govuk-!-text-align-centre"
+      },
+      {
         text: 'Status',
-        format: "numeric"
+        classes: "govuk-!-text-align-right"
       }
     ],
     rows: tableRows
