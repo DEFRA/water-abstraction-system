@@ -11,10 +11,14 @@ const { expect } = Code
 const FrequencyCollectedValidator = require('../../../app/validators/return-requirements/frequency-collected.validator.js')
 
 describe('Frequency Collected validator', () => {
+  let payload
+
   describe('when valid data is provided', () => {
-    const payload = {
-      frequencyCollected: 'monthly'
-    }
+    beforeEach(() => {
+      payload = {
+        frequencyCollected: 'monthly'
+      }
+    })
 
     it('confirms the data is valid', async () => {
       const result = FrequencyCollectedValidator.go(payload)
@@ -24,9 +28,11 @@ describe('Frequency Collected validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    const payload = {
-      frequencyCollected: 'ABC123'
-    }
+    beforeEach(() => {
+      payload = {
+        frequencyCollected: 'ABC123'
+      }
+    })
 
     it('fails validation', () => {
       const result = FrequencyCollectedValidator.go(payload)
@@ -36,7 +42,9 @@ describe('Frequency Collected validator', () => {
   })
 
   describe('when no data is provided', () => {
-    const payload = {}
+    beforeEach(() => {
+      payload = {}
+    })
 
     it('fails validation', () => {
       const result = FrequencyCollectedValidator.go(payload)
