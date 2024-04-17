@@ -127,7 +127,7 @@ async function submitAmendedBillableReturns (request, h) {
 
   await SubmitAmendedBillableReturnsService.go(reviewChargeElementId, request.payload)
 
-  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}/true`)
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}`)
 }
 
 async function submitSend (request, h) {

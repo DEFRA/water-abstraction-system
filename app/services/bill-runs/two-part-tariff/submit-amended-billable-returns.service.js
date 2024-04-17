@@ -8,10 +8,10 @@
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
 /**
- * 
- * @param {*} reviewChargeElementId 
- * @param {*} payload 
- * @returns 
+ *
+ * @param {*} reviewChargeElementId
+ * @param {*} payload
+ * @returns
  */
 async function go (reviewChargeElementId, payload) {
   const { 'quantity-options': selectedOption } = payload

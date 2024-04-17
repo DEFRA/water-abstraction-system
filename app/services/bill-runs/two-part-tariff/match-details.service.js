@@ -18,10 +18,10 @@ const MatchDetailsPresenter = require('../../../presenters/bill-runs/two-part-ta
  *
  * @returns {Promise<Object>} the 'pageData' needed to view the match details of an individual charge
  */
-async function go (billRunId, licenceId, reviewChargeElementId, showBanner) {
+async function go (billRunId, licenceId, reviewChargeElementId) {
   const { billRun, reviewChargeElement } = await FetchMatchDetailsService.go(billRunId, reviewChargeElementId)
 
-  const pageData = MatchDetailsPresenter.go(billRun, reviewChargeElement, licenceId, showBanner)
+  const pageData = MatchDetailsPresenter.go(billRun, reviewChargeElement, licenceId)
 
   return pageData
 }

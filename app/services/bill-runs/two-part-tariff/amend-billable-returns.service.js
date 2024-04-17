@@ -16,7 +16,7 @@ const FetchMatchDetailsService = require('./fetch-match-details.service.js')
  *
  * @returns {Promise<Object>} the 'pageData' needed to view the edit billable return volumes page
  */
-async function go (billRunId, licenceId, reviewChargeElementId, error = null) {
+async function go (billRunId, licenceId, reviewChargeElementId) {
   const { billRun, reviewChargeElement } = await FetchMatchDetailsService.go(billRunId, reviewChargeElementId)
 
   const pageData = AmendBillableReturnsPresenter.go(billRun, reviewChargeElement, licenceId)

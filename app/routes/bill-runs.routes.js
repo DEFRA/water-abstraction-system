@@ -112,7 +112,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/{showBanner}',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
     handler: BillRunsController.matchDetails,
     options: {
       auth: {
