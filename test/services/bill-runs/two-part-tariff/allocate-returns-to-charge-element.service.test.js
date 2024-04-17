@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-charge-element.service.js')
 
-describe.only('Allocate Returns to Charge Element Service', () => {
+describe('Allocate Returns to Charge Element Service', () => {
   describe('when there are records to process', () => {
     const chargePeriod = {
       startDate: new Date('2022-04-01'),
