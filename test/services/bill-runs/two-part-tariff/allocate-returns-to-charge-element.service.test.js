@@ -145,9 +145,10 @@ describe('Allocate Returns to Charge Element Service', () => {
       })
 
       // NOTE It was found during testing that if the individual return line volumes are greater than the charge
-      // reference authorised volume, which in turn is greater than the element authorised volume. That the element was
-      // being over allocated. In this scenario 3.5 would have been allocated to the element. This scenario has
-      // therefore been created to test that this does not happen.
+      // reference authorised volume, which in turn is greater than the element authorised volume, that the element was
+      // being over allocated. We should only be allocating to the lower volume. In this scenario 3.5 would have been
+      // allocated to the element rather than the correct volume of 3. This scenario has therefore been created to test
+      // that this does not happen.
       describe('with a reference authorised to 3.5, element to 3, matched to a return with line volumes of 4', () => {
         beforeEach(() => {
           testData = _generateTestData()
