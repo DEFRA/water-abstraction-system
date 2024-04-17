@@ -14,7 +14,7 @@ function go (session) {
     licenceRef: session.data.licence.licenceRef,
     reason: session.data.reason,
     startDate: _startDate(session.data),
-    note: decodeURIComponent(session.data.note)
+    note: session.data.note
   }
 
   return data

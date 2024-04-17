@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/add-note` page
- * @module StartDateService
+ * @module SubmitAddNoteService
  */
 
 const AddNotePresenter = require('../../presenters/return-requirements/add-note.presenter.js')
@@ -34,7 +34,7 @@ async function go (sessionId, payload) {
     }
   }
 
-  const formattedData = AddNotePresenter.go(session, payload)
+  const formattedData = AddNotePresenter.go(session)
 
   return {
     activeNavBar: 'search',
@@ -47,7 +47,7 @@ async function go (sessionId, payload) {
 async function _save (session, payload) {
   const currentData = session.data
 
-  currentData.note = encodeURIComponent(payload.note)
+  currentData.note = payload.note
 
   return session.$query().patch({ data: currentData })
 }

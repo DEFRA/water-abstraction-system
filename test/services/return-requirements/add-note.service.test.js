@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const AddNoteService = require('../../../app/services/return-requirements/add-note.service.js')
 
-describe.only('Add Note service', () => {
+describe('Add Note service', () => {
   let session
 
   beforeEach(async () => {

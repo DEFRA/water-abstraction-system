@@ -25,7 +25,7 @@ function _transformSession (sessionData) {
   }
 
   return {
-    note: decodeURIComponent(sessionData.note)
+    note: sessionData.note
   }
 }
 
