@@ -23,6 +23,7 @@ describe('Check Your Answers presenter', () => {
           licenceHolder: 'Astro Boy'
         },
         journey: '',
+        note: '',
         reason: '',
         startDate: '2008-02-08',
         startDateDay: '08',
@@ -36,6 +37,7 @@ describe('Check Your Answers presenter', () => {
   describe('when the no-returns-required journey was selected', () => {
     it('correctly presents the data', () => {
       session.data.journey = 'no-returns-required'
+      session.data.note = 'Note attached to requirement'
       session.data.reason = 'returns-exception'
 
       const result = CheckYourAnswersPresenter.go(session)
@@ -43,6 +45,7 @@ describe('Check Your Answers presenter', () => {
       expect(result).to.equal({
         journey: 'no-returns-required',
         licenceRef: '01/123',
+        note: 'Note attached to requirement',
         reason: 'returns-exception',
         startDate: '8 February 2008'
       }, { skip: ['id'] })
@@ -52,6 +55,7 @@ describe('Check Your Answers presenter', () => {
   describe('when the returns-required journey was selected', () => {
     it('correctly presents the data', () => {
       session.data.journey = 'returns-required'
+      session.data.note = 'Note attached to requirement'
       session.data.reason = 'major-change'
 
       const result = CheckYourAnswersPresenter.go(session)
@@ -59,6 +63,7 @@ describe('Check Your Answers presenter', () => {
       expect(result).to.equal({
         journey: 'returns-required',
         licenceRef: '01/123',
+        note: 'Note attached to requirement',
         reason: 'major-change',
         startDate: '8 February 2008'
       }, { skip: ['id'] })
