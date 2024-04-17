@@ -16,6 +16,7 @@ const SubmitFrequencyCollectedService = require('../../../app/services/return-re
 
 describe('Submit Frequency Collected service', () => {
   let session
+  let payload
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -37,9 +38,11 @@ describe('Submit Frequency Collected service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      const payload = {
-        frequencyCollected: 'weekly'
-      }
+      beforeEach(() => {
+        payload = {
+          frequencyCollected: 'weekly'
+        }
+      })
 
       it('saves the submitted value', async () => {
         await SubmitFrequencyCollectedService.go(session.id, payload)
@@ -58,7 +61,9 @@ describe('Submit Frequency Collected service', () => {
 
     describe('with an invalid payload', () => {
       describe('because the user has not selected the frequency collected', () => {
-        const payload = {}
+        beforeEach(() => {
+          payload = {}
+        })
 
         it('fetches the current setup session record', async () => {
           const result = await SubmitFrequencyCollectedService.go(session.id, payload)
