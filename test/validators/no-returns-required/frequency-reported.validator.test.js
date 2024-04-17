@@ -4,17 +4,21 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const FrequencyReportedValidator = require('../../../app/validators/return-requirements/frequency-reported.validator.js')
 
 describe('Frequency reported validator', () => {
+  let payload
+
   describe('when valid data is provided', () => {
-    const payload = {
-      frequencyReported: 'monthly'
-    }
+    beforeEach(() => {
+      payload = {
+        frequencyReported: 'monthly'
+      }
+    })
 
     it('confirms the data is valid', async () => {
       const result = FrequencyReportedValidator.go(payload)
@@ -24,9 +28,11 @@ describe('Frequency reported validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    const payload = {
-      frequencyReported: 'ABC123'
-    }
+    beforeEach(() => {
+      payload = {
+        frequencyReported: 'ABC123'
+      }
+    })
 
     it('fails validation', () => {
       const result = FrequencyReportedValidator.go(payload)
@@ -36,7 +42,9 @@ describe('Frequency reported validator', () => {
   })
 
   describe('when no data is provided', () => {
-    const payload = {}
+    beforeEach(() => {
+      payload = {}
+    })
 
     it('fails validation', () => {
       const result = FrequencyReportedValidator.go(payload)
