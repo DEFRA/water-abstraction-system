@@ -30,6 +30,7 @@ function go (billRun, licence, markProgress) {
       licenceHolder: licence[0].licenceHolder,
       progress: licence[0].progress
     },
+    elementsInReview: licence[0].hasReviewStatus,
     licenceUpdated: _licenceUpdated(markProgress),
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
