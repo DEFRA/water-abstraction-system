@@ -17,6 +17,7 @@ const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tari
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
+const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
@@ -384,6 +385,41 @@ describe('Bill Runs controller', () => {
           expect(response.payload).to.contain('Spray irrigation - storage, Abstraction from borehole at Chipping Norton')
           expect(response.payload).to.contain('Financial year 2022 to 2023')
           expect(response.payload).to.contain('Authorised 40ML')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        options = _options('POST', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedBillableReturnsService, 'go').resolves()
+        })
+
+        it('redirects to the match details page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the sending service threw an error', () => {
+          beforeEach(async () => {
+            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(SubmitAmendedBillableReturnsService, 'go').rejects()
+          })
+
+          it('returns the error page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          })
         })
       })
     })
