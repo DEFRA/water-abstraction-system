@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
@@ -23,7 +23,8 @@ describe('Frequency Collected validator', () => {
     it('confirms the data is valid', async () => {
       const result = FrequencyCollectedValidator.go(payload)
 
-      expect(result.value.frequencyCollected).to.exist()
+      expect(result.error).not.to.exist()
+      expect(result.value.frequencyCollected).to.equal('monthly')
     })
   })
 
