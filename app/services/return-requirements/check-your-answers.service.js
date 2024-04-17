@@ -15,8 +15,9 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @returns {Promise<Object>} page data needed by the view template
  */
-async function go (sessionId) {
+async function go (sessionId, user) {
   const session = await SessionModel.query().findById(sessionId)
+  const { username: userEmail } = user
 
   const formattedData = CheckYourAnswersPresenter.go(session)
 
@@ -26,6 +27,7 @@ async function go (sessionId) {
     activeNavBar: 'search',
     licenceRef: session.data.licence.licenceRef,
     pageTitle: `Check the return requirements for ${session.data.licence.licenceHolder}`,
+    userEmail,
     ...formattedData
   }
 }
