@@ -4,28 +4,32 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const FrequencyReportedPresenter = require('../../../app/presenters/return-requirements/frequency-reported.presenter.js')
 
 describe('Frequency Reported presenter', () => {
+  let session
+
   describe('when provided with a populated session', () => {
-    describe('and no returns cycle is session data', () => {
-      const session = {
-        id: '61e07498-f309-4829-96a9-72084a54996d',
-        data: {
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
+    describe('and no frequency reported in session data', () => {
+      beforeEach(() => {
+        session = {
+          id: '61e07498-f309-4829-96a9-72084a54996d',
+          data: {
+            licence: {
+              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+              endDate: null,
+              licenceRef: '01/ABC',
+              licenceHolder: 'Turbo Kid',
+              startDate: '2022-04-01T00:00:00.000Z'
+            }
           }
         }
-      }
+      })
 
       it('correctly presents the data', () => {
         const result = FrequencyReportedPresenter.go(session)
@@ -40,20 +44,22 @@ describe('Frequency Reported presenter', () => {
     })
 
     describe('and with returns cycle in session data', () => {
-      const session = {
-        id: '61e07498-f309-4829-96a9-72084a54996d',
-        data: {
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          },
-          frequencyReported: 'weekly'
+      beforeEach(() => {
+        session = {
+          id: '61e07498-f309-4829-96a9-72084a54996d',
+          data: {
+            licence: {
+              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+              endDate: null,
+              licenceRef: '01/ABC',
+              licenceHolder: 'Turbo Kid',
+              startDate: '2022-04-01T00:00:00.000Z'
+            },
+            frequencyReported: 'weekly'
+          }
         }
-      }
+      })
 
       it('correctly presents the data', () => {
         const result = FrequencyReportedPresenter.go(session)
