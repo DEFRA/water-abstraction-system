@@ -39,7 +39,7 @@ function go (billRun, reviewChargeElement, licenceId) {
       issues: reviewChargeElement.issues?.length > 0 ? reviewChargeElement.issues.split(', ') : []
     },
     matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns),
-    showBanner: reviewChargeElement.allocated === reviewChargeElement.calculated
+    showBanner: reviewChargeElement.allocated !== reviewChargeElement.calculated
   }
 }
 
