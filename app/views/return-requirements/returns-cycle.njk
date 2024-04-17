@@ -24,7 +24,7 @@
       titleText: "There is a problem",
       errorList: [
         {
-          text: "Select the returns cycle for the return requirement",
+          text: error.text,
           href: "#returnsCycle"
         }
       ]
@@ -44,11 +44,13 @@
       items: [
         {
           value: "summer",
-          text: "Summer"
+          text: "Summer",
+          checked: "summer" === returnsCycle
         },
         {
           value: "winter-and-all-year",
-          text: "Winter and all year"
+          text: "Winter and all year",
+          checked: "winter-and-all-year" === returnsCycle
         }
       ]
   }) }}
