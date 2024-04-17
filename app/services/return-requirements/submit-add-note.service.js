@@ -47,7 +47,7 @@ async function go (sessionId, payload) {
 async function _save (session, payload) {
   const currentData = session.data
 
-  currentData.note = payload.note
+  currentData.note = encodeURIComponent(payload.note)
 
   return session.$query().patch({ data: currentData })
 }
