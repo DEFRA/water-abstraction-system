@@ -16,6 +16,7 @@ const SubmitReturnsCycleService = require('../../../app/services/return-requirem
 
 describe('Submit Returns Cycle service', () => {
   let session
+  let payload
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -37,9 +38,11 @@ describe('Submit Returns Cycle service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      const payload = {
-        returnsCycle: 'summer'
-      }
+      beforeEach(() => {
+        payload = {
+          returnsCycle: 'summer'
+        }
+      })
 
       it('saves the submitted value', async () => {
         await SubmitReturnsCycleService.go(session.id, payload)
@@ -58,7 +61,9 @@ describe('Submit Returns Cycle service', () => {
 
     describe('with an invalid payload', () => {
       describe('because the user has not selected a returns cycle', () => {
-        const payload = {}
+        beforeEach(() => {
+          payload = {}
+        })
 
         it('fetches the current setup session record', async () => {
           const result = await SubmitReturnsCycleService.go(session.id, payload)

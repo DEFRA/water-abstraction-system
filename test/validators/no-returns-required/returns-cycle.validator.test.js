@@ -4,17 +4,21 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const ReturnsCycleValidator = require('../../../app/validators/return-requirements/returns-cycle.validator.js')
 
 describe('Returns Cycle validator', () => {
+  let payload
+
   describe('when valid data is provided', () => {
-    const payload = {
-      returnsCycle: 'winter-and-all-year'
-    }
+    beforeEach(() => {
+      payload = {
+        returnsCycle: 'winter-and-all-year'
+      }
+    })
 
     it('confirms the data is valid', async () => {
       const result = ReturnsCycleValidator.go(payload)
@@ -24,9 +28,11 @@ describe('Returns Cycle validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    const payload = {
-      returnsCycle: 'ABC123'
-    }
+    beforeEach(() => {
+      payload = {
+        returnsCycle: 'ABC123'
+      }
+    })
 
     it('fails validation', () => {
       const result = ReturnsCycleValidator.go(payload)
@@ -36,7 +42,9 @@ describe('Returns Cycle validator', () => {
   })
 
   describe('when no data is provided', () => {
-    const payload = {}
+    beforeEach(() => {
+      payload = {}
+    })
 
     it('fails validation', () => {
       const result = ReturnsCycleValidator.go(payload)
