@@ -13,7 +13,8 @@ function go (session) {
     journey: session.data.journey,
     licenceRef: session.data.licence.licenceRef,
     reason: session.data.reason,
-    startDate: _startDate(session.data)
+    startDate: _startDate(session.data),
+    note: session.data.note
   }
 
   return data

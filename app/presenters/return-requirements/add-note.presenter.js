@@ -8,10 +8,25 @@
 function go (session) {
   const data = {
     id: session.id,
-    licenceRef: session.data.licence.licenceRef
+    licenceRef: session.data.licence.licenceRef,
+    ..._transformSession(session.data)
   }
 
   return data
+}
+
+function _transformSession (sessionData) {
+  const currentNote = sessionData.note
+
+  if (!currentNote) {
+    return {
+      note: ''
+    }
+  }
+
+  return {
+    note: sessionData.note
+  }
 }
 
 module.exports = {

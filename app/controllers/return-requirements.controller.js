@@ -5,6 +5,7 @@
  * @module ReturnRequirementsController
  */
 
+const AddNoteService = require('../services/return-requirements/add-note.service.js')
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
@@ -14,6 +15,7 @@ const SessionModel = require('../models/session.model.js')
 const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
+const SubmitAddNoteService = require('../services/return-requirements/submit-add-note.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
@@ -38,12 +40,10 @@ async function abstractionPeriod (request, h) {
 async function addNote (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await AddNoteService.go(sessionId)
 
   return h.view('return-requirements/add-note.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Add a note',
-    ...session
+    ...pageData
   })
 }
 
@@ -203,6 +203,12 @@ async function submitAbstractionPeriod (request, h) {
 
 async function submitAddNote (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitAddNoteService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/add-note.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }

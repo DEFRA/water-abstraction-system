@@ -17,17 +17,18 @@
 {% block content %}
   {# Main heading #}
   {% set pageHeader %}
-    <div class="govuk-body">
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-    </div>
+    <span class="govuk-heading-l govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Licence {{ licenceRef }}</span> {{ pageTitle }}
+    </span>
   {% endset %}
 
   <form method="post">
     <div class="govuk-body">
       {{ govukCharacterCount({
-        name: "addNote",
-        id: "add-note",
-        maxlength: 200,
+        name: "note",
+        id: "note",
+        maxlength: 500,
+        value: note,
         label: {
           html: pageHeader,
           isPageHeading: true

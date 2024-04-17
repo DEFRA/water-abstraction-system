@@ -101,17 +101,17 @@
           {
             classes: 'govuk-summary-list govuk-summary-list__row--no-border',
             key: {
-              text: "No notes added",
+              text: note if note else "No notes added",
               classes: "govuk-body govuk-!-font-weight-regular"
             },
             value: {
-              text: ""
+              text: note
             },
             actions: {
               items: [
                 {
                   href: "add-note",
-                  text: "Add a note"
+                  text: "Change" if note else "Add a note"
                 }
               ]
             }

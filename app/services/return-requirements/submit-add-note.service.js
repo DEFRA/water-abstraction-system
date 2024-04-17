@@ -15,8 +15,7 @@ const SessionModel = require('../../models/session.model.js')
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
  * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
- * If there was a validation error the controller will re-render the page so needs this information. If all is well the
- * controller will redirect to the next page in the journey.
+ * If there was a validation error the controller will re-render the page so needs this information. If all is well the controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
@@ -31,7 +30,6 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited,
       journey: session.data.journey
     }
   }
@@ -40,7 +38,6 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Add a note',
     ...formattedData
@@ -50,7 +47,7 @@ async function go (sessionId, payload) {
 async function _save (session, payload) {
   const currentData = session.data
 
-  currentData.addNote = payload.addNote
+  currentData.note = payload.note
 
   return session.$query().patch({ data: currentData })
 }
