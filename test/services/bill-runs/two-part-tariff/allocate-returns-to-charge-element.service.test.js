@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/two-part-tariff/allocate-returns-to-charge-element.service.js')
 
-describe('Allocate Returns to Charge Element Service', () => {
+describe.only('Allocate Returns to Charge Element Service', () => {
   describe('when there are records to process', () => {
     const chargePeriod = {
       startDate: new Date('2022-04-01'),
@@ -136,6 +136,53 @@ describe('Allocate Returns to Charge Element Service', () => {
           expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
           expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
           expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+        })
+      })
+
+      // NOTE It was found during testing that if the individual return line volumes are greater than the charge
+      // reference authorised volume, which in turn is greater than the element authorised volume. That the element was
+      // being over allocated. In this scenario 3.5 would have been allocated to the element. This scenario has
+      // therefore been created to test that this does not happen.
+      describe('with a reference authorised to 3.5, element to 3, matched to a return with line volumes of 4', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.chargeReference.volume = 3.5
+          testData.chargeElement.authorisedAnnualQuantity = 3
+        })
+
+        it('allocates 3 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.volume).to.equal(3.5)
+          expect(chargeReference.allocatedQuantity).to.equal(3)
+        })
+
+        it('allocates 3 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.authorisedAnnualQuantity).to.equal(3)
+          expect(chargeElement.allocatedQuantity).to.equal(3)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(3)
+        })
+
+        it('allocates 10 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(3)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(1)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(4)
           expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
           expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
           expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
