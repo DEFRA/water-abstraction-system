@@ -16,6 +16,7 @@ const SubmitFrequencyReportedService = require('../../../app/services/return-req
 
 describe('Submit Frequency Reported service', () => {
   let session
+  let payload
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -37,9 +38,11 @@ describe('Submit Frequency Reported service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      const payload = {
-        frequencyReported: 'weekly'
-      }
+      beforeEach(() => {
+        payload = {
+          frequencyReported: 'weekly'
+        }
+      })
 
       it('saves the submitted value', async () => {
         await SubmitFrequencyReportedService.go(session.id, payload)
@@ -58,7 +61,9 @@ describe('Submit Frequency Reported service', () => {
 
     describe('with an invalid payload', () => {
       describe('because the user has not selected the frequency reported', () => {
-        const payload = {}
+        beforeEach(() => {
+          payload = {}
+        })
 
         it('fetches the current setup session record', async () => {
           const result = await SubmitFrequencyReportedService.go(session.id, payload)
