@@ -1,6 +1,8 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -14,13 +16,94 @@
   }}
 {% endblock %}
 
+{# If there is a fromAbstractionPeriod error, the error class and message are set #}
+{% if error.text.fromResult %}
+  {% set fromResultErrorClass = " govuk-input--error" %}
+  {% set fromResultErrorMessage = { text: error.text.fromResult } %}
+{% else %}
+  {% set fromResultErrorClass = "" %}
+  {% set fromResultErrorMessage = null %}
+{% endif %}
+
+{# If there is a toAbstractionPeriod error, the error class and message are set #}
+{% if error.text.toResult %}
+    {% set toResultErrorClass = " govuk-input--error" %}
+    {% set toResultErrorMessage = { text: error.text.toResult } %}
+{% else %}
+  {% set toResultErrorClass = "" %}
+  {% set toResultErrorMessage = null %}
+{% endif %}
+
 {% block content %}
+{# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text:error.text.fromResult,
+          href: "#abstraction-period-from"
+        },
+        {
+          text:error.text.toResult,
+          href: "#abstraction-period-to"
+        }
+      ]
+    }) }}
+  {%endif%}
+
   {# Main heading #}
   <div class="govuk-body">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
   </div>
 
   <form method="post">
+    {# From #}
+    {{ govukDateInput({
+      id: "abstraction-period-from",
+      namePrefix: "from-abstraction-period",
+      errorMessage: fromResultErrorMessage,
+      fieldset: {
+        legend: {
+          text: "From",
+          classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+        }
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2" + fromResultErrorClass
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2" + fromResultErrorClass
+        }
+      ]
+    }) }}
+
+    {# To #}
+    {{ govukDateInput({
+      id: "abstraction-period-to",
+      namePrefix: "to-abstraction-period",
+      errorMessage: toResultErrorMessage,
+      fieldset: {
+        legend: {
+          text: "To",
+          classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
+        }
+      },
+      items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2" + toResultErrorClass
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2" + toResultErrorClass
+        }
+      ]
+    }) }}
+
     <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
     </div>
