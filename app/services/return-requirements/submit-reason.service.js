@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/reason` page
- * @module StartDateService
+ * @module SubmitReasonService
  */
 
 const ReasonPresenter = require('../../presenters/return-requirements/reason.presenter.js')
