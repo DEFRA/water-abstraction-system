@@ -11,9 +11,9 @@ const { expect } = Code
 const ReturnsCyclePresenter = require('../../../app/presenters/return-requirements/returns-cycle.presenter.js')
 
 describe('Returns Cycle presenter', () => {
-  let session
-
   describe('when provided with a populated session', () => {
+    let session
+
     describe('and no returns cycle in session data', () => {
       beforeEach(() => {
         session = {
