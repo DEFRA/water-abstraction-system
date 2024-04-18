@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
+const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
@@ -44,6 +45,61 @@ describe('Bill Runs controller', () => {
   })
 
   describe('/bill-runs', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/bill-runs?page=2',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(IndexBillRunsService, 'go').resolves({
+            billRuns: [{
+              id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+              createdAt: '1 January 2024',
+              link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+              number: 1002,
+              numberOfBills: 7,
+              region: 'Avalon',
+              scheme: 'sroc',
+              status: 'ready',
+              total: '£200.00',
+              type: 'Supplementary'
+            }],
+            busy: 'none',
+            pageTitle: 'Bill runs (page 2 of 30)',
+            pagination: {
+              numberOfPages: 30,
+              component: {
+                previous: { href: '/system/bill-runs?page=1' },
+                next: { href: '/system/bill-runs?page=3' },
+                items: [
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
+                  { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: true },
+                  { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false }
+                ]
+              }
+            }
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Bill runs (page 2 of 30)')
+          expect(response.payload).to.contain('Previous')
+          expect(response.payload).to.contain('Next')
+        })
+      })
+    })
+
     describe('POST', () => {
       beforeEach(() => {
         options = _options('POST')
