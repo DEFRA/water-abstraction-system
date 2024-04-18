@@ -35,18 +35,17 @@ function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
 function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines) {
   matchedLines.forEach((matchedLine) => {
     const chargeElementRemainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
+    const chargeReferenceRemainingAllocation = chargeReference.volume - chargeReference.allocatedQuantity
 
-    if (chargeElementRemainingAllocation > 0) {
+    const remainingAllocation = Math.min(chargeElementRemainingAllocation, chargeReferenceRemainingAllocation)
+
+    if (remainingAllocation > 0) {
       let qtyToAllocate
 
       // If what remains to allocate on the charge reference/element is actually less than the `matchedLine.unallocated`
       // we set `qtyToAllocate` to what remains. Else the `qtyToAllocate` is equal to the `matchedLine.unallocated`.
-      const chargeReferenceRemainingAllocation = chargeReference.volume - chargeReference.allocatedQuantity
-
-      if (matchedLine.unallocated > chargeReferenceRemainingAllocation) {
-        qtyToAllocate = chargeReferenceRemainingAllocation
-      } else if (matchedLine.unallocated > chargeElementRemainingAllocation) {
-        qtyToAllocate = chargeElementRemainingAllocation
+      if (matchedLine.unallocated > remainingAllocation) {
+        qtyToAllocate = remainingAllocation
       } else {
         qtyToAllocate = matchedLine.unallocated
       }

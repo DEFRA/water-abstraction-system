@@ -69,8 +69,9 @@ function _prepareLicences (licences) {
       id: licence.licenceId,
       licenceRef: licence.licenceRef,
       licenceHolder: licence.licenceHolder,
-      status: licence.status,
-      issue: _getIssueOnLicence(licence.issues)
+      issue: _getIssueOnLicence(licence.issues),
+      progress: licence.progress ? '✓' : '',
+      status: licence.status
     })
   }
 

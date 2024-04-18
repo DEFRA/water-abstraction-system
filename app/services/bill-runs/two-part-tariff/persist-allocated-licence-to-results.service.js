@@ -132,6 +132,7 @@ async function _persistReviewChargeElement (chargeElement, reviewChargeReference
     reviewChargeReferenceId,
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
+    calculated: chargeElement.allocatedQuantity,
     chargeDatesOverlap: chargeElement.chargeDatesOverlap,
     issues: chargeElement.issues.join(', '),
     status: chargeElement.status
