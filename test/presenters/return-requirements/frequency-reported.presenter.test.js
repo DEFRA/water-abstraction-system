@@ -11,9 +11,9 @@ const { expect } = Code
 const FrequencyReportedPresenter = require('../../../app/presenters/return-requirements/frequency-reported.presenter.js')
 
 describe('Frequency Reported presenter', () => {
-  let session
-
   describe('when provided with a populated session', () => {
+    let session
+
     describe('and no frequency reported in session data', () => {
       beforeEach(() => {
         session = {
