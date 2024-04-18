@@ -37,7 +37,7 @@ async function go (regionId, billingPeriod) {
 
 async function _fetch (regionId, billingPeriod) {
   // LicenceId that Shabbir wants testing
-  const licenceRef = '9/55/18/0493'
+  const licenceRef = '19/55/18/0493'
 
   const chargeVersions = await ChargeVersionModel.query()
     .select([
