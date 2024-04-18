@@ -146,14 +146,54 @@ describe('Fetch Return Logs for Licence service', () => {
         expect(result[0].returnSubmissions[0].returnSubmissionLines).to.have.length(0)
       })
     })
+
+    describe('where the return logs start date is outside the billing period', () => {
+      beforeEach(async () => {
+        await ReturnLogHelper.add({
+          startDate: new Date('2022-01-01'),
+          endDate: new Date('2022-12-31')
+        })
+        const { id } = returnLogRecord
+
+        await ReturnSubmissionHelper.add({ returnLogId: id })
+      })
+
+      it('returns the return log and return submission lines that are applicable', async () => {
+        const { licenceRef } = returnLogRecord
+        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+
+        expect(result).to.have.length(1)
+        expect(result[0].id).to.equal(returnLogRecord.id)
+        expect(result[0].description).to.equal('The Description')
+      })
+    })
   })
 
   describe('when there are NO valid return logs that should be considered', () => {
-    describe('because the return log is outside the billing period', () => {
+    describe('because the return log is fully outside the billing period', () => {
       beforeEach(async () => {
         returnLogRecord = await ReturnLogHelper.add({
           startDate: new Date('2023-04-01'),
           endDate: new Date('2024-03-31')
+        })
+        const { id } = returnLogRecord
+
+        await ReturnSubmissionHelper.add({ returnLogId: id })
+      })
+
+      it('returns no records', async () => {
+        const { licenceRef } = returnLogRecord
+        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+
+        expect(result).to.have.length(0)
+      })
+    })
+
+    describe('because the return logs end date is outside the billing period', () => {
+      beforeEach(async () => {
+        returnLogRecord = await ReturnLogHelper.add({
+          startDate: new Date('2023-01-01'),
+          endDate: new Date('2023-12-31')
         })
         const { id } = returnLogRecord
 
