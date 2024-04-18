@@ -144,6 +144,54 @@ describe('Allocate Returns to Charge Element Service', () => {
         })
       })
 
+      // NOTE It was found during testing that if the individual return line volumes are greater than the charge
+      // reference authorised volume, which in turn is greater than the element authorised volume, that the element was
+      // being over allocated. We should only be allocating to the lower volume. In this scenario 3.5 would have been
+      // allocated to the element rather than the correct volume of 3. This scenario has therefore been created to test
+      // that this does not happen.
+      describe('with a reference authorised to 3.5, element to 3, matched to a return with line volumes of 4', () => {
+        beforeEach(() => {
+          testData = _generateTestData()
+          testData.chargeReference.volume = 3.5
+          testData.chargeElement.authorisedAnnualQuantity = 3
+        })
+
+        it('allocates 3 to the charge reference', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeReference.volume).to.equal(3.5)
+          expect(chargeReference.allocatedQuantity).to.equal(3)
+        })
+
+        it('allocates 3 to the charge element', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(chargeElement.authorisedAnnualQuantity).to.equal(3)
+          expect(chargeElement.allocatedQuantity).to.equal(3)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(3)
+        })
+
+        it('allocates 3 from the return log', () => {
+          const { chargeElement, chargeReference, matchingReturns } = testData
+
+          AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
+
+          expect(matchingReturns[0].allocatedQuantity).to.equal(3)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(1)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+        })
+      })
+
       describe('with a `returnSubmissionLine` outside of the `chargePeriod`', () => {
         beforeEach(() => {
           testData = _generateTestData()
