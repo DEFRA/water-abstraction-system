@@ -20,7 +20,7 @@ const SiteDescriptionService = require('../services/return-requirements/site-des
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
-const SubmitFrequencyCollected = require('../services/return-requirements/submit-frequency-collected.service.js')
+const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
@@ -235,7 +235,7 @@ async function submitExisting (request, h) {
 async function submitFrequencyCollected (request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitFrequencyCollected.go(sessionId, request.payload)
+  const pageData = await SubmitFrequencyCollectedService.go(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-collected.njk', pageData)
