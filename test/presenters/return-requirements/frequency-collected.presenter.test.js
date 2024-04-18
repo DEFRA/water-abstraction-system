@@ -11,8 +11,6 @@ const { expect } = Code
 const FrequencyCollectedPresenter = require('../../../app/presenters/return-requirements/frequency-collected.presenter.js')
 
 describe('Frequency Collected presenter', () => {
-  let session
-
   describe('when provided with a populated session', () => {
     let session
 
@@ -45,7 +43,7 @@ describe('Frequency Collected presenter', () => {
       })
     })
 
-    describe('and with returns cycle in session data', () => {
+    describe('and with frequency collected in session data', () => {
       beforeEach(() => {
         session = {
           id: '61e07498-f309-4829-96a9-72084a54996d',
