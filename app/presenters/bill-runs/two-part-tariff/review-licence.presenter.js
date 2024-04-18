@@ -19,7 +19,7 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (billRun, licence, markProgress) {
+function go (billRun, licence, licenceStatus, markProgress) {
   return {
     billRunId: billRun.id,
     region: billRun.region.displayName,
@@ -31,7 +31,7 @@ function go (billRun, licence, markProgress) {
       progress: licence[0].progress
     },
     elementsInReview: licence[0].hasReviewStatus,
-    licenceUpdated: _licenceUpdated(markProgress),
+    licenceUpdatedMessage: _licenceUpdatedMessage(licenceStatus, markProgress),
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
     chargeData: _prepareChargeData(licence, billRun)
@@ -140,14 +140,17 @@ function _financialYear (financialYearEnding) {
   return `${startYear} to ${endYear}`
 }
 
-function _licenceUpdated (markProgress) {
-  switch (markProgress) {
-    case 'mark':
-      return 'This licence has been marked.'
-    case 'unmark':
-      return 'The progress mark for this licence has been removed.'
-    default:
-      return null
+function _licenceUpdatedMessage (licenceStatus, markProgress) {
+  if (licenceStatus === 'ready') {
+    return 'Licence changed to ready.'
+  } else if (licenceStatus === 'review') {
+    return 'Licence changed to review.'
+  } else if (markProgress === 'mark') {
+    return 'This licence has been marked.'
+  } else if (markProgress === 'unmark') {
+    return 'The progress mark for this licence has been removed.'
+  } else {
+    return null
   }
 }
 

@@ -21,7 +21,12 @@ const ReviewLicencePresenter = require('../../../presenters/bill-runs/two-part-t
  * licence, bill run, matched and unmatched returns and the licence charge data
  */
 async function go (billRunId, licenceId, payload) {
+  const licenceStatus = payload?.licenceStatus
   const markProgress = payload?.marKProgress
+
+  if (licenceStatus === 'ready' || licenceStatus === 'review') {
+    await _updateStatus(billRunId, licenceId, licenceStatus)
+  }
 
   if (markProgress === 'mark' || markProgress === 'unmark') {
     await _updateProgress(billRunId, licenceId, markProgress)
@@ -29,7 +34,7 @@ async function go (billRunId, licenceId, payload) {
 
   const { billRun, licence } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
 
-  const pageData = ReviewLicencePresenter.go(billRun, licence, markProgress)
+  const pageData = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
 
   return pageData
 }
@@ -39,6 +44,13 @@ async function _updateProgress (billRunId, licenceId, marKProgress) {
 
   await ReviewLicenceModel.query()
     .patch({ progress })
+    .where('billRunId', billRunId)
+    .andWhere('licenceId', licenceId)
+}
+
+async function _updateStatus (billRunId, licenceId, licenceStatus) {
+  await ReviewLicenceModel.query()
+    .patch({ status: licenceStatus })
     .where('billRunId', billRunId)
     .andWhere('licenceId', licenceId)
 }

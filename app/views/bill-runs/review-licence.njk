@@ -21,10 +21,10 @@
 
 {% block content %}
   {# Licence updated banner #}
-  {% if licenceUpdated %}
+  {% if licenceUpdatedMessage %}
     {{ govukNotificationBanner({
       titleText: 'Licence updated',
-      text: licenceUpdated
+      text: licenceUpdatedMessage
     }) }}
   {% endif %}
 
