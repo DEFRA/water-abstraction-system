@@ -24,7 +24,9 @@ const sessionData = {
       licenceHolder: 'Turbo Kid',
       startDate: '2022-04-01T00:00:00.000Z'
     },
-    journey: 'no-returns-required'
+    journey: 'no-returns-required',
+    selectedOption: null
+
   }
 }
 
@@ -78,7 +80,8 @@ describe('Submit No Returns Required service', () => {
             activeNavBar: 'search',
             checkYourAnswersVisited: false,
             pageTitle: 'Why are no returns required?',
-            licenceRef: '01/ABC'
+            licenceRef: '01/ABC',
+            selectedOption: undefined
           }, { skip: ['id', 'error'] })
         })
 

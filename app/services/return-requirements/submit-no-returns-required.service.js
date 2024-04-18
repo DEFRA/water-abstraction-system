@@ -43,6 +43,7 @@ async function go (sessionId, payload) {
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Why are no returns required?',
+    selectedOption: null,
     ...formattedData
   }
 }

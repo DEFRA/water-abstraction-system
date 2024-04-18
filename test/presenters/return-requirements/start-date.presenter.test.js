@@ -25,7 +25,8 @@ describe('Start Date presenter', () => {
             licenceRef: '01/ABC',
             licenceHolder: 'Turbo Kid',
             startDate: '2023-11-126T00:00:00.000Z'
-          }
+          },
+          selectedOption: null
         }
       }
     })
@@ -41,8 +42,7 @@ describe('Start Date presenter', () => {
         anotherStartDateDay: null,
         anotherStartDateMonth: null,
         anotherStartDateYear: null,
-        anotherStartDateSelected: false,
-        licenceStartDateSelected: false
+        selectedOption: null
       }, { skip: ['id'] })
     })
   })
@@ -81,8 +81,7 @@ describe('Start Date presenter', () => {
         anotherStartDateDay: '26',
         anotherStartDateMonth: '11',
         anotherStartDateYear: '2023',
-        anotherStartDateSelected: true,
-        licenceStartDateSelected: false
+        selectedOption: 'anotherStartDate'
       }, { skip: ['id'] })
     })
   })
