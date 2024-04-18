@@ -6,27 +6,15 @@
  */
 
 function go (session) {
-  const data = {
-    id: session.id,
+  const { id, data } = session
+
+  const pageData = {
+    id,
     licenceRef: session.data.licence.licenceRef,
-    ..._transformSession(session.data)
+    note: data.note.content || ''
   }
 
-  return data
-}
-
-function _transformSession (sessionData) {
-  const currentNote = sessionData.note
-
-  if (!currentNote) {
-    return {
-      note: ''
-    }
-  }
-
-  return {
-    note: sessionData.note
-  }
+  return pageData
 }
 
 module.exports = {

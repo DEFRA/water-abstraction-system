@@ -22,7 +22,10 @@ describe('Add Note presenter', () => {
           licenceRef: '01/123',
           licenceHolder: 'Jane Doe'
         },
-        note: 'Note attached to return requirement'
+        note: {
+          content: 'Note attached to return requirement',
+          userEmail: 'jane.doe@atari.com'
+        }
       }
     }
   })

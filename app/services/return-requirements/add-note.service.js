@@ -21,6 +21,8 @@ async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const formattedData = AddNotePresenter.go(session)
 
+  console.log('formattedData', formattedData)
+
   return {
     activeNavBar: 'search',
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
