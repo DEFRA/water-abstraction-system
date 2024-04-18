@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- *
+ * Orchestrates fetching and presenting the data needed for the amend billable returns page
  * @module AmendBillableReturnsService
  */
 
@@ -9,6 +9,7 @@ const AmendBillableReturnsPresenter = require('../../../presenters/bill-runs/two
 const FetchMatchDetailsService = require('./fetch-match-details.service.js')
 
 /**
+ * Orchestrates fetching and presenting the data needed for the amend billable returns page
  *
  * @param {String} billRunId - The UUID for the bill run
  * @param {String} licenceId - The UUID of the licence that is being reviewed

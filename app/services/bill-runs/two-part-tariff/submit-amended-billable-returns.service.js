@@ -1,22 +1,22 @@
 'use strict'
 
 /**
- *
+ * Orchestrates validating the data for the amend billable returns page
  * @module SubmitAmendedBillableReturnsService
 */
 
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
 /**
+ * Orchestrates validating the data for the amend billable returns page and updating the db value
  *
- * @param {*} reviewChargeElementId
- * @param {*} payload
- * @returns
+ * @param {String} reviewChargeElementId - The UUID of the review charge element being updated
+ * @param {Object} payload - The submitted form data
+ *
+ * @returns {Promise<Object>} The updated value for the billable returns
  */
 async function go (reviewChargeElementId, payload) {
-  const { 'quantity-options': selectedOption } = payload
-
-  const volume = selectedOption === 'customQuantity' ? payload.customQuantity : selectedOption
+  const volume = payload['quantity-options'] === 'customQuantity' ? payload.customQuantity : payload['quantity-options']
 
   return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
