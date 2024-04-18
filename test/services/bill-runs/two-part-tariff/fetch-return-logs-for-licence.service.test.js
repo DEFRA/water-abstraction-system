@@ -147,7 +147,7 @@ describe('Fetch Return Logs for Licence service', () => {
       })
     })
 
-    describe('where the return logs start date is outside the billing period', () => {
+    describe('where the return logs start date is outside the billing period but the end date is inside', () => {
       beforeEach(async () => {
         await ReturnLogHelper.add({
           startDate: new Date('2022-01-01'),
@@ -189,7 +189,7 @@ describe('Fetch Return Logs for Licence service', () => {
       })
     })
 
-    describe('because the return logs end date is outside the billing period', () => {
+    describe('because the return logs start date is inside the billing period but end date is outside', () => {
       beforeEach(async () => {
         returnLogRecord = await ReturnLogHelper.add({
           startDate: new Date('2023-01-01'),
