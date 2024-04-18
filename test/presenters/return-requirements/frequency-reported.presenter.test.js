@@ -43,7 +43,7 @@ describe('Frequency Reported presenter', () => {
       })
     })
 
-    describe('and with returns cycle in session data', () => {
+    describe('and with frequency reported in session data', () => {
       beforeEach(() => {
         session = {
           id: '61e07498-f309-4829-96a9-72084a54996d',
