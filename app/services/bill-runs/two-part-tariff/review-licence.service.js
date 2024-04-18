@@ -24,12 +24,8 @@ async function go (billRunId, licenceId, payload) {
   const licenceStatus = payload?.licenceStatus
   const markProgress = payload?.marKProgress
 
-  if (licenceStatus === 'ready' || licenceStatus === 'review') {
-    await _updateStatus(billRunId, licenceId, licenceStatus)
-  }
-
-  if (markProgress === 'mark' || markProgress === 'unmark') {
-    await _updateProgress(billRunId, licenceId, markProgress)
+  if (payload) {
+    await _processPayload(billRunId, licenceId, licenceStatus, markProgress)
   }
 
   const { billRun, licence } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
@@ -37,6 +33,16 @@ async function go (billRunId, licenceId, payload) {
   const pageData = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
 
   return pageData
+}
+
+async function _processPayload (billRunId, licenceId, licenceStatus, markProgress) {
+  if (licenceStatus === 'ready' || licenceStatus === 'review') {
+    await _updateStatus(billRunId, licenceId, licenceStatus)
+  }
+
+  if (markProgress === 'mark' || markProgress === 'unmark') {
+    await _updateProgress(billRunId, licenceId, markProgress)
+  }
 }
 
 async function _updateProgress (billRunId, licenceId, marKProgress) {
