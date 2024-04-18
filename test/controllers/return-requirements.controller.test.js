@@ -12,6 +12,7 @@ const { expect } = Code
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
+const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
 const ReturnCycleService = require('../../app/services/return-requirements/returns-cycle.service.js')
@@ -140,12 +141,18 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/frequency-reported', () => {
+    beforeEach(async () => {
+      Sinon.stub(FrequencyReportedService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select how often readings or volumes are reported'
+      })
+    })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('frequency-reported'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select how often collected readings or volumes are reported')
+        expect(response.payload).to.contain('Select how often readings or volumes are reported')
       })
     })
   })
