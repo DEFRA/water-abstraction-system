@@ -47,54 +47,6 @@ describe('Review Licence Service', () => {
     })
   })
 
-  describe('when there is data to process after the user clicking the "Mark progress" button', () => {
-    const payload = { marKProgress: 'mark' }
-    let billRunId
-    let licenceId
-
-    beforeEach(async () => {
-      const reviewLicence = await ReviewLicenceHelper.add({ progress: false })
-
-      billRunId = reviewLicence.billRunId
-      licenceId = reviewLicence.licenceId
-    })
-
-    it('will set `progress` to true in the database and return the page data', async () => {
-      const result = await ReviewLicenceService.go(billRunId, licenceId, payload)
-      const reviewLicenceQuery = await ReviewLicenceModel.query()
-        .where('billRunId', billRunId)
-        .andWhere('licenceId', licenceId)
-        .first()
-
-      expect(reviewLicenceQuery.progress).to.be.true()
-      expect(result).to.equal('page data')
-    })
-  })
-
-  describe('when there is data to process after the user clicking the "Remove progress mark" button', () => {
-    const payload = { marKProgress: 'unmark' }
-    let billRunId
-    let licenceId
-
-    beforeEach(async () => {
-      const reviewLicence = await ReviewLicenceHelper.add({ progress: true })
-
-      billRunId = reviewLicence.billRunId
-      licenceId = reviewLicence.licenceId
-    })
-
-    it('will set `progress` to false in the database and return the page data', async () => {
-      const result = await ReviewLicenceService.go(billRunId, licenceId, payload)
-      const reviewLicenceQuery = await ReviewLicenceModel.query()
-        .where('billRunId', billRunId)
-        .andWhere('licenceId', licenceId)
-        .first()
-
-      expect(reviewLicenceQuery.progress).to.be.false()
-      expect(result).to.equal('page data')
-    })
-  })
-
   describe('when there is data to process after the user clicking the "Confirm licence is ready" button', () => {
     const payload = { licenceStatus: 'ready' }
     let billRunId
@@ -139,6 +91,54 @@ describe('Review Licence Service', () => {
         .first()
 
       expect(reviewLicenceQuery.status).to.equal('review')
+      expect(result).to.equal('page data')
+    })
+  })
+
+  describe('when there is data to process after the user clicking the "Mark progress" button', () => {
+    const payload = { marKProgress: 'mark' }
+    let billRunId
+    let licenceId
+
+    beforeEach(async () => {
+      const reviewLicence = await ReviewLicenceHelper.add({ progress: false })
+
+      billRunId = reviewLicence.billRunId
+      licenceId = reviewLicence.licenceId
+    })
+
+    it('will set `progress` to true in the database and return the page data', async () => {
+      const result = await ReviewLicenceService.go(billRunId, licenceId, payload)
+      const reviewLicenceQuery = await ReviewLicenceModel.query()
+        .where('billRunId', billRunId)
+        .andWhere('licenceId', licenceId)
+        .first()
+
+      expect(reviewLicenceQuery.progress).to.be.true()
+      expect(result).to.equal('page data')
+    })
+  })
+
+  describe('when there is data to process after the user clicking the "Remove progress mark" button', () => {
+    const payload = { marKProgress: 'unmark' }
+    let billRunId
+    let licenceId
+
+    beforeEach(async () => {
+      const reviewLicence = await ReviewLicenceHelper.add({ progress: true })
+
+      billRunId = reviewLicence.billRunId
+      licenceId = reviewLicence.licenceId
+    })
+
+    it('will set `progress` to false in the database and return the page data', async () => {
+      const result = await ReviewLicenceService.go(billRunId, licenceId, payload)
+      const reviewLicenceQuery = await ReviewLicenceModel.query()
+        .where('billRunId', billRunId)
+        .andWhere('licenceId', licenceId)
+        .first()
+
+      expect(reviewLicenceQuery.progress).to.be.false()
       expect(result).to.equal('page data')
     })
   })
