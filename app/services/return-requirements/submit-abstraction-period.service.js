@@ -39,7 +39,7 @@ async function go (sessionId, payload) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'Select the abstraction period for the requirements for returns',
+    pageTitle: 'Enter the abstraction period for the requirements for returns',
     ...formattedData
   }
 }

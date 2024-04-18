@@ -85,7 +85,7 @@ describe('Submit Abstraction Period service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: null,
-            pageTitle: 'Select the abstraction period for the requirements for returns',
+            pageTitle: 'Enter the abstraction period for the requirements for returns',
             id: 'aeb46f58-3431-42af-8724-361a7779becf',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
@@ -132,7 +132,7 @@ describe('Submit Abstraction Period service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: null,
-            pageTitle: 'Select the abstraction period for the requirements for returns',
+            pageTitle: 'Enter the abstraction period for the requirements for returns',
             id: 'aeb46f58-3431-42af-8724-361a7779becf',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
@@ -179,7 +179,7 @@ describe('Submit Abstraction Period service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: null,
-            pageTitle: 'Select the abstraction period for the requirements for returns',
+            pageTitle: 'Enter the abstraction period for the requirements for returns',
             id: 'aeb46f58-3431-42af-8724-361a7779becf',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
@@ -226,7 +226,7 @@ describe('Submit Abstraction Period service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: null,
-            pageTitle: 'Select the abstraction period for the requirements for returns',
+            pageTitle: 'Enter the abstraction period for the requirements for returns',
             id: 'aeb46f58-3431-42af-8724-361a7779becf',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
@@ -273,7 +273,7 @@ describe('Submit Abstraction Period service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: null,
-            pageTitle: 'Select the abstraction period for the requirements for returns',
+            pageTitle: 'Enter the abstraction period for the requirements for returns',
             id: 'aeb46f58-3431-42af-8724-361a7779becf',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
@@ -320,7 +320,7 @@ describe('Submit Abstraction Period service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             error: null,
-            pageTitle: 'Select the abstraction period for the requirements for returns',
+            pageTitle: 'Enter the abstraction period for the requirements for returns',
             id: 'aeb46f58-3431-42af-8724-361a7779becf',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
