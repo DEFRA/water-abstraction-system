@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
+const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
@@ -71,6 +72,12 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/agreements-exceptions', () => {
+    beforeEach(async () => {
+      Sinon.stub(AgreementsExceptionService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'Select agreements and exceptions for the return requirement'
+      })
+    })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('agreements-exceptions'))
