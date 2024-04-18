@@ -35,7 +35,7 @@ const sessionData = {
   }
 }
 
-describe.only('Check Your Answers service', () => {
+describe('Check Your Answers service', () => {
   let session
 
   beforeEach(async () => {
