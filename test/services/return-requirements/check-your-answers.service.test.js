@@ -27,14 +27,16 @@ const sessionData = {
     },
     reason: 'abstraction-below-100-cubic-metres-per-day',
     journey: 'no-returns-required',
-    note: '',
+    note: {
+      content: 'Note attached to requirement',
+      userEmail: 'carol.shaw@atari.com'
+    },
     startDateOptions: 'licenceStartDate'
   }
 }
 
-describe('Check Your Answers service', () => {
+describe.only('Check Your Answers service', () => {
   let session
-  const user = { username: 'carol.shaw@atari.com' }
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -45,13 +47,13 @@ describe('Check Your Answers service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await CheckYourAnswersService.go(session.id, user)
+      const result = await CheckYourAnswersService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await CheckYourAnswersService.go(session.id, user)
+      const result = await CheckYourAnswersService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -59,15 +61,17 @@ describe('Check Your Answers service', () => {
         pageTitle: 'Check the return requirements for Astro Boy',
         journey: 'no-returns-required',
         licenceRef: '01/ABC',
-        note: '',
+        note: {
+          content: 'Note attached to requirement',
+          userEmail: 'carol.shaw@atari.com'
+        },
         reason: 'abstraction-below-100-cubic-metres-per-day',
-        startDate: '8 February 2023',
-        userEmail: 'carol.shaw@atari.com'
+        startDate: '8 February 2023'
       }, { skip: ['id'] })
     })
 
     it('updates the session record to indicate user has visited check-your-answers', async () => {
-      await CheckYourAnswersService.go(session.id, user)
+      await CheckYourAnswersService.go(session.id)
       const updatedSession = await SessionModel.query().findById(session.id)
 
       expect(updatedSession.data.checkYourAnswersVisited).to.be.true()

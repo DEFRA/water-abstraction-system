@@ -19,15 +19,16 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
+ * @param {Object} user - The logged in user details
  *
  * @returns {Promise<Object>} The page data for the no returns required page
  */
-async function go (sessionId, payload) {
+async function go (sessionId, payload, user) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session, payload, user)
 
     return {
       journey: session.data.journey
@@ -44,10 +45,13 @@ async function go (sessionId, payload) {
   }
 }
 
-async function _save (session, payload) {
+async function _save (session, payload, user) {
   const currentData = session.data
 
-  currentData.note = payload.note
+  currentData.note = {
+    content: payload.note,
+    userEmail: user.username
+  }
 
   return session.$query().patch({ data: currentData })
 }

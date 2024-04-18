@@ -17,6 +17,7 @@ const SubmitAddNoteService = require('../../../app/services/return-requirements/
 describe('Submit Add Note service', () => {
   let payload
   let session
+  const user = { username: 'carol.shaw@atari.com' }
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -48,15 +49,18 @@ describe('Submit Add Note service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAddNoteService.go(session.id, payload)
+        await SubmitAddNoteService.go(session.id, payload, user)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.note).to.equal('A note related to return requirement')
+        expect(refreshedSession.data.note).to.equal({
+          content: 'A note related to return requirement',
+          userEmail: 'carol.shaw@atari.com'
+        })
       })
 
       it('returns the journey to redirect the page', async () => {
-        const result = await SubmitAddNoteService.go(session.id, payload)
+        const result = await SubmitAddNoteService.go(session.id, payload, user)
 
         expect(result).to.equal({
           journey: 'no-returns-required'
@@ -72,13 +76,13 @@ describe('Submit Add Note service', () => {
         })
 
         it('fetches the current setup session record', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload)
+          const result = await SubmitAddNoteService.go(session.id, payload, user)
 
           expect(result.id).to.equal(session.id)
         })
 
         it('returns page data for the view', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload)
+          const result = await SubmitAddNoteService.go(session.id, payload, user)
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -89,7 +93,7 @@ describe('Submit Add Note service', () => {
         })
 
         it('returns page data with an error', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload)
+          const result = await SubmitAddNoteService.go(session.id, payload, user)
 
           expect(result.error).to.equal({
             text: 'Text must be entered'
@@ -97,32 +101,32 @@ describe('Submit Add Note service', () => {
         })
       })
 
-      describe('because the user has not entered too much text', () => {
+      describe('because the user has entered too much text', () => {
         beforeEach(() => {
           payload = {
             note: `Lorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elit
 
-            Lorem ipsum dolor sit amet consectetur adipiscing elit
+              Lorem ipsum dolor sit amet consectetur adipiscing elit
 
-            Lorem ipsum dolor sit amet consectetur adipiscing elit
+              Lorem ipsum dolor sit amet consectetur adipiscing elit
 
-            Lorem ipsum dolor sit amet consectetur adipiscing elit
-            Lorem ipsum dolor sit amet consectetur adipiscing elit
-            Lorem ipsum dolor sit amet consectetur adipiscing elit
+              Lorem ipsum dolor sit amet consectetur adipiscing elit
+              Lorem ipsum dolor sit amet consectetur adipiscing elit
+              Lorem ipsum dolor sit amet consectetur adipiscing elit
 
-            Lorem ipsum dolor sit amet consectetur adipiscing elit
-            Lorem ipsum dolor sit amet consectetur adipiscing elit`
+              Lorem ipsum dolor sit amet consectetur adipiscing elit
+              Lorem ipsum dolor sit amet consectetur adipiscing elit`
           }
         })
 
         it('fetches the current setup session record', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload)
+          const result = await SubmitAddNoteService.go(session.id, payload, user)
 
           expect(result.id).to.equal(session.id)
         })
 
         it('returns page data for the view', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload)
+          const result = await SubmitAddNoteService.go(session.id, payload, user)
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -133,7 +137,7 @@ describe('Submit Add Note service', () => {
         })
 
         it('returns page data with an error', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload)
+          const result = await SubmitAddNoteService.go(session.id, payload, user)
 
           expect(result.error).to.equal({
             text: 'Textarea should have a value with character count less than 500'

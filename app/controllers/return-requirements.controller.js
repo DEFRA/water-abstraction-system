@@ -71,8 +71,7 @@ async function approved (request, h) {
 
 async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
-  const { user } = request.auth.credentials
-  const pageData = await CheckYourAnswersService.go(sessionId, user)
+  const pageData = await CheckYourAnswersService.go(sessionId)
 
   return h.view('return-requirements/check-your-answers.njk', {
     ...pageData
@@ -210,8 +209,9 @@ async function submitAbstractionPeriod (request, h) {
 
 async function submitAddNote (request, h) {
   const { sessionId } = request.params
+  const { user } = request.auth.credentials
 
-  const pageData = await SubmitAddNoteService.go(sessionId, request.payload)
+  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user)
 
   if (pageData.error) {
     return h.view('return-requirements/add-note.njk', pageData)
