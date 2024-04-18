@@ -18,7 +18,6 @@ const Joi = require('joi')
  * @returns {Object} The result from calling Joi's schema.validate(). The result from calling Joi's schema.validate().
  * If any errors are found the `error:` property will also exist detailing what the issue is.
  */
-
 function go (payload) {
   const returnsCycle = payload.returnsCycle
 
