@@ -1,6 +1,9 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -15,12 +18,64 @@
 {% endblock %}
 
 {% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#purposes"
+        }
+      ]
+    }) }}
+  {%endif%}
+
   {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  <div>
+    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+
   </div>
 
   <form method="post">
+    {{ govukCheckboxes({
+      name: "agreementsExceptions",
+      hint: {
+        text: "Select all that apply"
+      },
+      errorMessage: error,
+      items: [
+        {
+          value: "gravity-fill",
+          text: "Gravity fill"
+        },
+        {
+          value: "transfer-re-abstraction-scheme",
+          text: "Transfer re-abstraction scheme"
+        },
+        {
+          value: "two-part-tariff",
+          text: "Two-part tarrif",
+          hint: {
+            text: "requires daily collection"
+          }
+        },
+        {
+          value: "56-returns-exception",
+          text: "56 returns exception"
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "none",
+          text: "None",
+          behaviour: "exclusive"
+        }
+      ]
+    }) }}
+
     <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
     </div>
