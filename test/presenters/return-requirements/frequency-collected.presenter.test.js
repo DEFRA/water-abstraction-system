@@ -14,6 +14,8 @@ describe('Frequency Collected presenter', () => {
   let session
 
   describe('when provided with a populated session', () => {
+    let session
+
     describe('and no frequency collected is session data', () => {
       beforeEach(() => {
         session = {
