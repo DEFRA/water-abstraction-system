@@ -13,9 +13,12 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @param {module:BillRunModel} billRun the data from the bill run
  * @param {module:ReviewLicenceModel} licence the data from review licence
+ * @param {String} licenceStatus will contain the string 'ready' or 'review' if the licence review status button has
+ * been clicked, otherwise it will be null. It is used to determine the message displayed by the 'Licence updated'
+ * banner, if any
  * @param {String} markProgress will contain the string 'mark' or 'unmark' if the mark/unmark progress button has been
- * clicked, otherwise it will be null. It is passed back to the view to determine if the 'Licence updated' banner should
- * be displayed
+ * clicked, otherwise it will be null. It is used to determine the message displayed by the 'Licence updated'
+ * banner, if any
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
