@@ -60,6 +60,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/remove/{licenceId}',
+    handler: BillRunsController.removeLicence,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Confirm removing a licence from a bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.review,
     options: {
