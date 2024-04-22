@@ -10,6 +10,7 @@ const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
+const RemoveBillRunLicenceService = require('../services/bill-runs/remove-bill-run-licence.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
@@ -54,6 +55,18 @@ async function matchDetails (request, h) {
 
   return h.view('bill-runs/match-details.njk', {
     pageTitle: 'View match details',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function removeLicence (request, h) {
+  const { id, licenceId } = request.params
+
+  const pageData = await RemoveBillRunLicenceService.go(id, licenceId)
+
+  return h.view('bill-runs/remove-licence.njk', {
+    pageTitle: "You're about to remove this licence from the bill run",
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -138,6 +151,7 @@ module.exports = {
   cancel,
   create,
   matchDetails,
+  removeLicence,
   review,
   reviewLicence,
   send,
