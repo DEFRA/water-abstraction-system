@@ -182,32 +182,6 @@ function _complexPaginatorStart (selectedPageNumber, numberOfPages, path) {
   return items
 }
 
-function _paginatorType (selectedPageNumber, numberOfPages) {
-  if (numberOfPages <= 7) {
-    return SIMPLE_PAGINATOR
-  }
-
-  if (selectedPageNumber <= 4) {
-    return COMPLEX_START_PAGINATOR
-  }
-
-  if (selectedPageNumber >= (numberOfPages - 3)) {
-    return COMPLEX_END_PAGINATOR
-  }
-
-  return COMPLEX_MIDDLE_PAGINATOR
-}
-
-function _simplePaginator (selectedPageNumber, numberOfPages, path) {
-  const items = []
-
-  for (let i = 1; i <= numberOfPages; i++) {
-    items.push(_item(i, selectedPageNumber, path))
-  }
-
-  return items
-}
-
 function _item (pageNumber, selectedPageNumber, path) {
   return {
     number: pageNumber,
@@ -233,6 +207,32 @@ function _items (selectedPageNumber, numberOfPages, path) {
       break
     default:
       items = _simplePaginator(selectedPageNumber, numberOfPages, path)
+  }
+
+  return items
+}
+
+function _paginatorType (selectedPageNumber, numberOfPages) {
+  if (numberOfPages <= 7) {
+    return SIMPLE_PAGINATOR
+  }
+
+  if (selectedPageNumber <= 4) {
+    return COMPLEX_START_PAGINATOR
+  }
+
+  if (selectedPageNumber >= (numberOfPages - 3)) {
+    return COMPLEX_END_PAGINATOR
+  }
+
+  return COMPLEX_MIDDLE_PAGINATOR
+}
+
+function _simplePaginator (selectedPageNumber, numberOfPages, path) {
+  const items = []
+
+  for (let i = 1; i <= numberOfPages; i++) {
+    items.push(_item(i, selectedPageNumber, path))
   }
 
   return items
