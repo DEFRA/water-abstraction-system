@@ -16,14 +16,15 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  * @param {string} page - the page number of bill runs to be viewed
  *
  * @returns {Promise<Object>} an object representing the `pageData` needed by the index bill run template. It contains
- * summary details for each bill run for the page selected, for the templates pagination control, the title and the
- * status of busy bill runs
+ * summary details for each bill run for the page selected, the template's pagination control, the title and the
+ * status of any busy bill runs
  */
 async function go (page) {
   const selectedPageNumber = _selectedPageNumber(page)
 
   // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
-  // together means we are only waiting as long as it takes rather than the combined time to run both queries
+  // together means we are only waiting as long as it takes FetchBillRunsService to complete rather than their combined
+  // time
   const [fetchedBillRunResult, busyResult] = await Promise.all([
     FetchBillRunsService.go(selectedPageNumber),
     CheckBusyBillRunsService.go()
