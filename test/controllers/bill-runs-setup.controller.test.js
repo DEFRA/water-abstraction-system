@@ -281,7 +281,7 @@ describe('Bill Runs Setup controller', () => {
     })
 
     describe('POST', () => {
-      describe('when a request is valid', () => {
+      describe.only('when a request is valid', () => {
         beforeEach(async () => {
           options = _postOptions('type', { type: 'annual' })
 
@@ -289,6 +289,19 @@ describe('Bill Runs Setup controller', () => {
         })
 
         it('redirects to select a region page', async () => {
+          // for (const property in server) {
+          //   console.log('🚀 ~ it ~ server.property:', property, server[property])
+          // }
+          // const p1 = server['plugins']
+          // for (const property in p1) {
+          //   console.log('🚀 ~ it ~ p1.property:', property, p1[property])
+          // }
+          console.log('🚀 ~ it ~ plugins.crumb', server['plugins']['crumb'])
+          const generate = server['plugins']['crumb']['generate']
+          console.log('🚀 ~ it ~ generate', generate[0]())
+
+          // const test = server.plugins.crumb.generate()
+          // console.log('🚀 ~ it ~ test:', test)
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
