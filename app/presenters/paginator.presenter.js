@@ -23,8 +23,8 @@ const COMPLEX_END_PAGINATOR = 'end'
  *
  *  `<- Previous 1 ... 6 [7] 8 ... 42 Next ->`
  *
- * The first step is to take the number of records and divide them by our page size config (defaults to 50) to determine
- * how many pages are needed. If only 1 page is required (`numberOfRecords` is less then or equal to 50) no pagination
+ * The first step is to take the number of records and divide them by our page size config (defaults to 25) to determine
+ * how many pages are needed. If only 1 page is required (`numberOfRecords` is less then or equal to 25) no pagination
  * is needed and the presenter doesn't generate the component data.
  *
  * If pagination is needed, the next step is to determine the type. This is because the paginator is expected to behave
@@ -100,7 +100,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * When the current page is one of the last 4 pages we define the pagination type as 'complex end'. If, for example,
  * the number of pages is 42 and the current page is 39 we'll generate the following paginator.
  *
- * `<- Previous 1 ... 38 [39] 50 41 42 Next ->`
+ * `<- Previous 1 ... 38 [39] 40 41 42 Next ->`
  *
  * @param {number} numberOfRecords - the total number of records or results of the thing being paginated
  * @param {number} selectedPageNumber - the page of results selected for viewing
