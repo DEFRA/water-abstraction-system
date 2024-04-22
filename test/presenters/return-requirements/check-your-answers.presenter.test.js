@@ -36,9 +36,11 @@ describe('Check Your Answers presenter', () => {
   describe('when the no-returns-required journey was selected', () => {
     it('correctly presents the data with notes', () => {
       session.data.journey = 'no-returns-required'
-      session.data.note = 'Note attached to requirement'
+      session.data.note = {
+        content: 'Note attached to requirement',
+        userEmail: 'carol.shaw@atari.com'
+      }
       session.data.reason = 'returns-exception'
-      session.data.userEmail = 'carol.shaw@atari.com'
 
       const result = CheckYourAnswersPresenter.go(session)
 
@@ -63,10 +65,10 @@ describe('Check Your Answers presenter', () => {
       expect(result).to.equal({
         journey: 'returns-required',
         licenceRef: '01/123',
-        note: undefined,
+        note: '',
         reason: 'major-change',
         startDate: '8 February 2008',
-        userEmail: undefined
+        userEmail: ''
       }, { skip: ['id'] })
     })
   })

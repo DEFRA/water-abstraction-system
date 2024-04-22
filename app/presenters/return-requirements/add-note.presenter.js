@@ -6,15 +6,15 @@
  */
 
 function go (session) {
-  const { id, data } = session
+  const { id, data: { note } } = session
 
-  const pageData = {
+  const data = {
     id,
     licenceRef: session.data.licence.licenceRef,
-    note: data.note.content || ''
+    note: note ? note.content : ''
   }
 
-  return pageData
+  return data
 }
 
 module.exports = {

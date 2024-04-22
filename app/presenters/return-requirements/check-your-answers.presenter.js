@@ -14,8 +14,8 @@ function go (session) {
     licenceRef: session.data.licence.licenceRef,
     reason: session.data.reason,
     startDate: _startDate(session.data),
-    note: session.data.note.content,
-    userEmail: session.data.note.userEmail
+    note: session.data.note ? session.data.note.content : '',
+    userEmail: session.data.note ? session.data.note.userEmail : ''
   }
 
   return data
