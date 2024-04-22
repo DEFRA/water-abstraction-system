@@ -16,6 +16,8 @@ const config = {
   port: process.env.POSTGRES_PORT,
   database: process.env.POSTGRES_DB,
   testDatabase: process.env.POSTGRES_DB_TEST,
+  // Used by any service which uses paging in its query and by the PaginatorPresenter
+  defaultPageSize: parseInt(process.env.DEFAULT_PAGE_SIZE) || 25,
   // Only used when seeding our dev/test user records
   defaultUserPassword: process.env.DEFAULT_USER_PASSWORD
 }
