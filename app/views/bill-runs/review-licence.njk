@@ -21,10 +21,10 @@
 
 {% block content %}
   {# Licence updated banner #}
-  {% if licenceUpdated %}
+  {% if licenceUpdatedMessage %}
     {{ govukNotificationBanner({
       titleText: 'Licence updated',
-      text: licenceUpdated
+      text: licenceUpdatedMessage
     }) }}
   {% endif %}
 
@@ -60,6 +60,17 @@
     }) }}
   {% endif %}
 
+  {# Change status #}
+  {% if licence.status === 'ready' %}
+    {% set statusButtonText = 'Put licence into Review' %}
+    {% set statusButtonValue = 'review' %}
+    {% set statusButtonClass = "govuk-button--secondary" %}
+  {% else %}
+    {% set statusButtonText = 'Confirm licence is ready' %}
+    {% set statusButtonValue = 'ready' %}
+    {% set statusButtonClass = "govuk-button--primary" %}
+  {% endif %}
+
   {# Mark progress #}
   {% if licence.progress %}
     {% set progressButtonText = 'Remove progress mark' %}
@@ -70,6 +81,15 @@
   {% endif %}
 
   <form method="post">
+    <div class="govuk-button-group">
+    {{ govukButton({
+      text: statusButtonText,
+      classes: statusButtonClass,
+      preventDoubleClick: true,
+      name: "licenceStatus",
+      value: statusButtonValue
+    }) }}
+
     {{ govukButton({
       text: progressButtonText,
       classes: "govuk-button--secondary",
@@ -77,6 +97,7 @@
       name: "marKProgress",
       value: progressButtonValue
     }) }}
+    </div>
   </form>
 
   {# Charge Periods #}
