@@ -36,6 +36,14 @@
   {% endif %}
 {% endset %}
 
+{% set reasonLink %}
+  {% if journey == 'no-returns-required' %}
+    {{ baseURL }}/no-returns-required
+  {% elif journey == 'returns-required' %}
+    {{ baseURL }}/reason
+  {% endif %}
+{% endset %}
+
 {% block content %}
   {# Main heading #}
   <div class="govuk-body">
@@ -80,7 +88,7 @@
               actions: {
                 items: [
                   {
-                    href: baseURL + "/no-returns-required",
+                    href: reasonLink,
                     text: "Change",
                     visuallyHiddenText: "the reason for the return requirement"
                   }
