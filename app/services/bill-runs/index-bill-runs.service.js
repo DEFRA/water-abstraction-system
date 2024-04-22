@@ -31,7 +31,7 @@ async function go (page) {
   ])
 
   const billRuns = IndexBillRunsPresenter.go(fetchedBillRunResult.results)
-  const pagination = PaginatorPresenter.go(fetchedBillRunResult.total, selectedPageNumber)
+  const pagination = PaginatorPresenter.go(fetchedBillRunResult.total, selectedPageNumber, '/system/bill-runs')
 
   const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
 
