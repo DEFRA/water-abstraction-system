@@ -8,6 +8,9 @@ const routes = [
     path: '/bill-runs',
     handler: BillRunsController.create,
     options: {
+      plugins: {
+        crumb: false
+      },
       app: {
         plainOutput: true
       },
