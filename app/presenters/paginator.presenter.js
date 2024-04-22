@@ -104,18 +104,19 @@ const COMPLEX_END_PAGINATOR = 'end'
  *
  * @param {number} numberOfRecords - the total number of records or results of the thing being paginated
  * @param {number} selectedPageNumber - the page of results selected for viewing
+ * @param {string} path - the URL path the paginator should use, for example, `'/system/bill-runs'`
  *
  * @returns {Object} if no pagination is needed just the `numberOfPages: 1` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go (numberOfRecords, selectedPageNumber) {
+function go (numberOfRecords, selectedPageNumber, path) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
 
   if (numberOfPages === 1) {
     return { numberOfPages }
   }
 
-  const component = _component(selectedPageNumber, numberOfPages)
+  const component = _component(selectedPageNumber, numberOfPages, path)
 
   return {
     component,
@@ -123,60 +124,60 @@ function go (numberOfRecords, selectedPageNumber) {
   }
 }
 
-function _component (selectedPageNumber, numberOfPages) {
-  const items = _items(selectedPageNumber, numberOfPages)
+function _component (selectedPageNumber, numberOfPages, path) {
+  const items = _items(selectedPageNumber, numberOfPages, path)
 
   const component = { items }
 
   if (selectedPageNumber !== 1) {
-    component.previous = { href: `/system/bill-runs?page=${selectedPageNumber - 1}` }
+    component.previous = { href: `${path}?page=${selectedPageNumber - 1}` }
   }
 
   if (selectedPageNumber !== numberOfPages) {
-    component.next = { href: `/system/bill-runs?page=${selectedPageNumber + 1}` }
+    component.next = { href: `${path}?page=${selectedPageNumber + 1}` }
   }
 
   return component
 }
 
-function _complexPaginatorEnd (selectedPageNumber, numberOfPages) {
+function _complexPaginatorEnd (selectedPageNumber, numberOfPages, path) {
   const items = []
 
-  items.push(_item(1, selectedPageNumber))
+  items.push(_item(1, selectedPageNumber, path))
   items.push({ ellipsis: true })
-  items.push(_item(numberOfPages - 4, selectedPageNumber))
-  items.push(_item(numberOfPages - 3, selectedPageNumber))
-  items.push(_item(numberOfPages - 2, selectedPageNumber))
-  items.push(_item(numberOfPages - 1, selectedPageNumber))
-  items.push(_item(numberOfPages, selectedPageNumber))
+  items.push(_item(numberOfPages - 4, selectedPageNumber, path))
+  items.push(_item(numberOfPages - 3, selectedPageNumber, path))
+  items.push(_item(numberOfPages - 2, selectedPageNumber, path))
+  items.push(_item(numberOfPages - 1, selectedPageNumber, path))
+  items.push(_item(numberOfPages, selectedPageNumber, path))
 
   return items
 }
 
-function _complexPaginatorMiddle (selectedPageNumber, numberOfPages) {
+function _complexPaginatorMiddle (selectedPageNumber, numberOfPages, path) {
   const items = []
 
-  items.push(_item(1, selectedPageNumber))
+  items.push(_item(1, selectedPageNumber, path))
   items.push({ ellipsis: true })
-  items.push(_item(selectedPageNumber - 1, selectedPageNumber))
-  items.push(_item(selectedPageNumber, selectedPageNumber))
-  items.push(_item(selectedPageNumber + 1, selectedPageNumber))
+  items.push(_item(selectedPageNumber - 1, selectedPageNumber, path))
+  items.push(_item(selectedPageNumber, selectedPageNumber, path))
+  items.push(_item(selectedPageNumber + 1, selectedPageNumber, path))
   items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, selectedPageNumber))
+  items.push(_item(numberOfPages, selectedPageNumber, path))
 
   return items
 }
 
-function _complexPaginatorStart (selectedPageNumber, numberOfPages) {
+function _complexPaginatorStart (selectedPageNumber, numberOfPages, path) {
   const items = []
 
-  items.push(_item(1, selectedPageNumber))
-  items.push(_item(2, selectedPageNumber))
-  items.push(_item(3, selectedPageNumber))
-  items.push(_item(4, selectedPageNumber))
-  items.push(_item(5, selectedPageNumber))
+  items.push(_item(1, selectedPageNumber, path))
+  items.push(_item(2, selectedPageNumber, path))
+  items.push(_item(3, selectedPageNumber, path))
+  items.push(_item(4, selectedPageNumber, path))
+  items.push(_item(5, selectedPageNumber, path))
   items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, selectedPageNumber))
+  items.push(_item(numberOfPages, selectedPageNumber, path))
 
   return items
 }
@@ -197,41 +198,41 @@ function _paginatorType (selectedPageNumber, numberOfPages) {
   return COMPLEX_MIDDLE_PAGINATOR
 }
 
-function _simplePaginator (selectedPageNumber, numberOfPages) {
+function _simplePaginator (selectedPageNumber, numberOfPages, path) {
   const items = []
 
   for (let i = 1; i <= numberOfPages; i++) {
-    items.push(_item(i, selectedPageNumber))
+    items.push(_item(i, selectedPageNumber, path))
   }
 
   return items
 }
 
-function _item (pageNumber, selectedPageNumber) {
+function _item (pageNumber, selectedPageNumber, path) {
   return {
     number: pageNumber,
     visuallyHiddenText: `Page ${pageNumber}`,
-    href: pageNumber === 1 ? '/system/bill-runs' : `/system/bill-runs?page=${pageNumber}`,
+    href: pageNumber === 1 ? path : `${path}?page=${pageNumber}`,
     current: pageNumber === selectedPageNumber
   }
 }
 
-function _items (selectedPageNumber, numberOfPages) {
+function _items (selectedPageNumber, numberOfPages, path) {
   const paginatorType = _paginatorType(selectedPageNumber, numberOfPages)
 
   let items
   switch (paginatorType) {
     case COMPLEX_START_PAGINATOR:
-      items = _complexPaginatorStart(selectedPageNumber, numberOfPages)
+      items = _complexPaginatorStart(selectedPageNumber, numberOfPages, path)
       break
     case COMPLEX_MIDDLE_PAGINATOR:
-      items = _complexPaginatorMiddle(selectedPageNumber, numberOfPages)
+      items = _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path)
       break
     case COMPLEX_END_PAGINATOR:
-      items = _complexPaginatorEnd(selectedPageNumber, numberOfPages)
+      items = _complexPaginatorEnd(selectedPageNumber, numberOfPages, path)
       break
     default:
-      items = _simplePaginator(selectedPageNumber, numberOfPages)
+      items = _simplePaginator(selectedPageNumber, numberOfPages, path)
   }
 
   return items
