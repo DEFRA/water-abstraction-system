@@ -114,7 +114,7 @@ async function submitCancel (request, h) {
     // `cancel'.
     await SubmitCancelBillRunService.go(id)
 
-    return h.redirect('/billing/batch/list')
+    return h.redirect('/system/bill-runs')
   } catch (error) {
     return Boom.badImplementation(error.message)
   }

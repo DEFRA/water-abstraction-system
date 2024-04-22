@@ -247,7 +247,7 @@ describe('Bill Runs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/billing/batch/list')
+          expect(response.headers.location).to.equal('/system/bill-runs')
         })
       })
 
