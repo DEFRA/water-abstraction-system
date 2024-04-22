@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AddNotePresenter = require('../../../app/presenters/return-requirements/add-note.presenter.js')
 
-describe('Add Note presenter', () => {
+describe.only('Add Note presenter', () => {
   let session
 
   beforeEach(() => {
@@ -22,23 +22,31 @@ describe('Add Note presenter', () => {
           licenceRef: '01/123',
           licenceHolder: 'Jane Doe'
         },
-        note: {
-          content: 'Note attached to return requirement',
-          userEmail: 'jane.doe@atari.com'
-        }
+        note: ''
       }
     }
   })
 
   describe('when provided with a populated session', () => {
-    it('correctly presents the data', () => {
+    it('correctly presents the data with a note', () => {
       const result = AddNotePresenter.go(session)
 
-      expect(result).to.equal({
-        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licenceRef: '01/123',
-        note: 'Note attached to return requirement'
-      })
+      expect(result.id).to.be.equal('f1288f6c-8503-4dc1-b114-75c408a14bd0')
+      expect(result.licenceRef).to.be.equal('01/123')
+      expect(result.note).to.be.empty()
+    })
+  })
+
+  describe('when provided with a populated session', () => {
+    it('correctly presents the data without notes', () => {
+      session.data.note = {
+        content: 'Note attached to return requirement'
+      }
+      const result = AddNotePresenter.go(session)
+
+      expect(result.id).to.be.equal('f1288f6c-8503-4dc1-b114-75c408a14bd0')
+      expect(result.licenceRef).to.be.equal('01/123')
+      expect(result.note).to.be.equal('Note attached to return requirement')
     })
   })
 })

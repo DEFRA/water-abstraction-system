@@ -23,7 +23,6 @@ describe('Check Your Answers presenter', () => {
           licenceHolder: 'Astro Boy'
         },
         journey: '',
-        note: '',
         reason: '',
         startDate: '2008-02-08',
         startDateDay: '08',
@@ -35,10 +34,11 @@ describe('Check Your Answers presenter', () => {
   })
 
   describe('when the no-returns-required journey was selected', () => {
-    it('correctly presents the data', () => {
+    it('correctly presents the data with notes', () => {
       session.data.journey = 'no-returns-required'
       session.data.note = 'Note attached to requirement'
       session.data.reason = 'returns-exception'
+      session.data.userEmail = 'carol.shaw@atari.com'
 
       const result = CheckYourAnswersPresenter.go(session)
 
@@ -47,15 +47,15 @@ describe('Check Your Answers presenter', () => {
         licenceRef: '01/123',
         note: 'Note attached to requirement',
         reason: 'returns-exception',
-        startDate: '8 February 2008'
+        startDate: '8 February 2008',
+        userEmail: 'carol.shaw@atari.com'
       }, { skip: ['id'] })
     })
   })
 
   describe('when the returns-required journey was selected', () => {
-    it('correctly presents the data', () => {
+    it('correctly presents the data without notes', () => {
       session.data.journey = 'returns-required'
-      session.data.note = 'Note attached to requirement'
       session.data.reason = 'major-change'
 
       const result = CheckYourAnswersPresenter.go(session)
@@ -63,9 +63,10 @@ describe('Check Your Answers presenter', () => {
       expect(result).to.equal({
         journey: 'returns-required',
         licenceRef: '01/123',
-        note: 'Note attached to requirement',
+        note: undefined,
         reason: 'major-change',
-        startDate: '8 February 2008'
+        startDate: '8 February 2008',
+        userEmail: undefined
       }, { skip: ['id'] })
     })
   })
