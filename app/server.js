@@ -15,6 +15,7 @@ const RequestNotifierPlugin = require('./plugins/request-notifier.plugin.js')
 const RouterPlugin = require('./plugins/router.plugin.js')
 const StopPlugin = require('./plugins/stop.plugin.js')
 const ViewsPlugin = require('./plugins/views.plugin.js')
+const YarPlugin = require('./plugins/yar.plugin.js')
 
 const ServerConfig = require('../config/server.config.js')
 
@@ -24,6 +25,7 @@ const registerPlugins = async (server) => {
   await server.register(StopPlugin)
   await server.register(require('@hapi/inert'))
   await server.register(require('@hapi/cookie'))
+  await server.register(YarPlugin)
   await server.register(AuthPlugin)
   await server.register(RouterPlugin)
   await server.register(HapiPinoPlugin())
