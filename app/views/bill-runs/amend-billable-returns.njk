@@ -4,7 +4,6 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 
 {% block breadcrumbs %}
@@ -16,12 +15,6 @@
 {% endblock %}
 
 {% set quantityInputHTML %}
-  {% if error %}
-    {% set errorClass = 'govuk-input--error' %}
-  {% else %}
-    {% set errorClass = '' %}
-  {% endif %}
-
   {{ govukInput({
   id: "custom-quantity-input",
   name: "customQuantity",
