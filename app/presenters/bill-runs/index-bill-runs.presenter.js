@@ -52,6 +52,10 @@ function go (billRuns) {
 }
 
 function _link (billRunId, status) {
+  if (status === 'cancel') {
+    return null
+  }
+
   if (status === 'review') {
     return `/system/bill-runs/${billRunId}/review`
   }

@@ -57,9 +57,15 @@
           {% set rowIndex = loop.index0 %}
 
 
-          {# Generate the link to view the bill run #}
+          {# Link to view the bill run #}
           {% set viewLink %}
-            <a class="govuk-link" href="{{ billRun.link }}">{{ billRun.createdAt }} <span class="govuk-visually-hidden">View bill run {{ billRun.number }}</span></a>
+            {# If the link is null it is because the bill run is cancelling so we do not want to display a link #}
+            {% if billRun.link %}
+              <a class="govuk-link" href="{{ billRun.link }}">{{ billRun.createdAt }} <span class="govuk-visually-hidden">View bill run {{ billRun.number }}</span></a>
+            {% else %}
+              {{ billRun.createdAt }}
+            {% endif %}
+
             {% if billRun.scheme == 'alcs' %}
               <div class="govuk-body-s govuk-!-margin-0">Old charge scheme</div>
             {% endif %}

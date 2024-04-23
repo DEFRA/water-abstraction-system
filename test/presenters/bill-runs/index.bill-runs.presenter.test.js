@@ -63,6 +63,19 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
+      describe("when a bill run has the status 'cancel'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'cancel'
+        })
+
+        it('does not generate a href (returns null)', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.be.null()
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
       describe("when a bill run does not have the status 'review'", () => {
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns)
