@@ -44,7 +44,7 @@ const VALID_VALUES = [
   'gravity-fill',
   'transfer-re-abstraction-scheme',
   'two-part-tariff',
-  '56-returns-exceptions',
+  '56-returns-exception',
   'none'
 ]
 

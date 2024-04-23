@@ -19,7 +19,7 @@ describe('Agreements Exception validator', () => {
         agreementsExceptions: [
           'gravity-fill',
           'two-part-tariff',
-          '56-returns-exceptions'
+          '56-returns-exception'
         ]
       }
     })
@@ -30,7 +30,7 @@ describe('Agreements Exception validator', () => {
       expect(result.value.agreementsExceptions).to.equal([
         'gravity-fill',
         'two-part-tariff',
-        '56-returns-exceptions'
+        '56-returns-exception'
       ])
 
       expect(result.error).not.to.exist()

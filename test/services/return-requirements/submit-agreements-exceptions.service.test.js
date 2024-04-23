@@ -43,7 +43,7 @@ describe('Submit Agreements and Exceptions service', () => {
           agreementsExceptions: [
             'gravity-fill',
             'two-part-tariff',
-            '56-returns-exceptions'
+            '56-returns-exception'
           ]
         }
       })
@@ -56,7 +56,7 @@ describe('Submit Agreements and Exceptions service', () => {
         expect(refreshedSession.data.agreementsExceptions).to.equal([
           'gravity-fill',
           'two-part-tariff',
-          '56-returns-exceptions'
+          '56-returns-exception'
         ])
       })
 
