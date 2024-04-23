@@ -48,22 +48,26 @@
       items: [
         {
           value: "gravity-fill",
-          text: "Gravity fill"
+          text: "Gravity fill",
+          checked: "gravity-fill" in agreementsExceptions
         },
         {
           value: "transfer-re-abstraction-scheme",
-          text: "Transfer re-abstraction scheme"
+          text: "Transfer re-abstraction scheme",
+          checked: "transfer-re-abstraction-scheme" in agreementsExceptions
         },
         {
           value: "two-part-tariff",
           text: "Two-part tarrif",
+          checked: "two-part-tariff" in agreementsExceptions,
           hint: {
             text: "requires daily collection"
           }
         },
         {
           value: "56-returns-exception",
-          text: "56 returns exception"
+          text: "56 returns exception",
+          checked: "56-returns-exception" in agreementsExceptions
         },
         {
           divider: "or"
@@ -71,6 +75,7 @@
         {
           value: "none",
           text: "None",
+          checked: "none" in agreementsExceptions,
           behaviour: "exclusive"
         }
       ]
