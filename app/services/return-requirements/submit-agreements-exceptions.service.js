@@ -24,7 +24,6 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The page data for the agreements and exceptions page
  */
 async function go (sessionId, payload) {
-  console.log('🚀🚀🚀 ~ payload:', payload)
   const session = await SessionModel.query().findById(sessionId)
 
   _handleOneOptionSelected(payload)
