@@ -16,18 +16,6 @@
 {% endblock %}
 
 {% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: 'There is a problem',
-      errorList: [
-        {
-          text: error.text,
-          href: '#note'
-        }
-      ]
-    }) }}
-  {% endif %}
-
   {# Main heading #}
   {% set pageHeader %}
     <span class="govuk-heading-l govuk-!-margin-bottom-3">
@@ -48,7 +36,10 @@
         },
         hint: {
           text: "Provide a short explanation about the setup of these requirements for returns."
-        }
+        },
+        errorMessage: {
+          text: error.text
+        } if error
       }) }}
       {{ govukButton({ text: "Confirm" }) }}
     </div>
