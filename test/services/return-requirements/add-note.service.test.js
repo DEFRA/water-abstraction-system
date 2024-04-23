@@ -45,12 +45,13 @@ describe('Add Note service', () => {
       const result = await AddNoteService.go(session.id)
 
       expect(result).to.equal({
+        id: session.id,
         activeNavBar: 'search',
         checkYourAnswersVisited: true,
         pageTitle: 'Add a note',
         licenceRef: '01/ABC',
         note: ''
-      }, { skip: ['id'] })
+      })
     })
   })
 })

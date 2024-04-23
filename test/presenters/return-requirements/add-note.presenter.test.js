@@ -32,24 +32,35 @@ describe('Add Note presenter', () => {
       const result = AddNotePresenter.go(session)
 
       expect(result).to.be.equal({
+        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceRef: '01/123',
         note: ''
-      }, { skip: ['id'] })
+      })
     })
   })
 
-  describe('when provided with a populated session', () => {
-    it('correctly presents the data with a note', () => {
-      session.data.note = {
-        content: 'Note attached to return requirement',
-        userEmail: 'carol.shaw@atari.com'
-      }
-      const result = AddNotePresenter.go(session)
+  describe("the 'note' property", () => {
+    describe('when there is a note', () => {
+      beforeEach(() => {
+        session.data.note = {
+          content: 'Note attached to return requirement',
+          userEmail: 'carol.shaw@atari.com'
+        }
+      })
 
-      expect(result).to.be.equal({
-        licenceRef: '01/123',
-        note: 'Note attached to return requirement'
-      }, { skip: ['id'] })
+      it('returns the contents of the note', () => {
+        const result = AddNotePresenter.go(session)
+
+        expect(result.note).to.equal('Note attached to return requirement')
+      })
+    })
+
+    describe('when there is no note', () => {
+      it('returns an empty string', () => {
+        const result = AddNotePresenter.go(session)
+
+        expect(result.note).to.equal('')
+      })
     })
   })
 })

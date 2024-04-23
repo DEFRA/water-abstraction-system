@@ -34,7 +34,6 @@ describe('Submit Add Note service', () => {
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'no-returns-required',
-        note: '',
         returnsRequired: 'new-licence'
       }
     })
@@ -70,78 +69,22 @@ describe('Submit Add Note service', () => {
     })
 
     describe('with an invalid payload', () => {
-      describe('because the user has not entered any text', () => {
-        beforeEach(() => {
-          payload = {}
-        })
-
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload, user)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload, user)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            licenceRef: '01/ABC',
-            note: '',
-            pageTitle: 'Add a note'
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload, user)
-
-          expect(result.error).to.equal({
-            text: 'Text must be entered'
-          })
-        })
+      beforeEach(() => {
+        payload = {}
       })
 
-      describe('because the user has entered too much text', () => {
-        beforeEach(() => {
-          payload = {
-            note: `Lorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elit
+      it('returns page data with an error', async () => {
+        const result = await SubmitAddNoteService.go(session.id, payload, user)
 
-              Lorem ipsum dolor sit amet consectetur adipiscing elit
-
-              Lorem ipsum dolor sit amet consectetur adipiscing elit
-
-              Lorem ipsum dolor sit amet consectetur adipiscing elit
-              Lorem ipsum dolor sit amet consectetur adipiscing elit
-              Lorem ipsum dolor sit amet consectetur adipiscing elit
-
-              Lorem ipsum dolor sit amet consectetur adipiscing elit
-              Lorem ipsum dolor sit amet consectetur adipiscing elit`
-          }
-        })
-
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload, user)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload, user)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            licenceRef: '01/ABC',
-            note: '',
-            pageTitle: 'Add a note'
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload, user)
-
-          expect(result.error).to.equal({
-            text: 'Textarea should have a value with character count less than 500'
-          })
+        expect(result).to.equal({
+          id: session.id,
+          activeNavBar: 'search',
+          error: {
+            text: 'Enter details'
+          },
+          licenceRef: '01/ABC',
+          note: '',
+          pageTitle: 'Add a note'
         })
       })
     })

@@ -12,10 +12,10 @@ function go (session) {
     id: session.id,
     journey: session.data.journey,
     licenceRef: session.data.licence.licenceRef,
+    note: session.data.note ? session.data.note.content : '',
     reason: session.data.reason,
     startDate: _startDate(session.data),
-    note: session.data.note ? session.data.note.content : '',
-    userEmail: session.data.note ? session.data.note.userEmail : ''
+    userEmail: session.data.note ? session.data.note.userEmail : 'No notes added'
   }
 
   return data

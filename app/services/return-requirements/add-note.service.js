@@ -13,7 +13,7 @@ const SessionModel = require('../../models/session.model.js')
  * Supports generating the data needed for the add-note page in the return requirements setup journey. It
  * fetches the current session record and combines it with textarea information needed for the form.
  *
- * @param {string} id - The UUID for return requirement setup session record
+ * @param {string} sessionId - The UUID for return requirement setup session record
  *
  * @returns {Promise<Object>} The view data for the add-note page
  */

@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AddNoteValidator = require('../../../app/validators/return-requirements/add-note.validator.js')
 
-describe('AddNote validator', () => {
+describe('Add Note validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
       const result = AddNoteValidator.go({ note: 'Note added to return requirment' })
@@ -20,14 +20,14 @@ describe('AddNote validator', () => {
     })
   })
 
-  describe('when valid data is provided', () => {
+  describe('when invalid data is provided', () => {
     describe("because no 'note' is given", () => {
       it('fails validation', () => {
         const result = AddNoteValidator.go({ note: '' })
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Text must be entered')
+        expect(result.error.details[0].message).to.equal('Enter details')
       })
     })
 
@@ -49,7 +49,7 @@ describe('AddNote validator', () => {
         })
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Textarea should have a value with character count less than 500')
+        expect(result.error.details[0].message).to.equal('Enter no more than 500 characters')
       })
     })
   })
