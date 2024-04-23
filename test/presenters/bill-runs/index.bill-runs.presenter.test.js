@@ -50,11 +50,26 @@ describe('Index Bill Runs presenter', () => {
     })
 
     describe("the 'link' property", () => {
-      it('generates the href needed to link to the bill run', () => {
-        const results = IndexBillRunsPresenter.go(billRuns)
+      describe("when a bill run has the status 'review'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'review'
+        })
 
-        expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-        expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        it('generates the href needed to link to the bill run review', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b/review')
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run does not have the status 'review'", () => {
+        it('generates the href needed to link to the bill run', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
       })
     })
   })
