@@ -34,8 +34,6 @@ function go (billRuns) {
       status
     } = billRun
 
-    const type = formatBillRunType(batchType, scheme, summer)
-
     return {
       id,
       createdAt: formatLongDate(createdAt),
@@ -46,7 +44,7 @@ function go (billRuns) {
       scheme,
       status,
       total: formatMoney(netTotal, true),
-      type
+      type: formatBillRunType(batchType, scheme, summer)
     }
   })
 }
