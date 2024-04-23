@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAgreementsExceptionsService = require('../../../app/services/return-requirements/submit-agreements-exceptions.service.js')
 
-describe.only('Submit Agreements and Exceptions service', () => {
+describe('Submit Agreements and Exceptions service', () => {
   let payload
   let session
 
@@ -40,27 +40,31 @@ describe.only('Submit Agreements and Exceptions service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          agreementsExceptions: 'gravity-fill'
+          agreementsExceptions: [
+            'gravity-fill',
+            'two-part-tariff',
+            '56-returns-exceptions'
+          ]
         }
       })
-    })
 
-    it('saves the submitted value', async () => {
-      await SubmitAgreementsExceptionsService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitAgreementsExceptionsService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
+        const refreshedSession = await session.$query()
 
-      expect(refreshedSession.data.agreementsExceptions).to.equal({
-        agreementsExceptions: [
-          'gravity-fill'
-        ]
+        expect(refreshedSession.data.agreementsExceptions).to.equal([
+          'gravity-fill',
+          'two-part-tariff',
+          '56-returns-exceptions'
+        ])
       })
-    })
 
-    it('returns an empty object (no page data needed for a redirect)', async () => {
-      const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
+      it('returns an empty object (no page data needed for a redirect)', async () => {
+        const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
 
-      expect(result).to.equal({})
+        expect(result).to.equal({})
+      })
     })
   })
 
@@ -89,15 +93,13 @@ describe.only('Submit Agreements and Exceptions service', () => {
           agreementsExceptions: ''
         }, { skip: ['id', 'error'] })
       })
-    })
 
-    it('returns page data with an error for the data input form element', async () => {
-      const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
+      it('returns page data with an error for the data input form element', async () => {
+        const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
 
-      expect(result.error).to.equal({
-        text: {
-          message: 'Select agreements and exceptions for the requirements for returns'
-        }
+        expect(result.error).to.equal({
+          text: 'Select if there are any agreements and exceptions needed for the return requirements'
+        })
       })
     })
   })
