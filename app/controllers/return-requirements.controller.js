@@ -308,6 +308,10 @@ async function submitReason (request, h) {
     return h.view('return-requirements/reason.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/setup`)
 }
 

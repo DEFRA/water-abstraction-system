@@ -38,7 +38,7 @@ async function create (request, h) {
   try {
     await CreateService.go(request.auth.credentials.user, results)
 
-    return h.redirect('/billing/batch/list')
+    return h.redirect('/system/bill-runs')
   } catch (error) {
     return Boom.badImplementation(error.message)
   }
