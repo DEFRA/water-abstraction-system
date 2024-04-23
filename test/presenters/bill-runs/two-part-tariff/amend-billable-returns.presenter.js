@@ -53,36 +53,9 @@ function _reviewChargeElementData () {
     reviewChargeReferenceId: '9e5d87d7-073e-420e-b12d-73ca220dd8ef',
     chargeElementId: 'b345f1f1-496b-4049-a647-6bcd123dcf68',
     allocated: 0,
-    chargeDatesOverlap: false,
-    issues: null,
     status: 'ready',
     createdAt: new Date('2024-04-02'),
     updatedAt: new Date('2024-04-02'),
-    reviewReturns: [
-      {
-        id: 'c4cdbfa9-4528-4776-b62f-fa667b797717',
-        reviewLicenceId: '674ffa02-51be-4caa-b25e-cc1fea1ac057',
-        returnId: 'v1:1:01/57/14/1646:15584914:2022-04-01:2023-03-31',
-        returnReference: '10031343',
-        quantity: 0,
-        allocated: 0,
-        underQuery: false,
-        returnStatus: 'completed',
-        nilReturn: false,
-        abstractionOutsidePeriod: false,
-        receivedDate: new Date('2022-06-03'),
-        dueDate: new Date('2022-06-03'),
-        purposes: [{
-          tertiary: { code: '400', description: 'Spray Irrigation - Direct' }
-        }],
-        description: 'Lands at Mosshayne Farm, Exeter & Broadclyst',
-        startDate: new Date('2022-04-01'),
-        endDate: new Date('2022-05-06'),
-        issues: null,
-        createdAt: new Date('2024-04-02'),
-        updatedAt: new Date('2024-04-02')
-      }
-    ],
     chargeElement: {
       description: 'Trickle Irrigation - Direct',
       abstractionPeriodStartDay: 1,

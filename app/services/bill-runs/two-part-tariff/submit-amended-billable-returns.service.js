@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the amend billable returns page
+ * Orchestrates patching the data for the amend billable returns page
  * @module SubmitAmendedBillableReturnsService
 */
 
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
 /**
- * Orchestrates validating the data for the amend billable returns page and updating the db value
+ * Orchestrates validating the data for the amend billable returns page and patching the db value
  *
  * @param {String} reviewChargeElementId - The UUID of the review charge element being updated
  * @param {Object} payload - The submitted form data

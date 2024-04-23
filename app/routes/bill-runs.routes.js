@@ -146,7 +146,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Amend the billable return volumes on a charge element'
+      description: 'Submit the amended billable return volumes on a charge element'
     }
   },
   {

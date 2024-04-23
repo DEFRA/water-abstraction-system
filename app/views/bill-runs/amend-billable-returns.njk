@@ -25,7 +25,6 @@
   {{ govukInput({
   id: "custom-quantity-input",
   name: "customQuantity",
-  errorMessage: error.quanitityInputFormElement,
   classes: "govuk-!-width-one-third",
   label: {
     text: "Billable returns quantity"
@@ -41,18 +40,6 @@
 {% endset %}
 
 {% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: 'There is a problem',
-      errorList: [
-        {
-          text: error.message,
-          href: '#billable-volumes-error'
-        }
-      ]
-    }) }}
-  {% endif %}
-
   {% set insertText %}
     <div>
       Financial year {{billRun.financialYear}}
@@ -70,7 +57,6 @@
     <form method="post">
       {{ govukRadios({
           name: 'quantity-options',
-          errorMessage: error.radioFormElement,
           fieldset: {
             legend: {
               html: '<span class="govuk-caption-l">' + chargeElement.description + ' ' +  chargeElement.dates + '</span>' + 'Set the billable returns quantity for this bill run' + secondHeader,
