@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
+const AddNoteService = require('../../app/services/return-requirements/add-note.service.js')
 const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
@@ -64,6 +65,12 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/add-note', () => {
+    beforeEach(async () => {
+      Sinon.stub(AddNoteService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Add a note'
+      })
+    })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('add-note'))
