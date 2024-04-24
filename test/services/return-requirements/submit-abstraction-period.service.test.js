@@ -40,10 +40,10 @@ describe('Submit Abstraction Period service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'from-abstraction-period-day': '01',
-          'from-abstraction-period-month': '12',
-          'to-abstraction-period-day': '02',
-          'to-abstraction-period-month': '7'
+          'start-abstraction-period-day': '01',
+          'start-abstraction-period-month': '12',
+          'end-abstraction-period-day': '02',
+          'end-abstraction-period-month': '7'
         }
       })
 
@@ -53,10 +53,10 @@ describe('Submit Abstraction Period service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.data.abstractionPeriod).to.equal({
-          'to-abstraction-period-day': '02',
-          'from-abstraction-period-day': '01',
-          'to-abstraction-period-month': '7',
-          'from-abstraction-period-month': '12'
+          'end-abstraction-period-day': '02',
+          'start-abstraction-period-day': '01',
+          'end-abstraction-period-month': '7',
+          'start-abstraction-period-month': '12'
         })
       })
 
@@ -90,10 +90,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              fromDay: null,
-              fromMonth: null,
-              toDay: null,
-              toMonth: null
+              startDay: null,
+              startMonth: null,
+              endDay: null,
+              endMonth: null
             }
           }, { skip: ['id', 'error'] })
         })
@@ -103,20 +103,20 @@ describe('Submit Abstraction Period service', () => {
 
           expect(result.error).to.equal({
             text: {
-              fromResult: 'Select the from date of the abstraction period',
-              toResult: 'Select the to date of the abstraction period'
+              startResult: 'Select the start date of the abstraction period',
+              endResult: 'Select the end date of the abstraction period'
             }
           })
         })
       })
 
-      describe('because the user has not inputted a from abstraction period', () => {
+      describe('because the user has not inputted a start abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'from-abstraction-period-day': null,
-            'from-abstraction-period-month': null,
-            'to-abstraction-period-day': '02',
-            'to-abstraction-period-month': '7'
+            'start-abstraction-period-day': null,
+            'start-abstraction-period-month': null,
+            'end-abstraction-period-day': '02',
+            'end-abstraction-period-month': '7'
           }
         })
 
@@ -137,10 +137,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              fromDay: null,
-              fromMonth: null,
-              toDay: '02',
-              toMonth: '7'
+              startDay: null,
+              startMonth: null,
+              endDay: '02',
+              endMonth: '7'
             }
           }, { skip: ['id', 'error'] })
         })
@@ -150,20 +150,20 @@ describe('Submit Abstraction Period service', () => {
 
           expect(result.error).to.equal({
             text: {
-              fromResult: 'Select the from date of the abstraction period',
-              toResult: null
+              startResult: 'Select the start date of the abstraction period',
+              endResult: null
             }
           })
         })
       })
 
-      describe('because the user has not inputted a to abstraction period', () => {
+      describe('because the user has not inputted an end abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'from-abstraction-period-day': '08',
-            'from-abstraction-period-month': '12',
-            'to-abstraction-period-day': null,
-            'to-abstraction-period-month': null
+            'start-abstraction-period-day': '08',
+            'start-abstraction-period-month': '12',
+            'end-abstraction-period-day': null,
+            'end-abstraction-period-month': null
           }
         })
 
@@ -184,10 +184,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              fromDay: '08',
-              fromMonth: '12',
-              toDay: null,
-              toMonth: null
+              startDay: '08',
+              startMonth: '12',
+              endDay: null,
+              endMonth: null
             }
           }, { skip: ['id', 'error'] })
         })
@@ -197,20 +197,20 @@ describe('Submit Abstraction Period service', () => {
 
           expect(result.error).to.equal({
             text: {
-              fromResult: null,
-              toResult: 'Select the to date of the abstraction period'
+              startResult: null,
+              endResult: 'Select the end date of the abstraction period'
             }
           })
         })
       })
 
-      describe('because the user has inputted invalid from and to abstraction periods', () => {
+      describe('because the user has inputted invalid start and end abstraction periods', () => {
         beforeEach(() => {
           payload = {
-            'from-abstraction-period-day': 'abc',
-            'from-abstraction-period-month': '123',
-            'to-abstraction-period-day': 'abc',
-            'to-abstraction-period-month': '123'
+            'start-abstraction-period-day': 'abc',
+            'start-abstraction-period-month': '123',
+            'end-abstraction-period-day': 'abc',
+            'end-abstraction-period-month': '123'
           }
         })
 
@@ -231,10 +231,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              fromDay: 'abc',
-              fromMonth: '123',
-              toDay: 'abc',
-              toMonth: '123'
+              startDay: 'abc',
+              startMonth: '123',
+              endDay: 'abc',
+              endMonth: '123'
             }
           }, { skip: ['id', 'error'] })
         })
@@ -244,20 +244,20 @@ describe('Submit Abstraction Period service', () => {
 
           expect(result.error).to.equal({
             text: {
-              fromResult: 'Enter a real from date',
-              toResult: 'Enter a real to date'
+              startResult: 'Enter a real start date',
+              endResult: 'Enter a real end date'
             }
           })
         })
       })
 
-      describe('because the user has inputted invalid from abstraction period', () => {
+      describe('because the user has inputted invalid start abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'from-abstraction-period-day': 'abc',
-            'from-abstraction-period-month': '123',
-            'to-abstraction-period-day': '02',
-            'to-abstraction-period-month': '07'
+            'start-abstraction-period-day': 'abc',
+            'start-abstraction-period-month': '123',
+            'end-abstraction-period-day': '02',
+            'end-abstraction-period-month': '07'
           }
         })
 
@@ -278,10 +278,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              fromDay: 'abc',
-              fromMonth: '123',
-              toDay: '02',
-              toMonth: '07'
+              startDay: 'abc',
+              startMonth: '123',
+              endDay: '02',
+              endMonth: '07'
             }
           }, { skip: ['id', 'error'] })
         })
@@ -291,20 +291,20 @@ describe('Submit Abstraction Period service', () => {
 
           expect(result.error).to.equal({
             text: {
-              fromResult: 'Enter a real from date',
-              toResult: null
+              startResult: 'Enter a real start date',
+              endResult: null
             }
           })
         })
       })
 
-      describe('because the user has inputted invalid to abstraction period', () => {
+      describe('because the user has inputted invalid end abstraction period', () => {
         beforeEach(() => {
           payload = {
-            'from-abstraction-period-day': '08',
-            'from-abstraction-period-month': '12',
-            'to-abstraction-period-day': 'abc',
-            'to-abstraction-period-month': '123'
+            'start-abstraction-period-day': '08',
+            'start-abstraction-period-month': '12',
+            'end-abstraction-period-day': 'abc',
+            'end-abstraction-period-month': '123'
           }
         })
 
@@ -325,10 +325,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              fromDay: '08',
-              fromMonth: '12',
-              toDay: 'abc',
-              toMonth: '123'
+              startDay: '08',
+              startMonth: '12',
+              endDay: 'abc',
+              endMonth: '123'
             }
           }, { skip: ['id', 'error'] })
         })
@@ -338,8 +338,8 @@ describe('Submit Abstraction Period service', () => {
 
           expect(result.error).to.equal({
             text: {
-              fromResult: null,
-              toResult: 'Enter a real to date'
+              startResult: null,
+              endResult: 'Enter a real end date'
             }
           })
         })
