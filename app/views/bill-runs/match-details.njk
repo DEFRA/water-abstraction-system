@@ -5,7 +5,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "macros/review-status-tag.njk" import statusTag %}
-
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -16,6 +16,13 @@
 {% endblock %}
 
 {% block content %}
+  {% if showBanner %}
+    {{ govukNotificationBanner({
+      text: "The billable returns for this licence have been updated",
+      titleText: "Element updated"
+    }) }}
+  {% endif %}
+
   <div class="govuk-grid-row govuk-!-margin-bottom-5">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
@@ -97,6 +104,7 @@
     <div class="govuk-grid-column-full">
       {{ govukButton({
         text: "Edit the billable returns",
+        href: "/system/bill-runs/" + billRunId + "/review/" + licenceId + "/match-details/" + chargeElement.chargeElementId + "/amend-billable-returns",
         classes: "govuk-button--secondary"
       }) }}
     </div>
