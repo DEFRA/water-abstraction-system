@@ -125,7 +125,11 @@ async function submitCancel (request, h) {
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  await SubmitAmendedBillableReturnsService.go(reviewChargeElementId, request.payload)
+  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/amend-billable-returns.njk', pageData)
+  }
 
   return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}`)
 }

@@ -4,6 +4,7 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 
 {% block breadcrumbs %}
@@ -16,23 +17,36 @@
 
 {% set quantityInputHTML %}
   {{ govukInput({
-  id: "custom-quantity-input",
-  name: "customQuantity",
-  classes: "govuk-!-width-one-third",
-  label: {
-    text: "Billable returns quantity"
-  },
-  hint: {
-    text: "Enter a number with no more than 6 decimal places. For example, 20.123456"
-  },
-  suffix: {
-    text: "ML"
-  }
+    id: "custom-quantity-input",
+    name: "customQuantity",
+    errorMessage: error.customQuantityInputFormElement,
+    classes: "govuk-!-width-one-third",
+    label: {
+      text: "Billable returns quantity"
+    },
+    hint: {
+      text: "Enter a number with no more than 6 decimal places. For example, 20.123456"
+    },
+    suffix: {
+      text: "ML"
+    }
   }) }}
 
 {% endset %}
 
 {% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.message,
+          href: '#billable-volumes-error'
+        }
+      ]
+    }) }}
+  {% endif %}
+
   {% set insertText %}
     <div>
       Financial year {{billRun.financialYear}}
