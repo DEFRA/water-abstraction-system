@@ -10,6 +10,7 @@ const Boom = require('@hapi/boom')
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
+const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
@@ -59,6 +60,17 @@ async function create (request, h) {
   } catch (error) {
     return Boom.badImplementation(error.message)
   }
+}
+
+async function index (request, h) {
+  const { page } = request.query
+
+  const pageData = await IndexBillRunsService.go(page)
+
+  return h.view('bill-runs/index.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
 }
 
 async function matchDetails (request, h) {
@@ -116,7 +128,7 @@ async function submitCancel (request, h) {
     // `cancel'.
     await SubmitCancelBillRunService.go(id)
 
-    return h.redirect('/billing/batch/list')
+    return h.redirect('/system/bill-runs')
   } catch (error) {
     return Boom.badImplementation(error.message)
   }
@@ -164,6 +176,7 @@ module.exports = {
   amendBillableReturns,
   cancel,
   create,
+  index,
   matchDetails,
   review,
   reviewLicence,

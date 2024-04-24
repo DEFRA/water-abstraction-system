@@ -4,6 +4,19 @@ const BillRunsController = require('../controllers/bill-runs.controller.js')
 
 const routes = [
   {
+    method: 'GET',
+    path: '/bill-runs',
+    handler: BillRunsController.index,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'List all bill runs'
+    }
+  },
+  {
     method: 'POST',
     path: '/bill-runs',
     handler: BillRunsController.create,
