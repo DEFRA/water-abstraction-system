@@ -51,8 +51,8 @@ function _bannerMessage (yar, parsedPayload) {
 }
 
 function _parsePayload (payload) {
-  const markProgress = payload.marKProgress ?? null
-  const licenceStatus = payload.licenceStatus ?? null
+  const markProgress = payload['mark-progress'] ?? null
+  const licenceStatus = payload['licence-status'] ?? null
 
   return {
     progress: markProgress === 'mark',

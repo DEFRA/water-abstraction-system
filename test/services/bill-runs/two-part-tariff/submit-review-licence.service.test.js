@@ -36,7 +36,7 @@ describe('Submit Review Licence Service', () => {
   describe('when called by the status button', () => {
     describe("to set the review licence status to 'review'", () => {
       beforeEach(async () => {
-        payload = { licenceStatus: 'review' }
+        payload = { 'licence-status': 'review' }
 
         reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, status: 'ready' })
       })
@@ -61,7 +61,7 @@ describe('Submit Review Licence Service', () => {
 
     describe("to set the review licence status to 'ready'", () => {
       beforeEach(async () => {
-        payload = { licenceStatus: 'ready' }
+        payload = { 'licence-status': 'ready' }
 
         reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, status: 'review' })
       })
@@ -88,7 +88,7 @@ describe('Submit Review Licence Service', () => {
   describe('when called by the progress button', () => {
     describe('to mark the licence as in progress', () => {
       beforeEach(async () => {
-        payload = { marKProgress: 'mark' }
+        payload = { 'mark-progress': 'mark' }
 
         reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, progress: false })
       })
@@ -113,7 +113,7 @@ describe('Submit Review Licence Service', () => {
 
     describe('to remove the progress mark from the licence', () => {
       beforeEach(async () => {
-        payload = { marKProgress: 'unmark' }
+        payload = { 'mark-progress': 'unmark' }
 
         reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, progress: true })
       })
