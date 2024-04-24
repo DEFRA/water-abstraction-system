@@ -161,9 +161,9 @@ async function view (request, h) {
 }
 
 module.exports = {
+  amendBillableReturns,
   cancel,
   create,
-  amendBillableReturns,
   matchDetails,
   review,
   reviewLicence,
