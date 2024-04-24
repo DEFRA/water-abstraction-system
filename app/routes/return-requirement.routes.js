@@ -96,6 +96,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/cancel-requirements',
+    handler: ReturnRequirementsController.cancelRequirements,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Cancel return requirements'
+    }
+  },
+  // {
+  //   method: 'POST',
+  //   path: '/return-requirements/{sessionId}/cancel-requirements',
+  //   handler: ReturnRequirementsController.submitCancelRequirements,
+  //   options: {
+  //     auth: {
+  //       access: {
+  //         scope: ['billing']
+  //       }
+  //     },
+  //     description: 'Submit cancel return requirements'
+  //   }
+  // },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/check-your-answers',
     handler: ReturnRequirementsController.checkYourAnswers,
     options: {
