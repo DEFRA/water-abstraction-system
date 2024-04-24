@@ -21,6 +21,7 @@ describe('Select Reason service', () => {
     await DatabaseSupport.clean()
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -45,6 +46,7 @@ describe('Select Reason service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        checkYourAnswersVisited: false,
         pageTitle: 'Select the reason for the return requirement',
         licenceRef: '01/ABC'
       }, { skip: ['id'] })
