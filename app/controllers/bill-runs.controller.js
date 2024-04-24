@@ -18,6 +18,7 @@ const SendBillRunService = require('../services/bill-runs/send-bill-run.service.
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
@@ -99,7 +100,7 @@ async function review (request, h) {
 async function reviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
-  const pageData = await ReviewLicenceService.go(billRunId, licenceId, request.payload)
+  const pageData = await ReviewLicenceService.go(billRunId, licenceId)
 
   return h.view('bill-runs/review-licence.njk', {
     pageTitle: `Licence ${pageData.licence.licenceRef}`,
@@ -120,6 +121,18 @@ async function send (request, h) {
   })
 }
 
+async function submitAmendedBillableReturns (request, h) {
+  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
+
+  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload)
+
+  if (pageData.error) {
+    return h.view('bill-runs/amend-billable-returns.njk', pageData)
+  }
+
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}`)
+}
+
 async function submitCancel (request, h) {
   const { id } = request.params
 
@@ -134,16 +147,16 @@ async function submitCancel (request, h) {
   }
 }
 
-async function submitAmendedBillableReturns (request, h) {
-  const { id: billRunId, licenceId, reviewChargeElementId } = request.params
+async function submitReviewLicence (request, h) {
+  const { id: billRunId, licenceId } = request.params
 
-  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload)
+  const pageData = await SubmitReviewLicenceService.go(billRunId, licenceId, request.payload)
 
-  if (pageData.error) {
-    return h.view('bill-runs/amend-billable-returns.njk', pageData)
-  }
-
-  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/match-details/${reviewChargeElementId}`)
+  return h.view('bill-runs/review-licence.njk', {
+    pageTitle: `Licence ${pageData.licence.licenceRef}`,
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
 }
 
 async function submitSend (request, h) {
@@ -183,6 +196,7 @@ module.exports = {
   send,
   submitAmendedBillableReturns,
   submitCancel,
+  submitReviewLicence,
   submitSend,
   view
 }
