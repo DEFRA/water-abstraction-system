@@ -11,135 +11,129 @@ const { expect } = Code
 // Test helpers
 const DatabaseSupport = require('../../../support/database.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
-
-// Things we need to stub
-const FetchReviewLicenceResultsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-licence-results.service.js')
-const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
 // Thing under test
 const SubmitReviewLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 
 describe('Submit Review Licence Service', () => {
+  const billRunId = '1760c5f9-b868-4d77-adb0-961dfc5f5c5d'
+  const licenceId = '7a0388cf-d5e8-4bec-ac5a-bc495d0106b2'
+
+  let payload
+  let reviewLicence
+  let yarStub
+
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    Sinon.stub(FetchReviewLicenceResultsService, 'go').resolves({
-      billRun: 'bill run data',
-      licence: [{ licenceRef: '7/34/10/*S/0084' }]
-    })
-    Sinon.stub(ReviewLicencePresenter, 'go').resolves('page data')
+    yarStub = { flash: Sinon.stub() }
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when there is data to process', () => {
-    const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
-    const licenceId = '082f528e-4ae4-4f41-ba64-b740a0a210ff'
-    const payload = undefined
+  describe('when called by the status button', () => {
+    describe("to set the review licence status to 'review'", () => {
+      beforeEach(async () => {
+        payload = { licenceStatus: 'review' }
 
-    it('will fetch the bill run data and return it once formatted by the presenter', async () => {
-      const result = await SubmitReviewLicenceService.go(billRunId, licenceId, payload)
+        reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, status: 'ready' })
+      })
 
-      expect(result).to.equal('page data')
+      it("updates the review licence record status to 'review'", async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
+
+        const refreshedRecord = await reviewLicence.$query()
+
+        expect(refreshedRecord.status).to.equal('review')
+      })
+
+      it("sets the banner message to 'Licence changed to review.'", async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('banner')
+        expect(bannerMessage).to.equal('Licence changed to review.')
+      })
+    })
+
+    describe("to set the review licence status to 'ready'", () => {
+      beforeEach(async () => {
+        payload = { licenceStatus: 'ready' }
+
+        reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, status: 'review' })
+      })
+
+      it("updates the review licence record status to 'ready'", async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
+
+        const refreshedRecord = await reviewLicence.$query()
+
+        expect(refreshedRecord.status).to.equal('ready')
+      })
+
+      it("sets the banner message to 'Licence changed to ready.'", async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('banner')
+        expect(bannerMessage).to.equal('Licence changed to ready.')
+      })
     })
   })
 
-  describe('when there is data to process after the user clicking the "Confirm licence is ready" button', () => {
-    const payload = { licenceStatus: 'ready' }
-    let billRunId
-    let licenceId
+  describe('when called by the progress button', () => {
+    describe('to mark the licence as in progress', () => {
+      beforeEach(async () => {
+        payload = { marKProgress: 'mark' }
 
-    beforeEach(async () => {
-      const reviewLicence = await ReviewLicenceHelper.add({ status: 'review' })
+        reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, progress: false })
+      })
 
-      billRunId = reviewLicence.billRunId
-      licenceId = reviewLicence.licenceId
+      it('updates the review licence record progress to true', async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
+
+        const refreshedRecord = await reviewLicence.$query()
+
+        expect(refreshedRecord.progress).to.be.true()
+      })
+
+      it("sets the banner message to 'This licence has been marked.'", async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('banner')
+        expect(bannerMessage).to.equal('This licence has been marked.')
+      })
     })
 
-    it('will set `status` to `ready` in the database and return the page data', async () => {
-      const result = await SubmitReviewLicenceService.go(billRunId, licenceId, payload)
-      const reviewLicenceQuery = await ReviewLicenceModel.query()
-        .where('billRunId', billRunId)
-        .andWhere('licenceId', licenceId)
-        .first()
+    describe('to remove the progress mark from the licence', () => {
+      beforeEach(async () => {
+        payload = { marKProgress: 'unmark' }
 
-      expect(reviewLicenceQuery.status).to.equal('ready')
-      expect(result).to.equal('page data')
-    })
-  })
+        reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, progress: true })
+      })
 
-  describe('when there is data to process after the user clicking the "Put licence into Review" button', () => {
-    const payload = { licenceStatus: 'review' }
-    let billRunId
-    let licenceId
+      it('updates the review licence record progress to false', async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
-    beforeEach(async () => {
-      const reviewLicence = await ReviewLicenceHelper.add({ status: 'ready' })
+        const refreshedRecord = await reviewLicence.$query()
 
-      billRunId = reviewLicence.billRunId
-      licenceId = reviewLicence.licenceId
-    })
+        expect(refreshedRecord.progress).to.be.false()
+      })
 
-    it('will set `status` to `review` in the database and return the page data', async () => {
-      const result = await SubmitReviewLicenceService.go(billRunId, licenceId, payload)
-      const reviewLicenceQuery = await ReviewLicenceModel.query()
-        .where('billRunId', billRunId)
-        .andWhere('licenceId', licenceId)
-        .first()
+      it("sets the banner message to 'The progress mark for this licence has been removed.'", async () => {
+        await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
-      expect(reviewLicenceQuery.status).to.equal('review')
-      expect(result).to.equal('page data')
-    })
-  })
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-  describe('when there is data to process after the user clicking the "Mark progress" button', () => {
-    const payload = { marKProgress: 'mark' }
-    let billRunId
-    let licenceId
-
-    beforeEach(async () => {
-      const reviewLicence = await ReviewLicenceHelper.add({ progress: false })
-
-      billRunId = reviewLicence.billRunId
-      licenceId = reviewLicence.licenceId
-    })
-
-    it('will set `progress` to true in the database and return the page data', async () => {
-      const result = await SubmitReviewLicenceService.go(billRunId, licenceId, payload)
-      const reviewLicenceQuery = await ReviewLicenceModel.query()
-        .where('billRunId', billRunId)
-        .andWhere('licenceId', licenceId)
-        .first()
-
-      expect(reviewLicenceQuery.progress).to.be.true()
-      expect(result).to.equal('page data')
-    })
-  })
-
-  describe('when there is data to process after the user clicking the "Remove progress mark" button', () => {
-    const payload = { marKProgress: 'unmark' }
-    let billRunId
-    let licenceId
-
-    beforeEach(async () => {
-      const reviewLicence = await ReviewLicenceHelper.add({ progress: true })
-
-      billRunId = reviewLicence.billRunId
-      licenceId = reviewLicence.licenceId
-    })
-
-    it('will set `progress` to false in the database and return the page data', async () => {
-      const result = await SubmitReviewLicenceService.go(billRunId, licenceId, payload)
-      const reviewLicenceQuery = await ReviewLicenceModel.query()
-        .where('billRunId', billRunId)
-        .andWhere('licenceId', licenceId)
-        .first()
-
-      expect(reviewLicenceQuery.progress).to.be.false()
-      expect(result).to.equal('page data')
+        expect(flashType).to.equal('banner')
+        expect(bannerMessage).to.equal('The progress mark for this licence has been removed.')
+      })
     })
   })
 })
