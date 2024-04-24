@@ -90,6 +90,7 @@ describe('Review Licence presenter', () => {
                 chargeCategory: 'Charge reference 4.6.7',
                 chargeDescription: 'High loss, non-tidal, greater than 15 up to and including 50 ML/yr',
                 totalBillableReturns: '0 ML / 200 ML',
+                chargeReferenceLink: { linkName: 'Change details' },
                 chargeElements: [
                   {
                     elementNumber: 'Element 1 of 1',
@@ -183,6 +184,28 @@ describe('Review Licence presenter', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.matchedReturns[0].returnStatus).to.equal('query')
+        })
+      })
+    })
+
+    describe("the 'adjustments' property", () => {
+      describe('when a charge reference has an aggregate or charge factor adjustment', () => {
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
+
+      describe('when a charge reference does not have an aggregate or charge factor adjustment', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReference.adjustments = { charge: null, aggregate: null }
+        })
+
+        it("changes the chargeReferenceLink to 'View details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('View details')
         })
       })
     })
@@ -346,6 +369,10 @@ function _licenceData () {
           chargeCategory: {
             reference: '4.6.7',
             shortDescription: 'High loss, non-tidal, greater than 15 up to and including 50 ML/yr'
+          },
+          adjustments: {
+            charge: 1,
+            aggregate: null
           }
         },
         reviewChargeElements: [{
