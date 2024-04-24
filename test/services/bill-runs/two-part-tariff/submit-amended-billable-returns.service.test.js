@@ -16,6 +16,8 @@ const ReviewChargeElementModel = require('../../../../app/models/review-charge-e
 const SubmitAmendedBillableReturnsService = require('../../../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 
 describe('Submit Amended Billable Returns Service', () => {
+  const billRunId = 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e'
+  const licenceId = '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
   let payload
   let reviewChargeElement
 
@@ -34,7 +36,7 @@ describe('Submit Amended Billable Returns Service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitAmendedBillableReturnsService.go(reviewChargeElement.id, payload)
+        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
@@ -51,7 +53,7 @@ describe('Submit Amended Billable Returns Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAmendedBillableReturnsService.go(reviewChargeElement.id, payload)
+        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
