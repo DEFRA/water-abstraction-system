@@ -138,6 +138,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
+    handler: BillRunsController.amendBillableReturns,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Amend the billable return volumes on a charge element'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
+    handler: BillRunsController.submitAmendedBillableReturns,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the amended billable return volumes on a charge element'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/send',
     handler: BillRunsController.send,
     options: {
