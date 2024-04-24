@@ -12,16 +12,16 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const SelectReasonService = require('../../../app/services/return-requirements/reason.service.js')
+const AddNoteService = require('../../../app/services/return-requirements/add-note.service.js')
 
-describe('Select Reason service', () => {
+describe('Add Note service', () => {
   let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
+        checkYourAnswersVisited: true,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -36,20 +36,22 @@ describe('Select Reason service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SelectReasonService.go(session.id)
+      const result = await AddNoteService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SelectReasonService.go(session.id)
+      const result = await AddNoteService.go(session.id)
 
       expect(result).to.equal({
+        id: session.id,
         activeNavBar: 'search',
-        checkYourAnswersVisited: false,
-        pageTitle: 'Select the reason for the return requirement',
-        licenceRef: '01/ABC'
-      }, { skip: ['id'] })
+        checkYourAnswersVisited: true,
+        pageTitle: 'Add a note',
+        licenceRef: '01/ABC',
+        note: ''
+      })
     })
   })
 })

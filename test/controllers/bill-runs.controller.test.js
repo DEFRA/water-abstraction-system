@@ -9,16 +9,19 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const AmendBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
+const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
+const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
+const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
-const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -44,6 +47,61 @@ describe('Bill Runs controller', () => {
   })
 
   describe('/bill-runs', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = {
+          method: 'GET',
+          url: '/bill-runs?page=2',
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(IndexBillRunsService, 'go').resolves({
+            billRuns: [{
+              id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+              createdAt: '1 January 2024',
+              link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+              number: 1002,
+              numberOfBills: 7,
+              region: 'Avalon',
+              scheme: 'sroc',
+              status: 'ready',
+              total: '£200.00',
+              type: 'Supplementary'
+            }],
+            busy: 'none',
+            pageTitle: 'Bill runs (page 2 of 30)',
+            pagination: {
+              numberOfPages: 30,
+              component: {
+                previous: { href: '/system/bill-runs?page=1' },
+                next: { href: '/system/bill-runs?page=3' },
+                items: [
+                  { number: 1, visuallyHiddenText: 'Page 1', href: '/system/bill-runs?page=1', current: false },
+                  { number: 2, visuallyHiddenText: 'Page 2', href: '/system/bill-runs?page=2', current: true },
+                  { number: 3, visuallyHiddenText: 'Page 3', href: '/system/bill-runs?page=3', current: false }
+                ]
+              }
+            }
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Bill runs (page 2 of 30)')
+          expect(response.payload).to.contain('Previous')
+          expect(response.payload).to.contain('Next')
+        })
+      })
+    })
+
     describe('POST', () => {
       beforeEach(() => {
         options = _options('POST')
@@ -191,7 +249,7 @@ describe('Bill Runs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/billing/batch/list')
+          expect(response.headers.location).to.equal('/system/bill-runs')
         })
       })
 
@@ -333,7 +391,10 @@ describe('Bill Runs controller', () => {
   describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        options = _options('GET', 'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+        options = _options(
+          'GET',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
+        )
       })
 
       describe('when a request is valid', () => {
@@ -348,6 +409,84 @@ describe('Bill Runs controller', () => {
           expect(response.payload).to.contain('Charge period 1 April 2022 to 31 March 2023')
           expect(response.payload).to.contain('Financial year 2022 to 2023')
           expect(response.payload).to.contain('River Test and tributaries near Fullerton Grange, Andover')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _options(
+          'GET',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns'
+        )
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(AmendBillableReturnsService, 'go').resolves({
+            chargeElement: {
+              description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
+              dates: '25 July 2022 to 29 December 2022',
+              authorisedQuantity: 40
+            },
+            billRun: {
+              financialYear: '2022 to 2023'
+            },
+            chargeVersion: {
+              chargePeriod: '1 April 2022 to 31 March 2023'
+            }
+          })
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('Spray irrigation - storage, Abstraction from borehole at Chipping Norton')
+          expect(response.payload).to.contain('Financial year 2022 to 2023')
+          expect(response.payload).to.contain('Authorised 40ML')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        options = _options(
+          'POST',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-billable-returns'
+        )
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedBillableReturnsService, 'go').resolves(_matchDetailsData())
+        })
+
+        it('redirects to the match details page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/match-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
+          )
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the sending service threw an error', () => {
+          beforeEach(async () => {
+            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(SubmitAmendedBillableReturnsService, 'go').rejects()
+          })
+
+          it('returns the error page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          })
         })
       })
     })
@@ -472,6 +611,26 @@ function _licenceReviewData () {
     ],
     unmatchedReturns: [],
     chargeData: []
+  }
+}
+
+function _matchDetailsData () {
+  return {
+    billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
+    financialYear: '2022 to 2023',
+    chargePeriod: '1 April 2022 to 5 June 2022',
+    licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
+    showBanner: true,
+    chargeElement: {
+      chargeElementId: 'b4d70c89-de1b-4f68-a47f-832b338ac044',
+      description: 'Trickle Irrigation - Direct',
+      dates: ['1 April 2022 to 5 June 2022'],
+      status: 'ready',
+      billableVolume: 0,
+      authorisedVolume: 200,
+      issues: []
+    },
+    matchedReturns: []
   }
 }
 
