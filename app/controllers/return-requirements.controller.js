@@ -7,6 +7,7 @@
 
 const AddNoteService = require('../services/return-requirements/add-note.service.js')
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
+const CancelRequirementsService = require('../services/return-requirements/cancel-requirements.service.js')
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
@@ -72,6 +73,15 @@ async function approved (request, h) {
     activeNavBar: 'search',
     pageTitle: 'Returns requirements approved',
     licenceId
+  })
+}
+
+async function cancelRequirements (request, h) {
+  const { sessionId } = request.params
+  const pageData = await CancelRequirementsService.go(sessionId)
+
+  return h.view('return-requirements/cancel-requirements.njk', {
+    ...pageData
   })
 }
 
@@ -376,6 +386,7 @@ module.exports = {
   addNote,
   agreementsExceptions,
   approved,
+  cancelRequirements,
   checkYourAnswers,
   existing,
   frequencyCollected,
