@@ -7,7 +7,6 @@
  */
 
 const Joi = require('joi')
-const MAXNUMBEROFDECIMALS = 7
 
 /**
  * Validates data submitted for the `/bill-runs/{billRunId}/review/{licenceId}/match-details/{reviewChargeElementId}
@@ -40,9 +39,10 @@ function go (payload) {
  * the correct number of decimals.
  */
 function customValidation (customQuantity, helpers) {
+  const maxNumberOfDecimals = 7
   const customQuantityParts = customQuantity.toString().split('.')
 
-  if (customQuantityParts.length === 1 || customQuantityParts[1].length < MAXNUMBEROFDECIMALS) {
+  if (customQuantityParts.length === 1 || customQuantityParts[1].length < maxNumberOfDecimals) {
     return customQuantity
   }
 
