@@ -405,7 +405,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(SubmitAmendedBillableReturnsService, 'go').resolves()
+          Sinon.stub(SubmitAmendedBillableReturnsService, 'go').resolves(_matchDetailsData())
         })
 
         it('redirects to the match details page', async () => {
@@ -555,6 +555,26 @@ function _licenceReviewData () {
     ],
     unmatchedReturns: [],
     chargeData: []
+  }
+}
+
+function _matchDetailsData () {
+  return {
+    billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
+    financialYear: '2022 to 2023',
+    chargePeriod: '1 April 2022 to 5 June 2022',
+    licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
+    showBanner: true,
+    chargeElement: {
+      chargeElementId: 'b4d70c89-de1b-4f68-a47f-832b338ac044',
+      description: 'Trickle Irrigation - Direct',
+      dates: ['1 April 2022 to 5 June 2022'],
+      status: 'ready',
+      billableVolume: 0,
+      authorisedVolume: 200,
+      issues: []
+    },
+    matchedReturns: []
   }
 }
 
