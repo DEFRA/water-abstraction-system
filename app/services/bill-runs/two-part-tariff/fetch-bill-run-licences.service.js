@@ -67,6 +67,7 @@ async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolder, fil
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .where('billRunId', id)
     .orderBy('status', 'desc')
+    .orderBy('licenceRef', 'asc')
 
   _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolder, filterLicenceStatus)
 
