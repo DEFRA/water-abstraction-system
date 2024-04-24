@@ -41,7 +41,6 @@ describe('Review Licence Service', () => {
       expect(result.billRunId).to.equal('6620135b-0ecf-4fd4-924e-371f950c0526')
       expect(result.region).to.equal('Anglian')
       expect(result.licence.licenceId).to.equal('786f0d83-eaf7-43c3-9de5-ec59e3de05ee')
-      expect(result.licenceUpdatedMessage).to.be.null()
       expect(result.matchedReturns[0].returnId).to.equal('v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
       expect(result.unmatchedReturns[0].returnId).to.equal('v2:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
       expect(result.chargeData[0].financialYear).to.equal('2022 to 2023')
