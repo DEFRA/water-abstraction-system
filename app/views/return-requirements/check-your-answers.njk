@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set baseURL = "/system/return-requirements/" + id %}
@@ -44,7 +45,21 @@
   {% endif %}
 {% endset %}
 
+{% set bannerText %}
+  {% if noteStatus == "Added" or noteStatus == "Updated" %}
+    Changes made
+  {% elif noteStatus == "Removed" %}
+    Note removed
+  {% endif %}
+{% endset %}
+
 {% block content %}
+  {{ govukNotificationBanner({
+    text: bannerText,
+    type: "Important",
+    titleText: noteStatus
+  }) if noteStatus }}
+  
   {# Main heading #}
   <div class="govuk-body">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
@@ -120,7 +135,11 @@
                 {
                   href: "add-note",
                   text: "Change" if note else "Add a note"
-                }
+                },
+                {
+                  href: "check-your-answers",
+                  text: "Delete"
+                } if note
               ]
             }
           }

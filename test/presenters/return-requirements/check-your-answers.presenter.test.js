@@ -27,6 +27,7 @@ describe('Check Your Answers presenter', () => {
         journey: 'no-returns-required',
         note: {
           content: 'Note attached to requirement',
+          status: 'Added',
           userEmail: 'carol.shaw@atari.com'
         },
         reason: 'returns-exception',
@@ -44,6 +45,7 @@ describe('Check Your Answers presenter', () => {
         journey: 'no-returns-required',
         licenceRef: '01/123',
         note: 'Note attached to requirement',
+        noteStatus: 'Added',
         reason: 'returns-exception',
         startDate: '1 January 2023',
         userEmail: 'carol.shaw@atari.com'
@@ -69,6 +71,28 @@ describe('Check Your Answers presenter', () => {
         const result = CheckYourAnswersPresenter.go(session)
 
         expect(result.note).to.equal('')
+      })
+    })
+  })
+
+  describe("the 'noteStatus' property", () => {
+    describe('when there is a note', () => {
+      it('returns the status of the note', () => {
+        const result = CheckYourAnswersPresenter.go(session)
+
+        expect(result.noteStatus).to.equal('Added')
+      })
+    })
+
+    describe('when there is no note', () => {
+      beforeEach(() => {
+        delete session.data.note
+      })
+
+      it("returns ''", () => {
+        const result = CheckYourAnswersPresenter.go(session)
+
+        expect(result.noteStatus).to.equal('')
       })
     })
   })

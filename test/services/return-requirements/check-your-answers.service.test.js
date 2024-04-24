@@ -29,6 +29,7 @@ const sessionData = {
     journey: 'no-returns-required',
     note: {
       content: 'Note attached to requirement',
+      status: '',
       userEmail: 'carol.shaw@atari.com'
     },
     startDateOptions: 'licenceStartDate'
@@ -62,6 +63,7 @@ describe('Check Your Answers service', () => {
         journey: 'no-returns-required',
         licenceRef: '01/ABC',
         note: 'Note attached to requirement',
+        noteStatus: '',
         userEmail: 'carol.shaw@atari.com',
         reason: 'abstraction-below-100-cubic-metres-per-day',
         startDate: '8 February 2023'

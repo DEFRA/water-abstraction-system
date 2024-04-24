@@ -54,6 +54,7 @@ describe('Submit Add Note service', () => {
 
         expect(refreshedSession.data.note).to.equal({
           content: 'A note related to return requirement',
+          status: 'Added',
           userEmail: 'carol.shaw@atari.com'
         })
       })

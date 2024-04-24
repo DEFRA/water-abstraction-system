@@ -47,9 +47,11 @@ async function go (sessionId, payload, user) {
 
 async function _save (session, payload, user) {
   const currentData = session.data
+  const status = _status(currentData.note, payload.note)
 
   currentData.note = {
     content: payload.note,
+    status,
     userEmail: user.username
   }
 
@@ -68,6 +70,16 @@ function _validate (payload) {
   return {
     text: message
   }
+}
+
+function _status (currentNote, newNote) {
+  if (!currentNote) {
+    return 'Added'
+  } else if (currentNote.content !== newNote) {
+    return 'Updated'
+  }
+
+  return ''
 }
 
 module.exports = {
