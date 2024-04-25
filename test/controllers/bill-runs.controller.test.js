@@ -14,12 +14,13 @@ const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
-const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
+const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 
@@ -373,7 +374,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ReviewLicenceService, 'go').resolves(_licenceReviewData())
+          Sinon.stub(SubmitReviewLicenceService, 'go').resolves(_licenceReviewData())
         })
 
         it('returns a 200 response', async () => {
