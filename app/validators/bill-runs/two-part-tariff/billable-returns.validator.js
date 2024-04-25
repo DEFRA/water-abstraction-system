@@ -49,12 +49,12 @@ function customValidation (customQuantity, helpers) {
   return helpers.message({ custom: 'The quantity must contain no more than 6 decimal places' })
 }
 
-function _validateCustomQuantity (customQuantity, authorisedAnnualQuantity) {
+function _validateCustomQuantity (customQuantity, authorisedVolume) {
   const schema = Joi.object({
     customQuantity: Joi
       .number()
       .min(0)
-      .max(authorisedAnnualQuantity)
+      .max(authorisedVolume)
       .required()
       .messages({
         'number.unsafe': 'The quantity must be a number',
