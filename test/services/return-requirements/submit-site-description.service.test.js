@@ -44,24 +44,18 @@ describe('Submit Site Description service', () => {
         }
       })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitSiteDescriptionService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitSiteDescriptionService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data.siteDescription).to.equal('This is a valid return requirement description')
       })
 
-      it('returns page data for the view', async () => {
+      it('returns an empty object (no page data needed for a redirect)', async () => {
         const result = await SubmitSiteDescriptionService.go(session.id, payload)
 
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          journey: 'returns-required',
-          pageTitle: 'Enter a site description for the requirements for returns',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          licenceSiteDescription: 'This is a valid return requirement description'
-        }, { skip: ['id'] })
+        expect(result).to.equal({})
       })
     })
 
@@ -86,7 +80,8 @@ describe('Submit Site Description service', () => {
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            licenceSiteDescription: null
+            siteDescription: null,
+            inputtedSiteDescription: null
           }, { skip: ['id', 'error'] })
         })
 
@@ -121,7 +116,8 @@ describe('Submit Site Description service', () => {
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            licenceSiteDescription: 'Too short'
+            siteDescription: null,
+            inputtedSiteDescription: 'Too short'
           }, { skip: ['id', 'error'] })
         })
 
@@ -135,7 +131,8 @@ describe('Submit Site Description service', () => {
       })
 
       describe('because the user has entered a description more than 100 characters', () => {
-        const invalidSiteDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.'
+        const invalidSiteDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' +
+        ', sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.'
 
         beforeEach(() => {
           payload = {
@@ -158,7 +155,8 @@ describe('Submit Site Description service', () => {
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            licenceSiteDescription: invalidSiteDescription
+            siteDescription: null,
+            inputtedSiteDescription: invalidSiteDescription
           }, { skip: ['id', 'error'] })
         })
 

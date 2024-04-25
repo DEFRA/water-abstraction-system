@@ -49,7 +49,8 @@ describe('Site Description service', () => {
         pageTitle: 'Enter a site description for the requirements for returns',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
-        licenceSiteDescription: null
+        siteDescription: null,
+        inputtedSiteDescription: null
       }, { skip: ['id'] })
     })
   })
