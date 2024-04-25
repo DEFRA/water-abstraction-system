@@ -1,62 +1,77 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the licence review page in a two-part tariff bill run
- * @module ReviewLicenceService
+ * Handles updating a review licence record when the progress or status buttons are clicked
+ * @module SubmitReviewLicenceService
  */
 
-const FetchReviewLicenceResultsService = require('./fetch-review-licence-results.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
-const ReviewLicencePresenter = require('../../../presenters/bill-runs/two-part-tariff/review-licence.presenter.js')
 
 /**
- * Orchestrated fetching and presenting the data needed for the licence review page
+ * Handles updating a review licence record when the progress or status buttons are clicked
  *
- * @param {module:BillRunModel} billRunId The UUID for the bill run
- * @param {module:LicenceModel} licenceId The UUID of the licence that is being reviewed
- * @param {Object} payload The `request.payload` containing the `marKProgress` data. This is only passed to the service
- * when there is a POST request, which only occurs when the 'Mark progress' button is clicked.
+ * The progress button in the two-part tariff review licence screen toggles whether a licence is 'in-progress' or not.
  *
- * @returns {Object} an object representing the 'pageData' needed to review the individual licence. It contains the
- * licence, bill run, matched and unmatched returns and the licence charge data
+ * The status button toggles whether a licence is 'ready' or in 'review'.
+ *
+ * We update the `ReviewLicenceModel` record and set a `flash()` message in the session so that when the request is
+ * redirected to the `GET` it knows to display a notification banner to confirm that the progress or status has changed
+ * to the user.
+ *
+ * @param {module:BillRunModel} billRunId - The UUID for the bill run
+ * @param {module:LicenceModel} licenceId - The UUID of the licence that is being reviewed
+ * @param {Object} payload - The Hapi `request.payload` object passed on by the controller
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<Object>} resolves to the result of the update query. Not intended to be used
  */
-async function go (billRunId, licenceId, payload) {
-  const licenceStatus = payload?.licenceStatus
-  const markProgress = payload?.marKProgress
+async function go (billRunId, licenceId, payload, yar) {
+  const parsedPayload = _parsePayload(payload)
 
-  if (payload) {
-    await _processPayload(billRunId, licenceId, licenceStatus, markProgress)
-  }
+  // NOTE: The YarPlugin decorates the Hapi request object with a yar property. Yar is a session manager
+  _bannerMessage(yar, parsedPayload)
 
-  const { billRun, licence } = await FetchReviewLicenceResultsService.go(billRunId, licenceId)
-
-  const pageData = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
-
-  return pageData
+  return _update(billRunId, licenceId, parsedPayload)
 }
 
-async function _processPayload (billRunId, licenceId, licenceStatus, markProgress) {
-  if (licenceStatus === 'ready' || licenceStatus === 'review') {
-    await _updateStatus(billRunId, licenceId, licenceStatus)
+function _bannerMessage (yar, parsedPayload) {
+  const { progress, status } = parsedPayload
+
+  if (status) {
+    yar.flash('banner', `Licence changed to ${status}.`)
+    return
   }
 
-  if (markProgress === 'mark' || markProgress === 'unmark') {
-    await _updateProgress(billRunId, licenceId, markProgress)
+  if (progress) {
+    yar.flash('banner', 'This licence has been marked.')
+    return
+  }
+
+  yar.flash('banner', 'The progress mark for this licence has been removed.')
+}
+
+function _parsePayload (payload) {
+  const markProgress = payload['mark-progress'] ?? null
+  const licenceStatus = payload['licence-status'] ?? null
+
+  return {
+    progress: markProgress === 'mark',
+    status: licenceStatus
   }
 }
 
-async function _updateProgress (billRunId, licenceId, marKProgress) {
-  const progress = marKProgress === 'mark'
+async function _update (billRunId, licenceId, parsedPayload) {
+  const { progress, status } = parsedPayload
+  const patch = {}
 
-  await ReviewLicenceModel.query()
-    .patch({ progress })
-    .where('billRunId', billRunId)
-    .andWhere('licenceId', licenceId)
-}
+  if (status) {
+    patch.status = status
+  } else {
+    patch.progress = progress
+  }
 
-async function _updateStatus (billRunId, licenceId, licenceStatus) {
-  await ReviewLicenceModel.query()
-    .patch({ status: licenceStatus })
+  return ReviewLicenceModel.query()
+    .patch(patch)
     .where('billRunId', billRunId)
     .andWhere('licenceId', licenceId)
 }
