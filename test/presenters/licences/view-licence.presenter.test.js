@@ -1074,6 +1074,52 @@ describe('View Licence presenter', () => {
       })
     })
   })
+  describe("the 'notification' property", () => {
+    describe('when the licence will not be in the next supplementary bill', () => {
+      it('returns NULL', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.be.null()
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill (PRESROC)', () => {
+      beforeEach(() => {
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns the notification for PRESROC', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run for the old charge scheme.')
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill (SROC)', () => {
+      beforeEach(() => {
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns the notification for SROC', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run.')
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill (SROC & PRESROC)', () => {
+      beforeEach(() => {
+        licence.includeInSrocBilling = true
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns the notification for SROC & PRESROC)', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill runs for the current and old charge schemes.')
+      })
+    })
+  })
 })
 
 function _abstractionConditions () {
