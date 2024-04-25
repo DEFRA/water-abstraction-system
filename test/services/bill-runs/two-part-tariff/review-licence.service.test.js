@@ -18,8 +18,12 @@ describe('Review Licence Service', () => {
   const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
   const licenceId = '082f528e-4ae4-4f41-ba64-b740a0a210ff'
 
+  let yarStub
+
   beforeEach(async () => {
     Sinon.stub(FetchReviewLicenceResultsService, 'go').resolves(_fetchReviewLicenceResults())
+
+    yarStub = { flash: Sinon.stub().returns(['This licence has been marked.']) }
   })
 
   afterEach(() => {
@@ -28,14 +32,15 @@ describe('Review Licence Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ReviewLicenceService.go(billRunId, licenceId)
+      const result = await ReviewLicenceService.go(billRunId, licenceId, yarStub)
 
-      // NOTE: The service just regurgitates what the ReviewLicencePresenter returns. So, we don't diligently check
-      // each property of the result because we know this will have been covered by the ReviewLicencePresenter
+      expect(result.bannerMessage).to.equal('This licence has been marked.')
+
+      // NOTE: The service mainly just regurgitates what the ReviewLicencePresenter returns. So, we don't diligently
+      // check each property of the result because we know this will have been covered by the ReviewLicencePresenter
       expect(result.billRunId).to.equal('6620135b-0ecf-4fd4-924e-371f950c0526')
       expect(result.region).to.equal('Anglian')
       expect(result.licence.licenceId).to.equal('786f0d83-eaf7-43c3-9de5-ec59e3de05ee')
-      expect(result.licenceUpdatedMessage).to.be.null()
       expect(result.matchedReturns[0].returnId).to.equal('v1:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
       expect(result.unmatchedReturns[0].returnId).to.equal('v2:1:01/60/28/3437:17061181:2022-04-01:2023-03-31')
       expect(result.chargeData[0].financialYear).to.equal('2022 to 2023')
