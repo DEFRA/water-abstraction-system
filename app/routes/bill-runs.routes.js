@@ -113,7 +113,7 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/review/{licenceId}',
-    handler: BillRunsController.reviewLicence,
+    handler: BillRunsController.submitReviewLicence,
     options: {
       auth: {
         access: {
@@ -134,6 +134,32 @@ const routes = [
         }
       },
       description: 'View match details of a charge element'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
+    handler: BillRunsController.amendBillableReturns,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Amend the billable return volumes on a charge element'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}/amend-billable-returns',
+    handler: BillRunsController.submitAmendedBillableReturns,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the amended billable return volumes on a charge element'
     }
   },
   {
