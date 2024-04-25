@@ -113,7 +113,7 @@ async function review (request, h) {
 async function reviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
-  const pageData = await ReviewLicenceService.go(billRunId, licenceId)
+  const pageData = await ReviewLicenceService.go(billRunId, licenceId, request.yar)
 
   return h.view('bill-runs/review-licence.njk', {
     pageTitle: `Licence ${pageData.licence.licenceRef}`,
@@ -163,13 +163,9 @@ async function submitCancel (request, h) {
 async function submitReviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
-  const pageData = await SubmitReviewLicenceService.go(billRunId, licenceId, request.payload)
+  await SubmitReviewLicenceService.go(billRunId, licenceId, request.payload, request.yar)
 
-  return h.view('bill-runs/review-licence.njk', {
-    pageTitle: `Licence ${pageData.licence.licenceRef}`,
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}`)
 }
 
 async function submitSend (request, h) {
