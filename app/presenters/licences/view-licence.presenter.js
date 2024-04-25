@@ -107,13 +107,13 @@ function _abstractionConditionDetails (licenceAbstractionConditions) {
   }
 }
 
-function _calculateNotificationBanner (includeInPresrocBilling, includeInSrocBilling ) {
+function _calculateNotificationBanner (includeInPresrocBilling, includeInSrocBilling) {
   let notification = null
   const baseMessage = 'This license has been marked for the next supplementary bill run'
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
     notification = baseMessage + 's for the current and old charge schemes.'
   } else if (includeInPresrocBilling === 'yes') {
-    notification = baseMessage  + ' for the old charge scheme'
+    notification = baseMessage + ' for the old charge scheme.'
   } else if (includeInSrocBilling === true) {
     notification = baseMessage + '.'
   }
