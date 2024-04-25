@@ -59,18 +59,13 @@ function _validate (payload) {
 
   const { message } = validation.error.details[0]
 
-  if (payload['quantity-options'] === 'customQuantity') {
-    return {
-      message,
-      radioFormElement: null,
-      customQuantityInputFormElement: { text: message }
-    }
-  }
+  const radioFormElement = payload['quantity-options'] === 'customQuantity' ? null : { text: message }
+  const customQuantityInputFormElement = payload['quantity-options'] === 'customQuantity' ? { text: message } : null
 
   return {
     message,
-    radioFormElement: { text: message },
-    customQuantityInputFormElement: null
+    radioFormElement,
+    customQuantityInputFormElement
   }
 }
 
