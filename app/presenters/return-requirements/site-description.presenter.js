@@ -18,7 +18,7 @@ function go (session, payload = {}) {
     id: session.id,
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
-    licenceSiteDescription: _licenceSiteDescription(payload)
+    siteDescription: session.data.siteDescription ? session.data.siteDescription : null,
   }
 
   return data
