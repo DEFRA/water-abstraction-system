@@ -36,9 +36,9 @@ async function go (billRunId, licenceId, reviewChargeElementId, payload) {
     activeNavBar: 'search',
     pageTitle: 'Set the billable returns quantity for this bill run',
     error: validationResult,
-    ...pageData,
     customQuantitySelected: payload['quantity-options'] === 'customQuantity',
-    customQuantityValue: payload.customQuantity
+    customQuantityValue: payload.customQuantity,
+    ...pageData
   }
 }
 
