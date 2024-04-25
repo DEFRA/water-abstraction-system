@@ -24,7 +24,7 @@ function go (payload) {
   const { 'quantity-options': selectedOption } = payload
 
   if (selectedOption === 'customQuantity') {
-    return _validateCustomQuantity(payload.customQuantity)
+    return _validateCustomQuantity(payload.customQuantity, Number(payload.authorisedVolume))
   }
 
   return _validateAuthorisedQuantity(selectedOption)
@@ -46,17 +46,22 @@ function customValidation (customQuantity, helpers) {
     return customQuantity
   }
 
-  return helpers.message({ custom: 'You must enter less than 6 decimal places' })
+  return helpers.message({ custom: 'The quantity must contain no more than 6 decimal places' })
 }
 
-function _validateCustomQuantity (customQuantity) {
+function _validateCustomQuantity (customQuantity, authorisedAnnualQuantity) {
   const schema = Joi.object({
     customQuantity: Joi
       .number()
+      .min(0)
+      .max(authorisedAnnualQuantity)
       .required()
       .messages({
-        'number.base': 'You must enter a number',
-        'any.required': 'You must enter a custom quantity'
+        'number.unsafe': 'The quantity must be a number',
+        'number.base': 'The quantity must be a number',
+        'number.min': 'The quantity must be zero or higher',
+        'number.max': 'The quantity must be the same as or less than the authorised amount',
+        'any.required': 'Enter the billable quantity'
       })
   })
 
@@ -79,7 +84,7 @@ function _validateAuthorisedQuantity (selectedOption) {
       .number()
       .required()
       .messages({
-        'any.required': 'You must choose or enter a value'
+        'any.required': 'Select the billable quantity'
       })
   })
 

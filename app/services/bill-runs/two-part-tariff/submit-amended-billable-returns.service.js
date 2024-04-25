@@ -5,8 +5,9 @@
  * @module SubmitAmendedBillableReturnsService
 */
 
-const AmendBillableReturnsService = require('../../../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
+const AmendBillableReturnsPresenter = require('../../../presenters/bill-runs/two-part-tariff/amend-billable-returns.presenter.js')
 const BillableReturnsValidator = require('../../../validators/bill-runs/two-part-tariff/billable-returns.validator.js')
+const FetchMatchDetailsService = require('./fetch-match-details.service.js')
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
 /**
@@ -28,13 +29,16 @@ async function go (billRunId, licenceId, reviewChargeElementId, payload) {
     return { error: null }
   }
 
-  const pageData = await AmendBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId)
+  const { billRun, reviewChargeElement } = await FetchMatchDetailsService.go(billRunId, reviewChargeElementId)
+  const pageData = AmendBillableReturnsPresenter.go(billRun, reviewChargeElement, licenceId)
 
   return {
     activeNavBar: 'search',
     pageTitle: 'Set the billable returns quantity for this bill run',
     error: validationResult,
-    ...pageData
+    ...pageData,
+    customQuantitySelected: payload['quantity-options'] === 'customQuantity',
+    customQuantityValue: payload.customQuantity
   }
 }
 
