@@ -45,20 +45,12 @@
   {% endif %}
 {% endset %}
 
-{% set bannerText %}
-  {% if noteStatus == "Added" or noteStatus == "Updated" %}
-    Changes made
-  {% elif noteStatus == "Removed" %}
-    Note removed
-  {% endif %}
-{% endset %}
-
 {% block content %}
   {{ govukNotificationBanner({
-    text: bannerText,
-    type: "Important",
-    titleText: noteStatus
-  }) if noteStatus }}
+    text: notification.text,
+    titleText: notification.title,
+    type: "Important"
+  }) if notification }}
   
   {# Main heading #}
   <div class="govuk-body">
@@ -137,7 +129,7 @@
                   text: "Change" if note else "Add a note"
                 },
                 {
-                  href: "check-your-answers",
+                  href: "delete-note",
                   text: "Delete"
                 } if note
               ]

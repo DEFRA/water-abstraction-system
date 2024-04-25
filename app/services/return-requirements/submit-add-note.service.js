@@ -21,17 +21,18 @@ const SessionModel = require('../../models/session.model.js')
  * @param {Object} payload - The submitted form data
  * @param {Object} user - The logged in user details
  *
- * @returns {Promise<Object>} The page data for the no returns required page
+ * @returns {Promise<Object>} The page data for the check-your-answers page
  */
 async function go (sessionId, payload, user) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
+    const notification = _notification(session, payload.note)
     await _save(session, payload, user)
 
     return {
-      journey: session.data.journey
+      notification
     }
   }
 
@@ -47,11 +48,9 @@ async function go (sessionId, payload, user) {
 
 async function _save (session, payload, user) {
   const currentData = session.data
-  const status = _status(currentData.note, payload.note)
 
   currentData.note = {
     content: payload.note,
-    status,
     userEmail: user.username
   }
 
@@ -72,14 +71,25 @@ function _validate (payload) {
   }
 }
 
-function _status (currentNote, newNote) {
-  if (!currentNote) {
-    return 'Added'
-  } else if (currentNote.content !== newNote) {
-    return 'Updated'
+function _notification (session, newNote) {
+  const { data: { note } } = session
+  let notification = ''
+
+  if (!note && newNote) {
+    notification = {
+      title: 'Added',
+      text: 'Changes made'
+    }
   }
 
-  return ''
+  if (note && note !== newNote) {
+    notification = {
+      title: 'Updated',
+      text: 'Changes made'
+    }
+  }
+
+  return notification
 }
 
 module.exports = {
