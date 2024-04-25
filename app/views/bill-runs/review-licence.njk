@@ -21,10 +21,10 @@
 
 {% block content %}
   {# Licence updated banner #}
-  {% if licenceUpdatedMessage %}
+  {% if bannerMessage %}
     {{ govukNotificationBanner({
       titleText: 'Licence updated',
-      text: licenceUpdatedMessage
+      text: bannerMessage
     }) }}
   {% endif %}
 
@@ -85,7 +85,7 @@
     {{ govukButton({
       text: statusButtonText,
       classes: statusButtonClass,
-      name: "licenceStatus",
+      name: "licence-status",
       value: statusButtonValue,
       preventDoubleClick: true
     }) }}
@@ -93,7 +93,7 @@
     {{ govukButton({
       text: progressButtonText,
       classes: "govuk-button--secondary",
-      name: "marKProgress",
+      name: "mark-progress",
       value: progressButtonValue,
       preventDoubleClick: true
     }) }}
