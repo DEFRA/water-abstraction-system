@@ -19,24 +19,10 @@ function go (session, payload = {}) {
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
     siteDescription: session.data.siteDescription ? session.data.siteDescription : null,
+    inputtedSiteDescription: payload.siteDescription ? payload.siteDescription : null
   }
 
   return data
-}
-
-function _licenceSiteDescription (payload) {
-  // NOTE: 'siteDescription' is the payload value that tells us whether the user inputted a siteDescription
-  // for the return requirement site.
-  // If it is not set then it is because the presenter has been called from 'SiteDescriptionService' and it's the first
-  // load. Else it has been called by the 'SubmitSiteDescriptionService' and the user has not inputted a site description.
-  // Either way, we use it to tell us wether there is anything in the payload worth transforming.
-  const siteDescription = payload.siteDescription
-
-  if (!siteDescription) {
-    return null
-  }
-
-  return siteDescription
 }
 
 module.exports = {
