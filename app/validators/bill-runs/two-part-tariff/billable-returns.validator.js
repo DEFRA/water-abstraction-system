@@ -14,7 +14,8 @@ const Joi = require('joi')
  *
  * When editing the charge elements billable volume the user must either chose the existing authorised volume or enter
  * there own custom volume. The validation happening here is to ensure that a user selects either option and if its the
- * custom one, that they enter a number and that the number is less than 6 decimal places.
+ * custom one, that they enter a number above 0 but below the authorised volume and that the number is less than 6
+ * decimal places.
  * @param {Object} payload - The payload from the request to be validated
  *
  * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
