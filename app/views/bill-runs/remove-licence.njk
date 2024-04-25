@@ -1,0 +1,60 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "macros/bill-run-status-tag.njk" import statusTag %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {# Main heading #}
+  <div class="govuk-body">
+    <span class="govuk-caption-l">{{ region }} two-part tariff bill bill run</span>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-0">
+    <div class="govuk-grid-column-full">
+      {# Bill run meta-data #}
+      {#
+        GOV.UK summary lists only allow us to assign attributes at the top level and not to each row. This means we
+        can't assign our data-test attribute using the component. Our solution is to use the html option for each row
+        instead of text and wrap each value in a <span>. That way we can manually assign our data-test attribute to the
+        span.
+      #}
+      {{
+        govukSummaryList({
+          classes: 'govuk-summary-list--no-border',
+          attributes: { 'data-test': 'meta-data' },
+          rows: [
+            {
+              key: { text: "Licence", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-licence">' + licenceRef + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Financial year", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-year">' + financialYear + '</span>', classes: "meta-data__value" }
+            },
+            {
+              key: { text: "Billing account", classes: "meta-data__label" },
+              value: { html: '<span data-test="meta-data-account">' + billingAccount + '</span>', classes: "meta-data__value" }
+            }
+          ]
+        })
+      }}
+
+      <form method="post">
+        {{ govukButton({ text: "Remove licence" }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
