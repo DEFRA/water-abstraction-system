@@ -47,7 +47,10 @@ async function _fetchLicence (id) {
       'lapsedDate',
       'licenceRef',
       'revokedDate',
-      'startDate'
+      'startDate',
+      'include_in_presroc_billing',
+      'include_in_sroc_billing'
+
     ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {

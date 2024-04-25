@@ -2,6 +2,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% block breadcrumbs %}
   {{
@@ -37,6 +38,19 @@
       text: warning,
       iconFallbackText: "Warning"
     }) }}
+  {% endif %}
+
+  {% if notification %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+     <strong> {{ notification }} </strong>
+      </div>
+    </div>
   {% endif %}
 
   <span class="govuk-caption-l">{{ licenceName }}</span>

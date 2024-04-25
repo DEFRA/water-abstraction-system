@@ -29,7 +29,9 @@ function go (licence, licenceAbstractionConditions) {
     permitLicence,
     region,
     registeredTo,
-    startDate
+    startDate,
+    includeInPresrocBilling,
+    includeInSrocBilling
   } = licence
 
   const abstractionPeriods = _generateAbstractionPeriods(licenceVersions)
@@ -68,7 +70,8 @@ function go (licence, licenceAbstractionConditions) {
     registeredTo,
     sourceOfSupply: abstractionDetails.sourceOfSupply,
     startDate: formatLongDate(startDate),
-    warning: _generateWarningMessage(ends)
+    warning: _generateWarningMessage(ends),
+    notification: _calculateNotificationBanner(includeInPresrocBilling, includeInSrocBilling)
   }
 }
 
@@ -102,6 +105,19 @@ function _abstractionConditionDetails (licenceAbstractionConditions) {
     conditions,
     numberOfConditions
   }
+}
+
+function _calculateNotificationBanner (includeInPresrocBilling, includeInSrocBilling ) {
+  let notification = null
+  const baseMessage = 'This license has been marked for the next supplementary bill run'
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    notification = baseMessage + 's for the current and old charge schemes.'
+  } else if (includeInPresrocBilling === 'yes') {
+    notification = baseMessage  + ' for the old charge scheme'
+  } else if (includeInSrocBilling === true) {
+    notification = baseMessage + '.'
+  }
+  return notification
 }
 
 function _endDate (expiredDate) {

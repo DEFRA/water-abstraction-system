@@ -45,6 +45,7 @@ describe('View Licence presenter', () => {
           label: 'MEVAGISSEY FIRE STATION'
         }],
         pageTitle: 'Licence 01/123',
+        notification: null,
         purposes: null,
         registeredTo: null,
         region: 'Narnia',
