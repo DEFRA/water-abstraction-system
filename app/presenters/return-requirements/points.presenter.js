@@ -19,7 +19,7 @@ function go (session, pointsData, payload = {}) {
     id: session.id,
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
-    licencePoints: _licencePoints(pointsData, payload)
+    selectedPoints: session.data.points ? session.data.points.join(',') : ''
   }
 
   return data
