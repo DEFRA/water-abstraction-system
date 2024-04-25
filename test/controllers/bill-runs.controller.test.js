@@ -374,16 +374,14 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitReviewLicenceService, 'go').resolves(_licenceReviewData())
+          Sinon.stub(SubmitReviewLicenceService, 'go').resolves()
         })
 
-        it('returns a 200 response', async () => {
+        it('redirects to the review licence page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('1/11/10/*S/0084')
-          expect(response.payload).to.contain('two-part tariff')
-          expect(response.payload).to.contain('Test Road. Points 1 and 2.')
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
         })
       })
     })
