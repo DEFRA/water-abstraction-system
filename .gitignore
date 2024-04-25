@@ -46,3 +46,6 @@ app/public/build
 
 # ignore husky config
 .husky/
+
+.idea/
+.webstorm/
