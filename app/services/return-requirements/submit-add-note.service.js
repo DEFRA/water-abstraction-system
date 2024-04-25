@@ -73,23 +73,26 @@ function _validate (payload) {
 
 function _notification (session, newNote) {
   const { data: { note } } = session
-  let notification = ''
+
+  if (note && note.content === newNote) {
+    return ''
+  }
 
   if (!note && newNote) {
-    notification = {
+    return {
       title: 'Added',
       text: 'Changes made'
     }
   }
 
-  if (note && note !== newNote) {
-    notification = {
+  if (note && note.content !== newNote) {
+    return {
       title: 'Updated',
       text: 'Changes made'
     }
   }
 
-  return notification
+  return ''
 }
 
 module.exports = {

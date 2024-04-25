@@ -1,20 +1,21 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/delete-note` page
+ * Orchestrates deleting the notes data for `/return-requirements/{sessionId}/check-your-answers` page
  * @module DeleteNoteService
  */
 
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates removing note data for `/return-requirements/{sessionId}/check-your-answers` page
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
+ * Then it removes the notes data from the session.
+ *
  * @param {string} sessionId - The id of the current session
  *
- * @returns {Promise<Object>} The page data for the no returns required page
+ * @returns {Promise<Object>} The page data for the check-your-answers page
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
@@ -22,10 +23,8 @@ async function go (sessionId) {
   await _save(session)
 
   return {
-    notification: {
-      titleText: 'Removed',
-      text: 'Note removed'
-    }
+    title: 'Removed',
+    text: 'Note removed'
   }
 }
 

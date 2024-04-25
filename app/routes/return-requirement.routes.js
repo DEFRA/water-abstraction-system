@@ -121,7 +121,7 @@ const routes = [
     }
   },
   {
-    method: 'POST',
+    method: 'GET',
     path: '/return-requirements/{sessionId}/delete-note',
     handler: ReturnRequirementsController.deleteNote,
     options: {
