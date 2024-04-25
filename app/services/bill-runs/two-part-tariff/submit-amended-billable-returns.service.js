@@ -21,7 +21,7 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * @returns {Promise<Object>} The updated value for the billable returns
  */
 async function go (billRunId, licenceId, reviewChargeElementId, payload) {
-  const validationResult = await _validate(payload)
+  const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _persistAmendedBillableReturns(reviewChargeElementId, payload)
