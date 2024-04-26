@@ -11,8 +11,9 @@ const { capitalize, formatFinancialYear } = require('../../base.presenter.js')
  * Prepares and processes bill run data for presentation
  *
  * @param {module:BillRunModel} billRun - an instance of `BillRunModel`
- * @param {Object[]} licence - an array containing the licence id, ref & account number. For the majority of licences
- * the array will normally contain only one element, however licences can have multiple billing accounts.
+ * @param {Object[]} licence - an array containing the licence id, ref & account number for a single licence. For the
+ * majority of licences the array will normally contain only one element. However, licences can have multiple billing
+ * accounts so more than one element can exist for a licence.
  *
  * @returns {Object} - the prepared data to be passed to the remove licence template
  */
@@ -30,8 +31,8 @@ function go (billRun, licence) {
 
 function _billingAccount (licence) {
   if (licence.length > 1) {
-    const accountNumbers = licence.map(licence => {
-      return licence.accountNumber
+    const accountNumbers = licence.map(element => {
+      return element.accountNumber
     })
 
     return accountNumbers.join(', ')
