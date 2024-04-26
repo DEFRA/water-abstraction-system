@@ -304,7 +304,9 @@
     {% endif %}
 
   {# Sets the caption to be used in the table below #}
-  {% if totalNumberOfLicences > numberOfLicencesDisplayed %}
+  {% if totalNumberOfLicences === undefined %}
+    {% set caption = "All licences have been removed from this bill run!" %}
+  {% elseif totalNumberOfLicences > numberOfLicencesDisplayed %}
     {% set caption = "Showing " + numberOfLicencesDisplayed + " of " + totalNumberOfLicences + " licences" %}
   {% else %}
     {% set caption = "Showing all " + totalNumberOfLicences + " licences" %}
