@@ -19,6 +19,7 @@ const SendBillRunService = require('../services/bill-runs/send-bill-run.service.
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
@@ -160,6 +161,14 @@ async function submitCancel (request, h) {
   }
 }
 
+async function submitRemoveLicence (request, h) {
+  const { id, licenceId } = request.params
+
+  await SubmitRemoveBillRunLicenceService.go(id, licenceId)
+
+  return h.redirect(`/system/bill-runs/${id}/review`)
+}
+
 async function submitReviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
@@ -206,6 +215,7 @@ module.exports = {
   send,
   submitAmendedBillableReturns,
   submitCancel,
+  submitRemoveLicence,
   submitReviewLicence,
   submitSend,
   view
