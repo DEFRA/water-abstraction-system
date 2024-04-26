@@ -138,7 +138,11 @@ describe('Fetch Charge Versions service', () => {
           volume: 6.819,
           description: 'Mineral washing',
           aggregate: 0.562114443,
+          s126: null,
           s127: 'true',
+          s130: null,
+          winter: null,
+          charge: null,
           chargeCategory: {
             reference: '4.3.41',
             shortDescription: 'Low loss, non-tidal, restricted water, up to and including 5,000 ML/yr, Tier 1 model',
