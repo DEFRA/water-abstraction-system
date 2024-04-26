@@ -5,8 +5,9 @@
  * @module SubmitAmendedBillableReturnsService
 */
 
-const AmendBillableReturnsService = require('../../../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
+const AmendBillableReturnsPresenter = require('../../../presenters/bill-runs/two-part-tariff/amend-billable-returns.presenter.js')
 const BillableReturnsValidator = require('../../../validators/bill-runs/two-part-tariff/billable-returns.validator.js')
+const FetchMatchDetailsService = require('./fetch-match-details.service.js')
 const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
 
 /**
@@ -20,7 +21,7 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * @returns {Promise<Object>} The updated value for the billable returns
  */
 async function go (billRunId, licenceId, reviewChargeElementId, payload) {
-  const validationResult = await _validate(payload)
+  const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _persistAmendedBillableReturns(reviewChargeElementId, payload)
@@ -28,12 +29,15 @@ async function go (billRunId, licenceId, reviewChargeElementId, payload) {
     return { error: null }
   }
 
-  const pageData = await AmendBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId)
+  const { billRun, reviewChargeElement } = await FetchMatchDetailsService.go(billRunId, reviewChargeElementId)
+  const pageData = AmendBillableReturnsPresenter.go(billRun, reviewChargeElement, licenceId)
 
   return {
     activeNavBar: 'search',
     pageTitle: 'Set the billable returns quantity for this bill run',
     error: validationResult,
+    customQuantitySelected: payload['quantity-options'] === 'customQuantity',
+    customQuantityValue: payload.customQuantity,
     ...pageData
   }
 }
@@ -55,18 +59,13 @@ function _validate (payload) {
 
   const { message } = validation.error.details[0]
 
-  if (payload['quantity-options'] === 'customQuantity') {
-    return {
-      message,
-      radioFormElement: null,
-      customQuantityInputFormElement: { text: message }
-    }
-  }
+  const radioFormElement = payload['quantity-options'] === 'customQuantity' ? null : { text: message }
+  const customQuantityInputFormElement = payload['quantity-options'] === 'customQuantity' ? { text: message } : null
 
   return {
     message,
-    radioFormElement: { text: message },
-    customQuantityInputFormElement: null
+    radioFormElement,
+    customQuantityInputFormElement
   }
 }
 

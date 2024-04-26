@@ -20,6 +20,8 @@ function go (licence, licenceAbstractionConditions) {
     ends,
     expiredDate,
     id,
+    includeInPresrocBilling,
+    includeInSrocBilling,
     licenceDocumentHeader,
     licenceGaugingStations,
     licenceHolder,
@@ -48,20 +50,21 @@ function go (licence, licenceAbstractionConditions) {
   const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
 
   return {
-    id,
     abstractionConditionDetails,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
+    abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
-    abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionQuantities: abstractionDetails.quantities,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
+    id,
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceName,
     licenceRef,
     monitoringStations,
+    notification: _determineNotificationBanner(includeInPresrocBilling, includeInSrocBilling),
     pageTitle: `Licence ${licenceRef}`,
     purposes,
     region: region.displayName,
@@ -102,6 +105,23 @@ function _abstractionConditionDetails (licenceAbstractionConditions) {
     conditions,
     numberOfConditions
   }
+}
+
+function _determineNotificationBanner (includeInPresrocBilling, includeInSrocBilling) {
+  const baseMessage = 'This license has been marked for the next supplementary bill run'
+
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    return baseMessage + 's for the current and old charge schemes.'
+  }
+  if (includeInPresrocBilling === 'yes') {
+    return baseMessage + ' for the old charge scheme.'
+  }
+
+  if (includeInSrocBilling === true) {
+    return baseMessage + '.'
+  }
+
+  return null
 }
 
 function _endDate (expiredDate) {
