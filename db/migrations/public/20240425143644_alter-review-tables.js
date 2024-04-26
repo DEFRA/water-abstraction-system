@@ -18,7 +18,7 @@ exports.up = async function (knex) {
   await knex
     .schema
     .alterTable('review_charge_elements', (table) => {
-      table.renameColumn('calculated', 'amended_aggregate')
+      table.renameColumn('calculated', 'amended_allocated')
     })
 }
 
@@ -38,6 +38,6 @@ exports.down = async function (knex) {
   await knex
     .schema
     .alterTable('review_charge_elements', (table) => {
-      table.renameColumn('amended_aggregate', 'calculated')
+      table.renameColumn('amended_allocated', 'calculated')
     })
 }
