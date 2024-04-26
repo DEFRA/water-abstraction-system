@@ -11,6 +11,8 @@
     {% set color = "govuk-tag--grey" %}
   {% elif status === 'cancel' %}
     {% set color = "govuk-tag--orange" %}
+  {% elif status === 'cancelling' %}
+    {% set color = "govuk-tag--orange" %}
   {% elif status === 'error' %}
     {% set color = "govuk-tag--red" %}
   {% else %}

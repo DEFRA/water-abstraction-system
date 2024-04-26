@@ -42,7 +42,7 @@ function go (billRuns) {
       numberOfBills,
       region: capitalize(region),
       scheme,
-      status,
+      status: status === 'cancel' ? 'cancelling' : status,
       total: formatMoney(netTotal, true),
       type: formatBillRunType(batchType, scheme, summer)
     }
