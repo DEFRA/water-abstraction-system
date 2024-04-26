@@ -30,7 +30,7 @@ describe('Match Details presenter', () => {
           description: 'Trickle Irrigation - Direct',
           dates: ['1 April 2022 to 5 June 2022'],
           status: 'ready',
-          billableVolume: 0,
+          billableVolume: 10,
           authorisedVolume: 200,
           issues: []
         },
@@ -66,7 +66,7 @@ function _reviewChargeElementData () {
     reviewChargeReferenceId: '9e5d87d7-073e-420e-b12d-73ca220dd8ef',
     chargeElementId: 'b345f1f1-496b-4049-a647-6bcd123dcf68',
     allocated: 0,
-    calculated: 10,
+    amendedAllocated: 10,
     chargeDatesOverlap: false,
     issues: null,
     status: 'ready',
