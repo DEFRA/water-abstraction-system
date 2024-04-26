@@ -85,6 +85,19 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/bill-runs/{id}/remove/{licenceId}',
+    handler: BillRunsController.submitRemoveLicence,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit licence removal from a bill run'
+    }
+  },
+  {
     method: 'GET',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.review,
@@ -107,7 +120,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'POST request recieved when filtering applied to review two-part tariff match and allocation results'
+      description: 'POST request received when filtering applied to review two-part tariff match and allocation results'
     }
   },
   {
