@@ -17,7 +17,8 @@ describe('Billable Returns validator', () => {
     describe('because the user selected the authorised volume option', () => {
       beforeEach(() => {
         payload = {
-          'quantity-options': '25'
+          'quantity-options': 25,
+          authorisedVolume: 30
         }
       })
 
@@ -28,11 +29,12 @@ describe('Billable Returns validator', () => {
       })
     })
 
-    describe('because the user entered a valid volume', () => {
+    describe('because the user entered a valid volume (less than the authorised volume but greater than 0)', () => {
       beforeEach(() => {
         payload = {
           'quantity-options': 'customQuantity',
-          customQuantity: '123456'
+          customQuantity: 12,
+          authorisedVolume: 30
         }
       })
 
@@ -47,28 +49,33 @@ describe('Billable Returns validator', () => {
   describe('when an invalid payload is provided', () => {
     describe('because the user did not select an option', () => {
       beforeEach(() => {
-        payload = {}
+        payload = {
+          authorisedVolume: 30
+        }
       })
 
-      it("fails the validation with the message 'You must choose or enter a value'", () => {
+      it("fails the validation with the message 'Select the billable quantity'", () => {
         const result = BillableReturnsValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('You must choose or enter a value')
+        expect(result.error.details[0].message).to.equal('Select the billable quantity')
       })
     })
 
     describe('because the user selected to enter a custom quantity', () => {
       describe('but entered no value', () => {
         beforeEach(() => {
-          payload = { 'quantity-options': 'customQuantity' }
+          payload = {
+            'quantity-options': 'customQuantity',
+            authorisedVolume: 25
+          }
         })
 
-        it("fails validation with the message 'You must enter a custom quantity'", () => {
+        it("fails validation with the message 'Enter the billable quantity'", () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('You must enter a custom quantity')
+          expect(result.error.details[0].message).to.equal('Enter the billable quantity')
         })
       })
 
@@ -76,15 +83,16 @@ describe('Billable Returns validator', () => {
         beforeEach(() => {
           payload = {
             'quantity-options': 'customQuantity',
-            customQuantity: 'Hello world'
+            customQuantity: 'Hello world',
+            authorisedVolume: 25
           }
         })
 
-        it("fails validation with the message 'You must enter a number'", () => {
+        it("fails validation with the message 'The quantity must be a number'", () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('You must enter a number')
+          expect(result.error.details[0].message).to.equal('The quantity must be a number')
         })
       })
 
@@ -92,15 +100,50 @@ describe('Billable Returns validator', () => {
         beforeEach(() => {
           payload = {
             'quantity-options': 'customQuantity',
-            customQuantity: '12.3456789'
+            customQuantity: 12.3456789,
+            authorisedVolume: 25
           }
         })
 
-        it("fails validation with the message 'You must enter less than 6 decimal places'", () => {
+        it("fails validation with the message 'The quantity must contain no more than 6 decimal places'", () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('You must enter less than 6 decimal places')
+          expect(result.error.details[0].message).to.equal('The quantity must contain no more than 6 decimal places')
+        })
+      })
+
+      describe('but entered a number less than 0', () => {
+        beforeEach(() => {
+          payload = {
+            'quantity-options': 'customQuantity',
+            customQuantity: -0.1,
+            authorisedVolume: 25
+          }
+        })
+
+        it("fails validation with the message 'The quantity must be zero or higher'", () => {
+          const result = BillableReturnsValidator.go(payload)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('The quantity must be zero or higher')
+        })
+      })
+
+      describe('but entered a number greater than the authorised annual quantity', () => {
+        beforeEach(() => {
+          payload = {
+            'quantity-options': 'customQuantity',
+            customQuantity: 40,
+            authorisedVolume: 25
+          }
+        })
+
+        it("fails validation with the message 'The quantity must be the same as or less than the authorised amount'", () => {
+          const result = BillableReturnsValidator.go(payload)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('The quantity must be the same as or less than the authorised amount')
         })
       })
     })
