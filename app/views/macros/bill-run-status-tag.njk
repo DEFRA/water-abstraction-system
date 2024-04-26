@@ -1,22 +1,31 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% macro statusTag(status, inline=false) %}
+  {# Default the text to the status as that covers most tags #}
+  {% set text = status %}
+
   {% if status === 'ready' %}
-    {% set color = "govuk-tag--blue" %}
+    {% set color = 'govuk-tag--blue' %}
   {% elif status === 'review' %}
-    {% set color = "govuk-tag--blue" %}
+    {% set color = 'govuk-tag--blue' %}
   {% elif status === 'sent' %}
-    {% set color = "govuk-tag--green" %}
+    {% set color = 'govuk-tag--green' %}
   {% elif status === 'empty' %}
-    {% set color = "govuk-tag--grey" %}
+    {% set color = 'govuk-tag--grey' %}
   {% elif status === 'cancel' %}
-    {% set color = "govuk-tag--orange" %}
-  {% elif status === 'cancelling' %}
-    {% set color = "govuk-tag--orange" %}
+    {% set color = 'govuk-tag--orange' %}
+    {% set text = 'cancelling' %}
+  {% elif status === 'sending' %}
+    {% set color = 'govuk-tag--grey' %}
+  {% elif status === 'processing' %}
+    {% set color = 'govuk-tag--grey' %}
+    {% set text = 'building' %}
+  {% elif status === 'queued' %}
+    {% set color = 'govuk-tag--grey' %}
   {% elif status === 'error' %}
-    {% set color = "govuk-tag--red" %}
+    {% set color = 'govuk-tag--red' %}
   {% else %}
-    {% set color = "govuk-tag--blue" %}
+    {% set color = 'govuk-tag--blue' %}
   {% endif %}
 
   {% if inline %}
@@ -27,7 +36,7 @@
 
   {{
     govukTag({
-      text: status,
+      text: text,
       classes: color + ' ' + fontSize
     })
   }}
