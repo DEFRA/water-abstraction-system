@@ -50,7 +50,7 @@ describe('Submit Amended Billable Returns Service', () => {
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
-        expect(reviewChargeElementData.allocated).to.equal(10)
+        expect(reviewChargeElementData.amendedAllocated).to.equal(10)
       })
     })
 
@@ -68,7 +68,7 @@ describe('Submit Amended Billable Returns Service', () => {
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
-        expect(reviewChargeElementData.allocated).to.equal(20)
+        expect(reviewChargeElementData.amendedAllocated).to.equal(20)
       })
     })
 
