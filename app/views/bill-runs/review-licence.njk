@@ -6,6 +6,8 @@
 {% from "macros/review-status-tag.njk" import statusTag %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
 
 {% block breadcrumbs %}
   {# Back link #}
@@ -19,10 +21,10 @@
 
 {% block content %}
   {# Licence updated banner #}
-  {% if licenceUpdated %}
+  {% if bannerMessage %}
     {{ govukNotificationBanner({
       titleText: 'Licence updated',
-      text: licenceUpdated
+      text: bannerMessage
     }) }}
   {% endif %}
 
@@ -51,6 +53,24 @@
       </a></li>
   </ul>
 
+  {# Licence in review text #}
+  {% if elementsInReview === true %}
+    {{ govukInsetText({
+      text: "There are elements in review"
+    }) }}
+  {% endif %}
+
+  {# Change status #}
+  {% if licence.status === 'ready' %}
+    {% set statusButtonText = 'Put licence into review' %}
+    {% set statusButtonValue = 'review' %}
+    {% set statusButtonClass = "govuk-button--secondary" %}
+  {% else %}
+    {% set statusButtonText = 'Confirm licence is ready' %}
+    {% set statusButtonValue = 'ready' %}
+    {% set statusButtonClass = "govuk-button--primary" %}
+  {% endif %}
+
   {# Mark progress #}
   {% if licence.progress %}
     {% set progressButtonText = 'Remove progress mark' %}
@@ -61,13 +81,23 @@
   {% endif %}
 
   <form method="post">
+    <div class="govuk-button-group">
+    {{ govukButton({
+      text: statusButtonText,
+      classes: statusButtonClass,
+      preventDoubleClick: true,
+      name: "licence-status",
+      value: statusButtonValue
+    }) }}
+
     {{ govukButton({
       text: progressButtonText,
       classes: "govuk-button--secondary",
       preventDoubleClick: true,
-      name: "marKProgress",
+      name: "mark-progress",
       value: progressButtonValue
     }) }}
+    </div>
   </form>
 
   {# Charge Periods #}

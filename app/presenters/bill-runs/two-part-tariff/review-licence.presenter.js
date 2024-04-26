@@ -9,17 +9,14 @@ const DetermineAbstractionPeriodService = require('../../../services/bill-runs/d
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Prepares and processes bill run and review licence data for presentation
+ * Formats the review licence data ready for presenting in the review licence page
  *
- * @param {module:BillRunModel} billRun the data from the bill run
- * @param {module:ReviewLicenceModel} licence the data from review licence
- * @param {String} markProgress will contain the string 'mark' or 'unmark' if the mark/unmark progress button has been
- * clicked, otherwise it will be null. It is passed back to the view to determine if the 'Licence updated' banner should
- * be displayed
+ * @param {module:BillRunModel} billRun - the data from the bill run
+ * @param {module:ReviewLicenceModel} licence - the data from review licence
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (billRun, licence, markProgress) {
+function go (billRun, licence) {
   return {
     billRunId: billRun.id,
     region: billRun.region.displayName,
@@ -30,7 +27,7 @@ function go (billRun, licence, markProgress) {
       licenceHolder: licence[0].licenceHolder,
       progress: licence[0].progress
     },
-    licenceUpdated: _licenceUpdated(markProgress),
+    elementsInReview: licence[0].hasReviewStatus,
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
     chargeData: _prepareChargeData(licence, billRun)
@@ -137,17 +134,6 @@ function _financialYear (financialYearEnding) {
   const endYear = financialYearEnding
 
   return `${startYear} to ${endYear}`
-}
-
-function _licenceUpdated (markProgress) {
-  switch (markProgress) {
-    case 'mark':
-      return 'This licence has been marked.'
-    case 'unmark':
-      return 'The progress mark for this licence has been removed.'
-    default:
-      return null
-  }
 }
 
 function _matchedReturns (returnLogs) {

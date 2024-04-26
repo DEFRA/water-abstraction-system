@@ -18,6 +18,7 @@ const ReviewChargeElementModel = require('../../../app/models/review-charge-elem
  * - `chargeDatesOverlap` - false
  * - `issues` - null
  * - `status` - ready
+ * - `calculated` - 0
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -46,7 +47,8 @@ function defaults (data = {}) {
     allocated: 0,
     chargeDatesOverlap: false,
     issues: null,
-    status: 'ready'
+    status: 'ready',
+    calculated: 0
   }
 
   return {

@@ -66,6 +66,7 @@ describe('View Licence service', () => {
           licenceRef: '01/130/R01',
           monitoringStations: [],
           pageTitle: 'Licence 01/130/R01',
+          notification: null,
           purposes: null,
           region: 'South West',
           registeredTo: null,

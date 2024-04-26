@@ -5,20 +5,30 @@
  * @module ReturnRequirementsController
  */
 
+const AddNoteService = require('../services/return-requirements/add-note.service.js')
+const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
+const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
+const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
+const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
 const SessionModel = require('../models/session.model.js')
 const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
+const SubmitAddNoteService = require('../services/return-requirements/submit-add-note.service.js')
+const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
+const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
+const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
+const SubmitReturnsCycleService = require('../services/return-requirements/submit-returns-cycle.service.js')
 const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
@@ -26,24 +36,20 @@ const SubmitStartDateService = require('../services/return-requirements/submit-s
 async function abstractionPeriod (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await AbstractionPeriodService.go(sessionId)
 
   return h.view('return-requirements/abstraction-period.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Enter the abstraction period for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
 async function addNote (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await AddNoteService.go(sessionId)
 
   return h.view('return-requirements/add-note.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Add a note',
-    ...session
+    ...pageData
   })
 }
 
@@ -93,24 +99,20 @@ async function existing (request, h) {
 async function frequencyCollected (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await FrequencyCollectedService.go(sessionId)
 
   return h.view('return-requirements/frequency-collected.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select how often readings or volumes are collected',
-    ...session
+    ...pageData
   })
 }
 
 async function frequencyReported (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await FrequencyReportedService.go(sessionId)
 
   return h.view('return-requirements/frequency-reported.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select how often collected readings or volumes are reported',
-    ...session
+    ...pageData
   })
 }
 
@@ -157,12 +159,10 @@ async function reason (request, h) {
 async function returnsCycle (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await ReturnsCycleService.go(sessionId)
 
   return h.view('return-requirements/returns-cycle.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select the returns cycle for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -198,11 +198,24 @@ async function startDate (request, h) {
 async function submitAbstractionPeriod (request, h) {
   const { sessionId } = request.params
 
+  const pageData = await SubmitAbstractionPeriod.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/abstraction-period.njk', pageData)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle`)
 }
 
 async function submitAddNote (request, h) {
   const { sessionId } = request.params
+  const { user } = request.auth.credentials
+
+  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user)
+
+  if (pageData.error) {
+    return h.view('return-requirements/add-note.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
@@ -229,11 +242,23 @@ async function submitExisting (request, h) {
 async function submitFrequencyCollected (request, h) {
   const { sessionId } = request.params
 
+  const pageData = await SubmitFrequencyCollectedService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/frequency-collected.njk', pageData)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported`)
 }
 
 async function submitFrequencyReported (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitFrequencyReportedService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/frequency-reported.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
 }
@@ -283,11 +308,21 @@ async function submitReason (request, h) {
     return h.view('return-requirements/reason.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/setup`)
 }
 
 async function submitReturnsCycle (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitReturnsCycleService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/returns-cycle.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/site-description`)
 }
