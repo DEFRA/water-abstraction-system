@@ -1075,7 +1075,7 @@ describe('View Licence presenter', () => {
     })
   })
   describe("the 'notification' property", () => {
-    describe('when the licence will not be in the next supplementary bill', () => {
+    describe('when the licence will not be in the next supplementary bill run', () => {
       it('returns NULL', () => {
         const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
@@ -1083,7 +1083,7 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licence will be in the next supplementary bill (PRESROC)', () => {
+    describe('when the licence will be in the next supplementary bill run (PRESROC)', () => {
       beforeEach(() => {
         licence.includeInPresrocBilling = 'yes'
       })
@@ -1095,7 +1095,7 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licence will be in the next supplementary bill (SROC)', () => {
+    describe('when the licence will be in the next supplementary bill run (SROC)', () => {
       beforeEach(() => {
         licence.includeInSrocBilling = true
       })
@@ -1107,7 +1107,7 @@ describe('View Licence presenter', () => {
       })
     })
 
-    describe('when the licence will be in the next supplementary bill (SROC & PRESROC)', () => {
+    describe('when the licence will be in the next supplementary bill run (SROC & PRESROC)', () => {
       beforeEach(() => {
         licence.includeInSrocBilling = true
         licence.includeInPresrocBilling = 'yes'

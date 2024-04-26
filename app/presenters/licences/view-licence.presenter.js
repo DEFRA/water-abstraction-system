@@ -20,6 +20,8 @@ function go (licence, licenceAbstractionConditions) {
     ends,
     expiredDate,
     id,
+    includeInPresrocBilling,
+    includeInSrocBilling,
     licenceDocumentHeader,
     licenceGaugingStations,
     licenceHolder,
@@ -29,9 +31,7 @@ function go (licence, licenceAbstractionConditions) {
     permitLicence,
     region,
     registeredTo,
-    startDate,
-    includeInPresrocBilling,
-    includeInSrocBilling
+    startDate
   } = licence
 
   const abstractionPeriods = _generateAbstractionPeriods(licenceVersions)
@@ -50,28 +50,28 @@ function go (licence, licenceAbstractionConditions) {
   const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
 
   return {
-    id,
     abstractionConditionDetails,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
+    abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
-    abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionQuantities: abstractionDetails.quantities,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
+    id,
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceName,
     licenceRef,
     monitoringStations,
+    notification: _determineNotificationBanner(includeInPresrocBilling, includeInSrocBilling),
     pageTitle: `Licence ${licenceRef}`,
     purposes,
     region: region.displayName,
     registeredTo,
     sourceOfSupply: abstractionDetails.sourceOfSupply,
     startDate: formatLongDate(startDate),
-    warning: _generateWarningMessage(ends),
-    notification: _calculateNotificationBanner(includeInPresrocBilling, includeInSrocBilling)
+    warning: _generateWarningMessage(ends)
   }
 }
 
@@ -107,20 +107,21 @@ function _abstractionConditionDetails (licenceAbstractionConditions) {
   }
 }
 
-function _calculateNotificationBanner (includeInPresrocBilling, includeInSrocBilling) {
-  let notification
+function _determineNotificationBanner (includeInPresrocBilling, includeInSrocBilling) {
   const baseMessage = 'This license has been marked for the next supplementary bill run'
 
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    notification = baseMessage + 's for the current and old charge schemes.'
-  } else if (includeInPresrocBilling === 'yes') {
-    notification = baseMessage + ' for the old charge scheme.'
-  } else if (includeInSrocBilling === true) {
-    notification = baseMessage + '.'
-  } else {
-    notification = null
+    return baseMessage + 's for the current and old charge schemes.'
   }
-  return notification
+  if (includeInPresrocBilling === 'yes') {
+    return baseMessage + ' for the old charge scheme.'
+  }
+
+  if (includeInSrocBilling === true) {
+    return baseMessage + '.'
+  }
+
+  return null
 }
 
 function _endDate (expiredDate) {
