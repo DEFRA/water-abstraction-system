@@ -46,7 +46,8 @@ async function _allLicencesRemoved (id, licenceRef, yar) {
   }
 
   // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer any
-  // licences remaining the user is redirected back to the "Bill runs" page instead of "Review licences"
+  // licences remaining in the bill run the user is redirected to the "Bill runs" page instead of "Review licences". As
+  // the banner isn't displayed on the "Bill runs" page the message would remain in the cookie which could cause issues.
   yar.flash('banner', `Licence ${licenceRef} removed from the bill run.`)
 
   return false
