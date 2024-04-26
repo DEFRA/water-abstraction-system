@@ -5,10 +5,8 @@ exports.up = async function (knex) {
     .schema
     .alterTable('review_charge_references', (table) => {
       table.decimal('amended_aggregate', null, null).defaultTo(1)
-
       table.decimal('charge_adjustment', null, null).defaultTo(1)
       table.decimal('amended_charge_adjustment', null, null).defaultTo(1)
-
       table.decimal('abatement_agreement', null, null).defaultTo(1)
       table.boolean('winter_discount')
       table.boolean('two_part_tariff_agreement')
