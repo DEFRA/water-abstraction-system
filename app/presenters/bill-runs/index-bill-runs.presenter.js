@@ -42,7 +42,7 @@ function go (billRuns) {
       numberOfBills,
       region: capitalize(region),
       scheme,
-      status: status === 'cancel' ? 'cancelling' : status,
+      status,
       total: formatMoney(netTotal, true),
       type: formatBillRunType(batchType, scheme, summer)
     }
@@ -50,7 +50,7 @@ function go (billRuns) {
 }
 
 function _link (billRunId, status) {
-  if (status === 'cancel') {
+  if (['cancel', 'processing', 'queued', 'sending'].includes(status)) {
     return null
   }
 
