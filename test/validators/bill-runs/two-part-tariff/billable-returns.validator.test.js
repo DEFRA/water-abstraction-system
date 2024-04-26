@@ -29,7 +29,7 @@ describe('Billable Returns validator', () => {
       })
     })
 
-    describe('because the user entered a valid volume (less than the authorised volume but greater than 0', () => {
+    describe('because the user entered a valid volume (less than the authorised volume but greater than 0)', () => {
       beforeEach(() => {
         payload = {
           'quantity-options': 'customQuantity',

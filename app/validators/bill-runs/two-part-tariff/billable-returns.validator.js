@@ -12,7 +12,7 @@ const Joi = require('joi')
  * Validates data submitted for the `/bill-runs/{billRunId}/review/{licenceId}/match-details/{reviewChargeElementId}
  * /amend-billable-returns` page
  *
- * When editing the charge elements billable volume the user must either chose the existing authorised volume or enter
+ * When editing the charge elements billable volume the user must either choose the existing authorised volume or enter
  * there own custom volume. The validation happening here is to ensure that a user selects either option and if its the
  * custom one, that they enter a number above 0 but below the authorised volume and that the number is less than 6
  * decimal places.
