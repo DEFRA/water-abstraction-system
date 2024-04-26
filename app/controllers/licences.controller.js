@@ -25,9 +25,9 @@ async function returnsRequired (request, h) {
 }
 
 async function view (request, h) {
-  const { id } = request.params
+  const { params: { id }, auth  } = request
 
-  const data = await ViewLicenceService.go(id)
+  const data = await ViewLicenceService.go(id, auth)
 
   return h.view('licences/view.njk', {
     activeNavBar: 'search',
