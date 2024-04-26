@@ -164,7 +164,11 @@ async function submitCancel (request, h) {
 async function submitRemoveLicence (request, h) {
   const { id, licenceId } = request.params
 
-  await SubmitRemoveBillRunLicenceService.go(id, licenceId, request.yar)
+  const allLicencesRemoved = await SubmitRemoveBillRunLicenceService.go(id, licenceId, request.yar)
+
+  if (allLicencesRemoved) {
+    return h.redirect('/system/bill-runs')
+  }
 
   return h.redirect(`/system/bill-runs/${id}/review`)
 }

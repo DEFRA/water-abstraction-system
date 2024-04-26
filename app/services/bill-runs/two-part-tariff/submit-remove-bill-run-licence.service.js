@@ -24,8 +24,32 @@ async function go (id, licenceId, yar) {
 
   const licenceRef = await _setSupBillingTrueAndReturnRef(licenceId)
 
-  // set the banner message
+  const allLicencesRemoved = await _allLicencesRemoved(id, licenceRef, yar)
+
+  return allLicencesRemoved
+}
+
+async function _allLicencesRemoved (id, licenceRef, yar) {
+  const { licenceCount } = await db
+    .count('id AS licenceCount')
+    .from('reviewLicences')
+    .where('billRunId', id)
+    .first()
+
+  if (licenceCount === 0) {
+    await db
+      .update('status', 'empty')
+      .from('billRuns')
+      .where('id', id)
+
+    return true
+  }
+
+  // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer any
+  // licences remaining the user is redirected back to the "Bill runs" page instead of "Review licences"
   yar.flash('banner', `Licence ${licenceRef} removed from the bill run.`)
+
+  return false
 }
 
 async function _removeChargeElements (id, licenceId) {
