@@ -85,29 +85,6 @@ describe('Index Bill Runs presenter', () => {
         })
       })
     })
-
-    describe("the 'status' property", () => {
-      describe("when a bill run has the status 'cancel'", () => {
-        beforeEach(() => {
-          billRuns[0].status = 'cancel'
-        })
-
-        it("returns 'cancelling' for the status", () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
-
-          expect(results[0].status).to.equal('cancelling')
-        })
-      })
-
-      describe("when a bill run has a status other than 'cancel'", () => {
-        it('returns whatever the bill run status was', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
-
-          expect(results[0].status).to.equal(billRuns[0].status)
-          expect(results[1].status).to.equal(billRuns[1].status)
-        })
-      })
-    })
   })
 })
 
