@@ -6,8 +6,13 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const FetchReturnRequirementsBasedOnAbstractionDataService =
+  require('../../services/return-requirements/fetch-return-requirements-based-on-abstraction-data.service.js')
 
-function go (session) {
+async function go (session) {
+  const result = await FetchReturnRequirementsBasedOnAbstractionDataService.go(session.data.licence.id)
+
+  console.log(result)
   const data = {
     id: session.id,
     journey: session.data.journey,
