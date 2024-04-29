@@ -15,7 +15,21 @@ const routes = [
       },
       description: 'View a licence page'
     }
-  }, {
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}',
+    handler: LicencesController.redirect,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'View a licence page'
+    }
+  },
+  {
     method: 'GET',
     path: '/licences/{id}/no-returns-required',
     handler: LicencesController.noReturnsRequired,

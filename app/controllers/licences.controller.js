@@ -35,8 +35,13 @@ async function view (request, h) {
   })
 }
 
+async function redirect(request, h) {
+  return h.redirect(`${request.params.id}/summary`)
+}
+
 module.exports = {
   noReturnsRequired,
   returnsRequired,
-  view
+  view,
+  redirect
 }
