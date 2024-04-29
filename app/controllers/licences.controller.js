@@ -25,7 +25,7 @@ async function returnsRequired (request, h) {
 }
 
 async function view (request, h) {
-  const { params: { id }, auth  } = request
+  const { params: { id }, auth } = request
 
   const data = await ViewLicenceService.go(id, auth)
 
