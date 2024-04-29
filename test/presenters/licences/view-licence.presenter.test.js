@@ -1131,9 +1131,9 @@ describe('View Licence presenter', () => {
             roles: [{
               role: 'role 1'
             },
-              {
-                role: 'role 2'
-              }]
+            {
+              role: 'role 2'
+            }]
           }
         }
       })
