@@ -50,19 +50,6 @@ describe('Index Bill Runs presenter', () => {
     })
 
     describe("the 'link' property", () => {
-      describe("when a bill run has the status 'review'", () => {
-        beforeEach(() => {
-          billRuns[0].status = 'review'
-        })
-
-        it('generates the href needed to link to the bill run review', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
-
-          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b/review')
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
-        })
-      })
-
       describe("when a bill run has the status 'cancel'", () => {
         beforeEach(() => {
           billRuns[0].status = 'cancel'
@@ -76,7 +63,94 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run does not have the status 'review'", () => {
+      describe("when a bill run has the status 'empty'", () => {
+        it('generates the href needed to link to the bill run', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run has the status 'error'", () => {
+        it('generates the href needed to link to the bill run', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run has the status 'processing'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'processing'
+        })
+
+        it('does not generate a href (returns null)', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.be.null()
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run has the status 'queued'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'queued'
+        })
+
+        it('does not generate a href (returns null)', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.be.null()
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run has the status 'ready'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'ready'
+        })
+
+        it('generates the href needed to link to the bill run', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run has the status 'review'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'review'
+        })
+
+        it('generates the href needed to link to the bill run review', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b/review')
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run has the status 'sending'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'sending'
+        })
+
+        it('does not generate a href (returns null)', () => {
+          const results = IndexBillRunsPresenter.go(billRuns)
+
+          expect(results[0].link).to.be.null()
+          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+
+      describe("when a bill run has the status 'sent'", () => {
+        beforeEach(() => {
+          billRuns[0].status = 'sent'
+        })
+
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns)
 
