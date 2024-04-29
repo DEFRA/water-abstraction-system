@@ -88,6 +88,7 @@ describe('Return requirements controller', () => {
         pageTitle: 'Select agreements and exceptions for the return requirement'
       })
     })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('agreements-exceptions'))
