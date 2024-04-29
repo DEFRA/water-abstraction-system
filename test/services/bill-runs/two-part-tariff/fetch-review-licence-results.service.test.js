@@ -177,8 +177,7 @@ describe('Fetch Review Licence Results Service', () => {
               updatedAt: reviewChargeReference.updatedAt,
               chargeReference: {
                 chargeCategoryId: chargeReference.chargeCategoryId,
-                chargeCategory: null,
-                adjustments: chargeReference.adjustments
+                chargeCategory: null
               },
               reviewChargeElements: [{
                 id: reviewChargeElement.id,
