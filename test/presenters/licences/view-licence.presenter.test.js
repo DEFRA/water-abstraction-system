@@ -13,10 +13,12 @@ const ViewLicencePresenter = require('../../../app/presenters/licences/view-lice
 describe('View Licence presenter', () => {
   let licenceAbstractionConditions
   let licence
+  let auth
 
   beforeEach(() => {
     licence = _licence()
     licenceAbstractionConditions = _abstractionConditions()
+    auth = undefined
   })
 
   describe('when provided with a populated licence', () => {
@@ -1117,6 +1119,40 @@ describe('View Licence presenter', () => {
         const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.notification).to.equal('This license has been marked for the next supplementary bill runs for the current and old charge schemes.')
+      })
+    })
+  })
+
+  describe("the 'roles' property", () => {
+    describe('when the authenticated user has roles', () => {
+      beforeEach(() => {
+        auth = {
+          credentials: {
+            roles: [{
+              role: 'role 1'
+            },
+              {
+                role: 'role 2'
+              }]
+          }
+        }
+      })
+
+      it('returns the roles in a flat array', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions, auth)
+
+        expect(result.roles).to.equal(['role 1', 'role 2'])
+      })
+    })
+    describe('when the authenticated user has NO roles', () => {
+      beforeEach(() => {
+        auth = undefined
+      })
+
+      it('returns the roles in a flat array', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions, auth)
+
+        expect(result.roles).to.be.null()
       })
     })
   })
