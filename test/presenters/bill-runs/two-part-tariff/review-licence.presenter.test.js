@@ -183,8 +183,12 @@ describe('Review Licence presenter', () => {
       })
     })
 
-    describe("the 'adjustments' property", () => {
-      describe('when a charge reference has an aggregate or charge factor adjustment', () => {
+    describe("the 'adjustment' property's", () => {
+      describe('when a review charge reference has an aggregate', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
+        })
+
         it("changes the chargeReferenceLink to 'Change details'", () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
@@ -192,11 +196,32 @@ describe('Review Licence presenter', () => {
         })
       })
 
-      describe('when a charge reference does not have an aggregate or charge factor adjustment', () => {
+      describe('when a review charge reference has a charge factor adjustment', () => {
         beforeEach(() => {
-          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReference.adjustments = { charge: null, aggregate: null }
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
         })
 
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
+
+      describe('when a review charge reference has an aggregate and charge factor adjustment', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
+        })
+
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
+
+      describe('when a review charge reference does not have an aggregate or charge factor adjustment', () => {
         it("changes the chargeReferenceLink to 'View details'", () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
@@ -297,6 +322,7 @@ function _licenceData () {
         reviewChargeVersionId: 'bd16e7b0-c2a3-4258-b873-b965fd74cdf5',
         chargeReferenceId: '82ce8695-5841-41b0-a1e7-d016407adad4',
         aggregate: 1,
+        chargeAdjustment: 1,
         createdAt: new Date('2024-03-18'),
         updatedAt: new Date('2024-03-18'),
         chargeReference: {
@@ -304,10 +330,6 @@ function _licenceData () {
           chargeCategory: {
             reference: '4.6.7',
             shortDescription: 'High loss, non-tidal, greater than 15 up to and including 50 ML/yr'
-          },
-          adjustments: {
-            charge: 1,
-            aggregate: null
           }
         },
         reviewChargeElements: [{
