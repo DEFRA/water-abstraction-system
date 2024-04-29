@@ -85,7 +85,7 @@ describe('Review Licence presenter', () => {
                 chargeCategory: 'Charge reference 4.6.7',
                 chargeDescription: 'High loss, non-tidal, greater than 15 up to and including 50 ML/yr',
                 totalBillableReturns: '0 ML / 200 ML',
-                chargeReferenceLink: { linkName: 'Change details' },
+                chargeReferenceLink: { linkName: 'View details' },
                 chargeElements: [
                   {
                     elementNumber: 'Element 1 of 1',
