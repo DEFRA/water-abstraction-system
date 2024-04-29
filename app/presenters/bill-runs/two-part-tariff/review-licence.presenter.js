@@ -94,7 +94,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
       elementDescription: reviewChargeElement.chargeElement.description,
       dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
       issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : [''],
-      billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
+      billableReturns: `${reviewChargeElement.amendedAllocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
       returnVolume: _prepareReturnVolume(reviewChargeElement)
     }
   })
@@ -266,7 +266,7 @@ function _totalBillableReturns (reviewChargeReference) {
   let totalQuantity = 0
 
   reviewChargeReference.reviewChargeElements.forEach((reviewChargeElement) => {
-    totalBillableReturns += reviewChargeElement.allocated
+    totalBillableReturns += reviewChargeElement.amendedAllocated
     totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
   })
 

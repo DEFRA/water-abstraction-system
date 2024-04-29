@@ -79,7 +79,14 @@ async function _persistChargeReference (chargeReference, reviewChargeVersionId) 
   const data = {
     reviewChargeVersionId,
     chargeReferenceId: chargeReference.id,
-    aggregate: chargeReference.aggregate ?? 1
+    aggregate: chargeReference.aggregate ?? 1,
+    amendedAggregate: chargeReference.aggregate ?? 1,
+    chargeAdjustment: chargeReference.charge ?? 1,
+    amendedChargeAdjustment: chargeReference.charge ?? 1,
+    winterDiscount: chargeReference.winter,
+    abatementAgreement: chargeReference.s126 ?? 1,
+    twoPartTariffAgreement: chargeReference.s127,
+    canalAndRiverTrustAgreement: chargeReference.s130
   }
 
   const { id: reviewChargeReferenceId } = await ReviewChargeReferenceModel.query().insert(data).returning('id')
@@ -132,7 +139,7 @@ async function _persistReviewChargeElement (chargeElement, reviewChargeReference
     reviewChargeReferenceId,
     chargeElementId: chargeElement.id,
     allocated: chargeElement.allocatedQuantity,
-    calculated: chargeElement.allocatedQuantity,
+    amendedAllocated: chargeElement.allocatedQuantity,
     chargeDatesOverlap: chargeElement.chargeDatesOverlap,
     issues: chargeElement.issues.join(', '),
     status: chargeElement.status

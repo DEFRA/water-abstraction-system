@@ -39,10 +39,10 @@ describe('Abstraction Period presenter', () => {
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           abstractionPeriod: {
-            fromDay: null,
-            fromMonth: null,
-            toDay: null,
-            toMonth: null
+            startDay: null,
+            startMonth: null,
+            endDay: null,
+            endMonth: null
           }
         })
       })
@@ -51,10 +51,10 @@ describe('Abstraction Period presenter', () => {
 
   describe('and with a payload', () => {
     const payload = {
-      'from-abstraction-period-day': '01',
-      'from-abstraction-period-month': '12',
-      'to-abstraction-period-day': '02',
-      'to-abstraction-period-month': '7'
+      'start-abstraction-period-day': '01',
+      'start-abstraction-period-month': '12',
+      'end-abstraction-period-day': '02',
+      'end-abstraction-period-month': '7'
     }
 
     it('correctly presents the data', () => {
@@ -65,10 +65,10 @@ describe('Abstraction Period presenter', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         abstractionPeriod: {
-          fromDay: '01',
-          fromMonth: '12',
-          toDay: '02',
-          toMonth: '7'
+          startDay: '01',
+          startMonth: '12',
+          endDay: '02',
+          endMonth: '7'
         }
       })
     })
