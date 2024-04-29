@@ -44,8 +44,10 @@ describe('Fetch Bill Run Licences service', () => {
           status: 'ready',
           issues: 'Returns received late'
         })
+
         testLicenceReview = await ReviewLicenceHelper.add({
           billRunId: billRun.id,
+          licenceRef: '02/200',
           licenceHolder: 'Review Licence Holder Ltd',
           status: 'review',
           issues: 'Over abstraction, Returns received but not processed'
@@ -86,7 +88,7 @@ describe('Fetch Bill Run Licences service', () => {
         expect(result.licences[1].status).to.equal('ready')
       })
 
-      it("orders the licence by 'review status'", async () => {
+      it("orders the licence by 'review status' first", async () => {
         const result = await FetchBillRunLicencesService.go(
           billRun.id,
           filterIssues,
@@ -96,6 +98,30 @@ describe('Fetch Bill Run Licences service', () => {
 
         expect(result.licences[0].status).to.equal('review')
         expect(result.licences[1].status).to.equal('ready')
+      })
+
+      describe('after its been ordered by the licence status', () => {
+        beforeEach(async () => {
+          await ReviewLicenceHelper.add({
+            billRunId: billRun.id,
+            licenceRef: '01/100',
+            licenceHolder: 'Review Licence Holder Ltd',
+            status: 'review',
+            issues: 'Over abstraction, Returns received but not processed'
+          })
+        })
+
+        it('orders the licences by licence ref', async () => {
+          const result = await FetchBillRunLicencesService.go(
+            billRun.id,
+            filterIssues,
+            filterLicenceHolder,
+            filterLicenceStatus
+          )
+
+          expect(result.licences[0].licenceRef).to.equal('01/100')
+          expect(result.licences[1].licenceRef).to.equal('02/200')
+        })
       })
 
       describe('and a filter has been applied to the licence holder', () => {

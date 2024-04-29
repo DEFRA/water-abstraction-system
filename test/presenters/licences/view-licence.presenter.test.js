@@ -45,6 +45,7 @@ describe('View Licence presenter', () => {
           label: 'MEVAGISSEY FIRE STATION'
         }],
         pageTitle: 'Licence 01/123',
+        notification: null,
         purposes: null,
         registeredTo: null,
         region: 'Narnia',
@@ -1070,6 +1071,52 @@ describe('View Licence presenter', () => {
         const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.warning).to.equal('This licence was revoked on 1 April 2019')
+      })
+    })
+  })
+  describe("the 'notification' property", () => {
+    describe('when the licence will not be in the next supplementary bill run', () => {
+      it('returns NULL', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.be.null()
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill run (PRESROC)', () => {
+      beforeEach(() => {
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns the notification for PRESROC', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run for the old charge scheme.')
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill run (SROC)', () => {
+      beforeEach(() => {
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns the notification for SROC', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run.')
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill run (SROC & PRESROC)', () => {
+      beforeEach(() => {
+        licence.includeInSrocBilling = true
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns the notification for SROC & PRESROC)', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill runs for the current and old charge schemes.')
       })
     })
   })

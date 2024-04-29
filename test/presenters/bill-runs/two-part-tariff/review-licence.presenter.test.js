@@ -13,19 +13,15 @@ const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two
 describe('Review Licence presenter', () => {
   let billRun
   let licence
-  let licenceStatus
-  let markProgress
 
   describe('when there is data to be presented for the review licence page', () => {
     beforeEach(() => {
       billRun = _billRun()
       licence = _licenceData()
-      licenceStatus = undefined
-      markProgress = undefined
     })
 
     it('correctly presents the data', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
+      const result = ReviewLicencePresenter.go(billRun, licence)
 
       expect(result).to.equal({
         billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
@@ -37,7 +33,6 @@ describe('Review Licence presenter', () => {
           status: 'ready',
           licenceHolder: 'Licence Holder Ltd'
         },
-        licenceUpdatedMessage: null,
         elementsInReview: false,
         matchedReturns: [
           {
@@ -187,66 +182,6 @@ describe('Review Licence presenter', () => {
       })
     })
   })
-
-  describe('when there is data to be presented and the user has clicked the "Confirm licence is ready" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = 'ready'
-      markProgress = undefined
-    })
-
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
-
-      expect(result.licenceUpdatedMessage).to.equal('Licence changed to ready.')
-    })
-  })
-
-  describe('when there is data to be presented and the user has clicked the "Put licence into Review" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = 'review'
-      markProgress = undefined
-    })
-
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
-
-      expect(result.licenceUpdatedMessage).to.equal('Licence changed to review.')
-    })
-  })
-
-  describe('when there is data to be presented and the user has clicked the "Mark progress" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = undefined
-      markProgress = 'mark'
-    })
-
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
-
-      expect(result.licenceUpdatedMessage).to.equal('This licence has been marked.')
-    })
-  })
-
-  describe('when there is data to be presented and the user has clicked the "Remove progress mark" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = undefined
-      markProgress = 'unmark'
-    })
-
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
-
-      expect(result.licenceUpdatedMessage).to.equal('The progress mark for this licence has been removed.')
-    })
-  })
 })
 
 function _billRun () {
@@ -352,7 +287,8 @@ function _licenceData () {
           id: '8bc0cd32-400e-4a45-9dd7-fbce3d486031',
           reviewChargeReferenceId: '2210bb45-1efc-4e69-85cb-c8cc6e75c4fd',
           chargeElementId: 'b1001716-cfb4-43c6-91f0-1863f4529223',
-          allocated: 0,
+          allocated: 10,
+          amendedAllocated: 0,
           chargeDatesOverlap: false,
           issues: '',
           status: 'ready',

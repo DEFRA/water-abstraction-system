@@ -34,11 +34,12 @@ function go (billRun, reviewChargeElement, licenceId) {
         reviewChargeElement.reviewChargeReference.reviewChargeVersion
       ),
       status: reviewChargeElement.status,
-      billableVolume: reviewChargeElement.allocated,
+      billableVolume: reviewChargeElement.amendedAllocated,
       authorisedVolume: reviewChargeElement.chargeElement.authorisedAnnualQuantity,
       issues: reviewChargeElement.issues?.length > 0 ? reviewChargeElement.issues.split(', ') : []
     },
-    matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns)
+    matchedReturns: _matchedReturns(reviewChargeElement.reviewReturns),
+    showBanner: reviewChargeElement.allocated !== reviewChargeElement.calculated
   }
 }
 
