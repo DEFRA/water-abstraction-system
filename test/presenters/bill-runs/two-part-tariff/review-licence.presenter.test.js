@@ -186,7 +186,7 @@ describe('Review Licence presenter', () => {
     describe("the 'adjustment' property's", () => {
       describe('when a review charge reference has an aggregate', () => {
         beforeEach(() => {
-          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
         })
 
         it("changes the chargeReferenceLink to 'Change details'", () => {
@@ -198,7 +198,7 @@ describe('Review Licence presenter', () => {
 
       describe('when a review charge reference has a charge factor adjustment', () => {
         beforeEach(() => {
-          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
         })
 
         it("changes the chargeReferenceLink to 'Change details'", () => {
