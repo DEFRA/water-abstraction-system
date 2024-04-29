@@ -80,8 +80,7 @@ async function _fetchReviewLicence (licenceId, billRunId) {
     .withGraphFetched('reviewChargeVersions.reviewChargeReferences.chargeReference')
     .modifyGraph('reviewChargeVersions.reviewChargeReferences.chargeReference', (builder) => {
       builder.select([
-        'chargeCategoryId',
-        'adjustments'
+        'chargeCategoryId'
       ])
     })
     .withGraphFetched('reviewChargeVersions.reviewChargeReferences.chargeReference.chargeCategory')

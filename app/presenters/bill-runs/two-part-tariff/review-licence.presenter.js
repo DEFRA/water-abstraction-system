@@ -121,9 +121,9 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
 }
 
 function _chargeReferenceLink (reviewChargeReference) {
-  const { charge: chargeFactor, aggregate } = reviewChargeReference.chargeReference.adjustments
+  const { chargeAdjustment, aggregate } = reviewChargeReference
 
-  if (chargeFactor || aggregate) {
+  if (chargeAdjustment !== 1 || aggregate !== 1) {
     return { linkName: 'Change details' }
   }
 
