@@ -87,13 +87,13 @@
         panel: {
           html: billsTabHtml
         }
-      } if 'billing' in roles, {
+      } if roles and 'billing' in roles, {
         label: "Charge information",
         id: "charge-information",
         panel: {
           html: chargeInformationTabHtml
         }
-      } if 'view_charge_versions' in roles
+      } if roles and 'view_charge_versions' in roles
     ]
   }) }}
 {% endblock %}
