@@ -51,10 +51,10 @@ describe('Abstraction Period service', () => {
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         abstractionPeriod: {
-          fromDay: null,
-          fromMonth: null,
-          toDay: null,
-          toMonth: null
+          startDay: null,
+          startMonth: null,
+          endDay: null,
+          endMonth: null
         }
       }, { skip: ['id'] })
     })

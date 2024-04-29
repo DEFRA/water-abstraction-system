@@ -55,17 +55,17 @@ async function _save (session, payload) {
 function _validate (payload) {
   const validation = AbstractionPeriodValidator.go(payload)
 
-  if (!validation.fromResult.error && !validation.toResult.error) {
+  if (!validation.startResult.error && !validation.endResult.error) {
     return null
   }
 
-  const fromResult = validation.fromResult.error ? validation.fromResult.error.details[0].message : null
-  const toResult = validation.toResult.error ? validation.toResult.error.details[0].message : null
+  const startResult = validation.startResult.error ? validation.startResult.error.details[0].message : null
+  const endResult = validation.endResult.error ? validation.endResult.error.details[0].message : null
 
   return {
     text: {
-      fromResult,
-      toResult
+      startResult,
+      endResult
     }
   }
 }

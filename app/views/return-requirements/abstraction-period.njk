@@ -16,22 +16,22 @@
   }}
 {% endblock %}
 
-{# If there is a fromAbstractionPeriod error, the error class and message are set #}
-{% if error.text.fromResult %}
-  {% set fromResultErrorClass = " govuk-input--error" %}
-  {% set fromResultErrorMessage = { text: error.text.fromResult } %}
+{# If there is a startAbstractionPeriod error, the error class and message are set #}
+{% if error.text.startResult %}
+  {% set startResultErrorClass = " govuk-input--error" %}
+  {% set startResultErrorMessage = { text: error.text.startResult } %}
 {% else %}
-  {% set fromResultErrorClass = "" %}
-  {% set fromResultErrorMessage = null %}
+  {% set startResultErrorClass = "" %}
+  {% set startResultErrorMessage = null %}
 {% endif %}
 
-{# If there is a toAbstractionPeriod error, the error class and message are set #}
-{% if error.text.toResult %}
-    {% set toResultErrorClass = " govuk-input--error" %}
-    {% set toResultErrorMessage = { text: error.text.toResult } %}
+{# If there is a endAbstractionPeriod error, the error class and message are set #}
+{% if error.text.endResult %}
+    {% set endResultErrorClass = " govuk-input--error" %}
+    {% set endResultErrorMessage = { text: error.text.endResult } %}
 {% else %}
-  {% set toResultErrorClass = "" %}
-  {% set toResultErrorMessage = null %}
+  {% set endResultErrorClass = "" %}
+  {% set endResultErrorMessage = null %}
 {% endif %}
 
 {% block content %}
@@ -41,12 +41,12 @@
       titleText: "There is a problem",
       errorList: [
         {
-          text:error.text.fromResult,
-          href: "#abstraction-period-from"
+          text:error.text.startResult,
+          href: "#abstraction-period-start"
         },
         {
-          text:error.text.toResult,
-          href: "#abstraction-period-to"
+          text:error.text.endResult,
+          href: "#abstraction-period-end"
         }
       ]
     }) }}
@@ -61,46 +61,46 @@
   <form method="post">
     {# From #}
     {{ govukDateInput({
-      id: "abstraction-period-from",
-      namePrefix: "from-abstraction-period",
-      errorMessage: fromResultErrorMessage,
+      id: "abstraction-period-start",
+      namePrefix: "start-abstraction-period",
+      errorMessage: startResultErrorMessage,
       fieldset: {
         legend: {
-          text: "From",
+          text: "Start date",
           classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
         }
       },
       items: [
         {
           name: "day",
-          classes: "govuk-input--width-2" + fromResultErrorClass
+          classes: "govuk-input--width-2" + startResultErrorClass
         },
         {
           name: "month",
-          classes: "govuk-input--width-2" + fromResultErrorClass
+          classes: "govuk-input--width-2" + startResultErrorClass
         }
       ]
     }) }}
 
     {# To #}
     {{ govukDateInput({
-      id: "abstraction-period-to",
-      namePrefix: "to-abstraction-period",
-      errorMessage: toResultErrorMessage,
+      id: "abstraction-period-end",
+      namePrefix: "end-abstraction-period",
+      errorMessage: endResultErrorMessage,
       fieldset: {
         legend: {
-          text: "To",
+          text: "End date",
           classes: "govuk-fieldset__legend--xs govuk-!-font-weight-bold"
         }
       },
       items: [
         {
           name: "day",
-          classes: "govuk-input--width-2" + toResultErrorClass
+          classes: "govuk-input--width-2" + endResultErrorClass
         },
         {
           name: "month",
-          classes: "govuk-input--width-2" + toResultErrorClass
+          classes: "govuk-input--width-2" + endResultErrorClass
         }
       ]
     }) }}
