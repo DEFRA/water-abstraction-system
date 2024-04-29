@@ -23,7 +23,6 @@ describe('Amend Billable Returns presenter', () => {
         chargeElement: {
           description: 'Trickle Irrigation - Direct',
           dates: ['1 April 2022 to 5 June 2022'],
-          authorisedQuantity: 200,
           reviewChargeElementId: 'b4d70c89-de1b-4f68-a47f-832b338ac044'
         },
         billRun: {
@@ -33,7 +32,8 @@ describe('Amend Billable Returns presenter', () => {
         chargeVersion: {
           chargePeriod: '1 April 2022 to 5 June 2022'
         },
-        licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
+        licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
+        authorisedQuantity: 150
       })
     })
   })
@@ -69,6 +69,9 @@ function _reviewChargeElementData () {
       reviewChargeVersion: {
         chargePeriodStartDate: new Date('2022-04-01'),
         chargePeriodEndDate: new Date('2022-06-05')
+      },
+      chargeReference: {
+        volume: 150
       }
     }
   }
