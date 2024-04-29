@@ -55,6 +55,8 @@
     <p>Registered to <a href="/user/{{primaryUser.userId}}/status">{{ registeredTo }}</a></p>
   {% endif %}
 
+  {% include "licences/tab-group.njk" %}
+
   {{ govukTabs({
     items: [
       {

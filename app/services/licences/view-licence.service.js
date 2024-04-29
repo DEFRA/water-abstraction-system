@@ -5,10 +5,10 @@
  * @module ViewLicenceService
  */
 
-const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
-const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter.js')
-
+const ViewLicenceActiveTabDataService = require('./active-tab-license.service')
+const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter')
+const ViewLicenceTabNavBarPresenter = require('../../presenters/licences/tab-nav-bar.presenter')
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *
@@ -16,17 +16,17 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
  *
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
-async function go (licenceId) {
+async function go (licenceId, tab) {
   const licenceData = await FetchLicenceService.go(licenceId)
 
-  const currentLicenceVersionId = licenceData?.licenceVersions[0]?.id
-
-  const licenceAbstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
-
-  const pageData = ViewLicencePresenter.go(licenceData, licenceAbstractionConditions)
+  const commonData = ViewLicencePresenter.go(licenceData)
+  const pageData = await ViewLicenceActiveTabDataService.go(tab, licenceData)
 
   return {
-    ...pageData
+    ...commonData,
+    ...pageData,
+    tabs: ViewLicenceTabNavBarPresenter.go(tab),
+    activeTab: tab
   }
 }
 

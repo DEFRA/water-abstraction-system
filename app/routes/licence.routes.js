@@ -5,7 +5,7 @@ const LicencesController = require('../controllers/licences.controller.js')
 const routes = [
   {
     method: 'GET',
-    path: '/licences/{id}',
+    path: '/licences/{id}/{tab}',
     handler: LicencesController.view,
     options: {
       auth: {
