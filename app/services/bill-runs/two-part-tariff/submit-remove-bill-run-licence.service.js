@@ -114,7 +114,7 @@ async function _removeReturns (id, licenceId) {
 
 async function _setSupBillingTrueAndReturnRef (licenceId) {
   const licence = await db
-    .update('includeInSrocBilling', true)
+    .update('includeInSrocTptBilling', true)
     .from('licences')
     .where('id', licenceId)
     .returning('licenceRef')
