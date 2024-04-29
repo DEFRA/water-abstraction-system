@@ -26,7 +26,6 @@ describe('View Licence presenter', () => {
       const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
       expect(result).to.equal({
-        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         abstractionConditionDetails: {
           conditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
           numberOfConditions: 4
@@ -39,6 +38,7 @@ describe('View Licence presenter', () => {
         abstractionQuantities: null,
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
+        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceHolder: 'Unregistered licence',
         licenceName: 'Unregistered licence',
         licenceRef: '01/123',
@@ -46,11 +46,12 @@ describe('View Licence presenter', () => {
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
         }],
-        pageTitle: 'Licence 01/123',
         notification: null,
+        pageTitle: 'Licence 01/123',
         purposes: null,
-        registeredTo: null,
         region: 'Narnia',
+        registeredTo: null,
+        roles: null,
         sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
         startDate: '1 April 2019',
         warning: null
