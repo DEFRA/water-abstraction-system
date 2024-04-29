@@ -1,6 +1,9 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -15,12 +18,69 @@
 {% endblock %}
 
 {% block content %}
+  {# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#purposes"
+        }
+      ]
+    }) }}
+  {%endif%}
+
   {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  <div>
+    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+
   </div>
 
   <form method="post">
+    {{ govukCheckboxes({
+      name: "agreementsExceptions",
+      hint: {
+        text: "Select all that apply"
+      },
+      errorMessage: error,
+      items: [
+        {
+          value: "gravity-fill",
+          text: "Gravity fill",
+          checked: agreementsExceptions and "gravity-fill" in agreementsExceptions
+        },
+        {
+          value: "transfer-re-abstraction-scheme",
+          text: "Transfer re-abstraction scheme",
+          checked: agreementsExceptions and "transfer-re-abstraction-scheme" in agreementsExceptions
+        },
+        {
+          value: "two-part-tariff",
+          text: "Two-part tarrif",
+          checked: agreementsExceptions and "two-part-tariff" in agreementsExceptions,
+          hint: {
+            text: "requires daily collection"
+          }
+        },
+        {
+          value: "56-returns-exception",
+          text: "56 returns exception",
+          checked: agreementsExceptions and "56-returns-exception" in agreementsExceptions
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "none",
+          text: "None",
+          checked: "none" === agreementsExceptions,
+          behaviour: "exclusive"
+        }
+      ]
+    }) }}
+
     <div class="govuk-body">
       {{ govukButton({ text: "Continue" }) }}
     </div>
