@@ -110,7 +110,11 @@ async function _fetch (regionId, billingPeriod) {
           'volume',
           'description',
           ref('chargeReferences.adjustments:aggregate').castFloat().as('aggregate'),
-          ref('chargeReferences.adjustments:s127').castText().as('s127')
+          ref('chargeReferences.adjustments:s126').castText().as('s126'),
+          ref('chargeReferences.adjustments:s127').castText().as('s127'),
+          ref('chargeReferences.adjustments:s130').castText().as('s130'),
+          ref('chargeReferences.adjustments:winter').castText().as('winter'),
+          ref('chargeReferences.adjustments:charge').castText().as('charge')
         ])
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     })

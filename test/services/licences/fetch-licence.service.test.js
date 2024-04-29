@@ -44,7 +44,9 @@ describe('Fetch licence service', () => {
         expiredDate: null,
         lapsedDate: null,
         regionId: region.id,
-        revokedDate: null
+        revokedDate: null,
+        include_in_presroc_billing: 'yes',
+        include_in_sroc_billing: true
       })
 
       // Create 2 licence versions so we can test the service only gets the 'current' version
@@ -81,6 +83,8 @@ describe('Fetch licence service', () => {
       expect(result.revokedDate).to.equal(null)
       expect(result.permitLicence).to.equal(null)
       expect(result.licenceGaugingStations).to.equal([])
+      expect(result.includeInPresrocBilling).to.equal('yes')
+      expect(result.includeInSrocBilling).to.be.true()
     })
   })
 

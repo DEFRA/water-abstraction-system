@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
@@ -37,6 +38,14 @@
       text: warning,
       iconFallbackText: "Warning"
     }) }}
+  {% endif %}
+
+  {% if notification %}
+    {% if notification %}
+      {{ govukNotificationBanner({
+        html: '<strong>' + notification + '</strong>'
+      }) }}
+    {% endif %}
   {% endif %}
 
   <span class="govuk-caption-l">{{ licenceName }}</span>

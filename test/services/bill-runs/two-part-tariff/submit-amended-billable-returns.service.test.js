@@ -14,7 +14,8 @@ const ReviewChargeElementHelper = require('../../../support/helpers/review-charg
 const ReviewChargeElementModel = require('../../../../app/models/review-charge-element.model.js')
 
 // Things we need to stub
-const AmendBillableReturnsService = require('../../../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
+const FetchMatchDetailsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-match-details.service.js')
+const AmendBillableReturnsPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/amend-billable-returns.presenter.js')
 
 // Thing under test
 const SubmitAmendedBillableReturnsService = require('../../../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
@@ -39,7 +40,8 @@ describe('Submit Amended Billable Returns Service', () => {
     describe('with a valid payload for quantityOptions', () => {
       beforeEach(async () => {
         payload = {
-          'quantity-options': 10
+          'quantity-options': 10,
+          authorisedVolume: 11
         }
       })
 
@@ -48,7 +50,7 @@ describe('Submit Amended Billable Returns Service', () => {
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
-        expect(reviewChargeElementData.allocated).to.equal(10)
+        expect(reviewChargeElementData.amendedAllocated).to.equal(10)
       })
     })
 
@@ -56,7 +58,8 @@ describe('Submit Amended Billable Returns Service', () => {
       beforeEach(async () => {
         payload = {
           'quantity-options': 'customQuantity',
-          customQuantity: 20
+          customQuantity: 20,
+          authorisedVolume: 25
         }
       })
 
@@ -65,16 +68,20 @@ describe('Submit Amended Billable Returns Service', () => {
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
-        expect(reviewChargeElementData.allocated).to.equal(20)
+        expect(reviewChargeElementData.amendedAllocated).to.equal(20)
       })
     })
 
     describe('with an invalid payload', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchMatchDetailsService, 'go').resolves({ billRun: 'bill run', reviewChargeElement: 'charge element' })
+        Sinon.stub(AmendBillableReturnsPresenter, 'go').returns(_amendBillableReturnsData())
+      })
       describe('because the user did not select anything', () => {
         beforeEach(async () => {
-          payload = {}
-
-          Sinon.stub(AmendBillableReturnsService, 'go').resolves(_amendBillableReturnsData())
+          payload = {
+            authorisedVolume: 11
+          }
         })
 
         it('returns the page data for the view', async () => {
@@ -96,7 +103,9 @@ describe('Submit Amended Billable Returns Service', () => {
             chargeVersion: {
               chargePeriod: '1 April 2022 to 5 June 2022'
             },
-            licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
+            licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
+            customQuantitySelected: false,
+            customQuantityValue: undefined
           }, { skip: ['error'] })
         })
 
@@ -104,8 +113,8 @@ describe('Submit Amended Billable Returns Service', () => {
           const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
 
           expect(result.error).to.equal({
-            message: 'You must choose or enter a value',
-            radioFormElement: { text: 'You must choose or enter a value' },
+            message: 'Select the billable quantity',
+            radioFormElement: { text: 'Select the billable quantity' },
             customQuantityInputFormElement: null
           })
         })
@@ -115,10 +124,9 @@ describe('Submit Amended Billable Returns Service', () => {
         beforeEach(async () => {
           payload = {
             'quantity-options': 'customQuantity',
-            customQuantity: 'Hello world'
+            customQuantity: 'Hello world',
+            authorisedVolume: 11
           }
-
-          Sinon.stub(AmendBillableReturnsService, 'go').resolves(_amendBillableReturnsData())
         })
 
         it('returns the page data for the view', async () => {
@@ -140,7 +148,9 @@ describe('Submit Amended Billable Returns Service', () => {
             chargeVersion: {
               chargePeriod: '1 April 2022 to 5 June 2022'
             },
-            licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
+            licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
+            customQuantitySelected: true,
+            customQuantityValue: 'Hello world'
           }, { skip: ['error'] })
         })
 
@@ -148,9 +158,9 @@ describe('Submit Amended Billable Returns Service', () => {
           const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
 
           expect(result.error).to.equal({
-            message: 'You must enter a number',
+            message: 'The quantity must be a number',
             radioFormElement: null,
-            customQuantityInputFormElement: { text: 'You must enter a number' }
+            customQuantityInputFormElement: { text: 'The quantity must be a number' }
           })
         })
       })
