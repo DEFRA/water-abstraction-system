@@ -24,13 +24,15 @@ async function returnsRequired (request, h) {
   return h.redirect(`/system/return-requirements/${session.id}/start-date`)
 }
 
-async function view (request, h) {
+async function viewSummary (request, h) {
   const { params: { id }, auth } = request
 
   const data = await ViewLicenceService.go(id, auth)
 
   return h.view('licences/view.njk', {
     activeNavBar: 'search',
+    activeTab: 'summary',
+    path: '/system/licences/' + request.params.id,
     ...data
   })
 }
@@ -38,5 +40,5 @@ async function view (request, h) {
 module.exports = {
   noReturnsRequired,
   returnsRequired,
-  view
+  viewSummary
 }
