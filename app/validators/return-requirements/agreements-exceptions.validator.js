@@ -8,10 +8,10 @@
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `/return-requirements/{sessionId}/purpose` page
+ * Validates data submitted for the `/return-requirements/{sessionId}/agreements-exceptions` page
  *
- * When setting up a requirement users must specify a purpose for the return requirement.
- * Users must select one or more purposes linked to the licence. If these requirements are not met
+ * When setting up a requirement users must specify an agreement and exception for the return requirement.
+ * Users must select one or more agreements and exceptions linked to the licence. If these requirements are not met
  * the validation will return an error.
  *
  * @param {Object} payload - The payload from the request to be validated
