@@ -50,7 +50,7 @@ function go (billRuns) {
 }
 
 function _link (billRunId, status) {
-  if (status === 'cancel') {
+  if (['cancel', 'processing', 'queued', 'sending'].includes(status)) {
     return null
   }
 
