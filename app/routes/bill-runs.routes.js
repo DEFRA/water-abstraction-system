@@ -125,6 +125,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}',
+    handler: BillRunsController.chargeReferenceDetails,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Review a two-part tariff licences charge references'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
     handler: BillRunsController.matchDetails,
     options: {

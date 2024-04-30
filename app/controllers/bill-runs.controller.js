@@ -9,6 +9,7 @@ const Boom = require('@hapi/boom')
 
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
+const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
@@ -92,6 +93,18 @@ async function review (request, h) {
 
   return h.view('bill-runs/review.njk', {
     pageTitle: 'Review licences',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function chargeReferenceDetails (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
+
+  return h.view('bill-runs/charge-reference-details.njk', {
+    pageTitle: 'Charge reference details',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -188,6 +201,7 @@ module.exports = {
   index,
   matchDetails,
   review,
+  chargeReferenceDetails,
   reviewLicence,
   send,
   submitAmendedBillableReturns,

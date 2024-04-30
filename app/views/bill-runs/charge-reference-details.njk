@@ -1,0 +1,113 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{ govukBackLink({
+      text: 'Go back to licence',
+      href: '/system/bill-runs/' + billRunId + '/review/' + licenceId
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Charge reference {{chargeReference.reference}}</span> {{chargeReference.description}}
+      </h1>
+    <span class="govuk-caption-m">Financial Year {{financialYear}}</span>
+    <h2 class="govuk-heading-m">
+      Charge period {{chargePeriod}}
+    </h2>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-!-margin-right-6 float-left">
+      <h3>
+        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">{{chargeReference.totalBillableReturns}} ML</span>
+        <div>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Total billable returns</span>
+        </div>
+      </h3>
+    </div>
+    <div class="govuk-!-margin-right-6 float-left">
+      <h3>
+        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">/</span>
+      </h3>
+    </div>
+    <div class="govuk-!-margin-right-6 float-left">
+      <h3>
+        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">{{chargeReference.authorisedVolume}} ML</span>
+        <div>
+          <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Authorised volume</span>
+        </div>
+      </h3>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-full">
+    <span class="inline govuk-!-margin-right-3">
+      {{ govukButton({
+        text: "Change the authorised volume",
+        classes: "govuk-button--secondary"
+      }) }}
+    </span>
+
+    <span class="inline">
+      {{ govukButton({
+        text: "Preview the charge",
+        classes: "govuk-button--secondary"
+      }) }}
+    </span>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">
+      Reference details
+    <h2>
+
+    {% set adjustmentsValue %}
+      <div> Aggregate factor ({{chargeReference.adjustments.aggregateFactor}})</div>
+      <div> Charge adjustment ({{chargeReference.adjustments.chargeAdjustment}})</div>
+      <div> Winter discount ({{chargeReference.adjustments.winterDiscount}})</div>
+    {% endset %}
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "Additional charges"
+          },
+          value: {
+            text: "Dont know what this is for, need to ask Chris or work from a ticket lol"
+          }
+        },
+        {
+          key: {
+            text: "Adjustments"
+          },
+          value: {
+            html: adjustmentsValue
+          },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change factors",
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+  </div>
+</div>
+{% endblock %}

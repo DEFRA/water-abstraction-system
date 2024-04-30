@@ -109,6 +109,7 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
 
   reviewChargeReferences.forEach((reviewChargeReference) => {
     chargeReference.push({
+      id: reviewChargeReference.id,
       chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
       chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference),
