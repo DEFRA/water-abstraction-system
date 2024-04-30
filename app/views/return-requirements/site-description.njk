@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
@@ -16,6 +17,20 @@
 {% endblock %}
 
 {% block content %}
+{# Error summary #}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#siteDescription"
+        }
+      ]
+    }) }}
+  {%endif%}
+
+  {# Main heading #}
   <div class="govuk-body">
     <form method="post">
       <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
@@ -28,6 +43,7 @@
         hint: {
           text: "This is the description that will appear on the return"
         },
+        value: siteDescription,
         id: "site-description",
         name: "siteDescription",
         errorMessage: error
