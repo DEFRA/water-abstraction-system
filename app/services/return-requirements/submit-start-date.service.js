@@ -29,6 +29,7 @@ async function go (sessionId, payload) {
 
   const { endDate, startDate } = session.data.licence
   const validationResult = _validate(payload, startDate, endDate)
+  console.log('🚀🚀🚀 ~ start date options', session.data.startDateOptions)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -39,7 +40,8 @@ async function go (sessionId, payload) {
     }
   }
 
-  const formattedData = StartDatePresenter.go(session, payload)
+  const submittedSessionData = _submittedSessionData(session, payload)
+  console.log(' 🚀🚀🚀', session.data.startDateDay, session.data.startDateMonth, session.data.startDateYear, session.data.startDateOptions)
 
   return {
     activeNavBar: 'search',
@@ -47,7 +49,7 @@ async function go (sessionId, payload) {
     error: validationResult,
     journey: session.data.journey,
     pageTitle: 'Select the start date for the return requirement',
-    ...formattedData
+    ...submittedSessionData
   }
 }
 
@@ -64,6 +66,15 @@ async function _save (session, payload) {
   }
 
   return session.$query().patch({ data: currentData })
+}
+
+function _submittedSessionData (session, payload) {
+  session.data.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
+  session.data.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
+  session.data.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
+  session.data.startDateOptions = payload['start-date-options'] ? payload['start-date-options'] : null
+
+  return StartDatePresenter.go(session, payload)
 }
 
 function _validate (payload, licenceStartDate, licenceEndDate) {
