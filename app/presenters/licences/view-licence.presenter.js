@@ -72,7 +72,7 @@ function go (licence, licenceAbstractionConditions, auth) {
     sourceOfSupply: abstractionDetails.sourceOfSupply,
     startDate: formatLongDate(startDate),
     warning: _generateWarningMessage(ends),
-    roles: _getAuthRoles(auth)
+    roles: _authRoles(auth)
   }
 }
 
