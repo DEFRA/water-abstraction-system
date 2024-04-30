@@ -15,7 +15,7 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (licence, licenceAbstractionConditions) {
+function go (licence, licenceAbstractionConditions, auth) {
   const {
     ends,
     expiredDate,
@@ -71,7 +71,8 @@ function go (licence, licenceAbstractionConditions) {
     registeredTo,
     sourceOfSupply: abstractionDetails.sourceOfSupply,
     startDate: formatLongDate(startDate),
-    warning: _generateWarningMessage(ends)
+    warning: _generateWarningMessage(ends),
+    roles: _authRoles(auth)
   }
 }
 
@@ -130,6 +131,14 @@ function _endDate (expiredDate) {
   }
 
   return formatLongDate(expiredDate)
+}
+
+function _authRoles (auth) {
+  const roles = auth?.credentials?.roles?.map((role) => {
+    return role?.role
+  })
+
+  return roles || null
 }
 
 function _generateAbstractionContent (pointDetail) {
