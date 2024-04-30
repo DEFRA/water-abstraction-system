@@ -57,7 +57,7 @@ async function _save (session, payload) {
  * the user, payload will be an empty object.
  */
 function _submittedSessionData (session, payload) {
-  session.data.siteDescription = Object.keys(payload).length > 0 ? payload.siteDescription : null
+  session.data.siteDescription = payload.siteDescription ? payload.siteDescription : null
 
   return SiteDescriptionPresenter.go(session)
 }
