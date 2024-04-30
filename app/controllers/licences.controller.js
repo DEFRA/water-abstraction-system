@@ -32,7 +32,6 @@ async function viewSummary (request, h) {
   return h.view('licences/view.njk', {
     activeNavBar: 'search',
     activeTab: 'summary',
-    path: '/system/licences/' + request.params.id,
     ...data
   })
 }

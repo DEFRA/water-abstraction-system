@@ -39,36 +39,36 @@
             Contents
         </h2>
         <ul class="govuk-tabs__list">
-            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                <a class="govuk-tabs__tab" href="{{ path }}/summary">
+            <li class="govuk-tabs__list-item {% if activeTab === 'summary' %} govuk-tabs__list-item--selected {% endif %}">
+                <a class="govuk-tabs__tab" href="summary">
                     Summary
                 </a>
             </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="{{ path }}/contact-details">
+            <li class="govuk-tabs__list-item {% if activeTab === 'contact-details' %} govuk-tabs__list-item--selected {% endif %}">
+                <a class="govuk-tabs__tab" href="contact-details">
                     Contact details
                 </a>
             </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="{{ path }}/returns">
+            <li class="govuk-tabs__list-item {% if activeTab === 'returns' %} govuk-tabs__list-item--selected {% endif %}">
+                <a class="govuk-tabs__tab" href="returns">
                     Returns
                 </a>
             </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="{{ path }}/communications">
+            <li class="govuk-tabs__list-item {% if activeTab === 'communications' %} govuk-tabs__list-item--selected {% endif %}">
+                <a class="govuk-tabs__tab" href="communications">
                     Communications
                 </a>
             </li>
             {% if roles and 'billing' in roles %}
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab" href="{{ path }}/bills">
+                <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}">
+                    <a class="govuk-tabs__tab" href="bills">
                         Bills
                     </a>
                 </li>
             {% endif %}
             {% if roles and 'view_charge_versions' in roles %}
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab" href="{{ path }}/charge-information">
+                <li class="govuk-tabs__list-item {% if activeTab === 'charge-information' %} govuk-tabs__list-item--selected {% endif %}">
+                    <a class="govuk-tabs__tab" href="charge-information">
                         Charge information
                     </a>
                 </li>
