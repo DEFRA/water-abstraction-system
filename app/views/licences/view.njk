@@ -59,16 +59,20 @@
                     Communications
                 </a>
             </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="{{ path }}/bills">
-                    Bills
-                </a>
-            </li>
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="{{ path }}/charge-information">
-                    Charge information
-                </a>
-            </li>
+            {% if roles and 'billing' in roles %}
+                <li class="govuk-tabs__list-item">
+                    <a class="govuk-tabs__tab" href="{{ path }}/bills">
+                        Bills
+                    </a>
+                </li>
+            {% endif %}
+            {% if roles and 'view_charge_versions' in roles %}
+                <li class="govuk-tabs__list-item">
+                    <a class="govuk-tabs__tab" href="{{ path }}/charge-information">
+                        Charge information
+                    </a>
+                </li>
+            {% endif %}
         </ul>
 
         <div class="govuk-tabs__panel" id="{{ activeTab }}">
@@ -77,19 +81,4 @@
             {% endif %}
         </div>
     </div>
-
-
-{#    }, {#}
-{#    label: "Bills",#}
-{#    id: "bills",#}
-{#    panel: {#}
-{#    html: billsTabHtml#}
-{#    }#}
-{#    } if roles and 'billing' in roles, {#}
-{#    label: "Charge information",#}
-{#    id: "charge-information",#}
-{#    panel: {#}
-{#    html: chargeInformationTabHtml#}
-{#    }#}
-{#    } if roles and 'view_charge_versions' in roles#}
 {% endblock %}
