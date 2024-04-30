@@ -19,7 +19,7 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 // Thing under test
 const RemoveBillRunLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
 
-describe.only('Remove Bill Run Licence service', () => {
+describe('Remove Bill Run Licence service', () => {
   let billRunId
   let licenceId
 
