@@ -50,6 +50,7 @@ function go (licence, licenceAbstractionConditions, auth) {
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
     abstractionQuantities: abstractionDetails.quantities,
+    activeTab: 'summary',
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
     id,
@@ -58,7 +59,7 @@ function go (licence, licenceAbstractionConditions, auth) {
     purposes,
     region: region.displayName,
     sourceOfSupply: abstractionDetails.sourceOfSupply,
-    startDate: formatLongDate(startDate)
+    startDate: formatLongDate(startDate),
   }
 }
 

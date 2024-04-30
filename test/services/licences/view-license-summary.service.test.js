@@ -14,7 +14,7 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 // Things we need to stub
 const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
-
+const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
 // Thing under test
 const ViewLicenceSummaryService = require('../../../app/services/licences/view-license-summary.service')
 
@@ -29,6 +29,7 @@ describe('View Licence service summary', () => {
       purposeIds: [],
       numberOfConditions: 0
     })
+    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake license'})
   })
 
   afterEach(() => {
@@ -58,10 +59,12 @@ describe('View Licence service summary', () => {
           ],
           abstractionPointsCaption: 'Point of abstraction',
           abstractionQuantities: null,
+          activeTab: 'summary',
           documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
           endDate: null,
           id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           licenceHolder: 'Unregistered licence',
+          licenceName: 'fake license',
           monitoringStations: [],
           purposes: null,
           region: 'South West',
