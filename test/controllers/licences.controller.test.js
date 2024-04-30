@@ -150,11 +150,11 @@ describe('Licences controller', () => {
     })
   })
 
-  describe('GET /licences/{id}/', () => {
+  describe.only('GET /licences/{id}/summary', () => {
     beforeEach(async () => {
       options = {
         method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
         auth: {
           strategy: 'session',
           credentials: { scope: ['billing'] }
