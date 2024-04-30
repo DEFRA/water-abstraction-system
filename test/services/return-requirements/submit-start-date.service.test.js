@@ -184,10 +184,10 @@ describe('Submit Start Date service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             licenceVersionStartDate: '1 January 2023',
-            anotherStartDateDay: null,
-            anotherStartDateMonth: null,
-            anotherStartDateYear: null,
-            anotherStartDateSelected: false,
+            anotherStartDateDay: 'a',
+            anotherStartDateMonth: 'b',
+            anotherStartDateYear: 'c',
+            anotherStartDateSelected: true,
             licenceStartDateSelected: false
           }, { skip: ['id', 'error'] })
         })
