@@ -34,14 +34,13 @@ async function go (sessionId, payload) {
     return {}
   }
 
-  const formattedData = SiteDescriptionPresenter.go(session, payload)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
-    journey: session.data.journey,
     pageTitle: 'Enter a site description for the requirements for returns',
-    ...formattedData
+    ...submittedSessionData
   }
 }
 
@@ -51,6 +50,16 @@ async function _save (session, payload) {
   currentData.siteDescription = payload.siteDescription
 
   return session.$query().patch({ data: currentData })
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ */
+function _submittedSessionData (session, payload) {
+  session.data.siteDescription = Object.keys(payload).length > 0 ? payload.siteDescription : null
+
+  return SiteDescriptionPresenter.go(session)
 }
 
 function _validate (payload) {
