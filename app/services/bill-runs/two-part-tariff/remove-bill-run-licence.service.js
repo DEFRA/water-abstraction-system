@@ -10,7 +10,7 @@ const { db } = require('../../../../db/db.js')
 const RemoveBillRunLicencePresenter = require('../../../presenters/bill-runs/two-part-tariff/remove-bill-run-licence.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
+ * Orchestrates fetching and presenting the data needed for the remove bill run licence confirmation page
  *
  * @param {string} billRunId - The UUID of the bill run that the licence is in
  * @param {string} licenceId UUID of the licence to remove from the bill run
