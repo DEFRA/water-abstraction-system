@@ -38,8 +38,7 @@ describe('Site Description presenter', () => {
           id: '61e07498-f309-4829-96a9-72084a54996d',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
-          siteDescription: null,
-          inputtedSiteDescription: null
+          siteDescription: null
         })
       })
     })
@@ -75,8 +74,7 @@ describe('Site Description presenter', () => {
           id: '61e07498-f309-4829-96a9-72084a54996d',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
-          siteDescription: 'This is a valid return requirement description',
-          inputtedSiteDescription: 'This is a valid return requirement description'
+          siteDescription: 'This is a valid return requirement description'
         })
       })
     })

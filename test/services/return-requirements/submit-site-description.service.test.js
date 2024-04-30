@@ -76,12 +76,10 @@ describe('Submit Site Description service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
-            journey: 'returns-required',
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            siteDescription: null,
-            inputtedSiteDescription: null
+            siteDescription: null
           }, { skip: ['id', 'error'] })
         })
 
@@ -112,12 +110,10 @@ describe('Submit Site Description service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
-            journey: 'returns-required',
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            siteDescription: null,
-            inputtedSiteDescription: 'Too short'
+            siteDescription: 'Too short'
           }, { skip: ['id', 'error'] })
         })
 
@@ -151,12 +147,10 @@ describe('Submit Site Description service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
-            journey: 'returns-required',
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            siteDescription: null,
-            inputtedSiteDescription: invalidSiteDescription
+            siteDescription: invalidSiteDescription
           }, { skip: ['id', 'error'] })
         })
 
