@@ -98,9 +98,7 @@ jobs:
 
       # Run editorconfig check first. No point running the tests if there are issues with the format of the files
       - name: Run editorconfig check
-        uses: zbeekman/EditorConfig-Action@v1.1.1
-        env:
-          ALWAYS_LINT_ALL_FILES: false
+        uses: editorconfig-checker/action-editorconfig-checker@main
 
       # Next run linting. No point running the tests if there is a linting issue
       - name: Run lint check
