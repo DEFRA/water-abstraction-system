@@ -29,7 +29,6 @@ async function go (sessionId, payload) {
 
   const { endDate, startDate } = session.data.licence
   const validationResult = _validate(payload, startDate, endDate)
-  console.log('🚀🚀🚀 ~ start date options', session.data.startDateOptions)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -41,7 +40,6 @@ async function go (sessionId, payload) {
   }
 
   const submittedSessionData = _submittedSessionData(session, payload)
-  console.log(' 🚀🚀🚀', session.data.startDateDay, session.data.startDateMonth, session.data.startDateYear, session.data.startDateOptions)
 
   return {
     activeNavBar: 'search',
