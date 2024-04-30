@@ -34,7 +34,9 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+    }
   }
 
   const purposesData = await FetchPurposesService.go(session.data.licence.id)
@@ -42,6 +44,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select the purpose for the requirements for returns',
     ...formattedData
