@@ -46,6 +46,7 @@ async function _fetchLicence (id) {
       'id',
       'include_in_presroc_billing',
       'include_in_sroc_billing',
+      'waterUndertaker',
       'lapsedDate',
       'licenceRef',
       'revokedDate',
