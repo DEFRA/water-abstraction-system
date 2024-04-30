@@ -49,10 +49,8 @@ function go (billRun, reviewChargeElement, licenceId) {
  */
 function _authorisedQuantity (reviewChargeElement) {
   const { chargeElement, reviewChargeReference } = reviewChargeElement
-  const chargeElementQuantity = chargeElement.authorisedAnnualQuantity
-  const chargeReferenceQuantity = reviewChargeReference.chargeReference.volume
 
-  return chargeElementQuantity > chargeReferenceQuantity ? chargeReferenceQuantity : chargeElementQuantity
+  return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.chargeReference.volume)
 }
 
 function _financialYear (financialYearEnding) {
