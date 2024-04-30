@@ -133,7 +133,7 @@ function _endDate (expiredDate) {
   return formatLongDate(expiredDate)
 }
 
-function _getAuthRoles (auth) {
+function _authRoles (auth) {
   return auth?.credentials?.roles?.map((role) => {
     return role?.role
   }) || null
