@@ -87,7 +87,7 @@ function _prepareBillRun (billRun, preparedLicences, numberOfLicencesToReview) {
     billRunType: 'two-part tariff',
     numberOfLicencesDisplayed: preparedLicences.length,
     numberOfLicencesToReview,
-    totalNumberOfLicences: billRun.reviewLicences[0]?.totalNumberOfLicences
+    totalNumberOfLicences: billRun.reviewLicences[0].totalNumberOfLicences
   }
 }
 
