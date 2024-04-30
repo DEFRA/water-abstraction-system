@@ -125,11 +125,26 @@ describe('Index Bill Runs presenter', () => {
           billRuns[0].status = 'review'
         })
 
-        it('generates the href needed to link to the bill run review', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+        describe("and is for the 'PRESROC' charge scheme", () => {
+          beforeEach(() => {
+            billRuns[0].scheme = 'alcs'
+          })
 
-          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b/review')
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          it('generates the href needed to link to the old bill run review', () => {
+            const results = IndexBillRunsPresenter.go(billRuns)
+
+            expect(results[0].link).to.equal('/billing/batch/31fec553-f2de-40cf-a8d7-a5fb65f5761b/two-part-tariff-review')
+            expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          })
+        })
+
+        describe("and is for the 'SROC' charge scheme", () => {
+          it('generates the href needed to link to bill run review', () => {
+            const results = IndexBillRunsPresenter.go(billRuns)
+
+            expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b/review')
+            expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          })
         })
       })
 

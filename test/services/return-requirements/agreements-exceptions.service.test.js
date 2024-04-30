@@ -12,9 +12,9 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const AbstractionPeriodService = require('../../../app/services/return-requirements/abstraction-period.service.js')
+const AgreementsExceptionsService = require('../../../app/services/return-requirements/agreements-exceptions.service.js')
 
-describe('Abstraction Period service', () => {
+describe('Agreements Exceptions service', () => {
   let session
 
   beforeEach(async () => {
@@ -36,26 +36,21 @@ describe('Abstraction Period service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await AbstractionPeriodService.go(session.id)
+      const result = await AgreementsExceptionsService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await AbstractionPeriodService.go(session.id)
+      const result = await AgreementsExceptionsService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        pageTitle: 'Enter the abstraction period for the requirements for returns',
+        pageTitle: 'Select agreements and exceptions for the requirements for returns',
         id: '465c6792-dd84-4163-a808-cbb834a779be',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
-        abstractionPeriod: {
-          startDay: null,
-          startMonth: null,
-          endDay: null,
-          endMonth: null
-        }
+        agreementsExceptions: ''
       }, { skip: ['id'] })
     })
   })
