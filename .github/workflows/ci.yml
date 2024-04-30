@@ -97,8 +97,10 @@ jobs:
         run: npm ci
 
       # Run editorconfig check first. No point running the tests if there are issues with the format of the files
-      - name: Run editorconfig check
+      - name: Install editorconfig check
         uses: editorconfig-checker/action-editorconfig-checker@main
+
+      - name: Run editorconfig check
         run: editorconfig-checker
 
       # Next run linting. No point running the tests if there is a linting issue
