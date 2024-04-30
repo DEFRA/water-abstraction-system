@@ -5,7 +5,7 @@
  * @module RemoveBillRunLicencePresenter
  */
 
-const { capitalize, formatFinancialYear } = require('../../base.presenter.js')
+const { formatFinancialYear } = require('../../base.presenter.js')
 
 /**
  * Prepares and processes bill run data for presentation
@@ -25,7 +25,7 @@ function go (billRun, licence) {
     billingAccount: _billingAccount(licence),
     financialYear: formatFinancialYear(toFinancialYearEnding),
     licenceRef: licence[0].licenceRef,
-    region: capitalize(region)
+    region
   }
 }
 
