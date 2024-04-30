@@ -17,8 +17,8 @@
     "rollback:all": "knex migrate:rollback --all",
     "rollback:all:test": "NODE_ENV=test knex migrate:rollback --all",
     "seed": "knex seed:run --knexfile knexfile.application.js",
-    "lint": "eslint .",
-    "lint:changed": "eslint $(git diff --name-only --diff-filter=ACMRTUXB  | grep -E \"\\.(js|jsx|ts|tsx)$\")",
+    "lint": "eslint $(git diff --name-only --diff-filter=ACMRTUXB  | grep -E \"\\.(js)$\")",
+    "lint:all": "eslint .",
     "test": "lab --silent-skips --shuffle",
     "postinstall": "npm run build",
     "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"
