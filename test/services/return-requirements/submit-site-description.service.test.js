@@ -23,6 +23,7 @@ describe('Submit Site Description service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -52,10 +53,12 @@ describe('Submit Site Description service', () => {
         expect(refreshedSession.data.siteDescription).to.equal('This is a valid return requirement description')
       })
 
-      it('returns an empty object (no page data needed for a redirect)', async () => {
+      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
         const result = await SubmitSiteDescriptionService.go(session.id, payload)
 
-        expect(result).to.equal({})
+        expect(result).to.equal({
+          checkYourAnswersVisited: false
+        })
       })
     })
 
@@ -76,6 +79,7 @@ describe('Submit Site Description service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
+            checkYourAnswersVisited: false,
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
@@ -110,6 +114,7 @@ describe('Submit Site Description service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
+            checkYourAnswersVisited: false,
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
@@ -147,6 +152,7 @@ describe('Submit Site Description service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
+            checkYourAnswersVisited: false,
             pageTitle: 'Enter a site description for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
