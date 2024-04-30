@@ -4,17 +4,22 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const AmendBillableReturnsPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/amend-billable-returns.presenter.js')
 
 describe('Amend Billable Returns presenter', () => {
+  const licenceId = '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
+  let reviewChargeElement
+  let billRun
+
   describe('when there is data to be presented for the amend billable returns page', () => {
-    const billRun = _billRun()
-    const reviewChargeElement = _reviewChargeElementData()
-    const licenceId = '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
+    beforeEach(() => {
+      billRun = _billRun()
+      reviewChargeElement = _reviewChargeElementData()
+    })
 
     it('correctly presents the data', async () => {
       const result = AmendBillableReturnsPresenter.go(billRun, reviewChargeElement, licenceId)
@@ -23,7 +28,6 @@ describe('Amend Billable Returns presenter', () => {
         chargeElement: {
           description: 'Trickle Irrigation - Direct',
           dates: ['1 April 2022 to 5 June 2022'],
-          authorisedQuantity: 200,
           reviewChargeElementId: 'b4d70c89-de1b-4f68-a47f-832b338ac044'
         },
         billRun: {
@@ -33,7 +37,20 @@ describe('Amend Billable Returns presenter', () => {
         chargeVersion: {
           chargePeriod: '1 April 2022 to 5 June 2022'
         },
-        licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
+        licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
+        authorisedQuantity: 200
+      })
+    })
+
+    describe('when the charge reference has a lower authorised volume than the element', () => {
+      beforeEach(() => {
+        reviewChargeElement.reviewChargeReference.chargeReference.volume = 150
+      })
+
+      it('displays the lower volume from the two', () => {
+        const result = AmendBillableReturnsPresenter.go(billRun, reviewChargeElement, licenceId)
+
+        expect(result.authorisedQuantity).to.equal(150)
       })
     })
   })
@@ -69,6 +86,9 @@ function _reviewChargeElementData () {
       reviewChargeVersion: {
         chargePeriodStartDate: new Date('2022-04-01'),
         chargePeriodEndDate: new Date('2022-06-05')
+      },
+      chargeReference: {
+        volume: 250
       }
     }
   }

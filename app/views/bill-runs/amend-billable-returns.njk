@@ -80,8 +80,8 @@
           items: [
             {
               id: 'authorised-quantity',
-              value: chargeElement.authorisedQuantity,
-              html: 'Authorised ' + chargeElement.authorisedQuantity + 'ML'
+              value: authorisedQuantity,
+              html: 'Authorised ' + authorisedQuantity + 'ML'
             },
             {
               id: 'custom-quantity',
@@ -96,7 +96,7 @@
         }) }}
 
       {# Hidden input for authorised volume #}
-      <input type="hidden" name="authorisedVolume" value="{{ chargeElement.authorisedQuantity }}">
+      <input type="hidden" name="authorisedVolume" value="{{ authorisedQuantity }}">
 
       {{ govukButton({ text: 'Confirm' }) }}
     </form>
