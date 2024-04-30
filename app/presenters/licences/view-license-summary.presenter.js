@@ -59,7 +59,7 @@ function go (licence, licenceAbstractionConditions, auth) {
     purposes,
     region: region.displayName,
     sourceOfSupply: abstractionDetails.sourceOfSupply,
-    startDate: formatLongDate(startDate),
+    startDate: formatLongDate(startDate)
   }
 }
 

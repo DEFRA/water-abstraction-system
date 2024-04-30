@@ -29,7 +29,7 @@ describe('View Licence service summary', () => {
       purposeIds: [],
       numberOfConditions: 0
     })
-    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake license'})
+    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake license' })
   })
 
   afterEach(() => {
