@@ -5,7 +5,6 @@
  * @module ViewLicenceService
  */
 
-const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter.js')
 
@@ -13,17 +12,13 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *
  * @param {string} licenceId - The UUID of the licence
- *
+ * @param {string} auth - Auth object
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go (licenceId, auth) {
   const licenceData = await FetchLicenceService.go(licenceId)
 
-  const currentLicenceVersionId = licenceData?.licenceVersions[0]?.id
-
-  const licenceAbstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
-
-  const pageData = ViewLicencePresenter.go(licenceData, licenceAbstractionConditions, auth)
+  const pageData = ViewLicencePresenter.go(licenceData, auth)
 
   return {
     ...pageData
