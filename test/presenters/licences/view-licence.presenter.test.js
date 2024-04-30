@@ -1150,7 +1150,7 @@ describe('View Licence presenter', () => {
         auth = undefined
       })
 
-      it('returns the roles in a flat array', () => {
+      it('returns null for the roles', () => {
         const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions, auth)
 
         expect(result.roles).to.be.null()
