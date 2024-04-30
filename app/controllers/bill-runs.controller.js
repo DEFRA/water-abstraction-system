@@ -89,9 +89,9 @@ async function matchDetails (request, h) {
 }
 
 async function removeLicence (request, h) {
-  const { id, licenceId } = request.params
+  const { id: billRunId, licenceId } = request.params
 
-  const pageData = await RemoveBillRunLicenceService.go(id, licenceId)
+  const pageData = await RemoveBillRunLicenceService.go(billRunId, licenceId)
 
   return h.view('bill-runs/remove-licence.njk', {
     pageTitle: "You're about to remove this licence from the bill run",
@@ -162,15 +162,15 @@ async function submitCancel (request, h) {
 }
 
 async function submitRemoveLicence (request, h) {
-  const { id, licenceId } = request.params
+  const { id: billRunId, licenceId } = request.params
 
-  const allLicencesRemoved = await SubmitRemoveBillRunLicenceService.go(id, licenceId, request.yar)
+  const allLicencesRemoved = await SubmitRemoveBillRunLicenceService.go(billRunId, licenceId, request.yar)
 
   if (allLicencesRemoved) {
     return h.redirect('/system/bill-runs')
   }
 
-  return h.redirect(`/system/bill-runs/${id}/review`)
+  return h.redirect(`/system/bill-runs/${billRunId}/review`)
 }
 
 async function submitReviewLicence (request, h) {

@@ -12,24 +12,24 @@ const RemoveBillRunLicencePresenter = require('../../../presenters/bill-runs/two
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
  *
- * @param {string} id - The UUID of the bill run that the licence is in
+ * @param {string} billRunId - The UUID of the bill run that the licence is in
  * @param {string} licenceId UUID of the licence to remove from the bill run
  *
  * @returns {Promise<Object}> an object representing the `pageData` needed by the remove licence template. It contains
  * details of the bill run & licence.
  */
-async function go (id, licenceId) {
-  const billRun = await _fetchBillRun(id)
-  const licence = await _fetchLicence(id, licenceId)
+async function go (billRunId, licenceId) {
+  const billRun = await _fetchBillRun(billRunId)
+  const licence = await _fetchLicence(billRunId, licenceId)
 
   const pageData = RemoveBillRunLicencePresenter.go(billRun, licence)
 
   return pageData
 }
 
-async function _fetchBillRun (id) {
+async function _fetchBillRun (billRunId) {
   return BillRunModel.query()
-    .findById(id)
+    .findById(billRunId)
     .select(
       'billRuns.toFinancialYearEnding',
       'region.displayName as region'
@@ -37,7 +37,7 @@ async function _fetchBillRun (id) {
     .innerJoinRelated('region')
 }
 
-async function _fetchLicence (id, licenceId) {
+async function _fetchLicence (billRunId, licenceId) {
   return db
     .distinct(
       'rl.licenceId',
@@ -48,7 +48,7 @@ async function _fetchLicence (id, licenceId) {
     .innerJoin('reviewChargeVersions AS rcv', 'rl.id', 'rcv.reviewLicenceId')
     .innerJoin('chargeVersions AS cv', 'rcv.chargeVersionId', 'cv.id')
     .innerJoin('billingAccounts AS ba', 'cv.billingAccountId', 'ba.id')
-    .where('rl.billRunId', id)
+    .where('rl.billRunId', billRunId)
     .andWhere('rl.licenceId', licenceId)
 }
 

@@ -10,37 +10,37 @@ const { db } = require('../../../../db/db.js')
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
  *
- * @param {string} id - The UUID of the bill run that the licence is in
+ * @param {string} billRunId - The UUID of the bill run that the licence is in
  * @param {string} licenceId UUID of the licence to remove from the bill run
  * @param {Object} sessionManager - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go (id, licenceId, yar) {
-  await _removeChargeElementReturns(id, licenceId)
-  await _removeReturns(id, licenceId)
-  await _removeChargeElements(id, licenceId)
-  await _removeChargeReferences(id, licenceId)
-  await _removeChargeVersions(id, licenceId)
-  await _removeLicence(id, licenceId)
+async function go (billRunId, licenceId, yar) {
+  await _removeChargeElementReturns(billRunId, licenceId)
+  await _removeReturns(billRunId, licenceId)
+  await _removeChargeElements(billRunId, licenceId)
+  await _removeChargeReferences(billRunId, licenceId)
+  await _removeChargeVersions(billRunId, licenceId)
+  await _removeLicence(billRunId, licenceId)
 
   const licenceRef = await _setSupBillingTrueAndReturnRef(licenceId)
 
-  const allLicencesRemoved = await _allLicencesRemoved(id, licenceRef, yar)
+  const allLicencesRemoved = await _allLicencesRemoved(billRunId, licenceRef, yar)
 
   return allLicencesRemoved
 }
 
-async function _allLicencesRemoved (id, licenceRef, yar) {
+async function _allLicencesRemoved (billRunId, licenceRef, yar) {
   const { licenceCount } = await db
     .count('id AS licenceCount')
     .from('reviewLicences')
-    .where('billRunId', id)
+    .where('billRunId', billRunId)
     .first()
 
   if (licenceCount === 0) {
     await db
       .update('status', 'empty')
       .from('billRuns')
-      .where('id', id)
+      .where('id', billRunId)
 
     return true
   }
@@ -53,18 +53,18 @@ async function _allLicencesRemoved (id, licenceRef, yar) {
   return false
 }
 
-async function _removeChargeElements (id, licenceId) {
+async function _removeChargeElements (billRunId, licenceId) {
   return db
     .del()
     .from('reviewChargeElements AS rce')
     .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
     .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
     .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', id)
+    .where('rl.billRunId', billRunId)
     .andWhere('rl.licenceId', licenceId)
 }
 
-async function _removeChargeElementReturns (id, licenceId) {
+async function _removeChargeElementReturns (billRunId, licenceId) {
   return db
     .del()
     .from('reviewChargeElementsReturns AS rcer')
@@ -72,43 +72,43 @@ async function _removeChargeElementReturns (id, licenceId) {
     .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
     .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
     .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', id)
+    .where('rl.billRunId', billRunId)
     .andWhere('rl.licenceId', licenceId)
 }
 
-async function _removeChargeReferences (id, licenceId) {
+async function _removeChargeReferences (billRunId, licenceId) {
   return db
     .del()
     .from('reviewChargeReferences AS rcr')
     .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
     .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', id)
+    .where('rl.billRunId', billRunId)
     .andWhere('rl.licenceId', licenceId)
 }
 
-async function _removeChargeVersions (id, licenceId) {
+async function _removeChargeVersions (billRunId, licenceId) {
   return db
     .del()
     .from('reviewChargeVersions AS rcv')
     .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', id)
+    .where('rl.billRunId', billRunId)
     .andWhere('rl.licenceId', licenceId)
 }
 
-async function _removeLicence (id, licenceId) {
+async function _removeLicence (billRunId, licenceId) {
   return db
     .del()
     .from('reviewLicences')
-    .where('billRunId', id)
+    .where('billRunId', billRunId)
     .andWhere('licenceId', licenceId)
 }
 
-async function _removeReturns (id, licenceId) {
+async function _removeReturns (billRunId, licenceId) {
   return db
     .del()
     .from('reviewReturns AS rr')
     .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', id)
+    .where('rl.billRunId', billRunId)
     .andWhere('rl.licenceId', licenceId)
 }
 
