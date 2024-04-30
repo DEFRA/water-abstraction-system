@@ -67,10 +67,15 @@ async function _save (session, payload) {
 }
 
 function _submittedSessionData (session, payload) {
-  session.data.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
-  session.data.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
-  session.data.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
-  session.data.startDateOptions = payload['start-date-options'] ? payload['start-date-options'] : null
+  const startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
+  const startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
+  const startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
+  const startDateOptions = payload['start-date-options'] ? payload['start-date-options'] : null
+
+  session.data.startDateDay = startDateDay
+  session.data.startDateMonth = startDateMonth
+  session.data.startDateYear = startDateYear
+  session.data.startDateOptions = startDateOptions
 
   return StartDatePresenter.go(session, payload)
 }
