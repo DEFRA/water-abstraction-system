@@ -134,9 +134,11 @@ function _endDate (expiredDate) {
 }
 
 function _authRoles (auth) {
-  return auth?.credentials?.roles?.map((role) => {
+  const roles = auth?.credentials?.roles?.map((role) => {
     return role?.role
-  }) || null
+  })
+
+  return roles || null
 }
 
 function _generateAbstractionContent (pointDetail) {
