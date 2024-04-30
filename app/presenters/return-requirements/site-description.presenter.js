@@ -13,13 +13,12 @@
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, payload = {}) {
+function go (session) {
   const data = {
     id: session.id,
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
-    siteDescription: session.data.siteDescription ? session.data.siteDescription : null,
-    inputtedSiteDescription: payload.siteDescription ? payload.siteDescription : null
+    siteDescription: session.data.siteDescription ? session.data.siteDescription : null
   }
 
   return data
