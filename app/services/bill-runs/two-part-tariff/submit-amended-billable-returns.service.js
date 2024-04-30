@@ -47,7 +47,7 @@ function _persistAmendedBillableReturns (reviewChargeElementId, payload) {
 
   return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
-    .patch({ allocated: volume })
+    .patch({ amendedAllocated: volume })
 }
 
 function _validate (payload) {

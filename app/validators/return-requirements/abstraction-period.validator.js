@@ -13,7 +13,7 @@ const { leftPadZeroes } = require('../../presenters/base.presenter.js')
  * Validates data submitted for the `/return-requirements/{sessionId}/abstraction-period` page
  *
  * When setting up a requirement, users must specify an abstraction period for the return requirement. Users must input
- * a valid from-date and to-date for the licence. If these requirements are not met, the validation will return an
+ * a valid start-date and end-date for the licence. If these requirements are not met, the validation will return an
  * error.
  *
  * @param {Object} payload - The payload from the request to be validated.
@@ -23,81 +23,81 @@ const { leftPadZeroes } = require('../../presenters/base.presenter.js')
  */
 function go (payload) {
   const {
-    'from-abstraction-period-day': fromDay,
-    'from-abstraction-period-month': fromMonth,
-    'to-abstraction-period-day': toDay,
-    'to-abstraction-period-month': toMonth
+    'start-abstraction-period-day': startDay,
+    'start-abstraction-period-month': startMonth,
+    'end-abstraction-period-day': endDay,
+    'end-abstraction-period-month': endMonth
   } = payload
 
-  const parsedPayload = _parsePayload(fromDay, fromMonth, toDay, toMonth)
+  const parsedPayload = _parsePayload(startDay, startMonth, endDay, endMonth)
 
   const result = {
-    // NOTE: Because the fromDate and toDate both return slightly different error messages, the payloads are passed to
+    // NOTE: Because the startDate and endDate both return slightly different error messages, the payloads are passed to
     // two separate Joi validation schemas which return the appropriate error message. Once validated, they are passed
     // back to the result and returned.
-    fromResult: _validateAbstractionFromDate(parsedPayload.fromDate),
-    toResult: _validateAbstractionToDate(parsedPayload.toDate)
+    startResult: _validateAbstractionStartDate(parsedPayload.startDate),
+    endResult: _validateAbstractionEndDate(parsedPayload.endDate)
   }
 
   return result
 }
 
-function _parsePayload (fromDay, fromMonth, toDay, toMonth) {
-  const parsedFromDay = fromDay ? leftPadZeroes(fromDay, 2) : ''
-  const parsedFromMonth = fromMonth ? leftPadZeroes(fromMonth, 2) : ''
-  const parsedToDay = toDay ? leftPadZeroes(toDay, 2) : ''
-  const parsedToMonth = toMonth ? leftPadZeroes(toMonth, 2) : ''
+function _parsePayload (startDay, startMonth, endDay, endMonth) {
+  const parsedStartDay = startDay ? leftPadZeroes(startDay, 2) : ''
+  const parsedStartMonth = startMonth ? leftPadZeroes(startMonth, 2) : ''
+  const parsedEndDay = endDay ? leftPadZeroes(endDay, 2) : ''
+  const parsedEndMonth = endMonth ? leftPadZeroes(endMonth, 2) : ''
 
   const parsePayload = {
-    fromDate: {
-      entry: `${parsedFromDay}${parsedFromMonth}`,
-      fullDate: `2023-${parsedFromMonth}-${parsedFromDay}`
+    startDate: {
+      entry: `${parsedStartDay}${parsedStartMonth}`,
+      fullDate: `2023-${parsedStartMonth}-${parsedStartDay}`
     },
-    toDate: {
-      entry: `${parsedToDay}${parsedToMonth}`,
-      fullDate: `2023-${parsedToMonth}-${parsedToDay}`
+    endDate: {
+      entry: `${parsedEndDay}${parsedEndMonth}`,
+      fullDate: `2023-${parsedEndMonth}-${parsedEndDay}`
     }
   }
 
   return parsePayload
 }
 
-function _validateAbstractionFromDate (fromDate) {
+function _validateAbstractionStartDate (startDate) {
   const schema = Joi.object({
     entry: Joi.string()
       .required()
       .messages({
-        'string.empty': 'Select the from date of the abstraction period'
+        'string.empty': 'Select the start date of the abstraction period'
       }),
     fullDate: Joi.date()
       .format(['YYYY-MM-DD'])
       .required()
       .messages({
-        'date.base': 'Enter a real from date',
-        'date.format': 'Enter a real from date'
+        'date.base': 'Enter a real start date',
+        'date.format': 'Enter a real start date'
       })
   })
 
-  return schema.validate(fromDate, { abortEarly: true })
+  return schema.validate(startDate, { abortEarly: true })
 }
 
-function _validateAbstractionToDate (toDate) {
+function _validateAbstractionEndDate (endDate) {
   const schema = Joi.object({
     entry: Joi.string()
       .required()
       .messages({
-        'string.empty': 'Select the to date of the abstraction period'
+        'string.empty': 'Select the end date of the abstraction period'
       }),
     fullDate: Joi.date()
       .format(['YYYY-MM-DD'])
       .required()
       .messages({
-        'date.base': 'Enter a real to date',
-        'date.format': 'Enter a real to date'
+        'date.base': 'Enter a real end date',
+        'date.format': 'Enter a real end date'
       })
   })
 
-  return schema.validate(toDate, { abortEarly: true })
+  return schema.validate(endDate, { abortEarly: true })
 }
 
 module.exports = {
