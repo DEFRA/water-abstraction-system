@@ -83,18 +83,13 @@ describe('Submit Abstraction Period service', () => {
           const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
           expect(result).to.equal({
+            abstractionPeriod: null,
             activeNavBar: 'search',
             error: null,
             pageTitle: 'Enter the abstraction period for the requirements for returns',
             id: 'aeb46f58-3431-42af-8724-361a7779becf',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            abstractionPeriod: {
-              startDay: null,
-              startMonth: null,
-              endDay: null,
-              endMonth: null
-            }
+            licenceRef: '01/ABC'
           }, { skip: ['id', 'error'] })
         })
 
@@ -137,10 +132,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              startDay: null,
-              startMonth: null,
-              endDay: '02',
-              endMonth: '7'
+              'start-abstraction-period-day': null,
+              'start-abstraction-period-month': null,
+              'end-abstraction-period-day': '02',
+              'end-abstraction-period-month': '7'
             }
           }, { skip: ['id', 'error'] })
         })
@@ -184,10 +179,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              startDay: '08',
-              startMonth: '12',
-              endDay: null,
-              endMonth: null
+              'start-abstraction-period-day': '08',
+              'start-abstraction-period-month': '12',
+              'end-abstraction-period-day': null,
+              'end-abstraction-period-month': null
             }
           }, { skip: ['id', 'error'] })
         })
@@ -231,10 +226,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              startDay: 'abc',
-              startMonth: '123',
-              endDay: 'abc',
-              endMonth: '123'
+              'start-abstraction-period-day': 'abc',
+              'start-abstraction-period-month': '123',
+              'end-abstraction-period-day': 'abc',
+              'end-abstraction-period-month': '123'
             }
           }, { skip: ['id', 'error'] })
         })
@@ -278,10 +273,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              startDay: 'abc',
-              startMonth: '123',
-              endDay: '02',
-              endMonth: '07'
+              'start-abstraction-period-day': 'abc',
+              'start-abstraction-period-month': '123',
+              'end-abstraction-period-day': '02',
+              'end-abstraction-period-month': '07'
             }
           }, { skip: ['id', 'error'] })
         })
@@ -325,10 +320,10 @@ describe('Submit Abstraction Period service', () => {
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             abstractionPeriod: {
-              startDay: '08',
-              startMonth: '12',
-              endDay: 'abc',
-              endMonth: '123'
+              'start-abstraction-period-day': '08',
+              'start-abstraction-period-month': '12',
+              'end-abstraction-period-day': 'abc',
+              'end-abstraction-period-month': '123'
             }
           }, { skip: ['id', 'error'] })
         })

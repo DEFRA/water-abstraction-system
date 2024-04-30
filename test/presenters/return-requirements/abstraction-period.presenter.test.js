@@ -29,47 +29,42 @@ describe('Abstraction Period presenter', () => {
     }
   })
 
-  describe('when provided with a populated session', () => {
-    describe('and no payload', () => {
-      it('correctly presents the data', () => {
-        const result = AbstractionPeriodPresenter.go(session)
+  describe('when provided with a session where abstraction period is populated', () => {
+    beforeEach(() => {
+      session.data.abstractionPeriod = {
+        'start-abstraction-period-day': '07',
+        'start-abstraction-period-month': '12',
+        'end-abstraction-period-day': '22',
+        'end-abstraction-period-month': '07'
+      }
+    })
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          abstractionPeriod: {
-            startDay: null,
-            startMonth: null,
-            endDay: null,
-            endMonth: null
-          }
-        })
+    it('correctly presents the data', () => {
+      const result = AbstractionPeriodPresenter.go(session)
+
+      expect(result).to.equal({
+        abstractionPeriod: {
+          'start-abstraction-period-day': '07',
+          'start-abstraction-period-month': '12',
+          'end-abstraction-period-day': '22',
+          'end-abstraction-period-month': '07'
+        },
+        id: '61e07498-f309-4829-96a9-72084a54996d',
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC'
       })
     })
   })
 
-  describe('and with a payload', () => {
-    const payload = {
-      'start-abstraction-period-day': '01',
-      'start-abstraction-period-month': '12',
-      'end-abstraction-period-day': '02',
-      'end-abstraction-period-month': '7'
-    }
-
+  describe('when provided with a session where abstraction period is not populated', () => {
     it('correctly presents the data', () => {
-      const result = AbstractionPeriodPresenter.go(session, payload)
+      const result = AbstractionPeriodPresenter.go(session)
 
       expect(result).to.equal({
+        abstractionPeriod: null,
         id: '61e07498-f309-4829-96a9-72084a54996d',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC',
-        abstractionPeriod: {
-          startDay: '01',
-          startMonth: '12',
-          endDay: '02',
-          endMonth: '7'
-        }
+        licenceRef: '01/ABC'
       })
     })
   })
