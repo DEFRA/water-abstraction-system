@@ -16,12 +16,6 @@
   }}
 {% endblock %}
 
-{% if error %}
-  {% set placeholderText = inputtedSiteDescription %}
-{% else %}
-  {% set placeholderText = siteDescription %}
-{% endif %}
-
 {% block content %}
 {# Error summary #}
   {% if error %}
@@ -49,7 +43,7 @@
         hint: {
           text: "This is the description that will appear on the return"
         },
-        value: placeholderText,
+        value: siteDescription,
         id: "site-description",
         name: "siteDescription",
         errorMessage: error
