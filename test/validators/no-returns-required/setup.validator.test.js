@@ -13,7 +13,7 @@ const SetupValidator = require('../../../app/validators/return-requirements/setu
 describe('Setup validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = SetupValidator.go({ setup: 'use_abstraction_data' })
+      const result = SetupValidator.go({ setup: 'use-abstraction-data' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()

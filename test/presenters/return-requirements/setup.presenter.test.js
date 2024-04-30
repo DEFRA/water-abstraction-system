@@ -32,7 +32,8 @@ describe('Setup presenter', () => {
 
       expect(result).to.equal({
         id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licenceRef: '01/123'
+        licenceRef: '01/123',
+        setup: null
       })
     })
   })

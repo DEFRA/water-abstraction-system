@@ -8,8 +8,8 @@
 const Joi = require('joi')
 
 const VALID_VALUES = [
-  'use_abstraction_data',
-  'set_up_manually'
+  'use-abstraction-data',
+  'set-up-manually'
 ]
 
 /**

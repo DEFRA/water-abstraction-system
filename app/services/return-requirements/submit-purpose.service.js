@@ -7,7 +7,7 @@
 
 const FetchPurposesService = require('../../services/return-requirements/fetch-purposes.service.js')
 const PurposeValidation = require('../../validators/return-requirements/purpose.validator.js')
-const SelectPurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
+const PurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -15,9 +15,9 @@ const SessionModel = require('../../models/session.model.js')
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
- * The user input is then validated and the result is then combined with the output of the presenter to generate the page data needed by the view.
- * If there was a validation error the controller will re-render the page so needs this information. If all is well the
- * controller will redirect to the next page in the journey.
+ * The user input is then validated and the result is then combined with the output of the presenter to generate the
+ * page data needed by the view. If there was a validation error the controller will re-render the page so needs this
+ * information. If all is well the controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
@@ -38,7 +38,7 @@ async function go (sessionId, payload) {
   }
 
   const purposesData = await FetchPurposesService.go(session.data.licence.id)
-  const formattedData = SelectPurposePresenter.go(session, purposesData)
+  const formattedData = PurposePresenter.go(session, purposesData)
 
   return {
     activeNavBar: 'search',
