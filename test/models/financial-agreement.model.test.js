@@ -65,7 +65,7 @@ describe('Financial Agreement model', () => {
 
         expect(result.licenceAgreementTypes).to.be.an.array()
         expect(result.licenceAgreementTypes[0]).to.be.an.instanceOf(LicenceAgreementModel)
-        expect(result.licenceEntityRoles).to.include(testLicenceAgreements[0])
+        expect(result.licenceAgreementTypes).to.include(testLicenceAgreements)
       })
     })
   })

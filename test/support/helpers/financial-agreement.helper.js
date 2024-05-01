@@ -40,8 +40,8 @@ async function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     id: generateUUID(),
-    financialAgreementCode: 'INST',
-    description: 'Installment',
+    financialAgreementCode: 'S127',
+    description: 'Section 127 (Two Part Tariff)',
     disabled: false
   }
 

@@ -43,29 +43,29 @@ describe('Licence Agreement model', () => {
       beforeEach(async () => {
         testFinancialAgreements = await FinancialAgreementHelper.add()
 
-        const { id: financialAgreementTypeId } = testRecord
+        const { id: financialAgreementTypeId } = testFinancialAgreements
 
         testRecord = await LicenceAgreementHelper.add({ financialAgreementTypeId })
       })
 
       it('can successfully run a related query', async () => {
-        const query = await FinancialAgreementModel.query()
-          .innerJoinRelated('licenceAgreementTypes')
+        const query = await LicenceAgreementModel.query()
+          .innerJoinRelated('financialAgreements')
 
         expect(query).to.exist()
       })
 
       it('can eager load the licence entity roles', async () => {
-        const result = await FinancialAgreementModel.query()
+        const result = await LicenceAgreementModel.query()
           .findById(testRecord.id)
-          .withGraphFetched('licenceAgreementTypes')
+          .withGraphFetched('financialAgreements')
 
-        expect(result).to.be.instanceOf(FinancialAgreementModel)
+        expect(result).to.be.instanceOf(LicenceAgreementModel)
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.financialAgreements).to.be.an.array()
         expect(result.financialAgreements[0]).to.be.an.instanceOf(FinancialAgreementModel)
-        expect(result.financialAgreements).to.include(testFinancialAgreements[0])
+        expect(result.financialAgreements).to.include(testFinancialAgreements)
       })
     })
   })

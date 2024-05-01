@@ -16,7 +16,6 @@ const LicenceHelper = require('./licence.helper.js')
  * - `licenceAgreementId` - [random UUID]
  * - `licenceRef` - [randomly generated - 01/123]
  * - `startDate` - 2023-01-01
- * - `endDate` - 2023-12-31
  * - `dateSigned` - 2022-12-31
  * - `source` - 'nald'
  *
@@ -45,7 +44,6 @@ function defaults (data = {}) {
     id: generateUUID(),
     licenceRef: LicenceHelper.generateLicenceRef(),
     startDate: new Date('2023-01-01'),
-    endDate: new Date('2023-12-31'),
     dateSigned: new Date('2022-01-01'),
     source: 'nald'
   }
