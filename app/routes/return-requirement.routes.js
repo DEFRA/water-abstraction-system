@@ -338,7 +338,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'How do you want to set up the return requirement?'
+      description: 'How do you want to set up the requirements for returns?'
     }
   },
   {
