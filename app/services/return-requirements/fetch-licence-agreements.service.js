@@ -5,8 +5,6 @@
  * @module FetchLicenceAgreementsService
  */
 
-const { ref } = require('objection')
-
 const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
 
 /**
