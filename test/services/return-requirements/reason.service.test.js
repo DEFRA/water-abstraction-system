@@ -48,7 +48,8 @@ describe('Select Reason service', () => {
         activeNavBar: 'search',
         checkYourAnswersVisited: false,
         pageTitle: 'Select the reason for the return requirement',
-        licenceRef: '01/ABC'
+        licenceRef: '01/ABC',
+        reason: null
       }, { skip: ['id'] })
     })
   })

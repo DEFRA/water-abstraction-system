@@ -31,16 +31,19 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+    }
   }
 
-  const formattedData = AbstractionPeriodPresenter.go(session, payload)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Enter the abstraction period for the requirements for returns',
-    ...formattedData
+    ...submittedSessionData
   }
 }
 
@@ -50,6 +53,16 @@ async function _save (session, payload) {
   currentData.abstractionPeriod = payload
 
   return session.$query().patch({ data: currentData })
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ */
+function _submittedSessionData (session, payload) {
+  session.data.abstractionPeriod = Object.keys(payload).length > 0 ? payload : null
+
+  return AbstractionPeriodPresenter.go(session)
 }
 
 function _validate (payload) {

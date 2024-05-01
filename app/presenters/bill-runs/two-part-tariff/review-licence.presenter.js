@@ -112,11 +112,22 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
       chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
       chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference),
+      chargeReferenceLink: _chargeReferenceLink(reviewChargeReference),
       chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
     })
   })
 
   return chargeReference
+}
+
+function _chargeReferenceLink (reviewChargeReference) {
+  const { chargeAdjustment, aggregate } = reviewChargeReference
+
+  if (chargeAdjustment !== 1 || aggregate !== 1) {
+    return { linkName: 'Change details' }
+  }
+
+  return { linkName: 'View details' }
 }
 
 function _contactName (billingAccount) {

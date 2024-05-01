@@ -7,7 +7,7 @@
 
 const FetchPointsService = require('../../services/return-requirements/fetch-points.service.js')
 const PointsValidator = require('../../validators/return-requirements/points.validator.js')
-const SelectPointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
+const PointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -27,16 +27,47 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pointsData = await FetchPointsService.go(session.data.licence.id)
+  _handleOneOptionSelected(payload)
+
   const validationResult = _validate(payload)
-  const formattedData = SelectPointsPresenter.go(session, pointsData, payload)
+
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+    }
+  }
+
+  const pointsData = await FetchPointsService.go(session.data.licence.id)
+  const formattedData = PointsPresenter.go(session, pointsData)
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select the points for the requirements for returns',
     ...formattedData
   }
+}
+
+/**
+ * When a single point is checked by the user, it returns as a string. When multiple points are checked, the
+ * 'points' is returned as an array. This function works to make those single selected string 'points' into an array
+ * for uniformity.
+ */
+function _handleOneOptionSelected (payload) {
+  if (!Array.isArray(payload.points)) {
+    payload.points = [payload.points]
+  }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.points = payload.points
+
+  return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {

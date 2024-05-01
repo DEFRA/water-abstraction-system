@@ -28,6 +28,7 @@ describe('Submit Points service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -59,25 +60,22 @@ describe('Submit Points service', () => {
         Sinon.stub(PointsValidator, 'go').resolves(null)
       })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitPointsService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitPointsService.go(session.id, payload)
 
-        expect(result.id).to.equal(session.id)
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data.points).to.equal([
+          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+        ])
       })
 
-      it('returns page data for the view', async () => {
+      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
         const result = await SubmitPointsService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
-          error: null,
-          pageTitle: 'Select the points for the requirements for returns',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          licencePoints: [
-            'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-          ]
-        }, { skip: ['id'] })
+          checkYourAnswersVisited: false
+        })
       })
     })
   })
@@ -101,13 +99,15 @@ describe('Submit Points service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
+          checkYourAnswersVisited: false,
           pageTitle: 'Select the points for the requirements for returns',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
           licencePoints: [
             'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
             'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
-          ]
+          ],
+          selectedPoints: ''
         }, { skip: ['id', 'error'] })
       })
 

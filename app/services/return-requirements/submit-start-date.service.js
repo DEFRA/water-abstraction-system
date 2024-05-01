@@ -39,15 +39,15 @@ async function go (sessionId, payload) {
     }
   }
 
-  const formattedData = StartDatePresenter.go(session, payload)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     journey: session.data.journey,
-    pageTitle: 'Select the start date for the return requirement',
-    ...formattedData
+    pageTitle: 'Select the start date for the requirements for returns',
+    ...submittedSessionData
   }
 }
 
@@ -64,6 +64,15 @@ async function _save (session, payload) {
   }
 
   return session.$query().patch({ data: currentData })
+}
+
+function _submittedSessionData (session, payload) {
+  session.data.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
+  session.data.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
+  session.data.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
+  session.data.startDateOptions = payload['start-date-options'] ? payload['start-date-options'] : null
+
+  return StartDatePresenter.go(session, payload)
 }
 
 function _validate (payload, licenceStartDate, licenceEndDate) {
