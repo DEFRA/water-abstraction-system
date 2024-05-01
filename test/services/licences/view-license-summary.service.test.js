@@ -13,7 +13,7 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
 const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-license-summary.service')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
 // Thing under test
 const ViewLicenceSummaryService = require('../../../app/services/licences/view-license-summary.service')
@@ -40,7 +40,7 @@ describe('View Licence service summary', () => {
     describe('and it has no optional fields', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+        Sinon.stub(FetchLicenceSummaryService, 'go').resolves(fetchLicenceResult)
       })
 
       it('will return all the mandatory data and default values for use in the licence summary page', async () => {
@@ -78,7 +78,7 @@ describe('View Licence service summary', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
         fetchLicenceResult.licenceHolder = null
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+        Sinon.stub(FetchLicenceSummaryService, 'go').resolves(fetchLicenceResult)
       })
 
       it('will return unregistered licence for use in the licence summary page', async () => {
@@ -92,7 +92,7 @@ describe('View Licence service summary', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
         fetchLicenceResult.licenceHolder = 'Test Company'
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
+        Sinon.stub(FetchLicenceSummaryService, 'go').resolves(fetchLicenceResult)
       })
 
       it('will return the licence holder for use in the licence summary page', async () => {

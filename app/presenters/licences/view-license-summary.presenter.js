@@ -66,7 +66,7 @@ function _abstractionWrapper (licenceAbstractionConditions, licenceVersions, pur
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
     abstractionQuantities: abstractionDetails.quantities,
-    sourceOfSupply: abstractionDetails.sourceOfSupply,
+    sourceOfSupply: abstractionDetails.sourceOfSupply
   }
 }
 

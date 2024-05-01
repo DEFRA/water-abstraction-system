@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
+const FetchLicenceSummaryService = require('./fetch-license-summary.service')
 const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-license-summary.presenter')
 const ViewLicenceService = require('./view-licence.service')
 
@@ -20,14 +20,13 @@ const ViewLicenceService = require('./view-licence.service')
 async function go (licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
-  // fix this fetch
-  const licenceData = await FetchLicenceService.go(licenceId)
+  const summaryLicenceData = await FetchLicenceSummaryService.go(licenceId)
 
-  const currentLicenceVersionId = licenceData?.licenceVersions[0]?.id
+  const currentLicenceVersionId = summaryLicenceData?.licenceVersions[0]?.id
 
   const licenceAbstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
 
-  const pageData = ViewLicenceSummaryPresenter.go(licenceData, licenceAbstractionConditions)
+  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData, licenceAbstractionConditions)
 
   return {
     ...pageData,
