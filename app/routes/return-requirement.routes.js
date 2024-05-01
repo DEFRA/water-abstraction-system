@@ -286,7 +286,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the reason for the return requirement'
+      description: 'Select the reason for the requirements for returns'
     }
   },
   {
