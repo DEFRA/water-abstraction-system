@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches data needed for the view '/licences/{id}` page
+ * Fetches data needed for the view '/licences/{id}/summary` page
  * @module FetchLicenceSummaryService
  */
 
@@ -10,13 +10,13 @@ const { ref } = require('objection')
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetch the matching licence and return data needed for the view licence page
+ * Fetch the matching licence and return data needed for the view licence page summary tab
  *
- * Was built to provide the data needed for the '/licences/{id}' page
+ * Was built to provide the data needed for the '/licences/{id}/summary' page
  *
  * @param {string} id The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page and some elements of the summary tab
+ * @returns {Promise<Object>} the data needed to populate the view licence page summary tab
  */
 async function go (id) {
   const licence = await _fetchLicence(id)
