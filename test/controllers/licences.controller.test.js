@@ -190,7 +190,7 @@ describe('Licences controller', () => {
     }
   })
 
-  describe.only('GET /licences/{id}/returns', () => {
+  describe('GET /licences/{id}/returns', () => {
     beforeEach(async () => {
       options = {
         method: 'GET',
