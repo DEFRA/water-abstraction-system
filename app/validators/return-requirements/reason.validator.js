@@ -21,6 +21,8 @@ const VALID_VALUES = [
   'succession-to-remainder-licence-or-licence-apportionment'
 ]
 
+const errorMessage = 'Select the reason for the requirements for returns'
+
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/reason` page
  *
@@ -35,9 +37,9 @@ function go (data) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select the reason for the requirements for returns',
-        'any.only': 'Select the reason for the requirements for returns',
-        'string.empty': 'Select the reason for the requirements for returns'
+        'any.required': errorMessage,
+        'any.only': errorMessage,
+        'string.empty': errorMessage
       })
   })
 
