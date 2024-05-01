@@ -28,6 +28,8 @@ async function go (sessionId, yar) {
   await _save(session)
 
   yar.flash('notification', notification)
+
+  return notification
 }
 
 async function _save (session) {

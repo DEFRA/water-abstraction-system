@@ -78,14 +78,7 @@ async function approved (request, h) {
 
 async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
-  let pageData = await CheckYourAnswersService.go(sessionId, request.yar)
-
-  const notificationData = request.yar.get('notificationData')
-
-  if (notificationData) {
-    pageData = { ...pageData, notification: { ...notificationData } }
-    request.yar.clear('notificationData')
-  }
+  const pageData = await CheckYourAnswersService.go(sessionId, request.yar)
 
   return h.view('return-requirements/check-your-answers.njk', {
     ...pageData
@@ -97,9 +90,9 @@ async function deleteNote (request, h) {
 
   const notificationData = await DeleteNoteService.go(sessionId, request.yar)
 
-  request.yar.set('notificationData', notificationData)
-
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (notificationData.title) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
 }
 
 async function existing (request, h) {
