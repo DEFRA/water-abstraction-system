@@ -204,6 +204,10 @@ async function submitAbstractionPeriod (request, h) {
     return h.view('return-requirements/abstraction-period.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle`)
 }
 
@@ -227,6 +231,10 @@ async function submitAgreementsExceptions (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/agreements-exceptions.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
@@ -254,6 +262,10 @@ async function submitFrequencyCollected (request, h) {
     return h.view('return-requirements/frequency-collected.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported`)
 }
 
@@ -264,6 +276,10 @@ async function submitFrequencyReported (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-reported.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
@@ -290,6 +306,10 @@ async function submitPoints (request, h) {
     return h.view('return-requirements/points.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period`)
 }
 
@@ -300,6 +320,10 @@ async function submitPurpose (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/purpose.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/points`)
@@ -330,6 +354,10 @@ async function submitReturnsCycle (request, h) {
     return h.view('return-requirements/returns-cycle.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/site-description`)
 }
 
@@ -352,6 +380,10 @@ async function submitSiteDescription (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/site-description.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-collected`)
