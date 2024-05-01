@@ -24,7 +24,7 @@ async function go (sessionId) {
   return {
     activeNavBar: 'search',
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
-    pageTitle: 'Select the reason for the return requirement',
+    pageTitle: 'Select the reason for the requirements for returns',
     ...formattedData
   }
 }
