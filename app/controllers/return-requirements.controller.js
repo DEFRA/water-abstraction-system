@@ -88,11 +88,9 @@ async function checkYourAnswers (request, h) {
 async function deleteNote (request, h) {
   const { sessionId } = request.params
 
-  const notificationData = await DeleteNoteService.go(sessionId, request.yar)
+  await DeleteNoteService.go(sessionId, request.yar)
 
-  if (notificationData.title) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
-  }
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
 async function existing (request, h) {

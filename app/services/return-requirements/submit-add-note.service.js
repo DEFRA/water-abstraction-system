@@ -53,26 +53,23 @@ async function go (sessionId, payload, user, yar) {
 
 function _notification (session, newNote) {
   const { data: { note } } = session
-
-  if (note && note.content === newNote) {
-    return ''
-  }
+  let notification = ''
 
   if (!note && newNote) {
-    return {
+    notification = {
       title: 'Added',
       text: 'Changes made'
     }
   }
 
   if (note && note.content !== newNote) {
-    return {
+    notification = {
       title: 'Updated',
       text: 'Changes made'
     }
   }
 
-  return ''
+  return notification
 }
 
 async function _save (session, payload, user) {
