@@ -13,9 +13,23 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'View a licence page'
+      description: 'View a summary licence page'
     }
-  }, {
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/returns',
+    handler: LicencesController.viewReturns,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'View a returns licence page'
+    }
+  },
+  {
     method: 'GET',
     path: '/licences/{id}/no-returns-required',
     handler: LicencesController.noReturnsRequired,
