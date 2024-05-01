@@ -86,7 +86,7 @@ describe('Submit No Returns Required service', () => {
           const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: 'Select the reason for the return requirement'
+            text: 'Select the reason for the requirements for returns'
           })
         })
       })
