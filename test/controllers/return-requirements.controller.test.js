@@ -289,7 +289,7 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/start-date', () => {
     beforeEach(async () => {
       Sinon.stub(StartDateService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the start date for the return requirement'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the start date for the requirements for returns'
       })
     })
     describe('when the request succeeds', () => {
@@ -297,7 +297,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('start-date'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select the start date for the return requirement')
+        expect(response.payload).to.contain('Select the start date for the requirements for returns')
       })
     })
   })
