@@ -13,7 +13,6 @@ function go (session) {
     journey: session.data.journey,
     licenceRef: session.data.licence.licenceRef,
     note: session.data.note ? session.data.note.content : '',
-    noteStatus: session.data.note ? session.data.note.status : '',
     reason: session.data.reason,
     startDate: _startDate(session.data),
     userEmail: session.data.note ? session.data.note.userEmail : 'No notes added'

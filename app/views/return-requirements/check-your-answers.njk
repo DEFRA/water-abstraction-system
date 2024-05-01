@@ -46,11 +46,12 @@
 {% endset %}
 
 {% block content %}
-  {{ govukNotificationBanner({
-    text: notification.text,
-    titleText: notification.title,
-    type: "Important"
-  }) if notification }}
+  {% if notification %}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
+  {% endif %}
   
   {# Main heading #}
   <div class="govuk-body">

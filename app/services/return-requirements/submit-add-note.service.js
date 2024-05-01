@@ -20,10 +20,11 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
  * @param {Object} user - The logged in user details
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} The page data for the check-your-answers page
  */
-async function go (sessionId, payload, user) {
+async function go (sessionId, payload, user, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
@@ -31,8 +32,12 @@ async function go (sessionId, payload, user) {
     const notification = _notification(session, payload.note)
     await _save(session, payload, user)
 
+    if (notification) {
+      yar.flash('notification', notification)
+    }
+
     return {
-      notification
+      journey: session.data.journey
     }
   }
 
@@ -43,31 +48,6 @@ async function go (sessionId, payload, user) {
     error: validationResult,
     pageTitle: 'Add a note',
     ...formattedData
-  }
-}
-
-async function _save (session, payload, user) {
-  const currentData = session.data
-
-  currentData.note = {
-    content: payload.note,
-    userEmail: user.username
-  }
-
-  return session.$query().patch({ data: currentData })
-}
-
-function _validate (payload) {
-  const validation = AddNoteValidator.go(payload)
-
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
   }
 }
 
@@ -93,6 +73,31 @@ function _notification (session, newNote) {
   }
 
   return ''
+}
+
+async function _save (session, payload, user) {
+  const currentData = session.data
+
+  currentData.note = {
+    content: payload.note,
+    userEmail: user.username
+  }
+
+  return session.$query().patch({ data: currentData })
+}
+
+function _validate (payload) {
+  const validation = AddNoteValidator.go(payload)
+
+  if (!validation.error) {
+    return null
+  }
+
+  const { message } = validation.error.details[0]
+
+  return {
+    text: message
+  }
 }
 
 module.exports = {

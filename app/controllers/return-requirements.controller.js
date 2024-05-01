@@ -78,7 +78,7 @@ async function approved (request, h) {
 
 async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
-  let pageData = await CheckYourAnswersService.go(sessionId)
+  let pageData = await CheckYourAnswersService.go(sessionId, request.yar)
 
   const notificationData = request.yar.get('notificationData')
 
@@ -95,7 +95,7 @@ async function checkYourAnswers (request, h) {
 async function deleteNote (request, h) {
   const { sessionId } = request.params
 
-  const notificationData = await DeleteNoteService.go(sessionId)
+  const notificationData = await DeleteNoteService.go(sessionId, request.yar)
 
   request.yar.set('notificationData', notificationData)
 
@@ -229,11 +229,7 @@ async function submitAddNote (request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user)
-
-  if (pageData.notification) {
-    request.yar.set('notificationData', pageData.notification)
-  }
+  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user, request.yar)
 
   if (pageData.error) {
     return h.view('return-requirements/add-note.njk', pageData)

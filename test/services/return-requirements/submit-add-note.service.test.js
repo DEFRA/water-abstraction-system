@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -17,6 +18,7 @@ const SubmitAddNoteService = require('../../../app/services/return-requirements/
 describe('Submit Add Note service', () => {
   let payload
   let session
+  let yarStub
   const user = { username: 'carol.shaw@atari.com' }
 
   beforeEach(async () => {
@@ -37,6 +39,8 @@ describe('Submit Add Note service', () => {
         returnsRequired: 'new-licence'
       }
     })
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   describe('when called', () => {
@@ -48,24 +52,32 @@ describe('Submit Add Note service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAddNoteService.go(session.id, payload, user)
+        await SubmitAddNoteService.go(session.id, payload, user, yarStub)
 
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.data.note).to.equal({
           content: 'A note related to return requirement',
-          status: 'Added',
           userEmail: 'carol.shaw@atari.com'
         })
       })
 
       it('returns the journey to redirect the page', async () => {
-        const result = await SubmitAddNoteService.go(session.id, payload, user)
+        const result = await SubmitAddNoteService.go(session.id, payload, user, yarStub)
 
         expect(result).to.equal({
           journey: 'no-returns-required'
 
         }, { skip: ['id'] })
+      })
+
+      it("sets the notification message to 'Added.'", async () => {
+        await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+
+        const [flashType, notification] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(notification).to.equal({ title: 'Added', text: 'Changes made' })
       })
     })
 
@@ -75,7 +87,7 @@ describe('Submit Add Note service', () => {
       })
 
       it('returns page data with an error', async () => {
-        const result = await SubmitAddNoteService.go(session.id, payload, user)
+        const result = await SubmitAddNoteService.go(session.id, payload, user, yarStub)
 
         expect(result).to.equal({
           id: session.id,

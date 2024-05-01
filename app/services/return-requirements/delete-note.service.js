@@ -14,18 +14,20 @@ const SessionModel = require('../../models/session.model.js')
  * Then it removes the notes data from the session.
  *
  * @param {string} sessionId - The id of the current session
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} The page data for the check-your-answers page
  */
-async function go (sessionId) {
+async function go (sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
-
-  await _save(session)
-
-  return {
+  const notification = {
     title: 'Removed',
     text: 'Note removed'
   }
+
+  await _save(session)
+
+  yar.flash('notification', notification)
 }
 
 async function _save (session) {
