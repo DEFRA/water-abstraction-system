@@ -31,13 +31,16 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+    }
   }
 
   const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Enter a site description for the requirements for returns',
     ...submittedSessionData

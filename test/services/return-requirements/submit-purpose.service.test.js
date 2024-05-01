@@ -28,6 +28,7 @@ describe('Submit Purpose service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -71,10 +72,12 @@ describe('Submit Purpose service', () => {
         expect(refreshedSession.data.purposes).to.equal(['Potable Water Supply - Direct'])
       })
 
-      it('returns an empty object (no page data needed for a redirect)', async () => {
+      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
         const result = await SubmitPurposeService.go(session.id, payload)
 
-        expect(result).to.equal({})
+        expect(result).to.equal({
+          checkYourAnswersVisited: false
+        })
       })
     })
 
@@ -102,6 +105,7 @@ describe('Submit Purpose service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
+            checkYourAnswersVisited: false,
             pageTitle: 'Select the purpose for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',

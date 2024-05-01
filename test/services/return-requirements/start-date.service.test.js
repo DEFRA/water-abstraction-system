@@ -49,7 +49,7 @@ describe('Start Date service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         checkYourAnswersVisited: false,
-        pageTitle: 'Select the start date for the return requirement',
+        pageTitle: 'Select the start date for the requirements for returns',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         licenceVersionStartDate: '1 January 2023',

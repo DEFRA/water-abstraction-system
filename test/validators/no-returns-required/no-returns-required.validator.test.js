@@ -27,7 +27,7 @@ describe('No Returns Required validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the reason for the return requirement')
+        expect(result.error.details[0].message).to.equal('Select the reason for the requirements for returns')
       })
     })
 
@@ -37,7 +37,7 @@ describe('No Returns Required validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the reason for the return requirement')
+        expect(result.error.details[0].message).to.equal('Select the reason for the requirements for returns')
       })
     })
   })
