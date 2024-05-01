@@ -256,7 +256,7 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/setup', () => {
     beforeEach(async () => {
       Sinon.stub(SetupService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the return requirement?'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
       })
     })
     describe('when the request succeeds', () => {
@@ -264,7 +264,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('setup'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('How do you want to set up the return requirement?')
+        expect(response.payload).to.contain('How do you want to set up the requirements for returns?')
       })
     })
   })
