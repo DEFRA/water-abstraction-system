@@ -46,7 +46,7 @@ async function go (sessionId, payload) {
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
     journey: session.data.journey,
-    pageTitle: 'Select the start date for the return requirement',
+    pageTitle: 'Select the start date for the requirements for returns',
     ...submittedSessionData
   }
 }
