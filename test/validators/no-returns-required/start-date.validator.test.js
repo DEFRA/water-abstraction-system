@@ -55,11 +55,11 @@ describe('Start Date validator', () => {
         payload = {}
       })
 
-      it("fails validation with the message 'Select the start date for the return requirement'", () => {
+      it("fails validation with the message 'Select the start date for the requirements for returns'", () => {
         const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the start date for the return requirement')
+        expect(result.error.details[0].message).to.equal('Select the start date for the requirements for returns')
       })
     })
 

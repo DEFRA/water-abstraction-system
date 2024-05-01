@@ -42,7 +42,7 @@ async function go (sessionId, payload) {
     activeNavBar: 'search',
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
-    pageTitle: 'Select the reason for the return requirement',
+    pageTitle: 'Select the reason for the requirements for returns',
     ...formattedData
   }
 }

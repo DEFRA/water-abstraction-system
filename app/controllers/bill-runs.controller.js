@@ -79,7 +79,7 @@ async function index (request, h) {
 async function matchDetails (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId)
+  const pageData = await MatchDetailsService.go(billRunId, licenceId, reviewChargeElementId, request.yar)
 
   return h.view('bill-runs/match-details.njk', {
     pageTitle: 'View match details',
@@ -138,7 +138,7 @@ async function send (request, h) {
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload)
+  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload, request.yar)
 
   if (pageData.error) {
     return h.view('bill-runs/amend-billable-returns.njk', pageData)
