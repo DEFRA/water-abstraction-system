@@ -53,7 +53,7 @@ describe('Delete Note service', () => {
     expect(session.note).to.be.undefined()
   })
 
-  it("sets the notification message to 'Added.'", async () => {
+  it("sets the notification message to 'Removed'", async () => {
     await DeleteNoteService.go(session.id, yarStub)
 
     const [flashType, notification] = yarStub.flash.args[0]
