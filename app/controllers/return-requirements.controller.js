@@ -7,6 +7,7 @@
 
 const AddNoteService = require('../services/return-requirements/add-note.service.js')
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
+const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
@@ -22,6 +23,7 @@ const SiteDescriptionService = require('../services/return-requirements/site-des
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAddNoteService = require('../services/return-requirements/submit-add-note.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
+const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
@@ -57,12 +59,10 @@ async function addNote (request, h) {
 async function agreementsExceptions (request, h) {
   const { sessionId } = request.params
 
-  const session = await SessionModel.query().findById(sessionId)
+  const pageData = await AgreementsExceptionsService.go(sessionId)
 
   return h.view('return-requirements/agreements-exceptions.njk', {
-    activeNavBar: 'search',
-    pageTitle: 'Select agreements and exceptions for the return requirement',
-    ...session
+    ...pageData
   })
 }
 
@@ -222,6 +222,10 @@ async function submitAbstractionPeriod (request, h) {
     return h.view('return-requirements/abstraction-period.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle`)
 }
 
@@ -240,6 +244,16 @@ async function submitAddNote (request, h) {
 
 async function submitAgreementsExceptions (request, h) {
   const { sessionId } = request.params
+
+  const pageData = await SubmitAgreementsExceptions.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/agreements-exceptions.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
@@ -266,6 +280,10 @@ async function submitFrequencyCollected (request, h) {
     return h.view('return-requirements/frequency-collected.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported`)
 }
 
@@ -276,6 +294,10 @@ async function submitFrequencyReported (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-reported.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
@@ -302,6 +324,10 @@ async function submitPoints (request, h) {
     return h.view('return-requirements/points.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period`)
 }
 
@@ -312,6 +338,10 @@ async function submitPurpose (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/purpose.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/points`)
@@ -342,6 +372,10 @@ async function submitReturnsCycle (request, h) {
     return h.view('return-requirements/returns-cycle.njk', pageData)
   }
 
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  }
+
   return h.redirect(`/system/return-requirements/${sessionId}/site-description`)
 }
 
@@ -364,6 +398,10 @@ async function submitSiteDescription (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/site-description.njk', pageData)
+  }
+
+  if (pageData.checkYourAnswersVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-collected`)

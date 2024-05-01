@@ -141,7 +141,7 @@ describe('Submit Start Date service', () => {
             licenceRef: '01/ABC',
             licenceStartDateSelected: false,
             licenceVersionStartDate: '1 January 2023',
-            pageTitle: 'Select the start date for the return requirement'
+            pageTitle: 'Select the start date for the requirements for returns'
           }, { skip: ['id', 'error'] })
         })
 
@@ -149,8 +149,8 @@ describe('Submit Start Date service', () => {
           const result = await SubmitStartDateService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            message: 'Select the start date for the return requirement',
-            radioFormElement: { text: 'Select the start date for the return requirement' },
+            message: 'Select the start date for the requirements for returns',
+            radioFormElement: { text: 'Select the start date for the requirements for returns' },
             dateInputFormElement: null
           })
         })
@@ -180,14 +180,14 @@ describe('Submit Start Date service', () => {
             activeNavBar: 'search',
             checkYourAnswersVisited: false,
             journey: 'no-returns-required',
-            pageTitle: 'Select the start date for the return requirement',
+            pageTitle: 'Select the start date for the requirements for returns',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
             licenceVersionStartDate: '1 January 2023',
-            anotherStartDateDay: null,
-            anotherStartDateMonth: null,
-            anotherStartDateYear: null,
-            anotherStartDateSelected: false,
+            anotherStartDateDay: 'a',
+            anotherStartDateMonth: 'b',
+            anotherStartDateYear: 'c',
+            anotherStartDateSelected: true,
             licenceStartDateSelected: false
           }, { skip: ['id', 'error'] })
         })

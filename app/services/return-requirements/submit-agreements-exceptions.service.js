@@ -1,17 +1,16 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/points` page
- * @module SubmitPointsService
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/agreements-exceptions` page
+ * @module SubmitAgreementsExceptions
  */
 
-const FetchPointsService = require('../../services/return-requirements/fetch-points.service.js')
-const PointsValidator = require('../../validators/return-requirements/points.validator.js')
-const PointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
+const AgreementsExceptionsPresenter = require('../../presenters/return-requirements/agreements-exceptions.presenter.js')
+const AgreementsExceptionsValidator = require('../../validators/return-requirements/agreements-exceptions.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/points` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/agreements-exceptions` page
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
@@ -22,7 +21,7 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the start date page
+ * @returns {Promise<Object>} The page data for the agreements and exceptions page
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
@@ -39,39 +38,38 @@ async function go (sessionId, payload) {
     }
   }
 
-  const pointsData = await FetchPointsService.go(session.data.licence.id)
-  const formattedData = PointsPresenter.go(session, pointsData)
+  const formattedData = AgreementsExceptionsPresenter.go(session, payload)
 
   return {
     activeNavBar: 'search',
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
-    pageTitle: 'Select the points for the requirements for returns',
+    pageTitle: 'Select agreements and exceptions for the requirements for returns',
     ...formattedData
   }
 }
 
 /**
- * When a single point is checked by the user, it returns as a string. When multiple points are checked, the
- * 'points' is returned as an array. This function works to make those single selected string 'points' into an array
- * for uniformity.
+ * When a single agreement and exception is checked by the user, it returns as a string. When multiple agreements and
+ * exceptions are checked, the 'agreementsExceptions' is returned as an array. This function works to make those single
+ * selected string 'agreementsExceptions' into an array for uniformity.
  */
 function _handleOneOptionSelected (payload) {
-  if (!Array.isArray(payload.points)) {
-    payload.points = [payload.points]
+  if (!Array.isArray(payload.agreementsExceptions)) {
+    payload.agreementsExceptions = [payload.agreementsExceptions]
   }
 }
 
 async function _save (session, payload) {
   const currentData = session.data
 
-  currentData.points = payload.points
+  currentData.agreementsExceptions = payload.agreementsExceptions
 
   return session.$query().patch({ data: currentData })
 }
 
 function _validate (payload) {
-  const validation = PointsValidator.go(payload)
+  const validation = AgreementsExceptionsValidator.go(payload)
 
   if (!validation.error) {
     return null

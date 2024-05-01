@@ -45,17 +45,12 @@ describe('Abstraction Period service', () => {
       const result = await AbstractionPeriodService.go(session.id)
 
       expect(result).to.equal({
+        abstractionPeriod: null,
         activeNavBar: 'search',
         pageTitle: 'Enter the abstraction period for the requirements for returns',
         id: '465c6792-dd84-4163-a808-cbb834a779be',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC',
-        abstractionPeriod: {
-          fromDay: null,
-          fromMonth: null,
-          toDay: null,
-          toMonth: null
-        }
+        licenceRef: '01/ABC'
       }, { skip: ['id'] })
     })
   })

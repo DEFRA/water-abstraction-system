@@ -13,10 +13,12 @@ const ViewLicencePresenter = require('../../../app/presenters/licences/view-lice
 describe('View Licence presenter', () => {
   let licenceAbstractionConditions
   let licence
+  let auth
 
   beforeEach(() => {
     licence = _licence()
     licenceAbstractionConditions = _abstractionConditions()
+    auth = undefined
   })
 
   describe('when provided with a populated licence', () => {
@@ -24,7 +26,6 @@ describe('View Licence presenter', () => {
       const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
       expect(result).to.equal({
-        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         abstractionConditionDetails: {
           conditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
           numberOfConditions: 4
@@ -37,6 +38,7 @@ describe('View Licence presenter', () => {
         abstractionQuantities: null,
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
+        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceHolder: 'Unregistered licence',
         licenceName: 'Unregistered licence',
         licenceRef: '01/123',
@@ -44,10 +46,12 @@ describe('View Licence presenter', () => {
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
         }],
+        notification: null,
         pageTitle: 'Licence 01/123',
         purposes: null,
-        registeredTo: null,
         region: 'Narnia',
+        registeredTo: null,
+        roles: null,
         sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
         startDate: '1 April 2019',
         warning: null
@@ -1070,6 +1074,86 @@ describe('View Licence presenter', () => {
         const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.warning).to.equal('This licence was revoked on 1 April 2019')
+      })
+    })
+  })
+  describe("the 'notification' property", () => {
+    describe('when the licence will not be in the next supplementary bill run', () => {
+      it('returns NULL', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.be.null()
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill run (PRESROC)', () => {
+      beforeEach(() => {
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns the notification for PRESROC', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run for the old charge scheme.')
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill run (SROC)', () => {
+      beforeEach(() => {
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns the notification for SROC', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run.')
+      })
+    })
+
+    describe('when the licence will be in the next supplementary bill run (SROC & PRESROC)', () => {
+      beforeEach(() => {
+        licence.includeInSrocBilling = true
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns the notification for SROC & PRESROC)', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+
+        expect(result.notification).to.equal('This license has been marked for the next supplementary bill runs for the current and old charge schemes.')
+      })
+    })
+  })
+
+  describe("the 'roles' property", () => {
+    describe('when the authenticated user has roles', () => {
+      beforeEach(() => {
+        auth = {
+          credentials: {
+            roles: [{
+              role: 'role 1'
+            },
+            {
+              role: 'role 2'
+            }]
+          }
+        }
+      })
+
+      it('returns the roles in a flat array', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions, auth)
+
+        expect(result.roles).to.equal(['role 1', 'role 2'])
+      })
+    })
+    describe('when the authenticated user has NO roles', () => {
+      beforeEach(() => {
+        auth = undefined
+      })
+
+      it('returns null for the roles', () => {
+        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions, auth)
+
+        expect(result.roles).to.be.null()
       })
     })
   })

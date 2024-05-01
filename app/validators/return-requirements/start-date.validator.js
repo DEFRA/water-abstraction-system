@@ -80,8 +80,8 @@ function _validateLicenceVersionStartDate (payload) {
     'start-date-options': Joi.string()
       .required()
       .messages({
-        'any.required': 'Select the start date for the return requirement',
-        'string.empty': 'Select the start date for the return requirement'
+        'any.required': 'Select the start date for the requirements for returns',
+        'string.empty': 'Select the start date for the requirements for returns'
       })
   })
 

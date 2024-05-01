@@ -15,11 +15,13 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (licence, licenceAbstractionConditions) {
+function go (licence, licenceAbstractionConditions, auth) {
   const {
     ends,
     expiredDate,
     id,
+    includeInPresrocBilling,
+    includeInSrocBilling,
     licenceDocumentHeader,
     licenceGaugingStations,
     licenceHolder,
@@ -48,27 +50,29 @@ function go (licence, licenceAbstractionConditions) {
   const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
 
   return {
-    id,
     abstractionConditionDetails,
     abstractionPeriods,
     abstractionPeriodsAndPurposesLinkText,
+    abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
-    abstractionPointLinkText: abstractionDetails.pointLinkText,
     abstractionQuantities: abstractionDetails.quantities,
     documentId: licenceDocumentHeader.id,
     endDate: _endDate(expiredDate),
+    id,
     licenceHolder: _generateLicenceHolder(licenceHolder),
     licenceName,
     licenceRef,
     monitoringStations,
+    notification: _determineNotificationBanner(includeInPresrocBilling, includeInSrocBilling),
     pageTitle: `Licence ${licenceRef}`,
     purposes,
     region: region.displayName,
     registeredTo,
     sourceOfSupply: abstractionDetails.sourceOfSupply,
     startDate: formatLongDate(startDate),
-    warning: _generateWarningMessage(ends)
+    warning: _generateWarningMessage(ends),
+    roles: _authRoles(auth)
   }
 }
 
@@ -104,12 +108,37 @@ function _abstractionConditionDetails (licenceAbstractionConditions) {
   }
 }
 
+function _determineNotificationBanner (includeInPresrocBilling, includeInSrocBilling) {
+  const baseMessage = 'This license has been marked for the next supplementary bill run'
+
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    return baseMessage + 's for the current and old charge schemes.'
+  }
+  if (includeInPresrocBilling === 'yes') {
+    return baseMessage + ' for the old charge scheme.'
+  }
+
+  if (includeInSrocBilling === true) {
+    return baseMessage + '.'
+  }
+
+  return null
+}
+
 function _endDate (expiredDate) {
   if (!expiredDate || expiredDate < Date.now()) {
     return null
   }
 
   return formatLongDate(expiredDate)
+}
+
+function _authRoles (auth) {
+  const roles = auth?.credentials?.roles?.map((role) => {
+    return role?.role
+  })
+
+  return roles || null
 }
 
 function _generateAbstractionContent (pointDetail) {

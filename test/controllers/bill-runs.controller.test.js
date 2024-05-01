@@ -427,15 +427,15 @@ describe('Bill Runs controller', () => {
           Sinon.stub(AmendBillableReturnsService, 'go').resolves({
             chargeElement: {
               description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
-              dates: '25 July 2022 to 29 December 2022',
-              authorisedQuantity: 40
+              dates: '25 July 2022 to 29 December 2022'
             },
             billRun: {
               financialYear: '2022 to 2023'
             },
             chargeVersion: {
               chargePeriod: '1 April 2022 to 31 March 2023'
-            }
+            },
+            authorisedQuantity: 40
           })
         })
 

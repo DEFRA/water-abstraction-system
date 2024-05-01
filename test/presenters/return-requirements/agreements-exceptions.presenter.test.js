@@ -8,13 +8,13 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const SiteDescriptionPresenter = require('../../../app/presenters/return-requirements/site-description.presenter.js')
+const AgreementsExceptionsPresenter = require('../../../app/presenters/return-requirements/agreements-exceptions.presenter.js')
 
-describe('Site Description presenter', () => {
+describe('Agreements Exceptions presenter', () => {
   describe('when provided with a populated session', () => {
     let session
 
-    describe('and no site description in session data and no payload', () => {
+    describe('and no agreements and exceptions in session data', () => {
       beforeEach(() => {
         session = {
           id: '61e07498-f309-4829-96a9-72084a54996d',
@@ -32,25 +32,19 @@ describe('Site Description presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = SiteDescriptionPresenter.go(session)
+        const result = AgreementsExceptionsPresenter.go(session)
 
         expect(result).to.equal({
           id: '61e07498-f309-4829-96a9-72084a54996d',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
-          siteDescription: null
+          agreementsExceptions: ''
         })
       })
     })
 
-    describe('and with site description in session data and populated payload', () => {
-      let payload
-
+    describe('and with agreements and exceptions in session data', () => {
       beforeEach(() => {
-        payload = {
-          siteDescription: 'This is a valid return requirement description'
-        }
-
         session = {
           id: '61e07498-f309-4829-96a9-72084a54996d',
           data: {
@@ -62,19 +56,19 @@ describe('Site Description presenter', () => {
               licenceHolder: 'Turbo Kid',
               startDate: '2022-04-01T00:00:00.000Z'
             },
-            siteDescription: 'This is a valid return requirement description'
+            agreementsExceptions: 'gravity-fill'
           }
         }
       })
 
       it('correctly presents the data', () => {
-        const result = SiteDescriptionPresenter.go(session, payload)
+        const result = AgreementsExceptionsPresenter.go(session)
 
         expect(result).to.equal({
           id: '61e07498-f309-4829-96a9-72084a54996d',
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           licenceRef: '01/ABC',
-          siteDescription: 'This is a valid return requirement description'
+          agreementsExceptions: 'gravity-fill'
         })
       })
     })

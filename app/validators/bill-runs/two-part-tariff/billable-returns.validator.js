@@ -12,9 +12,10 @@ const Joi = require('joi')
  * Validates data submitted for the `/bill-runs/{billRunId}/review/{licenceId}/match-details/{reviewChargeElementId}
  * /amend-billable-returns` page
  *
- * When editing the charge elements billable volume the user must either chose the existing authorised volume or enter
+ * When editing the charge elements billable volume the user must either choose the existing authorised volume or enter
  * there own custom volume. The validation happening here is to ensure that a user selects either option and if its the
- * custom one, that they enter a number and that the number is less than 6 decimal places.
+ * custom one, that they enter a number above 0 but below the authorised volume and that the number is less than 6
+ * decimal places.
  * @param {Object} payload - The payload from the request to be validated
  *
  * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
@@ -24,7 +25,7 @@ function go (payload) {
   const { 'quantity-options': selectedOption } = payload
 
   if (selectedOption === 'customQuantity') {
-    return _validateCustomQuantity(payload.customQuantity)
+    return _validateCustomQuantity(payload.customQuantity, Number(payload.authorisedVolume))
   }
 
   return _validateAuthorisedQuantity(selectedOption)
@@ -46,17 +47,22 @@ function customValidation (customQuantity, helpers) {
     return customQuantity
   }
 
-  return helpers.message({ custom: 'You must enter less than 6 decimal places' })
+  return helpers.message({ custom: 'The quantity must contain no more than 6 decimal places' })
 }
 
-function _validateCustomQuantity (customQuantity) {
+function _validateCustomQuantity (customQuantity, authorisedVolume) {
   const schema = Joi.object({
     customQuantity: Joi
       .number()
+      .min(0)
+      .max(authorisedVolume)
       .required()
       .messages({
-        'number.base': 'You must enter a number',
-        'any.required': 'You must enter a custom quantity'
+        'number.unsafe': 'The quantity must be a number',
+        'number.base': 'The quantity must be a number',
+        'number.min': 'The quantity must be zero or higher',
+        'number.max': 'The quantity must be the same as or less than the authorised amount',
+        'any.required': 'Enter the billable quantity'
       })
   })
 
@@ -79,7 +85,7 @@ function _validateAuthorisedQuantity (selectedOption) {
       .number()
       .required()
       .messages({
-        'any.required': 'You must choose or enter a value'
+        'any.required': 'Select the billable quantity'
       })
   })
 

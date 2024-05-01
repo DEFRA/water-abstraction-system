@@ -12,13 +12,14 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const SetupService = require('../../../app/services/return-requirements/setup.service.js')
+const AgreementsExceptionsService = require('../../../app/services/return-requirements/agreements-exceptions.service.js')
 
-describe('Select Reason service', () => {
+describe('Agreements Exceptions service', () => {
   let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+
     session = await SessionHelper.add({
       data: {
         licence: {
@@ -26,7 +27,7 @@ describe('Select Reason service', () => {
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
-          licenceHolder: 'Astro Boy',
+          licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         }
       }
@@ -35,19 +36,21 @@ describe('Select Reason service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SetupService.go(session.id)
+      const result = await AgreementsExceptionsService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SetupService.go(session.id)
+      const result = await AgreementsExceptionsService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        pageTitle: 'How do you want to set up the return requirement?',
+        pageTitle: 'Select agreements and exceptions for the requirements for returns',
+        id: '465c6792-dd84-4163-a808-cbb834a779be',
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
-        setup: null
+        agreementsExceptions: ''
       }, { skip: ['id'] })
     })
   })

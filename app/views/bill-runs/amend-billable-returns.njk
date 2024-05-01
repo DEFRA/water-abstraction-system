@@ -16,11 +16,16 @@
 {% endblock %}
 
 {% set quantityInputHTML %}
+  {% if error.customQuantityInputFormElement %}
+    {% set errorClass = 'govuk-input--error' %}
+  {% endif %}
+
   {{ govukInput({
     id: "custom-quantity-input",
     name: "customQuantity",
     errorMessage: error.customQuantityInputFormElement,
-    classes: "govuk-!-width-one-third",
+    classes: "govuk-!-width-one-third " + errorClass,
+    value: customQuantityValue,
     label: {
       text: "Billable returns quantity"
     },
@@ -64,6 +69,7 @@
     <form method="post">
       {{ govukRadios({
           name: 'quantity-options',
+          errorMessage: error.radioFormElement,
           fieldset: {
             legend: {
               html: '<span class="govuk-caption-l">' + chargeElement.description + ' ' +  chargeElement.dates + '</span>' + 'Set the billable returns quantity for this bill run' + secondHeader,
@@ -74,9 +80,8 @@
           items: [
             {
               id: 'authorised-quantity',
-              value: chargeElement.authorisedQuantity,
-              html: 'Authorised ' + chargeElement.authorisedQuantity + 'ML',
-              checked: authorisedQuantitySelected
+              value: authorisedQuantity,
+              html: 'Authorised ' + authorisedQuantity + 'ML'
             },
             {
               id: 'custom-quantity',
@@ -89,6 +94,9 @@
             }
           ]
         }) }}
+
+      {# Hidden input for authorised volume #}
+      <input type="hidden" name="authorisedVolume" value="{{ authorisedQuantity }}">
 
       {{ govukButton({ text: 'Confirm' }) }}
     </form>

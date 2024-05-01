@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/site-description` page
- * @module SiteDescriptionPresenter
+ * Formats data for the `/return-requirements/{sessionId}/agreements-exceptions` page
+ * @module AgreementsExceptionsPresenter
 */
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/site-description` page
+ * Formats data for the `/return-requirements/{sessionId}/agreements-exceptions` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {Object} [payload] - The payload from the request
@@ -18,7 +18,7 @@ function go (session) {
     id: session.id,
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
-    siteDescription: session.data.siteDescription ? session.data.siteDescription : null
+    agreementsExceptions: session.data.agreementsExceptions ? session.data.agreementsExceptions : ''
   }
 
   return data

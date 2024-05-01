@@ -403,7 +403,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the start date for the return requirement'
+      description: 'Select the start date for the requirements for returns'
     }
   }, {
     method: 'POST',

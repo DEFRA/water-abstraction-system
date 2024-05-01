@@ -85,6 +85,7 @@ describe('Review Licence presenter', () => {
                 chargeCategory: 'Charge reference 4.6.7',
                 chargeDescription: 'High loss, non-tidal, greater than 15 up to and including 50 ML/yr',
                 totalBillableReturns: '0 ML / 200 ML',
+                chargeReferenceLink: { linkName: 'View details' },
                 chargeElements: [
                   {
                     elementNumber: 'Element 1 of 1',
@@ -181,6 +182,53 @@ describe('Review Licence presenter', () => {
         })
       })
     })
+
+    describe("the 'adjustment' property's", () => {
+      describe('when a review charge reference has an aggregate', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
+        })
+
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
+
+      describe('when a review charge reference has a charge factor adjustment', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
+        })
+
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
+
+      describe('when a review charge reference has an aggregate and charge factor adjustment', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
+        })
+
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
+
+      describe('when a review charge reference does not have an aggregate or charge factor adjustment', () => {
+        it("changes the chargeReferenceLink to 'View details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
+
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('View details')
+        })
+      })
+    })
   })
 })
 
@@ -274,6 +322,7 @@ function _licenceData () {
         reviewChargeVersionId: 'bd16e7b0-c2a3-4258-b873-b965fd74cdf5',
         chargeReferenceId: '82ce8695-5841-41b0-a1e7-d016407adad4',
         aggregate: 1,
+        chargeAdjustment: 1,
         createdAt: new Date('2024-03-18'),
         updatedAt: new Date('2024-03-18'),
         chargeReference: {
@@ -287,7 +336,8 @@ function _licenceData () {
           id: '8bc0cd32-400e-4a45-9dd7-fbce3d486031',
           reviewChargeReferenceId: '2210bb45-1efc-4e69-85cb-c8cc6e75c4fd',
           chargeElementId: 'b1001716-cfb4-43c6-91f0-1863f4529223',
-          allocated: 0,
+          allocated: 10,
+          amendedAllocated: 0,
           chargeDatesOverlap: false,
           issues: '',
           status: 'ready',
