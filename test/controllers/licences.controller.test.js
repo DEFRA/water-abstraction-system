@@ -212,6 +212,11 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Returns')
+        //  Check the table titles
+        expect(response.payload).to.contain('Return reference and dates')
+        expect(response.payload).to.contain('Purpose and description')
+        expect(response.payload).to.contain('Due date')
+        expect(response.payload).to.contain('Status')
       })
     })
 

@@ -22,7 +22,14 @@ describe('View Licence returns presenter', () => {
 
       expect(result).to.equal({
         activeTab: 'returns',
-        message: 'hello returns'
+        returns: [
+          {
+            dueDate: '28 April 2023', // date should be formatted
+            purpose: 'mock purpose',
+            reference: 'Mock reference',
+            status: 'complete' // lower case
+          }
+        ]
       })
     })
   })
