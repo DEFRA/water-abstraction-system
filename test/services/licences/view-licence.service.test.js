@@ -46,63 +46,14 @@ describe('View Licence service', () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result).to.equal({
-          abstractionConditionDetails: {
-            conditions: [],
-            numberOfConditions: 0
-          },
-          abstractionPeriods: null,
-          abstractionPeriodsAndPurposesLinkText: null,
-          abstractionPointLinkText: 'View details of the abstraction point',
-          abstractionPoints: [
-            'At National Grid Reference TL 23198 88603'
-          ],
-          abstractionPointsCaption: 'Point of abstraction',
-          abstractionQuantities: null,
-          documentId: '40306a46-d4ce-4874-9c9e-30ab6469b3fe',
-          endDate: null,
-          id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
-          licenceHolder: 'Unregistered licence',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
-          monitoringStations: [],
           notification: null,
           pageTitle: 'Licence 01/130/R01',
-          purposes: null,
-          region: 'South West',
           registeredTo: null,
           roles: null,
-          sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
-          startDate: '7 March 2013',
           warning: null
         })
-      })
-    })
-
-    describe('and it does not have a licence holder', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-        fetchLicenceResult.licenceHolder = null
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-      })
-
-      it('will return unregistered licence for use in the licence summary page', async () => {
-        const result = await ViewLicenceService.go(testId)
-
-        expect(result.licenceHolder).to.equal('Unregistered licence')
-      })
-    })
-
-    describe('and it does have a licence holder', () => {
-      beforeEach(() => {
-        fetchLicenceResult = _testLicence()
-        fetchLicenceResult.licenceHolder = 'Test Company'
-        Sinon.stub(FetchLicenceService, 'go').resolves(fetchLicenceResult)
-      })
-
-      it('will return the licence holder for use in the licence summary page', async () => {
-        const result = await ViewLicenceService.go(testId)
-
-        expect(result.licenceHolder).to.equal('Test Company')
       })
     })
 
@@ -118,8 +69,7 @@ describe('View Licence service', () => {
         expect(result.warning).to.equal(null)
       })
     })
-
-    describe("and it did 'end' in the past", () => {
+    describe('and it did \'end\' in the past', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
       })
@@ -164,7 +114,7 @@ describe('View Licence service', () => {
       })
     })
 
-    describe("and it did 'ends' today", () => {
+    describe('and it did \'ends\' today', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
         fetchLicenceResult.ends = { date: new Date(), priority: 1, reason: 'revoked' }
@@ -178,7 +128,7 @@ describe('View Licence service', () => {
       })
     })
 
-    describe("and it did 'ends' in the future", () => {
+    describe('and it did \'ends\' in the future', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
 
@@ -203,34 +153,8 @@ describe('View Licence service', () => {
 function _testLicence () {
   return LicenceModel.fromJson({
     id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
-    licenceDocumentHeader: {
-      id: '40306a46-d4ce-4874-9c9e-30ab6469b3fe'
-    },
     licenceRef: '01/130/R01',
     licenceName: 'Unregistered licence',
-    licenceVersions: [],
-    permitLicence: {
-      purposes: [{
-        ANNUAL_QTY: 'null',
-        DAILY_QTY: 'null',
-        HOURLY_QTY: 'null',
-        INST_QTY: 'null',
-        purposePoints: [{
-          point_detail: {
-            NGR1_SHEET: 'TL',
-            NGR1_EAST: '23198',
-            NGR1_NORTH: '88603'
-          },
-          point_source: {
-            NAME: 'SURFACE WATER SOURCE OF SUPPLY'
-          }
-        }]
-      }]
-    },
-    region: {
-      id: 'adca5dd3-114d-4477-8cdd-684081429f4b',
-      displayName: 'South West'
-    },
     registeredTo: null,
     startDate: new Date('2013-03-07')
   })

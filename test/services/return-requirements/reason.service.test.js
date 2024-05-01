@@ -47,7 +47,7 @@ describe('Select Reason service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         checkYourAnswersVisited: false,
-        pageTitle: 'Select the reason for the return requirement',
+        pageTitle: 'Select the reason for the requirements for returns',
         licenceRef: '01/ABC',
         reason: null
       }, { skip: ['id'] })

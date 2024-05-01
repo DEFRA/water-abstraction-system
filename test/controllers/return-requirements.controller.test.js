@@ -224,7 +224,7 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/reason', () => {
     beforeEach(async () => {
       Sinon.stub(SelectReasonService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the reason for the return requirement'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the reason for the requirements for returns'
       })
     })
     describe('when the request succeeds', () => {
@@ -232,7 +232,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('reason'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select the reason for the return requirement')
+        expect(response.payload).to.contain('Select the reason for the requirements for returns')
       })
     })
   })

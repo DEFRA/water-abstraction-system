@@ -24,7 +24,6 @@ describe('Match Details presenter', () => {
         financialYear: '2022 to 2023',
         chargePeriod: '1 April 2022 to 5 June 2022',
         licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
-        showBanner: true,
         chargeElement: {
           chargeElementId: 'b4d70c89-de1b-4f68-a47f-832b338ac044',
           description: 'Trickle Irrigation - Direct',
