@@ -69,7 +69,7 @@ describe('Submit Setup service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             licenceRef: '01/ABC',
-            pageTitle: 'How do you want to set up the return requirement?',
+            pageTitle: 'How do you want to set up the requirements for returns?',
             setup: null
           }, { skip: ['id', 'error'] })
         })

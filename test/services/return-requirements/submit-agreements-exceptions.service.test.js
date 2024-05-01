@@ -23,6 +23,7 @@ describe('Submit Agreements and Exceptions service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -60,10 +61,12 @@ describe('Submit Agreements and Exceptions service', () => {
         ])
       })
 
-      it('returns an empty object (no page data needed for a redirect)', async () => {
+      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
         const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
 
-        expect(result).to.equal({})
+        expect(result).to.equal({
+          checkYourAnswersVisited: false
+        })
       })
     })
   })
@@ -85,6 +88,7 @@ describe('Submit Agreements and Exceptions service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
+          checkYourAnswersVisited: false,
           error: null,
           pageTitle: 'Select agreements and exceptions for the requirements for returns',
           id: 'aeb46f58-3431-42af-8724-361a7779becf',
