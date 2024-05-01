@@ -1,14 +1,16 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the remove bill run licence confirmation page
- * @module RemoveBillRunLicenceService
+ * Orchestrates removing a licence from a bill run whilst it is at the review stage
+ * @module SubmitRemoveBillRunLicenceService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
+ * Orchestrates removing a licence from a bill run whilst it is at the review stage. It does this by deleting all of the
+ * persisted data relating to the licence from the review tables. The licence will then be flagged for 2PT supplementary
+ * billing. If after removing a licence the bill run is empty, the bill run status will be set to set to `empty`.
  *
  * @param {string} billRunId - The UUID of the bill run that the licence is in
  * @param {string} licenceId UUID of the licence to remove from the bill run
