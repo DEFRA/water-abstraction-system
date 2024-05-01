@@ -14,7 +14,7 @@ const { formatLongDate, formatAbstractionDate } = require('../base.presenter')
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (licence, licenceAbstractionConditions, auth) {
+function go (licence, licenceAbstractionConditions) {
   const {
     expiredDate,
     id,
@@ -27,8 +27,26 @@ function go (licence, licenceAbstractionConditions, auth) {
     startDate
   } = licence
 
-  const abstractionPeriods = _generateAbstractionPeriods(licenceVersions)
   const purposes = _generatePurposes(licenceVersions)
+  const monitoringStations = _generateMonitoringStation(licenceGaugingStations)
+  const abstractionData = _abstractionWrapper(licenceAbstractionConditions, licenceVersions, purposes, permitLicence)
+
+  return {
+    ...abstractionData,
+    activeTab: 'summary',
+    documentId: licenceDocumentHeader.id,
+    endDate: _endDate(expiredDate),
+    id,
+    licenceHolder: _generateLicenceHolder(licenceHolder),
+    monitoringStations,
+    purposes,
+    region: region.displayName,
+    startDate: formatLongDate(startDate)
+  }
+}
+
+function _abstractionWrapper (licenceAbstractionConditions, licenceVersions, purposes, permitLicence) {
+  const abstractionPeriods = _generateAbstractionPeriods(licenceVersions)
   let abstractionPeriodsAndPurposesLinkText = null
 
   if (abstractionPeriods && purposes) {
@@ -38,8 +56,6 @@ function go (licence, licenceAbstractionConditions, auth) {
   }
 
   const abstractionDetails = _parseAbstractionsAndSourceOfSupply(permitLicence)
-  const monitoringStations = _generateMonitoringStation(licenceGaugingStations)
-
   const abstractionConditionDetails = _abstractionConditionDetails(licenceAbstractionConditions)
 
   return {
@@ -50,16 +66,7 @@ function go (licence, licenceAbstractionConditions, auth) {
     abstractionPoints: abstractionDetails.points,
     abstractionPointsCaption: abstractionDetails.pointsCaption,
     abstractionQuantities: abstractionDetails.quantities,
-    activeTab: 'summary',
-    documentId: licenceDocumentHeader.id,
-    endDate: _endDate(expiredDate),
-    id,
-    licenceHolder: _generateLicenceHolder(licenceHolder),
-    monitoringStations,
-    purposes,
-    region: region.displayName,
     sourceOfSupply: abstractionDetails.sourceOfSupply,
-    startDate: formatLongDate(startDate)
   }
 }
 
