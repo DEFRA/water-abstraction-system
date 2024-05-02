@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
+const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
 // Thing under test
 const ViewLicenceReturnsService = require('../../../app/services/licences/view-license-returns.service')
 
@@ -18,6 +19,7 @@ describe('View Licence service returns', () => {
 
   beforeEach(() => {
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake license' })
+    Sinon.stub(FetchLicenceReturnsService, 'go').resolves(_returnData())
   })
 
   afterEach(() => {
@@ -32,9 +34,80 @@ describe('View Licence service returns', () => {
         expect(result).to.equal({
           activeTab: 'returns',
           licenceName: 'fake license',
-          message: 'hello returns'
+          returnsUrl: 'return/internal',
+          returns: [
+            {
+              id: 'mock-id-1',
+              reference: '1068',
+              purpose: 'SPRAY IRRIGATION',
+              dueDate: '28 November 2012',
+              status: 'COMPLETE'
+            },
+            {
+              id: 'mock-id-2',
+              reference: '1069',
+              purpose: 'SPRAY IRRIGATION',
+              dueDate: '28 November 2019',
+              status: 'OVERDUE'
+            }
+          ]
         })
       })
     })
   })
 })
+
+function _returnData () {
+  return [
+    {
+      id: 'mock-id-1',
+      dueDate: '2012-11-28T00:00:00.000Z',
+      status: 'completed',
+      metadata: {
+        purposes: [
+          {
+            alias: 'SPRAY IRRIGATION',
+            primary: {
+              code: 'A',
+              description: 'Agriculture'
+            },
+            tertiary: {
+              code: '400',
+              description: 'Spray Irrigation - Direct'
+            },
+            secondary: {
+              code: 'AGR',
+              description: 'General Agriculture'
+            }
+          }
+        ]
+      },
+      returnReference: '1068'
+    },
+    {
+      id: 'mock-id-2',
+      dueDate: '2019-11-28T00:00:00.000Z',
+      status: 'due',
+      metadata: {
+        purposes: [
+          {
+            alias: 'SPRAY IRRIGATION',
+            primary: {
+              code: 'A',
+              description: 'Agriculture'
+            },
+            tertiary: {
+              code: '400',
+              description: 'Spray Irrigation - Direct'
+            },
+            secondary: {
+              code: 'AGR',
+              description: 'General Agriculture'
+            }
+          }
+        ]
+      },
+      returnReference: '1069'
+    }
+  ]
+}

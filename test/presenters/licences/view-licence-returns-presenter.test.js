@@ -11,23 +11,32 @@ const { expect } = Code
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter')
 
 describe('View Licence returns presenter', () => {
-  let licence
+  let returnData
   beforeEach(() => {
-    licence = _licence()
+    returnData = _returnData()
   })
 
   describe('when provided with a populated licence', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceReturnsPresenter.go(licence)
+      const result = ViewLicenceReturnsPresenter.go(returnData)
 
       expect(result).to.equal({
         activeTab: 'returns',
+        returnsUrl: 'return/internal',
         returns: [
           {
-            dueDate: '28 April 2023', // date should be formatted
-            purpose: 'mock purpose',
-            reference: 'Mock reference',
-            status: 'complete' // lower case
+            id: 'mock-id-1',
+            reference: '1068',
+            purpose: 'SPRAY IRRIGATION',
+            dueDate: '28 November 2012',
+            status: 'COMPLETE'
+          },
+          {
+            id: 'mock-id-2',
+            reference: '1069',
+            purpose: 'SPRAY IRRIGATION',
+            dueDate: '28 November 2019',
+            status: 'OVERDUE'
           }
         ]
       })
@@ -35,6 +44,57 @@ describe('View Licence returns presenter', () => {
   })
 })
 
-function _licence () {
-  return {}
+function _returnData () {
+  return [
+    {
+      id: 'mock-id-1',
+      dueDate: '2012-11-28T00:00:00.000Z',
+      status: 'completed',
+      metadata: {
+        purposes: [
+          {
+            alias: 'SPRAY IRRIGATION',
+            primary: {
+              code: 'A',
+              description: 'Agriculture'
+            },
+            tertiary: {
+              code: '400',
+              description: 'Spray Irrigation - Direct'
+            },
+            secondary: {
+              code: 'AGR',
+              description: 'General Agriculture'
+            }
+          }
+        ]
+      },
+      returnReference: '1068'
+    },
+    {
+      id: 'mock-id-2',
+      dueDate: '2019-11-28T00:00:00.000Z',
+      status: 'due',
+      metadata: {
+        purposes: [
+          {
+            alias: 'SPRAY IRRIGATION',
+            primary: {
+              code: 'A',
+              description: 'Agriculture'
+            },
+            tertiary: {
+              code: '400',
+              description: 'Spray Irrigation - Direct'
+            },
+            secondary: {
+              code: 'AGR',
+              description: 'General Agriculture'
+            }
+          }
+        ]
+      },
+      returnReference: '1069'
+    }
+  ]
 }

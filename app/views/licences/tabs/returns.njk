@@ -2,11 +2,19 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% macro formatStatus(status) %}
-  {% if status === 'complete' %}
+  {% if status === 'COMPLETE' %}
     {{ govukTag({
       text: status,
       classes: "govuk-tag--green"
     }) }}
+
+  {% elseif status === 'OVERDUE' %}
+    {{ govukTag({
+      text: status,
+      classes: "govuk-tag--red"
+    }) }}
+  {% else %}
+    {{ status }}
   {% endif %}
 {% endmacro %}
 
@@ -23,7 +31,8 @@
   <tbody class="govuk-table__body">
   {% for return in returns %}
     <tr class="govuk-table__row">
-      <th class="govuk-table__cell"><a href="/" class="govuk-link">{{ return.reference }}</a></th>
+      <th class="govuk-table__cell"><a href="/{{ returnsUrl }}?returnId={{ return.id }}"
+                                       class="govuk-link">{{ return.reference }}</a></th>
       <td class="govuk-table__cell">{{ return.purpose }}</td>
       <td class="govuk-table__cell">{{ return.dueDate }}</td>
       <td class="govuk-table__cell">{{ formatStatus(return.status) }}</td>
