@@ -34,12 +34,19 @@ async function go (billRunId, licenceId, yar) {
 
   const licenceRef = await _flagForSupplementaryBilling(licenceId)
 
-  const allLicencesRemoved = await _allLicencesRemoved(billRunId, licenceRef, yar)
+  const allLicencesRemoved = await _allLicencesRemoved(billRunId)
+
+  if (!allLicencesRemoved) {
+    // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer
+    // any licences remaining in the bill run the user is redirected to the "Bill runs" page instead of
+    // "Review licences". As the banner isn't displayed on the "Bill runs" page the message would remain in the cookie.
+    yar.flash('banner', `Licence ${licenceRef} removed from the bill run.`)
+  }
 
   return allLicencesRemoved
 }
 
-async function _allLicencesRemoved (billRunId, licenceRef, yar) {
+async function _allLicencesRemoved (billRunId) {
   const count = await ReviewLicenceModel.query().where('billRunId', billRunId).resultSize()
 
   if (count === 0) {
@@ -47,11 +54,6 @@ async function _allLicencesRemoved (billRunId, licenceRef, yar) {
 
     return true
   }
-
-  // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer any
-  // licences remaining in the bill run the user is redirected to the "Bill runs" page instead of "Review licences". As
-  // the banner isn't displayed on the "Bill runs" page the message would remain in the cookie which could cause issues.
-  yar.flash('banner', `Licence ${licenceRef} removed from the bill run.`)
 
   return false
 }
