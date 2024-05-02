@@ -1,4 +1,5 @@
-// write test in hapi/yar for delete-note.service.js
+'use strict'
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
