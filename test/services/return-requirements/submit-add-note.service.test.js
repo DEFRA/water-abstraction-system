@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -43,41 +43,71 @@ describe('Submit Add Note service', () => {
     yarStub = { flash: Sinon.stub() }
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(() => {
-        payload = {
-          note: 'A note related to return requirement'
-        }
-      })
+      describe('with a new note', () => {
+        beforeEach(() => {
+          payload = {
+            note: 'A note related to return requirement'
+          }
+        })
 
-      it('saves the submitted value', async () => {
-        await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+        it('saves the submitted value', async () => {
+          await SubmitAddNoteService.go(session.id, payload, user, yarStub)
 
-        const refreshedSession = await session.$query()
+          const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.note).to.equal({
-          content: 'A note related to return requirement',
-          userEmail: 'carol.shaw@atari.com'
+          expect(refreshedSession.data.note).to.equal({
+            content: 'A note related to return requirement',
+            userEmail: 'carol.shaw@atari.com'
+          })
+        })
+
+        it('returns the journey to redirect the page', async () => {
+          const result = await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+
+          expect(result).to.equal({
+            journey: 'no-returns-required'
+
+          }, { skip: ['id'] })
+        })
+
+        it("sets the notification message to 'Added' for a new note", async () => {
+          await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+
+          const [flashType, notification] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(notification).to.equal({ title: 'Added', text: 'Changes made' })
         })
       })
+      describe('with an updated note', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({
+            data: {
+              note: {
+                content: 'A old note related to return requirement',
+                userEmail: 'carol.shaw@atari.com'
+              }
+            }
+          })
+          payload = {
+            note: 'A new note related to return requirement'
+          }
+        })
 
-      it('returns the journey to redirect the page', async () => {
-        const result = await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+        it("sets the notification message to 'Updated' for an updated note", async () => {
+          await SubmitAddNoteService.go(session.id, payload, user, yarStub)
 
-        expect(result).to.equal({
-          journey: 'no-returns-required'
+          const [flashType, notification] = yarStub.flash.args[0]
 
-        }, { skip: ['id'] })
-      })
-
-      it("sets the notification message to 'Added.'", async () => {
-        await SubmitAddNoteService.go(session.id, payload, user, yarStub)
-
-        const [flashType, notification] = yarStub.flash.args[0]
-
-        expect(flashType).to.equal('notification')
-        expect(notification).to.equal({ title: 'Added', text: 'Changes made' })
+          expect(flashType).to.equal('notification')
+          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+        })
       })
     })
 

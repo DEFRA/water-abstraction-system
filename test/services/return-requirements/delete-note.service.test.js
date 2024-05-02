@@ -53,7 +53,10 @@ describe('Delete Note service', () => {
 
   it('deletes the note', async () => {
     await DeleteNoteService.go(session.id, yarStub)
-    expect(session.note).to.be.undefined()
+
+    const refreshedSession = await session.$query()
+
+    expect(refreshedSession.data.note).to.be.undefined()
   })
 
   it("sets the notification message to 'Removed'", async () => {
