@@ -25,7 +25,7 @@ const ReviewReturnModel = require('../../../../app/models/review-return.model.js
 // Thing under test
 const RemoveReviewDataService = require('../../../../app/services/bill-runs/two-part-tariff/remove-review-data.service.js')
 
-describe.only('Remove Review Data service', () => {
+describe('Remove Review Data service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })

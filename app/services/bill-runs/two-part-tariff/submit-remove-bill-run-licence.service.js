@@ -6,8 +6,8 @@
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
-const { db } = require('../../../../db/db.js')
 const LicenceModel = require('../../../models/licence.model.js')
+const RemoveReviewDataService = require('./remove-review-data.service.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 
 /**
@@ -25,12 +25,7 @@ const ReviewLicenceModel = require('../../../models/review-licence.model.js')
  * @returns {Promise<boolean>} true if all the licences have been removed from the bill run else false
  */
 async function go (billRunId, licenceId, yar) {
-  await _removeChargeElementReturns(billRunId, licenceId)
-  await _removeReturns(billRunId, licenceId)
-  await _removeChargeElements(billRunId, licenceId)
-  await _removeChargeReferences(billRunId, licenceId)
-  await _removeChargeVersions(billRunId, licenceId)
-  await _removeLicence(billRunId, licenceId)
+  await RemoveReviewDataService.go(billRunId, licenceId)
 
   const licenceRef = await _flagForSupplementaryBilling(licenceId)
 
@@ -56,65 +51,6 @@ async function _allLicencesRemoved (billRunId) {
   }
 
   return false
-}
-
-async function _removeChargeElements (billRunId, licenceId) {
-  return db
-    .del()
-    .from('reviewChargeElements AS rce')
-    .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
-    .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
-    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', billRunId)
-    .andWhere('rl.licenceId', licenceId)
-}
-
-async function _removeChargeElementReturns (billRunId, licenceId) {
-  return db
-    .del()
-    .from('reviewChargeElementsReturns AS rcer')
-    .innerJoin('reviewChargeElements AS rce', 'rcer.reviewChargeElementId', 'rce.id')
-    .innerJoin('reviewChargeReferences AS rcr', 'rce.reviewChargeReferenceId', 'rcr.id')
-    .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
-    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', billRunId)
-    .andWhere('rl.licenceId', licenceId)
-}
-
-async function _removeChargeReferences (billRunId, licenceId) {
-  return db
-    .del()
-    .from('reviewChargeReferences AS rcr')
-    .innerJoin('reviewChargeVersions AS rcv', 'rcr.reviewChargeVersionId', 'rcv.id')
-    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', billRunId)
-    .andWhere('rl.licenceId', licenceId)
-}
-
-async function _removeChargeVersions (billRunId, licenceId) {
-  return db
-    .del()
-    .from('reviewChargeVersions AS rcv')
-    .innerJoin('reviewLicences AS rl', 'rcv.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', billRunId)
-    .andWhere('rl.licenceId', licenceId)
-}
-
-async function _removeLicence (billRunId, licenceId) {
-  return db
-    .del()
-    .from('reviewLicences')
-    .where('billRunId', billRunId)
-    .andWhere('licenceId', licenceId)
-}
-
-async function _removeReturns (billRunId, licenceId) {
-  return db
-    .del()
-    .from('reviewReturns AS rr')
-    .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
-    .where('rl.billRunId', billRunId)
-    .andWhere('rl.licenceId', licenceId)
 }
 
 async function _flagForSupplementaryBilling (licenceId) {
