@@ -8,7 +8,7 @@
 const { formatFinancialYear } = require('../../base.presenter.js')
 
 /**
- * Prepares and processes bill run data for presentation
+ * Formats the data ready for presenting in the remove bill run licence confirmation page
  *
  * @param {module:BillRunModel} billRun - an instance of `BillRunModel`
  * @param {Object[]} licence - an array containing the licence id, ref & account number for a single licence. For the
