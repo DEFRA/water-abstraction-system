@@ -22,7 +22,7 @@ const RemoveReviewDataService = require('../../../../app/services/bill-runs/two-
 // Thing under test
 const SubmitRemoveBillRunLicenceService = require('../../../../app/services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
 
-describe.only('Submit Remove Bill Run Licence service', () => {
+describe('Submit Remove Bill Run Licence service', () => {
   let yarStub
 
   beforeEach(async () => {
