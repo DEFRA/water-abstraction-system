@@ -86,7 +86,9 @@ async function _persistChargeReference (chargeReference, reviewChargeVersionId) 
     winterDiscount: chargeReference.winter,
     abatementAgreement: chargeReference.s126 ?? 1,
     twoPartTariffAgreement: chargeReference.s127,
-    canalAndRiverTrustAgreement: chargeReference.s130
+    canalAndRiverTrustAgreement: chargeReference.s130,
+    authorisedVolume: chargeReference.volume,
+    amendedAuthorisedVolume: chargeReference.volume
   }
 
   const { id: reviewChargeReferenceId } = await ReviewChargeReferenceModel.query().insert(data).returning('id')
