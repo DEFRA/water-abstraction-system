@@ -35,13 +35,13 @@ async function go (sessionId, payload, user) {
     }
   }
 
-  const formattedData = AddNotePresenter.go(session)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
     pageTitle: 'Add a note',
-    ...formattedData
+    ...submittedSessionData
   }
 }
 
@@ -54,6 +54,12 @@ async function _save (session, payload, user) {
   }
 
   return session.$query().patch({ data: currentData })
+}
+
+function _submittedSessionData (session, payload) {
+  session.data.note = payload.note ? payload.note : null
+
+  return AddNotePresenter.go(session)
 }
 
 function _validate (payload) {
