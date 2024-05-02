@@ -8,7 +8,7 @@ exports.up = function (knex) {
     .createView(viewName, (view) => {
       view.as(knex('licence_agreements').withSchema('water').select([
         'licence_agreement_id AS id',
-        'financial_agreement_type_id',
+        'financial_agreement_type_id AS financial_agreement_id',
         'licence_ref',
         'start_date',
         'end_date',
