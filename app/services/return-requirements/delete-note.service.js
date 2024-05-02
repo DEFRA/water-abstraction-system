@@ -25,11 +25,9 @@ async function go (sessionId, yar) {
     text: 'Note removed'
   }
 
-  await _save(session)
-
   yar.flash('notification', notification)
-
-  return notification
+  
+  return _save(session)
 }
 
 async function _save (session) {
