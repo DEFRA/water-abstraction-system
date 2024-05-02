@@ -31,8 +31,7 @@
   <tbody class="govuk-table__body">
   {% for return in returns %}
     <tr class="govuk-table__row">
-      <th class="govuk-table__cell"><a href="/{{ returnsUrl }}?returnId={{ return.id }}"
-                                       class="govuk-link">{{ return.reference }}</a></th>
+      <th class="govuk-table__cell"><a href="/{{ returnsUrl }}?returnId={{ return.id }}" class="govuk-link">{{ return.reference }}</a></th>
       <td class="govuk-table__cell">{{ return.purpose }}</td>
       <td class="govuk-table__cell">{{ return.dueDate }}</td>
       <td class="govuk-table__cell">{{ formatStatus(return.status) }}</td>
