@@ -123,12 +123,10 @@ describe('Fetch Match Details service', () => {
             },
             reviewChargeReference: {
               id: reviewChargeReference.id,
+              amendedAuthorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
               reviewChargeVersion: {
                 chargePeriodStartDate: reviewChargeVersion.chargePeriodStartDate,
                 chargePeriodEndDate: reviewChargeVersion.chargePeriodEndDate
-              },
-              chargeReference: {
-                volume: chargeReference.volume
               }
             }
           })
@@ -161,12 +159,10 @@ describe('Fetch Match Details service', () => {
             },
             reviewChargeReference: {
               id: reviewChargeReference.id,
+              amendedAuthorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
               reviewChargeVersion: {
                 chargePeriodStartDate: reviewChargeVersion.chargePeriodStartDate,
                 chargePeriodEndDate: reviewChargeVersion.chargePeriodEndDate
-              },
-              chargeReference: {
-                volume: chargeReference.volume
               }
             }
           })

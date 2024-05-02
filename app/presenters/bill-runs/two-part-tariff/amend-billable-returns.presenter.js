@@ -50,7 +50,7 @@ function go (billRun, reviewChargeElement, licenceId) {
 function _authorisedQuantity (reviewChargeElement) {
   const { chargeElement, reviewChargeReference } = reviewChargeElement
 
-  return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.chargeReference.volume)
+  return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)
 }
 
 function _financialYear (financialYearEnding) {
