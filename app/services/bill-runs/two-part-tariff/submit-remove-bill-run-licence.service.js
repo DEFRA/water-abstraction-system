@@ -8,14 +8,18 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Orchestrates removing a licence from a bill run whilst it is at the review stage. It does this by deleting all of the
- * persisted data relating to the licence from the review tables. The licence will then be flagged for 2PT supplementary
- * billing. If after removing a licence the bill run is empty, the bill run status will be set to set to `empty` and
- * `true` returned so that the user is redirected back to the Bill runs page rather than Review licences.
+ * Orchestrates removing a licence from a bill run whilst it is at the review stage
+ *
+ * It does this by deleting all of the persisted data relating to the licence from the review tables. The licence will
+ * then be flagged for 2PT supplementary billing. If after removing a licence the bill run is empty, the bill run status
+ * will be set to `empty` and `true` returned so that the user is redirected back to the Bill runs page rather
+ * than Review bill run.
  *
  * @param {string} billRunId - The UUID of the bill run that the licence is in
- * @param {string} licenceId UUID of the licence to remove from the bill run
- * @param {Object} sessionManager - The Hapi `request.yar` session manager passed on by the controller
+ * @param {string} licenceId - UUID of the licence to remove from the bill run
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<boolean>} true if all the licences have been removed from the bill run else false
  */
 async function go (billRunId, licenceId, yar) {
   await _removeChargeElementReturns(billRunId, licenceId)
