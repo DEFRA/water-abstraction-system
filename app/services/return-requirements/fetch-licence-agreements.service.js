@@ -10,7 +10,7 @@ const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
 /**
  * Fetches licence agreements needed for `/return-requirements/{sessionId}/check-your-answers` page
  *
- * @param {string} licenceRef - The UUID for the licence to fetch
+ * @param {string} licenceRef - The reference of the licence to fetch agreements for
  *
  * @returns {Promise<Object>} The licence agreements for the matching licenceRef
  */

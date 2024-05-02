@@ -13,7 +13,7 @@ exports.up = function (knex) {
         'start_date',
         'end_date',
         'date_signed',
-        'date_deleted',
+        'date_deleted AS deleted_at',
         'source',
         // 'is_test',
         'date_created AS created_at',
