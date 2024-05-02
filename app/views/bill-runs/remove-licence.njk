@@ -53,7 +53,10 @@
       }}
 
       <form method="post">
-        {{ govukButton({ text: "Remove licence" }) }}
+        {{ govukButton({
+          text: "Remove licence",
+          preventDoubleClick: true
+        }) }}
       </form>
     </div>
   </div>
