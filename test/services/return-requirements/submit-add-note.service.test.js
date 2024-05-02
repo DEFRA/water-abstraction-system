@@ -85,6 +85,7 @@ describe('Submit Add Note service', () => {
           expect(notification).to.equal({ title: 'Added', text: 'Changes made' })
         })
       })
+
       describe('with an updated note', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({
