@@ -5,7 +5,9 @@
  * @module SubmitRemoveBillRunLicenceService
  */
 
+const BillRunModel = require('../../../models/bill-run.model.js')
 const { db } = require('../../../../db/db.js')
+const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 
 /**
  * Orchestrates removing a licence from a bill run whilst it is at the review stage
@@ -37,17 +39,10 @@ async function go (billRunId, licenceId, yar) {
 }
 
 async function _allLicencesRemoved (billRunId, licenceRef, yar) {
-  const { licenceCount } = await db
-    .count('id AS licenceCount')
-    .from('reviewLicences')
-    .where('billRunId', billRunId)
-    .first()
+  const count = await ReviewLicenceModel.query().where('billRunId', billRunId).resultSize()
 
-  if (licenceCount === 0) {
-    await db
-      .update('status', 'empty')
-      .from('billRuns')
-      .where('id', billRunId)
+  if (count === 0) {
+    await BillRunModel.query().findById(billRunId).patch({ status: 'empty' })
 
     return true
   }
