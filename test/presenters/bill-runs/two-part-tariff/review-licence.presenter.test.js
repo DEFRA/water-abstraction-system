@@ -323,6 +323,8 @@ function _licenceData () {
         reviewChargeVersionId: 'bd16e7b0-c2a3-4258-b873-b965fd74cdf5',
         chargeReferenceId: '82ce8695-5841-41b0-a1e7-d016407adad4',
         aggregate: 1,
+        authorisedVolume: 200,
+        amendedAuthorisedVolume: 200,
         chargeAdjustment: 1,
         createdAt: new Date('2024-03-18'),
         updatedAt: new Date('2024-03-18'),

@@ -275,14 +275,12 @@ function _returnTotal (returnLog) {
 
 function _totalBillableReturns (reviewChargeReference) {
   let totalBillableReturns = 0
-  let totalQuantity = 0
 
   reviewChargeReference.reviewChargeElements.forEach((reviewChargeElement) => {
     totalBillableReturns += reviewChargeElement.amendedAllocated
-    totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
   })
 
-  return `${totalBillableReturns} ML / ${totalQuantity} ML`
+  return `${totalBillableReturns} ML / ${reviewChargeReference.amendedAuthorisedVolume} ML`
 }
 
 function _unmatchedReturns (returnLogs) {
