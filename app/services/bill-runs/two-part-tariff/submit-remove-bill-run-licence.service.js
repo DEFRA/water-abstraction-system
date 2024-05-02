@@ -7,6 +7,7 @@
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const { db } = require('../../../../db/db.js')
+const LicenceModel = require('../../../models/licence.model.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 
 /**
@@ -31,7 +32,7 @@ async function go (billRunId, licenceId, yar) {
   await _removeChargeVersions(billRunId, licenceId)
   await _removeLicence(billRunId, licenceId)
 
-  const licenceRef = await _setSupBillingTrueAndReturnRef(licenceId)
+  const licenceRef = await _flagForSupplementaryBilling(licenceId)
 
   const allLicencesRemoved = await _allLicencesRemoved(billRunId, licenceRef, yar)
 
@@ -114,14 +115,13 @@ async function _removeReturns (billRunId, licenceId) {
     .andWhere('rl.licenceId', licenceId)
 }
 
-async function _setSupBillingTrueAndReturnRef (licenceId) {
-  const licence = await db
-    .update('includeInSrocTptBilling', true)
-    .from('licences')
-    .where('id', licenceId)
+async function _flagForSupplementaryBilling (licenceId) {
+  const licence = await LicenceModel.query()
+    .findById(licenceId)
+    .patch({ includeInSrocTptBilling: true })
     .returning('licenceRef')
 
-  return licence[0].licenceRef
+  return licence.licenceRef
 }
 
 module.exports = {
