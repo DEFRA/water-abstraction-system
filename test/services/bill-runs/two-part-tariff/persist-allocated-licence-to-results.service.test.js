@@ -85,11 +85,14 @@ describe('Persist Allocated Licence to Results service', () => {
         // Check the charge reference persisted correctly
         // NOTE: As the aggregate is null on the charge reference the service returns 1
         const { reviewChargeReferences } = reviewChargeVersions[0]
-
         expect(reviewChargeReferences).to.have.length(1)
         expect(reviewChargeReferences[0].reviewChargeVersionId).to.equal(result[0].reviewChargeVersions[0].id)
         expect(reviewChargeReferences[0].chargeReferenceId).to.equal(testChargeVersions[0].chargeReferences[0].id)
         expect(reviewChargeReferences[0].aggregate).to.equal(1)
+        expect(reviewChargeReferences[0].authorisedVolume).to.equal(testChargeVersions[0].chargeReferences[0].volume)
+        expect(reviewChargeReferences[0].amendedAuthorisedVolume).to.equal(
+          testChargeVersions[0].chargeReferences[0].volume
+        )
 
         // Check the charge element persisted correctly
         const { reviewChargeElements } = reviewChargeReferences[0]
@@ -158,10 +161,16 @@ describe('Persist Allocated Licence to Results service', () => {
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 
         expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements).to.have.length(1)
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].chargeElementId).to.equal(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].id)
+        expect(
+          result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].chargeElementId
+        ).to.equal(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].id)
 
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns).to.have.length(0)
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns).to.equal([])
+        expect(
+          result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns
+        ).to.have.length(0)
+        expect(
+          result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns
+        ).to.equal([])
       })
     })
 
@@ -254,6 +263,7 @@ function _generateData (returnMatched = true) {
             s126: null,
             s127: true,
             s130: false,
+            volume: 200,
             chargeElements: [
               {
                 id: generateUUID(),
