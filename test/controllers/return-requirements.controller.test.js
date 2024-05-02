@@ -136,6 +136,7 @@ describe('Return requirements controller', () => {
         text: 'Note removed'
       })
     })
+
     it('redirects on success', async () => {
       const result = await server.inject(_options('delete-note'))
 
