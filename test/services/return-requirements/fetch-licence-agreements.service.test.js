@@ -25,9 +25,9 @@ describe('Return requirements Fetch Licence Agreements service', () => {
 
       testFinancialAgreements = await FinancialAgreementHelper.add()
 
-      const { id: financialAgreementTypeId } = testFinancialAgreements
+      const { id: financialAgreementId } = testFinancialAgreements
 
-      licenceAgreement = await LicenceAgreementHelper.add({ financialAgreementTypeId })
+      licenceAgreement = await LicenceAgreementHelper.add({ financialAgreementId })
     })
 
     it('should return a result with one financial agreement', async () => {
@@ -35,7 +35,7 @@ describe('Return requirements Fetch Licence Agreements service', () => {
 
       expect(result).to.equal([{
         id: licenceAgreement.id,
-        financialAgreementTypeId: licenceAgreement.financialAgreementTypeId,
+        financialAgreementId: licenceAgreement.financialAgreementId,
         licenceRef: licenceAgreement.licenceRef,
         startDate: licenceAgreement.startDate,
         endDate: null,
@@ -63,10 +63,10 @@ describe('Return requirements Fetch Licence Agreements service', () => {
 
       testFinancialAgreements = await FinancialAgreementHelper.add()
 
-      const { id: financialAgreementTypeId } = testFinancialAgreements
+      const { id: financialAgreementId } = testFinancialAgreements
 
       licenceAgreement = await LicenceAgreementHelper.add({
-        financialAgreementTypeId,
+        financialAgreementId,
         endDate: tomorrow
       })
     })
@@ -76,7 +76,7 @@ describe('Return requirements Fetch Licence Agreements service', () => {
 
       expect(result).to.equal([{
         id: licenceAgreement.id,
-        financialAgreementTypeId: licenceAgreement.financialAgreementTypeId,
+        financialAgreementId: licenceAgreement.financialAgreementId,
         licenceRef: licenceAgreement.licenceRef,
         startDate: licenceAgreement.startDate,
         endDate: tomorrow,
@@ -101,10 +101,10 @@ describe('Return requirements Fetch Licence Agreements service', () => {
 
       testFinancialAgreements = await FinancialAgreementHelper.add()
 
-      const { id: financialAgreementTypeId } = testFinancialAgreements
+      const { id: financialAgreementId } = testFinancialAgreements
 
       licenceAgreement = await LicenceAgreementHelper.add({
-        financialAgreementTypeId,
+        financialAgreementId,
         endDate: new Date('2023-12-31')
       })
     })

@@ -12,7 +12,7 @@ const FinancialAgreementModel = require('../../../app/models/financial-agreement
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `financialAgreementTypeId` - [random UUID]
+ * - `financialAgreementId` - [random UUID]
  * - `financialAgreementCode` - INST
  * - `description` - Installment
  * - `disabled` - false

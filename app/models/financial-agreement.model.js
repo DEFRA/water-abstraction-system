@@ -21,7 +21,7 @@ class FinancialAgreements extends BaseModel {
         modelClass: 'licence-agreement.model',
         join: {
           from: 'financialAgreements.id',
-          to: 'licenceAgreements.financialAgreementTypeId'
+          to: 'licenceAgreements.financialAgreementId'
         }
       }
     }

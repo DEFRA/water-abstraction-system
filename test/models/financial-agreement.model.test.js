@@ -43,9 +43,9 @@ describe('Financial Agreement model', () => {
       beforeEach(async () => {
         testRecord = await FinancialAgreementHelper.add()
 
-        const { id: financialAgreementTypeId } = testRecord
+        const { id: financialAgreementId } = testRecord
 
-        testLicenceAgreements = await LicenceAgreementHelper.add({ financialAgreementTypeId })
+        testLicenceAgreements = await LicenceAgreementHelper.add({ financialAgreementId })
       })
 
       it('can successfully run a related query', async () => {

@@ -20,7 +20,7 @@ class LicenceAgreements extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'financial-agreement.model',
         join: {
-          from: 'licenceAgreements.financialAgreementTypeId',
+          from: 'licenceAgreements.financialAgreementId',
           to: 'financialAgreements.id'
         }
       }
