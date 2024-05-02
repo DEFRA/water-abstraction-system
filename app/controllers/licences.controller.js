@@ -36,9 +36,9 @@ async function viewSummary (request, h) {
 }
 
 async function viewReturns (request, h) {
-  const { params: { id }, auth } = request
+  const { params: { id }, auth, query: { page = 1 } } = request
 
-  const data = await ViewLicenceReturnsService.go(id, auth)
+  const data = await ViewLicenceReturnsService.go(id, auth, page)
 
   return h.view('licences/view.njk', {
     activeNavBar: 'search',

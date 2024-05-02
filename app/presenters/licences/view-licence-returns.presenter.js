@@ -13,7 +13,7 @@ const { formatLongDate } = require('../base.presenter')
  * @returns {Object} The data formatted for the view template
  */
 function go (returnsData) {
-  const returns = _formatReturnToTableRow(returnsData)
+  const returns = _formatReturnToTableRow(returnsData.returns)
 
   return {
     activeTab: 'returns',
