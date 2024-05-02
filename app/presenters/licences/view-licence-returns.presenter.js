@@ -46,8 +46,10 @@ function _formatReturnToTableRow (returns) {
       id: r.id,
       reference: r.returnReference || 'No REF !!',
       purpose: _formatPurpose(r.metadata.purposes),
+      description: r.metadata.description,
       dueDate: formatLongDate(new Date(r.dueDate)),
-      status: _formatStatus(r.status)
+      status: _formatStatus(r.status),
+      dates: `${formatLongDate(new Date(r.startDate))} to ${formatLongDate(new Date(r.endDate))}`
     }
   })
 }

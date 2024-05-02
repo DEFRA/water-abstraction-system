@@ -38,6 +38,8 @@ async function _fetchLicence (id) {
   const result = await ReturnLogModel.query()
     .select([
       'id',
+      'start_date',
+      'end_date',
       'dueDate',
       'status',
       'metadata',
