@@ -14,26 +14,27 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const DeleteNoteService = require('../../../app/services/return-requirements/delete-note.service.js')
 
-const sessionData = {
-  data: {
-    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-    checkYourAnswersVisited: true,
-    licence: {
-      endDate: null,
-      licenceRef: '01/ABC',
-      licenceHolder: 'Astro Boy',
-      currentVersionStartDate: '2023-02-08T00:00:00.000Z'
-    },
-    reason: 'abstraction-below-100-cubic-metres-per-day',
-    journey: 'no-returns-required',
-    note: {
-      content: 'Note attached to requirement',
-      userEmail: 'carol.shaw@atari.com'
-    },
-    startDateOptions: 'licenceStartDate'
-  }
-}
 describe('Delete Note service', () => {
+  const sessionData = {
+    data: {
+      id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+      checkYourAnswersVisited: true,
+      licence: {
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Astro Boy',
+        currentVersionStartDate: '2023-02-08T00:00:00.000Z'
+      },
+      reason: 'abstraction-below-100-cubic-metres-per-day',
+      journey: 'no-returns-required',
+      note: {
+        content: 'Note attached to requirement',
+        userEmail: 'carol.shaw@atari.com'
+      },
+      startDateOptions: 'licenceStartDate'
+    }
+  }
+
   let session
   let yarStub
 
