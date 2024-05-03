@@ -285,8 +285,11 @@ describe('Bill Runs controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           Sinon.stub(RemoveBillRunLicenceService, 'go').resolves({
+            pageTitle: "You're about to remove 01/123/ABC from the bill run",
             backLink: `../review/${licenceId}`,
-            billingAccount: 'J10000070A',
+            billRunNumber: 12345,
+            billRunStatus: 'review',
+            dateCreated: '3 May 2024',
             financialYear: '2022 to 2023',
             licenceRef: '01/123/ABC',
             region: 'Test region'
@@ -297,9 +300,11 @@ describe('Bill Runs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('You&#39;re about to remove this licence from the bill run')
+          expect(response.payload).to.contain('You&#39;re about to remove 01/123/ABC from the bill run')
           expect(response.payload).to.contain(`../review/${licenceId}`)
-          expect(response.payload).to.contain('J10000070A')
+          expect(response.payload).to.contain('12345')
+          expect(response.payload).to.contain('review')
+          expect(response.payload).to.contain('3 May 2024')
           expect(response.payload).to.contain('2022 to 2023')
           expect(response.payload).to.contain('01/123/ABC')
           expect(response.payload).to.contain('Test region')

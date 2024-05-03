@@ -94,7 +94,6 @@ async function removeLicence (request, h) {
   const pageData = await RemoveBillRunLicenceService.go(billRunId, licenceId)
 
   return h.view('bill-runs/remove-licence.njk', {
-    pageTitle: "You're about to remove this licence from the bill run",
     activeNavBar: 'bill-runs',
     ...pageData
   })
