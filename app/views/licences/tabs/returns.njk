@@ -45,15 +45,8 @@
       </tr>
     {% endfor %}
     </tbody>
-
   {% else %}
-    {% if returnNeeded == true %}
-      <p class="govuk-body">Returns do not need to be submitted for this license.</p>
-    {% else %}
-      <p class="govuk-body">No requirements for returns have been set up for this licence.</p>
-    {% endif %}
-    <p class="govuk-body"><a class="govuk-link" href="/system/licences/{{ licenseId }}/returns-required">Set up new
-        requirements for returns</a></p>
+    <p>No returns found</p>
   {% endif %}
 </table>
 

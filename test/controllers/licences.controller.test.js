@@ -13,8 +13,8 @@ const Boom = require('@hapi/boom')
 
 // Things we need to stub
 const InitiateReturnRequirementSessionService = require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
-const ViewLicenceSummaryService = require('../../app/services/licences/view-license-summary.service')
-const ViewLicenceReturnsService = require('../../app/services/licences/view-license-returns.service')
+const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service')
+const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -217,39 +217,6 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Purpose and description')
         expect(response.payload).to.contain('Due date')
         expect(response.payload).to.contain('Status')
-      })
-    })
-
-    describe('when a request is valid and a return is not needed', () => {
-      beforeEach(async () => {
-        const returnData = _viewLicenceReturns()
-        delete returnData.returns
-        returnData.returnNeeded = true
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves(returnData)
-      })
-
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns')
-        expect(response.payload).to.contain('Returns do not need to be submitted for this license.')
-      })
-    })
-
-    describe('when a request is valid and no returns', () => {
-      beforeEach(async () => {
-        const returnData = _viewLicenceReturns()
-        delete returnData.returns
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves(returnData)
-      })
-
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns')
-        expect(response.payload).to.contain('No requirements for returns have been set up for this licence.')
       })
     })
 

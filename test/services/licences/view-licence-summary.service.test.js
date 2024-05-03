@@ -16,7 +16,7 @@ const FetchLicenceAbstractionConditionsService = require('../../../app/services/
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-license-summary.service')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
 // Thing under test
-const ViewLicenceSummaryService = require('../../../app/services/licences/view-license-summary.service')
+const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service')
 
 describe('View Licence service summary', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'

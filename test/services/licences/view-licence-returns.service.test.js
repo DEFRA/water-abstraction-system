@@ -14,7 +14,7 @@ const PaginatorPresenter = require('../../../app/presenters/paginator.presenter'
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter')
 const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
 // Thing under test
-const ViewLicenceReturnsService = require('../../../app/services/licences/view-license-returns.service')
+const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service')
 
 describe('View Licence service returns', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
