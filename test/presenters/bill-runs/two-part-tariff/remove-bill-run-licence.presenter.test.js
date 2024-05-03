@@ -4,64 +4,34 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
 const RemoveBillRunLicencePresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/remove-bill-run-licence.presenter.js')
 
 describe('Cancel Bill Run presenter', () => {
-  let billRun
-  let licence
-
-  describe('when provided with a licence that has a single billing account', () => {
-    beforeEach(() => {
-      billRun = { region: 'Test Region', toFinancialYearEnding: 2023 }
-      licence = [{
-        licenceId: '85a8e2d7-b73f-45a1-b5fd-ba5632b43442',
-        licenceRef: '01/123/ABC',
-        accountNumber: 'J10000070A'
-      }]
-    })
+  describe('when provided with bill run and licence data', () => {
+    const billRun = {
+      billRunNumber: 12345,
+      createdAt: new Date('2024-05-03'),
+      region: 'Test Region',
+      status: 'review',
+      toFinancialYearEnding: 2023
+    }
+    const licenceId = '85a8e2d7-b73f-45a1-b5fd-ba5632b43442'
+    const licenceRef = '01/123/ABC'
 
     it('correctly presents the data', () => {
-      const result = RemoveBillRunLicencePresenter.go(billRun, licence)
+      const result = RemoveBillRunLicencePresenter.go(billRun, licenceId, licenceRef)
 
       expect(result).to.equal({
-        backLink: `../review/${licence[0].licenceId}`,
-        billingAccount: 'J10000070A',
+        pageTitle: "You're about to remove 01/123/ABC from the bill run",
+        backLink: `../review/${licenceId}`,
+        billRunNumber: billRun.billRunNumber,
+        billRunStatus: billRun.status,
+        dateCreated: '3 May 2024',
         financialYear: '2022 to 2023',
-        licenceRef: licence[0].licenceRef,
-        region: billRun.region
-      })
-    })
-  })
-
-  describe('when provided with a licence that has multiple billing accounts', () => {
-    beforeEach(() => {
-      billRun = { region: 'Test Region', toFinancialYearEnding: 2023 }
-      licence = [
-        {
-          licenceId: '85a8e2d7-b73f-45a1-b5fd-ba5632b43442',
-          licenceRef: '01/123/ABC',
-          accountNumber: 'J10000070A'
-        },
-        {
-          licenceId: '85a8e2d7-b73f-45a1-b5fd-ba5632b43442',
-          licenceRef: '01/123/ABC',
-          accountNumber: 'X99999999A'
-        }
-      ]
-    })
-
-    it('correctly presents the data', () => {
-      const result = RemoveBillRunLicencePresenter.go(billRun, licence)
-
-      expect(result).to.equal({
-        backLink: `../review/${licence[0].licenceId}`,
-        billingAccount: 'J10000070A, X99999999A',
-        financialYear: '2022 to 2023',
-        licenceRef: licence[0].licenceRef,
         region: billRun.region
       })
     })
