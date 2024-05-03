@@ -59,7 +59,6 @@ describe('Fetch licence returns service', () => {
         total: 2
       })
       //  This should be ordered by due date
-      //    id: returnsLogData.id,
       expect(result.returns).to.equal(
         [
           {
