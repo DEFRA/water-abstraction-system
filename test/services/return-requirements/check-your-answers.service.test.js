@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
@@ -37,23 +38,29 @@ const sessionData = {
 
 describe('Check Your Answers service', () => {
   let session
+  let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
     session = await SessionHelper.add({
       ...sessionData
     })
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await CheckYourAnswersService.go(session.id)
+      const result = await CheckYourAnswersService.go(session.id, yarStub)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await CheckYourAnswersService.go(session.id)
+      const result = await CheckYourAnswersService.go(session.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -62,6 +69,7 @@ describe('Check Your Answers service', () => {
         journey: 'no-returns-required',
         licenceRef: '01/ABC',
         note: 'Note attached to requirement',
+        notification: undefined,
         userEmail: 'carol.shaw@atari.com',
         reason: 'abstraction-below-100-cubic-metres-per-day',
         startDate: '8 February 2023'
@@ -69,7 +77,7 @@ describe('Check Your Answers service', () => {
     })
 
     it('updates the session record to indicate user has visited check-your-answers', async () => {
-      await CheckYourAnswersService.go(session.id)
+      await CheckYourAnswersService.go(session.id, yarStub)
       const updatedSession = await SessionModel.query().findById(session.id)
 
       expect(updatedSession.data.checkYourAnswersVisited).to.be.true()

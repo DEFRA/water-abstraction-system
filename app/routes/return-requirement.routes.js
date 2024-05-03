@@ -122,6 +122,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/delete-note',
+    handler: ReturnRequirementsController.deleteNote,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Delete a note'
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/existing',
     handler: ReturnRequirementsController.existing,
     options: {

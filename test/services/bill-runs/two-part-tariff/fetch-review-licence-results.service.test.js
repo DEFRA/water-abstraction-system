@@ -173,6 +173,8 @@ describe('Fetch Review Licence Results Service', () => {
               abatementAgreement: reviewChargeReference.abatementAgreement,
               winterDiscount: reviewChargeReference.winterDiscount,
               twoPartTariffAgreement: reviewChargeReference.twoPartTariffAgreement,
+              authorisedVolume: reviewChargeReference.authorisedVolume,
+              amendedAuthorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
               createdAt: reviewChargeReference.createdAt,
               updatedAt: reviewChargeReference.updatedAt,
               chargeReference: {

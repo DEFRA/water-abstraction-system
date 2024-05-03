@@ -25,9 +25,12 @@ describe('Submit Amended Billable Returns Service', () => {
   const licenceId = '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
   let payload
   let reviewChargeElement
+  let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+
+    yarStub = { flash: Sinon.stub() }
 
     reviewChargeElement = await ReviewChargeElementHelper.add()
   })
@@ -46,11 +49,20 @@ describe('Submit Amended Billable Returns Service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
+        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
         expect(reviewChargeElementData.amendedAllocated).to.equal(10)
+      })
+
+      it("sets the banner message to 'The billable returns for this licence have been updated'", async () => {
+        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('banner')
+        expect(bannerMessage).to.equal('The billable returns for this licence have been updated')
       })
     })
 
@@ -64,11 +76,20 @@ describe('Submit Amended Billable Returns Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
+        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
         const reviewChargeElementData = await _fetchReviewChargeElement(reviewChargeElement.id)
 
         expect(reviewChargeElementData.amendedAllocated).to.equal(20)
+      })
+
+      it("sets the banner message to 'The billable returns for this licence have been updated'", async () => {
+        await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('banner')
+        expect(bannerMessage).to.equal('The billable returns for this licence have been updated')
       })
     })
 
@@ -85,7 +106,7 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns the page data for the view', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
+          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -110,7 +131,7 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns page data with an error for the radio form element', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
+          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
           expect(result.error).to.equal({
             message: 'Select the billable quantity',
@@ -130,7 +151,7 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns the page data for the view', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
+          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -155,7 +176,7 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns page data with an error for the custom quantity input form element', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload)
+          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
           expect(result.error).to.equal({
             message: 'The quantity must be a number',

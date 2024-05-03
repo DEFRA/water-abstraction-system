@@ -22,6 +22,8 @@ const ReviewChargeReferenceModel = require('../../../app/models/review-charge-re
  * - `abatementAgreement` - 0
  * - `chargeAdjustment - 1
  * - `amendedChargeAdjustment` - 1
+ * - `authorisedVolume` - 50
+ * - `amendedAuthorisedVolume` - 50
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -54,7 +56,9 @@ function defaults (data = {}) {
     winterDiscount: false,
     abatementAgreement: 0,
     chargeAdjustment: 0,
-    amendedChargeAdjustment: 0
+    amendedChargeAdjustment: 0,
+    authorisedVolume: 50,
+    amendedAuthorisedVolume: 50
   }
 
   return {

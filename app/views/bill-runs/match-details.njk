@@ -16,10 +16,11 @@
 {% endblock %}
 
 {% block content %}
-  {% if showBanner %}
+  {# Billable returns ammended banner #}
+  {% if bannerMessage %}
     {{ govukNotificationBanner({
-      text: "The billable returns for this licence have been updated",
-      titleText: "Element updated"
+      titleText: 'Element updated',
+      text: bannerMessage
     }) }}
   {% endif %}
 
