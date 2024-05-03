@@ -407,7 +407,7 @@ describe('Bill Runs controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('4.6.24')
           expect(response.payload).to.contain('Total billable returns')
-          expect(response.payload).to.contain('Aggregate factor (1)')
+          expect(response.payload).to.contain('Aggregate factor (0.5)')
         })
       })
     })
@@ -621,11 +621,7 @@ function _chargeReferenceData () {
       description: 'High loss, non-tidal, restricted water, greater than 85 up to and including 120 ML/yr',
       totalBillableReturns: 5,
       authorisedVolume: 10,
-      adjustments: {
-        aggregateFactor: 1,
-        chargeAdjustment: 1,
-        winterDiscount: 1
-      }
+      adjustments: ['Aggregate factor (0.5)']
     }
   }
 }
