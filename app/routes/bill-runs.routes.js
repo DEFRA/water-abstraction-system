@@ -133,7 +133,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Review a two-part tariff licences charge references'
+      description: 'Review a charge reference from a two-part tariff licence'
     }
   },
   {
