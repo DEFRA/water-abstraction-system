@@ -32,12 +32,12 @@
   <tbody class="govuk-table__body">
   {% for return in returns %}
 {#    Fix addtional bottom row#}
-    <tr class="govuk-table__row">
+    <tr class="govuk-table__row govuk-body-s">
       <th class="govuk-table__cell">
         <a href="/{{ returnsUrl }}?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
-        <p> {{ return.dates }}</p>
+        <p class="govuk-body-s"> {{ return.dates }}</p>
       </th>
-      <td class="govuk-table__cell">{{ return.purpose }} <p> {{ return.description }}</p></td>
+      <td class="govuk-table__cell">{{ return.purpose }} <p class="govuk-body-s"> {{ return.description }}</p></td>
       <td class="govuk-table__cell">{{ return.dueDate }}</td>
       <td class="govuk-table__cell">{{ formatStatus(return.status) }}</td>
     </tr>

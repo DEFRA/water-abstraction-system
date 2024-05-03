@@ -10,16 +10,22 @@ const { expect } = Code
 
 // Things we need to stub
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
+const PaginatorPresenter = require('../../../app/presenters/paginator.presenter')
+const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter')
 const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
 // Thing under test
 const ViewLicenceReturnsService = require('../../../app/services/licences/view-license-returns.service')
 
 describe('View Licence service returns', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
-
+  const page = 1
+  const auth = {}
+  const pagination = { page }
   beforeEach(() => {
-    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake license' })
-    Sinon.stub(FetchLicenceReturnsService, 'go').resolves(_returnData())
+    Sinon.stub(FetchLicenceReturnsService, 'go').resolves(_returnsFetch())
+    Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
+    Sinon.stub(ViewLicenceReturnsPresenter, 'go').returns(_returnsPresenter())
+    Sinon.stub(ViewLicenceService, 'go').resolves(_license())
   })
 
   afterEach(() => {
@@ -29,94 +35,35 @@ describe('View Licence service returns', () => {
   describe('when a return', () => {
     describe('and it has no optional fields', () => {
       it('will return all the mandatory data and default values for use in the licence returns page', async () => {
-        const result = await ViewLicenceReturnsService.go(testId)
+        const result = await ViewLicenceReturnsService.go(testId, auth, page)
 
         expect(result).to.equal({
-          activeTab: 'returns',
           licenceName: 'fake license',
           returnsUrl: 'return/internal',
-          returns: [
-            {
-              id: 'mock-id-1',
-              reference: '1068',
-              purpose: 'SPRAY IRRIGATION',
-              dueDate: '28 November 2012',
-              status: 'COMPLETE',
-              dates: '2 January 2020 to 1 February 2020',
-              description: 'empty description'
-            },
-            {
-              id: 'mock-id-2',
-              reference: '1069',
-              purpose: 'SPRAY IRRIGATION',
-              dueDate: '28 November 2019',
-              status: 'OVERDUE',
-              dates: '2 January 2020 to 1 February 2020',
-              description: 'empty description'
-            }
-          ]
+          returns: [],
+          activeTab: 'returns',
+          pagination: { page: 1 }
         })
       })
     })
   })
 })
-function _returnData () {
-  return [
-    {
-      id: 'mock-id-1',
-      dueDate: '2012-11-28T00:00:00.000Z',
-      status: 'completed',
-      startDate: '2020/01/02',
-      endDate: '2020/02/01',
-      metadata: {
-        purposes: [
-          {
-            alias: 'SPRAY IRRIGATION',
-            primary: {
-              code: 'A',
-              description: 'Agriculture'
-            },
-            tertiary: {
-              code: '400',
-              description: 'Spray Irrigation - Direct'
-            },
-            secondary: {
-              code: 'AGR',
-              description: 'General Agriculture'
-            }
-          }
-        ],
-        description: 'empty description'
-      },
-      returnReference: '1068'
-    },
-    {
-      id: 'mock-id-2',
-      dueDate: '2019-11-28T00:00:00.000Z',
-      status: 'due',
-      startDate: '2020/01/02',
-      endDate: '2020/02/01',
-      metadata: {
-        description: 'empty description',
-        purposes: [
-          {
-            alias: 'SPRAY IRRIGATION',
-            primary: {
-              code: 'A',
-              description: 'Agriculture'
-            },
-            tertiary: {
-              code: '400',
-              description: 'Spray Irrigation - Direct'
-            },
-            secondary: {
-              code: 'AGR',
-              description: 'General Agriculture'
-            }
-          }
-        ]
-      },
-      returnReference: '1069'
-    }
-  ]
+
+function _returnsPresenter () {
+  return {
+    returnsUrl: 'return/internal',
+    returns: [],
+    activeTab: 'returns'
+  }
+}
+
+function _returnsFetch () {
+  return {
+    pagination: { total: 1 },
+    returns: []
+  }
+}
+
+function _license () {
+  return { licenceName: 'fake license' }
 }

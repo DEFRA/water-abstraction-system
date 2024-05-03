@@ -22,7 +22,7 @@ async function go (licenceId, auth, page) {
   const returnsData = await FetchLicenceReturnsService.go(licenceId, page)
   const pageData = ViewLicenceReturnsPresenter.go(returnsData)
 
-  const pagination = PaginatorPresenter.go(returnsData.pagination.total, Number(page), '')
+  const pagination = PaginatorPresenter.go(returnsData.pagination.total, Number(page), `/system/licences/${licenceId}/returns`)
 
   return {
     ...pageData,

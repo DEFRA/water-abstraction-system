@@ -49,62 +49,64 @@ describe('View Licence returns presenter', () => {
 })
 
 function _returnData () {
-  return [
-    {
-      id: 'mock-id-1',
-      dueDate: '2012-11-28T00:00:00.000Z',
-      status: 'completed',
-      startDate: '2020/01/02',
-      endDate: '2020/02/01',
-      metadata: {
-        purposes: [
-          {
-            alias: 'SPRAY IRRIGATION',
-            primary: {
-              code: 'A',
-              description: 'Agriculture'
-            },
-            tertiary: {
-              code: '400',
-              description: 'Spray Irrigation - Direct'
-            },
-            secondary: {
-              code: 'AGR',
-              description: 'General Agriculture'
+  return {
+    returns: [
+      {
+        id: 'mock-id-1',
+        dueDate: '2012-11-28T00:00:00.000Z',
+        status: 'completed',
+        startDate: '2020/01/02',
+        endDate: '2020/02/01',
+        metadata: {
+          purposes: [
+            {
+              alias: 'SPRAY IRRIGATION',
+              primary: {
+                code: 'A',
+                description: 'Agriculture'
+              },
+              tertiary: {
+                code: '400',
+                description: 'Spray Irrigation - Direct'
+              },
+              secondary: {
+                code: 'AGR',
+                description: 'General Agriculture'
+              }
             }
-          }
-        ],
-        description: 'empty description'
+          ],
+          description: 'empty description'
+        },
+        returnReference: '1068'
       },
-      returnReference: '1068'
-    },
-    {
-      id: 'mock-id-2',
-      dueDate: '2019-11-28T00:00:00.000Z',
-      status: 'due',
-      startDate: '2020/01/02',
-      endDate: '2020/02/01',
-      metadata: {
-        description: 'empty description',
-        purposes: [
-          {
-            alias: 'SPRAY IRRIGATION',
-            primary: {
-              code: 'A',
-              description: 'Agriculture'
-            },
-            tertiary: {
-              code: '400',
-              description: 'Spray Irrigation - Direct'
-            },
-            secondary: {
-              code: 'AGR',
-              description: 'General Agriculture'
+      {
+        id: 'mock-id-2',
+        dueDate: '2019-11-28T00:00:00.000Z',
+        status: 'due',
+        startDate: '2020/01/02',
+        endDate: '2020/02/01',
+        metadata: {
+          description: 'empty description',
+          purposes: [
+            {
+              alias: 'SPRAY IRRIGATION',
+              primary: {
+                code: 'A',
+                description: 'Agriculture'
+              },
+              tertiary: {
+                code: '400',
+                description: 'Spray Irrigation - Direct'
+              },
+              secondary: {
+                code: 'AGR',
+                description: 'General Agriculture'
+              }
             }
-          }
-        ]
-      },
-      returnReference: '1069'
-    }
-  ]
+          ]
+        },
+        returnReference: '1069'
+      }
+    ]
+  }
 }
