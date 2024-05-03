@@ -12,6 +12,7 @@ const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/vi
 
 describe('View Licence returns presenter', () => {
   let returnData
+
   beforeEach(() => {
     returnData = _returnData()
   })
