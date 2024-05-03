@@ -6,7 +6,8 @@
  */
 
 const InitiateReturnRequirementSessionService = require('../services/return-requirements/initiate-return-requirement-session.service.js')
-const ViewLicenceSummaryService = require('../services/licences/view-license-summary.service')
+const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service')
+const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service')
 
 async function noReturnsRequired (request, h) {
   const { id } = request.params
@@ -35,8 +36,20 @@ async function viewSummary (request, h) {
   })
 }
 
+async function viewReturns (request, h) {
+  const { params: { id }, auth, query: { page = 1 } } = request
+
+  const data = await ViewLicenceReturnsService.go(id, auth, page)
+
+  return h.view('licences/view.njk', {
+    activeNavBar: 'search',
+    ...data
+  })
+}
+
 module.exports = {
   noReturnsRequired,
   returnsRequired,
+  viewReturns,
   viewSummary
 }

@@ -13,7 +13,8 @@ const Boom = require('@hapi/boom')
 
 // Things we need to stub
 const InitiateReturnRequirementSessionService = require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
-const ViewLicenceSummaryService = require('../../app/services/licences/view-license-summary.service')
+const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service')
+const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -188,4 +189,42 @@ describe('Licences controller', () => {
       }
     }
   })
+
+  describe('GET /licences/{id}/returns', () => {
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid and has returns', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Returns')
+        //  Check the table titles
+        expect(response.payload).to.contain('Return reference and dates')
+        expect(response.payload).to.contain('Purpose and description')
+        expect(response.payload).to.contain('Due date')
+        expect(response.payload).to.contain('Status')
+      })
+    })
+  })
 })
+
+function _viewLicenceReturns () {
+  return {
+    activeTab: 'returns',
+    returns: [{}]
+  }
+}

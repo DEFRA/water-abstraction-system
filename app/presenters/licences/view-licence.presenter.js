@@ -21,10 +21,12 @@ function go (licence, auth) {
     includeInSrocBilling,
     licenceName,
     licenceRef,
-    registeredTo
+    registeredTo,
+    id
   } = licence
 
   return {
+    licenceId: id,
     licenceName,
     licenceRef,
     notification: _determineNotificationBanner(includeInPresrocBilling, includeInSrocBilling),
@@ -36,7 +38,7 @@ function go (licence, auth) {
 }
 
 function _determineNotificationBanner (includeInPresrocBilling, includeInSrocBilling) {
-  const baseMessage = 'This license has been marked for the next supplementary bill run'
+  const baseMessage = 'This licence has been marked for the next supplementary bill run'
 
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
     return baseMessage + 's for the current and old charge schemes.'

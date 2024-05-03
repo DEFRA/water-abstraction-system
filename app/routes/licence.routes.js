@@ -8,9 +8,18 @@ const routes = [
     path: '/licences/{id}/summary',
     handler: LicencesController.viewSummary,
     options: {
-      description: 'View a licence page'
+      description: 'View a licence summary page'
     }
-  }, {
+  },
+  {
+    method: 'GET',
+    path: '/licences/{id}/returns',
+    handler: LicencesController.viewReturns,
+    options: {
+      description: 'View a licence returns page'
+    }
+  },
+  {
     method: 'GET',
     path: '/licences/{id}/no-returns-required',
     handler: LicencesController.noReturnsRequired,

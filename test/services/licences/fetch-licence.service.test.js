@@ -28,6 +28,7 @@ describe('Fetch licence service', () => {
   describe('when there is no optional data in the model', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add({
+        id: 'a8256ea1-4509-4992-b30f-d011509e5f62',
         expiredDate: null,
         include_in_presroc_billing: 'yes',
         include_in_sroc_billing: true,
@@ -42,6 +43,7 @@ describe('Fetch licence service', () => {
     it('returns results', async () => {
       const result = await FetchLicenceService.go(licence.id)
 
+      expect(result.id).to.equal('a8256ea1-4509-4992-b30f-d011509e5f62')
       expect(result.ends).to.equal(null)
       expect(result.expiredDate).to.equal(null)
       expect(result.lapsedDate).to.equal(null)

@@ -167,7 +167,7 @@ describe('View Bill Summaries presenter', () => {
     })
 
     describe("the bill 'licences' property", () => {
-      it('splits the licenses provided by , and places the resulting references into an array', () => {
+      it('splits the licences provided by , and places the resulting references into an array', () => {
         const result = ViewBillSummariesPresenter.go(billSummaries)
 
         expect(result[0].bills[0].licences).to.equal(['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'])
