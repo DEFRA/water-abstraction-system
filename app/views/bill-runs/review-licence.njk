@@ -21,10 +21,10 @@
 
 {% block content %}
   {# Licence updated banner #}
-  {% if licenceUpdatedMessage %}
+  {% if bannerMessage %}
     {{ govukNotificationBanner({
       titleText: 'Licence updated',
-      text: licenceUpdatedMessage
+      text: bannerMessage
     }) }}
   {% endif %}
 
@@ -62,7 +62,7 @@
 
   {# Change status #}
   {% if licence.status === 'ready' %}
-    {% set statusButtonText = 'Put licence into Review' %}
+    {% set statusButtonText = 'Put licence into review' %}
     {% set statusButtonValue = 'review' %}
     {% set statusButtonClass = "govuk-button--secondary" %}
   {% else %}
@@ -86,7 +86,7 @@
       text: statusButtonText,
       classes: statusButtonClass,
       preventDoubleClick: true,
-      name: "licenceStatus",
+      name: "licence-status",
       value: statusButtonValue
     }) }}
 
@@ -94,7 +94,7 @@
       text: progressButtonText,
       classes: "govuk-button--secondary",
       preventDoubleClick: true,
-      name: "marKProgress",
+      name: "mark-progress",
       value: progressButtonValue
     }) }}
     </div>
@@ -352,6 +352,14 @@
                     value: {
                       text: chargeReference.totalBillableReturns,
                       attributes: { 'data-test': 'total-billable-returns' }
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "#",
+                          text: chargeReference.chargeReferenceLink.linkName
+                        }
+                      ]
                     }
                     }
                   %}

@@ -9,20 +9,14 @@ const DetermineAbstractionPeriodService = require('../../../services/bill-runs/d
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Prepares and processes bill run and review licence data for presentation
+ * Formats the review licence data ready for presenting in the review licence page
  *
- * @param {module:BillRunModel} billRun the data from the bill run
- * @param {module:ReviewLicenceModel} licence the data from review licence
- * @param {String} licenceStatus will contain the string 'ready' or 'review' if the licence review status button has
- * been clicked, otherwise it will be null. It is used to determine the message displayed by the 'Licence updated'
- * banner, if any
- * @param {String} markProgress will contain the string 'mark' or 'unmark' if the mark/unmark progress button has been
- * clicked, otherwise it will be null. It is used to determine the message displayed by the 'Licence updated'
- * banner, if any
+ * @param {module:BillRunModel} billRun - the data from the bill run
+ * @param {module:ReviewLicenceModel} licence - the data from review licence
  *
  * @returns {Object} the prepared bill run and licence data to be passed to the review licence page
  */
-function go (billRun, licence, licenceStatus, markProgress) {
+function go (billRun, licence) {
   return {
     billRunId: billRun.id,
     region: billRun.region.displayName,
@@ -34,7 +28,6 @@ function go (billRun, licence, licenceStatus, markProgress) {
       progress: licence[0].progress
     },
     elementsInReview: licence[0].hasReviewStatus,
-    licenceUpdatedMessage: _licenceUpdatedMessage(licenceStatus, markProgress),
     matchedReturns: _matchedReturns(licence[0].reviewReturns),
     unmatchedReturns: _unmatchedReturns(licence[0].reviewReturns),
     chargeData: _prepareChargeData(licence, billRun)
@@ -101,7 +94,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
       elementDescription: reviewChargeElement.chargeElement.description,
       dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
       issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : [''],
-      billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
+      billableReturns: `${reviewChargeElement.amendedAllocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
       returnVolume: _prepareReturnVolume(reviewChargeElement)
     }
   })
@@ -119,11 +112,22 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
       chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
       chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference),
+      chargeReferenceLink: _chargeReferenceLink(reviewChargeReference),
       chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
     })
   })
 
   return chargeReference
+}
+
+function _chargeReferenceLink (reviewChargeReference) {
+  const { chargeAdjustment, aggregate } = reviewChargeReference
+
+  if (chargeAdjustment !== 1 || aggregate !== 1) {
+    return { linkName: 'Change details' }
+  }
+
+  return { linkName: 'View details' }
 }
 
 function _contactName (billingAccount) {
@@ -141,20 +145,6 @@ function _financialYear (financialYearEnding) {
   const endYear = financialYearEnding
 
   return `${startYear} to ${endYear}`
-}
-
-function _licenceUpdatedMessage (licenceStatus, markProgress) {
-  if (licenceStatus === 'ready') {
-    return 'Licence changed to ready.'
-  } else if (licenceStatus === 'review') {
-    return 'Licence changed to review.'
-  } else if (markProgress === 'mark') {
-    return 'This licence has been marked.'
-  } else if (markProgress === 'unmark') {
-    return 'The progress mark for this licence has been removed.'
-  } else {
-    return null
-  }
 }
 
 function _matchedReturns (returnLogs) {
@@ -284,14 +274,12 @@ function _returnTotal (returnLog) {
 
 function _totalBillableReturns (reviewChargeReference) {
   let totalBillableReturns = 0
-  let totalQuantity = 0
 
   reviewChargeReference.reviewChargeElements.forEach((reviewChargeElement) => {
-    totalBillableReturns += reviewChargeElement.allocated
-    totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
+    totalBillableReturns += reviewChargeElement.amendedAllocated
   })
 
-  return `${totalBillableReturns} ML / ${totalQuantity} ML`
+  return `${totalBillableReturns} ML / ${reviewChargeReference.amendedAuthorisedVolume} ML`
 }
 
 function _unmatchedReturns (returnLogs) {

@@ -20,29 +20,56 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
  * @param {Object} user - The logged in user details
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} The page data for the no returns required page
+ * @returns {Promise<Object>} The page data for the check-your-answers page
  */
-async function go (sessionId, payload, user) {
+async function go (sessionId, payload, user, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
+    const notification = _notification(session, payload.note)
     await _save(session, payload, user)
+
+    if (notification) {
+      yar.flash('notification', notification)
+    }
 
     return {
       journey: session.data.journey
     }
   }
 
-  const formattedData = AddNotePresenter.go(session)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
     error: validationResult,
     pageTitle: 'Add a note',
-    ...formattedData
+    ...submittedSessionData
   }
+}
+
+function _notification (session, newNote) {
+  const { data: { note } } = session
+  const text = 'Changes made'
+
+  if (!note && newNote) {
+    return {
+      text,
+      title: 'Added'
+    }
+  }
+
+  if (note?.content !== newNote) {
+    return {
+      text,
+      title: 'Updated'
+    }
+  }
+
+  return null
 }
 
 async function _save (session, payload, user) {
@@ -54,6 +81,12 @@ async function _save (session, payload, user) {
   }
 
   return session.$query().patch({ data: currentData })
+}
+
+function _submittedSessionData (session, payload) {
+  session.data.note = payload.note ? payload.note : null
+
+  return AddNotePresenter.go(session)
 }
 
 function _validate (payload) {

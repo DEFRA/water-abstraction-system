@@ -15,15 +15,20 @@ const MatchDetailsPresenter = require('../../../presenters/bill-runs/two-part-ta
  * @param {String} billRunId - The UUID for the bill run
  * @param {String} licenceId - The UUID of the licence that is being reviewed
  * @param {String} reviewChargeElementId - The UUID of the review charge element being viewed
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} the 'pageData' needed to view the match details of an individual charge
  */
-async function go (billRunId, licenceId, reviewChargeElementId) {
+async function go (billRunId, licenceId, reviewChargeElementId, yar) {
   const { billRun, reviewChargeElement } = await FetchMatchDetailsService.go(billRunId, reviewChargeElementId)
 
+  const [bannerMessage] = yar.flash('banner')
   const pageData = MatchDetailsPresenter.go(billRun, reviewChargeElement, licenceId)
 
-  return pageData
+  return {
+    bannerMessage,
+    ...pageData
+  }
 }
 
 module.exports = {

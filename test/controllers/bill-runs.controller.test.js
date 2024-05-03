@@ -14,12 +14,13 @@ const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
-const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
+const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 
@@ -373,16 +374,14 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(ReviewLicenceService, 'go').resolves(_licenceReviewData())
+          Sinon.stub(SubmitReviewLicenceService, 'go').resolves()
         })
 
-        it('returns a 200 response', async () => {
+        it('redirects to the review licence page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('1/11/10/*S/0084')
-          expect(response.payload).to.contain('two-part tariff')
-          expect(response.payload).to.contain('Test Road. Points 1 and 2.')
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
         })
       })
     })
@@ -428,15 +427,15 @@ describe('Bill Runs controller', () => {
           Sinon.stub(AmendBillableReturnsService, 'go').resolves({
             chargeElement: {
               description: 'Spray irrigation - storage, Abstraction from borehole at Chipping Norton',
-              dates: '25 July 2022 to 29 December 2022',
-              authorisedQuantity: 40
+              dates: '25 July 2022 to 29 December 2022'
             },
             billRun: {
               financialYear: '2022 to 2023'
             },
             chargeVersion: {
               chargePeriod: '1 April 2022 to 31 March 2023'
-            }
+            },
+            authorisedQuantity: 40
           })
         })
 

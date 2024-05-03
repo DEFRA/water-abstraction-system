@@ -8,7 +8,8 @@
 function go (session) {
   const data = {
     id: session.id,
-    licenceRef: session.data.licence.licenceRef
+    licenceRef: session.data.licence.licenceRef,
+    setup: session.data.setup ? session.data.setup : null
   }
 
   return data

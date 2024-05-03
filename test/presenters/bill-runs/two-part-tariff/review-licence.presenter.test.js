@@ -13,19 +13,15 @@ const ReviewLicencePresenter = require('../../../../app/presenters/bill-runs/two
 describe('Review Licence presenter', () => {
   let billRun
   let licence
-  let licenceStatus
-  let markProgress
 
   describe('when there is data to be presented for the review licence page', () => {
     beforeEach(() => {
       billRun = _billRun()
       licence = _licenceData()
-      licenceStatus = undefined
-      markProgress = undefined
     })
 
     it('correctly presents the data', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
+      const result = ReviewLicencePresenter.go(billRun, licence)
 
       expect(result).to.equal({
         billRunId: '6620135b-0ecf-4fd4-924e-371f950c0526',
@@ -37,7 +33,6 @@ describe('Review Licence presenter', () => {
           status: 'ready',
           licenceHolder: 'Licence Holder Ltd'
         },
-        licenceUpdatedMessage: null,
         elementsInReview: false,
         matchedReturns: [
           {
@@ -90,6 +85,7 @@ describe('Review Licence presenter', () => {
                 chargeCategory: 'Charge reference 4.6.7',
                 chargeDescription: 'High loss, non-tidal, greater than 15 up to and including 50 ML/yr',
                 totalBillableReturns: '0 ML / 200 ML',
+                chargeReferenceLink: { linkName: 'View details' },
                 chargeElements: [
                   {
                     elementNumber: 'Element 1 of 1',
@@ -186,65 +182,52 @@ describe('Review Licence presenter', () => {
         })
       })
     })
-  })
 
-  describe('when there is data to be presented and the user has clicked the "Confirm licence is ready" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = 'ready'
-      markProgress = undefined
-    })
+    describe("the 'adjustment' property's", () => {
+      describe('when a review charge reference has an aggregate', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
+        })
 
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
 
-      expect(result.licenceUpdatedMessage).to.equal('Licence changed to ready.')
-    })
-  })
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
 
-  describe('when there is data to be presented and the user has clicked the "Put licence into Review" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = 'review'
-      markProgress = undefined
-    })
+      describe('when a review charge reference has a charge factor adjustment', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
+        })
 
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
 
-      expect(result.licenceUpdatedMessage).to.equal('Licence changed to review.')
-    })
-  })
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
 
-  describe('when there is data to be presented and the user has clicked the "Mark progress" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = undefined
-      markProgress = 'mark'
-    })
+      describe('when a review charge reference has an aggregate and charge factor adjustment', () => {
+        beforeEach(() => {
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
+          licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
+        })
 
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
+        it("changes the chargeReferenceLink to 'Change details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
 
-      expect(result.licenceUpdatedMessage).to.equal('This licence has been marked.')
-    })
-  })
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
+        })
+      })
 
-  describe('when there is data to be presented and the user has clicked the "Remove progress mark" button', () => {
-    beforeEach(() => {
-      billRun = _billRun()
-      licence = _licenceData()
-      licenceStatus = undefined
-      markProgress = 'unmark'
-    })
+      describe('when a review charge reference does not have an aggregate or charge factor adjustment', () => {
+        it("changes the chargeReferenceLink to 'View details'", () => {
+          const result = ReviewLicencePresenter.go(billRun, licence)
 
-    it('correctly returns the text for the "Licence updated" notification banner', async () => {
-      const result = ReviewLicencePresenter.go(billRun, licence, licenceStatus, markProgress)
-
-      expect(result.licenceUpdatedMessage).to.equal('The progress mark for this licence has been removed.')
+          expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('View details')
+        })
+      })
     })
   })
 })
@@ -339,6 +322,9 @@ function _licenceData () {
         reviewChargeVersionId: 'bd16e7b0-c2a3-4258-b873-b965fd74cdf5',
         chargeReferenceId: '82ce8695-5841-41b0-a1e7-d016407adad4',
         aggregate: 1,
+        authorisedVolume: 200,
+        amendedAuthorisedVolume: 200,
+        chargeAdjustment: 1,
         createdAt: new Date('2024-03-18'),
         updatedAt: new Date('2024-03-18'),
         chargeReference: {
@@ -352,7 +338,8 @@ function _licenceData () {
           id: '8bc0cd32-400e-4a45-9dd7-fbce3d486031',
           reviewChargeReferenceId: '2210bb45-1efc-4e69-85cb-c8cc6e75c4fd',
           chargeElementId: 'b1001716-cfb4-43c6-91f0-1863f4529223',
-          allocated: 0,
+          allocated: 10,
+          amendedAllocated: 0,
           chargeDatesOverlap: false,
           issues: '',
           status: 'ready',

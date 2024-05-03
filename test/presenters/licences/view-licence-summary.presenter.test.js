@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ViewLicencePresenter = require('../../../app/presenters/licences/view-licence.presenter.js')
+const ViewLicenceSummaryPresenter = require('../../../app/presenters/licences/view-license-summary.presenter')
 
-describe('View Licence presenter', () => {
+describe('View Licence Summary presenter', () => {
   let licenceAbstractionConditions
   let licence
 
@@ -21,10 +21,9 @@ describe('View Licence presenter', () => {
 
   describe('when provided with a populated licence', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+      const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
       expect(result).to.equal({
-        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         abstractionConditionDetails: {
           conditions: ['Derogation clause', 'General conditions', 'Non standard quantities'],
           numberOfConditions: 4
@@ -35,27 +34,24 @@ describe('View Licence presenter', () => {
         abstractionPoints: ['At National Grid Reference TL 23198 88603'],
         abstractionPointsCaption: 'Point of abstraction',
         abstractionQuantities: null,
+        activeTab: 'summary',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         endDate: null,
+        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceHolder: 'Unregistered licence',
-        licenceName: 'Unregistered licence',
-        licenceRef: '01/123',
         monitoringStations: [{
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
           label: 'MEVAGISSEY FIRE STATION'
         }],
-        pageTitle: 'Licence 01/123',
         purposes: null,
-        registeredTo: null,
         region: 'Narnia',
         sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
-        startDate: '1 April 2019',
-        warning: null
+        startDate: '1 April 2019'
       })
     })
   })
 
-  describe("the 'abstractionConditionDetails' property", () => {
+  describe('the \'abstractionConditionDetails\' property', () => {
     describe('when there are multiple abstraction conditions', () => {
       beforeEach(() => {
         licenceAbstractionConditions.conditions = ['Derogation clause', 'General conditions']
@@ -64,7 +60,7 @@ describe('View Licence presenter', () => {
 
       describe('and they have different display titles', () => {
         it('returns the details with plural text and a populated conditions array', () => {
-          const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
           expect(result.abstractionConditionDetails).to.equal({
             conditions: ['Derogation clause', 'General conditions'],
@@ -80,7 +76,7 @@ describe('View Licence presenter', () => {
         })
 
         it('returns the details with plural text and a populated conditions array', () => {
-          const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+          const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
           expect(result.abstractionConditionDetails).to.equal({
             conditions: ['Derogation clause'],
@@ -97,7 +93,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns the details with singular text and a populated conditions array', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionConditionDetails).to.equal({
           conditions: ['Derogation clause'],
@@ -114,7 +110,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns the details with plural text and an empty conditions array', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionConditionDetails).to.equal({
           conditions: [],
@@ -124,10 +120,10 @@ describe('View Licence presenter', () => {
     })
   })
 
-  describe("the 'endDate' property", () => {
+  describe('the \'endDate\' property', () => {
     describe('when the licence expired date is null', () => {
       it('returns NULL', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.endDate).to.be.null()
       })
@@ -145,7 +141,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns NULL', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.endDate).to.be.null()
       })
@@ -156,18 +152,18 @@ describe('View Licence presenter', () => {
         licence.expiredDate = new Date('2099-04-01')
       })
 
-      it("returns '1 April 2099'", () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+      it('returns \'1 April 2099\'', () => {
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.endDate).to.equal('1 April 2099')
       })
     })
   })
 
-  describe("the 'licenceHolder' property", () => {
+  describe('the \'licenceHolder\' property', () => {
     describe('when the licence holder is not set', () => {
-      it("returns 'Unregistered licence'", () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+      it('returns \'Unregistered licence\'', () => {
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.licenceHolder).to.equal('Unregistered licence')
       })
@@ -178,40 +174,18 @@ describe('View Licence presenter', () => {
         licence.licenceHolder = 'Barbara Liskov'
       })
 
-      it("returns 'Barbara Liskov'", () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+      it('returns \'Barbara Liskov\'', () => {
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.licenceHolder).to.equal('Barbara Liskov')
       })
     })
   })
 
-  describe("the 'licenceName' property", () => {
-    describe('when there is no licenceName property', () => {
-      it('returns Unregistered licence', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.licenceName).to.equal('Unregistered licence')
-      })
-    })
-
-    describe('when there is a licenceName property', () => {
-      beforeEach(() => {
-        licence.licenceName = 'example@example.com'
-      })
-
-      it('returns a string with the licence name values', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.licenceName).to.equal('example@example.com')
-      })
-    })
-  })
-
-  describe("the 'licenceVersionPurposes' property", () => {
+  describe('the \'licenceVersionPurposes\' property', () => {
     describe('when there are no licenceVersions', () => {
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPeriods).to.equal(null)
         expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
@@ -224,7 +198,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPeriods).to.equal(null)
         expect(result.abstractionPeriodsAndPurposesLinkText).to.equal(null)
@@ -242,7 +216,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPeriods).to.equal(null)
       })
@@ -264,7 +238,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns an object with a caption and an array with one abstraction period', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPeriods).to.equal({
           caption: 'Period of abstraction',
@@ -291,7 +265,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns an object with a caption and an array with one abstraction period', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPeriods).to.equal({
           caption: 'Period of abstraction',
@@ -323,7 +297,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns an object with a caption and an array with two purposes', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPeriods).to.equal({
           caption: 'Periods of abstraction',
@@ -333,14 +307,14 @@ describe('View Licence presenter', () => {
     })
   })
 
-  describe("the 'monitoringStations' property", () => {
+  describe('the \'monitoringStations\' property', () => {
     describe('when the licenceGaugingStations property is not an array', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = {}
       })
 
       it('will return an empty array of monitoring station details', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.monitoringStations).to.equal([])
       })
@@ -352,19 +326,19 @@ describe('View Licence presenter', () => {
       })
 
       it('will return an empty array of monitoring station details', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.monitoringStations).to.equal([])
       })
     })
 
-    describe("when the licence has a null 'licenceGaugingStations' property", () => {
+    describe('when the licence has a null \'licenceGaugingStations\' property', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = null
       })
 
       it('will return an empty array of monitoring station details', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.monitoringStations).to.equal([])
       })
@@ -372,7 +346,7 @@ describe('View Licence presenter', () => {
 
     describe('when the licence has a gauging station', () => {
       it('will return an array populated with monitoring station details', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.monitoringStations).to.equal([{
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
@@ -393,7 +367,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return an array populated with multiple monitoring station details', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.monitoringStations).to.equal([{
           gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',
@@ -406,10 +380,10 @@ describe('View Licence presenter', () => {
     })
   })
 
-  describe("the 'purposes' property", () => {
+  describe('the \'purposes\' property', () => {
     describe('when there are no licenceVersions', () => {
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.purposes).to.equal(null)
       })
@@ -421,7 +395,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.purposes).to.equal(null)
       })
@@ -435,7 +409,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.purposes).to.equal(null)
       })
@@ -451,7 +425,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns an object with a caption and an array with one purpose', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.purposes).to.equal({
           caption: 'Purpose',
@@ -472,7 +446,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns an object with a caption and an array with one entry', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.purposes).to.equal({
           caption: 'Purpose',
@@ -493,7 +467,7 @@ describe('View Licence presenter', () => {
       })
 
       it('returns an object with a caption and an array with two entries', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.purposes).to.equal({
           caption: 'Purposes',
@@ -503,32 +477,10 @@ describe('View Licence presenter', () => {
     })
   })
 
-  describe("the 'registeredTo' property", () => {
-    describe('when there is no registeredTo property', () => {
-      it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.registeredTo).to.equal(null)
-      })
-    })
-
-    describe('when there is a registeredTo property', () => {
-      beforeEach(() => {
-        licence.registeredTo = 'Company'
-      })
-
-      it('returns a string with the registered to name', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.registeredTo).to.equal('Company')
-      })
-    })
-  })
-
-  describe("the 'purposes' property", () => {
+  describe('the \'purposes\' property', () => {
     describe('and it has a source of supply', () => {
       it('will return the source of supply for use in the licence summary page', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
       })
@@ -546,7 +498,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return null for the source of supply', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.sourceOfSupply).to.equal(null)
       })
@@ -562,7 +514,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
@@ -581,7 +533,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -599,7 +551,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -617,7 +569,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -633,7 +585,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -649,7 +601,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return null for the source of supply and abstraction point information', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal(null)
         expect(result.abstractionPointsCaption).to.equal(null)
@@ -678,7 +630,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return the correct information for the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal([
           'Between National Grid References TL 23198 88603 and TM 23197 88602'
@@ -707,7 +659,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal([
           'Within the area formed by the straight lines running between National Grid References TL 23198 88603 TM 23197 88602 TN 23196 88601 and TO 23195 88600'
@@ -730,7 +682,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal([
           'Between National Grid References TL 23198 88603 and TM 23197 88602'
@@ -753,7 +705,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
@@ -771,7 +723,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603'
@@ -792,7 +744,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603 (Local)'
@@ -819,7 +771,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will return the information for the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603',
@@ -847,7 +799,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will only display one of the abstraction point', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionPoints).to.equal([
           'At National Grid Reference TL 23198 88603'
@@ -866,7 +818,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will display the formatted strings with the rates per period and the correct caption', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
           '265.00 cubic metres per year',
@@ -883,7 +835,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
           '265.00 cubic metres per year'
@@ -900,7 +852,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
           '60.00 cubic metres per hour',
@@ -918,7 +870,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
           '6.00 litres per second'
@@ -962,7 +914,7 @@ describe('View Licence presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal([
           '265.00 cubic metres per year',
@@ -1009,67 +961,9 @@ describe('View Licence presenter', () => {
       })
 
       it('will display the formatted string with the rate per period and the correct caption', async () => {
-        const result = await ViewLicencePresenter.go(licence, licenceAbstractionConditions)
+        const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.abstractionQuantities).to.equal(null)
-      })
-    })
-  })
-
-  describe("the 'warning' property", () => {
-    describe('when the licence does not have an end date (expired, lapsed or revoked)', () => {
-      it('returns NULL', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.warning).to.be.null()
-      })
-    })
-
-    describe('when the licence does have an end date but it is in the future (expired, lapsed or revoked)', () => {
-      beforeEach(() => {
-        licence.expiredDate = new Date('2099-04-01')
-      })
-
-      it('returns NULL', () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.warning).to.be.null()
-      })
-    })
-
-    describe('when the licence ends today or in the past (2019-04-01) because it is expired', () => {
-      beforeEach(() => {
-        licence.ends = { date: new Date('2019-04-01'), reason: 'expired' }
-      })
-
-      it("returns 'This licence expired on 1 April 2019'", () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.warning).to.equal('This licence expired on 1 April 2019')
-      })
-    })
-
-    describe('when the licence ends today or in the past (2019-04-01) because it is lapsed', () => {
-      beforeEach(() => {
-        licence.ends = { date: new Date('2019-04-01'), reason: 'lapsed' }
-      })
-
-      it("returns 'This licence lapsed on 1 April 2019'", () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.warning).to.equal('This licence lapsed on 1 April 2019')
-      })
-    })
-
-    describe('when the licence was ends today or in the past (2019-04-01) because it is revoked', () => {
-      beforeEach(() => {
-        licence.ends = { date: new Date('2019-04-01'), reason: 'revoked' }
-      })
-
-      it("returns 'This licence was revoked on 1 April 2019'", () => {
-        const result = ViewLicencePresenter.go(licence, licenceAbstractionConditions)
-
-        expect(result.warning).to.equal('This licence was revoked on 1 April 2019')
       })
     })
   })

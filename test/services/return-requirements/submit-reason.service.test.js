@@ -60,8 +60,9 @@ describe('Submit Reason service', () => {
         expect(result).to.equal({
           activeNavBar: 'search',
           checkYourAnswersVisited: false,
-          pageTitle: 'Select the reason for the return requirement',
-          licenceRef: '01/ABC'
+          pageTitle: 'Select the reason for the requirements for returns',
+          licenceRef: '01/ABC',
+          reason: null
         }, { skip: ['id', 'error'] })
       })
     })
@@ -84,8 +85,9 @@ describe('Submit Reason service', () => {
           expect(result).to.equal({
             activeNavBar: 'search',
             checkYourAnswersVisited: false,
-            pageTitle: 'Select the reason for the return requirement',
-            licenceRef: '01/ABC'
+            pageTitle: 'Select the reason for the requirements for returns',
+            licenceRef: '01/ABC',
+            reason: null
           }, { skip: ['id', 'error'] })
         })
 
@@ -93,7 +95,7 @@ describe('Submit Reason service', () => {
           const result = await SubmitReasonService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: 'Select the reason for the return requirement'
+            text: 'Select the reason for the requirements for returns'
           })
         })
       })

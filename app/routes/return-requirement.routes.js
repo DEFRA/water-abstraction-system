@@ -148,6 +148,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/delete-note',
+    handler: ReturnRequirementsController.deleteNote,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Delete a note'
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/existing',
     handler: ReturnRequirementsController.existing,
     options: {
@@ -312,7 +325,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the reason for the return requirement'
+      description: 'Select the reason for the requirements for returns'
     }
   },
   {
@@ -364,7 +377,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'How do you want to set up the return requirement?'
+      description: 'How do you want to set up the requirements for returns?'
     }
   },
   {
@@ -416,7 +429,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Select the start date for the return requirement'
+      description: 'Select the start date for the requirements for returns'
     }
   }, {
     method: 'POST',

@@ -93,7 +93,8 @@ describe('Select Points service', () => {
           'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
         ],
         licenceRef: '01/ABC',
-        pageTitle: 'Select the points for the requirements for returns'
+        pageTitle: 'Select the points for the requirements for returns',
+        selectedPoints: ''
       }, { skip: ['id'] })
     })
   })

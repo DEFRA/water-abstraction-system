@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
+const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
@@ -40,12 +41,14 @@ describe('Fetch Match Details service', () => {
     describe('and a valid review charge element', () => {
       let reviewChargeElement
       let chargeElement
+      let chargeReference
       let reviewChargeVersion
       let reviewChargeReference
 
       beforeEach(async () => {
         reviewChargeVersion = await ReviewChargeVersionHelper.add()
-        reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: reviewChargeVersion.id })
+        chargeReference = await ChargeReferenceHelper.add()
+        reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: reviewChargeVersion.id, chargeReferenceId: chargeReference.id })
 
         chargeElement = await ChargeElementHelper.add({ chargeReferenceId: reviewChargeReference.chargeReferenceId })
         reviewChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId: reviewChargeReference.id, chargeElementId: chargeElement.id })
@@ -81,7 +84,7 @@ describe('Fetch Match Details service', () => {
             reviewChargeReferenceId: reviewChargeReference.id,
             chargeElementId: chargeElement.id,
             allocated: reviewChargeElement.allocated,
-            calculated: reviewChargeElement.calculated,
+            amendedAllocated: reviewChargeElement.amendedAllocated,
             chargeDatesOverlap: reviewChargeElement.chargeDatesOverlap,
             issues: reviewChargeElement.issues,
             status: reviewChargeElement.status,
@@ -120,6 +123,7 @@ describe('Fetch Match Details service', () => {
             },
             reviewChargeReference: {
               id: reviewChargeReference.id,
+              amendedAuthorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
               reviewChargeVersion: {
                 chargePeriodStartDate: reviewChargeVersion.chargePeriodStartDate,
                 chargePeriodEndDate: reviewChargeVersion.chargePeriodEndDate
@@ -138,7 +142,7 @@ describe('Fetch Match Details service', () => {
             reviewChargeReferenceId: reviewChargeReference.id,
             chargeElementId: chargeElement.id,
             allocated: reviewChargeElement.allocated,
-            calculated: reviewChargeElement.calculated,
+            amendedAllocated: reviewChargeElement.amendedAllocated,
             chargeDatesOverlap: reviewChargeElement.chargeDatesOverlap,
             issues: reviewChargeElement.issues,
             status: reviewChargeElement.status,
@@ -155,6 +159,7 @@ describe('Fetch Match Details service', () => {
             },
             reviewChargeReference: {
               id: reviewChargeReference.id,
+              amendedAuthorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
               reviewChargeVersion: {
                 chargePeriodStartDate: reviewChargeVersion.chargePeriodStartDate,
                 chargePeriodEndDate: reviewChargeVersion.chargePeriodEndDate

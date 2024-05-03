@@ -50,7 +50,8 @@ async function _fetchReviewChargeElement (reviewChargeElementId) {
     .withGraphFetched('reviewChargeReference')
     .modifyGraph('reviewChargeReference', (builder) => {
       builder.select([
-        'id'
+        'id',
+        'amendedAuthorisedVolume'
       ])
     })
     .withGraphFetched('reviewChargeReference.reviewChargeVersion')

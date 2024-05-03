@@ -41,7 +41,7 @@ async function go (sessionId, payload) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    pageTitle: 'How do you want to set up the return requirement?',
+    pageTitle: 'How do you want to set up the requirements for returns?',
     ...formattedData
   }
 }
@@ -49,11 +49,11 @@ async function go (sessionId, payload) {
 function _redirect (setup) {
   let endpoint
 
-  if (setup === 'use_abstraction_data') {
+  if (setup === 'use-abstraction-data') {
     endpoint = 'check-your-answers'
   }
 
-  if (setup === 'set_up_manually') {
+  if (setup === 'set-up-manually') {
     endpoint = 'purpose'
   }
 

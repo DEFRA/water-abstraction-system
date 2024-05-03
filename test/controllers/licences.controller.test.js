@@ -13,7 +13,7 @@ const Boom = require('@hapi/boom')
 
 // Things we need to stub
 const InitiateReturnRequirementSessionService = require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
-const ViewLicenceService = require('../../app/services/licences/view-licence.service.js')
+const ViewLicenceSummaryService = require('../../app/services/licences/view-license-summary.service')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -150,11 +150,11 @@ describe('Licences controller', () => {
     })
   })
 
-  describe('GET /licences/{id}/', () => {
+  describe('GET /licences/{id}/summary', () => {
     beforeEach(async () => {
       options = {
         method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
         auth: {
           strategy: 'session',
           credentials: { scope: ['billing'] }
@@ -164,7 +164,7 @@ describe('Licences controller', () => {
 
     describe('when a request is valid', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewLicenceService, 'go').resolves(_viewLicenceSummary())
+        Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
       })
 
       it('returns the page successfully', async () => {
@@ -183,7 +183,8 @@ describe('Licences controller', () => {
         licenceRef: '01/130/R01',
         region: 'Southern',
         startDate: '1 November 2022',
-        endDate: '1 November 2032'
+        endDate: '1 November 2032',
+        activeTab: 'summary'
       }
     }
   })

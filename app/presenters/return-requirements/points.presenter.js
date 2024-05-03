@@ -10,33 +10,22 @@
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {Object} [pointsData] - The points for the licence
- * @param {Object} [payload] - The payload from the request
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, pointsData, payload = {}) {
+function go (session, pointsData) {
   const data = {
     id: session.id,
     licenceId: session.data.licence.id,
     licenceRef: session.data.licence.licenceRef,
-    licencePoints: _licencePoints(pointsData, payload)
+    licencePoints: _licencePoints(pointsData),
+    selectedPoints: session.data.points ? session.data.points.join(',') : ''
   }
 
   return data
 }
 
-function _licencePoints (pointsData, payload) {
-  // NOTE: 'points' is the payload value that tells us whether the user selected any purposes
-  // for the return requirement.
-  // If it is not set then it is because the presenter has been called from 'PointsService' and it's the first
-  // load. Else it has been called by the 'SubmitPointsService' and the user has not checked a point from the list.
-  // Either way, we use it to tell us whether there is anything in the payload worth transforming.
-  const points = payload.points
-
-  if (points) {
-    return points
-  }
-
+function _licencePoints (pointsData) {
   const abstractionPoints = []
 
   if (!pointsData) {
