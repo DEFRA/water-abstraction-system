@@ -44,7 +44,7 @@ describe('Amend Billable Returns presenter', () => {
 
     describe('when the charge reference has a lower authorised volume than the element', () => {
       beforeEach(() => {
-        reviewChargeElement.reviewChargeReference.chargeReference.volume = 150
+        reviewChargeElement.reviewChargeReference.amendedAuthorisedVolume = 150
       })
 
       it('displays the lower volume from the two', () => {
@@ -83,12 +83,10 @@ function _reviewChargeElementData () {
     },
     reviewChargeReference: {
       id: '9e5d87d7-073e-420e-b12d-73ca220dd8ef',
+      amendedAuthorisedVolume: 250,
       reviewChargeVersion: {
         chargePeriodStartDate: new Date('2022-04-01'),
         chargePeriodEndDate: new Date('2022-06-05')
-      },
-      chargeReference: {
-        volume: 250
       }
     }
   }

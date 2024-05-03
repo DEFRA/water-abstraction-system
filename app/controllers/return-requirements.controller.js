@@ -9,6 +9,7 @@ const AddNoteService = require('../services/return-requirements/add-note.service
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
+const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
@@ -77,11 +78,19 @@ async function approved (request, h) {
 
 async function checkYourAnswers (request, h) {
   const { sessionId } = request.params
-  const pageData = await CheckYourAnswersService.go(sessionId)
+  const pageData = await CheckYourAnswersService.go(sessionId, request.yar)
 
   return h.view('return-requirements/check-your-answers.njk', {
     ...pageData
   })
+}
+
+async function deleteNote (request, h) {
+  const { sessionId } = request.params
+
+  await DeleteNoteService.go(sessionId, request.yar)
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
 async function existing (request, h) {
@@ -215,7 +224,7 @@ async function submitAddNote (request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user)
+  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user, request.yar)
 
   if (pageData.error) {
     return h.view('return-requirements/add-note.njk', pageData)
@@ -415,6 +424,7 @@ module.exports = {
   agreementsExceptions,
   approved,
   checkYourAnswers,
+  deleteNote,
   existing,
   frequencyCollected,
   frequencyReported,
