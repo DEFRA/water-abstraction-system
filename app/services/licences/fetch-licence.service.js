@@ -46,7 +46,6 @@ async function _fetchLicence (id) {
       'id',
       'include_in_presroc_billing',
       'include_in_sroc_billing',
-      'waterUndertaker',
       'lapsedDate',
       'licenceRef',
       'revokedDate',
@@ -76,18 +75,18 @@ async function _fetchLicence (id) {
       builder.select(['licenceVersions.id'])
         .where('licenceVersions.status', 'current')
     })
-    // .withGraphFetched('licenceVersions.[licenceVersionPurposes, purposes]')
-    // .modifyGraph('[licenceVersionPurposes]', (builder) => {
-    //   builder.select([
-    //     'licenceVersionPurposes.abstractionPeriodStartDay',
-    //     'licenceVersionPurposes.abstractionPeriodStartMonth',
-    //     'licenceVersionPurposes.abstractionPeriodEndDay',
-    //     'licenceVersionPurposes.abstractionPeriodEndMonth',
-    //     'licenceVersionPurposes.dailyQuantity',
-    //     'licenceVersionPurposes.externalId',
-    //     'licenceVersionPurposes.licenceVersionId'
-    //   ])
-    // })
+    .withGraphFetched('licenceVersions.[licenceVersionPurposes, purposes]')
+    .modifyGraph('[licenceVersionPurposes]', (builder) => {
+      builder.select([
+        'licenceVersionPurposes.abstractionPeriodStartDay',
+        'licenceVersionPurposes.abstractionPeriodStartMonth',
+        'licenceVersionPurposes.abstractionPeriodEndDay',
+        'licenceVersionPurposes.abstractionPeriodEndMonth',
+        'licenceVersionPurposes.dailyQuantity',
+        'licenceVersionPurposes.externalId',
+        'licenceVersionPurposes.licenceVersionId'
+      ])
+    })
     .modifyGraph('[purposes]', (builder) => {
       builder.select([
         'purposes.description'
