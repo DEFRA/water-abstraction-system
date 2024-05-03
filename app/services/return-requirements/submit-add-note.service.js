@@ -8,7 +8,7 @@
 const AddNotePresenter = require('../../presenters/return-requirements/add-note.presenter.js')
 const AddNoteValidator = require('../../validators/return-requirements/add-note.validator.js')
 const SessionModel = require('../../models/session.model.js')
-
+const DeleteNoteService = require('./delete-note.service.js')
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/add-note` page
  *
@@ -30,7 +30,13 @@ async function go (sessionId, payload, user, yar) {
 
   if (!validationResult) {
     const notification = _notification(session, payload.note)
-    await _save(session, payload, user)
+    const emptyNote = payload.note === undefined
+
+    if (emptyNote) {
+      await _delete(session, yar, emptyNote)
+    } else {
+      await _save(session, payload, user)
+    }
 
     if (notification) {
       yar.flash('notification', notification)
@@ -83,8 +89,14 @@ async function _save (session, payload, user) {
   return session.$query().patch({ data: currentData })
 }
 
+async function _delete (session, yar, emptyNote) {
+  const showNotification = session.data.note?.content && emptyNote
+
+  return DeleteNoteService.go(session.id, yar, showNotification)
+}
+
 function _submittedSessionData (session, payload) {
-  session.data.note = payload.note ? payload.note : null
+  session.data.note = payload.note || null
 
   return AddNotePresenter.go(session)
 }

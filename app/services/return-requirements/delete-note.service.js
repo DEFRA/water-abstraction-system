@@ -18,14 +18,16 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-async function go (sessionId, yar) {
+async function go (sessionId, yar, showNotification) {
   const session = await SessionModel.query().findById(sessionId)
   const notification = {
     title: 'Removed',
     text: 'Note removed'
   }
 
-  yar.flash('notification', notification)
+  if (showNotification) {
+    yar.flash('notification', notification)
+  }
 
   return _save(session)
 }
