@@ -6,8 +6,9 @@
  */
 
 const InitiateReturnRequirementSessionService = require('../services/return-requirements/initiate-return-requirement-session.service.js')
-const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service')
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service')
+const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service')
+
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 

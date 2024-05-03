@@ -8,7 +8,7 @@
 const { formatLongDate } = require('../base.presenter')
 
 /**
- * Formats data for common licence data `/licences/{id}` page's
+ * Formats common data for the `/licences/{id}/*` view licence pages
  *
  * @returns {Object} The data formatted for the view template
  */
