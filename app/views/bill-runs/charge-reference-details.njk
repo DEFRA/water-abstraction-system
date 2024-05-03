@@ -52,12 +52,14 @@
 
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-full">
-    <span class="inline govuk-!-margin-right-3">
-      {{ govukButton({
-        text: "Change the authorised volume",
-        classes: "govuk-button--secondary"
-      }) }}
-    </span>
+    {% if showButtons %}
+      <span class="inline govuk-!-margin-right-3">
+        {{ govukButton({
+          text: "Change the authorised volume",
+          classes: "govuk-button--secondary"
+        }) }}
+      </span>
+    {% endif %}
 
     <span class="inline">
       {{ govukButton({
@@ -68,46 +70,64 @@
   </div>
 </div>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-m">
-      Reference details
-    <h2>
+{% if chargeReference.additionalCharges or chargeReference.adjustments.length > 0 %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m">
+        Reference details
+      <h2>
 
-    {% set adjustmentsValue %}
-      <div> Aggregate factor ({{chargeReference.adjustments.aggregateFactor}})</div>
-      <div> Charge adjustment ({{chargeReference.adjustments.chargeAdjustment}})</div>
-      <div> Winter discount ({{chargeReference.adjustments.winterDiscount}})</div>
-    {% endset %}
+      {% set adjustmentsValue %}
+          {% for adjustment in chargeReference.adjustments %}
+          <div>{{adjustment}}</div>
+          {% endfor %}
+      {% endset %}
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: {
-            text: "Additional charges"
-          },
-          value: {
-            text: "Dont know what this is for, need to ask Chris or work from a ticket lol"
+      {% if showButtons %}
+        {% set showButton = {
+          items: [
+                  {
+                  href: "#",
+                  text: "Change factors"
+                  }
+                ]
+          }%}
+      {% endif %}
+
+      {% set tableRows = [] %}
+      {% if chargeReference.additionalCharges %}
+        {% set tableRow = {
+            key: {
+              text: "Additional charges"
+            },
+            value: {
+              text: chargeReference.additionalCharges
+            }
           }
-        },
-        {
-          key: {
-            text: "Adjustments"
-          },
-          value: {
-            html: adjustmentsValue
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change factors"
-              }
-            ]
+        %}
+
+        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+      {% endif %}
+
+      {% if chargeReference.adjustments %}
+        {% set tableRow = {
+            key: {
+              text: "Adjustments"
+            },
+            value: {
+              html: adjustmentsValue
+            },
+            actions: showButton
           }
-        }
-      ]
-    }) }}
+        %}
+
+        {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+      {% endif %}
+
+      {{ govukSummaryList({
+        rows: tableRows
+      }) }}
+    </div>
   </div>
-</div>
+{% endif %}
 {% endblock %}

@@ -29,14 +29,72 @@ function go (billRun, reviewChargeReference, licenceId) {
       description: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference.reviewChargeElements),
       authorisedVolume: reviewChargeReference.chargeReference.volume,
-      adjustments: {
-        aggregateFactor: reviewChargeReference.amendedAggregate,
-        chargeAdjustment: reviewChargeReference.amendedChargeAdjustment,
-        winterDiscount: reviewChargeReference.winterDiscount ? '0.5' : '1'
-      }
+      adjustments: _adjustments(reviewChargeReference),
+      additionalCharges: _additionalCharges(reviewChargeReference.chargeReference)
     },
-    licenceId
+    licenceId,
+    showButtons: _showButtons(reviewChargeReference)
   }
+}
+
+function _showButtons (reviewChargeReference) {
+  let showButton = false
+
+  if (reviewChargeReference.amendedAggregate !== 1) {
+    showButton = true
+  }
+
+  if (reviewChargeReference.amendedChargeAdjustment !== 1) {
+    showButton = true
+  }
+
+  return showButton
+}
+
+function _adjustments (reviewChargeReference) {
+  const adjustments = []
+
+  if (reviewChargeReference.amendedAggregate !== 1) {
+    adjustments.push(`Aggregate factor (${reviewChargeReference.amendedAggregate})`)
+  }
+
+  if (reviewChargeReference.amendedChargeAdjustment !== 1) {
+    adjustments.push(`Charge adjustment (${reviewChargeReference.amendedChargeAdjustment})`)
+  }
+
+  if (reviewChargeReference.abatementAgreement !== 1) {
+    adjustments.push(`Abatement agreement (${reviewChargeReference.abatementAgreement})`)
+  }
+
+  if (reviewChargeReference.winterDiscount) {
+    adjustments.push('Winter discount')
+  }
+
+  if (reviewChargeReference.twoPartTariffAgreement) {
+    adjustments.push('Two part tariff agreement')
+  }
+
+  if (reviewChargeReference.canalAndRiverTrustAgreement) {
+    adjustments.push('Canal and River trust agreement')
+  }
+
+  return adjustments
+}
+
+function _additionalCharges (chargeReference) {
+  const { supportedSourceName, waterCompanyCharge } = chargeReference
+
+  const charges = []
+
+  if (supportedSourceName) {
+    charges.push(`Supported source ${supportedSourceName}`)
+  }
+
+  if (waterCompanyCharge) {
+    charges.push('Public Water Supply')
+  }
+
+  return charges.join(', ')
 }
 
 function _financialYear (financialYearEnding) {

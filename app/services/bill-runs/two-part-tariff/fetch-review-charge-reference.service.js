@@ -5,6 +5,8 @@
  * @module FetchReviewChargeReferenceService
  */
 
+const { ref } = require('objection')
+
 const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
 
@@ -39,7 +41,9 @@ async function _fetchReviewChargeReference (reviewChargeReferenceId) {
     .modifyGraph('chargeReference', (builder) => {
       builder.select([
         'volume',
-        'chargeCategoryId'
+        'chargeCategoryId',
+        ref('chargeReferences.additionalCharges:supportedSource.name').castText().as('supportedSourceName'),
+        ref('chargeReferences.additionalCharges:isSupplyPublicWater').castText().as('waterCompanyCharge')
       ])
     })
     .withGraphFetched('chargeReference.chargeCategory')
