@@ -30,7 +30,7 @@ const sessionData = {
   }
 }
 
-describe.only('Submit No Returns Required service', () => {
+describe('Submit No Returns Required service', () => {
   let payload
   let session
 

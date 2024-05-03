@@ -23,6 +23,7 @@ const sessionData = {
       endDate: null,
       licenceRef: '01/ABC',
       licenceHolder: 'Turbo Kid',
+      selectedOption: null,
       startDate: '2022-04-01T00:00:00.000Z'
     }
   }
@@ -56,8 +57,7 @@ describe('Start Date service', () => {
         anotherStartDateDay: null,
         anotherStartDateMonth: null,
         anotherStartDateYear: null,
-        anotherStartDateSelected: false,
-        licenceStartDateSelected: false
+        selectedOption: null
       }, { skip: ['id'] })
     })
   })

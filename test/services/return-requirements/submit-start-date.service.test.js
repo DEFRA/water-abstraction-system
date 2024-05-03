@@ -24,7 +24,8 @@ const sessionData = {
       licenceHolder: 'Turbo Kid',
       startDate: '2022-04-01T00:00:00.000Z'
     },
-    journey: 'no-returns-required'
+    journey: 'no-returns-required',
+    selectedOption: null
   }
 }
 
@@ -134,14 +135,13 @@ describe('Submit Start Date service', () => {
             checkYourAnswersVisited: false,
             anotherStartDateDay: null,
             anotherStartDateMonth: null,
-            anotherStartDateSelected: false,
             anotherStartDateYear: null,
             journey: 'no-returns-required',
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
             licenceRef: '01/ABC',
-            licenceStartDateSelected: false,
             licenceVersionStartDate: '1 January 2023',
-            pageTitle: 'Select the start date for the requirements for returns'
+            pageTitle: 'Select the start date for the requirements for returns',
+            selectedOption: null
           }, { skip: ['id', 'error'] })
         })
 
@@ -187,8 +187,7 @@ describe('Submit Start Date service', () => {
             anotherStartDateDay: 'a',
             anotherStartDateMonth: 'b',
             anotherStartDateYear: 'c',
-            anotherStartDateSelected: true,
-            licenceStartDateSelected: false
+            selectedOption: 'anotherStartDate'
           }, { skip: ['id', 'error'] })
         })
 
