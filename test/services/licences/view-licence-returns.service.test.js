@@ -41,7 +41,6 @@ describe('View Licence service returns', () => {
 
         expect(result).to.equal({
           licenceName: 'fake licence',
-          returnsUrl: 'return/internal',
           returns: [],
           activeTab: 'returns',
           pagination: { page: 1 }
@@ -53,7 +52,6 @@ describe('View Licence service returns', () => {
 
 function _returnsPresenter () {
   return {
-    returnsUrl: 'return/internal',
     returns: [],
     activeTab: 'returns'
   }

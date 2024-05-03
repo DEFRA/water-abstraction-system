@@ -17,14 +17,13 @@ function go (returnsData) {
 
   return {
     activeTab: 'returns',
-    returnsUrl: 'return/internal',
     returns
   }
 }
 
 function _formatPurpose (purpose) {
   const [firstPurpose] = purpose
-  
+
   return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
 }
 

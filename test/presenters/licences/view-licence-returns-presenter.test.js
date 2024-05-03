@@ -22,7 +22,6 @@ describe('View Licence returns presenter', () => {
 
       expect(result).to.equal({
         activeTab: 'returns',
-        returnsUrl: 'return/internal',
         returns: [
           {
             id: 'mock-id-1',

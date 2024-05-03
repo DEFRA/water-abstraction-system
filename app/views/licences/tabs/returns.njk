@@ -34,7 +34,7 @@
     {% for return in returns %}
       <tr class="govuk-table__row govuk-body-s">
         <th class="govuk-table__cell">
-          <a href="/{{ returnsUrl }}?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
+          <a href="/return/internal?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
           <p class="govuk-body-s"> {{ return.dates }}</p>
         </th>
         <td class="govuk-table__cell">{{ return.purpose }} <p class="govuk-body-s"> {{ return.description }}</p></td>
