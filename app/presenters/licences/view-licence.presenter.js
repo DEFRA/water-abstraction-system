@@ -21,10 +21,12 @@ function go (licence, auth) {
     includeInSrocBilling,
     licenceName,
     licenceRef,
-    registeredTo
+    registeredTo,
+    id
   } = licence
 
   return {
+    licenseId: id,
     licenceName,
     licenceRef,
     notification: _determineNotificationBanner(includeInPresrocBilling, includeInSrocBilling),

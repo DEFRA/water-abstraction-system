@@ -47,10 +47,10 @@
    </tbody>
  {% elseif returnNeeded == true %}
    <p class="govuk-body">Returns do not need to be submitted for this license.</p>
-   <p class="govuk-body"><a class="govuk-link" href="/">Set up new requirements for returns</a></p>
+   <p class="govuk-body"><a class="govuk-link" href="/system/licences/{{licenseId}}/returns-required">Set up new requirements for returns</a></p>
  {% else %}
    <p class="govuk-body">No requirements for returns have been set up for this licence.</p>
-   <p class="govuk-body"><a class="govuk-link" href="/">Set up new requirements for returns</a></p>
+   <p class="govuk-body"><a class="govuk-link" href="/system/licences/{{licenseId}}/returns-required">Set up new requirements for returns</a></p>
  {% endif %}
 </table>
 
