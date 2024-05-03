@@ -25,7 +25,6 @@ function go (billRun, reviewChargeElement, licenceId) {
         reviewChargeElement.chargeElement,
         reviewChargeElement.reviewChargeReference.reviewChargeVersion
       ),
-      authorisedQuantity: reviewChargeElement.chargeElement.authorisedAnnualQuantity,
       reviewChargeElementId: reviewChargeElement.id
     },
     billRun: {
@@ -38,8 +37,20 @@ function go (billRun, reviewChargeElement, licenceId) {
         reviewChargeElement.reviewChargeReference.reviewChargeVersion.chargePeriodEndDate
       )
     },
-    licenceId
+    licenceId,
+    authorisedQuantity: _authorisedQuantity(reviewChargeElement)
   }
+}
+
+/**
+ * The user can only enter a volume on the billable returns that is less than the authorised volume. The authorised
+ * volume is either the authorised volume on the charge element or the authorised volume on the charge reference.
+ * Whichever is lower.
+ */
+function _authorisedQuantity (reviewChargeElement) {
+  const { chargeElement, reviewChargeReference } = reviewChargeElement
+
+  return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)
 }
 
 function _financialYear (financialYearEnding) {

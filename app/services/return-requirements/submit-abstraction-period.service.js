@@ -31,16 +31,19 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+    }
   }
 
-  const formattedData = AbstractionPeriodPresenter.go(session, payload)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
-    pageTitle: 'Select the abstraction period for the requirements for returns',
-    ...formattedData
+    pageTitle: 'Enter the abstraction period for the requirements for returns',
+    ...submittedSessionData
   }
 }
 
@@ -52,20 +55,30 @@ async function _save (session, payload) {
   return session.$query().patch({ data: currentData })
 }
 
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ */
+function _submittedSessionData (session, payload) {
+  session.data.abstractionPeriod = Object.keys(payload).length > 0 ? payload : null
+
+  return AbstractionPeriodPresenter.go(session)
+}
+
 function _validate (payload) {
   const validation = AbstractionPeriodValidator.go(payload)
 
-  if (!validation.fromResult.error && !validation.toResult.error) {
+  if (!validation.startResult.error && !validation.endResult.error) {
     return null
   }
 
-  const fromResult = validation.fromResult.error ? validation.fromResult.error.details[0].message : null
-  const toResult = validation.toResult.error ? validation.toResult.error.details[0].message : null
+  const startResult = validation.startResult.error ? validation.startResult.error.details[0].message : null
+  const endResult = validation.endResult.error ? validation.endResult.error.details[0].message : null
 
   return {
     text: {
-      fromResult,
-      toResult
+      startResult,
+      endResult
     }
   }
 }

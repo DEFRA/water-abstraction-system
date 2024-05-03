@@ -5,32 +5,11 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Go back to search',
-      href: "/licences"
-    })
-  }}
+  {{ govukBackLink({
+    text: 'Go back to search',
+    href: "/licences"
+  }) }}
 {% endblock %}
-
-{% set summaryTabHtml %}
-  {% include "licences/tabs/summary.njk" %}
-{% endset %}
-
-{% set contactDetailsTabHtml %}
-{% endset %}
-
-{% set returnsTabHtml %}
-{% endset %}
-
-{% set communicationsTabHtml %}
-{% endset %}
-
-{% set billsTabHtml %}
-{% endset %}
-
-{% set chargeInformationTabHtml %}
-{% endset %}
 
 {% block content %}
   {% if warning %}
@@ -52,48 +31,54 @@
   <h1 class="govuk-heading-l">Licence number {{ licenceRef }}</h1>
 
   {% if registeredTo %}
-    <p>Registered to <a href="/user/{{primaryUser.userId}}/status">{{ registeredTo }}</a></p>
+    <p>Registered to <a href="/user/{{ primaryUser.userId }}/status">{{ registeredTo }}</a></p>
   {% endif %}
 
-  {{ govukTabs({
-    items: [
-      {
-        label: "Summary",
-        id: "summary",
-        panel: {
-          html: summaryTabHtml
-        }
-      }, {
-        label: "Contact details",
-        id: "contact-details",
-        panel: {
-          html: contactDetailsTabHtml
-        }
-      }, {
-        label: "Returns",
-        id: "returns",
-        panel: {
-          html: returnsTabHtml
-        }
-      }, {
-        label: "Communications",
-        id: "communications",
-        panel: {
-          html: communicationsTabHtml
-        }
-      }, {
-        label: "Bills",
-        id: "bills",
-        panel: {
-          html: billsTabHtml
-        }
-      }, {
-        label: "Charge information",
-        id: "charge-information",
-        panel: {
-          html: chargeInformationTabHtml
-        }
-      }
-    ]
-  }) }}
+  <div class="govuk-tabs">
+    <h2 class="govuk-tabs__title">
+      Contents
+    </h2>
+    <ul class="govuk-tabs__list">
+      <li class="govuk-tabs__list-item {% if activeTab === 'summary' %} govuk-tabs__list-item--selected {% endif %}">
+        <a class="govuk-tabs__tab" href="summary">
+          Summary
+        </a>
+      </li>
+      <li class="govuk-tabs__list-item {% if activeTab === 'contact-details' %} govuk-tabs__list-item--selected {% endif %}">
+        <a class="govuk-tabs__tab" href="contact-details">
+          Contact details
+        </a>
+      </li>
+      <li class="govuk-tabs__list-item {% if activeTab === 'returns' %} govuk-tabs__list-item--selected {% endif %}">
+        <a class="govuk-tabs__tab" href="returns">
+          Returns
+        </a>
+      </li>
+      <li class="govuk-tabs__list-item {% if activeTab === 'communications' %} govuk-tabs__list-item--selected {% endif %}">
+        <a class="govuk-tabs__tab" href="communications">
+          Communications
+        </a>
+      </li>
+      {% if roles and 'billing' in roles %}
+        <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}">
+          <a class="govuk-tabs__tab" href="bills">
+            Bills
+          </a>
+        </li>
+      {% endif %}
+      {% if roles and 'view_charge_versions' in roles %}
+        <li class="govuk-tabs__list-item {% if activeTab === 'charge-information' %} govuk-tabs__list-item--selected {% endif %}">
+          <a class="govuk-tabs__tab" href="charge-information">
+            Charge information
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+
+    <div class="govuk-tabs__panel" id="{{ activeTab }}">
+      {% if activeTab === 'summary' %}
+        {% include "licences/tabs/summary.njk" %}
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}

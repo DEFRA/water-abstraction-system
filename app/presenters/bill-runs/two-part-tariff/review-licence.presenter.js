@@ -94,7 +94,7 @@ function _chargeElementDetails (reviewChargeReference, chargePeriod) {
       elementDescription: reviewChargeElement.chargeElement.description,
       dates: _prepareChargeElementDates(reviewChargeElement.chargeElement, chargePeriod),
       issues: reviewChargeElement.issues.length > 0 ? reviewChargeElement.issues.split(', ') : [''],
-      billableReturns: `${reviewChargeElement.allocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
+      billableReturns: `${reviewChargeElement.amendedAllocated} ML / ${reviewChargeElement.chargeElement.authorisedAnnualQuantity} ML`,
       returnVolume: _prepareReturnVolume(reviewChargeElement)
     }
   })
@@ -112,11 +112,22 @@ function _chargeReferenceDetails (reviewChargeVersion, chargePeriod) {
       chargeCategory: `Charge reference ${reviewChargeReference.chargeReference.chargeCategory.reference}`,
       chargeDescription: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference),
+      chargeReferenceLink: _chargeReferenceLink(reviewChargeReference),
       chargeElements: _chargeElementDetails(reviewChargeReference, chargePeriod)
     })
   })
 
   return chargeReference
+}
+
+function _chargeReferenceLink (reviewChargeReference) {
+  const { chargeAdjustment, aggregate } = reviewChargeReference
+
+  if (chargeAdjustment !== 1 || aggregate !== 1) {
+    return { linkName: 'Change details' }
+  }
+
+  return { linkName: 'View details' }
 }
 
 function _contactName (billingAccount) {
@@ -263,14 +274,12 @@ function _returnTotal (returnLog) {
 
 function _totalBillableReturns (reviewChargeReference) {
   let totalBillableReturns = 0
-  let totalQuantity = 0
 
   reviewChargeReference.reviewChargeElements.forEach((reviewChargeElement) => {
-    totalBillableReturns += reviewChargeElement.allocated
-    totalQuantity += reviewChargeElement.chargeElement.authorisedAnnualQuantity
+    totalBillableReturns += reviewChargeElement.amendedAllocated
   })
 
-  return `${totalBillableReturns} ML / ${totalQuantity} ML`
+  return `${totalBillableReturns} ML / ${reviewChargeReference.amendedAuthorisedVolume} ML`
 }
 
 function _unmatchedReturns (returnLogs) {

@@ -6,7 +6,7 @@
  */
 
 const FetchPointsService = require('../../services/return-requirements/fetch-points.service.js')
-const SelectPointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
+const PointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -23,7 +23,7 @@ async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const pointsData = await FetchPointsService.go(session.data.licence.id)
 
-  const formattedData = SelectPointsPresenter.go(session, pointsData)
+  const formattedData = PointsPresenter.go(session, pointsData)
 
   return {
     activeNavBar: 'search',

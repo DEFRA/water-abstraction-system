@@ -14,11 +14,11 @@ const SiteDescriptionValidator = require('../../validators/return-requirements/s
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
- * The user input is then validated and the result is then combined with the output of the presenter to generate the page data needed by the view.
- * If there was a validation error the controller will re-render the page so needs this information. If all is well the
- * controller will redirect to the next page in the journey.
+ * The user input is then validated and the site description in the payload is saved in the session. If there is a
+ * validation error the controller will re-render the page. If all is well the controller will redirect to the next page
+ * in the journey.
  *
- * @param {string} sessionId - The id of the current session
+ * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
  * @returns {Promise<Object>} The page data for the start date page
@@ -28,15 +28,41 @@ async function go (sessionId, payload) {
 
   const validationResult = _validate(payload)
 
-  const formattedData = SiteDescriptionPresenter.go(session, payload)
+  if (!validationResult) {
+    await _save(session, payload)
+
+    return {
+      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+    }
+  }
+
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
+    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
-    journey: session.data.journey,
     pageTitle: 'Enter a site description for the requirements for returns',
-    ...formattedData
+    ...submittedSessionData
   }
+}
+
+async function _save (session, payload) {
+  const currentData = session.data
+
+  currentData.siteDescription = payload.siteDescription
+
+  return session.$query().patch({ data: currentData })
+}
+
+/**
+ * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
+ * the user, payload will be an empty object.
+ */
+function _submittedSessionData (session, payload) {
+  session.data.siteDescription = payload.siteDescription ? payload.siteDescription : null
+
+  return SiteDescriptionPresenter.go(session)
 }
 
 function _validate (payload) {

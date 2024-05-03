@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
 const AddNoteService = require('../../app/services/return-requirements/add-note.service.js')
+const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
@@ -81,6 +82,13 @@ describe('Return requirements controller', () => {
   })
 
   describe('GET /return-requirements/{sessionId}/agreements-exceptions', () => {
+    beforeEach(async () => {
+      Sinon.stub(AgreementsExceptionService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'Select agreements and exceptions for the return requirement'
+      })
+    })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('agreements-exceptions'))
@@ -216,7 +224,7 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/reason', () => {
     beforeEach(async () => {
       Sinon.stub(SelectReasonService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the reason for the return requirement'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the reason for the requirements for returns'
       })
     })
     describe('when the request succeeds', () => {
@@ -224,7 +232,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('reason'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select the reason for the return requirement')
+        expect(response.payload).to.contain('Select the reason for the requirements for returns')
       })
     })
   })
@@ -248,7 +256,7 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/setup', () => {
     beforeEach(async () => {
       Sinon.stub(SetupService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the return requirement?'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'How do you want to set up the requirements for returns?'
       })
     })
     describe('when the request succeeds', () => {
@@ -256,7 +264,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('setup'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('How do you want to set up the return requirement?')
+        expect(response.payload).to.contain('How do you want to set up the requirements for returns?')
       })
     })
   })
@@ -281,7 +289,7 @@ describe('Return requirements controller', () => {
   describe('GET /return-requirements/{sessionId}/start-date', () => {
     beforeEach(async () => {
       Sinon.stub(StartDateService, 'go').resolves({
-        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the start date for the return requirement'
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select the start date for the requirements for returns'
       })
     })
     describe('when the request succeeds', () => {
@@ -289,7 +297,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('start-date'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select the start date for the return requirement')
+        expect(response.payload).to.contain('Select the start date for the requirements for returns')
       })
     })
   })

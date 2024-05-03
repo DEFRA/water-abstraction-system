@@ -17,14 +17,16 @@ const ReviewChargeElementModel = require('../../../models/review-charge-element.
  * @param {String} licenceId - The UUID of the licence that is being reviewed
  * @param {String} reviewChargeElementId - The UUID of the review charge element being updated
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} The updated value for the billable returns
  */
-async function go (billRunId, licenceId, reviewChargeElementId, payload) {
+async function go (billRunId, licenceId, reviewChargeElementId, payload, yar) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _persistAmendedBillableReturns(reviewChargeElementId, payload)
+    yar.flash('banner', 'The billable returns for this licence have been updated')
 
     return { error: null }
   }
@@ -47,7 +49,7 @@ function _persistAmendedBillableReturns (reviewChargeElementId, payload) {
 
   return ReviewChargeElementModel.query()
     .findById(reviewChargeElementId)
-    .patch({ allocated: volume })
+    .patch({ amendedAllocated: volume })
 }
 
 function _validate (payload) {

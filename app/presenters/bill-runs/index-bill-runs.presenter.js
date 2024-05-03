@@ -37,24 +37,29 @@ function go (billRuns) {
     return {
       id,
       createdAt: formatLongDate(createdAt),
-      link: _link(id, status),
+      link: _link(id, status, scheme),
       number: billRunNumber,
       numberOfBills,
       region: capitalize(region),
       scheme,
-      status: status === 'cancel' ? 'cancelling' : status,
+      status,
       total: formatMoney(netTotal, true),
       type: formatBillRunType(batchType, scheme, summer)
     }
   })
 }
 
-function _link (billRunId, status) {
-  if (status === 'cancel') {
+function _link (billRunId, status, scheme) {
+  if (['cancel', 'processing', 'queued', 'sending'].includes(status)) {
     return null
   }
 
   if (status === 'review') {
+    // Old PRESROC bill runs
+    if (scheme === 'alcs') {
+      return `/billing/batch/${billRunId}/two-part-tariff-review`
+    }
+
     return `/system/bill-runs/${billRunId}/review`
   }
 

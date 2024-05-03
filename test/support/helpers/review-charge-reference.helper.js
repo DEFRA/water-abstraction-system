@@ -14,7 +14,16 @@ const ReviewChargeReferenceModel = require('../../../app/models/review-charge-re
  *
  * - `reviewChargeVersionId` - [random UUID]
  * - `chargeReferenceId` - [random UUID]
- * - `aggregate` - Strategic review of charges (SRoC)
+ * - `aggregate` - 1
+ * - `amendedAggregate` - 1
+ * - `canalAndRiverTrustAgreement` - false
+ * - `twoPartTariffAgreement` - true
+ * - `winterDiscount` - false
+ * - `abatementAgreement` - 0
+ * - `chargeAdjustment - 1
+ * - `amendedChargeAdjustment` - 1
+ * - `authorisedVolume` - 50
+ * - `amendedAuthorisedVolume` - 50
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
@@ -40,7 +49,16 @@ function defaults (data = {}) {
   const defaults = {
     reviewChargeVersionId: generateUUID(),
     chargeReferenceId: generateUUID(),
-    aggregate: 1
+    aggregate: 1,
+    amendedAggregate: 1,
+    canalAndRiverTrustAgreement: false,
+    twoPartTariffAgreement: true,
+    winterDiscount: false,
+    abatementAgreement: 0,
+    chargeAdjustment: 0,
+    amendedChargeAdjustment: 0,
+    authorisedVolume: 50,
+    amendedAuthorisedVolume: 50
   }
 
   return {

@@ -24,7 +24,6 @@ describe('Match Details presenter', () => {
         financialYear: '2022 to 2023',
         chargePeriod: '1 April 2022 to 5 June 2022',
         licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
-        showBanner: true,
         chargeElement: {
           chargeElementId: 'b4d70c89-de1b-4f68-a47f-832b338ac044',
           description: 'Trickle Irrigation - Direct',
@@ -65,8 +64,8 @@ function _reviewChargeElementData () {
     id: 'b4d70c89-de1b-4f68-a47f-832b338ac044',
     reviewChargeReferenceId: '9e5d87d7-073e-420e-b12d-73ca220dd8ef',
     chargeElementId: 'b345f1f1-496b-4049-a647-6bcd123dcf68',
-    allocated: 0,
-    calculated: 10,
+    allocated: 10,
+    amendedAllocated: 0,
     chargeDatesOverlap: false,
     issues: null,
     status: 'ready',

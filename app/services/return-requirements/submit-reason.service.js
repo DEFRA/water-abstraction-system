@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/reason` page
- * @module StartDateService
+ * @module SubmitReasonService
  */
 
 const ReasonPresenter = require('../../presenters/return-requirements/reason.presenter.js')
@@ -42,7 +42,7 @@ async function go (sessionId, payload) {
     activeNavBar: 'search',
     checkYourAnswersVisited: session.data.checkYourAnswersVisited,
     error: validationResult,
-    pageTitle: 'Select the reason for the return requirement',
+    pageTitle: 'Select the reason for the requirements for returns',
     ...formattedData
   }
 }
