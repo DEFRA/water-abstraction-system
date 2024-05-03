@@ -16,7 +16,6 @@ const FetchLicenceReturnsService = require('../../../app/services/licences/fetch
 const LicenceHelper = require('../../support/helpers/licence.helper')
 
 describe('Fetch licence returns service', () => {
-  let returnsLogData
   const licenceId = 'fef693fd-eb6f-478d-9f79-ab24749c5dc6'
 
   beforeEach(async () => {
@@ -24,12 +23,18 @@ describe('Fetch licence returns service', () => {
   })
 
   describe('when there is no optional data in the model', () => {
+    let firstReturn
+    let latestReturn
+    const dueDate = new Date('2020-04-01')
+    const endDate = new Date('2020-06-01')
+    const startDate = new Date('2020-02-01')
+    const latestDueDate = new Date('2020-05-01')
     const returnData = {
-      dueDate: new Date('2020-04-01'),
-      endDate: new Date('2020-06-01'),
+      dueDate,
+      endDate,
       metadata: '323',
       returnReference: '32',
-      startDate: new Date('2020-02-01'),
+      startDate,
       status: '32'
     }
 
@@ -39,25 +44,42 @@ describe('Fetch licence returns service', () => {
       })
 
       returnData.licenceRef = license.licenceRef
-      returnsLogData = await ReturnLogHelper.add(returnData)
+      firstReturn = await ReturnLogHelper.add(returnData)
+      latestReturn = await ReturnLogHelper.add({
+        ...returnData,
+        returnReference: '123',
+        dueDate: latestDueDate
+      })
     })
 
     it('returns results', async () => {
       const result = await FetchLicenceReturnsService.go(licenceId, 1)
 
       expect(result.pagination).to.equal({
-        total: 1
+        total: 2
       })
+      //  This should be ordered by due date
+      //    id: returnsLogData.id,
       expect(result.returns).to.equal(
-        [{
-          dueDate: new Date('2020-04-01'),
-          endDate: new Date('2020-06-01'),
-          id: returnsLogData.id,
-          metadata: 323,
-          returnReference: '32',
-          startDate: new Date('2020-02-01'),
-          status: '32'
-        }
+        [
+          {
+            dueDate: latestDueDate,
+            endDate,
+            id: latestReturn.id,
+            metadata: 323,
+            returnReference: '123',
+            startDate,
+            status: '32'
+          },
+          {
+            dueDate,
+            endDate,
+            id: firstReturn.id,
+            metadata: 323,
+            returnReference: '32',
+            startDate,
+            status: '32'
+          }
         ]
       )
     })
