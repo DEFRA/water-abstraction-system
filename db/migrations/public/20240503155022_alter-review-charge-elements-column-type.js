@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   return knex
     .schema
     .alterTable(tableName, (table) => {
-      table.decimal('amended_allocated', null, null).defaultTo(0)
+      table.decimal('amended_allocated', null, null).defaultTo(0).alter()
     })
 }
 
