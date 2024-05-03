@@ -25,14 +25,6 @@ function go (returnsData) {
 function _formatPurpose (purpose) {
   const [firstPurpose] = purpose
   return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
-  /* Old Nunjucks converted to presenter logic
-    {% macro returnRequirementPurposes(return) %}
-  {% for purpose in return.returnRequirement.returnRequirementPurposes %}
-  {{ ', ' if not loop.first }}
-  {{ purpose.purposeAlias | titleCase if purpose.purposeAlias else purpose.purposeUse.name | titleCase }}
-  {% endfor %}
-  {% endmacro %}
-   */
 }
 
 function _formatStatus (status) {

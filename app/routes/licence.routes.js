@@ -21,11 +21,6 @@ const routes = [
     path: '/licences/{id}/returns',
     handler: LicencesController.viewReturns,
     options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
       description: 'View a returns licence page'
     }
   },

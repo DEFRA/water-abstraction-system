@@ -1,59 +1,44 @@
 'use strict'
 
 /**
- * Fetches data needed for the view '/licences/{id}` page
+ * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
  * @module FetchLicenceReturnsService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
 const ReturnLogModel = require('../../models/return-log.model')
+
 const DatabaseConfig = require('../../../config/database.config')
 
 /**
- * Fetch the matching licence and return data needed for the view licence page
+ * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
  *
- * Was built to provide the data needed for the '/licences/{id}' page
+ * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @param {string} id The UUID for the licence to fetch
- *
- * @returns {Promise<Object>} the data needed to populate the view licence page and some elements of the summary tab
+ * @returns {Promise<Object>} the data needed to populate the view licence page's returns tab
  */
-async function go (id, page) {
-  const licence = await _fetchLicence(id, page)
-  const data = await _data(licence)
+async function go (licenceId, page) {
+  const { results, total } = await _fetch(licenceId, page)
 
-  return data
-}
-
-async function _data ({ results, total }) {
   return { returns: results, pagination: { total } }
 }
 
-async function _fetchLicence (id, page) {
-  const licenseData = await LicenceModel.query()
-    .findById(id)
+async function _fetch (licenceId, page) {
+  return ReturnLogModel.query()
     .select([
-      'licenceRef'
+      'returnLogs.id',
+      'returnLogs.dueDate',
+      'returnLogs.endDate',
+      'returnLogs.metadata',
+      'returnLogs.returnReference',
+      'returnLogs.startDate',
+      'returnLogs.status'
     ])
-
-  //  order by due date
-  const result = await ReturnLogModel.query()
-    .select([
-      'id',
-      'start_date',
-      'end_date',
-      'dueDate',
-      'status',
-      'metadata',
-      'return_reference'
-    ])
-    .where('licence_ref', licenseData.licenceRef)
+    .innerJoinRelated('licence')
+    .where('licence.id', licenceId)
     .orderBy([
       { column: 'dueDate', order: 'desc' }
     ])
     .page(page - 1, DatabaseConfig.defaultPageSize)
-
-  return result
 }
 
 module.exports = {
