@@ -42,8 +42,14 @@ function _formatReturnToTableRow (returns) {
 }
 
 function _formatStatus (status) {
-  if (status === 'completed') return 'COMPLETE'
-  if (status === 'due') return 'OVERDUE'
+  if (status === 'completed') {
+    return 'COMPLETE'
+  }
+
+  if (status === 'due') {
+    return 'OVERDUE'
+  }
+
   return 'NO STATUS'
 }
 
