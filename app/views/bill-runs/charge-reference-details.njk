@@ -52,7 +52,7 @@
 
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-full">
-    {% if showButtons %}
+    {% if hasAggregateOrChargeFactor %}
       <span class="inline govuk-!-margin-right-3">
         {{ govukButton({
           text: "Change the authorised volume",
@@ -83,8 +83,8 @@
           {% endfor %}
       {% endset %}
 
-      {% if showButtons %}
-        {% set showButton = {
+      {% if hasAggregateOrChargeFactor %}
+        {% set showLink = {
           items: [
                   {
                   href: "#",
@@ -117,7 +117,7 @@
             value: {
               html: adjustmentsValue
             },
-            actions: showButton
+            actions: showLink
           }
         %}
 

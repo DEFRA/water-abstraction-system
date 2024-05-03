@@ -14,7 +14,9 @@ describe('Charge Reference Details presenter', () => {
   describe('when there is data to be presented for the charge reference details page', () => {
     const billRun = _billRun()
     const licenceId = '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
+
     let reviewChargeReference
+
     beforeEach(() => {
       reviewChargeReference = _reviewChargeReferenceData()
     })
@@ -35,7 +37,7 @@ describe('Charge Reference Details presenter', () => {
           adjustments: [],
           additionalCharges: ''
         },
-        showButtons: false
+        hasAggregateOrChargeFactor: false
       })
     })
 
@@ -51,10 +53,10 @@ describe('Charge Reference Details presenter', () => {
           expect(result.chargeReference.adjustments).to.equal(['Aggregate factor (0.5)'])
         })
 
-        it("sets 'showButtons' property to true", () => {
+        it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
-          expect(result.showButtons).to.equal(true)
+          expect(result.hasAggregateOrChargeFactor).to.equal(true)
         })
       })
 
@@ -69,10 +71,10 @@ describe('Charge Reference Details presenter', () => {
           expect(result.chargeReference.adjustments).to.equal(['Charge adjustment (0.7)'])
         })
 
-        it("sets 'showButtons' property to true", () => {
+        it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
-          expect(result.showButtons).to.equal(true)
+          expect(result.hasAggregateOrChargeFactor).to.equal(true)
         })
       })
 
@@ -131,10 +133,10 @@ describe('Charge Reference Details presenter', () => {
           expect(result.chargeReference.adjustments).to.equal([])
         })
 
-        it("sets 'showButtons' property to false", () => {
+        it("sets 'hasAggregateOrChargeFactor' property to false", () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
-          expect(result.showButtons).to.equal(false)
+          expect(result.hasAggregateOrChargeFactor).to.equal(false)
         })
       })
     })

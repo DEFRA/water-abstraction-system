@@ -12,11 +12,13 @@ const { formatLongDate } = require('../../base.presenter.js')
  *
  * @param {module:BillRunModel} billRun - the data from the bill run
  * @param {module:ReviewChargeReference} reviewChargeReference - the data from the review charge reference
- * @param {String} licenceId - the UUID of the licence the charge element is linked to
+ * @param {String} licenceId - the UUID of the licence the charge reference is linked to
  *
  * @returns {Object} the prepared bill run and charge reference data to be passed to the charge reference details page
  */
 function go (billRun, reviewChargeReference, licenceId) {
+  const { hasAggregateOrChargeFactor, adjustments } = _adjustments(reviewChargeReference)
+
   return {
     billRunId: billRun.id,
     financialYear: _financialYear(billRun.toFinancialYearEnding),
@@ -29,37 +31,42 @@ function go (billRun, reviewChargeReference, licenceId) {
       description: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference.reviewChargeElements),
       authorisedVolume: reviewChargeReference.chargeReference.volume,
-      adjustments: _adjustments(reviewChargeReference),
+      adjustments,
       additionalCharges: _additionalCharges(reviewChargeReference.chargeReference)
     },
     licenceId,
-    showButtons: _showButtons(reviewChargeReference)
+    hasAggregateOrChargeFactor
   }
 }
 
-function _showButtons (reviewChargeReference) {
-  let showButton = false
+function _additionalCharges (chargeReference) {
+  const { supportedSourceName, waterCompanyCharge } = chargeReference
 
-  if (reviewChargeReference.amendedAggregate !== 1) {
-    showButton = true
+  const charges = []
+
+  if (supportedSourceName) {
+    charges.push(`Supported source ${supportedSourceName}`)
   }
 
-  if (reviewChargeReference.amendedChargeAdjustment !== 1) {
-    showButton = true
+  if (waterCompanyCharge) {
+    charges.push('Public Water Supply')
   }
 
-  return showButton
+  return charges.join(', ')
 }
 
 function _adjustments (reviewChargeReference) {
   const adjustments = []
+  let hasAggregateOrChargeFactor = false
 
   if (reviewChargeReference.amendedAggregate !== 1) {
     adjustments.push(`Aggregate factor (${reviewChargeReference.amendedAggregate})`)
+    hasAggregateOrChargeFactor = true
   }
 
   if (reviewChargeReference.amendedChargeAdjustment !== 1) {
     adjustments.push(`Charge adjustment (${reviewChargeReference.amendedChargeAdjustment})`)
+    hasAggregateOrChargeFactor = true
   }
 
   if (reviewChargeReference.abatementAgreement !== 1) {
@@ -78,23 +85,7 @@ function _adjustments (reviewChargeReference) {
     adjustments.push('Canal and River trust agreement')
   }
 
-  return adjustments
-}
-
-function _additionalCharges (chargeReference) {
-  const { supportedSourceName, waterCompanyCharge } = chargeReference
-
-  const charges = []
-
-  if (supportedSourceName) {
-    charges.push(`Supported source ${supportedSourceName}`)
-  }
-
-  if (waterCompanyCharge) {
-    charges.push('Public Water Supply')
-  }
-
-  return charges.join(', ')
+  return { adjustments, hasAggregateOrChargeFactor }
 }
 
 function _financialYear (financialYearEnding) {
