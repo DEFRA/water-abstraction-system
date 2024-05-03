@@ -32,11 +32,12 @@ function _formatStatus (status) {
   if (status === 'due') return 'OVERDUE'
   return 'NO STATUS'
 }
+
 function _formatReturnToTableRow (returns) {
   return returns.map(r => {
     return {
       id: r.id,
-      reference: r.returnReference || 'No REF !!',
+      reference: r.returnReference,
       purpose: _formatPurpose(r.metadata.purposes),
       description: r.metadata.description,
       dueDate: formatLongDate(new Date(r.dueDate)),

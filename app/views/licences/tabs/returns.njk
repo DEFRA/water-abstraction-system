@@ -32,7 +32,6 @@
     </thead>
     <tbody class="govuk-table__body">
     {% for return in returns %}
-      {#    Fix addtional bottom row #}
       <tr class="govuk-table__row govuk-body-s">
         <th class="govuk-table__cell">
           <a href="/{{ returnsUrl }}?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
