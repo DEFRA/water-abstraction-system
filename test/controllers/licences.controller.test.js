@@ -219,12 +219,12 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Status')
       })
     })
-
-    function _viewLicenceReturns () {
-      return {
-        activeTab: 'returns',
-        returns: [{}]
-      }
-    }
   })
 })
+
+function _viewLicenceReturns () {
+  return {
+    activeTab: 'returns',
+    returns: [{}]
+  }
+}
