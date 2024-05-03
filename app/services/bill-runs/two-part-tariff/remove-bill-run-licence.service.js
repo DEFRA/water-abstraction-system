@@ -6,7 +6,7 @@
  */
 
 const BillRunModel = require('../../../models/bill-run.model.js')
-const { db } = require('../../../../db/db.js')
+const LicenceModel = require('../../../models/licence.model.js')
 const RemoveBillRunLicencePresenter = require('../../../presenters/bill-runs/two-part-tariff/remove-bill-run-licence.presenter.js')
 
 /**
@@ -16,13 +16,13 @@ const RemoveBillRunLicencePresenter = require('../../../presenters/bill-runs/two
  * @param {string} licenceId - UUID of the licence to remove from the bill run
  *
  * @returns {Promise<Object}> an object representing the `pageData` needed by the remove licence template. It contains
- * details of the bill run & licence.
+ * details of the bill run & the licence reference.
  */
 async function go (billRunId, licenceId) {
   const billRun = await _fetchBillRun(billRunId)
-  const licence = await _fetchLicence(billRunId, licenceId)
+  const licenceRef = await _fetchLicenceRef(licenceId)
 
-  const pageData = RemoveBillRunLicencePresenter.go(billRun, licence)
+  const pageData = RemoveBillRunLicencePresenter.go(billRun, licenceId, licenceRef)
 
   return pageData
 }
@@ -31,25 +31,21 @@ async function _fetchBillRun (billRunId) {
   return BillRunModel.query()
     .findById(billRunId)
     .select(
+      'billRuns.billRunNumber',
+      'billRuns.createdAt',
+      'billRuns.status',
       'billRuns.toFinancialYearEnding',
       'region.displayName as region'
     )
     .innerJoinRelated('region')
 }
 
-async function _fetchLicence (billRunId, licenceId) {
-  return db
-    .distinct(
-      'rl.licenceId',
-      'rl.licenceRef',
-      'ba.accountNumber'
-    )
-    .from('reviewLicences AS rl')
-    .innerJoin('reviewChargeVersions AS rcv', 'rl.id', 'rcv.reviewLicenceId')
-    .innerJoin('chargeVersions AS cv', 'rcv.chargeVersionId', 'cv.id')
-    .innerJoin('billingAccounts AS ba', 'cv.billingAccountId', 'ba.id')
-    .where('rl.billRunId', billRunId)
-    .andWhere('rl.licenceId', licenceId)
+async function _fetchLicenceRef (licenceId) {
+  const licence = await LicenceModel.query()
+    .findById(licenceId)
+    .select('licenceRef')
+
+  return licence.licenceRef
 }
 
 module.exports = {

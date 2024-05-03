@@ -8,12 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
 const DatabaseSupport = require('../../../support/database.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
 // Thing under test
@@ -27,15 +24,16 @@ describe('Remove Bill Run Licence service', () => {
     await DatabaseSupport.clean()
 
     const { id: regionId } = await RegionHelper.add({ displayName: 'Test Region' })
-    const billRun = await BillRunHelper.add({ toFinancialYearEnding: 2023, regionId })
+    const billRun = await BillRunHelper.add({
+      billRunNumber: 12345,
+      regionId,
+      status: 'review',
+      toFinancialYearEnding: 2023
+    })
     billRunId = billRun.id
 
-    const reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceRef: '01/123/ABC' })
-    licenceId = reviewLicence.licenceId
-
-    const { id: billingAccountId } = await BillingAccountHelper.add({ accountNumber: 'T12345678A' })
-    const { id: chargeVersionId } = await ChargeVersionHelper.add({ licenceId, billingAccountId })
-    await ReviewChargeVersionHelper.add({ reviewLicenceId: reviewLicence.id, chargeVersionId })
+    const licence = await LicenceHelper.add({ licenceRef: '01/123/ABC' })
+    licenceId = licence.id
   })
 
   describe('when called with a valid billRunId & licenceId', () => {
@@ -43,10 +41,12 @@ describe('Remove Bill Run Licence service', () => {
       const result = await RemoveBillRunLicenceService.go(billRunId, licenceId)
 
       expect(result).to.equal({
+        pageTitle: "You're about to remove 01/123/ABC from the bill run",
         backLink: `../review/${licenceId}`,
-        billingAccount: 'T12345678A',
+        billRunNumber: 12345,
+        billRunStatus: 'review',
+        dateCreated: '3 May 2024',
         financialYear: '2022 to 2023',
-        licenceRef: '01/123/ABC',
         region: 'Test Region'
       })
     })
