@@ -27,6 +27,7 @@ describe('Check Your Answers presenter', () => {
         journey: 'no-returns-required',
         note: {
           content: 'Note attached to requirement',
+          status: 'Added',
           userEmail: 'carol.shaw@atari.com'
         },
         reason: 'returns-exception',
