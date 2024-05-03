@@ -13,6 +13,7 @@ const ViewLicenceService = require('../../../app/services/licences/view-licence.
 const PaginatorPresenter = require('../../../app/presenters/paginator.presenter')
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter')
 const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
+
 // Thing under test
 const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service')
 
@@ -21,6 +22,7 @@ describe('View Licence service returns', () => {
   const page = 1
   const auth = {}
   const pagination = { page }
+
   beforeEach(() => {
     Sinon.stub(FetchLicenceReturnsService, 'go').resolves(_returnsFetch())
     Sinon.stub(PaginatorPresenter, 'go').returns(pagination)

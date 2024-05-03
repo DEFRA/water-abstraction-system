@@ -22,7 +22,7 @@ describe('Fetch licence returns service', () => {
     await DatabaseSupport.clean()
   })
 
-  describe('when there is no optional data in the model', () => {
+  describe('when the licence has return logs', () => {
     let firstReturn
     let latestReturn
     const dueDate = new Date('2020-04-01')

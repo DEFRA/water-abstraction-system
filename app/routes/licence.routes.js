@@ -8,7 +8,7 @@ const routes = [
     path: '/licences/{id}/summary',
     handler: LicencesController.viewSummary,
     options: {
-      description: 'View a summary licence page'
+      description: 'View a licence summary page'
     }
   },
   {
@@ -16,7 +16,7 @@ const routes = [
     path: '/licences/{id}/returns',
     handler: LicencesController.viewReturns,
     options: {
-      description: 'View a returns licence page'
+      description: 'View a licence returns page'
     }
   },
   {

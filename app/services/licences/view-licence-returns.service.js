@@ -9,6 +9,7 @@ const FetchLicenceReturnsService = require('./fetch-licence-returns.service')
 const ViewLicenceService = require('./view-licence.service')
 const ViewLicenceReturnsPresenter = require('../../presenters/licences/view-licence-returns.presenter')
 const PaginatorPresenter = require('../../presenters/paginator.presenter')
+
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *

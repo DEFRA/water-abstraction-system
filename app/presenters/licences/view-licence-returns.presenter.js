@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for common licence data `/licences/{id}` page's
+ * Formats common data for the `/licences/{id}/*` view licence pages
  * @module ViewLicenceReturnsPresenter
  */
 
@@ -24,6 +24,7 @@ function go (returnsData) {
 
 function _formatPurpose (purpose) {
   const [firstPurpose] = purpose
+  
   return firstPurpose.alias ? firstPurpose.alias : firstPurpose.tertiary.description
 }
 
@@ -34,7 +35,7 @@ function _formatStatus (status) {
 }
 
 function _formatReturnToTableRow (returns) {
-  return returns.map(r => {
+  return returns.map((r) => {
     return {
       id: r.id,
       reference: r.returnReference,

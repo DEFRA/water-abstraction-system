@@ -49,6 +49,6 @@ async function viewReturns (request, h) {
 module.exports = {
   noReturnsRequired,
   returnsRequired,
-  viewSummary,
-  viewReturns
+  viewReturns,
+  viewSummary
 }
