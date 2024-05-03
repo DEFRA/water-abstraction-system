@@ -27,7 +27,6 @@ describe('Check Your Answers presenter', () => {
         journey: 'no-returns-required',
         note: {
           content: 'Note attached to requirement',
-          status: 'Added',
           userEmail: 'carol.shaw@atari.com'
         },
         reason: 'returns-exception',
@@ -66,10 +65,10 @@ describe('Check Your Answers presenter', () => {
         delete session.data.note
       })
 
-      it('returns an empty string', () => {
+      it('returns null', () => {
         const result = CheckYourAnswersPresenter.go(session)
 
-        expect(result.note).to.equal('')
+        expect(result.note).to.be.null()
       })
     })
   })

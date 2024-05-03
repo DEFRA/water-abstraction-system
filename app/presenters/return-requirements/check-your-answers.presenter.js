@@ -12,7 +12,7 @@ function go (session) {
     id: session.id,
     journey: session.data.journey,
     licenceRef: session.data.licence.licenceRef,
-    note: session.data.note ? session.data.note.content : '',
+    note: session.data.note ? session.data.note.content : null,
     reason: session.data.reason,
     startDate: _startDate(session.data),
     userEmail: session.data.note ? session.data.note.userEmail : 'No notes added'
