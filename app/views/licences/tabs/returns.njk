@@ -20,31 +20,41 @@
 {% endmacro %}
 
 <table class="govuk-table">
-  <caption class="govuk-table__caption govuk-table__caption--m">Returns</caption>
-  <thead class="govuk-table__head">
-  <tr class="govuk-table__row">
-    <th scope="col" class="govuk-table__header">Return reference and dates</th>
-    <th scope="col" class="govuk-table__header">Purpose and description</th>
-    <th scope="col" class="govuk-table__header">Due date</th>
-    <th scope="col" class="govuk-table__header">Status</th>
-  </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-  {% for return in returns %}
-{#    Fix addtional bottom row#}
-    <tr class="govuk-table__row govuk-body-s">
-      <th class="govuk-table__cell">
-        <a href="/{{ returnsUrl }}?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
-        <p class="govuk-body-s"> {{ return.dates }}</p>
-      </th>
-      <td class="govuk-table__cell">{{ return.purpose }} <p class="govuk-body-s"> {{ return.description }}</p></td>
-      <td class="govuk-table__cell">{{ return.dueDate }}</td>
-      <td class="govuk-table__cell">{{ formatStatus(return.status) }}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
+  <h2 class="govuk-heading-l">Returns</h2>
+ {% if returns %}
+   <caption class="govuk-table__caption govuk-table__caption--m">Returns</caption>
+   <thead class="govuk-table__head">
+   <tr class="govuk-table__row">
+     <th scope="col" class="govuk-table__header">Return reference and dates</th>
+     <th scope="col" class="govuk-table__header">Purpose and description</th>
+     <th scope="col" class="govuk-table__header">Due date</th>
+     <th scope="col" class="govuk-table__header">Status</th>
+   </tr>
+   </thead>
+   <tbody class="govuk-table__body">
+   {% for return in returns %}
+     {#    Fix addtional bottom row#}
+     <tr class="govuk-table__row govuk-body-s">
+       <th class="govuk-table__cell">
+         <a href="/{{ returnsUrl }}?returnId={{ return.id }}" class="govuk-link">{{ return.reference }} </a>
+         <p class="govuk-body-s"> {{ return.dates }}</p>
+       </th>
+       <td class="govuk-table__cell">{{ return.purpose }} <p class="govuk-body-s"> {{ return.description }}</p></td>
+       <td class="govuk-table__cell">{{ return.dueDate }}</td>
+       <td class="govuk-table__cell">{{ formatStatus(return.status) }}</td>
+     </tr>
+   {% endfor %}
+   </tbody>
+ {% elseif returnNeeded == true %}
+   <p class="govuk-body">Returns do not need to be submitted for this license.</p>
+   <p class="govuk-body"><a class="govuk-link" href="/">Set up new requirements for returns</a></p>
+ {% else %}
+   <p class="govuk-body">No requirements for returns have been set up for this licence.</p>
+   <p class="govuk-body"><a class="govuk-link" href="/">Set up new requirements for returns</a></p>
+ {% endif %}
 </table>
 
-{% if pagination.numberOfPages > 1  %}
+{% if returns and pagination.numberOfPages > 1  %}
   {{ govukPagination(pagination.component) }}
 {% endif %}
+
