@@ -50,11 +50,8 @@ describe('View Licence service returns', () => {
   })
 })
 
-function _returnsPresenter () {
-  return {
-    returns: [],
-    activeTab: 'returns'
-  }
+function _licence () {
+  return { licenceName: 'fake licence' }
 }
 
 function _returnsFetch () {
@@ -64,6 +61,9 @@ function _returnsFetch () {
   }
 }
 
-function _licence () {
-  return { licenceName: 'fake licence' }
+function _returnsPresenter () {
+  return {
+    returns: [],
+    activeTab: 'returns'
+  }
 }
