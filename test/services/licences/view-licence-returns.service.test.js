@@ -25,7 +25,7 @@ describe('View Licence service returns', () => {
     Sinon.stub(FetchLicenceReturnsService, 'go').resolves(_returnsFetch())
     Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
     Sinon.stub(ViewLicenceReturnsPresenter, 'go').returns(_returnsPresenter())
-    Sinon.stub(ViewLicenceService, 'go').resolves(_license())
+    Sinon.stub(ViewLicenceService, 'go').resolves(_licence())
   })
 
   afterEach(() => {
@@ -38,7 +38,7 @@ describe('View Licence service returns', () => {
         const result = await ViewLicenceReturnsService.go(testId, auth, page)
 
         expect(result).to.equal({
-          licenceName: 'fake license',
+          licenceName: 'fake licence',
           returnsUrl: 'return/internal',
           returns: [],
           activeTab: 'returns',
@@ -64,6 +64,6 @@ function _returnsFetch () {
   }
 }
 
-function _license () {
-  return { licenceName: 'fake license' }
+function _licence () {
+  return { licenceName: 'fake licence' }
 }

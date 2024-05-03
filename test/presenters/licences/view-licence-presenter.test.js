@@ -151,7 +151,7 @@ describe('View Licence presenter', () => {
       it('returns the notification for PRESROC', () => {
         const result = ViewLicencePresenter.go(licence)
 
-        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run for the old charge scheme.')
+        expect(result.notification).to.equal('This licence has been marked for the next supplementary bill run for the old charge scheme.')
       })
     })
 
@@ -163,7 +163,7 @@ describe('View Licence presenter', () => {
       it('returns the notification for SROC', () => {
         const result = ViewLicencePresenter.go(licence)
 
-        expect(result.notification).to.equal('This license has been marked for the next supplementary bill run.')
+        expect(result.notification).to.equal('This licence has been marked for the next supplementary bill run.')
       })
     })
 
@@ -176,7 +176,7 @@ describe('View Licence presenter', () => {
       it('returns the notification for SROC & PRESROC)', () => {
         const result = ViewLicencePresenter.go(licence)
 
-        expect(result.notification).to.equal('This license has been marked for the next supplementary bill runs for the current and old charge schemes.')
+        expect(result.notification).to.equal('This licence has been marked for the next supplementary bill runs for the current and old charge schemes.')
       })
     })
   })
