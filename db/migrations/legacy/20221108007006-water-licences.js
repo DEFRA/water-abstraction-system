@@ -23,6 +23,7 @@ exports.up = function (knex) {
       table.boolean('is_test').notNullable().defaultTo(false)
       table.string('include_in_supplementary_billing').notNullable().defaultTo('no')
       table.boolean('include_in_sroc_supplementary_billing').notNullable().defaultTo(false)
+      table.boolean('include_in_sroc_tpt_supplementary_billing').notNullable().defaultTo(false)
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
