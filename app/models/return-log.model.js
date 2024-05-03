@@ -23,6 +23,14 @@ class ReturnLogModel extends BaseModel {
 
   static get relationMappings () {
     return {
+      licence: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'licence.model',
+        join: {
+          from: 'returnLogs.licenceRef',
+          to: 'licences.licenceRef'
+        }
+      },
       returnSubmissions: {
         relation: Model.HasManyRelation,
         modelClass: 'return-submission.model',
