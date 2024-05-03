@@ -9,11 +9,11 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
-const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
+const LicenceHelper = require('../../support/helpers/licence.helper')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const LicenceHelper = require('../../support/helpers/licence.helper')
+const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service')
 
 describe('Fetch licence returns service', () => {
   const licenceId = 'fef693fd-eb6f-478d-9f79-ab24749c5dc6'
