@@ -21,7 +21,8 @@ describe('No Returns Required presenter', () => {
           id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
           licenceRef: '01/123',
           licenceHolder: 'Jane Doe'
-        }
+        },
+        reason: 'transfer-licence'
       }
     }
   })
@@ -32,7 +33,9 @@ describe('No Returns Required presenter', () => {
 
       expect(result).to.equal({
         id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licenceRef: '01/123'
+        licenceRef: '01/123',
+        selectedOption: 'transfer-licence'
+
       })
     })
   })

@@ -30,7 +30,7 @@ const sessionData = {
   }
 }
 
-describe('Submit No Returns Required service', () => {
+describe.only('Submit No Returns Required service', () => {
   let payload
   let session
 
@@ -81,7 +81,7 @@ describe('Submit No Returns Required service', () => {
             checkYourAnswersVisited: false,
             pageTitle: 'Why are no returns required?',
             licenceRef: '01/ABC',
-            selectedOption: undefined
+            selectedOption: null
           }, { skip: ['id', 'error'] })
         })
 

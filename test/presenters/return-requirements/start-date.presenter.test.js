@@ -64,8 +64,8 @@ describe('Start Date presenter', () => {
           },
           startDateDay: '26',
           startDateMonth: '11',
-          startDateOptions: 'anotherStartDate',
-          startDateYear: '2023'
+          startDateYear: '2023',
+          startDateOptions: 'anotherStartDate'
         }
       }
     })
