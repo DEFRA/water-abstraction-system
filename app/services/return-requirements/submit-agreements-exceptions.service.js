@@ -7,7 +7,7 @@
 
 const AgreementsExceptionsPresenter = require('../../presenters/return-requirements/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../validators/return-requirements/agreements-exceptions.validator.js')
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionService = require('./fetch-session.service.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/agreements-exceptions` page
@@ -24,7 +24,7 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The page data for the agreements and exceptions page
  */
 async function go (sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
 
   _handleOneOptionSelected(payload)
 
@@ -34,7 +34,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+      checkYourAnswersVisited: session.checkYourAnswersVisited
     }
   }
 
@@ -42,7 +42,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select agreements and exceptions for the requirements for returns',
     ...formattedData
@@ -61,11 +61,9 @@ function _handleOneOptionSelected (payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.agreementsExceptions = payload.agreementsExceptions
 
-  currentData.agreementsExceptions = payload.agreementsExceptions
-
-  return session.$query().patch({ data: currentData })
+  return session.update()
 }
 
 function _validate (payload) {

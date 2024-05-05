@@ -6,8 +6,8 @@
  */
 
 const FetchPointsService = require('../../services/return-requirements/fetch-points.service.js')
+const FetchSessionService = require('./fetch-session.service.js')
 const PointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/points` page
@@ -20,8 +20,8 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The view data for the points page
 */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
-  const pointsData = await FetchPointsService.go(session.data.licence.id)
+  const session = await FetchSessionService.go(sessionId)
+  const pointsData = await FetchPointsService.go(session.licence.id)
 
   const formattedData = PointsPresenter.go(session, pointsData)
 

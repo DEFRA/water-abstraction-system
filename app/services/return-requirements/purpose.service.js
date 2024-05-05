@@ -6,8 +6,8 @@
  */
 
 const FetchPurposesService = require('../../services/return-requirements/fetch-purposes.service.js')
+const FetchSessionService = require('./fetch-session.service.js')
 const SelectPurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/purpose` page
@@ -20,8 +20,8 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The view data for the purpose page
 */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
-  const purposesData = await FetchPurposesService.go(session.data.licence.id)
+  const session = await FetchSessionService.go(sessionId)
+  const purposesData = await FetchPurposesService.go(session.licence.id)
 
   const formattedData = SelectPurposePresenter.go(session, purposesData)
 

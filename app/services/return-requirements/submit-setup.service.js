@@ -5,7 +5,7 @@
  * @module SubmitSetupService
  */
 
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionService = require('./fetch-session.service.js')
 const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
 const SetupValidator = require('../../validators/return-requirements/setup.validator.js')
 
@@ -24,7 +24,7 @@ const SetupValidator = require('../../validators/return-requirements/setup.valid
  * @returns {Promise<Object>} The page data for the reason page
  */
 async function go (sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -61,11 +61,9 @@ function _redirect (setup) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.setup = payload.setup
 
-  currentData.setup = payload.setup
-
-  return session.$query().patch({ data: currentData })
+  return session.update()
 }
 
 function _validate (payload) {

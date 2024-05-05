@@ -6,7 +6,7 @@
  */
 
 const AbstractionPeriodPresenter = require('../../presenters/return-requirements/abstraction-period.presenter.js')
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionService = require('./fetch-session.service.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/abstraction-period` page
@@ -19,7 +19,7 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The view data for the abstraction period page
 */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const formattedData = AbstractionPeriodPresenter.go(session)
 
   return {

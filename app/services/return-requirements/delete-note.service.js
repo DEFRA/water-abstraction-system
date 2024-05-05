@@ -5,7 +5,7 @@
  * @module DeleteNoteService
  */
 
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionService = require('./fetch-session.service.js')
 
 /**
  *
@@ -19,7 +19,7 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
 async function go (sessionId, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const notification = {
     title: 'Removed',
     text: 'Note removed'
@@ -31,11 +31,9 @@ async function go (sessionId, yar) {
 }
 
 async function _save (session) {
-  const currentData = session.data
+  delete session.note
 
-  delete currentData.note
-
-  return session.$query().patch({ data: currentData })
+  return session.update()
 }
 
 module.exports = {

@@ -5,7 +5,7 @@
  * @module StartDateService
  */
 
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionService = require('./fetch-session.service.js')
 const StartDatePresenter = require('../../presenters/return-requirements/start-date.presenter.js')
 
 /**
@@ -19,12 +19,12 @@ const StartDatePresenter = require('../../presenters/return-requirements/start-d
  * @returns {Promise<Object>} The view data for the start date page
 */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const formattedData = StartDatePresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     pageTitle: 'Select the start date for the requirements for returns',
     ...formattedData
   }

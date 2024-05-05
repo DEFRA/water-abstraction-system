@@ -5,9 +5,9 @@
  * @module SubmitFrequencyCollectedService
  */
 
+const FetchSessionService = require('./fetch-session.service.js')
 const FrequencyCollectedPresenter = require('../../presenters/return-requirements/frequency-collected.presenter.js')
 const FrequencyCollectedValidator = require('../../validators/return-requirements/frequency-collected.validator.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/frequency-collected` page
@@ -24,7 +24,7 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The page data for the frequency collected page
  */
 async function go (sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -32,7 +32,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+      checkYourAnswersVisited: session.checkYourAnswersVisited
     }
   }
 
@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select how often readings or volumes are collected',
     ...formattedData
@@ -48,11 +48,9 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.frequencyCollected = payload.frequencyCollected
 
-  currentData.frequencyCollected = payload.frequencyCollected
-
-  return session.$query().patch({ data: currentData })
+  return session.update()
 }
 
 function _validate (payload) {

@@ -5,9 +5,9 @@
  * @module SubmitNoteService
  */
 
+const FetchSessionService = require('./fetch-session.service.js')
 const NotePresenter = require('../../presenters/return-requirements/note.presenter.js')
 const NoteValidator = require('../../validators/return-requirements/note.validator.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/note` page
@@ -26,7 +26,7 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The page data for the check-your-answers page
  */
 async function go (sessionId, payload, user, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -38,7 +38,7 @@ async function go (sessionId, payload, user, yar) {
     }
 
     return {
-      journey: session.data.journey
+      journey: session.journey
     }
   }
 
@@ -53,7 +53,7 @@ async function go (sessionId, payload, user, yar) {
 }
 
 function _notification (session, newNote) {
-  const { data: { note } } = session
+  const { note } = session
   const text = 'Changes made'
 
   if (!note && newNote) {
@@ -74,18 +74,16 @@ function _notification (session, newNote) {
 }
 
 async function _save (session, payload, user) {
-  const currentData = session.data
-
-  currentData.note = {
+  session.note = {
     content: payload.note,
     userEmail: user.username
   }
 
-  return session.$query().patch({ data: currentData })
+  return session.update()
 }
 
 function _submittedSessionData (session, payload) {
-  session.data.note = payload.note ? payload.note : null
+  session.note = payload.note ? payload.note : null
 
   return NotePresenter.go(session)
 }

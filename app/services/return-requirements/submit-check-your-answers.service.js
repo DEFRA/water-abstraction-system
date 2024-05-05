@@ -7,7 +7,7 @@
 
 const CheckLicenceEndedService = require('./check-licence-ended.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionService = require('./fetch-session.service.js')
 
 /**
  * Manages converting the session data to return requirement records when check your answers is confirmed
@@ -24,11 +24,11 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {string} The licence ID
  */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
 
-  await _validateLicence(session.data.licence.id)
+  await _validateLicence(session.licence.id)
 
-  return session.data.licence.id
+  return session.licence.id
 }
 
 async function _validateLicence (licenceId) {

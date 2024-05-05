@@ -5,9 +5,9 @@
  * @module StartDateService
  */
 
+const FetchSessionService = require('./fetch-session.service.js')
 const NoReturnsRequiredPresenter = require('../../presenters/return-requirements/no-returns-required.presenter.js')
 const NoReturnsRequiredValidator = require('../../validators/return-requirements/no-returns-required.validator.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/no-returns-required` page
@@ -24,15 +24,15 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The page data for the no returns required page
  */
 async function go (sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited,
-      journey: session.data.journey
+      checkYourAnswersVisited: session.checkYourAnswersVisited,
+      journey: session.journey
     }
   }
 
@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Why are no returns required?',
     selectedOption: null,
@@ -49,11 +49,9 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.reason = payload.reason
 
-  currentData.reason = payload.reason
-
-  return session.$query().patch({ data: currentData })
+  return session.update()
 }
 
 function _validate (payload) {

@@ -4,8 +4,9 @@
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/setup` page
  * @module SetupService
  */
+
+const FetchSessionService = require('./fetch-session.service.js')
 const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/setup` page
@@ -18,7 +19,7 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} page data needed by the view template
  */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const formattedData = SetupPresenter.go(session)
 
   return {

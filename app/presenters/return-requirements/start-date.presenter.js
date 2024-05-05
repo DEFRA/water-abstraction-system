@@ -18,10 +18,10 @@ const { formatLongDate } = require('../base.presenter.js')
 function go (session) {
   const data = {
     id: session.id,
-    licenceId: session.data.licence.id,
-    licenceRef: session.data.licence.licenceRef,
-    licenceVersionStartDate: _licenceVersionStartDate(session.data.licence.currentVersionStartDate),
-    ..._transformSession(session.data)
+    licenceId: session.licence.id,
+    licenceRef: session.licence.licenceRef,
+    licenceVersionStartDate: _licenceVersionStartDate(session.licence.currentVersionStartDate),
+    ..._transformSession(session)
   }
 
   return data
@@ -36,13 +36,13 @@ function _licenceVersionStartDate (date) {
   return formattedDate
 }
 
-function _transformSession (sessionData) {
+function _transformSession (session) {
   // NOTE: 'startDateOptions' is the session value that tells us whether the user selected the licence version start
   // date or another date radio button.
   // If it is not set then either its because the presenter has been called from `StartDateService` and it's the first
   // load. Else its been called by `SubmitStartDateService` but the user hasn't selected a radio button.
   // Either way, we use it to tell us whether there is anything in the session worth transforming.
-  const selectedOption = sessionData.startDateOptions
+  const selectedOption = session.startDateOptions
 
   if (!selectedOption) {
     return {
@@ -54,9 +54,9 @@ function _transformSession (sessionData) {
   }
 
   return {
-    anotherStartDateDay: sessionData.startDateDay,
-    anotherStartDateMonth: sessionData.startDateMonth,
-    anotherStartDateYear: sessionData.startDateYear,
+    anotherStartDateDay: session.startDateDay,
+    anotherStartDateMonth: session.startDateMonth,
+    anotherStartDateYear: session.startDateYear,
     selectedOption
   }
 }

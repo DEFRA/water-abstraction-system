@@ -4,8 +4,9 @@
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/note` page
  * @module NoteService
  */
+
+const FetchSessionService = require('./fetch-session.service.js')
 const NotePresenter = require('../../presenters/return-requirements/note.presenter.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/note` page
@@ -18,12 +19,12 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The view data for the note page
  */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const formattedData = NotePresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     pageTitle: 'Add a note',
     ...formattedData
   }

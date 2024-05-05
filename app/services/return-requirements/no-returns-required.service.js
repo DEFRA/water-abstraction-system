@@ -4,8 +4,9 @@
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/no-returns-required` page
  * @module NoReturnsRequiredService
  */
+
+const FetchSessionService = require('./fetch-session.service.js')
 const NoReturnsRequiredPresenter = require('../../presenters/return-requirements/no-returns-required.presenter.js')
-const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/no-returns-required` page
@@ -18,12 +19,12 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The view data for the no returns required page
  */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const formattedData = NoReturnsRequiredPresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     pageTitle: 'Why are no returns required?',
     ...formattedData
   }

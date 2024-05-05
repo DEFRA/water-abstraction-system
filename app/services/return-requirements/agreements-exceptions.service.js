@@ -6,7 +6,7 @@
  */
 
 const AgreementsExceptionsPresenter = require('../../presenters/return-requirements/agreements-exceptions.presenter.js')
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionService = require('./fetch-session.service.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/agreements-exceptions` page
@@ -19,7 +19,7 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} The view data for the agreements and exceptions page
 */
 async function go (sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionService.go(sessionId)
   const formattedData = AgreementsExceptionsPresenter.go(session)
 
   return {
