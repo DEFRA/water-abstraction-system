@@ -5,7 +5,6 @@
  * @module ReturnRequirementsController
  */
 
-const AddNoteService = require('../services/return-requirements/add-note.service.js')
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
@@ -13,6 +12,7 @@ const DeleteNoteService = require('../services/return-requirements/delete-note.s
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
+const NoteService = require('../services/return-requirements/note.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
 const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
@@ -21,13 +21,13 @@ const SessionModel = require('../models/session.model.js')
 const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
-const SubmitAddNoteService = require('../services/return-requirements/submit-add-note.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
 const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
+const SubmitNoteService = require('../services/return-requirements/submit-note.service.js')
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
@@ -128,9 +128,9 @@ async function noReturnsRequired (request, h) {
 async function note (request, h) {
   const { sessionId } = request.params
 
-  const pageData = await AddNoteService.go(sessionId)
+  const pageData = await NoteService.go(sessionId)
 
-  return h.view('return-requirements/add-note.njk', {
+  return h.view('return-requirements/note.njk', {
     ...pageData
   })
 }
@@ -297,10 +297,10 @@ async function submitNote (request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user, request.yar)
+  const pageData = await SubmitNoteService.go(sessionId, request.payload, user, request.yar)
 
   if (pageData.error) {
-    return h.view('return-requirements/add-note.njk', pageData)
+    return h.view('return-requirements/note.njk', pageData)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)

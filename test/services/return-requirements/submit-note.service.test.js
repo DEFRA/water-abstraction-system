@@ -13,9 +13,9 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitAddNoteService = require('../../../app/services/return-requirements/submit-add-note.service.js')
+const SubmitNoteService = require('../../../app/services/return-requirements/submit-note.service.js')
 
-describe('Submit Add Note service', () => {
+describe('Submit Note service', () => {
   let payload
   let session
   let yarStub
@@ -57,7 +57,7 @@ describe('Submit Add Note service', () => {
         })
 
         it('saves the submitted value', async () => {
-          await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+          await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           const refreshedSession = await session.$query()
 
@@ -68,7 +68,7 @@ describe('Submit Add Note service', () => {
         })
 
         it('returns the journey to redirect the page', async () => {
-          const result = await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           expect(result).to.equal({
             journey: 'no-returns-required'
@@ -77,7 +77,7 @@ describe('Submit Add Note service', () => {
         })
 
         it("sets the notification message to 'Added' for a new note", async () => {
-          await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+          await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -102,7 +102,7 @@ describe('Submit Add Note service', () => {
         })
 
         it("sets the notification message to 'Updated' for an updated note", async () => {
-          await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+          await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -118,7 +118,7 @@ describe('Submit Add Note service', () => {
       })
 
       it('returns page data with an error', async () => {
-        const result = await SubmitAddNoteService.go(session.id, payload, user, yarStub)
+        const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
         expect(result).to.equal({
           id: session.id,
