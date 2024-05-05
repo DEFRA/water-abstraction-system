@@ -46,16 +46,6 @@ async function abstractionPeriod (request, h) {
   })
 }
 
-async function addNote (request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await AddNoteService.go(sessionId)
-
-  return h.view('return-requirements/add-note.njk', {
-    ...pageData
-  })
-}
-
 async function agreementsExceptions (request, h) {
   const { sessionId } = request.params
 
@@ -131,6 +121,16 @@ async function noReturnsRequired (request, h) {
   const pageData = await NoReturnsRequiredService.go(sessionId)
 
   return h.view('return-requirements/no-returns-required.njk', {
+    ...pageData
+  })
+}
+
+async function note (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await AddNoteService.go(sessionId)
+
+  return h.view('return-requirements/add-note.njk', {
     ...pageData
   })
 }
@@ -220,19 +220,6 @@ async function submitAbstractionPeriod (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle`)
 }
 
-async function submitAddNote (request, h) {
-  const { sessionId } = request.params
-  const { user } = request.auth.credentials
-
-  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user, request.yar)
-
-  if (pageData.error) {
-    return h.view('return-requirements/add-note.njk', pageData)
-  }
-
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
-}
-
 async function submitAgreementsExceptions (request, h) {
   const { sessionId } = request.params
 
@@ -301,6 +288,19 @@ async function submitNoReturnsRequired (request, h) {
 
   if (pageData.error) {
     return h.view('return-requirements/no-returns-required.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+}
+
+async function submitNote (request, h) {
+  const { sessionId } = request.params
+  const { user } = request.auth.credentials
+
+  const pageData = await SubmitAddNoteService.go(sessionId, request.payload, user, request.yar)
+
+  if (pageData.error) {
+    return h.view('return-requirements/add-note.njk', pageData)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
@@ -420,7 +420,6 @@ async function submitStartDate (request, h) {
 
 module.exports = {
   abstractionPeriod,
-  addNote,
   agreementsExceptions,
   approved,
   checkYourAnswers,
@@ -429,6 +428,7 @@ module.exports = {
   frequencyCollected,
   frequencyReported,
   noReturnsRequired,
+  note,
   points,
   purpose,
   reason,
@@ -437,13 +437,13 @@ module.exports = {
   siteDescription,
   startDate,
   submitAbstractionPeriod,
-  submitAddNote,
   submitAgreementsExceptions,
   submitCheckYourAnswers,
   submitExisting,
   submitFrequencyCollected,
   submitFrequencyReported,
   submitNoReturnsRequired,
+  submitNote,
   submitPoints,
   submitPurpose,
   submitReason,
