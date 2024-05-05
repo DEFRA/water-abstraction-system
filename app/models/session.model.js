@@ -9,6 +9,11 @@ const BaseModel = require('./base.model.js')
 
 /**
  * Used for managing temporary session data, for example, during set up journeys
+ *
+ * > IMPORTANT! Do use the following properties in `data:`; `id`, `createdAt` or `updatedAt`.
+ * >
+ * > This model includes functionality to elevate the properties of `data` onto the instance when fetched. But if `data`
+ * > contains these properties they will override the existing properties of the session instance.
  */
 class SessionModel extends BaseModel {
   static get tableName () {
