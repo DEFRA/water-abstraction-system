@@ -26,6 +26,7 @@ describe('Remove Bill Run Licence service', () => {
     const { id: regionId } = await RegionHelper.add({ displayName: 'Test Region' })
     const billRun = await BillRunHelper.add({
       billRunNumber: 12345,
+      createdAt: new Date('2024-05-03'),
       regionId,
       status: 'review',
       toFinancialYearEnding: 2023
