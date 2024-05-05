@@ -1,21 +1,22 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/add-note` page
- * @module SubmitAddNoteService
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/note` page
+ * @module SubmitNoteService
  */
 
-const AddNotePresenter = require('../../presenters/return-requirements/add-note.presenter.js')
-const AddNoteValidator = require('../../validators/return-requirements/add-note.validator.js')
+const NotePresenter = require('../../presenters/return-requirements/note.presenter.js')
+const NoteValidator = require('../../validators/return-requirements/note.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for `/return-requirements/{sessionId}/add-note` page
+ * Orchestrates validating the data for `/return-requirements/{sessionId}/note` page
  *
  * It first retrieves the session instance for the returns requirements journey in progress.
  *
  * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
- * If there was a validation error the controller will re-render the page so needs this information. If all is well the controller will redirect to the next page in the journey.
+ * If there was a validation error the controller will re-render the page so needs this information. If all is well the
+ * controller will redirect to the next page in the journey.
  *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
@@ -86,11 +87,11 @@ async function _save (session, payload, user) {
 function _submittedSessionData (session, payload) {
   session.data.note = payload.note ? payload.note : null
 
-  return AddNotePresenter.go(session)
+  return NotePresenter.go(session)
 }
 
 function _validate (payload) {
-  const validation = AddNoteValidator.go(payload)
+  const validation = NoteValidator.go(payload)
 
   if (!validation.error) {
     return null

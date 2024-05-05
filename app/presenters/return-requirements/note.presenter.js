@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/add-note` page
- * @module AddNotePresenter
+ * Formats data for the `/return-requirements/{sessionId}/note` page
+ * @module NotePresenter
  */
 
 function go (session) {

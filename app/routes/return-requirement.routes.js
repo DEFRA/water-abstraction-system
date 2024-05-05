@@ -31,32 +31,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/add-note',
-    handler: ReturnRequirementsController.addNote,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Add a note'
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/add-note',
-    handler: ReturnRequirementsController.submitAddNote,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Submit a note'
-    }
-  },
-  {
-    method: 'GET',
     path: '/return-requirements/{sessionId}/agreements-exceptions',
     handler: ReturnRequirementsController.agreementsExceptions,
     options: {
@@ -235,6 +209,32 @@ const routes = [
         }
       },
       description: 'Submit why are no returns required?'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/note',
+    handler: ReturnRequirementsController.note,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Add a note'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/note',
+    handler: ReturnRequirementsController.submitNote,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit a note'
     }
   },
   {
