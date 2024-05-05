@@ -49,8 +49,7 @@ function _transformSession (sessionData) {
       anotherStartDateDay: null,
       anotherStartDateMonth: null,
       anotherStartDateYear: null,
-      anotherStartDateSelected: false,
-      licenceStartDateSelected: false
+      selectedOption: null
     }
   }
 
@@ -58,8 +57,7 @@ function _transformSession (sessionData) {
     anotherStartDateDay: sessionData.startDateDay,
     anotherStartDateMonth: sessionData.startDateMonth,
     anotherStartDateYear: sessionData.startDateYear,
-    anotherStartDateSelected: selectedOption === 'anotherStartDate',
-    licenceStartDateSelected: selectedOption === 'licenceStartDate'
+    selectedOption
   }
 }
 

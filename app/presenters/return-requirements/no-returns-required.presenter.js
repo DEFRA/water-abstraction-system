@@ -7,6 +7,7 @@
 
 function go (session) {
   const data = {
+    selectedOption: session.data.reason || null,
     id: session.id,
     licenceRef: session.data.licence.licenceRef
   }
