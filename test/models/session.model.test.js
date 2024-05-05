@@ -121,5 +121,27 @@ describe('Session model', () => {
         expect(refreshedInstance.reason).to.equal('new-licence')
       })
     })
+
+    describe('when the session has an existing property that was deleted', () => {
+      beforeEach(async () => {
+        testRecord = await SessionHelper.add({ data: { reason: 'name-or-address-change' } })
+
+        recordToUpdate = await SessionModel.query().findById(testRecord.id)
+        delete recordToUpdate.reason
+      })
+
+      it("removed from the 'data' field when 'update()' is called", async () => {
+        const result = await recordToUpdate.$update()
+
+        // NOTE: We do not expect it to be used. But Objection.js patch() returns a count of records effected so we also
+        // return that as a result. As we are patching the instance this should only ever be 1
+        expect(result).to.equal(1)
+
+        const refreshedInstance = await SessionModel.query().findById(testRecord.id)
+
+        expect(refreshedInstance.data).to.equal({})
+        expect(refreshedInstance.reason).not.to.exist()
+      })
+    })
   })
 })
