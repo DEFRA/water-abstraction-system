@@ -18,7 +18,6 @@ const SessionModel = require('../../../app/models/session.model.js')
 
 const sessionData = {
   data: {
-    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     checkYourAnswersVisited: false,
     licence: {
       endDate: null,
