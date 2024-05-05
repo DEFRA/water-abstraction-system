@@ -39,6 +39,7 @@ async function _fetchLicence (id) {
   const result = await LicenceModel.query()
     .findById(id)
     .select([
+      'id',
       'include_in_presroc_billing',
       'include_in_sroc_billing',
       'licenceRef',
