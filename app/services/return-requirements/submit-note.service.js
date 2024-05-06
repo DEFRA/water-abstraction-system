@@ -38,7 +38,7 @@ async function go (sessionId, payload, user, yar) {
     }
 
     return {
-      journey: session.data.journey
+      journey: session.journey
     }
   }
 
@@ -74,18 +74,16 @@ function _notification (session, newNote) {
 }
 
 async function _save (session, payload, user) {
-  const currentData = session.data
-
-  currentData.note = {
+  session.note = {
     content: payload.note,
     userEmail: user.username
   }
 
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _submittedSessionData (session, payload) {
-  session.data.note = payload.note ? payload.note : null
+  session.note = payload.note ? payload.note : null
 
   return NotePresenter.go(session)
 }

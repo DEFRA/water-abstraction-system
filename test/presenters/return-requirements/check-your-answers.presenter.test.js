@@ -16,23 +16,21 @@ describe('Check Your Answers presenter', () => {
   beforeEach(() => {
     session = {
       id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-      data: {
-        licence: {
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
-          licenceRef: '01/123',
-          licenceHolder: 'Astro Boy'
+      licence: {
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
+        licenceRef: '01/123',
+        licenceHolder: 'Astro Boy'
 
-        },
-        journey: 'no-returns-required',
-        note: {
-          content: 'Note attached to requirement',
-          status: 'Added',
-          userEmail: 'carol.shaw@atari.com'
-        },
-        reason: 'returns-exception',
-        startDateOptions: 'licenceStartDate'
-      }
+      },
+      journey: 'no-returns-required',
+      note: {
+        content: 'Note attached to requirement',
+        status: 'Added',
+        userEmail: 'carol.shaw@atari.com'
+      },
+      reason: 'returns-exception',
+      startDateOptions: 'licenceStartDate'
     }
   })
 
@@ -63,7 +61,7 @@ describe('Check Your Answers presenter', () => {
 
     describe('when there is no note', () => {
       beforeEach(() => {
-        delete session.data.note
+        delete session.note
       })
 
       it('returns an empty string', () => {
@@ -77,11 +75,11 @@ describe('Check Your Answers presenter', () => {
   describe("the 'startDate' property", () => {
     describe("when the user selected the option 'anotherStartDate'", () => {
       beforeEach(() => {
-        session.data.startDateOptions = 'anotherStartDate'
+        session.startDateOptions = 'anotherStartDate'
 
-        session.data.startDateDay = '07'
-        session.data.startDateMonth = '03'
-        session.data.startDateYear = '2009'
+        session.startDateDay = '07'
+        session.startDateMonth = '03'
+        session.startDateYear = '2009'
       })
 
       it('returns the start day, month and year entered combined as a date', () => {
@@ -111,7 +109,7 @@ describe('Check Your Answers presenter', () => {
 
     describe('when there is no note', () => {
       beforeEach(() => {
-        delete session.data.note
+        delete session.note
       })
 
       it("returns 'No notes added'", () => {

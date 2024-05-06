@@ -79,7 +79,7 @@ describe('Check Your Answers service', () => {
       await CheckYourAnswersService.go(session.id, yarStub)
       const updatedSession = await SessionModel.query().findById(session.id)
 
-      expect(updatedSession.data.checkYourAnswersVisited).to.be.true()
+      expect(updatedSession.checkYourAnswersVisited).to.be.true()
     })
   })
 })

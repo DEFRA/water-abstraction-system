@@ -51,7 +51,7 @@ describe('Submit Start Date service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.startDateOptions).to.equal('licenceStartDate')
+        expect(refreshedSession.startDateOptions).to.equal('licenceStartDate')
       })
 
       it('returns the correct journey for the no-returns-required journey', async () => {
@@ -77,10 +77,10 @@ describe('Submit Start Date service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.startDateOptions).to.equal('anotherStartDate')
-        expect(refreshedSession.data.startDateDay).to.equal('26')
-        expect(refreshedSession.data.startDateMonth).to.equal('11')
-        expect(refreshedSession.data.startDateYear).to.equal('2023')
+        expect(refreshedSession.startDateOptions).to.equal('anotherStartDate')
+        expect(refreshedSession.startDateDay).to.equal('26')
+        expect(refreshedSession.startDateMonth).to.equal('11')
+        expect(refreshedSession.startDateYear).to.equal('2023')
       })
 
       it('returns the correct journey for the no returns required journey', async () => {

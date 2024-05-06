@@ -17,17 +17,15 @@ describe('Start Date presenter', () => {
     beforeEach(async () => {
       session = {
         id: 'd3fr4-f3ad-4cb6-a058-78abc4w4t3r',
-        data: {
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2023-11-126T00:00:00.000Z'
-          },
-          selectedOption: null
-        }
+        licence: {
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+          endDate: null,
+          licenceRef: '01/ABC',
+          licenceHolder: 'Turbo Kid',
+          startDate: '2023-11-126T00:00:00.000Z'
+        },
+        selectedOption: null
       }
     })
 
@@ -53,20 +51,18 @@ describe('Start Date presenter', () => {
     beforeEach(async () => {
       session = {
         id: 'd3fr4-f3ad-4cb6-a058-78abc4w4t3r',
-        data: {
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2023-11-126T00:00:00.000Z'
-          },
-          startDateDay: '26',
-          startDateMonth: '11',
-          startDateYear: '2023',
-          startDateOptions: 'anotherStartDate'
-        }
+        licence: {
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+          endDate: null,
+          licenceRef: '01/ABC',
+          licenceHolder: 'Turbo Kid',
+          startDate: '2023-11-126T00:00:00.000Z'
+        },
+        startDateDay: '26',
+        startDateMonth: '11',
+        startDateYear: '2023',
+        startDateOptions: 'anotherStartDate'
       }
     })
 

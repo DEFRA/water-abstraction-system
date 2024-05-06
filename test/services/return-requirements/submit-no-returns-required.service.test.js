@@ -52,7 +52,7 @@ describe('Submit No Returns Required service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
+        expect(refreshedSession.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
       })
 
       it('returns the journey to redirect the page', async () => {

@@ -61,7 +61,7 @@ describe('Submit Note service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.data.note).to.equal({
+          expect(refreshedSession.note).to.equal({
             content: 'A note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })

@@ -6,11 +6,11 @@
  */
 
 function go (session) {
-  const { id, data: { note } } = session
+  const { id, note } = session
 
   const data = {
     id,
-    licenceRef: session.data.licence.licenceRef,
+    licenceRef: session.licence.licenceRef,
     note: note ? note.content : ''
   }
 
