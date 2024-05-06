@@ -31,8 +31,8 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited,
-      journey: session.data.journey
+      checkYourAnswersVisited: session.checkYourAnswersVisited,
+      journey: session.journey
     }
   }
 
@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Why are no returns required?',
     selectedOption: null,
@@ -49,11 +49,9 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.reason = payload.reason
 
-  currentData.reason = payload.reason
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _validate (payload) {
