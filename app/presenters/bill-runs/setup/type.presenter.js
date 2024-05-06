@@ -15,7 +15,7 @@
 function go (session) {
   return {
     sessionId: session.id,
-    selectedType: session.data.type ? session.data.type : null
+    selectedType: session.type ? session.type : null
   }
 }
 

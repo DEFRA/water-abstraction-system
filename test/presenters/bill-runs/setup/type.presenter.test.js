@@ -34,7 +34,7 @@ describe('Bill Runs Setup Type presenter', () => {
 
     describe('where the user has previously selected a bill run type', () => {
       beforeEach(() => {
-        session.data.type = 'annual'
+        session.type = 'annual'
       })
 
       it('correctly presents the data', () => {

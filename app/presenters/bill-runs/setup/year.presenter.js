@@ -15,7 +15,7 @@
 function go (session) {
   return {
     sessionId: session.id,
-    selectedYear: session.data.year ? session.data.year : null
+    selectedYear: session.year ? session.year : null
   }
 }
 

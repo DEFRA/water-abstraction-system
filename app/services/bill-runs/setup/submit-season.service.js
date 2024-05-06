@@ -48,11 +48,9 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.season = payload.season
 
-  currentData.season = payload.season
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _validate (payload) {
