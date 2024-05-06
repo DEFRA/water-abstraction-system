@@ -41,7 +41,7 @@ describe('Bill Runs Setup Region presenter', () => {
 
     describe('where the user has previously selected a bill run region', () => {
       beforeEach(() => {
-        session.data.region = 'Stormlands'
+        session.region = 'Stormlands'
       })
 
       it('correctly presents the data', () => {

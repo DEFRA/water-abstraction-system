@@ -38,7 +38,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const { region, type, year } = session.data
+  const { region, type, year } = session
   const yearToUse = await DetermineFinancialYearEndService.go(region, type, year)
 
   const matchResults = await _fetchMatchingBillRun(session, yearToUse)
@@ -54,13 +54,13 @@ async function go (sessionId) {
 }
 
 async function _fetchMatchingBillRun (session, year) {
-  const { region, season, type } = session.data
+  const { region, season, type } = session
 
   return DetermineBlockingBillRunService.go(region, type, year, season)
 }
 
 function _pageData (session, matchResults) {
-  const { type } = session.data
+  const { type } = session
 
   // No matches so we can create the bill run
   if (matchResults.length === 0) {
