@@ -27,20 +27,16 @@ async function go (sessionId, yar) {
   return {
     activeNavBar: 'search',
     notification,
-    licenceRef: session.data.licence.licenceRef,
-    pageTitle: `Check the return requirements for ${session.data.licence.licenceHolder}`,
+    licenceRef: session.licence.licenceRef,
+    pageTitle: `Check the return requirements for ${session.licence.licenceHolder}`,
     ...formattedData
   }
 }
 
 async function _checkYourAnswersVisited (session) {
-  const currentData = session.data
+  session.checkYourAnswersVisited = true
 
-  currentData.checkYourAnswersVisited = true
-  await session.$query().patch({ data: currentData })
-
-  const updatedSession = await SessionModel.query().findById(session.id)
-  return updatedSession
+  return session.$update()
 }
 
 module.exports = {

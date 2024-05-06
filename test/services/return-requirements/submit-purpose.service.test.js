@@ -69,7 +69,7 @@ describe('Submit Purpose service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.purposes).to.equal(['Potable Water Supply - Direct'])
+        expect(refreshedSession.purposes).to.equal(['Potable Water Supply - Direct'])
       })
 
       it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {

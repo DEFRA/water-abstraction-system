@@ -34,7 +34,7 @@ describe('Bill Runs Setup Year presenter', () => {
 
     describe('where the user has previously selected a financial year', () => {
       beforeEach(() => {
-        session.data.year = 2022
+        session.year = 2022
       })
 
       it('correctly presents the data', () => {

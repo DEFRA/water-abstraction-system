@@ -23,7 +23,7 @@ async function go (sessionId) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     pageTitle: 'Why are no returns required?',
     ...formattedData
   }

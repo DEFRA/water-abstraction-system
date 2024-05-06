@@ -16,12 +16,10 @@ describe('Setup presenter', () => {
   beforeEach(() => {
     session = {
       id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-      data: {
-        licence: {
-          id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
-          licenceRef: '01/123',
-          licenceHolder: 'Astro Boy'
-        }
+      licence: {
+        id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
+        licenceRef: '01/123',
+        licenceHolder: 'Astro Boy'
       }
     }
   })
