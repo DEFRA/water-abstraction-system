@@ -9,21 +9,23 @@
  * Formats data for the `/return-requirements/{sessionId}/purpose` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
- * @param {Object} [purposesData] - The purposes for the licence
- * @param {Object} [payload] - The payload from the request
+ * @param {string} requirementIndex - The index of the requirement being added or changed
+ * @param {string[]} licencePurposes - The purposes for the licence
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, purposesData) {
-  const data = {
-    id: session.id,
-    licenceId: session.licence.id,
-    licenceRef: session.licence.licenceRef,
-    licencePurposes: purposesData,
-    selectedPurposes: session.purposes ? session.purposes.join(',') : ''
-  }
+function go (session, requirementIndex, licencePurposes) {
+  const { id: sessionId, licence, requirements } = session
+  const requirement = requirements[requirementIndex]
 
-  return data
+  return {
+    backLink: `/system/return-requirements/${sessionId}/setup`,
+    licenceId: licence.id,
+    licenceRef: licence.licenceRef,
+    licencePurposes,
+    selectedPurposes: requirement?.purposes ? requirement.purposes.join(',') : '',
+    sessionId
+  }
 }
 
 module.exports = {

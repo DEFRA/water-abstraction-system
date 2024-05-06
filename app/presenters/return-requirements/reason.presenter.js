@@ -2,17 +2,35 @@
 
 /**
  * Formats data for the `/return-requirements/{sessionId}/reason` page
- * @module SelectReasonPresenter
+ * @module ReasonPresenter
  */
 
+/**
+ * Formats data for the `/return-requirements/{sessionId}/reason` page
+ *
+ * @param {module:SessionModel} session - The returns requirements session instance
+ *
+ * @returns {Object} The data formatted for the view template
+ */
 function go (session) {
-  const data = {
-    id: session.id,
-    licenceRef: session.licence.licenceRef,
-    reason: session.reason ? session.reason : null
+  const { id: sessionId, licence, reason } = session
+
+  return {
+    backLink: _backLink(session),
+    licenceRef: licence.licenceRef,
+    reason: reason ?? null,
+    sessionId
+  }
+}
+
+function _backLink (session) {
+  const { checkYourAnswersVisited, id } = session
+
+  if (checkYourAnswersVisited) {
+    return `/system/return-requirements/${id}/check-your-answers`
   }
 
-  return data
+  return `/system/return-requirements/${id}/start-date`
 }
 
 module.exports = {

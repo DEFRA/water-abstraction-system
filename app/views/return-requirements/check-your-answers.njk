@@ -65,46 +65,46 @@
     <div class="govuk-!-margin-bottom-9">
       <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
       {{ govukSummaryList({
-          classes: 'govuk-!-margin-bottom-2',
-          rows: [
-            {
-              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-              key: {
-                text: "Start date"
-              },
-              value: {
-                text: startDate
-              },
-              actions: {
-                items: [
-                  {
-                    href: baseURL + "/start-date",
-                    text: "Change",
-                    visuallyHiddenText: "the start date for the return requirement"
-                  }
-                ]
-              }
+        classes: 'govuk-!-margin-bottom-2',
+        rows: [
+          {
+            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+            key: {
+              text: "Start date"
             },
-            {
-              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-              key: {
-                text: "Reason"
-              },
-              value: {
-                text: reasonText
-              },
-              actions: {
-                items: [
-                  {
-                    href: reasonLink,
-                    text: "Change",
-                    visuallyHiddenText: "the reason for the return requirement"
-                  }
-                ]
-              }
+            value: {
+              text: startDate
+            },
+            actions: {
+              items: [
+                {
+                  href: baseURL + "/start-date",
+                  text: "Change",
+                  visuallyHiddenText: "the start date for the return requirement"
+                }
+              ]
             }
-          ]
-        }) }}
+          },
+          {
+            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+            key: {
+              text: "Reason"
+            },
+            value: {
+              text: reasonText
+            },
+            actions: {
+              items: [
+                {
+                  href: reasonLink,
+                  text: "Change",
+                  visuallyHiddenText: "the reason for the return requirement"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
       <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
     </div>
 
@@ -146,16 +146,19 @@
         <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
         <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
       {% endif %}
+
       {{ govukButton({
         text: "Approve returns requirements",
-        classes: "govuk-!-margin-right-6"
-        }) }}
+        classes: "govuk-!-margin-right-6",
+        preventDoubleClick: true
+      }) }}
 
       {{ govukButton({
         text: "Cancel return requirements",
         classes: "govuk-button--secondary",
+        preventDoubleClick: true,
         href: "#"
-        }) }}
+      }) }}
     </div>
   </form>
 {% endblock %}

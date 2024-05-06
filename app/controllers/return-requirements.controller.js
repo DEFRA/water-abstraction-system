@@ -37,9 +37,9 @@ const SubmitSiteDescriptionService = require('../services/return-requirements/su
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
 async function abstractionPeriod (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await AbstractionPeriodService.go(sessionId)
+  const pageData = await AbstractionPeriodService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/abstraction-period.njk', {
     ...pageData
@@ -47,9 +47,9 @@ async function abstractionPeriod (request, h) {
 }
 
 async function agreementsExceptions (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await AgreementsExceptionsService.go(sessionId)
+  const pageData = await AgreementsExceptionsService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/agreements-exceptions.njk', {
     ...pageData
@@ -96,9 +96,9 @@ async function existing (request, h) {
 }
 
 async function frequencyCollected (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await FrequencyCollectedService.go(sessionId)
+  const pageData = await FrequencyCollectedService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/frequency-collected.njk', {
     ...pageData
@@ -106,9 +106,9 @@ async function frequencyCollected (request, h) {
 }
 
 async function frequencyReported (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await FrequencyReportedService.go(sessionId)
+  const pageData = await FrequencyReportedService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/frequency-reported.njk', {
     ...pageData
@@ -136,9 +136,9 @@ async function note (request, h) {
 }
 
 async function points (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await PointsService.go(sessionId)
+  const pageData = await PointsService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/points.njk', {
     ...pageData
@@ -146,9 +146,9 @@ async function points (request, h) {
 }
 
 async function purpose (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SelectPurposeService.go(sessionId)
+  const pageData = await SelectPurposeService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/purpose.njk', {
     ...pageData
@@ -166,9 +166,9 @@ async function reason (request, h) {
 }
 
 async function returnsCycle (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await ReturnsCycleService.go(sessionId)
+  const pageData = await ReturnsCycleService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/returns-cycle.njk', {
     ...pageData
@@ -186,9 +186,9 @@ async function setup (request, h) {
 }
 
 async function siteDescription (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SiteDescriptionService.go(sessionId)
+  const pageData = await SiteDescriptionService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/site-description.njk', {
     ...pageData
@@ -205,9 +205,9 @@ async function startDate (request, h) {
 }
 
 async function submitAbstractionPeriod (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitAbstractionPeriod.go(sessionId, request.payload)
+  const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/abstraction-period.njk', pageData)
@@ -217,20 +217,16 @@ async function submitAbstractionPeriod (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle`)
+  return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle/${requirementIndex}`)
 }
 
 async function submitAgreementsExceptions (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitAgreementsExceptions.go(sessionId, request.payload)
+  const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/agreements-exceptions.njk', pageData)
-  }
-
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
@@ -238,6 +234,7 @@ async function submitAgreementsExceptions (request, h) {
 
 async function submitCheckYourAnswers (request, h) {
   const { sessionId } = request.params
+
   const licenceId = await SubmitCheckYourAnswersService.go(sessionId)
 
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
@@ -250,9 +247,9 @@ async function submitExisting (request, h) {
 }
 
 async function submitFrequencyCollected (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitFrequencyCollectedService.go(sessionId, request.payload)
+  const pageData = await SubmitFrequencyCollectedService.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-collected.njk', pageData)
@@ -262,13 +259,13 @@ async function submitFrequencyCollected (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported`)
+  return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported/${requirementIndex}`)
 }
 
 async function submitFrequencyReported (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitFrequencyReportedService.go(sessionId, request.payload)
+  const pageData = await SubmitFrequencyReportedService.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-reported.njk', pageData)
@@ -278,7 +275,7 @@ async function submitFrequencyReported (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions`)
+  return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions/${requirementIndex}`)
 }
 
 async function submitNoReturnsRequired (request, h) {
@@ -307,9 +304,9 @@ async function submitNote (request, h) {
 }
 
 async function submitPoints (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitPointsService.go(sessionId, request.payload)
+  const pageData = await SubmitPointsService.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/points.njk', pageData)
@@ -319,13 +316,13 @@ async function submitPoints (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period`)
+  return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period/${requirementIndex}`)
 }
 
 async function submitPurpose (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitPurposeService.go(sessionId, request.payload)
+  const pageData = await SubmitPurposeService.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/purpose.njk', pageData)
@@ -335,7 +332,7 @@ async function submitPurpose (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/points`)
+  return h.redirect(`/system/return-requirements/${sessionId}/points/${requirementIndex}`)
 }
 
 async function submitReason (request, h) {
@@ -355,9 +352,9 @@ async function submitReason (request, h) {
 }
 
 async function submitReturnsCycle (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitReturnsCycleService.go(sessionId, request.payload)
+  const pageData = await SubmitReturnsCycleService.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/returns-cycle.njk', pageData)
@@ -367,7 +364,7 @@ async function submitReturnsCycle (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/site-description`)
+  return h.redirect(`/system/return-requirements/${sessionId}/site-description/${requirementIndex}`)
 }
 
 async function submitSetup (request, h) {
@@ -383,9 +380,9 @@ async function submitSetup (request, h) {
 }
 
 async function submitSiteDescription (request, h) {
-  const { sessionId } = request.params
+  const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SubmitSiteDescriptionService.go(sessionId, request.payload)
+  const pageData = await SubmitSiteDescriptionService.go(sessionId, requirementIndex, request.payload)
 
   if (pageData.error) {
     return h.view('return-requirements/site-description.njk', pageData)
@@ -395,14 +392,13 @@ async function submitSiteDescription (request, h) {
     return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/frequency-collected`)
+  return h.redirect(`/system/return-requirements/${sessionId}/frequency-collected/${requirementIndex}`)
 }
 
 async function submitStartDate (request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitStartDateService.go(sessionId, request.payload)
-  console.log('🚀 ~ submitStartDate ~ pageData:', pageData)
 
   if (pageData.error) {
     return h.view('return-requirements/start-date.njk', pageData)

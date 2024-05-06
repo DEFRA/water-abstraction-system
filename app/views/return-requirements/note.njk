@@ -53,7 +53,7 @@
           text: error.text
         } if error
       }) }}
-      {{ govukButton({ text: "Confirm" }) }}
+      {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
     </div>
   </form>
 {% endblock %}

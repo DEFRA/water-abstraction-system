@@ -57,7 +57,8 @@ function _data (licence, journey) {
       licenceHolder: licence.$licenceHolder(),
       startDate
     },
-    journey
+    journey,
+    requirements: [{}]
   }
 }
 

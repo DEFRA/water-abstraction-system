@@ -6,16 +6,10 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {% set backLink %}
-    /system/return-requirements/{{ id }}/{{ 'check-your-answers' if checkYourAnswersVisited else 'start-date' }}
-  {% endset %}
-
-  {{
-    govukBackLink({
+  {{ govukBackLink({
       text: 'Back',
       href: backLink
-    })
-  }}
+  }) }}
 {% endblock %}
 
 {% block content %}
@@ -102,7 +96,7 @@
         ]
       }) }}
 
-      {{ govukButton({ text: "Continue" }) }}
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}

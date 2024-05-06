@@ -9,19 +9,31 @@
  * Formats data for the `/return-requirements/{sessionId}/returns-cycle` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
- * @param {Object} [payload] - The payload from the request
+ * @param {string} requirementIndex - The index of the requirement being added or changed
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session) {
-  const data = {
-    id: session.id,
-    licenceId: session.licence.id,
-    licenceRef: session.licence.licenceRef,
-    returnsCycle: session.returnsCycle ? session.returnsCycle : null
+function go (session, requirementIndex) {
+  const { id: sessionId, licence, requirements } = session
+  const requirement = requirements[requirementIndex]
+
+  return {
+    backLink: _backLink(session, requirementIndex),
+    licenceId: licence.id,
+    licenceRef: licence.licenceRef,
+    returnsCycle: requirement?.returnsCycle ? requirement.returnsCycle : null,
+    sessionId
+  }
+}
+
+function _backLink (session, requirementIndex) {
+  const { checkYourAnswersVisited, id } = session
+
+  if (checkYourAnswersVisited) {
+    return `/system/return-requirements/${id}/check-your-answers`
   }
 
-  return data
+  return `/system/return-requirements/${id}/abstraction-period/${requirementIndex}`
 }
 
 module.exports = {

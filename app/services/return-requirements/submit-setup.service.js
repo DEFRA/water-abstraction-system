@@ -54,7 +54,7 @@ function _redirect (setup) {
   }
 
   if (setup === 'set-up-manually') {
-    endpoint = 'purpose'
+    endpoint = 'purpose/0'
   }
 
   return endpoint
