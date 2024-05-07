@@ -46,6 +46,7 @@ describe('View Licence service', () => {
         const result = await ViewLicenceService.go(testId)
 
         expect(result).to.equal({
+          activeNavBar: 'search',
           licenceId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
