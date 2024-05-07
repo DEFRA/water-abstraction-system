@@ -18,7 +18,7 @@ function go (session) {
   return {
     backLink: _backLink(session),
     licenceRef: licence.licenceRef,
-    selectedOption: reason || null,
+    reason: reason || null,
     sessionId
   }
 }
