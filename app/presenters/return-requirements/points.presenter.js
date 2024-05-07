@@ -10,7 +10,7 @@
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {Object[]} pointsData - The points for the licence
+ * @param {Object[]} pointsData - The points data from the licence
  *
  * @returns {Object} - The data formatted for the view template
  */
@@ -21,9 +21,9 @@ function go (session, requirementIndex, pointsData) {
   return {
     backLink: _backLink(session, requirementIndex),
     licenceId: licence.id,
-    licenceRef: licence.licenceRef,
     licencePoints: _licencePoints(pointsData),
-    selectedPoints: requirement?.points ? requirement.points.join(',') : '',
+    licenceRef: licence.licenceRef,
+    points: requirement?.points ? requirement.points.join(',') : '',
     sessionId
   }
 }

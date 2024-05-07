@@ -44,7 +44,7 @@
         {% set checkBoxItem = {
           value: point,
           text: point,
-          checked: point in selectedPoints
+          checked: point in points
         } %}
 
         {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
