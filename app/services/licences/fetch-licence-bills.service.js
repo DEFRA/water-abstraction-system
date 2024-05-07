@@ -5,7 +5,6 @@
  * @module FetchLicenceBillsService
  */
 
-const BillLicenceModel = require('../../models/bill-licence.model')
 const BillModel = require('../../models/bill.model')
 
 const DatabaseConfig = require('../../../config/database.config')
@@ -32,7 +31,7 @@ async function _fetch (licenceId, page) {
       'bills.financialYearEnding',
       'bills.netAmount',
       'bills.billingAccountId',
-      'bills.createdAt',
+      'bills.createdAt'
     ])
     .innerJoinRelated('billLicences')
     .where('billLicences.licence_id', licenceId)
