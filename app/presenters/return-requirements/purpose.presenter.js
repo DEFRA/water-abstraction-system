@@ -10,22 +10,38 @@
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  * @param {string} requirementIndex - The index of the requirement being added or changed
- * @param {string[]} licencePurposes - The purposes for the licence
+ * @param {module:PurposeModel[]} purposesData - The purposes for the licence
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, requirementIndex, licencePurposes) {
+function go (session, requirementIndex, purposesData) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
   return {
-    backLink: `/system/return-requirements/${sessionId}/setup`,
+    backLink: _backLink(session),
     licenceId: licence.id,
+    licencePurposes: _licencePurposes(purposesData),
     licenceRef: licence.licenceRef,
-    licencePurposes,
-    selectedPurposes: requirement?.purposes ? requirement.purposes.join(',') : '',
+    purposes: requirement?.purposes ? requirement.purposes.join(',') : '',
     sessionId
   }
+}
+
+function _backLink (session) {
+  const { checkYourAnswersVisited, id } = session
+
+  if (checkYourAnswersVisited) {
+    return `/system/return-requirements/${id}/check-your-answers`
+  }
+
+  return `/system/return-requirements/${id}/setup`
+}
+
+function _licencePurposes (purposesData) {
+  return purposesData.map((purpose) => {
+    return purpose.description
+  })
 }
 
 module.exports = {

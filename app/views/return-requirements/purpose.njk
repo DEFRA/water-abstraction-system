@@ -46,7 +46,7 @@
       {% set checkBoxItem = {
         value: purpose,
         text: purpose,
-        checked: purpose in selectedPurposes
+        checked: purpose in purposes
       } %}
 
       {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
