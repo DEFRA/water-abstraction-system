@@ -12,6 +12,7 @@ const ViewLicenceSummaryService = require('../services/licences/view-licence-sum
 
 
 const ViewLicencePage = 'licences/view.njk'
+
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 
@@ -61,7 +62,7 @@ async function viewReturns (request, h) {
 module.exports = {
   noReturnsRequired,
   returnsRequired,
+  viewBills,
   viewReturns,
-  viewSummary,
-  viewBills
+  viewSummary
 }

@@ -6,8 +6,8 @@
  */
 
 const FetchLicenceBillsService = require('./fetch-licence-bills.service')
-const ViewLicenceService = require('./view-licence.service')
 const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter')
+const ViewLicenceService = require('./view-licence.service')
 const PaginatorPresenter = require('../../presenters/paginator.presenter')
 
 /**
