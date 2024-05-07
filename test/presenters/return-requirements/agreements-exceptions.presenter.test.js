@@ -11,61 +11,80 @@ const { expect } = Code
 const AgreementsExceptionsPresenter = require('../../../app/presenters/return-requirements/agreements-exceptions.presenter.js')
 
 describe('Agreements Exceptions presenter', () => {
-  describe('when provided with a populated session', () => {
-    let session
+  const requirementIndex = 0
 
-    describe('and no agreements and exceptions in session data', () => {
+  let session
+
+  beforeEach(() => {
+    session = {
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        startDate: '2022-04-01T00:00:00.000Z'
+      },
+      requirements: [{}],
+      checkYourAnswersVisited: false
+    }
+  })
+
+  describe('when provided with a session', () => {
+    it('correctly presents the data', () => {
+      const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+
+      expect(result).to.equal({
+        agreementsExceptions: null,
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/frequency-reported/0',
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC',
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d'
+      })
+    })
+  })
+
+  describe("the 'agreementsExceptions' property", () => {
+    describe('when the user has previously submitted an agreement or exception', () => {
       beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          }
-        }
+        session.requirements[0].agreementsExceptions = 'gravity-fill'
       })
 
-      it('correctly presents the data', () => {
-        const result = AgreementsExceptionsPresenter.go(session)
+      it('returns a populated agreements-exceptions', () => {
+        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          agreementsExceptions: ''
-        })
+        expect(result.agreementsExceptions).to.equal('gravity-fill')
       })
     })
 
-    describe('and with agreements and exceptions in session data', () => {
+    describe('when the user has not previously submitted an agreement or exception', () => {
+      it('returns an empty agreements-exceptions', () => {
+        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+
+        expect(result.agreementsExceptions).to.be.null()
+      })
+    })
+  })
+
+  describe("the 'backLink' property", () => {
+    describe("when the user has come from 'check your answers'", () => {
       beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          },
-          agreementsExceptions: 'gravity-fill'
-        }
+        session.checkYourAnswersVisited = true
       })
 
-      it('correctly presents the data', () => {
-        const result = AgreementsExceptionsPresenter.go(session)
+      it("returns a link back to the 'check your answers' page", () => {
+        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          agreementsExceptions: 'gravity-fill'
-        })
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers')
+      })
+    })
+
+    describe('when the user has come from somewhere else', () => {
+      it("returns a link back to the 'frequency-reported' page", () => {
+        const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
+
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/frequency-reported/0')
       })
     })
   })

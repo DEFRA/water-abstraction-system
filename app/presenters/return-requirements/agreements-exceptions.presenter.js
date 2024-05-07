@@ -19,9 +19,9 @@ function go (session, requirementIndex) {
 
   return {
     backLink: _backLink(session, requirementIndex),
+    agreementsExceptions: requirement?.agreementsExceptions ? requirement.agreementsExceptions : null,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    agreementsExceptions: requirement?.agreementsExceptions ? requirement.agreementsExceptions : '',
     sessionId
   }
 }
