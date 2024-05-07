@@ -65,7 +65,7 @@ describe('Submit Points service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.points).to.equal([
+        expect(refreshedSession.points).to.equal([
           'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
         ])
       })

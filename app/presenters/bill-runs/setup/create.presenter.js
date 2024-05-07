@@ -54,7 +54,7 @@ function go (session, billRun) {
 }
 
 function _backLink (session) {
-  const { type, year } = session.data
+  const { type, year } = session
 
   if (!type.startsWith('two_part')) {
     return `/system/bill-runs/setup/${session.id}/region`

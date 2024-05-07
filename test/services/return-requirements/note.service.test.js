@@ -12,9 +12,9 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const AddNoteService = require('../../../app/services/return-requirements/add-note.service.js')
+const NoteService = require('../../../app/services/return-requirements/note.service.js')
 
-describe('Add Note service', () => {
+describe('Note service', () => {
   let session
 
   beforeEach(async () => {
@@ -36,13 +36,13 @@ describe('Add Note service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await AddNoteService.go(session.id)
+      const result = await NoteService.go(session.id)
 
       expect(result.id).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await AddNoteService.go(session.id)
+      const result = await NoteService.go(session.id)
 
       expect(result).to.equal({
         id: session.id,

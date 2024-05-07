@@ -18,15 +18,13 @@ describe('Frequency Reported presenter', () => {
       beforeEach(() => {
         session = {
           id: '61e07498-f309-4829-96a9-72084a54996d',
-          data: {
-            licence: {
-              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-              endDate: null,
-              licenceRef: '01/ABC',
-              licenceHolder: 'Turbo Kid',
-              startDate: '2022-04-01T00:00:00.000Z'
-            }
+          licence: {
+            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+            endDate: null,
+            licenceRef: '01/ABC',
+            licenceHolder: 'Turbo Kid',
+            startDate: '2022-04-01T00:00:00.000Z'
           }
         }
       })
@@ -47,17 +45,15 @@ describe('Frequency Reported presenter', () => {
       beforeEach(() => {
         session = {
           id: '61e07498-f309-4829-96a9-72084a54996d',
-          data: {
-            licence: {
-              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-              endDate: null,
-              licenceRef: '01/ABC',
-              licenceHolder: 'Turbo Kid',
-              startDate: '2022-04-01T00:00:00.000Z'
-            },
-            frequencyReported: 'weekly'
-          }
+          licence: {
+            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+            endDate: null,
+            licenceRef: '01/ABC',
+            licenceHolder: 'Turbo Kid',
+            startDate: '2022-04-01T00:00:00.000Z'
+          },
+          frequencyReported: 'weekly'
         }
       })
 

@@ -37,7 +37,7 @@ describe('Bill Runs Setup Submit Season service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.season).to.equal('summer')
+        expect(refreshedSession.season).to.equal('summer')
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {

@@ -16,10 +16,10 @@
 function go (session, pointsData) {
   const data = {
     id: session.id,
-    licenceId: session.data.licence.id,
-    licenceRef: session.data.licence.licenceRef,
+    licenceId: session.licence.id,
+    licenceRef: session.licence.licenceRef,
     licencePoints: _licencePoints(pointsData),
-    selectedPoints: session.data.points ? session.data.points.join(',') : ''
+    selectedPoints: session.points ? session.points.join(',') : ''
   }
 
   return data

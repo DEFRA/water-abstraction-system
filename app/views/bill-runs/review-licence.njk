@@ -85,17 +85,24 @@
     {{ govukButton({
       text: statusButtonText,
       classes: statusButtonClass,
-      preventDoubleClick: true,
       name: "licence-status",
-      value: statusButtonValue
+      value: statusButtonValue,
+      preventDoubleClick: true
     }) }}
 
     {{ govukButton({
       text: progressButtonText,
       classes: "govuk-button--secondary",
-      preventDoubleClick: true,
       name: "mark-progress",
-      value: progressButtonValue
+      value: progressButtonValue,
+      preventDoubleClick: true
+    }) }}
+
+    {{ govukButton({
+      text: "Remove from bill run",
+      classes: "govuk-button--secondary",
+      href: "../remove/" + licence.licenceId,
+      preventDoubleClick: true
     }) }}
     </div>
   </form>

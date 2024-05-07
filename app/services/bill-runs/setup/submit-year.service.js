@@ -37,7 +37,7 @@ async function go (sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return { setupComplete: ['2024', '2023'].includes(session.data.year) }
+    return { setupComplete: ['2024', '2023'].includes(session.year) }
   }
 
   const formattedData = YearPresenter.go(session)
@@ -49,11 +49,9 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.year = payload.year
 
-  currentData.year = payload.year
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _validate (payload, regions) {

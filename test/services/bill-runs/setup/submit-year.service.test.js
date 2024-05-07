@@ -38,7 +38,7 @@ describe('Bill Runs Setup Submit Year service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.data.year).to.equal('2023')
+          expect(refreshedSession.year).to.equal('2023')
           expect(result.setupComplete).to.be.true()
         })
       })
@@ -55,7 +55,7 @@ describe('Bill Runs Setup Submit Year service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.data.year).to.equal('2022')
+          expect(refreshedSession.year).to.equal('2022')
           expect(result.setupComplete).to.be.false()
         })
       })
