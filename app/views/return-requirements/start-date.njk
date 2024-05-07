@@ -85,7 +85,7 @@
             hint: {
               text:  licenceVersionStartDate
             },
-            checked: selectedOption == 'licenceStartDate'
+            checked: startDateOption == 'licenceStartDate'
           },
           {
             id: 'another-start-date',
@@ -94,7 +94,7 @@
             hint: {
               text: 'For example, 27 3 2007'
             },
-            checked: selectedOption == 'anotherStartDate',
+            checked: startDateOption == 'anotherStartDate',
             conditional: {
               html: dateInputHTML
             }
