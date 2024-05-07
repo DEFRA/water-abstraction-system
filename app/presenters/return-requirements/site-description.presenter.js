@@ -21,8 +21,8 @@ function go (session, requirementIndex) {
     backLink: _backLink(session, requirementIndex),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    siteDescription: requirement?.siteDescription ? requirement.siteDescription : null,
-    sessionId
+    sessionId,
+    siteDescription: requirement?.siteDescription ? requirement.siteDescription : null
   }
 }
 
