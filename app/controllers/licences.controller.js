@@ -6,8 +6,11 @@
  */
 
 const InitiateReturnRequirementSessionService = require('../services/return-requirements/initiate-return-requirement-session.service.js')
+const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service')
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service')
 const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service')
+
+const ViewLicencePage = 'licences/view.njk'
 
 async function noReturnsRequired (request, h) {
   const { id } = request.params
@@ -25,13 +28,22 @@ async function returnsRequired (request, h) {
   return h.redirect(`/system/return-requirements/${session.id}/start-date`)
 }
 
+async function viewBills (request, h) {
+  const { params: { id }, auth, query: { page = 1 } } = request
+
+  const data = await ViewLicenceBillsService.go(id, auth, page)
+
+  return h.view(ViewLicencePage, {
+    ...data
+  })
+}
+
 async function viewSummary (request, h) {
   const { params: { id }, auth } = request
 
   const data = await ViewLicenceSummaryService.go(id, auth)
 
-  return h.view('licences/view.njk', {
-    activeNavBar: 'search',
+  return h.view(ViewLicencePage, {
     ...data
   })
 }
@@ -41,8 +53,7 @@ async function viewReturns (request, h) {
 
   const data = await ViewLicenceReturnsService.go(id, auth, page)
 
-  return h.view('licences/view.njk', {
-    activeNavBar: 'search',
+  return h.view(ViewLicencePage, {
     ...data
   })
 }
@@ -50,6 +61,7 @@ async function viewReturns (request, h) {
 module.exports = {
   noReturnsRequired,
   returnsRequired,
+  viewBills,
   viewReturns,
   viewSummary
 }
