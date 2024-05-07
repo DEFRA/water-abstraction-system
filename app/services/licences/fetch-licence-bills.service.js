@@ -42,7 +42,10 @@ async function _fetch (licenceId, page) {
   return BillModel.query()
     .findByIds(billIds)
     .select('*')
-    // .where('bills.billing_account_id', billLicence.billId)
+    .withGraphFetched('billRun')
+    .modifyGraph('billRun', (builder) => {
+      builder.select(['batchType'])
+    })
     .orderBy([
       { column: 'created_at', order: 'desc' }
     ])

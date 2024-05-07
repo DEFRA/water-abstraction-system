@@ -184,7 +184,7 @@ describe('Licences controller', () => {
     })
     describe('when a request is valid and has no bills', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewLicenceBillsService, 'go').resolves({ activeTab: 'bills'})
+        Sinon.stub(ViewLicenceBillsService, 'go').resolves({ activeTab: 'bills' })
       })
 
       it('returns the page successfully', async () => {
@@ -198,63 +198,63 @@ describe('Licences controller', () => {
       })
     })
   })
-})
 
-describe('GET /licences/{id}/summary', () => {
-  beforeEach(async () => {
-    options = {
-      method: 'GET',
-      url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: [] }
-      }
-    }
-  })
-
-  describe('when a request is valid', () => {
+  describe('GET /licences/{id}/summary', () => {
     beforeEach(async () => {
-      Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
-    })
-
-    it('returns the page successfully', async () => {
-      const response = await server.inject(options)
-
-      expect(response.statusCode).to.equal(200)
-      expect(response.payload).to.contain('Summary')
-      expect(response.payload).to.contain('Effective from')
-      expect(response.payload).to.contain('End date')
-    })
-  })
-})
-
-describe('GET /licences/{id}/returns', () => {
-  beforeEach(async () => {
-    options = {
-      method: 'GET',
-      url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
-      auth: {
-        strategy: 'session',
-        credentials: { scope: ['billing'] }
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: [] }
+        }
       }
-    }
-  })
-
-  describe('when a request is valid and has returns', () => {
-    beforeEach(async () => {
-      Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
     })
 
-    it('returns the page successfully', async () => {
-      const response = await server.inject(options)
+    describe('when a request is valid', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
+      })
 
-      expect(response.statusCode).to.equal(200)
-      expect(response.payload).to.contain('Returns')
-      //  Check the table titles
-      expect(response.payload).to.contain('Return reference and dates')
-      expect(response.payload).to.contain('Purpose and description')
-      expect(response.payload).to.contain('Due date')
-      expect(response.payload).to.contain('Status')
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Summary')
+        expect(response.payload).to.contain('Effective from')
+        expect(response.payload).to.contain('End date')
+      })
+    })
+  })
+
+  describe('GET /licences/{id}/returns', () => {
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid and has returns', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Returns')
+        //  Check the table titles
+        expect(response.payload).to.contain('Return reference and dates')
+        expect(response.payload).to.contain('Purpose and description')
+        expect(response.payload).to.contain('Due date')
+        expect(response.payload).to.contain('Status')
+      })
     })
   })
 })

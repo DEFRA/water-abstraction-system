@@ -31,7 +31,7 @@ function _formatBillsToTableRow (bills) {
       billNumber: bill.invoiceNumber,
       dateCreated: formatLongDate(new Date(bill.createdAt)),
       account: bill.accountNumber,
-      runType: bill.batchType,
+      runType: bill.billRun.batchType,
       financialYear: bill.financialYearEnding,
       total: _formatCurrencyToGBP(bill.netAmount),
       accountId: bill.billingAccountId,

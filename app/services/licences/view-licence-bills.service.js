@@ -25,7 +25,7 @@ async function go (licenceId, auth) {
   return {
     ...commonData,
     ...pageData,
-    pagination: { total: 1 },
+    pagination: { total: 1 }
   }
 }
 

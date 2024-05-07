@@ -62,6 +62,6 @@ function _billsPresenter () {
 function _billsFetchService () {
   return {
     bills: [],
-    pagination: { total: 1 },
+    pagination: { total: 1 }
   }
 }
