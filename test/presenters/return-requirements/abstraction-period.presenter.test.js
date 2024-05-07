@@ -11,6 +11,8 @@ const { expect } = Code
 const AbstractionPeriodPresenter = require('../../../app/presenters/return-requirements/abstraction-period.presenter.js')
 
 describe('Abstraction Period presenter', () => {
+  const requirementIndex = 0
+
   let session
 
   beforeEach(() => {
@@ -23,46 +25,76 @@ describe('Abstraction Period presenter', () => {
         licenceRef: '01/ABC',
         licenceHolder: 'Turbo Kid',
         startDate: '2022-04-01T00:00:00.000Z'
-      }
+      },
+      requirements: [{}],
+      checkYourAnswersVisited: false
     }
   })
 
-  describe('when provided with a session where abstraction period is populated', () => {
-    beforeEach(() => {
-      session.abstractionPeriod = {
-        'start-abstraction-period-day': '07',
-        'start-abstraction-period-month': '12',
-        'end-abstraction-period-day': '22',
-        'end-abstraction-period-month': '07'
-      }
-    })
-
+  describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = AbstractionPeriodPresenter.go(session)
+      const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
       expect(result).to.equal({
-        abstractionPeriod: {
-          'start-abstraction-period-day': '07',
-          'start-abstraction-period-month': '12',
-          'end-abstraction-period-day': '22',
-          'end-abstraction-period-month': '07'
-        },
-        id: '61e07498-f309-4829-96a9-72084a54996d',
+        abstractionPeriod: null,
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/points/0',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC'
+        licenceRef: '01/ABC',
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })
   })
 
-  describe('when provided with a session where abstraction period is not populated', () => {
-    it('correctly presents the data', () => {
-      const result = AbstractionPeriodPresenter.go(session)
+  describe("the 'abstractionPeriod' property", () => {
+    describe('when the user has previously submitted an abstraction period', () => {
+      beforeEach(() => {
+        session.requirements[0].abstractionPeriod = {
+          'start-abstraction-period-day': '07',
+          'start-abstraction-period-month': '12',
+          'end-abstraction-period-day': '22',
+          'end-abstraction-period-month': '07'
+        }
+      })
 
-      expect(result).to.equal({
-        abstractionPeriod: null,
-        id: '61e07498-f309-4829-96a9-72084a54996d',
-        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC'
+      it('returns a populated abstraction period', () => {
+        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+
+        expect(result.abstractionPeriod).to.equal({
+          'start-abstraction-period-day': '07',
+          'start-abstraction-period-month': '12',
+          'end-abstraction-period-day': '22',
+          'end-abstraction-period-month': '07'
+        })
+      })
+    })
+
+    describe('when the user has not previously submitted an abstraction period', () => {
+      it('returns an empty abstraction period', () => {
+        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+
+        expect(result.abstractionPeriod).to.be.null()
+      })
+    })
+  })
+
+  describe("the 'backLink' property", () => {
+    describe("when the user has come from 'check your answers'", () => {
+      beforeEach(() => {
+        session.checkYourAnswersVisited = true
+      })
+
+      it("returns a link back to the 'check your answers' page", () => {
+        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers')
+      })
+    })
+
+    describe('when the user has come from somewhere else', () => {
+      it("returns a link back to the 'points' page", () => {
+        const result = AbstractionPeriodPresenter.go(session, requirementIndex)
+
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/points/0')
       })
     })
   })
