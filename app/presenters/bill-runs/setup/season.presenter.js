@@ -15,7 +15,7 @@
 function go (session) {
   return {
     sessionId: session.id,
-    selectedSeason: session.data.season ? session.data.season : null
+    selectedSeason: session.season ? session.season : null
   }
 }
 

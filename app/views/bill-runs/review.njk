@@ -5,6 +5,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
@@ -21,6 +22,14 @@
 {% endblock %}
 
 {% block content %}
+  {# Licence removed banner #}
+  {% if bannerMessage %}
+    {{ govukNotificationBanner({
+      titleText: 'Licence removed',
+      text: bannerMessage
+    }) }}
+  {% endif %}
+
   {# Main heading #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">

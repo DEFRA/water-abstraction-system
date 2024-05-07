@@ -58,7 +58,7 @@ describe('Bill Runs Setup Submit Region service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.data.region).to.equal('19a027c6-4aad-47d3-80e3-3917a4579a5b')
+          expect(refreshedSession.region).to.equal('19a027c6-4aad-47d3-80e3-3917a4579a5b')
           expect(result.setupComplete).to.be.true()
         })
       })
@@ -73,7 +73,7 @@ describe('Bill Runs Setup Submit Region service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.data.region).to.equal('19a027c6-4aad-47d3-80e3-3917a4579a5b')
+          expect(refreshedSession.region).to.equal('19a027c6-4aad-47d3-80e3-3917a4579a5b')
           expect(result.setupComplete).to.be.false()
         })
       })

@@ -27,15 +27,15 @@ const StartDateValidator = require('../../validators/return-requirements/start-d
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const { endDate, startDate } = session.data.licence
+  const { endDate, startDate } = session.licence
   const validationResult = _validate(payload, startDate, endDate)
 
   if (!validationResult) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited,
-      journey: session.data.journey
+      checkYourAnswersVisited: session.checkYourAnswersVisited,
+      journey: session.journey
     }
   }
 
@@ -43,34 +43,33 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
-    journey: session.data.journey,
+    journey: session.journey,
     pageTitle: 'Select the start date for the requirements for returns',
     ...submittedSessionData
   }
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
   const selectedOption = payload['start-date-options']
 
-  currentData.startDateOptions = selectedOption
+  session.startDateOptions = selectedOption
 
   if (selectedOption === 'anotherStartDate') {
-    currentData.startDateDay = payload['start-date-day']
-    currentData.startDateMonth = payload['start-date-month']
-    currentData.startDateYear = payload['start-date-year']
+    session.startDateDay = payload['start-date-day']
+    session.startDateMonth = payload['start-date-month']
+    session.startDateYear = payload['start-date-year']
   }
 
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _submittedSessionData (session, payload) {
-  session.data.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
-  session.data.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
-  session.data.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
-  session.data.startDateOptions = payload['start-date-options'] ? payload['start-date-options'] : null
+  session.startDateDay = payload['start-date-day'] ? payload['start-date-day'] : null
+  session.startDateMonth = payload['start-date-month'] ? payload['start-date-month'] : null
+  session.startDateYear = payload['start-date-year'] ? payload['start-date-year'] : null
+  session.startDateOptions = payload['start-date-options'] ? payload['start-date-options'] : null
 
   return StartDatePresenter.go(session, payload)
 }

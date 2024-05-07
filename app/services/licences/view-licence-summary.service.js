@@ -6,8 +6,8 @@
  */
 
 const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
-const FetchLicenceSummaryService = require('./fetch-license-summary.service')
-const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-license-summary.presenter')
+const FetchLicenceSummaryService = require('./fetch-licence-summary.service')
+const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter')
 const ViewLicenceService = require('./view-licence.service')
 
 /**

@@ -24,7 +24,9 @@ const sessionData = {
       licenceHolder: 'Turbo Kid',
       startDate: '2022-04-01T00:00:00.000Z'
     },
-    journey: 'no-returns-required'
+    journey: 'no-returns-required',
+    selectedOption: null
+
   }
 }
 
@@ -50,7 +52,7 @@ describe('Submit No Returns Required service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
+        expect(refreshedSession.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
       })
 
       it('returns the journey to redirect the page', async () => {
@@ -78,7 +80,8 @@ describe('Submit No Returns Required service', () => {
             activeNavBar: 'search',
             checkYourAnswersVisited: false,
             pageTitle: 'Why are no returns required?',
-            licenceRef: '01/ABC'
+            licenceRef: '01/ABC',
+            selectedOption: null
           }, { skip: ['id', 'error'] })
         })
 

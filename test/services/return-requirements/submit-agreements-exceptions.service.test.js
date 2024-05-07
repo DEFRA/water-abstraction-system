@@ -54,7 +54,7 @@ describe('Submit Agreements and Exceptions service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.agreementsExceptions).to.equal([
+        expect(refreshedSession.agreementsExceptions).to.equal([
           'gravity-fill',
           'two-part-tariff',
           '56-returns-exception'

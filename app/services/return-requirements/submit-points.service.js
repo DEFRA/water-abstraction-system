@@ -35,16 +35,16 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+      checkYourAnswersVisited: session.checkYourAnswersVisited
     }
   }
 
-  const pointsData = await FetchPointsService.go(session.data.licence.id)
+  const pointsData = await FetchPointsService.go(session.licence.id)
   const formattedData = PointsPresenter.go(session, pointsData)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select the points for the requirements for returns',
     ...formattedData
@@ -63,11 +63,9 @@ function _handleOneOptionSelected (payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.points = payload.points
 
-  currentData.points = payload.points
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _validate (payload) {

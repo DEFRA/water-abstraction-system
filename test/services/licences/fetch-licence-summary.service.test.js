@@ -27,7 +27,7 @@ const PermitLicenceHelper = require('../../support/helpers/permit-licence.helper
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Thing under test
-const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-license-summary.service')
+const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service')
 
 describe('Fetch licence summary service', () => {
   let licence
