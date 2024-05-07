@@ -8,6 +8,11 @@ const routes = [
     path: '/licences/{id}/bills',
     handler: LicencesController.viewBills,
     options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
       description: 'View a licence bills page'
     }
   },

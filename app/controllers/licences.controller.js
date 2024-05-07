@@ -10,6 +10,8 @@ const ViewLicenceBillsService = require('../services/licences/view-licence-bills
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service')
 const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service')
 
+
+const ViewLicencePage = 'licences/view.njk'
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 
@@ -31,7 +33,7 @@ async function viewBills (request, h) {
 
   const data = await ViewLicenceBillsService.go(id, auth, page)
 
-  return h.view('licences/view.njk', {
+  return h.view(ViewLicencePage, {
     ...data
   })
 }
@@ -41,7 +43,7 @@ async function viewSummary (request, h) {
 
   const data = await ViewLicenceSummaryService.go(id, auth)
 
-  return h.view('licences/view.njk', {
+  return h.view(ViewLicencePage, {
     ...data
   })
 }
@@ -51,7 +53,7 @@ async function viewReturns (request, h) {
 
   const data = await ViewLicenceReturnsService.go(id, auth, page)
 
-  return h.view('licences/view.njk', {
+  return h.view(ViewLicencePage, {
     ...data
   })
 }
