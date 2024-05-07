@@ -11,61 +11,80 @@ const { expect } = Code
 const ReturnsCyclePresenter = require('../../../app/presenters/return-requirements/returns-cycle.presenter.js')
 
 describe('Returns Cycle presenter', () => {
-  describe('when provided with a populated session', () => {
-    let session
+  const requirementIndex = 0
 
-    describe('and no returns cycle in session data', () => {
+  let session
+
+  beforeEach(() => {
+    session = {
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        startDate: '2022-04-01T00:00:00.000Z'
+      },
+      requirements: [{}],
+      checkYourAnswersVisited: false
+    }
+  })
+
+  describe('when provided with a session', () => {
+    it('correctly presents the data', () => {
+      const result = ReturnsCyclePresenter.go(session, requirementIndex)
+
+      expect(result).to.equal({
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0',
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC',
+        returnsCycle: null,
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d'
+      })
+    })
+  })
+
+  describe("the 'backLink' property", () => {
+    describe("when the user has come from 'check your answers'", () => {
       beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          }
-        }
+        session.checkYourAnswersVisited = true
       })
 
-      it('correctly presents the data', () => {
-        const result = ReturnsCyclePresenter.go(session)
+      it("returns a link back to the 'check your answers' page", () => {
+        const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          returnsCycle: null
-        })
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers')
       })
     })
 
-    describe('and with returns cycle in session data', () => {
+    describe('when the user has come from somewhere else', () => {
+      it("returns a link back to the 'abstraction-period' page", () => {
+        const result = ReturnsCyclePresenter.go(session, requirementIndex)
+
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0')
+      })
+    })
+  })
+
+  describe("the 'returnsCycle' property", () => {
+    describe('when the user has previously submitted the returns cycle', () => {
       beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          },
-          returnsCycle: 'summer'
-        }
+        session.requirements[0].returnsCycle = 'summer'
       })
 
-      it('correctly presents the data', () => {
-        const result = ReturnsCyclePresenter.go(session)
+      it('returns a populated frequency collected', () => {
+        const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          returnsCycle: 'summer'
-        })
+        expect(result.returnsCycle).to.equal('summer')
+      })
+    })
+
+    describe('when the user has not previously submitted the returns cycle', () => {
+      it('returns an empty frequency collected', () => {
+        const result = ReturnsCyclePresenter.go(session, requirementIndex)
+
+        expect(result.returnsCycle).to.be.null()
       })
     })
   })
