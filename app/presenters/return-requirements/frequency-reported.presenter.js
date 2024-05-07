@@ -19,9 +19,9 @@ function go (session, requirementIndex) {
 
   return {
     backLink: _backLink(session, requirementIndex),
+    frequencyReported: requirement?.frequencyReported ? requirement.frequencyReported : null,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    frequencyReported: requirement?.frequencyReported ? requirement.frequencyReported : null,
     sessionId
   }
 }

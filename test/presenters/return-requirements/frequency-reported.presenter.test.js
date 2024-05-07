@@ -11,61 +11,80 @@ const { expect } = Code
 const FrequencyReportedPresenter = require('../../../app/presenters/return-requirements/frequency-reported.presenter.js')
 
 describe('Frequency Reported presenter', () => {
-  describe('when provided with a populated session', () => {
-    let session
+  const requirementIndex = 0
 
-    describe('and no frequency reported in session data', () => {
+  let session
+
+  beforeEach(() => {
+    session = {
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        startDate: '2022-04-01T00:00:00.000Z'
+      },
+      requirements: [{}],
+      checkYourAnswersVisited: false
+    }
+  })
+
+  describe('when provided with a session', () => {
+    it('correctly presents the data', () => {
+      const result = FrequencyReportedPresenter.go(session, requirementIndex)
+
+      expect(result).to.equal({
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/frequency-collected/0',
+        frequencyReported: null,
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC',
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d'
+      })
+    })
+  })
+
+  describe("the 'backLink' property", () => {
+    describe("when the user has come from 'check your answers'", () => {
       beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          }
-        }
+        session.checkYourAnswersVisited = true
       })
 
-      it('correctly presents the data', () => {
-        const result = FrequencyReportedPresenter.go(session)
+      it("returns a link back to the 'check your answers' page", () => {
+        const result = FrequencyReportedPresenter.go(session, requirementIndex)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          frequencyReported: null
-        })
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers')
       })
     })
 
-    describe('and with frequency reported in session data', () => {
+    describe('when the user has come from somewhere else', () => {
+      it("returns a link back to the 'frequency-collected' page", () => {
+        const result = FrequencyReportedPresenter.go(session, requirementIndex)
+
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/frequency-collected/0')
+      })
+    })
+  })
+
+  describe("the 'frequencyReported' property", () => {
+    describe('when the user has previously submitted the frequency reported', () => {
       beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          },
-          frequencyReported: 'weekly'
-        }
+        session.requirements[0].frequencyReported = 'weekly'
       })
 
-      it('correctly presents the data', () => {
-        const result = FrequencyReportedPresenter.go(session)
+      it('returns a populated frequency reported', () => {
+        const result = FrequencyReportedPresenter.go(session, requirementIndex)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          frequencyReported: 'weekly'
-        })
+        expect(result.frequencyReported).to.equal('weekly')
+      })
+    })
+
+    describe('when the user has not previously submitted the frequency reported', () => {
+      it('returns an empty frequency reported', () => {
+        const result = FrequencyReportedPresenter.go(session, requirementIndex)
+
+        expect(result.frequencyReported).to.be.null()
       })
     })
   })
