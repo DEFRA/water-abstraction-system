@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set rootLink = "/system/return-requirements/" + id %}
 
@@ -14,10 +15,81 @@
   }}
 {% endblock %}
 
+{% set reasonText %}
+  {% if reason == 'abstraction-below-100-cubic-metres-per-day' %}
+    Abstraction amount below 100 cubic metres per day
+  {% elif reason == 'returns-exception' %}
+    Returns exception
+  {% elif reason == 'transfer-licence' %}
+    Transfer licence
+  {% elif reason == 'change-to-special-agreement' %}
+    Change to special agreement
+  {% elif reason == 'name-or-address-change' %}
+    Licence holder name or address change
+  {% elif reason == 'transfer-and-now-chargeable' %}
+    Licence transferred and now chargeable
+  {% elif reason == 'extension-of-licence-validity' %}
+    Limited extension of licence validity (LEV)
+  {% elif reason == 'major-change' %}
+    Major change
+  {% elif reason == 'minor-change' %}
+    Minor change
+  {% elif reason == 'new-licence-in-part-succession-or-licence-apportionment' %}
+    New licence in part succession or licence apportionment
+  {% elif reason == 'new-licence' %}
+    New licence
+  {% elif reason == 'new-special-agreement' %}
+    New special agreement
+  {% elif reason == 'succession-or-transfer-of-licence' %}
+    Succession or transfer of licence
+  {% elif reason == 'succession-to-remainder-licence-or-licence-apportionment' %}
+    Succession to remainder licence or licence apportionment
+  {% endif %}
+{% endset %}
+
 {# Main heading #}
 {% block content %}
-<div class="govuk-body">
-  <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-  <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-</div>
+  <div class="govuk-body">
+    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="govuk-body govuk-!-margin-bottom-7">
+    <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--m govuk-section-break--visible ">
+    {{ govukSummaryList({
+      classes: 'govuk-!-margin-bottom-2',
+      rows: [
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: "Reason"
+          },
+          value: {
+            text: reasonText
+          }
+        },
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: "Start date"
+          },
+          value: {
+            text: startDate
+          }
+        }
+      ]
+    }) }}
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+  </div>
+
+  <div class="govuk-body">
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24"> {{ returnRequirements }}</p>
+
+    <p class="govuk-!-margin-bottom-7"></p>
+    {{ govukButton({
+        text: "Confirm cancel",
+        href: "#"
+      })
+    }}
+  </div>
 {% endblock %}
