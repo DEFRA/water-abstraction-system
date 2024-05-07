@@ -3,48 +3,6 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% set baseURL = "/system/return-requirements/" + sessionId %}
-
-{% set reasonText %}
-  {% if reason == 'abstraction-below-100-cubic-metres-per-day' %}
-    Abstraction amount below 100 cubic metres per day
-  {% elif reason == 'returns-exception' %}
-    Returns exception
-  {% elif reason == 'transfer-licence' %}
-    Transfer licence
-  {% elif reason == 'change-to-special-agreement' %}
-    Change to special agreement
-  {% elif reason == 'name-or-address-change' %}
-    Licence holder name or address change
-  {% elif reason == 'transfer-and-now-chargeable' %}
-    Licence transferred and now chargeable
-  {% elif reason == 'extension-of-licence-validity' %}
-    Limited extension of licence validity (LEV)
-  {% elif reason == 'major-change' %}
-    Major change
-  {% elif reason == 'minor-change' %}
-    Minor change
-  {% elif reason == 'new-licence-in-part-succession-or-licence-apportionment' %}
-    New licence in part succession or licence apportionment
-  {% elif reason == 'new-licence' %}
-    New licence
-  {% elif reason == 'new-special-agreement' %}
-    New special agreement
-  {% elif reason == 'succession-or-transfer-of-licence' %}
-    Succession or transfer of licence
-  {% elif reason == 'succession-to-remainder-licence-or-licence-apportionment' %}
-    Succession to remainder licence or licence apportionment
-  {% endif %}
-{% endset %}
-
-{% set reasonLink %}
-  {% if journey == 'no-returns-required' %}
-    {{ baseURL }}/no-returns-required
-  {% elif journey == 'returns-required' %}
-    {{ baseURL }}/reason
-  {% endif %}
-{% endset %}
-
 {% block content %}
   {% if notification %}
     {{ govukNotificationBanner({
@@ -78,7 +36,7 @@
             actions: {
               items: [
                 {
-                  href: baseURL + "/start-date",
+                  href: "/system/return-requirements/" + sessionId + "/start-date",
                   text: "Change",
                   visuallyHiddenText: "the start date for the return requirement"
                 }
@@ -91,7 +49,7 @@
               text: "Reason"
             },
             value: {
-              text: reasonText
+              text: reason
             },
             actions: {
               items: [

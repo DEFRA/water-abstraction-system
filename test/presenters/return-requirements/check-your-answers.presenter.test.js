@@ -15,104 +15,149 @@ describe('Check Your Answers presenter', () => {
 
   beforeEach(() => {
     session = {
-      id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+      id: '61e07498-f309-4829-96a9-72084a54996d',
       licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-        id: 'ea53bfc6-740d-46c5-9558-fc8cabfc6c1f',
-        licenceRef: '01/123',
-        licenceHolder: 'Astro Boy'
-
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        startDate: '2022-04-01T00:00:00.000Z'
       },
+      requirements: [{}],
+      checkYourAnswersVisited: false,
       journey: 'no-returns-required',
-      note: {
-        content: 'Note attached to requirement',
-        status: 'Added',
-        userEmail: 'carol.shaw@atari.com'
-      },
-      reason: 'returns-exception',
-      startDateOptions: 'licenceStartDate'
+      startDateOptions: 'licenceStartDate',
+      reason: 'returns-exception'
     }
   })
 
-  describe('when the no-returns-required journey was selected', () => {
-    it('correctly presents the data with notes', () => {
+  describe('when provided with a session', () => {
+    it('correctly presents the data', () => {
       const result = CheckYourAnswersPresenter.go(session)
 
       expect(result).to.equal({
-        id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         journey: 'no-returns-required',
-        licenceRef: '01/123',
-        note: 'Note attached to requirement',
-        reason: 'returns-exception',
+        licenceRef: '01/ABC',
+        note: null,
+        pageTitle: 'Check the return requirements for Turbo Kid',
+        reason: 'Returns exception',
+        reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/no-returns-required',
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023',
-        userEmail: 'carol.shaw@atari.com'
+        userEmail: 'No notes added'
       })
     })
   })
 
   describe("the 'note' property", () => {
-    describe('when there is a note', () => {
-      it('returns the contents of the note', () => {
+    describe('when the user has added a note', () => {
+      beforeEach(() => {
+        session.note = {
+          content: 'Note attached to requirement',
+          status: 'Added',
+          userEmail: 'carol.shaw@atari.com'
+        }
+      })
+
+      it('returns a populated note', () => {
         const result = CheckYourAnswersPresenter.go(session)
 
         expect(result.note).to.equal('Note attached to requirement')
       })
     })
 
-    describe('when there is no note', () => {
-      beforeEach(() => {
-        delete session.note
-      })
-
-      it('returns an empty string', () => {
+    describe('when the user has not added a note', () => {
+      it('returns an empty note', () => {
         const result = CheckYourAnswersPresenter.go(session)
 
-        expect(result.note).to.equal('')
+        expect(result.note).to.be.null()
+      })
+    })
+  })
+
+  describe("the 'pageTitle' property", () => {
+    it('returns the page title combined with the licence holder name', () => {
+      const result = CheckYourAnswersPresenter.go(session)
+
+      expect(result.pageTitle).to.equal('Check the return requirements for Turbo Kid')
+    })
+  })
+
+  describe("the 'reason' property", () => {
+    it('returns the display version for the reason', () => {
+      const result = CheckYourAnswersPresenter.go(session)
+
+      expect(result.reason).to.equal('Returns exception')
+    })
+  })
+
+  describe("the 'reasonLink' property", () => {
+    describe('when the journey is for returns required', () => {
+      beforeEach(() => {
+        session.journey = 'returns-required'
+      })
+
+      it("returns a link to the 'reason' page", () => {
+        const result = CheckYourAnswersPresenter.go(session)
+
+        expect(result.reasonLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
+      })
+    })
+
+    describe('when the journey is for no returns required', () => {
+      it("returns a link to the 'no-returns-required' page", () => {
+        const result = CheckYourAnswersPresenter.go(session)
+
+        expect(result.reasonLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/no-returns-required')
       })
     })
   })
 
   describe("the 'startDate' property", () => {
-    describe("when the user selected the option 'anotherStartDate'", () => {
-      beforeEach(() => {
-        session.startDateOptions = 'anotherStartDate'
-
-        session.startDateDay = '07'
-        session.startDateMonth = '03'
-        session.startDateYear = '2009'
-      })
-
-      it('returns the start day, month and year entered combined as a date', () => {
-        const result = CheckYourAnswersPresenter.go(session)
-
-        expect(result.startDate).to.equal('7 March 2009')
-      })
-    })
-
-    describe("when the user selected the option 'licenceStartDate'", () => {
-      it("returns the licence's current version start date", () => {
+    describe('when the user has previously selected the licence start date as the start date', () => {
+      it('returns the licence version start date formatted as a long date', () => {
         const result = CheckYourAnswersPresenter.go(session)
 
         expect(result.startDate).to.equal('1 January 2023')
       })
     })
+
+    describe('when the user has previously selected another date as the start date', () => {
+      beforeEach(() => {
+        session.startDateDay = '26'
+        session.startDateMonth = '11'
+        session.startDateYear = '2023'
+        session.startDateOptions = 'anotherStartDate'
+      })
+
+      it('returns the start date parts formatted as a long date', () => {
+        const result = CheckYourAnswersPresenter.go(session)
+
+        expect(result.startDate).to.equal('26 November 2023')
+      })
+    })
   })
 
   describe("the 'userEmail' property", () => {
-    describe('when there is a note', () => {
-      it('returns the user email on the note', () => {
+    describe('when the user has added a note', () => {
+      beforeEach(() => {
+        session.note = {
+          content: 'Note attached to requirement',
+          status: 'Added',
+          userEmail: 'carol.shaw@atari.com'
+        }
+      })
+
+      it("returns a the user's email address", () => {
         const result = CheckYourAnswersPresenter.go(session)
 
         expect(result.userEmail).to.equal('carol.shaw@atari.com')
       })
     })
 
-    describe('when there is no note', () => {
-      beforeEach(() => {
-        delete session.note
-      })
-
-      it("returns 'No notes added'", () => {
+    describe('when the user has not added a note', () => {
+      it("returns the message 'no notes added'", () => {
         const result = CheckYourAnswersPresenter.go(session)
 
         expect(result.userEmail).to.equal('No notes added')
