@@ -4,14 +4,12 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + '/reason'
+      href: backLink
     })
   }}
 {% endblock %}
@@ -26,7 +24,7 @@
           href: "#setup-error"
         }
       ]
-      }) }}
+    }) }}
   {% endif %}
 
   <div class="govuk-body">
