@@ -10,7 +10,6 @@ const ViewLicenceBillsService = require('../services/licences/view-licence-bills
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service')
 const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service')
 
-
 const ViewLicencePage = 'licences/view.njk'
 
 async function noReturnsRequired (request, h) {
