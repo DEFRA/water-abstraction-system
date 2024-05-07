@@ -20,26 +20,28 @@ const DatabaseConfig = require('../../../config/database.config')
 async function go (licenceId, page) {
   const { results, total } = await _fetch(licenceId, page)
 
-  return { bills: JSON.parse(JSON.stringify(results)), pagination: { total } }
+  return { bills: results, pagination: { total } }
 }
 
 async function _fetch (licenceId, page) {
-  const billLicences = await BillLicenceModel.query()
-    .select('*')
-    .where('billLicences.licence_id', licenceId)
-    .page(page - 1, DatabaseConfig.defaultPageSize)
-
-  const billIds = JSON.parse(JSON.stringify(billLicences)).results.map(b => b.billId)
-
   return BillModel.query()
-    .findByIds(billIds)
-    .select('*')
+    .select([
+      'bills.id',
+      'bills.invoiceNumber',
+      'bills.accountNumber',
+      'bills.financialYearEnding',
+      'bills.netAmount',
+      'bills.billingAccountId',
+      'bills.createdAt',
+    ])
+    .innerJoinRelated('billLicences')
+    .where('billLicences.licence_id', licenceId)
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
       builder.select(['batchType'])
     })
     .orderBy([
-      { column: 'created_at', order: 'desc' }
+      { column: 'createdAt', order: 'desc' }
     ])
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
