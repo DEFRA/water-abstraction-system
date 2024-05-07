@@ -25,7 +25,7 @@ function _formatBillsToTableRow (bills) {
       billNumber: bill.invoiceNumber,
       dateCreated: formatLongDate(new Date(bill.createdAt)),
       account: bill.accountNumber,
-      runType: bill.billRun?.batchType,
+      runType: bill.billRun.batchType,
       financialYear: bill.financialYearEnding,
       total: formatMoney(bill.netAmount),
       accountId: bill.billingAccountId,
