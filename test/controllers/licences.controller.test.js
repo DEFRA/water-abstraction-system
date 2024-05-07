@@ -175,87 +175,94 @@ describe('Licences controller', () => {
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Bills')
         //  Check the table titles
+        expect(response.payload).to.contain('Bill number')
+        expect(response.payload).to.contain('Date created')
+        expect(response.payload).to.contain('Billing account')
+        expect(response.payload).to.contain('Bill run type')
+        expect(response.payload).to.contain('Bill total')
+      })
+    })
+    describe('when a request is valid and has no bills', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceBillsService, 'go').resolves({ activeTab: 'bills'})
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Bills')
+        //  Check the table titles
         expect(response.payload).to.contain('Bills')
         expect(response.payload).to.contain('No bills sent for this licence.')
       })
     })
   })
+})
 
-  describe('GET /licences/{id}/summary', () => {
-    beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: [] }
-        }
-      }
-    })
-
-    describe('when a request is valid', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
-      })
-
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Summary')
-        expect(response.payload).to.contain('Effective from')
-        expect(response.payload).to.contain('End date')
-      })
-    })
-
-    function _viewLicenceSummary () {
-      return {
-        id: '7861814c-ca19-43f2-be11-3c612f0d744b',
-        licenceRef: '01/130/R01',
-        region: 'Southern',
-        startDate: '1 November 2022',
-        endDate: '1 November 2032',
-        activeTab: 'summary'
+describe('GET /licences/{id}/summary', () => {
+  beforeEach(async () => {
+    options = {
+      method: 'GET',
+      url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/summary',
+      auth: {
+        strategy: 'session',
+        credentials: { scope: [] }
       }
     }
   })
 
-  describe('GET /licences/{id}/returns', () => {
+  describe('when a request is valid', () => {
     beforeEach(async () => {
-      options = {
-        method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
-        auth: {
-          strategy: 'session',
-          credentials: { scope: ['billing'] }
-        }
-      }
+      Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
     })
 
-    describe('when a request is valid and has returns', () => {
-      beforeEach(async () => {
-        Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
-      })
+    it('returns the page successfully', async () => {
+      const response = await server.inject(options)
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      expect(response.statusCode).to.equal(200)
+      expect(response.payload).to.contain('Summary')
+      expect(response.payload).to.contain('Effective from')
+      expect(response.payload).to.contain('End date')
+    })
+  })
+})
 
-        expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns')
-        //  Check the table titles
-        expect(response.payload).to.contain('Return reference and dates')
-        expect(response.payload).to.contain('Purpose and description')
-        expect(response.payload).to.contain('Due date')
-        expect(response.payload).to.contain('Status')
-      })
+describe('GET /licences/{id}/returns', () => {
+  beforeEach(async () => {
+    options = {
+      method: 'GET',
+      url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/returns',
+      auth: {
+        strategy: 'session',
+        credentials: { scope: ['billing'] }
+      }
+    }
+  })
+
+  describe('when a request is valid and has returns', () => {
+    beforeEach(async () => {
+      Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
+    })
+
+    it('returns the page successfully', async () => {
+      const response = await server.inject(options)
+
+      expect(response.statusCode).to.equal(200)
+      expect(response.payload).to.contain('Returns')
+      //  Check the table titles
+      expect(response.payload).to.contain('Return reference and dates')
+      expect(response.payload).to.contain('Purpose and description')
+      expect(response.payload).to.contain('Due date')
+      expect(response.payload).to.contain('Status')
     })
   })
 })
 
 function _viewLicenceBills () {
   return {
-    activeTab: 'bills'
-    // bills: []
+    activeTab: 'bills',
+    bills: []
   }
 }
 
@@ -263,5 +270,16 @@ function _viewLicenceReturns () {
   return {
     activeTab: 'returns',
     returns: [{}]
+  }
+}
+
+function _viewLicenceSummary () {
+  return {
+    id: '7861814c-ca19-43f2-be11-3c612f0d744b',
+    licenceRef: '01/130/R01',
+    region: 'Southern',
+    startDate: '1 November 2022',
+    endDate: '1 November 2032',
+    activeTab: 'summary'
   }
 }

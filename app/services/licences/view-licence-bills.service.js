@@ -5,6 +5,7 @@
  * @module ViewLicenceBillsService
  */
 
+const FetchLicenceBillsService = require('./fetch-licence-bills.service')
 const ViewLicenceService = require('./view-licence.service')
 const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter')
 
@@ -18,11 +19,13 @@ const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licenc
 async function go (licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
-  const pageData = ViewLicenceBillsPresenter.go()
+  const billsData = await FetchLicenceBillsService.go(licenceId, 1)
+  const pageData = ViewLicenceBillsPresenter.go(billsData.bills)
 
   return {
     ...commonData,
-    ...pageData
+    ...pageData,
+    pagination: { total: 1 },
   }
 }
 
