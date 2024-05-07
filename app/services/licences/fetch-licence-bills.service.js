@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
+ * Fetches all return logs for a licence which is needed for the view '/licences/{id}/bills` page
  * @module FetchLicenceBillsService
  */
 
@@ -14,7 +14,7 @@ const DatabaseConfig = require('../../../config/database.config')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<Object>} the data needed to populate the view licence page's returns tab
+ * @returns {Promise<Object>} the data needed to populate the view licence page's bills tab
  */
 async function go (licenceId, page) {
   const { results, total } = await _fetch(licenceId, page)
