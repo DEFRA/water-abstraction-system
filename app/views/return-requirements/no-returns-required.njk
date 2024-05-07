@@ -6,10 +6,6 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {% set backLink %}
-    /system/return-requirements/{{ id }}/{{ 'check-your-answers' if checkYourAnswersVisited else 'start-date' }}
-  {% endset %}
-
   {{
     govukBackLink({
       text: 'Back',
@@ -27,8 +23,8 @@
           text: error.text,
           href: "#no-returns-required-error"
         }
-        ]
-      }) }}
+      ]
+    }) }}
   {% endif %}
 
   <div class="govuk-body">
