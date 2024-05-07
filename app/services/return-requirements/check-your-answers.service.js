@@ -19,21 +19,20 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const notification = yar.flash('notification')[0]
+  await _markCheckYourAnswersVisited(session)
+
   const formattedData = CheckYourAnswersPresenter.go(session)
 
-  await _checkYourAnswersVisited(session)
+  const notification = yar.flash('notification')[0]
 
   return {
     activeNavBar: 'search',
     notification,
-    licenceRef: session.licence.licenceRef,
-    pageTitle: `Check the return requirements for ${session.licence.licenceHolder}`,
     ...formattedData
   }
 }
 
-async function _checkYourAnswersVisited (session) {
+async function _markCheckYourAnswersVisited (session) {
   session.checkYourAnswersVisited = true
 
   return session.$update()
