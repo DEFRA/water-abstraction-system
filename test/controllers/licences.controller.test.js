@@ -159,7 +159,7 @@ describe('Licences controller', () => {
         url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/bills',
         auth: {
           strategy: 'session',
-          credentials: { scope: [] }
+          credentials: { scope: ['billing'] }
         }
       }
     })
