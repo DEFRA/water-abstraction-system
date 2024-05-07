@@ -26,9 +26,9 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  await _validateLicence(session.data.licence.id)
+  await _validateLicence(session.licence.id)
 
-  return session.data.licence.id
+  return session.licence.id
 }
 
 async function _validateLicence (licenceId) {

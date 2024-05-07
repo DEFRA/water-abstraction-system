@@ -61,11 +61,9 @@ function _redirect (setup) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.setup = payload.setup
 
-  currentData.setup = payload.setup
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _validate (payload) {

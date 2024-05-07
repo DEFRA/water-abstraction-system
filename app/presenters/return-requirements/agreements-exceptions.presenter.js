@@ -16,9 +16,9 @@
 function go (session) {
   const data = {
     id: session.id,
-    licenceId: session.data.licence.id,
-    licenceRef: session.data.licence.licenceRef,
-    agreementsExceptions: session.data.agreementsExceptions ? session.data.agreementsExceptions : ''
+    licenceId: session.licence.id,
+    licenceRef: session.licence.licenceRef,
+    agreementsExceptions: session.agreementsExceptions ? session.agreementsExceptions : ''
   }
 
   return data

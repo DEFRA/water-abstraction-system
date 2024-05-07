@@ -35,16 +35,16 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+      checkYourAnswersVisited: session.checkYourAnswersVisited
     }
   }
 
-  const purposesData = await FetchPurposesService.go(session.data.licence.id)
+  const purposesData = await FetchPurposesService.go(session.licence.id)
   const formattedData = PurposePresenter.go(session, purposesData)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select the purpose for the requirements for returns',
     ...formattedData
@@ -63,11 +63,9 @@ function _handleOneOptionSelected (payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.purposes = payload.purposes
 
-  currentData.purposes = payload.purposes
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _validate (payload) {

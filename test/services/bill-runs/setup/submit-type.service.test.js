@@ -37,7 +37,7 @@ describe('Bill Runs Setup Submit Type service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.type).to.equal('annual')
+        expect(refreshedSession.type).to.equal('annual')
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {

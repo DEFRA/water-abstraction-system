@@ -50,7 +50,7 @@ describe('Submit Frequency Reported service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.frequencyReported).to.equal('weekly')
+        expect(refreshedSession.frequencyReported).to.equal('weekly')
       })
 
       it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
