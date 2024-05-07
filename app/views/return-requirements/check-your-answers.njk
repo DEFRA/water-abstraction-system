@@ -3,7 +3,7 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% set baseURL = "/system/return-requirements/" + id %}
+{% set baseURL = "/system/return-requirements/" + sessionId %}
 
 {% set reasonText %}
   {% if reason == 'abstraction-below-100-cubic-metres-per-day' %}
