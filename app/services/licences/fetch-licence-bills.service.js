@@ -5,7 +5,6 @@
  * @module FetchLicenceBillsService
  */
 
-const LicenceModel = require('../../models/licence.model')
 const BillLicenceModel = require('../../models/bill-licence.model')
 const BillModel = require('../../models/bill.model')
 
@@ -25,16 +24,9 @@ async function go (licenceId, page) {
 }
 
 async function _fetch (licenceId, page) {
-  const licence = await LicenceModel.query()
-    .findById(licenceId)
-    .select([
-      'id',
-      'licenceRef'
-    ])
-
   const billLicences = await BillLicenceModel.query()
     .select('*')
-    .where('billLicences.licence_ref', licence.licenceRef)
+    .where('billLicences.licence_id', licenceId)
     .page(page - 1, DatabaseConfig.defaultPageSize)
 
   const billIds = JSON.parse(JSON.stringify(billLicences)).results.map(b => b.billId)

@@ -1,3 +1,5 @@
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
 <table class="govuk-table">
   <h2 class="govuk-heading-l">Bills</h2>
   {% if bills %}
@@ -45,4 +47,9 @@
     <p>No bills sent for this licence.</p>
   {% endif %}
 </table>
+
+{% if bills and pagination.numberOfPages > 1 %}
+  {{ govukPagination(pagination.component) }}
+{% endif %}
+
 

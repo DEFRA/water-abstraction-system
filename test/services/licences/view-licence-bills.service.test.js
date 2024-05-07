@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchLicenceBillsService = require('../../../app/services/licences/fetch-licence-bills.service')
+const PaginatorPresenter = require('../../../app/presenters/paginator.presenter')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
 const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter')
 
@@ -17,11 +18,14 @@ const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view
 const ViewLicenceBillsService = require('../../../app/services/licences/view-licence-bills.service')
 
 describe('View Licence service bills', () => {
-  const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
   const auth = {}
+  const page = 1
+  const pagination = { page }
+  const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   beforeEach(() => {
     Sinon.stub(FetchLicenceBillsService, 'go').returns(_billsFetchService())
+    Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
     Sinon.stub(ViewLicenceBillsPresenter, 'go').returns(_billsPresenter())
     Sinon.stub(ViewLicenceService, 'go').resolves(_licence())
   })
@@ -39,9 +43,7 @@ describe('View Licence service bills', () => {
           activeTab: 'bills',
           bills: [],
           licenceName: 'fake licence',
-          pagination: {
-            total: 1
-          }
+          pagination: { page: 1 }
         })
       })
     })

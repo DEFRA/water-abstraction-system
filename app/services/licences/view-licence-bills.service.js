@@ -8,6 +8,7 @@
 const FetchLicenceBillsService = require('./fetch-licence-bills.service')
 const ViewLicenceService = require('./view-licence.service')
 const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter')
+const PaginatorPresenter = require('../../presenters/paginator.presenter')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
@@ -16,16 +17,18 @@ const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licenc
  *
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
-async function go (licenceId, auth) {
+async function go (licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
-  const billsData = await FetchLicenceBillsService.go(licenceId, 1)
+  const billsData = await FetchLicenceBillsService.go(licenceId, page)
   const pageData = ViewLicenceBillsPresenter.go(billsData.bills)
+
+  const pagination = PaginatorPresenter.go(100, Number(page), `/system/licences/${licenceId}/bills`)
 
   return {
     ...commonData,
     ...pageData,
-    pagination: { total: 1 }
+    pagination
   }
 }
 
