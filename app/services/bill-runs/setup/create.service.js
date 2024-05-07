@@ -25,7 +25,7 @@ const StartBillRunProcessService = require('../start-bill-run-process.service.js
  */
 async function go (user, existsResults) {
   const { matchResults, session, yearToUse } = existsResults
-  const { region: regionId, type, summer } = session.data
+  const { region: regionId, type, summer } = session
 
   const existingBillRun = matchResults[0]
 

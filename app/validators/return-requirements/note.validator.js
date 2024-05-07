@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/return-requirements/{sessionId}/add-note` page
- * @module AddNoteValidator
+ * Validates data submitted for the `/return-requirements/{sessionId}/note` page
+ * @module NoteValidator
  */
 
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `/return-requirements/{sessionId}/add-note` page
+ * Validates data submitted for the `/return-requirements/{sessionId}/note` page
  *
  * @param {Object} payload - The payload from the request to be validated
  *

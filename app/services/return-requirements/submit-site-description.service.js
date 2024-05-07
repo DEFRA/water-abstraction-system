@@ -32,7 +32,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+      checkYourAnswersVisited: session.checkYourAnswersVisited
     }
   }
 
@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Enter a site description for the requirements for returns',
     ...submittedSessionData
@@ -48,11 +48,9 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.siteDescription = payload.siteDescription
 
-  currentData.siteDescription = payload.siteDescription
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 /**
@@ -60,7 +58,7 @@ async function _save (session, payload) {
  * the user, payload will be an empty object.
  */
 function _submittedSessionData (session, payload) {
-  session.data.siteDescription = payload.siteDescription ? payload.siteDescription : null
+  session.siteDescription = payload.siteDescription ? payload.siteDescription : null
 
   return SiteDescriptionPresenter.go(session)
 }

@@ -33,11 +33,9 @@ async function go (sessionId, yar, showNotification) {
 }
 
 async function _save (session) {
-  const currentData = session.data
+  delete session.note
 
-  delete currentData.note
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 module.exports = {

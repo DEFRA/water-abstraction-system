@@ -18,7 +18,7 @@ describe('Bill Runs Setup Create presenter', () => {
     beforeEach(() => {
       session = {
         id: '98ad3a1f-8e4f-490a-be05-0aece6755466',
-        data: { type: 'annual' }
+        type: 'annual'
       }
 
       matchingBillRun = {
@@ -55,7 +55,7 @@ describe('Bill Runs Setup Create presenter', () => {
     describe("the 'backLink' property", () => {
       describe("when the selected bill run type is not 'two_part_tariff'", () => {
         beforeEach(() => {
-          session.data.type = 'supplementary'
+          session.type = 'supplementary'
         })
 
         it('returns a link to the region page', () => {
@@ -67,12 +67,12 @@ describe('Bill Runs Setup Create presenter', () => {
 
       describe("when the selected bill run type is 'two_part_tariff'", () => {
         beforeEach(() => {
-          session.data.type = 'two_part_tariff'
+          session.type = 'two_part_tariff'
         })
 
         describe('and the selected financial year is in the SROC period', () => {
           beforeEach(() => {
-            session.data.year = '2023'
+            session.year = '2023'
           })
 
           it('returns a link to the financial year page', () => {
@@ -84,7 +84,7 @@ describe('Bill Runs Setup Create presenter', () => {
 
         describe('and the selected financial year is in the PRESROC period', () => {
           beforeEach(() => {
-            session.data.year = '2022'
+            session.year = '2022'
           })
 
           it('returns a link to the season page', () => {

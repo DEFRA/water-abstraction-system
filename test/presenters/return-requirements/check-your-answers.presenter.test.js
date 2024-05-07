@@ -62,7 +62,7 @@ describe('Check Your Answers presenter', () => {
 
     describe('when there is no note', () => {
       beforeEach(() => {
-        delete session.data.note
+        delete session.note
       })
 
       it('returns null', () => {
@@ -76,11 +76,11 @@ describe('Check Your Answers presenter', () => {
   describe("the 'startDate' property", () => {
     describe("when the user selected the option 'anotherStartDate'", () => {
       beforeEach(() => {
-        session.data.startDateOptions = 'anotherStartDate'
+        session.startDateOptions = 'anotherStartDate'
 
-        session.data.startDateDay = '07'
-        session.data.startDateMonth = '03'
-        session.data.startDateYear = '2009'
+        session.startDateDay = '07'
+        session.startDateMonth = '03'
+        session.startDateYear = '2009'
       })
 
       it('returns the start day, month and year entered combined as a date', () => {
@@ -110,7 +110,7 @@ describe('Check Your Answers presenter', () => {
 
     describe('when there is no note', () => {
       beforeEach(() => {
-        delete session.data.note
+        delete session.note
       })
 
       it("returns 'No notes added'", () => {

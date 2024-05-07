@@ -50,7 +50,8 @@ describe('No Returns Required service', () => {
         activeNavBar: 'search',
         checkYourAnswersVisited: false,
         pageTitle: 'Why are no returns required?',
-        licenceRef: '01/ABC'
+        licenceRef: '01/ABC',
+        selectedOption: null
       }, { skip: ['id'] })
     })
   })

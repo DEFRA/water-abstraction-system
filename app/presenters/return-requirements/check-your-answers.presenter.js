@@ -21,16 +21,16 @@ function go (session) {
   return data
 }
 
-function _startDate (sessionData) {
-  const selectedOption = sessionData.startDateOptions
+function _startDate (session) {
+  const selectedOption = session.startDateOptions
   let date
 
   if (selectedOption === 'licenceStartDate') {
-    date = new Date(sessionData.licence.currentVersionStartDate)
+    date = new Date(session.licence.currentVersionStartDate)
   } else {
-    const day = sessionData.startDateDay
-    const month = sessionData.startDateMonth
-    const year = sessionData.startDateYear
+    const day = session.startDateDay
+    const month = session.startDateMonth
+    const year = session.startDateYear
 
     date = new Date(`${year}-${month}-${day}`)
   }

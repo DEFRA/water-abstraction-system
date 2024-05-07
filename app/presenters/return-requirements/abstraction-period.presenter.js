@@ -14,10 +14,10 @@
  */
 function go (session) {
   const data = {
-    abstractionPeriod: session.data.abstractionPeriod ? session.data.abstractionPeriod : null,
+    abstractionPeriod: session.abstractionPeriod ? session.abstractionPeriod : null,
     id: session.id,
-    licenceId: session.data.licence.id,
-    licenceRef: session.data.licence.licenceRef
+    licenceId: session.licence.id,
+    licenceRef: session.licence.licenceRef
   }
 
   return data
