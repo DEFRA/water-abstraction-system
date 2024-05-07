@@ -33,7 +33,8 @@ function go (licence, auth) {
     pageTitle: `Licence ${licenceRef}`,
     registeredTo,
     roles: _authRoles(auth),
-    warning: _generateWarningMessage(ends)
+    warning: _generateWarningMessage(ends),
+    activeNavBar: 'search'
   }
 }
 

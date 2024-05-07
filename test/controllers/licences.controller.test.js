@@ -13,6 +13,7 @@ const Boom = require('@hapi/boom')
 
 // Things we need to stub
 const InitiateReturnRequirementSessionService = require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
+const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service')
 
@@ -151,6 +152,35 @@ describe('Licences controller', () => {
     })
   })
 
+  describe('GET /licences/{id}/bills', () => {
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/bills',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: [] }
+        }
+      }
+    })
+
+    describe('when a request is valid and has bills', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceBillsService, 'go').resolves(_viewLicenceBills())
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Bills')
+        //  Check the table titles
+        expect(response.payload).to.contain('Bills')
+        expect(response.payload).to.contain('No bills sent for this licence.')
+      })
+    })
+  })
+
   describe('GET /licences/{id}/summary', () => {
     beforeEach(async () => {
       options = {
@@ -221,6 +251,13 @@ describe('Licences controller', () => {
     })
   })
 })
+
+function _viewLicenceBills () {
+  return {
+    activeTab: 'bills'
+    // bills: []
+  }
+}
 
 function _viewLicenceReturns () {
   return {

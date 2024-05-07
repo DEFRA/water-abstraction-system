@@ -5,6 +5,14 @@ const LicencesController = require('../controllers/licences.controller.js')
 const routes = [
   {
     method: 'GET',
+    path: '/licences/{id}/bills',
+    handler: LicencesController.viewBills,
+    options: {
+      description: 'View a licence bills page'
+    }
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/summary',
     handler: LicencesController.viewSummary,
     options: {
