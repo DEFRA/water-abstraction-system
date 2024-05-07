@@ -58,7 +58,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('abstraction-period'))
+        const response = await server.inject(_options('abstraction-period', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Enter the abstraction period for the requirements for returns')
@@ -93,7 +93,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('agreements-exceptions'))
+        const response = await server.inject(_options('agreements-exceptions', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select agreements and exceptions for the return requirement')
@@ -165,7 +165,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('frequency-collected'))
+        const response = await server.inject(_options('frequency-collected', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select how often readings or volumes are collected')
@@ -182,7 +182,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('frequency-reported'))
+        const response = await server.inject(_options('frequency-reported', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select how often readings or volumes are reported')
@@ -215,7 +215,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('points'))
+        const response = await server.inject(_options('points', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the points for the requirements for returns')
@@ -231,7 +231,7 @@ describe('Return requirements controller', () => {
     })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('purpose'))
+        const response = await server.inject(_options('purpose', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the purpose for the requirement for returns')
@@ -263,7 +263,7 @@ describe('Return requirements controller', () => {
     })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('returns-cycle'))
+        const response = await server.inject(_options('returns-cycle', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the returns cycle for the return requirement')
@@ -296,7 +296,7 @@ describe('Return requirements controller', () => {
     })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('site-description'))
+        const response = await server.inject(_options('site-description', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Enter a site description for the requirements for returns')
@@ -321,10 +321,16 @@ describe('Return requirements controller', () => {
   })
 })
 
-function _options (path) {
+function _options (path, index = -1) {
+  let url = `/return-requirements/${sessionId}/${path}`
+
+  if (index > -1) {
+    url = `${url}/${index}`
+  }
+
   return {
     method: 'GET',
-    url: `/return-requirements/${sessionId}/${path}`,
+    url,
     auth: {
       strategy: 'session',
       credentials: { scope: ['billing'] }
