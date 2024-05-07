@@ -18,7 +18,7 @@ function go (session) {
   return {
     backLink: `/system/return-requirements/${sessionId}/check-your-answers`,
     licenceRef: licence.licenceRef,
-    note: note ? note.content : '',
+    note: note ? note.content : null,
     sessionId
   }
 }
