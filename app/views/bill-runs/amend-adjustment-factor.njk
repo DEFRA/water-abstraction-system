@@ -1,0 +1,39 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{ govukBackLink({
+      text: 'Go back to licence',
+      href: '/system/bill-runs/' + billRun.id + '/review/' + licenceId + '/charge-reference-details/' + chargeReference.id
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row govuk-!-margin-bottom-9">
+    <div class="govuk-grid-column-full">
+      <span class="govuk-caption-l">High loss, non-tidal, greater than 50 up to and including 85 ML/yr</span>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Set the adjustment factors</h1>
+
+      {% set insertText %}
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          <span class="govuk-!-font-weight-bold">Financial year</span>
+          2022 to 2023
+        </p>
+
+        <p class="govuk-body">
+          <span class="govuk-!-font-weight-bold">Charge period</span>
+          1 April 2022 to 31 March 2023
+        </p>
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Other adjustments apply:</p>
+      {% endset %}
+
+      {{ govukInsetText({
+        html: insertText
+      }) }}
+
+    </dv>
+  </div>
+{% endblock %}

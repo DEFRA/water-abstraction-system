@@ -24,6 +24,13 @@ const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tarif
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
+async function amendAdjustmentFactor (request, h) {
+  return h.view('bill-runs/amend-adjustment-factor.njk', {
+    pageTitle: 'Set the adjustment factors',
+    activeNavBar: 'bill-runs'
+  })
+}
+
 async function amendBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
@@ -207,6 +214,7 @@ async function view (request, h) {
 }
 
 module.exports = {
+  amendAdjustmentFactor,
   amendBillableReturns,
   cancel,
   create,

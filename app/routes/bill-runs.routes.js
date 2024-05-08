@@ -151,6 +151,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
+    handler: BillRunsController.amendAdjustmentFactor,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Review a charge reference from a two-part tariff licence'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
     handler: BillRunsController.matchDetails,
     options: {
