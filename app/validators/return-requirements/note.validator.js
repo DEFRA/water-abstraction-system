@@ -21,7 +21,7 @@ function go (data) {
   const schema = Joi.object({
     note: Joi.string()
       .required()
-      .max(500)
+      .max(501)
       .messages({
         'any.required': errorMessage,
         'any.only': errorMessage,
