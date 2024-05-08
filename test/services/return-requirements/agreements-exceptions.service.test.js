@@ -15,6 +15,8 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const AgreementsExceptionsService = require('../../../app/services/return-requirements/agreements-exceptions.service.js')
 
 describe('Agreements Exceptions service', () => {
+  const requirementIndex = 0
+
   let session
 
   beforeEach(async () => {
@@ -29,29 +31,31 @@ describe('Agreements Exceptions service', () => {
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
-        }
+        },
+        requirements: [{}],
+        checkYourAnswersVisited: false
       }
     })
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await AgreementsExceptionsService.go(session.id)
+      const result = await AgreementsExceptionsService.go(session.id, requirementIndex)
 
-      expect(result.id).to.equal(session.id)
+      expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await AgreementsExceptionsService.go(session.id)
+      const result = await AgreementsExceptionsService.go(session.id, requirementIndex)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Select agreements and exceptions for the requirements for returns',
-        id: '465c6792-dd84-4163-a808-cbb834a779be',
+        agreementsExceptions: null,
+        backLink: `/system/return-requirements/${session.id}/frequency-reported/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licenceRef: '01/ABC',
-        agreementsExceptions: ''
-      }, { skip: ['id'] })
+        licenceRef: '01/ABC'
+      }, { skip: ['sessionId'] })
     })
   })
 })
