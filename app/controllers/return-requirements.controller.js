@@ -412,7 +412,6 @@ async function submitStartDate (request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitStartDateService.go(sessionId, request.payload)
-  console.log('🚀 ~ submitStartDate ~ pageData:', pageData)
 
   if (pageData.error) {
     return h.view('return-requirements/start-date.njk', pageData)
