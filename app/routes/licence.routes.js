@@ -18,6 +18,14 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licences/{id}/contact-details',
+    handler: LicencesController.viewContacts,
+    options: {
+      description: 'View a licence contacts page'
+    }
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/summary',
     handler: LicencesController.viewSummary,
     options: {
