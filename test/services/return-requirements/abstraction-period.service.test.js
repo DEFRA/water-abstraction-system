@@ -15,6 +15,8 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const AbstractionPeriodService = require('../../../app/services/return-requirements/abstraction-period.service.js')
 
 describe('Abstraction Period service', () => {
+  const requirementIndex = 0
+
   let session
 
   beforeEach(async () => {
@@ -29,29 +31,31 @@ describe('Abstraction Period service', () => {
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
-        }
+        },
+        requirements: [{}],
+        checkYourAnswersVisited: false
       }
     })
   })
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await AbstractionPeriodService.go(session.id)
+      const result = await AbstractionPeriodService.go(session.id, requirementIndex)
 
-      expect(result.id).to.equal(session.id)
+      expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await AbstractionPeriodService.go(session.id)
+      const result = await AbstractionPeriodService.go(session.id, requirementIndex)
 
       expect(result).to.equal({
-        abstractionPeriod: null,
         activeNavBar: 'search',
         pageTitle: 'Enter the abstraction period for the requirements for returns',
-        id: '465c6792-dd84-4163-a808-cbb834a779be',
+        abstractionPeriod: null,
+        backLink: `/system/return-requirements/${session.id}/points/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC'
-      }, { skip: ['id'] })
+      }, { skip: ['sessionId'] })
     })
   })
 })
