@@ -15,6 +15,8 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const SubmitAbstractionPeriodService = require('../../../app/services/return-requirements/submit-abstraction-period.service.js')
 
 describe('Submit Abstraction Period service', () => {
+  const requirementIndex = 0
+
   let payload
   let session
 
@@ -23,7 +25,6 @@ describe('Submit Abstraction Period service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -32,7 +33,8 @@ describe('Submit Abstraction Period service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required'
+        requirements: [{}],
+        checkYourAnswersVisited: false
       }
     })
   })
@@ -49,11 +51,11 @@ describe('Submit Abstraction Period service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAbstractionPeriodService.go(session.id, payload)
+        await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.abstractionPeriod).to.equal({
+        expect(refreshedSession.requirements[0].abstractionPeriod).to.equal({
           'end-abstraction-period-day': '02',
           'start-abstraction-period-day': '01',
           'end-abstraction-period-month': '7',
@@ -62,7 +64,7 @@ describe('Submit Abstraction Period service', () => {
       })
 
       it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({
           checkYourAnswersVisited: false
@@ -71,34 +73,26 @@ describe('Submit Abstraction Period service', () => {
     })
 
     describe('with an invalid payload', () => {
-      describe('because the user has not inputted anything', () => {
-        beforeEach(() => {
-          payload = {}
-        })
+      beforeEach(() => {
+        payload = {}
+      })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      it('returns page data for the view', async () => {
+        const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
-          expect(result.id).to.equal(session.id)
-        })
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Enter the abstraction period for the requirements for returns',
+          abstractionPeriod: null,
+          backLink: `/system/return-requirements/${session.id}/points/0`,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC'
+        }, { skip: ['sessionId', 'error'] })
+      })
 
-        it('returns page data for the view', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result).to.equal({
-            abstractionPeriod: null,
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            error: null,
-            pageTitle: 'Enter the abstraction period for the requirements for returns',
-            id: 'aeb46f58-3431-42af-8724-361a7779becf',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC'
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the data input form element', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      describe('because the user has not submitted anything', () => {
+        it('includes an error for both input elements', async () => {
+          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
             text: {
@@ -109,7 +103,7 @@ describe('Submit Abstraction Period service', () => {
         })
       })
 
-      describe('because the user has not inputted a start abstraction period', () => {
+      describe('because the user has not submitted a start abstraction period', () => {
         beforeEach(() => {
           payload = {
             'start-abstraction-period-day': null,
@@ -119,34 +113,8 @@ describe('Submit Abstraction Period service', () => {
           }
         })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            error: null,
-            pageTitle: 'Enter the abstraction period for the requirements for returns',
-            id: 'aeb46f58-3431-42af-8724-361a7779becf',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            abstractionPeriod: {
-              'start-abstraction-period-day': null,
-              'start-abstraction-period-month': null,
-              'end-abstraction-period-day': '02',
-              'end-abstraction-period-month': '7'
-            }
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the data input form element', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        it('includes an error for the start date input element', async () => {
+          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
             text: {
@@ -155,9 +123,20 @@ describe('Submit Abstraction Period service', () => {
             }
           })
         })
+
+        it('includes what was submitted', async () => {
+          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
+
+          expect(result.abstractionPeriod).to.equal({
+            'start-abstraction-period-day': null,
+            'start-abstraction-period-month': null,
+            'end-abstraction-period-day': '02',
+            'end-abstraction-period-month': '7'
+          })
+        })
       })
 
-      describe('because the user has not inputted an end abstraction period', () => {
+      describe('because the user has not submitted an end abstraction period', () => {
         beforeEach(() => {
           payload = {
             'start-abstraction-period-day': '08',
@@ -167,34 +146,8 @@ describe('Submit Abstraction Period service', () => {
           }
         })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            error: null,
-            pageTitle: 'Enter the abstraction period for the requirements for returns',
-            id: 'aeb46f58-3431-42af-8724-361a7779becf',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            abstractionPeriod: {
-              'start-abstraction-period-day': '08',
-              'start-abstraction-period-month': '12',
-              'end-abstraction-period-day': null,
-              'end-abstraction-period-month': null
-            }
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the data input form element', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        it('includes an error for the end date input element', async () => {
+          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
             text: {
@@ -203,148 +156,48 @@ describe('Submit Abstraction Period service', () => {
             }
           })
         })
-      })
 
-      describe('because the user has inputted invalid start and end abstraction periods', () => {
-        beforeEach(() => {
-          payload = {
-            'start-abstraction-period-day': 'abc',
-            'start-abstraction-period-month': '123',
-            'end-abstraction-period-day': 'abc',
-            'end-abstraction-period-month': '123'
-          }
-        })
+        it('includes what was submitted', async () => {
+          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            error: null,
-            pageTitle: 'Enter the abstraction period for the requirements for returns',
-            id: 'aeb46f58-3431-42af-8724-361a7779becf',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            abstractionPeriod: {
-              'start-abstraction-period-day': 'abc',
-              'start-abstraction-period-month': '123',
-              'end-abstraction-period-day': 'abc',
-              'end-abstraction-period-month': '123'
-            }
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result.error).to.equal({
-            text: {
-              startResult: 'Enter a real start date',
-              endResult: 'Enter a real end date'
-            }
-          })
-        })
-      })
-
-      describe('because the user has inputted invalid start abstraction period', () => {
-        beforeEach(() => {
-          payload = {
-            'start-abstraction-period-day': 'abc',
-            'start-abstraction-period-month': '123',
-            'end-abstraction-period-day': '02',
-            'end-abstraction-period-month': '07'
-          }
-        })
-
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            error: null,
-            pageTitle: 'Enter the abstraction period for the requirements for returns',
-            id: 'aeb46f58-3431-42af-8724-361a7779becf',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            abstractionPeriod: {
-              'start-abstraction-period-day': 'abc',
-              'start-abstraction-period-month': '123',
-              'end-abstraction-period-day': '02',
-              'end-abstraction-period-month': '07'
-            }
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the data input form element', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result.error).to.equal({
-            text: {
-              startResult: 'Enter a real start date',
-              endResult: null
-            }
-          })
-        })
-      })
-
-      describe('because the user has inputted invalid end abstraction period', () => {
-        beforeEach(() => {
-          payload = {
+          expect(result.abstractionPeriod).to.equal({
             'start-abstraction-period-day': '08',
             'start-abstraction-period-month': '12',
+            'end-abstraction-period-day': null,
+            'end-abstraction-period-month': null
+          })
+        })
+      })
+
+      describe('because the user has submitted invalid values', () => {
+        beforeEach(() => {
+          payload = {
+            'start-abstraction-period-day': 'abc',
+            'start-abstraction-period-month': '123',
             'end-abstraction-period-day': 'abc',
             'end-abstraction-period-month': '123'
           }
         })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            error: null,
-            pageTitle: 'Enter the abstraction period for the requirements for returns',
-            id: 'aeb46f58-3431-42af-8724-361a7779becf',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            abstractionPeriod: {
-              'start-abstraction-period-day': '08',
-              'start-abstraction-period-month': '12',
-              'end-abstraction-period-day': 'abc',
-              'end-abstraction-period-month': '123'
-            }
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the data input form element', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        it('includes an error for both input elements', async () => {
+          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
             text: {
-              startResult: null,
+              startResult: 'Enter a real start date',
               endResult: 'Enter a real end date'
             }
+          })
+        })
+
+        it('includes what was submitted', async () => {
+          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
+
+          expect(result.abstractionPeriod).to.equal({
+            'start-abstraction-period-day': 'abc',
+            'start-abstraction-period-month': '123',
+            'end-abstraction-period-day': 'abc',
+            'end-abstraction-period-month': '123'
           })
         })
       })
