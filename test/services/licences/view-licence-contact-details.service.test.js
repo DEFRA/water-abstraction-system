@@ -9,6 +9,8 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const ViewLicenceContactDetailsPresenter =
+  require('../../../app/presenters/licences/view-licence-contact-details.presenter')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
 
 // Thing under test
@@ -19,6 +21,7 @@ describe('View Licence service contact details', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   beforeEach(() => {
+    Sinon.stub(ViewLicenceContactDetailsPresenter, 'go').returns(_contactDetails())
     Sinon.stub(ViewLicenceService, 'go').resolves(_licence())
   })
 
@@ -43,4 +46,10 @@ describe('View Licence service contact details', () => {
 
 function _licence () {
   return { licenceName: 'fake licence' }
+}
+
+function _contactDetails () {
+  return {
+    activeTab: 'contact-details'
+  }
 }
