@@ -29,7 +29,7 @@ describe('Initiate Return Requirement Session service', () => {
       beforeEach(async () => {
         // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
         // 'ends' information
-        licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10') })
+        licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10'), licenceRef: '01/ABC' })
 
         // Create 2 licence versions so we can test the service only gets the 'current' version
         await LicenceVersionHelper.add({
@@ -45,47 +45,24 @@ describe('Initiate Return Requirement Session service', () => {
         journey = 'returns-required'
       })
 
-      it('creates a new session record containing details of the licence and licence holder', async () => {
+      it('creates a new session record containing details of the licence', async () => {
         const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
 
         const { data } = result
 
-        expect(data.licence.id).to.equal(licence.id)
-        expect(data.licence.licenceRef).to.equal(licence.licenceRef)
-        expect(data.licence.licenceHolder).to.equal('Licence Holder Ltd')
-        expect(data.checkYourAnswersVisited).to.be.false()
-      })
-
-      it("creates a new session record containing the licence's 'current version' start date", async () => {
-        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-        const { data } = result
-
-        expect(data.licence.currentVersionStartDate).to.equal(new Date('2022-05-01'))
-      })
-
-      it("creates a new session record containing the licence's end date", async () => {
-        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-        const { data } = result
-
-        expect(data.licence.endDate).to.equal(new Date('2024-08-10'))
-      })
-
-      it("creates a new session record containing the licence's start date", async () => {
-        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-        const { data } = result
-
-        expect(data.licence.startDate).to.equal(new Date('2022-01-01'))
-      })
-
-      it('creates a new session record containing the journey passed in', async () => {
-        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
-
-        const { data } = result
-
-        expect(data.journey).to.equal(journey)
+        expect(data).to.equal({
+          checkYourAnswersVisited: false,
+          licence: {
+            id: licence.id,
+            currentVersionStartDate: new Date('2022-05-01'),
+            endDate: new Date('2024-08-10'),
+            licenceRef: '01/ABC',
+            licenceHolder: 'Licence Holder Ltd',
+            startDate: new Date('2022-01-01')
+          },
+          journey: 'returns-required',
+          requirements: [{}]
+        }, { skip: ['id'] })
       })
     })
 
