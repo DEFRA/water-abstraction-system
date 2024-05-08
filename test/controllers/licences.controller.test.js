@@ -12,8 +12,10 @@ const { expect } = Code
 const Boom = require('@hapi/boom')
 
 // Things we need to stub
-const InitiateReturnRequirementSessionService = require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
+const InitiateReturnRequirementSessionService =
+  require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service')
+const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service')
 
@@ -199,6 +201,44 @@ describe('Licences controller', () => {
     })
   })
 
+  describe('GET /licences/{id}/contact-details', () => {
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/contact-details',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: [] }
+        }
+      }
+    })
+
+    describe('when a request is valid and has contacts', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Contact Details')
+      })
+    })
+    describe('when a request is valid and has no contact details', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves({ activeTab: 'contact-details' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Contact Details')
+      })
+    })
+  })
+
   describe('GET /licences/{id}/summary', () => {
     beforeEach(async () => {
       options = {
@@ -281,6 +321,12 @@ function _viewLicenceBills () {
   return {
     activeTab: 'bills',
     bills: [{ id: 'bills-id' }]
+  }
+}
+
+function _viewLicenceContactDetails () {
+  return {
+    activeTab: 'contact-details'
   }
 }
 
