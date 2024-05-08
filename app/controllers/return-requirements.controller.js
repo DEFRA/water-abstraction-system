@@ -24,6 +24,7 @@ const SiteDescriptionService = require('../services/return-requirements/site-des
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
 const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
+const SubmitCancelRequirements = require('../services/return-requirements/submit-cancel-requirements.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
@@ -246,6 +247,14 @@ async function submitAgreementsExceptions (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
+async function submitCancelRequirements (request, h) {
+  const { sessionId } = request.params
+
+  const licenceId = await SubmitCancelRequirements.go(sessionId)
+
+  return h.redirect(`/licences/${licenceId}#charge`)
+}
+
 async function submitCheckYourAnswers (request, h) {
   const { sessionId } = request.params
   const licenceId = await SubmitCheckYourAnswersService.go(sessionId)
@@ -449,6 +458,7 @@ module.exports = {
   startDate,
   submitAbstractionPeriod,
   submitAgreementsExceptions,
+  submitCancelRequirements,
   submitCheckYourAnswers,
   submitExisting,
   submitFrequencyCollected,
