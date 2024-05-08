@@ -2,10 +2,69 @@
 
 <p class="govuk-body"><a class="govuk-link" href="/customer/{{ contactId }}/#contacts">Go to customer contacts</a></p>
 
-{% if contacts.customers %}
+{% if customerContacts.length > 0 %}
   <h2 class="govuk-heading-m">Customer contacts</h2>
+  {{ customerContacts | dump }}
+
+  <table class="govuk-table">
+    <h2 class="govuk-heading-l">Returns</h2>
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">Communication type</th>
+      <th scope="col" class="govuk-table__header">Send to</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    {% for contact in customerContacts %}
+      <tr class="govuk-table__row govuk-body-s">
+        <th class="govuk-table__cell">{{ contact.contct | dump }}</th>
+        <td class="govuk-table__cell">Comm type</td>
+        <td class="govuk-table__cell"> {{ contact.address | dump }} </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
 {% endif %}
 
-{% if contacts.licences %}
+{% if licenceContacts.length > 0 %}
   <h2 class="govuk-heading-m">Licence contacts</h2>
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">Communication type</th>
+      <th scope="col" class="govuk-table__header">Send to</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    {% for contact in licenceContacts %}
+      <tr class="govuk-table__row govuk-body-s">
+        <th class="govuk-table__cell"> {{ contact.name }}</th>
+        <td class="govuk-table__cell"> {{ contact.communicationType }}</td>
+        <td class="govuk-table__cell">
+          {% if contact.address.address1 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address1 }}</p>
+          {% endif %}
+          {% if contact.address.address2 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address2 }}</p>
+          {% endif %}
+          {% if contact.address.address3 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address3 }}</p>
+          {% endif %}
+          {% if contact.address.address4 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address4 }}</p>
+          {% endif %}
+          {% if contact.address.country %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.country }}</p>
+          {% endif %}
+          {% if contact.address.postcode %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.postcode }}</p>
+          {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
 {% endif %}

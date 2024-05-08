@@ -13,15 +13,22 @@
 function go (contactDetails) {
   return {
     activeTab: 'contact-details',
-    contacts: _mapContactDetails(contactDetails)
+    licenceContacts: _mapLicenceContacts(contactDetails.licenceContacts),
+    customerContacts: _mapCustomerContacs(contactDetails.customerContacts)
   }
 }
 
-function _mapContactDetails (contactDetails) {
-  return {
-    customers: contactDetails?.customerContacts,
-    licences: contactDetails?.licenceContacts
-  }
+function _mapLicenceContacts (licenceContacts) {
+  return licenceContacts.map(contact => {
+    return {
+      name: contact.company.name,
+      communicationType: contact.licenceRole.label,
+      address: contact.address
+    }
+  })
+}
+function _mapCustomerContacs (customerContacts) {
+  return customerContacts.map(customer => customer)
 }
 
 module.exports = {
