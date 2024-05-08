@@ -5,7 +5,7 @@
  * @module ChargeReferenceDetailsPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+const { formatLongDate, formatFinancialYear } = require('../../base.presenter.js')
 
 /**
  * Prepares and processes review charge reference data for presentation
@@ -21,7 +21,7 @@ function go (billRun, reviewChargeReference, licenceId) {
 
   return {
     billRunId: billRun.id,
-    financialYear: _financialYear(billRun.toFinancialYearEnding),
+    financialYear: formatFinancialYear(billRun.toFinancialYearEnding),
     chargePeriod: _prepareDate(
       reviewChargeReference.reviewChargeVersion.chargePeriodStartDate,
       reviewChargeReference.reviewChargeVersion.chargePeriodEndDate
@@ -88,13 +88,6 @@ function _adjustments (reviewChargeReference) {
   return { adjustments, hasAggregateOrChargeFactor }
 }
 
-function _financialYear (financialYearEnding) {
-  const startYear = financialYearEnding - 1
-  const endYear = financialYearEnding
-
-  return `${startYear} to ${endYear}`
-}
-
 function _prepareDate (startDate, endDate) {
   const preparedStartDate = formatLongDate(startDate)
   const preparedEndDate = formatLongDate(endDate)
@@ -103,13 +96,10 @@ function _prepareDate (startDate, endDate) {
 }
 
 function _totalBillableReturns (reviewChargeElements) {
-  let totalBillableReturns = 0
-
-  reviewChargeElements.forEach((reviewChargeElement) => {
-    totalBillableReturns += reviewChargeElement.amendedAllocated
-  })
-
-  return totalBillableReturns
+  return reviewChargeElements.reduce((total, reviewChargeElement) => {
+    total += reviewChargeElement.amendedAllocated
+    return total
+  }, 0)
 }
 
 module.exports = {
