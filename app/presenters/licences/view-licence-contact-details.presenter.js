@@ -12,7 +12,15 @@
  */
 function go (contactDetails) {
   return {
-    activeTab: 'contact-details'
+    activeTab: 'contact-details',
+    contacts: _mapContactDetails(contactDetails)
+  }
+}
+
+function _mapContactDetails (contactDetails) {
+  return {
+    customers: contactDetails?.customerContacts,
+    licences: contactDetails?.licenceContacts
   }
 }
 

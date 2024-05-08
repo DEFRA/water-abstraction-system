@@ -1,3 +1,11 @@
 <h2 class="govuk-heading-l">Contact Details</h2>
 
+<p class="govuk-body"><a class="govuk-link" href="/customer/{{ contactId }}/#contacts">Go to customer contacts</a></p>
 
+{% if contacts.customers %}
+  <h2 class="govuk-heading-m">Customer contacts</h2>
+{% endif %}
+
+{% if contacts.licences %}
+  <h2 class="govuk-heading-m">Licence contacts</h2>
+{% endif %}
