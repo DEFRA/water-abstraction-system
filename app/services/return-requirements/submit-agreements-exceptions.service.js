@@ -44,7 +44,6 @@ async function go (sessionId, requirementIndex, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select agreements and exceptions for the requirements for returns',
     ...formattedData

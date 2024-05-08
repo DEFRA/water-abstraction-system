@@ -15,6 +15,8 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const SubmitAgreementsExceptionsService = require('../../../app/services/return-requirements/submit-agreements-exceptions.service.js')
 
 describe('Submit Agreements and Exceptions service', () => {
+  const requirementIndex = 0
+
   let payload
   let session
 
@@ -23,7 +25,6 @@ describe('Submit Agreements and Exceptions service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -32,7 +33,8 @@ describe('Submit Agreements and Exceptions service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required'
+        requirements: [{}],
+        checkYourAnswersVisited: false
       }
     })
   })
@@ -50,11 +52,11 @@ describe('Submit Agreements and Exceptions service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAgreementsExceptionsService.go(session.id, payload)
+        await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.agreementsExceptions).to.equal([
+        expect(refreshedSession.requirements[0].agreementsExceptions).to.equal([
           'gravity-fill',
           'two-part-tariff',
           '56-returns-exception'
@@ -62,7 +64,7 @@ describe('Submit Agreements and Exceptions service', () => {
       })
 
       it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
-        const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
+        const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({
           checkYourAnswersVisited: false
@@ -72,34 +74,26 @@ describe('Submit Agreements and Exceptions service', () => {
   })
 
   describe('with an invalid payload', () => {
-    describe('because the user has not inputted anything', () => {
-      beforeEach(() => {
-        payload = {}
-      })
+    beforeEach(() => {
+      payload = {}
+    })
 
-      it('fetches the current setup session record', async () => {
-        const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
+    it('returns page data for the view', async () => {
+      const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload)
 
-        expect(result.id).to.equal(session.id)
-      })
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        pageTitle: 'Select agreements and exceptions for the requirements for returns',
+        agreementsExceptions: null,
+        backLink: `/system/return-requirements/${session.id}/frequency-reported/0`,
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC'
+      }, { skip: ['sessionId', 'error'] })
+    })
 
-      it('returns page data for the view', async () => {
-        const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
-
-        expect(result).to.equal({
-          activeNavBar: 'search',
-          checkYourAnswersVisited: false,
-          error: null,
-          pageTitle: 'Select agreements and exceptions for the requirements for returns',
-          id: 'aeb46f58-3431-42af-8724-361a7779becf',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          agreementsExceptions: ''
-        }, { skip: ['id', 'error'] })
-      })
-
-      it('returns page data with an error for the data input form element', async () => {
-        const result = await SubmitAgreementsExceptionsService.go(session.id, payload)
+    describe('because the user has not submitted anything', () => {
+      it('includes an error for the input element', async () => {
+        const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload)
 
         expect(result.error).to.equal({
           text: 'Select if there are any agreements and exceptions needed for the return requirements'
