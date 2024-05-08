@@ -184,7 +184,7 @@ describe('Licences controller', () => {
     })
     describe('when a request is valid and has no bills', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewLicenceBillsService, 'go').resolves({ activeTab: 'bills' })
+        Sinon.stub(ViewLicenceBillsService, 'go').resolves({ activeTab: 'bills', bills: [] })
       })
 
       it('returns the page successfully', async () => {
@@ -256,20 +256,38 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Status')
       })
     })
+
+    describe('when a request is valid and has NO returns', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceReturnsService, 'go').resolves({
+          activeTab: 'returns',
+          returns: []
+        })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Returns')
+        //  Check the table titles
+        expect(response.payload).to.contain('No returns found')
+      })
+    })
   })
 })
 
 function _viewLicenceBills () {
   return {
     activeTab: 'bills',
-    bills: []
+    bills: [{ id: 'bills-id' }]
   }
 }
 
 function _viewLicenceReturns () {
   return {
     activeTab: 'returns',
-    returns: [{}]
+    returns: [{ id: 'returns-id' }]
   }
 }
 
