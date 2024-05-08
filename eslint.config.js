@@ -1,14 +1,21 @@
-module.exports = {
-  extends: 'standard', // Maintain Standard.js rules
-  plugins: [
-    '@stylistic/js'
-  ],
-  rules: {
-    '@stylistic/js/max-len': ['error', {
-      code: 120
-    }]
+'use strict'
+
+const standard = require('eslint-config-standard')
+const stylisticJs = require('@stylistic/eslint-plugin-js')
+
+module.exports = [
+  standard,
+  {
+    plugins: {
+      '@stylistic/js': stylisticJs
+    },
+    rules: {
+      '@stylistic/js/max-len': ['error', {
+        code: 120
+      }]
+    }
   }
-}
+]
 
 /*
 
