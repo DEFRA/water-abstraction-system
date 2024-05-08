@@ -16,34 +16,31 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const CheckYourAnswersService = require('../../../app/services/return-requirements/check-your-answers.service.js')
 const SessionModel = require('../../../app/models/session.model.js')
 
-const sessionData = {
-  data: {
-    checkYourAnswersVisited: false,
-    licence: {
-      endDate: null,
-      licenceRef: '01/ABC',
-      licenceHolder: 'Astro Boy',
-      currentVersionStartDate: '2023-02-08T00:00:00.000Z'
-    },
-    reason: 'abstraction-below-100-cubic-metres-per-day',
-    journey: 'no-returns-required',
-    note: {
-      content: 'Note attached to requirement',
-      userEmail: 'carol.shaw@atari.com'
-    },
-    startDateOptions: 'licenceStartDate'
-  }
-}
-
 describe('Check Your Answers service', () => {
   let session
   let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+
     session = await SessionHelper.add({
-      ...sessionData
+      data: {
+        licence: {
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+          endDate: null,
+          licenceRef: '01/ABC',
+          licenceHolder: 'Turbo Kid',
+          startDate: '2022-04-01T00:00:00.000Z'
+        },
+        requirements: [{}],
+        checkYourAnswersVisited: false,
+        journey: 'no-returns-required',
+        startDateOptions: 'licenceStartDate',
+        reason: 'returns-exception'
+      }
     })
+
     yarStub = { flash: Sinon.stub().returns([]) }
   })
 
@@ -55,7 +52,7 @@ describe('Check Your Answers service', () => {
     it('fetches the current setup session record', async () => {
       const result = await CheckYourAnswersService.go(session.id, yarStub)
 
-      expect(result.id).to.equal(session.id)
+      expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
@@ -63,16 +60,16 @@ describe('Check Your Answers service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        id: session.id,
-        pageTitle: 'Check the return requirements for Astro Boy',
+        notification: undefined,
         journey: 'no-returns-required',
         licenceRef: '01/ABC',
-        note: 'Note attached to requirement',
-        notification: undefined,
-        userEmail: 'carol.shaw@atari.com',
-        reason: 'abstraction-below-100-cubic-metres-per-day',
-        startDate: '8 February 2023'
-      }, { skip: ['id'] })
+        note: null,
+        pageTitle: 'Check the return requirements for Turbo Kid',
+        reason: 'Returns exception',
+        reasonLink: `/system/return-requirements/${session.id}/no-returns-required`,
+        startDate: '1 January 2023',
+        userEmail: 'No notes added'
+      }, { skip: ['sessionId'] })
     })
 
     it('updates the session record to indicate user has visited check-your-answers', async () => {
