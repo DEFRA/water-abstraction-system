@@ -30,14 +30,12 @@ async function _fetch (licenceId) {
   const licences = await LicenceModel.query().findOne({
     'licences.id': licenceId
   }).withGraphFetched('licenceDocument')
-  // return ContactModel.query()
-  //   .select('*')
-  //   .innerJoinRelated('licences')
-  //   .where('licences.id', licenceId)
 
-  const licenceContacts = await LicenceDocumentRoleModel.query().where({
-    licence_document_id: licences.licenceDocument.id
-  })
+  const licenceContacts = await LicenceDocumentRoleModel.query()
+    .where(function () {
+      this.where('end_date', '>', new Date()).orWhere({ end_date: null })
+    })
+    .andWhere({ licence_document_id: licences.licenceDocument.id })
     // roles.role_id as role_id,
     //   roles.name as role_name,
     //   roles.label as role_label,
