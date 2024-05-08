@@ -82,6 +82,9 @@
       {% if activeTab === 'returns' %}
         {% include "licences/tabs/returns.njk" %}
       {% endif %}
+      {% if activeTab === 'bills' %}
+        {% include "licences/tabs/bills.njk" %}
+      {% endif %}
     </div>
   </div>
 {% endblock %}

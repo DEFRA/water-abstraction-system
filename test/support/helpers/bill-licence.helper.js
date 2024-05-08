@@ -41,7 +41,7 @@ function defaults (data = {}) {
   const defaults = {
     billId: generateUUID(),
     licenceRef: LicenceHelper.generateLicenceRef(),
-    licenceId: generateUUID()
+    licenceId: data.licenceId || generateUUID()
   }
 
   return {
