@@ -14,11 +14,12 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SetupService = require('../../../app/services/return-requirements/setup.service.js')
 
-describe('Select Reason service', () => {
+describe('Setup service', () => {
   let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+
     session = await SessionHelper.add({
       data: {
         licence: {
@@ -26,9 +27,11 @@ describe('Select Reason service', () => {
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
-          licenceHolder: 'Astro Boy',
+          licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
-        }
+        },
+        requirements: [{}],
+        checkYourAnswersVisited: false
       }
     })
   })
@@ -37,7 +40,7 @@ describe('Select Reason service', () => {
     it('fetches the current setup session record', async () => {
       const result = await SetupService.go(session.id)
 
-      expect(result.id).to.equal(session.id)
+      expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
@@ -46,9 +49,10 @@ describe('Select Reason service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'How do you want to set up the requirements for returns?',
+        backLink: `/system/return-requirements/${session.id}/reason`,
         licenceRef: '01/ABC',
         setup: null
-      }, { skip: ['id'] })
+      }, { skip: ['sessionId'] })
     })
   })
 })
