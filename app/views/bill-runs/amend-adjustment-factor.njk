@@ -1,39 +1,70 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 
 {% block breadcrumbs %}
   {# Back link #}
   {{ govukBackLink({
       text: 'Go back to licence',
-      href: '/system/bill-runs/' + billRun.id + '/review/' + licenceId + '/charge-reference-details/' + chargeReference.id
+      href: '/system/bill-runs/' + billRunId + '/review/' + licenceId + '/charge-reference-details/' + chargeReference.id
   }) }}
 {% endblock %}
 
 {% block content %}
   <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-full">
-      <span class="govuk-caption-l">High loss, non-tidal, greater than 50 up to and including 85 ML/yr</span>
+      <span class="govuk-caption-l">{{chargeReference.description}}</span>
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Set the adjustment factors</h1>
 
       {% set insertText %}
         <p class="govuk-body govuk-!-margin-bottom-0">
           <span class="govuk-!-font-weight-bold">Financial year</span>
-          2022 to 2023
+          {{financialYear}}
         </p>
 
         <p class="govuk-body">
           <span class="govuk-!-font-weight-bold">Charge period</span>
-          1 April 2022 to 31 March 2023
+          {{chargePeriod}}
         </p>
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Other adjustments apply:</p>
+
+        {% for adjustment in chargeReference.otherAdjustments %}
+          <div>{{adjustment}}</div>
+        {% endfor %}
       {% endset %}
 
       {{ govukInsetText({
         html: insertText
       }) }}
 
-    </dv>
+      <form method="post">
+        {{ govukInput({
+          label: {
+            text: "Aggregate factor (optional)",
+            classes: "govuk-label"
+          },
+          id: "event-name",
+          name: "eventName",
+          classes: "govuk-input--width-10",
+          value: chargeReference.aggregateFactor
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Charge adjustment (optional)",
+            classes: "govuk-label"
+          },
+          id: "event-name",
+          name: "eventName",
+          classes: "govuk-input govuk-input--width-10",
+          value: chargeReference.chargeAdjustment
+        }) }}
+
+        {{ govukButton({ text: 'Confirm' }) }}
+      </form>
+    </div>
   </div>
 {% endblock %}
