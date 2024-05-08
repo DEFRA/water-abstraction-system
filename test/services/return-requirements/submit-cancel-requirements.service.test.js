@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitCancelRequirementsService = require('../../../app/services/return-requirements/submit-cancel-requirements.service.js')
 
-describe.only('Submit Cancel Requirements service', () => {
+describe('Submit Cancel Requirements service', () => {
   let session
 
   beforeEach(async () => {
