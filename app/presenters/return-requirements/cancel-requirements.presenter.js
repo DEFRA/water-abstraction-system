@@ -18,10 +18,10 @@ const { formatLongDate } = require('../base.presenter.js')
 function go (session) {
   const data = {
     id: session.id,
-    licenceId: session.data.licence.id,
-    licenceRef: session.data.licence.licenceRef,
+    licenceId: session.licence.id,
+    licenceRef: session.licence.licenceRef,
     reason: session.data.reason,
-    startDate: _startDate(session.data),
+    startDate: _startDate(session),
     returnRequirements: _formattedReturnRequirement(session.data) ? _formattedReturnRequirement(session.data) : null
   }
 
@@ -42,16 +42,16 @@ function _formattedReturnRequirement (sessionData) {
   return `${returnsCycle} ${frequencyReported} requirements for returns, ${siteDescription}.`
 }
 
-function _startDate (sessionData) {
-  const selectedOption = sessionData.startDateOptions
+function _startDate (session) {
+  const selectedOption = session.data.startDateOptions
   let date
 
   if (selectedOption === 'licenceStartDate') {
-    date = new Date(sessionData.licence.currentVersionStartDate)
+    date = new Date(session.licence.currentVersionStartDate)
   } else {
-    const day = sessionData.startDateDay
-    const month = sessionData.startDateMonth
-    const year = sessionData.startDateYear
+    const day = session.data.startDateDay
+    const month = session.data.startDateMonth
+    const year = session.data.startDateYear
 
     date = new Date(`${year}-${month}-${day}`)
   }
