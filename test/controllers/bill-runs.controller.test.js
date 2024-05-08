@@ -12,6 +12,7 @@ const { expect } = Code
 const AmendBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
+const ChargeReferenceDetailsService = require('../../app/services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
 const RemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
@@ -460,6 +461,31 @@ describe('Bill Runs controller', () => {
     })
   })
 
+  describe('/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _options(
+          'GET',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(ChargeReferenceDetailsService, 'go').resolves(_chargeReferenceData())
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('4.6.24')
+          expect(response.payload).to.contain('Total billable returns')
+          expect(response.payload).to.contain('Aggregate factor (0.5)')
+        })
+      })
+    })
+  })
+
   describe('/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -655,6 +681,21 @@ function _chargeElementDetails () {
       issues: []
     },
     matchedReturns: {}
+  }
+}
+
+function _chargeReferenceData () {
+  return {
+    billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
+    financialYear: '2022 to 2023',
+    chargePeriod: '1 April 2022 to 31 March 2023',
+    chargeReference: {
+      reference: '4.6.24',
+      description: 'High loss, non-tidal, restricted water, greater than 85 up to and including 120 ML/yr',
+      totalBillableReturns: 5,
+      authorisedVolume: 10,
+      adjustments: ['Aggregate factor (0.5)']
+    }
   }
 }
 
