@@ -7,6 +7,7 @@
 
 const Boom = require('@hapi/boom')
 
+const AmendAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
@@ -26,9 +27,14 @@ const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 
 async function amendAdjustmentFactor (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await AmendAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReferenceId)
+
   return h.view('bill-runs/amend-adjustment-factor.njk', {
     pageTitle: 'Set the adjustment factors',
-    activeNavBar: 'bill-runs'
+    activeNavBar: 'bill-runs',
+    ...pageData
   })
 }
 
@@ -51,6 +57,18 @@ async function cancel (request, h) {
 
   return h.view('bill-runs/cancel.njk', {
     pageTitle: "You're about to cancel this bill run",
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function chargeReferenceDetails (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
+
+  return h.view('bill-runs/charge-reference-details.njk', {
+    pageTitle: 'Charge reference details',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -118,18 +136,6 @@ async function review (request, h) {
   })
 }
 
-async function chargeReferenceDetails (request, h) {
-  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
-
-  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
-
-  return h.view('bill-runs/charge-reference-details.njk', {
-    pageTitle: 'Charge reference details',
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
-}
-
 async function reviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
@@ -157,7 +163,13 @@ async function send (request, h) {
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload, request.yar)
+  const pageData = await SubmitAmendedBillableReturnsService.go(
+    billRunId,
+    licenceId,
+    reviewChargeElementId,
+    request.payload,
+    request.yar
+  )
 
   if (pageData.error) {
     return h.view('bill-runs/amend-billable-returns.njk', pageData)
