@@ -82,14 +82,12 @@
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
 
-  <div class="govuk-body">
-    <p class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24"> {{ returnRequirements }}</p>
+  <form method="post">
+    <div class="govuk-body">
+      <p class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24"> {{ returnRequirements }}</p>
 
-    <p class="govuk-!-margin-bottom-7"></p>
-    {{ govukButton({
-        text: "Confirm cancel",
-        href: "#"
-      })
-    }}
-  </div>
+      <p class="govuk-!-margin-bottom-7"></p>
+      {{ govukButton({ text: "Confirm cancel" }) }}
+    </div>
+  </form>
 {% endblock %}
