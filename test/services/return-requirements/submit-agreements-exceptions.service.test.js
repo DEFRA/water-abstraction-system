@@ -25,6 +25,7 @@ describe('Submit Agreements and Exceptions service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -33,8 +34,10 @@ describe('Submit Agreements and Exceptions service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
+        journey: 'returns-required',
         requirements: [{}],
-        checkYourAnswersVisited: false
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change'
       }
     })
   })
@@ -96,7 +99,7 @@ describe('Submit Agreements and Exceptions service', () => {
         const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload)
 
         expect(result.error).to.equal({
-          text: 'Select if there are any agreements and exceptions needed for the return requirements'
+          text: 'Select if there are any agreements and exceptions needed for the requirements for returns'
         })
       })
     })

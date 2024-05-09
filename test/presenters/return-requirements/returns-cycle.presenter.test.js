@@ -18,6 +18,7 @@ describe('Returns Cycle presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
+      checkYourAnswersVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -26,8 +27,10 @@ describe('Returns Cycle presenter', () => {
         licenceHolder: 'Turbo Kid',
         startDate: '2022-04-01T00:00:00.000Z'
       },
+      journey: 'returns-required',
       requirements: [{}],
-      checkYourAnswersVisited: false
+      startDateOptions: 'licenceStartDate',
+      reason: 'major-change'
     }
   })
 

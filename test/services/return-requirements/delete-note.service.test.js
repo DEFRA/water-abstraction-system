@@ -24,6 +24,7 @@ describe('Delete Note service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -32,8 +33,10 @@ describe('Delete Note service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
+        journey: 'returns-required',
         requirements: [{}],
-        checkYourAnswersVisited: true,
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change',
         note: {
           content: 'I am not long for this world',
           userEmail: 'carol.shaw@atari.com'

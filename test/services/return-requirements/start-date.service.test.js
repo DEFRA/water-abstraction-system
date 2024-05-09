@@ -22,6 +22,7 @@ describe('Start Date service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -30,8 +31,8 @@ describe('Start Date service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        requirements: [{}],
-        checkYourAnswersVisited: false
+        journey: 'returns-required',
+        requirements: [{}]
       }
     })
   })

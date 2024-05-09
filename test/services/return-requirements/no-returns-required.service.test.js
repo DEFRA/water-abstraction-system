@@ -22,6 +22,7 @@ describe('No Returns Required service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -30,8 +31,9 @@ describe('No Returns Required service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
+        journey: 'no-returns-required',
         requirements: [{}],
-        checkYourAnswersVisited: false
+        startDateOptions: 'licenceStartDate'
       }
     })
   })

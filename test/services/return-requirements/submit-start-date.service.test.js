@@ -23,6 +23,7 @@ describe('Submit Start Date service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -33,7 +34,7 @@ describe('Submit Start Date service', () => {
         },
         journey: 'returns-required',
         requirements: [{}],
-        checkYourAnswersVisited: false
+        startDateOptions: 'licenceStartDate'
       }
     })
   })

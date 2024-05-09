@@ -25,6 +25,7 @@ describe('Check Your Answers service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -33,11 +34,10 @@ describe('Check Your Answers service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
+        journey: 'returns-required',
         requirements: [{}],
-        checkYourAnswersVisited: false,
-        journey: 'no-returns-required',
         startDateOptions: 'licenceStartDate',
-        reason: 'returns-exception'
+        reason: 'major-change'
       }
     })
 
@@ -61,12 +61,12 @@ describe('Check Your Answers service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         notification: undefined,
-        journey: 'no-returns-required',
+        journey: 'returns-required',
         licenceRef: '01/ABC',
         note: null,
         pageTitle: 'Check the return requirements for Turbo Kid',
-        reason: 'Returns exception',
-        reasonLink: `/system/return-requirements/${session.id}/no-returns-required`,
+        reason: 'Major change',
+        reasonLink: `/system/return-requirements/${session.id}/reason`,
         startDate: '1 January 2023',
         userEmail: 'No notes added'
       }, { skip: ['sessionId'] })

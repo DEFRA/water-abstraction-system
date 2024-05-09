@@ -16,6 +16,7 @@ describe('Check Your Answers presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
+      checkYourAnswersVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -24,11 +25,10 @@ describe('Check Your Answers presenter', () => {
         licenceHolder: 'Turbo Kid',
         startDate: '2022-04-01T00:00:00.000Z'
       },
+      journey: 'returns-required',
       requirements: [{}],
-      checkYourAnswersVisited: false,
-      journey: 'no-returns-required',
       startDateOptions: 'licenceStartDate',
-      reason: 'returns-exception'
+      reason: 'major-change'
     }
   })
 
@@ -37,12 +37,12 @@ describe('Check Your Answers presenter', () => {
       const result = CheckYourAnswersPresenter.go(session)
 
       expect(result).to.equal({
-        journey: 'no-returns-required',
+        journey: 'returns-required',
         licenceRef: '01/ABC',
         note: null,
         pageTitle: 'Check the return requirements for Turbo Kid',
-        reason: 'Returns exception',
-        reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/no-returns-required',
+        reason: 'Major change',
+        reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023',
         userEmail: 'No notes added'
@@ -87,16 +87,12 @@ describe('Check Your Answers presenter', () => {
     it('returns the display version for the reason', () => {
       const result = CheckYourAnswersPresenter.go(session)
 
-      expect(result.reason).to.equal('Returns exception')
+      expect(result.reason).to.equal('Major change')
     })
   })
 
   describe("the 'reasonLink' property", () => {
     describe('when the journey is for returns required', () => {
-      beforeEach(() => {
-        session.journey = 'returns-required'
-      })
-
       it("returns a link to the 'reason' page", () => {
         const result = CheckYourAnswersPresenter.go(session)
 
@@ -105,6 +101,10 @@ describe('Check Your Answers presenter', () => {
     })
 
     describe('when the journey is for no returns required', () => {
+      beforeEach(() => {
+        session.journey = 'no-returns-required'
+      })
+
       it("returns a link to the 'no-returns-required' page", () => {
         const result = CheckYourAnswersPresenter.go(session)
 
