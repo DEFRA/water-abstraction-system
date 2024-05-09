@@ -11,14 +11,7 @@ const { expect } = Code
 const DatabaseSupport = require('../../support/database.js')
 const FinancialAgreementHelper = require('../../support/helpers/financial-agreement.helper.js')
 const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.helper.js')
-const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
-const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
-const LicenceGaugingStationHelper = require('../../support/helpers/licence-gauging-station.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
@@ -30,10 +23,8 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 const FetchAbstractionDataReturnRequirementsService =
   require('../../../app/services/return-requirements/fetch-abstraction-data-return-requirements.service.js')
 
-describe.only('Fetch return requirements base on abstraction data service', () => {
+describe('Fetch return requirements base on abstraction data service', () => {
   let licence
-  let licenceVersion
-  let permitLicence
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -85,7 +76,7 @@ describe.only('Fetch return requirements base on abstraction data service', () =
       financialAgreementId
     })
 
-    permitLicence = await PermitLicenceHelper.add({
+    await PermitLicenceHelper.add({
       licenceRef: licence.licenceRef,
       licenceDataValue: {
         data: {
