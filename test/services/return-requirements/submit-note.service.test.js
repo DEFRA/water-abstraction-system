@@ -70,7 +70,7 @@ describe('Submit Note service', () => {
           })
         })
 
-        it('returns the journey to redirect the page', async () => {
+        it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           expect(result).to.equal({})

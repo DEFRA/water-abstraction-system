@@ -58,7 +58,7 @@ describe('Submit Site Description service', () => {
         expect(refreshedSession.requirements[0].siteDescription).to.equal('This is a valid return requirement description')
       })
 
-      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
+      it('returns the correct details the controller needs to redirect the journey', async () => {
         const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({

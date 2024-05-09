@@ -66,7 +66,7 @@ describe('Submit Abstraction Period service', () => {
         })
       })
 
-      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
+      it('returns the correct details the controller needs to redirect the journey', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({

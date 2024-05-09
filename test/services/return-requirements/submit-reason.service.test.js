@@ -55,7 +55,7 @@ describe('Submit Reason service', () => {
         expect(refreshedSession.reason).to.equal('new-licence')
       })
 
-      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
+      it('returns the correct details the controller needs to redirect the journey', async () => {
         const result = await SubmitReasonService.go(session.id, payload)
 
         expect(result).to.equal({

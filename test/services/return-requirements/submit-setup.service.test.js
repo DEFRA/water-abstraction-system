@@ -57,7 +57,7 @@ describe('Submit Setup service', () => {
       })
 
       describe('and the user has selected to use abstraction data', () => {
-        it('returns redirect route for Returns required journey', async () => {
+        it('returns the route to check your answers page', async () => {
           const result = await SubmitSetupService.go(session.id, payload)
 
           expect(result.redirect).to.equal('check-your-answers')
@@ -71,7 +71,7 @@ describe('Submit Setup service', () => {
           }
         })
 
-        it('returns redirect route for Returns required journey', async () => {
+        it('returns the route for the select purpose page', async () => {
           const result = await SubmitSetupService.go(session.id, payload)
 
           expect(result.redirect).to.equal('purpose/0')

@@ -72,7 +72,7 @@ describe('Submit Points service', () => {
         ])
       })
 
-      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
+      it('returns the correct details the controller needs to redirect the journey', async () => {
         const result = await SubmitPointsService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({

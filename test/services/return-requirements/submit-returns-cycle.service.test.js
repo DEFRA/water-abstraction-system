@@ -58,7 +58,7 @@ describe('Submit Returns Cycle service', () => {
         expect(refreshedSession.requirements[0].returnsCycle).to.equal('summer')
       })
 
-      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
+      it('returns the correct details the controller needs to redirect the journey', async () => {
         const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({
