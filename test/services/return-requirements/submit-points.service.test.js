@@ -107,7 +107,7 @@ describe('Submit Points service', () => {
         const result = await SubmitPointsService.go(session.id, requirementIndex, payload)
 
         expect(result.error).to.equal({
-          text: 'Select any points for the return requirement'
+          text: 'Select any points for the requirements for returns'
         })
       })
     })

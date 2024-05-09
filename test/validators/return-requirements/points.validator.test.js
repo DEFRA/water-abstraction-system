@@ -43,7 +43,7 @@ describe('Point validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select any points for the return requirement')
+      expect(result.error.details[0].message).to.equal('Select any points for the requirements for returns')
     })
   })
 
@@ -55,7 +55,7 @@ describe('Point validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select any points for the return requirement')
+      expect(result.error.details[0].message).to.equal('Select any points for the requirements for returns')
     })
   })
 })
