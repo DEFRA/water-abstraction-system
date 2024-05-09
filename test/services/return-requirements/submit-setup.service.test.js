@@ -28,10 +28,11 @@ describe('Submit Setup service', () => {
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
-          licenceHolder: 'Astro Boy',
+          licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required'
+        requirements: [{}],
+        checkYourAnswersVisited: false
       }
     })
   })
@@ -44,71 +45,62 @@ describe('Submit Setup service', () => {
         }
       })
 
-      it('returns redirect route for Returns required journey', async () => {
-        const result = await SubmitSetupService.go(session.id, payload)
+      it('saves the submitted value', async () => {
+        await SubmitSetupService.go(session.id, payload)
 
-        expect(result).to.equal({ redirect: 'check-your-answers' })
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.setup).to.equal('use-abstraction-data')
+      })
+
+      describe('and the user has selected to use abstraction data', () => {
+        it('returns redirect route for Returns required journey', async () => {
+          const result = await SubmitSetupService.go(session.id, payload)
+
+          expect(result.redirect).to.equal('check-your-answers')
+        })
+      })
+
+      describe('and the user has selected to setup the requirement manually', () => {
+        beforeEach(() => {
+          payload = {
+            setup: 'set-up-manually'
+          }
+        })
+
+        it('returns redirect route for Returns required journey', async () => {
+          const result = await SubmitSetupService.go(session.id, payload)
+
+          expect(result.redirect).to.equal('purpose/0')
+        })
       })
     })
 
     describe('with an invalid payload', () => {
-      describe('because the user has not selected anything', () => {
-        beforeEach(() => {
-          payload = {}
-        })
+      beforeEach(() => {
+        payload = {}
+      })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitSetupService.go(session.id, payload)
+      it('returns page data for the view', async () => {
+        const result = await SubmitSetupService.go(session.id, payload)
 
-          expect(result.id).to.equal(session.id)
-        })
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'How do you want to set up the requirements for returns?',
+          backLink: `/system/return-requirements/${session.id}/reason`,
+          licenceRef: '01/ABC',
+          setup: null
+        }, { skip: ['sessionId', 'error'] })
+      })
 
-        it('returns page data for the view', async () => {
-          const result = await SubmitSetupService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            licenceRef: '01/ABC',
-            pageTitle: 'How do you want to set up the requirements for returns?',
-            setup: null
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error', async () => {
+      describe('because the user has not submitted anything', () => {
+        it('includes an error for the input element', async () => {
           const result = await SubmitSetupService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            text: 'Select how you want to set up the return requirement'
+            text: 'Select how you want to set up the requirements for returns'
           })
         })
-      })
-    })
-  })
-
-  describe('with different setups', () => {
-    describe('and setup is use-abstraction-data', () => {
-      beforeEach(() => {
-        payload = {
-          setup: 'use-abstraction-data'
-        }
-      })
-
-      it('redirects to the check your answers page', async () => {
-        const result = await SubmitSetupService.go(session.id, payload)
-        expect(result.redirect).to.equal('check-your-answers')
-      })
-    })
-
-    describe('and setup is set-up-manually', () => {
-      beforeEach(() => {
-        payload = {
-          setup: 'set-up-manually'
-        }
-      })
-
-      it('redirects to the purpose page', async () => {
-        const result = await SubmitSetupService.go(session.id, payload)
-        expect(result.redirect).to.equal('purpose')
       })
     })
   })
