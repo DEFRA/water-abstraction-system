@@ -5,8 +5,7 @@
  * @module FetchLicenceContactDetailsService
  */
 
-const LicenceDocumentRoleModel = require('../../models/licence-document-role.model')
-const LicenceModel = require('../../models/licence.model')
+const LicenceDocumentModel = require('../../models/licence-document.model')
 
 /**
  * Fetches all contact details for a licence which is needed for the view '/licences/{id}/contact-details` page
@@ -18,35 +17,35 @@ const LicenceModel = require('../../models/licence.model')
 async function go (licenceId) {
   const { licenceContacts } = await _fetch(licenceId)
 
-  return { licenceContacts }
+  return { licenceContacts: licenceContacts.licenceDocumentRoles }
 }
 
 async function _fetch (licenceId) {
-  const licences = await LicenceModel.query().findOne({
-    'licences.id': licenceId
-  }).withGraphFetched('licenceDocument')
-
-  const licenceContacts = await LicenceDocumentRoleModel.query()
-    .where(function () {
-      this.where('end_date', '>', new Date()).orWhere({ end_date: null })
+  const licenceContacts = await LicenceDocumentModel.query()
+    .first()
+    .innerJoinRelated('licence')
+    .where('licence.id', licenceId)
+    .withGraphFetched('licenceDocumentRoles')
+    .modifyGraph('licenceDocumentRoles', (builder) => {
+      builder.where(function () {
+        this.where('end_date', '>', new Date()).orWhere({ end_date: null })
+      })
     })
-    .andWhere({ licence_document_id: licences.licenceDocument.id })
-    .select('')
-    .withGraphFetched('licenceRole')
-    .modifyGraph('licenceRole', (builder) => {
+    .withGraphFetched('licenceDocumentRoles.licenceRole')
+    .modifyGraph('licenceDocumentRoles.licenceRole', (builder) => {
       builder.select(['name', 'label'])
     })
-    .withGraphFetched('address')
-    .modifyGraph('address', (builder) => {
+    .withGraphFetched('licenceDocumentRoles.address')
+    .modifyGraph('licenceDocumentRoles.address', (builder) => {
       builder.select([
         'address1', 'address2', 'address3',
         'address4', 'country', 'postcode'])
     })
-    .withGraphFetched('contact')
+    .withGraphFetched('licenceDocumentRoles.contact')
     .modifyGraph('contact', (builder) => {
       builder.select(['first_name', 'last_name'])
     })
-    .withGraphFetched('company')
+    .withGraphFetched('licenceDocumentRoles.company')
     .modifyGraph('company', (builder) => {
       builder.select(['id', 'name'])
     })
