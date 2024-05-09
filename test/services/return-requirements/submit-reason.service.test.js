@@ -33,7 +33,8 @@ describe('Submit Reason service', () => {
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
-        returnsRequired: 'new-licence'
+        requirements: [{}],
+        startDateOptions: 'licenceStartDate'
       }
     })
   })
@@ -42,7 +43,7 @@ describe('Submit Reason service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          reason: 'new_licence'
+          reason: 'new-licence'
         }
       })
 
@@ -51,52 +52,40 @@ describe('Submit Reason service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.returnsRequired).to.equal('new-licence')
+        expect(refreshedSession.reason).to.equal('new-licence')
       })
 
-      it('returns page data for the journey', async () => {
+      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
         const result = await SubmitReasonService.go(session.id, payload)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
-          checkYourAnswersVisited: false,
-          pageTitle: 'Select the reason for the requirements for returns',
-          licenceRef: '01/ABC',
-          reason: null
-        }, { skip: ['id', 'error'] })
+          checkYourAnswersVisited: false
+        })
       })
     })
 
     describe('with an invalid payload', () => {
-      describe('because the user has not selected anything', () => {
-        beforeEach(() => {
-          payload = {}
-        })
+      beforeEach(() => {
+        payload = {}
+      })
 
-        it('fetches the current setup session record', async () => {
+      it('returns page data for the view', async () => {
+        const result = await SubmitReasonService.go(session.id, payload)
+
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Select the reason for the requirements for returns',
+          backLink: `/system/return-requirements/${session.id}/start-date`,
+          licenceRef: '01/ABC',
+          reason: null
+        }, { skip: ['sessionId', 'error'] })
+      })
+
+      describe('because the user has not submitted anything', () => {
+        it('includes an error for the input element', async () => {
           const result = await SubmitReasonService.go(session.id, payload)
 
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitReasonService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            pageTitle: 'Select the reason for the requirements for returns',
-            licenceRef: '01/ABC',
-            reason: null
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error', async () => {
-          const result = await SubmitReasonService.go(session.id, payload)
-
-          expect(result.error).to.equal({
-            text: 'Select the reason for the requirements for returns'
-          })
+          expect(result.error).to.equal({ text: 'Select the reason for the requirements for returns' })
         })
       })
     })
