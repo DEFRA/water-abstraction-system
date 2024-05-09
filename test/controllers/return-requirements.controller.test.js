@@ -11,7 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
 const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
-const CancelRequirementsService = require('../../app/services/return-requirements/cancel-requirements.service.js')
+const CancelService = require('../../app/services/return-requirements/cancel.service.js')
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
 const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
@@ -113,9 +113,9 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/cancel-requirements', () => {
+  describe('GET /return-requirements/{sessionId}/cancel', () => {
     beforeEach(async () => {
-      Sinon.stub(CancelRequirementsService, 'go').resolves({
+      Sinon.stub(CancelService, 'go').resolves({
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
         pageTitle: 'You are about to cancel these requirements for returns'
       })
@@ -123,7 +123,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('cancel-requirements'))
+        const response = await server.inject(_options('cancel'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('You are about to cancel these requirements for returns')
