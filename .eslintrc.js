@@ -1,8 +1,14 @@
 module.exports = {
   extends: 'standard', // Maintain Standard.js rules
+  plugins: [
+    '@stylistic/js'
+  ],
   rules: {
-    'max-len': ['error', {
-      code: 120
+    '@stylistic/js/max-len': ['error', {
+      code: 120,
+      ignoreStrings: true,
+      ignoreTemplateLiterals: true,
+      ignoreUrls: true
     }]
   }
 }
