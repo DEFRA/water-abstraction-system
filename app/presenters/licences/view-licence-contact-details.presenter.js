@@ -13,22 +13,41 @@
 function go (contactDetails) {
   return {
     activeTab: 'contact-details',
-    licenceContacts: _mapLicenceContacts(contactDetails.licenceContacts),
-    customerContacts: _mapCustomerContacs(contactDetails.customerContacts)
+    customerId: _findCustomerId(contactDetails.licenceContacts),
+    licenceContacts: _mapLicenceContacts(contactDetails.licenceContacts)
   }
+}
+
+function _findCustomerId (licenceContacts) {
+  const customer = licenceContacts.find(con => con.licenceRole.name === 'licenceHolder')
+
+  if (customer && customer.company) {
+    return customer.company.id
+  }
+
+  return null
+}
+
+function _formatLicenceContactName (company, contact) {
+  if (contact && contact.firstName && contact.lastName) {
+    return `${contact.firstName} ${contact.lastName}`
+  }
+
+  if (company) {
+    return company.name
+  }
+
+  return null
 }
 
 function _mapLicenceContacts (licenceContacts) {
   return licenceContacts.map(contact => {
     return {
-      name: contact.company.name,
+      name: _formatLicenceContactName(contact.company, contact.contact),
       communicationType: contact.licenceRole.label,
       address: contact.address
     }
   })
-}
-function _mapCustomerContacs (customerContacts) {
-  return customerContacts.map(customer => customer)
 }
 
 module.exports = {
