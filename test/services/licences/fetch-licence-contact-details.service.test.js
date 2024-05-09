@@ -21,7 +21,7 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper')
 const FetchLicenceContactDetailsService =
   require('../../../app/services/licences/fetch-licence-contact-details.service')
 
-describe.only('Fetch licence contact details service', () => {
+describe('Fetch licence contact details service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })
