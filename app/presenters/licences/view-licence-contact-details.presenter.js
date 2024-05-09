@@ -43,9 +43,9 @@ function _formatLicenceContactName (company, contact) {
 function _mapLicenceContacts (licenceContacts) {
   return licenceContacts.map(contact => {
     return {
-      name: _formatLicenceContactName(contact.company, contact.contact),
+      address: contact.address,
       communicationType: contact.licenceRole.label,
-      address: contact.address
+      name: _formatLicenceContactName(contact.company, contact.contact)
     }
   })
 }

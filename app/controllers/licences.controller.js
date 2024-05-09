@@ -72,8 +72,8 @@ async function viewReturns (request, h) {
 module.exports = {
   noReturnsRequired,
   returnsRequired,
-  viewContacts,
   viewBills,
+  viewContacts,
   viewReturns,
   viewSummary
 }

@@ -11,7 +11,7 @@ const { expect } = Code
 const ViewLicenceContactDetailsPresenter =
   require('../../../app/presenters/licences/view-licence-contact-details.presenter')
 
-describe('View Licence contact details presenter', () => {
+describe.only('View Licence contact details presenter', () => {
   describe('when provided with a licence contacts data', () => {
     it('correctly presents the data', () => {
       const result = ViewLicenceContactDetailsPresenter.go(_LicenceContacts())
@@ -52,13 +52,17 @@ describe('View Licence contact details presenter', () => {
     it('uses the contact first and last name if available', () => {
       const result = ViewLicenceContactDetailsPresenter.go(_LicenceContacts())
 
-      expect(result.licenceContacts[0].name).to.equal('Jackie Flow')
+      const [licenceWithFirstAndLastName] = result.licenceContacts
+
+      expect(licenceWithFirstAndLastName.name).to.equal('Jackie Flow')
     })
 
     it('uses the contact company name if no contact names are available', () => {
       const result = ViewLicenceContactDetailsPresenter.go(_LicenceContacts())
 
-      expect(result.licenceContacts[1].name).to.equal('Water Services Ltd')
+      const [, licenceWithCompanyName] = result.licenceContacts
+
+      expect(licenceWithCompanyName.name).to.equal('Water Services Ltd')
     })
 
     it('finds the customerId', () => {
@@ -70,6 +74,7 @@ describe('View Licence contact details presenter', () => {
     it('handles not finding a customerId', () => {
       const contacts = _LicenceContacts()
       contacts.licenceContacts[1].company = null
+
       const result = ViewLicenceContactDetailsPresenter.go(contacts)
 
       expect(result.customerId).to.be.null()
