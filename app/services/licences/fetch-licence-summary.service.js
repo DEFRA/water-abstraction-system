@@ -38,7 +38,9 @@ async function _fetchLicence (id) {
     .select([
       'expiredDate',
       'id',
-      'startDate'
+      'licenceRef',
+      'startDate',
+      'waterUndertaker'
     ])
     .withGraphFetched('region')
     .modifyGraph('region', (builder) => {

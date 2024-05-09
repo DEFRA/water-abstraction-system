@@ -20,6 +20,7 @@ const { generateLicenceRef } = require('./licence.helper.js')
  * - `licenceStartDt` - [null]
  * - `licenceEndDt` - [null]
  * - `licenceRef` - [randomly generated - 01/123]
+ * - `licenceDataValue` - [null]
  * - `licenceSummary` - [null]
  * - `metadata` - [null]
  * - `dateLicenceVersionPurposeConditionsLastCopied` - [null]

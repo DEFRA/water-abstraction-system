@@ -5,11 +5,9 @@
  * @module FetchReturnRequirementsBasedOnAbstractionDataService
  */
 
-const FetchLicenceAbstractionConditionsService = require('../licences/fetch-licence-abstraction-conditions.service.js')
-const FetchLicenceService = require('../licences/fetch-licence.service.js')
-const { formatAbstractionDate } = require('../../presenters/base.presenter.js')
+const FectchLicenceAgreementsService = require('./fetch-licence-agreements.service.js')
+const FetchLicenceSummaryService = require('../licences/fetch-licence-summary.service.js')
 const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
-const LicenceModel = require('../../models/licence.model.js')
 
 /**
  * Fetches return requirements based on abstraction data needed for `/return-requirements/{sessionId}/check-your-answers` page
@@ -25,23 +23,11 @@ async function go (licenceId) {
 }
 
 async function _fetchAbstractionData (licenceId) {
-  const licenceData = await FetchLicenceService.go(licenceId)
-
-  const currentLicenceVersionId = licenceData?.licenceVersions[0]?.id
-
-  const licenceAbstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
+  const licenceData = await FetchLicenceSummaryService.go(licenceId)
+  const licenceAgreements = await FectchLicenceAgreementsService.go(licenceData.licenceRef)
   const returnRequirements = []
-  // console.log(licenceData)
-  // console.log(licenceData.permitLicence.purposes[0])
-  // console.log(licenceData.permitLicence.purposes[0].purposePoints[0].point_detail)
-  // console.log(licenceData.licenceVersions[0].purposes)
-  // console.log(licenceData.licenceVersions[0].licenceVersionPurposes)
-  // console.log(licenceAbstractionConditions)
 
   licenceData.licenceVersions[0].licenceVersionPurposes.forEach((licenceVersionPurpose) => {
-    // console.log(licenceData.licenceVersions[0])
-    console.log(licenceVersionPurpose)
-    // console.log(licenceData.licenceVersions[0].purposes)
     const purpose = licenceData.licenceVersions[0].purposes.find((purpose) => {
       return purpose.id === licenceVersionPurpose.purposeId
     })
@@ -50,16 +36,7 @@ async function _fetchAbstractionData (licenceId) {
     const permitPurpose = licenceData.permitLicence.purposes.find((purpose) => {
       return purpose.ID === id
     })
-
-    // console.log(purpose)
-    // console.log(licenceVersionPurpose)
-
-    const abstractionPeriod = _generateAbstractionPeriod(licenceVersionPurpose)
     const returnsCycle = _calculateReturnsCycle(licenceVersionPurpose)
-
-    // need permit data - so need to be able to link purpose to specific permitLicence.purposes
-    // point =  permitLicence.purposes[0].purposePoints[0].point_detail
-    // const siteDescription = licenceData.permitLicence.purposes[0].purposePoints[0].point_detail.LOCAL_NAME
 
     const abstractionPoint = generateAbstractionPointDetail(permitPurpose.purposePoints[0].point_detail)
     const siteDescription = permitPurpose.purposePoints[0].point_detail.LOCAL_NAME
@@ -72,7 +49,7 @@ async function _fetchAbstractionData (licenceId) {
       abstractionPoint,
       isSummer: returnsCycle,
       purposeDescription: purpose.description,
-      returnsFrequency: _calculateCollectionFrequency(licenceData, licenceVersionPurpose),
+      returnsFrequency: _calculateCollectionFrequency(licenceData, licenceVersionPurpose, licenceAgreements),
       reportingFrequency: _calculateReportingCycle(licenceData, licenceVersionPurpose),
       siteDescription
     })
@@ -81,8 +58,12 @@ async function _fetchAbstractionData (licenceId) {
   return returnRequirements
 }
 
-function _calculateCollectionFrequency (licenceData, licenceVersionPurpose) {
+function _calculateCollectionFrequency (licenceData, licenceVersionPurpose, licenceAgreements) {
   if (licenceData.waterUndertaker || licenceData.isElectricityGenerator) {
+    return 'daily'
+  }
+
+  if (licenceAgreements.length > 0) {
     return 'daily'
   }
 
@@ -119,13 +100,6 @@ function _calculateReportingCycle (licenceData, licenceVersionPurpose) {
   } else {
     return 'weekly'
   }
-}
-
-function _generateAbstractionPeriod (purpose) {
-  const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
-  const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
-
-  return `From ${startDate} to ${endDate}`
 }
 
 module.exports = {

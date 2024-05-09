@@ -23,8 +23,9 @@ async function go (licenceRef) {
 async function _fetchLicenceAgreements (licenceRef) {
   const result = await LicenceAgreementModel.query()
     .where('licenceRef', licenceRef)
-    .whereNull('endDate')
-    .orWhere('endDate', '>=', new Date())
+    .where(function () {
+      this.whereNull('endDate').orWhere('endDate', '>=', new Date())
+    })
     .withGraphFetched('financialAgreements')
     .modifyGraph('financialAgreements', (builder) => {
       builder.select([
