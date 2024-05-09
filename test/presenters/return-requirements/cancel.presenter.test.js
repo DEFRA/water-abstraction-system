@@ -58,6 +58,7 @@ describe('Cancel presenter', () => {
 
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers',
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         reason: 'Major change',
         returnRequirements: ['Winter and all year monthly requirements for returns, Bore hole in rear field.'],

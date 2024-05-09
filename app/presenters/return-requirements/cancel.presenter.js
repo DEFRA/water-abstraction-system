@@ -20,6 +20,7 @@ function go (session) {
 
   return {
     backLink: `/system/return-requirements/${sessionId}/check-your-answers`,
+    licenceId: licence.id,
     licenceRef: licence.licenceRef,
     reason: returnRequirementReasons[reason],
     returnRequirements: _returnRequirements(journey, requirements),

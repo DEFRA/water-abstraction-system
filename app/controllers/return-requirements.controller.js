@@ -245,8 +245,9 @@ async function submitAgreementsExceptions (request, h) {
 
 async function submitCancel (request, h) {
   const { sessionId } = request.params
+  const { licenceId } = request.payload
 
-  const licenceId = await SubmitCancel.go(sessionId)
+  await SubmitCancel.go(sessionId)
 
   return h.redirect(`/licences/${licenceId}#charge`)
 }

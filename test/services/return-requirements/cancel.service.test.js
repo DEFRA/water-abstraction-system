@@ -75,6 +75,7 @@ describe('Cancel service', () => {
         pageTitle: 'You are about to cancel these requirements for returns',
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers',
         licenceRef: '01/ABC',
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         reason: 'Major change',
         returnRequirements: ['Winter and all year monthly requirements for returns, Bore hole in rear field.'],
         startDate: '1 January 2023'
