@@ -26,6 +26,8 @@ const LicenceVersionHelper = require('../support/helpers/licence-version.helper.
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
+const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
+const ReturnLogModel = require('../../app/models/return-log.model.js')
 const RegisteredToAndLicenceNameSeeder = require('../support/seeders/registered-to-and-licence-name.seeder.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
 const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
@@ -246,6 +248,41 @@ describe('Licence model', () => {
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
         expect(result.region).to.equal(testRegion)
+      })
+    })
+
+    describe('when linking to return logs', () => {
+      let testReturnLogs
+
+      beforeEach(async () => {
+        const { licenceRef } = testRecord
+
+        testReturnLogs = []
+        for (let i = 0; i < 2; i++) {
+          const returnLog = await ReturnLogHelper.add({ licenceRef })
+          testReturnLogs.push(returnLog)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('returnLogs')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the workflows', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('returnLogs')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnLogs).to.be.an.array()
+        expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
+        expect(result.returnLogs).to.include(testReturnLogs[0])
+        expect(result.returnLogs).to.include(testReturnLogs[1])
       })
     })
 

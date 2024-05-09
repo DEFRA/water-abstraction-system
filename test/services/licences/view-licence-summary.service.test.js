@@ -16,7 +16,7 @@ const FetchLicenceAbstractionConditionsService = require('../../../app/services/
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
 // Thing under test
-const ViewLicenceSummaryService = require('../../../app/services/licences/view-license-summary.service')
+const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service')
 
 describe('View Licence service summary', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
@@ -29,7 +29,7 @@ describe('View Licence service summary', () => {
       purposeIds: [],
       numberOfConditions: 0
     })
-    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake license' })
+    Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
   })
 
   afterEach(() => {
@@ -64,7 +64,7 @@ describe('View Licence service summary', () => {
           endDate: null,
           id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           licenceHolder: 'Unregistered licence',
-          licenceName: 'fake license',
+          licenceName: 'fake licence',
           monitoringStations: [],
           purposes: null,
           region: 'South West',

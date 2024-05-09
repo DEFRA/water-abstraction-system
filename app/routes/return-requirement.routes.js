@@ -31,32 +31,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/add-note',
-    handler: ReturnRequirementsController.addNote,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Add a note'
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-requirements/{sessionId}/add-note',
-    handler: ReturnRequirementsController.submitAddNote,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Submit a note'
-    }
-  },
-  {
-    method: 'GET',
     path: '/return-requirements/{sessionId}/agreements-exceptions',
     handler: ReturnRequirementsController.agreementsExceptions,
     options: {
@@ -96,6 +70,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/cancel-requirements',
+    handler: ReturnRequirementsController.cancelRequirements,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Cancel return requirements'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/cancel-requirements',
+    handler: ReturnRequirementsController.submitCancelRequirements,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Cancel return requirements'
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/check-your-answers',
     handler: ReturnRequirementsController.checkYourAnswers,
     options: {
@@ -118,6 +118,19 @@ const routes = [
         }
       },
       description: 'Submit check your answers'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/delete-note',
+    handler: ReturnRequirementsController.deleteNote,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Delete a note'
     }
   },
   {
@@ -222,6 +235,32 @@ const routes = [
         }
       },
       description: 'Submit why are no returns required?'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/note',
+    handler: ReturnRequirementsController.note,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Add a note'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/note',
+    handler: ReturnRequirementsController.submitNote,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit a note'
     }
   },
   {

@@ -32,7 +32,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.data.checkYourAnswersVisited
+      checkYourAnswersVisited: session.checkYourAnswersVisited
     }
   }
 
@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.data.checkYourAnswersVisited,
+    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select how often readings or volumes are collected',
     ...formattedData
@@ -48,11 +48,9 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  session.frequencyCollected = payload.frequencyCollected
 
-  currentData.frequencyCollected = payload.frequencyCollected
-
-  return session.$query().patch({ data: currentData })
+  return session.$update()
 }
 
 function _validate (payload) {

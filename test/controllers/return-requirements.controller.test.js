@@ -10,12 +10,14 @@ const { expect } = Code
 
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
-const AddNoteService = require('../../app/services/return-requirements/add-note.service.js')
 const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
+const CancelRequirementsService = require('../../app/services/return-requirements/cancel-requirements.service.js')
 const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
+const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
+const NoteService = require('../../app/services/return-requirements/note.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
 const ReturnCycleService = require('../../app/services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../../app/services/return-requirements/purpose.service.js')
@@ -26,6 +28,7 @@ const StartDateService = require('../../app/services/return-requirements/start-d
 
 // For running our service
 const { init } = require('../../app/server.js')
+const sessionId = '64924759-8142-4a08-9d1e-1e902cd9d316'
 
 describe('Return requirements controller', () => {
   let server
@@ -64,16 +67,16 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/add-note', () => {
+  describe('GET /return-requirements/{sessionId}/note', () => {
     beforeEach(async () => {
-      Sinon.stub(AddNoteService, 'go').resolves({
+      Sinon.stub(NoteService, 'go').resolves({
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Add a note'
       })
     })
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('add-note'))
+        const response = await server.inject(_options('note'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Add a note')
@@ -110,6 +113,24 @@ describe('Return requirements controller', () => {
     })
   })
 
+  describe('GET /return-requirements/{sessionId}/cancel-requirements', () => {
+    beforeEach(async () => {
+      Sinon.stub(CancelRequirementsService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'You are about to cancel these requirements for returns'
+      })
+    })
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(_options('cancel-requirements'))
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('You are about to cancel these requirements for returns')
+      })
+    })
+  })
+
   describe('GET /return-requirements/{sessionId}/check-your-answers', () => {
     beforeEach(async () => {
       Sinon.stub(CheckYourAnswersService, 'go').resolves({
@@ -124,6 +145,22 @@ describe('Return requirements controller', () => {
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Check the return requirements for')
       })
+    })
+  })
+
+  describe('GET /return-requirements/{sessionId}/delete-note', () => {
+    beforeEach(async () => {
+      Sinon.stub(DeleteNoteService, 'go').resolves({
+        title: 'Removed',
+        text: 'Note removed'
+      })
+    })
+
+    it('redirects on success', async () => {
+      const result = await server.inject(_options('delete-note'))
+
+      expect(result.statusCode).to.equal(302)
+      expect(result.headers.location).to.equal(`/system/return-requirements/${sessionId}/check-your-answers`)
     })
   })
 
@@ -306,7 +343,7 @@ describe('Return requirements controller', () => {
 function _options (path) {
   return {
     method: 'GET',
-    url: `/return-requirements/64924759-8142-4a08-9d1e-1e902cd9d316/${path}`,
+    url: `/return-requirements/${sessionId}/${path}`,
     auth: {
       strategy: 'session',
       credentials: { scope: ['billing'] }

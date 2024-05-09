@@ -44,6 +44,10 @@ describe('Bill Runs Setup Create service', () => {
       session = await SessionHelper.add({
         data: { region: '19a027c6-4aad-47d3-80e3-3917a4579a5b', type: 'annual' }
       })
+      // NOTE: We make these additional $afterFind() calls to trigger the hook that would have been called when the
+      // create service queries for the session. The hook elevates properties from `data` onto the session instance
+      // itself. Without this the tests fail though the service works fine.
+      session.$afterFind()
 
       existsResults = { matchResults: [], session, yearToUse: 2024 }
     })
@@ -62,6 +66,7 @@ describe('Bill Runs Setup Create service', () => {
       session = await SessionHelper.add({
         data: { region: '19a027c6-4aad-47d3-80e3-3917a4579a5b', type: 'annual' }
       })
+      session.$afterFind()
 
       existsResults = { matchResults: [], session, yearToUse: 2024 }
     })
@@ -84,6 +89,7 @@ describe('Bill Runs Setup Create service', () => {
       session = await SessionHelper.add({
         data: { region: '19a027c6-4aad-47d3-80e3-3917a4579a5b', type: 'supplementary' }
       })
+      session.$afterFind()
     })
 
     describe('and there were no matching bill runs', () => {
@@ -147,6 +153,7 @@ describe('Bill Runs Setup Create service', () => {
             season: 'summer'
           }
         })
+        session.$afterFind()
 
         existsResults = { matchResults: [], session, yearToUse: 2022 }
       })
@@ -168,6 +175,7 @@ describe('Bill Runs Setup Create service', () => {
             year: 2023
           }
         })
+        session.$afterFind()
 
         existsResults = { matchResults: [], session, yearToUse: 2023 }
       })

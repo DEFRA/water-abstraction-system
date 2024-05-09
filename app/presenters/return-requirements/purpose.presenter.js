@@ -17,10 +17,10 @@
 function go (session, purposesData) {
   const data = {
     id: session.id,
-    licenceId: session.data.licence.id,
-    licenceRef: session.data.licence.licenceRef,
+    licenceId: session.licence.id,
+    licenceRef: session.licence.licenceRef,
     licencePurposes: purposesData,
-    selectedPurposes: session.data.purposes ? session.data.purposes.join(',') : ''
+    selectedPurposes: session.purposes ? session.purposes.join(',') : ''
   }
 
   return data

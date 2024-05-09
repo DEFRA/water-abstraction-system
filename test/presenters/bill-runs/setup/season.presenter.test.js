@@ -34,7 +34,7 @@ describe('Bill Runs Setup Season presenter', () => {
 
     describe('where the user has previously selected a season', () => {
       beforeEach(() => {
-        session.data.season = 'summer'
+        session.season = 'summer'
       })
 
       it('correctly presents the data', () => {

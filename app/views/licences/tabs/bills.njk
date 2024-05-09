@@ -1,0 +1,55 @@
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
+<table class="govuk-table">
+  <h2 class="govuk-heading-l">Bills</h2>
+  {% if bills.length > 0 %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col">Bill number</th>
+        <th class="govuk-table__header" scope="col">Date created</th>
+        <th class="govuk-table__header" scope="col">Billing account</th>
+        <th class="govuk-table__header" scope="col">Bill run type</th>
+        <th class="govuk-table__header govuk-table__header--numeric" scope="col">Financial year</th>
+        <th class="govuk-table__header govuk-table__header--numeric" scope="col">Bill total</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      {% for bill in bills %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell" scope="row">
+            <a href="/system/bills/{{ bill.id }}">
+              {{ bill.billNumber }}
+            </a>
+          </td>
+          <td class="govuk-table__cell">
+            {{ bill.dateCreated }}
+          </td>
+          <td class="govuk-table__cell">
+            <a href="/billing-accounts/{{ bill.accountId }}">
+              {{ bill.account }}
+            </a>
+          </td>
+          <td class="govuk-table__cell">
+            {{ bill.runType | title }}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            {{ bill.financialYear }}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            {{ bill.total }}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No bills sent for this licence.</p>
+  {% endif %}
+</table>
+
+{% if bills and pagination.numberOfPages > 1 %}
+  {{ govukPagination(pagination.component) }}
+{% endif %}
+
+

@@ -15,27 +15,27 @@ async function go (session) {
   console.log(result)
   const data = {
     id: session.id,
-    journey: session.data.journey,
-    licenceRef: session.data.licence.licenceRef,
-    note: session.data.note ? session.data.note.content : '',
-    reason: session.data.reason,
-    startDate: _startDate(session.data),
-    userEmail: session.data.note ? session.data.note.userEmail : 'No notes added'
+    journey: session.journey,
+    licenceRef: session.licence.licenceRef,
+    note: session.note ? session.note.content : '',
+    reason: session.reason,
+    startDate: _startDate(session),
+    userEmail: session.note ? session.note.userEmail : 'No notes added'
   }
 
   return data
 }
 
-function _startDate (sessionData) {
-  const selectedOption = sessionData.startDateOptions
+function _startDate (session) {
+  const selectedOption = session.startDateOptions
   let date
 
   if (selectedOption === 'licenceStartDate') {
-    date = new Date(sessionData.licence.currentVersionStartDate)
+    date = new Date(session.licence.currentVersionStartDate)
   } else {
-    const day = sessionData.startDateDay
-    const month = sessionData.startDateMonth
-    const year = sessionData.startDateYear
+    const day = session.startDateDay
+    const month = session.startDateMonth
+    const year = session.startDateYear
 
     date = new Date(`${year}-${month}-${day}`)
   }

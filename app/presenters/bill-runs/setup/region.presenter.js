@@ -17,7 +17,7 @@ function go (session, regions) {
   return {
     sessionId: session.id,
     regions,
-    selectedRegion: session.data.region ? session.data.region : null
+    selectedRegion: session.region ? session.region : null
   }
 }
 

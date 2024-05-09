@@ -42,6 +42,7 @@ describe('Submit Check Your Answers service', () => {
 
     it('returns a valid licence', async () => {
       const result = await SubmitCheckYourAnswersService.go(sessionId)
+
       expect(result).to.equal(session.data.licence.id)
     })
   })
@@ -53,6 +54,7 @@ describe('Submit Check Your Answers service', () => {
 
     it('throws an error', async () => {
       const response = await expect(SubmitCheckYourAnswersService.go(sessionId)).to.reject()
+
       expect(response).to.be.an.instanceOf(ExpandedError)
       expect(response.message).to.equal('Invalid licence for return requirements')
     })

@@ -73,6 +73,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/remove/{licenceId}',
+    handler: BillRunsController.removeLicence,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Confirm removing a licence from a bill run'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/remove/{licenceId}',
+    handler: BillRunsController.submitRemoveLicence,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit licence removal from a bill run'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.review,
     options: {
@@ -94,7 +120,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'POST request recieved when filtering applied to review two-part tariff match and allocation results'
+      description: 'POST request received when filtering applied to review two-part tariff match and allocation results'
     }
   },
   {
@@ -121,6 +147,19 @@ const routes = [
         }
       },
       description: 'POST request received when progress marking is applied to review a two-part tariff licence'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}',
+    handler: BillRunsController.chargeReferenceDetails,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Review a charge reference from a two-part tariff licence'
     }
   },
   {

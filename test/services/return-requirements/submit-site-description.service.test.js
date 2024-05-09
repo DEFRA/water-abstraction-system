@@ -50,7 +50,7 @@ describe('Submit Site Description service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.siteDescription).to.equal('This is a valid return requirement description')
+        expect(refreshedSession.siteDescription).to.equal('This is a valid return requirement description')
       })
 
       it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {

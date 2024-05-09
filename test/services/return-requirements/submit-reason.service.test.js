@@ -51,7 +51,7 @@ describe('Submit Reason service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.returnsRequired).to.equal('new-licence')
+        expect(refreshedSession.returnsRequired).to.equal('new-licence')
       })
 
       it('returns page data for the journey', async () => {

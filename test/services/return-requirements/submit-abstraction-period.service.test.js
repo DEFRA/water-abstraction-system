@@ -53,7 +53,7 @@ describe('Submit Abstraction Period service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.abstractionPeriod).to.equal({
+        expect(refreshedSession.abstractionPeriod).to.equal({
           'end-abstraction-period-day': '02',
           'start-abstraction-period-day': '01',
           'end-abstraction-period-month': '7',

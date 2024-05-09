@@ -21,7 +21,7 @@ const SessionModel = require('../../models/session.model.js')
 */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const purposesData = await FetchPurposesService.go(session.data.licence.id)
+  const purposesData = await FetchPurposesService.go(session.licence.id)
 
   const formattedData = SelectPurposePresenter.go(session, purposesData)
 

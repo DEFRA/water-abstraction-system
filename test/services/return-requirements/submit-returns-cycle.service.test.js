@@ -50,7 +50,7 @@ describe('Submit Returns Cycle service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.data.returnsCycle).to.equal('summer')
+        expect(refreshedSession.returnsCycle).to.equal('summer')
       })
 
       it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {

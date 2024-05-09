@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set baseURL = "/system/return-requirements/" + id %}
@@ -45,6 +46,13 @@
 {% endset %}
 
 {% block content %}
+  {% if notification %}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
+  {% endif %}
+
   {# Main heading #}
   <div class="govuk-body">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
@@ -118,9 +126,13 @@
             actions: {
               items: [
                 {
-                  href: "add-note",
+                  href: "note",
                   text: "Change" if note else "Add a note"
-                }
+                },
+                {
+                  href: "delete-note",
+                  text: "Delete"
+                } if note
               ]
             }
           }
@@ -142,7 +154,7 @@
       {{ govukButton({
         text: "Cancel return requirements",
         classes: "govuk-button--secondary",
-        href: "#"
+        href: baseURL + "/cancel-requirements"
         }) }}
     </div>
   </form>

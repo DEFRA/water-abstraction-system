@@ -9,15 +9,18 @@ const Boom = require('@hapi/boom')
 
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
+const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../services/bill-runs/two-part-tariff/match-details.service.js')
+const RemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
 const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
@@ -86,12 +89,35 @@ async function matchDetails (request, h) {
   })
 }
 
+async function removeLicence (request, h) {
+  const { id: billRunId, licenceId } = request.params
+
+  const pageData = await RemoveBillRunLicenceService.go(billRunId, licenceId)
+
+  return h.view('bill-runs/remove-licence.njk', {
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
 async function review (request, h) {
   const { id } = request.params
-  const pageData = await ReviewBillRunService.go(id, request.payload)
+  const pageData = await ReviewBillRunService.go(id, request.payload, request.yar)
 
   return h.view('bill-runs/review.njk', {
     pageTitle: 'Review licences',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function chargeReferenceDetails (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
+
+  return h.view('bill-runs/charge-reference-details.njk', {
+    pageTitle: 'Charge reference details',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -147,6 +173,18 @@ async function submitCancel (request, h) {
   }
 }
 
+async function submitRemoveLicence (request, h) {
+  const { id: billRunId, licenceId } = request.params
+
+  const allLicencesRemoved = await SubmitRemoveBillRunLicenceService.go(billRunId, licenceId, request.yar)
+
+  if (allLicencesRemoved) {
+    return h.redirect('/system/bill-runs')
+  }
+
+  return h.redirect(`/system/bill-runs/${billRunId}/review`)
+}
+
 async function submitReviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
@@ -187,11 +225,14 @@ module.exports = {
   create,
   index,
   matchDetails,
+  removeLicence,
   review,
+  chargeReferenceDetails,
   reviewLicence,
   send,
   submitAmendedBillableReturns,
   submitCancel,
+  submitRemoveLicence,
   submitReviewLicence,
   submitSend,
   view

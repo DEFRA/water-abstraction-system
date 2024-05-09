@@ -40,7 +40,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     // The journey is complete (we don't need any details) if the bill run type is not 2PT
-    return { setupComplete: !session.data.type.startsWith('two_part') }
+    return { setupComplete: !session.type.startsWith('two_part') }
   }
 
   const formattedData = RegionPresenter.go(session, regions)
@@ -52,7 +52,7 @@ async function go (sessionId, payload) {
 }
 
 async function _save (session, payload) {
-  const currentData = session.data
+  const currentData = session
 
   currentData.region = payload.region
 

@@ -12,14 +12,17 @@ const { expect } = Code
 const AmendBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
+const ChargeReferenceDetailsService = require('../../app/services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const MatchDetailsService = require('../../app/services/bill-runs/two-part-tariff/match-details.service.js')
+const RemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/remove-bill-run-licence.service.js')
 const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/review-bill-run.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
+const SubmitRemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
 const SubmitReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
@@ -272,6 +275,77 @@ describe('Bill Runs controller', () => {
     })
   })
 
+  describe('/bill-runs/{id}/remove/{licenceId}', () => {
+    const licenceId = '949aab20-d3fc-4726-aace-6bd2def6a146'
+
+    describe('GET /bill-runs/{id}/remove/{licenceId}', () => {
+      beforeEach(async () => {
+        options = _options('GET', `remove/${licenceId}`)
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(RemoveBillRunLicenceService, 'go').resolves({
+            pageTitle: "You're about to remove 01/123/ABC from the bill run",
+            backLink: `../review/${licenceId}`,
+            billRunNumber: 12345,
+            billRunStatus: 'review',
+            dateCreated: '3 May 2024',
+            financialYear: '2022 to 2023',
+            licenceRef: '01/123/ABC',
+            region: 'Test region'
+          })
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('You&#39;re about to remove 01/123/ABC from the bill run')
+          expect(response.payload).to.contain(`../review/${licenceId}`)
+          expect(response.payload).to.contain('12345')
+          expect(response.payload).to.contain('review')
+          expect(response.payload).to.contain('3 May 2024')
+          expect(response.payload).to.contain('2022 to 2023')
+          expect(response.payload).to.contain('01/123/ABC')
+          expect(response.payload).to.contain('Test region')
+        })
+      })
+    })
+
+    describe('POST /bill-runs/{id}/remove/{licenceId}', () => {
+      beforeEach(() => {
+        options = _options('POST', `remove/${licenceId}`)
+      })
+
+      describe('when a request is valid and licences still remain in the bill run', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitRemoveBillRunLicenceService, 'go').resolves(false)
+        })
+
+        it('redirects to the Review licences page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review')
+        })
+      })
+
+      describe('when a request is valid and NO licences remain in the bill run', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitRemoveBillRunLicenceService, 'go').resolves(true)
+        })
+
+        it('redirects to the Bill runs page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal('/system/bill-runs')
+        })
+      })
+    })
+  })
+
   describe('/bill-runs/{id}/review', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -382,6 +456,31 @@ describe('Bill Runs controller', () => {
 
           expect(response.statusCode).to.equal(302)
           expect(response.headers.location).to.equal('/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _options(
+          'GET',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(ChargeReferenceDetailsService, 'go').resolves(_chargeReferenceData())
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('4.6.24')
+          expect(response.payload).to.contain('Total billable returns')
+          expect(response.payload).to.contain('Aggregate factor (0.5)')
         })
       })
     })
@@ -582,6 +681,21 @@ function _chargeElementDetails () {
       issues: []
     },
     matchedReturns: {}
+  }
+}
+
+function _chargeReferenceData () {
+  return {
+    billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
+    financialYear: '2022 to 2023',
+    chargePeriod: '1 April 2022 to 31 March 2023',
+    chargeReference: {
+      reference: '4.6.24',
+      description: 'High loss, non-tidal, restricted water, greater than 85 up to and including 120 ML/yr',
+      totalBillableReturns: 5,
+      authorisedVolume: 10,
+      adjustments: ['Aggregate factor (0.5)']
+    }
   }
 }
 
