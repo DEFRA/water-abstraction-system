@@ -223,6 +223,10 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Contact Details')
+        // Table row titles
+        expect(response.payload).to.contain('Name')
+        expect(response.payload).to.contain('Communication type')
+        expect(response.payload).to.contain('Send to')
       })
     })
     describe('when a request is valid and has no contact details', () => {
@@ -235,6 +239,7 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Contact Details')
+        expect(response.payload).to.contain('No contacts found.')
       })
     })
   })
@@ -326,7 +331,8 @@ function _viewLicenceBills () {
 
 function _viewLicenceContactDetails () {
   return {
-    activeTab: 'contact-details'
+    activeTab: 'contact-details',
+    licenceContacts: [{}]
   }
 }
 
