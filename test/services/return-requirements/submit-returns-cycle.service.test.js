@@ -17,8 +17,8 @@ const SubmitReturnsCycleService = require('../../../app/services/return-requirem
 describe('Submit Returns Cycle service', () => {
   const requirementIndex = 0
 
-  let session
   let payload
+  let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()

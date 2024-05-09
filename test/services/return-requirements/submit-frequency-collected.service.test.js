@@ -17,8 +17,8 @@ const SubmitFrequencyCollectedService = require('../../../app/services/return-re
 describe('Submit Frequency Collected service', () => {
   const requirementIndex = 0
 
-  let session
   let payload
+  let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
