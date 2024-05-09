@@ -23,7 +23,7 @@ describe('Return Requirements - Cancel service', () => {
     session = await SessionHelper.add({
       id: '61e07498-f309-4829-96a9-72084a54996d',
       data: {
-        checkYourAnswersVisited: false,
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -73,7 +73,7 @@ describe('Return Requirements - Cancel service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'You are about to cancel these requirements for returns',
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers',
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check',
         licenceRef: '01/ABC',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         reason: 'Major change',

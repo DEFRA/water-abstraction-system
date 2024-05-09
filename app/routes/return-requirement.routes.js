@@ -96,28 +96,28 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/check-your-answers',
-    handler: ReturnRequirementsController.checkYourAnswers,
+    path: '/return-requirements/{sessionId}/check',
+    handler: ReturnRequirementsController.check,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Check your answers'
+      description: 'Check return requirements'
     }
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/check-your-answers',
-    handler: ReturnRequirementsController.submitCheckYourAnswers,
+    path: '/return-requirements/{sessionId}/check',
+    handler: ReturnRequirementsController.submitCheck,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Submit check your answers'
+      description: 'Submit check return requirements'
     }
   },
   {

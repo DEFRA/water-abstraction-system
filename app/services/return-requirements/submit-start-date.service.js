@@ -22,9 +22,8 @@ const StartDateValidator = require('../../validators/return-requirements/start-d
  * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} If no errors 2 flags that determine whether the user is returned to the check your answers
- * page or the next page in the journey else the page data for the start date page including the validation error
- * details
+ * @returns {Promise<Object>} If no errors 2 flags that determine whether the user is returned to the check page or the
+ * next page in the journey else the page data for the start date page including the validation error details
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
@@ -36,7 +35,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.checkYourAnswersVisited,
+      checkPageVisited: session.checkPageVisited,
       journey: session.journey
     }
   }

@@ -24,10 +24,10 @@ function go (session) {
 }
 
 function _backLink (session) {
-  const { checkYourAnswersVisited, id } = session
+  const { checkPageVisited, id } = session
 
-  if (checkYourAnswersVisited) {
-    return `/system/return-requirements/${id}/check-your-answers`
+  if (checkPageVisited) {
+    return `/system/return-requirements/${id}/check`
   }
 
   return `/system/return-requirements/${id}/start-date`

@@ -8,7 +8,7 @@
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../services/return-requirements/cancel.service.js')
-const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
+const CheckService = require('../services/return-requirements/check.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
@@ -25,7 +25,7 @@ const StartDateService = require('../services/return-requirements/start-date.ser
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
 const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
 const SubmitCancel = require('../services/return-requirements/submit-cancel.service.js')
-const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
+const SubmitCheckService = require('../services/return-requirements/submit-check.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
@@ -77,11 +77,11 @@ async function cancel (request, h) {
   })
 }
 
-async function checkYourAnswers (request, h) {
+async function check (request, h) {
   const { sessionId } = request.params
-  const pageData = await CheckYourAnswersService.go(sessionId, request.yar)
+  const pageData = await CheckService.go(sessionId, request.yar)
 
-  return h.view('return-requirements/check-your-answers.njk', {
+  return h.view('return-requirements/check.njk', {
     ...pageData
   })
 }
@@ -91,7 +91,7 @@ async function deleteNote (request, h) {
 
   await DeleteNoteService.go(sessionId, request.yar)
 
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
 
 async function existing (request, h) {
@@ -224,8 +224,8 @@ async function submitAbstractionPeriod (request, h) {
     return h.view('return-requirements/abstraction-period.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/returns-cycle/${requirementIndex}`)
@@ -240,7 +240,7 @@ async function submitAgreementsExceptions (request, h) {
     return h.view('return-requirements/agreements-exceptions.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
 
 async function submitCancel (request, h) {
@@ -252,10 +252,10 @@ async function submitCancel (request, h) {
   return h.redirect(`/licences/${licenceId}#charge`)
 }
 
-async function submitCheckYourAnswers (request, h) {
+async function submitCheck (request, h) {
   const { sessionId } = request.params
 
-  const licenceId = await SubmitCheckYourAnswersService.go(sessionId)
+  const licenceId = await SubmitCheckService.go(sessionId)
 
   return h.redirect(`/system/return-requirements/${licenceId}/approved`)
 }
@@ -263,7 +263,7 @@ async function submitCheckYourAnswers (request, h) {
 async function submitExisting (request, h) {
   const { sessionId } = request.params
 
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
 
 async function submitFrequencyCollected (request, h) {
@@ -275,8 +275,8 @@ async function submitFrequencyCollected (request, h) {
     return h.view('return-requirements/frequency-collected.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-reported/${requirementIndex}`)
@@ -291,8 +291,8 @@ async function submitFrequencyReported (request, h) {
     return h.view('return-requirements/frequency-reported.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/agreements-exceptions/${requirementIndex}`)
@@ -307,7 +307,7 @@ async function submitNoReturnsRequired (request, h) {
     return h.view('return-requirements/no-returns-required.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
 
 async function submitNote (request, h) {
@@ -320,7 +320,7 @@ async function submitNote (request, h) {
     return h.view('return-requirements/note.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
 
 async function submitPoints (request, h) {
@@ -332,8 +332,8 @@ async function submitPoints (request, h) {
     return h.view('return-requirements/points.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/abstraction-period/${requirementIndex}`)
@@ -348,8 +348,8 @@ async function submitPurpose (request, h) {
     return h.view('return-requirements/purpose.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/points/${requirementIndex}`)
@@ -364,8 +364,8 @@ async function submitReason (request, h) {
     return h.view('return-requirements/reason.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/setup`)
@@ -380,8 +380,8 @@ async function submitReturnsCycle (request, h) {
     return h.view('return-requirements/returns-cycle.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/site-description/${requirementIndex}`)
@@ -408,8 +408,8 @@ async function submitSiteDescription (request, h) {
     return h.view('return-requirements/site-description.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/frequency-collected/${requirementIndex}`)
@@ -424,8 +424,8 @@ async function submitStartDate (request, h) {
     return h.view('return-requirements/start-date.njk', pageData)
   }
 
-  if (pageData.checkYourAnswersVisited) {
-    return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  if (pageData.checkPageVisited) {
+    return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
   if (pageData.journey === 'returns-required') {
@@ -440,7 +440,7 @@ module.exports = {
   agreementsExceptions,
   approved,
   cancel,
-  checkYourAnswers,
+  check,
   deleteNote,
   existing,
   frequencyCollected,
@@ -457,7 +457,7 @@ module.exports = {
   submitAbstractionPeriod,
   submitAgreementsExceptions,
   submitCancel,
-  submitCheckYourAnswers,
+  submitCheck,
   submitExisting,
   submitFrequencyCollected,
   submitFrequencyReported,

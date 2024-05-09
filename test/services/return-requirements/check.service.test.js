@@ -13,10 +13,10 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const CheckYourAnswersService = require('../../../app/services/return-requirements/check-your-answers.service.js')
+const CheckService = require('../../../app/services/return-requirements/check.service.js')
 const SessionModel = require('../../../app/models/session.model.js')
 
-describe('Return Requirements - Check Your Answers service', () => {
+describe('Return Requirements - Check service', () => {
   let session
   let yarStub
 
@@ -25,7 +25,7 @@ describe('Return Requirements - Check Your Answers service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -50,13 +50,13 @@ describe('Return Requirements - Check Your Answers service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await CheckYourAnswersService.go(session.id, yarStub)
+      const result = await CheckService.go(session.id, yarStub)
 
       expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await CheckYourAnswersService.go(session.id, yarStub)
+      const result = await CheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -72,11 +72,12 @@ describe('Return Requirements - Check Your Answers service', () => {
       }, { skip: ['sessionId'] })
     })
 
-    it('updates the session record to indicate user has visited check-your-answers', async () => {
-      await CheckYourAnswersService.go(session.id, yarStub)
-      const updatedSession = await SessionModel.query().findById(session.id)
+    it("updates the session record to indicate user has visited the 'check' page", async () => {
+      await CheckService.go(session.id, yarStub)
 
-      expect(updatedSession.checkYourAnswersVisited).to.be.true()
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.checkPageVisited).to.be.true()
     })
   })
 })

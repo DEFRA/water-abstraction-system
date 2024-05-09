@@ -16,7 +16,7 @@ describe('Return Requirements - Note presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      checkYourAnswersVisited: false,
+      checkPageVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -37,7 +37,7 @@ describe('Return Requirements - Note presenter', () => {
       const result = NotePresenter.go(session)
 
       expect(result).to.be.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers',
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check',
         licenceRef: '01/ABC',
         note: null,
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
@@ -46,10 +46,10 @@ describe('Return Requirements - Note presenter', () => {
   })
 
   describe("the 'backLink' property", () => {
-    it("returns a link back to the 'check-your-answers' page", () => {
+    it("returns a link back to the 'check' page", () => {
       const result = NotePresenter.go(session)
 
-      expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers')
+      expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
     })
   })
 

@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/check-your-answers` page
- * @module CheckYourAnswersService
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/check` page
+ * @module CheckService
  */
 
-const CheckYourAnswersPresenter = require('../../presenters/return-requirements/check-your-answers.presenter.js')
+const CheckPresenter = require('../../presenters/return-requirements/check.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/check-your-answers` page
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/check` page
  *
  * @param {string} sessionId - The UUID for return requirement setup session record
  * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
@@ -19,9 +19,9 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  await _markCheckYourAnswersVisited(session)
+  await _markCheckPageVisited(session)
 
-  const formattedData = CheckYourAnswersPresenter.go(session)
+  const formattedData = CheckPresenter.go(session)
 
   const notification = yar.flash('notification')[0]
 
@@ -32,8 +32,8 @@ async function go (sessionId, yar) {
   }
 }
 
-async function _markCheckYourAnswersVisited (session) {
-  session.checkYourAnswersVisited = true
+async function _markCheckPageVisited (session) {
+  session.checkPageVisited = true
 
   return session.$update()
 }

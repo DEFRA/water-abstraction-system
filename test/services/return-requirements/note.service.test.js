@@ -22,7 +22,7 @@ describe('Return Requirements - Note service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -52,7 +52,7 @@ describe('Return Requirements - Note service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'Add a note',
-        backLink: `/system/return-requirements/${session.id}/check-your-answers`,
+        backLink: `/system/return-requirements/${session.id}/check`,
         licenceRef: '01/ABC',
         note: null
       }, { skip: ['sessionId'] })

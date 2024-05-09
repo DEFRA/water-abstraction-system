@@ -48,7 +48,7 @@ function _data (licence, journey) {
   const ends = licence.$ends()
 
   return {
-    checkYourAnswersVisited: false,
+    checkPageVisited: false,
     licence: {
       id,
       currentVersionStartDate: _currentVersionStartDate(licenceVersions),

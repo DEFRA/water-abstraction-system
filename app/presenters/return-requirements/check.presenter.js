@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/check-your-answers` page
- * @module CheckYourAnswersPresenter
+ * Formats data for the `/return-requirements/{sessionId}/check` page
+ * @module CheckPresenter
  */
 
 const { formatLongDate } = require('../base.presenter.js')

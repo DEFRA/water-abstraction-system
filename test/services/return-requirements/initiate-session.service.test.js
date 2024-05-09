@@ -51,7 +51,7 @@ describe('Return Requirements - Initiate Session service', () => {
         const { data } = result
 
         expect(data).to.equal({
-          checkYourAnswersVisited: false,
+          checkPageVisited: false,
           licence: {
             id: licence.id,
             currentVersionStartDate: new Date('2022-05-01'),

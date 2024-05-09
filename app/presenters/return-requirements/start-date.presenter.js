@@ -38,10 +38,10 @@ function go (session) {
 }
 
 function _backLink (session) {
-  const { checkYourAnswersVisited, id, licence } = session
+  const { checkPageVisited, id, licence } = session
 
-  if (checkYourAnswersVisited) {
-    return `/system/return-requirements/${id}/check-your-answers`
+  if (checkPageVisited) {
+    return `/system/return-requirements/${id}/check`
   }
 
   return `/licences/${licence.id}#charge`

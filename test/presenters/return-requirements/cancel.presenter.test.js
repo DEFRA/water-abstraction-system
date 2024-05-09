@@ -16,7 +16,7 @@ describe('Return Requirements - Cancel presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      checkYourAnswersVisited: false,
+      checkPageVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -57,7 +57,7 @@ describe('Return Requirements - Cancel presenter', () => {
       const result = CancelPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers',
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
         reason: 'Major change',

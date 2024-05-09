@@ -19,7 +19,7 @@ function go (session) {
   const { id: sessionId, journey, licence, reason, requirements } = session
 
   return {
-    backLink: `/system/return-requirements/${sessionId}/check-your-answers`,
+    backLink: `/system/return-requirements/${sessionId}/check`,
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     reason: returnRequirementReasons[reason],

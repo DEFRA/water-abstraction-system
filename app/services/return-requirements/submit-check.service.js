@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Manages converting the session data to return requirement records when check your answers is confirmed
- * @module SubmitCheckYoursAnswersService
+ * Manages converting the session data to return requirement records when check return requirements is confirmed
+ * @module SubmitCheckService
  */
 
 const CheckLicenceEndedService = require('./check-licence-ended.service.js')
@@ -10,7 +10,7 @@ const ExpandedError = require('../../errors/expanded.error.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Manages converting the session data to return requirement records when check your answers is confirmed
+ * Manages converting the session data to return requirement records when check return requirements is confirmed
  *
  * > This service is work in progress. Some of the functionality described is yet to be implemented
  *

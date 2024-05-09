@@ -31,7 +31,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.checkYourAnswersVisited,
+      checkPageVisited: session.checkPageVisited,
       journey: session.journey
     }
   }

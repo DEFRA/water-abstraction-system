@@ -23,7 +23,7 @@ describe('Return Requirements - Submit Setup service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -57,10 +57,10 @@ describe('Return Requirements - Submit Setup service', () => {
       })
 
       describe('and the user has selected to use abstraction data', () => {
-        it('returns the route to check your answers page', async () => {
+        it('returns the route to check page', async () => {
           const result = await SubmitSetupService.go(session.id, payload)
 
-          expect(result.redirect).to.equal('check-your-answers')
+          expect(result.redirect).to.equal('check')
         })
       })
 

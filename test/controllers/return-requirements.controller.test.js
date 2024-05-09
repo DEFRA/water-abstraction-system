@@ -12,7 +12,7 @@ const { expect } = Code
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
 const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../../app/services/return-requirements/cancel.service.js')
-const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
+const CheckService = require('../../app/services/return-requirements/check.service.js')
 const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
@@ -131,16 +131,16 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/check-your-answers', () => {
+  describe('GET /return-requirements/{sessionId}/check', () => {
     beforeEach(async () => {
-      Sinon.stub(CheckYourAnswersService, 'go').resolves({
+      Sinon.stub(CheckService, 'go').resolves({
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Check the return requirements for Acme Corp.'
       })
     })
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('check-your-answers'))
+        const response = await server.inject(_options('check'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Check the return requirements for')
@@ -160,7 +160,7 @@ describe('Return requirements controller', () => {
       const result = await server.inject(_options('delete-note'))
 
       expect(result.statusCode).to.equal(302)
-      expect(result.headers.location).to.equal(`/system/return-requirements/${sessionId}/check-your-answers`)
+      expect(result.headers.location).to.equal(`/system/return-requirements/${sessionId}/check`)
     })
   })
 

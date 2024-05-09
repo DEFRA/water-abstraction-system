@@ -16,7 +16,7 @@ describe('Return Requirements - Reason presenter', () => {
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      checkYourAnswersVisited: false,
+      checkPageVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -45,15 +45,15 @@ describe('Return Requirements - Reason presenter', () => {
   })
 
   describe("the 'backLink' property", () => {
-    describe("when the user has come from 'check your answers'", () => {
+    describe("when the user has come from the 'check' page", () => {
       beforeEach(() => {
-        session.checkYourAnswersVisited = true
+        session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check your answers' page", () => {
+      it("returns a link back to the 'check' page", () => {
         const result = ReasonPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers')
+        expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 

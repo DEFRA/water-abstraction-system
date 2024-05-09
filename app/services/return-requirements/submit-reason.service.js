@@ -21,8 +21,8 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check your answers
- * page else the page data for the reason page including the validation error details
+ * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
+ * the page data for the reason page including the validation error details
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
@@ -33,7 +33,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.checkYourAnswersVisited
+      checkPageVisited: session.checkPageVisited
     }
   }
 

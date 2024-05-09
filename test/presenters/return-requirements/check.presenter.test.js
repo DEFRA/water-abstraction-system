@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CheckYourAnswersPresenter = require('../../../app/presenters/return-requirements/check-your-answers.presenter.js')
+const CheckPresenter = require('../../../app/presenters/return-requirements/check.presenter.js')
 
-describe('Return Requirements - Check Your Answers presenter', () => {
+describe('Return Requirements - Check presenter', () => {
   let session
 
   beforeEach(() => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
-      checkYourAnswersVisited: false,
+      checkPageVisited: false,
       licence: {
         id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -34,7 +34,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = CheckYourAnswersPresenter.go(session)
+      const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
         journey: 'returns-required',
@@ -60,7 +60,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
       })
 
       it('returns a populated note', () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.note).to.equal('Note attached to requirement')
       })
@@ -68,7 +68,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
 
     describe('when the user has not added a note', () => {
       it('returns an empty note', () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.note).to.be.null()
       })
@@ -77,7 +77,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
 
   describe("the 'pageTitle' property", () => {
     it('returns the page title combined with the licence holder name', () => {
-      const result = CheckYourAnswersPresenter.go(session)
+      const result = CheckPresenter.go(session)
 
       expect(result.pageTitle).to.equal('Check the return requirements for Turbo Kid')
     })
@@ -85,7 +85,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
 
   describe("the 'reason' property", () => {
     it('returns the display version for the reason', () => {
-      const result = CheckYourAnswersPresenter.go(session)
+      const result = CheckPresenter.go(session)
 
       expect(result.reason).to.equal('Major change')
     })
@@ -94,7 +94,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
   describe("the 'reasonLink' property", () => {
     describe('when the journey is for returns required', () => {
       it("returns a link to the 'reason' page", () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.reasonLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
       })
@@ -106,7 +106,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
       })
 
       it("returns a link to the 'no-returns-required' page", () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.reasonLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/no-returns-required')
       })
@@ -116,7 +116,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
   describe("the 'startDate' property", () => {
     describe('when the user has previously selected the licence start date as the start date', () => {
       it('returns the licence version start date formatted as a long date', () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.startDate).to.equal('1 January 2023')
       })
@@ -131,7 +131,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
       })
 
       it('returns the start date parts formatted as a long date', () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.startDate).to.equal('26 November 2023')
       })
@@ -149,7 +149,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
       })
 
       it("returns a the user's email address", () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.userEmail).to.equal('carol.shaw@atari.com')
       })
@@ -157,7 +157,7 @@ describe('Return Requirements - Check Your Answers presenter', () => {
 
     describe('when the user has not added a note', () => {
       it("returns the message 'no notes added'", () => {
-        const result = CheckYourAnswersPresenter.go(session)
+        const result = CheckPresenter.go(session)
 
         expect(result.userEmail).to.equal('No notes added')
       })

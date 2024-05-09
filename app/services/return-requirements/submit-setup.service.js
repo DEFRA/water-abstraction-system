@@ -51,7 +51,7 @@ function _redirect (setup) {
   let endpoint
 
   if (setup === 'use-abstraction-data') {
-    endpoint = 'check-your-answers'
+    endpoint = 'check'
   }
 
   if (setup === 'set-up-manually') {
