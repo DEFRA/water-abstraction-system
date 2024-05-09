@@ -16,8 +16,8 @@
     </thead>
     <tbody class="govuk-table__body">
     {% for contact in licenceContacts %}
-      <tr class="govuk-table__row govuk-body-s">
-        <th class="govuk-table__cell"> {{ contact.name }}</th>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell"> {{ contact.name }}</td>
         <td class="govuk-table__cell"> {{ contact.communicationType }}</td>
         <td class="govuk-table__cell">
           {% if contact.address.address1 %}
