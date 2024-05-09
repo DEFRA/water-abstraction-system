@@ -23,13 +23,14 @@ async function go (licenceId) {
 async function _fetch (licenceId) {
   const licenceContacts = await LicenceDocumentModel.query()
     .first()
+    .select('')
     .innerJoinRelated('licence')
     .where('licence.id', licenceId)
     .withGraphFetched('licenceDocumentRoles')
     .modifyGraph('licenceDocumentRoles', (builder) => {
       builder.where(function () {
         this.where('end_date', '>', new Date()).orWhere({ end_date: null })
-      })
+      }).select('')
     })
     .withGraphFetched('licenceDocumentRoles.licenceRole')
     .modifyGraph('licenceDocumentRoles.licenceRole', (builder) => {
