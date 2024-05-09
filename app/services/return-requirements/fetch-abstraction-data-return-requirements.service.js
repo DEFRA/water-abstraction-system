@@ -59,11 +59,7 @@ async function _fetchAbstractionData (licenceId) {
 }
 
 function _calculateCollectionFrequency (licenceData, licenceVersionPurpose, licenceAgreements) {
-  if (licenceData.waterUndertaker || licenceData.isElectricityGenerator) {
-    return 'daily'
-  }
-
-  if (licenceAgreements.length > 0) {
+  if (licenceData.waterUndertaker || licenceAgreements.length > 0 || licenceData.isElectricityGenerator) {
     return 'daily'
   }
 

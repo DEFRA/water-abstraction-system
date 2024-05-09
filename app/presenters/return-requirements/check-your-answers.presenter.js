@@ -12,7 +12,6 @@ const FetchReturnRequirementsBasedOnAbstractionDataService =
 async function go (session) {
   const result = await FetchReturnRequirementsBasedOnAbstractionDataService.go(session.data.licence.id)
 
-  console.log(result)
   const data = {
     id: session.id,
     journey: session.journey,
