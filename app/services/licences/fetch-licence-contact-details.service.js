@@ -40,7 +40,8 @@ async function _fetch (licenceId) {
     .modifyGraph('licenceDocumentRoles.address', (builder) => {
       builder.select([
         'address1', 'address2', 'address3',
-        'address4', 'country', 'postcode'])
+        'address4', 'address5', 'address6',
+        'country', 'postcode'])
     })
     .withGraphFetched('licenceDocumentRoles.contact')
     .modifyGraph('contact', (builder) => {
