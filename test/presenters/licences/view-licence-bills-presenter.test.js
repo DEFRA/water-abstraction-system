@@ -38,6 +38,11 @@ describe('View Licence Bills presenter', () => {
       const result = ViewLicenceBillsPresenter.go(_bills())
       expect(result.bills[0].total).to.equal('£1,234,567.89')
     })
+
+    it('correctly formats the two part tariff batch type', () => {
+      const result = ViewLicenceBillsPresenter.go(_billsTwoPartTariff())
+      expect(result.bills[0].runType).to.equal('two part tariff')
+    })
   })
 })
 
@@ -45,6 +50,19 @@ function _bills () {
   return [{
     accountNumber: 'acc123',
     billRun: { batchType: 'annual' },
+    billingAccountId: 'bicc1233',
+    createdAt: new Date('2020-01-01'),
+    financialYearEnding: '2021',
+    id: 'id123',
+    invoiceNumber: 'inv123',
+    netAmount: 123456789
+  }]
+}
+
+function _billsTwoPartTariff () {
+  return [{
+    accountNumber: 'acc123',
+    billRun: { batchType: 'two_part_tariff' },
     billingAccountId: 'bicc1233',
     createdAt: new Date('2020-01-01'),
     financialYearEnding: '2021',
