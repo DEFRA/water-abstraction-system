@@ -15,18 +15,19 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitNoteService = require('../../../app/services/return-requirements/submit-note.service.js')
 
-describe('Submit Note service', () => {
+describe('Return Requirements - Submit Note service', () => {
+  const user = { username: 'carol.shaw@atari.com' }
+
   let payload
   let session
   let yarStub
-  const user = { username: 'carol.shaw@atari.com' }
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
     session = await SessionHelper.add({
       data: {
-        checkAnswersVisited: true,
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -35,8 +36,10 @@ describe('Submit Note service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'no-returns-required',
-        returnsRequired: 'new-licence'
+        journey: 'returns-required',
+        requirements: [{}],
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change'
       }
     })
 
@@ -49,10 +52,10 @@ describe('Submit Note service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      describe('with a new note', () => {
+      describe('that is a new note', () => {
         beforeEach(() => {
           payload = {
-            note: 'A note related to return requirement'
+            note: 'A new note related to return requirement'
           }
         })
 
@@ -62,21 +65,18 @@ describe('Submit Note service', () => {
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.note).to.equal({
-            content: 'A note related to return requirement',
+            content: 'A new note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
         })
 
-        it('returns the journey to redirect the page', async () => {
+        it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result).to.equal({
-            journey: 'no-returns-required'
-
-          }, { skip: ['id'] })
+          expect(result).to.equal({})
         })
 
-        it("sets the notification message to 'Added' for a new note", async () => {
+        it("sets the notification message to 'Added'", async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
@@ -86,22 +86,53 @@ describe('Submit Note service', () => {
         })
       })
 
-      describe('with an updated note', () => {
+      describe('that is an updated note', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({
+          await session.$query().patch({
             data: {
+              checkPageVisited: false,
+              licence: {
+                id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+                currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+                endDate: null,
+                licenceRef: '01/ABC',
+                licenceHolder: 'Turbo Kid',
+                startDate: '2022-04-01T00:00:00.000Z'
+              },
+              journey: 'returns-required',
+              requirements: [{}],
+              startDateOptions: 'licenceStartDate',
+              reason: 'major-change',
               note: {
                 content: 'A old note related to return requirement',
                 userEmail: 'carol.shaw@atari.com'
               }
             }
           })
+
           payload = {
-            note: 'A new note related to return requirement'
+            note: 'An updated note related to return requirement'
           }
         })
 
-        it("sets the notification message to 'Updated' for an updated note", async () => {
+        it('saves the submitted value', async () => {
+          await SubmitNoteService.go(session.id, payload, user, yarStub)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.note).to.equal({
+            content: 'An updated note related to return requirement',
+            userEmail: 'carol.shaw@atari.com'
+          })
+        })
+
+        it('returns the journey to redirect the page', async () => {
+          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+
+          expect(result).to.equal({})
+        })
+
+        it("sets the notification message to 'Updated'", async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
@@ -117,18 +148,52 @@ describe('Submit Note service', () => {
         payload = {}
       })
 
-      it('returns page data with an error', async () => {
+      it('returns page data for the view', async () => {
         const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
         expect(result).to.equal({
-          id: session.id,
           activeNavBar: 'search',
-          error: {
-            text: 'Enter details'
-          },
+          pageTitle: 'Add a note',
+          backLink: `/system/return-requirements/${session.id}/check`,
           licenceRef: '01/ABC',
-          note: '',
-          pageTitle: 'Add a note'
+          note: null
+        }, { skip: ['sessionId', 'error'] })
+      })
+
+      describe('because the user has not entered anything', () => {
+        it('includes an error for the input element', async () => {
+          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+
+          expect(result.error).to.equal({
+            text: 'Enter details'
+          })
+        })
+      })
+
+      describe('because the user has entered a note more than 500 characters', () => {
+        beforeEach(() => {
+          payload = {
+            note: `Lorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elit
+
+            Lorem ipsum dolor sit amet consectetur adipiscing elit
+
+            Lorem ipsum dolor sit amet consectetur adipiscing elit
+
+            Lorem ipsum dolor sit amet consectetur adipiscing elit
+            Lorem ipsum dolor sit amet consectetur adipiscing elit
+            Lorem ipsum dolor sit amet consectetur adipiscing elit
+
+            Lorem ipsum dolor sit amet consectetur adipiscing elit
+            Lorem ipsum dolor sit amet consectetur adipiscing elit`
+          }
+        })
+
+        it('includes an error for the input element', async () => {
+          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+
+          expect(result.error).to.equal({
+            text: 'Enter no more than 500 characters'
+          })
         })
       })
     })

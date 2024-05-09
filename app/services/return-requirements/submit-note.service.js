@@ -23,7 +23,8 @@ const SessionModel = require('../../models/session.model.js')
  * @param {Object} user - The logged in user details
  * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<Object>} The page data for the check-your-answers page
+ * @returns {Promise<Object>} If no errors it returns an empty object else the page data for the note page including the
+ * validation error details
  */
 async function go (sessionId, payload, user, yar) {
   const session = await SessionModel.query().findById(sessionId)
@@ -37,9 +38,7 @@ async function go (sessionId, payload, user, yar) {
       yar.flash('notification', notification)
     }
 
-    return {
-      journey: session.journey
-    }
+    return {}
   }
 
   const submittedSessionData = _submittedSessionData(session, payload)

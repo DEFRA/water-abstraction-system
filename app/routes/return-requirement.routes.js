@@ -5,7 +5,7 @@ const ReturnRequirementsController = require('../controllers/return-requirements
 const routes = [
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/abstraction-period',
+    path: '/return-requirements/{sessionId}/abstraction-period/{requirementIndex}',
     handler: ReturnRequirementsController.abstractionPeriod,
     options: {
       auth: {
@@ -18,7 +18,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/abstraction-period',
+    path: '/return-requirements/{sessionId}/abstraction-period/{requirementIndex}',
     handler: ReturnRequirementsController.submitAbstractionPeriod,
     options: {
       auth: {
@@ -31,7 +31,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/agreements-exceptions',
+    path: '/return-requirements/{sessionId}/agreements-exceptions/{requirementIndex}',
     handler: ReturnRequirementsController.agreementsExceptions,
     options: {
       auth: {
@@ -44,7 +44,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/agreements-exceptions',
+    path: '/return-requirements/{sessionId}/agreements-exceptions/{requirementIndex}',
     handler: ReturnRequirementsController.submitAgreementsExceptions,
     options: {
       auth: {
@@ -70,8 +70,8 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/cancel-requirements',
-    handler: ReturnRequirementsController.cancelRequirements,
+    path: '/return-requirements/{sessionId}/cancel',
+    handler: ReturnRequirementsController.cancel,
     options: {
       auth: {
         access: {
@@ -83,8 +83,8 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/cancel-requirements',
-    handler: ReturnRequirementsController.submitCancelRequirements,
+    path: '/return-requirements/{sessionId}/cancel',
+    handler: ReturnRequirementsController.submitCancel,
     options: {
       auth: {
         access: {
@@ -96,28 +96,28 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/check-your-answers',
-    handler: ReturnRequirementsController.checkYourAnswers,
+    path: '/return-requirements/{sessionId}/check',
+    handler: ReturnRequirementsController.check,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Check your answers'
+      description: 'Check return requirements'
     }
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/check-your-answers',
-    handler: ReturnRequirementsController.submitCheckYourAnswers,
+    path: '/return-requirements/{sessionId}/check',
+    handler: ReturnRequirementsController.submitCheck,
     options: {
       auth: {
         access: {
           scope: ['billing']
         }
       },
-      description: 'Submit check your answers'
+      description: 'Submit check return requirements'
     }
   },
   {
@@ -161,7 +161,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/frequency-collected',
+    path: '/return-requirements/{sessionId}/frequency-collected/{requirementIndex}',
     handler: ReturnRequirementsController.frequencyCollected,
     options: {
       auth: {
@@ -174,7 +174,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/frequency-collected',
+    path: '/return-requirements/{sessionId}/frequency-collected/{requirementIndex}',
     handler: ReturnRequirementsController.submitFrequencyCollected,
     options: {
       auth: {
@@ -187,7 +187,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/frequency-reported',
+    path: '/return-requirements/{sessionId}/frequency-reported/{requirementIndex}',
     handler: ReturnRequirementsController.frequencyReported,
     options: {
       auth: {
@@ -200,7 +200,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/frequency-reported',
+    path: '/return-requirements/{sessionId}/frequency-reported/{requirementIndex}',
     handler: ReturnRequirementsController.submitFrequencyReported,
     options: {
       auth: {
@@ -265,7 +265,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/points',
+    path: '/return-requirements/{sessionId}/points/{requirementIndex}',
     handler: ReturnRequirementsController.points,
     options: {
       auth: {
@@ -278,7 +278,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/points',
+    path: '/return-requirements/{sessionId}/points/{requirementIndex}',
     handler: ReturnRequirementsController.submitPoints,
     options: {
       auth: {
@@ -291,7 +291,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/purpose',
+    path: '/return-requirements/{sessionId}/purpose/{requirementIndex}',
     handler: ReturnRequirementsController.purpose,
     options: {
       auth: {
@@ -304,7 +304,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/purpose',
+    path: '/return-requirements/{sessionId}/purpose/{requirementIndex}',
     handler: ReturnRequirementsController.submitPurpose,
     options: {
       auth: {
@@ -343,7 +343,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/returns-cycle',
+    path: '/return-requirements/{sessionId}/returns-cycle/{requirementIndex}',
     handler: ReturnRequirementsController.returnsCycle,
     options: {
       auth: {
@@ -356,7 +356,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/returns-cycle',
+    path: '/return-requirements/{sessionId}/returns-cycle/{requirementIndex}',
     handler: ReturnRequirementsController.submitReturnsCycle,
     options: {
       auth: {
@@ -395,7 +395,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/site-description',
+    path: '/return-requirements/{sessionId}/site-description/{requirementIndex}',
     handler: ReturnRequirementsController.siteDescription,
     options: {
       auth: {
@@ -408,7 +408,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/site-description',
+    path: '/return-requirements/{sessionId}/site-description/{requirementIndex}',
     handler: ReturnRequirementsController.submitSiteDescription,
     options: {
       auth: {

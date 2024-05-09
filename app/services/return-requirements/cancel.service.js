@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/cancel-requirements` page
- * @module CancelRequirementsService
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/cancel` page
+ * @module CancelService
  */
 
-const CancelRequirementsPresenter = require('../../presenters/return-requirements/cancel-requirements.presenter.js')
+const CancelPresenter = require('../../presenters/return-requirements/cancel.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/cancel-requirements` page
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/cancel` page
  *
  * Supports generating the data needed for the cancel requirements page in the return requirements setup journey. It
  * fetches the current session record and combines it with the date fields and other information needed for the form.
@@ -20,7 +20,8 @@ const SessionModel = require('../../models/session.model.js')
 */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = CancelRequirementsPresenter.go(session)
+
+  const formattedData = CancelPresenter.go(session)
 
   return {
     activeNavBar: 'search',

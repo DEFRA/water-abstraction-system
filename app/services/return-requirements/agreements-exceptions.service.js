@@ -15,12 +15,14 @@ const SessionModel = require('../../models/session.model.js')
  * It fetches the current session record and combines it with the date fields and other information needed for the form.
  *
  * @param {string} sessionId - The UUID of the current session
+ * @param {string} requirementIndex - The index of the requirement being added or changed
  *
  * @returns {Promise<Object>} The view data for the agreements and exceptions page
 */
-async function go (sessionId) {
+async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
-  const formattedData = AgreementsExceptionsPresenter.go(session)
+
+  const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
   return {
     activeNavBar: 'search',
