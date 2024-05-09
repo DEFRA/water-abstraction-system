@@ -10,7 +10,10 @@ const FetchReturnRequirementsBasedOnAbstractionDataService =
   require('../../services/return-requirements/fetch-abstraction-data-return-requirements.service.js')
 
 async function go (session) {
-  const result = await FetchReturnRequirementsBasedOnAbstractionDataService.go(session.data.licence.id)
+  console.log(session)
+  if (session.setup === 'use-abstraction-data') {
+    const result = await FetchReturnRequirementsBasedOnAbstractionDataService.go(session.licence.id)
+  }
 
   const data = {
     id: session.id,
