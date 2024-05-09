@@ -23,6 +23,7 @@ describe('Cancel Requirements service', () => {
     session = await SessionHelper.add({
       id: '61e07498-f309-4829-96a9-72084a54996d',
       data: {
+        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -31,11 +32,30 @@ describe('Cancel Requirements service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        reason: 'abstraction-below-100-cubic-metres-per-day',
+        journey: 'returns-required',
+        requirements: [{
+          points: [
+            'At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'
+          ],
+          purposes: [
+            'Mineral Washing'
+          ],
+          returnsCycle: 'winter-and-all-year',
+          siteDescription: 'Bore hole in rear field',
+          abstractionPeriod: {
+            'end-abstraction-period-day': '31',
+            'end-abstraction-period-month': '10',
+            'start-abstraction-period-day': '1',
+            'start-abstraction-period-month': '4'
+          },
+          frequencyReported: 'monthly',
+          frequencyCollected: 'monthly',
+          agreementsExceptions: [
+            'none'
+          ]
+        }],
         startDateOptions: 'licenceStartDate',
-        returnsCycle: 'winter-and-all-year',
-        frequencyReported: 'monthly',
-        siteDescription: 'This is a valid site description'
+        reason: 'major-change'
       }
     })
   })
@@ -44,7 +64,7 @@ describe('Cancel Requirements service', () => {
     it('fetches the current setup session record', async () => {
       const result = await CancelRequirementsService.go(session.id)
 
-      expect(result.id).to.equal(session.id)
+      expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
@@ -53,13 +73,11 @@ describe('Cancel Requirements service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'You are about to cancel these requirements for returns',
-        id: '465c6792-dd84-4163-a808-cbb834a779be',
-        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
-        reason: 'abstraction-below-100-cubic-metres-per-day',
-        startDate: '1 January 2023',
-        returnRequirements: 'Winter and all year monthly requirements for returns, This is a valid site description.'
-      }, { skip: ['id'] })
+        reason: 'Major change',
+        returnRequirements: ['Winter and all year monthly requirements for returns, Bore hole in rear field.'],
+        startDate: '1 January 2023'
+      }, { skip: ['sessionId'] })
     })
   })
 })

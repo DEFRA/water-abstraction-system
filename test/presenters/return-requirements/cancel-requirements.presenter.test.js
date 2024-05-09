@@ -13,75 +13,112 @@ const CancelRequirementsPresenter = require('../../../app/presenters/return-requ
 describe('Cancel Requirements presenter', () => {
   let session
 
-  describe('when called from the returns requirement journey', () => {
-    describe('and provided with completed session data for returns required', () => {
-      beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          },
-          data: {
-            reason: 'abstraction-below-100-cubic-metres-per-day',
-            startDateOptions: 'licenceStartDate',
-            returnsCycle: 'winter-and-all-year',
-            frequencyReported: 'monthly',
-            siteDescription: 'This is a valid site description'
-          }
-        }
-      })
+  beforeEach(() => {
+    session = {
+      id: '61e07498-f309-4829-96a9-72084a54996d',
+      checkYourAnswersVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        startDate: '2022-04-01T00:00:00.000Z'
+      },
+      journey: 'returns-required',
+      requirements: [{
+        points: [
+          'At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'
+        ],
+        purposes: [
+          'Mineral Washing'
+        ],
+        returnsCycle: 'winter-and-all-year',
+        siteDescription: 'Bore hole in rear field',
+        abstractionPeriod: {
+          'end-abstraction-period-day': '31',
+          'end-abstraction-period-month': '10',
+          'start-abstraction-period-day': '1',
+          'start-abstraction-period-month': '4'
+        },
+        frequencyReported: 'monthly',
+        frequencyCollected: 'monthly',
+        agreementsExceptions: [
+          'none'
+        ]
+      }],
+      startDateOptions: 'licenceStartDate',
+      reason: 'major-change'
+    }
+  })
 
-      it('correctly presents the data', () => {
-        const result = CancelRequirementsPresenter.go(session)
+  describe('when provided with a session', () => {
+    it('correctly presents the data', () => {
+      const result = CancelRequirementsPresenter.go(session)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          reason: 'abstraction-below-100-cubic-metres-per-day',
-          startDate: '1 January 2023',
-          returnRequirements: 'Winter and all year monthly requirements for returns, This is a valid site description.'
-        })
+      expect(result).to.equal({
+        licenceRef: '01/ABC',
+        reason: 'Major change',
+        returnRequirements: ['Winter and all year monthly requirements for returns, Bore hole in rear field.'],
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
+        startDate: '1 January 2023'
       })
     })
   })
 
-  describe('when called from the no returns required journey', () => {
-    describe('and provided with completed session data for no returns required', () => {
+  describe("the 'reason' property", () => {
+    it('returns the display version for the reason', () => {
+      const result = CancelRequirementsPresenter.go(session)
+
+      expect(result.reason).to.equal('Major change')
+    })
+  })
+
+  describe("the 'returnRequirements' property", () => {
+    describe("when the user journey was 'no-returns-required'", () => {
       beforeEach(() => {
-        session = {
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-            endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            startDate: '2022-04-01T00:00:00.000Z'
-          },
-          data: {
-            reason: 'abstraction-below-100-cubic-metres-per-day',
-            startDateOptions: 'licenceStartDate'
-          }
-        }
+        session.journey = 'no-returns-required'
       })
 
-      it('correctly presents the data', () => {
+      it('returns null', () => {
         const result = CancelRequirementsPresenter.go(session)
 
-        expect(result).to.equal({
-          id: '61e07498-f309-4829-96a9-72084a54996d',
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          reason: 'abstraction-below-100-cubic-metres-per-day',
-          startDate: '1 January 2023',
-          returnRequirements: null
-        })
+        expect(result.returnRequirements).to.be.null()
+      })
+    })
+
+    describe("when the user journey was 'returns-required'", () => {
+      it('returns a summary for each requirement in the session', () => {
+        const result = CancelRequirementsPresenter.go(session)
+
+        expect(result.returnRequirements).to.equal([
+          'Winter and all year monthly requirements for returns, Bore hole in rear field.'
+        ])
+      })
+    })
+  })
+
+  describe("the 'startDate' property", () => {
+    describe('when the user has previously selected the licence start date as the start date', () => {
+      it('returns the licence version start date formatted as a long date', () => {
+        const result = CancelRequirementsPresenter.go(session)
+
+        expect(result.startDate).to.equal('1 January 2023')
+      })
+    })
+
+    describe('when the user has previously selected another date as the start date', () => {
+      beforeEach(() => {
+        session.startDateDay = '26'
+        session.startDateMonth = '11'
+        session.startDateYear = '2023'
+        session.startDateOptions = 'anotherStartDate'
+      })
+
+      it('returns the start date parts formatted as a long date', () => {
+        const result = CancelRequirementsPresenter.go(session)
+
+        expect(result.startDate).to.equal('26 November 2023')
       })
     })
   })
