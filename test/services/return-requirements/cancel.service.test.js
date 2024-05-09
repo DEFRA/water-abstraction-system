@@ -12,9 +12,9 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
-const CancelRequirementsService = require('../../../app/services/return-requirements/cancel-requirements.service.js')
+const CancelService = require('../../../app/services/return-requirements/cancel.service.js')
 
-describe('Cancel Requirements service', () => {
+describe('Cancel service', () => {
   let session
 
   beforeEach(async () => {
@@ -62,17 +62,18 @@ describe('Cancel Requirements service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await CancelRequirementsService.go(session.id)
+      const result = await CancelService.go(session.id)
 
       expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await CancelRequirementsService.go(session.id)
+      const result = await CancelService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         pageTitle: 'You are about to cancel these requirements for returns',
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers',
         licenceRef: '01/ABC',
         reason: 'Major change',
         returnRequirements: ['Winter and all year monthly requirements for returns, Bore hole in rear field.'],

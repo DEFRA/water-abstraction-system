@@ -1,0 +1,62 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{# Main heading #}
+{% block content %}
+  <div class="govuk-body">
+    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
+  </div>
+
+  <div class="govuk-body govuk-!-margin-bottom-7">
+    <hr class="govuk-section-break govuk-!-margin-bottom-2 govuk-section-break--m govuk-section-break--visible ">
+    {{ govukSummaryList({
+      classes: 'govuk-!-margin-bottom-2',
+      rows: [
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: "Reason"
+          },
+          value: {
+            text: reason
+          }
+        },
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: "Start date"
+          },
+          value: {
+            text: startDate
+          }
+        }
+      ]
+    }) }}
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+  </div>
+
+  <div class="govuk-body">
+    {% for returnRequirement in returnRequirements %}
+      <p class="govuk-body govuk-!-font-weight-bold govuk-!-font-size-24"> {{ returnRequirement }}</p>
+    {% endfor %}
+
+    <p class="govuk-!-margin-bottom-7"></p>
+
+    <form method="post">
+      {{ govukButton({ text: "Confirm cancel", preventDoubleClick: true }) }}
+    </form>
+  </div>
+{% endblock %}

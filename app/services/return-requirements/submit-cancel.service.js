@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Manages cancelling the return requirement session when cancel requirements is confirmed
- * @module SubmitCancelRequirementsService
+ * Manages cancelling the return requirement session when cancel is confirmed
+ * @module SubmitCancelService
  */
 
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Manages deleting the return requirement session when cancel requirements is confirmed
+ * Manages deleting the return requirement session when cancel is confirmed
  *
  * After fetching the session instance for the return requirements journey in progress, it returns the licence id which
  * is used to return the user to the charge information page before the return requirements journey.

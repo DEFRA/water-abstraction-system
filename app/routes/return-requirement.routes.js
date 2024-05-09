@@ -70,8 +70,8 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-requirements/{sessionId}/cancel-requirements',
-    handler: ReturnRequirementsController.cancelRequirements,
+    path: '/return-requirements/{sessionId}/cancel',
+    handler: ReturnRequirementsController.cancel,
     options: {
       auth: {
         access: {
@@ -83,8 +83,8 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-requirements/{sessionId}/cancel-requirements',
-    handler: ReturnRequirementsController.submitCancelRequirements,
+    path: '/return-requirements/{sessionId}/cancel',
+    handler: ReturnRequirementsController.submitCancel,
     options: {
       auth: {
         access: {

@@ -7,7 +7,7 @@
 
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
-const CancelRequirementsService = require('../services/return-requirements/cancel-requirements.service.js')
+const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckYourAnswersService = require('../services/return-requirements/check-your-answers.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
@@ -24,7 +24,7 @@ const SiteDescriptionService = require('../services/return-requirements/site-des
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
 const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
-const SubmitCancelRequirements = require('../services/return-requirements/submit-cancel-requirements.service.js')
+const SubmitCancel = require('../services/return-requirements/submit-cancel.service.js')
 const SubmitCheckYourAnswersService = require('../services/return-requirements/submit-check-your-answers.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
@@ -68,11 +68,11 @@ async function approved (request, h) {
   })
 }
 
-async function cancelRequirements (request, h) {
+async function cancel (request, h) {
   const { sessionId } = request.params
-  const pageData = await CancelRequirementsService.go(sessionId)
+  const pageData = await CancelService.go(sessionId)
 
-  return h.view('return-requirements/cancel-requirements.njk', {
+  return h.view('return-requirements/cancel.njk', {
     ...pageData
   })
 }
@@ -243,10 +243,10 @@ async function submitAgreementsExceptions (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
 }
 
-async function submitCancelRequirements (request, h) {
+async function submitCancel (request, h) {
   const { sessionId } = request.params
 
-  const licenceId = await SubmitCancelRequirements.go(sessionId)
+  const licenceId = await SubmitCancel.go(sessionId)
 
   return h.redirect(`/licences/${licenceId}#charge`)
 }
@@ -438,7 +438,7 @@ module.exports = {
   abstractionPeriod,
   agreementsExceptions,
   approved,
-  cancelRequirements,
+  cancel,
   checkYourAnswers,
   deleteNote,
   existing,
@@ -455,7 +455,7 @@ module.exports = {
   startDate,
   submitAbstractionPeriod,
   submitAgreementsExceptions,
-  submitCancelRequirements,
+  submitCancel,
   submitCheckYourAnswers,
   submitExisting,
   submitFrequencyCollected,

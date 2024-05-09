@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const CancelRequirementsPresenter = require('../../../app/presenters/return-requirements/cancel-requirements.presenter.js')
+const CancelPresenter = require('../../../app/presenters/return-requirements/cancel.presenter.js')
 
-describe('Cancel Requirements presenter', () => {
+describe('Cancel presenter', () => {
   let session
 
   beforeEach(() => {
@@ -54,9 +54,10 @@ describe('Cancel Requirements presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = CancelRequirementsPresenter.go(session)
+      const result = CancelPresenter.go(session)
 
       expect(result).to.equal({
+        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check-your-answers',
         licenceRef: '01/ABC',
         reason: 'Major change',
         returnRequirements: ['Winter and all year monthly requirements for returns, Bore hole in rear field.'],
@@ -68,7 +69,7 @@ describe('Cancel Requirements presenter', () => {
 
   describe("the 'reason' property", () => {
     it('returns the display version for the reason', () => {
-      const result = CancelRequirementsPresenter.go(session)
+      const result = CancelPresenter.go(session)
 
       expect(result.reason).to.equal('Major change')
     })
@@ -81,7 +82,7 @@ describe('Cancel Requirements presenter', () => {
       })
 
       it('returns null', () => {
-        const result = CancelRequirementsPresenter.go(session)
+        const result = CancelPresenter.go(session)
 
         expect(result.returnRequirements).to.be.null()
       })
@@ -89,7 +90,7 @@ describe('Cancel Requirements presenter', () => {
 
     describe("when the user journey was 'returns-required'", () => {
       it('returns a summary for each requirement in the session', () => {
-        const result = CancelRequirementsPresenter.go(session)
+        const result = CancelPresenter.go(session)
 
         expect(result.returnRequirements).to.equal([
           'Winter and all year monthly requirements for returns, Bore hole in rear field.'
@@ -101,7 +102,7 @@ describe('Cancel Requirements presenter', () => {
   describe("the 'startDate' property", () => {
     describe('when the user has previously selected the licence start date as the start date', () => {
       it('returns the licence version start date formatted as a long date', () => {
-        const result = CancelRequirementsPresenter.go(session)
+        const result = CancelPresenter.go(session)
 
         expect(result.startDate).to.equal('1 January 2023')
       })
@@ -116,7 +117,7 @@ describe('Cancel Requirements presenter', () => {
       })
 
       it('returns the start date parts formatted as a long date', () => {
-        const result = CancelRequirementsPresenter.go(session)
+        const result = CancelPresenter.go(session)
 
         expect(result.startDate).to.equal('26 November 2023')
       })
