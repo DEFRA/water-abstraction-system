@@ -46,7 +46,6 @@ async function go (sessionId, payload) {
   return {
     activeNavBar: 'search',
     error: validationResult,
-    journey: session.journey,
     pageTitle: 'Select the start date for the requirements for returns',
     ...submittedSessionData
   }
