@@ -21,7 +21,7 @@ function go (contactDetails) {
 function _findCustomerId (licenceContacts) {
   const customer = licenceContacts.find(con => con.licenceRole.name === 'licenceHolder')
 
-  if (customer && customer.company) {
+  if (customer?.company) {
     return customer.company.id
   }
 
@@ -29,7 +29,7 @@ function _findCustomerId (licenceContacts) {
 }
 
 function _formatLicenceContactName (company, contact) {
-  if (contact && contact.firstName && contact.lastName) {
+  if (contact?.firstName && contact.lastName) {
     return `${contact.firstName} ${contact.lastName}`
   }
 
