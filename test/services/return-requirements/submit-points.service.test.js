@@ -18,7 +18,7 @@ const FetchPointsService = require('../../../app/services/return-requirements/fe
 // Thing under test
 const SubmitPointsService = require('../../../app/services/return-requirements/submit-points.service.js')
 
-describe('Submit Points service', () => {
+describe('Return Requirements - Submit Points service', () => {
   const requirementIndex = 0
 
   let payload

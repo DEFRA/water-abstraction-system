@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const ReasonService = require('../../../app/services/return-requirements/reason.service.js')
 
-describe('Reason service', () => {
+describe('Return Requirements - Reason service', () => {
   let session
 
   beforeEach(async () => {

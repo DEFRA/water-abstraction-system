@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SiteDescriptionPresenter = require('../../../app/presenters/return-requirements/site-description.presenter.js')
 
-describe('Site Description presenter', () => {
+describe('Return Requirements - Site Description presenter', () => {
   const requirementIndex = 0
 
   let session

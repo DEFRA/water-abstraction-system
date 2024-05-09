@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const AgreementsExceptionsService = require('../../../app/services/return-requirements/agreements-exceptions.service.js')
 
-describe('Agreements Exceptions service', () => {
+describe('Return Requirements - Agreements Exceptions service', () => {
   const requirementIndex = 0
 
   let session

@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAgreementsExceptionsService = require('../../../app/services/return-requirements/submit-agreements-exceptions.service.js')
 
-describe('Submit Agreements and Exceptions service', () => {
+describe('Return Requirements - Submit Agreements and Exceptions service', () => {
   const requirementIndex = 0
 
   let payload

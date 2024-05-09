@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitNoReturnsRequiredService = require('../../../app/services/return-requirements/submit-no-returns-required.service.js')
 
-describe('Submit No Returns Required service', () => {
+describe('Return Requirements - Submit No Returns Required service', () => {
   let payload
   let session
 

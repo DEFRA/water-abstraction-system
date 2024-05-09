@@ -18,7 +18,7 @@ const FetchPurposesService = require('../../../app/services/return-requirements/
 // Thing under test
 const SubmitPurposeService = require('../../../app/services/return-requirements/submit-purpose.service.js')
 
-describe('Submit Purpose service', () => {
+describe('Return Requirements - Submit Purpose service', () => {
   const requirementIndex = 0
 
   let payload

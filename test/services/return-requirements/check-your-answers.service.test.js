@@ -16,7 +16,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const CheckYourAnswersService = require('../../../app/services/return-requirements/check-your-answers.service.js')
 const SessionModel = require('../../../app/models/session.model.js')
 
-describe('Check Your Answers service', () => {
+describe('Return Requirements - Check Your Answers service', () => {
   let session
   let yarStub
 

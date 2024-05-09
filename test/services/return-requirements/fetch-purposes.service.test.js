@@ -16,7 +16,7 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 // Thing under test
 const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
 
-describe('Fetch Purposes service', () => {
+describe('Return Requirements - Fetch Purposes service', () => {
   let licenceVersion
   let purposes
 

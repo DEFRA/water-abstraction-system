@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitReasonService = require('../../../app/services/return-requirements/submit-reason.service.js')
 
-describe('Submit Reason service', () => {
+describe('Return Requirements - Submit Reason service', () => {
   let payload
   let session
 

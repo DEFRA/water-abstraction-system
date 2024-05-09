@@ -18,7 +18,7 @@ const FetchPurposesService = require('../../../app/services/return-requirements/
 // Thing under test
 const PurposeService = require('../../../app/services/return-requirements/purpose.service.js')
 
-describe('Purpose service', () => {
+describe('Return Requirements - Purpose service', () => {
   const requirementIndex = 0
 
   let session

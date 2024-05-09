@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitReturnsCycleService = require('../../../app/services/return-requirements/submit-returns-cycle.service.js')
 
-describe('Submit Returns Cycle service', () => {
+describe('Return Requirements - Submit Returns Cycle service', () => {
   const requirementIndex = 0
 
   let payload

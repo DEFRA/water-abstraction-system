@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReturnsCyclePresenter = require('../../../app/presenters/return-requirements/returns-cycle.presenter.js')
 
-describe('Returns Cycle presenter', () => {
+describe('Return Requirements - Returns Cycle presenter', () => {
   const requirementIndex = 0
 
   let session

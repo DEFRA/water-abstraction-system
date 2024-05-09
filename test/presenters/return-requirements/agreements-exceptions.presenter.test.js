@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AgreementsExceptionsPresenter = require('../../../app/presenters/return-requirements/agreements-exceptions.presenter.js')
 
-describe('Agreements Exceptions presenter', () => {
+describe('Return Requirements - Agreements Exceptions presenter', () => {
   const requirementIndex = 0
 
   let session

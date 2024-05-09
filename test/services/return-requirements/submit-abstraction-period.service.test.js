@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAbstractionPeriodService = require('../../../app/services/return-requirements/submit-abstraction-period.service.js')
 
-describe('Submit Abstraction Period service', () => {
+describe('Return Requirements - Submit Abstraction Period service', () => {
   const requirementIndex = 0
 
   let payload

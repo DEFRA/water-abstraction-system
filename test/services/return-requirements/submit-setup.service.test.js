@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitSetupService = require('../../../app/services/return-requirements/submit-setup.service.js')
 
-describe('Submit Setup service', () => {
+describe('Return Requirements - Submit Setup service', () => {
   let payload
   let session
 

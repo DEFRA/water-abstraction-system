@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const FrequencyReportedPresenter = require('../../../app/presenters/return-requirements/frequency-reported.presenter.js')
 
-describe('Frequency Reported presenter', () => {
+describe('Return Requirements - Frequency Reported presenter', () => {
   const requirementIndex = 0
 
   let session

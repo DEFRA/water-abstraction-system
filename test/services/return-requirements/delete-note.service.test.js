@@ -15,7 +15,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const DeleteNoteService = require('../../../app/services/return-requirements/delete-note.service.js')
 
-describe('Delete Note service', () => {
+describe('Return Requirements - Delete Note service', () => {
   let session
   let yarStub
 

@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const NotePresenter = require('../../../app/presenters/return-requirements/note.presenter.js')
 
-describe('Note presenter', () => {
+describe('Return Requirements - Note presenter', () => {
   let session
 
   beforeEach(() => {

@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const AbstractionPeriodService = require('../../../app/services/return-requirements/abstraction-period.service.js')
 
-describe('Abstraction Period service', () => {
+describe('Return Requirements - Abstraction Period service', () => {
   const requirementIndex = 0
 
   let session

@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const NoReturnsRequiredService = require('../../../app/services/return-requirements/no-returns-required.service.js')
 
-describe('No Returns Required service', () => {
+describe('Return Requirements - No Returns Required service', () => {
   let session
 
   beforeEach(async () => {

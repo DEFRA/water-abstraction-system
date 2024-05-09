@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitStartDateService = require('../../../app/services/return-requirements/submit-start-date.service.js')
 
-describe('Submit Start Date service', () => {
+describe('Return Requirements - Submit Start Date service', () => {
   let payload
   let session
 

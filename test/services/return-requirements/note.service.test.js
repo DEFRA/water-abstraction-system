@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const NoteService = require('../../../app/services/return-requirements/note.service.js')
 
-describe('Note service', () => {
+describe('Return Requirements - Note service', () => {
   let session
 
   beforeEach(async () => {

@@ -18,7 +18,7 @@ const FetchPointsService = require('../../../app/services/return-requirements/fe
 // Thing under test
 const SelectPointsService = require('../../../app/services/return-requirements/points.service.js')
 
-describe('Select Points service', () => {
+describe('Return Requirements - Select Points service', () => {
   const requirementIndex = 0
 
   let session

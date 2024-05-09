@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AbstractionPeriodPresenter = require('../../../app/presenters/return-requirements/abstraction-period.presenter.js')
 
-describe('Abstraction Period presenter', () => {
+describe('Return Requirements - Abstraction Period presenter', () => {
   const requirementIndex = 0
 
   let session

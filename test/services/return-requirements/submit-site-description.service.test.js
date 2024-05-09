@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Things under test
 const SubmitSiteDescriptionService = require('../../../app/services/return-requirements/submit-site-description.service.js')
 
-describe('Submit Site Description service', () => {
+describe('Return Requirements - Submit Site Description service', () => {
   const requirementIndex = 0
 
   let payload

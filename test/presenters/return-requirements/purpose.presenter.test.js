@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const PurposePresenter = require('../../../app/presenters/return-requirements/purpose.presenter.js')
 
-describe('Purpose presenter', () => {
+describe('Return Requirements - Purpose presenter', () => {
   const requirementIndex = 0
 
   let purposesData

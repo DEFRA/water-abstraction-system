@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitFrequencyCollectedService = require('../../../app/services/return-requirements/submit-frequency-collected.service.js')
 
-describe('Submit Frequency Collected service', () => {
+describe('Return Requirements - Submit Frequency Collected service', () => {
   const requirementIndex = 0
 
   let payload

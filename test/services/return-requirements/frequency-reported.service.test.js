@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const FrequencyReportedService = require('../../../app/services/return-requirements/frequency-reported.service.js')
 
-describe('Frequency Reported service', () => {
+describe('Return Requirements - Frequency Reported service', () => {
   const requirementIndex = 0
 
   let session

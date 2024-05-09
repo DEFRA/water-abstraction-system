@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const StartDateService = require('../../../app/services/return-requirements/start-date.service.js')
 
-describe('Start Date service', () => {
+describe('Return Requirements - Start Date service', () => {
   let session
 
   beforeEach(async () => {

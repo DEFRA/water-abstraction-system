@@ -16,7 +16,7 @@ const ExpandedError = require('../../../app/errors/expanded.error.js')
 const CheckLicenceEndedService = require('../../../app/services/return-requirements/check-licence-ended.service.js')
 const SubmitCheckYourAnswersService = require('../../../app/services/return-requirements/submit-check-your-answers.service.js')
 
-describe('Submit Check Your Answers service', () => {
+describe('Return Requirements - Submit Check Your Answers service', () => {
   let session
   let sessionId
 

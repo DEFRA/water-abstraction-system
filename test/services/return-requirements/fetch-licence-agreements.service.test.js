@@ -15,7 +15,7 @@ const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.
 // Thing under test
 const FetchLicenceAgreementsService = require('../../../app/services/return-requirements/fetch-licence-agreements.service.js')
 
-describe('Return requirements Fetch Licence Agreements service', () => {
+describe('Return Requirements - Fetch Licence Agreements service', () => {
   let licenceAgreement
   let financialAgreementId
 

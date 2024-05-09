@@ -15,7 +15,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitNoteService = require('../../../app/services/return-requirements/submit-note.service.js')
 
-describe('Submit Note service', () => {
+describe('Return Requirements - Submit Note service', () => {
   const user = { username: 'carol.shaw@atari.com' }
 
   let payload

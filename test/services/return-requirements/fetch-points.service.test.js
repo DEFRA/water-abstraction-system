@@ -16,7 +16,7 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 // Thing under test
 const FetchPointsService = require('../../../app/services/return-requirements/fetch-points.service.js')
 
-describe('Return requirements Fetch Points service', () => {
+describe('Return Requirements - Return requirements Fetch Points service', () => {
   let licence
   let region
 
