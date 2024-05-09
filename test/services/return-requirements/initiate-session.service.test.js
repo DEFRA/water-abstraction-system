@@ -14,9 +14,9 @@ const LicenceVersionHelper = require('../../support/helpers/licence-version.help
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 
 // Thing under test
-const InitiateReturnRequirementSessionService = require('../../../app/services/return-requirements/initiate-return-requirement-session.service.js')
+const InitiateSessionService = require('../../../app/services/return-requirements/initiate-session.service.js')
 
-describe('Initiate Return Requirement Session service', () => {
+describe('Initiate Session service', () => {
   let journey
   let licence
 
@@ -46,7 +46,7 @@ describe('Initiate Return Requirement Session service', () => {
       })
 
       it('creates a new session record containing details of the licence', async () => {
-        const result = await InitiateReturnRequirementSessionService.go(licence.id, journey)
+        const result = await InitiateSessionService.go(licence.id, journey)
 
         const { data } = result
 
@@ -68,7 +68,7 @@ describe('Initiate Return Requirement Session service', () => {
 
     describe('but the licence does not exist', () => {
       it('throws a Boom not found error', async () => {
-        const error = await expect(InitiateReturnRequirementSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', 'journey')).to.reject()
+        const error = await expect(InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', 'journey')).to.reject()
 
         expect(error.isBoom).to.be.true()
         expect(error.data).to.equal({ id: 'e456e538-4d55-4552-84f7-6a7636eb1945' })

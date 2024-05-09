@@ -2,7 +2,7 @@
 
 /**
  * Initiates the session record used for setting up a new return requirement
- * @module InitiateReturnRequirementSessionService
+ * @module InitiateSessionService
  */
 
 const Boom = require('@hapi/boom')
