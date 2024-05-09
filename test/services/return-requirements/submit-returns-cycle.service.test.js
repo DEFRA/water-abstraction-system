@@ -15,6 +15,8 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 const SubmitReturnsCycleService = require('../../../app/services/return-requirements/submit-returns-cycle.service.js')
 
 describe('Submit Returns Cycle service', () => {
+  const requirementIndex = 0
+
   let session
   let payload
 
@@ -23,7 +25,6 @@ describe('Submit Returns Cycle service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -32,7 +33,8 @@ describe('Submit Returns Cycle service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required'
+        requirements: [{}],
+        checkYourAnswersVisited: false
       }
     })
   })
@@ -46,15 +48,15 @@ describe('Submit Returns Cycle service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitReturnsCycleService.go(session.id, payload)
+        await SubmitReturnsCycleService.go(session.id, requirementIndex, payload)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.returnsCycle).to.equal('summer')
+        expect(refreshedSession.requirements[0].returnsCycle).to.equal('summer')
       })
 
       it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
-        const result = await SubmitReturnsCycleService.go(session.id, payload)
+        const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({
           checkYourAnswersVisited: false
@@ -63,34 +65,28 @@ describe('Submit Returns Cycle service', () => {
     })
 
     describe('with an invalid payload', () => {
-      describe('because the user has not selected a returns cycle', () => {
-        beforeEach(() => {
-          payload = {}
-        })
+      beforeEach(() => {
+        payload = {}
+      })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitReturnsCycleService.go(session.id, payload)
+      it('returns the page data for the view', async () => {
+        const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload)
 
-          expect(result.id).to.equal(session.id)
-        })
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Select the returns cycle for the requirements for returns',
+          backLink: `/system/return-requirements/${session.id}/abstraction-period/0`,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC',
+          returnsCycle: null
+        }, { skip: ['sessionId', 'error'] })
+      })
 
-        it('returns the page data for the view', async () => {
-          const result = await SubmitReturnsCycleService.go(session.id, payload)
+      describe('because the user has not submitted anything', () => {
+        it('includes an error for the input element', async () => {
+          const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload)
 
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            pageTitle: 'Select the returns cycle for the requirements for returns',
-            returnsCycle: null
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the radio form element', async () => {
-          const result = await SubmitReturnsCycleService.go(session.id, payload)
-
-          expect(result.error).to.equal({ text: 'Select the returns cycle for the return requirement' })
+          expect(result.error).to.equal({ text: 'Select the returns cycle for the requirements for returns' })
         })
       })
     })
