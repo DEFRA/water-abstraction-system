@@ -37,7 +37,9 @@ describe('Fetch licence contact details service', () => {
 
     beforeEach(async () => {
       await AddressHelper.add({
-        id: addressId
+        id: addressId,
+        address5: 'Earth',
+        address6: 'Planet'
       })
 
       await ContactModel.add({
@@ -81,6 +83,8 @@ describe('Fetch licence contact details service', () => {
       expect(licenceUnderTest.address.address2).to.equal('HORIZON HOUSE')
       expect(licenceUnderTest.address.address3).to.equal('DEANERY ROAD')
       expect(licenceUnderTest.address.address4).to.equal('BRISTOL')
+      expect(licenceUnderTest.address.address5).to.equal('Earth')
+      expect(licenceUnderTest.address.address6).to.equal('Planet')
       expect(licenceUnderTest.address.country).to.equal('United Kingdom')
       expect(licenceUnderTest.address.postcode).to.equal('BS1 5AH')
       // Company

@@ -11,7 +11,7 @@ const { expect } = Code
 const ViewLicenceContactDetailsPresenter =
   require('../../../app/presenters/licences/view-licence-contact-details.presenter')
 
-describe.only('View Licence contact details presenter', () => {
+describe('View Licence contact details presenter', () => {
   describe('when provided with a licence contacts data', () => {
     it('correctly presents the data', () => {
       const result = ViewLicenceContactDetailsPresenter.go(_LicenceContacts())
@@ -26,6 +26,8 @@ describe.only('View Licence contact details presenter', () => {
               address2: 'Open Road',
               address3: 'Farmers yard',
               address4: null,
+              address5: null,
+              address6: null,
               country: null,
               postcode: 'BS1 5TL'
             },
@@ -38,6 +40,8 @@ describe.only('View Licence contact details presenter', () => {
               address2: 'Liquid Road',
               address3: null,
               address4: null,
+              address5: null,
+              address6: null,
               country: null,
               postcode: 'BS1 5TL'
             },
@@ -103,6 +107,8 @@ function _LicenceContacts () {
           address2: 'Open Road',
           address3: 'Farmers yard',
           address4: null,
+          address5: null,
+          address6: null,
           country: null,
           postcode: 'BS1 5TL'
         }
@@ -122,6 +128,8 @@ function _LicenceContacts () {
           address2: 'Liquid Road',
           address3: null,
           address4: null,
+          address5: null,
+          address6: null,
           country: null,
           postcode: 'BS1 5TL'
         }
