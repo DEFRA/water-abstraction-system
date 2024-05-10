@@ -19,23 +19,60 @@ function go (bills) {
   }
 }
 
+function _formatBatchType (batchType) {
+  return batchType.replace(/_/g, ' ')
+}
+
+function _formatBillNumberLabel (bill) {
+  if (bill.invoiceNumber) {
+    return bill.invoiceNumber
+  }
+  if (bill.deminimis) {
+    return 'De minimis bill'
+  }
+  if (bill.legacyId) {
+    return 'NALD revised bill'
+  }
+  if (bill.netAmount === 0) {
+    return 'Zero value bill'
+  }
+
+  return null
+}
+
 function _formatBillsToTableRow (bills) {
   return bills.map((bill) => {
     return {
-      billNumber: bill.invoiceNumber,
+      billNumber: _formatBillNumberLabel(bill),
       dateCreated: formatLongDate(new Date(bill.createdAt)),
       account: bill.accountNumber,
       runType: _formatBatchType(bill.billRun.batchType),
       financialYear: bill.financialYearEnding,
       total: formatMoney(bill.netAmount),
       accountId: bill.billingAccountId,
-      id: bill.id
+      id: bill.id,
+      rebilling: _formatRebillingInformation(bill),
+      legacyId: bill.legacyId
     }
   })
 }
 
-function _formatBatchType (batchType) {
-  return batchType.replace(/_/g, ' ')
+function _formatRebillingInformation (bill) {
+  return {
+    flaggedForRebilling: bill.flaggedForRebilling,
+    rebillingState: _formatRebillingState(bill.rebillingState)
+  }
+}
+
+function _formatRebillingState (rebillingState) {
+  if (rebillingState === 'rebill') {
+    return 'Reissued'
+  }
+
+  if (rebillingState === 'reversal') {
+    return 'Reversed'
+  }
+  return null
 }
 
 module.exports = {

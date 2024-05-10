@@ -21,6 +21,12 @@
             <a href="/system/bills/{{ bill.id }}">
               {{ bill.billNumber }}
             </a>
+            {% if bill.rebilling.flaggedForRebilling != true and bill.rebilling.rebillingState %}
+              <p class="govuk-body-s govuk-!-margin-bottom-0">{{ bill.rebilling.rebillingState | title }}</p>
+            {% endif %}
+            {% if bill.rebilling.flaggedForRebilling %}
+              <p class="govuk-body-s govuk-!-margin-bottom-0">Marked for reissue</p>
+            {% endif %}
           </td>
           <td class="govuk-table__cell">
             {{ bill.dateCreated }}
@@ -28,6 +34,16 @@
           <td class="govuk-table__cell">
             <a href="/billing-accounts/{{ bill.accountId }}">
               {{ bill.account }}
+
+
+              {# missing
+{% if invoice.invoiceAccount %}
+      <a href="/billing-accounts/{{ invoice.invoiceAccount.id }}">
+        {{ invoice.invoiceAccount.accountNumber }}
+      </a>
+    {% else %}
+      {{ invoice.accountNumber }}
+    {% endif %} #}
             </a>
           </td>
           <td class="govuk-table__cell">
@@ -38,6 +54,30 @@
           </td>
           <td class="govuk-table__cell govuk-table__cell--numeric">
             {{ bill.total }}
+
+            {# missing
+{% if invoice.isCredit %}
+      <div>Credit</div>
+    {% endif %} #}
+
+            {#            {% macro amountCell(invoice) %}
+  <td class="govuk-table__cell govuk-table__cell--numeric">
+    {{ chargeOrDash(invoice.netTotal) }}
+    {% if invoice.isCredit %}
+      <div>Credit</div>
+    {% endif %}
+  </td>
+{% endmacro %} #}
+
+            {#
+            {% macro chargeOrDash (value, isSigned = false) %}
+              {% if value | defaultTo(false) !== false %}
+                {{ value | charge(isSigned) }}
+              {% else %}
+                <span>-</span><span class=govuk-visually-hidden>Loading</span>
+              {% endif %}
+            {% endmacro %}
+            #}
           </td>
         </tr>
       {% endfor %}

@@ -25,7 +25,13 @@ describe('View Licence Bills presenter', () => {
           financialYear: '2021',
           id: 'id123',
           runType: 'annual',
-          total: '£1,234,567.89'
+          total: '£1,234,567.89',
+          legacyId: null,
+          rebilling: {
+            flaggedForRebilling: false,
+            rebillingState: null
+          }
+
         }]
       })
     })
@@ -43,11 +49,72 @@ describe('View Licence Bills presenter', () => {
       const result = ViewLicenceBillsPresenter.go(_billsTwoPartTariff())
       expect(result.bills[0].runType).to.equal('two part tariff')
     })
+
+    describe('billNumber', () => {
+      it('correctly formats the \'billNumber\' to the invoice number', () => {
+        const result = ViewLicenceBillsPresenter.go(_bills())
+        expect(result.bills[0].billNumber).to.equal('inv123')
+      })
+
+      it('correctly formats the \'billNumber\' to \'De minimis bill\'', () => {
+        const bill = _bill()
+        bill.invoiceNumber = null
+        bill.deminimis = true
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].billNumber).to.equal('De minimis bill')
+      })
+
+      it('correctly formats the \'billNumber\' to \'NALD revised bill\'', () => {
+        const bill = _bill()
+        bill.invoiceNumber = null
+        bill.legacyId = 'lgcy'
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].billNumber).to.equal('NALD revised bill')
+      })
+
+      it('correctly formats the \'billNumber\' to \'Zero value bill\'', () => {
+        const bill = _bill()
+        bill.invoiceNumber = null
+        bill.netAmount = 0
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].billNumber).to.equal('Zero value bill')
+      })
+    })
+    describe('rebilling', () => {
+      it('returns flaggedForRebilling false', () => {
+        const bill = _bill()
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].rebilling.flaggedForRebilling).to.be.false()
+      })
+      it('returns flaggedForRebilling true', () => {
+        const bill = _bill()
+        bill.flaggedForRebilling = true
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].rebilling.flaggedForRebilling).to.be.true()
+      })
+      it('formats the rebillingState to \'rebill\'', () => {
+        const bill = _bill()
+        bill.rebillingState = 'rebill'
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].rebilling.rebillingState).to.equal('Reissued')
+      })
+      it('formats the rebillingState to \'reversal\'', () => {
+        const bill = _bill()
+        bill.rebillingState = 'reversal'
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].rebilling.rebillingState).to.equal('Reversed')
+      })
+      it('formats the rebillingState to \'null\'', () => {
+        const bill = _bill()
+        const result = ViewLicenceBillsPresenter.go([bill])
+        expect(result.bills[0].rebilling.rebillingState).to.be.null()
+      })
+    })
   })
 })
 
-function _bills () {
-  return [{
+function _bill () {
+  return {
     accountNumber: 'acc123',
     billRun: { batchType: 'annual' },
     billingAccountId: 'bicc1233',
@@ -55,8 +122,16 @@ function _bills () {
     financialYearEnding: '2021',
     id: 'id123',
     invoiceNumber: 'inv123',
-    netAmount: 123456789
-  }]
+    netAmount: 123456789,
+    legacyId: null,
+    deminimis: false,
+    flaggedForRebilling: false,
+    rebillingState: null
+  }
+}
+
+function _bills () {
+  return [_bill()]
 }
 
 function _billsTwoPartTariff () {
@@ -68,6 +143,10 @@ function _billsTwoPartTariff () {
     financialYearEnding: '2021',
     id: 'id123',
     invoiceNumber: 'inv123',
-    netAmount: 123456789
+    netAmount: 123456789,
+    legacyId: null,
+    deminimis: false,
+    flaggedForRebilling: false,
+    rebillingState: null
   }]
 }
