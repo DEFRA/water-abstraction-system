@@ -14,7 +14,9 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Things under test
 const SubmitSiteDescriptionService = require('../../../app/services/return-requirements/submit-site-description.service.js')
 
-describe('Submit Site Description service', () => {
+describe('Return Requirements - Submit Site Description service', () => {
+  const requirementIndex = 0
+
   let payload
   let session
 
@@ -23,7 +25,7 @@ describe('Submit Site Description service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -32,7 +34,10 @@ describe('Submit Site Description service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required'
+        journey: 'returns-required',
+        requirements: [{}],
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change'
       }
     })
   })
@@ -46,49 +51,43 @@ describe('Submit Site Description service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSiteDescriptionService.go(session.id, payload)
+        await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.siteDescription).to.equal('This is a valid return requirement description')
+        expect(refreshedSession.requirements[0].siteDescription).to.equal('This is a valid return requirement description')
       })
 
-      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
-        const result = await SubmitSiteDescriptionService.go(session.id, payload)
+      it('returns the correct details the controller needs to redirect the journey', async () => {
+        const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({
-          checkYourAnswersVisited: false
+          checkPageVisited: false
         })
       })
     })
 
     describe('with an invalid payload', () => {
+      beforeEach(() => {
+        payload = {}
+      })
+
+      it('returns page data for the view', async () => {
+        const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Enter a site description for the requirements for returns',
+          backLink: `/system/return-requirements/${session.id}/returns-cycle/0`,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC',
+          siteDescription: null
+        }, { skip: ['sessionId', 'error'] })
+      })
+
       describe('because the user has not entered anything', () => {
-        beforeEach(() => {
-          payload = {}
-        })
-
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            pageTitle: 'Enter a site description for the requirements for returns',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            siteDescription: null
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the text input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
+        it('includes an error for the input element', async () => {
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
             text: 'Enter a description of the site'
@@ -103,31 +102,18 @@ describe('Submit Site Description service', () => {
           }
         })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            pageTitle: 'Enter a site description for the requirements for returns',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            siteDescription: 'Too short'
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the text input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
+        it('includes an error for the input element', async () => {
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
             text: 'Site description must be 10 characters or more'
           })
+        })
+
+        it('includes what was submitted', async () => {
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+
+          expect(result.siteDescription).to.equal('Too short')
         })
       })
 
@@ -141,31 +127,18 @@ describe('Submit Site Description service', () => {
           }
         })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
-
-          expect(result.id).to.equal(session.id)
-        })
-
-        it('returns page data for the view', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            pageTitle: 'Enter a site description for the requirements for returns',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            siteDescription: invalidSiteDescription
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error for the text input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, payload)
+        it('includes an error for the input element', async () => {
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
             text: 'Site description must be 100 characters or less'
           })
+        })
+
+        it('includes what was submitted', async () => {
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+
+          expect(result.siteDescription).to.equal(invalidSiteDescription)
         })
       })
     })

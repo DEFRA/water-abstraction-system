@@ -4,14 +4,12 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/returns-cycle"
+      href: backLink
     })
   }}
 {% endblock %}
@@ -49,7 +47,7 @@
         errorMessage: error
       }) }}
 
-      {{ govukButton({ text: "Continue" }) }}
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}

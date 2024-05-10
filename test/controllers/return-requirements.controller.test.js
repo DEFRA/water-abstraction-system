@@ -11,7 +11,8 @@ const { expect } = Code
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
 const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
-const CheckYourAnswersService = require('../../app/services/return-requirements/check-your-answers.service.js')
+const CancelService = require('../../app/services/return-requirements/cancel.service.js')
+const CheckService = require('../../app/services/return-requirements/check.service.js')
 const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
@@ -58,7 +59,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('abstraction-period'))
+        const response = await server.inject(_options('abstraction-period', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Enter the abstraction period for the requirements for returns')
@@ -93,7 +94,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('agreements-exceptions'))
+        const response = await server.inject(_options('agreements-exceptions', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select agreements and exceptions for the return requirement')
@@ -112,16 +113,34 @@ describe('Return requirements controller', () => {
     })
   })
 
-  describe('GET /return-requirements/{sessionId}/check-your-answers', () => {
+  describe('GET /return-requirements/{sessionId}/cancel', () => {
     beforeEach(async () => {
-      Sinon.stub(CheckYourAnswersService, 'go').resolves({
+      Sinon.stub(CancelService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'You are about to cancel these requirements for returns'
+      })
+    })
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(_options('cancel'))
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('You are about to cancel these requirements for returns')
+      })
+    })
+  })
+
+  describe('GET /return-requirements/{sessionId}/check', () => {
+    beforeEach(async () => {
+      Sinon.stub(CheckService, 'go').resolves({
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Check the return requirements for Acme Corp.'
       })
     })
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('check-your-answers'))
+        const response = await server.inject(_options('check'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Check the return requirements for')
@@ -141,7 +160,7 @@ describe('Return requirements controller', () => {
       const result = await server.inject(_options('delete-note'))
 
       expect(result.statusCode).to.equal(302)
-      expect(result.headers.location).to.equal(`/system/return-requirements/${sessionId}/check-your-answers`)
+      expect(result.headers.location).to.equal(`/system/return-requirements/${sessionId}/check`)
     })
   })
 
@@ -165,7 +184,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('frequency-collected'))
+        const response = await server.inject(_options('frequency-collected', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select how often readings or volumes are collected')
@@ -182,7 +201,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('frequency-reported'))
+        const response = await server.inject(_options('frequency-reported', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select how often readings or volumes are reported')
@@ -215,7 +234,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('points'))
+        const response = await server.inject(_options('points', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the points for the requirements for returns')
@@ -231,7 +250,7 @@ describe('Return requirements controller', () => {
     })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('purpose'))
+        const response = await server.inject(_options('purpose', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the purpose for the requirement for returns')
@@ -263,7 +282,7 @@ describe('Return requirements controller', () => {
     })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('returns-cycle'))
+        const response = await server.inject(_options('returns-cycle', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the returns cycle for the return requirement')
@@ -296,7 +315,7 @@ describe('Return requirements controller', () => {
     })
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('site-description'))
+        const response = await server.inject(_options('site-description', 0))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Enter a site description for the requirements for returns')
@@ -321,10 +340,16 @@ describe('Return requirements controller', () => {
   })
 })
 
-function _options (path) {
+function _options (path, index = -1) {
+  let url = `/return-requirements/${sessionId}/${path}`
+
+  if (index > -1) {
+    url = `${url}/${index}`
+  }
+
   return {
     method: 'GET',
-    url: `/return-requirements/${sessionId}/${path}`,
+    url,
     auth: {
       strategy: 'session',
       credentials: { scope: ['billing'] }

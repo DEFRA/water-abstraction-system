@@ -5,7 +5,10 @@ module.exports = {
   ],
   rules: {
     '@stylistic/js/max-len': ['error', {
-      code: 120
+      code: 120,
+      ignoreStrings: true,
+      ignoreTemplateLiterals: true,
+      ignoreUrls: true
     }]
   }
 }

@@ -1,0 +1,122 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block content %}
+  {% if notification %}
+    {{ govukNotificationBanner({
+      titleText: notification.title,
+      text: notification.text
+    }) }}
+  {% endif %}
+
+  {# Main heading #}
+  <div class="govuk-body">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
+      {{ pageTitle }}
+    </h1>
+  </div>
+
+  <form method="post">
+    <div class="govuk-!-margin-bottom-9">
+      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-2',
+        rows: [
+          {
+            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+            key: {
+              text: "Start date"
+            },
+            value: {
+              text: startDate
+            },
+            actions: {
+              items: [
+                {
+                  href: "/system/return-requirements/" + sessionId + "/start-date",
+                  text: "Change",
+                  visuallyHiddenText: "the start date for the return requirement"
+                }
+              ]
+            }
+          },
+          {
+            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+            key: {
+              text: "Reason"
+            },
+            value: {
+              text: reason
+            },
+            actions: {
+              items: [
+                {
+                  href: reasonLink,
+                  text: "Change",
+                  visuallyHiddenText: "the reason for the return requirement"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+    </div>
+
+    <div class="govuk-!-margin-bottom-9">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Notes</h2>
+      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+      {{ govukSummaryList({
+        classes: 'govuk-!-margin-bottom-2',
+        rows: [
+          {
+            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+            key: {
+              text: userEmail,
+              classes: "govuk-body govuk-!-font-weight-regular"
+            },
+            value: {
+              text: note | escape | nl2br
+            },
+            actions: {
+              items: [
+                {
+                  href: "note",
+                  text: "Change" if note else "Add a note"
+                },
+                {
+                  href: "delete-note",
+                  text: "Delete"
+                } if note
+              ]
+            }
+          }
+        ]
+      }) }}
+      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+    </div>
+
+    <div class="govuk-body">
+      {% if journey == 'no-returns-required' %}
+        <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+        <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
+      {% endif %}
+
+      {{ govukButton({
+        text: "Approve returns requirements",
+        classes: "govuk-!-margin-right-6",
+        preventDoubleClick: true
+      }) }}
+
+      {{ govukButton({
+        text: "Cancel return requirements",
+        classes: "govuk-button--secondary",
+        preventDoubleClick: true,
+        href: "/system/return-requirements/" + sessionId + "/cancel"
+      }) }}
+    </div>
+  </form>
+{% endblock %}
