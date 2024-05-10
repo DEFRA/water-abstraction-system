@@ -14,12 +14,13 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
-const PurposeValidation = require('../../../app/validators/return-requirements/purpose.validator.js')
 
 // Thing under test
 const SubmitPurposeService = require('../../../app/services/return-requirements/submit-purpose.service.js')
 
-describe('Submit Purpose service', () => {
+describe('Return Requirements - Submit Purpose service', () => {
+  const requirementIndex = 0
+
   let payload
   let session
 
@@ -28,7 +29,7 @@ describe('Submit Purpose service', () => {
 
     session = await SessionHelper.add({
       data: {
-        checkYourAnswersVisited: false,
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -37,7 +38,10 @@ describe('Submit Purpose service', () => {
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
         },
-        journey: 'returns-required'
+        journey: 'returns-required',
+        requirements: [{}],
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change'
       }
     })
   })
@@ -50,78 +54,62 @@ describe('Submit Purpose service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          purposes: [
-            'Potable Water Supply - Direct'
-          ]
+          purposes: ['Heat Pump']
         }
 
         Sinon.stub(FetchPurposesService, 'go').resolves([
-          'Potable Water Supply - Direct',
-          'Transfer Between Sources (Pre Water Act 2003)'
-        ]
-        )
-
-        Sinon.stub(PurposeValidation, 'go').resolves(null)
+          { description: 'Heat Pump' },
+          { description: 'Horticultural Watering' }
+        ])
       })
 
       it('saves the submitted value', async () => {
-        await SubmitPurposeService.go(session.id, payload)
+        await SubmitPurposeService.go(session.id, requirementIndex, payload)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.purposes).to.equal(['Potable Water Supply - Direct'])
+        expect(refreshedSession.requirements[0].purposes).to.equal(['Heat Pump'])
       })
 
-      it('returns the checkYourAnswersVisited property (no page data needed for a redirect)', async () => {
-        const result = await SubmitPurposeService.go(session.id, payload)
+      it('returns the correct details the controller needs to redirect the journey', async () => {
+        const result = await SubmitPurposeService.go(session.id, requirementIndex, payload)
 
         expect(result).to.equal({
-          checkYourAnswersVisited: false
+          checkPageVisited: false
         })
       })
     })
 
     describe('with an invalid payload', () => {
-      describe('because the user has not selected anything', () => {
-        beforeEach(() => {
-          payload = {}
+      beforeEach(() => {
+        payload = {}
 
-          Sinon.stub(FetchPurposesService, 'go').resolves(
-            [
-              'Transfer Between Sources (Pre Water Act 2003)',
-              'Potable Water Supply - Direct'
-            ]
-          )
-        })
+        Sinon.stub(FetchPurposesService, 'go').resolves([
+          { description: 'Heat Pump' },
+          { description: 'Horticultural Watering' }
+        ])
+      })
 
-        it('fetches the current setup session record', async () => {
-          const result = await SubmitPurposeService.go(session.id, payload)
+      it('returns page data for the view', async () => {
+        const result = await SubmitPurposeService.go(session.id, requirementIndex, payload)
 
-          expect(result.id).to.equal(session.id)
-        })
+        expect(result).to.equal({
+          activeNavBar: 'search',
+          pageTitle: 'Select the purpose for the requirements for returns',
+          backLink: `/system/return-requirements/${session.id}/setup`,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licencePurposes: ['Heat Pump', 'Horticultural Watering'],
+          licenceRef: '01/ABC',
+          purposes: ''
+        }, { skip: ['sessionId', 'error'] })
+      })
 
-        it('returns the page data for the view', async () => {
-          const result = await SubmitPurposeService.go(session.id, payload)
-
-          expect(result).to.equal({
-            activeNavBar: 'search',
-            checkYourAnswersVisited: false,
-            pageTitle: 'Select the purpose for the requirements for returns',
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            licencePurposes: [
-              'Transfer Between Sources (Pre Water Act 2003)',
-              'Potable Water Supply - Direct'
-            ],
-            selectedPurposes: ''
-          }, { skip: ['id', 'error'] })
-        })
-
-        it('returns page data with an error', async () => {
-          const result = await SubmitPurposeService.go(session.id, payload)
+      describe('because the user has not submitted anything', () => {
+        it('includes an error for the input element', async () => {
+          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload)
 
           expect(result.error).to.equal({
-            text: 'Select any uses for the return requirement'
+            text: 'Select any purpose for the requirements for returns'
           })
         })
       })

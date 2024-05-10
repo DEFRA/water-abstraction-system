@@ -19,10 +19,11 @@ const StartDateValidator = require('../../validators/return-requirements/start-d
  * If there was a validation error the controller will re-render the page so needs this information. If all is well the
  * controller will redirect to the next page in the journey.
  *
- * @param {string} sessionId - The id of the current session
+ * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the start date page
+ * @returns {Promise<Object>} If no errors 2 flags that determine whether the user is returned to the check page or the
+ * next page in the journey else the page data for the start date page including the validation error details
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
@@ -34,7 +35,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.checkYourAnswersVisited,
+      checkPageVisited: session.checkPageVisited,
       journey: session.journey
     }
   }
@@ -43,9 +44,7 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
-    journey: session.journey,
     pageTitle: 'Select the start date for the requirements for returns',
     ...submittedSessionData
   }

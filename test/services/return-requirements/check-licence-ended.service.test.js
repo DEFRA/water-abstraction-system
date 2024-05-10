@@ -14,7 +14,7 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 // Thing under test
 const CheckLicenceEndedService = require('../../../app/services/return-requirements/check-licence-ended.service.js')
 
-describe('CheckLicenceEndedService', () => {
+describe('Return Requirements - CheckLicenceEndedService', () => {
   let licence
 
   beforeEach(async () => {

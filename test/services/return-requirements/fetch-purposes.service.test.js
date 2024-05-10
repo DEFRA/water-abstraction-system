@@ -16,9 +16,9 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 // Thing under test
 const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
 
-describe('Fetch purposes service', () => {
-  let purposes
+describe('Return Requirements - Fetch Purposes service', () => {
   let licenceVersion
+  let purposes
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -47,9 +47,9 @@ describe('Fetch purposes service', () => {
       const result = await FetchPurposesService.go(licenceVersion.licenceId)
 
       expect(result).to.equal([
-        'Heat Pump',
-        'Horticultural Watering',
-        'Large Garden Watering'
+        { description: 'Heat Pump' },
+        { description: 'Horticultural Watering' },
+        { description: 'Large Garden Watering' }
       ])
     })
   })

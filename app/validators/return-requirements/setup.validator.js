@@ -21,7 +21,7 @@ const VALID_VALUES = [
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (data) {
-  const errorMessage = 'Select how you want to set up the return requirement'
+  const errorMessage = 'Select how you want to set up the requirements for returns'
   const schema = Joi.object({
     setup: Joi.string()
       .required()

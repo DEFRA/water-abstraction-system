@@ -1,27 +1,25 @@
 'use strict'
 
 /**
- * Fetches licence agreements needed for `/return-requirements/{sessionId}/check-your-answers` page
+ * Fetches licence agreements needed to create a return requirement from abstraction data
  * @module FetchLicenceAgreementsService
  */
 
 const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
 
 /**
- * Fetches licence agreements needed for `/return-requirements/{sessionId}/check-your-answers` page
+ * Fetches licence agreements needed to create a return requirement from abstraction data
  *
  * @param {string} licenceRef - The reference of the licence to fetch agreements for
  *
  * @returns {Promise<Object>} The licence agreements for the matching licenceRef
  */
 async function go (licenceRef) {
-  const data = await _fetchLicenceAgreements(licenceRef)
-
-  return data
+  return _fetch(licenceRef)
 }
 
-async function _fetchLicenceAgreements (licenceRef) {
-  const result = await LicenceAgreementModel.query()
+async function _fetch (licenceRef) {
+  return LicenceAgreementModel.query()
     .where('licenceRef', licenceRef)
     .where(function () {
       this.whereNull('endDate').orWhere('endDate', '>=', new Date())
@@ -33,8 +31,6 @@ async function _fetchLicenceAgreements (licenceRef) {
       ])
         .where('financialAgreementCode', 'S127')
     })
-
-  return result
 }
 
 module.exports = {

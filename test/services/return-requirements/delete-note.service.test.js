@@ -15,26 +15,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const DeleteNoteService = require('../../../app/services/return-requirements/delete-note.service.js')
 
-describe('Delete Note service', () => {
-  const sessionData = {
-    data: {
-      checkYourAnswersVisited: true,
-      licence: {
-        endDate: null,
-        licenceRef: '01/ABC',
-        licenceHolder: 'Astro Boy',
-        currentVersionStartDate: '2023-02-08T00:00:00.000Z'
-      },
-      reason: 'abstraction-below-100-cubic-metres-per-day',
-      journey: 'no-returns-required',
-      note: {
-        content: 'Note attached to requirement',
-        userEmail: 'carol.shaw@atari.com'
-      },
-      startDateOptions: 'licenceStartDate'
-    }
-  }
-
+describe('Return Requirements - Delete Note service', () => {
   let session
   let yarStub
 
@@ -42,7 +23,25 @@ describe('Delete Note service', () => {
     await DatabaseSupport.clean()
 
     session = await SessionHelper.add({
-      ...sessionData
+      data: {
+        checkPageVisited: false,
+        licence: {
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+          endDate: null,
+          licenceRef: '01/ABC',
+          licenceHolder: 'Turbo Kid',
+          startDate: '2022-04-01T00:00:00.000Z'
+        },
+        journey: 'returns-required',
+        requirements: [{}],
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change',
+        note: {
+          content: 'I am not long for this world',
+          userEmail: 'carol.shaw@atari.com'
+        }
+      }
     })
 
     yarStub = {
@@ -50,7 +49,7 @@ describe('Delete Note service', () => {
     }
   })
 
-  it('deletes the note', async () => {
+  it('deletes the note from the session', async () => {
     await DeleteNoteService.go(session.id, yarStub)
 
     const refreshedSession = await session.$query()
