@@ -15,6 +15,7 @@ const FrequencyReportedService = require('../services/return-requirements/freque
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../services/return-requirements/note.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
+const RemoveService = require('../services/return-requirements/remove.service.js')
 const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
@@ -172,6 +173,16 @@ async function reason (request, h) {
   const pageData = await SelectReasonService.go(sessionId)
 
   return h.view('return-requirements/reason.njk', {
+    ...pageData
+  })
+}
+
+async function remove (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await RemoveService.go(sessionId)
+
+  return h.view('return-requirements/remove.njk', {
     ...pageData
   })
 }
@@ -450,6 +461,7 @@ module.exports = {
   points,
   purpose,
   reason,
+  remove,
   returnsCycle,
   setup,
   siteDescription,
