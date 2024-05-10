@@ -52,7 +52,8 @@ function _formatBillsToTableRow (bills) {
       accountId: bill.billingAccountId,
       id: bill.id,
       rebilling: _formatRebillingInformation(bill),
-      legacyId: bill.legacyId
+      legacyId: bill.legacyId,
+      credit: bill.credit
     }
   })
 }

@@ -25,17 +25,18 @@ async function go (licenceId, page) {
 async function _fetch (licenceId, page) {
   return BillModel.query()
     .select([
-      'bills.id',
-      'bills.invoiceNumber',
       'bills.accountNumber',
-      'bills.financialYearEnding',
-      'bills.netAmount',
       'bills.billingAccountId',
       'bills.createdAt',
+      'bills.credit',
+      'bills.deminimis',
+      'bills.financialYearEnding',
       'bills.flaggedForRebilling',
-      'bills.rebillingState',
+      'bills.id',
+      'bills.invoiceNumber',
       'bills.legacyId',
-      'bills.deminimis'
+      'bills.netAmount',
+      'bills.rebillingState'
     ])
     .innerJoinRelated('billLicences')
     .where('billLicences.licence_id', licenceId)

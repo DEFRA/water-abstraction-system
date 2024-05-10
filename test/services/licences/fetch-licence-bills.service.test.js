@@ -62,6 +62,7 @@ describe('Fetch licence bills service', () => {
           billRun: null,
           billingAccountId,
           createdAt: createdDate,
+          credit: null,
           deminimis: false,
           financialYearEnding: 2023,
           flaggedForRebilling: false,

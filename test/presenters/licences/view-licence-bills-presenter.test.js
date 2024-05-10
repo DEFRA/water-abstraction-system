@@ -21,17 +21,17 @@ describe('View Licence Bills presenter', () => {
           account: 'acc123',
           accountId: 'bicc1233',
           billNumber: 'inv123',
+          credit: false,
           dateCreated: '1 January 2020',
           financialYear: '2021',
           id: 'id123',
-          runType: 'annual',
-          total: '£1,234,567.89',
           legacyId: null,
           rebilling: {
             flaggedForRebilling: false,
             rebillingState: null
-          }
-
+          },
+          runType: 'annual',
+          total: '£1,234,567.89'
         }]
       })
     })
@@ -119,13 +119,14 @@ function _bill () {
     billRun: { batchType: 'annual' },
     billingAccountId: 'bicc1233',
     createdAt: new Date('2020-01-01'),
+    credit: false,
+    deminimis: false,
     financialYearEnding: '2021',
+    flaggedForRebilling: false,
     id: 'id123',
     invoiceNumber: 'inv123',
-    netAmount: 123456789,
     legacyId: null,
-    deminimis: false,
-    flaggedForRebilling: false,
+    netAmount: 123456789,
     rebillingState: null
   }
 }
@@ -140,13 +141,14 @@ function _billsTwoPartTariff () {
     billRun: { batchType: 'two_part_tariff' },
     billingAccountId: 'bicc1233',
     createdAt: new Date('2020-01-01'),
+    credit: false,
+    deminimis: false,
     financialYearEnding: '2021',
+    flaggedForRebilling: false,
     id: 'id123',
     invoiceNumber: 'inv123',
-    netAmount: 123456789,
     legacyId: null,
-    deminimis: false,
-    flaggedForRebilling: false,
+    netAmount: 123456789,
     rebillingState: null
   }]
 }
