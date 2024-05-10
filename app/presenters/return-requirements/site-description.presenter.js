@@ -9,19 +9,31 @@
  * Formats data for the `/return-requirements/{sessionId}/site-description` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
- * @param {Object} [payload] - The payload from the request
+ * @param {string} requirementIndex - The index of the requirement being added or changed
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session) {
-  const data = {
-    id: session.id,
-    licenceId: session.licence.id,
-    licenceRef: session.licence.licenceRef,
-    siteDescription: session.siteDescription ? session.siteDescription : null
+function go (session, requirementIndex) {
+  const { id: sessionId, licence, requirements } = session
+  const requirement = requirements[requirementIndex]
+
+  return {
+    backLink: _backLink(session, requirementIndex),
+    licenceId: licence.id,
+    licenceRef: licence.licenceRef,
+    sessionId,
+    siteDescription: requirement?.siteDescription ? requirement.siteDescription : null
+  }
+}
+
+function _backLink (session, requirementIndex) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-requirements/${id}/check`
   }
 
-  return data
+  return `/system/return-requirements/${id}/returns-cycle/${requirementIndex}`
 }
 
 module.exports = {

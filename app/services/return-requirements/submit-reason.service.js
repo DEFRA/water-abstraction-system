@@ -18,10 +18,11 @@ const SessionModel = require('../../models/session.model.js')
  * If there was a validation error the controller will re-render the page so needs this information. If all is well the
  * controller will redirect to the next page in the journey.
  *
- * @param {string} sessionId - The id of the current session
+ * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the reason page
+ * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
+ * the page data for the reason page including the validation error details
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
@@ -32,7 +33,7 @@ async function go (sessionId, payload) {
     await _save(session, payload)
 
     return {
-      checkYourAnswersVisited: session.checkYourAnswersVisited
+      checkPageVisited: session.checkPageVisited
     }
   }
 
@@ -40,7 +41,6 @@ async function go (sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select the reason for the requirements for returns',
     ...formattedData

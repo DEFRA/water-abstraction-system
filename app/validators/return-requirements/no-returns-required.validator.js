@@ -27,9 +27,9 @@ function go (data) {
       .required()
       .valid(...VALID_VALUES)
       .messages({
-        'any.required': 'Select the reason for the requirements for returns',
-        'any.only': 'Select the reason for the requirements for returns',
-        'string.empty': 'Select the reason for the requirements for returns'
+        'any.required': 'Select the reason for no returns required',
+        'any.only': 'Select the reason for no returns required',
+        'string.empty': 'Select the reason for no returns required'
       })
   })
 

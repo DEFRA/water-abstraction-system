@@ -2,7 +2,7 @@
 
 /**
  * Initiates the session record used for setting up a new return requirement
- * @module InitiateReturnRequirementSessionService
+ * @module InitiateSessionService
  */
 
 const Boom = require('@hapi/boom')
@@ -48,7 +48,7 @@ function _data (licence, journey) {
   const ends = licence.$ends()
 
   return {
-    checkYourAnswersVisited: false,
+    checkPageVisited: false,
     licence: {
       id,
       currentVersionStartDate: _currentVersionStartDate(licenceVersions),
@@ -57,7 +57,8 @@ function _data (licence, journey) {
       licenceHolder: licence.$licenceHolder(),
       startDate
     },
-    journey
+    journey,
+    requirements: [{}]
   }
 }
 

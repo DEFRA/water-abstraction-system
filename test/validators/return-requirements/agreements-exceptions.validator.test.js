@@ -48,7 +48,7 @@ describe('Agreements Exception validator', () => {
       const result = AgreementsExceptionsValidator.go(payload)
 
       expect(result.error.details[0].message).to.equal(
-        'Select if there are any agreements and exceptions needed for the return requirements'
+        'Select if there are any agreements and exceptions needed for the requirements for returns'
       )
     })
   })
@@ -62,7 +62,7 @@ describe('Agreements Exception validator', () => {
       const result = AgreementsExceptionsValidator.go(payload)
 
       expect(result.error.details[0].message).to.equal(
-        'Select if there are any agreements and exceptions needed for the return requirements'
+        'Select if there are any agreements and exceptions needed for the requirements for returns'
       )
     })
   })

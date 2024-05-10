@@ -5,14 +5,32 @@
  * @module NoReturnsRequiredPresenter
  */
 
+/**
+ * Formats data for the `/return-requirements/{sessionId}/no-returns-required` page
+ *
+ * @param {module:SessionModel} session - The returns requirements session instance
+ *
+ * @returns {Object} - The data formatted for the view template
+ */
 function go (session) {
-  const data = {
-    selectedOption: session.reason || null,
-    id: session.id,
-    licenceRef: session.licence.licenceRef
+  const { id: sessionId, licence, reason } = session
+
+  return {
+    backLink: _backLink(session),
+    licenceRef: licence.licenceRef,
+    reason: reason || null,
+    sessionId
+  }
+}
+
+function _backLink (session) {
+  const { checkPageVisited, id } = session
+
+  if (checkPageVisited) {
+    return `/system/return-requirements/${id}/check`
   }
 
-  return data
+  return `/system/return-requirements/${id}/start-date`
 }
 
 module.exports = {
