@@ -21,6 +21,7 @@ const StartBillRunProcessService = require('../services/bill-runs/start-bill-run
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
+const SubmitReviewBillRunService = require('../services/bill-runs/two-part-tariff/submit-review-bill-run.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
@@ -44,6 +45,18 @@ async function cancel (request, h) {
 
   return h.view('bill-runs/cancel.njk', {
     pageTitle: "You're about to cancel this bill run",
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function chargeReferenceDetails (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
+
+  return h.view('bill-runs/charge-reference-details.njk', {
+    pageTitle: 'Charge reference details',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -102,7 +115,7 @@ async function removeLicence (request, h) {
 
 async function review (request, h) {
   const { id } = request.params
-  const pageData = await ReviewBillRunService.go(id, request.payload, request.yar)
+  const pageData = await ReviewBillRunService.go(id, request.yar)
 
   return h.view('bill-runs/review.njk', {
     pageTitle: 'Review licences',
@@ -111,16 +124,11 @@ async function review (request, h) {
   })
 }
 
-async function chargeReferenceDetails (request, h) {
-  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+async function reviewClearFilters (request, h) {
+  const { id } = request.params
+  request.yar.clear('filters')
 
-  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
-
-  return h.view('bill-runs/charge-reference-details.njk', {
-    pageTitle: 'Charge reference details',
-    activeNavBar: 'bill-runs',
-    ...pageData
-  })
+  return h.redirect(`/system/bill-runs/${id}/review`)
 }
 
 async function reviewLicence (request, h) {
@@ -185,6 +193,13 @@ async function submitRemoveLicence (request, h) {
   return h.redirect(`/system/bill-runs/${billRunId}/review`)
 }
 
+async function submitReview (request, h) {
+  const { id } = request.params
+  await SubmitReviewBillRunService.go(request.payload, request.yar)
+
+  return h.redirect(`/system/bill-runs/${id}/review`)
+}
+
 async function submitReviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
@@ -222,16 +237,18 @@ async function view (request, h) {
 module.exports = {
   amendBillableReturns,
   cancel,
+  chargeReferenceDetails,
   create,
   index,
   matchDetails,
   removeLicence,
   review,
-  chargeReferenceDetails,
+  reviewClearFilters,
   reviewLicence,
   send,
   submitAmendedBillableReturns,
   submitCancel,
+  submitReview,
   submitRemoveLicence,
   submitReviewLicence,
   submitSend,
