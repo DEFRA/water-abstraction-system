@@ -58,7 +58,8 @@ function _validate (quantity, maxNumberOfDecimals, validationType) {
         'number.unsafe': `The ${validationType} factor must be a number`,
         'number.max': `The ${validationType} factor must be less than 1`,
         'number.min': `The ${validationType} factor must be greater than 0`,
-        'number.base': `The ${validationType} factor must be a number`
+        'number.base': `The ${validationType} factor must be a number`,
+        'any.required': `Enter a ${validationType} factor`
       })
   })
 
