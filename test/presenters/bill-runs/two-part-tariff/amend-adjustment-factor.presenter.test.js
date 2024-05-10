@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AmendAdjustmentFactorPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/amend-adjustment-factor.presenter.js')
 
-describe.only('Amend Adjustment Factor presenter', () => {
+describe('Amend Adjustment Factor presenter', () => {
   const licenceId = '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
   let reviewChargeReference
   let billRun
