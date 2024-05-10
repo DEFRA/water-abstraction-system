@@ -19,36 +19,37 @@ const SiteDescriptionValidator = require('../../validators/return-requirements/s
  * in the journey.
  *
  * @param {string} sessionId - The UUID of the current session
+ * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the start date page
+ * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
+ * the page data for the site description page including the validation error details
  */
-async function go (sessionId, payload) {
+async function go (sessionId, requirementIndex, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session, requirementIndex, payload)
 
     return {
-      checkYourAnswersVisited: session.checkYourAnswersVisited
+      checkPageVisited: session.checkPageVisited
     }
   }
 
-  const submittedSessionData = _submittedSessionData(session, payload)
+  const submittedSessionData = _submittedSessionData(session, requirementIndex, payload)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Enter a site description for the requirements for returns',
     ...submittedSessionData
   }
 }
 
-async function _save (session, payload) {
-  session.siteDescription = payload.siteDescription
+async function _save (session, requirementIndex, payload) {
+  session.requirements[requirementIndex].siteDescription = payload.siteDescription
 
   return session.$update()
 }
@@ -57,10 +58,10 @@ async function _save (session, payload) {
  * Combines the existing session data with the submitted payload formatted by the presenter. If nothing is submitted by
  * the user, payload will be an empty object.
  */
-function _submittedSessionData (session, payload) {
-  session.siteDescription = payload.siteDescription ? payload.siteDescription : null
+function _submittedSessionData (session, requirementIndex, payload) {
+  session.requirements[requirementIndex].siteDescription = payload.siteDescription ? payload.siteDescription : null
 
-  return SiteDescriptionPresenter.go(session)
+  return SiteDescriptionPresenter.go(session, requirementIndex)
 }
 
 function _validate (payload) {

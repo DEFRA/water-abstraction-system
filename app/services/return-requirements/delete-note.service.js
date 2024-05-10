@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates deleting the notes data for `/return-requirements/{sessionId}/check-your-answers` page
+ * Orchestrates deleting the notes data for `/return-requirements/{sessionId}/check` page
  * @module DeleteNoteService
  */
 

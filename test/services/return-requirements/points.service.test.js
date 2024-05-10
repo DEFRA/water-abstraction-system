@@ -18,7 +18,9 @@ const FetchPointsService = require('../../../app/services/return-requirements/fe
 // Thing under test
 const SelectPointsService = require('../../../app/services/return-requirements/points.service.js')
 
-describe('Select Points service', () => {
+describe('Return Requirements - Select Points service', () => {
+  const requirementIndex = 0
+
   let session
 
   beforeEach(async () => {
@@ -26,6 +28,7 @@ describe('Select Points service', () => {
 
     session = await SessionHelper.add({
       data: {
+        checkPageVisited: false,
         licence: {
           id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
@@ -33,7 +36,11 @@ describe('Select Points service', () => {
           licenceRef: '01/ABC',
           licenceHolder: 'Turbo Kid',
           startDate: '2022-04-01T00:00:00.000Z'
-        }
+        },
+        journey: 'returns-required',
+        requirements: [{}],
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change'
       }
     })
 
@@ -52,21 +59,6 @@ describe('Select Points service', () => {
         NGR3_SHEET: 'null',
         NGR4_NORTH: 'null',
         NGR4_SHEET: 'null'
-      },
-      {
-        NGR1_EAST: '68083',
-        NGR2_EAST: 'null',
-        NGR3_EAST: 'null',
-        NGR4_EAST: 'null',
-        LOCAL_NAME: 'BEWL WATER RESERVOIR',
-        NGR1_NORTH: '33604',
-        NGR1_SHEET: 'TQ',
-        NGR2_NORTH: 'null',
-        NGR2_SHEET: 'null',
-        NGR3_NORTH: 'null',
-        NGR3_SHEET: 'null',
-        NGR4_NORTH: 'null',
-        NGR4_SHEET: 'null'
       }
     ])
   })
@@ -77,25 +69,25 @@ describe('Select Points service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SelectPointsService.go(session.id)
+      const result = await SelectPointsService.go(session.id, requirementIndex)
 
-      expect(result.id).to.equal(session.id)
+      expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SelectPointsService.go(session.id)
+      const result = await SelectPointsService.go(session.id, requirementIndex)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        pageTitle: 'Select the points for the requirements for returns',
+        backLink: `/system/return-requirements/${session.id}/purpose/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [
-          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
-          'At National Grid Reference TQ 68083 33604 (BEWL WATER RESERVOIR)'
+          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
         ],
         licenceRef: '01/ABC',
-        pageTitle: 'Select the points for the requirements for returns',
-        selectedPoints: ''
-      }, { skip: ['id'] })
+        points: ''
+      }, { skip: ['sessionId'] })
     })
   })
 })

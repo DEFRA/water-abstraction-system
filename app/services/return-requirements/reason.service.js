@@ -4,6 +4,7 @@
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/reason` page
  * @module SelectReasonService
  */
+
 const SelectReasonPresenter = require('../../presenters/return-requirements/reason.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -19,11 +20,11 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+
   const formattedData = SelectReasonPresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.checkYourAnswersVisited,
     pageTitle: 'Select the reason for the requirements for returns',
     ...formattedData
   }

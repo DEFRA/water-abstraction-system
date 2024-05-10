@@ -19,12 +19,14 @@ const SessionModel = require('../../models/session.model.js')
  * page data needed by the view. If there was a validation error the controller will re-render the page so needs this
  * information. If all is well the controller will redirect to the next page in the journey.
  *
- * @param {string} sessionId - The id of the current session
+ * @param {string} sessionId - The UUID of the current session
+ * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the start date page
+ * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
+ * the page data for the purpose page including the validation error details
  */
-async function go (sessionId, payload) {
+async function go (sessionId, requirementIndex, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
   _handleOneOptionSelected(payload)
@@ -32,19 +34,18 @@ async function go (sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session, requirementIndex, payload)
 
     return {
-      checkYourAnswersVisited: session.checkYourAnswersVisited
+      checkPageVisited: session.checkPageVisited
     }
   }
 
   const purposesData = await FetchPurposesService.go(session.licence.id)
-  const formattedData = PurposePresenter.go(session, purposesData)
+  const formattedData = PurposePresenter.go(session, requirementIndex, purposesData)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.checkYourAnswersVisited,
     error: validationResult,
     pageTitle: 'Select the purpose for the requirements for returns',
     ...formattedData
@@ -62,8 +63,8 @@ function _handleOneOptionSelected (payload) {
   }
 }
 
-async function _save (session, payload) {
-  session.purposes = payload.purposes
+async function _save (session, requirementIndex, payload) {
+  session.requirements[requirementIndex].purposes = payload.purposes
 
   return session.$update()
 }

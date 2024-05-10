@@ -26,7 +26,7 @@ function go (payload) {
     'winter-and-all-year'
   ]
 
-  const errorMessage = 'Select the returns cycle for the return requirement'
+  const errorMessage = 'Select the returns cycle for the requirements for returns'
 
   const schema = Joi.object({
     returnsCycle: Joi.string()

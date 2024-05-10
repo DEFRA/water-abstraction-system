@@ -5,18 +5,15 @@
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/setup"
+      href: backLink
     })
   }}
 {% endblock %}
-
 
 {% block content %}
   {# Error summary #}
@@ -43,25 +40,26 @@
 
 <div>
   <form method="post">
-      {% set checkBoxItems = [] %}
-      {% for purpose in licencePurposes %}
+    {% set checkBoxItems = [] %}
+    {% for purpose in licencePurposes %}
 
-        {% set checkBoxItem = {
-          value: purpose,
-          text: purpose,
-          checked: purpose in selectedPurposes
-        } %}
+      {% set checkBoxItem = {
+        value: purpose,
+        text: purpose,
+        checked: purpose in purposes
+      } %}
 
       {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
 
-      {% endfor %}
-        {{ govukCheckboxes({
-          name: "purposes",
-          errorMessage: error,
-          items: checkBoxItems
-        }) }}
+    {% endfor %}
 
-    {{ govukButton({ text: "Continue" }) }}
+    {{ govukCheckboxes({
+      name: "purposes",
+      errorMessage: error,
+      items: checkBoxItems
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
 </div>
 {% endblock %}
