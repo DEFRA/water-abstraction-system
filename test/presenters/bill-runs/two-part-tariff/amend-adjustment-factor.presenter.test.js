@@ -81,7 +81,7 @@ describe('Amend Adjustment Factor presenter', () => {
           reviewChargeReference.canalAndRiverTrustAgreement = true
         })
 
-        it('adds the two part tariff agreement to the otherAdjustments property', () => {
+        it('adds the canal and river trust agreement to the otherAdjustments property', () => {
           const result = AmendAdjustmentFactorPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.otherAdjustments).to.equal(['Canal and River trust agreement'])
@@ -105,7 +105,7 @@ describe('Amend Adjustment Factor presenter', () => {
           reviewChargeReference.chargeReference.waterCompanyCharge = true
         })
 
-        it('adds the supported source to the otherAdjustments property', () => {
+        it('adds the public water supply to the otherAdjustments property', () => {
           const result = AmendAdjustmentFactorPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.otherAdjustments).to.equal(['Public Water Supply'])

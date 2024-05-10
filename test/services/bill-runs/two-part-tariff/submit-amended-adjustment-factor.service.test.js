@@ -194,7 +194,7 @@ describe('Submit Amended Adjustment Factor Service', () => {
           }, { skip: ['error'] })
         })
 
-        it('returns the page data with an error for the aggregate factor input element', async () => {
+        it('returns the page data with an error for the charge factor input element', async () => {
           const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result.error).to.equal({
@@ -231,7 +231,7 @@ describe('Submit Amended Adjustment Factor Service', () => {
           }, { skip: ['error'] })
         })
 
-        it('returns the page data with an error for the aggregate factor input element', async () => {
+        it('returns the page data with an error for the aggregate and charge factor input element', async () => {
           const result = await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
           expect(result.error).to.equal({

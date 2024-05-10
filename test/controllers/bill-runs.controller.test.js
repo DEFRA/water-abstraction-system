@@ -525,7 +525,7 @@ describe('Bill Runs controller', () => {
           Sinon.stub(SubmitAmendedAdjustmentFactorService, 'go').resolves(_chargeReferenceData())
         })
 
-        it('redirects to the match details page', async () => {
+        it('redirects to the charge reference details page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(302)
