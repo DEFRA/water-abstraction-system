@@ -38,6 +38,9 @@
           </td>
           <td class="govuk-table__cell govuk-table__cell--numeric">
             {{ bill.total }}
+            {% if bill.credit %}
+              <div>Credit</div>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
