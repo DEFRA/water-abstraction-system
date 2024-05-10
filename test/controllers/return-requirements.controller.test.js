@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/return-requirements/abstraction-period.service.js')
+const AdditionalSubmissionOptionsService = require('../../app/services/return-requirements/additional-submission-options.service.js')
 const AgreementsExceptionService = require('../../app/services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../../app/services/return-requirements/cancel.service.js')
 const CheckService = require('../../app/services/return-requirements/check.service.js')
@@ -63,6 +64,24 @@ describe('Return requirements controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Enter the abstraction period for the requirements for returns')
+      })
+    })
+  })
+
+  describe('GET /return-requirements/{sessionId}/additional-submission-options', () => {
+    beforeEach(async () => {
+      Sinon.stub(AdditionalSubmissionOptionsService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
+        pageTitle: 'Select any additional submission options for the requirements for returns'
+      })
+    })
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(_options('additional-submission-options'))
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Select any additional submission options for the requirements for returns')
       })
     })
   })

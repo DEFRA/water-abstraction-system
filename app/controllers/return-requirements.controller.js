@@ -9,6 +9,7 @@ const AbstractionPeriodService = require('../services/return-requirements/abstra
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckService = require('../services/return-requirements/check.service.js')
+const AdditionalSubmissionOptionsService = require('../services/return-requirements/additional-submission-options.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
@@ -23,6 +24,7 @@ const SetupService = require('../services/return-requirements/setup.service.js')
 const SiteDescriptionService = require('../services/return-requirements/site-description.service.js')
 const StartDateService = require('../services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../services/return-requirements/submit-abstraction-period.service.js')
+const SubmitAdditionalSubmissionOptionsService = require('../services/return-requirements/submit-additional-submission-options.service.js')
 const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
 const SubmitCancel = require('../services/return-requirements/submit-cancel.service.js')
 const SubmitCheckService = require('../services/return-requirements/submit-check.service.js')
@@ -44,6 +46,16 @@ async function abstractionPeriod (request, h) {
   const pageData = await AbstractionPeriodService.go(sessionId, requirementIndex)
 
   return h.view('return-requirements/abstraction-period.njk', {
+    ...pageData
+  })
+}
+
+async function additionalSubmissionOptions (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await AdditionalSubmissionOptionsService.go(sessionId)
+
+  return h.view('return-requirements/additional-submission-options.njk', {
     ...pageData
   })
 }
@@ -244,6 +256,18 @@ async function submitAgreementsExceptions (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
 
+async function submitAdditionalSubmissionOptions (request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await SubmitAdditionalSubmissionOptionsService.go(sessionId, request.payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/additional-submission-options.njk', pageData)
+  }
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+}
+
 async function submitCancel (request, h) {
   const { sessionId } = request.params
   const { licenceId } = request.payload
@@ -438,6 +462,7 @@ async function submitStartDate (request, h) {
 
 module.exports = {
   abstractionPeriod,
+  additionalSubmissionOptions,
   agreementsExceptions,
   approved,
   cancel,
@@ -456,6 +481,7 @@ module.exports = {
   siteDescription,
   startDate,
   submitAbstractionPeriod,
+  submitAdditionalSubmissionOptions,
   submitAgreementsExceptions,
   submitCancel,
   submitCheck,
