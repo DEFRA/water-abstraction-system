@@ -176,6 +176,19 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
+    handler: BillRunsController.submitAmendedAdjustmentFactor,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the amended charge references adjustment factors from a two-part tariff licence'
+    }
+  },
+  {
     method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/match-details/{reviewChargeElementId}',
     handler: BillRunsController.matchDetails,

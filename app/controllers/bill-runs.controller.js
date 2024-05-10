@@ -19,6 +19,7 @@ const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/revi
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
+const SubmitAmendedAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
@@ -65,7 +66,7 @@ async function cancel (request, h) {
 async function chargeReferenceDetails (request, h) {
   const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
 
-  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
+  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId, request.yar)
 
   return h.view('bill-runs/charge-reference-details.njk', {
     pageTitle: 'Charge reference details',
@@ -160,6 +161,23 @@ async function send (request, h) {
   })
 }
 
+async function submitAmendedAdjustmentFactor (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+  const pageData = await SubmitAmendedAdjustmentFactorService.go(
+    billRunId,
+    licenceId,
+    reviewChargeReferenceId,
+    request.payload,
+    request.yar
+  )
+
+  if (pageData.error) {
+    return h.view('bill-runs/amend-adjustment-factor.njk', pageData)
+  }
+
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`)
+}
+
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
@@ -250,6 +268,7 @@ module.exports = {
   chargeReferenceDetails,
   reviewLicence,
   send,
+  submitAmendedAdjustmentFactor,
   submitAmendedBillableReturns,
   submitCancel,
   submitRemoveLicence,

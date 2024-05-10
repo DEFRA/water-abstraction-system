@@ -3,6 +3,7 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
 
 {% block breadcrumbs %}
@@ -16,6 +17,24 @@
 {% block content %}
   <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-full">
+
+      {% set errorMessage %}
+        <div>{{error.aggregateFactorElement.text}}</div>
+        <div>{{error.chargeAdjustmentElement.text}}</div>
+      {% endset %}
+
+      {% if error %}
+        {{ govukErrorSummary({
+          titleText: 'There is a problem',
+          errorList: [
+            {
+              html: errorMessage,
+              href: '#adjustment-factor-error'
+            }
+          ]
+        }) }}
+      {% endif %}
+
       <span class="govuk-caption-l">{{chargeReference.description}}</span>
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Set the adjustment factors</h1>
 
@@ -40,16 +59,29 @@
         html: insertText
       }) }}
 
+      {% if inputtedAggregateValue %}
+        {% set aggregateValue = inputtedAggregateValue %}
+      {% else %}
+        {% set aggregateValue = chargeReference.aggregateFactor %}
+      {% endif %}
+
+      {% if inputtedChargeValue %}
+        {% set chargeValue = inputtedChargeValue %}
+      {% else %}
+        {% set chargeValue = chargeReference.chargeAdjustment %}
+      {% endif %}
+
       <form method="post">
         {{ govukInput({
           label: {
             text: "Aggregate factor (optional)",
             classes: "govuk-label"
           },
-          id: "event-name",
-          name: "eventName",
+          id: "amended-aggregate-factor",
+          name: "amendedAggregateFactor",
           classes: "govuk-input--width-10",
-          value: chargeReference.aggregateFactor
+          value: aggregateValue,
+          errorMessage: error.aggregateFactorElement
         }) }}
 
         {{ govukInput({
@@ -57,10 +89,11 @@
             text: "Charge adjustment (optional)",
             classes: "govuk-label"
           },
-          id: "event-name",
-          name: "eventName",
+          id: "amended-charge-adjustment",
+          name: "amendedChargeAdjustment",
           classes: "govuk-input govuk-input--width-10",
-          value: chargeReference.chargeAdjustment
+          value: chargeValue,
+          errorMessage: error.chargeAdjustmentElement
         }) }}
 
         {{ govukButton({ text: 'Confirm' }) }}
