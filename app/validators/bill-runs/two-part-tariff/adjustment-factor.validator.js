@@ -68,7 +68,9 @@ function _validate (quantity, maxNumberOfDecimals, validationType) {
   // The first check we are doing is validating that a number has been inputted. If it has then we can move onto our
   // next check for if there are less than the given amount of decimal places
   if (!validation.error) {
-    const decimalSchema = Joi.number().custom((value, helpers) => customValidation(value, helpers, maxNumberOfDecimals, validationType))
+    const decimalSchema = Joi.number().custom((value, helpers) => {
+      return customValidation(value, helpers, maxNumberOfDecimals, validationType)
+    })
 
     return decimalSchema.validate(quantity)
   }
