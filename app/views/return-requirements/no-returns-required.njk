@@ -6,10 +6,6 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {% set backLink %}
-    /system/return-requirements/{{ id }}/{{ 'check-your-answers' if checkYourAnswersVisited else 'start-date' }}
-  {% endset %}
-
   {{
     govukBackLink({
       text: 'Back',
@@ -27,8 +23,8 @@
           text: error.text,
           href: "#no-returns-required-error"
         }
-        ]
-      }) }}
+      ]
+    }) }}
   {% endif %}
 
   <div class="govuk-body">
@@ -47,22 +43,22 @@
           {
             text: 'Abstraction amount below 100 cubic metres per day',
             value:  'abstraction-below-100-cubic-metres-per-day',
-            checked: selectedOption == 'abstraction-below-100-cubic-metres-per-day'
+            checked: reason == 'abstraction-below-100-cubic-metres-per-day'
           },
           {
             text: 'Returns exception',
             value: 'returns-exception',
-            checked: selectedOption == 'returns-exception'
+            checked: reason == 'returns-exception'
           },
           {
             text: 'Transfer licence',
             value: 'transfer-licence',
-            checked: selectedOption == 'transfer-licence'
+            checked: reason == 'transfer-licence'
           }
         ]
       }) }}
 
-      {{ govukButton({ text: "Continue" }) }}
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </form>
   </div>
 

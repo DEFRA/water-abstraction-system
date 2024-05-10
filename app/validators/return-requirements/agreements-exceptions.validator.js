@@ -22,7 +22,7 @@ const Joi = require('joi')
 function go (payload) {
   const agreementsExceptions = payload.agreementsExceptions
 
-  const errorMessage = 'Select if there are any agreements and exceptions needed for the return requirements'
+  const errorMessage = 'Select if there are any agreements and exceptions needed for the requirements for returns'
 
   const schema = Joi.object({
     agreementsExceptions: Joi.array()

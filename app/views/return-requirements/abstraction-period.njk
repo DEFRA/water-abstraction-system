@@ -4,14 +4,12 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/points"
+      href: backLink
     })
   }}
 {% endblock %}
@@ -110,7 +108,7 @@
     }) }}
 
     <div class="govuk-body">
-      {{ govukButton({ text: "Continue" }) }}
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </div>
   </form>
 {% endblock %}

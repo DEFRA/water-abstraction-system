@@ -14,18 +14,28 @@ const ExpandedError = require('../../../app/errors/expanded.error.js')
 
 // Thing under test
 const CheckLicenceEndedService = require('../../../app/services/return-requirements/check-licence-ended.service.js')
-const SubmitCheckYourAnswersService = require('../../../app/services/return-requirements/submit-check-your-answers.service.js')
+const SubmitCheckService = require('../../../app/services/return-requirements/submit-check.service.js')
 
-describe('Submit Check Your Answers service', () => {
+describe('Return Requirements - Submit Check service', () => {
   let session
   let sessionId
 
   beforeEach(async () => {
     session = await SessionHelper.add({
       data: {
+        checkPageVisited: false,
         licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d'
-        }
+          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+          endDate: null,
+          licenceRef: '01/ABC',
+          licenceHolder: 'Turbo Kid',
+          startDate: '2022-04-01T00:00:00.000Z'
+        },
+        journey: 'returns-required',
+        requirements: [{}],
+        startDateOptions: 'licenceStartDate',
+        reason: 'major-change'
       }
     })
     sessionId = session.id
@@ -41,7 +51,7 @@ describe('Submit Check Your Answers service', () => {
     })
 
     it('returns a valid licence', async () => {
-      const result = await SubmitCheckYourAnswersService.go(sessionId)
+      const result = await SubmitCheckService.go(sessionId)
 
       expect(result).to.equal(session.data.licence.id)
     })
@@ -53,7 +63,7 @@ describe('Submit Check Your Answers service', () => {
     })
 
     it('throws an error', async () => {
-      const response = await expect(SubmitCheckYourAnswersService.go(sessionId)).to.reject()
+      const response = await expect(SubmitCheckService.go(sessionId)).to.reject()
 
       expect(response).to.be.an.instanceOf(ExpandedError)
       expect(response.message).to.equal('Invalid licence for return requirements')

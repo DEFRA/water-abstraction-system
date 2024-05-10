@@ -5,8 +5,7 @@
  * @module LicencesController
  */
 
-const InitiateReturnRequirementSessionService =
-  require('../services/return-requirements/initiate-return-requirement-session.service.js')
+const InitiateSessionService = require('../services/return-requirements/initiate-session.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service')
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service')
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service')
@@ -17,7 +16,7 @@ const ViewLicencePage = 'licences/view.njk'
 async function noReturnsRequired (request, h) {
   const { id } = request.params
 
-  const session = await InitiateReturnRequirementSessionService.go(id, 'no-returns-required')
+  const session = await InitiateSessionService.go(id, 'no-returns-required')
 
   return h.redirect(`/system/return-requirements/${session.id}/start-date`)
 }
@@ -25,7 +24,7 @@ async function noReturnsRequired (request, h) {
 async function returnsRequired (request, h) {
   const { id } = request.params
 
-  const session = await InitiateReturnRequirementSessionService.go(id, 'returns-required')
+  const session = await InitiateSessionService.go(id, 'returns-required')
 
   return h.redirect(`/system/return-requirements/${session.id}/start-date`)
 }

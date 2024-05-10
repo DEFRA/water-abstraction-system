@@ -12,8 +12,7 @@ const { expect } = Code
 const Boom = require('@hapi/boom')
 
 // Things we need to stub
-const InitiateReturnRequirementSessionService =
-  require('../../app/services/return-requirements/initiate-return-requirement-session.service.js')
+const InitiateSessionService = require('../../app/services/return-requirements/initiate-session.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service')
@@ -58,7 +57,7 @@ describe('Licences controller', () => {
 
     describe('when a request is valid', () => {
       beforeEach(async () => {
-        Sinon.stub(InitiateReturnRequirementSessionService, 'go').resolves(session)
+        Sinon.stub(InitiateSessionService, 'go').resolves(session)
       })
 
       it('redirects to select return start date page', async () => {
@@ -72,7 +71,7 @@ describe('Licences controller', () => {
     describe('when a request is invalid', () => {
       describe('because the licence ID is unrecognised', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateReturnRequirementSessionService, 'go').rejects(Boom.notFound())
+          Sinon.stub(InitiateSessionService, 'go').rejects(Boom.notFound())
         })
 
         it('returns a 404 and page not found', async () => {
@@ -85,7 +84,7 @@ describe('Licences controller', () => {
 
       describe('because the initialise session service errors', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateReturnRequirementSessionService, 'go').rejects()
+          Sinon.stub(InitiateSessionService, 'go').rejects()
         })
 
         it('returns a 200 and there is a problem with the service page', async () => {
@@ -114,7 +113,7 @@ describe('Licences controller', () => {
 
     describe('when a request is valid', () => {
       beforeEach(async () => {
-        Sinon.stub(InitiateReturnRequirementSessionService, 'go').resolves(session)
+        Sinon.stub(InitiateSessionService, 'go').resolves(session)
       })
 
       it('redirects to select return start date page', async () => {
@@ -128,7 +127,7 @@ describe('Licences controller', () => {
     describe('when a request is invalid', () => {
       describe('because the licence ID is unrecognised', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateReturnRequirementSessionService, 'go').rejects(Boom.notFound())
+          Sinon.stub(InitiateSessionService, 'go').rejects(Boom.notFound())
         })
 
         it('returns a 404 and page not found', async () => {
@@ -141,7 +140,7 @@ describe('Licences controller', () => {
 
       describe('because the initialise session service errors', () => {
         beforeEach(async () => {
-          Sinon.stub(InitiateReturnRequirementSessionService, 'go').rejects()
+          Sinon.stub(InitiateSessionService, 'go').rejects()
         })
 
         it('returns a 200 and there is a problem with the service page', async () => {
