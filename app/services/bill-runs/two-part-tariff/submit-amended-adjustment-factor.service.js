@@ -31,12 +31,7 @@ async function go (billRunId, licenceId, reviewChargeReferenceId, payload, yar) 
     return { error: null }
   }
 
-  const {
-    billRun,
-    reviewChargeReference
-  } = await FetchReviewChargeReferenceService.go(billRunId, reviewChargeReferenceId)
-
-  const pageData = AmendAdjustmentFactorPresenter.go(billRun, reviewChargeReference, licenceId)
+  const pageData = _getPageData(billRunId, reviewChargeReferenceId, licenceId)
 
   return {
     activeNavBar: 'search',
@@ -48,6 +43,15 @@ async function go (billRunId, licenceId, reviewChargeReferenceId, payload, yar) 
   }
 }
 
+async function _getPageData (billRunId, reviewChargeReferenceId, licenceId) {
+  const {
+    billRun,
+    reviewChargeReference
+  } = await FetchReviewChargeReferenceService.go(billRunId, reviewChargeReferenceId)
+
+  return AmendAdjustmentFactorPresenter.go(billRun, reviewChargeReference, licenceId)
+}
+
 async function _persistAmendedAdjustmentFactor (reviewChargeReferenceId, payload) {
   if (payload.amendedAggregateFactor) {
     await ReviewChargeReferenceModel.query()
@@ -56,7 +60,7 @@ async function _persistAmendedAdjustmentFactor (reviewChargeReferenceId, payload
   }
 
   if (payload.amendedChargeAdjustment) {
-    return ReviewChargeReferenceModel.query()
+    await ReviewChargeReferenceModel.query()
       .findById(reviewChargeReferenceId)
       .patch({ amendedChargeAdjustment: payload.amendedChargeAdjustment })
   }
