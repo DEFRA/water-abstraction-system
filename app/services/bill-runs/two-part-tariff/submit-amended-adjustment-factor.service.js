@@ -31,7 +31,7 @@ async function go (billRunId, licenceId, reviewChargeReferenceId, payload, yar) 
     return { error: null }
   }
 
-  const pageData = _getPageData(billRunId, reviewChargeReferenceId, licenceId)
+  const pageData = await _getPageData(billRunId, reviewChargeReferenceId, licenceId)
 
   return {
     activeNavBar: 'search',
