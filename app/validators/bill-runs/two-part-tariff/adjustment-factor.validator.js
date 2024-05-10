@@ -15,7 +15,7 @@ const Joi = require('joi')
  * When editing the aggregate factor or the charge adjustment on the charge reference, the user input boxes are
  * pre-populated with the current value for both. The user must overwrite this value with there own value to amend the
  * adjustments.
- * The validation happening here it to ensure that either one or both of the adjustments have been entered. Both have a
+ * The validation happening here it to ensure that the adjustments have been entered. Both have a
  * minimum value of 0 and a maximum value of 1, and they both get validated to either 2 or 15 decimal places.
  *
  * @param {Object} payload - The payload from the request to be validated
