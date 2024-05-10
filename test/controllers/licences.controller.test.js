@@ -229,6 +229,7 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Send to')
       })
     })
+
     describe('when a request is valid and has no contact details', () => {
       beforeEach(async () => {
         Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves({ activeTab: 'contact-details' })
