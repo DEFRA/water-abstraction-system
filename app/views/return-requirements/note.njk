@@ -4,7 +4,6 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% set backLink = "/system/return-requirements/" + id + "/check-your-answers" %}
 {% block breadcrumbs %}
   {# Back link #}
   {{
@@ -53,7 +52,8 @@
           text: error.text
         } if error
       }) }}
-      {{ govukButton({ text: "Confirm" }) }}
+
+      {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
     </div>
   </form>
 {% endblock %}

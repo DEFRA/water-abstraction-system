@@ -4,14 +4,12 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/frequency-collected"
+      href: backLink
     })
   }}
 {% endblock %}
@@ -57,10 +55,10 @@
           checked: "monthly" === frequencyReported
         }
       ]
-  }) }}
+    }) }}
 
     <div class="govuk-body">
-      {{ govukButton({ text: "Continue" }) }}
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </div>
   </form>
 {% endblock %}

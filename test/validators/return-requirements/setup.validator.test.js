@@ -27,7 +27,7 @@ describe('Setup validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select how you want to set up the return requirement')
+        expect(result.error.details[0].message).to.equal('Select how you want to set up the requirements for returns')
       })
     })
 
@@ -37,7 +37,7 @@ describe('Setup validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select how you want to set up the return requirement')
+        expect(result.error.details[0].message).to.equal('Select how you want to set up the requirements for returns')
       })
     })
   })
