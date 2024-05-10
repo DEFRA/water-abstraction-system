@@ -53,17 +53,13 @@ async function _getPageData (billRunId, reviewChargeReferenceId, licenceId) {
 }
 
 async function _persistAmendedAdjustmentFactor (reviewChargeReferenceId, payload) {
-  if (payload.amendedAggregateFactor) {
-    await ReviewChargeReferenceModel.query()
-      .findById(reviewChargeReferenceId)
-      .patch({ amendedAggregate: payload.amendedAggregateFactor })
-  }
+  await ReviewChargeReferenceModel.query()
+    .findById(reviewChargeReferenceId)
+    .patch({ amendedAggregate: payload.amendedAggregateFactor })
 
-  if (payload.amendedChargeAdjustment) {
-    await ReviewChargeReferenceModel.query()
-      .findById(reviewChargeReferenceId)
-      .patch({ amendedChargeAdjustment: payload.amendedChargeAdjustment })
-  }
+  await ReviewChargeReferenceModel.query()
+    .findById(reviewChargeReferenceId)
+    .patch({ amendedChargeAdjustment: payload.amendedChargeAdjustment })
 }
 
 function _validate (payload) {
