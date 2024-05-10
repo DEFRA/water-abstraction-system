@@ -1,7 +1,7 @@
 <h2 class="govuk-heading-l">Contact Details</h2>
 
 {% if customerId %}
-  <p><a href='/customer/{{ customerId }}/#contacts'>Go to customer contacts </a></p>
+  <p><a href='/customer/{{ customerId }}/#contacts'>Go to customer contacts</a></p>
 {% endif %}
 
 {% if licenceContacts.length > 0 %}
@@ -15,34 +15,34 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
-    {% for contact in licenceContacts %}
+    {% for licenceContact in licenceContacts %}
       <tr class="govuk-table__row">
-        <td class="govuk-table__cell"> {{ contact.name }}</td>
-        <td class="govuk-table__cell"> {{ contact.communicationType }}</td>
+        <td class="govuk-table__cell">{{ licenceContact.name }}</td>
+        <td class="govuk-table__cell">{{ licenceContact.communicationType }}</td>
         <td class="govuk-table__cell">
-          {% if contact.address.address1 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address1 }}</p>
+          {% if licenceContact.address.address1 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address1 }}</p>
           {% endif %}
-          {% if contact.address.address2 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address2 }}</p>
+          {% if licenceContact.address.address2 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address2 }}</p>
           {% endif %}
-          {% if contact.address.address3 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address3 }}</p>
+          {% if licenceContact.address.address3 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address3 }}</p>
           {% endif %}
-          {% if contact.address.address4 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address4 }}</p>
+          {% if licenceContact.address.address4 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address4 }}</p>
           {% endif %}
-          {% if contact.address.address5 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address5 }}</p>
+          {% if licenceContact.address.address5 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address5 }}</p>
           {% endif %}
-          {% if contact.address.address6 %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.address6 }}</p>
+          {% if licenceContact.address.address6 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address6 }}</p>
           {% endif %}
-          {% if contact.address.country %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.country }}</p>
+          {% if licenceContact.address.country %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.country }}</p>
           {% endif %}
-          {% if contact.address.postcode %}
-            <p class="govuk-body govuk-!-margin-bottom-0">{{ contact.address.postcode }}</p>
+          {% if licenceContact.address.postcode %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.postcode }}</p>
           {% endif %}
       </tr>
     {% endfor %}

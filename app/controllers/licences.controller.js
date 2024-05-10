@@ -40,9 +40,9 @@ async function viewBills (request, h) {
 }
 
 async function viewContacts (request, h) {
-  const { params: { id }, auth, query: { page = 1 } } = request
+  const { params: { id }, auth } = request
 
-  const data = await ViewLicenceContactDetailsService.go(id, auth, page)
+  const data = await ViewLicenceContactDetailsService.go(id, auth)
 
   return h.view(ViewLicencePage, {
     ...data
