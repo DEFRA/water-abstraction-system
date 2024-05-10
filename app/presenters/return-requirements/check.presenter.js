@@ -9,12 +9,7 @@ const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 function go (session) {
-  const { id: sessionId, journey, licence, note, reason, setup } = session
-
-  console.log(session)
-  if (setup === 'use-abstraction-data') {
-    const result = await FetchReturnRequirementsBasedOnAbstractionDataService.go(session.licence.id)
-  }
+  const { id: sessionId, journey, licence, note, reason } = session
 
   return {
     journey,
