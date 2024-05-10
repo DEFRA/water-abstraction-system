@@ -21,12 +21,6 @@
             <a href="/system/bills/{{ bill.id }}">
               {{ bill.billNumber }}
             </a>
-            {% if bill.rebilling.flaggedForRebilling != true and bill.rebilling.rebillingState %}
-              <p class="govuk-body-s govuk-!-margin-bottom-0">{{ bill.rebilling.rebillingState | title }}</p>
-            {% endif %}
-            {% if bill.rebilling.flaggedForRebilling %}
-              <p class="govuk-body-s govuk-!-margin-bottom-0">Marked for reissue</p>
-            {% endif %}
           </td>
           <td class="govuk-table__cell">
             {{ bill.dateCreated }}
@@ -47,7 +41,6 @@
             {% if bill.credit %}
               <div>Credit</div>
             {% endif %}
-
           </td>
         </tr>
       {% endfor %}

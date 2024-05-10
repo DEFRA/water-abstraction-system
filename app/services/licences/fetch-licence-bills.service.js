@@ -31,12 +31,10 @@ async function _fetch (licenceId, page) {
       'bills.credit',
       'bills.deminimis',
       'bills.financialYearEnding',
-      'bills.flaggedForRebilling',
       'bills.id',
       'bills.invoiceNumber',
       'bills.legacyId',
-      'bills.netAmount',
-      'bills.rebillingState'
+      'bills.netAmount'
     ])
     .innerJoinRelated('billLicences')
     .where('billLicences.licence_id', licenceId)

@@ -51,29 +51,10 @@ function _formatBillsToTableRow (bills) {
       total: formatMoney(bill.netAmount),
       accountId: bill.billingAccountId,
       id: bill.id,
-      rebilling: _formatRebillingInformation(bill),
       legacyId: bill.legacyId,
       credit: bill.credit
     }
   })
-}
-
-function _formatRebillingInformation (bill) {
-  return {
-    flaggedForRebilling: bill.flaggedForRebilling,
-    rebillingState: _formatRebillingState(bill.rebillingState)
-  }
-}
-
-function _formatRebillingState (rebillingState) {
-  if (rebillingState === 'rebill') {
-    return 'Reissued'
-  }
-
-  if (rebillingState === 'reversal') {
-    return 'Reversed'
-  }
-  return null
 }
 
 module.exports = {

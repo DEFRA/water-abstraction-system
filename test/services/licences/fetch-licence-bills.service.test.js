@@ -65,12 +65,10 @@ describe('Fetch licence bills service', () => {
           credit: null,
           deminimis: false,
           financialYearEnding: 2023,
-          flaggedForRebilling: false,
           id: billId,
           invoiceNumber: '123',
           legacyId: null,
-          netAmount: 12345,
-          rebillingState: null
+          netAmount: 12345
         }]
       )
     })

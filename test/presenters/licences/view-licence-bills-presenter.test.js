@@ -26,10 +26,6 @@ describe('View Licence Bills presenter', () => {
           financialYear: '2021',
           id: 'id123',
           legacyId: null,
-          rebilling: {
-            flaggedForRebilling: false,
-            rebillingState: null
-          },
           runType: 'annual',
           total: '£1,234,567.89'
         }]
@@ -80,36 +76,6 @@ describe('View Licence Bills presenter', () => {
         expect(result.bills[0].billNumber).to.equal('Zero value bill')
       })
     })
-    describe('rebilling', () => {
-      it('returns flaggedForRebilling false', () => {
-        const bill = _bill()
-        const result = ViewLicenceBillsPresenter.go([bill])
-        expect(result.bills[0].rebilling.flaggedForRebilling).to.be.false()
-      })
-      it('returns flaggedForRebilling true', () => {
-        const bill = _bill()
-        bill.flaggedForRebilling = true
-        const result = ViewLicenceBillsPresenter.go([bill])
-        expect(result.bills[0].rebilling.flaggedForRebilling).to.be.true()
-      })
-      it('formats the rebillingState to \'rebill\'', () => {
-        const bill = _bill()
-        bill.rebillingState = 'rebill'
-        const result = ViewLicenceBillsPresenter.go([bill])
-        expect(result.bills[0].rebilling.rebillingState).to.equal('Reissued')
-      })
-      it('formats the rebillingState to \'reversal\'', () => {
-        const bill = _bill()
-        bill.rebillingState = 'reversal'
-        const result = ViewLicenceBillsPresenter.go([bill])
-        expect(result.bills[0].rebilling.rebillingState).to.equal('Reversed')
-      })
-      it('formats the rebillingState to \'null\'', () => {
-        const bill = _bill()
-        const result = ViewLicenceBillsPresenter.go([bill])
-        expect(result.bills[0].rebilling.rebillingState).to.be.null()
-      })
-    })
   })
 })
 
@@ -122,12 +88,10 @@ function _bill () {
     credit: false,
     deminimis: false,
     financialYearEnding: '2021',
-    flaggedForRebilling: false,
     id: 'id123',
     invoiceNumber: 'inv123',
     legacyId: null,
-    netAmount: 123456789,
-    rebillingState: null
+    netAmount: 123456789
   }
 }
 
@@ -144,11 +108,9 @@ function _billsTwoPartTariff () {
     credit: false,
     deminimis: false,
     financialYearEnding: '2021',
-    flaggedForRebilling: false,
     id: 'id123',
     invoiceNumber: 'inv123',
     legacyId: null,
-    netAmount: 123456789,
-    rebillingState: null
+    netAmount: 123456789
   }]
 }
