@@ -24,15 +24,21 @@ describe('Charge Reference Details Service', () => {
     const billRunId = 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e'
     const licenceId = '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
 
+    let yarStub
+
     beforeEach(() => {
       Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves({
         billRun: _billRun(),
         reviewChargeReference: _reviewChargeReferenceData()
       })
+
+      yarStub = { flash: Sinon.stub().returns(['Adjustment updated']) }
     })
 
     it('will fetch the charge reference data and return it once formatted by the presenter', async () => {
-      const result = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
+      const result = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId, yarStub)
+
+      expect(result.bannerMessage).to.equal('Adjustment updated')
 
       // NOTE: The service mainly just regurgitates what the ChargeReferencePresenter returns. So, we don't diligently
       // check each property of the result because we know this will have been covered by the ChargeReferencePresenter
