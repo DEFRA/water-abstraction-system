@@ -23,7 +23,7 @@ const RegionHelper = require('../../support/helpers/region.helper.js')
 const FetchAbstractionDataReturnRequirementsService =
   require('../../../app/services/return-requirements/fetch-requirements-for-returns-from-abstraction-data.service.js')
 
-describe.only('Fetch return requirements base on abstraction data service', () => {
+describe('Fetch return requirements base on abstraction data service', () => {
   describe('when called with a valid licenceId of a water undertaker with just one purpose', () => {
     let licence
 
