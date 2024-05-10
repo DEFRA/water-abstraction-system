@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AmendAdjustmentFactorPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/amend-adjustment-factor.presenter.js')
 
-describe('Amend Adjustment Factor presenter', () => {
+describe.only('Amend Adjustment Factor presenter', () => {
   const licenceId = '5aa8e752-1a5c-4b01-9112-d92a543b70d1'
   let reviewChargeReference
   let billRun
@@ -85,6 +85,30 @@ describe('Amend Adjustment Factor presenter', () => {
           const result = AmendAdjustmentFactorPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.otherAdjustments).to.equal(['Canal and River trust agreement'])
+        })
+      })
+
+      describe('when the charge reference has a supported source', () => {
+        beforeEach(() => {
+          reviewChargeReference.chargeReference.supportedSourceName = 'Thames'
+        })
+
+        it('adds the supported source to the otherAdjustments property', () => {
+          const result = AmendAdjustmentFactorPresenter.go(billRun, reviewChargeReference, licenceId)
+
+          expect(result.chargeReference.otherAdjustments).to.equal(['Supported source Thames'])
+        })
+      })
+
+      describe('when the charge reference has a public water supply', () => {
+        beforeEach(() => {
+          reviewChargeReference.chargeReference.waterCompanyCharge = true
+        })
+
+        it('adds the supported source to the otherAdjustments property', () => {
+          const result = AmendAdjustmentFactorPresenter.go(billRun, reviewChargeReference, licenceId)
+
+          expect(result.chargeReference.otherAdjustments).to.equal(['Public Water Supply'])
         })
       })
 
