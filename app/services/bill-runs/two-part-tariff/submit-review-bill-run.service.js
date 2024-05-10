@@ -12,11 +12,12 @@
  * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go (payload, yar) {
+  const clearFilters = payload?.clearFilters
   const filterIssues = payload?.filterIssues
   const filterLicenceHolder = payload?.filterLicenceHolder
   const filterLicenceStatus = payload?.filterLicenceStatus
 
-  if ((filterIssues || filterLicenceHolder || filterLicenceStatus) === undefined) {
+  if (clearFilters) {
     yar.clear('filters')
   } else {
     yar.set('filters', {

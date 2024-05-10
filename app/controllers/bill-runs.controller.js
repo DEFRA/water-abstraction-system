@@ -124,13 +124,6 @@ async function review (request, h) {
   })
 }
 
-async function reviewClearFilters (request, h) {
-  const { id } = request.params
-  request.yar.clear('filters')
-
-  return h.redirect(`/system/bill-runs/${id}/review`)
-}
-
 async function reviewLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
@@ -243,7 +236,6 @@ module.exports = {
   matchDetails,
   removeLicence,
   review,
-  reviewClearFilters,
   reviewLicence,
   send,
   submitAmendedBillableReturns,

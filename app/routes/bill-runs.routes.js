@@ -111,19 +111,6 @@ const routes = [
     }
   },
   {
-    method: 'GET',
-    path: '/bill-runs/{id}/review/clear-filters',
-    handler: BillRunsController.reviewClearFilters,
-    options: {
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      },
-      description: 'Clears the filter data held in the session cookie and redirects to the tpt review licences page'
-    }
-  },
-  {
     method: 'POST',
     path: '/bill-runs/{id}/review',
     handler: BillRunsController.submitReview,
