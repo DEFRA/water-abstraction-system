@@ -4,6 +4,7 @@ module.exports = {
     '@stylistic/js'
   ],
   rules: {
+    '@stylistic/js/arrow-parens': ['error', 'always'],
     '@stylistic/js/max-len': ['error', {
       code: 120,
       ignoreStrings: true,
