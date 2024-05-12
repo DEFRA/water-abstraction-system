@@ -41,7 +41,8 @@ function _financialYearEndings (billingPeriods) {
 }
 
 function _processBillRun (billRun, billingPeriods) {
-  // We do not `await` the bill run being processed so we can leave it to run in the background while we return an immediate response
+  // We do not `await` the bill run being processed so we can leave it to run in the background while we return an
+  // immediate response
   switch (billRun.batchType) {
     case 'annual':
       AnnualProcessBillRunService.go(billRun, billingPeriods)

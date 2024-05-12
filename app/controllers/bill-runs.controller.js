@@ -150,7 +150,13 @@ async function send (request, h) {
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
-  const pageData = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElementId, request.payload, request.yar)
+  const pageData = await SubmitAmendedBillableReturnsService.go(
+    billRunId,
+    licenceId,
+    reviewChargeElementId,
+    request.payload,
+    request.yar
+  )
 
   if (pageData.error) {
     return h.view('bill-runs/amend-billable-returns.njk', pageData)
