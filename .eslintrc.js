@@ -3,7 +3,7 @@
 module.exports = {
   extends: 'standard', // Maintain Standard.js rules
   parserOptions: {
-    sourceType: 'commonjs'
+    sourceType: 'script'
   },
   plugins: [
     '@stylistic/js'
