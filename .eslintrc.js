@@ -9,6 +9,7 @@ module.exports = {
     '@stylistic/js'
   ],
   rules: {
+    'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
     strict: ['error', 'global'],
     '@stylistic/js/arrow-parens': ['error', 'always'],
