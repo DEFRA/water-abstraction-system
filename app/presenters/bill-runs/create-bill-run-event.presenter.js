@@ -23,6 +23,7 @@ function go (billRun) {
     status,
     toFinancialYearEnding
   } = billRun
+
   return {
     batch: {
       id,

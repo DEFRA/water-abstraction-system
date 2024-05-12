@@ -134,6 +134,7 @@ async function _getRedisConnectivityData () {
 async function _getVirusScannerData () {
   try {
     const { stdout, stderr } = await exec('clamdscan --version')
+
     return stderr ? `ERROR: ${stderr}` : stdout
   } catch (error) {
     return `ERROR: ${error.message}`

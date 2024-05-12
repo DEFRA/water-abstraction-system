@@ -88,6 +88,7 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   // this in the UI
   if (!isPopulated) {
     await _updateStatus(billRun.id, 'empty')
+
     return
   }
 

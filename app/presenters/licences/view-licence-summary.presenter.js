@@ -148,6 +148,7 @@ function _generateAbstractionPeriods (licenceVersions) {
   const formattedAbstactionPeriods = licenceVersions[0].licenceVersionPurposes.map((purpose) => {
     const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
     const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
+
     return `${startDate} to ${endDate}`
   })
 
