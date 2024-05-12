@@ -41,7 +41,8 @@ async function _fetch (licenceRef, billingPeriod) {
       ref('metadata:purposes').as('purposes')
     ])
     .where('licenceRef', licenceRef)
-    // water-abstraction-service filters out old return logs in this way: see `src/lib/services/returns/api-connector.js`
+    // water-abstraction-service filters out old return logs in this way: see
+    // `src/lib/services/returns/api-connector.js`
     .where('startDate', '>=', '2008-04-01')
     .where('endDate', '>=', billingPeriod.startDate)
     .where('endDate', '<=', billingPeriod.endDate)

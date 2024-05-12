@@ -8,7 +8,9 @@
 const { db } = require('../../../../db/db.js')
 
 /**
- * Retrieves headers, a knex query for the table rows and the table name from the table in the db, and returns them as an object
+ * Retrieves headers, a knex query for the table rows and the table name from the table in the db, and returns them as
+ * an object
+ *
  * @param {String} tableName The name of the table to retrieve
  * @param {string} schemaName The schema that the table belongs to
  *

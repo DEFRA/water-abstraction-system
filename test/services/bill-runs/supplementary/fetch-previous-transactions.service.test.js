@@ -73,7 +73,11 @@ describe('Fetch Previous Transactions service', () => {
             })
 
             it('returns no results', async () => {
-              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+              const results = await FetchPreviousTransactionsService.go(
+                billingAccountId,
+                licenceId,
+                financialYearEnding
+              )
 
               expect(results).to.be.empty()
             })
@@ -90,7 +94,11 @@ describe('Fetch Previous Transactions service', () => {
             })
 
             it('returns the debits', async () => {
-              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+              const results = await FetchPreviousTransactionsService.go(
+                billingAccountId,
+                licenceId,
+                financialYearEnding
+              )
 
               expect(results).to.have.length(1)
               expect(results[0].credit).to.be.false()
@@ -116,7 +124,11 @@ describe('Fetch Previous Transactions service', () => {
             })
 
             it('returns only the follow up debit', async () => {
-              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+              const results = await FetchPreviousTransactionsService.go(
+                billingAccountId,
+                licenceId,
+                financialYearEnding
+              )
 
               expect(results).to.have.length(1)
               expect(results[0].credit).to.be.false()
@@ -135,7 +147,11 @@ describe('Fetch Previous Transactions service', () => {
             })
 
             it('returns both debits', async () => {
-              const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+              const results = await FetchPreviousTransactionsService.go(
+                billingAccountId,
+                licenceId,
+                financialYearEnding
+              )
 
               expect(results).to.have.length(2)
               expect(results.every((transaction) => !transaction.credit)).to.be.true()
