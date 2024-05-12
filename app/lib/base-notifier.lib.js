@@ -103,7 +103,7 @@ class BaseNotifierLib {
           this._logger.error(notice.error, `${this.constructor.name} - Airbrake failed`)
         }
       })
-      .catch(err => {
+      .catch((err) => {
         this._logger.error(err, `${this.constructor.name} - Airbrake errored`)
       })
   }

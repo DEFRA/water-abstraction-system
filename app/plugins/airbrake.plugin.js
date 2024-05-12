@@ -43,12 +43,12 @@ const AirbrakePlugin = {
             url: request.url.href
           }
         })
-        .then(notice => {
+        .then((notice) => {
           if (!notice.id) {
             server.logger.error({ message: `Airbrake notification failed: ${notice.error}`, error: notice.error })
           }
         })
-        .catch(error => {
+        .catch((error) => {
           server.logger.error({ message: `Airbrake notification errored: ${error}`, error })
         })
     })

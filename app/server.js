@@ -61,7 +61,7 @@ const start = async () => {
   return server
 }
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   console.log(err)
   process.exit(1)
 })
