@@ -17,6 +17,10 @@ async function go (licenceId) {
 }
 
 async function _fetch (licenceId) {
+  // select documents.* from crm_v2.documents
+  //   join crm_v2.document_roles document_roles on document_roles.document_id = documents.document_id
+  //   WHERE (document_roles.end_date is null or document_roles.end_date > NOW())
+  //   AND document_roles.company_id IN (SELECT DISTINCT company_id FROM crm_v2.company_contacts)
   return {}
 }
 

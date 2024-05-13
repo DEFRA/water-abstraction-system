@@ -33,8 +33,8 @@ async function go (licenceId, auth) {
   return {
     activeTab: 'contact-details',
     ...commonData,
-    ...licenceContactsData,
-    ...customerContactsData
+    ...customerContactsData,
+    ...licenceContactsData
   }
 }
 

@@ -12,7 +12,7 @@
  */
 function go () {
   return {
-    customerContacts: []
+    customerContacts: [{}]
   }
 }
 
