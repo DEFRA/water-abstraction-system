@@ -9,6 +9,8 @@ const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewLicenceModel = require('../../../models/review-licence.model.js')
 const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.js')
 
+const DatabaseConfig = require('../../../../config/database.config.js')
+
 /**
  * Takes the bill run ID and fetches all the data needed to review the bill run
  *
@@ -23,13 +25,14 @@ const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.j
  * there is a POST request, which only occurs when a filter is applied to the results.
  * @param {String} filterLicenceStatus The status of the licence to filter the results by. This also only contains data
  * when there is a POST request.
+ * @param {number} page - the page number of licences to be viewed
  *
- * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run. Also
- * included is any data that has been used to filter the results
+ * @returns {Promise<Object>} An object containing the billRun data and an array of licences for the bill run that match
+ * the selected 'page in the data. Also included is any data that has been used to filter the results
  */
-async function go (id, filterIssues, filterLicenceHolder, filterLicenceStatus) {
+async function go (id, filterIssues, filterLicenceHolder, filterLicenceStatus, page) {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(id, filterIssues, filterLicenceHolder, filterLicenceStatus)
+  const licences = await _fetchBillRunLicences(id, filterIssues, filterLicenceHolder, filterLicenceStatus, page)
 
   return { billRun, licences }
 }
@@ -59,17 +62,20 @@ async function _fetchBillRun (id) {
     .withGraphFetched('reviewLicences')
     .modifyGraph('reviewLicences', (builder) => {
       builder.count('licenceId as totalNumberOfLicences')
+        .count({ numberOfLicencesToReview: ReviewLicenceModel.raw("CASE WHEN status = 'review' THEN 1 END") })
         .groupBy('billRunId')
     })
 }
 
-async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolder, filterLicenceStatus) {
+async function _fetchBillRunLicences (id, filterIssues, filterLicenceHolder, filterLicenceStatus, page = 1) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
+    .select('licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
     .where('billRunId', id)
     .orderBy([
       { column: 'status', order: 'desc' },
       { column: 'licenceRef', order: 'asc' }
     ])
+    .page(page - 1, DatabaseConfig.defaultPageSize)
 
   _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolder, filterLicenceStatus)
 
