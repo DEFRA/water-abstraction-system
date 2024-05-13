@@ -13,8 +13,8 @@ const ViewBillLicencePresenter = require('../../presenters/bill-licences/view-bi
  *
  * @param {string} id The UUID for the bill licence to view
  *
- * @returns {Promise<Object>} a formatted representation of the bill licence and its transactions for use in the bill licence
- * view page
+ * @returns {Promise<Object>} a formatted representation of the bill licence and its transactions for use in the bill
+ * licence view page
  */
 async function go (id) {
   const billLicence = await FetchBillLicenceService.go(id)
