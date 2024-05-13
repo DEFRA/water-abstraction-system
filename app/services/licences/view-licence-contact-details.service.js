@@ -1,30 +1,33 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the licence contact page
+ * Orchestrates fetching and presenting the data needed for the view licence contact details tab
  * @module ViewLicenceContactDetailsService
  */
 
-const FetchLicenceContactDetailsService = require('./fetch-licence-contact-details.service')
-const ViewLicenceContactDetailsPresenter = require('../../presenters/licences/view-licence-contact-details.presenter')
-const ViewLicenceService = require('./view-licence.service')
+const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
+const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
+const ViewLicenceService = require('./view-licence.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence contact details page
  *
  * @param {string} licenceId - The UUID of the licence
+ * @param {Object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {Promise<Object>} an object representing the `pageData` needed by the licence contact details  template.
+ * @returns {Promise<Object>} an object representing the `pageData` needed by the licence contact details template.
  */
 async function go (licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
-  const contactsData = await FetchLicenceContactDetailsService.go(licenceId)
-  const data = ViewLicenceContactDetailsPresenter.go(contactsData)
+  // Licence contact details
+  const licenceContacts = await FetchLicenceContactsService.go(licenceId)
+  const licenceContactsData = LicenceContactsPresenter.go(licenceContacts)
 
   return {
+    activeTab: 'contact-details',
     ...commonData,
-    ...data
+    ...licenceContactsData
   }
 }
 
