@@ -23,6 +23,7 @@ const StartBillRunProcessService = require('../../app/services/bill-runs/start-b
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
+const SubmitReviewBillRunService = require('../../app/services/bill-runs/two-part-tariff/submit-review-bill-run.service.js')
 const SubmitReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
@@ -374,46 +375,17 @@ describe('Bill Runs controller', () => {
       })
 
       describe('when a request is valid', () => {
-        describe('and no filters have been applied', () => {
-          beforeEach(() => {
-            Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
-          })
-
-          it('returns a 200 response', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('two-part tariff')
-            expect(response.payload).to.contain('Southern (Test replica)')
-            expect(response.payload).to.contain(
-              'You need to review 1 licences with returns data issues. You can then continue and send the bill run.'
-            )
-            expect(response.payload).to.contain('Showing all 2 licences')
-          })
+        beforeEach(() => {
+          Sinon.stub(SubmitReviewBillRunService, 'go').resolves()
         })
 
-        describe('and a filter has been applied', () => {
-          beforeEach(() => {
-            const reviewBillRunData = _reviewBillRunData()
+        it('redirects to the review licences page', async () => {
+          const response = await server.inject(options)
 
-            // edit the data to represent a filter being applied
-            reviewBillRunData.filter = { openFilter: true, licenceHolder: 'big' }
-            reviewBillRunData.numberOfLicencesDisplayed = 1
-
-            Sinon.stub(ReviewBillRunService, 'go').resolves(reviewBillRunData)
-          })
-
-          it('returns a 200 response', async () => {
-            const response = await server.inject(options)
-
-            expect(response.statusCode).to.equal(200)
-            expect(response.payload).to.contain('two-part tariff')
-            expect(response.payload).to.contain('Southern (Test replica)')
-            expect(response.payload).to.contain(
-              'You need to review 1 licences with returns data issues. You can then continue and send the bill run.'
-            )
-            expect(response.payload).to.contain('Showing 1 of 2 licences')
-          })
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review'
+          )
         })
       })
     })
