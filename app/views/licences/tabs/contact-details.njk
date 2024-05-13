@@ -1,0 +1,53 @@
+<h2 class="govuk-heading-l">Contact Details</h2>
+
+{% if customerId %}
+  <p><a href='/customer/{{ customerId }}/#contacts'>Go to customer contacts</a></p>
+{% endif %}
+
+{% if licenceContacts.length > 0 %}
+  <h2 class="govuk-heading-m">Licence contacts</h2>
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">Communication type</th>
+      <th scope="col" class="govuk-table__header">Send to</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    {% for licenceContact in licenceContacts %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ licenceContact.name }}</td>
+        <td class="govuk-table__cell">{{ licenceContact.communicationType }}</td>
+        <td class="govuk-table__cell">
+          {% if licenceContact.address.address1 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address1 }}</p>
+          {% endif %}
+          {% if licenceContact.address.address2 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address2 }}</p>
+          {% endif %}
+          {% if licenceContact.address.address3 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address3 }}</p>
+          {% endif %}
+          {% if licenceContact.address.address4 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address4 }}</p>
+          {% endif %}
+          {% if licenceContact.address.address5 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address5 }}</p>
+          {% endif %}
+          {% if licenceContact.address.address6 %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.address6 }}</p>
+          {% endif %}
+          {% if licenceContact.address.country %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.country }}</p>
+          {% endif %}
+          {% if licenceContact.address.postcode %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ licenceContact.address.postcode }}</p>
+          {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No contacts found.</p>
+{% endif %}

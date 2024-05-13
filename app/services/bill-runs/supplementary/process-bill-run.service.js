@@ -82,7 +82,9 @@ async function _finaliseBillRun (billRun, accumulatedLicenceIds, resultsOfProces
   await UnflagUnbilledLicencesService.go(billRun, allLicenceIds)
 
   // We set `isPopulated` to `true` if at least one processing result was truthy
-  const isPopulated = resultsOfProcessing.some(result => result)
+  const isPopulated = resultsOfProcessing.some((result) => {
+    return result
+  })
 
   // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
   // this in the UI
