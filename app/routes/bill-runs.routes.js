@@ -113,7 +113,7 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-runs/{id}/review',
-    handler: BillRunsController.review,
+    handler: BillRunsController.submitReview,
     options: {
       auth: {
         access: {
