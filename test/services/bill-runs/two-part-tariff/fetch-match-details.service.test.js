@@ -48,10 +48,14 @@ describe('Fetch Match Details service', () => {
       beforeEach(async () => {
         reviewChargeVersion = await ReviewChargeVersionHelper.add()
         chargeReference = await ChargeReferenceHelper.add()
-        reviewChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: reviewChargeVersion.id, chargeReferenceId: chargeReference.id })
+        reviewChargeReference = await ReviewChargeReferenceHelper.add(
+          { reviewChargeVersionId: reviewChargeVersion.id, chargeReferenceId: chargeReference.id }
+        )
 
         chargeElement = await ChargeElementHelper.add({ chargeReferenceId: reviewChargeReference.chargeReferenceId })
-        reviewChargeElement = await ReviewChargeElementHelper.add({ reviewChargeReferenceId: reviewChargeReference.id, chargeElementId: chargeElement.id })
+        reviewChargeElement = await ReviewChargeElementHelper.add(
+          { reviewChargeReferenceId: reviewChargeReference.id, chargeElementId: chargeElement.id }
+        )
       })
 
       describe('that has a matching return', () => {

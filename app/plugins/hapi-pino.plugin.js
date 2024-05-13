@@ -23,8 +23,8 @@ const HapiPinoPlugin = () => {
     options: {
       // Include our test configuration
       ...HapiPinoLogInTestService.go(LogConfig.logInTest),
-      // When not in the production environment we want a 'pretty' version of the JSON to make it easier to grok what has
-      // happened
+      // When not in the production environment we want a 'pretty' version of the JSON to make it easier to grok what
+      // has happened
       transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
       // Redact Authorization headers, see https://getpino.io/#/docs/redaction
       redact: ['req.headers.authorization'],
