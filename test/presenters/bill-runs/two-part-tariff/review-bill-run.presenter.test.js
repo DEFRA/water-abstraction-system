@@ -131,7 +131,7 @@ function _testBillRun () {
     region: {
       displayName: 'Southern (Test replica)'
     },
-    reviewLicences: [{ totalNumberOfLicences: 3 }]
+    reviewLicences: [{ totalNumberOfLicences: 3, numberOfLicencesToReview: 1 }]
   }
 }
 
