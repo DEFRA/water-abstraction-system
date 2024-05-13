@@ -115,7 +115,11 @@ describe('Info service', () => {
           stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
           stderror: null
         })
-      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      const utilStub = {
+        promisify: Sinon.stub().callsFake(() => {
+          return execStub
+        })
+      }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
@@ -171,7 +175,11 @@ describe('Info service', () => {
           stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
           stderror: null
         })
-      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      const utilStub = {
+        promisify: Sinon.stub().callsFake(() => {
+          return execStub
+        })
+      }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
@@ -222,7 +230,11 @@ describe('Info service', () => {
             stdout: null,
             stderr: 'Could not connect to clamd'
           })
-        const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+        const utilStub = {
+          promisify: Sinon.stub().callsFake(() => {
+            return execStub
+          })
+        }
         InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
 
@@ -249,7 +261,11 @@ describe('Info service', () => {
           .stub()
           .withArgs('clamdscan --version')
           .throwsException(new Error('ClamAV check went boom'))
-        const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+        const utilStub = {
+          promisify: Sinon.stub().callsFake(() => {
+            return execStub
+          })
+        }
         InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
       })
 
@@ -286,7 +302,11 @@ describe('Info service', () => {
           stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
           stderror: null
         })
-      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      const utilStub = {
+        promisify: Sinon.stub().callsFake(() => {
+          return execStub
+        })
+      }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
     })
 
@@ -343,7 +363,11 @@ describe('Info service', () => {
           stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
           stderror: null
         })
-      const utilStub = { promisify: Sinon.stub().callsFake(() => execStub) }
+      const utilStub = {
+        promisify: Sinon.stub().callsFake(() => {
+          return execStub
+        })
+      }
       InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
 
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
