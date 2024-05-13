@@ -6,10 +6,10 @@
  */
 
 const InitiateSessionService = require('../services/return-requirements/initiate-session.service.js')
-const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service')
-const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service')
-const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service')
-const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service')
+const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
+const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
+const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service.js')
+const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service.js')
 
 const ViewLicencePage = 'licences/view.njk'
 
@@ -40,9 +40,9 @@ async function viewBills (request, h) {
 }
 
 async function viewContacts (request, h) {
-  const { params: { id }, auth, query: { page = 1 } } = request
+  const { params: { id }, auth } = request
 
-  const data = await ViewLicenceContactDetailsService.go(id, auth, page)
+  const data = await ViewLicenceContactDetailsService.go(id, auth)
 
   return h.view(ViewLicencePage, {
     ...data
