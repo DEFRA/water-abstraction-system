@@ -50,7 +50,7 @@ async function _fetch (licenceRef, billingPeriod) {
     .orderBy('startDate', 'ASC')
     .orderBy('returnReference', 'ASC')
     .withGraphFetched('returnSubmissions')
-    .modifyGraph('returnSubmissions', builder => {
+    .modifyGraph('returnSubmissions', (builder) => {
       builder
         .select([
           'id',
@@ -59,7 +59,7 @@ async function _fetch (licenceRef, billingPeriod) {
         .where('returnSubmissions.current', true)
     })
     .withGraphFetched('returnSubmissions.returnSubmissionLines')
-    .modifyGraph('returnSubmissions.returnSubmissionLines', builder => {
+    .modifyGraph('returnSubmissions.returnSubmissionLines', (builder) => {
       builder
         .select([
           'id',

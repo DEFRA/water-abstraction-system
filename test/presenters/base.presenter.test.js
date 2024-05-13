@@ -222,7 +222,7 @@ describe('Base presenter', () => {
         new Date('2021-10-12T14:41:10.511Z'),
         new Date('2021-11-12T14:41:10.511Z'),
         new Date('2021-12-12T14:41:10.511Z')
-      ].map(date => BasePresenter.formatChargingModuleDate(date))
+      ].map((date) => BasePresenter.formatChargingModuleDate(date))
 
       expect(results).to.equal([
         '01-JAN-2021',

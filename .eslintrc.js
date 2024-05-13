@@ -1,16 +1,23 @@
+'use strict'
+
 module.exports = {
   extends: 'standard', // Maintain Standard.js rules
+  parserOptions: {
+    sourceType: 'script'
+  },
   plugins: [
     '@stylistic/js'
   ],
   rules: {
+    'import/extensions': ['error', 'always'],
+    strict: ['error', 'global'],
+    '@stylistic/js/arrow-parens': ['error', 'always'],
     '@stylistic/js/max-len': ['error', {
       code: 120,
       ignoreStrings: true,
       ignoreTemplateLiterals: true,
       ignoreUrls: true
-    }],
-    'import/extensions': ['error', 'always']
+    }]
   }
 }
 
