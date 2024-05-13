@@ -29,9 +29,9 @@ function go (session, requirementIndex, purposesData) {
 }
 
 function _backLink (session) {
-  const { checkPageVisited, id } = session
+  const { checkPageVisited, id, requirements } = session
 
-  if (checkPageVisited) {
+  if (checkPageVisited || requirements.length > 1) {
     return `/system/return-requirements/${id}/check`
   }
 
