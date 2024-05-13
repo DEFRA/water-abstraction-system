@@ -9,7 +9,8 @@ module.exports = {
       ignoreStrings: true,
       ignoreTemplateLiterals: true,
       ignoreUrls: true
-    }]
+    }],
+    'import/extensions': ['error', 'always']
   }
 }
 
