@@ -33,7 +33,6 @@ describe('Review Bill Run Service', () => {
 
   describe('when called without a filter applied', () => {
     const bannerMessage = undefined
-    const payload = undefined
     const presenterStubData = {
       preparedBillRun: 'bill run data',
       preparedLicences: 'licence data',
@@ -48,11 +47,11 @@ describe('Review Bill Run Service', () => {
     beforeEach(() => {
       Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
 
-      yarStub = { flash: Sinon.stub().returns([]) }
+      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(undefined) }
     })
 
     it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-      const result = await ReviewBillRunService.go(billRunId, payload, yarStub)
+      const result = await ReviewBillRunService.go(billRunId, yarStub)
 
       expect(result).to.equal({ bannerMessage, ...presenterStubData })
 
@@ -63,11 +62,6 @@ describe('Review Bill Run Service', () => {
 
   describe('when called with a filter applied', () => {
     const bannerMessage = undefined
-    const payload = {
-      filterIssues: ['abs-outside-period', 'aggregate-factor'],
-      filterLicenceHolder: 'A Licence Holder Ltd',
-      filterLicenceStatus: 'review'
-    }
     const presenterStubData = {
       preparedBillRun: 'bill run data',
       preparedLicences: 'licence data',
@@ -90,15 +84,20 @@ describe('Review Bill Run Service', () => {
         openFilter: true
       }
     }
+    const yarGetStubData = {
+      filterIssues: ['abs-outside-period', 'aggregate-factor'],
+      filterLicenceHolder: 'A Licence Holder Ltd',
+      filterLicenceStatus: 'review'
+    }
 
     beforeEach(() => {
       Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
 
-      yarStub = { flash: Sinon.stub().returns([]) }
+      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(yarGetStubData) }
     })
 
     it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-      const result = await ReviewBillRunService.go(billRunId, payload, yarStub)
+      const result = await ReviewBillRunService.go(billRunId, yarStub)
 
       expect(result).to.equal({ bannerMessage, ...presenterStubData })
 
@@ -109,12 +108,6 @@ describe('Review Bill Run Service', () => {
 
   describe('when called with a banner displayed', () => {
     const bannerMessage = 'Licence 01/123/ABC removed from the bill run.'
-    const payload = {
-      filterIssues: ['abs-outside-period', 'aggregate-factor'],
-      filterLicenceHolder: 'A Licence Holder Ltd',
-      filterLicenceStatus: 'review'
-    }
-
     const presenterStubData = {
       preparedBillRun: 'bill run data',
       preparedLicences: 'licence data',
@@ -137,15 +130,23 @@ describe('Review Bill Run Service', () => {
         openFilter: true
       }
     }
+    const yarGetStubData = {
+      filterIssues: ['abs-outside-period', 'aggregate-factor'],
+      filterLicenceHolder: 'A Licence Holder Ltd',
+      filterLicenceStatus: 'review'
+    }
 
     beforeEach(() => {
       Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
 
-      yarStub = { flash: Sinon.stub().returns(['Licence 01/123/ABC removed from the bill run.']) }
+      yarStub = {
+        flash: Sinon.stub().returns(['Licence 01/123/ABC removed from the bill run.']),
+        get: Sinon.stub().returns(yarGetStubData)
+      }
     })
 
     it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-      const result = await ReviewBillRunService.go(billRunId, payload, yarStub)
+      const result = await ReviewBillRunService.go(billRunId, yarStub)
 
       expect(result).to.equal({ bannerMessage, ...presenterStubData })
 
