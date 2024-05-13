@@ -147,7 +147,9 @@ async function _pauseUntilNotPending (billRunExternalId) {
     // bombarding the CM with requests
     if (status) {
       // Create a new promise that resolves after 1000ms and wait until it's resolved before continuing
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => {
+        return setTimeout(resolve, 1000)
+      })
     }
 
     const result = await ChargingModuleViewBillRunStatusRequest.send(billRunExternalId)

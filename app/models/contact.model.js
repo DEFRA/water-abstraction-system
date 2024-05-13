@@ -89,7 +89,9 @@ class ContactModel extends BaseModel {
       this.suffix
     ]
 
-    const onlyPopulatedNameParts = allNameParts.filter((item) => item)
+    const onlyPopulatedNameParts = allNameParts.filter((item) => {
+      return item
+    })
 
     return onlyPopulatedNameParts.join(' ')
   }
