@@ -29,6 +29,7 @@ async function go () {
 async function _getCommitHash () {
   try {
     const { stdout, stderr } = await exec('git rev-parse HEAD')
+
     return stderr ? `ERROR: ${stderr}` : stdout.replace('\n', '')
   } catch (error) {
     return `ERROR: ${error.message}`
