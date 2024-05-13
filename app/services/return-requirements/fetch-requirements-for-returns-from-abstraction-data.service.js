@@ -9,6 +9,9 @@ const FectchLicenceAgreementsService = require('./fetch-licence-agreements.servi
 const FetchLicenceSummaryService = require('../licences/fetch-licence-summary.service.js')
 const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
 
+const minimumDailyQuantityThreshold = 100
+const upperDailyQuantityThreshold = 2500
+
 /**
  * Fetches return requirements based on abstraction data needed for `/return-requirements/{sessionId}/check` page
  *
@@ -28,7 +31,7 @@ async function _fetchAbstractionData (licenceId) {
   const returnRequirements = []
 
   licenceData.licenceVersions[0].licenceVersionPurposes.forEach((licenceVersionPurpose) => {
-    const purpose = licenceData.licenceVersions[0].purposes.find((purpose) => {
+    const licencePurpose = licenceData.licenceVersions[0].purposes.find((purpose) => {
       return purpose.id === licenceVersionPurpose.purposeId
     })
 
@@ -48,7 +51,7 @@ async function _fetchAbstractionData (licenceId) {
       abstractionPeriodEndMonth: licenceVersionPurpose.abstractionPeriodEndMonth,
       abstractionPoint,
       isSummer: returnsCycle,
-      purposeDescription: purpose.description,
+      purposeDescription: licencePurpose.description,
       returnsFrequency: _calculateCollectionFrequency(licenceData, licenceVersionPurpose, licenceAgreements),
       reportingFrequency: _calculateReportingCycle(licenceData, licenceVersionPurpose),
       siteDescription
@@ -63,9 +66,9 @@ function _calculateCollectionFrequency (licenceData, licenceVersionPurpose, lice
     return 'daily'
   }
 
-  if (licenceVersionPurpose.dailyQuantity < 100) {
+  if (licenceVersionPurpose.dailyQuantity < minimumDailyQuantityThreshold) {
     return 'none'
-  } else if (licenceVersionPurpose.dailyQuantity <= 2500) {
+  } else if (licenceVersionPurpose.dailyQuantity <= upperDailyQuantityThreshold) {
     return 'monthly'
   } else {
     return 'weekly'
@@ -73,17 +76,14 @@ function _calculateCollectionFrequency (licenceData, licenceVersionPurpose, lice
 }
 
 function _calculateReturnsCycle (purpose) {
-  const purposeStartDate = new Date(1970, purpose.abstractionPeriodStartMonth - 1, purpose.abstractionPeriodStartDay)
-  const purposeEndDate = new Date(1970, purpose.abstractionPeriodEndMonth - 1, purpose.abstractionPeriodEndDay)
+  const epocStartDate = 1970
+  const purposeStartDate = new Date(epocStartDate, purpose.abstractionPeriodStartMonth - 1, purpose.abstractionPeriodStartDay)
+  const purposeEndDate = new Date(epocStartDate, purpose.abstractionPeriodEndMonth - 1, purpose.abstractionPeriodEndDay)
 
-  const summerStartDate = new Date(1970, 3, 1)
-  const summerEndDate = new Date(1970, 9, 31)
+  const summerStartDate = new Date('1970-04-01')
+  const summerEndDate = new Date('1970-10-31')
 
-  if (purposeStartDate >= summerStartDate && purposeEndDate <= summerEndDate) {
-    return true
-  }
-
-  return false
+  return purposeStartDate >= summerStartDate && purposeEndDate <= summerEndDate
 }
 
 function _calculateReportingCycle (licenceData, licenceVersionPurpose) {
@@ -91,7 +91,7 @@ function _calculateReportingCycle (licenceData, licenceVersionPurpose) {
     return 'daily'
   }
 
-  if (licenceVersionPurpose.dailyQuantity <= 2500) {
+  if (licenceVersionPurpose.dailyQuantity <= upperDailyQuantityThreshold) {
     return 'monthly'
   } else {
     return 'weekly'
