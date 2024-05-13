@@ -60,7 +60,8 @@ describe('Licence Version Purposes model', () => {
         expect(result).to.be.instanceOf(LicenceVersionPurposeConditionModel)
         expect(result.id).to.equal(testRecord.id)
 
-        expect(result.licenceVersionPurposeConditionTypes[0]).to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
+        expect(result.licenceVersionPurposeConditionTypes[0])
+          .to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
         expect(result.licenceVersionPurposeConditionTypes[0].id).to.equal(testLicenceVersionPurposeConditionType.id)
       })
     })

@@ -136,7 +136,8 @@ function _checkReturnForIssues (matchedReturn) {
     return true
   }
 
-  if (matchedReturn.returnSubmissions.length === 0 || matchedReturn.returnSubmissions[0].returnSubmissionLines.length === 0) {
+  if (matchedReturn.returnSubmissions.length === 0 ||
+    matchedReturn.returnSubmissions[0].returnSubmissionLines.length === 0) {
     return true
   }
 
