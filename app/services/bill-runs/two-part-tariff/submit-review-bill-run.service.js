@@ -18,9 +18,9 @@ async function go (payload, yar) {
   const filterLicenceStatus = payload?.filterLicenceStatus
 
   if (clearFilters) {
-    yar.clear('filters')
+    yar.clear('reviewFilters')
   } else {
-    yar.set('filters', {
+    yar.set('reviewFilters', {
       filterIssues,
       filterLicenceHolder,
       filterLicenceStatus
