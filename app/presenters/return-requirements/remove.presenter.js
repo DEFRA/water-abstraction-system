@@ -20,12 +20,19 @@ function go (session, requirementIndex) {
   const requirement = requirements[requirementIndex]
 
   return {
+    backLink: _backLink(session),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     returnRequirement: _formattedReturnRequirement(requirement) ? _formattedReturnRequirement(requirement) : null,
     sessionId,
     startDate: _startDate(session)
   }
+}
+
+function _backLink (session) {
+  const { id } = session
+
+  return `/system/return-requirements/${id}/check`
 }
 
 function _formattedReturnRequirement (requirement) {
