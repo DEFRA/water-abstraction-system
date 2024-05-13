@@ -14,17 +14,17 @@ const StartDatePresenter = require('../../presenters/return-requirements/start-d
  * Supports generating the data needed for the start date page in the return requirements setup journey. It fetches the
  * current session record and combines it with the radio buttons, date fields and other information needed for the form.
  *
- * @param {string} sessionId - The id of the current session
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<Object>} The view data for the start date page
 */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+
   const formattedData = StartDatePresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    checkYourAnswersVisited: session.checkYourAnswersVisited,
     pageTitle: 'Select the start date for the requirements for returns',
     ...formattedData
   }

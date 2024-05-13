@@ -18,10 +18,11 @@ const SetupValidator = require('../../validators/return-requirements/setup.valid
  * If there was a validation error the controller will re-render the page so needs this information. If all is well the
  * controller will redirect to the next page in the journey depending on which radio item was chosen.
  *
- * @param {string} sessionId - The id of the current session
+ * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} The page data for the reason page
+ * @returns {Promise<Object>} If no errors a the url for where the user should be redirected else the page data for the
+ * setup page including the validation error details
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
@@ -50,11 +51,11 @@ function _redirect (setup) {
   let endpoint
 
   if (setup === 'use-abstraction-data') {
-    endpoint = 'check-your-answers'
+    endpoint = 'check'
   }
 
   if (setup === 'set-up-manually') {
-    endpoint = 'purpose'
+    endpoint = 'purpose/0'
   }
 
   return endpoint

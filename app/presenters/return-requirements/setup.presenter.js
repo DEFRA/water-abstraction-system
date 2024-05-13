@@ -5,14 +5,22 @@
  * @module SetupPresenter
  */
 
+/**
+ * Formats data for the `/return-requirements/{sessionId}/setup` page
+ *
+ * @param {module:SessionModel} session - The returns requirements session instance
+ *
+ * @returns {Object} - The data formatted for the view template
+ */
 function go (session) {
-  const data = {
-    id: session.id,
-    licenceRef: session.licence.licenceRef,
-    setup: session.setup ? session.setup : null
-  }
+  const { id: sessionId, licence, setup } = session
 
-  return data
+  return {
+    backLink: `/system/return-requirements/${sessionId}/reason`,
+    licenceRef: licence.licenceRef,
+    sessionId,
+    setup: setup ?? null
+  }
 }
 
 module.exports = {

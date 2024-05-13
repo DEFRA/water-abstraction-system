@@ -5,14 +5,12 @@
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set rootLink = "/system/return-requirements/" + id %}
-
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/frequency-reported"
+      href: backLink
     })
   }}
 {% endblock %}
@@ -82,7 +80,7 @@
     }) }}
 
     <div class="govuk-body">
-      {{ govukButton({ text: "Continue" }) }}
+      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
     </div>
   </form>
 {% endblock %}

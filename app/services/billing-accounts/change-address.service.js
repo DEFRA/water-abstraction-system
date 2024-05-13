@@ -18,9 +18,9 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * Within the service an internal user can 'Change the address' of a billing account. That is what the button says but
  * they can also change or set the agent company and the contact along with the address.
  *
- * Behind the scenes a new `billing_account_address` record is created that links to the `addresses`,
- * `companies` and `contacts` records. It will also be linked to the `billing_account` which
- * represents the billing account being amended.
+ * Behind the scenes a new `billing_account_address` record is created that links to the `addresses`, `companies` and
+ * `contacts` records. It will also be linked to the `billing_account` which represents the billing account being
+ * amended.
  *
  * It won't have an end date, which marks it as the 'current' address. The previous `billing_account_address` will get
  * its `end_date` updated. The legacy service then knows that address is no longer current.
@@ -49,7 +49,8 @@ const SendCustomerChangeService = require('./send-customer-change.service.js')
  * @param {Object} [agentCompany] The validated agent company details
  * @param {Object} [contact] The validated contact details
  *
- * @returns {Promise<Object>} contains a copy of the persisted address, agent company and contact if they were also changed
+ * @returns {Promise<Object>} contains a copy of the persisted address, agent company and contact if they were also
+ * changed
  */
 async function go (billingAccountId, address, agentCompany = {}, contact = {}) {
   const billingAccount = await _fetchBillingAccount(billingAccountId)
@@ -105,9 +106,9 @@ async function _fetchBillingAccount (billingAccountId) {
  * instances.
  *
  * We attempt to persist the address, company and contact model instances first because we need their IDs in order to
- * create the new `billing_account_addresses` record. When we create that record we also need to apply an end date
- * to any existing billing account addresses with a null end date. This is how the service determines which address
- * details are current (end date is null).
+ * create the new `billing_account_addresses` record. When we create that record we also need to apply an end date to
+ * any existing billing account addresses with a null end date. This is how the service determines which address details
+ * are current (end date is null).
  *
  * The object we return has all 3 entities whether they were persisted or not. This gets passed back to the UI via the
  * controller and is what it needs to then be able to redirect the user to the correct page.
@@ -118,8 +119,8 @@ async function _fetchBillingAccount (billingAccountId) {
  * @param {module:CompanyModel} company the new agent company to be persisted (not expected to be populated)
  * @param {module:ContactModel} contact the new contact to be persisted (not expected to be populated)
  *
- * @returns {Promise<Object>} a single object that contains the persisted billingAccountAddress, plus address, agent company and
- * contact
+ * @returns {Promise<Object>} a single object that contains the persisted billingAccountAddress, plus address, agent
+ * company and contact
  */
 async function _persist (timestamp, billingAccount, address, company, contact) {
   const persistedData = {}

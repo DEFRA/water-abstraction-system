@@ -9,36 +9,33 @@
  * Formats data for the `/return-requirements/{sessionId}/points` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
- * @param {Object} [pointsData] - The points for the licence
+ * @param {string} requirementIndex - The index of the requirement being added or changed
+ * @param {Object[]} pointsData - The points data from the licence
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, pointsData) {
-  const data = {
-    id: session.id,
-    licenceId: session.licence.id,
-    licenceRef: session.licence.licenceRef,
-    licencePoints: _licencePoints(pointsData),
-    selectedPoints: session.points ? session.points.join(',') : ''
-  }
+function go (session, requirementIndex, pointsData) {
+  const { id: sessionId, licence, requirements } = session
+  const requirement = requirements[requirementIndex]
 
-  return data
+  return {
+    backLink: _backLink(session, requirementIndex),
+    licenceId: licence.id,
+    licencePoints: _licencePoints(pointsData),
+    licenceRef: licence.licenceRef,
+    points: requirement?.points ? requirement.points.join(',') : '',
+    sessionId
+  }
 }
 
-function _licencePoints (pointsData) {
-  const abstractionPoints = []
+function _backLink (session, requirementIndex) {
+  const { checkPageVisited, id } = session
 
-  if (!pointsData) {
-    return abstractionPoints
+  if (checkPageVisited) {
+    return `/system/return-requirements/${id}/check`
   }
 
-  pointsData.forEach((pointDetail) => {
-    abstractionPoints.push(_generateAbstractionContent(pointDetail))
-  })
-
-  const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
-
-  return uniqueAbstractionPoints
+  return `/system/return-requirements/${id}/purpose/${requirementIndex}`
 }
 
 function _generateAbstractionContent (pointDetails) {
@@ -65,6 +62,22 @@ function _generateAbstractionContent (pointDetails) {
   abstractionPoints += pointDetails.LOCAL_NAME !== undefined ? ` (${pointDetails.LOCAL_NAME})` : ''
 
   return abstractionPoints
+}
+
+function _licencePoints (pointsData) {
+  const abstractionPoints = []
+
+  if (!pointsData) {
+    return abstractionPoints
+  }
+
+  pointsData.forEach((pointDetail) => {
+    abstractionPoints.push(_generateAbstractionContent(pointDetail))
+  })
+
+  const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
+
+  return uniqueAbstractionPoints
 }
 
 module.exports = {

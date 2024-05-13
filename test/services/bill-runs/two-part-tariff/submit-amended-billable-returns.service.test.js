@@ -106,7 +106,13 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns the page data for the view', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
+          const result = await SubmitAmendedBillableReturnsService.go(
+            billRunId,
+            licenceId,
+            reviewChargeElement.id,
+            payload,
+            yarStub
+          )
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -131,7 +137,13 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns page data with an error for the radio form element', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
+          const result = await SubmitAmendedBillableReturnsService.go(
+            billRunId,
+            licenceId,
+            reviewChargeElement.id,
+            payload,
+            yarStub
+          )
 
           expect(result.error).to.equal({
             message: 'Select the billable quantity',
@@ -151,7 +163,13 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns the page data for the view', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
+          const result = await SubmitAmendedBillableReturnsService.go(
+            billRunId,
+            licenceId,
+            reviewChargeElement.id,
+            payload,
+            yarStub
+          )
 
           expect(result).to.equal({
             activeNavBar: 'search',
@@ -176,7 +194,13 @@ describe('Submit Amended Billable Returns Service', () => {
         })
 
         it('returns page data with an error for the custom quantity input form element', async () => {
-          const result = await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
+          const result = await SubmitAmendedBillableReturnsService.go(
+            billRunId,
+            licenceId,
+            reviewChargeElement.id,
+            payload,
+            yarStub
+          )
 
           expect(result.error).to.equal({
             message: 'The quantity must be a number',

@@ -75,8 +75,8 @@ describe('Fetch Bill Licence Summary service', () => {
     it('will fetch the data use in the remove bill licence page', async () => {
       const result = await FetchBillLicenceSummaryService.go(billLicence.id)
 
-      // // NOTE: Transactions would not ordinarily be empty. But the format of the transactions will differ depending on
-      // // scheme so we get into that in later tests.
+      // NOTE: Transactions would not ordinarily be empty. But the format of the transactions will differ depending on
+      // scheme so we get into that in later tests.
       expect(result).to.equal({
         id: billLicence.id,
         licenceId: billLicence.licenceId,

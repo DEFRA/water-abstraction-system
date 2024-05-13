@@ -20,15 +20,15 @@ const Joi = require('joi')
  */
 function go (payload) {
   // NOTE: When a single point is checked by a user, it returns as a string. When multiple points are checked, the
-  // 'payload' is returned as an array. To make Joi validation straightforward, if the 'payload.points' is a string, it is
-  // turned into an array and validated as such.
+  // 'payload' is returned as an array. To make Joi validation straightforward, if the 'payload.points' is a string, it
+  // is turned into an array and validated as such.
   let points = payload.points
 
   if (!Array.isArray(points)) {
     points = [points]
   }
 
-  const errorMessage = 'Select any points for the return requirement'
+  const errorMessage = 'Select any points for the requirements for returns'
 
   const schema = Joi.object({
     points: Joi.array()

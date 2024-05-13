@@ -37,7 +37,7 @@ describe('Returns Cycle validator', () => {
     it('fails validation', () => {
       const result = ReturnsCycleValidator.go(payload)
 
-      expect(result.error.details[0].message).to.equal('Select the returns cycle for the return requirement')
+      expect(result.error.details[0].message).to.equal('Select the returns cycle for the requirements for returns')
     })
   })
 
@@ -49,7 +49,7 @@ describe('Returns Cycle validator', () => {
     it('fails validation', () => {
       const result = ReturnsCycleValidator.go(payload)
 
-      expect(result.error.details[0].message).to.equal('Select the returns cycle for the return requirement')
+      expect(result.error.details[0].message).to.equal('Select the returns cycle for the requirements for returns')
     })
   })
 })

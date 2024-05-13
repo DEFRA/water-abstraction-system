@@ -16,14 +16,15 @@ const SessionModel = require('../../models/session.model.js')
  * current session record and combines it with the checkboxes and other information needed for the form.
  *
  * @param {string} sessionId - The UUID of the current session
+ * @param {string} requirementIndex - The index of the requirement being added or changed
  *
  * @returns {Promise<Object>} The view data for the points page
 */
-async function go (sessionId) {
+async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
   const pointsData = await FetchPointsService.go(session.licence.id)
 
-  const formattedData = PointsPresenter.go(session, pointsData)
+  const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
 
   return {
     activeNavBar: 'search',
