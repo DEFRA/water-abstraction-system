@@ -18,7 +18,7 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/two-part-t
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
 async function go (id, yar) {
-  const filters = yar.get('filters')
+  const filters = yar.get('reviewFilters')
 
   const filterIssues = filters?.filterIssues
   const filterLicenceHolder = filters?.filterLicenceHolder
