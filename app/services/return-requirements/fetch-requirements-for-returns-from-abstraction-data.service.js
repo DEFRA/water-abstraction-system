@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches return requirements based on abstraction data needed for `/return-requirements/{sessionId}/check-your-answers` page
+ * Fetches return requirements based on abstraction data needed for `/return-requirements/{sessionId}/check` page
  * @module FetchReturnRequirementsBasedOnAbstractionDataService
  */
 
@@ -10,7 +10,7 @@ const FetchLicenceSummaryService = require('../licences/fetch-licence-summary.se
 const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
 
 /**
- * Fetches return requirements based on abstraction data needed for `/return-requirements/{sessionId}/check-your-answers` page
+ * Fetches return requirements based on abstraction data needed for `/return-requirements/{sessionId}/check` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
@@ -79,7 +79,7 @@ function _calculateReturnsCycle (purpose) {
   const summerStartDate = new Date(1970, 3, 1)
   const summerEndDate = new Date(1970, 9, 31)
 
-  if (purposeStartDate >= summerStartDate && purposeEndDate >= summerEndDate) {
+  if (purposeStartDate >= summerStartDate && purposeEndDate <= summerEndDate) {
     return true
   }
 
