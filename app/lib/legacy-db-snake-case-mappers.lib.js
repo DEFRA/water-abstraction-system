@@ -36,8 +36,12 @@ const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/u
  */
 function legacyDbSnakeCaseMappers (opt = {}) {
   return knexIdentifierMappers({
-    parse: (str) => _legacyCamelCase(str, opt),
-    format: (str) => _legacySnakeCase(str, opt)
+    parse: (str) => {
+      return _legacyCamelCase(str, opt)
+    },
+    format: (str) => {
+      return _legacySnakeCase(str, opt)
+    }
   })
 }
 

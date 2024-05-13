@@ -115,7 +115,9 @@ describe('Base Request', () => {
         describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .delete(() => true)
+              .delete(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
               .persist()
           })
@@ -161,9 +163,13 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will error, the second response will return OK
             Nock(testDomain)
-              .delete(() => true)
+              .delete(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
-              .delete(() => true)
+              .delete(() => {
+                return true
+              })
               .reply(200, { data: 'econnreset hello world' })
           })
 
@@ -203,7 +209,9 @@ describe('Base Request', () => {
         describe('and all retries fail', { timeout: 5000 }, () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .delete(() => true)
+              .delete(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
               .persist()
@@ -250,10 +258,14 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will time out, the second response will return OK
             Nock(testDomain)
-              .delete(() => true)
+              .delete(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
-              .delete(() => true)
+              .delete(() => {
+                return true
+              })
               .reply(200, { data: 'delayed hello world' })
           })
 
@@ -383,7 +395,9 @@ describe('Base Request', () => {
         describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .get(() => true)
+              .get(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
               .persist()
           })
@@ -429,9 +443,13 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will error, the second response will return OK
             Nock(testDomain)
-              .get(() => true)
+              .get(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
-              .get(() => true)
+              .get(() => {
+                return true
+              })
               .reply(200, { data: 'econnreset hello world' })
           })
 
@@ -471,7 +489,9 @@ describe('Base Request', () => {
         describe('and all retries fail', { timeout: 5000 }, () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .get(() => true)
+              .get(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
               .persist()
@@ -518,10 +538,14 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will time out, the second response will return OK
             Nock(testDomain)
-              .get(() => true)
+              .get(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
-              .get(() => true)
+              .get(() => {
+                return true
+              })
               .reply(200, { data: 'delayed hello world' })
           })
 
@@ -651,7 +675,9 @@ describe('Base Request', () => {
         describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .patch(() => true)
+              .patch(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
               .persist()
           })
@@ -697,9 +723,13 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will error, the second response will return OK
             Nock(testDomain)
-              .patch(() => true)
+              .patch(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
-              .patch(() => true)
+              .patch(() => {
+                return true
+              })
               .reply(200, { data: 'econnreset hello world' })
           })
 
@@ -739,7 +769,9 @@ describe('Base Request', () => {
         describe('and all retries fail', { timeout: 5000 }, () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .patch(() => true)
+              .patch(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
               .persist()
@@ -786,10 +818,14 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will time out, the second response will return OK
             Nock(testDomain)
-              .patch(() => true)
+              .patch(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
-              .patch(() => true)
+              .patch(() => {
+                return true
+              })
               .reply(200, { data: 'delayed hello world' })
           })
 
@@ -919,7 +955,9 @@ describe('Base Request', () => {
         describe('and all retries fail', () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .post(() => true)
+              .post(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
               .persist()
           })
@@ -965,9 +1003,13 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will error, the second response will return OK
             Nock(testDomain)
-              .post(() => true)
+              .post(() => {
+                return true
+              })
               .replyWithError({ code: 'ECONNRESET' })
-              .post(() => true)
+              .post(() => {
+                return true
+              })
               .reply(200, { data: 'econnreset hello world' })
           })
 
@@ -1007,7 +1049,9 @@ describe('Base Request', () => {
         describe('and all retries fail', { timeout: 5000 }, () => {
           beforeEach(async () => {
             Nock(testDomain)
-              .post(() => true)
+              .post(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
               .persist()
@@ -1054,10 +1098,14 @@ describe('Base Request', () => {
           beforeEach(async () => {
             // The first response will time out, the second response will return OK
             Nock(testDomain)
-              .post(() => true)
+              .post(() => {
+                return true
+              })
               .delay(100)
               .reply(200, { data: 'hello world' })
-              .post(() => true)
+              .post(() => {
+                return true
+              })
               .reply(200, { data: 'delayed hello world' })
           })
 

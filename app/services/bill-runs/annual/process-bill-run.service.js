@@ -73,6 +73,7 @@ async function _finaliseBillRun (billRun, billRunPopulated) {
   // this in the UI
   if (!billRunPopulated) {
     await _updateStatus(billRun.id, 'empty')
+
     return
   }
 

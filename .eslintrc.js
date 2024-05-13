@@ -9,15 +9,21 @@ module.exports = {
     '@stylistic/js'
   ],
   rules: {
+    'arrow-body-style': ['error', 'always'],
     'import/extensions': ['error', 'always'],
     strict: ['error', 'global'],
     '@stylistic/js/arrow-parens': ['error', 'always'],
+    '@stylistic/js/implicit-arrow-linebreak': ['off'],
     '@stylistic/js/max-len': ['error', {
       code: 120,
       ignoreStrings: true,
       ignoreTemplateLiterals: true,
       ignoreUrls: true
-    }]
+    }],
+    '@stylistic/js/padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: '*', next: 'return' }
+    ]
   }
 }
 
