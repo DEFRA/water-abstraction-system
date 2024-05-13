@@ -5,7 +5,9 @@
  * @module ViewLicenceContactDetailsService
  */
 
+const FetchCustomerContactDetailsService = require('./fetch-customer-contacts.service.js')
 const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
+const CustomerContactDetailsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
 const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
 const ViewLicenceService = require('./view-licence.service.js')
 
@@ -24,10 +26,15 @@ async function go (licenceId, auth) {
   const licenceContacts = await FetchLicenceContactsService.go(licenceId)
   const licenceContactsData = LicenceContactsPresenter.go(licenceContacts)
 
+  // Customer contacts
+  const customerContacts = await FetchCustomerContactDetailsService.go(licenceId)
+  const customerContactsData = CustomerContactDetailsPresenter.go(customerContacts)
+
   return {
     activeTab: 'contact-details',
     ...commonData,
-    ...licenceContactsData
+    ...licenceContactsData,
+    ...customerContactsData
   }
 }
 
