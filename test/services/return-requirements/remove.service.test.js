@@ -14,7 +14,7 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 // Thing under test
 const RemoveService = require('../../../app/services/return-requirements/remove.service.js')
 
-describe.only('Return Requirements - Remove presenter', () => {
+describe('Return Requirements - Remove service', () => {
   const requirementIndex = 0
 
   let session
