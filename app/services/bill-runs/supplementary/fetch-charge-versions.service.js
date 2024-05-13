@@ -63,7 +63,7 @@ async function _fetch (regionId, billingPeriod) {
       { column: 'chargeVersions.licenceId' }
     ])
     .withGraphFetched('licence')
-    .modifyGraph('licence', builder => {
+    .modifyGraph('licence', (builder) => {
       builder.select([
         'id',
         'licenceRef',
@@ -77,20 +77,20 @@ async function _fetch (regionId, billingPeriod) {
       ])
     })
     .withGraphFetched('licence.region')
-    .modifyGraph('licence.region', builder => {
+    .modifyGraph('licence.region', (builder) => {
       builder.select([
         'id',
         'chargeRegionId'
       ])
     })
     .withGraphFetched('changeReason')
-    .modifyGraph('changeReason', builder => {
+    .modifyGraph('changeReason', (builder) => {
       builder.select([
         'triggersMinimumCharge'
       ])
     })
     .withGraphFetched('chargeReferences')
-    .modifyGraph('chargeReferences', builder => {
+    .modifyGraph('chargeReferences', (builder) => {
       builder.select([
         'id',
         'source',
@@ -102,14 +102,14 @@ async function _fetch (regionId, billingPeriod) {
       ])
     })
     .withGraphFetched('chargeReferences.chargeCategory')
-    .modifyGraph('chargeReferences.chargeCategory', builder => {
+    .modifyGraph('chargeReferences.chargeCategory', (builder) => {
       builder.select([
         'reference',
         'shortDescription'
       ])
     })
     .withGraphFetched('chargeReferences.chargeElements')
-    .modifyGraph('chargeReferences.chargeElements', builder => {
+    .modifyGraph('chargeReferences.chargeElements', (builder) => {
       builder.select([
         'id',
         'abstractionPeriodStartDay',
