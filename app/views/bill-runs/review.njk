@@ -6,6 +6,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
@@ -335,4 +336,8 @@
     ],
     rows: tableRows
   }) }}
+
+  {% if pagination.numberOfPages > 1  %}
+    {{ govukPagination(pagination.component) }}
+  {% endif %}
 {% endblock %}
