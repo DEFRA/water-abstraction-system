@@ -45,11 +45,11 @@ async function go () {
         .from('water_import.job')
         .whereIn('state', ['failed', 'completed', 'active', 'created'])
         .whereIn('name', PGBOSS_JOBS_ARRAY)
-        .where((builder) =>
-          builder
+        .where((builder) => {
+          return builder
             .where('createdon', '>', currentDateMinusOneDay)
             .orWhere('completedon', '>', currentDateMinusOneDay)
-        )
+        })
         .unionAll(
           db
             .select(
@@ -60,11 +60,11 @@ async function go () {
             .from('water_import.archive')
             .whereIn('state', ['failed', 'completed', 'active', 'created'])
             .whereIn('name', PGBOSS_JOBS_ARRAY)
-            .where((builder) =>
-              builder
+            .where((builder) => {
+              return builder
                 .where('createdon', '>', currentDateMinusOneDay)
                 .orWhere('completedon', '>', currentDateMinusOneDay)
-            )
+            })
         ))
         .as('jobs')
     )

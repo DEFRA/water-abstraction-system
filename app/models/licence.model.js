@@ -221,7 +221,9 @@ class LicenceModel extends BaseModel {
       { date: this.expiredDate, priority: 3, reason: 'expired' }
     ]
 
-    const filteredDates = endDates.filter((endDate) => endDate.date)
+    const filteredDates = endDates.filter((endDate) => {
+      return endDate.date
+    })
 
     if (filteredDates.length === 0) {
       return null
