@@ -33,7 +33,7 @@ async function wipeDatabase () {
   console.log(`${dbConfig.connection.database} database wiped`)
 
   process.exit()
-})().catch(error => {
+})().catch((error) => {
   console.error(`Could not wipe ${dbConfig.connection.database}: ${error.message}`)
 
   process.exit(1)

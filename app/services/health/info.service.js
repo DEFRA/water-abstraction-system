@@ -141,7 +141,7 @@ async function _getVirusScannerData () {
 }
 
 function _mapArrayToTextCells (rows) {
-  return rows.map(row => {
+  return rows.map((row) => {
     return [
       ...[{ text: row.name }],
       ...[{ text: row.completedCount }],

@@ -49,7 +49,7 @@ describe('Charging Module Create Transaction presenter', () => {
           ref('licences.regions:regionalChargeArea').castText().as('regionalChargeArea')
         ])
         .withGraphFetched('region')
-        .modifyGraph('licence.region', builder => {
+        .modifyGraph('licence.region', (builder) => {
           builder.select([
             'id',
             'chargeRegionId'

@@ -57,7 +57,7 @@ describe('Fetch User Roles And Groups service', () => {
     it("returns the user's roles", async () => {
       const result = await FetchUserRolesAndGroupsService.go(testUser.id)
 
-      const roles = result.roles.map(role => role.role)
+      const roles = result.roles.map((role) => role.role)
 
       expect(roles).to.have.length(2)
       expect(roles).to.only.include(['role_for_user', 'role_for_group'])
@@ -66,7 +66,7 @@ describe('Fetch User Roles And Groups service', () => {
     it("returns the user's groups", async () => {
       const result = await FetchUserRolesAndGroupsService.go(testUser.id)
 
-      const groups = result.groups.map(group => group.group)
+      const groups = result.groups.map((group) => group.group)
 
       expect(groups).to.have.length(1)
       expect(groups).to.equal(['wirs'])
@@ -80,7 +80,7 @@ describe('Fetch User Roles And Groups service', () => {
       it('returns only one instance of the role', async () => {
         const result = await FetchUserRolesAndGroupsService.go(testUser.id)
 
-        const roles = result.roles.map(role => role.role)
+        const roles = result.roles.map((role) => role.role)
 
         expect(roles).to.have.length(2)
         expect(roles).to.only.include(['role_for_user', 'role_for_group'])
