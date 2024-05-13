@@ -99,6 +99,28 @@
       <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
     </div>
 
+    {% if journey == 'returns-required' %}
+      <div class="govuk-!-margin-bottom-9">
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Requirements for returns</h2>
+        <form method= "post" action= "/system/return-requirements/{{sessionId}}/add">
+          {{ govukButton({
+            text: "Add another requirement",
+            classes: "govuk-button--secondary",
+            preventDoubleClick: true
+          }) }}
+        </form>
+
+        {% for requirement in requirements %}
+          {# Set an easier to use index #}
+          {% set rowIndex = loop.index0 %}
+          <div>
+            <h3>{{requirement.siteDescription}}</h3>
+            <p>Remove {{rowIndex}} </p>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <div class="govuk-body">
       {% if journey == 'no-returns-required' %}
         <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
