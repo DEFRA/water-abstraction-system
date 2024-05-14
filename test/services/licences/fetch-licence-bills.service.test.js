@@ -11,6 +11,7 @@ const { expect } = Code
 const DatabaseSupport = require('../../support/database.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 
 // Thing under test
 const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
@@ -26,6 +27,7 @@ describe('Fetch Licence Bills service', () => {
     const licenceId = '96d97293-1a62-4ad0-bcb6-24f68a203e6b'
     const billId = '72988ec1-9fb2-4b87-b0a0-3c0be628a72c'
     const billingAccountId = '0ba3b707-72ee-4296-b177-a19afff10688'
+    const billRunId = 'd40004d5-a99b-40a7-adf2-22d36d5b20b5'
 
     beforeEach(async () => {
       await BillLicenceHelper.add({
@@ -33,17 +35,21 @@ describe('Fetch Licence Bills service', () => {
         billId
       })
 
+      await BillRunHelper.add({ id: billRunId })
+
       await BillHelper.add(
         {
           id: billId,
+          billRunId,
           invoiceNumber: '123',
           accountNumber: 'T21404193A',
           netAmount: 12345,
           billingAccountId,
           createdAt: createdDate
         })
-      // Add an extra record to ensure the bill is retrieved by the license id
-      await BillHelper.add()
+
+      // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
+      await BillHelper.add({ billRunId })
     })
 
     it('returns results', async () => {
@@ -56,7 +62,9 @@ describe('Fetch Licence Bills service', () => {
       expect(result.bills).to.equal(
         [{
           accountNumber: 'T21404193A',
-          billRun: null,
+          billRun: {
+            batchType: 'supplementary'
+          },
           billingAccountId,
           createdAt: createdDate,
           credit: null,
