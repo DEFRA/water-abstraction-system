@@ -39,6 +39,7 @@ describe('View Licence Contact Details service', () => {
       postcode: 'CF71 7DG',
       country: 'United Kingdom'
     }])
+
     Sinon.stub(FetchCustomerContactDetailsService, 'go').returns([{
       communicationType: 'Additional Contact',
       email: 'dfd@email.com',
