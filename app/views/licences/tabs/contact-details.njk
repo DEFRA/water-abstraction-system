@@ -4,7 +4,7 @@
   <p><a href='/customer/{{ customerId }}/#contacts'>Go to customer contacts</a></p>
 {% endif %}
 
-{% if not customerContacts.length > 0  and not licenceContacts.length > 0 %}
+{% if customerContacts.length == 0 and licenceContacts.length == 0 %}
   <p>No contacts found.</p>
 {% endif %}
 
