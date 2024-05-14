@@ -53,7 +53,7 @@ async function _fetchAbstractionData (licenceId) {
       isSummer: returnsCycle,
       purposeDescription: licencePurpose.description,
       returnsFrequency: _calculateCollectionFrequency(licenceData, licenceVersionPurpose, licenceAgreements),
-      reportingFrequency: _calculateReportingCycle(licenceData, licenceVersionPurpose),
+      reportingFrequency: _calculateReportingFrequency(licenceData, licenceVersionPurpose),
       siteDescription
     })
   })
@@ -70,9 +70,9 @@ function _calculateCollectionFrequency (licenceData, licenceVersionPurpose, lice
     return 'none'
   } else if (licenceVersionPurpose.dailyQuantity <= upperDailyQuantityThreshold) {
     return 'monthly'
-  } else {
-    return 'weekly'
   }
+
+  return 'weekly'
 }
 
 function _calculateReturnsCycle (purpose) {
@@ -86,16 +86,16 @@ function _calculateReturnsCycle (purpose) {
   return purposeStartDate >= summerStartDate && purposeEndDate <= summerEndDate
 }
 
-function _calculateReportingCycle (licenceData, licenceVersionPurpose) {
+function _calculateReportingFrequency (licenceData, licenceVersionPurpose) {
   if (licenceData.waterUndertaker) {
     return 'daily'
   }
 
   if (licenceVersionPurpose.dailyQuantity <= upperDailyQuantityThreshold) {
     return 'monthly'
-  } else {
-    return 'weekly'
   }
+
+  return 'weekly'
 }
 
 module.exports = {

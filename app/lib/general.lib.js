@@ -105,6 +105,8 @@ function determineCurrentFinancialYear () {
  * Nation Grid References are saved against the abstraction point. This function checks for these references and builds
  * a string that defines the details of the abstraction point.
  *
+ * @param {Object} pointDetail - Object containing all the details for the point
+ *
  * @returns {String} a description of the abstraction point
  */
 function generateAbstractionPointDetail (pointDetail) {
