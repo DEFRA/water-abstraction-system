@@ -4,7 +4,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% set backLink = "/system/return-requirements/" + id + "/check-your-answers" %}
+{% set backLink = "/system/return-requirements/" + id + "/check" %}
 {% block breadcrumbs %}
   {# Back link #}
   {{
@@ -56,11 +56,6 @@
             value: "multiple-upload",
             text: "Multiple upload",
             checked: "multiple-upload" in additionalSubmissionOptions
-          },
-          {
-            value: "paper-forms",
-            text: "Paper forms",
-            checked: "paper-forms" in additionalSubmissionOptions
           },
           {
             divider: "or"

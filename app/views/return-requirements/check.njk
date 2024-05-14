@@ -109,10 +109,10 @@
           classes: 'govuk-!-margin-bottom-2',
           rows: [
             {
-              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+              classes: 'govuk-summary-list',
               key: {
                 text: 'Additional submission options',
-                classes: "govuk-body govuk-heading-m govuk-!-width-one-half"
+                classes: "govuk-heading-m govuk-!-width-one-half"
               },
               value: {
                 text: ''
@@ -133,12 +133,14 @@
                 classes: "govuk-body "
               },
               value: {
-                text: 'Yes'
+                text: 'Yes' if additionalSubmissionOptions else "No"
               }
             }
           ]
         }) }}
       {% endif %}
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
       {{ govukButton({
         text: "Approve returns requirements",

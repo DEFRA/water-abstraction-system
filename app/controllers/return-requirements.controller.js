@@ -257,9 +257,9 @@ async function submitAgreementsExceptions (request, h) {
 }
 
 async function submitAdditionalSubmissionOptions (request, h) {
-  const { sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitAdditionalSubmissionOptionsService.go(sessionId, request.payload)
+  const pageData = await SubmitAdditionalSubmissionOptionsService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/additional-submission-options.njk', pageData)

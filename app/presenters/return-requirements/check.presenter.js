@@ -9,9 +9,10 @@ const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 function go (session) {
-  const { id: sessionId, journey, licence, note, reason } = session
+  const { additionalSubmissionOptions, id: sessionId, journey, licence, note, reason } = session
 
   return {
+    additionalSubmissionOptions: additionalSubmissionOptions || null,
     journey,
     licenceRef: licence.licenceRef,
     note: note ? note.content : null,

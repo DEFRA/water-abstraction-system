@@ -1,7 +1,8 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/additional-submission-options` page
+ * Orchestrates fetching and presenting the data for
+ * `/return-requirements/{sessionId}/additional-submission-options` page
  * @module AdditionalSubmissionOptionsService
  */
 
@@ -9,7 +10,8 @@ const AdditionalSubmissionOptionsPresenter = require('../../presenters/return-re
 const SessionModel = require('../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/additional-submission-options` page
+ * Orchestrates fetching and presenting the data for
+ * `/return-requirements/{sessionId}/additional-submission-options` page
  *
  * Supports generating the data needed for the points page in the return requirements setup journey. It fetches the
  * current session record and combines it with the checkboxes and other information needed for the form.
