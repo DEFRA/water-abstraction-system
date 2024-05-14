@@ -17,18 +17,17 @@ const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
 
 describe('Fetch Licence Bills service', () => {
+  const billId = '72988ec1-9fb2-4b87-b0a0-3c0be628a72c'
+  const billingAccountId = '0ba3b707-72ee-4296-b177-a19afff10688'
+  const billRunId = 'd40004d5-a99b-40a7-adf2-22d36d5b20b5'
+  const createdDate = new Date('2022-01-01')
+  const licenceId = '96d97293-1a62-4ad0-bcb6-24f68a203e6b'
+
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })
 
   describe('when the licence has bills', () => {
-    const createdDate = new Date('2022-01-01')
-
-    const licenceId = '96d97293-1a62-4ad0-bcb6-24f68a203e6b'
-    const billId = '72988ec1-9fb2-4b87-b0a0-3c0be628a72c'
-    const billingAccountId = '0ba3b707-72ee-4296-b177-a19afff10688'
-    const billRunId = 'd40004d5-a99b-40a7-adf2-22d36d5b20b5'
-
     beforeEach(async () => {
       await BillLicenceHelper.add({
         licenceId,
@@ -110,6 +109,24 @@ describe('Fetch Licence Bills service', () => {
 
         expect(result.bills).to.be.empty()
       })
+    })
+  })
+
+  describe('when the licence has no bills', () => {
+    beforeEach(async () => {
+      await BillRunHelper.add({ id: billRunId, status: 'sent' })
+      await BillHelper.add({ id: billId, billRunId })
+      await BillLicenceHelper.add({ billId })
+    })
+
+    it('returns no results', async () => {
+      const result = await FetchLicenceBillService.go(licenceId, 1)
+
+      expect(result.pagination).to.equal({
+        total: 0
+      })
+
+      expect(result.bills).to.be.empty()
     })
   })
 })
