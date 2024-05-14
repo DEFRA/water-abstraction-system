@@ -6,7 +6,6 @@
  */
 
 const CheckPresenter = require('../../presenters/return-requirements/check.presenter.js')
-// const FetchReturnRequirementsBasedOnAbstractionDataService = require('./fetch-requirements-for-returns-from-abstraction-data.service.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -19,10 +18,6 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
-
-  // if (session.setup === 'use-abstraction-data') {
-  //   const result = await FetchReturnRequirementsBasedOnAbstractionDataService.go(session.licence.id)
-  // }
 
   await _markCheckPageVisited(session)
 
