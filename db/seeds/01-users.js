@@ -97,7 +97,9 @@ async function _insertUsersWhereNotExists (knex) {
 }
 
 async function _insertUserGroupsWhereNotExists (knex) {
-  const seedUsersWithGroups = seedUsers.filter((seedData) => seedData.group)
+  const seedUsersWithGroups = seedUsers.filter((seedData) => {
+    return seedData.group
+  })
 
   for (const seedUser of seedUsersWithGroups) {
     const existingUserGroup = await knex('idm.userGroups')
@@ -121,11 +123,15 @@ async function _updateSeedUsersWithUserIdAndGroupId (knex) {
   const groups = await _groups(knex)
 
   seedUsers.forEach((seedUser) => {
-    const user = users.find(({ userName }) => userName === seedUser.userName)
+    const user = users.find(({ userName }) => {
+      return userName === seedUser.userName
+    })
     seedUser.userId = user.userId
 
     if (seedUser.group) {
-      const userGroup = groups.find(({ group }) => group === seedUser.group)
+      const userGroup = groups.find(({ group }) => {
+        return group === seedUser.group
+      })
       seedUser.groupId = userGroup.groupId
     }
   })

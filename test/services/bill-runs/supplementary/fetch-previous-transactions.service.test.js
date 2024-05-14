@@ -154,8 +154,12 @@ describe('Fetch Previous Transactions service', () => {
               )
 
               expect(results).to.have.length(2)
-              expect(results.every((transaction) => !transaction.credit)).to.be.true()
-              expect(results.find((transaction) => transaction.description === 'follow up')).to.exist()
+              expect(results.every((transaction) => {
+                return !transaction.credit
+              })).to.be.true()
+              expect(results.find((transaction) => {
+                return transaction.description === 'follow up'
+              })).to.exist()
             })
           })
         })

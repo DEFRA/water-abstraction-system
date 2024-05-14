@@ -72,6 +72,7 @@ function _extractRolesFromGroups (groups) {
   return groups.flatMap((group) => {
     const { roles } = group
     delete group.roles
+
     return roles
   })
 }

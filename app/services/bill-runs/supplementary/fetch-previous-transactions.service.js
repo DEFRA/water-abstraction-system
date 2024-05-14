@@ -32,8 +32,12 @@ async function go (billingAccountId, licenceId, financialYearEnding) {
  * to know only about debits that have not been credited.
  */
 function _cleanse (transactions) {
-  const credits = transactions.filter((transaction) => transaction.credit)
-  const debits = transactions.filter((transaction) => !transaction.credit)
+  const credits = transactions.filter((transaction) => {
+    return transaction.credit
+  })
+  const debits = transactions.filter((transaction) => {
+    return !transaction.credit
+  })
 
   credits.forEach((credit) => {
     const debitIndex = debits.findIndex((debit) => {

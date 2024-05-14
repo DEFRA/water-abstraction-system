@@ -32,7 +32,9 @@ describe('BoomNotifierLib class', () => {
     it('throws a Boom error with the correct message and data', async () => {
       const testNotifier = new BoomNotifierLib(id, pinoFake, airbrakeFake)
 
-      expect(() => testNotifier.omfg(message, data)).to.throw(Error, { message, data })
+      expect(() => {
+        return testNotifier.omfg(message, data)
+      }).to.throw(Error, { message, data })
     })
   })
 })

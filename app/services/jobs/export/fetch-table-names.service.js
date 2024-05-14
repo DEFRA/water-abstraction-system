@@ -39,7 +39,9 @@ async function _fetchTableNames (schemaName) {
 }
 
 function _pluckTableNames (tableData) {
-  return tableData.map((obj) => obj.table_name)
+  return tableData.map((obj) => {
+    return obj.table_name
+  })
 }
 
 module.exports = {

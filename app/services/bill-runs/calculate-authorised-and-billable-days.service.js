@@ -146,6 +146,7 @@ function _consolidateAndCalculate (referencePeriod, abstractionsPeriods) {
 
   const totalDays = consolidatedAbstractionPeriods.reduce((acc, abstractionPeriod) => {
     const abstractionOverlapPeriod = _calculateAbstractionOverlapPeriod(referencePeriod, abstractionPeriod)
+
     return acc + _calculateDays(abstractionOverlapPeriod)
   }, 0)
 
