@@ -332,7 +332,8 @@ function _viewLicenceBills () {
 function _viewLicenceContactDetails () {
   return {
     activeTab: 'contact-details',
-    licenceContacts: [{}]
+    licenceContacts: [{}],
+    customerContacts: [{}]
   }
 }
 

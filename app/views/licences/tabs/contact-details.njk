@@ -4,7 +4,7 @@
   <p><a href='/customer/{{ customerId }}/#contacts'>Go to customer contacts</a></p>
 {% endif %}
 
-{% if customerContacts.length <= 0  and licenceContacts.length <= 0 %}
+{% if not customerContacts.length > 0  and not licenceContacts.length > 0 %}
   <p>No contacts found.</p>
 {% endif %}
 
@@ -69,7 +69,7 @@
       <tr class="govuk-table__row">
         <td class="govuk-table__cell">{{ customerContact.name }}</td>
         <td class="govuk-table__cell">{{ customerContact.communicationType }}</td>
-        <td class="govuk-table__cell"> {{ customerContact.email }}</tr>
+        <td class="govuk-table__cell">{{ customerContact.email }}</tr>
     {% endfor %}
     </tbody>
   </table>

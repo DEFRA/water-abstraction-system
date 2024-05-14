@@ -22,14 +22,15 @@ const FetchCustomerContactDetailsService =
   require('../../../app/services/licences/fetch-customer-contacts.service.js')
 
 describe('Fetch Customer Contacts service', () => {
-  let licenceId
   let companyId
   let contactId
+  let licenceId
+
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })
 
-  describe('when the licence has contact details', () => {
+  describe('when the licence has customer contact details', () => {
     beforeEach(async () => {
       const licence = await LicenceHelper.add()
       licenceId = licence.id
@@ -44,21 +45,21 @@ describe('Fetch Customer Contacts service', () => {
       const { id: licenceRoleId } = await LicenceRoleHelper.add()
 
       await CompanyContactsHelper.add({
-        contactId,
         companyId,
+        contactId,
         roleId: licenceRoleId
       })
 
       await LicenceDocumentRolesHelper.add({
+        companyId,
+        contactId,
         endDate: null,
         licenceDocumentId,
-        licenceRoleId,
-        contactId,
-        companyId
+        licenceRoleId
       })
     })
 
-    it('returns the matching licence contacts', async () => {
+    it('returns the matching licence customer contacts', async () => {
       const results = await FetchCustomerContactDetailsService.go(licenceId)
 
       expect(results).to.equal([

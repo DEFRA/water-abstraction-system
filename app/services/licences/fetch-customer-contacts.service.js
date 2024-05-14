@@ -19,8 +19,6 @@ async function go (licenceId) {
 }
 
 async function _fetch (licenceId) {
-  // company id from
-
   return db.withSchema('public')
     .select([
       'con.contact_type',

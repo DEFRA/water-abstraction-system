@@ -5,9 +5,9 @@
  * @module ViewLicenceContactDetailsService
  */
 
+const CustomerContactDetailsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
 const FetchCustomerContactDetailsService = require('./fetch-customer-contacts.service.js')
 const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
-const CustomerContactDetailsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
 const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
 const ViewLicenceService = require('./view-licence.service.js')
 
@@ -26,7 +26,7 @@ async function go (licenceId, auth) {
   const licenceContacts = await FetchLicenceContactsService.go(licenceId)
   const licenceContactsData = LicenceContactsPresenter.go(licenceContacts)
 
-  // Customer contacts
+  // Customer contacts details
   const customerContacts = await FetchCustomerContactDetailsService.go(licenceId)
   const customerContactsData = CustomerContactDetailsPresenter.go(customerContacts)
 

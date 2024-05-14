@@ -40,14 +40,14 @@ describe('View Licence Contact Details service', () => {
       country: 'United Kingdom'
     }])
     Sinon.stub(FetchCustomerContactDetailsService, 'go').returns([{
+      communicationType: 'Additional Contact',
       email: 'dfd@email.com',
       firstName: 'Donald',
+      initials: null,
       lastName: 'Duck',
       middleInitials: null,
-      initials: null,
       salutation: null,
-      suffix: null,
-      communicationType: 'Additional Contact'
+      suffix: null
     }])
 
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
