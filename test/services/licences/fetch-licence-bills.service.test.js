@@ -9,12 +9,12 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper')
-const BillHelper = require('../../support/helpers/bill.helper')
-const BillRunHelper = require('../../support/helpers/bill-run.helper')
+const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
+const BillHelper = require('../../support/helpers/bill.helper.js')
+const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 
 // Thing under test
-const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service')
+const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
 
 describe('Fetch licence bills service', () => {
   beforeEach(async () => {
