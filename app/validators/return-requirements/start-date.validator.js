@@ -36,6 +36,7 @@ function go (payload, licenceStartDate, licenceEndDate) {
 
   if (selectedOption === 'anotherStartDate') {
     payload.fullDate = _fullDate(payload)
+
     return _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate)
   }
 
