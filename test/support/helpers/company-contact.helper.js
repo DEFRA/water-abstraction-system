@@ -12,7 +12,6 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - [random UUID]
  * - `companyId` - [random UUID]
  * - `contactId` - [random UUID]
  * - `roleId` - [random UUID]
