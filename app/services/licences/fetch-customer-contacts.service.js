@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches all return logs for a licence which is needed for the view '/licences/{id}/contact-details` page
+ * Fetches all customer contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
  * @module FetchCustomerContactDetailsService
  */
 
