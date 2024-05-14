@@ -37,10 +37,11 @@ describe('Return Requirements - Additional Submission Options presenter', () => 
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
       expect(result).to.be.equal({
-        backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check',
+        backLink: `/system/return-requirements/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         additionalSubmissionOptions: '',
-        licenceRef: '01/ABC'
+        licenceRef: '01/ABC',
+        sessionId: session.id
       })
     })
   })
@@ -49,7 +50,7 @@ describe('Return Requirements - Additional Submission Options presenter', () => 
     it("returns a link back to the 'check' page", () => {
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-      expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
+      expect(result.backLink).to.equal(`/system/return-requirements/${session.id}/check`)
     })
   })
 

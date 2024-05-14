@@ -20,7 +20,6 @@ const SessionModel = require('../../models/session.model.js')
  *
  * @param {string} sessionId - The id of the current session
  * @param {Object} payload - The submitted form data
- * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} If no errors it returns an empty object else the page data for the note page including the
