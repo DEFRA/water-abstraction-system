@@ -39,7 +39,6 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    id: generateUUID(),
     companyId: generateUUID(),
     contactId: generateUUID(),
     roleId: generateUUID()
