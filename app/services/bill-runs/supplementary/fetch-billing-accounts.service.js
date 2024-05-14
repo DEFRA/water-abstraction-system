@@ -42,7 +42,7 @@ function _fetch (uniqueBillingAccountIds) {
 }
 
 function _makeObjects (models) {
-  return models.map(model => {
+  return models.map((model) => {
     return model.toJSON()
   })
 }

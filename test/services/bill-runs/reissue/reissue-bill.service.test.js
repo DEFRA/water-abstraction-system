@@ -206,7 +206,9 @@ describe('Reissue Bill service', () => {
       it('negative for credits', async () => {
         const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        const credits = result.transactions.filter(transaction => transaction.credit)
+        const credits = result.transactions.filter((transaction) => {
+          return transaction.credit
+        })
 
         credits.forEach((transaction) => {
           expect(transaction.netAmount).to.be.below(0)
@@ -216,7 +218,9 @@ describe('Reissue Bill service', () => {
       it('positive for debits', async () => {
         const result = await ReissueBillService.go(sourceBill, reissueBillRun)
 
-        const debits = result.transactions.filter(transaction => !transaction.credit)
+        const debits = result.transactions.filter((transaction) => {
+          return !transaction.credit
+        })
 
         debits.forEach((transaction) => {
           expect(transaction.netAmount).to.be.above(0)
