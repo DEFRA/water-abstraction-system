@@ -68,8 +68,7 @@ describe('View Licence Contact Details service', () => {
           communicationType: 'Additional Contact',
           email: 'dfd@email.com',
           name: 'Donald Duck'
-        }
-        ],
+        }],
         licenceName: 'fake licence',
         customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
         licenceContacts: [{
