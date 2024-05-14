@@ -231,7 +231,11 @@ describe('Licences controller', () => {
 
     describe('when a request is valid and has no contact details', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves({ activeTab: 'contact-details' })
+        Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves({
+          activeTab: 'contact-details',
+          licenceContacts: [],
+          customerContacts: []
+        })
       })
 
       it('returns the page successfully', async () => {
@@ -332,8 +336,8 @@ function _viewLicenceBills () {
 function _viewLicenceContactDetails () {
   return {
     activeTab: 'contact-details',
-    licenceContacts: [{}],
-    customerContacts: [{}]
+    licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
+    customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
   }
 }
 
