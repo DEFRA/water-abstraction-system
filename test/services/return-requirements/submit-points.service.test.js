@@ -54,9 +54,7 @@ describe('Return Requirements - Submit Points service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          points: [
-            'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-          ]
+          points: ['1234']
         }
 
         Sinon.stub(FetchPointsService, 'go').resolves(_points())
@@ -68,7 +66,7 @@ describe('Return Requirements - Submit Points service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.requirements[0].points).to.equal([
-          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+          '1234'
         ])
       })
 
@@ -97,9 +95,10 @@ describe('Return Requirements - Submit Points service', () => {
         pageTitle: 'Select the points for the requirements for returns',
         backLink: `/system/return-requirements/${session.id}/purpose/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePoints: [
-          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-        ],
+        licencePoints: [{
+          id: '1234',
+          description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+        }],
         licenceRef: '01/ABC',
         points: ''
       }, { skip: ['sessionId', 'error'] })
@@ -120,6 +119,7 @@ describe('Return Requirements - Submit Points service', () => {
 function _points () {
   return [
     {
+      ID: '1234',
       NGR1_EAST: '69212',
       NGR2_EAST: 'null',
       NGR3_EAST: 'null',

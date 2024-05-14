@@ -46,6 +46,7 @@ describe('Return Requirements - Select Points service', () => {
 
     Sinon.stub(FetchPointsService, 'go').resolves([
       {
+        ID: '1234',
         NGR1_EAST: '69212',
         NGR2_EAST: 'null',
         NGR3_EAST: 'null',
@@ -83,7 +84,10 @@ describe('Return Requirements - Select Points service', () => {
         backLink: `/system/return-requirements/${session.id}/purpose/0`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licencePoints: [
-          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+          {
+            id: '1234',
+            description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+          }
         ],
         licenceRef: '01/ABC',
         points: ''
