@@ -37,7 +37,9 @@ async function _fetch (licenceId, page) {
       'bills.netAmount'
     ])
     .innerJoinRelated('billLicences')
+    .innerJoin('billRuns', 'billRuns.id', 'bills.billRunId')
     .where('billLicences.licence_id', licenceId)
+    .where('billRuns.status', 'sent')
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
       builder.select(['batchType'])
