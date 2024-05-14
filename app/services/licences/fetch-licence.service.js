@@ -54,6 +54,7 @@ async function _fetchLicence (id) {
       ])
     })
     .modify('registeredToAndLicenceName')
+
   return result
 }
 

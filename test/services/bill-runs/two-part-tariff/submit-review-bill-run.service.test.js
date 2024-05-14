@@ -1,0 +1,51 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+const Sinon = require('sinon')
+
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { expect } = Code
+
+// Thing under test
+const SubmitReviewBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/submit-review-bill-run.service.js')
+
+describe('Submit Review Bill Run Service', () => {
+  let yarStub
+
+  beforeEach(() => {
+    yarStub = { clear: Sinon.stub().returns(), set: Sinon.stub().returns() }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when called with the filters applied', () => {
+    const payload = {
+      filterIssues: ['abs-outside-period', 'aggregate-factor'],
+      filterLicenceHolder: 'A Licence Holder Ltd',
+      filterLicenceStatus: 'review'
+    }
+
+    it('will set the cookie with the filter data', async () => {
+      await SubmitReviewBillRunService.go(payload, yarStub)
+
+      expect(yarStub.clear.called).to.be.false()
+      expect(yarStub.set.called).to.be.true()
+      expect(yarStub.set.args[0][1]).to.equal(payload)
+    })
+  })
+
+  describe('when called to clear the filters', () => {
+    const payload = { clearFilters: 'reset' }
+
+    it('will clear the filter data from the cookie', async () => {
+      await SubmitReviewBillRunService.go(payload, yarStub)
+
+      expect(yarStub.clear.called).to.be.true()
+      expect(yarStub.set.called).to.be.false()
+    })
+  })
+})

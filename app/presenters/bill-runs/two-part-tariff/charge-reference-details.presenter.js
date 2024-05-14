@@ -99,6 +99,7 @@ function _prepareDate (startDate, endDate) {
 function _totalBillableReturns (reviewChargeElements) {
   return reviewChargeElements.reduce((total, reviewChargeElement) => {
     total += reviewChargeElement.amendedAllocated
+
     return total
   }, 0)
 }

@@ -17,14 +17,14 @@ const SROC_FIRST_FIN_YEAR_END = 2023
 /**
  * Determine the billing periods needed when generating a bill run
  *
- * Using the `financialYearEnding` provided we first determine the financial start and end date for that financial year. If
- * no `financialYearEnding` is provided we use the current financial year.
+ * Using the `financialYearEnding` provided we first determine the financial start and end date for that financial year.
+ * If no `financialYearEnding` is provided we use the current financial year.
  *
  * If the bill run type is 'annual' or 'two_part_tariff' we just return that billing period.
  *
- * If the bill run type is 'supplementary' we then need to calculate a range of up to 6 billing periods back to 2022-2023.
- * The service supports corrections and changes being made to charge version information in the current financial year
- * plus 5. We limit this to 2022-2023 as that is the first SROC year (and we don't handle PRESROC!)
+ * If the bill run type is 'supplementary' we then need to calculate a range of up to 6 billing periods back to
+ * 2022-2023. The service supports corrections and changes being made to charge version information in the current
+ * financial year plus 5. We limit this to 2022-2023 as that is the first SROC year (and we don't handle PRESROC!)
  *
  * Our 3 billing engines then use these periods to generate the bill run.
  *

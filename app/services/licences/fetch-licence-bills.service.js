@@ -5,9 +5,9 @@
  * @module FetchLicenceBillsService
  */
 
-const BillModel = require('../../models/bill.model')
+const BillModel = require('../../models/bill.model.js')
 
-const DatabaseConfig = require('../../../config/database.config')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches all bills for a licence which is needed for the view '/licences/{id}/bills` page
@@ -25,16 +25,21 @@ async function go (licenceId, page) {
 async function _fetch (licenceId, page) {
   return BillModel.query()
     .select([
+      'bills.accountNumber',
+      'bills.billingAccountId',
+      'bills.createdAt',
+      'bills.credit',
+      'bills.deminimis',
+      'bills.financialYearEnding',
       'bills.id',
       'bills.invoiceNumber',
-      'bills.accountNumber',
-      'bills.financialYearEnding',
-      'bills.netAmount',
-      'bills.billingAccountId',
-      'bills.createdAt'
+      'bills.legacyId',
+      'bills.netAmount'
     ])
     .innerJoinRelated('billLicences')
+    .innerJoin('billRuns', 'billRuns.id', 'bills.billRunId')
     .where('billLicences.licence_id', licenceId)
+    .where('billRuns.status', 'sent')
     .withGraphFetched('billRun')
     .modifyGraph('billRun', (builder) => {
       builder.select(['batchType'])

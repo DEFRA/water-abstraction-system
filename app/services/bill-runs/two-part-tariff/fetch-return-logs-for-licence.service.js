@@ -41,7 +41,8 @@ async function _fetch (licenceRef, billingPeriod) {
       ref('metadata:purposes').as('purposes')
     ])
     .where('licenceRef', licenceRef)
-    // water-abstraction-service filters out old return logs in this way: see `src/lib/services/returns/api-connector.js`
+    // water-abstraction-service filters out old return logs in this way: see
+    // `src/lib/services/returns/api-connector.js`
     .where('startDate', '>=', '2008-04-01')
     .where('endDate', '>=', billingPeriod.startDate)
     .where('endDate', '<=', billingPeriod.endDate)
@@ -49,7 +50,7 @@ async function _fetch (licenceRef, billingPeriod) {
     .orderBy('startDate', 'ASC')
     .orderBy('returnReference', 'ASC')
     .withGraphFetched('returnSubmissions')
-    .modifyGraph('returnSubmissions', builder => {
+    .modifyGraph('returnSubmissions', (builder) => {
       builder
         .select([
           'id',
@@ -58,7 +59,7 @@ async function _fetch (licenceRef, billingPeriod) {
         .where('returnSubmissions.current', true)
     })
     .withGraphFetched('returnSubmissions.returnSubmissionLines')
-    .modifyGraph('returnSubmissions.returnSubmissionLines', builder => {
+    .modifyGraph('returnSubmissions.returnSubmissionLines', (builder) => {
       builder
         .select([
           'id',

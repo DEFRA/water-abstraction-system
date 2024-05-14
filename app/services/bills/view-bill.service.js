@@ -15,19 +15,19 @@ const ViewLicenceSummariesPresenter = require('../../presenters/bills/view-licen
 /**
  * Orchestrates fetching and presenting the data needed for one of the view bill templates
  *
- * When viewing a bill we are required to return a different template depending on whether the bill is linked to one
- * or multiple licences.
+ * When viewing a bill we are required to return a different template depending on whether the bill is linked to one or
+ * multiple licences.
  *
- * All templates depend on the same bill and billing account data. We show the same thing at the top of the page. But
- * if the bill has multiple licences we show a table that summarises them so depend on `LicenceSummariesPresenter`.
+ * All templates depend on the same bill and billing account data. We show the same thing at the top of the page. But if
+ * the bill has multiple licences we show a table that summarises them so depend on `LicenceSummariesPresenter`.
  *
- * Else when there is just 1 licence we show all the transactions details instead (saving the user an extra click!).
- * For this we need to fetch the bill licence and use `ViewBillLicencePresenter` to generate the data.
+ * Else when there is just 1 licence we show all the transactions details instead (saving the user an extra click!). For
+ * this we need to fetch the bill licence and use `ViewBillLicencePresenter` to generate the data.
  *
  * @param {string} id The UUID for the bill to view
  *
- * @returns {Promise<Object>} a formatted representation of the bill, its bill run and billing account plus summaries for all
- * the licences linked to the bill for use in the bill view page
+ * @returns {Promise<Object>} a formatted representation of the bill, its bill run and billing account plus summaries
+ * for all the licences linked to the bill for use in the bill view page
  */
 async function go (id) {
   const { bill, licenceSummaries } = await FetchBillService.go(id)

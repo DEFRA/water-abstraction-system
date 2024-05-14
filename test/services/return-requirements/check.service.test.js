@@ -14,7 +14,6 @@ const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
 const CheckService = require('../../../app/services/return-requirements/check.service.js')
-const SessionModel = require('../../../app/models/session.model.js')
 
 describe('Return Requirements - Check service', () => {
   let session

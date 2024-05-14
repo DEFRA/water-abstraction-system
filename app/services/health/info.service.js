@@ -134,6 +134,7 @@ async function _getRedisConnectivityData () {
 async function _getVirusScannerData () {
   try {
     const { stdout, stderr } = await exec('clamdscan --version')
+
     return stderr ? `ERROR: ${stderr}` : stdout
   } catch (error) {
     return `ERROR: ${error.message}`
@@ -141,7 +142,7 @@ async function _getVirusScannerData () {
 }
 
 function _mapArrayToTextCells (rows) {
-  return rows.map(row => {
+  return rows.map((row) => {
     return [
       ...[{ text: row.name }],
       ...[{ text: row.completedCount }],
