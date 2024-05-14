@@ -11,7 +11,6 @@ const { expect } = Code
 const DatabaseSupport = require('../../support/database.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 
 // Thing under test
 const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
@@ -33,8 +32,6 @@ describe('Fetch Licence Bills service', () => {
         licenceId,
         billId
       })
-
-      await BillRunHelper.add({ batchType: 'annual' })
 
       await BillHelper.add(
         {
