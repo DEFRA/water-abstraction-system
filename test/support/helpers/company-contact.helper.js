@@ -6,6 +6,7 @@
 
 const CompanyContactModel = require('../../../app/models/company-contact.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+
 /**
  * Add a new company contact
  *
