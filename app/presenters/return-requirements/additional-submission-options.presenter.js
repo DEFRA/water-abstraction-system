@@ -14,16 +14,14 @@
  *
  * @returns {Object} - The data formatted for the view template
  */
-function go (session, requirementIndex) {
-  const { id, licence: { id: licenceId, licenceRef }, requirements } = session
-  const requirement = requirements[requirementIndex]
+function go (session) {
+  const { id: sessionId, licence: { id: licenceId, licenceRef }, additionalSubmissionOptions } = session
   const data = {
-    id,
+    additionalSubmissionOptions: additionalSubmissionOptions || '',
+    backLink: `/system/return-requirements/${sessionId}/check`,
     licenceId,
     licenceRef,
-    additionalSubmissionOptions: requirement?.additionalSubmissionOptions
-      ? requirement.additionalSubmissionOptions.join(',')
-      : ''
+    sessionId
   }
 
   return data

@@ -37,6 +37,7 @@ describe('Return Requirements - Check presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
+        additionalSubmissionOptions: false,
         journey: 'returns-required',
         licenceRef: '01/ABC',
         note: null,
@@ -46,6 +47,28 @@ describe('Return Requirements - Check presenter', () => {
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023',
         userEmail: 'No notes added'
+      })
+    })
+  })
+
+  describe("the 'additionalSubmissionOptions' property", () => {
+    describe('when the user has checked additionalSubmissionOptions', () => {
+      beforeEach(() => {
+        session.additionalSubmissionOptions = ['multiple-upload']
+      })
+
+      it('returns a checked option', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.additionalSubmissionOptions).to.be.true()
+      })
+    })
+
+    describe('when the user has not checked an option', () => {
+      it('returns no options', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.additionalSubmissionOptions).to.be.false()
       })
     })
   })

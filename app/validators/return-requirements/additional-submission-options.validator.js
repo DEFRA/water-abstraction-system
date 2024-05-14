@@ -26,16 +26,12 @@ function go (payload) {
   * To make Joi validation straightforward, if the 'payload.additionalSubmissionOptions' is a string,
   * it is turned into an array and validated as such.
   */
-  let additionalSubmissionOptions = payload['additional-submission-options']
-
-  if (!Array.isArray(additionalSubmissionOptions)) {
-    additionalSubmissionOptions = [additionalSubmissionOptions]
-  }
+  const additionalSubmissionOptions = payload['additional-submission-options']
 
   const errorMessage = 'Select additional submission options for the requirements for returns'
 
   const schema = Joi.object({
-    points: Joi.array()
+    'additional-submission-options': Joi.array()
       .items(Joi.string())
       .required()
   }).messages({
@@ -43,7 +39,7 @@ function go (payload) {
     'array.sparse': errorMessage
   })
 
-  return schema.validate({ additionalSubmissionOptions }, { abortEarly: false })
+  return schema.validate({ 'additional-submission-options': additionalSubmissionOptions }, { abortEarly: false })
 }
 
 module.exports = {

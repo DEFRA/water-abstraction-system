@@ -26,16 +26,16 @@ const SessionModel = require('../../models/session.model.js')
  * @returns {Promise<Object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-async function go (sessionId, requirementIndex, payload, yar) {
+async function go (sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  _handleOneOptionSelected(payload)
+  payload['additional-submission-options'] = _ensureIsArray(payload['additional-submission-options'])
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    const notification = _notification(session, requirementIndex, payload['additional-submission-options'])
-    await _save(session, requirementIndex, payload)
+    const notification = _notification(session, payload['additional-submission-options'])
+    await _save(session, payload)
 
     if (notification) {
       yar.flash('notification', notification)
@@ -44,7 +44,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
     return {}
   }
 
-  const submittedSessionData = _submittedSessionData(session, requirementIndex, payload)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
@@ -54,23 +54,16 @@ async function go (sessionId, requirementIndex, payload, yar) {
   }
 }
 
-/**
- * When a single point is checked by the user, it returns as a string. When multiple points are checked, the
- * 'points' is returned as an array. This function works to make those single selected string 'points' into an array
- * for uniformity.
- */
-function _handleOneOptionSelected (payload) {
-  if (!Array.isArray(payload['additional-submission-options'])) {
-    payload['additional-submission-options'] = [payload['additional-submission-options']]
-  }
+function _ensureIsArray (options) {
+  return Array.isArray(options) ? options : [options]
 }
 
-function _notification (session, requirementIndex, newOptions) {
-  const additionalSubmissionOptions = session.requirements[requirementIndex]?.additionalSubmissionOptions
+function _notification (session, newOptions) {
+  const additionalSubmissionOptions = session?.additionalSubmissionOptions
 
-  if (additionalSubmissionOptions && additionalSubmissionOptions !== newOptions) {
+  if (additionalSubmissionOptions !== newOptions) {
     return {
-      text: 'Changes updates',
+      text: 'Changes updated',
       title: 'Updated'
     }
   }
@@ -78,14 +71,14 @@ function _notification (session, requirementIndex, newOptions) {
   return null
 }
 
-async function _save (session, requirementIndex, payload) {
-  session.requirements[requirementIndex].additionalSubmissionOptions = payload['additional-submission-options']
+async function _save (session, payload) {
+  session.additionalSubmissionOptions = payload['additional-submission-options']
 
   return session.$update()
 }
 
-function _submittedSessionData (session, requirementIndex, payload) {
-  session.requirements[requirementIndex].additionalSubmissionOptions = payload['additional-submission-options'] || null
+function _submittedSessionData (session, payload) {
+  session.additionalSubmissionOptions = payload['additional-submission-options'] || null
 
   return AdditionalSubmissionOptionsPresenter.go(session)
 }

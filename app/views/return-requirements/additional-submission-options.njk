@@ -4,7 +4,6 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
 
-{% set backLink = "/system/return-requirements/" + id + "/check" %}
 {% block breadcrumbs %}
   {# Back link #}
   {{
@@ -21,7 +20,7 @@
       titleText: 'There is a problem',
       errorList: [
         {
-          text: 'error.text',
+          text: error.text,
           href: '#additional-submission-options'
         }
       ]
@@ -49,7 +48,7 @@
           text: "Select all that apply"
         },
         errorMessage: {
-          text: "error.text"
+          text: error.text
         } if error,
         items: [
           {

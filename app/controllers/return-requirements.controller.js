@@ -257,15 +257,15 @@ async function submitAgreementsExceptions (request, h) {
 }
 
 async function submitAdditionalSubmissionOptions (request, h) {
-  const { params: { requirementIndex, sessionId }, payload, yar } = request
+  const { params: { sessionId }, payload, yar } = request
 
-  const pageData = await SubmitAdditionalSubmissionOptionsService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitAdditionalSubmissionOptionsService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/additional-submission-options.njk', pageData)
   }
 
-  return h.redirect(`/system/return-requirements/${sessionId}/check-your-answers`)
+  return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
 
 async function submitCancel (request, h) {
