@@ -1,12 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the `/licences/{id}/contact-details` view licence contact details page
+ * Formats data for the `/licences/{id}/contact-details` view customer contact details page
  * @module CustomerContactDetailsPresenter
  */
 
+const ContactModel = require('../../models/contact.model.js')
+
 /**
- * Formats data for the `/licences/{id}/contact-details` view licence contact details page
+ * Formats data for the `/licences/{id}/contact-details` view customer contact details page
  *
  * @returns {Object} The data formatted for the view template
  */
@@ -17,15 +19,9 @@ function go (customerContacts) {
 }
 
 function _buildCustomerName (customer) {
-  let name = ''
+  const contact = ContactModel.fromJson(customer)
 
-  name += ` ${customer.salutation ?? ''}`
-  name += ` ${customer.firstName ?? ''}`
-  name += ` ${customer.middleInitials ? customer.middleInitials ?? '' : customer.initials ?? ''}`
-  name += ` ${customer.lastName ?? ''}`
-  name += ` ${customer.suffix ?? ''}`
-
-  return name.replace(/ +(?= )/g, '').trim()
+  return contact.$name()
 }
 
 function _customerContacts (customerContacts) {

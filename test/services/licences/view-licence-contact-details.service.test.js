@@ -39,7 +39,16 @@ describe('View Licence Contact Details service', () => {
       postcode: 'CF71 7DG',
       country: 'United Kingdom'
     }])
-    Sinon.stub(FetchCustomerContactDetailsService, 'go').returns({})
+    Sinon.stub(FetchCustomerContactDetailsService, 'go').returns([{
+      email: 'dfd@email.com',
+      firstName: 'Donald',
+      lastName: 'Duck',
+      middleInitials: null,
+      initials: null,
+      salutation: null,
+      suffix: null,
+      communicationType: 'Additional Contact'
+    }])
 
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
   })
@@ -54,7 +63,12 @@ describe('View Licence Contact Details service', () => {
 
       expect(result).to.equal({
         activeTab: 'contact-details',
-        customerContacts: [],
+        customerContacts: [{
+          communicationType: 'Additional Contact',
+          email: 'dfd@email.com',
+          name: 'Donald Duck'
+        }
+        ],
         licenceName: 'fake licence',
         customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
         licenceContacts: [{

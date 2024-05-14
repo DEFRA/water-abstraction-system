@@ -23,11 +23,14 @@ async function _fetch (licenceId) {
 
   return db.withSchema('public')
     .select([
+      'con.contact_type',
+      'con.data_source',
+      'con.department',
       'con.email',
       'con.firstName',
+      'con.initials',
       'con.lastName',
       'con.middle_initials',
-      'con.initials',
       'con.salutation',
       'con.suffix',
       'lr.label AS communicationType'

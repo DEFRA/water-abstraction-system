@@ -55,7 +55,7 @@ describe('Customer Contacts presenter', () => {
         it("returns the customers contact's name", () => {
           const result = CustomerContactsPresenter.go(customerContacts)
 
-          expect(result.customerContacts[0].name).to.equal('Mrs Malary d d Duck Sr')
+          expect(result.customerContacts[0].name).to.equal('Mrs M d d Duck Sr')
         })
       })
 
@@ -66,7 +66,7 @@ describe('Customer Contacts presenter', () => {
         it("returns the customers contact's name", () => {
           const result = CustomerContactsPresenter.go(customerContacts)
 
-          expect(result.customerContacts[0].name).to.equal('Donald d Duck')
+          expect(result.customerContacts[0].name).to.equal('d Duck')
         })
       })
 
@@ -77,7 +77,7 @@ describe('Customer Contacts presenter', () => {
         it("returns the customers contact's name", () => {
           const result = CustomerContactsPresenter.go(customerContacts)
 
-          expect(result.customerContacts[0].name).to.equal('Donald m i Duck')
+          expect(result.customerContacts[0].name).to.equal('D m i Duck')
         })
       })
 
