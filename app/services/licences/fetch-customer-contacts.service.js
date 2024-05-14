@@ -5,6 +5,8 @@
  * @module FetchCustomerContactDetailsService
  */
 
+const { db } = require('../../../db/db.js')
+
 /**
  * Fetches all contact details for a licence which is needed for the view '/licences/{id}/contact-details` page
  *
@@ -17,11 +19,29 @@ async function go (licenceId) {
 }
 
 async function _fetch (licenceId) {
-  // select documents.* from crm_v2.documents
-  //   join crm_v2.document_roles document_roles on document_roles.document_id = documents.document_id
-  //   WHERE (document_roles.end_date is null or document_roles.end_date > NOW())
-  //   AND document_roles.company_id IN (SELECT DISTINCT company_id FROM crm_v2.company_contacts)
-  return {}
+  // company id from
+
+  return db.withSchema('public')
+    .select([
+      'con.email',
+      'con.firstName',
+      'con.lastName',
+      'con.middle_initials',
+      'con.initials',
+      'con.salutation',
+      'con.suffix',
+      'lr.label AS communicationType'
+    ])
+    .from('licenceDocuments AS ld')
+    .innerJoin('licences AS l', 'l.licenceRef', '=', 'ld.licenceRef')
+    .innerJoin('licenceDocumentRoles AS ldr', 'ldr.licenceDocumentId', '=', 'ld.id')
+    .where('l.id', '=', licenceId)
+    .andWhere((builder) => {
+      builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
+    })
+    .innerJoin('companyContacts AS cct', 'cct.companyId', '=', 'ldr.companyId')
+    .innerJoin('contacts AS con', 'con.id', '=', 'cct.contactId')
+    .innerJoin('licenceRoles AS lr', 'lr.id', '=', 'cct.roleId')
 }
 
 module.exports = {
