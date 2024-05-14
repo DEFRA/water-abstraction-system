@@ -23,6 +23,7 @@ const LicenceModel = require('../../models/licence.model.js')
 async function go (id) {
   const licence = await _fetchLicence(id)
   const licenceEnded = _licenceEnded(licence)
+
   return licenceEnded
 }
 

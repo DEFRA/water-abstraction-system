@@ -19,7 +19,11 @@ module.exports = {
       ignoreStrings: true,
       ignoreTemplateLiterals: true,
       ignoreUrls: true
-    }]
+    }],
+    '@stylistic/js/padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: '*', next: 'return' }
+    ]
   }
 }
 
