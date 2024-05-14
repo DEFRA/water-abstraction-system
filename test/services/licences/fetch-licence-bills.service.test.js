@@ -34,48 +34,82 @@ describe('Fetch Licence Bills service', () => {
         licenceId,
         billId
       })
-
-      await BillRunHelper.add({ id: billRunId })
-
-      await BillHelper.add(
-        {
-          id: billId,
-          billRunId,
-          invoiceNumber: '123',
-          accountNumber: 'T21404193A',
-          netAmount: 12345,
-          billingAccountId,
-          createdAt: createdDate
-        })
-
-      // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
-      await BillHelper.add({ billRunId })
     })
 
-    it('returns results', async () => {
-      const result = await FetchLicenceBillService.go(licenceId, 1)
+    describe("and they are linked to a 'sent' bill run", () => {
+      beforeEach(async () => {
+        await BillRunHelper.add({ id: billRunId, status: 'sent' })
 
-      expect(result.pagination).to.equal({
-        total: 1
+        await BillHelper.add(
+          {
+            id: billId,
+            billRunId,
+            invoiceNumber: '123',
+            accountNumber: 'T21404193A',
+            netAmount: 12345,
+            billingAccountId,
+            createdAt: createdDate
+          })
+
+        // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
+        await BillHelper.add({ billRunId })
       })
 
-      expect(result.bills).to.equal(
-        [{
-          accountNumber: 'T21404193A',
-          billRun: {
-            batchType: 'supplementary'
-          },
-          billingAccountId,
-          createdAt: createdDate,
-          credit: null,
-          deminimis: false,
-          financialYearEnding: 2023,
-          id: billId,
-          invoiceNumber: '123',
-          legacyId: null,
-          netAmount: 12345
-        }]
-      )
+      it('returns results', async () => {
+        const result = await FetchLicenceBillService.go(licenceId, 1)
+
+        expect(result.pagination).to.equal({
+          total: 1
+        })
+
+        expect(result.bills).to.equal(
+          [{
+            accountNumber: 'T21404193A',
+            billRun: {
+              batchType: 'supplementary'
+            },
+            billingAccountId,
+            createdAt: createdDate,
+            credit: null,
+            deminimis: false,
+            financialYearEnding: 2023,
+            id: billId,
+            invoiceNumber: '123',
+            legacyId: null,
+            netAmount: 12345
+          }]
+        )
+      })
+    })
+
+    describe("but they are not linked to a 'sent' bill run", () => {
+      beforeEach(async () => {
+        await BillRunHelper.add({ id: billRunId })
+
+        await BillHelper.add(
+          {
+            id: billId,
+            billRunId,
+            invoiceNumber: '123',
+            accountNumber: 'T21404193A',
+            netAmount: 12345,
+            billingAccountId,
+            createdAt: createdDate
+          })
+
+        // Add an extra bill linked to the same bill run to test only bills for the licence are retrieved
+        await BillHelper.add({ billRunId })
+      })
+
+      it('returns no results', async () => {
+        const result = await FetchLicenceBillService.go(licenceId, 1)
+
+        expect(result.pagination).to.equal({
+          total: 0
+        })
+
+        expect(result.bills).to.be.empty()
+      })
     })
   })
 })
