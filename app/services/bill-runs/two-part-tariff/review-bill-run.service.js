@@ -25,7 +25,7 @@ async function go (id, page, yar) {
   const filterLicenceHolder = filters?.filterLicenceHolder
   const filterLicenceStatus = filters?.filterLicenceStatus
 
-  const selectedPageNumber = _selectedPageNumber(page)
+  const selectedPageNumber = page ? Number(page) : 1
 
   const { billRun, licences } = await FetchBillRunLicencesService.go(
     id,
@@ -66,14 +66,6 @@ function _pageTitle (numberOfPages, selectedPageNumber) {
   }
 
   return `Review licences (page ${selectedPageNumber} of ${numberOfPages})`
-}
-
-function _selectedPageNumber (page) {
-  if (!page) {
-    return 1
-  }
-
-  return Number(page)
 }
 
 module.exports = {
