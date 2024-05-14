@@ -16,7 +16,7 @@ const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 // Thing under test
 const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
 
-describe('Fetch licence bills service', () => {
+describe('Fetch Licence Bills service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })
