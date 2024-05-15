@@ -40,6 +40,9 @@ function _requirements (session) {
 
   for (const requirement of requirements) {
     const { siteDescription, agreementsExceptions } = requirement
+
+    // NOTE: We determine a requirement is complete because agreement exceptions is populated and it is the last step in
+    // the journey
     if (agreementsExceptions) {
       completedRequirements.push({ siteDescription })
     }
