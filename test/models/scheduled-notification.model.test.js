@@ -10,8 +10,8 @@ const { expect } = Code
 // Test helpers
 const DatabaseSupport = require('../support/database.js')
 const EventHelper = require('../support/helpers/event.helper.js')
-const ScheduledNotificationHelper = require('../support/helpers/scheduled-notification.helper.js')
 const EventModel = require('../../app/models/event.model.js')
+const ScheduledNotificationHelper = require('../support/helpers/scheduled-notification.helper.js')
 
 // Thing under test
 const ScheduledNotificationModel = require('../../app/models/scheduled-notification.model.js')
