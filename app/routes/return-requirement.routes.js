@@ -39,7 +39,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Submit the abstraction period for the return requirement'
+      description: 'Adds another object to the requirements array in the session'
     }
 
   },
