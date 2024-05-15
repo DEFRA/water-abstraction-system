@@ -5,6 +5,9 @@
  * @module FetchCommunicationsService
  */
 
+const EventModel = require('../../models/event.model.js')
+const DatabaseConfig = require('../../../config/database.config.js')
+
 /**
  * Fetch the matching licence and return data needed for the view licence communications page
  *
@@ -14,14 +17,26 @@
  *
  * @returns {Promise<Object>} the data needed to populate the view licence page's communications tab
  */
-async function go (licenceId, page) {
-  const { results, total } = await _fetch(licenceId, page)
+async function go (licenceRef, page) {
+  const { results, total } = await _fetch(licenceRef, page)
 
   return { communications: results, pagination: { total } }
 }
 
-async function _fetch (licenceId, page) {
-  return { results: [], total: 0 }
+async function _fetch (licenceRef, page) {
+  const data = await EventModel.query()
+    .select([
+      'created_at',
+      'metadata',
+      'type',
+      'subtype',
+      'status',
+      'issuer'
+    ])
+    .where('licences', '@>', `["${licenceRef}"]`)
+    .page(page - 1, DatabaseConfig.defaultPageSize)
+
+  return data
 }
 
 module.exports = {

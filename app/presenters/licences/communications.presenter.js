@@ -5,6 +5,8 @@
  * @module CommunicationsPresenter
  */
 
+const { formatLongDate } = require('../base.presenter.js')
+
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
@@ -19,7 +21,8 @@ function go (communications) {
 function _communications (communications) {
   return communications.map((communication) => {
     return {
-      ...communication
+      sender: communication.issuer,
+      sent: formatLongDate(communication.createdAt)
     }
   })
 }
