@@ -7,6 +7,7 @@
 
 const Boom = require('@hapi/boom')
 
+const AmendAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
@@ -18,6 +19,7 @@ const ReviewBillRunService = require('../services/bill-runs/two-part-tariff/revi
 const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
+const SubmitAmendedAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
@@ -25,6 +27,18 @@ const SubmitReviewBillRunService = require('../services/bill-runs/two-part-tarif
 const SubmitReviewLicenceService = require('../services/bill-runs/two-part-tariff/submit-review-licence.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
+
+async function amendAdjustmentFactor (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await AmendAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReferenceId)
+
+  return h.view('bill-runs/amend-adjustment-factor.njk', {
+    pageTitle: 'Set the adjustment factors',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
 
 async function amendBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
@@ -149,6 +163,23 @@ async function send (request, h) {
   })
 }
 
+async function submitAmendedAdjustmentFactor (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+  const pageData = await SubmitAmendedAdjustmentFactorService.go(
+    billRunId,
+    licenceId,
+    reviewChargeReferenceId,
+    request.payload,
+    request.yar
+  )
+
+  if (pageData.error) {
+    return h.view('bill-runs/amend-adjustment-factor.njk', pageData)
+  }
+
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`)
+}
+
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
@@ -236,6 +267,7 @@ async function view (request, h) {
 }
 
 module.exports = {
+  amendAdjustmentFactor,
   amendBillableReturns,
   cancel,
   chargeReferenceDetails,
@@ -246,6 +278,7 @@ module.exports = {
   review,
   reviewLicence,
   send,
+  submitAmendedAdjustmentFactor,
   submitAmendedBillableReturns,
   submitCancel,
   submitReview,
