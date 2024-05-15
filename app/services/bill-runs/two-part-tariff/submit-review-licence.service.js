@@ -39,11 +39,13 @@ function _bannerMessage (yar, parsedPayload) {
 
   if (status) {
     yar.flash('banner', `Licence changed to ${status}.`)
+
     return
   }
 
   if (progress) {
     yar.flash('banner', 'This licence has been marked.')
+
     return
   }
 

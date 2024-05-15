@@ -222,6 +222,7 @@ async function startDate (request, h) {
   const { sessionId } = request.params
 
   const pageData = await StartDateService.go(sessionId)
+
   return h.view('return-requirements/start-date.njk', {
     ...pageData
   })

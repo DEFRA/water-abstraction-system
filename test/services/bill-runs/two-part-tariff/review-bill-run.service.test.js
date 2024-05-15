@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
+// Test helpers
+const DatabaseConfig = require('../../../../config/database.config.js')
+
 // Things we need to stub
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-bill-run-licences.service.js')
 const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/two-part-tariff/review-bill-run.presenter.js')
@@ -18,20 +21,172 @@ const ReviewBillRunService = require('../../../../app/services/bill-runs/two-par
 describe('Review Bill Run Service', () => {
   const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
+  let page
   let yarStub
 
   beforeEach(() => {
-    Sinon.stub(FetchBillRunLicencesService, 'go').resolves({
-      billRun: 'bill data',
-      licences: 'licence data'
-    })
+    // The default page size is 25, but we set it here in case any local config is overriding the default
+    Sinon.replace(DatabaseConfig, 'defaultPageSize', 25)
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when called without a filter applied', () => {
+  describe('when there is only one page of results', () => {
+    beforeEach(() => {
+      page = undefined
+
+      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({
+        billRun: 'bill data',
+        licences: { results: 'licence data', total: 25 }
+      })
+    })
+
+    describe('and the service is called without a filter applied', () => {
+      const bannerMessage = undefined
+      const presenterStubData = {
+        preparedBillRun: 'bill run data',
+        preparedLicences: 'licence data',
+        filter: {
+          issues: undefined,
+          licenceHolder: undefined,
+          licenceStatus: undefined,
+          openFilter: false
+        }
+      }
+
+      beforeEach(() => {
+        Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
+
+        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(undefined) }
+      })
+
+      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
+        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
+
+        expect(result.bannerMessage).to.equal(bannerMessage)
+        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
+        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
+        expect(result.filter).to.equal(presenterStubData.filter)
+        expect(result.pageTitle).to.equal('Review licences')
+        expect(result.pagination.numberOfPages).to.equal(1)
+        expect(result.pagination.component).not.to.exist()
+
+        expect(FetchBillRunLicencesService.go.called).to.be.true()
+        expect(ReviewBillRunPresenter.go.called).to.be.true()
+      })
+    })
+
+    describe('and the service is called with a filter applied', () => {
+      const bannerMessage = undefined
+      const presenterStubData = {
+        preparedBillRun: 'bill run data',
+        preparedLicences: 'licence data',
+        filter: {
+          issues: {
+            absOutsidePeriod: true,
+            aggregateFactor: true,
+            checkingQuery: false,
+            noReturnsReceived: false,
+            overAbstraction: false,
+            overlapOfChargeDates: false,
+            returnsReceivedNotProcessed: false,
+            returnsLate: false,
+            returnSplitOverRefs: false,
+            someReturnsNotReceived: false,
+            unableToMatchReturn: false
+          },
+          licenceHolder: 'A Licence Holder Ltd',
+          licenceStatus: 'review',
+          openFilter: true
+        }
+      }
+      const yarGetStubData = {
+        filterIssues: ['abs-outside-period', 'aggregate-factor'],
+        filterLicenceHolder: 'A Licence Holder Ltd',
+        filterLicenceStatus: 'review'
+      }
+
+      beforeEach(() => {
+        Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
+
+        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(yarGetStubData) }
+      })
+
+      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
+        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
+
+        expect(result.bannerMessage).to.equal(bannerMessage)
+        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
+        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
+        expect(result.filter).to.equal(presenterStubData.filter)
+        expect(result.pageTitle).to.equal('Review licences')
+        expect(result.pagination.numberOfPages).to.equal(1)
+        expect(result.pagination.component).not.to.exist()
+
+        expect(FetchBillRunLicencesService.go.called).to.be.true()
+        expect(ReviewBillRunPresenter.go.called).to.be.true()
+      })
+    })
+
+    describe('and the service is called with a banner displayed', () => {
+      const bannerMessage = 'Licence 01/123/ABC removed from the bill run.'
+      const presenterStubData = {
+        preparedBillRun: 'bill run data',
+        preparedLicences: 'licence data',
+        filter: {
+          issues: {
+            absOutsidePeriod: true,
+            aggregateFactor: true,
+            checkingQuery: false,
+            noReturnsReceived: false,
+            overAbstraction: false,
+            overlapOfChargeDates: false,
+            returnsReceivedNotProcessed: false,
+            returnsLate: false,
+            returnSplitOverRefs: false,
+            someReturnsNotReceived: false,
+            unableToMatchReturn: false
+          },
+          licenceHolder: 'A Licence Holder Ltd',
+          licenceStatus: 'review',
+          openFilter: true
+        }
+      }
+      const yarGetStubData = {
+        filterIssues: ['abs-outside-period', 'aggregate-factor'],
+        filterLicenceHolder: 'A Licence Holder Ltd',
+        filterLicenceStatus: 'review'
+      }
+
+      beforeEach(() => {
+        Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
+
+        yarStub = {
+          flash: Sinon.stub().returns(['Licence 01/123/ABC removed from the bill run.']),
+          get: Sinon.stub().returns(yarGetStubData)
+        }
+      })
+
+      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
+        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
+
+        expect(result.bannerMessage).to.equal(bannerMessage)
+        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
+        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
+        expect(result.filter).to.equal(presenterStubData.filter)
+        expect(result.pageTitle).to.equal('Review licences')
+        expect(result.pagination.numberOfPages).to.equal(1)
+        expect(result.pagination.component).not.to.exist()
+
+        expect(FetchBillRunLicencesService.go.called).to.be.true()
+        expect(ReviewBillRunPresenter.go.called).to.be.true()
+      })
+    })
+  })
+
+  describe('when there are multiple pages of results', () => {
     const bannerMessage = undefined
     const presenterStubData = {
       preparedBillRun: 'bill run data',
@@ -45,113 +200,55 @@ describe('Review Bill Run Service', () => {
     }
 
     beforeEach(() => {
+      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({
+        billRun: 'bill data',
+        licences: { results: 'licence data', total: 70 }
+      })
       Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
 
       yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(undefined) }
     })
 
-    it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-      const result = await ReviewBillRunService.go(billRunId, yarStub)
+    describe('and no page is selected', () => {
+      beforeEach(() => {
+        page = undefined
+      })
 
-      expect(result).to.equal({ bannerMessage, ...presenterStubData })
+      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
+        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
 
-      expect(FetchBillRunLicencesService.go.called).to.be.true()
-      expect(ReviewBillRunPresenter.go.called).to.be.true()
-    })
-  })
+        expect(result.bannerMessage).to.equal(bannerMessage)
+        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
+        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
+        expect(result.filter).to.equal(presenterStubData.filter)
+        expect(result.pageTitle).to.equal('Review licences (page 1 of 3)')
+        expect(result.pagination.numberOfPages).to.equal(3)
+        expect(result.pagination.component).to.exist()
 
-  describe('when called with a filter applied', () => {
-    const bannerMessage = undefined
-    const presenterStubData = {
-      preparedBillRun: 'bill run data',
-      preparedLicences: 'licence data',
-      filter: {
-        issues: {
-          absOutsidePeriod: true,
-          aggregateFactor: true,
-          checkingQuery: false,
-          noReturnsReceived: false,
-          overAbstraction: false,
-          overlapOfChargeDates: false,
-          returnsReceivedNotProcessed: false,
-          returnsLate: false,
-          returnSplitOverRefs: false,
-          someReturnsNotReceived: false,
-          unableToMatchReturn: false
-        },
-        licenceHolder: 'A Licence Holder Ltd',
-        licenceStatus: 'review',
-        openFilter: true
-      }
-    }
-    const yarGetStubData = {
-      filterIssues: ['abs-outside-period', 'aggregate-factor'],
-      filterLicenceHolder: 'A Licence Holder Ltd',
-      filterLicenceStatus: 'review'
-    }
-
-    beforeEach(() => {
-      Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
-
-      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(yarGetStubData) }
+        expect(FetchBillRunLicencesService.go.called).to.be.true()
+        expect(ReviewBillRunPresenter.go.called).to.be.true()
+      })
     })
 
-    it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-      const result = await ReviewBillRunService.go(billRunId, yarStub)
+    describe('and a page other than page 1 is selected', () => {
+      beforeEach(() => {
+        page = '2'
+      })
 
-      expect(result).to.equal({ bannerMessage, ...presenterStubData })
+      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
+        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
 
-      expect(FetchBillRunLicencesService.go.called).to.be.true()
-      expect(ReviewBillRunPresenter.go.called).to.be.true()
-    })
-  })
+        expect(result.bannerMessage).to.equal(bannerMessage)
+        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
+        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
+        expect(result.filter).to.equal(presenterStubData.filter)
+        expect(result.pageTitle).to.equal('Review licences (page 2 of 3)')
+        expect(result.pagination.numberOfPages).to.equal(3)
+        expect(result.pagination.component).to.exist()
 
-  describe('when called with a banner displayed', () => {
-    const bannerMessage = 'Licence 01/123/ABC removed from the bill run.'
-    const presenterStubData = {
-      preparedBillRun: 'bill run data',
-      preparedLicences: 'licence data',
-      filter: {
-        issues: {
-          absOutsidePeriod: true,
-          aggregateFactor: true,
-          checkingQuery: false,
-          noReturnsReceived: false,
-          overAbstraction: false,
-          overlapOfChargeDates: false,
-          returnsReceivedNotProcessed: false,
-          returnsLate: false,
-          returnSplitOverRefs: false,
-          someReturnsNotReceived: false,
-          unableToMatchReturn: false
-        },
-        licenceHolder: 'A Licence Holder Ltd',
-        licenceStatus: 'review',
-        openFilter: true
-      }
-    }
-    const yarGetStubData = {
-      filterIssues: ['abs-outside-period', 'aggregate-factor'],
-      filterLicenceHolder: 'A Licence Holder Ltd',
-      filterLicenceStatus: 'review'
-    }
-
-    beforeEach(() => {
-      Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
-
-      yarStub = {
-        flash: Sinon.stub().returns(['Licence 01/123/ABC removed from the bill run.']),
-        get: Sinon.stub().returns(yarGetStubData)
-      }
-    })
-
-    it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-      const result = await ReviewBillRunService.go(billRunId, yarStub)
-
-      expect(result).to.equal({ bannerMessage, ...presenterStubData })
-
-      expect(FetchBillRunLicencesService.go.called).to.be.true()
-      expect(ReviewBillRunPresenter.go.called).to.be.true()
+        expect(FetchBillRunLicencesService.go.called).to.be.true()
+        expect(ReviewBillRunPresenter.go.called).to.be.true()
+      })
     })
   })
 })
