@@ -6,6 +6,8 @@
  */
 
 const ViewLicenceService = require('./view-licence.service.js')
+const FetchCommunicationsService = require('./fetch-communications.service.js')
+const CommunicationsPresenter = require('../../presenters/licences/communications.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence communications page
@@ -15,13 +17,16 @@ const ViewLicenceService = require('./view-licence.service.js')
  *
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence communication template.
  */
-async function go (licenceId, auth) {
+async function go (licenceId, auth, page) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
+
+  const communications = await FetchCommunicationsService.go(licenceId, page)
+  const communicationsData = CommunicationsPresenter.go(communications.communications)
 
   return {
     activeTab: 'communications',
     ...commonData,
-    communications: []
+    ...communicationsData
   }
 }
 
