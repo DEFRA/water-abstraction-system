@@ -15,12 +15,12 @@ const Joi = require('joi')
  * When editing the aggregate factor or the charge adjustment on the charge reference, the user input boxes are
  * pre-populated with the current value for both. The user must overwrite this value with there own value to amend the
  * adjustments.
- * The validation happening here it to ensure that the adjustments have been entered. Both have a
+ * The validation happening here is to ensure that the adjustments have been entered. Both have a
  * minimum value of 0 and a maximum value of 1, and they both get validated to either 2 or 15 decimal places.
  *
  * @param {Object} payload - The payload from the request to be validated
  * @param {Number} maxNumberOfDecimals - The maximum number of decimal places the factor can be validated to
- * @param {String} validationType - The type of factor being validated, this it to add to the validation messages
+ * @param {String} validationType - The type of factor being validated, this is to add to the validation messages
  *
  * @returns {Object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
@@ -37,14 +37,16 @@ function go (payload, maxNumberOfDecimals, validationType) {
  * represents the part after. By assessing if the length of the second string is less than 3 or 16, we can validate if
  * there the correct number of decimals.
  */
-function customValidation (quantity, helpers, maxNumberOfDecimals, validationType) {
+function _customValidation (quantity, helpers, maxNumberOfDecimals, validationType) {
   const quantityParts = quantity.toString().split('.')
 
   if (quantityParts.length === 1 || quantityParts[1].length <= maxNumberOfDecimals) {
     return quantity
   }
 
-  return helpers.message({ custom: `The ${validationType} must contain no more than ${maxNumberOfDecimals} decimal places` })
+  return helpers.message({
+    custom: `The ${validationType} must contain no more than ${maxNumberOfDecimals} decimal places`
+  })
 }
 
 function _validate (quantity, maxNumberOfDecimals, validationType) {
@@ -55,18 +57,18 @@ function _validate (quantity, maxNumberOfDecimals, validationType) {
       .max(1)
       .required()
       .messages({
-        'number.unsafe': `The ${validationType} factor must be a number`,
-        'number.max': `The ${validationType} factor must be less than 1`,
-        'number.min': `The ${validationType} factor must be greater than 0`,
         'number.base': `The ${validationType} factor must be a number`,
+        'number.unsafe': `The ${validationType} factor must be a number`,
+        'number.min': `The ${validationType} factor must be greater than 0`,
+        'number.max': `The ${validationType} factor must be less than 1`,
         'any.required': `Enter a ${validationType} factor`
       })
   })
 
   const validation = schema.validate({ quantity }, { abortEarly: false })
 
-  // The first check we are doing is validating that a number has been inputted. If it has then we can move onto our
-  // next check for if there are less than the given amount of decimal places
+  // The first check we are doing is validating that a number has been inputted. If it is a number then we can move onto
+  // checking if there are a valid number of decimal places
   if (!validation.error) {
     return _validateDecimals(quantity, maxNumberOfDecimals, validationType)
   }
@@ -76,7 +78,7 @@ function _validate (quantity, maxNumberOfDecimals, validationType) {
 
 function _validateDecimals (quantity, maxNumberOfDecimals, validationType) {
   const decimalSchema = Joi.number().custom((value, helpers) => {
-    return customValidation(value, helpers, maxNumberOfDecimals, validationType)
+    return _customValidation(value, helpers, maxNumberOfDecimals, validationType)
   })
 
   return decimalSchema.validate(quantity)
