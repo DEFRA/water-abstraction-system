@@ -21,8 +21,8 @@ function go (communications) {
 function _communications (communications) {
   return communications.map((communication) => {
     return {
-      sender: communication.issuer,
-      sent: formatLongDate(communication.createdAt)
+      sender: communication.event.issuer,
+      sent: formatLongDate(communication.event.createdAt)
     }
   })
 }

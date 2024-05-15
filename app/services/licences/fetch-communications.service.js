@@ -6,6 +6,7 @@
  */
 
 const EventModel = require('../../models/event.model.js')
+const ScheduledNotificationModel = require('../../models/scheduled-notification.model.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
@@ -24,16 +25,20 @@ async function go (licenceRef, page) {
 }
 
 async function _fetch (licenceRef, page) {
-  const data = await EventModel.query()
-    .select([
-      'created_at',
-      'metadata',
-      'type',
-      'subtype',
-      'status',
-      'issuer'
-    ])
+  const data = await ScheduledNotificationModel.query()
     .where('licences', '@>', `["${licenceRef}"]`)
+    .whereNotNull('eventId')
+    .withGraphFetched('event')
+    .modifyGraph('event', (builder) => {
+      builder.select([
+        'created_at',
+        'metadata',
+        'type',
+        'subtype',
+        'status',
+        'issuer'
+      ]).where('licences', '@>', `["${licenceRef}"]`)
+    })
     .page(page - 1, DatabaseConfig.defaultPageSize)
 
   return data
