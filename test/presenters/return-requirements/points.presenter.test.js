@@ -44,11 +44,16 @@ describe('Return Requirements - Points presenter', () => {
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePoints: [
-          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
-          'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)',
-          'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
-        ],
+        licencePoints: [{
+          id: '1234',
+          description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+        }, {
+          id: '1235',
+          description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
+        }, {
+          id: '1236',
+          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
+        }],
         licenceRef: '01/ABC',
         points: '',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
@@ -87,7 +92,10 @@ describe('Return Requirements - Points presenter', () => {
       it("returns a 'At National Grid Reference ...' point", () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
-        expect(result.licencePoints).to.equal(['At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'])
+        expect(result.licencePoints).to.equal([{
+          id: '1234',
+          description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+        }])
       })
     })
 
@@ -99,7 +107,10 @@ describe('Return Requirements - Points presenter', () => {
       it("returns a 'Between National Grid References ...' point", () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
-        expect(result.licencePoints).to.equal(['Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'])
+        expect(result.licencePoints).to.equal([{
+          id: '1235',
+          description: 'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
+        }])
       })
     })
 
@@ -111,7 +122,10 @@ describe('Return Requirements - Points presenter', () => {
       it("returns a 'Within the area formed by the straight lines running between National Grid References ...' point", () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
-        expect(result.licencePoints).to.equal(['Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'])
+        expect(result.licencePoints).to.equal([{
+          id: '1236',
+          description: 'Within the area formed by the straight lines running between National Grid References NZ 892 055 NZ 895 054 NZ 893 053 and NZ 892 053 (AREA D)'
+        }])
       })
     })
   })
@@ -120,15 +134,15 @@ describe('Return Requirements - Points presenter', () => {
     describe('when the user has previously submitted points', () => {
       beforeEach(() => {
         session.requirements[0].points = [
-          'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)',
-          'Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)'
+          '1234',
+          '1235'
         ]
       })
 
       it('returns a populated points', () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
-        expect(result.points).to.equal('At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE),Between National Grid References SO 524 692 and SO 531 689 (KIRKENEL FARM ASHFORD CARBONEL - RIVER TEME)')
+        expect(result.points).to.equal('1234,1235')
       })
     })
 
@@ -145,6 +159,7 @@ describe('Return Requirements - Points presenter', () => {
 function _pointsData () {
   return [
     {
+      ID: '1234',
       NGR1_EAST: '69212',
       NGR2_EAST: 'null',
       NGR3_EAST: 'null',
@@ -160,6 +175,7 @@ function _pointsData () {
       NGR4_SHEET: 'null'
     },
     {
+      ID: '1235',
       NGR1_EAST: '524',
       NGR2_EAST: '531',
       NGR3_EAST: 'null',
@@ -175,6 +191,7 @@ function _pointsData () {
       NGR4_SHEET: 'null'
     },
     {
+      ID: '1236',
       NGR1_EAST: '892',
       NGR2_EAST: '895',
       NGR3_EAST: '893',
