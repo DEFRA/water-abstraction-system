@@ -343,6 +343,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/remove/{requirementIndex}',
+    handler: ReturnRequirementsController.remove,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'You are about to remove these requirements for returns'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/remove/{requirementIndex}',
+    handler: ReturnRequirementsController.submitRemove,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit you are about to remove these requirements for returns'
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/returns-cycle/{requirementIndex}',
     handler: ReturnRequirementsController.returnsCycle,
     options: {
