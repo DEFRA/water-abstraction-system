@@ -281,6 +281,7 @@ describe('Return requirements controller', () => {
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'You are about to remove these requirements for returns'
       })
     })
+
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(_options('remove', 0))
