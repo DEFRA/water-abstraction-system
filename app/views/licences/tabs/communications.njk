@@ -1,0 +1,28 @@
+<h2 class="govuk-heading-l">Communications</h2>
+
+{% if communications.length == 0 %}
+  <p> No communications for this licence. </p>
+{% endif %}
+
+{% if communications.length > 0 %}
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Type</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Sent</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Sender</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Method</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    {% for communication in communications %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ communication.Type }}</td>
+        <td class="govuk-table__cell">{{ communication.Sent }}</td>
+        <td class="govuk-table__cell">{{ communication.Sender }}</td>
+        <td class="govuk-table__cell">{{ communication.Method }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
