@@ -51,7 +51,7 @@ describe('Return Requirements - Additional Submission Options service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        additionalSubmissionOptions: '',
+        additionalSubmissionOptions: [],
         backLink: `/system/return-requirements/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
