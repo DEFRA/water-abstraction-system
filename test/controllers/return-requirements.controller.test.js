@@ -72,7 +72,7 @@ describe('Return requirements controller', () => {
     beforeEach(async () => {
       Sinon.stub(AdditionalSubmissionOptionsService, 'go').resolves({
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
-        pageTitle: 'Select any additional submission options for the requirements for returns'
+        pageTitle: 'Select any additional submission options for the return requirements'
       })
     })
 
@@ -81,7 +81,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('additional-submission-options'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Select any additional submission options for the requirements for returns')
+        expect(response.payload).to.contain('Select any additional submission options for the return requirements')
       })
     })
   })

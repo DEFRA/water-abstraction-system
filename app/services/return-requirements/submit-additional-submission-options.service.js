@@ -77,7 +77,7 @@ async function _save (session, payload) {
 }
 
 function _submittedSessionData (session, payload) {
-  session.additionalSubmissionOptions = payload['additional-submission-options'] || null
+  session.additionalSubmissionOptions = payload['additional-submission-options'] || ''
 
   return AdditionalSubmissionOptionsPresenter.go(session)
 }

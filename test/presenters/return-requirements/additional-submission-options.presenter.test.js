@@ -63,7 +63,7 @@ describe('Return Requirements - Additional Submission Options presenter', () => 
       it('returns the options', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.equal(['multiple-upload'])
+        expect(result.additionalSubmissionOptions).to.equal('multiple-upload')
       })
     })
 

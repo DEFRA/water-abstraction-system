@@ -59,6 +59,7 @@ describe('Return Requirements - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        additionalSubmissionOptions: '',
         notification: undefined,
         journey: 'returns-required',
         licenceRef: '01/ABC',
