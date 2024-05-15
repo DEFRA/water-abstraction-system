@@ -19,14 +19,14 @@ const Joi = require('joi')
  * @returns {Object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-function go (options) {
+function go (payload) {
   /**
   * NOTE: When a single point is checked by a user, it returns as a string.
   * When multiple additionalSubmissionOptions are checked, the 'payload' is returned as an array.
-  * To make Joi validation straightforward, if the 'payload[additional-submission-options]' is a string,
+  * To make Joi validation straightforward, if the "payload['additional-submission-options']" is a string,
   * it is turned into an array and validated as such.
   */
-  const additionalSubmissionOptions = options
+  const additionalSubmissionOptions = payload['additional-submission-options']
 
   const errorMessage = 'Select additional submission options for the requirements for returns'
 

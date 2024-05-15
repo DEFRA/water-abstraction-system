@@ -28,7 +28,8 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const options = _ensureIsArray(payload['additional-submission-options'])
-  const validationResult = _validate(options)
+  payload['additional-submission-options'] = options
+  const validationResult = _validate(payload)
 
   if (!validationResult) {
     const notification = _notification(session, options)
