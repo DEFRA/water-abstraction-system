@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Model for events (water.events)
- * @module EventModel
+ * Model for scheduled notifications (water.scheduled_notification)
+ * @module ScheduledNotificationModel
  */
 
 const BaseModel = require('./base.model.js')

@@ -23,10 +23,6 @@ describe('Scheduled Notification model', () => {
     await DatabaseSupport.clean()
 
     testRecord = await ScheduledNotificationHelper.add()
-
-    await EventHelper.add({
-      id: testRecord.eventId
-    })
   })
 
   describe('Basic query', () => {
