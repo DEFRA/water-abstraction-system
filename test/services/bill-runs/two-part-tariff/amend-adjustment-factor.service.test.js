@@ -12,41 +12,38 @@ const { expect } = Code
 const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-charge-reference.service.js')
 
 // Thing under test
-const ChargeReferenceDetailsService = require('../../../../app/services/bill-runs/two-part-tariff/charge-reference-details.service.js')
+const AmendAdjustmentFactorService = require('../../../../app/services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
 
-describe('Charge Reference Details Service', () => {
+describe('Amend Adjustment Factor Service', () => {
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when given a billRun, licence and chargeReference ID', () => {
+  describe('when given a billRun, licence and a reviewChargeReferenceId', () => {
     const reviewChargeReferenceId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
     const billRunId = 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e'
     const licenceId = '9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
-
-    let yarStub
 
     beforeEach(() => {
       Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves({
         billRun: _billRun(),
         reviewChargeReference: _reviewChargeReferenceData()
       })
-
-      yarStub = { flash: Sinon.stub().returns(['Adjustment updated']) }
     })
 
     it('will fetch the charge reference data and return it once formatted by the presenter', async () => {
-      const result = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId, yarStub)
+      const result = await AmendAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReferenceId)
 
-      expect(result.bannerMessage).to.equal('Adjustment updated')
-
-      // NOTE: The service mainly just regurgitates what the ChargeReferencePresenter returns. So, we don't diligently
-      // check each property of the result because we know this will have been covered by the ChargeReferencePresenter
+      // NOTE: The service mainly just regurgitates what the AmendAdjustmentFactorPresenter returns. So, we don't
+      // diligently check each property of the result because we know this will have been covered by the
+      // AmendAdjustmentFactorPresenter
       expect(FetchReviewChargeReferenceService.go.called).to.be.true()
       expect(result.billRunId).to.equal('cc4bbb18-0d6a-4254-ac2c-7409de814d7e')
       expect(result.licenceId).to.equal('9a8a148d-b71e-463c-bea8-bc5e0a5d95e2')
       expect(result.financialYear).to.equal('2022 to 2023')
-      expect(result.chargeReference.reference).to.equal('4.6.12')
+      expect(result.chargeReference.description).to.equal(
+        'High loss, non-tidal, restricted water, greater than 15 up to and including 50 ML/yr, Tier 2 model'
+      )
     })
   })
 })
