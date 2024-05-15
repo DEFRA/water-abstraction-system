@@ -364,7 +364,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'You are about to remove these requirements for returns'
+      description: 'Submit you are about to remove these requirements for returns'
     }
   },
   {
