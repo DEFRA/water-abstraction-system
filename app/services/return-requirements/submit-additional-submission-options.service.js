@@ -27,14 +27,12 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
-
-  payload['additional-submission-options'] = _ensureIsArray(payload['additional-submission-options'])
-
-  const validationResult = _validate(payload)
+  const options = _ensureIsArray(payload['additional-submission-options'])
+  const validationResult = _validate(options)
 
   if (!validationResult) {
-    const notification = _notification(session, payload['additional-submission-options'])
-    await _save(session, payload)
+    const notification = _notification(session, options)
+    await _save(session, options)
 
     if (notification) {
       yar.flash('notification', notification)
@@ -43,7 +41,7 @@ async function go (sessionId, payload, yar) {
     return {}
   }
 
-  const submittedSessionData = _submittedSessionData(session, payload)
+  const submittedSessionData = _submittedSessionData(session, options)
 
   return {
     activeNavBar: 'search',
@@ -57,10 +55,10 @@ function _ensureIsArray (options) {
   return Array.isArray(options) ? options : [options]
 }
 
-function _notification (session, newOptions) {
+function _notification (session, options) {
   const additionalSubmissionOptions = session?.additionalSubmissionOptions
 
-  if (additionalSubmissionOptions !== newOptions) {
+  if (additionalSubmissionOptions !== options) {
     return {
       text: 'Changes updated',
       title: 'Updated'
@@ -70,14 +68,14 @@ function _notification (session, newOptions) {
   return null
 }
 
-async function _save (session, payload) {
-  session.additionalSubmissionOptions = payload['additional-submission-options']
+async function _save (session, options) {
+  session.additionalSubmissionOptions = options
 
   return session.$update()
 }
 
-function _submittedSessionData (session, payload) {
-  session.additionalSubmissionOptions = payload['additional-submission-options'] ?? []
+function _submittedSessionData (session, options) {
+  session.additionalSubmissionOptions = options ?? []
 
   return AdditionalSubmissionOptionsPresenter.go(session)
 }
