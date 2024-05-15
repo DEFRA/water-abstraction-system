@@ -49,7 +49,7 @@ describe('Return Requirements - Add service', () => {
       expect(refreshedSession.data.requirements).to.equal([{}, {}])
     })
 
-    it('returns the index of the the new requirement', async () => {
+    it('returns the index of the new requirement', async () => {
       const result = await AddService.go(session.id)
 
       expect(result).to.equal(1)
