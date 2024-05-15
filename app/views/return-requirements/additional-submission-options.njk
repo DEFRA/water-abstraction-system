@@ -54,7 +54,7 @@
           {
             value: "multiple-upload",
             text: "Multiple upload",
-            checked: "multiple-upload" in additionalSubmissionOptions
+            checked: additionalSubmissionOptions.includes("multiple-upload")
           },
           {
             divider: "or"
@@ -62,7 +62,7 @@
           {
             value: "none",
             text: "None",
-            checked: "none" in additionalSubmissionOptions,
+            checked: additionalSubmissionOptions.includes("none"),
             behaviour: "exclusive"
           }
         ]

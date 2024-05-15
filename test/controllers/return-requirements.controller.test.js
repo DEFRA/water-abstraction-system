@@ -72,7 +72,8 @@ describe('Return requirements controller', () => {
     beforeEach(async () => {
       Sinon.stub(AdditionalSubmissionOptionsService, 'go').resolves({
         id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
-        pageTitle: 'Select any additional submission options for the return requirements'
+        pageTitle: 'Select any additional submission options for the return requirements',
+        additionalSubmissionOptions: []
       })
     })
 

@@ -12,7 +12,7 @@ function go (session) {
   const { additionalSubmissionOptions, id: sessionId, journey, licence, note, reason } = session
 
   return {
-    additionalSubmissionOptions: additionalSubmissionOptions ? additionalSubmissionOptions.join(',') : '',
+    additionalSubmissionOptions: additionalSubmissionOptions ?? [],
     journey,
     licenceRef: licence.licenceRef,
     note: note ? note.content : null,

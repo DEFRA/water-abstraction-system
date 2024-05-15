@@ -37,7 +37,7 @@ describe('Return Requirements - Check presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
-        additionalSubmissionOptions: '',
+        additionalSubmissionOptions: [],
         journey: 'returns-required',
         licenceRef: '01/ABC',
         note: null,
@@ -60,7 +60,7 @@ describe('Return Requirements - Check presenter', () => {
       it('returns a checked option', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.equal('multiple-upload')
+        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
       })
     })
 
@@ -68,7 +68,7 @@ describe('Return Requirements - Check presenter', () => {
       it('returns no options', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.equal('')
+        expect(result.additionalSubmissionOptions).to.be.empty()
       })
     })
   })

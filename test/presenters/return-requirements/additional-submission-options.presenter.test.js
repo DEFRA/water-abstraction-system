@@ -39,7 +39,7 @@ describe('Return Requirements - Additional Submission Options presenter', () => 
       expect(result).to.be.equal({
         backLink: `/system/return-requirements/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        additionalSubmissionOptions: '',
+        additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
         sessionId: session.id
       })
@@ -63,7 +63,7 @@ describe('Return Requirements - Additional Submission Options presenter', () => 
       it('returns the options', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.equal('multiple-upload')
+        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
       })
     })
 
@@ -71,7 +71,7 @@ describe('Return Requirements - Additional Submission Options presenter', () => 
       it('returns empty options', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.additionalSubmissionOptions).to.be.equal('')
+        expect(result.additionalSubmissionOptions).to.be.empty()
       })
     })
   })

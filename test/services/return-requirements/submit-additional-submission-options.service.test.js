@@ -139,7 +139,7 @@ describe('Return Requirements - Submit Additional Submission Options service', (
           backLink: `/system/return-requirements/${session.id}/check`,
           pageTitle: 'Select any additional submission options for the return requirements',
           licenceRef: '01/ABC',
-          additionalSubmissionOptions: ''
+          additionalSubmissionOptions: [undefined]
         }, { skip: ['id', 'sessionId', 'error', 'licenceId'] })
       })
 
