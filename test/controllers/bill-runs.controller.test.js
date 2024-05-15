@@ -349,19 +349,40 @@ describe('Bill Runs controller', () => {
 
   describe('/bill-runs/{id}/review', () => {
     describe('GET', () => {
-      beforeEach(async () => {
-        options = _options('GET', 'review')
-      })
+      let ReviewBillRunServiceStub
 
-      describe('when a request is valid', () => {
+      describe('when a request is valid with no pagination', () => {
         beforeEach(() => {
-          Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
+          options = _options('GET', 'review')
+          ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
         })
 
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
+          const ReviewBillRunServiceArgs = ReviewBillRunServiceStub.args[0]
 
           expect(response.statusCode).to.equal(200)
+          expect(ReviewBillRunServiceArgs[0]).to.equal('97db1a27-8308-4aba-b463-8a6af2558b28')
+          expect(ReviewBillRunServiceArgs[1]).to.equal(undefined)
+          expect(response.payload).to.contain('two-part tariff')
+          expect(response.payload).to.contain('Southern (Test replica)')
+          expect(response.payload).to.contain('Showing all 2 licences')
+        })
+      })
+
+      describe('when a request is valid with pagination', () => {
+        beforeEach(() => {
+          options = _options('GET', 'review?page=2')
+          ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+          const ReviewBillRunServiceArgs = ReviewBillRunServiceStub.args[0]
+
+          expect(response.statusCode).to.equal(200)
+          expect(ReviewBillRunServiceArgs[0]).to.equal('97db1a27-8308-4aba-b463-8a6af2558b28')
+          expect(ReviewBillRunServiceArgs[1]).to.equal('2')
           expect(response.payload).to.contain('two-part tariff')
           expect(response.payload).to.contain('Southern (Test replica)')
           expect(response.payload).to.contain('Showing all 2 licences')
