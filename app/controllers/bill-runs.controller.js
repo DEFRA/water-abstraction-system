@@ -129,10 +129,11 @@ async function removeLicence (request, h) {
 
 async function review (request, h) {
   const { id } = request.params
-  const pageData = await ReviewBillRunService.go(id, request.yar)
+  const { page } = request.query
+
+  const pageData = await ReviewBillRunService.go(id, page, request.yar)
 
   return h.view('bill-runs/review.njk', {
-    pageTitle: 'Review licences',
     activeNavBar: 'bill-runs',
     ...pageData
   })
