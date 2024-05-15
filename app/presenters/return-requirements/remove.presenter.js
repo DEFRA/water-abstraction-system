@@ -23,7 +23,7 @@ function go (session, requirementIndex) {
     backLink: _backLink(session),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
-    returnRequirement: _formattedReturnRequirement(requirement) ? _formattedReturnRequirement(requirement) : null,
+    returnRequirement: _formattedReturnRequirement(requirement),
     sessionId,
     startDate: _startDate(session)
   }
@@ -36,21 +36,15 @@ function _backLink (session) {
 }
 
 function _formattedReturnRequirement (requirement) {
-  if (!requirement.returnsCycle) {
-    return null
-  }
+  const { frequencyReported, returnsCycle, siteDescription } = requirement
+  const cycle = returnsCycle === 'summer' ? 'Summer' : 'Winter and all year'
 
-  let returnsCycle = requirement.returnsCycle.charAt(0).toUpperCase() + requirement.returnsCycle.slice(1)
-  returnsCycle = returnsCycle.replaceAll('-', ' ')
-
-  const { frequencyReported } = requirement
-  const { siteDescription } = requirement
-
-  return `${returnsCycle} ${frequencyReported} requirements for returns, ${siteDescription}.`
+  return `${cycle} ${frequencyReported} requirements for returns, ${siteDescription}.`
 }
 
 function _startDate (session) {
   const selectedOption = session.startDateOptions
+
   let date
 
   if (selectedOption === 'licenceStartDate') {
