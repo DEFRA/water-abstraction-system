@@ -48,5 +48,11 @@ describe('Return Requirements - Add service', () => {
       expect(refreshedSession.data.requirements.length).to.equal(2)
       expect(refreshedSession.data.requirements).to.equal([{}, {}])
     })
+
+    it('returns the index of the the new requirement', async () => {
+      const result = await AddService.go(session.id)
+
+      expect(result).to.equal(1)
+    })
   })
 })
