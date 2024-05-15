@@ -20,7 +20,7 @@ const SessionModel = require('../../models/session.model.js')
 async function go (sessionId, requirementIndex) {
   const session = await SessionModel.query().findById(sessionId)
 
-  return await _removeRequirementFromSession(session, requirementIndex)
+  return _removeRequirementFromSession(session, requirementIndex)
 }
 
 async function _removeRequirementFromSession (session, requirementIndex) {
