@@ -19,6 +19,7 @@ const FrequencyReportedService = require('../../app/services/return-requirements
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../../app/services/return-requirements/note.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
+const RemoveService = require('../../app/services/return-requirements/remove.service.js')
 const ReturnCycleService = require('../../app/services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../../app/services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../../app/services/return-requirements/reason.service.js')
@@ -270,6 +271,23 @@ describe('Return requirements controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select the reason for the requirements for returns')
+      })
+    })
+  })
+
+  describe('GET /return-requirements/{sessionId}/remove', () => {
+    beforeEach(async () => {
+      Sinon.stub(RemoveService, 'go').resolves({
+        id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'You are about to remove these requirements for returns'
+      })
+    })
+
+    describe('when the request succeeds', () => {
+      it('returns the page successfully', async () => {
+        const response = await server.inject(_options('remove', 0))
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('You are about to remove these requirements for returns')
       })
     })
   })
