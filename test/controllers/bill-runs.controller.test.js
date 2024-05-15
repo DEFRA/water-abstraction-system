@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const AmendAdjustmentFactorService = require('../../app/services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
 const AmendBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const Boom = require('@hapi/boom')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
@@ -20,6 +21,7 @@ const ReviewBillRunService = require('../../app/services/bill-runs/two-part-tari
 const ReviewLicenceService = require('../../app/services/bill-runs/two-part-tariff/review-licence.service.js')
 const SendBillRunService = require('../../app/services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../../app/services/bill-runs/start-bill-run-process.service.js')
+const SubmitAmendedAdjustmentFactorService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
 const SubmitAmendedBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../../app/services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
@@ -349,19 +351,40 @@ describe('Bill Runs controller', () => {
 
   describe('/bill-runs/{id}/review', () => {
     describe('GET', () => {
-      beforeEach(async () => {
-        options = _options('GET', 'review')
-      })
+      let ReviewBillRunServiceStub
 
-      describe('when a request is valid', () => {
+      describe('when a request is valid with no pagination', () => {
         beforeEach(() => {
-          Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
+          options = _options('GET', 'review')
+          ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
         })
 
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
+          const ReviewBillRunServiceArgs = ReviewBillRunServiceStub.args[0]
 
           expect(response.statusCode).to.equal(200)
+          expect(ReviewBillRunServiceArgs[0]).to.equal('97db1a27-8308-4aba-b463-8a6af2558b28')
+          expect(ReviewBillRunServiceArgs[1]).to.equal(undefined)
+          expect(response.payload).to.contain('two-part tariff')
+          expect(response.payload).to.contain('Southern (Test replica)')
+          expect(response.payload).to.contain('Showing all 2 licences')
+        })
+      })
+
+      describe('when a request is valid with pagination', () => {
+        beforeEach(() => {
+          options = _options('GET', 'review?page=2')
+          ReviewBillRunServiceStub = Sinon.stub(ReviewBillRunService, 'go').resolves(_reviewBillRunData())
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+          const ReviewBillRunServiceArgs = ReviewBillRunServiceStub.args[0]
+
+          expect(response.statusCode).to.equal(200)
+          expect(ReviewBillRunServiceArgs[0]).to.equal('97db1a27-8308-4aba-b463-8a6af2558b28')
+          expect(ReviewBillRunServiceArgs[1]).to.equal('2')
           expect(response.payload).to.contain('two-part tariff')
           expect(response.payload).to.contain('Southern (Test replica)')
           expect(response.payload).to.contain('Showing all 2 licences')
@@ -453,6 +476,71 @@ describe('Bill Runs controller', () => {
           expect(response.payload).to.contain('4.6.24')
           expect(response.payload).to.contain('Total billable returns')
           expect(response.payload).to.contain('Aggregate factor (0.5)')
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _options(
+          'GET',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-adjustment-factor')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(AmendAdjustmentFactorService, 'go').resolves(_chargeReferenceData())
+        })
+
+        it('returns a 200 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.contain('High loss, non-tidal, restricted water, greater than 85 up to and including 120 ML/yr')
+          expect(response.payload).to.contain('Set the adjustment factors')
+          expect(response.payload).to.contain('Aggregate factor (optional)')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        options = _options(
+          'POST',
+          'review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2/amend-adjustment-factor'
+        )
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(async () => {
+          Sinon.stub(SubmitAmendedAdjustmentFactorService, 'go').resolves(_chargeReferenceData())
+        })
+
+        it('redirects to the charge reference details page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(
+            '/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/cc4bbb18-0d6a-4254-ac2c-7409de814d7e/charge-reference-details/9a8a148d-b71e-463c-bea8-bc5e0a5d95e2'
+          )
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the sending service threw an error', () => {
+          beforeEach(async () => {
+            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(SubmitAmendedBillableReturnsService, 'go').rejects()
+          })
+
+          it('returns the error page', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+          })
         })
       })
     })

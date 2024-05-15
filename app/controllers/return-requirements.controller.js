@@ -15,6 +15,7 @@ const FrequencyReportedService = require('../services/return-requirements/freque
 const NoReturnsRequiredService = require('../services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../services/return-requirements/note.service.js')
 const PointsService = require('../services/return-requirements/points.service.js')
+const RemoveService = require('../services/return-requirements/remove.service.js')
 const ReturnsCycleService = require('../services/return-requirements/returns-cycle.service.js')
 const SelectPurposeService = require('../services/return-requirements/purpose.service.js')
 const SelectReasonService = require('../services/return-requirements/reason.service.js')
@@ -33,6 +34,7 @@ const SubmitNoteService = require('../services/return-requirements/submit-note.s
 const SubmitPointsService = require('../services/return-requirements/submit-points.service.js')
 const SubmitPurposeService = require('../services/return-requirements/submit-purpose.service.js')
 const SubmitReasonService = require('../services/return-requirements/submit-reason.service.js')
+const SubmitRemoveService = require('../services/return-requirements/submit-remove.service.js')
 const SubmitReturnsCycleService = require('../services/return-requirements/submit-returns-cycle.service.js')
 const SubmitSetupService = require('../services/return-requirements/submit-setup.service.js')
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
@@ -172,6 +174,16 @@ async function reason (request, h) {
   const pageData = await SelectReasonService.go(sessionId)
 
   return h.view('return-requirements/reason.njk', {
+    ...pageData
+  })
+}
+
+async function remove (request, h) {
+  const { requirementIndex, sessionId } = request.params
+
+  const pageData = await RemoveService.go(sessionId, requirementIndex)
+
+  return h.view('return-requirements/remove.njk', {
     ...pageData
   })
 }
@@ -372,6 +384,14 @@ async function submitReason (request, h) {
   return h.redirect(`/system/return-requirements/${sessionId}/setup`)
 }
 
+async function submitRemove (request, h) {
+  const { requirementIndex, sessionId } = request.params
+
+  await SubmitRemoveService.go(sessionId, requirementIndex)
+
+  return h.redirect(`/system/return-requirements/${sessionId}/check`)
+}
+
 async function submitReturnsCycle (request, h) {
   const { requirementIndex, sessionId } = request.params
 
@@ -451,6 +471,7 @@ module.exports = {
   points,
   purpose,
   reason,
+  remove,
   returnsCycle,
   setup,
   siteDescription,
@@ -467,6 +488,7 @@ module.exports = {
   submitPoints,
   submitPurpose,
   submitReason,
+  submitRemove,
   submitReturnsCycle,
   submitSetup,
   submitSiteDescription,

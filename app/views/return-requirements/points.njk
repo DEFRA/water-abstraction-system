@@ -42,9 +42,9 @@
       {% for point in licencePoints %}
 
         {% set checkBoxItem = {
-          value: point,
-          text: point,
-          checked: point in points
+          value: point.id,
+          text: point.description,
+          checked: point.id in points
         } %}
 
         {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}
