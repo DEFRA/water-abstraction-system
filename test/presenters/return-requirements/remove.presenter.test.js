@@ -28,8 +28,29 @@ describe('Return Requirements - Remove presenter', () => {
         startDate: '2022-04-01T00:00:00.000Z'
       },
       journey: 'returns-required',
-      requirements: [{}],
-      startDateOptions: 'licenceStartDate'
+      requirements: [{
+        points: [
+          'At National Grid Reference TQ 6520 5937 (POINT A, ADDINGTON SANDPITS)'
+        ],
+        purposes: [
+          'Mineral Washing'
+        ],
+        returnsCycle: 'winter-and-all-year',
+        siteDescription: 'Bore hole in rear field',
+        abstractionPeriod: {
+          'end-abstraction-period-day': '31',
+          'end-abstraction-period-month': '10',
+          'start-abstraction-period-day': '1',
+          'start-abstraction-period-month': '4'
+        },
+        frequencyReported: 'monthly',
+        frequencyCollected: 'monthly',
+        agreementsExceptions: [
+          'none'
+        ]
+      }],
+      startDateOptions: 'licenceStartDate',
+      reason: 'major-change'
     }
   })
 
@@ -41,9 +62,10 @@ describe('Return Requirements - Remove presenter', () => {
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
         licenceRef: '01/ABC',
+        returnRequirement: 'Winter and all year monthly requirements for returns, Bore hole in rear field.',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023'
-      }, { skip: ['returnRequirement'] })
+      })
     })
   })
 
