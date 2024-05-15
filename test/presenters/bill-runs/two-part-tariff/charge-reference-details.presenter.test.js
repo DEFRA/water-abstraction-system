@@ -30,6 +30,7 @@ describe('Charge Reference Details presenter', () => {
         chargePeriod: '1 April 2022 to 31 March 2023',
         licenceId: '5aa8e752-1a5c-4b01-9112-d92a543b70d1',
         chargeReference: {
+          id: '89eebffa-28a2-489d-b93a-c0f02a2bdbdd',
           reference: '4.6.12',
           description: 'High loss, non-tidal, restricted water, greater than 15 up to and including 50 ML/yr, Tier 2 model',
           totalBillableReturns: 0.00018,

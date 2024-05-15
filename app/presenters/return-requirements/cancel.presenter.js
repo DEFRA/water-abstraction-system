@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/cancel-requirements` page
+ * Formats data for the `/return-requirements/{sessionId}/cancel` page
  * @module CancelRequirementsPresenter
 */
 
@@ -9,7 +9,7 @@ const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/cancel-requirements` page
+ * Formats data for the `/return-requirements/{sessionId}/cancel` page
  *
  * @param {module:SessionModel} session - The returns requirements session instance
  *
