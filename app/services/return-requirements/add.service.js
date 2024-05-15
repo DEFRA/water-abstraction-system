@@ -1,12 +1,21 @@
 'use strict'
 
 /**
- * Orchestrates adding object to requirements array
+ * Orchestrates adding an empty object to requirements array to the setup session record.
  * @module AddService
  */
 
 const SessionModel = require('../../models/session.model.js')
 
+/**
+ * Orchestrates adding an empty object to requirements array to the setup session record.
+ *
+ * Supports adding another object to the requirements array in the session when a user hits the add requirements button.
+ * It also returns the index of the object added to add the new returns requirements data.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ * @returns {number} - The index of the object in the requirements array
+ */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
