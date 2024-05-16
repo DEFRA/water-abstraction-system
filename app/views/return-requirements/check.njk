@@ -114,7 +114,12 @@
         {% set rowIndex = loop.index0 %}
         <div>
           <h3>{{requirement.siteDescription}}</h3>
-          <p>Remove {{rowIndex}} </p>
+          {{ govukButton({
+            text: "Remove requirement",
+            classes: "govuk-button--warning",
+            preventDoubleClick: true,
+            href: "/system/return-requirements/" + sessionId + "/remove/" + rowIndex
+          }) }}
         </div>
       {% endfor %}
     </div>
