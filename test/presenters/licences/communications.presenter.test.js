@@ -68,6 +68,7 @@ describe('Communications presenter', () => {
           })
         })
       })
+
       describe('when the message ref does not contain pdf', () => {
         it('returns that communication type', () => {
           const result = CommunicationsPresenter.go(communications)
