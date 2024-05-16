@@ -37,7 +37,7 @@ async function _fetch (licenceRef, page) {
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select([
-        'created_at',
+        'createdAt',
         'metadata',
         'type',
         'subtype',
@@ -46,7 +46,7 @@ async function _fetch (licenceRef, page) {
       ])
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
-    .orderBy('send_after', 'desc')
+    .orderBy('sendAfter', 'desc')
 }
 
 module.exports = {
