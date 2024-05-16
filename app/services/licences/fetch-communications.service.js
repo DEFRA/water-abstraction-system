@@ -6,6 +6,7 @@
  */
 
 const ScheduledNotificationModel = require('../../models/scheduled-notification.model.js')
+
 const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
