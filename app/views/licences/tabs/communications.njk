@@ -8,19 +8,31 @@
   <table class="govuk-table">
     <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Type</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Sent</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Sender</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Method</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Type</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Sent</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Sender</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Method</th>
     </tr>
     </thead>
     <tbody class="govuk-table__body">
     {% for communication in communications %}
       <tr class="govuk-table__row">
-        <td class="govuk-table__cell">{{ communication.type }}</td>
+        <td class="govuk-table__cell">{{ communication.type }}
+
+{#          {% if message.isPdf %}
+    {{ message.event.metadata.name }}
+    <span class="govuk-visually-hidden"> sent {{ message.event.created | date }} via {{ message.messageType }}</span>
+  {% else %}
+    <a href="/licences/{{ documentId }}/communications/{{ message.id }}">
+      {{ message.event.metadata.options.sendingAlertType | sentenceCase + ' - ' if message.event.metadata.name == 'Water abstraction alert' else '' }}
+      {{ message.event.metadata.name }}
+      <span class="govuk-visually-hidden"> sent {{ message.event.created | date }} via {{ message.messageType }}</span>
+    </a>
+  {% endif %}#}
+        </td>
         <td class="govuk-table__cell">{{ communication.sent }}</td>
         <td class="govuk-table__cell">{{ communication.sender }}</td>
-        <td class="govuk-table__cell">{{ communication.method }}</td>
+        <td class="govuk-table__cell">{{ communication.method | title}}</td>
       </tr>
     {% endfor %}
     </tbody>

@@ -26,6 +26,10 @@ async function go (licenceRef, page) {
 
 async function _fetch (licenceRef, page) {
   const data = await ScheduledNotificationModel.query()
+    .select([
+      'id',
+      'messageType'
+    ])
     .where('licences', '@>', `["${licenceRef}"]`)
     .whereNotNull('eventId')
     .withGraphFetched('event')
