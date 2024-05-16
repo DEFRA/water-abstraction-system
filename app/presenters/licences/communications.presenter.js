@@ -36,7 +36,7 @@ function _type (communication) {
   return {
     alert: _typeAlert(communication),
     label: communication.event.metadata.name,
-    sentVia: `sent ${formatLongDate(communication.event.createdAt)} via ${communication.messageType}`,
+    sentVia: `sent ${formatLongDate(new Date(communication.event.createdAt))} via ${communication.messageType}`,
     pdf: communication.messageRef.includes('pdf')
   }
 }
@@ -47,7 +47,7 @@ function _communications (communications) {
       id: communication.id,
       type: _type(communication),
       sender: communication.event.issuer,
-      sent: formatLongDate(communication.event.createdAt),
+      sent: formatLongDate(new Date(communication.event.createdAt)),
       method: _sentenceCase(communication.messageType)
     }
   })

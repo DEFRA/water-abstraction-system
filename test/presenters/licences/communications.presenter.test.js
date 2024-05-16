@@ -10,11 +10,27 @@ const { expect } = Code
 // Thing under test
 const CommunicationsPresenter = require('../../../app/presenters/licences/communications.presenter.js')
 
-describe('Communications presenter', () => {
+describe.only('Communications presenter', () => {
   let communications
 
   beforeEach(() => {
-    communications = []
+    communications = [{
+      id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
+      messageType: 'letter',
+      messageRef: 'returns_invitation_licence_holder_letter',
+      event: {
+        createdAt: '2024-05-15T10:27:15.000Z',
+        metadata: {
+          name: 'Returns: invitation',
+          options: {
+          }
+        },
+        type: 'notification',
+        subtype: 'returnInvitation',
+        status: 'processed',
+        issuer: 'admin-internal@wrls.gov.uk'
+      }
+    }]
   })
 
   describe('when provided with populated communications data', () => {
@@ -22,7 +38,57 @@ describe('Communications presenter', () => {
       const result = CommunicationsPresenter.go(communications)
 
       expect(result).to.equal({
-        communications: []
+        communications: [{
+          id: '3ce7d0b6-610f-4cb2-9d4c-9761db797141',
+          method: 'Letter',
+          sender: 'admin-internal@wrls.gov.uk',
+          sent: '15 May 2024',
+          type: {
+            alert: null,
+            label: 'Returns: invitation',
+            pdf: false,
+            sentVia: 'sent 15 May 2024 via letter'
+          }
+        }
+        ]
+      })
+    })
+    describe('the \'messageRef\' property', () => {
+      describe('when the message ref contains pdf', () => {
+        it('returns that communication type', () => {
+          communications[0].messageRef = 'pdf.return_form'
+          const result = CommunicationsPresenter.go(communications)
+
+          expect(result.communications[0].type).to.equal({
+            alert: null,
+            label: 'Returns: invitation',
+            pdf: true,
+            sentVia: 'sent 15 May 2024 via letter'
+          })
+        })
+      })
+      describe('when the message ref does not contain pdf', () => {
+        it('returns that communication type', () => {
+          const result = CommunicationsPresenter.go(communications)
+
+          expect(result.communications[0].type).to.equal({
+            alert: null,
+            label: 'Returns: invitation',
+            pdf: false,
+            sentVia: 'sent 15 May 2024 via letter'
+          })
+        })
+      })
+    })
+
+    describe('the \'messageType\' property', () => {
+      describe('when the message type is present', () => {
+        it('returns the method key in sentence case', () => {
+          communications[0].messageType = 'i AM in senTence case'
+          const result = CommunicationsPresenter.go(communications)
+
+          expect(result.communications[0].method).to.equal('I am in sentence case')
+        })
       })
     })
   })
