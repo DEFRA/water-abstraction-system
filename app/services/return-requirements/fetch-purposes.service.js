@@ -1,30 +1,38 @@
 'use strict'
 
 /**
- * Fetches a licence's purposes needed for `/return-requirements/{sessionId}/purpose` page
+ * Fetches all of the purpose ids
  * @module FetchPurposesService
  */
 
 const PurposeModel = require('../../models/purpose.model.js')
 
 /**
- * Fetches a licence's purposes needed for `/return-requirements/{sessionId}/purpose` page
+ * Fetches all of the purpose ids
  *
- * @param {string} licenceId - The UUID for the licence to fetch
- *
- * @returns {Promise<Object>} The purposes for the matching licenceId
+ * @returns {Promise<Object>} The list of all purpose ids
  */
-async function go (licenceId) {
-  return _fetch(licenceId)
+async function go () {
+  const purposes = await _fetch()
+  const data = _data(purposes)
+
+  return data
 }
 
-async function _fetch (licenceId) {
+function _data (purposes) {
+  const ids = []
+  purposes.forEach((purpose) => {
+    ids.push(purpose.id)
+  })
+
+  return ids
+}
+
+async function _fetch () {
   return PurposeModel.query()
-    .distinct('description')
-    .innerJoin('licenceVersionPurposes', 'purposes.id', 'licenceVersionPurposes.purposeId')
-    .innerJoin('licenceVersions', 'licenceVersionPurposes.licenceVersionId', 'licenceVersions.id')
-    .where('licenceVersions.licenceId', licenceId)
-    .where('licenceVersions.status', 'current')
+    .select([
+      'id'
+    ])
 }
 
 module.exports = {

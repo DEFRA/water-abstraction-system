@@ -22,7 +22,7 @@
       titleText: "There is a problem",
       errorList: [
         {
-          text: "Select any uses for the return requirement",
+          text: error.text,
           href: "#purposes"
         }
       ]
@@ -44,9 +44,9 @@
     {% for purpose in licencePurposes %}
 
       {% set checkBoxItem = {
-        value: purpose,
-        text: purpose,
-        checked: purpose in purposes
+        value: purpose.id,
+        text: purpose.description,
+        checked: purpose.id in purposes
       } %}
 
       {% set checkBoxItems = (checkBoxItems.push(checkBoxItem), checkBoxItems) %}

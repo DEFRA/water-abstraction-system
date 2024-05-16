@@ -10,10 +10,10 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
+const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
+const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
-
-// Things we need to stub
-const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
 
 // Thing under test
 const PurposeService = require('../../../app/services/return-requirements/purpose.service.js')
@@ -21,16 +21,35 @@ const PurposeService = require('../../../app/services/return-requirements/purpos
 describe('Return Requirements - Purpose service', () => {
   const requirementIndex = 0
 
+  let licenceVersion
+  let purposes
   let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
+    // Create the initial licenceVersion
+    licenceVersion = await LicenceVersionHelper.add()
+
+    // Create 3 descriptions for the purposes
+    purposes = await Promise.all([
+      await PurposeHelper.add({ id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' }),
+      await PurposeHelper.add({ id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' })
+    ])
+
+    // Create the licenceVersionPurposes with the purposes and licenceVersion
+    for (const purpose of purposes) {
+      await LicenceVersionPurposeHelper.add({
+        licenceVersionId: licenceVersion.id,
+        purposeId: purpose.id
+      })
+    }
+
     session = await SessionHelper.add({
       data: {
         checkPageVisited: false,
         licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          id: licenceVersion.licenceId,
           currentVersionStartDate: '2023-01-01T00:00:00.000Z',
           endDate: null,
           licenceRef: '01/ABC',
@@ -43,11 +62,6 @@ describe('Return Requirements - Purpose service', () => {
         reason: 'major-change'
       }
     })
-
-    Sinon.stub(FetchPurposesService, 'go').resolves([
-      { description: 'Transfer Between Sources (Pre Water Act 2003)' },
-      { description: 'Potable Water Supply - Direct' }
-    ])
   })
 
   afterEach(() => {
@@ -68,13 +82,14 @@ describe('Return Requirements - Purpose service', () => {
         activeNavBar: 'search',
         pageTitle: 'Select the purpose for the requirements for returns',
         backLink: `/system/return-requirements/${session.id}/setup`,
-        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceId: licenceVersion.licenceId,
         licencePurposes: [
-          'Transfer Between Sources (Pre Water Act 2003)',
-          'Potable Water Supply - Direct'
+          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
         ],
         licenceRef: '01/ABC',
-        purposes: ''
+        purposes: '',
+        sessionId: session.id
       }, { skip: ['sessionId'] })
     })
   })

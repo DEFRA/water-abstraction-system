@@ -40,7 +40,10 @@ function _backLink (session) {
 
 function _licencePurposes (purposesData) {
   return purposesData.map((purpose) => {
-    return purpose.description
+    return {
+      id: purpose.id,
+      description: purpose.description
+    }
   })
 }
 
