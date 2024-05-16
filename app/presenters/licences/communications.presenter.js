@@ -18,25 +18,37 @@ function go (communications) {
   }
 }
 
+function _sentenceCase (text = '') {
+  const sentence = text.toLowerCase()
+
+  return sentence.charAt(0).toUpperCase() + sentence.slice(1)
+}
+
+function _typeAlert (communication) {
+  if (communication.event.metadata.name === 'Water abstraction alert') {
+    return `${_sentenceCase(communication.event.metadata.options.sendingAlertType)} - Water abstraction alert`
+  }
+
+  return null
+}
+
 function _type (communication) {
-//   {#          {% if message.isPdf %}
-//     {{ message.event.metadata.name }}
-//     <span class="govuk-visually-hidden"> sent {{ message.event.created | date }} via {{ message.messageType }}</span>
-//   {% else %}
-//     <a href="/licences/{{ documentId }}/communications/{{ message.id }}">
-//       {{ message.event.metadata.options.sendingAlertType | sentenceCase + ' - ' if message.event.metadata.name == 'Water abstraction alert' else '' }}
-//       {{ message.event.metadata.name }}
-//       <span class="govuk-visually-hidden"> sent {{ message.event.created | date }} via {{ message.messageType }}</span>
-//     </a>
-//   {% endif %}#}
+  return {
+    alert: _typeAlert(communication),
+    label: communication.event.metadata.name,
+    sentVia: `sent ${formatLongDate(communication.event.createdAt)} via ${communication.messageType}`,
+    pdf: communication.messageRef.includes('pdf')
+  }
 }
 
 function _communications (communications) {
   return communications.map((communication) => {
     return {
+      id: communication.id,
+      type: _type(communication),
       sender: communication.event.issuer,
       sent: formatLongDate(communication.event.createdAt),
-      method: communication.messageType.toLowerCase()
+      method: _sentenceCase(communication.messageType)
     }
   })
 }

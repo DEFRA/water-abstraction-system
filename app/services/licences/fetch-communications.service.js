@@ -28,7 +28,8 @@ async function _fetch (licenceRef, page) {
   const data = await ScheduledNotificationModel.query()
     .select([
       'id',
-      'messageType'
+      'messageType',
+      'messageRef'
     ])
     .where('licences', '@>', `["${licenceRef}"]`)
     .whereNotNull('eventId')

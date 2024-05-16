@@ -17,9 +17,20 @@
     <tbody class="govuk-table__body">
     {% for communication in communications %}
       <tr class="govuk-table__row">
-        <td class="govuk-table__cell">{{ communication.type }}
+        <td class="govuk-table__cell">
 
-{#          {% if message.isPdf %}
+          {% if communication.type.pdf %}
+            <p class="govuk-body govuk-!-margin-bottom-0"> {{ communication.type.label }} </p>
+            <span class="govuk-visually-hidden"> {{ communication.type.sentVia }} </span>
+          {% else %}
+            <a href="/licences/{{ documentId }}/communications/{{ communication.id }}">
+              <p class="govuk-body govuk-!-margin-bottom-0"> {{ communication.type.alert }} </p>
+              <p class="govuk-body govuk-!-margin-bottom-0"> {{ communication.type.label }} </p>
+              <span class="govuk-visually-hidden"> {{ communication.type.sentVia }} </span>
+            </a>
+          {% endif %}
+
+          {#          {% if message.isPdf %}
     {{ message.event.metadata.name }}
     <span class="govuk-visually-hidden"> sent {{ message.event.created | date }} via {{ message.messageType }}</span>
   {% else %}
@@ -28,11 +39,11 @@
       {{ message.event.metadata.name }}
       <span class="govuk-visually-hidden"> sent {{ message.event.created | date }} via {{ message.messageType }}</span>
     </a>
-  {% endif %}#}
+  {% endif %} #}
         </td>
         <td class="govuk-table__cell">{{ communication.sent }}</td>
         <td class="govuk-table__cell">{{ communication.sender }}</td>
-        <td class="govuk-table__cell">{{ communication.method | title}}</td>
+        <td class="govuk-table__cell">{{ communication.method | title }}</td>
       </tr>
     {% endfor %}
     </tbody>
