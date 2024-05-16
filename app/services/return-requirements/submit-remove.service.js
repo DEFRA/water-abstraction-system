@@ -14,11 +14,20 @@ const SessionModel = require('../../models/session.model.js')
  * is deleted from the session in the database.
  *
  * @param {string} sessionId - The UUID for the return requirement setup session record
+ * @param {number} requirementIndex - The index of the requirement being removed
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise} the promise returned is not intended to resolve to any particular value
  */
-async function go (sessionId, requirementIndex) {
+async function go (sessionId, requirementIndex, yar) {
   const session = await SessionModel.query().findById(sessionId)
+
+  const notification = {
+    title: 'Removed',
+    text: 'Requirement removed'
+  }
+
+  yar.flash('notification', notification)
 
   return _removeRequirementFromSession(session, requirementIndex)
 }
