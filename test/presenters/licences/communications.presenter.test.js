@@ -82,7 +82,7 @@ describe('Communications presenter', () => {
       })
     })
 
-    describe('the \'messageType\' property', () => {
+    describe("the 'messageType' property", () => {
       describe('when the message type is present', () => {
         it('returns the method key in sentence case', () => {
           communications[0].messageType = 'i AM in senTence case'
