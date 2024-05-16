@@ -5,9 +5,10 @@
  * @module ViewLicenceCommunicationsService
  */
 
-const ViewLicenceService = require('./view-licence.service.js')
-const FetchCommunicationsService = require('./fetch-communications.service.js')
 const CommunicationsPresenter = require('../../presenters/licences/communications.presenter.js')
+const FetchCommunicationsService = require('./fetch-communications.service.js')
+const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const ViewLicenceService = require('./view-licence.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence communications page
@@ -23,10 +24,13 @@ async function go (licenceId, auth, page) {
   const communications = await FetchCommunicationsService.go(commonData.licenceRef, page)
   const communicationsData = CommunicationsPresenter.go(communications.communications)
 
+  const pagination = PaginatorPresenter.go(communications.pagination.total, Number(page), `/system/licences/${licenceId}/communications`)
+
   return {
     activeTab: 'communications',
     ...commonData,
-    ...communicationsData
+    ...communicationsData,
+    pagination
   }
 }
 

@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
+const PaginatorPresenter = require('../../../app/presenters/paginator.presenter.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
@@ -18,10 +19,12 @@ const ViewLicenceCommunicationsService = require('../../../app/services/licences
 describe('View Licence Communications service', () => {
   const auth = {}
   const page = 1
+  const pagination = { page }
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   beforeEach(() => {
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
+    Sinon.stub(PaginatorPresenter, 'go').returns(pagination)
     Sinon.stub(FetchCommunicationsService, 'go').resolves({
       communications: [],
       pagination: { total: 1 }
@@ -39,7 +42,10 @@ describe('View Licence Communications service', () => {
       expect(result).to.equal({
         activeTab: 'communications',
         communications: [],
-        licenceName: 'fake licence'
+        licenceName: 'fake licence',
+        pagination: {
+          page: 1
+        }
       })
     })
   })

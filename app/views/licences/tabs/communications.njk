@@ -1,3 +1,5 @@
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
 <h2 class="govuk-heading-l">Communications</h2>
 
 {% if communications.length == 0 %}
@@ -36,4 +38,8 @@
     {% endfor %}
     </tbody>
   </table>
+{% endif %}
+
+{% if communications.length > 0 and pagination.numberOfPages > 1 %}
+  {{ govukPagination(pagination.component) }}
 {% endif %}
