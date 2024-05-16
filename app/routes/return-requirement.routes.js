@@ -30,6 +30,20 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/add',
+    handler: ReturnRequirementsController.add,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Adds another object to the requirements array in the session'
+    }
+
+  },
+  {
     method: 'GET',
     path: '/return-requirements/{sessionId}/agreements-exceptions/{requirementIndex}',
     handler: ReturnRequirementsController.agreementsExceptions,
@@ -339,6 +353,32 @@ const routes = [
         }
       },
       description: 'Submit the reason for the return requirement'
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-requirements/{sessionId}/remove/{requirementIndex}',
+    handler: ReturnRequirementsController.remove,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'You are about to remove these requirements for returns'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/remove/{requirementIndex}',
+    handler: ReturnRequirementsController.submitRemove,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit you are about to remove these requirements for returns'
     }
   },
   {

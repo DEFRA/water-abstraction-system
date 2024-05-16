@@ -43,6 +43,7 @@ describe('Return Requirements - Check presenter', () => {
         pageTitle: 'Check the return requirements for Turbo Kid',
         reason: 'Major change',
         reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
+        requirements: [],
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023',
         userEmail: 'No notes added'
