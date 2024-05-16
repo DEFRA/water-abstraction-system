@@ -24,7 +24,7 @@ async function go (licenceRef, page) {
 }
 
 async function _fetch (licenceRef, page) {
-  const data = await ScheduledNotificationModel.query()
+  return ScheduledNotificationModel.query()
     .select([
       'id',
       'messageType',
@@ -46,8 +46,6 @@ async function _fetch (licenceRef, page) {
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
     .orderBy('send_after', 'desc')
-
-  return data
 }
 
 module.exports = {
