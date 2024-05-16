@@ -45,7 +45,7 @@ function _customValidation (quantity, helpers, maxNumberOfDecimals, validationTy
   }
 
   return helpers.message({
-    custom: `The ${validationType} must contain no more than ${maxNumberOfDecimals} decimal places`
+    custom: `The ${validationType} factor must not have more than ${maxNumberOfDecimals} decimal places`
   })
 }
 
@@ -60,7 +60,7 @@ function _validate (quantity, maxNumberOfDecimals, validationType) {
         'number.base': `The ${validationType} factor must be a number`,
         'number.unsafe': `The ${validationType} factor must be a number`,
         'number.min': `The ${validationType} factor must be greater than 0`,
-        'number.max': `The ${validationType} factor must be less than 1`,
+        'number.max': `The ${validationType} factor must be equal to or less than 1`,
         'any.required': `Enter a ${validationType} factor`
       })
   })
