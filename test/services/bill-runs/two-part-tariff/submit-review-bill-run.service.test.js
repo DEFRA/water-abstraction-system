@@ -12,6 +12,7 @@ const { expect } = Code
 const SubmitReviewBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/submit-review-bill-run.service.js')
 
 describe('Submit Review Bill Run Service', () => {
+  const billRunId = '27dad88a-6b3c-438b-a25f-f1483e7e12a0'
   let yarStub
 
   beforeEach(() => {
@@ -30,10 +31,11 @@ describe('Submit Review Bill Run Service', () => {
     }
 
     it('will set the cookie with the filter data', async () => {
-      await SubmitReviewBillRunService.go(payload, yarStub)
+      await SubmitReviewBillRunService.go(billRunId, payload, yarStub)
 
       expect(yarStub.clear.called).to.be.false()
       expect(yarStub.set.called).to.be.true()
+      expect(yarStub.set.args[0][0]).to.equal('review-27dad88a-6b3c-438b-a25f-f1483e7e12a0')
       expect(yarStub.set.args[0][1]).to.equal(payload)
     })
   })
@@ -42,9 +44,10 @@ describe('Submit Review Bill Run Service', () => {
     const payload = { clearFilters: 'reset' }
 
     it('will clear the filter data from the cookie', async () => {
-      await SubmitReviewBillRunService.go(payload, yarStub)
+      await SubmitReviewBillRunService.go(billRunId, payload, yarStub)
 
       expect(yarStub.clear.called).to.be.true()
+      expect(yarStub.clear.args[0][0]).to.equal('review-27dad88a-6b3c-438b-a25f-f1483e7e12a0')
       expect(yarStub.set.called).to.be.false()
     })
   })
