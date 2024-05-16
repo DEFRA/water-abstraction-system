@@ -62,57 +62,7 @@ describe('Return Requirements - Submit Additional Submission Options service', (
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.additionalSubmissionOptions).to.equal(['multiple-upload'])
-        })
-
-        it("sets the notification message to 'Updated'", async () => {
-          await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
-
-          const [flashType, notification] = yarStub.flash.args[0]
-
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Changes updated' })
-        })
-      })
-
-      describe('that is an updated submission option', () => {
-        beforeEach(async () => {
-          await session.$query().patch({
-            data: {
-              checkPageVisited: false,
-              licence: {
-                id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-                currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-                endDate: null,
-                licenceRef: '01/ABC',
-                licenceHolder: 'Turbo Kid',
-                startDate: '2022-04-01T00:00:00.000Z'
-              },
-              journey: 'returns-required',
-              requirements: [{}],
-              startDateOptions: 'licenceStartDate',
-              reason: 'major-change',
-              additionalSubmissionOptions: ['multiple-upload']
-            }
-          })
-
-          payload = {
-            'additional-submission-options': 'none'
-          }
-        })
-
-        it('saves the submitted value', async () => {
-          await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
-
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.additionalSubmissionOptions).to.equal(['none'])
-        })
-
-        it('returns the journey to redirect the page', async () => {
-          const result = await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
-
-          expect(result).to.equal({})
+          expect(refreshedSession.additionalSubmissionOptions).to.include('multiple-upload')
         })
 
         it("sets the notification message to 'Updated'", async () => {

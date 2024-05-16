@@ -57,7 +57,7 @@ function _ensureIsArray (options) {
 }
 
 function _notification (session, options) {
-  const additionalSubmissionOptions = session?.additionalSubmissionOptions
+  const { additionalSubmissionOptions } = session ?? {}
 
   if (additionalSubmissionOptions !== options) {
     return {
