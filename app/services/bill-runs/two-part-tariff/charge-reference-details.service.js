@@ -16,19 +16,24 @@ const FetchReviewChargeReferenceService = require('./fetch-review-charge-referen
  * @param {String} billRunId - The UUID for the bill run
  * @param {String} licenceId - The UUID of the licence that is being reviewed
  * @param {String} reviewChargeReferenceId - The UUID of the charge reference being reviewed
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} the 'pageData' needed for the review charge reference page. It contains details of the
  * bill run, charge reference and the charge adjustments
  */
-async function go (billRunId, licenceId, reviewChargeReferenceId) {
+async function go (billRunId, licenceId, reviewChargeReferenceId, yar) {
   const {
     billRun,
     reviewChargeReference
   } = await FetchReviewChargeReferenceService.go(billRunId, reviewChargeReferenceId)
 
+  const [bannerMessage] = yar.flash('banner')
   const pageData = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
-  return pageData
+  return {
+    bannerMessage,
+    ...pageData
+  }
 }
 
 module.exports = {
