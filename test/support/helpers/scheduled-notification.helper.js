@@ -14,6 +14,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  *
  * - `id` - [random UUID]
  * - `event_id` - [random UUID]
+ * - 'notify_status': 'delivered'
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
