@@ -357,7 +357,7 @@ describe('View Bill presenter', () => {
     })
 
     describe("the 'region' property", () => {
-      it("returns the bill run's region display name capitalized", () => {
+      it("returns the bill run's region display name in title case", () => {
         const result = ViewBillPresenter.go(bill, billingAccount)
 
         expect(result.region).to.equal('South West')

@@ -1,27 +1,6 @@
 'use strict'
 
 /**
- * Capitalize the first letter of each word in a string
- *
- * Will work for strings containing multiple words or only one.
- *
- * @param {string} value The string to capitalize
- *
- * @returns {string} The capitalized string
- */
-function capitalize (value) {
-  const words = value.split(' ')
-  const capitalizedWords = []
-
-  words.forEach((word) => {
-    const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1)
-    capitalizedWords.push(capitalizedWord)
-  })
-
-  return capitalizedWords.join(' ')
-}
-
-/**
  * Converts a number which represents pence into pounds by dividing it by 100
  *
  * This is such a simply calculation it could be done in place. But by having it as a named method we make it clear
@@ -52,7 +31,7 @@ function convertPenceToPounds (value) {
 function generateBillRunTitle (regionName, batchType, scheme, summer) {
   const billRunType = formatBillRunType(batchType, scheme, summer)
 
-  return `${capitalize(regionName)} ${billRunType.toLowerCase()}`
+  return `${titleCase(regionName)} ${billRunType.toLowerCase()}`
 }
 
 /**
@@ -99,7 +78,7 @@ function formatAbstractionPeriod (startDay, startMonth, endDay, endMonth) {
  */
 function formatBillRunType (batchType, scheme, summer) {
   if (batchType !== 'two_part_tariff') {
-    return capitalize(batchType)
+    return titleCase(batchType)
   }
 
   if (scheme === 'sroc') {
@@ -246,8 +225,43 @@ function leftPadZeroes (number, length) {
     .padStart(length, '0')
 }
 
+/**
+ * Convert a string to sentence case by lowercasing all characters then capitalizing the first letter
+ *
+ * Will work for strings containing multiple words or only one.
+ *
+ * @param {string} value - The string to title case
+ *
+ * @returns {string} The title cased string
+ */
+function sentenceCase (value) {
+  const sentence = value.toLowerCase()
+
+  return sentence.charAt(0).toUpperCase() + sentence.slice(1)
+}
+
+/**
+ * Convert a string to title case by capitalizing the first letter of each word
+ *
+ * Will work for strings containing multiple words or only one.
+ *
+ * @param {string} value - The string to title case
+ *
+ * @returns {string} The title cased string
+ */
+function titleCase (value) {
+  const words = value.split(' ')
+  const titleCasedWords = []
+
+  words.forEach((word) => {
+    const titleCasedWord = word.charAt(0).toUpperCase() + word.slice(1)
+    titleCasedWords.push(titleCasedWord)
+  })
+
+  return titleCasedWords.join(' ')
+}
+
 module.exports = {
-  capitalize,
   convertPenceToPounds,
   generateBillRunTitle,
   formatAbstractionDate,
@@ -260,5 +274,7 @@ module.exports = {
   formatLongDateTime,
   formatMoney,
   formatPounds,
-  leftPadZeroes
+  leftPadZeroes,
+  sentenceCase,
+  titleCase
 }

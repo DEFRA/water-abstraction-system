@@ -6,9 +6,9 @@
  */
 
 const {
-  capitalize,
   formatLongDate,
-  formatMoney
+  formatMoney,
+  titleCase
 } = require('../base.presenter.js')
 
 function go (bill, billingAccount) {
@@ -36,7 +36,7 @@ function go (bill, billingAccount) {
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
     financialYear: _financialYear(bill),
     flaggedForReissue: bill.flaggedForRebilling,
-    region: capitalize(billRun.region.displayName),
+    region: titleCase(billRun.region.displayName),
     transactionFile: billRun.transactionFileReference
   }
 
@@ -76,7 +76,7 @@ function _billRunType (billRun) {
   const { batchType, summer, scheme } = billRun
 
   if (batchType !== 'two_part_tariff') {
-    return capitalize(batchType)
+    return titleCase(batchType)
   }
 
   if (scheme === 'sroc') {
