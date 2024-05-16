@@ -6,10 +6,10 @@
  */
 
 const {
-  capitalize,
   formatBillRunType,
   formatLongDate,
-  formatMoney
+  formatMoney,
+  titleCase
 } = require('../base.presenter.js')
 
 /**
@@ -40,7 +40,7 @@ function go (billRuns) {
       link: _link(id, status, scheme),
       number: billRunNumber,
       numberOfBills,
-      region: capitalize(region),
+      region: titleCase(region),
       scheme,
       status,
       total: formatMoney(netTotal, true),

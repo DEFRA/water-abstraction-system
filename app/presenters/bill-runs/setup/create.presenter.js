@@ -6,11 +6,11 @@
  */
 
 const {
-  capitalize,
   formatBillRunType,
   formatChargeScheme,
   formatFinancialYear,
-  formatLongDate
+  formatLongDate,
+  titleCase
 } = require('../../base.presenter.js')
 
 const LAST_PRESROC_YEAR = 2022
@@ -48,7 +48,7 @@ function go (session, billRun) {
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
-    region: capitalize(region.displayName),
+    region: titleCase(region.displayName),
     warningMessage: _warningMessage(billRunType, status)
   }
 }

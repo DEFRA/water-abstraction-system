@@ -11,7 +11,7 @@ const { expect } = Code
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
 describe('Base presenter', () => {
-  describe('#capitalize()', () => {
+  describe('#titleCase()', () => {
     let valueToCapitalize
 
     describe('when the value is a single word', () => {
@@ -19,8 +19,8 @@ describe('Base presenter', () => {
         valueToCapitalize = 'high'
       })
 
-      it('correctly returns the value capitalized, for example, High', async () => {
-        const result = BasePresenter.capitalize(valueToCapitalize)
+      it('correctly returns the value in title case, for example, High', async () => {
+        const result = BasePresenter.titleCase(valueToCapitalize)
 
         expect(result).to.equal('High')
       })
@@ -31,8 +31,8 @@ describe('Base presenter', () => {
         valueToCapitalize = 'spray irrigation'
       })
 
-      it('correctly returns the value capitalized, for example, Spray Irrigation', async () => {
-        const result = BasePresenter.capitalize(valueToCapitalize)
+      it('correctly returns the value in title case, for example, Spray Irrigation', async () => {
+        const result = BasePresenter.titleCase(valueToCapitalize)
 
         expect(result).to.equal('Spray Irrigation')
       })
@@ -43,8 +43,8 @@ describe('Base presenter', () => {
         valueToCapitalize = 'spray irrigation - direct'
       })
 
-      it('correctly returns the value capitalized, for example, Spray Irrigation - Direct', async () => {
-        const result = BasePresenter.capitalize(valueToCapitalize)
+      it('correctly returns the value in title case, for example, Spray Irrigation - Direct', async () => {
+        const result = BasePresenter.titleCase(valueToCapitalize)
 
         expect(result).to.equal('Spray Irrigation - Direct')
       })
@@ -56,7 +56,7 @@ describe('Base presenter', () => {
       })
 
       it('correctly returns the value unchanged, for example, SPRAY IRRIGATION', async () => {
-        const result = BasePresenter.capitalize(valueToCapitalize)
+        const result = BasePresenter.titleCase(valueToCapitalize)
 
         expect(result).to.equal('SPRAY IRRIGATION')
       })
