@@ -113,7 +113,7 @@
         {# Set an easier to use index #}
         {% set rowIndex = loop.index0 %}
         <div>
-          <h3>{{requirement.siteDescription}}</h3>
+          <h3 class="govuk-body">{{requirement.siteDescription}}</h3>
           {{ govukButton({
             text: "Remove requirement",
             classes: "govuk-button--warning",
