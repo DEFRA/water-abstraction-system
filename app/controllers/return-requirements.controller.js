@@ -420,7 +420,7 @@ async function submitReason (request, h) {
 async function submitRemove (request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  await SubmitRemoveService.go(sessionId, requirementIndex)
+  await SubmitRemoveService.go(sessionId, requirementIndex, request.yar)
 
   return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
