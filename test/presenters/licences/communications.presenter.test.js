@@ -53,7 +53,8 @@ describe('Communications presenter', () => {
         ]
       })
     })
-    describe('the \'messageRef\' property', () => {
+    
+    describe("the 'messageRef' property", () => {
       describe('when the message ref contains pdf', () => {
         it('returns that communication type', () => {
           communications[0].messageRef = 'pdf.return_form'
