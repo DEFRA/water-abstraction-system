@@ -37,7 +37,8 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    eventId: generateUUID()
+    eventId: generateUUID(),
+    notifyStatus: 'delivered'
   }
 
   return {

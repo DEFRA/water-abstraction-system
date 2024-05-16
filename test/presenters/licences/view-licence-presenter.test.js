@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ViewLicencePresenter = require('../../../app/presenters/licences/view-licence.presenter')
+const ViewLicencePresenter = require('../../../app/presenters/licences/view-licence.presenter.js')
 
 describe('View Licence presenter', () => {
   let licence
@@ -32,7 +32,8 @@ describe('View Licence presenter', () => {
         pageTitle: 'Licence 01/123',
         registeredTo: null,
         roles: null,
-        warning: null
+        warning: null,
+        documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb'
       })
     })
   })

@@ -5,7 +5,6 @@
  * @module FetchCommunicationsService
  */
 
-const EventModel = require('../../models/event.model.js')
 const ScheduledNotificationModel = require('../../models/scheduled-notification.model.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 
@@ -32,7 +31,8 @@ async function _fetch (licenceRef, page) {
       'messageRef'
     ])
     .where('licences', '@>', `["${licenceRef}"]`)
-    .whereNotNull('eventId')
+    .andWhere('notify_status', 'in', ['delivered', 'received'])
+    .andWhere('eventId', 'is not', null)
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select([
@@ -45,6 +45,7 @@ async function _fetch (licenceRef, page) {
       ]).where('licences', '@>', `["${licenceRef}"]`)
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
+    .orderBy('send_after', 'desc')
 
   return data
 }
