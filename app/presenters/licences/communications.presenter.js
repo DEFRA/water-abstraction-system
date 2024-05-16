@@ -18,18 +18,22 @@ function go (communications) {
   }
 }
 
+function _communications (communications) {
+  return communications.map((communication) => {
+    return {
+      id: communication.id,
+      type: _type(communication),
+      sender: communication.event.issuer,
+      sent: formatLongDate(new Date(communication.event.createdAt)),
+      method: _sentenceCase(communication.messageType)
+    }
+  })
+}
+
 function _sentenceCase (text = '') {
   const sentence = text.toLowerCase()
 
   return sentence.charAt(0).toUpperCase() + sentence.slice(1)
-}
-
-function _typeAlert (communication) {
-  if (communication.event.metadata.name === 'Water abstraction alert') {
-    return `${_sentenceCase(communication.event.metadata.options.sendingAlertType)} - Water abstraction alert`
-  }
-
-  return null
 }
 
 function _type (communication) {
@@ -41,16 +45,12 @@ function _type (communication) {
   }
 }
 
-function _communications (communications) {
-  return communications.map((communication) => {
-    return {
-      id: communication.id,
-      type: _type(communication),
-      sender: communication.event.issuer,
-      sent: formatLongDate(new Date(communication.event.createdAt)),
-      method: _sentenceCase(communication.messageType)
-    }
-  })
+function _typeAlert (communication) {
+  if (communication.event.metadata.name === 'Water abstraction alert') {
+    return `${_sentenceCase(communication.event.metadata.options.sendingAlertType)} - Water abstraction alert`
+  }
+
+  return null
 }
 
 module.exports = {
