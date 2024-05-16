@@ -43,7 +43,7 @@ async function _fetch (licenceRef, page) {
         'subtype',
         'status',
         'issuer'
-      ]).where('licences', '@>', `["${licenceRef}"]`)
+      ])
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
     .orderBy('send_after', 'desc')
