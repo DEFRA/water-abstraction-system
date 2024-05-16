@@ -59,7 +59,7 @@ describe('Fetch Communications service', () => {
     beforeEach(async () => {
     })
 
-    it('returns the matching licence customer contacts', async () => {
+    it('returns no communications', async () => {
       const result = await FetchCommunicationsService.go()
 
       expect(result.pagination).to.equal({
