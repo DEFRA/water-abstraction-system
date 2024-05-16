@@ -29,9 +29,18 @@ function go (session, requirementIndex, purposesData) {
 }
 
 function _backLink (session) {
-  const { checkPageVisited, id } = session
+  const { checkPageVisited, id, requirements } = session
 
-  if (checkPageVisited) {
+  // NOTE: Purpose is the first page in the manual setup journey. So, when a user first comes through, we want to allow
+  // them to go back to `/setup`. Once they've got to the `/check` page they may return because they clicked the
+  // 'Change' link for the purpose. When this happens, `checkPageVisited` will be true and 'Back' needs to take them
+  // back there.
+  //
+  // But if they click 'Add requirement' on the `/check` page they'll also be directed here. When that happens
+  // `checkPageVisited` will have been reset to false to allow the user to progress through the setup journey. In this
+  // scenario 'Back' also needs to take them back to `/check`. Hence, the logic is different in this presenter when
+  // compared with the other setup pages.
+  if (checkPageVisited || requirements.length > 1) {
     return `/system/return-requirements/${id}/check`
   }
 

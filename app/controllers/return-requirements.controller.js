@@ -6,6 +6,7 @@
  */
 
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
+const AddService = require('../services/return-requirements/add.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckService = require('../services/return-requirements/check.service.js')
@@ -48,6 +49,14 @@ async function abstractionPeriod (request, h) {
   return h.view('return-requirements/abstraction-period.njk', {
     ...pageData
   })
+}
+
+async function add (request, h) {
+  const { sessionId } = request.params
+
+  const requirementIndex = await AddService.go(sessionId)
+
+  return h.redirect(`/system/return-requirements/${sessionId}/purpose/${requirementIndex}`)
 }
 
 async function agreementsExceptions (request, h) {
@@ -458,6 +467,7 @@ async function submitStartDate (request, h) {
 
 module.exports = {
   abstractionPeriod,
+  add,
   agreementsExceptions,
   approved,
   cancel,
