@@ -308,6 +308,58 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#sentenceCase()', () => {
+    let valueToSentenceCase
+
+    describe('when the value is a single word', () => {
+      beforeEach(() => {
+        valueToSentenceCase = 'high'
+      })
+
+      it('correctly returns the value in sentence case, for example, High', async () => {
+        const result = BasePresenter.sentenceCase(valueToSentenceCase)
+
+        expect(result).to.equal('High')
+      })
+    })
+
+    describe('when the value is multiple words', () => {
+      beforeEach(() => {
+        valueToSentenceCase = 'spray irrigation'
+      })
+
+      it('correctly returns the value in sentence case, for example, Spray irrigation', async () => {
+        const result = BasePresenter.sentenceCase(valueToSentenceCase)
+
+        expect(result).to.equal('Spray irrigation')
+      })
+    })
+
+    describe('when the value contains a symbol', () => {
+      beforeEach(() => {
+        valueToSentenceCase = 'spray irrigation - direct'
+      })
+
+      it('correctly returns the value in sentence case, for example, Spray irrigation - direct', async () => {
+        const result = BasePresenter.sentenceCase(valueToSentenceCase)
+
+        expect(result).to.equal('Spray irrigation - direct')
+      })
+    })
+
+    describe('when the value is all capitals', () => {
+      beforeEach(() => {
+        valueToSentenceCase = 'SPRAY IRRIGATION'
+      })
+
+      it('correctly returns the value in sentence case, for example, Spray irrigation', async () => {
+        const result = BasePresenter.sentenceCase(valueToSentenceCase)
+
+        expect(result).to.equal('Spray irrigation')
+      })
+    })
+  })
+
   describe('#titleCase()', () => {
     let valueToTitleCase
 

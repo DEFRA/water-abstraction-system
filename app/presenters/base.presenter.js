@@ -226,6 +226,21 @@ function leftPadZeroes (number, length) {
 }
 
 /**
+ * Convert a string to sentence case by lowercasing all characters then capitalizing the first letter
+ *
+ * Will work for strings containing multiple words or only one.
+ *
+ * @param {string} value - The string to title case
+ *
+ * @returns {string} The title cased string
+ */
+function sentenceCase (value) {
+  const sentence = value.toLowerCase()
+
+  return sentence.charAt(0).toUpperCase() + sentence.slice(1)
+}
+
+/**
  * Convert a string to title case by capitalizing the first letter of each word
  *
  * Will work for strings containing multiple words or only one.
@@ -260,5 +275,6 @@ module.exports = {
   formatMoney,
   formatPounds,
   leftPadZeroes,
+  sentenceCase,
   titleCase
 }
