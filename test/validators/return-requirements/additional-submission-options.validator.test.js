@@ -13,7 +13,7 @@ const AdditionalSubmissionOptionsValidator = require('../../../app/validators/re
 describe('Additional Submission Options validator', () => {
   describe('when valid data is provided', () => {
     const payload = {
-      'additional-submission-options': [
+      additionalSubmissionOptions: [
         'multiple-upload'
       ]
     }

@@ -27,13 +27,14 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
-  const options = _ensureIsArray(payload['additional-submission-options'])
-  payload['additional-submission-options'] = options
+
+  _handleOneOptionSelected(payload)
+
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    const notification = _notification(session, options)
-    await _save(session, options)
+    const notification = _notification(session, payload)
+    await _save(session, payload)
 
     if (notification) {
       yar.flash('notification', notification)
@@ -42,7 +43,7 @@ async function go (sessionId, payload, yar) {
     return {}
   }
 
-  const submittedSessionData = _submittedSessionData(session, options)
+  const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
@@ -52,14 +53,21 @@ async function go (sessionId, payload, yar) {
   }
 }
 
-function _ensureIsArray (options) {
-  return Array.isArray(options) ? options : [options]
+/**
+ * When a single agreement and exception is checked by the user, it returns as a string. When multiple agreements and
+ * exceptions are checked, the 'agreementsExceptions' is returned as an array. This function works to make those single
+ * selected string 'agreementsExceptions' into an array for uniformity.
+ */
+function _handleOneOptionSelected (payload) {
+  if (!Array.isArray(payload.agreementsExceptions)) {
+    payload.agreementsExceptions = [payload.agreementsExceptions]
+  }
 }
 
-function _notification (session, options) {
+function _notification (session, payload) {
   const { additionalSubmissionOptions } = session ?? {}
 
-  if (additionalSubmissionOptions !== options) {
+  if (additionalSubmissionOptions !== payload.additionalSubmissionOptions) {
     return {
       text: 'Changes updated',
       title: 'Updated'
@@ -69,14 +77,14 @@ function _notification (session, options) {
   return null
 }
 
-async function _save (session, options) {
-  session.additionalSubmissionOptions = options
+async function _save (session, payload) {
+  session.additionalSubmissionOptions = payload.additionalSubmissionOptions
 
   return session.$update()
 }
 
-function _submittedSessionData (session, options) {
-  session.additionalSubmissionOptions = options ?? []
+function _submittedSessionData (session, payload) {
+  session.additionalSubmissionOptions = payload.additionalSubmissionOptions ?? []
 
   return AdditionalSubmissionOptionsPresenter.go(session)
 }

@@ -52,7 +52,7 @@ describe('Return Requirements - Submit Additional Submission Options service', (
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          'additional-submission-options': 'multiple-upload'
+          additionalSubmissionOptions: 'multiple-upload'
         }
       })
 
