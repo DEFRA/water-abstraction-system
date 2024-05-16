@@ -63,7 +63,7 @@ async function _persistAmendedAdjustmentFactor (reviewChargeReferenceId, payload
 }
 
 function _validate (payload) {
-  const maxDecimalsForAggregateValue = 2
+  const maxDecimalsForAggregateValue = 15
   const maxDecimalsForChargeAdjustmentValue = 15
 
   const aggregateValidation = AdjustmentFactorValidator.go(
