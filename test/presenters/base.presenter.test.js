@@ -11,58 +11,6 @@ const { expect } = Code
 const BasePresenter = require('../../app/presenters/base.presenter.js')
 
 describe('Base presenter', () => {
-  describe('#titleCase()', () => {
-    let valueToCapitalize
-
-    describe('when the value is a single word', () => {
-      beforeEach(() => {
-        valueToCapitalize = 'high'
-      })
-
-      it('correctly returns the value in title case, for example, High', async () => {
-        const result = BasePresenter.titleCase(valueToCapitalize)
-
-        expect(result).to.equal('High')
-      })
-    })
-
-    describe('when the value is multiple words', () => {
-      beforeEach(() => {
-        valueToCapitalize = 'spray irrigation'
-      })
-
-      it('correctly returns the value in title case, for example, Spray Irrigation', async () => {
-        const result = BasePresenter.titleCase(valueToCapitalize)
-
-        expect(result).to.equal('Spray Irrigation')
-      })
-    })
-
-    describe('when the value contains a symbol', () => {
-      beforeEach(() => {
-        valueToCapitalize = 'spray irrigation - direct'
-      })
-
-      it('correctly returns the value in title case, for example, Spray Irrigation - Direct', async () => {
-        const result = BasePresenter.titleCase(valueToCapitalize)
-
-        expect(result).to.equal('Spray Irrigation - Direct')
-      })
-    })
-
-    describe('when the value is all capitals', () => {
-      beforeEach(() => {
-        valueToCapitalize = 'SPRAY IRRIGATION'
-      })
-
-      it('correctly returns the value unchanged, for example, SPRAY IRRIGATION', async () => {
-        const result = BasePresenter.titleCase(valueToCapitalize)
-
-        expect(result).to.equal('SPRAY IRRIGATION')
-      })
-    })
-  })
-
   describe('#convertPenceToPounds()', () => {
     let valueInPence
 
@@ -357,6 +305,58 @@ describe('Base presenter', () => {
       const result = BasePresenter.leftPadZeroes(number, 7)
 
       expect(result).to.equal('0000123')
+    })
+  })
+
+  describe('#titleCase()', () => {
+    let valueToTitleCase
+
+    describe('when the value is a single word', () => {
+      beforeEach(() => {
+        valueToTitleCase = 'high'
+      })
+
+      it('correctly returns the value in title case, for example, High', async () => {
+        const result = BasePresenter.titleCase(valueToTitleCase)
+
+        expect(result).to.equal('High')
+      })
+    })
+
+    describe('when the value is multiple words', () => {
+      beforeEach(() => {
+        valueToTitleCase = 'spray irrigation'
+      })
+
+      it('correctly returns the value in title case, for example, Spray Irrigation', async () => {
+        const result = BasePresenter.titleCase(valueToTitleCase)
+
+        expect(result).to.equal('Spray Irrigation')
+      })
+    })
+
+    describe('when the value contains a symbol', () => {
+      beforeEach(() => {
+        valueToTitleCase = 'spray irrigation - direct'
+      })
+
+      it('correctly returns the value in title case, for example, Spray Irrigation - Direct', async () => {
+        const result = BasePresenter.titleCase(valueToTitleCase)
+
+        expect(result).to.equal('Spray Irrigation - Direct')
+      })
+    })
+
+    describe('when the value is all capitals', () => {
+      beforeEach(() => {
+        valueToTitleCase = 'SPRAY IRRIGATION'
+      })
+
+      it('correctly returns the value unchanged, for example, SPRAY IRRIGATION', async () => {
+        const result = BasePresenter.titleCase(valueToTitleCase)
+
+        expect(result).to.equal('SPRAY IRRIGATION')
+      })
     })
   })
 })
