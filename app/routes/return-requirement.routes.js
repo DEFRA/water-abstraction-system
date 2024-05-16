@@ -30,6 +30,20 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/add',
+    handler: ReturnRequirementsController.add,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Adds another object to the requirements array in the session'
+    }
+
+  },
+  {
     method: 'GET',
     path: '/return-requirements/{sessionId}/additional-submission-options',
     handler: ReturnRequirementsController.additionalSubmissionOptions,
