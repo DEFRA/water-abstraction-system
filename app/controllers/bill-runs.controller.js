@@ -227,7 +227,7 @@ async function submitRemoveLicence (request, h) {
 async function submitReview (request, h) {
   const { id } = request.params
 
-  await SubmitReviewBillRunService.go(request.payload, request.yar)
+  await SubmitReviewBillRunService.go(id, request.payload, request.yar)
 
   return h.redirect(`/system/bill-runs/${id}/review`)
 }
