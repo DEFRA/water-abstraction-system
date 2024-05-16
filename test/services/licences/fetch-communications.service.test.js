@@ -16,7 +16,7 @@ const ScheduledNotificationModel = require('../../support/helpers/scheduled-noti
 const FetchCommunicationsService =
   require('../../../app/services/licences/fetch-communications.service.js')
 
-describe.only('Fetch Communications service', () => {
+describe('Fetch Communications service', () => {
   const licenceRef = '01/01'
 
   let testRecord
