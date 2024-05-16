@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -18,6 +19,7 @@ describe('Return Requirements - Submit Remove service', () => {
   const requirementIndex = 0
 
   let session
+  let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -60,15 +62,28 @@ describe('Return Requirements - Submit Remove service', () => {
         reason: 'major-change'
       }
     })
+
+    yarStub = {
+      flash: Sinon.stub()
+    }
   })
 
   describe('when a user submits the return requirements to be removed', () => {
     it('deletes the selected requirement from the session data', async () => {
-      await SubmitRemoveService.go(session.id, requirementIndex)
+      await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
 
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.requirements[requirementIndex]).not.to.exist()
+    })
+
+    it("sets the notification message to 'Requirements removed'", async () => {
+      await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
+
+      const [flashType, notification] = yarStub.flash.args[0]
+
+      expect(flashType).to.equal('notification')
+      expect(notification).to.equal({ title: 'Removed', text: 'Requirement removed' })
     })
   })
 })
