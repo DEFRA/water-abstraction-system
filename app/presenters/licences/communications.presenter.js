@@ -30,10 +30,13 @@ function _communications (communications) {
   })
 }
 
+function _titleCase (text = '') {
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
 function _sentenceCase (text = '') {
   const sentence = text.toLowerCase()
 
-  return sentence.charAt(0).toUpperCase() + sentence.slice(1)
+  return _titleCase(sentence)
 }
 
 function _type (communication) {

@@ -53,11 +53,13 @@ describe('Communications presenter', () => {
         ]
       })
     })
-    
+
     describe("the 'messageRef' property", () => {
       describe('when the message ref contains pdf', () => {
-        it('returns that communication type', () => {
+        beforeEach(() => {
           communications[0].messageRef = 'pdf.return_form'
+        })
+        it('returns that communication type', () => {
           const result = CommunicationsPresenter.go(communications)
 
           expect(result.communications[0].type).to.equal({
@@ -84,9 +86,11 @@ describe('Communications presenter', () => {
     })
 
     describe("the 'messageType' property", () => {
+      beforeEach(() => {
+        communications[0].messageType = 'i AM in senTence case'
+      })
       describe('when the message type is present', () => {
         it('returns the method key in sentence case', () => {
-          communications[0].messageType = 'i AM in senTence case'
           const result = CommunicationsPresenter.go(communications)
 
           expect(result.communications[0].method).to.equal('I am in sentence case')
@@ -95,9 +99,11 @@ describe('Communications presenter', () => {
     })
 
     describe("when the communication is a 'Water abstraction alert'", () => {
-      it('returns the type object with an alert text', () => {
+      beforeEach(() => {
         communications[0].event.metadata.name = 'Water abstraction alert'
         communications[0].event.metadata.options.sendingAlertType = 'test'
+      })
+      it('returns the type object with an alert text', () => {
         const result = CommunicationsPresenter.go(communications)
 
         expect(result.communications[0].type).to.equal({
