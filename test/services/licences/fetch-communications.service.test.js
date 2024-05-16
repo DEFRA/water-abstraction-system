@@ -9,16 +9,28 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
+const EventHelper = require('../../support/helpers/event.helper.js')
+const ScheduledNotificationModel = require('../../support/helpers/scheduled-notification.helper.js')
 
 // Thing under test
 const FetchCommunicationsService =
   require('../../../app/services/licences/fetch-communications.service.js')
 
-describe('Fetch Communications service', () => {
-  let licenceId
+describe.only('Fetch Communications service', () => {
+  const licenceRef = '01/01'
+
+  let testRecord
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
+
+    testRecord = await ScheduledNotificationModel.add({
+      licences: JSON.stringify([licenceRef])
+    })
+
+    await EventHelper.add({
+      licences: JSON.stringify([licenceRef])
+    })
   })
 
   describe('when the licence has communications', () => {
@@ -26,9 +38,35 @@ describe('Fetch Communications service', () => {
     })
 
     it('returns the matching licence customer contacts', async () => {
-      const results = await FetchCommunicationsService.go(licenceId)
+      const result = await FetchCommunicationsService.go(licenceRef)
 
-      expect(results).to.equal({ communications: [], pagination: { total: 0 } })
+      expect(result.pagination).to.equal({
+        total: 1
+      })
+
+      expect(result.communications).to.equal(
+        [{
+          event: null,
+          id: testRecord.id,
+          messageRef: null,
+          messageType: null
+        }]
+      )
+    })
+  })
+
+  describe('when the licence has no communications', () => {
+    beforeEach(async () => {
+    })
+
+    it('returns the matching licence customer contacts', async () => {
+      const result = await FetchCommunicationsService.go()
+
+      expect(result.pagination).to.equal({
+        total: 0
+      })
+
+      expect(result.communications).to.equal([])
     })
   })
 })

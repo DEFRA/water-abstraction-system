@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const CommunicationsPresenter = require('../../../app/presenters/licences/communications.presenter.js')
 
-describe.only('Communications presenter', () => {
+describe('Communications presenter', () => {
   let communications
 
   beforeEach(() => {
