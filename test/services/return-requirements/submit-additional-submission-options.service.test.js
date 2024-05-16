@@ -50,29 +50,27 @@ describe('Return Requirements - Submit Additional Submission Options service', (
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      describe('that is a new submission option', () => {
-        beforeEach(() => {
-          payload = {
-            'additional-submission-options': 'multiple-upload'
-          }
-        })
+      beforeEach(() => {
+        payload = {
+          'additional-submission-options': 'multiple-upload'
+        }
+      })
 
-        it('saves the submitted value', async () => {
-          await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+      it('saves the submitted value', async () => {
+        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-          const refreshedSession = await session.$query()
+        const refreshedSession = await session.$query()
 
-          expect(refreshedSession.additionalSubmissionOptions).to.include('multiple-upload')
-        })
+        expect(refreshedSession.additionalSubmissionOptions).to.include('multiple-upload')
+      })
 
-        it("sets the notification message to 'Updated'", async () => {
-          await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+      it("sets the notification message to 'Updated'", async () => {
+        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+        const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Changes updated' })
-        })
+        expect(flashType).to.equal('notification')
+        expect(notification).to.equal({ title: 'Updated', text: 'Changes updated' })
       })
     })
 
