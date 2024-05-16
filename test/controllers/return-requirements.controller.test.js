@@ -80,7 +80,7 @@ describe('Return requirements controller', () => {
 
     describe('when the request succeeds', () => {
       it('returns the page successfully', async () => {
-        const response = await server.inject(_options('additionalSubmissionOptions'))
+        const response = await server.inject(_options('additional-submission-options'))
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Select any additional submission options for the return requirements')
