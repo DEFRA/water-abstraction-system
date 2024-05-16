@@ -93,7 +93,7 @@ describe('Communications presenter', () => {
       })
     })
 
-    describe('when the communication is a \'Water abstraction alert\' ', () => {
+    describe("when the communication is a 'Water abstraction alert'", () => {
       it('returns the type object with an alert text', () => {
         communications[0].event.metadata.name = 'Water abstraction alert'
         communications[0].event.metadata.options.sendingAlertType = 'test'
