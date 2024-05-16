@@ -269,7 +269,7 @@ describe('Licences controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Contact Details')
+        expect(response.payload).to.contain('Contact details')
         // Table row titles
         expect(response.payload).to.contain('Name')
         expect(response.payload).to.contain('Communication type')
@@ -290,7 +290,7 @@ describe('Licences controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Contact Details')
+        expect(response.payload).to.contain('Contact details')
         expect(response.payload).to.contain('No contacts found.')
       })
     })
