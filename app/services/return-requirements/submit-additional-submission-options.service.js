@@ -54,10 +54,9 @@ async function go (sessionId, payload, yar) {
 }
 
 /**
- * When a single agreement and exception is checked by the user, it returns as a string. When multiple agreements and
- * exceptions are checked, the 'additionalSubmissionOptions' is returned as an array.
- * This function works to make those single
- * selected string 'additionalSubmissionOptions' into an array for uniformity.
+* When a single additional submission option is checked by the user, it returns as a string. When multiple options are
+ * checked, the 'additionalSubmissionOptions' is returned as an array.
+ * This function works to make those single selected string 'additionalSubmissionOptions' into an array for uniformity.
  */
 function _handleOneOptionSelected (payload) {
   if (!Array.isArray(payload.additionalSubmissionOptions)) {

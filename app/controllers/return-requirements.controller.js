@@ -6,11 +6,11 @@
  */
 
 const AbstractionPeriodService = require('../services/return-requirements/abstraction-period.service.js')
+const AdditionalSubmissionOptionsService = require('../services/return-requirements/additional-submission-options.service.js')
 const AddService = require('../services/return-requirements/add.service.js')
 const AgreementsExceptionsService = require('../services/return-requirements/agreements-exceptions.service.js')
 const CancelService = require('../services/return-requirements/cancel.service.js')
 const CheckService = require('../services/return-requirements/check.service.js')
-const AdditionalSubmissionOptionsService = require('../services/return-requirements/additional-submission-options.service.js')
 const DeleteNoteService = require('../services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-requirements/frequency-reported.service.js')
