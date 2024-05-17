@@ -10,10 +10,10 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
+
+// Things we need to stub
+const FetchLicencePurposesService = require('../../../app/services/return-requirements/fetch-licence-purposes.service.js')
 
 // Thing under test
 const SubmitPurposeService = require('../../../app/services/return-requirements/submit-purpose.service.js')
@@ -21,9 +21,7 @@ const SubmitPurposeService = require('../../../app/services/return-requirements/
 describe('Return Requirements - Submit Purpose service', () => {
   const requirementIndex = 0
 
-  let licenceVersion
   let payload
-  let purposes
   let session
 
   beforeEach(async () => {
@@ -59,23 +57,11 @@ describe('Return Requirements - Submit Purpose service', () => {
           purposes: ['14794d57-1acf-4c91-8b48-4b1ec68bfd6f']
         }
 
-        // Create the initial licenceVersion
-        licenceVersion = await LicenceVersionHelper.add()
-
-        // Create 3 descriptions for the purposes
-        purposes = await Promise.all([
-          await PurposeHelper.add({ id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' }),
-          await PurposeHelper.add({ id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }),
-          await PurposeHelper.add({ id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' })
+        Sinon.stub(FetchLicencePurposesService, 'go').resolves([
+          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
+          { id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' }
         ])
-
-        // Create the licenceVersionPurposes with the purposes and licenceVersion
-        for (const purpose of purposes) {
-          await LicenceVersionPurposeHelper.add({
-            licenceVersionId: licenceVersion.id,
-            purposeId: purpose.id
-          })
-        }
       })
 
       it('saves the submitted value', async () => {
@@ -99,23 +85,11 @@ describe('Return Requirements - Submit Purpose service', () => {
       beforeEach(async () => {
         payload = {}
 
-        // Create the initial licenceVersion
-        licenceVersion = await LicenceVersionHelper.add()
-
-        // Create 3 descriptions for the purposes
-        purposes = await Promise.all([
-          await PurposeHelper.add({ id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' }),
-          await PurposeHelper.add({ id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }),
-          await PurposeHelper.add({ id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' })
+        Sinon.stub(FetchLicencePurposesService, 'go').resolves([
+          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
+          { id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' }
         ])
-
-        // Create the licenceVersionPurposes with the purposes and licenceVersion
-        for (const purpose of purposes) {
-          await LicenceVersionPurposeHelper.add({
-            licenceVersionId: licenceVersion.id,
-            purposeId: purpose.id
-          })
-        }
       })
 
       it('returns page data for the view', async () => {
@@ -129,7 +103,18 @@ describe('Return Requirements - Submit Purpose service', () => {
           error: {
             text: 'Select any purpose for the requirements for returns'
           },
-          licencePurposes: [],
+          licencePurposes: [{
+            description: 'Heat Pump',
+            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
+          },
+          {
+            description: 'Horticultural Watering',
+            id: '49088608-ee9f-491a-8070-6831240945ac'
+          },
+          {
+            description: 'Large Garden Watering',
+            id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d'
+          }],
           licenceRef: '01/ABC',
           purposes: '',
           sessionId: session.id

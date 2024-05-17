@@ -70,9 +70,8 @@ async function _save (session, requirementIndex, payload) {
 }
 
 async function _validate (payload, purposesData) {
-  const purposeIds = []
-  purposesData.forEach((purpose) => {
-    purposeIds.push(purpose.id)
+  const purposeIds = purposesData.map((purpose) => {
+    return purpose.id
   })
 
   const validation = PurposeValidation.go(payload, purposeIds)
