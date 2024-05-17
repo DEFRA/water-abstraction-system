@@ -13,10 +13,11 @@ const Boom = require('@hapi/boom')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-requirements/initiate-session.service.js')
-const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service')
-const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service')
-const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service')
-const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service')
+const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
+const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
+const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
+const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
+const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -200,6 +201,53 @@ describe('Licences controller', () => {
     })
   })
 
+  describe('GET /licences/{id}/communications', () => {
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/communications',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: [] }
+        }
+      }
+    })
+
+    describe('when a request is valid and has communications', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceCommunicationsService, 'go').resolves(_viewLicenceCommunications())
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Communications')
+        expect(response.payload).to.contain('Type')
+        expect(response.payload).to.contain('Sent')
+        expect(response.payload).to.contain('Sender')
+        expect(response.payload).to.contain('Method')
+      })
+    })
+
+    describe('when a request is valid and does not have communications', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceCommunicationsService, 'go').resolves({
+          activeTab: 'communications',
+          communications: []
+        })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Communications')
+        expect(response.payload).to.contain('No communications for this licence.')
+      })
+    })
+  })
+
   describe('GET /licences/{id}/contact-details', () => {
     beforeEach(async () => {
       options = {
@@ -330,6 +378,13 @@ function _viewLicenceBills () {
   return {
     activeTab: 'bills',
     bills: [{ id: 'bills-id' }]
+  }
+}
+
+function _viewLicenceCommunications () {
+  return {
+    activeTab: 'communications',
+    communications: [{ type: 'paper return', sent: 'date', sender: 'admin@email.com', method: 'letter' }]
   }
 }
 
