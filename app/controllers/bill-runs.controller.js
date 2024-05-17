@@ -67,7 +67,7 @@ async function cancel (request, h) {
 async function chargeReferenceDetails (request, h) {
   const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
 
-  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId)
+  const pageData = await ChargeReferenceDetailsService.go(billRunId, licenceId, reviewChargeReferenceId, request.yar)
 
   return h.view('bill-runs/charge-reference-details.njk', {
     pageTitle: 'Charge reference details',
@@ -227,7 +227,7 @@ async function submitRemoveLicence (request, h) {
 async function submitReview (request, h) {
   const { id } = request.params
 
-  await SubmitReviewBillRunService.go(request.payload, request.yar)
+  await SubmitReviewBillRunService.go(id, request.payload, request.yar)
 
   return h.redirect(`/system/bill-runs/${id}/review`)
 }

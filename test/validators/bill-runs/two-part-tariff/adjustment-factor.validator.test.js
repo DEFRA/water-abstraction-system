@@ -11,8 +11,9 @@ const { expect } = Code
 const AdjustmentFactorValidator = require('../../../../app/validators/bill-runs/two-part-tariff/adjustment-factor.validator.js')
 
 describe('Adjustment Factor validator', () => {
+  const maxNumberOfDecimals = 15
+
   let payload
-  let maxNumberOfDecimals
   let validationType
 
   describe('when a valid payload is provided', () => {
@@ -22,7 +23,6 @@ describe('Adjustment Factor validator', () => {
           amendedAggregateFactor: 0.5
         }
 
-        maxNumberOfDecimals = 2
         validationType = 'aggregate'
       })
 
@@ -39,12 +39,15 @@ describe('Adjustment Factor validator', () => {
           amendedChargeAdjustment: 0.5
         }
 
-        maxNumberOfDecimals = 15
         validationType = 'charge'
       })
 
       it('confirms the payload is valid', () => {
-        const result = AdjustmentFactorValidator.go(payload.amendedChargeAdjustment, maxNumberOfDecimals, validationType)
+        const result = AdjustmentFactorValidator.go(
+          payload.amendedChargeAdjustment,
+          maxNumberOfDecimals,
+          validationType
+        )
 
         expect(result.error).not.to.exist()
       })
@@ -56,7 +59,6 @@ describe('Adjustment Factor validator', () => {
       beforeEach(() => {
         payload = undefined
 
-        maxNumberOfDecimals = 2
         validationType = 'aggregate'
       })
 
@@ -74,7 +76,6 @@ describe('Adjustment Factor validator', () => {
           amendedAggregateFactor: 'Hello World'
         }
 
-        maxNumberOfDecimals = 2
         validationType = 'aggregate'
       })
 
@@ -89,18 +90,19 @@ describe('Adjustment Factor validator', () => {
     describe('because the user entered too many decimal places', () => {
       beforeEach(() => {
         payload = {
-          amendedAggregateFactor: 0.555
+          amendedAggregateFactor: 0.1234567890123456
         }
 
-        maxNumberOfDecimals = 2
         validationType = 'aggregate'
       })
 
-      it("fails the validation with the message 'The aggregate must contain no more than 2 decimal places'", () => {
+      it("fails the validation with the message 'The aggregate factor must not have more than 15 decimal places'", () => {
         const result = AdjustmentFactorValidator.go(payload.amendedAggregateFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The aggregate must contain no more than 2 decimal places')
+        expect(result.error.details[0].message).to.equal(
+          'The aggregate factor must not have more than 15 decimal places'
+        )
       })
     })
 
@@ -110,15 +112,14 @@ describe('Adjustment Factor validator', () => {
           amendedAggregateFactor: 1.1
         }
 
-        maxNumberOfDecimals = 2
         validationType = 'aggregate'
       })
 
-      it("fails the validation with the message 'The aggregate factor must be less than 1'", () => {
+      it("fails the validation with the message 'The aggregate factor must be equal to or less than 1'", () => {
         const result = AdjustmentFactorValidator.go(payload.amendedAggregateFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The aggregate factor must be less than 1')
+        expect(result.error.details[0].message).to.equal('The aggregate factor must be equal to or less than 1')
       })
     })
 
@@ -128,7 +129,6 @@ describe('Adjustment Factor validator', () => {
           amendedAggregateFactor: -1
         }
 
-        maxNumberOfDecimals = 2
         validationType = 'aggregate'
       })
 
@@ -146,7 +146,6 @@ describe('Adjustment Factor validator', () => {
       beforeEach(() => {
         payload = undefined
 
-        maxNumberOfDecimals = 15
         validationType = 'charge'
       })
 
@@ -164,7 +163,6 @@ describe('Adjustment Factor validator', () => {
           amendedChargeFactor: 'Hello World'
         }
 
-        maxNumberOfDecimals = 15
         validationType = 'charge'
       })
 
@@ -182,15 +180,14 @@ describe('Adjustment Factor validator', () => {
           amendedChargeFactor: 0.5555555555555555
         }
 
-        maxNumberOfDecimals = 15
         validationType = 'charge'
       })
 
-      it("fails the validation with the message 'The charge must contain no more than 2 decimal places'", () => {
+      it("fails the validation with the message 'The charge factor must not have more than 15 decimal places'", () => {
         const result = AdjustmentFactorValidator.go(payload.amendedChargeFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The charge must contain no more than 15 decimal places')
+        expect(result.error.details[0].message).to.equal('The charge factor must not have more than 15 decimal places')
       })
     })
 
@@ -200,15 +197,14 @@ describe('Adjustment Factor validator', () => {
           amendedChargeFactor: 1.1
         }
 
-        maxNumberOfDecimals = 15
         validationType = 'charge'
       })
 
-      it("fails the validation with the message 'The charge factor must be less than 1'", () => {
+      it("fails the validation with the message 'The charge factor must be equal to or less than 1'", () => {
         const result = AdjustmentFactorValidator.go(payload.amendedChargeFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The charge factor must be less than 1')
+        expect(result.error.details[0].message).to.equal('The charge factor must be equal to or less than 1')
       })
     })
 
@@ -218,7 +214,6 @@ describe('Adjustment Factor validator', () => {
           amendedChargeFactor: -1
         }
 
-        maxNumberOfDecimals = 15
         validationType = 'charge'
       })
 

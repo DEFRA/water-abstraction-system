@@ -6,11 +6,11 @@
  */
 
 const {
-  capitalize,
   formatAbstractionPeriod,
   formatLongDate,
   formatMoney,
-  formatPounds
+  formatPounds,
+  titleCase
 } = require('../base.presenter.js')
 
 /**
@@ -102,9 +102,9 @@ function _chargeElement (purpose, startDay, startMonth, endDay, endMonth, source
   return {
     purpose: purpose.description,
     abstractionPeriod: formatAbstractionPeriod(startDay, startMonth, endDay, endMonth),
-    source: capitalize(source),
-    season: capitalize(season),
-    loss: capitalize(loss)
+    source: titleCase(source),
+    season: titleCase(season),
+    loss: titleCase(loss)
   }
 }
 

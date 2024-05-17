@@ -18,10 +18,10 @@ describe('Return Requirements - Purpose presenter', () => {
 
   beforeEach(() => {
     purposesData = [
-      { description: 'Heat Pump' },
-      { description: 'Horticultural Watering' },
-      { description: 'Hydraulic Rams' },
-      { description: 'Hydraulic Testing' }
+      { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+      { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
+      { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams' },
+      { id: '02036782-81d2-43be-b6af-bf20898653e1', description: 'Hydraulic Testing' }
     ]
 
     session = {
@@ -49,7 +49,12 @@ describe('Return Requirements - Purpose presenter', () => {
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/setup',
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePurposes: ['Heat Pump', 'Horticultural Watering', 'Hydraulic Rams', 'Hydraulic Testing'],
+        licencePurposes: [
+          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
+          { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams' },
+          { id: '02036782-81d2-43be-b6af-bf20898653e1', description: 'Hydraulic Testing' }
+        ],
         licenceRef: '01/ABC',
         purposes: '',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
@@ -80,10 +85,15 @@ describe('Return Requirements - Purpose presenter', () => {
   })
 
   describe("the 'licencePurposes' property", () => {
-    it("returns the description from each 'purpose' passed in", () => {
+    it("returns the id and description from each 'purpose' passed in", () => {
       const result = PurposePresenter.go(session, requirementIndex, purposesData)
 
-      expect(result.licencePurposes).to.equal(['Heat Pump', 'Horticultural Watering', 'Hydraulic Rams', 'Hydraulic Testing'])
+      expect(result.licencePurposes).to.equal([
+        { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+        { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
+        { id: '1d03c79b-da97-4838-a68c-ccb613d54367', description: 'Hydraulic Rams' },
+        { id: '02036782-81d2-43be-b6af-bf20898653e1', description: 'Hydraulic Testing' }
+      ])
     })
   })
 

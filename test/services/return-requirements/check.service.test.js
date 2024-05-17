@@ -59,6 +59,7 @@ describe('Return Requirements - Check service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        additionalSubmissionOptions: [],
         notification: undefined,
         journey: 'returns-required',
         licenceRef: '01/ABC',
@@ -66,6 +67,7 @@ describe('Return Requirements - Check service', () => {
         pageTitle: 'Check the return requirements for Turbo Kid',
         reason: 'Major change',
         reasonLink: `/system/return-requirements/${session.id}/reason`,
+        requirements: [],
         startDate: '1 January 2023',
         userEmail: 'No notes added'
       }, { skip: ['sessionId'] })

@@ -3,33 +3,22 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
-// Things we need to stub
-const FetchLicencePurposesService = require('../../../app/services/return-requirements/fetch-licence-purposes.service.js')
-
 // Thing under test
-const PurposeService = require('../../../app/services/return-requirements/purpose.service.js')
+const AdditionalSubmissionOptionsService = require('../../../app/services/return-requirements/additional-submission-options.service.js')
 
-describe('Return Requirements - Purpose service', () => {
-  const requirementIndex = 0
-
+describe('Return Requirements - Additional Submission Options service', () => {
   let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    Sinon.stub(FetchLicencePurposesService, 'go').resolves([
-      { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-      { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
-    ])
 
     session = await SessionHelper.add({
       data: {
@@ -50,32 +39,23 @@ describe('Return Requirements - Purpose service', () => {
     })
   })
 
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await PurposeService.go(session.id, requirementIndex)
+      const result = await AdditionalSubmissionOptionsService.go(session.id)
 
       expect(result.sessionId).to.equal(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await PurposeService.go(session.id, requirementIndex)
+      const result = await AdditionalSubmissionOptionsService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        pageTitle: 'Select the purpose for the requirements for returns',
-        backLink: `/system/return-requirements/${session.id}/setup`,
+        additionalSubmissionOptions: [],
+        backLink: `/system/return-requirements/${session.id}/check`,
         licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-        licencePurposes: [
-          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
-          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
-        ],
         licenceRef: '01/ABC',
-        purposes: '',
-        sessionId: session.id
+        pageTitle: 'Select any additional submission options for the return requirements'
       }, { skip: ['sessionId'] })
     })
   })

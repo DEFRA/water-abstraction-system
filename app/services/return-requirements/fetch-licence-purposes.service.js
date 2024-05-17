@@ -20,7 +20,10 @@ async function go (licenceId) {
 
 async function _fetch (licenceId) {
   return PurposeModel.query()
-    .distinct('description')
+    .select([
+      'purposes.id',
+      'purposes.description'
+    ])
     .innerJoin('licenceVersionPurposes', 'purposes.id', 'licenceVersionPurposes.purposeId')
     .innerJoin('licenceVersions', 'licenceVersionPurposes.licenceVersionId', 'licenceVersions.id')
     .where('licenceVersions.licenceId', licenceId)

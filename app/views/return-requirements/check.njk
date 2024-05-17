@@ -19,91 +19,155 @@
     </h1>
   </div>
 
-  <form method="post">
-    <div class="govuk-!-margin-bottom-9">
-      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
-      {{ govukSummaryList({
-        classes: 'govuk-!-margin-bottom-2',
-        rows: [
-          {
-            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-            key: {
-              text: "Start date"
-            },
-            value: {
-              text: startDate
-            },
-            actions: {
-              items: [
-                {
-                  href: "/system/return-requirements/" + sessionId + "/start-date",
-                  text: "Change",
-                  visuallyHiddenText: "the start date for the return requirement"
-                }
-              ]
-            }
+  <div class="govuk-!-margin-bottom-9">
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+    {{ govukSummaryList({
+      classes: 'govuk-!-margin-bottom-2',
+      rows: [
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: "Start date"
           },
-          {
-            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-            key: {
-              text: "Reason"
-            },
-            value: {
-              text: reason
-            },
-            actions: {
-              items: [
-                {
-                  href: reasonLink,
-                  text: "Change",
-                  visuallyHiddenText: "the reason for the return requirement"
-                }
-              ]
-            }
+          value: {
+            text: startDate
+          },
+          actions: {
+            items: [
+              {
+                href: "/system/return-requirements/" + sessionId + "/start-date",
+                text: "Change",
+                visuallyHiddenText: "the start date for the return requirement"
+              }
+            ]
           }
-        ]
-      }) }}
-      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
-    </div>
+        },
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: "Reason"
+          },
+          value: {
+            text: reason
+          },
+          actions: {
+            items: [
+              {
+                href: reasonLink,
+                text: "Change",
+                visuallyHiddenText: "the reason for the return requirement"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+  </div>
 
+  <div class="govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Notes</h2>
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+    {{ govukSummaryList({
+      classes: 'govuk-!-margin-bottom-2',
+      rows: [
+        {
+          classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+          key: {
+            text: userEmail,
+            classes: "govuk-body govuk-!-font-weight-regular"
+          },
+          value: {
+            text: note | escape | nl2br
+          },
+          actions: {
+            items: [
+              {
+                href: "note",
+                text: "Change" if note else "Add a note"
+              },
+              {
+                href: "delete-note",
+                text: "Delete"
+              } if note
+            ]
+          }
+        }
+      ]
+    }) }}
+    <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
+  </div>
+
+  {% if journey == 'returns-required' %}
     <div class="govuk-!-margin-bottom-9">
-      <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Notes</h2>
-      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
-      {{ govukSummaryList({
-        classes: 'govuk-!-margin-bottom-2',
-        rows: [
-          {
-            classes: 'govuk-summary-list govuk-summary-list__row--no-border',
-            key: {
-              text: userEmail,
-              classes: "govuk-body govuk-!-font-weight-regular"
-            },
-            value: {
-              text: note | escape | nl2br
-            },
-            actions: {
-              items: [
-                {
-                  href: "note",
-                  text: "Change" if note else "Add a note"
-                },
-                {
-                  href: "delete-note",
-                  text: "Delete"
-                } if note
-              ]
-            }
-          }
-        ]
-      }) }}
-      <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
-    </div>
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Requirements for returns</h2>
+      <form method= "post" action= "/system/return-requirements/{{sessionId}}/add">
+        {{ govukButton({
+          text: "Add another requirement",
+          classes: "govuk-button--secondary",
+          preventDoubleClick: true
+        }) }}
+      </form>
 
+      {% for requirement in requirements %}
+        {# Set an easier to use index #}
+        {% set rowIndex = loop.index0 %}
+        <div>
+          <h3 class="govuk-body">{{requirement.siteDescription}}</h3>
+          {{ govukButton({
+            text: "Remove requirement",
+            classes: "govuk-button--warning",
+            preventDoubleClick: true,
+            href: "/system/return-requirements/" + sessionId + "/remove/" + rowIndex
+          }) }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post">
     <div class="govuk-body">
       {% if journey == 'no-returns-required' %}
         <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
         <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
       {% endif %}
+      {% if journey == 'returns-required' %}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-2',
+          rows: [
+            {
+              classes: 'govuk-summary-list',
+              key: {
+                text: 'Additional submission options',
+                classes: "govuk-heading-m govuk-!-width-one-half"
+              },
+              value: {
+                text: ''
+              },
+              actions: {
+                items: [
+                  {
+                    href: "additional-submission-options",
+                    text: "Change"
+                  }
+                ]
+              }
+            },
+            {
+              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+              key: {
+                text: 'Multiple upload',
+                classes: "govuk-body "
+              },
+              value: {
+                text: 'Yes' if additionalSubmissionOptions.includes('multiple-upload') else "No"
+              }
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
       {{ govukButton({
         text: "Approve returns requirements",

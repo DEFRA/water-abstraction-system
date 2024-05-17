@@ -37,15 +37,39 @@ describe('Return Requirements - Check presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
+        additionalSubmissionOptions: [],
         journey: 'returns-required',
         licenceRef: '01/ABC',
         note: null,
         pageTitle: 'Check the return requirements for Turbo Kid',
         reason: 'Major change',
         reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
+        requirements: [],
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023',
         userEmail: 'No notes added'
+      })
+    })
+  })
+
+  describe("the 'additionalSubmissionOptions' property", () => {
+    describe('when the user has checked additionalSubmissionOptions', () => {
+      beforeEach(() => {
+        session.additionalSubmissionOptions = ['multiple-upload']
+      })
+
+      it('returns a checked option', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.additionalSubmissionOptions).to.include('multiple-upload')
+      })
+    })
+
+    describe('when the user has not checked an option', () => {
+      it('returns no options', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.additionalSubmissionOptions).to.be.empty()
       })
     })
   })
