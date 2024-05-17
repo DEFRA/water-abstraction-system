@@ -11,19 +11,23 @@ const { expect } = Code
 const PurposeValidator = require('../../../app/validators/return-requirements/purpose.validator.js')
 
 describe('Purpose validator', () => {
+  const purposeIds = [
+    '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
+    '49088608-ee9f-491a-8070-6831240945ac',
+    '1d03c79b-da97-4838-a68c-ccb613d54367',
+    '02036782-81d2-43be-b6af-bf20898653e1'
+  ]
+
   describe('when valid data is provided', () => {
     const payload = {
       purposes: [
-        'Heat Pump',
-        'Horticultural Watering',
-        'Hydraulic Rams',
-        'Hydraulic Testing',
-        'Hydroelectric Power Generation'
+        '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
+        '49088608-ee9f-491a-8070-6831240945ac'
       ]
     }
 
     it('confirms the data is valid', () => {
-      const result = PurposeValidator.go(payload)
+      const result = PurposeValidator.go(payload, purposeIds)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -42,7 +46,7 @@ describe('Purpose validator', () => {
     }
 
     it('fails validation', () => {
-      const result = PurposeValidator.go(payload)
+      const result = PurposeValidator.go(payload, purposeIds)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
@@ -54,7 +58,7 @@ describe('Purpose validator', () => {
     const payload = {}
 
     it('fails validation', () => {
-      const result = PurposeValidator.go(payload)
+      const result = PurposeValidator.go(payload, purposeIds)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()

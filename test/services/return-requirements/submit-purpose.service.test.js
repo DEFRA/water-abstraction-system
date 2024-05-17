@@ -13,7 +13,7 @@ const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FetchPurposesService = require('../../../app/services/return-requirements/fetch-purposes.service.js')
+const FetchLicencePurposesService = require('../../../app/services/return-requirements/fetch-licence-purposes.service.js')
 
 // Thing under test
 const SubmitPurposeService = require('../../../app/services/return-requirements/submit-purpose.service.js')
@@ -52,14 +52,15 @@ describe('Return Requirements - Submit Purpose service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         payload = {
-          purposes: ['Heat Pump']
+          purposes: ['14794d57-1acf-4c91-8b48-4b1ec68bfd6f']
         }
 
-        Sinon.stub(FetchPurposesService, 'go').resolves([
-          { description: 'Heat Pump' },
-          { description: 'Horticultural Watering' }
+        Sinon.stub(FetchLicencePurposesService, 'go').resolves([
+          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
+          { id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' }
         ])
       })
 
@@ -68,7 +69,7 @@ describe('Return Requirements - Submit Purpose service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.requirements[0].purposes).to.equal(['Heat Pump'])
+        expect(refreshedSession.requirements[0].purposes).to.equal(['14794d57-1acf-4c91-8b48-4b1ec68bfd6f'])
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -81,12 +82,13 @@ describe('Return Requirements - Submit Purpose service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         payload = {}
 
-        Sinon.stub(FetchPurposesService, 'go').resolves([
-          { description: 'Heat Pump' },
-          { description: 'Horticultural Watering' }
+        Sinon.stub(FetchLicencePurposesService, 'go').resolves([
+          { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
+          { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' },
+          { id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d', description: 'Large Garden Watering' }
         ])
       })
 
@@ -98,20 +100,25 @@ describe('Return Requirements - Submit Purpose service', () => {
           pageTitle: 'Select the purpose for the requirements for returns',
           backLink: `/system/return-requirements/${session.id}/setup`,
           licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licencePurposes: ['Heat Pump', 'Horticultural Watering'],
-          licenceRef: '01/ABC',
-          purposes: ''
-        }, { skip: ['sessionId', 'error'] })
-      })
-
-      describe('because the user has not submitted anything', () => {
-        it('includes an error for the input element', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload)
-
-          expect(result.error).to.equal({
+          error: {
             text: 'Select any purpose for the requirements for returns'
-          })
-        })
+          },
+          licencePurposes: [{
+            description: 'Heat Pump',
+            id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f'
+          },
+          {
+            description: 'Horticultural Watering',
+            id: '49088608-ee9f-491a-8070-6831240945ac'
+          },
+          {
+            description: 'Large Garden Watering',
+            id: '8290bb6a-4265-4cc8-b9bb-37cde1357d5d'
+          }],
+          licenceRef: '01/ABC',
+          purposes: '',
+          sessionId: session.id
+        }, { skip: ['sessionId', 'error'] })
       })
     })
   })
