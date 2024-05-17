@@ -56,7 +56,7 @@ describe('Fetch Communications service', () => {
   describe('when the licence has no communications', () => {
 
     it('returns no communications', async () => {
-      const result = await FetchCommunicationsService.go()
+      const result = await FetchCommunicationsService.go('01/02')
 
       expect(result.pagination).to.equal({
         total: 0
