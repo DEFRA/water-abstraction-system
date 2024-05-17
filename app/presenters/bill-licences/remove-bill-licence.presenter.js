@@ -6,12 +6,12 @@
  */
 
 const {
-  capitalize,
   formatBillRunType,
   formatChargeScheme,
   formatFinancialYear,
   formatLongDate,
-  formatMoney
+  formatMoney,
+  titleCase
 } = require('../base.presenter.js')
 
 /**
@@ -80,7 +80,7 @@ function _billRunSummary (billRun) {
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
-    region: capitalize(region.displayName)
+    region: titleCase(region.displayName)
   }
 }
 
