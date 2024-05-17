@@ -90,6 +90,7 @@ describe('Communications presenter', () => {
       beforeEach(() => {
         communications[0].messageType = 'i AM in senTence case'
       })
+
       describe('when the message type is present', () => {
         it('returns the method key in sentence case', () => {
           const result = CommunicationsPresenter.go(communications)
