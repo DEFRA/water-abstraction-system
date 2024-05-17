@@ -45,6 +45,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/return-requirements/{sessionId}/additional-submission-options',
+    handler: ReturnRequirementsController.additionalSubmissionOptions,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Select additional submission options for the return requirement'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-requirements/{sessionId}/additional-submission-options',
+    handler: ReturnRequirementsController.submitAdditionalSubmissionOptions,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit additional submission options for the return requirement'
+    }
+  },
+  {
+    method: 'GET',
     path: '/return-requirements/{sessionId}/agreements-exceptions/{requirementIndex}',
     handler: ReturnRequirementsController.agreementsExceptions,
     options: {

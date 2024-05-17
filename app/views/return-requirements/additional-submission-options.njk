@@ -1,0 +1,73 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from 'govuk/components/error-summary/macro.njk' import govukErrorSummary %}
+
+{% block breadcrumbs %}
+  {# Back link #}
+  {{
+    govukBackLink({
+      text: 'Back',
+      href: backLink
+    })
+  }}
+{% endblock %}
+
+{% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.text,
+          href: '#additionalSubmissionOptions'
+        }
+      ]
+    }) }}
+  {% endif %}
+
+  {# Main heading #}
+  {% set pageHeader %}
+    <span class="govuk-heading-l govuk-!-margin-bottom-3">
+      <span class="govuk-caption-l">Licence {{ licenceRef }}</span> {{ pageTitle }}
+    </span>
+  {% endset %}
+
+  <form method="post">
+    <div class="govuk-body">
+      {{ govukCheckboxes({
+        name: "additionalSubmissionOptions",
+        fieldset: {
+          legend: {
+            html: pageHeader,
+            isPageHeading: true
+          }
+        },
+        hint: {
+          text: "Select all that apply"
+        },
+        errorMessage: {
+          text: error.text
+        } if error,
+        items: [
+          {
+            value: "multiple-upload",
+            text: "Multiple upload",
+            checked: additionalSubmissionOptions.includes("multiple-upload")
+          },
+          {
+            divider: "or"
+          },
+          {
+            value: "none",
+            text: "None",
+            checked: additionalSubmissionOptions.includes("none"),
+            behaviour: "exclusive"
+          }
+        ]
+      }) }}
+      {{ govukButton({ text: "Confirm" }) }}
+    </div>
+  </form>
+{% endblock %}
