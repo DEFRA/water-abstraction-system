@@ -104,6 +104,7 @@ describe('Communications presenter', () => {
         communications[0].event.metadata.name = 'Water abstraction alert'
         communications[0].event.metadata.options.sendingAlertType = 'test'
       })
+
       it('returns the type object with an alert text', () => {
         const result = CommunicationsPresenter.go(communications)
 
