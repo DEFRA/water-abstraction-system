@@ -62,7 +62,7 @@ describe('Fetch Communications service', () => {
         total: 0
       })
 
-      expect(result.communications).to.equal([])
+      expect(result.communications).to.be.empty()
     })
   })
 })
