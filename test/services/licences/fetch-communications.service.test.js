@@ -34,8 +34,6 @@ describe('Fetch Communications service', () => {
   })
 
   describe('when the licence has communications', () => {
-    beforeEach(async () => {
-    })
 
     it('returns the matching communication', async () => {
       const result = await FetchCommunicationsService.go(licenceRef)
