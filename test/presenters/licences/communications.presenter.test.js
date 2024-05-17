@@ -59,6 +59,7 @@ describe('Communications presenter', () => {
         beforeEach(() => {
           communications[0].messageRef = 'pdf.return_form'
         })
+
         it('returns that communication type', () => {
           const result = CommunicationsPresenter.go(communications)
 
