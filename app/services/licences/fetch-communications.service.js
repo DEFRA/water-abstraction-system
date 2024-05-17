@@ -1,0 +1,54 @@
+'use strict'
+
+/**
+ * Fetches data needed for the view '/licences/{id}/communications` page
+ * @module FetchCommunicationsService
+ */
+
+const ScheduledNotificationModel = require('../../models/scheduled-notification.model.js')
+
+const DatabaseConfig = require('../../../config/database.config.js')
+
+/**
+ * Fetch the matching licence and return data needed for the view licence communications page
+ *
+ * Was built to provide the data needed for the '/licences/{id}/communications' page
+ *
+ * @param {string} licenceId The UUID for the licence to fetch
+ *
+ * @returns {Promise<Object>} the data needed to populate the view licence page's communications tab
+ */
+async function go (licenceRef, page) {
+  const { results, total } = await _fetch(licenceRef, page)
+
+  return { communications: results, pagination: { total } }
+}
+
+async function _fetch (licenceRef, page) {
+  return ScheduledNotificationModel.query()
+    .select([
+      'id',
+      'messageType',
+      'messageRef'
+    ])
+    .where('licences', '@>', `["${licenceRef}"]`)
+    .andWhere('notify_status', 'in', ['delivered', 'received'])
+    .andWhere('eventId', 'is not', null)
+    .withGraphFetched('event')
+    .modifyGraph('event', (builder) => {
+      builder.select([
+        'createdAt',
+        'metadata',
+        'type',
+        'subtype',
+        'status',
+        'issuer'
+      ])
+    })
+    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .orderBy('sendAfter', 'desc')
+}
+
+module.exports = {
+  go
+}

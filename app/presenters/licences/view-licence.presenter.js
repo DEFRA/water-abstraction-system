@@ -17,12 +17,13 @@ const { formatLongDate } = require('../base.presenter.js')
 function go (licence, auth) {
   const {
     ends,
+    id,
     includeInPresrocBilling,
     includeInSrocBilling,
+    licenceDocumentHeader,
     licenceName,
     licenceRef,
-    registeredTo,
-    id
+    registeredTo
   } = licence
 
   return {
@@ -34,7 +35,8 @@ function go (licence, auth) {
     registeredTo,
     roles: _authRoles(auth),
     warning: _generateWarningMessage(ends),
-    activeNavBar: 'search'
+    activeNavBar: 'search',
+    documentId: licenceDocumentHeader.id
   }
 }
 
