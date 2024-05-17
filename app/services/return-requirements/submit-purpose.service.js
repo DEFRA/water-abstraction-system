@@ -5,7 +5,7 @@
  * @module SubmitPurposeService
  */
 
-const FetchPurposesService = require('../../services/return-requirements/fetch-purposes.service.js')
+const FetchLicencePurposesService = require('./fetch-licence-purposes.service.js')
 const PurposeValidation = require('../../validators/return-requirements/purpose.validator.js')
 const PurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
 const SessionModel = require('../../models/session.model.js')
@@ -28,10 +28,11 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId, requirementIndex, payload) {
   const session = await SessionModel.query().findById(sessionId)
+  const purposesData = await FetchLicencePurposesService.go(session.licence.id)
 
   _handleOneOptionSelected(payload)
 
-  const validationResult = _validate(payload)
+  const validationResult = await _validate(payload, purposesData)
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
@@ -41,7 +42,6 @@ async function go (sessionId, requirementIndex, payload) {
     }
   }
 
-  const purposesData = await FetchPurposesService.go(session.licence.id)
   const formattedData = PurposePresenter.go(session, requirementIndex, purposesData)
 
   return {
@@ -69,8 +69,12 @@ async function _save (session, requirementIndex, payload) {
   return session.$update()
 }
 
-function _validate (payload) {
-  const validation = PurposeValidation.go(payload)
+async function _validate (payload, purposesData) {
+  const purposeIds = purposesData.map((purpose) => {
+    return purpose.id
+  })
+
+  const validation = PurposeValidation.go(payload, purposeIds)
 
   if (!validation.error) {
     return null
