@@ -6,13 +6,13 @@
  */
 
 const {
-  capitalize,
   generateBillRunTitle,
   formatBillRunType,
   formatChargeScheme,
   formatFinancialYear,
   formatLongDate,
-  formatMoney
+  formatMoney,
+  titleCase
 } = require('../base.presenter.js')
 
 function go (billRun, billSummaries) {
@@ -52,7 +52,7 @@ function go (billRun, billSummaries) {
     displayCreditDebitTotals: _displayCreditDebitTotals(billRun),
     financialYear: formatFinancialYear(toFinancialYearEnding),
     pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
-    region: capitalize(region.displayName),
+    region: titleCase(region.displayName),
     transactionFile: transactionFileReference
   }
 }
