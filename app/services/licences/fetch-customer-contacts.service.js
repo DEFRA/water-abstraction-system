@@ -33,6 +33,7 @@ async function _fetch (licenceId) {
       'con.suffix',
       'lr.label AS communicationType'
     ])
+    .distinct()
     .from('licenceDocuments AS ld')
     .innerJoin('licences AS l', 'l.licenceRef', '=', 'ld.licenceRef')
     .innerJoin('licenceDocumentRoles AS ldr', 'ldr.licenceDocumentId', '=', 'ld.id')
