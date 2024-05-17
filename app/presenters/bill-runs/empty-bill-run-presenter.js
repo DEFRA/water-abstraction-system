@@ -6,12 +6,12 @@
  */
 
 const {
-  capitalize,
   generateBillRunTitle,
   formatBillRunType,
   formatChargeScheme,
   formatFinancialYear,
-  formatLongDate
+  formatLongDate,
+  titleCase
 } = require('../base.presenter.js')
 
 /**
@@ -43,7 +43,7 @@ function go (billRun) {
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
     pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
-    region: capitalize(region.displayName)
+    region: titleCase(region.displayName)
   }
 }
 
