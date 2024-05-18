@@ -131,6 +131,43 @@
         <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
         <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
       {% endif %}
+      {% if journey == 'returns-required' %}
+        {{ govukSummaryList({
+          classes: 'govuk-!-margin-bottom-2',
+          rows: [
+            {
+              classes: 'govuk-summary-list',
+              key: {
+                text: 'Additional submission options',
+                classes: "govuk-heading-m govuk-!-width-one-half"
+              },
+              value: {
+                text: ''
+              },
+              actions: {
+                items: [
+                  {
+                    href: "additional-submission-options",
+                    text: "Change"
+                  }
+                ]
+              }
+            },
+            {
+              classes: 'govuk-summary-list govuk-summary-list__row--no-border',
+              key: {
+                text: 'Multiple upload',
+                classes: "govuk-body "
+              },
+              value: {
+                text: 'Yes' if additionalSubmissionOptions.includes('multiple-upload') else "No"
+              }
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
       {{ govukButton({
         text: "Approve returns requirements",
