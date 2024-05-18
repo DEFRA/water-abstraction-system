@@ -6,8 +6,13 @@
  */
 
 const FectchLicenceAgreementsService = require('./fetch-licence-agreements.service.js')
-const FetchLicenceSummaryService = require('../licences/fetch-licence-summary.service.js')
+// const FetchLicenceSummaryService = require('../licences/fetch-licence-summary.service.js')
+const FetchLicenceDetailsService = require('./fetch-licence-details.service.js')
 const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
+
+// legacy ids used to identify electricitiy generators
+const heatPumpLegacyId = '200'
+const hydroelectricPowerGenerationLegacyId = '240'
 
 const minimumDailyQuantityThreshold = 100
 const upperDailyQuantityThreshold = 2500
@@ -26,7 +31,7 @@ async function go (licenceId) {
 }
 
 async function _fetchAbstractionData (licenceId) {
-  const licenceData = await FetchLicenceSummaryService.go(licenceId)
+  const licenceData = await FetchLicenceDetailsService.go(licenceId)
   const licenceAgreements = await FectchLicenceAgreementsService.go(licenceData.licenceRef)
   const returnRequirements = []
 
@@ -52,8 +57,8 @@ async function _fetchAbstractionData (licenceId) {
       abstractionPoint,
       isSummer: returnsCycle,
       purposeDescription: licencePurpose.description,
-      returnsFrequency: _calculateCollectionFrequency(licenceData, licenceVersionPurpose, licenceAgreements),
-      reportingFrequency: _calculateReportingFrequency(licenceData, licenceVersionPurpose),
+      returnsFrequency: _calculateCollectionFrequency(licenceData, licenceVersionPurpose, licencePurpose, licenceAgreements),
+      reportingFrequency: _calculateReportingFrequency(licenceData, licenceVersionPurpose, licencePurpose),
       siteDescription
     })
   })
@@ -61,8 +66,10 @@ async function _fetchAbstractionData (licenceId) {
   return returnRequirements
 }
 
-function _calculateCollectionFrequency (licenceData, licenceVersionPurpose, licenceAgreements) {
-  if (licenceData.waterUndertaker || licenceAgreements.length > 0) {
+function _calculateCollectionFrequency (licenceData, licenceVersionPurpose, licencePurpose, licenceAgreements) {
+  if (licenceData.waterUndertaker ||
+    licenceAgreements.length > 0 ||
+    [heatPumpLegacyId, hydroelectricPowerGenerationLegacyId].includes(licencePurpose.legacyId)) {
     return 'daily'
   }
 
@@ -86,8 +93,9 @@ function _calculateReturnsCycle (purpose) {
   return purposeStartDate >= summerStartDate && purposeEndDate <= summerEndDate
 }
 
-function _calculateReportingFrequency (licenceData, licenceVersionPurpose) {
-  if (licenceData.waterUndertaker) {
+function _calculateReportingFrequency (licenceData, licenceVersionPurpose, licencePurpose) {
+  if (licenceData.waterUndertaker ||
+    [heatPumpLegacyId, hydroelectricPowerGenerationLegacyId].includes(licencePurpose.legacyId)) {
     return 'daily'
   }
 
