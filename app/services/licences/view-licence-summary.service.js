@@ -25,9 +25,9 @@ async function go (licenceId, auth) {
 
   const currentLicenceVersionId = summaryLicenceData?.licenceVersions[0]?.id
 
-  const licenceAbstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
+  const abstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
 
-  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData, licenceAbstractionConditions)
+  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData, abstractionConditions)
 
   return {
     ...pageData,
