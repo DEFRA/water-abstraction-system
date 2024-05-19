@@ -175,7 +175,7 @@ function _generatePurposes (licenceVersions) {
 
 function _parseAbstractionsAndSourceOfSupply (permitLicence) {
   if (!permitLicence ||
-    permitLicence?.purposes === undefined ||
+    !permitLicence.purposes ||
     permitLicence.purposes.length === 0 ||
     permitLicence.purposes[0]?.purposePoints === undefined ||
     permitLicence.purposes[0]?.purposePoints.length === 0
