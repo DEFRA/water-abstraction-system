@@ -120,14 +120,14 @@ function _generateAbstractionPeriods (licenceVersions) {
     return null
   }
 
-  const formattedAbstactionPeriods = licenceVersions[0].licenceVersionPurposes.map((purpose) => {
+  const formattedAbstractionPeriods = licenceVersions[0].licenceVersionPurposes.map((purpose) => {
     const startDate = formatAbstractionDate(purpose.abstractionPeriodStartDay, purpose.abstractionPeriodStartMonth)
     const endDate = formatAbstractionDate(purpose.abstractionPeriodEndDay, purpose.abstractionPeriodEndMonth)
 
     return `${startDate} to ${endDate}`
   })
 
-  const uniqueAbstractionPeriods = [...new Set(formattedAbstactionPeriods)]
+  const uniqueAbstractionPeriods = [...new Set(formattedAbstractionPeriods)]
 
   return {
     caption: uniqueAbstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction',
