@@ -6,9 +6,9 @@
  */
 
 const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
-const FetchLicenceSummaryService = require('./fetch-licence-summary.service')
-const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter')
-const ViewLicenceService = require('./view-licence.service')
+const FetchLicenceSummaryService = require('./fetch-licence-summary.service.js')
+const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter.js')
+const ViewLicenceService = require('./view-licence.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
