@@ -32,7 +32,20 @@ const LicenceVersionPurposeModel = require('../../models/licence-version-purpose
  * to and the total count of conditions for the licence version.
  */
 async function go (licenceVersionId) {
-  const results = await LicenceVersionPurposeModel.query()
+  const results = await _fetch(licenceVersionId)
+
+  return _processResults(results)
+}
+
+function _fetch (licenceVersionId) {
+  // NOTE: We have found in testing that there are incomplete licences in the DB, for example, with no licence versions.
+  // If we are dealing with such a licence licenceVersionId will be undefined. As this service knows how to format the
+  // results for downstream services we handle it here rather than in the calling service.
+  if (!licenceVersionId) {
+    return []
+  }
+
+  return LicenceVersionPurposeModel.query()
     .distinct([
       'licenceVersionPurposes.purposeId',
       'licenceVersionPurposeConditionTypes.displayTitle'
@@ -43,8 +56,6 @@ async function go (licenceVersionId) {
     .orderBy([
       { column: 'licenceVersionPurposeConditionTypes.displayTitle', order: 'asc' }
     ])
-
-  return _processResults(results)
 }
 
 function _processResults (results) {

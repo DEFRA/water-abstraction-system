@@ -13,10 +13,10 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
 const FetchLicenceAbstractionConditionsService = require('../../../app/services/licences/fetch-licence-abstraction-conditions.service.js')
-const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service')
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service')
+const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
+const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 // Thing under test
-const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service')
+const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service.js')
 
 describe('View Licence service summary', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'

@@ -6,14 +6,15 @@
  */
 
 const FetchLicenceAbstractionConditionsService = require('./fetch-licence-abstraction-conditions.service.js')
-const FetchLicenceSummaryService = require('./fetch-licence-summary.service')
-const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter')
-const ViewLicenceService = require('./view-licence.service')
+const FetchLicenceSummaryService = require('./fetch-licence-summary.service.js')
+const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter.js')
+const ViewLicenceService = require('./view-licence.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
  *
  * @param {string} licenceId - The UUID of the licence
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
@@ -24,9 +25,9 @@ async function go (licenceId, auth) {
 
   const currentLicenceVersionId = summaryLicenceData?.licenceVersions[0]?.id
 
-  const licenceAbstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
+  const abstractionConditions = await FetchLicenceAbstractionConditionsService.go(currentLicenceVersionId)
 
-  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData, licenceAbstractionConditions)
+  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData, abstractionConditions)
 
   return {
     ...pageData,
