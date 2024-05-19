@@ -5,7 +5,7 @@
  * @module ViewLicenceSummaryPresenter
  */
 
-const { formatLongDate, formatAbstractionDate } = require('../base.presenter')
+const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
 const { generateAbstractionPointDetail } = require('../../lib/general.lib.js')
 
 /**
