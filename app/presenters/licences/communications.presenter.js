@@ -41,7 +41,7 @@ function _type (communication) {
 
 function _typeAlert (communication) {
   if (communication.event.metadata.name === 'Water abstraction alert') {
-    return `${sentenceCase(communication.event.metadata.options.sendingAlertType)} - Water abstraction alert`
+    return `${sentenceCase(communication.event.metadata.options.sendingAlertType)}`
   }
 
   return null

@@ -103,14 +103,14 @@ describe('Communications presenter', () => {
     describe("when the communication is a 'Water abstraction alert'", () => {
       beforeEach(() => {
         communications[0].event.metadata.name = 'Water abstraction alert'
-        communications[0].event.metadata.options.sendingAlertType = 'test'
+        communications[0].event.metadata.options.sendingAlertType = 'test - Water abstraction alert'
       })
 
       it('returns the type object with an alert text', () => {
         const result = CommunicationsPresenter.go(communications)
 
         expect(result.communications[0].type).to.equal({
-          alert: 'Test - Water abstraction alert',
+          alert: 'Test - water abstraction alert',
           label: 'Water abstraction alert',
           pdf: false,
           sentVia: 'sent 15 May 2024 via letter'
