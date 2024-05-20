@@ -78,6 +78,7 @@ describe('Charge Reference Details presenter', () => {
       describe('when the charge reference has a charge adjustment factor', () => {
         beforeEach(() => {
           reviewChargeReference.amendedChargeAdjustment = 0.7
+          reviewChargeReference.chargeAdjustment = 0.7
         })
 
         it('adds the charge adjustment factor to the adjustments property', () => {
