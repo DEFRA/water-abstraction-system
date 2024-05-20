@@ -44,7 +44,6 @@ describe('Communications presenter', () => {
           sender: 'admin-internal@wrls.gov.uk',
           sent: '15 May 2024',
           type: {
-            alert: null,
             label: 'Returns: invitation',
             pdf: false,
             sentVia: 'sent 15 May 2024 via letter'
@@ -64,7 +63,6 @@ describe('Communications presenter', () => {
           const result = CommunicationsPresenter.go(communications)
 
           expect(result.communications[0].type).to.equal({
-            alert: null,
             label: 'Returns: invitation',
             pdf: true,
             sentVia: 'sent 15 May 2024 via letter'
@@ -77,7 +75,6 @@ describe('Communications presenter', () => {
           const result = CommunicationsPresenter.go(communications)
 
           expect(result.communications[0].type).to.equal({
-            alert: null,
             label: 'Returns: invitation',
             pdf: false,
             sentVia: 'sent 15 May 2024 via letter'
@@ -103,15 +100,14 @@ describe('Communications presenter', () => {
     describe("when the communication is a 'Water abstraction alert'", () => {
       beforeEach(() => {
         communications[0].event.metadata.name = 'Water abstraction alert'
-        communications[0].event.metadata.options.sendingAlertType = 'test - Water abstraction alert'
+        communications[0].event.metadata.options.sendingAlertType = 'test'
       })
 
       it('returns the type object with an alert text', () => {
         const result = CommunicationsPresenter.go(communications)
 
         expect(result.communications[0].type).to.equal({
-          alert: 'Test - water abstraction alert',
-          label: 'Water abstraction alert',
+          label: 'Test - Water abstraction alert',
           pdf: false,
           sentVia: 'sent 15 May 2024 via letter'
         })

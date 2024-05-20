@@ -32,19 +32,19 @@ function _communications (communications) {
 
 function _type (communication) {
   return {
-    alert: _typeAlert(communication),
-    label: communication.event.metadata.name,
+    label: _typeLabel(communication),
     sentVia: `sent ${formatLongDate(new Date(communication.event.createdAt))} via ${communication.messageType}`,
     pdf: communication.messageRef.includes('pdf')
   }
 }
 
-function _typeAlert (communication) {
+function _typeLabel (communication) {
   if (communication.event.metadata.name === 'Water abstraction alert') {
-    return `${sentenceCase(communication.event.metadata.options.sendingAlertType)}`
+    return `${sentenceCase(communication.event.metadata.options.sendingAlertType)}` +
+      ` - ${communication.event.metadata.name}`
   }
 
-  return null
+  return communication.event.metadata.name
 }
 
 module.exports = {
