@@ -313,8 +313,7 @@ describe('Licences controller', () => {
       beforeEach(async () => {
         Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
           activeTab: 'set-up',
-          chargeVersions: [],
-          workflowRecords: []
+          chargeInformation: []
         })
       })
 

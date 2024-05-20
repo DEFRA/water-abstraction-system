@@ -4,21 +4,44 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
+
+const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
 
 // Thing under test
 const FetchChargeVersionsService =
   require('../../../app/services/licences/fetch-charge-versions.service.js')
 
-describe('Fetch charge versions for a licence', () => {
-  describe('when the licence has set up data', () => {
-    it('returns the matching set up data', async () => {
-      const result = await FetchChargeVersionsService.go()
+describe.only('Fetch charge versions for a licence', () => {
+  let testRecord
 
-      expect(result).to.be.empty()
+  beforeEach(async () => {
+    const changeReason = await ChangeReasonHelper.add()
+
+    testRecord = await ChargeVersionHelper.add({
+      changeReasonId: changeReason.id
+    })
+  })
+
+  describe('when the licence has charge versions data', () => {
+    it('returns the matching charge versions data', async () => {
+      const result = await FetchChargeVersionsService.go(testRecord.licenceRef)
+
+      expect(result).to.equal([
+        {
+          changeReason: {
+            description: 'Strategic review of charges (SRoC)'
+          },
+          endDate: null,
+          id: testRecord.id,
+          startDate: testRecord.startDate,
+          status: 'current'
+        }
+      ])
     })
   })
 })
