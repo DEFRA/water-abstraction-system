@@ -57,33 +57,52 @@ function _additionalCharges (chargeReference) {
 }
 
 function _adjustments (reviewChargeReference) {
+  const {
+    aggregate,
+    amendedAggregate,
+    chargeAdjustment,
+    amendedChargeAdjustment,
+    abatementAgreement,
+    winterDiscount,
+    twoPartTariffAgreement,
+    canalAndRiverTrustAgreement
+  } = reviewChargeReference
+
   const adjustments = []
   let hasAggregateOrChargeFactor = false
 
-  if (reviewChargeReference.amendedAggregate !== 1) {
-    adjustments.push(`Aggregate factor (${reviewChargeReference.amendedAggregate})`)
+  if (amendedAggregate !== 1) {
+    adjustments.push(`Aggregate factor (${amendedAggregate})`)
     hasAggregateOrChargeFactor = true
   }
 
-  if (reviewChargeReference.amendedChargeAdjustment !== 1) {
-    adjustments.push(`Charge adjustment (${reviewChargeReference.amendedChargeAdjustment})`)
+  if (amendedChargeAdjustment !== 1) {
+    adjustments.push(`Charge adjustment (${amendedChargeAdjustment})`)
     hasAggregateOrChargeFactor = true
   }
 
-  if (reviewChargeReference.abatementAgreement !== 1) {
-    adjustments.push(`Abatement agreement (${reviewChargeReference.abatementAgreement})`)
+  if (abatementAgreement !== 1) {
+    adjustments.push(`Abatement agreement (${abatementAgreement})`)
   }
 
-  if (reviewChargeReference.winterDiscount) {
+  if (winterDiscount) {
     adjustments.push('Winter discount')
   }
 
-  if (reviewChargeReference.twoPartTariffAgreement) {
+  if (twoPartTariffAgreement) {
     adjustments.push('Two part tariff agreement')
   }
 
-  if (reviewChargeReference.canalAndRiverTrustAgreement) {
+  if (canalAndRiverTrustAgreement) {
     adjustments.push('Canal and River trust agreement')
+  }
+
+  if (aggregate !== amendedAggregate) {
+    hasAggregateOrChargeFactor = true
+  }
+
+  if (chargeAdjustment !== amendedChargeAdjustment) {
+    hasAggregateOrChargeFactor = true
   }
 
   return { adjustments, hasAggregateOrChargeFactor }
