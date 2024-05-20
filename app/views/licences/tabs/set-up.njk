@@ -1,0 +1,7 @@
+<h2 class="govuk-heading-l">Licence set up</h2>
+
+<h3 class="govuk-heading-m"> Charge information </h3>
+
+{% if chargeVersions.length == 0 and workflowRecords.length == 0 %}
+<p class="govuk-body"> No charge information for this licence.</p>
+{% endif %}

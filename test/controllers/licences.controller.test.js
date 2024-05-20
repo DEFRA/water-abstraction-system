@@ -16,6 +16,7 @@ const InitiateSessionService = require('../../app/services/return-requirements/i
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
+const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
 
@@ -292,6 +293,38 @@ describe('Licences controller', () => {
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Contact details')
         expect(response.payload).to.contain('No contacts found.')
+      })
+    })
+  })
+
+  describe('GET /licences/{id}/licence-set-up', () => {
+    beforeEach(async () => {
+      options = {
+        method: 'GET',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-set-up',
+        auth: {
+          strategy: 'session',
+          credentials: { scope: ['billing'] }
+        }
+      }
+    })
+
+    describe('when a request is valid and does not have any data', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
+          activeTab: 'set-up',
+          chargeVersions: [],
+          workflowRecords: []
+        })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Licence set up')
+        expect(response.payload).to.contain('Charge information')
+        expect(response.payload).to.contain('No charge information for this licence.')
       })
     })
   })

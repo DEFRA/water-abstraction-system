@@ -18,6 +18,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licences/{id}/licence-set-up',
+    handler: LicencesController.viewSetUp,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'View a licence set up page'
+    }
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/communications',
     handler: LicencesController.viewCommunications,
     options: {

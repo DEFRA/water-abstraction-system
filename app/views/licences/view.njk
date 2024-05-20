@@ -67,9 +67,9 @@
         </li>
       {% endif %}
       {% if roles and 'view_charge_versions' in roles %}
-        <li class="govuk-tabs__list-item {% if activeTab === 'charge-information' %} govuk-tabs__list-item--selected {% endif %}">
-          <a class="govuk-tabs__tab" href="charge-information">
-            Charge information
+        <li class="govuk-tabs__list-item {% if activeTab === 'set-up' %} govuk-tabs__list-item--selected {% endif %}">
+          <a class="govuk-tabs__tab" href="licence-set-up">
+            Licence set up
           </a>
         </li>
       {% endif %}
@@ -90,6 +90,9 @@
       {% endif %}
       {% if activeTab === 'bills' %}
         {% include "licences/tabs/bills.njk" %}
+      {% endif %}
+      {% if activeTab === 'set-up' %}
+        {% include "licences/tabs/set-up.njk" %}
       {% endif %}
     </div>
   </div>
