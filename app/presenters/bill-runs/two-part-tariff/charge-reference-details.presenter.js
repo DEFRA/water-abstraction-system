@@ -97,11 +97,7 @@ function _adjustments (reviewChargeReference) {
     adjustments.push('Canal and River trust agreement')
   }
 
-  if (aggregate !== amendedAggregate) {
-    hasAggregateOrChargeFactor = true
-  }
-
-  if (chargeAdjustment !== amendedChargeAdjustment) {
+  if (aggregate !== amendedAggregate || chargeAdjustment !== amendedChargeAdjustment) {
     hasAggregateOrChargeFactor = true
   }
 
