@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchLicenceSetUpService =
-  require('../../../app/services/licences/fetch-licence-set-up.service.js')
+  require('../../../app/services/licences/fetch-charge-versions.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
@@ -21,7 +21,15 @@ describe('View licence set up service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   beforeEach(() => {
-    Sinon.stub(FetchLicenceSetUpService, 'go').returns([])
+    Sinon.stub(FetchLicenceSetUpService, 'go').returns([
+      {
+        id: '123',
+        startDate: new Date('2020-01-01'),
+        endDate: new Date('2020-09-01'),
+        status: 'current',
+        changeReason: { description: 'Missing thing' }
+      }
+    ])
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
   })
 
@@ -35,9 +43,14 @@ describe('View licence set up service', () => {
 
       expect(result).to.equal({
         activeTab: 'set-up',
-        chargeVersions: [],
-        licenceName: 'fake licence',
-        workflowRecords: []
+        chargeInformation: [{
+          endDate: '1 September 2020',
+          id: '123',
+          reason: 'Missing thing',
+          startDate: '1 January 2020',
+          status: 'approved'
+        }],
+        licenceName: 'fake licence'
       })
     })
   })

@@ -4,11 +4,11 @@
 
 <h3 class="govuk-heading-m"> Charge information </h3>
 
-{% if chargeVersions.length == 0 and workflowRecords.length == 0 %}
+{% if chargeInformation.length == 0 %}
   <p class="govuk-body"> No charge information for this licence.</p>
 {% endif %}
 
-{% if chargeVersions.length > 0 %}
+{% if chargeInformation.length > 0 %}
   <table class="govuk-table">
     <thead class="govuk-table__head">
     <tr class="govuk-table__row">
@@ -20,7 +20,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
-    {% for chargeVersion in chargeVersions %}
+    {% for chargeVersion in chargeInformation %}
       <tr class="govuk-table__row">
         <td class="govuk-table__cell">{{ chargeVersion.startDate }}</td>
         <td class="govuk-table__cell">{{ chargeVersion.endDate }}</td>

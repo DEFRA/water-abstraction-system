@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/licences/{id}/licence-set-up` page
- * @module FetchLicenceSetUpService
+ * @module FetchChargeVersionsService
  */
 
 const ChargeVersionModel = require('../../models/charge-version.model.js')

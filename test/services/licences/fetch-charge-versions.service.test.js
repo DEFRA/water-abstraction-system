@@ -10,13 +10,13 @@ const { expect } = Code
 // Test helpers
 
 // Thing under test
-const FetchLicenceSetUpService =
-  require('../../../app/services/licences/fetch-licence-set-up.service.js')
+const FetchChargeVersionsService =
+  require('../../../app/services/licences/fetch-charge-versions.service.js')
 
-describe('Fetch licence set up', () => {
+describe('Fetch charge versions for a licence', () => {
   describe('when the licence has set up data', () => {
     it('returns the matching set up data', async () => {
-      const result = await FetchLicenceSetUpService.go()
+      const result = await FetchChargeVersionsService.go()
 
       expect(result).to.be.empty()
     })

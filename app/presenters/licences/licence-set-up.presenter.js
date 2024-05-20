@@ -5,18 +5,24 @@
  * @module LicenceSetUpPresenter
  */
 
-const { formatLongDate, titleCase } = require('../base.presenter')
+const { formatLongDate } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/licence-set-up` view licence set up page
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (licenceSetUp) {
+function go (chargeVersions, chargeVersionWorkflows = []) {
   return {
-    chargeVersions: _chargeVersions(licenceSetUp),
-    workflowRecords: _workflowRecords(licenceSetUp)
+    chargeInformation: _chargeInformation(chargeVersions, chargeVersionWorkflows)
   }
+}
+
+function _chargeInformation (chargeVersions, chargeVersionWorkflows) {
+  return [
+    ..._chargeVersions(chargeVersions),
+    ..._workflowRecords(chargeVersionWorkflows)
+  ]
 }
 
 function _chargeVersions (licenceSetUp) {
@@ -27,14 +33,6 @@ function _chargeVersions (licenceSetUp) {
       endDate: chargeInformation.endDate ? formatLongDate(chargeInformation.endDate) : '-',
       status: _chargeVersionStatus(chargeInformation.status),
       reason: chargeInformation.changeReason?.description
-    }
-  })
-}
-
-function _workflowRecords (licenceSetUp) {
-  return licenceSetUp.map((workflowRecord) => {
-    return {
-      ...workflowRecord
     }
   })
 }
@@ -53,6 +51,14 @@ function _chargeVersionStatus (status) {
   }
 
   return statues[status]
+}
+
+function _workflowRecords (licenceSetUp) {
+  return licenceSetUp.map((workflowRecord) => {
+    return {
+      ...workflowRecord
+    }
+  })
 }
 
 module.exports = {
