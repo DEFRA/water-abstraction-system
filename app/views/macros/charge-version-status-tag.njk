@@ -1,0 +1,26 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro statusTag(status) %}
+  {% if status === 'approved' %}
+    {% set classes = "govuk-tag--green" %}
+    {% elif status === 'replaced' %}
+    {% set classes = "govuk-tag--grey" %}
+    {% elif status === 'superseded' %}
+    {% set classes = "govuk-tag--grey" %}
+    {% elif status === 'invalid' %}
+    {% set classes = "govuk-tag--red" %}
+    {% elif status === 'review' %}
+    {% set classes = "govuk-tag--orange" %}
+    {% elif status === 'change request' %}
+    {% set classes = "govuk-tag--blue" %}
+    {% elif status === 'to_setup' %}
+    {% set classes = "govuk-tag--blue" %}
+  {% else %}
+    {% set classes = "" %}
+  {% endif %}
+
+  {{ govukTag({
+    text: status,
+    classes: classes
+  }) }}
+{% endmacro %}

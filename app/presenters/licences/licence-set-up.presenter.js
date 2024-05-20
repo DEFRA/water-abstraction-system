@@ -5,6 +5,8 @@
  * @module LicenceSetUpPresenter
  */
 
+const { formatLongDate, titleCase } = require('../base.presenter')
+
 /**
  * Formats data for the `/licences/{id}/licence-set-up` view licence set up page
  *
@@ -20,7 +22,11 @@ function go (licenceSetUp) {
 function _chargeVersions (licenceSetUp) {
   return licenceSetUp.map((chargeInformation) => {
     return {
-      ...chargeInformation
+      id: chargeInformation.id,
+      startDate: chargeInformation.startDate ? formatLongDate(chargeInformation.startDate) : '-',
+      endDate: chargeInformation.endDate ? formatLongDate(chargeInformation.endDate) : '-',
+      status: _chargeVersionStatus(chargeInformation.status),
+      reason: chargeInformation.changeReason?.description
     }
   })
 }
@@ -31,6 +37,22 @@ function _workflowRecords (licenceSetUp) {
       ...workflowRecord
     }
   })
+}
+
+function _chargeVersionStatus (status) {
+  const statues = {
+    current: 'approved',
+    draft: 'draft',
+    approved: 'approved',
+    replaced: 'replaced',
+    superseded: 'replaced',
+    invalid: 'invalid',
+    review: 'review',
+    changes_requested: 'change request',
+    to_setup: 'to set up'
+  }
+
+  return statues[status]
 }
 
 module.exports = {
