@@ -46,6 +46,7 @@ describe('Charge Reference Details presenter', () => {
       describe('when the charge reference has an aggregate factor', () => {
         beforeEach(() => {
           reviewChargeReference.amendedAggregate = 0.5
+          reviewChargeReference.aggregate = 0.5
         })
 
         it('adds the aggregate factor to the adjustments property', () => {
@@ -59,11 +60,25 @@ describe('Charge Reference Details presenter', () => {
 
           expect(result.hasAggregateOrChargeFactor).to.equal(true)
         })
+
+        describe('when the source aggregate factor is different to the amendedAggregate factor', () => {
+          beforeEach(() => {
+            reviewChargeReference.aggregate = 0.5
+            reviewChargeReference.amendedAggregate = 1
+          })
+
+          it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
+            const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
+
+            expect(result.hasAggregateOrChargeFactor).to.equal(true)
+          })
+        })
       })
 
       describe('when the charge reference has a charge adjustment factor', () => {
         beforeEach(() => {
           reviewChargeReference.amendedChargeAdjustment = 0.7
+          reviewChargeReference.chargeAdjustment = 0.7
         })
 
         it('adds the charge adjustment factor to the adjustments property', () => {
@@ -76,6 +91,19 @@ describe('Charge Reference Details presenter', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.hasAggregateOrChargeFactor).to.equal(true)
+        })
+
+        describe('when the source charge adjustment factor is different to the amendedChargeAdjustment factor', () => {
+          beforeEach(() => {
+            reviewChargeReference.chargeAdjustment = 0.5
+            reviewChargeReference.amendedChargeAdjustment = 1
+          })
+
+          it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
+            const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
+
+            expect(result.hasAggregateOrChargeFactor).to.equal(true)
+          })
         })
       })
 
