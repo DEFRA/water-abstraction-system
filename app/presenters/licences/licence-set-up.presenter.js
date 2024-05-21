@@ -31,7 +31,7 @@ function _chargeVersions (licenceSetUp) {
       id: chargeInformation.id,
       startDate: chargeInformation.startDate ? formatLongDate(chargeInformation.startDate) : '-',
       endDate: chargeInformation.endDate ? formatLongDate(chargeInformation.endDate) : '-',
-      status: _chargeVersionStatus(chargeInformation.status),
+      status: _status(chargeInformation.status),
       reason: chargeInformation.changeReason?.description,
       action: [
         {
@@ -43,7 +43,7 @@ function _chargeVersions (licenceSetUp) {
   })
 }
 
-function _chargeVersionStatus (status) {
+function _status (status) {
   const statues = {
     current: 'approved',
     draft: 'draft',
@@ -65,7 +65,7 @@ function _workflows (workflows, auth) {
       id: workflow.id,
       startDate: workflow.createdAt ? formatLongDate(workflow.createdAt) : '-',
       endDate: '-',
-      status: _chargeVersionStatus(workflow.status),
+      status: _status(workflow.status),
       reason: workflow.data.chargeVersion.changeReason.description,
       action: _workflowAction(workflow, auth)
     }
@@ -74,26 +74,34 @@ function _workflows (workflows, auth) {
 
 function _workflowAction (workflow, auth) {
   if (workflow.status === 'to_setup' && auth.credentials?.scope?.includes('charge_version_workflow_editor')) {
-    return [
-      {
-        text: 'Set up',
-        link: `/licences/${workflow.licenceId}/charge-information/create?chargeVersionWorkflowId=${workflow.id}`
-      },
-      {
-        text: 'Remove',
-        link: `/charge-information-workflow/${workflow.id}/remove`
-      }
-    ]
+    return _workflowActionEditor(workflow)
   } else if (auth.credentials?.scope?.includes('charge_version_workflow_reviewer')) {
-    return [
-      {
-        text: 'Review',
-        link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`
-      }
-    ]
+    return _workflowActionReviewer(workflow)
+  } else {
+    return []
   }
+}
 
-  return []
+function _workflowActionEditor (workflow) {
+  return [
+    {
+      text: 'Set up',
+      link: `/licences/${workflow.licenceId}/charge-information/create?chargeVersionWorkflowId=${workflow.id}`
+    },
+    {
+      text: 'Remove',
+      link: `/charge-information-workflow/${workflow.id}/remove`
+    }
+  ]
+}
+
+function _workflowActionReviewer (workflow) {
+  return [
+    {
+      text: 'Review',
+      link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`
+    }
+  ]
 }
 
 module.exports = {
