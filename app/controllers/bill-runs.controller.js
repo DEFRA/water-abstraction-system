@@ -8,6 +8,7 @@
 const Boom = require('@hapi/boom')
 
 const AmendAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
+const AmendAuthorisedVolumeService = require('../services/bill-runs/two-part-tariff/amend-authorised-volume.service.js')
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
@@ -35,6 +36,18 @@ async function amendAdjustmentFactor (request, h) {
 
   return h.view('bill-runs/amend-adjustment-factor.njk', {
     pageTitle: 'Set the adjustment factors',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function amendAuthorisedVolume (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await AmendAuthorisedVolumeService.go(billRunId, licenceId, reviewChargeReferenceId)
+
+  return h.view('bill-runs/amend-authorised-volume.njk', {
+    pageTitle: 'Set the authorised volume',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -268,6 +281,7 @@ async function view (request, h) {
 
 module.exports = {
   amendAdjustmentFactor,
+  amendAuthorisedVolume,
   amendBillableReturns,
   cancel,
   chargeReferenceDetails,

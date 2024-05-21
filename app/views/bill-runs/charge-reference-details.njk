@@ -66,7 +66,8 @@
       <span class="inline govuk-!-margin-right-3">
         {{ govukButton({
           text: "Change the authorised volume",
-          classes: "govuk-button--secondary"
+          classes: "govuk-button--secondary",
+          href: chargeReference.id + '/amend-authorised-volume'
         }) }}
       </span>
     {% endif %}
