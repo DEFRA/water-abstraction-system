@@ -13,6 +13,7 @@ const LicenceSetUpPresenter = require('../../../app/presenters/licences/licence-
 describe('Licence set up presenter', () => {
   let chargeVersions
   let workflows
+  let auth = {}
 
   beforeEach(() => {
     chargeVersions = [{
@@ -35,7 +36,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data', () => {
     it('correctly presents the data', () => {
-      const result = LicenceSetUpPresenter.go(chargeVersions, workflows)
+      const result = LicenceSetUpPresenter.go(chargeVersions, workflows, auth)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -67,7 +68,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data with only the charge versions', () => {
     it('correctly presents the charge version data', () => {
-      const result = LicenceSetUpPresenter.go(chargeVersions, [])
+      const result = LicenceSetUpPresenter.go(chargeVersions, [], auth)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -91,7 +92,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data with only the workflows', () => {
     it('correctly presents the workflows data', () => {
-      const result = LicenceSetUpPresenter.go([], workflows)
+      const result = LicenceSetUpPresenter.go([], workflows, auth)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -104,6 +105,99 @@ describe('Licence set up presenter', () => {
             status: 'review'
           }
         ]
+      })
+    })
+
+    describe('user is authorised to edit the workflow', () => {
+      beforeEach(() => {
+        auth = {
+          credentials: {
+            scope: ['charge_version_workflow_editor']
+          }
+        }
+
+        workflows[0].status = 'to_setup'
+      })
+
+      it('populates the \'action\' with the data for a user who can edit a charge version workflow and the \'status\' is to set up', () => {
+        const result = LicenceSetUpPresenter.go([], workflows, auth)
+
+        expect(result).to.equal({
+          chargeInformation: [
+            {
+              action: [
+                {
+                  link: '/licences/456/charge-information/create?chargeVersionWorkflowId=123',
+                  text: 'Set up'
+                },
+                {
+                  link: '/charge-information-workflow/123/remove',
+                  text: 'Remove'
+                }
+              ],
+              endDate: '-',
+              id: '123',
+              reason: 'changed something',
+              startDate: '1 January 2020',
+              status: 'to_setup'
+            }
+          ]
+        })
+      })
+    })
+    describe('user is authorised to review the workflow', () => {
+      beforeEach(() => {
+        auth = {
+          credentials: {
+            scope: ['charge_version_workflow_reviewer']
+          }
+        }
+
+        workflows[0].status = 'review'
+      })
+
+      it('populates the \'action\' with the data for a user who can review a charge version', () => {
+        const result = LicenceSetUpPresenter.go([], workflows, auth)
+
+        expect(result).to.equal({
+          chargeInformation: [
+            {
+              action: [
+                {
+                  link: '/licences/456/charge-information/123/review',
+                  text: 'Review'
+                }
+              ],
+              endDate: '-',
+              id: '123',
+              reason: 'changed something',
+              startDate: '1 January 2020',
+              status: 'review'
+            }
+          ]
+        })
+      })
+    })
+    describe('user is not authorised', () => {
+      beforeEach(() => {
+        auth = {}
+      })
+
+      it('populates the \'action\' as empty if the user is not authorised', () => {
+        const result = LicenceSetUpPresenter.go([], workflows, auth)
+
+        expect(result).to.equal({
+          chargeInformation: [
+            {
+              action: [],
+              endDate: '-',
+              id: '123',
+              reason: 'changed something',
+              startDate: '1 January 2020',
+              status: 'review'
+            }
+          ]
+        })
       })
     })
   })

@@ -12,15 +12,15 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows) {
+function go (chargeVersions, workflows, auth) {
   return {
-    chargeInformation: _chargeInformation(chargeVersions, workflows)
+    chargeInformation: _chargeInformation(chargeVersions, workflows, auth)
   }
 }
 
-function _chargeInformation (chargeVersions, workflows) {
+function _chargeInformation (chargeVersions, workflows, auth) {
   return [
-    ..._workflows(workflows),
+    ..._workflows(workflows, auth),
     ..._chargeVersions(chargeVersions)
   ]
 }
@@ -59,17 +59,41 @@ function _chargeVersionStatus (status) {
   return statues[status]
 }
 
-function _workflows (workflows) {
-  return workflows.map((workflowRecord) => {
+function _workflows (workflows, auth) {
+  return workflows.map((workflow) => {
     return {
-      id: workflowRecord.id,
-      startDate: workflowRecord.createdAt ? formatLongDate(workflowRecord.createdAt) : '-',
+      id: workflow.id,
+      startDate: workflow.createdAt ? formatLongDate(workflow.createdAt) : '-',
       endDate: '-',
-      status: workflowRecord.status,
-      reason: workflowRecord.data.chargeVersion.changeReason.description,
-      action: []
+      status: workflow.status,
+      reason: workflow.data.chargeVersion.changeReason.description,
+      action: _workflowAction(workflow, auth)
     }
   })
+}
+
+function _workflowAction (workflow, auth) {
+  if (workflow.status === 'to_setup' && auth.credentials?.scope?.includes('charge_version_workflow_editor')) {
+    return [
+      {
+        text: 'Set up',
+        link: `/licences/${workflow.licenceId}/charge-information/create?chargeVersionWorkflowId=${workflow.id}`
+      },
+      {
+        text: 'Remove',
+        link: `/charge-information-workflow/${workflow.id}/remove`
+      }
+    ]
+  } else if (auth.credentials?.scope?.includes('charge_version_workflow_reviewer')) {
+    return [
+      {
+        text: 'Review',
+        link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`
+      }
+    ]
+  }
+
+  return []
 }
 
 module.exports = {

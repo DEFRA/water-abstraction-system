@@ -24,7 +24,7 @@ async function go (licenceId, auth) {
   const chargeVersions = await FetchChargeVersionsService.go(licenceId)
   const workflows = await FetchWorkflowsService.go(licenceId)
 
-  const licenceSetUpData = LicenceSetUpPresenter.go(chargeVersions, workflows)
+  const licenceSetUpData = LicenceSetUpPresenter.go(chargeVersions, workflows, auth)
 
   return {
     activeTab: 'set-up',
