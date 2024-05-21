@@ -89,4 +89,14 @@ describe('Fetch Licence Abstraction Conditions service', () => {
       expect(result.numberOfConditions).to.equal(0)
     })
   })
+
+  describe('when an undefined licence version ID is passed in', () => {
+    it('returns an empty array of conditions, purpose IDs and 0 for the number of conditions', async () => {
+      const result = await FetchLicenceAbstractionConditionsService.go(undefined)
+
+      expect(result.conditions).to.be.empty()
+      expect(result.purposeIds).to.be.empty()
+      expect(result.numberOfConditions).to.equal(0)
+    })
+  })
 })

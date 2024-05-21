@@ -47,6 +47,7 @@ describe('View Licence service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
+          documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
           licenceId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
@@ -158,6 +159,7 @@ function _testLicence () {
     licenceRef: '01/130/R01',
     licenceName: 'Unregistered licence',
     registeredTo: null,
-    startDate: new Date('2013-03-07')
+    startDate: new Date('2013-03-07'),
+    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' }
   })
 }
