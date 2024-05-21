@@ -52,6 +52,7 @@ describe('Fetch licence service', () => {
       expect(result.revokedDate).to.equal(null)
       expect(result.includeInPresrocBilling).to.equal('yes')
       expect(result.includeInSrocBilling).to.be.true()
+      expect(result.startDate).to.equal(licence.startDate)
     })
   })
 

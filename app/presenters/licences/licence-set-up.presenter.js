@@ -18,9 +18,9 @@ const roles = {
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, auth, licenceId) {
+function go (chargeVersions, workflows, auth, licence) {
   return {
-    ..._authorisedLinks(auth, licenceId),
+    ..._authorisedLinks(auth, licence),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth)
   }
 }
@@ -50,11 +50,24 @@ function _chargeVersions (licenceSetUp) {
   })
 }
 
-function _authorisedLinks (auth, licenceId) {
-  if (auth.credentials?.scope?.includes(roles.workflowEditor)) {
+function _isLessThanSixYearsOld (date) {
+  const startDate = new Date(date)
+
+  const yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+  yesterday.setHours(23, 59, 59, 999)
+
+  const sixYearsFromYesterday = new Date(yesterday.getTime())
+  sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - 6)
+
+  return startDate > sixYearsFromYesterday
+}
+
+function _authorisedLinks (auth, licence) {
+  if (auth.credentials?.scope?.includes(roles.workflowEditor) && _isLessThanSixYearsOld(licence.startDate)) {
     return {
-      setupNewCharge: `/licences/${licenceId}/charge-information/create`,
-      makeLicenceNonChargeable: `/licences/${licenceId}/charge-information/non-chargeable-reason?start=1`
+      setupNewCharge: `/licences/${licence.id}/charge-information/create`,
+      makeLicenceNonChargeable: `/licences/${licence.id}/charge-information/non-chargeable-reason?start=1`
     }
   }
 }
@@ -78,12 +91,12 @@ function _status (status) {
 function _workflows (workflows, auth) {
   return workflows.map((workflow) => {
     return {
-      id: workflow.id,
-      startDate: workflow.createdAt ? formatLongDate(workflow.createdAt) : '-',
+      action: _workflowAction(workflow, auth),
       endDate: '-',
-      status: _status(workflow.status),
-      reason: workflow.data.chargeVersion.changeReason.description,
-      action: _workflowAction(workflow, auth)
+      id: workflow.id,
+      reason: workflow.data.chargeVersion?.changeReason?.description,
+      startDate: workflow.createdAt ? formatLongDate(workflow.createdAt) : '-',
+      status: _status(workflow.status)
     }
   })
 }

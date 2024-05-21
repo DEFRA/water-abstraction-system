@@ -4,14 +4,17 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
+const Sinon = require('sinon')
 
 // Thing under test
 const LicenceSetUpPresenter = require('../../../app/presenters/licences/licence-set-up.presenter.js')
 
 describe('Licence set up presenter', () => {
-  const licenceId = 123
+  const licence = {
+    id: 123
+  }
 
   let chargeVersions
   let workflows
@@ -38,7 +41,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data', () => {
     it('correctly presents the data', () => {
-      const result = LicenceSetUpPresenter.go(chargeVersions, workflows, auth, licenceId)
+      const result = LicenceSetUpPresenter.go(chargeVersions, workflows, auth, licence)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -70,7 +73,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data with only the charge versions', () => {
     it('correctly presents the charge version data', () => {
-      const result = LicenceSetUpPresenter.go(chargeVersions, [], auth, licenceId)
+      const result = LicenceSetUpPresenter.go(chargeVersions, [], auth, licence)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -94,7 +97,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data with only the workflows', () => {
     it('correctly presents the workflows data', () => {
-      const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
+      const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -122,7 +125,7 @@ describe('Licence set up presenter', () => {
       })
 
       it('populates the \'action\' with the data for a user who can edit a charge version workflow and the \'status\' is to set up', () => {
-        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
 
         expect(result.chargeInformation[0].action).to.equal(
           [
@@ -138,7 +141,7 @@ describe('Licence set up presenter', () => {
         )
       })
       it('populates the \'makeLicenceNonChargeable\'  and \'setupNewCharge\' links ', () => {
-        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
 
         expect(result.makeLicenceNonChargeable).to.equal('/licences/123/charge-information/non-chargeable-reason?start=1')
         expect(result.setupNewCharge).to.equal('/licences/123/charge-information/create')
@@ -157,7 +160,7 @@ describe('Licence set up presenter', () => {
       })
 
       it('populates the \'action\' with the data for a user who can review a charge version', () => {
-        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
 
         expect(result).to.equal({
           chargeInformation: [
@@ -184,7 +187,7 @@ describe('Licence set up presenter', () => {
       })
 
       it('populates the \'action\' as empty if the user is not authorised', () => {
-        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
 
         expect(result).to.equal({
           chargeInformation: [
@@ -198,6 +201,53 @@ describe('Licence set up presenter', () => {
             }
           ]
         })
+      })
+    })
+  })
+
+  describe('when provided with populated licence set up data', () => {
+    const now = new Date('2022-01-02')
+
+    let clock
+
+    beforeEach(() => {
+      auth = {
+        credentials: {
+          scope: ['charge_version_workflow_editor']
+        }
+      }
+      licence.startDate = '2020-01-01'
+
+      clock = Sinon.useFakeTimers(now.getTime())
+    })
+
+    afterEach(() => {
+      clock.restore()
+    })
+
+    describe('user is authorised to edit the workflow and the licence is less than 6 years old', () => {
+      beforeEach(() => {
+        licence.startDate = '2020-01-01'
+      })
+
+      it('populates the \'makeLicenceNonChargeable\'  and \'setupNewCharge\' links ', () => {
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
+
+        expect(result.makeLicenceNonChargeable).to.equal('/licences/123/charge-information/non-chargeable-reason?start=1')
+        expect(result.setupNewCharge).to.equal('/licences/123/charge-information/create')
+      })
+    })
+
+    describe('user is authorised to edit the workflow and the licence is more than 6 years old', () => {
+      beforeEach(() => {
+        licence.startDate = '1990-01-01'
+      })
+
+      it('no links should be present', () => {
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
+
+        expect(result.makeLicenceNonChargeable).to.be.undefined()
+        expect(result.setupNewCharge).to.be.undefined()
       })
     })
   })
