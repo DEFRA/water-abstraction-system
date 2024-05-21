@@ -113,17 +113,166 @@
         {# Set an easier to use index #}
         {% set rowIndex = loop.index0 %}
         <div>
-          <h3 class="govuk-body">{{requirement.siteDescription}}</h3>
-          {{ govukButton({
-            text: "Remove requirement",
-            classes: "govuk-button--warning",
-            preventDoubleClick: true,
-            href: "/system/return-requirements/" + sessionId + "/remove/" + rowIndex
-          }) }}
+            {{ govukSummaryList({
+              card: {
+                title: {
+                  text: requirement.siteDescription
+                }
+              },
+              classes: "govuk-summary-list--no-border",
+              rows: [
+                {
+                  key: {
+                    text: "Purpose"
+                  },
+                  value: {
+                    html: "requirement.purposes"
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "purpose/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Purpose"
+                      }
+                    ]
+                  }
+                },
+                {
+                  key: {
+                    text: "Point"
+                  },
+                  value: {
+                    html: "requirement.points"
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "points/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Point"
+                      }
+                    ]
+                  }
+                },
+                {
+                  key: {
+                    text: "Abstraction period"
+                  },
+                  value: {
+                    html: requirement.abstractionPeriod
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "abstraction-period/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Abstraction period"
+                      }
+                    ]
+                  }
+                },
+                {
+                  key: {
+                    text: "Returns cycle"
+                  },
+                  value: {
+                    html: requirement.returnsCycle | capitalize
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "returns-cycle/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Returns cycle"
+                      }
+                    ]
+                  }
+                },
+                {
+                  key: {
+                    text: "Site description"
+                  },
+                  value: {
+                    html: requirement.siteDescription
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "site-description/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Site description"
+                      }
+                    ]
+                  }
+                },
+                {
+                  key: {
+                    text: "Collection"
+                  },
+                  value: {
+                    html: requirement.frequencyCollected | capitalize
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "frequency-collected/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Collection"
+                      }
+                    ]
+                  }
+                },
+                {
+                  key: {
+                    text: "Reporting"
+                  },
+                  value: {
+                    html: requirement.frequencyReported | capitalize
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "frequency-reported/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Reporting"
+                      }
+                    ]
+                  }
+                },
+                {
+                  key: {
+                    text: "Agreements exceptions"
+                  },
+                  value: {
+                    html: "requirement.agreementsExceptions"
+                  },
+                  actions: {
+                    items: [
+                      {
+                        href: "agreements-exceptions/" + rowIndex,
+                        text: "Change",
+                        visuallyHiddenText: "Agreements exception"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }) }}
+          {% if requirements.length >= 2 %}
+            {{ govukButton({
+              text: "Remove requirement",
+              classes: "govuk-button--warning",
+              preventDoubleClick: true,
+              href: "/system/return-requirements/" + sessionId + "/remove/" + rowIndex
+            }) }}
+          {% endif %}
         </div>
       {% endfor %}
     </div>
   {% endif %}
+
+
 
   <form method="post">
     <div class="govuk-body">
