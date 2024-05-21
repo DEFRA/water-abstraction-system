@@ -44,7 +44,6 @@ describe('Communications presenter', () => {
           sender: 'admin-internal@wrls.gov.uk',
           sent: '15 May 2024',
           type: {
-            alert: null,
             label: 'Returns: invitation',
             pdf: false,
             sentVia: 'sent 15 May 2024 via letter'
@@ -64,7 +63,6 @@ describe('Communications presenter', () => {
           const result = CommunicationsPresenter.go(communications)
 
           expect(result.communications[0].type).to.equal({
-            alert: null,
             label: 'Returns: invitation',
             pdf: true,
             sentVia: 'sent 15 May 2024 via letter'
@@ -77,7 +75,6 @@ describe('Communications presenter', () => {
           const result = CommunicationsPresenter.go(communications)
 
           expect(result.communications[0].type).to.equal({
-            alert: null,
             label: 'Returns: invitation',
             pdf: false,
             sentVia: 'sent 15 May 2024 via letter'
@@ -110,8 +107,7 @@ describe('Communications presenter', () => {
         const result = CommunicationsPresenter.go(communications)
 
         expect(result.communications[0].type).to.equal({
-          alert: 'Test - Water abstraction alert',
-          label: 'Water abstraction alert',
+          label: 'Test - Water abstraction alert',
           pdf: false,
           sentVia: 'sent 15 May 2024 via letter'
         })
