@@ -23,11 +23,12 @@ describe('View licence set up service', () => {
   beforeEach(() => {
     Sinon.stub(FetchLicenceSetUpService, 'go').returns([
       {
-        id: '123',
-        startDate: new Date('2020-01-01'),
+        changeReason: { description: 'Missing thing' },
         endDate: new Date('2020-09-01'),
-        status: 'current',
-        changeReason: { description: 'Missing thing' }
+        id: '123',
+        licenceId: '456',
+        startDate: new Date('2020-01-01'),
+        status: 'current'
       }
     ])
     Sinon.stub(ViewLicenceService, 'go').resolves({ licenceName: 'fake licence' })
@@ -44,6 +45,12 @@ describe('View licence set up service', () => {
       expect(result).to.equal({
         activeTab: 'set-up',
         chargeInformation: [{
+          action: [
+            {
+              link: '/licences/456/charge-information/123/view',
+              text: 'View'
+            }
+          ],
           endDate: '1 September 2020',
           id: '123',
           reason: 'Missing thing',

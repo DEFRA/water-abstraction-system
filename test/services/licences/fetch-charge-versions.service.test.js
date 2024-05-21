@@ -29,7 +29,7 @@ describe('Fetch charge versions for a licence', () => {
 
   describe('when the licence has charge versions data', () => {
     it('returns the matching charge versions data', async () => {
-      const result = await FetchChargeVersionsService.go(testRecord.licenceRef)
+      const result = await FetchChargeVersionsService.go(testRecord.licenceId)
 
       expect(result).to.equal([
         {
@@ -38,6 +38,7 @@ describe('Fetch charge versions for a licence', () => {
           },
           endDate: null,
           id: testRecord.id,
+          licenceId: testRecord.licenceId,
           startDate: testRecord.startDate,
           status: 'current'
         }

@@ -20,7 +20,7 @@ const ViewLicenceService = require('./view-licence.service.js')
 async function go (licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
-  const chargeVersions = await FetchChargeVersionsService.go(commonData.licenceRef)
+  const chargeVersions = await FetchChargeVersionsService.go(licenceId)
   const licenceSetUpData = LicenceSetUpPresenter.go(chargeVersions)
 
   return {

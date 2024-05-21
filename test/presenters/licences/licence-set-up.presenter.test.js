@@ -19,7 +19,8 @@ describe('Licence set up presenter', () => {
       startDate: new Date('2020-01-01'),
       endDate: new Date('2020-09-01'),
       status: 'current',
-      changeReason: { description: 'Missing thing' }
+      changeReason: { description: 'Missing thing' },
+      licenceId: '456'
     }]
   })
 
@@ -30,6 +31,12 @@ describe('Licence set up presenter', () => {
       expect(result).to.equal({
         chargeInformation: [
           {
+            action: [
+              {
+                link: '/licences/456/charge-information/123/view',
+                text: 'View'
+              }
+            ],
             id: '123',
             startDate: '1 January 2020',
             endDate: '1 September 2020',
@@ -48,6 +55,12 @@ describe('Licence set up presenter', () => {
       expect(result).to.equal({
         chargeInformation: [
           {
+            action: [
+              {
+                link: '/licences/456/charge-information/123/view',
+                text: 'View'
+              }
+            ],
             id: '123',
             startDate: '1 January 2020',
             endDate: '1 September 2020',

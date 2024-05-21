@@ -12,22 +12,23 @@ const ChargeVersionModel = require('../../models/charge-version.model.js')
  *
  * Was built to provide the data needed for the '/licences/{id}/licence-set-up' page
  *
- * @param {string} licenceRef The string for the licence to fetch
+ * @param {string} licenceId The string for the licence to fetch
  *
  * @returns {Promise<Object>} the data needed to populate the view licence page's set up tab
  */
-async function go (licenceRef) {
-  return _fetch(licenceRef)
+async function go (licenceId) {
+  return _fetch(licenceId)
 }
 
-async function _fetch (licenceRef) {
+async function _fetch (licenceId) {
   return ChargeVersionModel.query()
-    .where('licenceRef', licenceRef)
+    .where('licenceId', licenceId)
     .select([
       'id',
       'startDate',
       'endDate',
-      'status'
+      'status',
+      'licenceId'
     ])
     .withGraphFetched('changeReason')
     .modifyGraph('changeReason', (builder) => {

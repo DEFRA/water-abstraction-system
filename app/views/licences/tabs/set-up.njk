@@ -27,8 +27,12 @@
         <td class="govuk-table__cell">{{ chargeVersion.reason }}</td>
         <td class="govuk-table__cell">{{ statusTag(chargeVersion.status) }}</td>
         <th class="govuk-table__cell">
-          <a href="/licences/{{ licenceId }}/charge-information/{{ chargeVersion.id }}/view" class="govuk-link">
-            View </a>
+          {% for chargeVersionAction in chargeVersion.action %}
+            {% if not loop.first %} | {% endif %}
+            <a href="{{ chargeVersionAction.link }}" class="govuk-link">
+              {{ chargeVersionAction.text }} </a>
+          {% endfor %}
+
         </th>
       </tr>
     {% endfor %}

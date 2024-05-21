@@ -32,7 +32,13 @@ function _chargeVersions (licenceSetUp) {
       startDate: chargeInformation.startDate ? formatLongDate(chargeInformation.startDate) : '-',
       endDate: chargeInformation.endDate ? formatLongDate(chargeInformation.endDate) : '-',
       status: _chargeVersionStatus(chargeInformation.status),
-      reason: chargeInformation.changeReason?.description
+      reason: chargeInformation.changeReason?.description,
+      action: [
+        {
+          text: 'View',
+          link: `/licences/${chargeInformation.licenceId}/charge-information/${chargeInformation.id}/view`
+        }
+      ]
     }
   })
 }
