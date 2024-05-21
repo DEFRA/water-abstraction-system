@@ -309,6 +309,29 @@ describe('Licences controller', () => {
       }
     })
 
+    describe('when a request is valid and has charge versions and charge edit buttons', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceSetUpService, 'go').resolves(_viewLicenceSetUp())
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.contain('Licence set up')
+        expect(response.payload).to.contain('Charge information')
+        // Table headers
+        expect(response.payload).to.contain('Start date')
+        expect(response.payload).to.contain('End date')
+        expect(response.payload).to.contain('Reason')
+        expect(response.payload).to.contain('Status')
+        expect(response.payload).to.contain('Action')
+        // Button present
+        expect(response.payload).to.contain('Set up a new charge')
+        expect(response.payload).to.contain('Make licence non-chargeable')
+      })
+    })
+
     describe('when a request is valid and does not have any data', () => {
       beforeEach(async () => {
         Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
@@ -410,6 +433,15 @@ function _viewLicenceBills () {
   return {
     activeTab: 'bills',
     bills: [{ id: 'bills-id' }]
+  }
+}
+
+function _viewLicenceSetUp () {
+  return {
+    activeTab: 'set-up',
+    chargeInformation: [{ }],
+    setupNewCharge: '/',
+    makeLicenceNonChargeable: '/'
   }
 }
 

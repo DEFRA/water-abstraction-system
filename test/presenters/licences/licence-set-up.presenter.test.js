@@ -205,7 +205,7 @@ describe('Licence set up presenter', () => {
     })
   })
 
-  describe('when provided with populated licence set up data', () => {
+  describe('when provided with populated licence set up data with a start date before or after six years', () => {
     const now = new Date('2022-01-02')
 
     let clock

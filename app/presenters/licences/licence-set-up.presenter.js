@@ -25,6 +25,15 @@ function go (chargeVersions, workflows, auth, licence) {
   }
 }
 
+function _authorisedLinks (auth, licence) {
+  if (auth.credentials?.scope?.includes(roles.workflowEditor) && _isLessThanSixYearsOld(licence.startDate)) {
+    return {
+      setupNewCharge: `/licences/${licence.id}/charge-information/create`,
+      makeLicenceNonChargeable: `/licences/${licence.id}/charge-information/non-chargeable-reason?start=1`
+    }
+  }
+}
+
 function _chargeInformation (chargeVersions, workflows, auth) {
   return [
     ..._workflows(workflows, auth),
@@ -63,17 +72,8 @@ function _isLessThanSixYearsOld (date) {
   return startDate > sixYearsFromYesterday
 }
 
-function _authorisedLinks (auth, licence) {
-  if (auth.credentials?.scope?.includes(roles.workflowEditor) && _isLessThanSixYearsOld(licence.startDate)) {
-    return {
-      setupNewCharge: `/licences/${licence.id}/charge-information/create`,
-      makeLicenceNonChargeable: `/licences/${licence.id}/charge-information/non-chargeable-reason?start=1`
-    }
-  }
-}
-
 function _status (status) {
-  const statues = {
+  const statuses = {
     current: 'approved',
     draft: 'draft',
     approved: 'approved',
@@ -85,7 +85,7 @@ function _status (status) {
     to_setup: 'to set up'
   }
 
-  return statues[status]
+  return statuses[status]
 }
 
 function _workflows (workflows, auth) {

@@ -8,7 +8,6 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
-
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
