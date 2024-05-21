@@ -12,16 +12,16 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, chargeVersionWorkflows = []) {
+function go (chargeVersions, workflows) {
   return {
-    chargeInformation: _chargeInformation(chargeVersions, chargeVersionWorkflows)
+    chargeInformation: _chargeInformation(chargeVersions, workflows)
   }
 }
 
-function _chargeInformation (chargeVersions, chargeVersionWorkflows) {
+function _chargeInformation (chargeVersions, workflows) {
   return [
-    ..._chargeVersions(chargeVersions),
-    ..._workflowRecords(chargeVersionWorkflows)
+    ..._workflows(workflows),
+    ..._chargeVersions(chargeVersions)
   ]
 }
 
@@ -59,10 +59,15 @@ function _chargeVersionStatus (status) {
   return statues[status]
 }
 
-function _workflowRecords (licenceSetUp) {
-  return licenceSetUp.map((workflowRecord) => {
+function _workflows (workflows) {
+  return workflows.map((workflowRecord) => {
     return {
-      ...workflowRecord
+      id: workflowRecord.id,
+      startDate: workflowRecord.createdAt ? formatLongDate(workflowRecord.createdAt) : '-',
+      endDate: '-',
+      status: workflowRecord.status,
+      reason: workflowRecord.data.chargeVersion.changeReason.description,
+      action: []
     }
   })
 }

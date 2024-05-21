@@ -7,6 +7,7 @@
 
 const LicenceSetUpPresenter = require('../../presenters/licences/licence-set-up.presenter.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+const FetchWorkflowsService = require('./fetch-workflows.service.js')
 const ViewLicenceService = require('./view-licence.service.js')
 
 /**
@@ -21,7 +22,9 @@ async function go (licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
   const chargeVersions = await FetchChargeVersionsService.go(licenceId)
-  const licenceSetUpData = LicenceSetUpPresenter.go(chargeVersions)
+  const workflows = await FetchWorkflowsService.go(licenceId)
+
+  const licenceSetUpData = LicenceSetUpPresenter.go(chargeVersions, workflows)
 
   return {
     activeTab: 'set-up',
