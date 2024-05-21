@@ -7,13 +7,20 @@
 
 const { formatLongDate } = require('../base.presenter.js')
 
+const roles = {
+  billing: 'billing',
+  workflowEditor: 'charge_version_workflow_editor',
+  workflowReviewer: 'charge_version_workflow_reviewer'
+}
+
 /**
  * Formats data for the `/licences/{id}/licence-set-up` view licence set up page
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, auth) {
+function go (chargeVersions, workflows, auth, licenceId) {
   return {
+    ..._authorisedLinks(auth, licenceId),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth)
   }
 }
@@ -41,6 +48,15 @@ function _chargeVersions (licenceSetUp) {
       ]
     }
   })
+}
+
+function _authorisedLinks (auth, licenceId) {
+  if (auth.credentials?.scope?.includes(roles.workflowEditor)) {
+    return {
+      setupNewCharge: `/licences/${licenceId}/charge-information/create`,
+      makeLicenceNonChargeable: `/licences/${licenceId}/charge-information/non-chargeable-reason?start=1`
+    }
+  }
 }
 
 function _status (status) {
@@ -73,9 +89,9 @@ function _workflows (workflows, auth) {
 }
 
 function _workflowAction (workflow, auth) {
-  if (workflow.status === 'to_setup' && auth.credentials?.scope?.includes('charge_version_workflow_editor')) {
+  if (workflow.status === 'to_setup' && auth.credentials?.scope?.includes(roles.workflowEditor)) {
     return _workflowActionEditor(workflow)
-  } else if (auth.credentials?.scope?.includes('charge_version_workflow_reviewer')) {
+  } else if (auth.credentials?.scope?.includes(roles.workflowReviewer)) {
     return _workflowActionReviewer(workflow)
   } else {
     return []

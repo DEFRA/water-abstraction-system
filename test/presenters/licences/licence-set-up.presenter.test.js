@@ -11,6 +11,8 @@ const { expect } = Code
 const LicenceSetUpPresenter = require('../../../app/presenters/licences/licence-set-up.presenter.js')
 
 describe('Licence set up presenter', () => {
+  const licenceId = 123
+
   let chargeVersions
   let workflows
   let auth = {}
@@ -36,7 +38,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data', () => {
     it('correctly presents the data', () => {
-      const result = LicenceSetUpPresenter.go(chargeVersions, workflows, auth)
+      const result = LicenceSetUpPresenter.go(chargeVersions, workflows, auth, licenceId)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -68,7 +70,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data with only the charge versions', () => {
     it('correctly presents the charge version data', () => {
-      const result = LicenceSetUpPresenter.go(chargeVersions, [], auth)
+      const result = LicenceSetUpPresenter.go(chargeVersions, [], auth, licenceId)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -92,7 +94,7 @@ describe('Licence set up presenter', () => {
 
   describe('when provided with populated licence set up data with only the workflows', () => {
     it('correctly presents the workflows data', () => {
-      const result = LicenceSetUpPresenter.go([], workflows, auth)
+      const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
 
       expect(result).to.equal({
         chargeInformation: [
@@ -120,31 +122,29 @@ describe('Licence set up presenter', () => {
       })
 
       it('populates the \'action\' with the data for a user who can edit a charge version workflow and the \'status\' is to set up', () => {
-        const result = LicenceSetUpPresenter.go([], workflows, auth)
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
 
-        expect(result).to.equal({
-          chargeInformation: [
+        expect(result.chargeInformation[0].action).to.equal(
+          [
             {
-              action: [
-                {
-                  link: '/licences/456/charge-information/create?chargeVersionWorkflowId=123',
-                  text: 'Set up'
-                },
-                {
-                  link: '/charge-information-workflow/123/remove',
-                  text: 'Remove'
-                }
-              ],
-              endDate: '-',
-              id: '123',
-              reason: 'changed something',
-              startDate: '1 January 2020',
-              status: 'to set up'
+              link: '/licences/456/charge-information/create?chargeVersionWorkflowId=123',
+              text: 'Set up'
+            },
+            {
+              link: '/charge-information-workflow/123/remove',
+              text: 'Remove'
             }
           ]
-        })
+        )
+      })
+      it('populates the \'makeLicenceNonChargeable\'  and \'setupNewCharge\' links ', () => {
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
+
+        expect(result.makeLicenceNonChargeable).to.equal('/licences/123/charge-information/non-chargeable-reason?start=1')
+        expect(result.setupNewCharge).to.equal('/licences/123/charge-information/create')
       })
     })
+
     describe('user is authorised to review the workflow', () => {
       beforeEach(() => {
         auth = {
@@ -157,7 +157,7 @@ describe('Licence set up presenter', () => {
       })
 
       it('populates the \'action\' with the data for a user who can review a charge version', () => {
-        const result = LicenceSetUpPresenter.go([], workflows, auth)
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
 
         expect(result).to.equal({
           chargeInformation: [
@@ -184,7 +184,7 @@ describe('Licence set up presenter', () => {
       })
 
       it('populates the \'action\' as empty if the user is not authorised', () => {
-        const result = LicenceSetUpPresenter.go([], workflows, auth)
+        const result = LicenceSetUpPresenter.go([], workflows, auth, licenceId)
 
         expect(result).to.equal({
           chargeInformation: [
