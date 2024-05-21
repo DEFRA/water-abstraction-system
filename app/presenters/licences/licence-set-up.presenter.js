@@ -65,7 +65,7 @@ function _workflows (workflows, auth) {
       id: workflow.id,
       startDate: workflow.createdAt ? formatLongDate(workflow.createdAt) : '-',
       endDate: '-',
-      status: workflow.status,
+      status: _chargeVersionStatus(workflow.status),
       reason: workflow.data.chargeVersion.changeReason.description,
       action: _workflowAction(workflow, auth)
     }

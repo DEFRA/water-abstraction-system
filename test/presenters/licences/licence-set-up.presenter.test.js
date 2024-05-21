@@ -139,7 +139,7 @@ describe('Licence set up presenter', () => {
               id: '123',
               reason: 'changed something',
               startDate: '1 January 2020',
-              status: 'to_setup'
+              status: 'to set up'
             }
           ]
         })

@@ -32,35 +32,9 @@ async function _fetch (licenceId) {
       'data'
     ])
     .orderBy([
-      { column: 'updatedAt', order: 'desc' }
+      { column: 'createdAt', order: 'desc' }
     ])
 }
-
-// const getChargeVersionWorkflowLinks = (chargeVersionWorkflow, options) => {
-//   const { licenceId, editChargeVersions, reviewChargeVersions } = options
-//   if (chargeVersionWorkflow.status === 'to_setup' && editChargeVersions) {
-//     return [
-//       getLink('Set up', `/licences/${licenceId}/charge-information/create?chargeVersionWorkflowId=${chargeVersionWorkflow.id}`),
-//       getLink('Remove', `/charge-information-workflow/${chargeVersionWorkflow.id}/remove`)
-//     ]
-//   } else if (reviewChargeVersions) {
-//     return [
-//       getLink('Review', `/licences/${licenceId}/charge-information/${chargeVersionWorkflow.id}/review`)
-//     ]
-//   }
-//   return []
-// }
-
-//   ...get(chargeVersionWorkflow, 'chargeVersion', {}),
-//   status: chargeVersionWorkflow.status,
-//   id: chargeVersionWorkflow.id,
-//   links: getChargeVersionWorkflowLinks(chargeVersionWorkflow, options)
-
-// const CHARGE_VERSION_WORKFLOW_STATUS = {
-//   review: 'review',
-//   changesRequested: 'changes_requested',
-//   toSetup: 'to_setup'
-// }
 
 module.exports = {
   go
