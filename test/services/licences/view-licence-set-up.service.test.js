@@ -11,6 +11,8 @@ const { expect } = Code
 // Things we need to stub
 const FetchChargeVersionsService =
   require('../../../app/services/licences/fetch-charge-versions.service.js')
+const FetchLicenceService =
+  require('../../../app/services/licences/fetch-licence.service.js')
 const FetchWorkflowsService =
   require('../../../app/services/licences/fetch-workflows.service.js')
 const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
@@ -33,6 +35,12 @@ describe('View licence set up service', () => {
         status: 'current'
       }
     ])
+
+    Sinon.stub(FetchLicenceService, 'go').returns({
+      id: testId,
+      startDate: '1998-01-01'
+    })
+
     Sinon.stub(FetchWorkflowsService, 'go').returns([
       {
         id: '123',
