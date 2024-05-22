@@ -61,10 +61,10 @@ function _validate (authorisedVolume, totalBillableReturns, minVolume, maxVolume
       .required()
       .messages({
         'number.base': 'The authorised volume must be a number',
-        'number.unsafe': 'The authorised volume must be a number',
+        'number.unsafe': 'The authorised volume must be a number or fewer than 17 digits long',
         'number.min': `The authorised volume must be greater than ${minValue}`,
         'number.max': `The authorised volume must be equal to or less than ${maxValue}`,
-        'any.required': 'Enter a authorised volume'
+        'any.required': 'Enter an authorised volume'
       })
   })
 
