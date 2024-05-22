@@ -500,7 +500,7 @@ describe('Bill Runs controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('High loss, non-tidal, restricted water, greater than 85 up to and including 120 ML/yr')
           expect(response.payload).to.contain('Set the adjustment factors')
-          expect(response.payload).to.contain('Aggregate factor (optional)')
+          expect(response.payload).to.contain('Aggregate factor')
         })
       })
     })
