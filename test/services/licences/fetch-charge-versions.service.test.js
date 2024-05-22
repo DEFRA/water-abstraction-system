@@ -15,7 +15,7 @@ const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.j
 const FetchChargeVersionsService =
   require('../../../app/services/licences/fetch-charge-versions.service.js')
 
-describe('Fetch charge versions for a licence', () => {
+describe('Fetch Charge Versions service', () => {
   let testRecord
 
   beforeEach(async () => {

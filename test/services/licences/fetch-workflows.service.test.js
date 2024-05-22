@@ -14,7 +14,7 @@ const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 const FetchWorkflowsService =
   require('../../../app/services/licences/fetch-workflows.service.js')
 
-describe('Fetch workflows for a licence', () => {
+describe('Fetch Workflows service', () => {
   let testRecord
 
   beforeEach(async () => {

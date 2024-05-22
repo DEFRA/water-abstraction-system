@@ -43,18 +43,18 @@ function _chargeInformation (chargeVersions, workflows, auth) {
   ]
 }
 
-function _chargeVersions (licenceSetUp) {
-  return licenceSetUp.map((chargeInformation) => {
+function _chargeVersions (chargeVersions) {
+  return chargeVersions.map((chargeVersion) => {
     return {
-      id: chargeInformation.id,
-      startDate: chargeInformation.startDate ? formatLongDate(chargeInformation.startDate) : '-',
-      endDate: chargeInformation.endDate ? formatLongDate(chargeInformation.endDate) : '-',
-      status: _status(chargeInformation.status),
-      reason: chargeInformation.changeReason?.description,
+      id: chargeVersion.id,
+      startDate: chargeVersion.startDate ? formatLongDate(chargeVersion.startDate) : '-',
+      endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '-',
+      status: _status(chargeVersion.status),
+      reason: chargeVersion.changeReason?.description,
       action: [
         {
           text: 'View',
-          link: `/licences/${chargeInformation.licenceId}/charge-information/${chargeInformation.id}/view`
+          link: `/licences/${chargeVersion.licenceId}/charge-information/${chargeVersion.id}/view`
         }
       ]
     }
