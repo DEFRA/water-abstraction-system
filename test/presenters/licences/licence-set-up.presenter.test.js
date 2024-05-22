@@ -15,8 +15,10 @@ describe('Licence set up presenter', () => {
   const licence = {
     id: 123
   }
+  const now = new Date('2022-01-02')
 
   let chargeVersions
+  let clock
   let workflows
   let auth = {}
 
@@ -37,6 +39,12 @@ describe('Licence set up presenter', () => {
       data: { chargeVersion: { changeReason: { description: 'changed something' } } },
       licenceId: '456'
     }]
+
+    clock = Sinon.useFakeTimers(now.getTime())
+  })
+
+  afterEach(() => {
+    clock.restore()
   })
 
   describe('when provided with populated licence set up data', () => {
@@ -122,11 +130,11 @@ describe('Licence set up presenter', () => {
         }
 
         workflows[0].status = 'to_setup'
+        licence.startDate = '2020-01-01'
       })
 
       it('populates the \'action\' with the data for a user who can edit a charge version workflow and the \'status\' is to set up', () => {
         const result = LicenceSetUpPresenter.go([], workflows, auth, licence)
-
         expect(result.chargeInformation[0].action).to.equal(
           [
             {
@@ -206,23 +214,12 @@ describe('Licence set up presenter', () => {
   })
 
   describe('when provided with populated licence set up data with a start date before or after six years', () => {
-    const now = new Date('2022-01-02')
-
-    let clock
-
     beforeEach(() => {
       auth = {
         credentials: {
           scope: ['charge_version_workflow_editor']
         }
       }
-      licence.startDate = '2020-01-01'
-
-      clock = Sinon.useFakeTimers(now.getTime())
-    })
-
-    afterEach(() => {
-      clock.restore()
     })
 
     describe('user is authorised to edit the workflow and the licence is less than 6 years old', () => {

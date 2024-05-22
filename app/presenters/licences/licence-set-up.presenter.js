@@ -26,6 +26,7 @@ function go (chargeVersions, workflows, auth, licence) {
 }
 
 function _authorisedLinks (auth, licence) {
+  console.log('Date: ', new Date())
   if (auth.credentials?.scope?.includes(roles.workflowEditor) && _isLessThanSixYearsOld(licence.startDate)) {
     return {
       setupNewCharge: `/licences/${licence.id}/charge-information/create`,
