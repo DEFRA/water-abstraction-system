@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches data needed for the view '/licences/{id}/licence-set-up` page
+ * Fetches charge version data needed for the view '/licences/{id}/set-up` page
  * @module FetchChargeVersionsService
  */
 
