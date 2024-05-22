@@ -26,13 +26,14 @@ function go (chargeVersions, workflows, auth, licence) {
 }
 
 function _authorisedLinks (auth, licence) {
-  console.log('Date: ', new Date())
   if (auth.credentials?.scope?.includes(roles.workflowEditor) && _isLessThanSixYearsOld(licence.startDate)) {
     return {
       setupNewCharge: `/licences/${licence.id}/charge-information/create`,
       makeLicenceNonChargeable: `/licences/${licence.id}/charge-information/non-chargeable-reason?start=1`
     }
   }
+
+  return {}
 }
 
 function _chargeInformation (chargeVersions, workflows, auth) {
@@ -61,14 +62,16 @@ function _chargeVersions (licenceSetUp) {
 }
 
 function _isLessThanSixYearsOld (date) {
+  const sixYears = 6
+  const timeStamp = { hour: 23, minutes: 59, seconds: 59, ms: 999 }
   const startDate = new Date(date)
 
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
-  yesterday.setHours(23, 59, 59, 999)
+  yesterday.setHours(timeStamp.hour, timeStamp.minutes, timeStamp.seconds, timeStamp.ms)
 
   const sixYearsFromYesterday = new Date(yesterday.getTime())
-  sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - 6)
+  sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
 
   return startDate > sixYearsFromYesterday
 }
