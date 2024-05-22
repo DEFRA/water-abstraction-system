@@ -30,6 +30,10 @@ function go (billRun, reviewChargeReference, licenceId) {
       description: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       authorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference.reviewChargeElements)
+    },
+    chargeCategory: {
+      minVolume: reviewChargeReference.chargeReference.chargeCategory.minVolume,
+      maxVolume: reviewChargeReference.chargeReference.chargeCategory.maxVolume
     }
   }
 }

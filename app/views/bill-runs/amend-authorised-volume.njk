@@ -14,6 +14,18 @@
 {% endblock %}
 
 {% block content %}
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: 'There is a problem',
+      errorList: [
+        {
+          text: error.message,
+          href: '#authorised-volume-error'
+        }
+      ]
+    }) }}
+  {% endif %}
+
   <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-full">
       <span class="govuk-caption-l">{{chargeReference.description}}</span>
@@ -52,6 +64,11 @@
             text: "ML"
           }
         }) }}
+
+        {# Hidden input for authorised volume #}
+        <input type="hidden" name="totalBillableReturns" value="{{ chargeReference.totalBillableReturns }}">
+        <input type="hidden" name="minVolume" value="{{ chargeCategory.minVolume }}">
+        <input type="hidden" name="maxVolume" value="{{ chargeCategory.maxVolume }}">
 
         {{ govukButton({ text: 'Confirm' }) }}
       </form>
