@@ -1,4 +1,5 @@
 {% from "macros/charge-version-status-tag.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 <h2 class="govuk-heading-l">Licence set up</h2>
 
@@ -40,13 +41,17 @@
 {% endif %}
 
 {% if setupNewCharge %}
-  <a href="{{ setupNewCharge }}" role="button" draggable="false" class="govuk-button govuk-button--secondary govuk-!-margin-right-3" data-module="govuk-button">
-    Set up a new charge
-  </a>
+  {{ govukButton({
+    text: "Set up a new charge",
+    href: setupNewCharge,
+    classes: "govuk-button--secondary govuk-!-margin-right-3"
+  }) }}
 {% endif %}
 
 {% if makeLicenceNonChargeable %}
-  <a href="{{ makeLicenceNonChargeable }}" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-    Make licence non-chargeable
-  </a>
+  {{ govukButton({
+    text: "Make licence non-chargeable",
+    href: makeLicenceNonChargeable,
+    classes: "govuk-button--secondary"
+  }) }}
 {% endif %}
