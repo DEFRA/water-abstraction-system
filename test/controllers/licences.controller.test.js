@@ -297,11 +297,11 @@ describe('Licences controller', () => {
     })
   })
 
-  describe('GET /licences/{id}/licence-set-up', () => {
+  describe('GET /licences/{id}/set-up', () => {
     beforeEach(async () => {
       options = {
         method: 'GET',
-        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-set-up',
+        url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/set-up',
         auth: {
           strategy: 'session',
           credentials: { scope: ['billing'] }

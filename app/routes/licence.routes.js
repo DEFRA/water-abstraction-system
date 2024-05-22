@@ -34,7 +34,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/licences/{id}/licence-set-up',
+    path: '/licences/{id}/set-up',
     handler: LicencesController.viewSetUp,
     options: {
       auth: {

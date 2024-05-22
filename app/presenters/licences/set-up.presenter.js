@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the `/licences/{id}/licence-set-up` view licence set up page
- * @module LicenceSetUpPresenter
+ * Formats data for the `/licences/{id}/set-up` view licence set up page
+ * @module SetUpPresenter
  */
 
 const { formatLongDate } = require('../base.presenter.js')
@@ -14,7 +14,7 @@ const roles = {
 }
 
 /**
- * Formats data for the `/licences/{id}/licence-set-up` view licence set up page
+ * Formats data for the `/licences/{id}/set-up` view licence set up page
  *
  * @returns {Object} The data formatted for the view template
  */
