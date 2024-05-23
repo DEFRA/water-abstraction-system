@@ -47,13 +47,13 @@ describe('Charging Module Calculate Charge request', () => {
       })
     })
 
-    it('returns a `true` success status', async () => {
+    it('returns a "true" success status', async () => {
       const result = await CalculateChargeRequest.send(transactionData)
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the results of the calculation in the `response`', async () => {
+    it('returns the results of the calculation in the "response"', async () => {
       const result = await CalculateChargeRequest.send(transactionData)
 
       expect(result.response.body.calculation.chargeValue).to.equal(7000)
@@ -88,13 +88,13 @@ describe('Charging Module Calculate Charge request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
         expect(result.response.body.statusCode).to.equal(401)
@@ -111,13 +111,13 @@ describe('Charging Module Calculate Charge request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
         expect(result.response.statusCode).not.to.exist()
