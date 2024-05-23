@@ -29,7 +29,6 @@ async function _fetchBillRun (billRunId) {
     .findById(billRunId)
     .select(
       'id',
-      'fromFinancialYearEnding',
       'toFinancialYearEnding')
 }
 

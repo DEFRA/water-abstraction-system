@@ -59,7 +59,6 @@ describe('Fetch Authorised Volume service', () => {
 
         expect(result.billRun).to.equal({
           id: billRun.id,
-          fromFinancialYearEnding: billRun.fromFinancialYearEnding,
           toFinancialYearEnding: billRun.toFinancialYearEnding
         })
       })

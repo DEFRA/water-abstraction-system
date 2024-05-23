@@ -75,7 +75,6 @@ describe('Amend Authorised Volume presenter', () => {
 function _billRun () {
   return {
     id: '6620135b-0ecf-4fd4-924e-371f950c0526',
-    fromFinancialYearEnding: 2023,
     toFinancialYearEnding: 2023
   }
 }
