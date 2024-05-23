@@ -127,6 +127,7 @@ describe('Charging Module Calculate Charge request', () => {
     })
   })
 })
+
 function _transactionData () {
   return {
     abatementFactor: 1.0,
