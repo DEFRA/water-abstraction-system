@@ -8,7 +8,7 @@
 const WorkflowModel = require('../../models/workflow.model.js')
 
 /**
- * Fetches charge version data needed for the view '/licences/{id}/set-up` page
+ * Fetches workflow data needed for the view '/licences/{id}/set-up` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch workflow data for
  *
