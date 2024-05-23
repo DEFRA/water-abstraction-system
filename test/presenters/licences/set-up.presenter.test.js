@@ -4,244 +4,267 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
-const Sinon = require('sinon')
 
 // Thing under test
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
 
-describe('Licence set up presenter', () => {
-  const licence = {
-    id: 123
+describe('Licence Set Up presenter', () => {
+  const chargeVersion = {
+    id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+    startDate: new Date('2020-01-01'),
+    endDate: new Date('2020-09-01'),
+    status: 'current',
+    changeReason: { description: 'Major change' },
+    licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b'
   }
-  const now = new Date('2022-01-02')
+  const workflow = {
+    id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+    createdAt: new Date('2020-01-01'),
+    status: 'review',
+    data: { chargeVersion: { changeReason: { description: 'changed something' } } },
+    licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b'
+  }
 
+  let auth
   let chargeVersions
-  let clock
+  let licence
   let workflows
-  let auth = {}
 
   beforeEach(() => {
-    chargeVersions = [{
-      id: '123',
-      startDate: new Date('2020-01-01'),
-      endDate: new Date('2020-09-01'),
-      status: 'current',
-      changeReason: { description: 'Missing thing' },
-      licenceId: '456'
-    }]
+    auth = {
+      isValid: true,
+      credentials: {
+        user: { id: 123 },
+        roles: ['billing', 'charge_version_workflow_editor'],
+        groups: [],
+        scope: ['billing', 'charge_version_workflow_editor'],
+        permissions: { abstractionReform: false, billRuns: true, manage: true }
+      }
+    }
 
-    workflows = [{
-      id: '123',
-      createdAt: new Date('2020-01-01'),
-      status: 'review',
-      data: { chargeVersion: { changeReason: { description: 'changed something' } } },
-      licenceId: '456'
-    }]
-
-    clock = Sinon.useFakeTimers(now.getTime())
-  })
-
-  afterEach(() => {
-    clock.restore()
+    licence = { id: 'f91bf145-ce8e-481c-a842-4da90348062b' }
   })
 
   describe('when provided with populated licence set up data', () => {
-    it('correctly presents the data', () => {
-      const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
-
-      expect(result).to.equal({
-        chargeInformation: [
-          {
-            action: [],
-            id: '123',
-            startDate: '1 January 2020',
-            endDate: '-',
-            status: 'review',
-            reason: 'changed something'
-          },
-          {
-            action: [
-              {
-                link: '/licences/456/charge-information/123/view',
-                text: 'View'
-              }
-            ],
-            id: '123',
-            startDate: '1 January 2020',
-            endDate: '1 September 2020',
-            status: 'approved',
-            reason: 'Missing thing'
-          }
-        ]
-      })
-    })
-  })
-
-  describe('when provided with populated licence set up data with only the charge versions', () => {
-    it('correctly presents the charge version data', () => {
-      const result = SetUpPresenter.go(chargeVersions, [], auth, licence)
-
-      expect(result).to.equal({
-        chargeInformation: [
-          {
-            action: [
-              {
-                link: '/licences/456/charge-information/123/view',
-                text: 'View'
-              }
-            ],
-            id: '123',
-            startDate: '1 January 2020',
-            endDate: '1 September 2020',
-            status: 'approved',
-            reason: 'Missing thing'
-          }
-        ]
-      })
-    })
-  })
-
-  describe('when provided with populated licence set up data with only the workflows', () => {
-    it('correctly presents the workflows data', () => {
-      const result = SetUpPresenter.go([], workflows, auth, licence)
-
-      expect(result).to.equal({
-        chargeInformation: [
-          {
-            action: [],
-            endDate: '-',
-            id: '123',
-            reason: 'changed something',
-            startDate: '1 January 2020',
-            status: 'review'
-          }
-        ]
-      })
-    })
-
-    describe('user is authorised to edit the workflow', () => {
+    describe('that includes both charge versions and workflows', () => {
       beforeEach(() => {
-        auth = {
-          credentials: {
-            scope: ['charge_version_workflow_editor']
-          }
-        }
-
-        workflows[0].status = 'to_setup'
-        licence.startDate = '2020-01-01'
+        chargeVersions = [{ ...chargeVersion }]
+        workflows = [{ ...workflow }]
       })
 
-      it('populates the \'action\' with the data for a user who can edit a charge version workflow and the \'status\' is to set up', () => {
-        const result = SetUpPresenter.go([], workflows, auth, licence)
-        expect(result.chargeInformation[0].action).to.equal(
-          [
-            {
-              link: '/licences/456/charge-information/create?chargeVersionWorkflowId=123',
-              text: 'Set up'
-            },
-            {
-              link: '/charge-information-workflow/123/remove',
-              text: 'Remove'
-            }
-          ]
-        )
-      })
-      it('populates the \'makeLicenceNonChargeable\'  and \'setupNewCharge\' links ', () => {
-        const result = SetUpPresenter.go([], workflows, auth, licence)
-
-        expect(result.makeLicenceNonChargeable).to.equal('/licences/123/charge-information/non-chargeable-reason?start=1')
-        expect(result.setupNewCharge).to.equal('/licences/123/charge-information/create')
-      })
-    })
-
-    describe('user is authorised to review the workflow', () => {
-      beforeEach(() => {
-        auth = {
-          credentials: {
-            scope: ['charge_version_workflow_reviewer']
-          }
-        }
-
-        workflows[0].status = 'review'
-      })
-
-      it('populates the \'action\' with the data for a user who can review a charge version', () => {
-        const result = SetUpPresenter.go([], workflows, auth, licence)
-
-        expect(result).to.equal({
-          chargeInformation: [
-            {
-              action: [
-                {
-                  link: '/licences/456/charge-information/123/review',
-                  text: 'Review'
-                }
-              ],
-              endDate: '-',
-              id: '123',
-              reason: 'changed something',
-              startDate: '1 January 2020',
-              status: 'review'
-            }
-          ]
-        })
-      })
-    })
-    describe('user is not authorised', () => {
-      beforeEach(() => {
-        auth = {}
-      })
-
-      it('populates the \'action\' as empty if the user is not authorised', () => {
-        const result = SetUpPresenter.go([], workflows, auth, licence)
+      it("groups both types of data into the 'chargeInformation' property", () => {
+        const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
 
         expect(result).to.equal({
           chargeInformation: [
             {
               action: [],
-              endDate: '-',
-              id: '123',
-              reason: 'changed something',
+              id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
               startDate: '1 January 2020',
-              status: 'review'
+              endDate: '-',
+              status: 'review',
+              reason: 'changed something'
+            },
+            {
+              action: [{
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                text: 'View'
+              }],
+              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+              startDate: '1 January 2020',
+              endDate: '1 September 2020',
+              status: 'approved',
+              reason: 'Major change'
             }
-          ]
+          ],
+          makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
+          setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
         })
       })
     })
-  })
 
-  describe('when provided with populated licence set up data with a start date before or after six years', () => {
-    beforeEach(() => {
-      auth = {
-        credentials: {
-          scope: ['charge_version_workflow_editor']
-        }
-      }
+    describe('that includes charge versions', () => {
+      beforeEach(() => {
+        workflows = []
+      })
+
+      describe('where the end date is not populated', () => {
+        beforeEach(() => {
+          chargeVersions = [{ ...chargeVersion }]
+          chargeVersions[0].endDate = null
+        })
+
+        it('correctly presents the data with a dash for the end date', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+
+          expect(result).to.equal({
+            chargeInformation: [{
+              action: [{
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                text: 'View'
+              }],
+              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+              startDate: '1 January 2020',
+              endDate: '-',
+              status: 'approved',
+              reason: 'Major change'
+            }],
+            makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
+            setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
+          })
+        })
+      })
+
+      describe('where the end date is populated', () => {
+        beforeEach(() => {
+          chargeVersions = [{ ...chargeVersion }]
+        })
+
+        it('correctly presents the data with the end date', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+
+          expect(result).to.equal({
+            chargeInformation: [{
+              action: [{
+                link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
+                text: 'View'
+              }],
+              id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
+              startDate: '1 January 2020',
+              endDate: '1 September 2020',
+              status: 'approved',
+              reason: 'Major change'
+            }],
+            makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
+            setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
+          })
+        })
+      })
     })
 
-    describe('user is authorised to edit the workflow and the licence is less than 6 years old', () => {
+    describe('that includes workflow records', () => {
       beforeEach(() => {
-        licence.startDate = '2020-01-01'
+        chargeVersions = []
       })
 
-      it('populates the \'makeLicenceNonChargeable\'  and \'setupNewCharge\' links ', () => {
-        const result = SetUpPresenter.go([], workflows, auth, licence)
+      describe("that have a status of 'review'", () => {
+        beforeEach(() => {
+          workflows = [{ ...workflow }]
+        })
 
-        expect(result.makeLicenceNonChargeable).to.equal('/licences/123/charge-information/non-chargeable-reason?start=1')
-        expect(result.setupNewCharge).to.equal('/licences/123/charge-information/create')
+        describe('and the user is permitted to review workflow records', () => {
+          beforeEach(() => {
+            auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+          })
+
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+
+            expect(result).to.equal({
+              chargeInformation: [{
+                action: [{
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  text: 'Review'
+                }],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 January 2020',
+                endDate: '-',
+                status: 'review',
+                reason: 'changed something'
+              }]
+            })
+          })
+        })
+
+        describe('and the user is not permitted to review workflow records', () => {
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+
+            expect(result).to.equal({
+              chargeInformation: [{
+                action: [],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 January 2020',
+                endDate: '-',
+                status: 'review',
+                reason: 'changed something'
+              }],
+              makeLicenceNonChargeable: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/non-chargeable-reason?start=1',
+              setupNewCharge: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/create'
+            })
+          })
+        })
+      })
+
+      describe("that have a status of 'to_setup'", () => {
+        beforeEach(() => {
+          workflows = [{ ...workflow }]
+          workflows[0].status = 'to_setup'
+        })
+
+        describe('and the user is permitted to edit workflow records', () => {
+          beforeEach(() => {
+            auth.credentials.scope = ['billing', 'charge_version_workflow_reviewer']
+          })
+
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+
+            expect(result).to.equal({
+              chargeInformation: [{
+                action: [{
+                  link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
+                  text: 'Review'
+                }],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 January 2020',
+                endDate: '-',
+                status: 'to set up',
+                reason: 'changed something'
+              }]
+            })
+          })
+        })
+
+        describe('and the user is not permitted to edit workflow records', () => {
+          beforeEach(() => {
+            auth.credentials.scope = ['billing']
+          })
+
+          it('correctly presents the data and workflow actions', () => {
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+
+            expect(result).to.equal({
+              chargeInformation: [{
+                action: [],
+                id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
+                startDate: '1 January 2020',
+                endDate: '-',
+                status: 'to set up',
+                reason: 'changed something'
+              }]
+            })
+          })
+        })
       })
     })
 
-    describe('user is authorised to edit the workflow and the licence is more than 6 years old', () => {
+    describe("where the licence 'ends' more than 6 years ago", () => {
       beforeEach(() => {
-        licence.startDate = '1990-01-01'
+        const sixYearsAndOneDayAgo = new Date()
+        sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+        sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+        licence.ends = sixYearsAndOneDayAgo
+
+        chargeVersions = []
+        workflows = [{ ...workflow }]
       })
 
-      it('no links should be present', () => {
-        const result = SetUpPresenter.go([], workflows, auth, licence)
+      it('returns no links for editing', () => {
+        const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
 
         expect(result.makeLicenceNonChargeable).to.be.undefined()
         expect(result.setupNewCharge).to.be.undefined()
