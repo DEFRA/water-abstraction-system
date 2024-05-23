@@ -46,13 +46,11 @@ function _prepareDate (startDate, endDate) {
 }
 
 function _totalBillableReturns (reviewChargeElements) {
-  let totalBillableReturns = 0
+  return reviewChargeElements.reduce((total, reviewChargeElement) => {
+    total += reviewChargeElement.amendedAllocated
 
-  reviewChargeElements.forEach((reviewChargeElement) => {
-    totalBillableReturns += reviewChargeElement.amendedAllocated
-  })
-
-  return totalBillableReturns
+    return total
+  }, 0)
 }
 
 module.exports = {

@@ -50,7 +50,7 @@ describe('Amend Authorised Volume presenter', () => {
           })
         })
 
-        it('sums the amendedAuthorised volumes up', () => {
+        it('sums the amendedAllocated volumes up', () => {
           const result = AmendAuthorisedVolumePresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.totalBillableReturns).to.equal(32)

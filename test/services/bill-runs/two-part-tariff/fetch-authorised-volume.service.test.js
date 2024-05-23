@@ -46,15 +46,7 @@ describe('Fetch Authorised Volume service', () => {
       beforeEach(async () => {
         reviewChargeVersion = await ReviewChargeVersionHelper.add()
         chargeCategory = await ChargeCategoryHelper.add()
-        chargeReference = await ChargeReferenceHelper.add({
-          chargeCategoryId: chargeCategory.id,
-          additionalCharges: {
-            isSupplyPublicWater: true,
-            supportedSource: {
-              name: 'Thames'
-            }
-          }
-        })
+        chargeReference = await ChargeReferenceHelper.add({ chargeCategoryId: chargeCategory.id })
         reviewChargeReference = await ReviewChargeReferenceHelper.add({
           reviewChargeVersionId: reviewChargeVersion.id,
           chargeReferenceId: chargeReference.id

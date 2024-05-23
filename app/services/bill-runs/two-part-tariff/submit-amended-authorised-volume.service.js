@@ -43,7 +43,7 @@ async function go (billRunId, licenceId, reviewChargeReferenceId, payload, yar) 
   }
 }
 
-function _persistAuthorisedVolume (reviewChargeReferenceId, payload) {
+async function _persistAuthorisedVolume (reviewChargeReferenceId, payload) {
   return ReviewChargeReferenceModel.query()
     .findById(reviewChargeReferenceId)
     .patch({ amendedAuthorisedVolume: payload.authorisedVolume })

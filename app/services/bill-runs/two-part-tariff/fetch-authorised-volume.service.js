@@ -1,7 +1,8 @@
 'use strict'
 
 /**
- * Fetches the individual charge reference details during the review stage of a two-part tariff bill run
+ * Fetches the individual charge reference details when the authorised volume is being amended for a two-part tariff
+ * bill run
  * @module FetchAuthorisedVolumeService
  */
 
