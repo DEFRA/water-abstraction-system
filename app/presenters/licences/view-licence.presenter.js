@@ -36,7 +36,8 @@ function go (licence, auth) {
     roles: _authRoles(auth),
     warning: _generateWarningMessage(ends),
     activeNavBar: 'search',
-    documentId: licenceDocumentHeader.id
+    documentId: licenceDocumentHeader.id,
+    ends
   }
 }
 
