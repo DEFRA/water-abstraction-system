@@ -98,7 +98,7 @@
       {# Hidden input for authorised volume #}
       <input type="hidden" name="authorisedVolume" value="{{ authorisedQuantity }}">
 
-      {{ govukButton({ text: 'Confirm' }) }}
+      {{ govukButton({ text: 'Confirm', preventDoubleClick: true }) }}
     </form>
   </div>
 {% endblock %}
