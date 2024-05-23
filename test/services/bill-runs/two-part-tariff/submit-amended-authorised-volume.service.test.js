@@ -57,7 +57,7 @@ describe('Submit Amended Authorised Volume Service', () => {
         expect(reviewChargeReferenceData.amendedAuthorisedVolume).to.equal(10)
       })
 
-      it("sets the banner message to 'The authorised volume for this licence have been updated'", async () => {
+      it('sets the banner message to "The authorised volume for this licence have been updated"', async () => {
         await SubmitAmendedAuthorisedVolumeService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]

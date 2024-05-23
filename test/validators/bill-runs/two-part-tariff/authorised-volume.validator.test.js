@@ -42,7 +42,7 @@ describe('Authorised Volume validator', () => {
         }
       })
 
-      it("fails the validation with the message 'Enter an authorised volume'", () => {
+      it('fails the validation with the message "Enter an authorised volume"', () => {
         const result = AuthorisedVolumeValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -60,7 +60,7 @@ describe('Authorised Volume validator', () => {
         }
       })
 
-      it("fails the validation with the message 'The authorised volume must be a number'", () => {
+      it('fails the validation with the message "The authorised volume must be a number"', () => {
         const result = AuthorisedVolumeValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -78,7 +78,7 @@ describe('Authorised Volume validator', () => {
         }
       })
 
-      it("fails the validation with the message 'The authorised volume must be greater than 6'", () => {
+      it('fails the validation with the message "The authorised volume must be greater than 6"', () => {
         const result = AuthorisedVolumeValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -96,7 +96,7 @@ describe('Authorised Volume validator', () => {
         }
       })
 
-      it("fails the validation with the message 'The authorised volume must be greater than 6'", () => {
+      it('fails the validation with the message "The authorised volume must be greater than 6"', () => {
         const result = AuthorisedVolumeValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -114,7 +114,7 @@ describe('Authorised Volume validator', () => {
         }
       })
 
-      it("fails the validation with the message ''The authorised volume must be equal to or less than 20'", () => {
+      it('fails the validation with the message "The authorised volume must be equal to or less than 20"', () => {
         const result = AuthorisedVolumeValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -132,7 +132,7 @@ describe('Authorised Volume validator', () => {
         }
       })
 
-      it("fails the validation with the message 'The authorised volume must not have more than 6 decimal places'", () => {
+      it('fails the validation with the message "The authorised volume must not have more than 6 decimal places"', () => {
         const result = AuthorisedVolumeValidator.go(payload)
 
         expect(result.error).to.exist()

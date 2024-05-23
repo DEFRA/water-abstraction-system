@@ -42,7 +42,7 @@ describe('Amend Authorised Volume presenter', () => {
       })
     })
 
-    describe("the 'totalBillableReturns' property", () => {
+    describe('the "totalBillableReturns" property', () => {
       describe('when there are multiple reviewChargeElements', () => {
         beforeEach(() => {
           reviewChargeReference.reviewChargeElements.push({
