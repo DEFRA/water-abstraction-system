@@ -110,7 +110,7 @@
       </form>
       {% for requirement in requirements %}
         {# Set an easier to use index #}
-        {% set rowIndex = loop.index0 %}
+        {% set rowIndex = requirement.index %}
         <div>
             {{ govukSummaryList({
               card: {
@@ -130,7 +130,7 @@
                   actions: {
                     items: [
                       {
-                        href: "purpose/" + requirement.index,
+                        href: "purpose/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Purpose"
                       }
@@ -147,7 +147,7 @@
                   actions: {
                     items: [
                       {
-                        href: "points/" + requirement.index,
+                        href: "points/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Point"
                       }
@@ -164,7 +164,7 @@
                   actions: {
                     items: [
                       {
-                        href: "abstraction-period/" + requirement.index,
+                        href: "abstraction-period/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Abstraction period"
                       }
@@ -176,12 +176,12 @@
                     text: "Returns cycle"
                   },
                   value: {
-                    html: requirement.returnsCycle | capitalize
+                    html: "requirement.returnsCycle"
                   },
                   actions: {
                     items: [
                       {
-                        href: "returns-cycle/" + requirement.index,
+                        href: "returns-cycle/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Returns cycle"
                       }
@@ -198,7 +198,7 @@
                   actions: {
                     items: [
                       {
-                        href: "site-description/" + requirement.index,
+                        href: "site-description/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Site description"
                       }
@@ -215,7 +215,7 @@
                   actions: {
                     items: [
                       {
-                        href: "frequency-collected/" + requirement.index,
+                        href: "frequency-collected/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Collection"
                       }
@@ -232,7 +232,7 @@
                   actions: {
                     items: [
                       {
-                        href: "frequency-reported/" + requirement.index,
+                        href: "frequency-reported/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Reporting"
                       }
@@ -249,7 +249,7 @@
                   actions: {
                     items: [
                       {
-                        href: "agreements-exceptions/" + requirement.index,
+                        href: "agreements-exceptions/" + rowIndex,
                         text: "Change",
                         visuallyHiddenText: "Agreements exception"
                       }
@@ -263,7 +263,7 @@
               text: "Remove requirement",
               classes: "govuk-button--warning",
               preventDoubleClick: true,
-              href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
+              href: "/system/return-requirements/" + sessionId + "/remove/" + rowIndex
             }) }}
           {% endif %}
         </div>
