@@ -51,7 +51,6 @@ describe('Amend Adjustment Factor Service', () => {
 function _billRun () {
   return {
     id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
-    fromFinancialYearEnding: 2023,
     toFinancialYearEnding: 2023
   }
 }
