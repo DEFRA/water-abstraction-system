@@ -39,12 +39,13 @@ function _requirements (session) {
 
   const completedRequirements = []
 
-  for (const requirement of requirements) {
+  for (const [index, requirement] of requirements.entries()) {
     const { agreementsExceptions } = requirement
     // NOTE: We determine a requirement is complete because agreement exceptions is populated and it is the last step in
     // the journey
     if (agreementsExceptions) {
       requirement.abstractionPeriod = _abstractionPeriod(requirement.abstractionPeriod)
+      requirement.index = index
       completedRequirements.push(requirement)
     }
   }

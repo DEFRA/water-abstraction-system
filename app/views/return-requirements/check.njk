@@ -108,7 +108,6 @@
           preventDoubleClick: true
         }) }}
       </form>
-
       {% for requirement in requirements %}
         {# Set an easier to use index #}
         {% set rowIndex = loop.index0 %}
@@ -131,7 +130,7 @@
                   actions: {
                     items: [
                       {
-                        href: "purpose/" + rowIndex,
+                        href: "purpose/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Purpose"
                       }
@@ -148,7 +147,7 @@
                   actions: {
                     items: [
                       {
-                        href: "points/" + rowIndex,
+                        href: "points/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Point"
                       }
@@ -165,7 +164,7 @@
                   actions: {
                     items: [
                       {
-                        href: "abstraction-period/" + rowIndex,
+                        href: "abstraction-period/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Abstraction period"
                       }
@@ -182,7 +181,7 @@
                   actions: {
                     items: [
                       {
-                        href: "returns-cycle/" + rowIndex,
+                        href: "returns-cycle/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Returns cycle"
                       }
@@ -199,7 +198,7 @@
                   actions: {
                     items: [
                       {
-                        href: "site-description/" + rowIndex,
+                        href: "site-description/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Site description"
                       }
@@ -216,7 +215,7 @@
                   actions: {
                     items: [
                       {
-                        href: "frequency-collected/" + rowIndex,
+                        href: "frequency-collected/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Collection"
                       }
@@ -233,7 +232,7 @@
                   actions: {
                     items: [
                       {
-                        href: "frequency-reported/" + rowIndex,
+                        href: "frequency-reported/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Reporting"
                       }
@@ -250,7 +249,7 @@
                   actions: {
                     items: [
                       {
-                        href: "agreements-exceptions/" + rowIndex,
+                        href: "agreements-exceptions/" + requirement.index,
                         text: "Change",
                         visuallyHiddenText: "Agreements exception"
                       }
@@ -264,7 +263,7 @@
               text: "Remove requirement",
               classes: "govuk-button--warning",
               preventDoubleClick: true,
-              href: "/system/return-requirements/" + sessionId + "/remove/" + rowIndex
+              href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
             }) }}
           {% endif %}
         </div>
