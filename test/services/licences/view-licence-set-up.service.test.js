@@ -43,6 +43,7 @@ describe('View Licence Set Up service', () => {
         licenceId: '456'
       }
     ])
+
     Sinon.stub(ViewLicenceService, 'go').resolves({
       licenceName: 'fake licence',
       licenceId: testId
