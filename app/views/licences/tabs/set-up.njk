@@ -2,9 +2,17 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "macros/charge-version-status-tag.njk" import statusTag %}
 
-{% set rows = [] %}
+{% macro createLink(chargeVersion) %}
+  {% for chargeVersionAction in chargeVersion.action %}
+    {% if not loop.first %} | {% endif %}
+    <a href="{{ chargeVersionAction.link }}" class="govuk-link">
+      {{ chargeVersionAction.text }} </a>
+  {% endfor %}
+{% endmacro %}
 
-{% set head = [
+{% set chargeVersionRows = [] %}
+
+{% set chargeVersionHead = [
   {
     text: "Start date"
   },
@@ -22,16 +30,8 @@
   }
 ] %}
 
-{% macro createLink(chargeVersion) %}
-  {% for chargeVersionAction in chargeVersion.action %}
-    {% if not loop.first %} | {% endif %}
-    <a href="{{ chargeVersionAction.link }}" class="govuk-link">
-      {{ chargeVersionAction.text }} </a>
-  {% endfor %}
-{% endmacro %}
-
 {% for chargeVersion in  chargeInformation %}
-  {% set rows = (rows.push([
+  {% set chargeVersionRows = (chargeVersionRows.push([
     {
       text: chargeVersion.startDate
     },
@@ -47,7 +47,7 @@
     {
       html: createLink(chargeVersion)
     }
-  ]), rows) %}
+  ]), chargeVersionRows) %}
 {% endfor %}
 
 <h2 class="govuk-heading-l">Licence set up</h2>
@@ -60,8 +60,8 @@
 
 {% if chargeInformation.length > 0 %}
   {{ govukTable({
-    head: head,
-    rows: rows
+    head: chargeVersionHead,
+    rows: chargeVersionRows
   }) }}
 {% endif %}
 
@@ -77,6 +77,71 @@
   {{ govukButton({
     text: "Make licence non-chargeable",
     href: makeLicenceNonChargeable,
+    classes: "govuk-button--secondary"
+  }) }}
+{% endif %}
+
+<hr />
+
+{% set agreementRows = [] %}
+
+{% set agreementHead = [
+  {
+    text: "Start date"
+  },
+  {
+    text: "End date"
+  },
+  {
+    text: "Agreement"
+  },
+  {
+    text: "Date signed"
+  },
+  {
+    text: "Action"
+  }
+] %}
+
+{% for agreement in  agreements %}
+  {% set agreementRows = (agreementRows.push([
+    {
+      text: agreement.startDate
+    },
+    {
+      text: agreement.endDate
+    },
+    {
+      text: agreement.description
+    },
+    {
+      text: agreement.signedDate
+    },
+    {
+      html: createLink(agreement)
+    }
+  ]), agreementRows) %}
+{% endfor %}
+
+
+<h3 class="govuk-heading-m"> Agreements </h3>
+
+{% if agreements.length == 0 %}
+  <p class="govuk-body"> No agreements for this licence.</p>
+{% endif %}
+
+{% if agreements.length > 0 %}
+  {{ govukTable({
+    head: agreementHead,
+    rows: agreementRows
+  }) }}
+{% endif %}
+
+
+{% if setUpAgreement %}
+  {{ govukButton({
+    text: "Set up a new agreement",
+    href: setUpAgreement,
     classes: "govuk-button--secondary"
   }) }}
 {% endif %}

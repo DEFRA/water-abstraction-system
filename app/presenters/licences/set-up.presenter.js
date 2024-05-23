@@ -9,8 +9,17 @@ const { formatLongDate } = require('../base.presenter.js')
 
 const roles = {
   billing: 'billing',
+  deleteAgreements: 'delete_agreements',
+  manageAgreements: 'manage_agreements',
   workflowEditor: 'charge_version_workflow_editor',
   workflowReviewer: 'charge_version_workflow_reviewer'
+}
+
+const agreementDescriptions = {
+  S127: 'Two-part tariff',
+  S130S: 'Canal and Rivers Trust, supported source (S130S)',
+  S130U: 'Canal and Rivers Trust, unsupported source (S130U)',
+  S126: 'Abatement'
 }
 
 /**
@@ -18,16 +27,76 @@ const roles = {
  *
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
+ * @param {module:LicenceAgreements[]} agreements - All in-progress agreements records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, auth, commonData) {
+function go (chargeVersions, workflows, agreements, auth, commonData) {
   return {
-    ..._authorisedLinks(auth, commonData),
-    chargeInformation: _chargeInformation(chargeVersions, workflows, auth)
+    agreements: _agreements(commonData, agreements, auth),
+    chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
+    ..._agreementButtons(commonData, auth),
+    ..._authorisedLinks(auth, commonData)
   }
+}
+
+function _agreements (commonData, agreements, auth) {
+  return agreements.map((agreement) => {
+    return {
+      startDate: formatLongDate(agreement.startDate),
+      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
+      description: agreementDescriptions[_financialAgreementCode(agreement)],
+      dateSigned: agreement.dateSigned ? formatLongDate(agreement.dateSigned) : '',
+      action: _agreementActionLinks(commonData, agreement, auth)
+    }
+  })
+}
+
+function _agreementActionLinks (commonData, agreement, auth) {
+  if (!auth.credentials.scope.includes(roles.manageAgreements)) {
+    return []
+  }
+
+  const actionLinks = []
+  const hasNotEnded = !agreement.endDate
+  const is2PTAgreement = _financialAgreementCode(agreement) === 'S127'
+  const isNotMarkedForSupplementaryBilling = commonData.includeInPresrocBilling === 'no'
+
+  if (auth.credentials.scope.includes(roles.deleteAgreements)) {
+    actionLinks.push({
+      text: 'Delete',
+      link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/delete`
+    })
+  }
+
+  if (hasNotEnded) {
+    actionLinks.push({
+      text: 'End',
+      link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/end`
+    })
+  }
+
+  if (hasNotEnded && is2PTAgreement && isNotMarkedForSupplementaryBilling &&
+    auth.credentials.scope.includes(roles.billing)) {
+    actionLinks.push({
+      text: 'Recalculate bills',
+      link: `/licences/${commonData.licenceId}/mark-for-supplementary-billing`
+    })
+  }
+
+  return actionLinks
+}
+
+function _agreementButtons (commonData, auth) {
+  if (auth.credentials.scope.includes(roles.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
+    return {
+      setUpAgreement: `/licences/${commonData.licenceId}/agreements/select-type`
+    }
+  }
+
+  return null
 }
 
 function _authorisedLinks (auth, commonData) {
@@ -82,6 +151,10 @@ function _endsSixYearsAgo (endDate) {
   sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
 
   return endDate < sixYearsFromYesterday
+}
+
+function _financialAgreementCode (agreement) {
+  return agreement.financialAgreements[0].financialAgreementCode
 }
 
 function _status (status) {

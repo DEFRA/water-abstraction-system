@@ -37,7 +37,8 @@ function go (licence, auth) {
     warning: _generateWarningMessage(ends),
     activeNavBar: 'search',
     documentId: licenceDocumentHeader.id,
-    ends
+    ends,
+    includeInPresrocBilling
   }
 }
 
