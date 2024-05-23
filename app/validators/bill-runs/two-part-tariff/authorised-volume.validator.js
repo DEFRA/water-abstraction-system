@@ -50,7 +50,7 @@ function _customValidation (quantity, helpers) {
 }
 
 function _validate (authorisedVolume, totalBillableReturns, minVolume, maxVolume) {
-  const minValue = Number(Math.min(totalBillableReturns, minVolume))
+  const minValue = Number(Math.max(totalBillableReturns, minVolume))
   const maxValue = Number(maxVolume)
 
   const schema = Joi.object({
