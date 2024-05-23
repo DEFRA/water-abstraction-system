@@ -66,7 +66,8 @@
       <span class="inline govuk-!-margin-right-3">
         {{ govukButton({
           text: "Change the authorised volume",
-          classes: "govuk-button--secondary"
+          classes: "govuk-button--secondary",
+          preventDoubleClick: true
         }) }}
       </span>
     {% endif %}
@@ -74,7 +75,9 @@
     <span class="inline">
       {{ govukButton({
         text: "Preview the charge",
-        classes: "govuk-button--secondary"
+        classes: "govuk-button--secondary",
+        href: "../preview-charge/" + chargeReference.id,
+        preventDoubleClick: true
       }) }}
     </span>
   </div>
