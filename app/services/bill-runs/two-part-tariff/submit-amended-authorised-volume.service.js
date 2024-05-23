@@ -45,11 +45,9 @@ function _validate (payload) {
     return null
   }
 
-  const { message } = validation.error.details[0]
-  const authorisedVolume = message
+  const authorisedVolume = validation.error.details[0].message
 
   return {
-    message,
     authorisedVolume
   }
 }
