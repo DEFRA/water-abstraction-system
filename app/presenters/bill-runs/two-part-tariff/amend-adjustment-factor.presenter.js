@@ -28,8 +28,8 @@ function go (billRun, reviewChargeReference, licenceId) {
     chargeReference: {
       id: reviewChargeReference.id,
       description: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
-      aggregateFactor: reviewChargeReference.amendedAggregate,
-      chargeAdjustment: reviewChargeReference.amendedChargeAdjustment,
+      aggregateFactor: reviewChargeReference.amendedAggregate === 0 ? '0' : reviewChargeReference.amendedAggregate,
+      chargeAdjustment: reviewChargeReference.amendedChargeAdjustment === 0 ? '0' : reviewChargeReference.amendedChargeAdjustment,
       otherAdjustments: _otherAdjustments(reviewChargeReference)
     }
   }
