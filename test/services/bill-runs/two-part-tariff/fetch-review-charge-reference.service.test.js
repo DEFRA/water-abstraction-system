@@ -63,7 +63,7 @@ describe('Fetch Review Charge Reference service', () => {
       })
 
       it('returns details of the bill run', async () => {
-        const result = await FetchReviewChargeReferenceService.go(billRun.id, reviewChargeElement.id)
+        const result = await FetchReviewChargeReferenceService.go(billRun.id, reviewChargeReference.id)
 
         expect(result.billRun).to.equal({
           id: billRun.id,
