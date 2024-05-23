@@ -29,7 +29,7 @@ describe('Licence Set Up presenter', () => {
 
   let auth
   let chargeVersions
-  let licence
+  let commonData
   let workflows
 
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('Licence Set Up presenter', () => {
       }
     }
 
-    licence = { id: 'f91bf145-ce8e-481c-a842-4da90348062b' }
+    commonData = { licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b' }
   })
 
   describe('when provided with populated licence set up data', () => {
@@ -55,7 +55,7 @@ describe('Licence Set Up presenter', () => {
       })
 
       it("groups both types of data into the 'chargeInformation' property", () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+        const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
         expect(result).to.equal({
           chargeInformation: [
@@ -97,7 +97,7 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with a dash for the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+          const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
           expect(result).to.equal({
             chargeInformation: [{
@@ -123,7 +123,7 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+          const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
           expect(result).to.equal({
             chargeInformation: [{
@@ -160,7 +160,7 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
             expect(result).to.equal({
               chargeInformation: [{
@@ -180,7 +180,7 @@ describe('Licence Set Up presenter', () => {
 
         describe('and the user is not permitted to review workflow records', () => {
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
             expect(result).to.equal({
               chargeInformation: [{
@@ -210,7 +210,7 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
             expect(result).to.equal({
               chargeInformation: [{
@@ -234,7 +234,7 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
             expect(result).to.equal({
               chargeInformation: [{
@@ -257,14 +257,14 @@ describe('Licence Set Up presenter', () => {
         sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
         sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
 
-        licence.ends = sixYearsAndOneDayAgo
+        commonData.ends = sixYearsAndOneDayAgo
 
         chargeVersions = []
         workflows = [{ ...workflow }]
       })
 
       it('returns no links for editing', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, auth, licence)
+        const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
 
         expect(result.makeLicenceNonChargeable).to.be.undefined()
         expect(result.setupNewCharge).to.be.undefined()

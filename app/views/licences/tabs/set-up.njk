@@ -1,5 +1,54 @@
-{% from "macros/charge-version-status-tag.njk" import statusTag %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "macros/charge-version-status-tag.njk" import statusTag %}
+
+{% set rows = [] %}
+
+{% set head = [
+  {
+    text: "Start date"
+  },
+  {
+    text: "End date"
+  },
+  {
+    text: "Reason"
+  },
+  {
+    text: "Status"
+  },
+  {
+    text: "Action"
+  }
+] %}
+
+{% macro createLink(chargeVersion) %}
+  {% for chargeVersionAction in chargeVersion.action %}
+    {% if not loop.first %} | {% endif %}
+    <a href="{{ chargeVersionAction.link }}" class="govuk-link">
+      {{ chargeVersionAction.text }} </a>
+  {% endfor %}
+{% endmacro %}
+
+{% for chargeVersion in  chargeInformation %}
+  {% set rows = (rows.push([
+    {
+      text: chargeVersion.startDate
+    },
+    {
+      text: chargeVersion.endDate
+    },
+    {
+      text: chargeVersion.reason
+    },
+    {
+      html: statusTag(chargeVersion.status)
+    },
+    {
+      html: createLink(chargeVersion)
+    }
+  ]), rows) %}
+{% endfor %}
 
 <h2 class="govuk-heading-l">Licence set up</h2>
 
@@ -10,34 +59,10 @@
 {% endif %}
 
 {% if chargeInformation.length > 0 %}
-  <table class="govuk-table">
-    <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header">Start date</th>
-      <th scope="col" class="govuk-table__header">End date</th>
-      <th scope="col" class="govuk-table__header">Reason</th>
-      <th scope="col" class="govuk-table__header">Status</th>
-      <th scope="col" class="govuk-table__header">Action</th>
-    </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-    {% for chargeVersion in chargeInformation %}
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">{{ chargeVersion.startDate }}</td>
-        <td class="govuk-table__cell">{{ chargeVersion.endDate }}</td>
-        <td class="govuk-table__cell">{{ chargeVersion.reason }}</td>
-        <td class="govuk-table__cell">{{ statusTag(chargeVersion.status) }}</td>
-        <th class="govuk-table__cell">
-          {% for chargeVersionAction in chargeVersion.action %}
-            {% if not loop.first %} | {% endif %}
-            <a href="{{ chargeVersionAction.link }}" class="govuk-link">
-              {{ chargeVersionAction.text }} </a>
-          {% endfor %}
-        </th>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  {{ govukTable({
+    head: head,
+    rows: rows
+  }) }}
 {% endif %}
 
 {% if setupNewCharge %}

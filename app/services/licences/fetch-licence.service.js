@@ -45,8 +45,7 @@ async function _fetchLicence (id) {
       'licenceRef',
       'expiredDate',
       'revokedDate',
-      'lapsedDate',
-      'startDate'
+      'lapsedDate'
     ])
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (builder) => {

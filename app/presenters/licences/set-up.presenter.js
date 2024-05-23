@@ -18,18 +18,18 @@ const roles = {
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, auth, licence) {
+function go (chargeVersions, workflows, auth, commonData) {
   return {
-    ..._authorisedLinks(auth, licence),
+    ..._authorisedLinks(auth, commonData),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth)
   }
 }
 
-function _authorisedLinks (auth, licence) {
-  if (auth.credentials?.scope?.includes(roles.workflowEditor) && !_endsSixYearsAgo(licence.ends)) {
+function _authorisedLinks (auth, commonData) {
+  if (auth.credentials?.scope?.includes(roles.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
     return {
-      setupNewCharge: `/licences/${licence.id}/charge-information/create`,
-      makeLicenceNonChargeable: `/licences/${licence.id}/charge-information/non-chargeable-reason?start=1`
+      setupNewCharge: `/licences/${commonData.licenceId}/charge-information/create`,
+      makeLicenceNonChargeable: `/licences/${commonData.licenceId}/charge-information/non-chargeable-reason?start=1`
     }
   }
 
