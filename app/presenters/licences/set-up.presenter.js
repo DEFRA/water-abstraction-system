@@ -114,7 +114,7 @@ function _workflows (workflows, auth) {
 }
 
 function _workflowAction (workflow, auth) {
-  if (workflow.status === 'to_setup' && auth.credentials?.scope?.includes(roles.workflowEditor)) {
+  if (workflow.status === 'to_setup' && auth.credentials.scope.includes(roles.workflowEditor)) {
     return _workflowActionEditor(workflow)
   }
   if (auth.credentials?.scope?.includes(roles.workflowReviewer)) {
