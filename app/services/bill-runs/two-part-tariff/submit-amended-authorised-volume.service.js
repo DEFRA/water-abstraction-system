@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating and patching the data for the amend billable returns page
+ * Orchestrates validating and patching the data for the amend authorised volume page
  * @module SubmitAmendedAuthorisedVolumeService
 */
 
@@ -10,6 +10,17 @@ const AuthorisedVolumeValidator = require('../../../validators/bill-runs/two-par
 const FetchAuthorisedVolumeService = require('./fetch-authorised-volume.service.js')
 const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
 
+/**
+ * Orchestrates validating the data for the amend authorised volume page and patching the db value
+ *
+ * @param {String} billRunId - The UUID for the bill run
+ * @param {String} licenceId - The UUID of the licence that is being reviewed
+ * @param {String} reviewChargeReferenceId - The UUID of the review charge reference being updated
+ * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<Object>} The updated value for the authorised volume
+ */
 async function go (billRunId, licenceId, reviewChargeReferenceId, payload, yar) {
   const validationResult = _validate(payload)
 
