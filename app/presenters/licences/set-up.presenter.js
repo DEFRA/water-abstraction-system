@@ -31,7 +31,7 @@ function go (chargeVersions, workflows, auth, commonData) {
 }
 
 function _authorisedLinks (auth, commonData) {
-  if (auth.credentials?.scope?.includes(roles.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
+  if (auth.credentials.scope.includes(roles.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setupNewCharge: `/licences/${commonData.licenceId}/charge-information/create`,
       makeLicenceNonChargeable: `/licences/${commonData.licenceId}/charge-information/non-chargeable-reason?start=1`
