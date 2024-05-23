@@ -45,7 +45,6 @@ async function _fetchReviewChargeReference (reviewChargeReferenceId) {
     .withGraphFetched('chargeReference.chargeCategory')
     .modifyGraph('chargeReference.chargeCategory', (builder) => {
       builder.select([
-        'reference',
         'shortDescription',
         'minVolume',
         'maxVolume'
