@@ -19,8 +19,9 @@ const ViewLicenceService = require('../../../app/services/licences/view-licence.
 const ViewLicenceSetUpService = require('../../../app/services/licences/view-licence-set-up.service.js')
 
 describe('View Licence Set Up service', () => {
-  const auth = {}
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
+
+  let auth = {}
 
   beforeEach(() => {
     Sinon.stub(FetchChargeVersionsService, 'go').returns([
@@ -48,6 +49,17 @@ describe('View Licence Set Up service', () => {
       licenceName: 'fake licence',
       licenceId: testId
     })
+
+    auth = {
+      isValid: true,
+      credentials: {
+        user: { id: 123 },
+        roles: ['billing', 'charge_version_workflow_editor'],
+        groups: [],
+        scope: ['billing', 'charge_version_workflow_editor'],
+        permissions: { abstractionReform: false, billRuns: true, manage: true }
+      }
+    }
   })
 
   afterEach(() => {
@@ -84,7 +96,9 @@ describe('View Licence Set Up service', () => {
           }
         ],
         licenceId: testId,
-        licenceName: 'fake licence'
+        licenceName: 'fake licence',
+        makeLicenceNonChargeable: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/non-chargeable-reason?start=1',
+        setupNewCharge: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/create'
       })
     })
   })
