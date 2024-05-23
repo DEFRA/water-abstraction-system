@@ -16,6 +16,11 @@ const roles = {
 /**
  * Formats data for the `/licences/{id}/set-up` view licence set up page
  *
+ * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
+ * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
+ * @param {Object} auth - The auth object taken from `request.auth` containing user details
+ * @param {Object} commonData - Licence data already formatted for the view's shared elements
+ *
  * @returns {Object} The data formatted for the view template
  */
 function go (chargeVersions, workflows, auth, commonData) {
