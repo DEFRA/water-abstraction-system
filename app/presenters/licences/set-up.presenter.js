@@ -47,7 +47,7 @@ function _chargeVersions (chargeVersions) {
   return chargeVersions.map((chargeVersion) => {
     return {
       id: chargeVersion.id,
-      startDate: chargeVersion.startDate ? formatLongDate(chargeVersion.startDate) : '-',
+      startDate: formatLongDate(chargeVersion.startDate),
       endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '-',
       status: _status(chargeVersion.status),
       reason: chargeVersion.changeReason?.description,
