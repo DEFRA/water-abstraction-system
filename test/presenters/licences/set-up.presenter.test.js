@@ -11,6 +11,10 @@ const { expect } = Code
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
 
 describe('Licence Set Up presenter', () => {
+  // const agreement = {
+  //
+  // }
+
   const chargeVersion = {
     id: '0d514aa4-1550-46b1-8195-878957f2a5f8',
     startDate: new Date('2020-01-01'),
@@ -27,6 +31,7 @@ describe('Licence Set Up presenter', () => {
     licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b'
   }
 
+  let agreements
   let auth
   let chargeVersions
   let commonData
@@ -50,14 +55,16 @@ describe('Licence Set Up presenter', () => {
   describe('when provided with populated licence set up data', () => {
     describe('that includes both charge versions and workflows', () => {
       beforeEach(() => {
+        agreements = []
         chargeVersions = [{ ...chargeVersion }]
         workflows = [{ ...workflow }]
       })
 
       it("groups both types of data into the 'chargeInformation' property", () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
         expect(result).to.equal({
+          agreements: [],
           chargeInformation: [
             {
               action: [],
@@ -97,9 +104,10 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with a dash for the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
           expect(result).to.equal({
+            agreements: [],
             chargeInformation: [{
               action: [{
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
@@ -123,9 +131,10 @@ describe('Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with the end date', () => {
-          const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
           expect(result).to.equal({
+            agreements: [],
             chargeInformation: [{
               action: [{
                 link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/0d514aa4-1550-46b1-8195-878957f2a5f8/view',
@@ -160,9 +169,10 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
             expect(result).to.equal({
+              agreements: [],
               chargeInformation: [{
                 action: [{
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
@@ -180,9 +190,10 @@ describe('Licence Set Up presenter', () => {
 
         describe('and the user is not permitted to review workflow records', () => {
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
             expect(result).to.equal({
+              agreements: [],
               chargeInformation: [{
                 action: [],
                 id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
@@ -210,9 +221,10 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
             expect(result).to.equal({
+              agreements: [],
               chargeInformation: [{
                 action: [{
                   link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/charge-information/f547f465-0a62-45ff-9909-38825f05e0c4/review',
@@ -234,9 +246,10 @@ describe('Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
             expect(result).to.equal({
+              agreements: [],
               chargeInformation: [{
                 action: [],
                 id: 'f547f465-0a62-45ff-9909-38825f05e0c4',
@@ -264,7 +277,7 @@ describe('Licence Set Up presenter', () => {
       })
 
       it('returns no links for editing', () => {
-        const result = SetUpPresenter.go(chargeVersions, workflows, auth, commonData)
+        const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
         expect(result.makeLicenceNonChargeable).to.be.undefined()
         expect(result.setupNewCharge).to.be.undefined()
