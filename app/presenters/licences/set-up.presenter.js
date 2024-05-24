@@ -60,7 +60,7 @@ function _agreementActionLinks (commonData, agreement, auth) {
   }
 
   const actionLinks = []
-  const hasNotEnded = !agreement.endDate
+  const hasNotEnded = agreement.endDate === null
   const is2PTAgreement = _financialAgreementCode(agreement) === 'S127'
   const isNotMarkedForSupplementaryBilling = commonData.includeInPresrocBilling === 'no'
 
