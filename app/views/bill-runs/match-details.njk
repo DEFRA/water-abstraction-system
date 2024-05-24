@@ -106,7 +106,8 @@
       {{ govukButton({
         text: "Edit the billable returns",
         href: "/system/bill-runs/" + billRunId + "/review/" + licenceId + "/match-details/" + chargeElement.chargeElementId + "/amend-billable-returns",
-        classes: "govuk-button--secondary"
+        classes: "govuk-button--secondary",
+        preventDoubleClick: true
       }) }}
     </div>
   </div>

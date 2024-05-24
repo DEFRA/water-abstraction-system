@@ -18,9 +18,9 @@ const ReviewChargeReferenceHelper = require('../../../support/helpers/review-cha
 const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
 
 // Thing under test
-const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-review-charge-reference.service.js')
+const FetchAuthorisedVolumeService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-authorised-volume.service.js')
 
-describe('Fetch Review Charge Reference service', () => {
+describe('Fetch Authorised Volume service', () => {
   beforeEach(async () => {
     await DatabaseSupport.clean()
   })
@@ -29,7 +29,7 @@ describe('Fetch Review Charge Reference service', () => {
     Sinon.restore()
   })
 
-  describe('when there is a valid bill run', () => {
+  describe('when there is a valid bull run', () => {
     let billRun
 
     beforeEach(async () => {
@@ -46,15 +46,7 @@ describe('Fetch Review Charge Reference service', () => {
       beforeEach(async () => {
         reviewChargeVersion = await ReviewChargeVersionHelper.add()
         chargeCategory = await ChargeCategoryHelper.add()
-        chargeReference = await ChargeReferenceHelper.add({
-          chargeCategoryId: chargeCategory.id,
-          additionalCharges: {
-            isSupplyPublicWater: true,
-            supportedSource: {
-              name: 'Thames'
-            }
-          }
-        })
+        chargeReference = await ChargeReferenceHelper.add({ chargeCategoryId: chargeCategory.id })
         reviewChargeReference = await ReviewChargeReferenceHelper.add({
           reviewChargeVersionId: reviewChargeVersion.id,
           chargeReferenceId: chargeReference.id
@@ -63,7 +55,7 @@ describe('Fetch Review Charge Reference service', () => {
       })
 
       it('returns details of the bill run', async () => {
-        const result = await FetchReviewChargeReferenceService.go(billRun.id, reviewChargeReference.id)
+        const result = await FetchAuthorisedVolumeService.go(billRun.id, reviewChargeReference.id)
 
         expect(result.billRun).to.equal({
           id: billRun.id,
@@ -72,40 +64,25 @@ describe('Fetch Review Charge Reference service', () => {
       })
 
       it('returns details of the review charge reference', async () => {
-        const result = await FetchReviewChargeReferenceService.go(billRun.id, reviewChargeReference.id)
+        const result = await FetchAuthorisedVolumeService.go(billRun.id, reviewChargeReference.id)
 
         expect(result.reviewChargeReference).to.equal({
           id: reviewChargeReference.id,
-          reviewChargeVersionId: reviewChargeVersion.id,
-          chargeReferenceId: chargeReference.id,
-          aggregate: reviewChargeReference.aggregate,
-          createdAt: reviewChargeReference.createdAt,
-          updatedAt: reviewChargeReference.updatedAt,
-          amendedAggregate: reviewChargeReference.amendedAggregate,
-          chargeAdjustment: reviewChargeReference.chargeAdjustment,
-          amendedChargeAdjustment: reviewChargeReference.amendedChargeAdjustment,
-          abatementAgreement: reviewChargeReference.abatementAgreement,
-          winterDiscount: reviewChargeReference.winterDiscount,
-          twoPartTariffAgreement: reviewChargeReference.twoPartTariffAgreement,
-          canalAndRiverTrustAgreement: reviewChargeReference.canalAndRiverTrustAgreement,
-          authorisedVolume: reviewChargeReference.authorisedVolume,
           amendedAuthorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
-          reviewChargeVersion: {
-            chargePeriodStartDate: reviewChargeVersion.chargePeriodStartDate,
-            chargePeriodEndDate: reviewChargeVersion.chargePeriodEndDate
+          chargeReference: {
+            chargeCategoryId: chargeCategory.id,
+            chargeCategory: {
+              shortDescription: chargeCategory.shortDescription,
+              maxVolume: chargeCategory.maxVolume,
+              minVolume: chargeCategory.minVolume
+            }
           },
           reviewChargeElements: [{
             amendedAllocated: reviewChargeElement.amendedAllocated
           }],
-          chargeReference: {
-            volume: chargeReference.volume,
-            chargeCategoryId: chargeCategory.id,
-            supportedSourceName: chargeReference.additionalCharges.supportedSource.name,
-            waterCompanyCharge: `${chargeReference.additionalCharges.isSupplyPublicWater}`,
-            chargeCategory: {
-              reference: chargeCategory.reference,
-              shortDescription: chargeCategory.shortDescription
-            }
+          reviewChargeVersion: {
+            chargePeriodStartDate: reviewChargeVersion.chargePeriodStartDate,
+            chargePeriodEndDate: reviewChargeVersion.chargePeriodEndDate
           }
         })
       })
