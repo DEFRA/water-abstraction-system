@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
 
-describe.only('Licence Set Up presenter', () => {
+describe('Licence Set Up presenter', () => {
   const agreement = {
     id: '123',
     startDate: new Date('2020-01-01'),
