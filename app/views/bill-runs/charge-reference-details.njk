@@ -67,7 +67,8 @@
         {{ govukButton({
           text: "Change the authorised volume",
           classes: "govuk-button--secondary",
-          preventDoubleClick: true
+          preventDoubleClick: true,
+          href: chargeReference.id + '/amend-authorised-volume'
         }) }}
       </span>
     {% endif %}

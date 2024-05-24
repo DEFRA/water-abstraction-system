@@ -8,6 +8,7 @@
 const Boom = require('@hapi/boom')
 
 const AmendAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
+const AmendAuthorisedVolumeService = require('../services/bill-runs/two-part-tariff/amend-authorised-volume.service.js')
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
@@ -20,6 +21,7 @@ const ReviewLicenceService = require('../services/bill-runs/two-part-tariff/revi
 const SendBillRunService = require('../services/bill-runs/send-bill-run.service.js')
 const StartBillRunProcessService = require('../services/bill-runs/start-bill-run-process.service.js')
 const SubmitAmendedAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/submit-amended-adjustment-factor.service.js')
+const SubmitAmendedAuthorisedVolumeService = require('../services/bill-runs/two-part-tariff/submit-amended-authorised-volume.service.js')
 const SubmitAmendedBillableReturnsService = require('..//services/bill-runs/two-part-tariff/submit-amended-billable-returns.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/submit-cancel-bill-run.service.js')
 const SubmitRemoveBillRunLicenceService = require('../services/bill-runs/two-part-tariff/submit-remove-bill-run-licence.service.js')
@@ -35,6 +37,18 @@ async function amendAdjustmentFactor (request, h) {
 
   return h.view('bill-runs/amend-adjustment-factor.njk', {
     pageTitle: 'Set the adjustment factors',
+    activeNavBar: 'bill-runs',
+    ...pageData
+  })
+}
+
+async function amendAuthorisedVolume (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  const pageData = await AmendAuthorisedVolumeService.go(billRunId, licenceId, reviewChargeReferenceId)
+
+  return h.view('bill-runs/amend-authorised-volume.njk', {
+    pageTitle: 'Set the authorised volume',
     activeNavBar: 'bill-runs',
     ...pageData
   })
@@ -188,6 +202,23 @@ async function submitAmendedAdjustmentFactor (request, h) {
   return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`)
 }
 
+async function submitAmendedAuthorisedVolume (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+  const pageData = await SubmitAmendedAuthorisedVolumeService.go(
+    billRunId,
+    licenceId,
+    reviewChargeReferenceId,
+    request.payload,
+    request.yar
+  )
+
+  if (pageData.error) {
+    return h.view('bill-runs/amend-authorised-volume.njk', pageData)
+  }
+
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`)
+}
+
 async function submitAmendedBillableReturns (request, h) {
   const { id: billRunId, licenceId, reviewChargeElementId } = request.params
 
@@ -276,6 +307,7 @@ async function view (request, h) {
 
 module.exports = {
   amendAdjustmentFactor,
+  amendAuthorisedVolume,
   amendBillableReturns,
   cancel,
   chargeReferenceDetails,
@@ -288,6 +320,7 @@ module.exports = {
   reviewLicence,
   send,
   submitAmendedAdjustmentFactor,
+  submitAmendedAuthorisedVolume,
   submitAmendedBillableReturns,
   submitCancel,
   submitReview,

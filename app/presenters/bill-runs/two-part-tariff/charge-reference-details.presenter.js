@@ -31,7 +31,7 @@ function go (billRun, reviewChargeReference, licenceId) {
       reference: reviewChargeReference.chargeReference.chargeCategory.reference,
       description: reviewChargeReference.chargeReference.chargeCategory.shortDescription,
       totalBillableReturns: _totalBillableReturns(reviewChargeReference.reviewChargeElements),
-      authorisedVolume: reviewChargeReference.chargeReference.volume,
+      authorisedVolume: reviewChargeReference.amendedAuthorisedVolume,
       adjustments,
       additionalCharges: _additionalCharges(reviewChargeReference.chargeReference)
     },
