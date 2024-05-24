@@ -27,7 +27,7 @@ const agreementDescriptions = {
  *
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
- * @param {module:LicenceAgreements[]} agreements - All in-progress agreements records for the licence
+ * @param {module:LicenceAgreements[]} agreements - All agreements records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
  *
@@ -37,7 +37,7 @@ function go (chargeVersions, workflows, agreements, auth, commonData) {
   return {
     agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
-    ..._agreementButtons(commonData, auth),
+    ..._agreementButtons(auth, commonData),
     ..._authorisedLinks(auth, commonData)
   }
 }
@@ -89,7 +89,7 @@ function _agreementActionLinks (commonData, agreement, auth) {
   return actionLinks
 }
 
-function _agreementButtons (commonData, auth) {
+function _agreementButtons (auth, commonData) {
   if (auth.credentials.scope.includes(roles.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
     return {
       setUpAgreement: `/licences/${commonData.licenceId}/agreements/select-type`
