@@ -67,7 +67,6 @@ describe('Fetch Review Charge Reference service', () => {
 
         expect(result.billRun).to.equal({
           id: billRun.id,
-          fromFinancialYearEnding: billRun.fromFinancialYearEnding,
           toFinancialYearEnding: billRun.toFinancialYearEnding
         })
       })
