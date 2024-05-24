@@ -116,6 +116,14 @@ async function matchDetails (request, h) {
   })
 }
 
+async function previewCharge (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  // await CalculateCharge.go(billRunId, licenceId, reviewChargeReferenceId, request.yar)
+
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`)
+}
+
 async function removeLicence (request, h) {
   const { id: billRunId, licenceId } = request.params
 
@@ -274,6 +282,7 @@ module.exports = {
   create,
   index,
   matchDetails,
+  previewCharge,
   removeLicence,
   review,
   reviewLicence,

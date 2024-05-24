@@ -164,6 +164,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/preview-charge/{reviewChargeReferenceId}',
+    handler: BillRunsController.previewCharge,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Sends a request to the Charging Module to calculate the charge for a charge reference'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
     handler: BillRunsController.amendAdjustmentFactor,
     options: {
