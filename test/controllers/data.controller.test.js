@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const LoadService = require('../../app/services/data/load/load.service.js')
 const SeedService = require('../../app/services/data/seed/seed.service.js')
 const SubmitDeduplicateService = require('../../app/services/data/deduplicate/submit-deduplicate.service.js')
 const TearDownService = require('../../app/services/data/tear-down/tear-down.service.js')
@@ -103,6 +104,44 @@ describe('Data controller', () => {
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('There is a problem')
           expect(response.payload).to.contain('Enter a licence reference to de-dupe')
+        })
+      })
+    })
+  })
+
+  describe('/data/load', () => {
+    describe('POST', () => {
+      const options = {
+        method: 'POST',
+        url: '/data/load'
+      }
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(LoadService, 'go').resolves({
+            regions: ['d0a4123d-1e19-480d-9dd4-f70f3387c4b9']
+          })
+        })
+
+        it('returns a 200 status and the results', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(200)
+          expect(response.payload).to.equal('{"regions":["d0a4123d-1e19-480d-9dd4-f70f3387c4b9"]}')
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the LoadService errors', () => {
+          beforeEach(async () => {
+            Sinon.stub(LoadService, 'go').rejects()
+          })
+
+          it('returns a 500 status', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(500)
+          })
         })
       })
     })
