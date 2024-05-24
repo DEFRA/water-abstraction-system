@@ -34,7 +34,7 @@ async function _fetch (licenceRef) {
       ])
     })
     .orderBy([
-      { column: 'startDate', order: 'desc' }
+      { column: 'createdAt', order: 'asc' }
     ])
 }
 
