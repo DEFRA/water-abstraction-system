@@ -164,6 +164,32 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-authorised-volume',
+    handler: BillRunsController.amendAuthorisedVolume,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Amend a charge references authorised volume from a two-part tariff licence'
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-authorised-volume',
+    handler: BillRunsController.submitAmendedAuthorisedVolume,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      description: 'Submit the amended charge references authorised volume from a two-part tariff licence'
+    }
+  },
+  {
+    method: 'GET',
     path: '/bill-runs/{id}/review/{licenceId}/charge-reference-details/{reviewChargeReferenceId}/amend-adjustment-factor',
     handler: BillRunsController.amendAdjustmentFactor,
     options: {

@@ -26,6 +26,7 @@ describe('View Licence presenter', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
+        ends: null,
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceName: 'Unregistered licence',
         licenceRef: '01/123',

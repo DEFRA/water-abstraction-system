@@ -16,7 +16,6 @@ const ViewLicencePresenter = require('../../presenters/licences/view-licence.pre
  * @returns {Promise<Object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go (licenceId, auth) {
-  //  fox this fetch
   const licenceData = await FetchLicenceService.go(licenceId)
 
   const pageData = ViewLicencePresenter.go(licenceData, auth)
