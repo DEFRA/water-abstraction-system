@@ -2,6 +2,47 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "macros/charge-version-status-tag.njk" import statusTag %}
 
+{% macro createLink(chargeVersion) %}
+  {% for chargeVersionAction in chargeVersion.action %}
+    {% if not loop.first %} | {% endif %}
+    <a href="{{ chargeVersionAction.link }}" class="govuk-link">
+      {{ chargeVersionAction.text }} </a>
+  {% endfor %}
+{% endmacro %}
+
+<h2 class="govuk-heading-l">Licence set up</h2>
+
+{% set returnsRequirementsToggle = true %}
+
+{% if returnsRequirementsToggle %}
+  <h3 class="govuk-heading-m"> Returns for requirements </h3>
+  {% if returnsRequirements.length == 0 %}
+    <p class="govuk-body"> No returns for requirements for this licence.</p>
+  {% endif %}
+
+  {% if returnsRequirements.length > 0 %}
+    <p class="govuk-body"> A table of requirements </p>
+  {% endif %}
+
+  {% if links.returnsRequirements.returnsRequired %}
+    {{ govukButton({
+      text: "Set up new returns requirement",
+      href: links.returnsRequirements.returnsRequired,
+      classes: "govuk-button--secondary govuk-!-margin-right-3"
+    }) }}
+  {% endif %}
+
+  {% if links.returnsRequirements.noReturnsRequired %}
+    {{ govukButton({
+      text: "Mark licence as 'no returns needed'",
+      href: links.returnsRequirements.noReturnsRequired,
+      classes: "govuk-button--secondary govuk-!-margin-right-3"
+    }) }}
+  {% endif %}
+{% endif %}
+
+<h3 class="govuk-heading-m"> Charge information </h3>
+
 {% set rows = [] %}
 
 {% set head = [
@@ -21,14 +62,6 @@
     text: "Action"
   }
 ] %}
-
-{% macro createLink(chargeVersion) %}
-  {% for chargeVersionAction in chargeVersion.action %}
-    {% if not loop.first %} | {% endif %}
-    <a href="{{ chargeVersionAction.link }}" class="govuk-link">
-      {{ chargeVersionAction.text }} </a>
-  {% endfor %}
-{% endmacro %}
 
 {% for chargeVersion in  chargeInformation %}
   {% set rows = (rows.push([
@@ -50,9 +83,6 @@
   ]), rows) %}
 {% endfor %}
 
-<h2 class="govuk-heading-l">Licence set up</h2>
-
-<h3 class="govuk-heading-m"> Charge information </h3>
 
 {% if chargeInformation.length == 0 %}
   <p class="govuk-body"> No charge information for this licence.</p>

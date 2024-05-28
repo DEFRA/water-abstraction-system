@@ -24,6 +24,13 @@ const roles = {
  */
 function go (chargeVersions, workflows, auth, commonData) {
   return {
+    links: {
+      returnsRequirements: {
+        returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
+        noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
+      }
+    },
+    returnsRequirements: _returnsRequirements(),
     ..._authorisedLinks(auth, commonData),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth)
   }
@@ -81,6 +88,10 @@ function _endsSixYearsAgo (endDate) {
   sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
 
   return endDate < sixYearsFromYesterday
+}
+
+function _returnsRequirements () {
+  return [{}]
 }
 
 function _status (status) {
