@@ -74,6 +74,8 @@ async function _calculateCharge (reviewChargeReference, waterUndertaker) {
 
   if (calculatedCharge.succeeded) {
     return calculatedCharge.response.body.calculation.chargeValue
+  } else {
+    return null
   }
 }
 
