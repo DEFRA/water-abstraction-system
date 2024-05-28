@@ -212,6 +212,17 @@ function formatPounds (valueInPence) {
 }
 
 /**
+ * Formats a date into a DD-MM-YYYY string, for example, '01-04-2022'
+ *
+ * @param {Date} date The date to be formatted
+ *
+ * @returns {string} The date formatted as a 'DD-MM-YYYY' string
+ */
+function formatShortDate (date) {
+  return date.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })
+}
+
+/**
  * Pads a number to a given length with leading zeroes and returns the result as a string
  *
  * @param {Number} number The number to be padded
@@ -274,6 +285,7 @@ module.exports = {
   formatLongDateTime,
   formatMoney,
   formatPounds,
+  formatShortDate,
   leftPadZeroes,
   sentenceCase,
   titleCase
