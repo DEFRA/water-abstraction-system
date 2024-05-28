@@ -8,7 +8,6 @@
 const { formatLongDate } = require('../base.presenter.js')
 
 const roles = {
-  billing: 'billing',
   workflowEditor: 'charge_version_workflow_editor',
   workflowReviewer: 'charge_version_workflow_reviewer'
 }
