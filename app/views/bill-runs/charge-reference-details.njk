@@ -22,6 +22,14 @@
     }) }}
   {% endif %}
 
+  {# Charge preview banner #}
+  {% if chargeMessage %}
+    {{ govukNotificationBanner({
+      titleText: 'Information',
+      text: chargeMessage
+    }) }}
+  {% endif %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
