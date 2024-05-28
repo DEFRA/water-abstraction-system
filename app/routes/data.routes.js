@@ -31,6 +31,19 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/data/load',
+    handler: DataController.load,
+    options: {
+      app: {
+        excludeFromProd: true,
+        plainOutput: true
+      },
+      auth: false,
+      description: 'Used to load test data in the database'
+    }
+  },
+  {
+    method: 'POST',
     path: '/data/seed',
     handler: DataController.seed,
     options: {
