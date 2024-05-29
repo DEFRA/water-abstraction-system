@@ -257,7 +257,9 @@ describe('Licence Set Up presenter', () => {
         sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
         sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
 
-        commonData.ends = sixYearsAndOneDayAgo
+        commonData.ends = {
+          date: sixYearsAndOneDayAgo
+        }
 
         chargeVersions = []
         workflows = [{ ...workflow }]
