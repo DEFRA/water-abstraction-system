@@ -16,12 +16,57 @@
 
 {% if returnsRequirementsToggle %}
   <h3 class="govuk-heading-m"> Returns for requirements </h3>
+
+  {% set returnsRequirementsTableRows = [] %}
+
+  {% set returnsRequirementsTableHead = [
+    {
+      text: "Start date"
+    },
+    {
+      text: "End date"
+    },
+    {
+      text: "Reason"
+    },
+    {
+      text: "Status"
+    },
+    {
+      text: "Action"
+    }
+  ] %}
+
+  {% for returnsRequirement in  returnsRequirements %}
+    {% set returnsRequirementsTableRows = (returnsRequirementsTableRows.push([
+      {
+        text: returnsRequirement.startDate
+      },
+      {
+        text: returnsRequirement.endDate
+      },
+      {
+        text: returnsRequirement.reason
+      },
+      {
+        html: statusTag(returnsRequirement.status)
+      },
+      {
+        html: createLink(returnsRequirement)
+      }
+    ]), returnsRequirementsTableRows) %}
+  {% endfor %}
+
+
   {% if returnsRequirements.length == 0 %}
     <p class="govuk-body"> No returns for requirements for this licence.</p>
   {% endif %}
 
   {% if returnsRequirements.length > 0 %}
-    <p class="govuk-body"> A table of requirements </p>
+      {{ govukTable({
+        head: returnsRequirementsTableHead,
+        rows: returnsRequirementsTableRows
+      }) }}
   {% endif %}
 
   {% if links.returnsRequirements.returnsRequired %}

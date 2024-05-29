@@ -17,12 +17,13 @@ const roles = {
  *
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
+ * @param {[]} returnsRequirements - All returns requirement records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, auth, commonData) {
+function go (chargeVersions, workflows, returnsRequirements, auth, commonData) {
   return {
     links: {
       returnsRequirements: {
@@ -30,7 +31,7 @@ function go (chargeVersions, workflows, auth, commonData) {
         noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
       }
     },
-    returnsRequirements: _returnsRequirements(),
+    returnsRequirements: _returnsRequirements(returnsRequirements),
     ..._authorisedLinks(auth, commonData),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth)
   }
@@ -90,8 +91,19 @@ function _endsSixYearsAgo (endDate) {
   return endDate < sixYearsFromYesterday
 }
 
-function _returnsRequirements () {
-  return [{}]
+function _returnsRequirements (returnsRequirements = [{}]) {
+  return returnsRequirements.map((returnsRequirement) => {
+    return {
+      action: [{
+        text: 'View',
+        link: ''
+      }],
+      endDate: returnsRequirement.endDate ? formatLongDate(returnsRequirement.endDate) : '-',
+      reason: '',
+      startDate: returnsRequirement.startDate ? formatLongDate(returnsRequirement.startDate) : '-',
+      status: returnsRequirement.status
+    }
+  })
 }
 
 function _status (status) {
