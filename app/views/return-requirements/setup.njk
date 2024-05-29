@@ -39,21 +39,7 @@
             classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
           }
         },
-        items: [
-          {
-            value: "use-abstraction-data",
-            text: "Start by using abstraction data",
-            checked: "use-abstraction-data" === setup
-          },
-          {
-            divider: "or"
-          },
-          {
-            value: "set-up-manually",
-            text: "Set up manually",
-            checked: "set-up-manually" === setup
-          }
-        ]
+        items: radioOptions
       }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}

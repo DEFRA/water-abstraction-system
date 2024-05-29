@@ -5,6 +5,7 @@
  * @module SetupService
  */
 
+const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
@@ -20,8 +21,9 @@ const SessionModel = require('../../models/session.model.js')
  */
 async function go (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+  const existingData = await FetchReturnRequirementsService.go(session.licence.id)
 
-  const formattedData = SetupPresenter.go(session)
+  const formattedData = SetupPresenter.go(session, existingData)
 
   return {
     activeNavBar: 'search',

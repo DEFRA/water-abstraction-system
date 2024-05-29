@@ -9,6 +9,7 @@ const Joi = require('joi')
 
 const VALID_VALUES = [
   'use-abstraction-data',
+  'use-existing-requirements',
   'set-up-manually'
 ]
 

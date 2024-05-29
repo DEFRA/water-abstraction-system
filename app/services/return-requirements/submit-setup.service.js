@@ -54,6 +54,10 @@ function _redirect (setup) {
     endpoint = 'check'
   }
 
+  if (setup === 'use-existing-requirements') {
+    endpoint = 'existing'
+  }
+
   if (setup === 'set-up-manually') {
     endpoint = 'purpose/0'
   }
