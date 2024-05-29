@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates removing a licence from a bill run whilst it is at the review stage
- * @module CalculateCharge
+ * @module CalculateChargeService
  */
 
 const { ref } = require('objection')
