@@ -52,10 +52,17 @@ const seedUsers = [
 ]
 
 async function seed (knex) {
+  // The following applies to all the seed users listed above.
+  //
+  // First create the user record if it doesn't exist
   await _insertUsersWhereNotExists(knex)
 
+  // Then if the seed user has a group property check if a `user_group` record exists. (This is only expected to be the
+  // case if we have just created the user)
   await _updateSeedUsersWithUserIdAndGroupId(knex)
 
+  // Finally, if the seed user has a group property and we've not found a `user_group` record, insert one. It's this
+  // that gives, for example, the billing.data@wrls.gov.uk user the permissions it needs to access billing features
   await _insertUserGroupsWhereNotExists(knex)
 }
 
@@ -69,7 +76,8 @@ function _generateHashedPassword () {
 }
 
 async function _groups (knex) {
-  return knex('idm.groups')
+  return knex('groups')
+    .withSchema('idm')
     .select('groupId', 'group')
 }
 
@@ -77,13 +85,15 @@ async function _insertUsersWhereNotExists (knex) {
   const password = _generateHashedPassword()
 
   for (const seedUser of seedUsers) {
-    const existingUser = await knex('idm.users')
+    const existingUser = await knex('users')
+      .withSchema('idm')
       .first('userId')
       .where('userName', seedUser.userName)
       .andWhere('application', seedUser.application)
 
     if (!existingUser) {
-      await knex('idm.users')
+      await knex('users')
+        .withSchema('idm')
         .insert({
           userName: seedUser.userName,
           application: seedUser.application,
@@ -102,8 +112,9 @@ async function _insertUserGroupsWhereNotExists (knex) {
   })
 
   for (const seedUser of seedUsersWithGroups) {
-    const existingUserGroup = await knex('idm.userGroups')
-      .select('userGroupId')
+    const existingUserGroup = await knex('userGroups')
+      .withSchema('idm')
+      .first('userGroupId')
       .where('userId', seedUser.userId)
       .andWhere('groupId', seedUser.groupId)
 
@@ -138,9 +149,9 @@ async function _updateSeedUsersWithUserIdAndGroupId (knex) {
 }
 
 async function _users (knex) {
-  return knex('idm.users')
+  return knex('users')
+    .withSchema('idm')
     .select('userId', 'userName')
-    .whereJsonPath('userData', '$.source', '=', 'Seeded')
 }
 
 module.exports = {

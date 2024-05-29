@@ -48,6 +48,7 @@ describe('View Licence service', () => {
         expect(result).to.equal({
           activeNavBar: 'search',
           documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
+          ends: null,
           licenceId: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
           licenceName: 'Unregistered licence',
           licenceRef: '01/130/R01',
@@ -157,6 +158,7 @@ function _testLicence () {
   return LicenceModel.fromJson({
     id: '2c80bd22-a005-4cf4-a2a2-73812a9861de',
     licenceRef: '01/130/R01',
+    ends: null,
     licenceName: 'Unregistered licence',
     registeredTo: null,
     startDate: new Date('2013-03-07'),

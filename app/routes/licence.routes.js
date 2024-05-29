@@ -34,6 +34,19 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/licences/{id}/set-up',
+    handler: LicencesController.viewSetUp,
+    options: {
+      auth: {
+        access: {
+          scope: ['view_charge_versions']
+        }
+      },
+      description: 'View a licence set up page'
+    }
+  },
+  {
+    method: 'GET',
     path: '/licences/{id}/summary',
     handler: LicencesController.viewSummary,
     options: {
