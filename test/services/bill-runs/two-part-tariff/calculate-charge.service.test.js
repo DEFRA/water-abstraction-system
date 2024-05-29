@@ -101,7 +101,7 @@ describe('Calculate Charge service', () => {
       })
     })
 
-    it('will generate a banner message displaying the example charge', async () => {
+    it('will generate a banner message to display the example charge', async () => {
       await CalculateChargeService.go(licenceId, reviewChargeReferenceId, yarStub)
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
