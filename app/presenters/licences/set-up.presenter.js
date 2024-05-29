@@ -150,7 +150,7 @@ function _endsSixYearsAgo (endDate) {
   const sixYearsFromYesterday = new Date(yesterday.getTime())
   sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
 
-  return endDate < sixYearsFromYesterday
+  return endDate.date < sixYearsFromYesterday
 }
 
 function _financialAgreementCode (agreement) {
