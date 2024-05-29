@@ -13,6 +13,7 @@ const AmendAdjustmentFactorService = require('../../app/services/bill-runs/two-p
 const AmendAuthorisedVolumeService = require('../../app/services/bill-runs/two-part-tariff/amend-authorised-volume.service.js')
 const AmendBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const Boom = require('@hapi/boom')
+const CalculateCharge = require('../../app/services/bill-runs/two-part-tariff/calculate-charge.service.js')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../../app/services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
@@ -712,6 +713,32 @@ describe('Bill Runs controller', () => {
             expect(response.statusCode).to.equal(200)
             expect(response.payload).to.contain('Sorry, there is a problem with the service')
           })
+        })
+      })
+    })
+  })
+
+  describe('/bill-runs/{id}/review/{licenceId}/preview-charge/{reviewChargeReferenceId}', () => {
+    describe('GET', () => {
+      const licenceId = '87cb11cf-1e5e-448d-8050-29f4e681b416'
+      const reviewChargeReferenceId = '7c09753d-f606-4deb-a929-4bc8aa7acb8d'
+
+      beforeEach(async () => {
+        options = _options('GET', `review/${licenceId}/preview-charge/${reviewChargeReferenceId}`)
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(CalculateCharge, 'go').resolves()
+        })
+
+        it('redirects to the review charge reference details page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(302)
+          expect(response.headers.location).to.equal(
+            `/system/bill-runs/97db1a27-8308-4aba-b463-8a6af2558b28/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`
+          )
         })
       })
     })
