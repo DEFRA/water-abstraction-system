@@ -29,7 +29,7 @@ function go (session, existingData) {
     checked: setup === 'set-up-manually'
   }]
 
-  if (existingData) {
+  if (existingData.length !== 0) {
     radioOptions.splice(1, 0, {
       value: 'use-existing-requirements',
       text: 'Copy existing requirements',

@@ -5,6 +5,7 @@
  * @module SubmitSetupService
  */
 
+const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const SessionModel = require('../../models/session.model.js')
 const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
 const SetupValidator = require('../../validators/return-requirements/setup.validator.js')
@@ -26,6 +27,7 @@ const SetupValidator = require('../../validators/return-requirements/setup.valid
  */
 async function go (sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
+  const existingData = await FetchReturnRequirementsService.go(session.licence.id)
 
   const validationResult = _validate(payload)
 
@@ -37,7 +39,7 @@ async function go (sessionId, payload) {
     }
   }
 
-  const formattedData = SetupPresenter.go(session, payload)
+  const formattedData = SetupPresenter.go(session, existingData)
 
   return {
     activeNavBar: 'search',

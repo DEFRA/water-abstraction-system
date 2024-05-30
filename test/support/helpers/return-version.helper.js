@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * @module ReturnSubmissionHelper
+ * @module ReturnVersionHelper
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 /**
- * Add a new return submission
+ * Add a new return version
  *
  * If no `data` is provided, default values will be used. These are
  *
@@ -41,12 +41,11 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    returnVersionId: generateUUID(),
+    id: generateUUID(),
     licenceId: generateUUID(),
     versionNumber: 100,
     start_date: new Date('2022-11-16'),
     status: 'approved',
-    metadata: {},
     // INFO: The lines table does not have a default for the date_created column. But it is set as
     // 'not nullable'! So, we need to ensure we set it when creating a new record, something we'll never actually need
     // to do because it's a static table. Also, we can't use Date.now() because Javascript returns the time since the

@@ -92,6 +92,22 @@ describe('Return Requirements - Submit Setup service', () => {
           pageTitle: 'How do you want to set up the requirements for returns?',
           backLink: `/system/return-requirements/${session.id}/reason`,
           licenceRef: '01/ABC',
+          radioOptions: [
+            {
+              checked: false,
+              text: 'Start by using abstraction data',
+              value: 'use-abstraction-data'
+            },
+            {
+              divider: 'or'
+            },
+            {
+              checked: false,
+              text: 'Set up manually',
+              value: 'set-up-manually'
+            }
+          ],
+          sessionId: session.id,
           setup: null
         }, { skip: ['sessionId', 'error'] })
       })

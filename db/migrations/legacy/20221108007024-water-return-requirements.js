@@ -23,6 +23,11 @@ exports.up = function (knex) {
       table.string('description')
       table.integer('legacy_id')
       table.string('external_id')
+      table.string('collection_frequency')
+      table.boolean('gravity_fill')
+      table.boolean('reabstraction')
+      table.boolean('two_part_tariff')
+      table.boolean('fifty_six_exception')
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable()

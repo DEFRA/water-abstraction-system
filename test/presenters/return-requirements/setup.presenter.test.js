@@ -34,12 +34,23 @@ describe('Return Requirements - Setup presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = SetupPresenter.go(session)
+      const result = SetupPresenter.go(session, [])
 
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
         licenceRef: '01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
+        radioOptions: [{
+          checked: false,
+          text: 'Start by using abstraction data',
+          value: 'use-abstraction-data'
+        }, {
+          divider: 'or'
+        }, {
+          checked: false,
+          text: 'Set up manually',
+          value: 'set-up-manually'
+        }],
         setup: null
       })
     })
@@ -47,9 +58,49 @@ describe('Return Requirements - Setup presenter', () => {
 
   describe("the 'backLink' property", () => {
     it("returns a link back to the 'start-date' page", () => {
-      const result = SetupPresenter.go(session)
+      const result = SetupPresenter.go(session, [])
 
       expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
+    })
+  })
+
+  describe("the 'radioOptions' property", () => {
+    it('when given an empty array returns a list of radio options excluding the copy-existing-data option', () => {
+      const result = SetupPresenter.go(session, [])
+
+      expect(result.radioOptions).to.equal([{
+        checked: false,
+        text: 'Start by using abstraction data',
+        value: 'use-abstraction-data'
+      }, {
+        divider: 'or'
+      }, {
+        checked: false,
+        text: 'Set up manually',
+        value: 'set-up-manually'
+      }])
+    })
+  })
+
+  describe("the 'radioOptions' property", () => {
+    it('when given an array with data returns an array including all of the radio button options', () => {
+      const result = SetupPresenter.go(session, [{ id: '61e07498-f309-4829-96a9-72184a54996d' }])
+
+      expect(result.radioOptions).to.equal([{
+        checked: false,
+        text: 'Start by using abstraction data',
+        value: 'use-abstraction-data'
+      }, {
+        value: 'use-existing-requirements',
+        text: 'Copy existing requirements',
+        checked: false
+      }, {
+        divider: 'or'
+      }, {
+        checked: false,
+        text: 'Set up manually',
+        value: 'set-up-manually'
+      }])
     })
   })
 
@@ -60,7 +111,7 @@ describe('Return Requirements - Setup presenter', () => {
       })
 
       it('returns a populated setup', () => {
-        const result = SetupPresenter.go(session)
+        const result = SetupPresenter.go(session, [])
 
         expect(result.setup).to.equal('set-up-manually')
       })
@@ -68,7 +119,7 @@ describe('Return Requirements - Setup presenter', () => {
 
     describe('when the user has not previously submitted a setup option', () => {
       it('returns an empty setup', () => {
-        const result = SetupPresenter.go(session)
+        const result = SetupPresenter.go(session, [])
 
         expect(result.setup).to.be.null()
       })

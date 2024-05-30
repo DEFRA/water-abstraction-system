@@ -23,7 +23,7 @@ exports.up = function (knex) {
         'gravity_fill',
         'reabstraction',
         'two_part_tariff',
-        'fixty_six_exception',
+        'fifty_six_exception',
         'date_created AS created_at',
         'date_updated AS updated_at'
       ]))

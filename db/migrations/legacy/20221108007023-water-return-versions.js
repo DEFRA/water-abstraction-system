@@ -15,9 +15,11 @@ exports.up = function (knex) {
       table.integer('version_number').notNullable()
       table.date('start_date').notNullable()
       table.date('end_date')
-      table.string('external_id')
       table.string('status').notNullable()
+      table.string('external_id')
       table.string('reason')
+      table.boolean('multiple_upload')
+      table.text('notes')
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable()
