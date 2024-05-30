@@ -261,14 +261,6 @@ describe('Base presenter', () => {
     })
   })
 
-  describe('#formatShortDate()', () => {
-    it('correctly formats the given date, for example, 12/09/2021', async () => {
-      const result = BasePresenter.formatShortDate(new Date('2021-09-12T14:41:10.511Z'))
-
-      expect(result).to.equal('12/09/2021')
-    })
-  })
-
   describe('#formatMoney()', () => {
     let valueInPence
 
