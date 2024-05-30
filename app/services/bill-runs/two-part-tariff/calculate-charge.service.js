@@ -8,7 +8,7 @@
 const { ref } = require('objection')
 
 const CalculateChargeRequest = require('../../../requests/charging-module/calculate-charge.request.js')
-const { formatMoney, formatShortDate } = require('../../../presenters/base.presenter.js')
+const { formatChargingModuleDate, formatMoney } = require('../../../presenters/base.presenter.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
 
@@ -53,8 +53,8 @@ async function _calculateCharge (reviewChargeReference, waterUndertaker) {
     compensationCharge: false, // Always false for the two-part tariff annual
     credit: false,
     loss: reviewChargeReference.chargeReference.loss,
-    periodStart: formatShortDate(reviewChargeReference.reviewChargeVersion.chargePeriodStartDate),
-    periodEnd: formatShortDate(reviewChargeReference.reviewChargeVersion.chargePeriodEndDate),
+    periodStart: formatChargingModuleDate(reviewChargeReference.reviewChargeVersion.chargePeriodStartDate),
+    periodEnd: formatChargingModuleDate(reviewChargeReference.reviewChargeVersion.chargePeriodEndDate),
     ruleset: 'sroc',
     section127Agreement: reviewChargeReference.chargeReference.section127Agreement,
     section130Agreement: reviewChargeReference.chargeReference.section130Agreement,
