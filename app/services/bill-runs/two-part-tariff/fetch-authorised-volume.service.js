@@ -1,11 +1,10 @@
 'use strict'
 
 /**
- * Fetches the individual charge reference details during the review stage of a two-part tariff bill run
- * @module FetchReviewChargeReferenceService
+ * Fetches the individual charge reference details when the authorised volume is being amended for a two-part tariff
+ * bill run
+ * @module FetchAuthorisedVolumeService
  */
-
-const { ref } = require('objection')
 
 const BillRunModel = require('../../../models/bill-run.model.js')
 const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
@@ -36,20 +35,19 @@ async function _fetchBillRun (billRunId) {
 async function _fetchReviewChargeReference (reviewChargeReferenceId) {
   return ReviewChargeReferenceModel.query()
     .findById(reviewChargeReferenceId)
+    .select('id', 'amendedAuthorisedVolume')
     .withGraphFetched('chargeReference')
     .modifyGraph('chargeReference', (builder) => {
       builder.select([
-        'volume',
-        'chargeCategoryId',
-        ref('chargeReferences.additionalCharges:supportedSource.name').castText().as('supportedSourceName'),
-        ref('chargeReferences.additionalCharges:isSupplyPublicWater').castText().as('waterCompanyCharge')
+        'chargeCategoryId'
       ])
     })
     .withGraphFetched('chargeReference.chargeCategory')
     .modifyGraph('chargeReference.chargeCategory', (builder) => {
       builder.select([
-        'reference',
-        'shortDescription'
+        'shortDescription',
+        'minVolume',
+        'maxVolume'
       ])
     })
     .withGraphFetched('reviewChargeVersion')

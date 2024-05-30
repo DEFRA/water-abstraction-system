@@ -8,7 +8,6 @@
 const { formatLongDate } = require('../base.presenter.js')
 
 const roles = {
-  billing: 'billing',
   workflowEditor: 'charge_version_workflow_editor',
   workflowReviewer: 'charge_version_workflow_reviewer'
 }
@@ -81,7 +80,7 @@ function _endsSixYearsAgo (endDate) {
   const sixYearsFromYesterday = new Date(yesterday.getTime())
   sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
 
-  return endDate < sixYearsFromYesterday
+  return endDate.date < sixYearsFromYesterday
 }
 
 function _status (status) {
