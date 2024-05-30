@@ -39,7 +39,7 @@ const routes = [
     options: {
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['view_charge_versions']
         }
       },
       description: 'View a licence set up page'
