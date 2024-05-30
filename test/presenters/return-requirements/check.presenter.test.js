@@ -234,7 +234,7 @@ describe('Return Requirements - Check presenter', () => {
         ])
       })
     })
-    describe('when the requirement does not have agreements exceptions', () => {
+    describe('when the requirement does not have any agreements exceptions', () => {
       beforeEach(() => {
         delete session.requirements[0].agreementsExceptions
       })
