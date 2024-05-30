@@ -16,7 +16,7 @@ const ReviewChargeReferenceModel = require('../../../models/review-charge-refere
  * Calculates the charge for a charge reference to display in a banner to the user
  *
  * It does this by sending a transaction based on the selected charge reference to the charging module so that it can
- * calculate the charge. The charge amount is then added to to a flash message which will be displayed to the user.
+ * calculate the charge. The charge amount is then added to a flash message which will be displayed to the user.
  *
  * @param {String} licenceId - The UUID of the licence related to the charge
  * @param {String} reviewChargeReferenceId - The UUID of the charge reference review data to calculate the charge on
