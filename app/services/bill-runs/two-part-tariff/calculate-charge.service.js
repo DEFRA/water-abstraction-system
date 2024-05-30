@@ -56,8 +56,8 @@ async function _calculateCharge (reviewChargeReference, waterUndertaker) {
     periodStart: formatChargingModuleDate(reviewChargeReference.reviewChargeVersion.chargePeriodStartDate),
     periodEnd: formatChargingModuleDate(reviewChargeReference.reviewChargeVersion.chargePeriodEndDate),
     ruleset: 'sroc',
-    section127Agreement: reviewChargeReference.chargeReference.section127Agreement,
-    section130Agreement: reviewChargeReference.chargeReference.section130Agreement,
+    section127Agreement: reviewChargeReference.twoPartTariffAgreement,
+    section130Agreement: reviewChargeReference.canalAndRiverTrustAgreement,
     supportedSource: reviewChargeReference.chargeReference.supportedSourceName !== null,
     // If `supportedSource` is `true` then `supportedSourceName` must be present
     supportedSourceName: reviewChargeReference.chargeReference.supportedSourceName,
@@ -85,6 +85,7 @@ async function _fetchReviewChargeReference (reviewChargeReferenceId) {
       'amendedAggregate',
       'amendedAuthorisedVolume',
       'amendedChargeAdjustment',
+      'canalAndRiverTrustAgreement',
       'twoPartTariffAgreement',
       'winterDiscount'
     )
@@ -92,8 +93,6 @@ async function _fetchReviewChargeReference (reviewChargeReferenceId) {
     .modifyGraph('chargeReference', (builder) => {
       builder.select(
         'loss',
-        'section127Agreement',
-        'section130Agreement',
         ref('chargeReferences.additionalCharges:supportedSource.name').castText().as('supportedSourceName'),
         ref('chargeReferences.additionalCharges:isSupplyPublicWater').castText().as('waterCompanyCharge')
       )
