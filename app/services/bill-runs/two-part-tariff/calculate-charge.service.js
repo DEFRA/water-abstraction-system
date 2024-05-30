@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates removing a licence from a bill run whilst it is at the review stage
+ * Calculates the charge for a charge reference to display in a banner to the user
  * @module CalculateChargeService
  */
 
@@ -13,12 +13,10 @@ const LicenceModel = require('../../../models/licence.model.js')
 const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
 
 /**
- * Orchestrates removing a licence from a bill run whilst it is at the review stage
+ * Calculates the charge for a charge reference to display in a banner to the user
  *
- * It does this by deleting all of the persisted data relating to the licence from the review tables. The licence will
- * then be flagged for 2PT supplementary billing. If after removing a licence the bill run is empty, the bill run status
- * will be set to `empty` and `true` returned so that the user is redirected back to the Bill runs page rather
- * than Review bill run.
+ * It does this by sending a transaction based on the selected charge reference to the charging module so that it can
+ * calculate the charge. The charge amount is then added to to a flash message which will be displayed to the user.
  *
  * @param {String} licenceId - The UUID of the licence related to the charge
  * @param {String} reviewChargeReferenceId - The UUID of the charge reference review data to calculate the charge on
