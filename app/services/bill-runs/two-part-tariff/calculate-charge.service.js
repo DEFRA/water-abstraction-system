@@ -8,7 +8,7 @@
 const { ref } = require('objection')
 
 const CalculateChargeRequest = require('../../../requests/charging-module/calculate-charge.request.js')
-const { formatPounds, formatShortDate } = require('../../../presenters/base.presenter.js')
+const { formatMoney, formatShortDate } = require('../../../presenters/base.presenter.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
 
@@ -30,7 +30,7 @@ async function go (licenceId, reviewChargeReferenceId, yar) {
   const calculatedCharge = await _calculateCharge(reviewChargeReference, waterUndertaker)
 
   if (calculatedCharge) {
-    yar.flash('charge', `Based on this information the example charge is £${formatPounds(calculatedCharge)}.`)
+    yar.flash('charge', `Based on this information the example charge is ${formatMoney(calculatedCharge)}.`)
   }
 }
 
