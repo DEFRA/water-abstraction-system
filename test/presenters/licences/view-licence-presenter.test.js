@@ -39,7 +39,7 @@ describe('View Licence presenter', () => {
     })
   })
 
-  describe('the \'licenceName\' property', () => {
+  describe('the "licenceName" property', () => {
     describe('when there is no licenceName property', () => {
       it('returns Unregistered licence', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -60,7 +60,7 @@ describe('View Licence presenter', () => {
       })
     })
   })
-  describe('the \'registeredTo\' property', () => {
+  describe('the "registeredTo" property', () => {
     describe('when there is no registeredTo property', () => {
       it('returns null', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -81,7 +81,7 @@ describe('View Licence presenter', () => {
       })
     })
   })
-  describe('the \'warning\' property', () => {
+  describe('the "warning" property', () => {
     describe('when the licence does not have an end date (expired, lapsed or revoked)', () => {
       it('returns NULL', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -107,7 +107,7 @@ describe('View Licence presenter', () => {
         licence.ends = { date: new Date('2019-04-01'), reason: 'expired' }
       })
 
-      it('returns \'This licence expired on 1 April 2019\'', () => {
+      it('returns "This licence expired on 1 April 2019"', () => {
         const result = ViewLicencePresenter.go(licence)
 
         expect(result.warning).to.equal('This licence expired on 1 April 2019')
@@ -119,7 +119,7 @@ describe('View Licence presenter', () => {
         licence.ends = { date: new Date('2019-04-01'), reason: 'lapsed' }
       })
 
-      it('returns \'This licence lapsed on 1 April 2019\'', () => {
+      it('returns "This licence lapsed on 1 April 2019"', () => {
         const result = ViewLicencePresenter.go(licence)
 
         expect(result.warning).to.equal('This licence lapsed on 1 April 2019')
@@ -131,14 +131,14 @@ describe('View Licence presenter', () => {
         licence.ends = { date: new Date('2019-04-01'), reason: 'revoked' }
       })
 
-      it('returns \'This licence was revoked on 1 April 2019\'', () => {
+      it('returns "This licence was revoked on 1 April 2019"', () => {
         const result = ViewLicencePresenter.go(licence)
 
         expect(result.warning).to.equal('This licence was revoked on 1 April 2019')
       })
     })
   })
-  describe('the \'notification\' property', () => {
+  describe('the "notification" property', () => {
     describe('when the licence will not be in the next supplementary bill run', () => {
       it('returns NULL', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -184,7 +184,7 @@ describe('View Licence presenter', () => {
       })
     })
   })
-  describe('the \'roles\' property', () => {
+  describe('the "roles" property', () => {
     describe('when the authenticated user has roles', () => {
       beforeEach(() => {
         auth = {
