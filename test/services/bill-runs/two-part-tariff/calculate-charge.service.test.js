@@ -113,9 +113,7 @@ describe('Calculate Charge service', () => {
 
   describe('when the charge is not calculated because the request to calculate the charge fails', () => {
     beforeEach(async () => {
-      calculateChargeRequestStub = Sinon.stub(CalculateChargeRequest, 'send').resolves(
-        _calculateChargeRequestStub(false)
-      )
+      calculateChargeRequestStub = Sinon.stub(CalculateChargeRequest, 'send').resolves({ succeeded: false })
     })
 
     it('sends a valid transaction to the charging module to calculate the charge', async () => {
@@ -157,9 +155,9 @@ describe('Calculate Charge service', () => {
   })
 })
 
-function _calculateChargeRequestStub (succeeded = true) {
+function _calculateChargeRequestStub () {
   return {
-    succeeded,
+    succeeded: true,
     response: {
       info: {
         gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
