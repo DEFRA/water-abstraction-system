@@ -212,11 +212,11 @@ function formatPounds (valueInPence) {
 }
 
 /**
- * Formats a date into a DD-MM-YYYY string, for example, '01-04-2022'
+ * Formats a date into a DD/MM/YYYY string, for example, '01/04/2022'
  *
  * @param {Date} date The date to be formatted
  *
- * @returns {string} The date formatted as a 'DD-MM-YYYY' string
+ * @returns {string} The date formatted as a 'DD/MM/YYYY' string
  */
 function formatShortDate (date) {
   return date.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })
