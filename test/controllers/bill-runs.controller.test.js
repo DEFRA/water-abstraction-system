@@ -13,7 +13,7 @@ const AmendAdjustmentFactorService = require('../../app/services/bill-runs/two-p
 const AmendAuthorisedVolumeService = require('../../app/services/bill-runs/two-part-tariff/amend-authorised-volume.service.js')
 const AmendBillableReturnsService = require('../../app/services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
 const Boom = require('@hapi/boom')
-const CalculateCharge = require('../../app/services/bill-runs/two-part-tariff/calculate-charge.service.js')
+const CalculateChargeService = require('../../app/services/bill-runs/two-part-tariff/calculate-charge.service.js')
 const CancelBillRunService = require('../../app/services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../../app/services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
@@ -729,7 +729,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(CalculateCharge, 'go').resolves()
+          Sinon.stub(CalculateChargeService, 'go').resolves()
         })
 
         it('redirects to the review charge reference details page', async () => {
