@@ -19,7 +19,7 @@ const ReviewChargeReferenceModel = require('../../../app/models/review-charge-re
  * - `canalAndRiverTrustAgreement` - false
  * - `twoPartTariffAgreement` - true
  * - `winterDiscount` - false
- * - `abatementAgreement` - 0
+ * - `abatementAgreement` - 1
  * - `chargeAdjustment - 1
  * - `amendedChargeAdjustment` - 1
  * - `authorisedVolume` - 50
