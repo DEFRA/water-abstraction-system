@@ -129,7 +129,7 @@ describe('Return requirements controller', () => {
         const response = await server.inject(_options('approved'))
 
         expect(response.statusCode).to.equal(200)
-        expect(response.payload).to.contain('Returns requirements approved')
+        expect(response.payload).to.contain('Requirements for returns approved')
       })
     })
   })
