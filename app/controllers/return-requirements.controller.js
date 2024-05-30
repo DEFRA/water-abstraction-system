@@ -86,7 +86,7 @@ async function approved (request, h) {
 
   return h.view('return-requirements/approved.njk', {
     activeNavBar: 'search',
-    pageTitle: 'Returns requirements approved',
+    pageTitle: 'Requirements for returns approved',
     licenceId
   })
 }

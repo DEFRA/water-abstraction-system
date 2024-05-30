@@ -105,7 +105,7 @@ const routes = [
           scope: ['billing']
         }
       },
-      description: 'Returns requirements approved'
+      description: 'Requirements for returns approved'
     }
   },
   {
