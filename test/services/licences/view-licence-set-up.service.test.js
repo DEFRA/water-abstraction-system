@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Things we need to stub
+const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 const FetchChargeVersionsService =
   require('../../../app/services/licences/fetch-charge-versions.service.js')
 const FetchWorkflowsService =
@@ -24,6 +25,16 @@ describe('View Licence Set Up service', () => {
   let auth = {}
 
   beforeEach(() => {
+    Sinon.stub(FetchAgreementsService, 'go').returns([
+      {
+        id: '123',
+        startDate: new Date('2020-01-01'),
+        endDate: null,
+        dateSigned: null,
+        financialAgreements: [{ financialAgreementCode: 'S127' }]
+      }
+    ])
+
     Sinon.stub(FetchChargeVersionsService, 'go').returns([
       {
         changeReason: { description: 'Missing thing' },
@@ -72,6 +83,15 @@ describe('View Licence Set Up service', () => {
 
       expect(result).to.equal({
         activeTab: 'set-up',
+        agreements: [
+          {
+            action: [],
+            dateSigned: '',
+            description: 'Two-part tariff',
+            endDate: '',
+            startDate: '1 January 2020'
+          }
+        ],
         chargeInformation: [
           {
             action: [],
