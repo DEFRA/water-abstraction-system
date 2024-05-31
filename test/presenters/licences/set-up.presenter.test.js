@@ -54,7 +54,18 @@ describe('Licence Set Up presenter', () => {
       }
     }
 
-    commonData = { licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b' }
+    const lessThanSixYearsAgo = new Date()
+
+    commonData = {
+      licenceId: 'f91bf145-ce8e-481c-a842-4da90348062b',
+      ends: {
+        date: lessThanSixYearsAgo
+      }
+    }
+
+    chargeVersions = []
+    workflows = []
+    agreements = []
   })
 
   describe('when provided with populated licence set up data', () => {
@@ -285,6 +296,45 @@ describe('Licence Set Up presenter', () => {
 
             expect(result.setUpAgreement).to.be.undefined()
           })
+        })
+      })
+
+      describe('when the licence is less than 6 years old and all the actions are available for an agreement', () => {
+        it('shows delete, end and recalculate bills actions', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+
+          expect(result.agreements[0].action).to.equal([
+            {
+              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/delete',
+              text: 'Delete'
+            },
+            {
+              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/agreements/123/end',
+              text: 'End'
+            },
+            {
+              link: '/licences/f91bf145-ce8e-481c-a842-4da90348062b/mark-for-supplementary-billing',
+              text: 'Recalculate bills'
+            }
+          ])
+        })
+      })
+
+      describe('when the licence is more than 6 years old and all the actions are available for an agreement', () => {
+        beforeEach(() => {
+          const sixYearsAndOneDayAgo = new Date()
+          sixYearsAndOneDayAgo.setDate(sixYearsAndOneDayAgo.getDate() - 1)
+          sixYearsAndOneDayAgo.setFullYear(sixYearsAndOneDayAgo.getFullYear() - 6)
+
+          commonData.ends = {
+            date: sixYearsAndOneDayAgo
+          }
+        })
+
+        it('shows delete, end and recalculate bills actions', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
+
+          expect(result.agreements[0].action).to.equal([])
         })
       })
     })
