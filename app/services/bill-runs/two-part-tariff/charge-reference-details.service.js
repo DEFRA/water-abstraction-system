@@ -28,10 +28,12 @@ async function go (billRunId, licenceId, reviewChargeReferenceId, yar) {
   } = await FetchReviewChargeReferenceService.go(billRunId, reviewChargeReferenceId)
 
   const [bannerMessage] = yar.flash('banner')
+  const [chargeMessage] = yar.flash('charge')
   const pageData = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
   return {
     bannerMessage,
+    chargeMessage,
     ...pageData
   }
 }
