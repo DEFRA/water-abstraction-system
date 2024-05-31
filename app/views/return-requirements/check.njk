@@ -3,6 +3,13 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <p> {{ item }}</p>
+  {% endfor %}
+{% endmacro %}
+
 {% block content %}
   {% if notification %}
     {{ govukNotificationBanner({
@@ -27,38 +34,38 @@
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-            text: "Start date"
-          },
+          text: "Start date"
+        },
           value: {
-            html: '<span data-test="meta-data-start-date">' + startDate + '</span>'
-          },
+          text: startDate
+        },
           actions: {
-            items: [
-              {
-                href: "/system/return-requirements/" + sessionId + "/start-date",
-                text: "Change",
-                visuallyHiddenText: "the start date for the return requirement"
-              }
-            ]
-          }
+          items: [
+            {
+              href: "/system/return-requirements/" + sessionId + "/start-date",
+              text: "Change",
+              visuallyHiddenText: "the start date for the return requirement"
+            }
+          ]
+        }
         },
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-            text: "Reason"
-          },
+          text: "Reason"
+        },
           value: {
-            html: '<span data-test="meta-data-reason">' + reason + '</span>'
-          },
+          text: reason
+        },
           actions: {
-            items: [
-              {
-                href: reasonLink,
-                text: "Change",
-                visuallyHiddenText: "the reason for the return requirement"
-              }
-            ]
-          }
+          items: [
+            {
+              href: reasonLink,
+              text: "Change",
+              visuallyHiddenText: "the reason for the return requirement"
+            }
+          ]
+        }
         }
       ]
     }) }}
@@ -66,7 +73,7 @@
   </div>
 
   <div class="govuk-!-margin-bottom-9">
-    <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Notes</h2>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
     {{ govukSummaryList({
       classes: 'govuk-!-margin-bottom-2',
@@ -74,34 +81,34 @@
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-            text: userEmail,
-            classes: "govuk-body govuk-!-font-weight-regular"
-          },
+          text: userEmail,
+          classes: "govuk-body govuk-!-font-weight-regular"
+        },
           value: {
-            text: note | escape | nl2br
-          },
+          text: note | escape | nl2br
+        },
           actions: {
-            items: [
-              {
-                href: "note",
-                text: "Change" if note else "Add a note"
-              },
-              {
-                href: "delete-note",
-                text: "Delete"
-              } if note
-            ]
-          }
+          items: [
+            {
+              href: "note",
+              text: "Change" if note else "Add a note"
+            },
+            {
+              href: "delete-note",
+              text: "Delete"
+            } if note
+          ]
+        }
         }
       ]
     }) }}
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
 
-  {% if journey == 'returns-required' %}
+  {% if returnsRequired %}
     <div class="govuk-!-margin-bottom-9">
-      <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Requirements for returns</h2>
-      <form method= "post" action= "/system/return-requirements/{{sessionId}}/add">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
+      <form method="post" action="/system/return-requirements/{{ sessionId }}/add">
         {{ govukButton({
           text: "Add another requirement",
           classes: "govuk-button--secondary",
@@ -110,152 +117,152 @@
       </form>
       {% for requirement in requirements %}
         <div>
-            {{ govukSummaryList({
-              card: {
-                title: {
-                  text: requirement.siteDescription
-                }
+          {{ govukSummaryList({
+            card: {
+              title: {
+                text: requirement.siteDescription
+              }
+            },
+            classes: "govuk-summary-list--no-border",
+            rows: [
+              {
+                key: {
+                text: "Purpose"
               },
-              classes: "govuk-summary-list--no-border",
-              rows: [
-                {
-                  key: {
-                    text: "Purpose"
-                  },
-                  value: {
-                    html: "requirement.purposes"
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "purpose/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Purpose"
-                      }
-                    ]
+                value: {
+                html: newLine(requirement.purposes)
+              },
+                actions: {
+                items: [
+                  {
+                    href: "purpose/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Purpose"
                   }
-                },
-                {
-                  key: {
-                    text: "Point"
-                  },
-                  value: {
-                    html: "requirement.points"
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "points/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Point"
-                      }
-                    ]
+                ]
+              }
+              },
+              {
+                key: {
+                text: "Point"
+              },
+                value: {
+                html: "requirement.points"
+              },
+                actions: {
+                items: [
+                  {
+                    href: "points/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Point"
                   }
-                },
-                {
-                  key: {
-                    text: "Abstraction period"
-                  },
-                  value: {
-                    html: requirement.abstractionPeriod
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "abstraction-period/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Abstraction period"
-                      }
-                    ]
+                ]
+              }
+              },
+              {
+                key: {
+                text: "Abstraction period"
+              },
+                value: {
+                html: requirement.abstractionPeriod
+              },
+                actions: {
+                items: [
+                  {
+                    href: "abstraction-period/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Abstraction period"
                   }
-                },
-                {
-                  key: {
-                    text: "Returns cycle"
-                  },
-                  value: {
-                    html: "requirement.returnsCycle"
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "returns-cycle/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Returns cycle"
-                      }
-                    ]
+                ]
+              }
+              },
+              {
+                key: {
+                text: "Returns cycle"
+              },
+                value: {
+                html: "requirement.returnsCycle"
+              },
+                actions: {
+                items: [
+                  {
+                    href: "returns-cycle/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Returns cycle"
                   }
-                },
-                {
-                  key: {
-                    text: "Site description"
-                  },
-                  value: {
-                    html: requirement.siteDescription
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "site-description/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Site description"
-                      }
-                    ]
+                ]
+              }
+              },
+              {
+                key: {
+                text: "Site description"
+              },
+                value: {
+                html: requirement.siteDescription
+              },
+                actions: {
+                items: [
+                  {
+                    href: "site-description/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Site description"
                   }
-                },
-                {
-                  key: {
-                    text: "Collection"
-                  },
-                  value: {
-                    html: requirement.frequencyCollected | capitalize
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "frequency-collected/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Collection"
-                      }
-                    ]
+                ]
+              }
+              },
+              {
+                key: {
+                text: "Collection"
+              },
+                value: {
+                html: requirement.frequencyCollected | capitalize
+              },
+                actions: {
+                items: [
+                  {
+                    href: "frequency-collected/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Collection"
                   }
-                },
-                {
-                  key: {
-                    text: "Reporting"
-                  },
-                  value: {
-                    html: requirement.frequencyReported | capitalize
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "frequency-reported/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Reporting"
-                      }
-                    ]
+                ]
+              }
+              },
+              {
+                key: {
+                text: "Reporting"
+              },
+                value: {
+                html: requirement.frequencyReported | capitalize
+              },
+                actions: {
+                items: [
+                  {
+                    href: "frequency-reported/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Reporting"
                   }
-                },
-                {
-                  key: {
-                    text: "Agreements exceptions"
-                  },
-                  value: {
-                    html: "requirement.agreementsExceptions"
-                  },
-                  actions: {
-                    items: [
-                      {
-                        href: "agreements-exceptions/" + requirement.index ,
-                        text: "Change",
-                        visuallyHiddenText: "Agreements exception"
-                      }
-                    ]
+                ]
+              }
+              },
+              {
+                key: {
+                text: "Agreements exceptions"
+              },
+                value: {
+                html: "requirement.agreementsExceptions"
+              },
+                actions: {
+                items: [
+                  {
+                    href: "agreements-exceptions/" + requirement.index ,
+                    text: "Change",
+                    visuallyHiddenText: "Agreements exception"
                   }
-                }
-              ]
-            }) }}
+                ]
+              }
+              }
+            ]
+          }) }}
           {% if requirements.length >= 2 %}
             {{ govukButton({
               text: "Remove requirement",
@@ -271,41 +278,41 @@
 
   <form method="post">
     <div class="govuk-body">
-      {% if journey == 'no-returns-required' %}
+      {% if noReturnsRequired %}
         <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
         <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
       {% endif %}
-      {% if journey == 'returns-required' %}
+      {% if returnsRequired %}
         {{ govukSummaryList({
           classes: 'govuk-!-margin-bottom-2',
           rows: [
             {
               classes: 'govuk-summary-list',
               key: {
-                text: 'Additional submission options',
-                classes: "govuk-heading-m govuk-!-width-one-half"
-              },
+              text: 'Additional submission options',
+              classes: "govuk-heading-m govuk-!-width-one-half"
+            },
               value: {
-                text: ''
-              },
+              text: ''
+            },
               actions: {
-                items: [
-                  {
-                    href: "additional-submission-options",
-                    text: "Change"
-                  }
-                ]
-              }
+              items: [
+                {
+                  href: "additional-submission-options",
+                  text: "Change"
+                }
+              ]
+            }
             },
             {
               classes: 'govuk-summary-list govuk-summary-list__row--no-border',
               key: {
-                text: 'Multiple upload',
-                classes: "govuk-body "
-              },
+              text: 'Multiple upload',
+              classes: "govuk-body "
+            },
               value: {
-                text: 'Yes' if additionalSubmissionOptions.includes('multiple-upload') else "No"
-              }
+              text: 'Yes' if additionalSubmissionOptions.includes('multiple-upload') else "No"
+            }
             }
           ]
         }) }}
@@ -314,7 +321,7 @@
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
       {{ govukButton({
-        html: '<span data-test="meta-data-approve">' + "Approve returns requirements" + "</span>",
+        text: "Approve returns requirements",
         classes: "govuk-!-margin-right-6",
         preventDoubleClick: true
       }) }}

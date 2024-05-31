@@ -8,6 +8,8 @@
 const CheckPresenter = require('../../presenters/return-requirements/check.presenter.js')
 const SessionModel = require('../../models/session.model.js')
 
+const RequirementsService = require('./check/returns-requirements.service.js')
+
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/check` page
  *
@@ -21,6 +23,8 @@ async function go (sessionId, yar) {
 
   await _markCheckPageVisited(session)
 
+  const requirements = await RequirementsService.go(sessionId)
+
   const formattedData = CheckPresenter.go(session)
 
   const notification = yar.flash('notification')[0]
@@ -28,6 +32,7 @@ async function go (sessionId, yar) {
   return {
     activeNavBar: 'search',
     notification,
+    ...requirements,
     ...formattedData
   }
 }
