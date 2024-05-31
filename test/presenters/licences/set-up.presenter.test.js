@@ -300,6 +300,10 @@ describe('Licence Set Up presenter', () => {
       })
 
       describe('when the licence is less than 6 years old and all the actions are available for an agreement', () => {
+        beforeEach(() => {
+          agreement.financialAgreements[0].financialAgreementCode = 'S127'
+        })
+
         it('shows delete, end and recalculate bills actions', () => {
           const result = SetUpPresenter.go(chargeVersions, workflows, agreements, auth, commonData)
 
