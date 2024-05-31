@@ -59,6 +59,10 @@ function _agreementActionLinks (commonData, agreement, auth) {
     return []
   }
 
+  if (_endsSixYearsAgo(commonData.ends)) {
+    return []
+  }
+
   const actionLinks = []
   const hasNotEnded = agreement.endDate === null
   const is2PTAgreement = _financialAgreementCode(agreement) === 'S127'
