@@ -11,13 +11,31 @@ const { expect } = Code
 const ReturnRequirementsPresenter = require('../../../../app/services/return-requirements/check/returns-requirements.presenter.js')
 
 describe('Return Requirements presenter', () => {
+  let journey
+  let purposeIds = []
   let requirement
   let requirements = []
-  let purposeIds = []
-  let journey
 
   beforeEach(() => {
+    journey = {}
+
+    purposeIds = [{
+      id: '772136d1-9184-417b-90cd-91053287d1df',
+      description: 'A singular purpose'
+    }]
+
     requirement = {
+      abstractionPeriod: {
+        'end-abstraction-period-day': '01',
+        'end-abstraction-period-month': '03',
+        'start-abstraction-period-day': '01',
+        'start-abstraction-period-month': '06'
+      },
+      agreementsExceptions: [
+        'gravity-fill'
+      ],
+      frequencyCollected: 'daily',
+      frequencyReported: 'daily',
       points: [
         '286'
       ],
@@ -25,25 +43,8 @@ describe('Return Requirements presenter', () => {
         '772136d1-9184-417b-90cd-91053287d1df'
       ],
       returnsCycle: 'summer',
-      siteDescription: 'A place in the sun',
-      abstractionPeriod: {
-        'end-abstraction-period-day': '01',
-        'end-abstraction-period-month': '03',
-        'start-abstraction-period-day': '01',
-        'start-abstraction-period-month': '06'
-      },
-      frequencyReported: 'daily',
-      frequencyCollected: 'daily',
-      agreementsExceptions: [
-        'gravity-fill'
-      ]
+      siteDescription: 'A place in the sun'
     }
-    journey = {}
-
-    purposeIds = [{
-      id: '772136d1-9184-417b-90cd-91053287d1df',
-      description: 'A singular purpose'
-    }]
 
     requirements = [{ ...requirement }]
   })
@@ -92,7 +93,7 @@ describe('Return Requirements presenter', () => {
         delete requirements[0].agreementsExceptions
       })
 
-      it('correctly does not return the requirement', () => {
+      it('does not return the requirement', () => {
         const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
 
         expect(result.requirements).to.equal([])
