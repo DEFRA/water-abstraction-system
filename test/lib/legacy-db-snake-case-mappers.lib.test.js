@@ -59,8 +59,8 @@ describe('Legacy DB Snake Case Mappers lib', () => {
         return identifier
       }
 
-      describe('and passed the identifier `addressLine1`', () => {
-        it('returns `address_line_1`', () => {
+      describe('and passed the identifier "addressLine1"', () => {
+        it('returns "address_line_1"', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('addressLine1', origWrap)
 
@@ -68,8 +68,8 @@ describe('Legacy DB Snake Case Mappers lib', () => {
         })
       })
 
-      describe('and passed the identifier `purpose`', () => {
-        it('returns `purpose`', () => {
+      describe('and passed the identifier "purpose"', () => {
+        it('returns "purpose"', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('purpose', origWrap)
 
@@ -77,8 +77,8 @@ describe('Legacy DB Snake Case Mappers lib', () => {
         })
       })
 
-      describe('and passed the identifier `isOccupied`', () => {
-        it('returns `is_occupied`', () => {
+      describe('and passed the identifier "isOccupied"', () => {
+        it('returns "is_occupied"', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('isOccupied', origWrap)
 
@@ -86,8 +86,8 @@ describe('Legacy DB Snake Case Mappers lib', () => {
         })
       })
 
-      describe('and passed the identifier `section127Agreement`', () => {
-        it('returns `section_127_agreement`', () => {
+      describe('and passed the identifier "section127Agreement"', () => {
+        it('returns "section_127_agreement"', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('section127Agreement', origWrap)
 
@@ -95,8 +95,8 @@ describe('Legacy DB Snake Case Mappers lib', () => {
         })
       })
 
-      describe('and passed the identifier `crm_v2`', () => {
-        it('returns `crm_v2` (it does no formatting)', () => {
+      describe('and passed the identifier "crm_v2"', () => {
+        it('returns "crm_v2" (it does no formatting)', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('crm_v2', origWrap)
 
@@ -104,8 +104,8 @@ describe('Legacy DB Snake Case Mappers lib', () => {
         })
       })
 
-      describe('and passed the identifier `foo_v2`', () => {
-        it('returns `foo_v_2` (confirmation on crm_v2 is special!)', () => {
+      describe('and passed the identifier "foo_v2"', () => {
+        it('returns "foo_v_2" (confirmation on crm_v2 is special!)', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('foo_v2', origWrap)
 

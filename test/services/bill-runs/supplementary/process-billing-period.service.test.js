@@ -184,7 +184,7 @@ describe('Supplementary Process billing period service', () => {
           })
         })
 
-        describe('because the charge version status is `superseded`', () => {
+        describe('because the charge version status is "superseded"', () => {
           describe('and there are no previously billed transactions', () => {
             beforeEach(async () => {
               const { id: chargeVersionId } = await ChargeVersionHelper.add(

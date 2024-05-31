@@ -78,7 +78,7 @@ describe('Match And Allocate Service', () => {
           expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
         })
 
-        it('returns `true` as there are licences to process', async () => {
+        it('returns "true" as there are licences to process', async () => {
           const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
           expect(result).to.be.true()
@@ -104,7 +104,7 @@ describe('Match And Allocate Service', () => {
           expect(PersistAllocatedLicenceToResultsService.go.called).to.be.true()
         })
 
-        it('returns `true` as there are licences to process', async () => {
+        it('returns "true" as there are licences to process', async () => {
           const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
           expect(result).to.be.true()
@@ -140,7 +140,7 @@ describe('Match And Allocate Service', () => {
         expect(PersistAllocatedLicenceToResultsService.go.called).to.be.false()
       })
 
-      it('returns `false` as there are no licences to process', async () => {
+      it('returns "false" as there are no licences to process', async () => {
         const result = await MatchAndAllocateService.go(billRun, billingPeriods)
 
         expect(result).to.be.false()
