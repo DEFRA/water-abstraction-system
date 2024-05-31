@@ -21,7 +21,7 @@ describe('Setup validator', () => {
   })
 
   describe('when valid data is provided', () => {
-    describe("because no 'setup' is given", () => {
+    describe('because no "setup" is given', () => {
       it('fails validation', () => {
         const result = SetupValidator.go({ setup: '' })
 
@@ -31,7 +31,7 @@ describe('Setup validator', () => {
       })
     })
 
-    describe("because an unknown 'setup' is given", () => {
+    describe('because an unknown "setup" is given', () => {
       it('fails validation', () => {
         const result = SetupValidator.go({ setup: 'just-because' })
 

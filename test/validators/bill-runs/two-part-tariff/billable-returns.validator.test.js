@@ -54,7 +54,7 @@ describe('Billable Returns validator', () => {
         }
       })
 
-      it("fails the validation with the message 'Select the billable quantity'", () => {
+      it('fails the validation with the message "Select the billable quantity"', () => {
         const result = BillableReturnsValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -71,7 +71,7 @@ describe('Billable Returns validator', () => {
           }
         })
 
-        it("fails validation with the message 'Enter the billable quantity'", () => {
+        it('fails validation with the message "Enter the billable quantity"', () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()
@@ -88,7 +88,7 @@ describe('Billable Returns validator', () => {
           }
         })
 
-        it("fails validation with the message 'The quantity must be a number'", () => {
+        it('fails validation with the message "The quantity must be a number"', () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()
@@ -105,7 +105,7 @@ describe('Billable Returns validator', () => {
           }
         })
 
-        it("fails validation with the message 'The quantity must contain no more than 6 decimal places'", () => {
+        it('fails validation with the message "The quantity must contain no more than 6 decimal places"', () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()
@@ -122,7 +122,7 @@ describe('Billable Returns validator', () => {
           }
         })
 
-        it("fails validation with the message 'The quantity must be zero or higher'", () => {
+        it('fails validation with the message "The quantity must be zero or higher"', () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()
@@ -139,7 +139,7 @@ describe('Billable Returns validator', () => {
           }
         })
 
-        it("fails validation with the message 'The quantity must be the same as or less than the authorised amount'", () => {
+        it('fails validation with the message "The quantity must be the same as or less than the authorised amount"', () => {
           const result = BillableReturnsValidator.go(payload)
 
           expect(result.error).to.exist()

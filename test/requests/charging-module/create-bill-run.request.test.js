@@ -51,13 +51,13 @@ describe('Charging Module Create Bill Run request', () => {
       })
     })
 
-    it('returns a `true` success status', async () => {
+    it('returns a "true" success status', async () => {
       const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the bill run id and number in the `response`', async () => {
+    it('returns the bill run id and number in the "response"', async () => {
       const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
       expect(result.response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
@@ -86,13 +86,13 @@ describe('Charging Module Create Bill Run request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.response.body.statusCode).to.equal(401)
@@ -109,13 +109,13 @@ describe('Charging Module Create Bill Run request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
         expect(result.response.statusCode).not.to.exist()

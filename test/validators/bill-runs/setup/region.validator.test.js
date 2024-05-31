@@ -27,7 +27,7 @@ describe('Bill Runs Setup Region validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe("because no 'region' is given", () => {
+    describe('because no "region" is given', () => {
       it('fails validation', () => {
         const result = RegionValidator.go({ region: '' }, regions)
 
@@ -37,7 +37,7 @@ describe('Bill Runs Setup Region validator', () => {
       })
     })
 
-    describe("because an unknown 'region' is given", () => {
+    describe('because an unknown "region" is given', () => {
       it('fails validation', () => {
         const result = RegionValidator.go({ region: '34b43f8a-aee4-48e0-ab17-f819ac2c9a15' }, regions)
 

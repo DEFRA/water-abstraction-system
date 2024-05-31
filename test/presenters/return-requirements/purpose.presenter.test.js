@@ -62,13 +62,13 @@ describe('Return Requirements - Purpose presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    describe("when the user has come from the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
       beforeEach(() => {
         session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check' page", () => {
+      it('returns a link back to the "check" page', () => {
         const result = PurposePresenter.go(session, requirementIndex, purposesData)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
@@ -76,7 +76,7 @@ describe('Return Requirements - Purpose presenter', () => {
     })
 
     describe('when the user has come from somewhere else', () => {
-      it("returns a link back to the 'setup' page", () => {
+      it('returns a link back to the "setup" page', () => {
         const result = PurposePresenter.go(session, requirementIndex, purposesData)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/setup')
@@ -84,8 +84,8 @@ describe('Return Requirements - Purpose presenter', () => {
     })
   })
 
-  describe("the 'licencePurposes' property", () => {
-    it("returns the id and description from each 'purpose' passed in", () => {
+  describe('the "licencePurposes" property', () => {
+    it('returns the id and description from each "purpose" passed in', () => {
       const result = PurposePresenter.go(session, requirementIndex, purposesData)
 
       expect(result.licencePurposes).to.equal([
@@ -97,7 +97,7 @@ describe('Return Requirements - Purpose presenter', () => {
     })
   })
 
-  describe("the 'purposes' property", () => {
+  describe('the "purposes" property', () => {
     describe('when the user has previously submitted purposes', () => {
       beforeEach(() => {
         session.requirements[0].purposes = ['Heat Pump', 'Hydraulic Rams']

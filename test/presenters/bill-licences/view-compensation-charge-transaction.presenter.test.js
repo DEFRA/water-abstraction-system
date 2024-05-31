@@ -76,13 +76,13 @@ describe('View Compensation Charge Transaction presenter', () => {
         transaction.scheme = 'alcs'
       })
 
-      describe("the 'agreement' property", () => {
+      describe('the "agreement" property', () => {
         describe('when the transaction is two-part tariff', () => {
           beforeEach(() => {
             transaction.section127Agreement = true
           })
 
-          it("returns 'Two-part tariff'", () => {
+          it('returns "Two-part tariff"', () => {
             const result = ViewCompensationChargeTransactionPresenter.go(transaction)
 
             expect(result.agreement).to.equal('Two-part tariff')

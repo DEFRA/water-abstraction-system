@@ -76,7 +76,7 @@ describe('Return Requirements - Submit Note service', () => {
           expect(result).to.equal({})
         })
 
-        it("sets the notification message to 'Added'", async () => {
+        it('sets the notification message to "Added"', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
@@ -132,7 +132,7 @@ describe('Return Requirements - Submit Note service', () => {
           expect(result).to.equal({})
         })
 
-        it("sets the notification message to 'Updated'", async () => {
+        it('sets the notification message to "Updated"', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]

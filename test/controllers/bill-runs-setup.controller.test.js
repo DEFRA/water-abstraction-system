@@ -88,7 +88,7 @@ describe('Bill Runs Setup controller', () => {
             })
           })
 
-          it("returns the 'create' page displaying the existing bill run", async () => {
+          it('returns the "create" page displaying the existing bill run', async () => {
             const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(200)

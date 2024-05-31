@@ -106,7 +106,7 @@ describe('View Bill Summaries presenter', () => {
       })
     })
 
-    describe("the group 'caption' property", () => {
+    describe('the group "caption" property', () => {
       describe('when there is only 1 water bill summary', () => {
         it("the group's caption is singular (1 water company)", () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
@@ -148,7 +148,7 @@ describe('View Bill Summaries presenter', () => {
       })
     })
 
-    describe("the bill 'billingContact' property", () => {
+    describe('the bill "billingContact" property', () => {
       describe('when the bill does have an agent company name', () => {
         it('returns the agent company name', () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
@@ -166,7 +166,7 @@ describe('View Bill Summaries presenter', () => {
       })
     })
 
-    describe("the bill 'licences' property", () => {
+    describe('the bill "licences" property', () => {
       it('splits the licences provided by , and places the resulting references into an array', () => {
         const result = ViewBillSummariesPresenter.go(billSummaries)
 

@@ -51,7 +51,7 @@ describe('Fetch Bill Runs service', () => {
         page = 2
       })
 
-      it("returns a result with the matching 'results' and the correct 'total'", async () => {
+      it('returns a result with the matching "results" and the correct "total"', async () => {
         const result = await FetchBillRunsService.go(page)
 
         expect(result.results).to.equal([
@@ -87,7 +87,7 @@ describe('Fetch Bill Runs service', () => {
         page = 3
       })
 
-      it("returns a result with no 'results' but the correct 'total'", async () => {
+      it('returns a result with no "results" but the correct "total"', async () => {
         const result = await FetchBillRunsService.go(page)
 
         expect(result.results).to.be.empty()
@@ -97,7 +97,7 @@ describe('Fetch Bill Runs service', () => {
   })
 
   describe('when there are no bill runs', () => {
-    it("returns a result with no 'results' and 0 for 'total'", async () => {
+    it('returns a result with no "results" and 0 for "total"', async () => {
       const result = await FetchBillRunsService.go()
 
       expect(result.results).to.be.empty()

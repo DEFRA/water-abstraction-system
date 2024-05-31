@@ -34,7 +34,7 @@ describe('Cancel Bill Run presenter', () => {
       })
     })
 
-    describe("the 'backLink' property", () => {
+    describe('the "backLink" property', () => {
       describe('when the bill run status is review', () => {
         beforeEach(() => {
           billRun.status = 'review'

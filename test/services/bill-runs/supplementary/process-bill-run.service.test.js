@@ -95,7 +95,7 @@ describe('Supplementary Process Bill Run service', () => {
         expect(result.status).to.equal('processing')
       })
 
-      it("tells the charging module API to 'generate' the bill run", async () => {
+      it('tells the charging module API to "generate" the bill run', async () => {
         await SupplementaryProcessBillRunService.go(billRun, billingPeriods)
 
         expect(chargingModuleGenerateBillRunRequestStub.called).to.be.true()

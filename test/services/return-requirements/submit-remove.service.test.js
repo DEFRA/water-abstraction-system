@@ -77,7 +77,7 @@ describe('Return Requirements - Submit Remove service', () => {
       expect(refreshedSession.requirements[requirementIndex]).not.to.exist()
     })
 
-    it("sets the notification message to 'Requirements removed'", async () => {
+    it('sets the notification message to "Requirements removed"', async () => {
       await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
 
       const [flashType, notification] = yarStub.flash.args[0]

@@ -57,7 +57,7 @@ describe('Submit Amended Adjustment Factor Service', () => {
         expect(reviewChargeReferenceData.amendedAggregate).to.equal(0.5)
       })
 
-      it("sets the banner message to 'The adjustment factors for this licence have been updated'", async () => {
+      it('sets the banner message to "The adjustment factors for this licence have been updated"', async () => {
         await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -83,7 +83,7 @@ describe('Submit Amended Adjustment Factor Service', () => {
         expect(reviewChargeReferenceData.amendedChargeAdjustment).to.equal(0.7)
       })
 
-      it("sets the banner message to 'The adjustment factors for this licence have been updated'", async () => {
+      it('sets the banner message to "The adjustment factors for this licence have been updated"', async () => {
         await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -110,7 +110,7 @@ describe('Submit Amended Adjustment Factor Service', () => {
         expect(reviewChargeReferenceData.amendedChargeAdjustment).to.equal(0.3)
       })
 
-      it("sets the banner message to 'The adjustment factors for this licence have been updated'", async () => {
+      it('sets the banner message to "The adjustment factors for this licence have been updated"', async () => {
         await SubmitAmendedAdjustmentFactorService.go(billRunId, licenceId, reviewChargeReference.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]

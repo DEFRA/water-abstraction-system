@@ -46,15 +46,15 @@ describe('Return Requirements - Additional Submission Options presenter', () => 
     })
   })
 
-  describe("the 'backLink' property", () => {
-    it("returns a link back to the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    it('returns a link back to the "check" page', () => {
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
       expect(result.backLink).to.equal(`/system/return-requirements/${session.id}/check`)
     })
   })
 
-  describe("the 'additionalSubmissionOptions' property", () => {
+  describe('the "additionalSubmissionOptions" property', () => {
     describe('when the user has previously submitted additional submission options', () => {
       beforeEach(() => {
         session.additionalSubmissionOptions = ['multiple-upload']

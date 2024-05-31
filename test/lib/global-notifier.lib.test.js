@@ -31,7 +31,7 @@ describe('GlobalNotifierLib class', () => {
   })
 
   describe('#constructor', () => {
-    describe("when the 'logger' argument is not provided", () => {
+    describe('when the "logger" argument is not provided', () => {
       it('throws an error', () => {
         expect(() => {
           return new GlobalNotifierLib(null, airbrakeFake)
@@ -39,7 +39,7 @@ describe('GlobalNotifierLib class', () => {
       })
     })
 
-    describe("when the 'notifier' argument is not provided", () => {
+    describe('when the "notifier" argument is not provided', () => {
       it('throws an error', () => {
         expect(() => {
           return new GlobalNotifierLib(pinoFake)

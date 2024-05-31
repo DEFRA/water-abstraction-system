@@ -43,7 +43,7 @@ describe('Remove Bill Licence presenter', () => {
       })
     })
 
-    describe("the 'accountName' property", () => {
+    describe('the "accountName" property', () => {
       describe('when the billing account is not linked to an agent', () => {
         it('returns the name of the company linked to the billing account', () => {
           const result = RemoveBillLicencePresenter.go(billLicence)
@@ -69,7 +69,7 @@ describe('Remove Bill Licence presenter', () => {
       })
     })
 
-    describe("the 'pageTitle' property", () => {
+    describe('the "pageTitle" property', () => {
       it('returns the licence reference as part of the title', () => {
         const result = RemoveBillLicencePresenter.go(billLicence)
 

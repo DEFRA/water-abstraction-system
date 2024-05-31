@@ -21,7 +21,7 @@ describe('Bill Runs Setup Season validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe("because no 'season' is given", () => {
+    describe('because no "season" is given', () => {
       it('fails validation', () => {
         const result = SeasonValidator.go({ season: '' })
 
@@ -31,7 +31,7 @@ describe('Bill Runs Setup Season validator', () => {
       })
     })
 
-    describe("because an unknown 'season' is given", () => {
+    describe('because an unknown "season" is given', () => {
       it('fails validation', () => {
         const result = SeasonValidator.go({ type: 'spring' })
 
