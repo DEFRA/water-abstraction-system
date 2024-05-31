@@ -12,8 +12,31 @@ const CheckPresenter = require('../../../app/presenters/return-requirements/chec
 
 describe('Return Requirements - Check presenter', () => {
   let session
+  let requirement
 
   beforeEach(() => {
+    requirement = {
+      points: [
+        '286'
+      ],
+      purposes: [
+        '772136d1-9184-417b-90cd-91053287d1df'
+      ],
+      returnsCycle: 'summer',
+      siteDescription: 'A place in the sun',
+      abstractionPeriod: {
+        'end-abstraction-period-day': '01',
+        'end-abstraction-period-month': '03',
+        'start-abstraction-period-day': '01',
+        'start-abstraction-period-month': '06'
+      },
+      frequencyReported: 'daily',
+      frequencyCollected: 'daily',
+      agreementsExceptions: [
+        'gravity-fill'
+      ]
+    }
+
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
       checkPageVisited: false,
@@ -26,7 +49,7 @@ describe('Return Requirements - Check presenter', () => {
         startDate: '2022-04-01T00:00:00.000Z'
       },
       journey: 'returns-required',
-      requirements: [{}],
+      requirements: [{ ...requirement }],
       startDateOptions: 'licenceStartDate',
       reason: 'major-change'
     }
@@ -44,7 +67,14 @@ describe('Return Requirements - Check presenter', () => {
         pageTitle: 'Check the return requirements for Turbo Kid',
         reason: 'Major change',
         reasonLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
-        requirements: [],
+        requirements: [{
+          abstractionPeriod: 'From 1 June to 1 March',
+          frequencyCollected: 'daily',
+          frequencyReported: 'daily',
+          index: 0,
+          purposes: 'purpose',
+          siteDescription: 'A place in the sun'
+        }],
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         startDate: '1 January 2023',
         userEmail: 'No notes added'
@@ -184,6 +214,35 @@ describe('Return Requirements - Check presenter', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.userEmail).to.equal('No notes added')
+      })
+    })
+  })
+
+  describe("the 'requirements' property", () => {
+    describe('when the requirement has agreements exceptions', () => {
+      it('correctly returns and requirement with agreements exceptions', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.requirements).to.equal([{
+          abstractionPeriod: 'From 1 June to 1 March',
+          frequencyCollected: 'daily',
+          frequencyReported: 'daily',
+          index: 0,
+          purposes: 'purpose',
+          siteDescription: 'A place in the sun'
+        }
+        ])
+      })
+    })
+    describe('when the requirement does not have any agreements exceptions', () => {
+      beforeEach(() => {
+        delete session.requirements[0].agreementsExceptions
+      })
+
+      it('correctly does not return the requirement', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.requirements).to.equal([])
       })
     })
   })
