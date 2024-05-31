@@ -53,7 +53,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'accountName' property", () => {
+    describe('the "accountName" property', () => {
       describe('when the billing account is not linked to an agent', () => {
         it('returns the name of the company linked to the billing account', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
@@ -79,7 +79,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'addressLines' property", () => {
+    describe('the "addressLines" property', () => {
       describe('when the billing account address contains blank elements', () => {
         it('returns an array of only the set elements', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
@@ -89,7 +89,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'billRunType' property", () => {
+    describe('the "billRunType" property', () => {
       describe('when the bill run is annual', () => {
         it('returns Annual', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
@@ -151,7 +151,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'billTotal' property", () => {
+    describe('the "billTotal" property', () => {
       describe('when the bill is a debit', () => {
         it('returns just the bill total formatted as money', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
@@ -165,7 +165,7 @@ describe('View Bill presenter', () => {
           bill.credit = true
         })
 
-        it("returns the bill total formatted as money plus 'credit' as a suffix", () => {
+        it('returns the bill total formatted as money plus "credit" as a suffix', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.billTotal).to.equal('£213,178.00 credit')
@@ -173,7 +173,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'chargeScheme' property", () => {
+    describe('the "chargeScheme" property', () => {
       describe('when the bill run is sroc', () => {
         it('returns Current', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
@@ -195,7 +195,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'contactName' property", () => {
+    describe('the "contactName" property', () => {
       describe('when the billing account is linked not linked to a contact', () => {
         it('returns null', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
@@ -230,9 +230,9 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'creditsTotal' property", () => {
+    describe('the "creditsTotal" property', () => {
       describe('when the bill run was created in WRLS', () => {
-        it("returns the 'creditNoteValue' of the bill (£0.00)", () => {
+        it('returns the "creditNoteValue" of the bill (£0.00)', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.creditsTotal).to.equal('£0.00')
@@ -244,7 +244,7 @@ describe('View Bill presenter', () => {
           bill.billRun.source = 'nald'
         })
 
-        describe("and 'netAmount' on the bill is 21317800", () => {
+        describe('and "netAmount" on the bill is 21317800', () => {
           it('returns £0.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
@@ -252,7 +252,7 @@ describe('View Bill presenter', () => {
           })
         })
 
-        describe("and 'netAmount' on the bill is -21317800", () => {
+        describe('and "netAmount" on the bill is -21317800', () => {
           beforeEach(() => {
             bill.netAmount = -21317800
           })
@@ -264,7 +264,7 @@ describe('View Bill presenter', () => {
           })
         })
 
-        describe("and 'netAmount' on the bill is 0", () => {
+        describe('and "netAmount" on the bill is 0', () => {
           beforeEach(() => {
             bill.netAmount = 0
           })
@@ -278,9 +278,9 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'debitsTotal' property", () => {
+    describe('the "debitsTotal" property', () => {
       describe('when the bill run was created in WRLS', () => {
-        it("returns the 'invoiceValue' of the bill (£213,178.00)", () => {
+        it('returns the "invoiceValue" of the bill (£213,178.00)', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
           expect(result.debitsTotal).to.equal('£213,178.00')
@@ -292,7 +292,7 @@ describe('View Bill presenter', () => {
           bill.billRun.source = 'nald'
         })
 
-        describe("and 'netAmount' on the bill is 21317800", () => {
+        describe('and "netAmount" on the bill is 21317800', () => {
           it('returns £213,178.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
@@ -300,7 +300,7 @@ describe('View Bill presenter', () => {
           })
         })
 
-        describe("and 'netAmount' on the bill is -21317800", () => {
+        describe('and "netAmount" on the bill is -21317800', () => {
           beforeEach(() => {
             bill.netAmount = -21317800
           })
@@ -312,7 +312,7 @@ describe('View Bill presenter', () => {
           })
         })
 
-        describe("and 'netAmount' on the bill is 0", () => {
+        describe('and "netAmount" on the bill is 0', () => {
           beforeEach(() => {
             bill.netAmount = 0
           })
@@ -326,7 +326,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'displayCreditDebitTotals' property", () => {
+    describe('the "displayCreditDebitTotals" property', () => {
       describe('when the bill run is not supplementary', () => {
         it('returns false', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
@@ -348,7 +348,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'financialYear' property", () => {
+    describe('the "financialYear" property', () => {
       it('returns the bill run start and end financial year', () => {
         const result = ViewBillPresenter.go(bill, billingAccount)
 
@@ -356,7 +356,7 @@ describe('View Bill presenter', () => {
       })
     })
 
-    describe("the 'region' property", () => {
+    describe('the "region" property', () => {
       it("returns the bill run's region display name in title case", () => {
         const result = ViewBillPresenter.go(bill, billingAccount)
 

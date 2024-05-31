@@ -32,7 +32,7 @@ describe('View Bill Licence presenter', () => {
       Sinon.stub(ViewStandardChargeTransactionPresenter, 'go').returns({ chargeType: 'standard' })
     })
 
-    describe("the 'displayCreditDebitTotals' property", () => {
+    describe('the "displayCreditDebitTotals" property', () => {
       describe('when the linked bill run is not supplementary', () => {
         beforeEach(() => {
           billLicence.bill.billRun.batchType = 'annual'
@@ -54,8 +54,8 @@ describe('View Bill Licence presenter', () => {
       })
     })
 
-    describe("the 'removeLicenceLink' property", () => {
-      describe("when the linked bill run has a status of 'ready'", () => {
+    describe('the "removeLicenceLink" property', () => {
+      describe('when the linked bill run has a status of "ready"', () => {
         beforeEach(() => {
           billLicence.bill.billRun.status = 'ready'
         })
@@ -67,7 +67,7 @@ describe('View Bill Licence presenter', () => {
         })
       })
 
-      describe("when the linked bill run has a status of 'sent'", () => {
+      describe('when the linked bill run has a status of "sent"', () => {
         beforeEach(() => {
           billLicence.bill.billRun.status = 'sent'
         })
@@ -80,7 +80,7 @@ describe('View Bill Licence presenter', () => {
       })
     })
 
-    describe("the 'tableCaption' property", () => {
+    describe('the "tableCaption" property', () => {
       describe('when there is only 1 transaction', () => {
         beforeEach(() => {
           billLicence.transactions = [billLicence.transactions[0]]

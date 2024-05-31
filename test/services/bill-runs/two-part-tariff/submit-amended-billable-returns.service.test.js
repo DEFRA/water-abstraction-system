@@ -56,7 +56,7 @@ describe('Submit Amended Billable Returns Service', () => {
         expect(reviewChargeElementData.amendedAllocated).to.equal(10)
       })
 
-      it("sets the banner message to 'The billable returns for this licence have been updated'", async () => {
+      it('sets the banner message to "The billable returns for this licence have been updated"', async () => {
         await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -83,7 +83,7 @@ describe('Submit Amended Billable Returns Service', () => {
         expect(reviewChargeElementData.amendedAllocated).to.equal(20)
       })
 
-      it("sets the banner message to 'The billable returns for this licence have been updated'", async () => {
+      it('sets the banner message to "The billable returns for this licence have been updated"', async () => {
         await SubmitAmendedBillableReturnsService.go(billRunId, licenceId, reviewChargeElement.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]

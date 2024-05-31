@@ -120,7 +120,7 @@ describe('Create Bill Run validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe("because no 'address' is provided", () => {
+    describe('because no "address" is provided', () => {
       beforeEach(() => {
         data = {
           agentCompany: {},
@@ -147,7 +147,7 @@ describe('Create Bill Run validator', () => {
         }
       })
 
-      describe("because 'type' is unrecognised", () => {
+      describe('because "type" is unrecognised', () => {
         beforeEach(() => {
           data.agentCompany.type = 'INVALID'
         })
@@ -161,7 +161,7 @@ describe('Create Bill Run validator', () => {
         })
       })
 
-      describe("because 'organisationType' is unrecognised", () => {
+      describe('because "organisationType" is unrecognised', () => {
         beforeEach(() => {
           data.agentCompany.organisationType = 'INVALID'
         })
@@ -186,7 +186,7 @@ describe('Create Bill Run validator', () => {
         }
       })
 
-      describe("because 'type' is unrecognised", () => {
+      describe('because "type" is unrecognised', () => {
         beforeEach(() => {
           data.contact.type = 'INVALID'
         })
@@ -200,7 +200,7 @@ describe('Create Bill Run validator', () => {
         })
       })
 
-      describe("because 'source' is unrecognised", () => {
+      describe('because "source" is unrecognised', () => {
         beforeEach(() => {
           data.contact.source = 'INVALID'
         })

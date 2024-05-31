@@ -47,7 +47,7 @@ describe('Charging Module Send Bill Run request', () => {
       Sinon.stub(WaitForStatusRequest, 'send').resolves({ succeeded: true, status: 'billed', attempts: 1 })
     })
 
-    it('returns a `true` success status', async () => {
+    it('returns a "true" success status', async () => {
       const result = await SendBillRunRequest.send(billRunId)
 
       expect(result.succeeded).to.be.true()

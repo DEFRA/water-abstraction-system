@@ -46,7 +46,7 @@ describe('Charging Module Create Customer Change request', () => {
       })
     })
 
-    it('returns a `true` success status', async () => {
+    it('returns a "true" success status', async () => {
       const result = await CreateCustomerChangeRequest.send(requestData)
 
       expect(result.succeeded).to.be.true()
@@ -74,13 +74,13 @@ describe('Charging Module Create Customer Change request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.response.body.statusCode).to.equal(401)
@@ -97,13 +97,13 @@ describe('Charging Module Create Customer Change request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await CreateCustomerChangeRequest.send(requestData)
 
         expect(result.response.statusCode).not.to.exist()

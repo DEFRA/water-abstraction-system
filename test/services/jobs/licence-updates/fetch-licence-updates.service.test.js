@@ -107,7 +107,7 @@ describe('Fetch Licence Updates service', () => {
       })
     })
 
-    describe("because they have a status of 'draft'", () => {
+    describe('because they have a status of "draft"', () => {
       beforeEach(async () => {
         licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, status: 'draft' })
       })

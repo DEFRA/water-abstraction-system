@@ -82,7 +82,7 @@ describe('Return Requirements - Check presenter', () => {
     })
   })
 
-  describe("the 'additionalSubmissionOptions' property", () => {
+  describe('the "additionalSubmissionOptions" property', () => {
     describe('when the user has checked additionalSubmissionOptions', () => {
       beforeEach(() => {
         session.additionalSubmissionOptions = ['multiple-upload']
@@ -104,7 +104,7 @@ describe('Return Requirements - Check presenter', () => {
     })
   })
 
-  describe("the 'note' property", () => {
+  describe('the "note" property', () => {
     describe('when the user has added a note', () => {
       beforeEach(() => {
         session.note = {
@@ -129,7 +129,7 @@ describe('Return Requirements - Check presenter', () => {
     })
   })
 
-  describe("the 'pageTitle' property", () => {
+  describe('the "pageTitle" property', () => {
     it('returns the page title combined with the licence holder name', () => {
       const result = CheckPresenter.go(session)
 
@@ -137,7 +137,7 @@ describe('Return Requirements - Check presenter', () => {
     })
   })
 
-  describe("the 'reason' property", () => {
+  describe('the "reason" property', () => {
     it('returns the display version for the reason', () => {
       const result = CheckPresenter.go(session)
 
@@ -145,9 +145,9 @@ describe('Return Requirements - Check presenter', () => {
     })
   })
 
-  describe("the 'reasonLink' property", () => {
+  describe('the "reasonLink" property', () => {
     describe('when the journey is for returns required', () => {
-      it("returns a link to the 'reason' page", () => {
+      it('returns a link to the "reason" page', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.reasonLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
@@ -159,7 +159,7 @@ describe('Return Requirements - Check presenter', () => {
         session.journey = 'no-returns-required'
       })
 
-      it("returns a link to the 'no-returns-required' page", () => {
+      it('returns a link to the "no-returns-required" page', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.reasonLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/no-returns-required')
@@ -167,7 +167,7 @@ describe('Return Requirements - Check presenter', () => {
     })
   })
 
-  describe("the 'startDate' property", () => {
+  describe('the "startDate" property', () => {
     describe('when the user has previously selected the licence start date as the start date', () => {
       it('returns the licence version start date formatted as a long date', () => {
         const result = CheckPresenter.go(session)
@@ -192,7 +192,7 @@ describe('Return Requirements - Check presenter', () => {
     })
   })
 
-  describe("the 'userEmail' property", () => {
+  describe('the "userEmail" property', () => {
     describe('when the user has added a note', () => {
       beforeEach(() => {
         session.note = {
@@ -210,7 +210,7 @@ describe('Return Requirements - Check presenter', () => {
     })
 
     describe('when the user has not added a note', () => {
-      it("returns the message 'no notes added'", () => {
+      it('returns the message "no notes added"', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.userEmail).to.equal('No notes added')

@@ -52,8 +52,8 @@ describe('Bill Runs Setup Create presenter', () => {
       })
     })
 
-    describe("the 'backLink' property", () => {
-      describe("when the selected bill run type is not 'two_part_tariff'", () => {
+    describe('the "backLink" property', () => {
+      describe('when the selected bill run type is not "two_part_tariff"', () => {
         beforeEach(() => {
           session.type = 'supplementary'
         })
@@ -65,7 +65,7 @@ describe('Bill Runs Setup Create presenter', () => {
         })
       })
 
-      describe("when the selected bill run type is 'two_part_tariff'", () => {
+      describe('when the selected bill run type is "two_part_tariff"', () => {
         beforeEach(() => {
           session.type = 'two_part_tariff'
         })
@@ -96,7 +96,7 @@ describe('Bill Runs Setup Create presenter', () => {
       })
     })
 
-    describe("the 'billRunLink' property", () => {
+    describe('the "billRunLink" property', () => {
       describe("when the matching bill run's status is not 'review'", () => {
         it('returns a link to the bill run page', () => {
           const result = CreatePresenter.go(session, matchingBillRun)
@@ -133,42 +133,42 @@ describe('Bill Runs Setup Create presenter', () => {
       })
     })
 
-    describe("the 'warningMessage' property", () => {
-      describe("when the matching bill run type is 'supplementary'", () => {
+    describe('the "warningMessage" property', () => {
+      describe('when the matching bill run type is "supplementary"', () => {
         beforeEach(() => {
           matchingBillRun.batchType = 'supplementary'
         })
 
-        it("returns the 'You need to confirm or cancel this [..]' message", () => {
+        it('returns the "You need to confirm or cancel this [..]" message', () => {
           const result = CreatePresenter.go(session, matchingBillRun)
 
           expect(result.warningMessage).to.equal('You need to confirm or cancel this bill run before you can create a new one')
         })
       })
 
-      describe("when the matching bill run type is not 'supplementary'", () => {
+      describe('when the matching bill run type is not "supplementary"', () => {
         beforeEach(() => {
           matchingBillRun.batchType = 'two_part_tariff'
         })
 
-        describe("and its status is 'sent'", () => {
+        describe('and its status is "sent"', () => {
           beforeEach(() => {
             matchingBillRun.status = 'sent'
           })
 
-          it("returns the 'You can only have one [..]' message", () => {
+          it('returns the "You can only have one [..]" message', () => {
             const result = CreatePresenter.go(session, matchingBillRun)
 
             expect(result.warningMessage).to.equal('You can only have one Two-part tariff per region in a financial year')
           })
         })
 
-        describe("and its status is not 'sent'", () => {
+        describe('and its status is not "sent"', () => {
           beforeEach(() => {
             matchingBillRun.status = 'ready'
           })
 
-          it("returns the 'You need to cancel this [..]' message", () => {
+          it('returns the "You need to cancel this [..]" message', () => {
             const result = CreatePresenter.go(session, matchingBillRun)
 
             expect(result.warningMessage).to.equal('You need to cancel this bill run before you can create a new one')

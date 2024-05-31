@@ -33,7 +33,7 @@ describe('Handle Errored Bill Run service', () => {
   })
 
   describe('when the service is called successfully', () => {
-    it('sets the bill run status to `error`', async () => {
+    it('sets the bill run status to "error"', async () => {
       await HandleErroredBillRunService.go(billRun.id)
 
       const result = await billRun.$query()
@@ -42,7 +42,7 @@ describe('Handle Errored Bill Run service', () => {
     })
 
     describe('when no error code is passed', () => {
-      it('doesn\'t set an error code', async () => {
+      it('does not set an error code', async () => {
         await HandleErroredBillRunService.go(billRun.id)
 
         const result = await billRun.$query()

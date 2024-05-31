@@ -45,15 +45,15 @@ describe('Return Requirements - Note presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    it("returns a link back to the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    it('returns a link back to the "check" page', () => {
       const result = NotePresenter.go(session)
 
       expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
     })
   })
 
-  describe("the 'note' property", () => {
+  describe('the "note" property', () => {
     describe('when the user has previously submitted a note', () => {
       beforeEach(() => {
         session.note = {

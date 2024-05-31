@@ -91,7 +91,7 @@ describe('Error pages service', () => {
         expect(result.stopResponse).to.be.true()
       })
 
-      it("returns a 'safe' status code", () => {
+      it('returns a "safe" status code', () => {
         const result = ErrorPagesService.go(request)
 
         expect(result.statusCode).to.equal(200)
@@ -181,7 +181,7 @@ describe('Error pages service', () => {
         expect(result.stopResponse).to.be.true()
       })
 
-      it("returns a 'safe' status code", () => {
+      it('returns a "safe" status code', () => {
         const result = ErrorPagesService.go(request)
 
         expect(result.statusCode).to.equal(404)

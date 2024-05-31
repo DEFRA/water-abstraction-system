@@ -43,7 +43,7 @@ describe('View Licence Summaries presenter', () => {
       })
     })
 
-    describe("the 'tableCaption' property", () => {
+    describe('the "tableCaption" property', () => {
       describe('when there is only 1 licence summary', () => {
         let singularLicenceSummary
 

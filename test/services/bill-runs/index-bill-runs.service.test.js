@@ -35,7 +35,7 @@ describe('Index Bill Runs service', () => {
       })
     })
 
-    it("returns all bill runs, the state of 'busy' bill runs, the title without page info and no pagination component for the view", async () => {
+    it('returns all bill runs, the state of "busy" bill runs, the title without page info and no pagination component for the view', async () => {
       const result = await IndexBillRunsService.go(page)
 
       expect(result.billRuns).to.have.length(2)
@@ -54,7 +54,7 @@ describe('Index Bill Runs service', () => {
         })
       })
 
-      it("returns the first page of bill runs, the state of 'busy' bill runs, the title with page info and a pagination component for the view", async () => {
+      it('returns the first page of bill runs, the state of "busy" bill runs, the title with page info and a pagination component for the view', async () => {
         const result = await IndexBillRunsService.go(page)
 
         expect(result.billRuns).to.have.length(2)
@@ -64,7 +64,7 @@ describe('Index Bill Runs service', () => {
       })
     })
 
-    describe("and a page other than 'page 1' with bill runs is selected", () => {
+    describe('and a page other than "page 1" with bill runs is selected', () => {
       beforeEach(() => {
         page = 2
 
@@ -74,7 +74,7 @@ describe('Index Bill Runs service', () => {
         })
       })
 
-      it("returns the page of bill runs, the state of 'busy' bill runs, the title with page info and a pagination component for the view", async () => {
+      it('returns the page of bill runs, the state of "busy" bill runs, the title with page info and a pagination component for the view', async () => {
         const result = await IndexBillRunsService.go(page)
 
         expect(result.billRuns).to.have.length(2)
@@ -94,7 +94,7 @@ describe('Index Bill Runs service', () => {
         })
       })
 
-      it("returns no bill runs, the state of 'busy' bill runs, the title with page info and a pagination component for the view", async () => {
+      it('returns no bill runs, the state of "busy" bill runs, the title with page info and a pagination component for the view', async () => {
         const result = await IndexBillRunsService.go(page)
 
         expect(result.billRuns).to.be.empty()

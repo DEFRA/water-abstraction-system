@@ -21,7 +21,7 @@ describe('Note validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe("because no 'note' is given", () => {
+    describe('because no "note" is given', () => {
       it('fails validation', () => {
         const result = NoteValidator.go({ note: '' })
 
@@ -31,7 +31,7 @@ describe('Note validator', () => {
       })
     })
 
-    describe("because too much 'note' text is given", () => {
+    describe('because too much "note" text is given', () => {
       it('fails validation', () => {
         const result = NoteValidator.go({
           note: `Lorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elitLorem ipsum dolor sit amet consectetur adipiscing elit

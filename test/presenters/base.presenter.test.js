@@ -45,7 +45,7 @@ describe('Base presenter', () => {
     const scheme = 'sroc'
     const summer = false
 
-    it("generates the page title for the bill run, for example, 'Anglian two-part tariff'", () => {
+    it('generates the page title for the bill run, for example, "Anglian two-part tariff"', () => {
       const result = BasePresenter.generateBillRunTitle(regionName, batchType, scheme, summer)
 
       expect(result).to.equal('Anglian two-part tariff')
@@ -81,48 +81,48 @@ describe('Base presenter', () => {
     let scheme
     let summer
 
-    describe("when the batch type is 'annual'", () => {
+    describe('when the batch type is "annual"', () => {
       beforeEach(() => {
         batchType = 'annual'
       })
 
-      it("returns 'Annual'", () => {
+      it('returns "Annual"', () => {
         const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
 
         expect(result).to.equal('Annual')
       })
     })
 
-    describe("when the batch type is 'supplementary'", () => {
+    describe('when the batch type is "supplementary"', () => {
       beforeEach(() => {
         batchType = 'supplementary'
       })
 
-      it("returns 'Supplementary'", () => {
+      it('returns "Supplementary"', () => {
         const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
 
         expect(result).to.equal('Supplementary')
       })
     })
 
-    describe("when the batch type is 'two_part_tariff'", () => {
+    describe('when the batch type is "two_part_tariff"', () => {
       beforeEach(() => {
         batchType = 'two_part_tariff'
       })
 
-      describe("and the scheme is 'sroc'", () => {
+      describe('and the scheme is "sroc"', () => {
         beforeEach(() => {
           scheme = 'sroc'
         })
 
-        it("returns 'Two-part tariff'", () => {
+        it('returns "Two-part tariff"', () => {
           const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
 
           expect(result).to.equal('Two-part tariff')
         })
       })
 
-      describe("and the scheme is 'alcs'", () => {
+      describe('and the scheme is "alcs"', () => {
         beforeEach(() => {
           scheme = 'alcs'
         })
@@ -132,7 +132,7 @@ describe('Base presenter', () => {
             summer = false
           })
 
-          it("returns 'Two-part tariff winter and all year'", () => {
+          it('returns "Two-part tariff winter and all year"', () => {
             const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
 
             expect(result).to.equal('Two-part tariff winter and all year')
@@ -144,7 +144,7 @@ describe('Base presenter', () => {
             summer = true
           })
 
-          it("returns 'Two-part tariff summer'", () => {
+          it('returns "Two-part tariff summer"', () => {
             const result = BasePresenter.formatBillRunType(batchType, scheme, summer)
 
             expect(result).to.equal('Two-part tariff summer')
@@ -194,24 +194,24 @@ describe('Base presenter', () => {
   describe('#formatChargeScheme()', () => {
     let scheme
 
-    describe("when the scheme is 'sroc'", () => {
+    describe('when the scheme is "sroc"', () => {
       beforeEach(() => {
         scheme = 'sroc'
       })
 
-      it("returns 'Current'", () => {
+      it('returns "Current"', () => {
         const result = BasePresenter.formatChargeScheme(scheme)
 
         expect(result).to.equal('Current')
       })
     })
 
-    describe("when the scheme is 'alcs'", () => {
+    describe('when the scheme is "alcs"', () => {
       beforeEach(() => {
         scheme = 'alcs'
       })
 
-      it("returns 'Old'", () => {
+      it('returns "Old"', () => {
         const result = BasePresenter.formatChargeScheme(scheme)
 
         expect(result).to.equal('Old')
@@ -222,12 +222,12 @@ describe('Base presenter', () => {
   describe('#formatFinancialYear()', () => {
     let financialYearEnding
 
-    describe("when the financial year ending is '2024'", () => {
+    describe('when the financial year ending is "2024"', () => {
       beforeEach(() => {
         financialYearEnding = 2024
       })
 
-      it("returns '2023 to 2024'", () => {
+      it('returns "2023 to 2024"', () => {
         const result = BasePresenter.formatFinancialYear(financialYearEnding)
 
         expect(result).to.equal('2023 to 2024')
@@ -281,7 +281,7 @@ describe('Base presenter', () => {
         valueInPence = -114950
       })
 
-      describe("and we do not override the default parameter 'signed'", () => {
+      describe('and we do not override the default parameter "signed"', () => {
         it('correctly returns the value as a positive money string with commas and a symbol, for example, £1,149.50', async () => {
           const result = BasePresenter.formatMoney(valueInPence)
 
@@ -289,7 +289,7 @@ describe('Base presenter', () => {
         })
       })
 
-      describe("and we override the default parameter 'signed'", () => {
+      describe('and we override the default parameter "signed"', () => {
         it('correctly returns the value as a positive money string with commas and a symbol, for example, -£1,149.50', async () => {
           const result = BasePresenter.formatMoney(valueInPence, true)
 
