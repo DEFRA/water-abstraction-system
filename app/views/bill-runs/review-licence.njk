@@ -162,22 +162,22 @@
         {
           html: action,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-action' + matchedReturnIndex }
+          attributes: { 'data-test': 'matched-return-action-' + matchedReturnIndex }
         },
         {
           html: returnSummary,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-summary' + matchedReturnIndex }
+          attributes: { 'data-test': 'matched-return-summary-' + matchedReturnIndex }
           },
         {
           html: tag,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-status' + matchedReturnIndex }
+          attributes: { 'data-test': 'matched-return-status-' + matchedReturnIndex }
         },
         {
           html: "<div>" + return.returnTotal + "</div>" + issues,
           classes: "govuk-body-s govuk-!-text-align-right",
-          attributes: { 'data-test': 'matched-return-total' + matchedReturnIndex}
+          attributes: { 'data-test': 'matched-return-total-' + matchedReturnIndex}
         }]
       %}
 
@@ -241,22 +241,22 @@
         {
           html: action,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-action' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-action-' + unmatchedReturnIndex }
         },
         {
           html: returnSummary,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-summary' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-summary-' + unmatchedReturnIndex }
         },
         {
           html: tag,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-status' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-status-' + unmatchedReturnIndex }
         },
         {
           html: "<div>" + return.returnTotal + "</div>" + issues,
           classes: "govuk-body-s govuk-!-text-align-right",
-          attributes: { 'data-test': 'unmatched-return-total' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-total-' + unmatchedReturnIndex }
         }
         ]
       %}
@@ -302,7 +302,7 @@
       {% for chargeVersion in chargeData %}
       {% set chargeVersionIndex = loop.index0 %}
         <div class ="govuk-caption-l">Financial year {{chargeVersion.financialYear}}</div>
-        <section id="chargeVersion{{chargeVersionIndex}}">
+        <section id="charge-version-{{chargeVersionIndex}}">
           <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriodDate}}</h2>
         </section>
         <div class="govuk-caption-m">{{chargeVersion.licenceHolderName}}</div>
@@ -375,7 +375,7 @@
 
                   <div class="govuk-!-margin-top-0">
                     {{ govukSummaryList({
-                      attributes: { 'data-test': 'charge-reference' + chargeReferenceIndex },
+                      attributes: { 'data-test': 'charge-reference-' + chargeReferenceIndex },
                       classes: "govuk-!-margin-bottom-9 govuk-section-break govuk-section-break--visible",
                       rows: rows
                     }) }}
@@ -448,7 +448,7 @@
                       %}
 
                       {{ govukSummaryList({
-                        attributes: { 'data-test': 'charge-elements' },
+                        attributes: { 'data-test': 'charge-elements' + chargeElementIndex },
                         classes: "govuk-!-margin-bottom-9",
                         rows: elementRow
                       }) }}
