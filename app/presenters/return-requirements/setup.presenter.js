@@ -19,23 +19,24 @@ function go (session, existingData) {
     value: 'use-abstraction-data',
     text: 'Start by using abstraction data',
     checked: setup === 'use-abstraction-data'
-  },
-  {
+  }]
+
+  if (existingData.length !== 0) {
+    radioOptions.push({
+      value: 'use-existing-requirements',
+      text: 'Copy existing requirements',
+      checked: setup === 'use-existing-requirements'
+    })
+  }
+
+  radioOptions.push({
     divider: 'or'
   },
   {
     value: 'set-up-manually',
     text: 'Set up manually',
     checked: setup === 'set-up-manually'
-  }]
-
-  if (existingData.length !== 0) {
-    radioOptions.splice(1, 0, {
-      value: 'use-existing-requirements',
-      text: 'Copy existing requirements',
-      checked: setup === 'use-existing-requirements'
-    })
-  }
+  })
 
   return {
     backLink: `/system/return-requirements/${sessionId}/reason`,

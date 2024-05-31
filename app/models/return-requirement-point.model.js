@@ -2,14 +2,14 @@
 
 /**
  * Model for ReturnRequirementPoints (water.return_requirement_points)
- * @module ReturnRequirementPoints
+ * @module ReturnRequirementPointModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class ReturnRequirementPoints extends BaseModel {
+class ReturnRequirementPointModel extends BaseModel {
   static get tableName () {
     return 'returnRequirementPoints'
   }
@@ -36,4 +36,4 @@ class ReturnRequirementPoints extends BaseModel {
   }
 }
 
-module.exports = ReturnRequirementPoints
+module.exports = ReturnRequirementPointModel

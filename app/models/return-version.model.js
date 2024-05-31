@@ -2,14 +2,14 @@
 
 /**
  * Model for returnVersions (water.return_versions)
- * @module ReturnVersionsModel
+ * @module ReturnVersionModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class ReturnVersionsModel extends BaseModel {
+class ReturnVersionModel extends BaseModel {
   static get tableName () {
     return 'returnVersions'
   }
@@ -40,4 +40,4 @@ class ReturnVersionsModel extends BaseModel {
   }
 }
 
-module.exports = ReturnVersionsModel
+module.exports = ReturnVersionModel
