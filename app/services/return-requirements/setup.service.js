@@ -12,8 +12,8 @@ const SessionModel = require('../../models/session.model.js')
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/setup` page
  *
- * Supports generating the data needed for the select reason page in the return requirements setup journey. It
- * fetches the current session record and combines it with the radio buttons and other information needed for the form.
+ * Supports generating the data needed for selecting how you want to set up the return in the return requirements setup journey.
+ * It fetches the current session record and combines it with the radio buttons and other information needed for the form.
  *
  * @param {string} sessionId - The UUID for return requirement setup session record
  *

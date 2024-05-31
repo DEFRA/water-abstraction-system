@@ -56,7 +56,7 @@ describe('Return Requirements - Setup presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
+  describe('the "backLink" property', () => {
     it("returns a link back to the 'start-date' page", () => {
       const result = SetupPresenter.go(session, [])
 
@@ -64,7 +64,7 @@ describe('Return Requirements - Setup presenter', () => {
     })
   })
 
-  describe("the 'radioOptions' property", () => {
+  describe('the "radioOptions" property', () => {
     it('when given an empty array returns a list of radio options excluding the copy-existing-data option', () => {
       const result = SetupPresenter.go(session, [])
 
@@ -82,7 +82,7 @@ describe('Return Requirements - Setup presenter', () => {
     })
   })
 
-  describe("the 'radioOptions' property", () => {
+  describe('the "radioOptions" property', () => {
     it('when given an array with data returns an array including all of the radio button options', () => {
       const result = SetupPresenter.go(session, [{ id: '61e07498-f309-4829-96a9-72184a54996d' }])
 
@@ -104,7 +104,7 @@ describe('Return Requirements - Setup presenter', () => {
     })
   })
 
-  describe("the 'setup' property", () => {
+  describe('the "setup" property', () => {
     describe('when the user has previously submitted a setup option', () => {
       beforeEach(() => {
         session.setup = 'set-up-manually'

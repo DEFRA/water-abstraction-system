@@ -5,18 +5,18 @@
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+const ReturnRequirementModel = require('../../../app/models/return-requirement.model.js')
 
 /**
- * Add a new return version
+ * Add a new return requirement
  *
  * If no `data` is provided, default values will be used. These are
  *
  * - `id` - [random UUID]
- * - `licence_id` - [random UUID]
- * - `version_number` - 100
- * - `start_date` - 2022-11-16
- * - `status` - approved
+ * - `return_version_id` - [random UUID]
+ * - `returns_frequency` - [enum] - defult to approved
+ * - `summer` - [boolean] - false
+ * - `upload` - [boolean] - false
  * - `createdAt` - 2022-11-16 09:42:11.000
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
@@ -26,7 +26,7 @@ const ReturnVersionModel = require('../../../app/models/return-version.model.js'
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return ReturnVersionModel.query()
+  return ReturnRequirementModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -42,10 +42,10 @@ function add (data = {}) {
 function defaults (data = {}) {
   const defaults = {
     id: generateUUID(),
-    licenceId: generateUUID(),
-    versionNumber: 100,
-    startDate: new Date('2022-11-16'),
-    status: 'approved',
+    returnVersionId: generateUUID(),
+    returnsFrequency: 'approved',
+    summer: false,
+    upload: false,
     // INFO: The lines table does not have a default for the date_created column. But it is set as
     // 'not nullable'! So, we need to ensure we set it when creating a new record, something we'll never actually need
     // to do because it's a static table. Also, we can't use Date.now() because Javascript returns the time since the

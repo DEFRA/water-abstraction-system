@@ -22,7 +22,7 @@ const SetupValidator = require('../../validators/return-requirements/setup.valid
  * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
  *
- * @returns {Promise<Object>} If no errors a the url for where the user should be redirected else the page data for the
+ * @returns {Promise<Object>} If no errors return a url for where the user should be redirected else the page data for the
  * setup page including the validation error details
  */
 async function go (sessionId, payload) {

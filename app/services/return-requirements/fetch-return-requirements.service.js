@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches existing return requirements needed for `/return-requirements/{sessionId}/check` page
+ * Fetches existing return requirements needed for `/return-requirements/{sessionId}/setup` page
  * @module FetchReturnRequirementsService
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')
 
 /**
- * Fetches existing return requirements needed for `/return-requirements/{sessionId}/check` page
+ * Fetches existing return requirements needed for `/return-requirements/{sessionId}/setup` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
@@ -21,13 +21,12 @@ async function go (licenceId) {
 }
 
 async function _fetchReturnRequirements (licenceId) {
-  console.log(licenceId)
   const result = await ReturnVersionModel.query()
     .where('licenceId', licenceId)
     .withGraphFetched('returnRequirementPoints')
     .modifyGraph('returnRequirementPoints', (builder) => {
       builder.select([
-        '*'
+        'id'
       ])
     })
 

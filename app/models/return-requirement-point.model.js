@@ -16,20 +16,12 @@ class ReturnRequirementPointModel extends BaseModel {
 
   static get relationMappings () {
     return {
-      licenceVersion: {
+      returnRequirements: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-version.model',
+        modelClass: 'return-requirement.model',
         join: {
-          from: 'licenceVersionPurposes.licenceVersionId',
-          to: 'licenceVersions.id'
-        }
-      },
-      purpose: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'purpose.model.js',
-        join: {
-          from: 'licenceVersionPurposes.purposeId',
-          to: 'purposes.id'
+          from: 'returnRequirements.id',
+          to: 'returnRequirementPoints.returnRequirementId'
         }
       }
     }
