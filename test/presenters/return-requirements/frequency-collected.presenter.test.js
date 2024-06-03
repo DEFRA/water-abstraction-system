@@ -48,13 +48,13 @@ describe('Return Requirements - Frequency Collected presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    describe("when the user has come from the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
       beforeEach(() => {
         session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check' page", () => {
+      it('returns a link back to the "check" page', () => {
         const result = FrequencyCollectedPresenter.go(session, requirementIndex)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
@@ -62,7 +62,7 @@ describe('Return Requirements - Frequency Collected presenter', () => {
     })
 
     describe('when the user has come from somewhere else', () => {
-      it("returns a link back to the 'site-description' page", () => {
+      it('returns a link back to the "site-description" page', () => {
         const result = FrequencyCollectedPresenter.go(session, requirementIndex)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/site-description/0')
@@ -70,7 +70,7 @@ describe('Return Requirements - Frequency Collected presenter', () => {
     })
   })
 
-  describe("the 'frequencyCollected' property", () => {
+  describe('the "frequencyCollected" property', () => {
     describe('when the user has previously submitted the frequency collected', () => {
       beforeEach(() => {
         session.requirements[0].frequencyCollected = 'weekly'

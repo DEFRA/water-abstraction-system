@@ -21,7 +21,7 @@ describe('Reason validator', () => {
   })
 
   describe('when valid data is provided', () => {
-    describe("because no 'reason' is given", () => {
+    describe('because no "reason" is given', () => {
       it('fails validation', () => {
         const result = ReasonValidator.go({ reason: '' })
 
@@ -31,7 +31,7 @@ describe('Reason validator', () => {
       })
     })
 
-    describe("because an unknown 'reason' is given", () => {
+    describe('because an unknown "reason" is given', () => {
       it('fails validation', () => {
         const result = ReasonValidator.go({ reason: 'just-because' })
 

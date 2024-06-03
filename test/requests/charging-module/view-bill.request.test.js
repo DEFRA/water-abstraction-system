@@ -50,13 +50,13 @@ describe('Charging Module View Bill request', () => {
       expect(endpoint).to.equal(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}`)
     })
 
-    it('returns a `true` success status', async () => {
+    it('returns a "true" success status', async () => {
       const result = await ViewBillRequest.send(billRunId, billId)
 
       expect(result.succeeded).to.be.true()
     })
 
-    it('returns the bill in the `response`', async () => {
+    it('returns the bill in the "response"', async () => {
       const result = await ViewBillRequest.send(billRunId, billId)
 
       expect(result.response.body.invoice.id).to.equal(billId)
@@ -85,13 +85,13 @@ describe('Charging Module View Bill request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.response.body.statusCode).to.equal(401)
@@ -108,13 +108,13 @@ describe('Charging Module View Bill request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await ViewBillRequest.send(billRunId, billId)
 
         expect(result.response.statusCode).not.to.exist()

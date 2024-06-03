@@ -48,7 +48,7 @@ describe('Return Requirements - Agreements Exceptions presenter', () => {
     })
   })
 
-  describe("the 'agreementsExceptions' property", () => {
+  describe('the "agreementsExceptions" property', () => {
     describe('when the user has previously submitted an agreement or exception', () => {
       beforeEach(() => {
         session.requirements[0].agreementsExceptions = 'gravity-fill'
@@ -70,13 +70,13 @@ describe('Return Requirements - Agreements Exceptions presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    describe("when the user has come from the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
       beforeEach(() => {
         session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check' page", () => {
+      it('returns a link back to the "check" page', () => {
         const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
@@ -84,7 +84,7 @@ describe('Return Requirements - Agreements Exceptions presenter', () => {
     })
 
     describe('when the user has come from somewhere else', () => {
-      it("returns a link back to the 'frequency-reported' page", () => {
+      it('returns a link back to the "frequency-reported" page', () => {
         const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/frequency-reported/0')

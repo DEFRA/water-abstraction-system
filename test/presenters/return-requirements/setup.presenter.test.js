@@ -45,15 +45,15 @@ describe('Return Requirements - Setup presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    it("returns a link back to the 'start-date' page", () => {
+  describe('the "backLink" property', () => {
+    it('returns a link back to the "start-date" page', () => {
       const result = SetupPresenter.go(session)
 
       expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
     })
   })
 
-  describe("the 'setup' property", () => {
+  describe('the "setup" property', () => {
     describe('when the user has previously submitted a setup option', () => {
       beforeEach(() => {
         session.setup = 'set-up-manually'

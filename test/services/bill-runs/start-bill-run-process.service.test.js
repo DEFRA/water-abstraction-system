@@ -48,7 +48,7 @@ describe('Start Bill Run Process service', () => {
       Sinon.stub(DetermineBillingPeriodsService, 'go').returns(billingPeriods)
     })
 
-    describe("and the bill run type is 'annual'", () => {
+    describe('and the bill run type is "annual"', () => {
       beforeEach(async () => {
         batchType = 'annual'
 
@@ -90,7 +90,7 @@ describe('Start Bill Run Process service', () => {
       })
     })
 
-    describe("and the bill run type is 'supplementary'", () => {
+    describe('and the bill run type is "supplementary"', () => {
       beforeEach(async () => {
         batchType = 'supplementary'
 
@@ -132,7 +132,7 @@ describe('Start Bill Run Process service', () => {
       })
     })
 
-    describe("and the bill run type is 'two part tariff'", () => {
+    describe('and the bill run type is "two part tariff"', () => {
       beforeEach(async () => {
         batchType = 'two_part_tariff'
 

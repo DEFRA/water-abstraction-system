@@ -34,7 +34,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('which does not include `financialYearEnding`', () => {
+    describe('which does not include "financialYearEnding"', () => {
       it('returns validated data', async () => {
         const validData = {
           type: 'supplementary',
@@ -56,7 +56,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('which does not include `previousBillRunId`', () => {
+    describe('which does not include "previousBillRunId"', () => {
       it('returns validated data', async () => {
         const validData = {
           type: 'supplementary',
@@ -80,7 +80,7 @@ describe('Create Bill Run validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe('because `type` is missing', () => {
+    describe('because "type" is missing', () => {
       it('returns an error', async () => {
         const invalidData = {
           scheme: 'sroc',
@@ -94,7 +94,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `scheme` is missing', () => {
+    describe('because "scheme" is missing', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',
@@ -108,7 +108,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `region` is missing', () => {
+    describe('because "region" is missing', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',
@@ -122,7 +122,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `user` is missing', () => {
+    describe('because "user" is missing', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',
@@ -136,7 +136,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `type` has an invalid value', () => {
+    describe('because "type" has an invalid value', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'INVALID',
@@ -151,7 +151,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `scheme` has an invalid value', () => {
+    describe('because "scheme" has an invalid value', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',
@@ -166,7 +166,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `region` has an invalid value', () => {
+    describe('because "region" has an invalid value', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',
@@ -181,7 +181,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `user` has an invalid value', () => {
+    describe('because "user" has an invalid value', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',
@@ -196,7 +196,7 @@ describe('Create Bill Run validator', () => {
       })
     })
 
-    describe('because `financialYearEnding` has an invalid value', () => {
+    describe('because "financialYearEnding" has an invalid value', () => {
       it('returns an error', async () => {
         const invalidData = {
           type: 'supplementary',

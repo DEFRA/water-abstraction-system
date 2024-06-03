@@ -35,7 +35,7 @@ describe('Site Description validator', () => {
         payload = {}
       })
 
-      it("fails validation with the error 'Enter a description of the site'", () => {
+      it('fails validation with the error "Enter a description of the site"', () => {
         const result = SiteDescriptionValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -52,7 +52,7 @@ describe('Site Description validator', () => {
         }
       })
 
-      it("fails validation with the error 'Site description must be 10 characters or more'", () => {
+      it('fails validation with the error "Site description must be 10 characters or more"', () => {
         const result = SiteDescriptionValidator.go(payload)
 
         expect(result.error).to.exist()
@@ -69,7 +69,7 @@ describe('Site Description validator', () => {
         }
       })
 
-      it("fails validation with the error 'Site description must be 100 characters or less'", () => {
+      it('fails validation with the error "Site description must be 100 characters or less"', () => {
         const result = SiteDescriptionValidator.go(payload)
 
         expect(result.error).to.exist()

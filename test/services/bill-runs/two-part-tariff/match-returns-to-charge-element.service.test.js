@@ -100,7 +100,7 @@ describe('Match Returns To Charge Element Service', () => {
         ])
       })
 
-      it("only flags the matching return logs as 'matched'", () => {
+      it('only flags the matching return logs as "matched"', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
         expect(returnLogs[0].matched).to.be.true()
@@ -127,7 +127,7 @@ describe('Match Returns To Charge Element Service', () => {
         ])
       })
 
-      it("only flags the matching return logs as 'matched'", () => {
+      it('only flags the matching return logs as "matched"', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
         expect(returnLogs[0].matched).to.be.true()

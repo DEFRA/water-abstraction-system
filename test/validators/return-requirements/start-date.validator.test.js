@@ -55,7 +55,7 @@ describe('Start Date validator', () => {
         payload = {}
       })
 
-      it("fails validation with the message 'Select the start date for the requirements for returns'", () => {
+      it('fails validation with the message "Select the start date for the requirements for returns"', () => {
         const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
         expect(result.error).to.exist()
@@ -63,7 +63,7 @@ describe('Start Date validator', () => {
       })
     })
 
-    describe("because the user selected 'Another date'", () => {
+    describe('because the user selected "Another date"', () => {
       beforeEach(() => {
         payload = { 'start-date-options': 'anotherStartDate' }
       })
@@ -75,7 +75,7 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = null
         })
 
-        it("fails validation with the message 'Enter a real start date'", () => {
+        it('fails validation with the message "Enter a real start date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
@@ -90,7 +90,7 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = null
         })
 
-        it("fails validation with the message 'Enter a real start date'", () => {
+        it('fails validation with the message "Enter a real start date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
@@ -105,7 +105,7 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = 'LLLL'
         })
 
-        it("fails validation with the message 'Enter a real start date'", () => {
+        it('fails validation with the message "Enter a real start date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
@@ -120,7 +120,7 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = '2023'
         })
 
-        it("fails validation with the message 'Enter a real start date'", () => {
+        it('fails validation with the message "Enter a real start date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
@@ -135,7 +135,7 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = '2023'
         })
 
-        it("fails validation with the message 'Enter a real start date'", () => {
+        it('fails validation with the message "Enter a real start date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
@@ -150,7 +150,7 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = '2022'
         })
 
-        it("fails validation with the message 'Start date must be after the original licence start date'", () => {
+        it('fails validation with the message "Start date must be after the original licence start date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()
@@ -165,7 +165,7 @@ describe('Start Date validator', () => {
           payload['start-date-year'] = '2024'
         })
 
-        it("fails validation with the message 'Start date must be before the licence end date'", () => {
+        it('fails validation with the message "Start date must be before the licence end date"', () => {
           const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).to.exist()

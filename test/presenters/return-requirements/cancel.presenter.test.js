@@ -68,7 +68,7 @@ describe('Return Requirements - Cancel presenter', () => {
     })
   })
 
-  describe("the 'reason' property", () => {
+  describe('the "reason" property', () => {
     it('returns the display version for the reason', () => {
       const result = CancelPresenter.go(session)
 
@@ -76,8 +76,8 @@ describe('Return Requirements - Cancel presenter', () => {
     })
   })
 
-  describe("the 'returnRequirements' property", () => {
-    describe("when the user journey was 'no-returns-required'", () => {
+  describe('the "returnRequirements" property', () => {
+    describe('when the user journey was "no-returns-required"', () => {
       beforeEach(() => {
         session.journey = 'no-returns-required'
       })
@@ -89,7 +89,7 @@ describe('Return Requirements - Cancel presenter', () => {
       })
     })
 
-    describe("when the user journey was 'returns-required'", () => {
+    describe('when the user journey was "returns-required"', () => {
       it('returns a summary for each requirement in the session', () => {
         const result = CancelPresenter.go(session)
 
@@ -100,7 +100,7 @@ describe('Return Requirements - Cancel presenter', () => {
     })
   })
 
-  describe("the 'startDate' property", () => {
+  describe('the "startDate" property', () => {
     describe('when the user has previously selected the licence start date as the start date', () => {
       it('returns the licence version start date formatted as a long date', () => {
         const result = CancelPresenter.go(session)

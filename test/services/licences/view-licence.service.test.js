@@ -74,7 +74,7 @@ describe('View Licence service', () => {
         expect(result.warning).to.equal(null)
       })
     })
-    describe('and it did \'end\' in the past', () => {
+    describe('and it did "end" in the past', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
       })
@@ -119,7 +119,7 @@ describe('View Licence service', () => {
       })
     })
 
-    describe('and it did \'ends\' today', () => {
+    describe('and it did "ends" today', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
         fetchLicenceResult.ends = { date: new Date(), priority: 1, reason: 'revoked' }
@@ -133,7 +133,7 @@ describe('View Licence service', () => {
       })
     })
 
-    describe('and it did \'ends\' in the future', () => {
+    describe('and it did "ends" in the future', () => {
       beforeEach(() => {
         fetchLicenceResult = _testLicence()
 

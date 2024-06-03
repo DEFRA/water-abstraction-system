@@ -27,7 +27,7 @@ describe('Determine Billing Periods service', () => {
     Sinon.restore()
   })
 
-  describe("when the bill run type is 'annual'", () => {
+  describe('when the bill run type is "annual"', () => {
     beforeEach(() => {
       billRunType = 'annual'
     })
@@ -41,7 +41,7 @@ describe('Determine Billing Periods service', () => {
       })
     })
 
-    describe("and the financial year ending '2023' is provided", () => {
+    describe('and the financial year ending "2023" is provided', () => {
       beforeEach(() => {
         financialYearEnding = 2023
 
@@ -60,7 +60,7 @@ describe('Determine Billing Periods service', () => {
     })
   })
 
-  describe("when the bill run type is 'two_part_tariff'", () => {
+  describe('when the bill run type is "two_part_tariff"', () => {
     beforeEach(() => {
       billRunType = 'two_part_tariff'
     })
@@ -74,7 +74,7 @@ describe('Determine Billing Periods service', () => {
       })
     })
 
-    describe("and the financial year ending '2023' is provided", () => {
+    describe('and the financial year ending "2023" is provided', () => {
       beforeEach(() => {
         financialYearEnding = 2023
 
@@ -93,7 +93,7 @@ describe('Determine Billing Periods service', () => {
     })
   })
 
-  describe("when the bill run type is 'supplementary'", () => {
+  describe('when the bill run type is "supplementary"', () => {
     beforeEach(() => {
       billRunType = 'supplementary'
     })
@@ -114,7 +114,7 @@ describe('Determine Billing Periods service', () => {
       })
 
       describe('and no financial year ending is provided', () => {
-        it("returns a single billing period for the 'current' financial year", () => {
+        it('returns a single billing period for the "current" financial year', () => {
           const result = DetermineBillingPeriodsService.go(billRunType)
 
           expect(result).to.have.length(1)
@@ -125,7 +125,7 @@ describe('Determine Billing Periods service', () => {
       // NOTE: This scenario would never happen, i.e. that we'd get a request to generate an SROC supplementary for a
       // PRESROC financial year. But it demonstrates the service will only generate billing periods that start in the
       // first year of SROC
-      describe("and the financial year ending '2021' is provided", () => {
+      describe('and the financial year ending "2021" is provided', () => {
         beforeEach(() => {
           financialYearEnding = 2021
         })
@@ -137,7 +137,7 @@ describe('Determine Billing Periods service', () => {
         })
       })
 
-      describe("and the financial year ending '2023' is provided", () => {
+      describe('and the financial year ending "2023" is provided', () => {
         beforeEach(() => {
           financialYearEnding = 2023
 
@@ -168,7 +168,7 @@ describe('Determine Billing Periods service', () => {
       })
 
       describe('and no financial year ending is provided', () => {
-        it("returns a single billing period for the 'current' financial year", () => {
+        it('returns a single billing period for the "current" financial year', () => {
           const result = DetermineBillingPeriodsService.go(billRunType)
 
           expect(result).to.have.length(1)
@@ -179,7 +179,7 @@ describe('Determine Billing Periods service', () => {
       // NOTE: This scenario would never happen, i.e. that we'd get a request to generate an SROC supplementary for a
       // PRESROC financial year. But it demonstrates the service will only generate billing periods that start in the
       // first year of SROC
-      describe("and the financial year ending '2021' is provided", () => {
+      describe('and the financial year ending "2021" is provided', () => {
         beforeEach(() => {
           financialYearEnding = 2021
         })
@@ -191,7 +191,7 @@ describe('Determine Billing Periods service', () => {
         })
       })
 
-      describe("and the financial year ending '2023' is provided", () => {
+      describe('and the financial year ending "2023" is provided', () => {
         beforeEach(() => {
           financialYearEnding = 2023
 
@@ -244,7 +244,7 @@ describe('Determine Billing Periods service', () => {
       })
 
       describe('and no financial year ending is provided', () => {
-        it("returns 6 billing periods starting with the 'current' financial year and working back", () => {
+        it('returns 6 billing periods starting with the "current" financial year and working back', () => {
           const result = DetermineBillingPeriodsService.go(billRunType)
 
           expect(result).to.have.length(6)
@@ -252,7 +252,7 @@ describe('Determine Billing Periods service', () => {
         })
       })
 
-      describe("and the financial year ending '2026' is provided", () => {
+      describe('and the financial year ending "2026" is provided', () => {
         beforeEach(() => {
           financialYearEnding = 2026
 

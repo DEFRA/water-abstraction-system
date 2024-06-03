@@ -79,7 +79,7 @@ describe('Charging Module Request', () => {
         expect(requestArgs[1].timeout).to.equal({ request: 1234 })
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await ChargingModuleRequest.delete(testRoute)
 
         expect(result.succeeded).to.be.true()
@@ -120,7 +120,7 @@ describe('Charging Module Request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await ChargingModuleRequest.delete(testRoute)
 
         expect(result.succeeded).to.be.false()
@@ -179,7 +179,7 @@ describe('Charging Module Request', () => {
         expect(requestArgs[1].timeout).to.equal({ request: 1234 })
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await ChargingModuleRequest.get(testRoute)
 
         expect(result.succeeded).to.be.true()
@@ -220,7 +220,7 @@ describe('Charging Module Request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await ChargingModuleRequest.get(testRoute)
 
         expect(result.succeeded).to.be.false()
@@ -279,7 +279,7 @@ describe('Charging Module Request', () => {
         expect(requestArgs[1].timeout).to.equal({ request: 1234 })
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await ChargingModuleRequest.patch(testRoute)
 
         expect(result.succeeded).to.be.true()
@@ -320,7 +320,7 @@ describe('Charging Module Request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await ChargingModuleRequest.patch(testRoute)
 
         expect(result.succeeded).to.be.false()
@@ -380,7 +380,7 @@ describe('Charging Module Request', () => {
         expect(requestArgs[1].timeout).to.equal({ request: 1234 })
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
 
         expect(result.succeeded).to.be.true()
@@ -421,7 +421,7 @@ describe('Charging Module Request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
 
         expect(result.succeeded).to.be.false()

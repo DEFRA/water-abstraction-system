@@ -49,8 +49,8 @@ describe('Index Bill Runs presenter', () => {
       ])
     })
 
-    describe("the 'link' property", () => {
-      describe("when a bill run has the status 'cancel'", () => {
+    describe('the "link" property', () => {
+      describe('when a bill run has the status "cancel"', () => {
         beforeEach(() => {
           billRuns[0].status = 'cancel'
         })
@@ -63,7 +63,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'empty'", () => {
+      describe('when a bill run has the status "empty"', () => {
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns)
 
@@ -72,7 +72,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'error'", () => {
+      describe('when a bill run has the status "error"', () => {
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns)
 
@@ -81,7 +81,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'processing'", () => {
+      describe('when a bill run has the status "processing"', () => {
         beforeEach(() => {
           billRuns[0].status = 'processing'
         })
@@ -94,7 +94,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'queued'", () => {
+      describe('when a bill run has the status "queued"', () => {
         beforeEach(() => {
           billRuns[0].status = 'queued'
         })
@@ -107,7 +107,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'ready'", () => {
+      describe('when a bill run has the status "ready"', () => {
         beforeEach(() => {
           billRuns[0].status = 'ready'
         })
@@ -120,12 +120,12 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'review'", () => {
+      describe('when a bill run has the status "review"', () => {
         beforeEach(() => {
           billRuns[0].status = 'review'
         })
 
-        describe("and is for the 'PRESROC' charge scheme", () => {
+        describe('and is for the "PRESROC" charge scheme', () => {
           beforeEach(() => {
             billRuns[0].scheme = 'alcs'
           })
@@ -138,7 +138,7 @@ describe('Index Bill Runs presenter', () => {
           })
         })
 
-        describe("and is for the 'SROC' charge scheme", () => {
+        describe('and is for the "SROC" charge scheme', () => {
           it('generates the href needed to link to bill run review', () => {
             const results = IndexBillRunsPresenter.go(billRuns)
 
@@ -148,7 +148,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'sending'", () => {
+      describe('when a bill run has the status "sending"', () => {
         beforeEach(() => {
           billRuns[0].status = 'sending'
         })
@@ -161,7 +161,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe("when a bill run has the status 'sent'", () => {
+      describe('when a bill run has the status "sent"', () => {
         beforeEach(() => {
           billRuns[0].status = 'sent'
         })

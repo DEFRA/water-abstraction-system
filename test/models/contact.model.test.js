@@ -142,34 +142,34 @@ describe('Contact model', () => {
         contactRecord.dataSource = 'nald'
       })
 
-      describe("and has a last name of 'Villar'", () => {
+      describe('and has a last name of "Villar"', () => {
         beforeEach(() => {
           contactRecord.lastName = 'Villar'
         })
 
-        it("returns 'Villar'", () => {
+        it('returns "Villar"', () => {
           testRecord = ContactModel.fromJson(contactRecord)
 
           expect(testRecord.$name()).to.equal('Villar')
         })
 
-        describe("and the salutation 'Mrs'", () => {
+        describe('and the salutation "Mrs"', () => {
           beforeEach(() => {
             contactRecord.salutation = 'Mrs'
           })
 
-          it("returns 'Mrs Villar'", () => {
+          it('returns "Mrs Villar"', () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
             expect(testRecord.$name()).to.equal('Mrs Villar')
           })
 
-          describe("and the initial 'J'", () => {
+          describe('and the initial "J"', () => {
             beforeEach(() => {
               contactRecord.initials = 'J'
             })
 
-            it("returns 'Mrs J Villar'", () => {
+            it('returns "Mrs J Villar"', () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
               expect(testRecord.$name()).to.equal('Mrs J Villar')
@@ -177,34 +177,34 @@ describe('Contact model', () => {
           })
         })
 
-        describe("and a first name of 'Margherita'", () => {
+        describe('and a first name of "Margherita"', () => {
           beforeEach(() => {
             contactRecord.firstName = 'Margherita'
           })
 
-          it("returns 'Margherita Villar'", () => {
+          it('returns "Margherita Villar"', () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
             expect(testRecord.$name()).to.equal('Margherita Villar')
           })
 
-          describe("and the salutation 'Mrs'", () => {
+          describe('and the salutation "Mrs"', () => {
             beforeEach(() => {
               contactRecord.salutation = 'Mrs'
             })
 
-            it("returns 'Mrs Margherita Villar'", () => {
+            it('returns "Mrs Margherita Villar"', () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
               expect(testRecord.$name()).to.equal('Mrs Margherita Villar')
             })
 
-            describe("and the initial 'J'", () => {
+            describe('and the initial "J"', () => {
               beforeEach(() => {
                 contactRecord.initials = 'J'
               })
 
-              it("returns 'Mrs J Villar'", () => {
+              it('returns "Mrs J Villar"', () => {
                 testRecord = ContactModel.fromJson(contactRecord)
 
                 expect(testRecord.$name()).to.equal('Mrs J Villar')
@@ -220,62 +220,62 @@ describe('Contact model', () => {
         contactRecord.dataSource = 'wrls'
       })
 
-      describe("and it is a department named 'Humanoid Risk Assessment'", () => {
+      describe('and it is a department named "Humanoid Risk Assessment"', () => {
         beforeEach(() => {
           contactRecord.contactType = 'department'
           contactRecord.department = 'Humanoid Risk Assessment'
         })
 
-        it("returns 'Humanoid Risk Assessment'", () => {
+        it('returns "Humanoid Risk Assessment"', () => {
           testRecord = ContactModel.fromJson(contactRecord)
 
           expect(testRecord.$name()).to.equal('Humanoid Risk Assessment')
         })
       })
 
-      describe("and it is a 'person'", () => {
+      describe('and it is a "person"', () => {
         beforeEach(() => {
           contactRecord.contactType = 'person'
           contactRecord.firstName = 'Vincent'
           contactRecord.lastName = 'Anderson'
         })
 
-        describe("with the name 'Vincent Anderson'", () => {
-          it("returns 'Vincent Anderson'", () => {
+        describe('with the name "Vincent Anderson"', () => {
+          it('returns "Vincent Anderson"', () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
             expect(testRecord.$name()).to.equal('Vincent Anderson')
           })
         })
 
-        describe("and the salutation 'Mr'", () => {
+        describe('and the salutation "Mr"', () => {
           beforeEach(() => {
             contactRecord.salutation = 'Mr'
           })
 
-          it("returns 'Mr Vincent Anderson'", () => {
+          it('returns "Mr Vincent Anderson"', () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
             expect(testRecord.$name()).to.equal('Mr Vincent Anderson')
           })
 
-          describe("and the middle initial 'P'", () => {
+          describe('and the middle initial "P"', () => {
             beforeEach(() => {
               contactRecord.middleInitials = 'P'
             })
 
-            it("returns 'Mr V P Anderson'", () => {
+            it('returns Mr V P Anderson', () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
               expect(testRecord.$name()).to.equal('Mr V P Anderson')
             })
 
-            describe("and the suffix 'MBE'", () => {
+            describe('and the suffix "MBE"', () => {
               beforeEach(() => {
                 contactRecord.suffix = 'MBE'
               })
 
-              it("returns 'Mr V P Anderson MBE'", () => {
+              it('returns "Mr V P Anderson MBE"', () => {
                 testRecord = ContactModel.fromJson(contactRecord)
 
                 expect(testRecord.$name()).to.equal('Mr V P Anderson MBE')
@@ -284,23 +284,23 @@ describe('Contact model', () => {
           })
         })
 
-        describe("and the middle initial 'P'", () => {
+        describe('and the middle initial "P"', () => {
           beforeEach(() => {
             contactRecord.middleInitials = 'P'
           })
 
-          it("returns 'V P Anderson'", () => {
+          it('returns "V P Anderson"', () => {
             testRecord = ContactModel.fromJson(contactRecord)
 
             expect(testRecord.$name()).to.equal('V P Anderson')
           })
 
-          describe("and the suffix 'MBE'", () => {
+          describe('and the suffix "MBE"', () => {
             beforeEach(() => {
               contactRecord.suffix = 'MBE'
             })
 
-            it("returns 'V P Anderson MBE'", () => {
+            it('returns "V P Anderson MBE"', () => {
               testRecord = ContactModel.fromJson(contactRecord)
 
               expect(testRecord.$name()).to.equal('V P Anderson MBE')

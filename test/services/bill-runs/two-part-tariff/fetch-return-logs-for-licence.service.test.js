@@ -134,7 +134,7 @@ describe('Fetch Return Logs for Licence service', () => {
         await ReturnSubmissionHelper.add({ returnLogId: id, nilReturn: true })
       })
 
-      it('returns the return log with `nilreturn` set to `true` and no return submission lines', async () => {
+      it('returns the return log with "nilreturn" set to "true" and no return submission lines', async () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 

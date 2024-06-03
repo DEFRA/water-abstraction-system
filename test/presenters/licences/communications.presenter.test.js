@@ -53,7 +53,7 @@ describe('Communications presenter', () => {
       })
     })
 
-    describe("the 'messageRef' property", () => {
+    describe('the "messageRef" property', () => {
       describe('when the message ref contains pdf', () => {
         beforeEach(() => {
           communications[0].messageRef = 'pdf.return_form'
@@ -83,7 +83,7 @@ describe('Communications presenter', () => {
       })
     })
 
-    describe("the 'messageType' property", () => {
+    describe('the "messageType" property', () => {
       beforeEach(() => {
         communications[0].messageType = 'i AM in senTence case'
       })
@@ -97,7 +97,7 @@ describe('Communications presenter', () => {
       })
     })
 
-    describe("when the communication is a 'Water abstraction alert'", () => {
+    describe('when the communication is a "Water abstraction alert"', () => {
       beforeEach(() => {
         communications[0].event.metadata.name = 'Water abstraction alert'
         communications[0].event.metadata.options.sendingAlertType = 'test'

@@ -28,7 +28,7 @@ describe('Fetch Matching Bill Run service', () => {
 
   describe('when called', () => {
     describe('with a matching region', () => {
-      describe("and the batch type is 'annual'", () => {
+      describe('and the batch type is "annual"', () => {
         describe('and a bill run for the same financial year exists', () => {
           beforeEach(async () => {
             const billRun = await BillRunHelper.add({ regionId, batchType: 'annual', status: 'sent', toFinancialYearEnding: 2024 })
@@ -43,7 +43,7 @@ describe('Fetch Matching Bill Run service', () => {
         })
       })
 
-      describe("and the batch type is 'supplementary'", () => {
+      describe('and the batch type is "supplementary"', () => {
         describe('and two bill runs for the same financial year exist', () => {
           const matchingBillRunIds = []
 
@@ -70,7 +70,7 @@ describe('Fetch Matching Bill Run service', () => {
         })
       })
 
-      describe("and the batch type is 'two_part_tariff'", () => {
+      describe('and the batch type is "two_part_tariff"', () => {
         describe('and the financial year is in the SROC period', () => {
           describe('and a bill run for the same financial year exists', () => {
             beforeEach(async () => {
@@ -104,7 +104,7 @@ describe('Fetch Matching Bill Run service', () => {
             matchingWinterBillRunId = billRun.id
           })
 
-          describe("and 'summer' is set to true", () => {
+          describe('and "summer" is set to true', () => {
             describe('and a bill run for the same financial year exists', () => {
               it('returns the matching bill run', async () => {
                 const results = await FetchMatchingBillRunService.go(regionId, 'two_part_tariff', 2022, true)
@@ -114,7 +114,7 @@ describe('Fetch Matching Bill Run service', () => {
             })
           })
 
-          describe("and 'summer' is set to false", () => {
+          describe('and "summer" is set to false', () => {
             describe('and a bill run for the same financial year exists', () => {
               it('returns the matching bill run', async () => {
                 const results = await FetchMatchingBillRunService.go(regionId, 'two_part_tariff', 2022, false)
@@ -140,7 +140,7 @@ describe('Fetch Matching Bill Run service', () => {
         })
       })
 
-      describe("because they have a status of 'cancel', 'empty', or 'error'", () => {
+      describe('because they have a status of "cancel", "empty", or "error"', () => {
         beforeEach(async () => {
           await Promise.all([
             BillRunHelper.add({ regionId, batchType: 'supplementary', status: 'cancel', toFinancialYearEnding: 2024 }),

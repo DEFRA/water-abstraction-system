@@ -74,7 +74,7 @@ describe('Return Requirements - Check service', () => {
       }, { skip: ['sessionId'] })
     })
 
-    it("updates the session record to indicate user has visited the 'check' page", async () => {
+    it('updates the session record to indicate user has visited the "check" page', async () => {
       await CheckService.go(session.id, yarStub)
 
       const refreshedSession = await session.$query()
