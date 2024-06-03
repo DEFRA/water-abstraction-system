@@ -144,7 +144,7 @@
               },
               {
                 key: {
-                text: "Point"
+                text: "Points"
               },
                 value: {
                 html: "requirement.points"
@@ -260,17 +260,19 @@
                   }
                 ]
               }
+              },
+              {
+                key: {
+                html:  govukButton({
+                  text: "Remove requirement",
+                  classes: "govuk-button--secondary",
+                  preventDoubleClick: true,
+                  href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
+                }) if requirements.length >= 2
+              }
               }
             ]
           }) }}
-          {% if requirements.length >= 2 %}
-            {{ govukButton({
-              text: "Remove requirement",
-              classes: "govuk-button--warning",
-              preventDoubleClick: true,
-              href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
-            }) }}
-          {% endif %}
         </div>
       {% endfor %}
     </div>
