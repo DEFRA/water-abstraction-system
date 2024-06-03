@@ -416,8 +416,7 @@
                             text: 'Issues'
                           },
                           value: {
-                            html: issues,
-                            attributes: { 'data-test': 'charge-element-issues-' + chargeElementIndex }
+                            html: '<div data-test="charge-element-issues-' + chargeElementIndex + '">' + issues + '</div>'
                           }
                         },
                         {
@@ -425,8 +424,7 @@
                             text: 'Billable returns'
                           },
                           value: {
-                            text: chargeElement.billableReturns,
-                            attributes: { 'data-test': 'charge-element-billable-returns' + chargeElementIndex }
+                            html: '<div data-test="charge-element-billable-returns-' + chargeElementIndex + '">' + chargeElement.billableReturns + '</div>'
                           },
                           actions: {
                             items: [
@@ -449,7 +447,7 @@
                       %}
 
                       {{ govukSummaryList({
-                        attributes: { 'data-test': 'charge-elements-' + chargeElementIndex },
+                        attributes: { 'data-test': 'charge-element-' + chargeElementIndex },
                         classes: "govuk-!-margin-bottom-9",
                         rows: elementRow
                       }) }}
