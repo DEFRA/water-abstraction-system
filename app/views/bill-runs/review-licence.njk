@@ -449,6 +449,7 @@
                       %}
 
                       {{ govukSummaryList({
+                        attributes: { 'data-test': 'charge-elements-' + chargeElementIndex },
                         classes: "govuk-!-margin-bottom-9",
                         rows: elementRow
                       }) }}
