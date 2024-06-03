@@ -2,14 +2,14 @@
 
 /**
  * Model for LicenceAgreements (water.licence_agreements)
- * @module LicenceAgreements
+ * @module LicenceAgreementModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class LicenceAgreements extends BaseModel {
+class LicenceAgreementModel extends BaseModel {
   static get tableName () {
     return 'licenceAgreements'
   }
@@ -28,4 +28,4 @@ class LicenceAgreements extends BaseModel {
   }
 }
 
-module.exports = LicenceAgreements
+module.exports = LicenceAgreementModel

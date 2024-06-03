@@ -2,14 +2,14 @@
 
 /**
  * Model for LicenceVersionPurposes (water.licence_version_purposes)
- * @module LicenceVersionPurposes
+ * @module LicenceVersionPurposeModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class LicenceVersionPurposes extends BaseModel {
+class LicenceVersionPurposeModel extends BaseModel {
   static get tableName () {
     return 'licenceVersionPurposes'
   }
@@ -36,4 +36,4 @@ class LicenceVersionPurposes extends BaseModel {
   }
 }
 
-module.exports = LicenceVersionPurposes
+module.exports = LicenceVersionPurposeModel

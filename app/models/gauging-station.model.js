@@ -2,14 +2,14 @@
 
 /**
  * Model for gaugingStations (water.gauging_stations)
- * @module GaugingStationsnModel
+ * @module GaugingStationModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class GaugingStationsnModel extends BaseModel {
+class GaugingStationModel extends BaseModel {
   static get tableName () {
     return 'gaugingStations'
   }
@@ -35,4 +35,4 @@ class GaugingStationsnModel extends BaseModel {
   }
 }
 
-module.exports = GaugingStationsnModel
+module.exports = GaugingStationModel

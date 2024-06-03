@@ -2,14 +2,14 @@
 
 /**
  * Model for FinancialAgreements (water.financial_agreements)
- * @module FinancialAgreements
+ * @module FinancialAgreementModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class FinancialAgreements extends BaseModel {
+class FinancialAgreementModel extends BaseModel {
   static get tableName () {
     return 'financialAgreements'
   }
@@ -28,4 +28,4 @@ class FinancialAgreements extends BaseModel {
   }
 }
 
-module.exports = FinancialAgreements
+module.exports = FinancialAgreementModel

@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for licenceGauginStations (water.licence_gauging_stations)
- * @module GauginStationsnModel
+ * Model for licenceGaugingStations (water.licence_gauging_stations)
+ * @module LicenceGaugingStationModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class LicenceGauginStationsnModel extends BaseModel {
+class LicenceGaugingStationModel extends BaseModel {
   static get tableName () {
     return 'licenceGaugingStations'
   }
@@ -28,4 +28,4 @@ class LicenceGauginStationsnModel extends BaseModel {
   }
 }
 
-module.exports = LicenceGauginStationsnModel
+module.exports = LicenceGaugingStationModel

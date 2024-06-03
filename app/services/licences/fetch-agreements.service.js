@@ -5,7 +5,7 @@
  * @module FetchAgreementsService
  */
 
-const LicenceAgreements = require('../../models/licence-agreement.model.js')
+const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
 
 /**
  * Fetches charge version data needed for the view '/licences/{id}/set-up` page
@@ -19,7 +19,7 @@ async function go (licenceRef) {
 }
 
 async function _fetch (licenceRef) {
-  return LicenceAgreements.query()
+  return LicenceAgreementModel.query()
     .where('licenceRef', licenceRef)
     .select([
       'id',
