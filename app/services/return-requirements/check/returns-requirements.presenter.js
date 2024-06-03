@@ -3,7 +3,7 @@
 const { formatAbstractionDate } = require('../../../presenters/base.presenter.js')
 
 /**
- * Formats data for the `/return-requirements/{sessionId}/check` page
+ * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
  * @module ReturnRequirementsPresenter
  */
 

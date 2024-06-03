@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches a licence's purposes needed for `/return-requirements/{sessionId}/purpose` page
- * @module FetchPurposesByIdsService
+ * Fetches a licence's purposes needed for `/return-requirements/{sessionId}/check` page
+ * @module FetchPurposeByIdsService
  */
 
 const PurposeModel = require('../../../models/purpose.model.js')

@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the requirements for the check page
- * @module RequirementsService
+ * Orchestrates fetching and presenting the return requirements for the check page
+ * @module ReturnRequirementsService
  */
 
-const FetchPurposesByIdsService = require('./fetch-purposes.service.js')
+const FetchPurposeByIdsService = require('./fetch-purposes.service.js')
 const ReturnRequirementsPresenter = require('./returns-requirements.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the requirements for `/return-requirements/{sessionId}/check` page
+ * Orchestrates fetching and presenting the return requirements for `/return-requirements/{sessionId}/check` page
  *
  * @param {string} sessionId - The UUID for return requirement setup session record
  *
@@ -21,7 +21,7 @@ async function go (sessionId) {
 
   const { requirements, journey } = session
   const purposeIds = _purposeIds(requirements)
-  const purposes = await FetchPurposesByIdsService.go(purposeIds)
+  const purposes = await FetchPurposeByIdsService.go(purposeIds)
 
   return ReturnRequirementsPresenter.go(requirements, purposes, journey)
 }
