@@ -7,7 +7,7 @@
 
 const ReturnRequirementsPresenter = require('../../../presenters/return-requirements/check/returns-requirements.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
-const PurposeModel = require('../../../models/purpose.model.Js')
+const PurposeModel = require('../../../models/purpose.model.js')
 
 /**
  * Orchestrates fetching and presenting the return requirements for `/return-requirements/{sessionId}/check` page
