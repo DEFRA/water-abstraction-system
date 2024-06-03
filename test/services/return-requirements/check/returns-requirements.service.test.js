@@ -17,8 +17,8 @@ const ReturnRequirementsService = require('../../../../app/services/return-requi
 
 describe('Return Requirements service', () => {
   let purpose
-  let session
   let requirement
+  let session
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
