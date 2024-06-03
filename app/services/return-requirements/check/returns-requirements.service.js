@@ -5,9 +5,9 @@
  * @module ReturnRequirementsService
  */
 
-const FetchPurposeByIdsService = require('./fetch-purposes.service.js')
-const ReturnRequirementsPresenter = require('./returns-requirements.presenter.js')
+const ReturnRequirementsPresenter = require('../../../presenters/return-requirements/check/returns-requirements.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const PurposeModel = require('../../../models/purpose.model.Js')
 
 /**
  * Orchestrates fetching and presenting the return requirements for `/return-requirements/{sessionId}/check` page
@@ -21,7 +21,7 @@ async function go (sessionId) {
 
   const { requirements, journey } = session
   const purposeIds = _purposeIds(requirements)
-  const purposes = await FetchPurposeByIdsService.go(purposeIds)
+  const purposes = await _fetchPurposeIds(purposeIds)
 
   return ReturnRequirementsPresenter.go(requirements, purposes, journey)
 }
@@ -35,8 +35,16 @@ function _purposeIds (requirements) {
     return []
   })
 
-  //  Duplicate is a bug this is temp
   return [...new Set(requirementPurposes)]
+}
+
+async function _fetchPurposeIds (purposeIds) {
+  return PurposeModel.query()
+    .select([
+      'purposes.id',
+      'purposes.description'
+    ])
+    .findByIds(purposeIds)
 }
 
 module.exports = {

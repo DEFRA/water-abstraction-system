@@ -1,6 +1,6 @@
 'use strict'
 
-const { formatAbstractionDate } = require('../../../presenters/base.presenter.js')
+const { formatAbstractionDate } = require('../../base.presenter.js')
 
 /**
  * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
@@ -41,23 +41,21 @@ function _requirements (requirements, purposeIds) {
   return completedRequirements
 }
 
+function _mapPurposes (purposes, purposeIds) {
+  return purposes.map((purpose) => {
+    return purposeIds.find((pid) => { return pid.id === purpose }).description
+  })
+}
+
 function _mapRequirement (requirement, index, purposeIds) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     frequencyCollected: requirement.frequencyCollected,
     frequencyReported: requirement.frequencyReported,
     index,
-    purposes: _mapPurpoes(requirement.purposes, purposeIds),
+    purposes: _mapPurposes(requirement.purposes, purposeIds),
     siteDescription: requirement.siteDescription
   }
-}
-
-function _mapPurpoes (purposes, purposeIds) {
-  const uniquePurposes = [...new Set(purposes)]
-
-  return uniquePurposes.map((purpose) => {
-    return purposeIds.find((pid) => { return pid.id === purpose }).description
-  })
 }
 
 module.exports = {

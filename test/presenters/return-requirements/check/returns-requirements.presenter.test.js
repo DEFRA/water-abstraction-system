@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Thing under test
-const ReturnRequirementsPresenter = require('../../../../app/services/return-requirements/check/returns-requirements.presenter.js')
+const ReturnRequirementsPresenter = require('../../../../app/presenters/return-requirements/check/returns-requirements.presenter.js')
 
 describe('Return Requirements presenter', () => {
   let journey
@@ -40,7 +40,7 @@ describe('Return Requirements presenter', () => {
         '286'
       ],
       purposes: [
-        '772136d1-9184-417b-90cd-91053287d1df'
+        purposeIds[0].id
       ],
       returnsCycle: 'summer',
       siteDescription: 'A place in the sun'
@@ -97,6 +97,27 @@ describe('Return Requirements presenter', () => {
         const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
 
         expect(result.requirements).to.equal([])
+      })
+    })
+    describe('has purpose id\'s', () => {
+      describe('populated', () => {
+        it('should map the purpose descriptions', () => {
+          const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
+
+          expect(result.requirements[0].purposes).to.equal(['A singular purpose'])
+        })
+      })
+
+      describe('not populated', () => {
+        beforeEach(() => {
+          requirements[0].purposes = []
+        })
+
+        it('should leave the purpose empty', () => {
+          const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
+
+          expect(result.requirements[0].purposes).to.equal([])
+        })
       })
     })
   })
