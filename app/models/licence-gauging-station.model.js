@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for licenceGaugingStations (water.licence_gauging_stations)
+ * Model for licence_gauging_stations (water.licence_gauging_stations)
  * @module LicenceGaugingStationModel
  */
 

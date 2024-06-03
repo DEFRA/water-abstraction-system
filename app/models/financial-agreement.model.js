@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for FinancialAgreements (water.financial_agreements)
+ * Model for financial_agreements (water.financial_agreement_types)
  * @module FinancialAgreementModel
  */
 

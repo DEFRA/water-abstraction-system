@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for gaugingStations (water.gauging_stations)
+ * Model for gauging_stations (water.gauging_stations)
  * @module GaugingStationModel
  */
 

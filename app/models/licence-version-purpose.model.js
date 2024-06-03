@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for LicenceVersionPurposes (water.licence_version_purposes)
+ * Model for licence_version_purposes (water.licence_version_purposes)
  * @module LicenceVersionPurposeModel
  */
 
