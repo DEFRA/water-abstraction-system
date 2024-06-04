@@ -6,8 +6,8 @@
  */
 
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
-const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
 const SessionModel = require('../../models/session.model.js')
+const SetupPresenter = require('../../presenters/return-requirements/setup.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/setup` page
