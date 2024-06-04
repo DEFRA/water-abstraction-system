@@ -21,7 +21,7 @@ const ReturnRequirementModel = require('../../../app/models/return-requirement.m
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:ReturnVersionModel>} The instance of the newly created record
+ * @returns {Promise<module:ReturnRequirementModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
