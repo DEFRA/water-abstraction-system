@@ -21,6 +21,7 @@ function _abstractionPeriod (abstractionPeriod) {
 
   return `From ${startDate} to ${endDate}`
 }
+
 function _requirements (requirements, purposeIds) {
   const completedRequirements = []
 
