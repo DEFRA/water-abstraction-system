@@ -3,6 +3,13 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+
+{% macro newLine(array) %}
+  {% for item in array %}
+    <p> {{ item }}</p>
+  {% endfor %}
+{% endmacro %}
+
 {% block content %}
   {% if notification %}
     {{ govukNotificationBanner({
@@ -66,7 +73,7 @@
   </div>
 
   <div class="govuk-!-margin-bottom-9">
-    <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Notes</h2>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Notes</h2>
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
     {{ govukSummaryList({
       classes: 'govuk-!-margin-bottom-2',
@@ -98,10 +105,10 @@
     <hr class="govuk-section-break  govuk-!-margin-bottom-2 govuk-section-break--visible">
   </div>
 
-  {% if journey == 'returns-required' %}
+  {% if returnsRequired %}
     <div class="govuk-!-margin-bottom-9">
-      <h2 class="govuk-heading-l govuk-!-margin-bottom-4" >Requirements for returns</h2>
-      <form method= "post" action= "/system/return-requirements/{{sessionId}}/add">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
+      <form method="post" action="/system/return-requirements/{{ sessionId }}/add">
         {{ govukButton({
           text: "Add another requirement",
           classes: "govuk-button--secondary",
@@ -123,7 +130,7 @@
                     text: "Purpose"
                   },
                   value: {
-                    html: "requirement.purposes"
+                    html: newLine(requirement.purposes)
                   },
                   actions: {
                     items: [
@@ -137,7 +144,7 @@
                 },
                 {
                   key: {
-                    text: "Point"
+                    text: "Points"
                   },
                   value: {
                     html: "requirement.points"
@@ -253,17 +260,19 @@
                       }
                     ]
                   }
+                },
+                {
+                  key: {
+                  html:  govukButton({
+                    text: "Remove requirement",
+                    classes: "govuk-button--secondary",
+                    preventDoubleClick: true,
+                    href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
+                  }) if requirements.length >= 2
+                }
                 }
               ]
             }) }}
-          {% if requirements.length >= 2 %}
-            {{ govukButton({
-              text: "Remove requirement",
-              classes: "govuk-button--warning",
-              preventDoubleClick: true,
-              href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
-            }) }}
-          {% endif %}
         </div>
       {% endfor %}
     </div>
@@ -271,11 +280,7 @@
 
   <form method="post">
     <div class="govuk-body">
-      {% if journey == 'no-returns-required' %}
-        <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
-        <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
-      {% endif %}
-      {% if journey == 'returns-required' %}
+      {% if returnsRequired %}
         {{ govukSummaryList({
           classes: 'govuk-!-margin-bottom-2',
           rows: [
@@ -309,12 +314,15 @@
             }
           ]
         }) }}
+        {% else %}
+          <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
+          <hr class="govuk-!-margin-bottom-5 govuk-section-break--s govuk-section-break--visible">
       {% endif %}
 
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
       {{ govukButton({
-        html: '<span data-test="meta-data-approve">' + "Approve returns requirements" + "</span>",
+        text: "Approve returns requirements",
         classes: "govuk-!-margin-right-6",
         preventDoubleClick: true
       }) }}
