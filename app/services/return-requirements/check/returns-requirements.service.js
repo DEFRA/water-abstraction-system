@@ -5,8 +5,8 @@
  * @module ReturnRequirementsService
  */
 
-const ReturnRequirementsPresenter = require('../../../presenters/return-requirements/check/returns-requirements.presenter.js')
 const PurposeModel = require('../../../models/purpose.model.js')
+const ReturnRequirementsPresenter = require('../../../presenters/return-requirements/check/returns-requirements.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the return requirements for `/return-requirements/{sessionId}/check` page
