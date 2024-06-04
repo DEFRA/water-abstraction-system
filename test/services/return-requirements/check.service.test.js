@@ -61,7 +61,6 @@ describe('Return Requirements - Check service', () => {
         activeNavBar: 'search',
         additionalSubmissionOptions: [],
         licenceRef: '01/ABC',
-        noReturnsRequired: false,
         note: null,
         notification: undefined,
         pageTitle: 'Check the return requirements for Turbo Kid',

@@ -54,7 +54,6 @@ describe('Return Requirements presenter', () => {
       const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
 
       expect(result).to.equal({
-        noReturnsRequired: false,
         returnsRequired: false,
         requirements: [{
           abstractionPeriod: 'From 1 June to 1 March',

@@ -61,7 +61,6 @@ describe('Return Requirements service', () => {
       const result = await ReturnRequirementsService.go(session)
 
       expect(result).to.equal({
-        noReturnsRequired: false,
         requirements: [{
           abstractionPeriod: 'From 1 June to 1 March',
           frequencyCollected: 'daily',
