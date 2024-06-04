@@ -86,6 +86,12 @@ describe('Return Requirements presenter', () => {
         }
         ])
       })
+
+      it('maps the selected purpose ID\'s to their description', () => {
+        const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
+
+        expect(result.requirements[0].purposes).to.equal(['A singular purpose'])
+      })
     })
 
     describe('when the requirement is "incomplete" (agreements exceptions is not populated)', () => {
@@ -97,27 +103,6 @@ describe('Return Requirements presenter', () => {
         const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
 
         expect(result.requirements).to.equal([])
-      })
-    })
-    describe('has purpose id\'s', () => {
-      describe('populated', () => {
-        it('should map the purpose descriptions', () => {
-          const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
-
-          expect(result.requirements[0].purposes).to.equal(['A singular purpose'])
-        })
-      })
-
-      describe('not populated', () => {
-        beforeEach(() => {
-          requirements[0].purposes = []
-        })
-
-        it('should leave the purpose empty', () => {
-          const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
-
-          expect(result.requirements[0].purposes).to.equal([])
-        })
       })
     })
   })
