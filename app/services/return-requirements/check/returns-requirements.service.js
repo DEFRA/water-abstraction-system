@@ -30,7 +30,7 @@ async function _fetchPurposes (purposeIds) {
       'purposes.id',
       'purposes.description'
     ])
-    .findByIds(purposes)
+    .findByIds(purposeIds)
 }
 
 function _purposeIds (requirements) {
