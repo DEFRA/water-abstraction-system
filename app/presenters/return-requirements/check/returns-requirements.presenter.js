@@ -5,11 +5,6 @@ const { formatAbstractionDate } = require('../../base.presenter.js')
 /**
  * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
  * @module ReturnRequirementsPresenter
- * @param {object} requirements - The requirements from the session
- * @param {module:PurposeModel} purposes - The purposes related to the ids of every requirement purpose
- * @param {string} journey - The journey from the session to determine if the journey is returns required
- *
- * @returns {Object} returns requirement data needed by the view template
  */
 
 function go (requirements, purposes, journey) {
