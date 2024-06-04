@@ -24,6 +24,15 @@ async function go (session) {
   return ReturnRequirementsPresenter.go(requirements, purposes, journey)
 }
 
+async function _fetchPurposeIds (purposeIds) {
+  return PurposeModel.query()
+    .select([
+      'purposes.id',
+      'purposes.description'
+    ])
+    .findByIds(purposeIds)
+}
+
 function _purposeIds (requirements) {
   const requirementPurposes = requirements.flatMap((requirement) => {
     if (requirement.purposes) {
@@ -34,15 +43,6 @@ function _purposeIds (requirements) {
   })
 
   return [...new Set(requirementPurposes)]
-}
-
-async function _fetchPurposeIds (purposeIds) {
-  return PurposeModel.query()
-    .select([
-      'purposes.id',
-      'purposes.description'
-    ])
-    .findByIds(purposeIds)
 }
 
 module.exports = {
