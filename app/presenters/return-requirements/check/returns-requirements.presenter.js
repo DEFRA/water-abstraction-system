@@ -8,10 +8,8 @@ const { formatAbstractionDate } = require('../../base.presenter.js')
  */
 
 function go (requirements, purposeIds, journey) {
-  const returnsRequired = journey === 'returns-required'
-
   return {
-    returnsRequired,
+    returnsRequired: journey === 'returns-required',
     requirements: _requirements(requirements, purposeIds)
   }
 }
