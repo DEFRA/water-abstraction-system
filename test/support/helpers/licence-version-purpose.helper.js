@@ -5,7 +5,7 @@
  */
 
 const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const LicenceVersionPurposesModel = require('../../../app/models/licence-version-purpose.model.js')
+const LicenceVersionPurposeModel = require('../../../app/models/licence-version-purpose.model.js')
 const { randomInteger } = require('../general.js')
 
 /**
@@ -27,12 +27,12 @@ const { randomInteger } = require('../general.js')
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:LicenceVersionPurposesModel>} The instance of the newly created record
+ * @returns {Promise<module:LicenceVersionPurposeModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return LicenceVersionPurposesModel.query()
+  return LicenceVersionPurposeModel.query()
     .insert({ ...insertData })
     .returning('*')
 }

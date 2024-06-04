@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for scheduled notifications (water.scheduled_notification)
+ * Model for scheduled_notification (water.scheduled_notification)
  * @module ScheduledNotificationModel
  */
 

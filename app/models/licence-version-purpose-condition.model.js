@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for LicenceVersionPurposeCondition (water.licence_version_purpose_conditions)
- * @module LicenceVersionPurposeConditions
+ * Model for licence_version_purpose_conditions (water.licence_version_purpose_conditions)
+ * @module LicenceVersionPurposeConditionModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class LicenceVersionPurposeConditions extends BaseModel {
+class LicenceVersionPurposeConditionModel extends BaseModel {
   static get tableName () {
     return 'licenceVersionPurposeConditions'
   }
@@ -28,4 +28,4 @@ class LicenceVersionPurposeConditions extends BaseModel {
   }
 }
 
-module.exports = LicenceVersionPurposeConditions
+module.exports = LicenceVersionPurposeConditionModel
