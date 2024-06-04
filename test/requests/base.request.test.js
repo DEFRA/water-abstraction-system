@@ -56,13 +56,13 @@ describe('Base Request', () => {
       })
 
       describe('the result it returns', () => {
-        it("has a 'succeeded' property marked as true", async () => {
+        it('has a "succeeded" property marked as true', async () => {
           const result = await BaseRequest.delete(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
-        it("has a 'response' property containing the web response", async () => {
+        it('has a "response" property containing the web response', async () => {
           const result = await BaseRequest.delete(testDomain)
 
           expect(result.response).to.exist()
@@ -95,13 +95,13 @@ describe('Base Request', () => {
         })
 
         describe('the result it returns', () => {
-          it("has a 'succeeded' property marked as false", async () => {
+          it('has a "succeeded" property marked as false', async () => {
             const result = await BaseRequest.delete(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
-          it("has a 'response' property containing the web response", async () => {
+          it('has a "response" property containing the web response', async () => {
             const result = await BaseRequest.delete(testDomain)
 
             expect(result.response).to.exist()
@@ -143,13 +143,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -181,13 +181,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -238,13 +238,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -277,13 +277,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -336,13 +336,13 @@ describe('Base Request', () => {
       })
 
       describe('the result it returns', () => {
-        it("has a 'succeeded' property marked as true", async () => {
+        it('has a "succeeded" property marked as true', async () => {
           const result = await BaseRequest.get(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
-        it("has a 'response' property containing the web response", async () => {
+        it('has a "response" property containing the web response', async () => {
           const result = await BaseRequest.get(testDomain)
 
           expect(result.response).to.exist()
@@ -375,13 +375,13 @@ describe('Base Request', () => {
         })
 
         describe('the result it returns', () => {
-          it("has a 'succeeded' property marked as false", async () => {
+          it('has a "succeeded" property marked as false', async () => {
             const result = await BaseRequest.get(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
-          it("has a 'response' property containing the web response", async () => {
+          it('has a "response" property containing the web response', async () => {
             const result = await BaseRequest.get(testDomain)
 
             expect(result.response).to.exist()
@@ -423,13 +423,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -461,13 +461,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -518,13 +518,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -557,13 +557,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -616,13 +616,13 @@ describe('Base Request', () => {
       })
 
       describe('the result it returns', () => {
-        it("has a 'succeeded' property marked as true", async () => {
+        it('has a "succeeded" property marked as true', async () => {
           const result = await BaseRequest.patch(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
-        it("has a 'response' property containing the web response", async () => {
+        it('has a "response" property containing the web response', async () => {
           const result = await BaseRequest.patch(testDomain)
 
           expect(result.response).to.exist()
@@ -655,13 +655,13 @@ describe('Base Request', () => {
         })
 
         describe('the result it returns', () => {
-          it("has a 'succeeded' property marked as false", async () => {
+          it('has a "succeeded" property marked as false', async () => {
             const result = await BaseRequest.patch(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
-          it("has a 'response' property containing the web response", async () => {
+          it('has a "response" property containing the web response', async () => {
             const result = await BaseRequest.patch(testDomain)
 
             expect(result.response).to.exist()
@@ -703,13 +703,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -741,13 +741,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -798,13 +798,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -837,13 +837,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -896,13 +896,13 @@ describe('Base Request', () => {
       })
 
       describe('the result it returns', () => {
-        it("has a 'succeeded' property marked as true", async () => {
+        it('has a "succeeded" property marked as true', async () => {
           const result = await BaseRequest.post(testDomain)
 
           expect(result.succeeded).to.be.true()
         })
 
-        it("has a 'response' property containing the web response", async () => {
+        it('has a "response" property containing the web response', async () => {
           const result = await BaseRequest.post(testDomain)
 
           expect(result.response).to.exist()
@@ -935,13 +935,13 @@ describe('Base Request', () => {
         })
 
         describe('the result it returns', () => {
-          it("has a 'succeeded' property marked as false", async () => {
+          it('has a "succeeded" property marked as false', async () => {
             const result = await BaseRequest.post(testDomain)
 
             expect(result.succeeded).to.be.false()
           })
 
-          it("has a 'response' property containing the web response", async () => {
+          it('has a "response" property containing the web response', async () => {
             const result = await BaseRequest.post(testDomain)
 
             expect(result.response).to.exist()
@@ -983,13 +983,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -1021,13 +1021,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -1078,13 +1078,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as false", async () => {
+            it('has a "succeeded" property marked as false', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.false()
             })
 
-            it("has a 'response' property containing the error", async () => {
+            it('has a "response" property containing the error', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
@@ -1117,13 +1117,13 @@ describe('Base Request', () => {
           })
 
           describe('the result it returns', () => {
-            it("has a 'succeeded' property marked as true", async () => {
+            it('has a "succeeded" property marked as true', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.succeeded).to.be.true()
             })
 
-            it("has a 'response' property containing the web response", async () => {
+            it('has a "response" property containing the web response', async () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()

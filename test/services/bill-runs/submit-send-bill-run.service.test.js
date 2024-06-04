@@ -58,7 +58,7 @@ describe('Submit Send Bill Run service', () => {
     let secondBill
     let billRun
 
-    describe("and its status is 'ready'", () => {
+    describe('and its status is "ready"', () => {
       beforeEach(async () => {
         billRun = await BillRunHelper.add({ externalId: '8212003e-059a-4cf2-94c2-da9dfae90a80', status: 'ready' })
       })
@@ -127,7 +127,7 @@ describe('Submit Send Bill Run service', () => {
           expect(logDataArg.billRunId).to.exist()
         })
 
-        describe("when the bill run's batch type is 'supplementary'", () => {
+        describe('when the bill run batch type is "supplementary"', () => {
           it('removes the SROC supplementary billing flag from those licences billed', async () => {
             await SubmitSendBillBunService.go(billRun.id)
 
@@ -137,7 +137,7 @@ describe('Submit Send Bill Run service', () => {
           })
         })
 
-        describe("when the bill run's batch type is not 'supplementary'", () => {
+        describe('when the bill run batch type is not "supplementary"', () => {
           let annualBillRun
 
           beforeEach(async () => {
@@ -181,7 +181,7 @@ describe('Submit Send Bill Run service', () => {
       })
     })
 
-    describe("but its status is not 'ready'", () => {
+    describe('but its status is not "ready"', () => {
       beforeEach(async () => {
         billRun = await BillRunHelper.add({ status: 'sent' })
       })

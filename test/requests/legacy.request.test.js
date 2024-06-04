@@ -47,7 +47,7 @@ describe('Legacy Request', () => {
         expect(requestArgs[1].responseType).to.equal('json')
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
         expect(result.succeeded).to.be.true()
@@ -94,7 +94,7 @@ describe('Legacy Request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
         expect(result.succeeded).to.be.false()
@@ -146,7 +146,7 @@ describe('Legacy Request', () => {
         expect(requestArgs[1].json).to.be.undefined()
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
         expect(result.succeeded).to.be.true()
@@ -194,7 +194,7 @@ describe('Legacy Request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
         expect(result.succeeded).to.be.false()
@@ -248,7 +248,7 @@ describe('Legacy Request', () => {
         expect(requestArgs[1].json).to.equal(requestBody)
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.succeeded).to.be.true()
@@ -296,7 +296,7 @@ describe('Legacy Request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
         expect(result.succeeded).to.be.false()

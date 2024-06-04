@@ -29,7 +29,7 @@ describe('Check Busy Bill Runs service', () => {
       await BillRunHelper.add({ status: 'processing' })
     })
 
-    it("returns 'both'", async () => {
+    it('returns "both"', async () => {
       const result = await CheckBusyBillRunsService.go()
 
       expect(result).to.equal('both')
@@ -41,7 +41,7 @@ describe('Check Busy Bill Runs service', () => {
       await BillRunHelper.add({ status: 'cancel' })
     })
 
-    it("returns 'cancelling'", async () => {
+    it('returns "cancelling"', async () => {
       const result = await CheckBusyBillRunsService.go()
 
       expect(result).to.equal('cancelling')
@@ -49,36 +49,36 @@ describe('Check Busy Bill Runs service', () => {
   })
 
   describe('when there are building bill runs', () => {
-    describe("because their status is 'processing'", () => {
+    describe('because their status is "processing"', () => {
       beforeEach(async () => {
         await BillRunHelper.add({ status: 'processing' })
       })
 
-      it("returns 'building'", async () => {
+      it('returns "building"', async () => {
         const result = await CheckBusyBillRunsService.go()
 
         expect(result).to.equal('building')
       })
     })
 
-    describe("because their status is 'queued'", () => {
+    describe('because their status is "queued"', () => {
       beforeEach(async () => {
         await BillRunHelper.add({ status: 'queued' })
       })
 
-      it("returns 'building'", async () => {
+      it('returns "building"', async () => {
         const result = await CheckBusyBillRunsService.go()
 
         expect(result).to.equal('building')
       })
     })
 
-    describe("because their status is 'sending'", () => {
+    describe('because their status is "sending"', () => {
       beforeEach(async () => {
         await BillRunHelper.add({ status: 'sending' })
       })
 
-      it("returns 'building'", async () => {
+      it('returns "building"', async () => {
         const result = await CheckBusyBillRunsService.go()
 
         expect(result).to.equal('building')
@@ -87,7 +87,7 @@ describe('Check Busy Bill Runs service', () => {
   })
 
   describe('when there are no building or cancelling bill runs', () => {
-    it("returns 'none'", async () => {
+    it('returns "none"', async () => {
       const result = await CheckBusyBillRunsService.go()
 
       expect(result).to.equal('none')

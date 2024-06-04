@@ -62,7 +62,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'aggregate'
       })
 
-      it("fails the validation with the message 'Enter a aggregate factor'", () => {
+      it('fails the validation with the message "Enter a aggregate factor"', () => {
         const result = AdjustmentFactorValidator.go(payload, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -79,7 +79,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'aggregate'
       })
 
-      it("fails the validation with the message 'The aggregate factor must be a number'", () => {
+      it('fails the validation with the message "The aggregate factor must be a number"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedAggregateFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -96,7 +96,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'aggregate'
       })
 
-      it("fails the validation with the message 'The aggregate factor must not have more than 15 decimal places'", () => {
+      it('fails the validation with the message "The aggregate factor must not have more than 15 decimal places"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedAggregateFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -115,7 +115,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'aggregate'
       })
 
-      it("fails the validation with the message 'The aggregate factor must be equal to or less than 1'", () => {
+      it('fails the validation with the message "The aggregate factor must be equal to or less than 1"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedAggregateFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -132,7 +132,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'aggregate'
       })
 
-      it("fails the validation with the message 'The aggregate factor must be greater than 0'", () => {
+      it('fails the validation with the message "The aggregate factor must be greater than 0"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedAggregateFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -149,7 +149,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'charge'
       })
 
-      it("fails the validation with the message 'Enter a charge factor'", () => {
+      it('fails the validation with the message "Enter a charge factor"', () => {
         const result = AdjustmentFactorValidator.go(payload, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -166,7 +166,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'charge'
       })
 
-      it("fails the validation with the message 'The charge factor must be a number'", () => {
+      it('fails the validation with the message "The charge factor must be a number"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedChargeFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -183,7 +183,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'charge'
       })
 
-      it("fails the validation with the message 'The charge factor must not have more than 15 decimal places'", () => {
+      it('fails the validation with the message "The charge factor must not have more than 15 decimal places"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedChargeFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -200,7 +200,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'charge'
       })
 
-      it("fails the validation with the message 'The charge factor must be equal to or less than 1'", () => {
+      it('fails the validation with the message "The charge factor must be equal to or less than 1"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedChargeFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()
@@ -217,7 +217,7 @@ describe('Adjustment Factor validator', () => {
         validationType = 'charge'
       })
 
-      it("fails the validation with the message 'The charge factor must be greater than 0'", () => {
+      it('fails the validation with the message "The charge factor must be greater than 0"', () => {
         const result = AdjustmentFactorValidator.go(payload.amendedChargeFactor, maxNumberOfDecimals, validationType)
 
         expect(result.error).to.exist()

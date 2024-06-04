@@ -45,7 +45,7 @@ describe('Remove Bill presenter', () => {
       })
     })
 
-    describe("the 'accountName' property", () => {
+    describe('the "accountName" property', () => {
       describe('when the billing account is not linked to an agent', () => {
         it('returns the name of the company linked to the billing account', () => {
           const result = RemoveBillPresenter.go(bill)
@@ -71,7 +71,7 @@ describe('Remove Bill presenter', () => {
       })
     })
 
-    describe("the 'licences' property", () => {
+    describe('the "licences" property', () => {
       describe('when there is more than one licence', () => {
         it('returns them as a comma separated list', () => {
           const result = RemoveBillPresenter.go(bill)
@@ -93,9 +93,9 @@ describe('Remove Bill presenter', () => {
       })
     })
 
-    describe("the 'licencesText' property", () => {
+    describe('the "licencesText" property', () => {
       describe('when there is more than one licence', () => {
-        it("returns 'Licences' (plural)", () => {
+        it('returns "Licences" (plural)', () => {
           const result = RemoveBillPresenter.go(bill)
 
           expect(result.licencesText).to.equal('Licences')
@@ -107,7 +107,7 @@ describe('Remove Bill presenter', () => {
           bill.billLicences.pop()
         })
 
-        it("returns 'Licence' (singular)", () => {
+        it('returns "Licence" (singular)', () => {
           const result = RemoveBillPresenter.go(bill)
 
           expect(result.licencesText).to.equal('Licence')
@@ -115,7 +115,7 @@ describe('Remove Bill presenter', () => {
       })
     })
 
-    describe("the 'pageTitle' property", () => {
+    describe('the "pageTitle" property', () => {
       it('returns the account number as part of the title', () => {
         const result = RemoveBillPresenter.go(bill)
 
@@ -123,9 +123,9 @@ describe('Remove Bill presenter', () => {
       })
     })
 
-    describe("the 'supplementaryMessage' property", () => {
+    describe('the "supplementaryMessage" property', () => {
       describe('when there is more than one licence', () => {
-        it("returns the message with 'licences' (plural)", () => {
+        it('returns the message with "licences" (plural)', () => {
           const result = RemoveBillPresenter.go(bill)
 
           expect(result.supplementaryMessage).to.equal('The licences will go into the next supplementary bill run.')
@@ -137,7 +137,7 @@ describe('Remove Bill presenter', () => {
           bill.billLicences.pop()
         })
 
-        it("returns the message with 'licence' (singular)", () => {
+        it('returns the message with "licence" (singular)', () => {
           const result = RemoveBillPresenter.go(bill)
 
           expect(result.supplementaryMessage).to.equal('The licence will go into the next supplementary bill run.')

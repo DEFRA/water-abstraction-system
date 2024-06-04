@@ -35,7 +35,7 @@ describe('Errored Bill Run presenter', () => {
       })
     })
 
-    describe("the 'errorMessage' property", () => {
+    describe('the "errorMessage" property', () => {
       describe('when the bill run has an error code', () => {
         beforeEach(() => {
           billRun.errorCode = 80

@@ -52,7 +52,7 @@ describe('Reissue Bills service', () => {
         Sinon.stub(FetchBillsToBeReissuedService, 'go').resolves([])
       })
 
-      it('returns `false`', async () => {
+      it('returns "false"', async () => {
         const result = await ReissueBillsService.go(reissueBillRun)
 
         expect(result).to.be.false()
@@ -80,7 +80,7 @@ describe('Reissue Bills service', () => {
           .resolves(_reissueBillServiceResponse('09aab25a-4fd2-42d5-8c7a-6a3777b01bba'))
       })
 
-      it('returns `true`', async () => {
+      it('returns "true"', async () => {
         const result = await ReissueBillsService.go(reissueBillRun)
 
         expect(result).to.be.true()

@@ -57,8 +57,8 @@ describe('Licence Contacts presenter', () => {
       })
     })
 
-    describe("the 'customerId' property", () => {
-      describe("when one of the licence contacts has the communication type of 'Licence Holder'", () => {
+    describe('the "customerId" property', () => {
+      describe('when one of the licence contacts has the communication type of "Licence Holder"', () => {
         it("returns that licence contact's company Id", () => {
           const result = LicenceContactsPresenter.go(licenceContacts)
 
@@ -66,7 +66,7 @@ describe('Licence Contacts presenter', () => {
         })
       })
 
-      describe("when none of the licence contacts has the communication type of 'Licence Holder'", () => {
+      describe('when none of the licence contacts has the communication type of "Licence Holder"', () => {
         beforeEach(() => {
           licenceContacts[0].communicationType = 'Returns'
         })
@@ -79,7 +79,7 @@ describe('Licence Contacts presenter', () => {
       })
     })
 
-    describe("the 'licenceContacts.name' property", () => {
+    describe('the "licenceContacts.name" property', () => {
       describe('when the licence contact does not have a contact', () => {
         it("returns the licence contact's company name", () => {
           const result = LicenceContactsPresenter.go(licenceContacts)

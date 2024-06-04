@@ -29,7 +29,7 @@ describe('RequestNotifierLib class', () => {
 
   describe('#omg()', () => {
     describe('when just a message is logged', () => {
-      it("logs a correctly formatted 'info' level entry", () => {
+      it('logs a correctly formatted "info" level entry', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omg(message)
 
@@ -38,7 +38,7 @@ describe('RequestNotifierLib class', () => {
     })
 
     describe('when a message and some data is to be logged', () => {
-      it("logs a correctly formatted 'info' level entry", () => {
+      it('logs a correctly formatted "info" level entry', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omg(message, { name: 'foo' })
 
@@ -51,7 +51,7 @@ describe('RequestNotifierLib class', () => {
     const testError = new Error('hell no test')
 
     describe('when just a message is logged', () => {
-      it("logs a correctly formatted 'error' level entry", () => {
+      it('logs a correctly formatted "error" level entry', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message)
 
@@ -63,7 +63,7 @@ describe('RequestNotifierLib class', () => {
         expect(logPacketArgs[1]).to.equal(message)
       })
 
-      it("sends the expected notification to 'Errbit'", () => {
+      it('sends the expected notification to "Errbit"', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message)
 
@@ -76,7 +76,7 @@ describe('RequestNotifierLib class', () => {
     })
 
     describe('when a message and some data is to be logged', () => {
-      it("logs a correctly formatted 'error' level entry", () => {
+      it('logs a correctly formatted "error" level entry', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, { name: 'foo' })
 
@@ -89,7 +89,7 @@ describe('RequestNotifierLib class', () => {
         expect(logPacketArgs[1]).to.equal(message)
       })
 
-      it("sends the expected notification to 'Errbit'", () => {
+      it('sends the expected notification to "Errbit"', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, { name: 'foo' })
 
@@ -102,7 +102,7 @@ describe('RequestNotifierLib class', () => {
     })
 
     describe('when a message, some data and an error is to be logged', () => {
-      it("logs a correctly formatted 'error' level entry", () => {
+      it('logs a correctly formatted "error" level entry', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, { name: 'foo' }, testError)
 
@@ -115,7 +115,7 @@ describe('RequestNotifierLib class', () => {
         expect(logPacketArgs[1]).to.equal(message)
       })
 
-      it("sends the expected notification to 'Errbit'", () => {
+      it('sends the expected notification to "Errbit"', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, { name: 'foo' }, testError)
 
@@ -128,7 +128,7 @@ describe('RequestNotifierLib class', () => {
     })
 
     describe('when a message, no data but an error is to be logged', () => {
-      it("logs a correctly formatted 'error' level entry", () => {
+      it('logs a correctly formatted "error" level entry', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, null, testError)
 
@@ -140,7 +140,7 @@ describe('RequestNotifierLib class', () => {
         expect(logPacketArgs[1]).to.equal(message)
       })
 
-      it("sends the expected notification to 'Errbit'", () => {
+      it('sends the expected notification to "Errbit"', () => {
         const testNotifier = new RequestNotifierLib(id, pinoFake, airbrakeFake)
         testNotifier.omfg(message, null, testError)
 

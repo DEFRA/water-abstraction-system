@@ -27,6 +27,7 @@ describe('View Licence presenter', () => {
         activeNavBar: 'search',
         documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
         ends: null,
+        includeInPresrocBilling: 'no',
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceName: 'Unregistered licence',
         licenceRef: '01/123',
@@ -39,7 +40,7 @@ describe('View Licence presenter', () => {
     })
   })
 
-  describe('the \'licenceName\' property', () => {
+  describe('the "licenceName" property', () => {
     describe('when there is no licenceName property', () => {
       it('returns Unregistered licence', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -60,7 +61,7 @@ describe('View Licence presenter', () => {
       })
     })
   })
-  describe('the \'registeredTo\' property', () => {
+  describe('the "registeredTo" property', () => {
     describe('when there is no registeredTo property', () => {
       it('returns null', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -81,7 +82,7 @@ describe('View Licence presenter', () => {
       })
     })
   })
-  describe('the \'warning\' property', () => {
+  describe('the "warning" property', () => {
     describe('when the licence does not have an end date (expired, lapsed or revoked)', () => {
       it('returns NULL', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -107,7 +108,7 @@ describe('View Licence presenter', () => {
         licence.ends = { date: new Date('2019-04-01'), reason: 'expired' }
       })
 
-      it('returns \'This licence expired on 1 April 2019\'', () => {
+      it('returns "This licence expired on 1 April 2019"', () => {
         const result = ViewLicencePresenter.go(licence)
 
         expect(result.warning).to.equal('This licence expired on 1 April 2019')
@@ -119,7 +120,7 @@ describe('View Licence presenter', () => {
         licence.ends = { date: new Date('2019-04-01'), reason: 'lapsed' }
       })
 
-      it('returns \'This licence lapsed on 1 April 2019\'', () => {
+      it('returns "This licence lapsed on 1 April 2019"', () => {
         const result = ViewLicencePresenter.go(licence)
 
         expect(result.warning).to.equal('This licence lapsed on 1 April 2019')
@@ -131,14 +132,14 @@ describe('View Licence presenter', () => {
         licence.ends = { date: new Date('2019-04-01'), reason: 'revoked' }
       })
 
-      it('returns \'This licence was revoked on 1 April 2019\'', () => {
+      it('returns "This licence was revoked on 1 April 2019"', () => {
         const result = ViewLicencePresenter.go(licence)
 
         expect(result.warning).to.equal('This licence was revoked on 1 April 2019')
       })
     })
   })
-  describe('the \'notification\' property', () => {
+  describe('the "notification" property', () => {
     describe('when the licence will not be in the next supplementary bill run', () => {
       it('returns NULL', () => {
         const result = ViewLicencePresenter.go(licence)
@@ -184,7 +185,7 @@ describe('View Licence presenter', () => {
       })
     })
   })
-  describe('the \'roles\' property', () => {
+  describe('the "roles" property', () => {
     describe('when the authenticated user has roles', () => {
       beforeEach(() => {
         auth = {
@@ -224,6 +225,7 @@ function _licence () {
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     ends: null,
     expiredDate: null,
+    includeInPresrocBilling: 'no',
     licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' },
     licenceGaugingStations: [{
       gaugingStationId: 'ac075651-4781-4e24-a684-b943b98607ca',

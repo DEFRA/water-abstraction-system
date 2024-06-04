@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
+const { formatAbstractionDate, formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 function go (session) {
@@ -26,6 +26,14 @@ function go (session) {
   }
 }
 
+function _abstractionPeriod (abstractionPeriod) {
+  const { 'start-abstraction-period-day': startDay, 'start-abstraction-period-month': startMonth, 'end-abstraction-period-day': endDay, 'end-abstraction-period-month': endMonth } = abstractionPeriod
+  const startDate = formatAbstractionDate(startDay, startMonth)
+  const endDate = formatAbstractionDate(endDay, endMonth)
+
+  return `From ${startDate} to ${endDate}`
+}
+
 function _reasonLink (sessionId, journey) {
   if (journey === 'returns-required') {
     return `/system/return-requirements/${sessionId}/reason`
@@ -39,17 +47,27 @@ function _requirements (session) {
 
   const completedRequirements = []
 
-  for (const requirement of requirements) {
-    const { siteDescription, agreementsExceptions } = requirement
-
+  for (const [index, requirement] of requirements.entries()) {
+    const { agreementsExceptions } = requirement
     // NOTE: We determine a requirement is complete because agreement exceptions is populated and it is the last step in
     // the journey
     if (agreementsExceptions) {
-      completedRequirements.push({ siteDescription })
+      completedRequirements.push(_mapRequirement(requirement, index))
     }
   }
 
   return completedRequirements
+}
+
+function _mapRequirement (requirement, index) {
+  return {
+    abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
+    frequencyCollected: requirement.frequencyCollected,
+    frequencyReported: requirement.frequencyReported,
+    index,
+    purposes: 'purpose',
+    siteDescription: requirement.siteDescription
+  }
 }
 
 function _startDate (session) {

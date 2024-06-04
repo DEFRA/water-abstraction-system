@@ -35,7 +35,7 @@ describe('BaseNotifierLib class', () => {
     })
 
     describe('when just a message is logged', () => {
-      it("logs a correctly formatted 'info' level entry", () => {
+      it('logs a correctly formatted "info" level entry', () => {
         const testNotifier = new BaseNotifierLib()
         testNotifier.omg(message)
 
@@ -44,7 +44,7 @@ describe('BaseNotifierLib class', () => {
     })
 
     describe('when a message and some data is to be logged', () => {
-      it("logs a correctly formatted 'info' level entry", () => {
+      it('logs a correctly formatted "info" level entry', () => {
         const testNotifier = new BaseNotifierLib()
         testNotifier.omg(message, { id })
 
@@ -52,14 +52,14 @@ describe('BaseNotifierLib class', () => {
       })
     })
 
-    it("does not send a notification to 'Errbit'", () => {
+    it('does not send a notification to "Errbit"', () => {
       const testNotifier = new BaseNotifierLib()
       testNotifier.omg(message)
 
       expect(airbrakeFake.notify.notCalled).to.be.true()
     })
 
-    it("does not log an 'error' message", () => {
+    it('does not log an "error" message', () => {
       const testNotifier = new BaseNotifierLib()
       testNotifier.omg(message)
 
@@ -77,7 +77,7 @@ describe('BaseNotifierLib class', () => {
       })
 
       describe('and just a message is logged', () => {
-        it("logs a correctly formatted 'error' level entry", () => {
+        it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message)
 
@@ -88,7 +88,7 @@ describe('BaseNotifierLib class', () => {
           expect(logPacketArgs[1]).to.equal(message)
         })
 
-        it("sends the expected notification to 'Errbit'", () => {
+        it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message)
 
@@ -101,7 +101,7 @@ describe('BaseNotifierLib class', () => {
       })
 
       describe('and a message and some data is to be logged', () => {
-        it("logs a correctly formatted 'error' level entry", () => {
+        it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message, { id })
 
@@ -113,7 +113,7 @@ describe('BaseNotifierLib class', () => {
           expect(logPacketArgs[1]).to.equal(message)
         })
 
-        it("sends the expected notification to 'Errbit'", () => {
+        it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message, { id })
 
@@ -126,7 +126,7 @@ describe('BaseNotifierLib class', () => {
       })
 
       describe('and a message, some data and an error is to be logged', () => {
-        it("logs a correctly formatted 'error' level entry", () => {
+        it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message, { id }, testError)
 
@@ -138,7 +138,7 @@ describe('BaseNotifierLib class', () => {
           expect(logPacketArgs[1]).to.equal(message)
         })
 
-        it("sends the expected notification to 'Errbit'", () => {
+        it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message, { id }, testError)
 
@@ -151,7 +151,7 @@ describe('BaseNotifierLib class', () => {
       })
 
       describe('and a message, no data but an error is to be logged', () => {
-        it("logs a correctly formatted 'error' level entry", () => {
+        it('logs a correctly formatted "error" level entry', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message, null, testError)
 
@@ -162,7 +162,7 @@ describe('BaseNotifierLib class', () => {
           expect(logPacketArgs[1]).to.equal(message)
         })
 
-        it("sends the expected notification to 'Errbit'", () => {
+        it('sends the expected notification to "Errbit"', () => {
           const testNotifier = new BaseNotifierLib()
           testNotifier.omfg(message, null, testError)
 
@@ -188,7 +188,7 @@ describe('BaseNotifierLib class', () => {
         Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
       })
 
-      it("logs 2 'error' messages, the second containing details of the Airbrake failure", async () => {
+      it('logs 2 "error" messages, the second containing details of the Airbrake failure', async () => {
         const testNotifier = new BaseNotifierLib()
         testNotifier.omfg(message)
 
@@ -223,7 +223,7 @@ describe('BaseNotifierLib class', () => {
         Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
       })
 
-      it("logs 2 'error' messages, the second containing details of the Airbrake errors", async () => {
+      it('logs 2 "error" messages, the second containing details of the Airbrake errors', async () => {
         const testNotifier = new BaseNotifierLib()
         testNotifier.omfg(message)
 

@@ -69,15 +69,15 @@ describe('Return Requirements - Remove presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    it("returns a link back to the 'setup' page", () => {
+  describe('the "backLink" property', () => {
+    it('returns a link back to the "setup" page', () => {
       const result = RemovePresenter.go(session, requirementIndex)
 
       expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
     })
   })
 
-  describe("the 'returnRequirement' property", () => {
+  describe('the "returnRequirement" property', () => {
     describe('when the user has completed the return requirements journey', () => {
       beforeEach(() => {
         session.requirements[0] = {

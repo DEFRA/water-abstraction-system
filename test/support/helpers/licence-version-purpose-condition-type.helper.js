@@ -5,7 +5,7 @@
  */
 
 const { timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const LicenceVersionPurposeConditionTypesModel = require('../../../app/models/licence-version-purpose-condition-type.model.js')
+const LicenceVersionPurposeConditionTypeModel = require('../../../app/models/licence-version-purpose-condition-type.model.js')
 
 /**
  * Add a new licence version purpose
@@ -22,12 +22,12 @@ const LicenceVersionPurposeConditionTypesModel = require('../../../app/models/li
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:LicenceVersionPurposeConditionTypesModel>} The instance of the newly created record
+ * @returns {Promise<module:LicenceVersionPurposeConditionTypeModel>} The instance of the newly created record
  */
 async function add (data = {}) {
   const insertData = defaults(data)
 
-  return LicenceVersionPurposeConditionTypesModel.query()
+  return LicenceVersionPurposeConditionTypeModel.query()
     .insert({ ...insertData })
     .returning('*')
 }

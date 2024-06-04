@@ -37,7 +37,7 @@ describe('Session model', () => {
 
   // NOTE: this is an Objection.js hook and not intended to be called directly
   describe('$afterFind', () => {
-    describe("when 'data' is empty", () => {
+    describe('when "data" is empty', () => {
       beforeEach(async () => {
         testRecord = await SessionHelper.add()
       })
@@ -49,7 +49,7 @@ describe('Session model', () => {
       })
     })
 
-    describe("when 'data' is populated", () => {
+    describe('when "data" is populated', () => {
       beforeEach(async () => {
         testRecord = await SessionHelper.add({
           data: {
@@ -86,7 +86,7 @@ describe('Session model', () => {
         recordToUpdate.reason = 'minor-change'
       })
 
-      it("is updated in the 'data' field when 'update()' is called", async () => {
+      it('is updated in the "data" field when "update()" is called', async () => {
         const result = await recordToUpdate.$update()
 
         // NOTE: We do not expect it to be used. But Objection.js patch() returns a count of records effected so we also
@@ -108,7 +108,7 @@ describe('Session model', () => {
         recordToUpdate.reason = 'new-licence'
       })
 
-      it("is set in the 'data' field when 'update()' is called", async () => {
+      it('is set in the "data" field when "update()" is called', async () => {
         const result = await recordToUpdate.$update()
 
         // NOTE: We do not expect it to be used. But Objection.js patch() returns a count of records effected so we also
@@ -130,7 +130,7 @@ describe('Session model', () => {
         delete recordToUpdate.reason
       })
 
-      it("removed from the 'data' field when 'update()' is called", async () => {
+      it('removed from the "data" field when "update()" is called', async () => {
         const result = await recordToUpdate.$update()
 
         // NOTE: We do not expect it to be used. But Objection.js patch() returns a count of records effected so we also

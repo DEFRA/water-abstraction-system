@@ -48,13 +48,13 @@ describe('Return Requirements - Start Date presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    describe("when the user has come from the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
       beforeEach(() => {
         session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check' page", () => {
+      it('returns a link back to the "check" page', () => {
         const result = StartDatePresenter.go(session)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
@@ -70,7 +70,7 @@ describe('Return Requirements - Start Date presenter', () => {
     })
   })
 
-  describe("the 'licenceVersionStartDate' property", () => {
+  describe('the "licenceVersionStartDate" property', () => {
     it('returns the licence start date in long date format', () => {
       const result = StartDatePresenter.go(session)
 
@@ -78,13 +78,13 @@ describe('Return Requirements - Start Date presenter', () => {
     })
   })
 
-  describe("the 'startDate' properties", () => {
+  describe('the "startDate" properties', () => {
     describe('when the user has previously selected the licence start date as the start date', () => {
       beforeEach(() => {
         session.startDateOptions = 'licenceStartDate'
       })
 
-      it("returns the 'startDateOption' property populated to re-select the option", () => {
+      it('returns the "startDateOption" property populated to re-select the option', () => {
         const result = StartDatePresenter.go(session)
 
         const { anotherStartDateDay, anotherStartDateMonth, anotherStartDateYear, startDateOption } = result

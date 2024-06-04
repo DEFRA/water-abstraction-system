@@ -157,7 +157,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    it("returns both 'current' and 'superseded' SROC charge version that are applicable", async () => {
+    it('returns both "current" and "superseded" SROC charge version that are applicable', async () => {
       const result = await FetchChargeVersionsService.go(regionId, billingPeriod)
 
       expect(result.chargeVersions).to.have.length(4)
@@ -262,7 +262,7 @@ describe('Fetch Charge Versions service', () => {
   })
 
   describe('when there are no charge version that should be considered for the next supplementary billing', () => {
-    describe("because none of them are linked to a licence flagged 'includeInSrocSupplementaryBilling'", () => {
+    describe('because none of them are linked to a licence flagged "includeInSrocSupplementaryBilling"', () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -283,7 +283,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe("because all the applicable charge versions have a 'draft' status", () => {
+    describe('because all the applicable charge versions have a "draft" status', () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -308,7 +308,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe("because all of them are for the 'alcs' (presroc) scheme", () => {
+    describe('because all of them are for the "alcs" (presroc) scheme', () => {
       beforeEach(async () => {
         billingPeriod = {
           startDate: new Date('2022-04-01'),
@@ -333,7 +333,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe('because none of them have a `billingAccountId`', () => {
+    describe('because none of them have a "billingAccountId"', () => {
       let licenceId
       beforeEach(async () => {
         billingPeriod = {

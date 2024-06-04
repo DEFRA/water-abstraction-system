@@ -39,7 +39,7 @@ describe('Amend Adjustment Factor presenter', () => {
       })
     })
 
-    describe("the 'otherAdjustments' property", () => {
+    describe('the "otherAdjustments" property', () => {
       describe('when the charge reference has a abatement agreement', () => {
         beforeEach(() => {
           reviewChargeReference.abatementAgreement = 0.3

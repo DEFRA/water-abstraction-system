@@ -34,7 +34,7 @@ describe('Legacy Delete Bill request', () => {
       })
     })
 
-    it('returns a `true` success status', async () => {
+    it('returns a "true" success status', async () => {
       const result = await DeleteBillRequest.send(billRunId, billId, user)
 
       expect(result.succeeded).to.be.true()
@@ -65,13 +65,13 @@ describe('Legacy Delete Bill request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await DeleteBillRequest.send(billRunId, billId, user)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await DeleteBillRequest.send(billRunId, billId, user)
 
         expect(result.response.body.statusCode).to.equal(401)
@@ -88,13 +88,13 @@ describe('Legacy Delete Bill request', () => {
         })
       })
 
-      it('returns a `false` success status', async () => {
+      it('returns a "false" success status', async () => {
         const result = await DeleteBillRequest.send(billRunId, billId, user)
 
         expect(result.succeeded).to.be.false()
       })
 
-      it('returns the error in the `response`', async () => {
+      it('returns the error in the "response"', async () => {
         const result = await DeleteBillRequest.send(billRunId, billId, user)
 
         expect(result.response.statusCode).not.to.exist()

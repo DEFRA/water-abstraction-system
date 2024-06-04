@@ -21,7 +21,7 @@ describe('No Returns Required validator', () => {
   })
 
   describe('when valid data is provided', () => {
-    describe("because no 'reason' is given", () => {
+    describe('because no "reason" is given', () => {
       it('fails validation', () => {
         const result = NoReturnsRequiredValidator.go({ reason: '' })
 
@@ -31,7 +31,7 @@ describe('No Returns Required validator', () => {
       })
     })
 
-    describe("because an unknown 'reason' is given", () => {
+    describe('because an unknown "reason" is given', () => {
       it('fails validation', () => {
         const result = NoReturnsRequiredValidator.go({ reason: 'no-water' })
 

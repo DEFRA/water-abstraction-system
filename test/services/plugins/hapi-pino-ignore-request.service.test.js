@@ -11,7 +11,7 @@ const { expect } = Code
 const HapiPinoIgnoreRequestService = require('../../../app/services/plugins/hapi-pino-ignore-request.service.js')
 
 describe('Hapi Pino Ignore Request service', () => {
-  describe("when the request is for the root '/'", () => {
+  describe('when the request is for the root "/"', () => {
     it('returns true', () => {
       const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/' })
 
@@ -19,7 +19,7 @@ describe('Hapi Pino Ignore Request service', () => {
     })
   })
 
-  describe("when the request is for '/status'", () => {
+  describe('when the request is for "/status"', () => {
     it('returns true', () => {
       const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/status' })
 
@@ -45,7 +45,7 @@ describe('Hapi Pino Ignore Request service', () => {
     })
   })
 
-  describe("when the request is not for '/status' or an asset", () => {
+  describe('when the request is not for "/status" or an asset', () => {
     it('returns false', () => {
       const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/bill-run/stuff' })
 

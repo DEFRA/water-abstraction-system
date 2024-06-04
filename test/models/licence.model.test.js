@@ -389,7 +389,7 @@ describe('Licence model', () => {
         revokedDate = new Date('2023-03-07')
       })
 
-      it("returns 'revoked' as the reason and '2023-03-07' as the date", () => {
+      it('returns "revoked" as the reason and "2023-03-07" as the date', () => {
         const result = LicenceModel.fromJson({ revokedDate }).$ends()
 
         expect(result).to.equal({ date: new Date('2023-03-07'), priority: 1, reason: 'revoked' })
@@ -401,7 +401,7 @@ describe('Licence model', () => {
         lapsedDate = new Date('2023-03-08')
       })
 
-      it("returns 'lapsed' as the reason and '2023-03-08' as the date", () => {
+      it('returns "lapsed" as the reason and "2023-03-08" as the date', () => {
         const result = LicenceModel.fromJson({ lapsedDate }).$ends()
 
         expect(result).to.equal({ date: new Date('2023-03-08'), priority: 2, reason: 'lapsed' })
@@ -413,7 +413,7 @@ describe('Licence model', () => {
         expiredDate = new Date('2023-03-09')
       })
 
-      it("returns 'lapsed' as the reason and '2023-03-09' as the date", () => {
+      it('returns "lapsed" as the reason and "2023-03-09" as the date', () => {
         const result = LicenceModel.fromJson({ expiredDate }).$ends()
 
         expect(result).to.equal({ date: new Date('2023-03-09'), priority: 3, reason: 'expired' })
@@ -441,24 +441,24 @@ describe('Licence model', () => {
           revokedDate = new Date('2023-03-09')
         })
 
-        describe("and they are 'lapsed' and 'expired'", () => {
-          it("returns 'lapsed' as the end date", () => {
+        describe('and they are "lapsed" and "expired"', () => {
+          it('returns "lapsed" as the end date', () => {
             const result = LicenceModel.fromJson({ expiredDate, lapsedDate }).$ends()
 
             expect(result).to.equal({ date: new Date('2023-03-09'), priority: 2, reason: 'lapsed' })
           })
         })
 
-        describe("and they are 'lapsed' and 'revoked'", () => {
-          it("returns 'revoked' as the end date", () => {
+        describe('and they are "lapsed" and "revoked"', () => {
+          it('returns "revoked" as the end date', () => {
             const result = LicenceModel.fromJson({ lapsedDate, revokedDate }).$ends()
 
             expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
           })
         })
 
-        describe("and they are 'expired' and 'revoked'", () => {
-          it("returns 'revoked' as the end date", () => {
+        describe('and they are "expired" and "revoked"', () => {
+          it('returns "revoked" as the end date', () => {
             const result = LicenceModel.fromJson({ expiredDate, revokedDate }).$ends()
 
             expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
@@ -483,42 +483,42 @@ describe('Licence model', () => {
       })
 
       describe('and two have the same earliest date', () => {
-        describe("and they are 'lapsed' and 'expired'", () => {
+        describe('and they are "lapsed" and "expired"', () => {
           beforeEach(() => {
             expiredDate = new Date('2023-03-09')
             lapsedDate = new Date('2023-03-09')
             revokedDate = new Date('2023-03-10')
           })
 
-          it("returns 'lapsed' as the end date", () => {
+          it('returns "lapsed" as the end date', () => {
             const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
 
             expect(result).to.equal({ date: new Date('2023-03-09'), priority: 2, reason: 'lapsed' })
           })
         })
 
-        describe("and they are 'lapsed' and 'revoked'", () => {
+        describe('and they are "lapsed" and "revoked"', () => {
           beforeEach(() => {
             expiredDate = new Date('2023-03-10')
             lapsedDate = new Date('2023-03-09')
             revokedDate = new Date('2023-03-09')
           })
 
-          it("returns 'revoked' as the end date", () => {
+          it('returns "revoked" as the end date', () => {
             const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
 
             expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
           })
         })
 
-        describe("and they are 'expired' and 'revoked'", () => {
+        describe('and they are "expired" and "revoked"', () => {
           beforeEach(() => {
             expiredDate = new Date('2023-03-09')
             lapsedDate = new Date('2023-03-10')
             revokedDate = new Date('2023-03-09')
           })
 
-          it("returns 'revoked' as the end date", () => {
+          it('returns "revoked" as the end date', () => {
             const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
 
             expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
@@ -533,7 +533,7 @@ describe('Licence model', () => {
           revokedDate = new Date('2023-03-09')
         })
 
-        it("returns 'revoked' as the end date", () => {
+        it('returns "revoked" as the end date', () => {
           const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
 
           expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })

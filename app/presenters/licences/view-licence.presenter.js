@@ -27,6 +27,10 @@ function go (licence, auth) {
   } = licence
 
   return {
+    activeNavBar: 'search',
+    documentId: licenceDocumentHeader.id,
+    ends,
+    includeInPresrocBilling,
     licenceId: id,
     licenceName,
     licenceRef,
@@ -34,10 +38,7 @@ function go (licence, auth) {
     pageTitle: `Licence ${licenceRef}`,
     registeredTo,
     roles: _authRoles(auth),
-    warning: _generateWarningMessage(ends),
-    activeNavBar: 'search',
-    documentId: licenceDocumentHeader.id,
-    ends
+    warning: _generateWarningMessage(ends)
   }
 }
 

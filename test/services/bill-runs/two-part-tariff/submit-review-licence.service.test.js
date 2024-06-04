@@ -34,14 +34,14 @@ describe('Submit Review Licence Service', () => {
   })
 
   describe('when called by the status button', () => {
-    describe("to set the review licence status to 'review'", () => {
+    describe('to set the review licence status to "review"', () => {
       beforeEach(async () => {
         payload = { 'licence-status': 'review' }
 
         reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, status: 'ready' })
       })
 
-      it("updates the review licence record status to 'review'", async () => {
+      it('updates the review licence record status to "review"', async () => {
         await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
         const refreshedRecord = await reviewLicence.$query()
@@ -49,7 +49,7 @@ describe('Submit Review Licence Service', () => {
         expect(refreshedRecord.status).to.equal('review')
       })
 
-      it("sets the banner message to 'Licence changed to review.'", async () => {
+      it('sets the banner message to "Licence changed to review."', async () => {
         await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -59,14 +59,14 @@ describe('Submit Review Licence Service', () => {
       })
     })
 
-    describe("to set the review licence status to 'ready'", () => {
+    describe('to set the review licence status to "ready"', () => {
       beforeEach(async () => {
         payload = { 'licence-status': 'ready' }
 
         reviewLicence = await ReviewLicenceHelper.add({ billRunId, licenceId, status: 'review' })
       })
 
-      it("updates the review licence record status to 'ready'", async () => {
+      it('updates the review licence record status to "ready"', async () => {
         await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
         const refreshedRecord = await reviewLicence.$query()
@@ -74,7 +74,7 @@ describe('Submit Review Licence Service', () => {
         expect(refreshedRecord.status).to.equal('ready')
       })
 
-      it("sets the banner message to 'Licence changed to ready.'", async () => {
+      it('sets the banner message to "Licence changed to ready."', async () => {
         await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -101,7 +101,7 @@ describe('Submit Review Licence Service', () => {
         expect(refreshedRecord.progress).to.be.true()
       })
 
-      it("sets the banner message to 'This licence has been marked.'", async () => {
+      it('sets the banner message to "This licence has been marked."', async () => {
         await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -126,7 +126,7 @@ describe('Submit Review Licence Service', () => {
         expect(refreshedRecord.progress).to.be.false()
       })
 
-      it("sets the banner message to 'The progress mark for this licence has been removed.'", async () => {
+      it('sets the banner message to "The progress mark for this licence has been removed."', async () => {
         await SubmitReviewLicenceService.go(billRunId, licenceId, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]

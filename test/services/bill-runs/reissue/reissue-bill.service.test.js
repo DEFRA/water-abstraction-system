@@ -228,7 +228,7 @@ describe('Reissue Bill service', () => {
       })
     })
 
-    describe("and the Charging Module's bill run status is `pending`", () => {
+    describe('and the Charging Modules bill run status is "pending"', () => {
       let billRunStatusStub
 
       beforeEach(() => {
@@ -244,7 +244,7 @@ describe('Reissue Bill service', () => {
           })
       })
 
-      it("retries until it's no longer `pending`", async () => {
+      it('retries until it is no longer "pending"', async () => {
         await ReissueBillService.go(sourceBill, reissueBillRun)
 
         expect(billRunStatusStub.callCount).to.equal(2)
