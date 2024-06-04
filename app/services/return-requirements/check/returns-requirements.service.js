@@ -24,7 +24,7 @@ async function go (session) {
   return ReturnRequirementsPresenter.go(requirements, purposes, journey)
 }
 
-async function _fetchPurposes (purposes) {
+async function _fetchPurposes (purposeIds) {
   return PurposeModel.query()
     .select([
       'purposes.id',
