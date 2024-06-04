@@ -24,13 +24,13 @@ async function go (session) {
   return ReturnRequirementsPresenter.go(requirements, purposes, journey)
 }
 
-async function _fetchPurposes (purposeIds) {
+async function _fetchPurposes (purposes) {
   return PurposeModel.query()
     .select([
       'purposes.id',
       'purposes.description'
     ])
-    .findByIds(purposeIds)
+    .findByIds(purposes)
 }
 
 function _purposeIds (requirements) {

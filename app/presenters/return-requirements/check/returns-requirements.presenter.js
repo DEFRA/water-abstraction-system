@@ -7,10 +7,10 @@ const { formatAbstractionDate } = require('../../base.presenter.js')
  * @module ReturnRequirementsPresenter
  */
 
-function go (requirements, purposeIds, journey) {
+function go (requirements, purposes, journey) {
   return {
     returnsRequired: journey === 'returns-required',
-    requirements: _requirements(requirements, purposeIds)
+    requirements: _requirements(requirements, purposes)
   }
 }
 
@@ -22,7 +22,7 @@ function _abstractionPeriod (abstractionPeriod) {
   return `From ${startDate} to ${endDate}`
 }
 
-function _requirements (requirements, purposeIds) {
+function _requirements (requirements, purposes) {
   const completedRequirements = []
 
   for (const [index, requirement] of requirements.entries()) {
@@ -30,26 +30,26 @@ function _requirements (requirements, purposeIds) {
     // NOTE: We determine a requirement is complete because agreement exceptions is populated and it is the last step in
     // the journey
     if (agreementsExceptions) {
-      completedRequirements.push(_mapRequirement(requirement, index, purposeIds))
+      completedRequirements.push(_mapRequirement(requirement, index, purposes))
     }
   }
 
   return completedRequirements
 }
 
-function _mapPurposes (purposes, purposeIds) {
-  return purposes.map((purpose) => {
-    return purposeIds.find((pid) => { return pid.id === purpose }).description
+function _mapPurposes (requirememtPurposes, purposes) {
+  return requirememtPurposes.map((purpose) => {
+    return purposes.find((pid) => { return pid.id === purpose }).description
   })
 }
 
-function _mapRequirement (requirement, index, purposeIds) {
+function _mapRequirement (requirement, index, purposes) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     frequencyCollected: requirement.frequencyCollected,
     frequencyReported: requirement.frequencyReported,
     index,
-    purposes: _mapPurposes(requirement.purposes, purposeIds),
+    purposes: _mapPurposes(requirement.purposes, purposes),
     siteDescription: requirement.siteDescription
   }
 }
