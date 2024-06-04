@@ -42,13 +42,13 @@
 
   {# Licence nav bars #}
   <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
-    <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#summary">
+    <li class="govuk-summary-list__actions-list-item" data-test="summary-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#summary">
         Summary
       </a></li>
-    <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#returns">
+    <li class="govuk-summary-list__actions-list-item" data-test="returns-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#returns">
         Returns
       </a></li>
-      <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#charge">
+      <li class="govuk-summary-list__actions-list-item" data-test="charge-information-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#charge">
         Charge information
       </a></li>
   </ul>
@@ -115,7 +115,7 @@
         {% for chargeVersion in chargeData %}
           {% set chargeDateIndex = loop.index0 %}
             <li>
-              <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}">{{chargeVersion.chargePeriodDate}}</a>
+              <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}" data-test="charge-period-{{ chargeDateIndex }}">{{chargeVersion.chargePeriodDate}}</a>
             </li>
         {% endfor %}
         </ul>
@@ -430,8 +430,7 @@
                             items: [
                             {
                               href: licence.licenceId + '/match-details/' + chargeElement.reviewChargeElementId,
-                              text: 'View match details',
-                              visuallyHiddenText: ''
+                              html: '<div data-test="charge-element-match-details-' + chargeElementIndex + '">View match details</div>'
                             }
                           ]}
                         },
@@ -440,8 +439,7 @@
                             text: 'Return volume'
                           },
                           value: {
-                            html: returnVolumes,
-                            attributes: { 'data-test': 'charge-element-return-volumes' + chargeElementIndex }
+                            html: '<div data-test="charge-element-return volumes-' + chargeElementIndex + '">' + returnVolumes + '</div>'
                           }
                         }]
                       %}
