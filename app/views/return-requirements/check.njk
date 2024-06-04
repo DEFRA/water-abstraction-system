@@ -37,7 +37,7 @@
             text: "Start date"
           },
           value: {
-            text: startDate
+            html: '<span data-test="meta-data-start-date">' + startDate + '</span>'
           },
           actions: {
             items: [
@@ -55,7 +55,7 @@
             text: "Reason"
           },
           value: {
-            text: reason
+            html: '<span data-test="meta-data-reason">' + reason + '</span>'
           },
           actions: {
             items: [
@@ -322,7 +322,6 @@
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
       {{ govukButton({
-        html: '<span data-test="meta-data-approve">' + "Approve returns requirements" + "</span>",
         text: "Approve returns requirements",
         classes: "govuk-!-margin-right-6",
         preventDoubleClick: true
