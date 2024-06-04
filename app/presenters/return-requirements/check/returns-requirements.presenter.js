@@ -8,7 +8,6 @@ const { formatAbstractionDate } = require('../../base.presenter.js')
  */
 
 function go (requirements, purposeIds, journey) {
-  //  Not clear of this can be an if else
   const returnsRequired = journey === 'returns-required'
   const noReturnsRequired = journey === 'no-returns-required'
 
