@@ -5,6 +5,8 @@
  * @module PrepareReturnLogsService
  */
 
+const Big = require('big.js')
+
 const DetermineAbstractionPeriodService = require('../determine-abstraction-periods.service.js')
 const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
 const { periodsOverlap } = require('../../../lib/general.lib.js')
@@ -53,8 +55,8 @@ function _prepReturnsForMatching (returnLogs, billingPeriod) {
       if (!abstractionOutsidePeriod) {
         abstractionOutsidePeriod = _abstractionOutsidePeriod(abstractionPeriods, returnSubmissionLine)
       }
-      returnSubmissionLine.unallocated = returnSubmissionLine.quantity / 1000
-      quantity += returnSubmissionLine.unallocated
+      returnSubmissionLine.unallocated = Big(returnSubmissionLine.quantity).div(1000).toNumber()
+      quantity = Big(quantity).plus(returnSubmissionLine.unallocated).toNumber()
     })
 
     returnLog.nilReturn = returnSubmissions[0]?.nilReturn ?? false
