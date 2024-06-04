@@ -6,6 +6,7 @@
  */
 
 const CheckPresenter = require('../../presenters/return-requirements/check.presenter.js')
+const ReturnRequirementsService = require('./check/returns-requirements.service.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -21,6 +22,8 @@ async function go (sessionId, yar) {
 
   await _markCheckPageVisited(session)
 
+  const returnRequirements = await ReturnRequirementsService.go(session)
+
   const formattedData = CheckPresenter.go(session)
 
   const notification = yar.flash('notification')[0]
@@ -28,6 +31,7 @@ async function go (sessionId, yar) {
   return {
     activeNavBar: 'search',
     notification,
+    ...returnRequirements,
     ...formattedData
   }
 }
