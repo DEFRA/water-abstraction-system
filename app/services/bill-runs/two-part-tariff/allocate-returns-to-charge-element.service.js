@@ -5,6 +5,8 @@
  * @module AllocateReturnsToChargeElementService
  */
 
+const Big = require('big.js')
+
 const { periodsOverlap } = require('../../../lib/general.lib.js')
 
 /**
@@ -34,8 +36,12 @@ function go (chargeElement, matchingReturns, chargePeriod, chargeReference) {
 
 function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeReference, i, matchedLines) {
   matchedLines.forEach((matchedLine) => {
-    const chargeElementRemainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
-    const chargeReferenceRemainingAllocation = chargeReference.volume - chargeReference.allocatedQuantity
+    const chargeElementRemainingAllocation = Big(chargeElement.authorisedAnnualQuantity)
+      .minus(chargeElement.allocatedQuantity)
+      .toNumber()
+    const chargeReferenceRemainingAllocation = Big(chargeReference.volume)
+      .minus(chargeReference.allocatedQuantity)
+      .toNumber()
 
     const remainingAllocation = Math.min(chargeElementRemainingAllocation, chargeReferenceRemainingAllocation)
 
@@ -56,33 +62,41 @@ function _allocateReturns (chargeElement, matchedReturn, chargePeriod, chargeRef
         chargeElement.chargeDatesOverlap = _chargeDatesOverlap(matchedLine, chargePeriod)
       }
 
-      chargeElement.allocatedQuantity += qtyToAllocate
-      chargeElement.returnLogs[i].allocatedQuantity += qtyToAllocate
-      matchedLine.unallocated -= qtyToAllocate
-      matchedReturn.allocatedQuantity += qtyToAllocate
-      chargeReference.allocatedQuantity += qtyToAllocate
+      chargeElement.allocatedQuantity = Big(chargeElement.allocatedQuantity).plus(qtyToAllocate).toNumber()
+      chargeElement.returnLogs[i].allocatedQuantity = Big(chargeElement.returnLogs[i].allocatedQuantity)
+        .plus(qtyToAllocate)
+        .toNumber()
+      matchedLine.unallocated = Big(matchedLine.unallocated).minus(qtyToAllocate).toNumber()
+      matchedReturn.allocatedQuantity = Big(matchedReturn.allocatedQuantity).plus(qtyToAllocate).toNumber()
+      chargeReference.allocatedQuantity = Big(chargeReference.allocatedQuantity).plus(qtyToAllocate).toNumber()
     }
   })
 }
 
 function _allocateDueReturns (chargeElement, matchedReturn, chargeReference, i) {
-  const chargeElementRemainingAllocation = chargeElement.authorisedAnnualQuantity - chargeElement.allocatedQuantity
+  const chargeElementRemainingAllocation = Big(chargeElement.authorisedAnnualQuantity)
+    .minus(chargeElement.allocatedQuantity)
+    .toNumber()
 
   if (chargeElementRemainingAllocation > 0) {
     let qtyToAllocate = chargeElementRemainingAllocation
 
     // If the unallocated volume on the element is greater than that remaining on the reference the `qtyToAllocate` will
     // be set to whatever volume remains unallocated on the reference
-    const chargeReferenceRemainingAllocation = chargeReference.volume - chargeReference.allocatedQuantity
+    const chargeReferenceRemainingAllocation = Big(chargeReference.volume)
+      .minus(chargeReference.allocatedQuantity)
+      .toNumber()
 
     if (chargeElementRemainingAllocation > chargeReferenceRemainingAllocation) {
       qtyToAllocate = chargeReferenceRemainingAllocation
     }
 
-    chargeElement.allocatedQuantity += qtyToAllocate
-    chargeElement.returnLogs[i].allocatedQuantity += qtyToAllocate
-    matchedReturn.allocatedQuantity += qtyToAllocate
-    chargeReference.allocatedQuantity += qtyToAllocate
+    chargeElement.allocatedQuantity = Big(chargeElement.allocatedQuantity).plus(qtyToAllocate).toNumber()
+    chargeElement.returnLogs[i].allocatedQuantity = Big(chargeElement.returnLogs[i].allocatedQuantity)
+      .plus(qtyToAllocate)
+      .toNumber()
+    matchedReturn.allocatedQuantity = Big(matchedReturn.allocatedQuantity).plus(qtyToAllocate).toNumber()
+    chargeReference.allocatedQuantity = Big(chargeReference.allocatedQuantity).plus(qtyToAllocate).toNumber()
   }
 }
 

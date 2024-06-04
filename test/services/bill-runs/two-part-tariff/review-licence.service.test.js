@@ -97,6 +97,7 @@ function _fetchReviewLicenceResults () {
           reviewChargeReferenceId: '7759e0f9-5763-4b94-8d45-0621aea3edc1',
           chargeElementId: 'b1cd4f98-ad96-4901-9e21-4432f032492a',
           allocated: 0,
+          amendedAllocated: 0,
           chargeDatesOverlap: false,
           issues: '',
           status: 'ready'
@@ -152,6 +153,7 @@ function _fetchReviewLicenceResults () {
             reviewChargeReferenceId: '2210bb45-1efc-4e69-85cb-c8cc6e75c4fd',
             chargeElementId: 'b1001716-cfb4-43c6-91f0-1863f4529223',
             allocated: 0,
+            amendedAllocated: 0,
             chargeDatesOverlap: false,
             issues: '',
             status: 'ready',
