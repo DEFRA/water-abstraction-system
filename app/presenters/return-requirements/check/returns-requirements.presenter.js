@@ -42,9 +42,13 @@ function _requirements (requirements, purposes) {
   return completedRequirements
 }
 
-function _mapPurposes (requirememtPurposes, purposes) {
-  return requirememtPurposes.map((purpose) => {
-    return purposes.find((pid) => { return pid.id === purpose }).description
+function _mapPurposes (requirementPurposes, purposes) {
+  return requirementPurposes.map((requirementPurpose) => {
+    const matchedPurpose = purposes.find((purpose) => {
+      return purpose.id === requirementPurpose
+    })
+
+    return matchedPurpose.description
   })
 }
 
