@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for returnVersions (water.return_versions)
+ * Model for return_versions (water.return_versions)
  * @module ReturnVersionModel
  */
 

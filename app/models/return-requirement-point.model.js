@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for ReturnRequirementPoints (water.return_requirement_points)
+ * Model for return_requirement_points (water.return_requirement_points)
  * @module ReturnRequirementPointModel
  */
 
