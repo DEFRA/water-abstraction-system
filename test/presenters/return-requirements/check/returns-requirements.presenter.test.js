@@ -70,8 +70,8 @@ describe('Return Requirements presenter', () => {
   })
 
   describe("the 'requirements' property", () => {
-    describe('when the requirement has agreements exceptions', () => {
-      it('correctly returns and requirement with agreements exceptions', () => {
+    describe('when the requirement is "complete" (agreements exceptions is populated)', () => {
+      it('correctly returns the requirement', () => {
         const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
 
         expect(result.requirements).to.equal([{
