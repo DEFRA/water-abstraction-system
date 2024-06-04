@@ -11,7 +11,7 @@ const ReturnRequirementsPresenter = require('../../../presenters/return-requirem
 /**
  * Orchestrates fetching and presenting the return requirements for `/return-requirements/{sessionId}/check` page
  *
- * @param {string} session - The session for return requirement journey
+ * @param {module:SessionModel} session - The session for the return requirement journey
  *
  * @returns {Promise<Object>} page data needed by the view template
  */
