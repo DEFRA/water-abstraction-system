@@ -5,6 +5,7 @@
  * @module ReturnRequirementsService
  */
 
+const FetchPointsService = require('../fetch-points.service.js')
 const PurposeModel = require('../../../models/purpose.model.js')
 const ReturnRequirementsPresenter = require('../../../presenters/return-requirements/check/returns-requirements.presenter.js')
 
@@ -16,12 +17,13 @@ const ReturnRequirementsPresenter = require('../../../presenters/return-requirem
  * @returns {Promise<Object>} page data needed by the view template
  */
 async function go (session) {
-  const { requirements, journey } = session.data
+  const { licence, data: { requirements, journey } } = session
 
+  const points = await FetchPointsService.go(licence.id)
   const purposeIds = _purposeIds(requirements)
   const purposes = await _fetchPurposes(purposeIds)
 
-  return ReturnRequirementsPresenter.go(requirements, purposes, journey)
+  return ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 }
 
 async function _fetchPurposes (purposeIds) {
