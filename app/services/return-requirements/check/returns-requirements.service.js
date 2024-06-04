@@ -19,12 +19,12 @@ async function go (session) {
   const { requirements, journey } = session.data
 
   const purposeIds = _purposeIds(requirements)
-  const purposes = await _fetchPurposeIds(purposeIds)
+  const purposes = await _fetchPurposes(purposeIds)
 
   return ReturnRequirementsPresenter.go(requirements, purposes, journey)
 }
 
-async function _fetchPurposeIds (purposeIds) {
+async function _fetchPurposes (purposeIds) {
   return PurposeModel.query()
     .select([
       'purposes.id',
