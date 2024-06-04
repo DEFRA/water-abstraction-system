@@ -7,6 +7,15 @@ const { formatAbstractionDate } = require('../../base.presenter.js')
  * @module ReturnRequirementsPresenter
  */
 
+/**
+ * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
+ *
+ * @param {Object[]} requirements - The existing return requirements in the current session
+ * @param {module:PurposeModel[]} purposes - All purposes that match those selected across the return requirements
+ * @param {string} journey - Whether the setup journey is 'no-returns-required' or 'returns-required'
+ *
+ * @returns {Object} returns requirement data needed by the view template
+ */
 function go (requirements, purposes, journey) {
   return {
     returnsRequired: journey === 'returns-required',
