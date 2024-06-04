@@ -16,7 +16,7 @@ const ReturnRequirementPointHelper = require('../support/helpers/return-requirem
 // Thing under test
 const ReturnRequirementPointModel = require('../../app/models/return-requirement-point.model.js')
 
-describe('Return requirement point model', () => {
+describe('Return Requirement Point model', () => {
   let testRecord
 
   beforeEach(async () => {

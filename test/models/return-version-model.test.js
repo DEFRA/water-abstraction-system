@@ -19,7 +19,7 @@ const ReturnRequirementPointModel = require('../../app/models/return-requirement
 // Thing under test
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 
-describe('Return version model', () => {
+describe('Return Version model', () => {
   let testRecord
 
   beforeEach(async () => {
