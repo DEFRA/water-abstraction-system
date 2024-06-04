@@ -87,7 +87,8 @@ describe('Return Requirements presenter', () => {
         ])
       })
     })
-    describe('when the requirement does not have any agreements exceptions', () => {
+
+    describe('when the requirement is "incomplete" (agreements exceptions is not populated)', () => {
       beforeEach(() => {
         delete requirements[0].agreementsExceptions
       })
