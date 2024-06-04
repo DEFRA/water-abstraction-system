@@ -11,10 +11,10 @@ const { expect } = Code
 const DatabaseSupport = require('../support/database.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
-const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
 const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPointModel = require('../../app/models/return-requirement-point.model.js')
+const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 
 // Thing under test
 const ReturnVersionModel = require('../../app/models/return-version.model.js')

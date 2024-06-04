@@ -9,8 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../support/database.js')
-const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
+const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
 
 // Thing under test
