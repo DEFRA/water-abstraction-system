@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const DatabaseSupport = require('../../../support/database.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const ReturnRequirementsService = require('../../../../app/services/return-requirements/check/returns-requirements.service.js')
@@ -46,42 +45,35 @@ describe('Return Requirements service', () => {
       returnsCycle: 'summer',
       siteDescription: 'A place in the sun'
     }
-
-    session = await SessionHelper.add({
-      data: {
-        checkPageVisited: false,
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          startDate: '2022-04-01T00:00:00.000Z'
-        },
-        journey: 'returns-required',
-        requirements: [{ ...requirement }],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
-      }
-    })
   })
 
-  it('returns the return requirements data', async () => {
-    const result = await ReturnRequirementsService.go(session.id)
+  describe('when the session contains a single requirement', () => {
+    beforeEach(() => {
+      session = {
+        data: {
+          journey: 'returns-required',
+          requirements: [{ ...requirement }]
+        }
+      }
+    })
 
-    expect(result).to.equal({
-      noReturnsRequired: false,
-      requirements: [{
-        abstractionPeriod: 'From 1 June to 1 March',
-        frequencyCollected: 'daily',
-        frequencyReported: 'daily',
-        index: 0,
-        purposes: [
-          'Spray Irrigation - Storage'
-        ],
-        siteDescription: 'A place in the sun'
-      }],
-      returnsRequired: true
+    it('returns the return requirements data', async () => {
+      const result = await ReturnRequirementsService.go(session)
+
+      expect(result).to.equal({
+        noReturnsRequired: false,
+        requirements: [{
+          abstractionPeriod: 'From 1 June to 1 March',
+          frequencyCollected: 'daily',
+          frequencyReported: 'daily',
+          index: 0,
+          purposes: [
+            'Spray Irrigation - Storage'
+          ],
+          siteDescription: 'A place in the sun'
+        }],
+        returnsRequired: true
+      })
     })
   })
 
@@ -94,32 +86,21 @@ describe('Return Requirements service', () => {
           description: 'Sunny field'
         })
 
-        session = await SessionHelper.add({
+        session = {
           data: {
-            checkPageVisited: false,
-            licence: {
-              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-              endDate: null,
-              licenceRef: '01/ABC',
-              licenceHolder: 'Turbo Kid',
-              startDate: '2022-04-01T00:00:00.000Z'
-            },
             journey: 'returns-required',
-            requirements: [{ ...requirement }, { ...requirement, purposes: [purposeAdditional.id] }],
-            startDateOptions: 'licenceStartDate',
-            reason: 'major-change'
+            requirements: [{ ...requirement }, { ...requirement, purposes: [purposeAdditional.id] }]
           }
-        })
+        }
 
         it('returns the first requirement with the correct purpose description ', async () => {
-          const result = await ReturnRequirementsService.go(session.id)
+          const result = await ReturnRequirementsService.go(session)
 
           expect(result.requirements[0].purposes).to.equal(['Spray Irrigation - Storage'])
         })
 
         it('returns the second requirement with the correct purpose description ', async () => {
-          const result = await ReturnRequirementsService.go(session.id)
+          const result = await ReturnRequirementsService.go(session)
 
           expect(result.requirements[1].purposes).to.equal(['Sunny field'])
         })
@@ -128,27 +109,16 @@ describe('Return Requirements service', () => {
 
     describe('and the description is the same', () => {
       beforeEach(async () => {
-        session = await SessionHelper.add({
+        session = {
           data: {
-            checkPageVisited: false,
-            licence: {
-              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-              endDate: null,
-              licenceRef: '01/ABC',
-              licenceHolder: 'Turbo Kid',
-              startDate: '2022-04-01T00:00:00.000Z'
-            },
             journey: 'returns-required',
-            requirements: [{ ...requirement }, { ...requirement }],
-            startDateOptions: 'licenceStartDate',
-            reason: 'major-change'
+            requirements: [{ ...requirement }, { ...requirement }]
           }
-        })
+        }
       })
 
       it('returns the requirements with the same description', async () => {
-        const result = await ReturnRequirementsService.go(session.id)
+        const result = await ReturnRequirementsService.go(session)
 
         expect(result.requirements[0].purposes).to.equal(['Spray Irrigation - Storage'])
         expect(result.requirements[1].purposes).to.equal(['Spray Irrigation - Storage'])

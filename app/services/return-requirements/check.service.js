@@ -22,7 +22,7 @@ async function go (sessionId, yar) {
 
   await _markCheckPageVisited(session)
 
-  const returnRequirements = await ReturnRequirementsService.go(sessionId)
+  const returnRequirements = await ReturnRequirementsService.go(session)
 
   const formattedData = CheckPresenter.go(session)
 
