@@ -34,38 +34,38 @@
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-          text: "Start date"
-        },
+            text: "Start date"
+          },
           value: {
-          html: '<span data-test="meta-data-start-date">' + startDate + '</span>'
-        },
+            html: '<span data-test="meta-data-start-date">' + startDate + '</span>'
+          },
           actions: {
-          items: [
-            {
-              href: "/system/return-requirements/" + sessionId + "/start-date",
-              text: "Change",
-              visuallyHiddenText: "the start date for the return requirement"
-            }
-          ]
-        }
+            items: [
+              {
+                href: "/system/return-requirements/" + sessionId + "/start-date",
+                text: "Change",
+                visuallyHiddenText: "the start date for the return requirement"
+              }
+            ]
+          }
         },
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-          text: "Reason"
-        },
+            text: "Reason"
+          },
           value: {
-          html: '<span data-test="meta-data-reason">' + reason + '</span>'
-        },
+            html: '<span data-test="meta-data-reason">' + reason + '</span>'
+          },
           actions: {
-          items: [
-            {
-              href: reasonLink,
-              text: "Change",
-              visuallyHiddenText: "the reason for the return requirement"
-            }
-          ]
-        }
+            items: [
+              {
+                href: reasonLink,
+                text: "Change",
+                visuallyHiddenText: "the reason for the return requirement"
+              }
+            ]
+          }
         }
       ]
     }) }}
@@ -81,24 +81,24 @@
         {
           classes: 'govuk-summary-list govuk-summary-list__row--no-border',
           key: {
-          text: userEmail,
-          classes: "govuk-body govuk-!-font-weight-regular"
-        },
+            text: userEmail,
+            classes: "govuk-body govuk-!-font-weight-regular"
+          },
           value: {
-          text: note | escape | nl2br
-        },
+            text: note | escape | nl2br
+          },
           actions: {
-          items: [
-            {
-              href: "note",
-              text: "Change" if note else "Add a note"
-            },
-            {
-              href: "delete-note",
-              text: "Delete"
-            } if note
-          ]
-        }
+            items: [
+              {
+                href: "note",
+                text: "Change" if note else "Add a note"
+              },
+              {
+                href: "delete-note",
+                text: "Delete"
+              } if note
+            ]
+          }
         }
       ]
     }) }}
