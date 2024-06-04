@@ -117,162 +117,162 @@
       </form>
       {% for requirement in requirements %}
         <div>
-          {{ govukSummaryList({
-            card: {
-              title: {
-                text: requirement.siteDescription
-              }
-            },
-            classes: "govuk-summary-list--no-border",
-            rows: [
-              {
-                key: {
-                text: "Purpose"
+            {{ govukSummaryList({
+              card: {
+                title: {
+                  text: requirement.siteDescription
+                }
               },
-                value: {
-                html: newLine(requirement.purposes)
-              },
-                actions: {
-                items: [
-                  {
-                    href: "purpose/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Purpose"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                text: "Points"
-              },
-                value: {
-                html: "requirement.points"
-              },
-                actions: {
-                items: [
-                  {
-                    href: "points/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Point"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                text: "Abstraction period"
-              },
-                value: {
-                html: requirement.abstractionPeriod
-              },
-                actions: {
-                items: [
-                  {
-                    href: "abstraction-period/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Abstraction period"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                text: "Returns cycle"
-              },
-                value: {
-                html: "requirement.returnsCycle"
-              },
-                actions: {
-                items: [
-                  {
-                    href: "returns-cycle/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Returns cycle"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                text: "Site description"
-              },
-                value: {
-                html: requirement.siteDescription
-              },
-                actions: {
-                items: [
-                  {
-                    href: "site-description/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Site description"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                text: "Collection"
-              },
-                value: {
-                html: requirement.frequencyCollected | capitalize
-              },
-                actions: {
-                items: [
-                  {
-                    href: "frequency-collected/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Collection"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                text: "Reporting"
-              },
-                value: {
-                html: requirement.frequencyReported | capitalize
-              },
-                actions: {
-                items: [
-                  {
-                    href: "frequency-reported/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Reporting"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                text: "Agreements exceptions"
-              },
-                value: {
-                html: "requirement.agreementsExceptions"
-              },
-                actions: {
-                items: [
-                  {
-                    href: "agreements-exceptions/" + requirement.index ,
-                    text: "Change",
-                    visuallyHiddenText: "Agreements exception"
-                  }
-                ]
-              }
-              },
-              {
-                key: {
-                html:  govukButton({
-                  text: "Remove requirement",
-                  classes: "govuk-button--secondary",
-                  preventDoubleClick: true,
-                  href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
-                }) if requirements.length >= 2
-              }
-              }
-            ]
-          }) }}
+              classes: "govuk-summary-list--no-border",
+              rows: [
+                {
+                  key: {
+                  text: "Purpose"
+                },
+                  value: {
+                  html: newLine(requirement.purposes)
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "purpose/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Purpose"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  text: "Points"
+                },
+                  value: {
+                  html: "requirement.points"
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "points/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Point"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  text: "Abstraction period"
+                },
+                  value: {
+                  html: requirement.abstractionPeriod
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "abstraction-period/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Abstraction period"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  text: "Returns cycle"
+                },
+                  value: {
+                  html: "requirement.returnsCycle"
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "returns-cycle/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Returns cycle"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  text: "Site description"
+                },
+                  value: {
+                  html: requirement.siteDescription
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "site-description/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Site description"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  text: "Collection"
+                },
+                  value: {
+                  html: requirement.frequencyCollected | capitalize
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "frequency-collected/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Collection"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  text: "Reporting"
+                },
+                  value: {
+                  html: requirement.frequencyReported | capitalize
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "frequency-reported/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Reporting"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  text: "Agreements exceptions"
+                },
+                  value: {
+                  html: "requirement.agreementsExceptions"
+                },
+                  actions: {
+                  items: [
+                    {
+                      href: "agreements-exceptions/" + requirement.index ,
+                      text: "Change",
+                      visuallyHiddenText: "Agreements exception"
+                    }
+                  ]
+                }
+                },
+                {
+                  key: {
+                  html:  govukButton({
+                    text: "Remove requirement",
+                    classes: "govuk-button--secondary",
+                    preventDoubleClick: true,
+                    href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
+                  }) if requirements.length >= 2
+                }
+                }
+              ]
+            }) }}
         </div>
       {% endfor %}
     </div>
