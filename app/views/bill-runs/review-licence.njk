@@ -83,7 +83,7 @@
   <form method="post">
     <div class="govuk-button-group">
     {{ govukButton({
-      html: '<div data-test="status-button">' + statusButtonText + '</div>',
+      text: statusButtonText,
       classes: statusButtonClass,
       name: "licence-status",
       value: statusButtonValue,
@@ -91,7 +91,7 @@
     }) }}
 
     {{ govukButton({
-      html: '<div data-test="progress-button">' + progressButtonText + '</div>',
+      text: progressButtonText,
       classes: "govuk-button--secondary",
       name: "mark-progress",
       value: progressButtonValue,
@@ -99,7 +99,7 @@
     }) }}
 
     {{ govukButton({
-      html: '<div data-test="progress-button">Remove from bill run</div>',
+      text: 'Remove from bill run',
       classes: "govuk-button--secondary",
       href: "../remove/" + licence.licenceId,
       preventDoubleClick: true
