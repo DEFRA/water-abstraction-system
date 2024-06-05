@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
+const ReturnRequirementsService = require('../../../app/services/return-requirements/check/returns-requirements.service.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -20,6 +21,11 @@ describe('Return Requirements - Check service', () => {
   let yarStub
 
   beforeEach(async () => {
+    Sinon.stub(ReturnRequirementsService, 'go').resolves({
+      requirements: [],
+      returnsRequired: true
+    })
+
     await DatabaseSupport.clean()
 
     session = await SessionHelper.add({
@@ -34,7 +40,7 @@ describe('Return Requirements - Check service', () => {
           startDate: '2022-04-01T00:00:00.000Z'
         },
         journey: 'returns-required',
-        requirements: [{}],
+        requirements: [],
         startDateOptions: 'licenceStartDate',
         reason: 'major-change'
       }
@@ -60,14 +66,14 @@ describe('Return Requirements - Check service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         additionalSubmissionOptions: [],
-        notification: undefined,
-        journey: 'returns-required',
         licenceRef: '01/ABC',
         note: null,
+        notification: undefined,
         pageTitle: 'Check the return requirements for Turbo Kid',
         reason: 'Major change',
         reasonLink: `/system/return-requirements/${session.id}/reason`,
         requirements: [],
+        returnsRequired: true,
         startDate: '1 January 2023',
         userEmail: 'No notes added'
       }, { skip: ['sessionId'] })
