@@ -47,7 +47,7 @@ describe('Return Requirements service', () => {
       frequencyCollected: 'daily',
       frequencyReported: 'daily',
       points: [
-        '9000031' // Hard coded from teh permit licence data
+        '9000031' // Hard coded from the permit licence data
       ],
       purposes: [
         purpose.id
