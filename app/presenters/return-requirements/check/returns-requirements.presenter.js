@@ -39,6 +39,17 @@ function _abstractionPeriod (abstractionPeriod) {
   return `From ${startDate} to ${endDate}`
 }
 
+function _agreementsExceptions (agreementsExceptions) {
+  const agreementsExceptionsText = {
+    'gravity-fill': 'Gravity fill',
+    'transfer-re-abstraction-scheme': 'Transfer re-abstraction scheme',
+    'two-part-tariff': 'Two-part tariff',
+    '56-returns-exception': '56 returns exception'
+  }
+
+  return agreementsExceptionsText[agreementsExceptions[0]]
+}
+
 function _requirements (requirements, purposes, points) {
   const completedRequirements = []
 
@@ -67,6 +78,7 @@ function _mapPurposes (requirementPurposes, purposes) {
 function _mapRequirement (requirement, index, purposes, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
+    agreementsExceptions: _agreementsExceptions(requirement.agreementsExceptions),
     frequencyCollected: requirement.frequencyCollected,
     frequencyReported: requirement.frequencyReported,
     index,
@@ -77,7 +89,6 @@ function _mapRequirement (requirement, index, purposes, points) {
 }
 
 function _mapPoints (requirementPoints, points) {
-
   return requirementPoints.map((point) => {
     const matchedPoint = points.find((pid) => { return pid.ID === point })
 

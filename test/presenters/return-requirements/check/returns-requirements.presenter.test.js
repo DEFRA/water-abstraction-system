@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReturnRequirementsPresenter = require('../../../../app/presenters/return-requirements/check/returns-requirements.presenter.js')
 
-describe('Return Requirements presenter', () => {
+describe.only('Return Requirements presenter', () => {
   let journey
   let points = []
   let purposes = []
@@ -70,6 +70,7 @@ describe('Return Requirements presenter', () => {
         returnsRequired: false,
         requirements: [{
           abstractionPeriod: 'From 1 June to 1 March',
+          agreementsExceptions: 'Gravity fill',
           frequencyCollected: 'daily',
           frequencyReported: 'daily',
           index: 0,
@@ -92,6 +93,7 @@ describe('Return Requirements presenter', () => {
 
         expect(result.requirements).to.equal([{
           abstractionPeriod: 'From 1 June to 1 March',
+          agreementsExceptions: 'Gravity fill',
           frequencyCollected: 'daily',
           frequencyReported: 'daily',
           index: 0,
@@ -116,6 +118,38 @@ describe('Return Requirements presenter', () => {
         const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
         expect(result.requirements[0].points).to.equal(['At National Grid Reference TQ 1234 1234 (Test local name)'])
+      })
+
+      describe('and the agreement exceptions has', () => {
+        describe('one exception', () => {
+          it('should return the exception', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill')
+          })
+        })
+
+        describe('two exceptions', () => {
+          beforeEach(() => {
+            requirements = [{ ...requirement, agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme'] }]
+          })
+          it('should return the exceptions seperated with an and \'exception1 and exception2\' ', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill and Transfer re-abstraction scheme')
+          })
+        })
+
+        describe('more than two exceptions', () => {
+          beforeEach(() => {
+            requirements = [{ ...requirement, agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme', 'two-part-tariff', '56-returns-exception'] }]
+          })
+          it('should return the exceptions formatted in Oxford comma e.g \'exception1, exception2, and exception3\' ', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception')
+          })
+        })
       })
     })
 
