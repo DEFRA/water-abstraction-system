@@ -17,7 +17,7 @@ const ReturnRequirementsPresenter = require('../../../presenters/return-requirem
  * @returns {Promise<Object>} page data needed by the view template
  */
 async function go (session) {
-  const { licence, data: { requirements, journey } } = session
+  const { licence, requirements, journey } = session
 
   const points = await FetchPointsService.go(licence.id)
   const purposeIds = _purposeIds(requirements)

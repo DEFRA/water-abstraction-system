@@ -63,10 +63,8 @@ describe('Return Requirements service', () => {
         licence: {
           id: licence.id
         },
-        data: {
-          journey: 'returns-required',
-          requirements: [{ ...requirement }]
-        }
+        journey: 'returns-required',
+        requirements: [{ ...requirement }]
       }
     })
 
@@ -115,10 +113,8 @@ describe('Return Requirements service', () => {
           licence: {
             id: licence.id
           },
-          data: {
-            journey: 'returns-required',
-            requirements: [{ ...requirement }, { ...requirement, purposes: [purposeAdditional.id] }]
-          }
+          journey: 'returns-required',
+          requirements: [{ ...requirement }, { ...requirement, purposes: [purposeAdditional.id] }]
         }
 
         it('returns the first requirement with the correct purpose description ', async () => {
@@ -141,10 +137,8 @@ describe('Return Requirements service', () => {
           licence: {
             id: licence.id
           },
-          data: {
-            journey: 'returns-required',
-            requirements: [{ ...requirement }, { ...requirement }]
-          }
+          journey: 'returns-required',
+          requirements: [{ ...requirement }, { ...requirement }]
         }
       })
 
