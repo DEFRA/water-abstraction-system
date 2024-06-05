@@ -54,18 +54,6 @@ function _requirements (requirements, purposes, points) {
   return completedRequirements
 }
 
-function _returnsCycle (returnsCycle) {
-  if (returnsCycle === 'summer') {
-    return 'Summer'
-  }
-
-  if (returnsCycle === 'winter-and-all-year') {
-    return 'Winter and all year'
-  }
-
-  return ''
-}
-
 function _mapPurposes (requirementPurposes, purposes) {
   return requirementPurposes.map((requirementPurpose) => {
     const matchedPurpose = purposes.find((purpose) => {
