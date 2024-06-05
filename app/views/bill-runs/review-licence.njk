@@ -42,13 +42,13 @@
 
   {# Licence nav bars #}
   <ul class="govuk-summary-list__actions-list govuk-!-margin-bottom-3">
-    <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#summary">
+    <li class="govuk-summary-list__actions-list-item" data-test="summary-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#summary">
         Summary
       </a></li>
-    <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#returns">
+    <li class="govuk-summary-list__actions-list-item" data-test="returns-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#returns">
         Returns
       </a></li>
-      <li class="govuk-summary-list__actions-list-item"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#charge">
+      <li class="govuk-summary-list__actions-list-item" data-test="charge-information-link"><a class="govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state govuk-link--no-underline" href="/licences/{{ licence.licenceId }}#charge">
         Charge information
       </a></li>
   </ul>
@@ -99,7 +99,7 @@
     }) }}
 
     {{ govukButton({
-      text: "Remove from bill run",
+      text: 'Remove from bill run',
       classes: "govuk-button--secondary",
       href: "../remove/" + licence.licenceId,
       preventDoubleClick: true
@@ -115,7 +115,7 @@
         {% for chargeVersion in chargeData %}
           {% set chargeDateIndex = loop.index0 %}
             <li>
-              <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}">{{chargeVersion.chargePeriodDate}}</a>
+              <a class="govuk-link" href="#chargeVersion{{chargeDateIndex}}" data-test="charge-period-{{ chargeDateIndex }}">{{chargeVersion.chargePeriodDate}}</a>
             </li>
         {% endfor %}
         </ul>
@@ -162,22 +162,22 @@
         {
           html: action,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-action' + matchedReturnIndex }
+          attributes: { 'data-test': 'matched-return-action-' + matchedReturnIndex }
         },
         {
           html: returnSummary,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-summary' + matchedReturnIndex }
+          attributes: { 'data-test': 'matched-return-summary-' + matchedReturnIndex }
           },
         {
           html: tag,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-status' + matchedReturnIndex }
+          attributes: { 'data-test': 'matched-return-status-' + matchedReturnIndex }
         },
         {
           html: "<div>" + return.returnTotal + "</div>" + issues,
           classes: "govuk-body-s govuk-!-text-align-right",
-          attributes: { 'data-test': 'matched-return-total' + matchedReturnIndex}
+          attributes: { 'data-test': 'matched-return-total-' + matchedReturnIndex}
         }]
       %}
 
@@ -241,22 +241,22 @@
         {
           html: action,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-action' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-action-' + unmatchedReturnIndex }
         },
         {
           html: returnSummary,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-summary' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-summary-' + unmatchedReturnIndex }
         },
         {
           html: tag,
           classes: 'govuk-body-s',
-          attributes: { 'data-test': 'unmatched-return-status' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-status-' + unmatchedReturnIndex }
         },
         {
           html: "<div>" + return.returnTotal + "</div>" + issues,
           classes: "govuk-body-s govuk-!-text-align-right",
-          attributes: { 'data-test': 'unmatched-return-total' + unmatchedReturnIndex }
+          attributes: { 'data-test': 'unmatched-return-total-' + unmatchedReturnIndex }
         }
         ]
       %}
@@ -301,11 +301,11 @@
     <div class="govuk-grid-column-full">
       {% for chargeVersion in chargeData %}
       {% set chargeVersionIndex = loop.index0 %}
-        <div class ="govuk-caption-l">Financial year {{chargeVersion.financialYear}}</div>
-        <section id="chargeVersion{{chargeVersionIndex}}">
+        <div class ="govuk-caption-l" data-test="financial-year">Financial year {{chargeVersion.financialYear}}</div>
+        <section id="charge-version-{{chargeVersionIndex}}">
           <h2 class="govuk-heading-l">Charge periods {{chargeVersion.chargePeriodDate}}</h2>
         </section>
-        <div class="govuk-caption-m">{{chargeVersion.licenceHolderName}}</div>
+        <div class="govuk-caption-m" data-test='licence-holder'>{{chargeVersion.licenceHolderName}}</div>
 
         {% set chargeReferenceText = "charge references " if chargeVersion.chargeReferences.length > 1 else "charge reference " %}
         {% set chargeElementText = "charge elements " if chargeVersion.chargeElementCount > 1 else "charge element " %}
@@ -315,7 +315,7 @@
         {# Billing account details #}
         {% set billingAccountLink = '/billing-accounts/' + chargeVersion.billingAccountDetails.billingAccountId %}
         {% set billingAccountText %}
-          <div class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></div>
+          <div class="govuk-!-font-weight-bold">Billing account <a class="govuk-link" data-test="billing-account" href="{{ billingAccountLink }}">{{ chargeVersion.billingAccountDetails.accountNumber }}</a></div>
           <div data-test="account-name">{{ chargeVersion.billingAccountDetails.accountName }}</div>
 
           {# billing account contact name #}
@@ -326,7 +326,7 @@
           {# billing account address #}
           <div>
             {% for addressLine in chargeVersion.billingAccountDetails.addressLines %}
-            {% set addressLineIndex = loop.index0 %}
+              {% set addressLineIndex = loop.index0 %}
               <div data-test="address-line" + addressLineIndex>{{addressLine}}</div>
             {% endfor %}
           </div>
@@ -345,7 +345,7 @@
             <div class="govuk-grid-column-full">
               <div class="govuk-summary-card ">
                 <div class="govuk-summary-card__title-wrapper ">
-                  <h3 class="govuk-summary-card__title"><span class="govuk-!-font-weight-regular">{{chargeReference.chargeCategory}}</span><div>{{chargeReference.chargeDescription}}</div></h3>
+                  <h3 class="govuk-summary-card__title"><span class="govuk-!-font-weight-regular" data-test="reference-{{ chargeReferenceIndex }}">{{chargeReference.chargeCategory}}</span><div data-test="charge-description-{{ chargeReferenceIndex }}">{{chargeReference.chargeDescription}}</div></h3>
                 </div>
 
                 <div class="govuk-summary-card__content govuk-!-padding-top-0">
@@ -353,18 +353,17 @@
                   {% set row = {
                     classes: "border-bottom",
                     key: {
-                      text: "Total billable returns",
-                      attributes: { 'data-test': 'total' }
+                      text: "Total billable returns"
                     },
                     value: {
-                      text: chargeReference.totalBillableReturns,
-                      attributes: { 'data-test': 'total-billable-returns' }
+                      html: '<div data-test="total-billable-returns-' + chargeReferenceIndex + '">' + chargeReference.totalBillableReturns + '</div>'
                     },
                     actions: {
                       items: [
                         {
                           href: licence.licenceId + '/charge-reference-details/' + chargeReference.id,
-                          text: chargeReference.chargeReferenceLink.linkName
+                          text: chargeReference.chargeReferenceLink.linkName,
+                          attributes: { 'data-test': 'charge-reference-link-' + chargeReferenceIndex }
                         }
                       ]
                     }
@@ -375,7 +374,7 @@
 
                   <div class="govuk-!-margin-top-0">
                     {{ govukSummaryList({
-                      attributes: { 'data-test': 'charge-reference' + chargeReferenceIndex },
+                      attributes: { 'data-test': 'charge-reference-' + chargeReferenceIndex },
                       classes: "govuk-!-margin-bottom-9 govuk-section-break govuk-section-break--visible",
                       rows: rows
                     }) }}
@@ -387,14 +386,14 @@
                     {% set elementRows = [] %}
 
                     <div class="govuk-!-margin-top-6">
-                      <span class="govuk-body govuk-!-font-weight-regular">{{chargeElement.elementNumber}}</span>
+                      <span class="govuk-body govuk-!-font-weight-regular" data-test="element-count-{{ chargeElementIndex }}">{{chargeElement.elementNumber}}</span>
                       <span class="float-right">
                         {{ statusTag(chargeElement.elementStatus) }}
                       </span>
-                      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{chargeElement.elementDescription}}
+                      <h3 class="govuk-heading-s govuk-!-margin-bottom-1" data-test="element-description-{{ chargeElementIndex }}">{{chargeElement.elementDescription}}
                         <div>
                           {% for chargeElementDate in chargeElement.dates %}
-                            <div>{{ chargeElementDate }}</div>
+                            <div data-test="element-dates-{{ chargeElementIndex }}">{{ chargeElementDate }}</div>
                           {% endfor %}
                         </div>
                       </h3>
@@ -415,8 +414,7 @@
                             text: 'Issues'
                           },
                           value: {
-                            html: issues,
-                            attributes: { 'data-test': 'charge-element-issues' + chargeElementIndex }
+                            html: '<div data-test="charge-element-issues-' + chargeElementIndex + '">' + issues + '</div>'
                           }
                         },
                         {
@@ -424,15 +422,13 @@
                             text: 'Billable returns'
                           },
                           value: {
-                            text: chargeElement.billableReturns,
-                            attributes: { 'data-test': 'charge-element-billable-returns' + chargeElementIndex }
+                            html: '<div data-test="charge-element-billable-returns-' + chargeElementIndex + '">' + chargeElement.billableReturns + '</div>'
                           },
                           actions: {
                             items: [
                             {
                               href: licence.licenceId + '/match-details/' + chargeElement.reviewChargeElementId,
-                              text: 'View match details',
-                              visuallyHiddenText: ''
+                              html: '<div data-test="charge-element-match-details-' + chargeElementIndex + '">View match details</div>'
                             }
                           ]}
                         },
@@ -441,14 +437,13 @@
                             text: 'Return volume'
                           },
                           value: {
-                            html: returnVolumes,
-                            attributes: { 'data-test': 'charge-element-return-volumes' + chargeElementIndex }
+                            html: '<div data-test="charge-element-return volumes-' + chargeElementIndex + '">' + returnVolumes + '</div>'
                           }
                         }]
                       %}
 
                       {{ govukSummaryList({
-                        attributes: { 'data-test': 'charge-elements' },
+                        attributes: { 'data-test': 'charge-element-' + chargeElementIndex },
                         classes: "govuk-!-margin-bottom-9",
                         rows: elementRow
                       }) }}

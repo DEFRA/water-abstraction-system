@@ -33,10 +33,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l">Charge reference {{chargeReference.reference}}</span> {{chargeReference.description}}
+        <span class="govuk-caption-l" data-test="charge-reference">Charge reference {{chargeReference.reference}}</span><span data-test="charge-reference-description">{{chargeReference.description}}</span>
       </h1>
-    <span class="govuk-caption-m">Financial Year {{financialYear}}</span>
-    <h2 class="govuk-heading-m">
+    <span class="govuk-caption-m" data-test="financial-year">Financial Year {{financialYear}}</span>
+    <h2 class="govuk-heading-m" data-test="charge-period">
       Charge period {{chargePeriod}}
     </h2>
   </div>
@@ -46,7 +46,7 @@
   <div class="govuk-grid-column-full">
     <div class="govuk-!-margin-right-6 float-left">
       <h3>
-        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">{{chargeReference.totalBillableReturns}} ML</span>
+        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="total-billable-returns">{{chargeReference.totalBillableReturns}} ML</span>
         <div>
           <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Total billable returns</span>
         </div>
@@ -59,7 +59,7 @@
     </div>
     <div class="govuk-!-margin-right-6 float-left">
       <h3>
-        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">{{chargeReference.authorisedVolume}} ML</span>
+        <span class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="authorised-volume">{{chargeReference.authorisedVolume}} ML</span>
         <div>
           <span class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">Authorised volume</span>
         </div>
@@ -101,7 +101,8 @@
 
       {% set adjustmentsValue %}
           {% for adjustment in chargeReference.adjustments %}
-          <div>{{adjustment}}</div>
+            {% set adjustmentsIndex = loop.index0 %}
+          <div data-test="adjustment-{{ adjustmentsIndex }}">{{adjustment}}</div>
           {% endfor %}
       {% endset %}
 
@@ -123,7 +124,7 @@
               text: "Additional charges"
             },
             value: {
-              text: chargeReference.additionalCharges
+              html: '<div data-test="additional-charges">' + chargeReference.additionalCharges + '</div>'
             }
           }
         %}
