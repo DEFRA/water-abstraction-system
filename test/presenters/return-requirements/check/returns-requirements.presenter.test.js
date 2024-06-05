@@ -12,14 +12,15 @@ const ReturnRequirementsPresenter = require('../../../../app/presenters/return-r
 
 describe('Return Requirements presenter', () => {
   let journey
-  let purposeIds = []
+  let points = []
+  let purposes = []
   let requirement
   let requirements = []
 
   beforeEach(() => {
     journey = {}
 
-    purposeIds = [{
+    purposes = [{
       id: '772136d1-9184-417b-90cd-91053287d1df',
       description: 'A singular purpose'
     }]
@@ -37,21 +38,33 @@ describe('Return Requirements presenter', () => {
       frequencyCollected: 'daily',
       frequencyReported: 'daily',
       points: [
-        '286'
+        '9000031'
       ],
       purposes: [
-        purposeIds[0].id
+        purposes[0].id
       ],
       returnsCycle: 'summer',
       siteDescription: 'A place in the sun'
     }
+
+    points = [
+      {
+        ID: '9000031',
+        AADD_ID: '9000020',
+        NGR1_EAST: '1234',
+        LOCAL_NAME: 'Test local name',
+        NGR1_NORTH: '1234',
+        NGR1_SHEET: 'TQ',
+        FGAC_REGION_CODE: '9'
+      }
+    ]
 
     requirements = [{ ...requirement }]
   })
 
   describe('when provided requirements and purposes', () => {
     it('correctly presents the data', () => {
-      const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
+      const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
       expect(result).to.equal({
         returnsRequired: false,
@@ -60,6 +73,9 @@ describe('Return Requirements presenter', () => {
           frequencyCollected: 'daily',
           frequencyReported: 'daily',
           index: 0,
+          points: [
+            'At National Grid Reference TQ 1234 1234 (Test local name)'
+          ],
           purposes: [
             'A singular purpose'
           ],
@@ -72,13 +88,16 @@ describe('Return Requirements presenter', () => {
   describe("the 'requirements' property", () => {
     describe('when the requirement is "complete" (agreements exceptions is populated)', () => {
       it('correctly returns the requirement', () => {
-        const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
+        const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
         expect(result.requirements).to.equal([{
           abstractionPeriod: 'From 1 June to 1 March',
           frequencyCollected: 'daily',
           frequencyReported: 'daily',
           index: 0,
+          points: [
+            'At National Grid Reference TQ 1234 1234 (Test local name)'
+          ],
           purposes: [
             'A singular purpose'
           ],
@@ -88,9 +107,15 @@ describe('Return Requirements presenter', () => {
       })
 
       it('maps the selected purpose ID\'s to their description', () => {
-        const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
+        const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
         expect(result.requirements[0].purposes).to.equal(['A singular purpose'])
+      })
+
+      it('maps the selected points to the abstraction point details format', () => {
+        const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+        expect(result.requirements[0].points).to.equal(['At National Grid Reference TQ 1234 1234 (Test local name)'])
       })
     })
 
@@ -100,7 +125,7 @@ describe('Return Requirements presenter', () => {
       })
 
       it('does not return the requirement', () => {
-        const result = ReturnRequirementsPresenter.go(requirements, purposeIds, journey)
+        const result = ReturnRequirementsPresenter.go(requirements, purposes, journey)
 
         expect(result.requirements).to.equal([])
       })

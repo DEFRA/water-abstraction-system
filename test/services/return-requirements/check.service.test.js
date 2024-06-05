@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
+const ReturnRequirementsService = require('../../../app/services/return-requirements/check/returns-requirements.service.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -20,6 +21,11 @@ describe('Return Requirements - Check service', () => {
   let yarStub
 
   beforeEach(async () => {
+    Sinon.stub(ReturnRequirementsService, 'go').resolves({
+      requirements: [],
+      returnsRequired: true
+    })
+
     await DatabaseSupport.clean()
 
     session = await SessionHelper.add({
