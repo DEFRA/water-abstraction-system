@@ -54,16 +54,6 @@ function _requirements (requirements, purposes, points) {
   return completedRequirements
 }
 
-function _mapPurposes (requirementPurposes, purposes) {
-  return requirementPurposes.map((requirementPurpose) => {
-    const matchedPurpose = purposes.find((purpose) => {
-      return purpose.id === requirementPurpose
-    })
-
-    return matchedPurpose.description
-  })
-}
-
 function _returnsCycle (returnsCycle) {
   if (returnsCycle === 'summer') {
     return 'Summer'
@@ -76,15 +66,25 @@ function _returnsCycle (returnsCycle) {
   return ''
 }
 
+function _mapPurposes (requirementPurposes, purposes) {
+  return requirementPurposes.map((requirementPurpose) => {
+    const matchedPurpose = purposes.find((purpose) => {
+      return purpose.id === requirementPurpose
+    })
+
+    return matchedPurpose.description
+  })
+}
+
 function _mapRequirement (requirement, index, purposes, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     frequencyCollected: requirement.frequencyCollected,
     frequencyReported: requirement.frequencyReported,
     index,
-    returnsCycle: _returnsCycle(requirement.returnsCycle),
     points: _mapPoints(requirement.points, points),
     purposes: _mapPurposes(requirement.purposes, purposes),
+    returnsCycle: _returnsCycle(requirement.returnsCycle),
     siteDescription: requirement.siteDescription
   }
 }
