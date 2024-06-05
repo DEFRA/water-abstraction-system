@@ -5,6 +5,8 @@
  * @module ChargeReferenceDetailsPresenter
  */
 
+const Big = require('big.js')
+
 const { formatLongDate, formatFinancialYear } = require('../../base.presenter.js')
 
 /**
@@ -113,7 +115,7 @@ function _prepareDate (startDate, endDate) {
 
 function _totalBillableReturns (reviewChargeElements) {
   return reviewChargeElements.reduce((total, reviewChargeElement) => {
-    total += reviewChargeElement.amendedAllocated
+    total = Big(total).plus(reviewChargeElement.amendedAllocated).toNumber()
 
     return total
   }, 0)

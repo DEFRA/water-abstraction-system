@@ -5,6 +5,8 @@
  * @module ReviewLicencePresenter
  */
 
+const Big = require('big.js')
+
 const DetermineAbstractionPeriodService = require('../../../services/bill-runs/determine-abstraction-periods.service.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
@@ -277,7 +279,7 @@ function _totalBillableReturns (reviewChargeReference) {
   let totalBillableReturns = 0
 
   reviewChargeReference.reviewChargeElements.forEach((reviewChargeElement) => {
-    totalBillableReturns += reviewChargeElement.amendedAllocated
+    totalBillableReturns = Big(totalBillableReturns).plus(reviewChargeElement.amendedAllocated).toNumber()
   })
 
   return `${totalBillableReturns} ML / ${reviewChargeReference.amendedAuthorisedVolume} ML`
