@@ -64,12 +64,25 @@ function _mapPurposes (requirementPurposes, purposes) {
   })
 }
 
+function _mapReturnCycle (returnsCycle) {
+  if (returnsCycle === 'summer') {
+    return 'Summer'
+  }
+
+  if (returnsCycle === 'winter-and-all-year') {
+    return 'Winter and all year'
+  }
+
+  return ''
+}
+
 function _mapRequirement (requirement, index, purposes, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
     frequencyCollected: requirement.frequencyCollected,
     frequencyReported: requirement.frequencyReported,
     index,
+    returnsCycle: _mapReturnCycle(requirement.returnsCycle),
     points: _mapPoints(requirement.points, points),
     purposes: _mapPurposes(requirement.purposes, purposes),
     siteDescription: requirement.siteDescription
@@ -77,7 +90,6 @@ function _mapRequirement (requirement, index, purposes, points) {
 }
 
 function _mapPoints (requirementPoints, points) {
-
   return requirementPoints.map((point) => {
     const matchedPoint = points.find((pid) => { return pid.ID === point })
 
