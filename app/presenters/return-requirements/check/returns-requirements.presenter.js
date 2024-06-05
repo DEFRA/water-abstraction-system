@@ -72,12 +72,12 @@ function _mapRequirement (requirement, index, purposes, points) {
     index,
     points: _mapPoints(requirement.points, points),
     purposes: _mapPurposes(requirement.purposes, purposes),
+    returnsCycle: requirement.returnsCycle === 'summer' ? 'Summer' : 'Winter and all year',
     siteDescription: requirement.siteDescription
   }
 }
 
 function _mapPoints (requirementPoints, points) {
-
   return requirementPoints.map((point) => {
     const matchedPoint = points.find((pid) => { return pid.ID === point })
 

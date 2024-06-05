@@ -83,6 +83,7 @@ describe('Return Requirements service', () => {
           purposes: [
             'Spray Irrigation - Storage'
           ],
+          returnsCycle: 'Summer',
           siteDescription: 'A place in the sun'
         }],
         returnsRequired: true
