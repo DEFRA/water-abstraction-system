@@ -40,6 +40,10 @@ function _abstractionPeriod (abstractionPeriod) {
 }
 
 function _agreementsExceptions (agreementsExceptions) {
+  if (agreementsExceptions[0] === 'none') {
+    return ''
+  }
+
   const agreementsExceptionsText = {
     'gravity-fill': 'Gravity fill',
     'transfer-re-abstraction-scheme': 'Transfer re-abstraction scheme',
@@ -47,7 +51,22 @@ function _agreementsExceptions (agreementsExceptions) {
     '56-returns-exception': '56 returns exception'
   }
 
-  return agreementsExceptionsText[agreementsExceptions[0]]
+  let text = ''
+  agreementsExceptions.forEach((agreementsException, index) => {
+    if (agreementsExceptions.length > 1 && index === (agreementsExceptions.length - 1)) {
+      text += 'and '
+    }
+
+    text += `${agreementsExceptionsText[agreementsException]}`
+
+    if (agreementsExceptions.length > 2 && index !== (agreementsExceptions.length - 1)) {
+      text += ','
+    }
+
+    text += ' '
+  })
+
+  return text.trim()
 }
 
 function _requirements (requirements, purposes, points) {

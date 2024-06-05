@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReturnRequirementsPresenter = require('../../../../app/presenters/return-requirements/check/returns-requirements.presenter.js')
 
-describe.only('Return Requirements presenter', () => {
+describe('Return Requirements presenter', () => {
   let journey
   let points = []
   let purposes = []
@@ -121,6 +121,18 @@ describe.only('Return Requirements presenter', () => {
       })
 
       describe('and the agreement exceptions has', () => {
+        describe('the exception is \'none\'', () => {
+          beforeEach(() => {
+            requirements = [{ ...requirement, agreementsExceptions: ['none'] }]
+          })
+
+          it('should return empty', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('')
+          })
+        })
+
         describe('one exception', () => {
           it('should return the exception', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
