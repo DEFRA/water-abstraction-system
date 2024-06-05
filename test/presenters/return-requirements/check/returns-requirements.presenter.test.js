@@ -128,10 +128,12 @@ describe('Return Requirements presenter', () => {
             expect(result.requirements[0].returnsCycle).to.equal('Summer')
           })
         })
+
         describe('Winter and all year', () => {
           beforeEach(() => {
             requirements = [{ ...requirement, returnsCycle: 'winter-and-all-year' }]
           })
+
           it('should return the text for a Winter and all year return cycle', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
