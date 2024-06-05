@@ -84,7 +84,7 @@ function _mapRequirement (requirement, index, purposes, points) {
     index,
     points: _mapPoints(requirement.points, points),
     purposes: _mapPurposes(requirement.purposes, purposes),
-    returnsCycle: _returnsCycle(requirement.returnsCycle),
+    returnsCycle: requirement.returnsCycle === 'summer' ? 'Summer' : 'Winter and all year',
     siteDescription: requirement.siteDescription
   }
 }
