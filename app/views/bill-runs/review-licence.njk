@@ -353,12 +353,10 @@
                   {% set row = {
                     classes: "border-bottom",
                     key: {
-                      text: "Total billable returns",
-                      attributes: { 'data-test': 'total' }
+                      text: "Total billable returns"
                     },
                     value: {
-                      text: chargeReference.totalBillableReturns,
-                      attributes: { 'data-test': 'total-billable-returns' }
+                      html: '<div data-test="total-billable-returns-' + chargeReferenceIndex + '">' + chargeReference.totalBillableReturns + '</div>'
                     },
                     actions: {
                       items: [
