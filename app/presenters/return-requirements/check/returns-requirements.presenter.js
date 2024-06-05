@@ -13,7 +13,7 @@ const { generateAbstractionPointDetail } = require('../../../lib/general.lib.js'
  *
  * @param {Object[]} requirements - The existing return requirements in the current session
  * @param {module:PurposeModel[]} purposes - All purposes that match those selected across the return requirements
- * @param {module:PermitLicenceModel[]} points - The points related to the licence ref
+ * @param {Object[]} points - The points related to the licence
  * @param {string} journey - Whether the setup journey is 'no-returns-required' or 'returns-required'
  *
  * @returns {Object} returns requirement data needed by the view template
