@@ -64,7 +64,7 @@ function _mapPurposes (requirementPurposes, purposes) {
   })
 }
 
-function _mapReturnCycle (returnsCycle) {
+function _returnsCycle (returnsCycle) {
   if (returnsCycle === 'summer') {
     return 'Summer'
   }
@@ -82,7 +82,7 @@ function _mapRequirement (requirement, index, purposes, points) {
     frequencyCollected: requirement.frequencyCollected,
     frequencyReported: requirement.frequencyReported,
     index,
-    returnsCycle: _mapReturnCycle(requirement.returnsCycle),
+    returnsCycle: _returnsCycle(requirement.returnsCycle),
     points: _mapPoints(requirement.points, points),
     purposes: _mapPurposes(requirement.purposes, purposes),
     siteDescription: requirement.siteDescription
