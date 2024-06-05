@@ -77,9 +77,6 @@ function _mapRequirement (requirement, index, purposes, points) {
 }
 
 function _mapPoints (requirementPoints, points) {
-  if (!requirementPoints || !points) {
-    return []
-  }
 
   return requirementPoints.map((point) => {
     const matchedPoint = points.find((pid) => { return pid.ID === point })
