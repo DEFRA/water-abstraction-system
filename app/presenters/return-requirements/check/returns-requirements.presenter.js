@@ -3,6 +3,13 @@
 const { formatAbstractionDate } = require('../../base.presenter.js')
 const { generateAbstractionPointDetail } = require('../../../lib/general.lib.js')
 
+const agreementsExceptionsText = {
+  'gravity-fill': 'Gravity fill',
+  'transfer-re-abstraction-scheme': 'Transfer re-abstraction scheme',
+  'two-part-tariff': 'Two-part tariff',
+  '56-returns-exception': '56 returns exception'
+}
+
 /**
  * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
  * @module ReturnRequirementsPresenter
@@ -39,34 +46,32 @@ function _abstractionPeriod (abstractionPeriod) {
   return `From ${startDate} to ${endDate}`
 }
 
+function _formatExceptionsToSerialCommaList (exceptions) {
+  return exceptions
+    .slice(0, exceptions.length - 1)
+    .join(', ') +
+    (exceptions.length > 2 ? ',' : '') +
+    ' and ' + exceptions[exceptions.length - 1]
+}
+
 function _agreementsExceptions (agreementsExceptions) {
   if (agreementsExceptions[0] === 'none') {
-    return ''
+    return 'None'
   }
 
-  const agreementsExceptionsText = {
-    'gravity-fill': 'Gravity fill',
-    'transfer-re-abstraction-scheme': 'Transfer re-abstraction scheme',
-    'two-part-tariff': 'Two-part tariff',
-    '56-returns-exception': '56 returns exception'
-  }
-
-  let text = ''
-  agreementsExceptions.forEach((agreementsException, index) => {
-    if (agreementsExceptions.length > 1 && index === (agreementsExceptions.length - 1)) {
-      text += 'and '
-    }
-
-    text += `${agreementsExceptionsText[agreementsException]}`
-
-    if (agreementsExceptions.length > 2 && index !== (agreementsExceptions.length - 1)) {
-      text += ','
-    }
-
-    text += ' '
+  const formattedExceptions = agreementsExceptions.map((exception) => {
+    return agreementsExceptionsText[exception]
   })
 
-  return text.trim()
+  if (formattedExceptions.length === 1) {
+    return formattedExceptions[0]
+  } else if (formattedExceptions.length === 2) {
+    return formattedExceptions.join(' and ')
+  } else {
+    return _formatExceptionsToSerialCommaList(formattedExceptions)
+  }
+
+  // return text.trim()
 }
 
 function _requirements (requirements, purposes, points) {
