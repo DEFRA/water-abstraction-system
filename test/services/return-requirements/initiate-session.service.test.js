@@ -12,6 +12,7 @@ const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
+const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../app/services/return-requirements/initiate-session.service.js')
@@ -39,6 +40,14 @@ describe('Return Requirements - Initiate Session service', () => {
           licenceId: licence.id, startDate: new Date('2022-05-01')
         })
 
+        // Create 2 return versions so we can test the service only gets the 'current' version
+        await ReturnVersionHelper.add({
+          licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
+        })
+        await ReturnVersionHelper.add({
+          id: '7aac9bce-bb11-40c9-81b5-fda735c3d51c', licenceId: licence.id, startDate: new Date('2022-05-01')
+        })
+
         // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
         await LicenceHolderSeeder.seed(licence.licenceRef)
 
@@ -58,6 +67,11 @@ describe('Return Requirements - Initiate Session service', () => {
             endDate: new Date('2024-08-10'),
             licenceRef: '01/ABC',
             licenceHolder: 'Licence Holder Ltd',
+            returnVersions: [{
+              id: '7aac9bce-bb11-40c9-81b5-fda735c3d51c',
+              reason: 'new-licence',
+              startDate: new Date('2022-05-01')
+            }],
             startDate: new Date('2022-01-01')
           },
           journey: 'returns-required',
