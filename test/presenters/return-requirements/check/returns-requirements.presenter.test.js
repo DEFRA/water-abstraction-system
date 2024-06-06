@@ -80,6 +80,7 @@ describe('Return Requirements presenter', () => {
           purposes: [
             'A singular purpose'
           ],
+          returnsCycle: 'Summer',
           siteDescription: 'A place in the sun'
         }]
       })
@@ -103,6 +104,7 @@ describe('Return Requirements presenter', () => {
           purposes: [
             'A singular purpose'
           ],
+          returnsCycle: 'Summer',
           siteDescription: 'A place in the sun'
         }
         ])
@@ -118,6 +120,28 @@ describe('Return Requirements presenter', () => {
         const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
         expect(result.requirements[0].points).to.equal(['At National Grid Reference TQ 1234 1234 (Test local name)'])
+      })
+
+      describe('and the return cycle is', () => {
+        describe('Summer', () => {
+          it('should return the text for a summer return cycle', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].returnsCycle).to.equal('Summer')
+          })
+        })
+
+        describe('Winter and all year', () => {
+          beforeEach(() => {
+            requirements = [{ ...requirement, returnsCycle: 'winter-and-all-year' }]
+          })
+
+          it('should return the text for a Winter and all year return cycle', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].returnsCycle).to.equal('Winter and all year')
+          })
+        })
       })
 
       describe('and the agreement exceptions', () => {
