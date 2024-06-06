@@ -43,7 +43,7 @@ const SubmitSetupService = require('../services/return-requirements/submit-setup
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
-function flasher (yar, title = 'Updated', text = 'Changes made') {
+function addFlashNotification (yar, title = 'Updated', text = 'Changes made') {
   yar.flash('notification', {
     title,
     text
@@ -266,7 +266,7 @@ async function submitAbstractionPeriod (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -284,8 +284,8 @@ async function submitAgreementsExceptions (request, h) {
   }
 
   // This needs logic
-  flasher(request.yar)
-  flasher(request.yar, 'Added', 'New requirement added')
+  addFlashNotification(request.yar)
+  addFlashNotification(request.yar, 'Added', 'New requirement added')
 
   return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
@@ -335,7 +335,7 @@ async function submitFrequencyCollected (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -353,7 +353,7 @@ async function submitFrequencyReported (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -396,7 +396,7 @@ async function submitPoints (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -414,7 +414,7 @@ async function submitPurpose (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -432,7 +432,7 @@ async function submitReason (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -458,7 +458,7 @@ async function submitReturnsCycle (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -488,7 +488,7 @@ async function submitSiteDescription (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
@@ -506,7 +506,7 @@ async function submitStartDate (request, h) {
   }
 
   if (pageData.checkPageVisited) {
-    flasher(request.yar)
+    addFlashNotification(request.yar)
 
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
