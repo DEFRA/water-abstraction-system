@@ -39,7 +39,7 @@ function add (data = {}) {
  */
 function defaults (data = {}) {
   const defaults = {
-    legacyId: generateLegacyId(),
+    legacyId: generatePurposeCode(),
     description: 'Spray Irrigation - Storage',
     lossFactor: 'high',
     twoPartTariff: true
@@ -51,7 +51,7 @@ function defaults (data = {}) {
   }
 }
 
-function generateLegacyId () {
+function generatePurposeCode () {
   const numbering = randomInteger(1, 999)
 
   return `${numbering}0`
@@ -59,5 +59,6 @@ function generateLegacyId () {
 
 module.exports = {
   add,
-  defaults
+  defaults,
+  generatePurposeCode
 }
