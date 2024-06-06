@@ -8,6 +8,7 @@
 const AbstractionPeriodPresenter = require('../../presenters/return-requirements/abstraction-period.presenter.js')
 const AbstractionPeriodValidator = require('../../validators/return-requirements/abstraction-period.validator.js')
 const SessionModel = require('../../models/session.model.js')
+const NotificationLib = require('../../lib/flash-notifications.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/abstraction-period` page
@@ -21,17 +22,22 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the abstraction period page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload) {
+async function go (sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
+
+    if (session.checkPageVisited) {
+      NotificationLib.flashNotification(yar)
+    }
 
     return {
       checkPageVisited: session.checkPageVisited

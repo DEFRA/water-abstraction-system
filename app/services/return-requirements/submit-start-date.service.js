@@ -5,6 +5,7 @@
  * @module StartDateService
  */
 
+const NotificationLib = require('../../lib/flash-notifications.lib.js')
 const SessionModel = require('../../models/session.model.js')
 const StartDatePresenter = require('../../presenters/return-requirements/start-date.presenter.js')
 const StartDateValidator = require('../../validators/return-requirements/start-date.validator.js')
@@ -21,11 +22,12 @@ const StartDateValidator = require('../../validators/return-requirements/start-d
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} If no errors 2 flags that determine whether the user is returned to the check page or the
  * next page in the journey else the page data for the start date page including the validation error details
  */
-async function go (sessionId, payload) {
+async function go (sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const { endDate, startDate } = session.licence
@@ -33,6 +35,10 @@ async function go (sessionId, payload) {
 
   if (!validationResult) {
     await _save(session, payload)
+
+    if (session.checkPageVisited) {
+      NotificationLib.flashNotification(yar)
+    }
 
     return {
       checkPageVisited: session.checkPageVisited,

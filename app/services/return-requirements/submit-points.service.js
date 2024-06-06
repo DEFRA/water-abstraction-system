@@ -6,8 +6,9 @@
  */
 
 const FetchPointsService = require('../../services/return-requirements/fetch-points.service.js')
-const PointsValidator = require('../../validators/return-requirements/points.validator.js')
+const NotificationLib = require('../../lib/flash-notifications.lib.js')
 const PointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
+const PointsValidator = require('../../validators/return-requirements/points.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -22,11 +23,12 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the points page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload) {
+async function go (sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   _handleOneOptionSelected(payload)
@@ -35,6 +37,10 @@ async function go (sessionId, requirementIndex, payload) {
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
+
+    if (session.checkPageVisited) {
+      NotificationLib.flashNotification(yar)
+    }
 
     return {
       checkPageVisited: session.checkPageVisited

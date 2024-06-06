@@ -6,8 +6,9 @@
  */
 
 const FetchLicencePurposesService = require('./fetch-licence-purposes.service.js')
-const PurposeValidation = require('../../validators/return-requirements/purpose.validator.js')
+const NotificationLib = require('../../lib/flash-notifications.lib.js')
 const PurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
+const PurposeValidation = require('../../validators/return-requirements/purpose.validator.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -22,11 +23,12 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the purpose page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload) {
+async function go (sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const purposesData = await FetchLicencePurposesService.go(session.licence.id)
 
@@ -36,6 +38,10 @@ async function go (sessionId, requirementIndex, payload) {
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
+
+    if (session.checkPageVisited) {
+      NotificationLib.flashNotification(yar)
+    }
 
     return {
       checkPageVisited: session.checkPageVisited

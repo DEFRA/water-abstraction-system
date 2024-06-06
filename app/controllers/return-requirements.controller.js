@@ -43,13 +43,6 @@ const SubmitSetupService = require('../services/return-requirements/submit-setup
 const SubmitSiteDescriptionService = require('../services/return-requirements/submit-site-description.service.js')
 const SubmitStartDateService = require('../services/return-requirements/submit-start-date.service.js')
 
-function addFlashNotification (yar, title = 'Updated', text = 'Changes made') {
-  yar.flash('notification', {
-    title,
-    text
-  })
-}
-
 async function abstractionPeriod (request, h) {
   const { requirementIndex, sessionId } = request.params
 
@@ -257,17 +250,15 @@ async function startDate (request, h) {
 }
 
 async function submitAbstractionPeriod (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { yar, payload, params: { requirementIndex, sessionId } } = request
 
-  const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/abstraction-period.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -275,18 +266,12 @@ async function submitAbstractionPeriod (request, h) {
 }
 
 async function submitAgreementsExceptions (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { yar, payload, params: { requirementIndex, sessionId } } = request
 
-  const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/agreements-exceptions.njk', pageData)
-  }
-
-  if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-  } else {
-    addFlashNotification(request.yar, 'Added', 'New requirement added')
   }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check`)
@@ -328,17 +313,15 @@ async function submitExisting (request, h) {
 }
 
 async function submitFrequencyCollected (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitFrequencyCollectedService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitFrequencyCollectedService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-collected.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -346,17 +329,15 @@ async function submitFrequencyCollected (request, h) {
 }
 
 async function submitFrequencyReported (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitFrequencyReportedService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitFrequencyReportedService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-reported.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -389,17 +370,15 @@ async function submitNote (request, h) {
 }
 
 async function submitPoints (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitPointsService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitPointsService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/points.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -407,17 +386,15 @@ async function submitPoints (request, h) {
 }
 
 async function submitPurpose (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitPurposeService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitPurposeService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/purpose.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -425,17 +402,15 @@ async function submitPurpose (request, h) {
 }
 
 async function submitReason (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload, yar } = request
 
-  const pageData = await SubmitReasonService.go(sessionId, request.payload)
+  const pageData = await SubmitReasonService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/reason.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -451,17 +426,15 @@ async function submitRemove (request, h) {
 }
 
 async function submitReturnsCycle (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitReturnsCycleService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitReturnsCycleService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/returns-cycle.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -481,17 +454,15 @@ async function submitSetup (request, h) {
 }
 
 async function submitSiteDescription (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitSiteDescriptionService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitSiteDescriptionService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/site-description.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 
@@ -499,17 +470,15 @@ async function submitSiteDescription (request, h) {
 }
 
 async function submitStartDate (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload, yar } = request
 
-  const pageData = await SubmitStartDateService.go(sessionId, request.payload)
+  const pageData = await SubmitStartDateService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/start-date.njk', pageData)
   }
 
   if (pageData.checkPageVisited) {
-    addFlashNotification(request.yar)
-
     return h.redirect(`/system/return-requirements/${sessionId}/check`)
   }
 

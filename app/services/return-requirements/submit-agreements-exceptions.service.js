@@ -8,6 +8,7 @@
 const AgreementsExceptionsPresenter = require('../../presenters/return-requirements/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../validators/return-requirements/agreements-exceptions.validator.js')
 const SessionModel = require('../../models/session.model.js')
+const NotificationLib = require('../../lib/flash-notifications.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/agreements-exceptions` page
@@ -21,11 +22,12 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the agreements exceptions page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload) {
+async function go (sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   _handleOneOptionSelected(payload)
@@ -34,6 +36,12 @@ async function go (sessionId, requirementIndex, payload) {
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
+
+    if (session.checkPageVisited) {
+      NotificationLib.flashNotification(yar)
+    } else {
+      NotificationLib.flashNotification(yar, 'Added', 'New requirement added')
+    }
 
     return {
       checkPageVisited: session.checkPageVisited
