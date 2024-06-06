@@ -250,7 +250,7 @@ async function startDate (request, h) {
 }
 
 async function submitAbstractionPeriod (request, h) {
-  const { yar, payload, params: { requirementIndex, sessionId } } = request
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
   const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, payload, yar)
 
@@ -266,7 +266,7 @@ async function submitAbstractionPeriod (request, h) {
 }
 
 async function submitAgreementsExceptions (request, h) {
-  const { yar, payload, params: { requirementIndex, sessionId } } = request
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
   const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, payload, yar)
 
