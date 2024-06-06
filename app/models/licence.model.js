@@ -72,6 +72,14 @@ class LicenceModel extends BaseModel {
           to: 'returnLogs.licenceRef'
         }
       },
+      returnVersions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'return-version.model',
+        join: {
+          from: 'licences.id',
+          to: 'returnVersions.licenceId'
+        }
+      },
       reviewLicences: {
         relation: Model.HasManyRelation,
         modelClass: 'review-licence.model',
