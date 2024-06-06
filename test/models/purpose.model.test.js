@@ -14,6 +14,8 @@ const ChargeReferenceHelper = require('../support/helpers/charge-reference.helpe
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const DatabaseSupport = require('../support/database.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
+const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
+const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
 
 // Thing under test
 const PurposeModel = require('../../app/models/purpose.model.js')
@@ -23,11 +25,13 @@ describe('Purpose model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await PurposeHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await PurposeHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await PurposeModel.query().findById(testRecord.id)
 
@@ -41,11 +45,11 @@ describe('Purpose model', () => {
       let testChargeElements
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await PurposeHelper.add()
 
         testChargeElements = []
         for (let i = 0; i < 2; i++) {
-          const chargeElement = await ChargeElementHelper.add({ purposeId: id })
+          const chargeElement = await ChargeElementHelper.add({ purposeId: testRecord.id })
           testChargeElements.push(chargeElement)
         }
       })
@@ -76,11 +80,11 @@ describe('Purpose model', () => {
       let testChargeReferences
 
       beforeEach(async () => {
-        const { id } = testRecord
+        testRecord = await PurposeHelper.add()
 
         testChargeReferences = []
         for (let i = 0; i < 2; i++) {
-          const chargeReference = await ChargeReferenceHelper.add({ purposeId: id })
+          const chargeReference = await ChargeReferenceHelper.add({ purposeId: testRecord.id })
           testChargeReferences.push(chargeReference)
         }
       })
@@ -104,6 +108,41 @@ describe('Purpose model', () => {
         expect(result.chargeReferences[0]).to.be.an.instanceOf(ChargeReferenceModel)
         expect(result.chargeReferences).to.include(testChargeReferences[0])
         expect(result.chargeReferences).to.include(testChargeReferences[1])
+      })
+    })
+
+    describe('when linking to return requirement purposes', () => {
+      let testReturnRequirementPurposes
+
+      beforeEach(async () => {
+        testRecord = await PurposeHelper.add()
+
+        testReturnRequirementPurposes = []
+        for (let i = 0; i < 2; i++) {
+          const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ purposeId: testRecord.id })
+          testReturnRequirementPurposes.push(returnRequirementPurpose)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await PurposeModel.query()
+          .innerJoinRelated('returnRequirementPurposes')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return requirement purposes', async () => {
+        const result = await PurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('returnRequirementPurposes')
+
+        expect(result).to.be.instanceOf(PurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnRequirementPurposes).to.be.an.array()
+        expect(result.returnRequirementPurposes[0]).to.be.an.instanceOf(ReturnRequirementPurposeModel)
+        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[0])
+        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[1])
       })
     })
   })
