@@ -21,11 +21,13 @@ describe('Return Requirement Point model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ReturnRequirementPointHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ReturnRequirementPointHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ReturnRequirementPointModel.query().findById(testRecord.id)
 

@@ -23,11 +23,13 @@ describe('Return Requirement Purpose model', () => {
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
-
-    testRecord = await ReturnRequirementPurposeHelper.add()
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await ReturnRequirementPurposeHelper.add()
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await ReturnRequirementPurposeModel.query().findById(testRecord.id)
 
