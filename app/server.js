@@ -4,7 +4,6 @@ const Hapi = require('@hapi/hapi')
 
 const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
 const AuthPlugin = require('./plugins/auth.plugin.js')
-const BlippPlugin = require('./plugins/blipp.plugin.js')
 const ChargingModuleTokenCachePlugin = require('./plugins/charging-module-token-cache.plugin.js')
 const ErrorPagesPlugin = require('./plugins/error-pages.plugin.js')
 const GlobalHapiServerMethodsPlugin = require('./plugins/global-hapi-server-methods.plugin.js')
@@ -37,11 +36,6 @@ const registerPlugins = async (server) => {
   await server.register(PayloadCleanerPlugin)
   await server.register(ViewsPlugin)
   await server.register(GlobalHapiServerMethodsPlugin)
-
-  // Register non-production plugins
-  if (ServerConfig.environment === 'development') {
-    await server.register(BlippPlugin)
-  }
 }
 
 const init = async () => {
