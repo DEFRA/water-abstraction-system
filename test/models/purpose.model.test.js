@@ -13,6 +13,8 @@ const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
 const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
 const DatabaseSupport = require('../support/database.js')
+const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
+const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const ReturnRequirementPurposeHelper = require('../support/helpers/return-requirement-purpose.helper.js')
 const ReturnRequirementPurposeModel = require('../../app/models/return-requirement-purpose.model.js')
@@ -108,6 +110,41 @@ describe('Purpose model', () => {
         expect(result.chargeReferences[0]).to.be.an.instanceOf(ChargeReferenceModel)
         expect(result.chargeReferences).to.include(testChargeReferences[0])
         expect(result.chargeReferences).to.include(testChargeReferences[1])
+      })
+    })
+
+    describe('when linking to licence version purposes', () => {
+      let testLicenceVersionPurposes
+
+      beforeEach(async () => {
+        testRecord = await PurposeHelper.add()
+
+        testLicenceVersionPurposes = []
+        for (let i = 0; i < 2; i++) {
+          const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({ purposeId: testRecord.id })
+          testLicenceVersionPurposes.push(licenceVersionPurpose)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await PurposeModel.query()
+          .innerJoinRelated('licenceVersionPurposes')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purposes', async () => {
+        const result = await PurposeModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurposes')
+
+        expect(result).to.be.instanceOf(PurposeModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurposes).to.be.an.array()
+        expect(result.licenceVersionPurposes[0]).to.be.an.instanceOf(LicenceVersionPurposeModel)
+        expect(result.licenceVersionPurposes).to.include(testLicenceVersionPurposes[0])
+        expect(result.licenceVersionPurposes).to.include(testLicenceVersionPurposes[1])
       })
     })
 
