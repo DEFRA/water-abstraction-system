@@ -150,7 +150,7 @@ describe('Return Requirements presenter', () => {
             requirements = [{ ...requirement, agreementsExceptions: ['none'] }]
           })
 
-          it('should return empty', () => {
+          it('should return \'None\' ', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].agreementsExceptions).to.equal('None')
@@ -158,7 +158,7 @@ describe('Return Requirements presenter', () => {
         })
 
         describe('has one exception', () => {
-          it('should return the exception', () => {
+          it('should return the exception in the string equivalent', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill')
@@ -169,7 +169,7 @@ describe('Return Requirements presenter', () => {
           beforeEach(() => {
             requirements = [{ ...requirement, agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme'] }]
           })
-          it('should return the exceptions seperated with an and \'exception1 and exception2\' ', () => {
+          it('should return the exceptions in the string equivalent seperated with an and \'exception1 and exception2\' ', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill and Transfer re-abstraction scheme')
@@ -180,7 +180,7 @@ describe('Return Requirements presenter', () => {
           beforeEach(() => {
             requirements = [{ ...requirement, agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme', 'two-part-tariff', '56-returns-exception'] }]
           })
-          it('should return the exceptions formatted in the serial comma style e.g \'exception1, exception2, and exception3\' ', () => {
+          it('should return the exceptions formatted in the string equivalent, in the serial comma style e.g \'exception1, exception2, and exception3\' ', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception')

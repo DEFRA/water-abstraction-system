@@ -4,6 +4,7 @@ const { formatAbstractionDate } = require('../../base.presenter.js')
 const { generateAbstractionPointDetail } = require('../../../lib/general.lib.js')
 
 const agreementsExceptionsText = {
+  none: 'None',
   'gravity-fill': 'Gravity fill',
   'transfer-re-abstraction-scheme': 'Transfer re-abstraction scheme',
   'two-part-tariff': 'Two-part tariff',
@@ -46,16 +47,8 @@ function _abstractionPeriod (abstractionPeriod) {
   return `From ${startDate} to ${endDate}`
 }
 
-function _formatExceptionsToSerialCommaList (exceptions) {
-  return exceptions
-    .slice(0, exceptions.length - 1)
-    .join(', ') +
-    (exceptions.length > 2 ? ',' : '') +
-    ' and ' + exceptions[exceptions.length - 1]
-}
-
 function _agreementsExceptions (agreementsExceptions) {
-  if (agreementsExceptions[0] === 'none') {
+  if (agreementsExceptions[0] === agreementsExceptionsText.none) {
     return 'None'
   }
 
@@ -70,8 +63,14 @@ function _agreementsExceptions (agreementsExceptions) {
   } else {
     return _formatExceptionsToSerialCommaList(formattedExceptions)
   }
+}
 
-  // return text.trim()
+function _formatExceptionsToSerialCommaList (exceptions) {
+  return exceptions
+    .slice(0, exceptions.length - 1)
+    .join(', ') +
+    (exceptions.length > 2 ? ',' : '') +
+    ' and ' + exceptions[exceptions.length - 1]
 }
 
 function _requirements (requirements, purposes, points) {
