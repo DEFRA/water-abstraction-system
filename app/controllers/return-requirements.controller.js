@@ -283,9 +283,11 @@ async function submitAgreementsExceptions (request, h) {
     return h.view('return-requirements/agreements-exceptions.njk', pageData)
   }
 
-  // This needs logic
-  addFlashNotification(request.yar)
-  addFlashNotification(request.yar, 'Added', 'New requirement added')
+  if (pageData.checkPageVisited) {
+    addFlashNotification(request.yar)
+  } else {
+    addFlashNotification(request.yar, 'Added', 'New requirement added')
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
