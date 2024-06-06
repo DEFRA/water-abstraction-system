@@ -53,10 +53,12 @@
   {% endif %}
 
   {% set insertText %}
-    <div>
+    <div data-test="financial-year">
       Financial year {{billRun.financialYear}}
     </div>
-    Charge period {{chargeVersion.chargePeriod}}
+    <div data-test="charge-period">
+      Charge period {{chargeVersion.chargePeriod}}
+    </div>
   {%endset%}
 
   {% set secondHeader %}
@@ -72,7 +74,7 @@
           errorMessage: error.radioFormElement,
           fieldset: {
             legend: {
-              html: '<span class="govuk-caption-l">' + chargeElement.description + ' ' +  chargeElement.dates + '</span>' + 'Set the billable returns quantity for this bill run' + secondHeader,
+              html: '<span class="govuk-caption-l">' + chargeElement.description + ' ' +  chargeElement.dates + '</span>' + '<div data-test="title">' + 'Set the billable returns quantity for this bill run' + '</div>' + secondHeader,
               isPageHeading: true,
               classes: 'govuk-fieldset__legend--l'
             }
@@ -81,7 +83,7 @@
             {
               id: 'authorised-quantity',
               value: authorisedQuantity,
-              html: 'Authorised ' + authorisedQuantity + 'ML'
+              html: '<div data-test="authorised-quantity">Authorised ' + authorisedQuantity + 'ML</div>'
             },
             {
               id: 'custom-quantity',

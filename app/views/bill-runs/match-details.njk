@@ -50,15 +50,15 @@
     </div>
   </div>
 
-  <div class="govuk-caption-m"> Financial year {{ financialYear }}</div>
-  <h2 class="govuk-heading-m">Charge period {{ chargePeriod }}</h2>
+  <div class="govuk-caption-m" data-test="financial-year"> Financial year {{ financialYear }}</div>
+  <h2 class="govuk-heading-m" data-test="charge-period">Charge period {{ chargePeriod }}</h2>
 
   {# Billable returns and volume #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-!-margin-right-6 float-left">
         <h3>
-          <div class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">
+          <div class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="billable-returns">
             {{chargeElement.billableVolume}}ML
           </div>
           <div class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">
@@ -75,7 +75,7 @@
       </div>
       <div class="govuk-!-margin-right-6 float-left">
         <h3>
-          <div class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold">
+          <div class="govuk-body govuk-font-size-64 govuk-!-font-weight-bold" data-test="authorised-volume">
             {{chargeElement.authorisedVolume}}ML
           </div>
           <div class="govuk-body govuk-!-font-weight-bold govuk-body govuk-!-font-size-19">
@@ -91,7 +91,8 @@
                 Issue
               </h4>
               {% for issue in chargeElement.issues %}
-                <div> {{ issue }} </div>
+                {% set issuesIndex = loop.index0 %}
+                <div data-test="issues-{{ issuesIndex }}"> {{ issue }} </div>
               {% endfor %}
             </div>
           {% endif %}
@@ -142,24 +143,20 @@
 
       {% set tableRow = [
         {
-          html: action,
-          classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-action' + matchedReturnIndex }
+          html: '<div data-test="matched-return-action-' + matchedReturnIndex + '">' + action + '</div>',
+          classes: 'govuk-body-s'
         },
         {
-          html: returnSummary,
-          classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-summary' + matchedReturnIndex }
+          html: '<div data-test="matched-return-summary-' + matchedReturnIndex + '">' + returnSummary + '</div>',
+          classes: 'govuk-body-s'
           },
         {
-          html: tag,
-          classes: 'govuk-body-s',
-          attributes: { 'data-test': 'matched-return-status' + matchedReturnIndex }
+          html: '<div data-test="matched-return-status-' + matchedReturnIndex + '">' + tag + '</div>',
+          classes: 'govuk-body-s'
         },
         {
-          html: "<div>" + return.returnTotal + "</div>" + issues,
-          classes: "govuk-body-s govuk-!-text-align-right",
-          attributes: { 'data-test': 'matched-return-total' + matchedReturnIndex}
+          html: '<div data-test="matched-return-total-' + matchedReturnIndex + '"><div>' + return.returnTotal + '</div>' + issues + '</div>' ,
+          classes: "govuk-body-s govuk-!-text-align-right"
         }]
       %}
 
