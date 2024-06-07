@@ -70,6 +70,7 @@ describe('Return Requirements presenter', () => {
         returnsRequired: false,
         requirements: [{
           abstractionPeriod: 'From 1 June to 1 March',
+          agreementsExceptions: 'Gravity fill',
           frequencyCollected: 'daily',
           frequencyReported: 'daily',
           index: 0,
@@ -93,6 +94,7 @@ describe('Return Requirements presenter', () => {
 
         expect(result.requirements).to.equal([{
           abstractionPeriod: 'From 1 June to 1 March',
+          agreementsExceptions: 'Gravity fill',
           frequencyCollected: 'daily',
           frequencyReported: 'daily',
           index: 0,
@@ -138,6 +140,52 @@ describe('Return Requirements presenter', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].returnsCycle).to.equal('Winter and all year')
+          })
+        })
+      })
+
+      describe('and the agreement exceptions', () => {
+        describe('is "none"', () => {
+          beforeEach(() => {
+            requirements = [{ ...requirement, agreementsExceptions: ['none'] }]
+          })
+
+          it('should return "None"', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('None')
+          })
+        })
+
+        describe('has one exception', () => {
+          it('should return the exception as "Gravity fill"', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill')
+          })
+        })
+
+        describe('has two exceptions', () => {
+          beforeEach(() => {
+            requirements = [{ ...requirement, agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme'] }]
+          })
+
+          it('should return the exceptions as "Gravity fill and Transfer re-abstraction scheme"', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill and Transfer re-abstraction scheme')
+          })
+        })
+
+        describe('has more than two exceptions', () => {
+          beforeEach(() => {
+            requirements = [{ ...requirement, agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme', 'two-part-tariff', '56-returns-exception'] }]
+          })
+
+          it('should return the exceptions as "Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception"', () => {
+            const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
+
+            expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception')
           })
         })
       })

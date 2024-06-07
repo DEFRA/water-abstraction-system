@@ -28,6 +28,8 @@ const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../app/models/return-log.model.js')
+const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
+const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const RegisteredToAndLicenceNameSeeder = require('../support/seeders/registered-to-and-licence-name.seeder.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
 const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
@@ -271,7 +273,7 @@ describe('Licence model', () => {
         expect(query).to.exist()
       })
 
-      it('can eager load the workflows', async () => {
+      it('can eager load the return logs', async () => {
         const result = await LicenceModel.query()
           .findById(testRecord.id)
           .withGraphFetched('returnLogs')
@@ -283,6 +285,41 @@ describe('Licence model', () => {
         expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
         expect(result.returnLogs).to.include(testReturnLogs[0])
         expect(result.returnLogs).to.include(testReturnLogs[1])
+      })
+    })
+
+    describe('when linking to return versions', () => {
+      let testReturnVersions
+
+      beforeEach(async () => {
+        const { id: licenceId } = testRecord
+
+        testReturnVersions = []
+        for (let i = 0; i < 2; i++) {
+          const returnVersion = await ReturnVersionHelper.add({ licenceId })
+          testReturnVersions.push(returnVersion)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query()
+          .innerJoinRelated('returnVersions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the return versions', async () => {
+        const result = await LicenceModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('returnVersions')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.returnVersions).to.be.an.array()
+        expect(result.returnVersions[0]).to.be.an.instanceOf(ReturnVersionModel)
+        expect(result.returnVersions).to.include(testReturnVersions[0])
+        expect(result.returnVersions).to.include(testReturnVersions[1])
       })
     })
 
