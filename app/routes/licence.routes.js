@@ -12,25 +12,18 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'View a licence bills page'
+      }
     }
   },
   {
     method: 'GET',
     path: '/licences/{id}/communications',
-    handler: LicencesController.viewCommunications,
-    options: {
-      description: 'View a licence communications page'
-    }
+    handler: LicencesController.viewCommunications
   },
   {
     method: 'GET',
     path: '/licences/{id}/contact-details',
-    handler: LicencesController.viewContacts,
-    options: {
-      description: 'View a licence contacts page'
-    }
+    handler: LicencesController.viewContacts
   },
   {
     method: 'GET',
@@ -41,25 +34,18 @@ const routes = [
         access: {
           scope: ['view_charge_versions']
         }
-      },
-      description: 'View a licence set up page'
+      }
     }
   },
   {
     method: 'GET',
     path: '/licences/{id}/summary',
-    handler: LicencesController.viewSummary,
-    options: {
-      description: 'View a licence summary page'
-    }
+    handler: LicencesController.viewSummary
   },
   {
     method: 'GET',
     path: '/licences/{id}/returns',
-    handler: LicencesController.viewReturns,
-    options: {
-      description: 'View a licence returns page'
-    }
+    handler: LicencesController.viewReturns
   },
   {
     method: 'GET',
@@ -70,8 +56,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Start no returns required set up journey (return-requirements)'
+      }
     }
   },
   {
@@ -83,8 +68,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Start returns required set up journey (return-requirements)'
+      }
     }
   }
 ]

@@ -11,9 +11,7 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false,
-      description: 'Used by the delivery team to confirm error logging is working correctly in an environment. ' +
-        'NOTE. We expect this endpoint to return a 500'
+      auth: false
     }
   },
   {
@@ -24,9 +22,7 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false,
-      description: 'Used by the delivery team to confirm we can connect to the database. It also returns us some ' +
-        'useful stats about each table.'
+      auth: false
     }
   },
   {
@@ -41,9 +37,7 @@ const routes = [
         // authenticated to see this page. So, if you have no creds or you are running with an expired cookie we don't
         // care, you'll just not see the links.
         mode: 'try'
-      },
-      description: 'Used by the delivery team to confirm we can connect to our other apps and services. It also ' +
-      'returns us the version and commit hash for each one.'
+      }
     }
   }
 ]

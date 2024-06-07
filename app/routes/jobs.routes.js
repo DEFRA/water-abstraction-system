@@ -11,8 +11,7 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false,
-      description: 'Used to export the database and upload the file to our AWS S3 bucket'
+      auth: false
     }
   },
   {
@@ -23,8 +22,7 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false,
-      description: 'Puts a licence into workflow when a new licence version has been created for it'
+      auth: false
     }
   },
   {
@@ -35,8 +33,7 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false,
-      description: 'Puts a licence into workflow when a charge element has a `timeLimitedEndDate` which is < 50 days away'
+      auth: false
     }
   }
 ]

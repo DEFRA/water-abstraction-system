@@ -11,8 +11,7 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false,
-      description: 'Returns the same response as /status'
+      auth: false
     }
   },
   {
@@ -22,8 +21,7 @@ const routes = [
       file: 'app/public/static/robots.txt'
     },
     options: {
-      auth: false,
-      description: 'Needed to support requests proxied from the legacy UI through to this app'
+      auth: false
     }
   },
   {
@@ -34,8 +32,7 @@ const routes = [
       app: {
         plainOutput: true
       },
-      auth: false,
-      description: 'Used by the AWS load balancers to confirm the service is running'
+      auth: false
     }
   }
 ]
