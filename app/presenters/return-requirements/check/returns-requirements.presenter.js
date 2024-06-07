@@ -58,11 +58,13 @@ function _agreementsExceptions (agreementsExceptions) {
 
   if (formattedExceptions.length === 1) {
     return formattedExceptions[0]
-  } else if (formattedExceptions.length === 2) {
-    return formattedExceptions.join(' and ')
-  } else {
-    return _formatExceptionsToSerialCommaList(formattedExceptions)
   }
+    
+  if (formattedExceptions.length === 2) {
+    return formattedExceptions.join(' and ')
+  }
+    
+  return _formatExceptionsToSerialCommaList(formattedExceptions)
 }
 
 function _formatExceptionsToSerialCommaList (exceptions) {
