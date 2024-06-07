@@ -74,6 +74,7 @@ describe('Return Requirements service', () => {
       expect(result).to.equal({
         requirements: [{
           abstractionPeriod: 'From 1 June to 1 March',
+          agreementsExceptions: 'Gravity fill',
           frequencyCollected: 'daily',
           frequencyReported: 'daily',
           index: 0,
