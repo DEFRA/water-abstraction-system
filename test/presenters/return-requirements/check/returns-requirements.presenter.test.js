@@ -158,7 +158,7 @@ describe('Return Requirements presenter', () => {
         })
 
         describe('has one exception', () => {
-          it('should return the exception in the string equivalent', () => {
+          it('should return the exception as "Gravity fill"', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill')
