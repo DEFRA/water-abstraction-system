@@ -7,8 +7,8 @@
 
 const AbstractionPeriodPresenter = require('../../presenters/return-requirements/abstraction-period.presenter.js')
 const AbstractionPeriodValidator = require('../../validators/return-requirements/abstraction-period.validator.js')
-const SessionModel = require('../../models/session.model.js')
 const GeneralLib = require('../../lib/general.lib.js')
+const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/abstraction-period` page

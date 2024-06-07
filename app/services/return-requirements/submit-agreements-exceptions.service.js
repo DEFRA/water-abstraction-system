@@ -7,8 +7,8 @@
 
 const AgreementsExceptionsPresenter = require('../../presenters/return-requirements/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../validators/return-requirements/agreements-exceptions.validator.js')
-const SessionModel = require('../../models/session.model.js')
 const GeneralLib = require('../../lib/general.lib.js')
+const SessionModel = require('../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/agreements-exceptions` page
