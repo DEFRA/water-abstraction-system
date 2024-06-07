@@ -145,7 +145,7 @@ describe('Return Requirements presenter', () => {
       })
 
       describe('and the agreement exceptions', () => {
-        describe('is \'none\'', () => {
+        describe('is "none"', () => {
           beforeEach(() => {
             requirements = [{ ...requirement, agreementsExceptions: ['none'] }]
           })
