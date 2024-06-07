@@ -66,6 +66,7 @@ describe('Return requirements controller', () => {
 
   describe('/return-requirements/{sessionId}/abstraction-period', () => {
     const path = 'abstraction-period'
+
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(AbstractionPeriodService, 'go').resolves({
@@ -129,6 +130,8 @@ describe('Return requirements controller', () => {
   })
 
   describe('/return-requirements/{sessionId}/additional-submission-options', () => {
+    const path = 'additional-submission-options'
+
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(AdditionalSubmissionOptionsService, 'go').resolves({
@@ -140,7 +143,7 @@ describe('Return requirements controller', () => {
 
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions('additional-submission-options'))
+          const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select any additional submission options for the return requirements')
@@ -150,6 +153,8 @@ describe('Return requirements controller', () => {
   })
 
   describe('/return-requirements/{sessionId}/note', () => {
+    const path = 'note'
+
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(NoteService, 'go').resolves({
@@ -159,7 +164,7 @@ describe('Return requirements controller', () => {
 
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions('note'))
+          const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Add a note')
@@ -221,10 +226,12 @@ describe('Return requirements controller', () => {
   })
 
   describe('/return-requirements/{licenceId}/approved', () => {
+    const path = 'approved'
+
     describe('GET', () => {
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions('approved'))
+          const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Requirements for returns approved')
@@ -234,6 +241,8 @@ describe('Return requirements controller', () => {
   })
 
   describe('/return-requirements/{sessionId}/cancel', () => {
+    const path = 'cancel'
+
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(CancelService, 'go').resolves({
@@ -244,7 +253,7 @@ describe('Return requirements controller', () => {
 
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions('cancel'))
+          const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('You are about to cancel these requirements for returns')
@@ -254,6 +263,8 @@ describe('Return requirements controller', () => {
   })
 
   describe('/return-requirements/{sessionId}/check', () => {
+    const path = 'check'
+
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(CheckService, 'go').resolves({
@@ -263,7 +274,7 @@ describe('Return requirements controller', () => {
 
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions('check'))
+          const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Check the return requirements for')
@@ -273,6 +284,8 @@ describe('Return requirements controller', () => {
   })
 
   describe('/return-requirements/{sessionId}/delete-note', () => {
+    const path = 'delete-note'
+
     describe('GET', () => {
       beforeEach(async () => {
         Sinon.stub(DeleteNoteService, 'go').resolves({
@@ -282,7 +295,7 @@ describe('Return requirements controller', () => {
       })
 
       it('redirects on success', async () => {
-        const result = await server.inject(_getOptions('delete-note'))
+        const result = await server.inject(_getOptions(path))
 
         expect(result.statusCode).to.equal(302)
         expect(result.headers.location).to.equal(`/system/return-requirements/${sessionId}/check`)
@@ -291,10 +304,12 @@ describe('Return requirements controller', () => {
   })
 
   describe('/return-requirements/{sessionId}/existing', () => {
+    const path = 'existing'
+
     describe('GET', () => {
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions('existing'))
+          const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
           expect(response.payload).to.contain('Select an existing return requirement from')
