@@ -17,6 +17,7 @@ function go (session) {
 
   return {
     backLink: `/system/return-requirements/${sessionId}/reason`,
+    displayCopyExisting: licence.returnVersions.length > 0,
     licenceRef: licence.licenceRef,
     sessionId,
     setup: setup ?? null
