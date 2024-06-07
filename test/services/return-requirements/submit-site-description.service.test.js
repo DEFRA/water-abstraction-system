@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -19,11 +20,13 @@ describe('Return Requirements - Submit Site Description service', () => {
 
   let payload
   let session
+  let sessionData
+  let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    session = await SessionHelper.add({
+    sessionData = {
       data: {
         checkPageVisited: false,
         licence: {
@@ -39,7 +42,11 @@ describe('Return Requirements - Submit Site Description service', () => {
         startDateOptions: 'licenceStartDate',
         reason: 'major-change'
       }
-    })
+    }
+
+    session = await SessionHelper.add(sessionData)
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   describe('when called', () => {
@@ -51,18 +58,43 @@ describe('Return Requirements - Submit Site Description service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+        await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.requirements[0].siteDescription).to.equal('This is a valid return requirement description')
       })
 
-      it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+      describe('and the page has been not been visited', () => {
+        it('returns the correct details the controller needs to redirect the journey', async () => {
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(result).to.equal({
-          checkPageVisited: false
+          expect(result).to.equal({
+            checkPageVisited: false
+          })
+        })
+      })
+
+      describe('and the page has been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        })
+
+        it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+
+          expect(result).to.equal({
+            checkPageVisited: true
+          })
+        })
+
+        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+          await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+
+          const [flashType, notification] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
         })
       })
     })
@@ -73,7 +105,7 @@ describe('Return Requirements - Submit Site Description service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+        const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'search',
@@ -87,7 +119,7 @@ describe('Return Requirements - Submit Site Description service', () => {
 
       describe('because the user has not entered anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
             text: 'Enter a description of the site'
@@ -103,7 +135,7 @@ describe('Return Requirements - Submit Site Description service', () => {
         })
 
         it('includes an error for the input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
             text: 'Site description must be 10 characters or more'
@@ -111,7 +143,7 @@ describe('Return Requirements - Submit Site Description service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.siteDescription).to.equal('Too short')
         })
@@ -128,7 +160,7 @@ describe('Return Requirements - Submit Site Description service', () => {
         })
 
         it('includes an error for the input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).to.equal({
             text: 'Site description must be 100 characters or less'
@@ -136,7 +168,7 @@ describe('Return Requirements - Submit Site Description service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload)
+          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result.siteDescription).to.equal(invalidSiteDescription)
         })
