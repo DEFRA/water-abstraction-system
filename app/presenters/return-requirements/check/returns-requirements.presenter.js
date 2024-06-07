@@ -59,20 +59,13 @@ function _agreementsExceptions (agreementsExceptions) {
   if (formattedExceptions.length === 1) {
     return formattedExceptions[0]
   }
-    
+
   if (formattedExceptions.length === 2) {
     return formattedExceptions.join(' and ')
   }
-    
-  return _formatExceptionsToSerialCommaList(formattedExceptions)
-}
 
-function _formatExceptionsToSerialCommaList (exceptions) {
-  return exceptions
-    .slice(0, exceptions.length - 1)
-    .join(', ') +
-    (exceptions.length > 2 ? ',' : '') +
-    ' and ' + exceptions[exceptions.length - 1]
+  return formattedExceptions.slice(0, formattedExceptions.length - 1)
+    .join(', ') + ', and ' + formattedExceptions[formattedExceptions.length - 1]
 }
 
 function _requirements (requirements, purposes, points) {
