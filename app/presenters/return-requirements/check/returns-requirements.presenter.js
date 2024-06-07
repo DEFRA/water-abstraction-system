@@ -3,6 +3,14 @@
 const { formatAbstractionDate } = require('../../base.presenter.js')
 const { generateAbstractionPointDetail } = require('../../../lib/general.lib.js')
 
+const agreementsExceptionsText = {
+  none: 'None',
+  'gravity-fill': 'Gravity fill',
+  'transfer-re-abstraction-scheme': 'Transfer re-abstraction scheme',
+  'two-part-tariff': 'Two-part tariff',
+  '56-returns-exception': '56 returns exception'
+}
+
 /**
  * Formats return requirements data for the `/return-requirements/{sessionId}/check` page
  * @module ReturnRequirementsPresenter
@@ -39,6 +47,27 @@ function _abstractionPeriod (abstractionPeriod) {
   return `From ${startDate} to ${endDate}`
 }
 
+function _agreementsExceptions (agreementsExceptions) {
+  if (agreementsExceptions[0] === agreementsExceptionsText.none) {
+    return 'None'
+  }
+
+  const formattedExceptions = agreementsExceptions.map((exception) => {
+    return agreementsExceptionsText[exception]
+  })
+
+  if (formattedExceptions.length === 1) {
+    return formattedExceptions[0]
+  }
+
+  if (formattedExceptions.length === 2) {
+    return formattedExceptions.join(' and ')
+  }
+
+  return formattedExceptions.slice(0, formattedExceptions.length - 1)
+    .join(', ') + ', and ' + formattedExceptions[formattedExceptions.length - 1]
+}
+
 function _requirements (requirements, purposes, points) {
   const completedRequirements = []
 
@@ -67,6 +96,7 @@ function _mapPurposes (requirementPurposes, purposes) {
 function _mapRequirement (requirement, index, purposes, points) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement.abstractionPeriod),
+    agreementsExceptions: _agreementsExceptions(requirement.agreementsExceptions),
     frequencyCollected: requirement.frequencyCollected,
     frequencyReported: requirement.frequencyReported,
     index,
