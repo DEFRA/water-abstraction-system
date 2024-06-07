@@ -265,7 +265,7 @@
                   key: {
                   html:  govukButton({
                     text: "Remove requirement",
-                    classes: "govuk-button--secondary",
+                    classes: "govuk-button--secondary data-test='meta-data-remove'" ,
                     preventDoubleClick: true,
                     href: "/system/return-requirements/" + sessionId + "/remove/" + requirement.index
                   }) if requirements.length >= 2
@@ -322,7 +322,7 @@
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
       {{ govukButton({
-        text: "Approve returns requirements",
+        html: '<span data-test="meta-data-approve">' + "Approve returns requirements" + "</span>",
         classes: "govuk-!-margin-right-6",
         preventDoubleClick: true
       }) }}
