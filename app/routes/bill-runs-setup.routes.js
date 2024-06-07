@@ -12,8 +12,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Attempt to create a new bill run'
+      }
     }
   },
   {
@@ -25,8 +24,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the region for the bill run'
+      }
     }
   },
   {
@@ -38,8 +36,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the region for the bill run'
+      }
     }
   },
   {
@@ -51,8 +48,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the season for the bill run'
+      }
     }
   },
   {
@@ -64,8 +60,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the season for the bill run'
+      }
     }
   },
   {
@@ -77,8 +72,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Create a bill run (start of journey)'
+      }
     }
   },
   {
@@ -90,8 +84,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the bill run type'
+      }
     }
   },
   {
@@ -103,8 +96,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the bill run type for the bill run'
+      }
     }
   },
   {
@@ -116,8 +108,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the financial year for the bill run'
+      }
     }
   },
   {
@@ -129,8 +120,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the financial year for the bill run'
+      }
     }
   }
 ]

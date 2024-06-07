@@ -8,7 +8,6 @@ const routes = [
     path: '/bills/{id}',
     options: {
       handler: BillsController.view,
-      description: 'Used to view a bill',
       auth: {
         access: {
           scope: ['billing']
@@ -21,7 +20,6 @@ const routes = [
     path: '/bills/{id}/remove',
     options: {
       handler: BillsController.remove,
-      description: 'Confirm bill should be removed from bill run page',
       auth: {
         access: {
           scope: ['billing']
@@ -34,7 +32,6 @@ const routes = [
     path: '/bills/{id}/remove',
     options: {
       handler: BillsController.submitRemove,
-      description: 'Submit confirm bill should be removed from bill run',
       auth: {
         access: {
           scope: ['billing']

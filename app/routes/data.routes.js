@@ -12,8 +12,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'De-duplicate a licence'
+      }
     }
   },
   {
@@ -25,8 +24,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit licence to be de-duped'
+      }
     }
   },
   {
@@ -38,8 +36,7 @@ const routes = [
         excludeFromProd: true,
         plainOutput: true
       },
-      auth: false,
-      description: 'Used to load test data in the database'
+      auth: false
     }
   },
   {
@@ -51,8 +48,7 @@ const routes = [
         excludeFromProd: true,
         plainOutput: true
       },
-      auth: false,
-      description: 'Used to seed test data in the database'
+      auth: false
     }
   },
   {
@@ -64,8 +60,7 @@ const routes = [
         excludeFromProd: true,
         plainOutput: true
       },
-      auth: false,
-      description: 'Used to remove the acceptance test data from the database'
+      auth: false
     }
   }
 ]

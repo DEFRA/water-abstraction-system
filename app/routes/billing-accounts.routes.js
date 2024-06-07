@@ -15,8 +15,7 @@ const routes = [
         access: {
           scope: ['manage_billing_accounts']
         }
-      },
-      description: 'Used updating a billing account with a new address'
+      }
     }
   }
 ]

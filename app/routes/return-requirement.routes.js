@@ -12,8 +12,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Enter the abstraction period for the return requirement'
+      }
     }
   },
   {
@@ -25,8 +24,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the abstraction period for the return requirement'
+      }
     }
   },
   {
@@ -38,8 +36,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Adds another object to the requirements array in the session'
+      }
     }
 
   },
@@ -52,8 +49,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select additional submission options for the return requirement'
+      }
     }
   },
   {
@@ -65,8 +61,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit additional submission options for the return requirement'
+      }
     }
   },
   {
@@ -78,8 +73,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select agreements and exceptions for the return requirement'
+      }
     }
   },
   {
@@ -91,8 +85,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit agreements and exceptions for the return requirement'
+      }
     }
   },
   {
@@ -104,8 +97,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Requirements for returns approved'
+      }
     }
   },
   {
@@ -117,8 +109,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Cancel return requirements'
+      }
     }
   },
   {
@@ -130,8 +121,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Cancel return requirements'
+      }
     }
   },
   {
@@ -143,8 +133,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Check return requirements'
+      }
     }
   },
   {
@@ -156,8 +145,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit check return requirements'
+      }
     }
   },
   {
@@ -169,8 +157,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Delete a note'
+      }
     }
   },
   {
@@ -182,8 +169,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select an existing return requirement from'
+      }
     }
   },
   {
@@ -195,8 +181,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit an existing return requirement from'
+      }
     }
   },
   {
@@ -208,8 +193,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select how often readings or volumes are collected'
+      }
     }
   },
   {
@@ -221,8 +205,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit how often readings or volumes are collected'
+      }
     }
   },
   {
@@ -234,8 +217,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select how often collected readings or volumes are reported'
+      }
     }
   },
   {
@@ -247,8 +229,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit how often collected readings or volumes are reported'
+      }
     }
   },
   {
@@ -260,8 +241,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Why are no returns required?'
+      }
     }
   },
   {
@@ -273,8 +253,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit why are no returns required?'
+      }
     }
   },
   {
@@ -286,8 +265,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Add a note'
+      }
     }
   },
   {
@@ -299,8 +277,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit a note'
+      }
     }
   },
   {
@@ -312,8 +289,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the points for the requirements for returns'
+      }
     }
   },
   {
@@ -325,8 +301,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the points for the requirements for returns'
+      }
     }
   },
   {
@@ -338,8 +313,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the purpose for the requirements for returns'
+      }
     }
   },
   {
@@ -351,8 +325,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the purpose for the requirements for returns'
+      }
     }
   },
   {
@@ -364,8 +337,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the reason for the requirements for returns'
+      }
     }
   },
   {
@@ -377,8 +349,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the reason for the return requirement'
+      }
     }
   },
   {
@@ -390,8 +361,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'You are about to remove these requirements for returns'
+      }
     }
   },
   {
@@ -403,8 +373,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit you are about to remove these requirements for returns'
+      }
     }
   },
   {
@@ -416,8 +385,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the returns cycle for the return requirement'
+      }
     }
   },
   {
@@ -429,8 +397,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the returns cycle for the return requirement'
+      }
     }
   },
   {
@@ -442,8 +409,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'How do you want to set up the requirements for returns?'
+      }
     }
   },
   {
@@ -455,8 +421,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit how do you want to set up the return requirement?'
+      }
     }
   },
   {
@@ -468,8 +433,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Enter a site description for the requirements for returns'
+      }
     }
   },
   {
@@ -481,8 +445,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit a site description for the return requirement'
+      }
     }
   },
   {
@@ -494,8 +457,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Select the start date for the requirements for returns'
+      }
     }
   }, {
     method: 'POST',
@@ -506,8 +468,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the start date for the return requirement'
+      }
     }
   }
 ]
