@@ -48,17 +48,15 @@ async function go (sessionId, payload) {
 }
 
 function _redirect (setup) {
-  let endpoint
-
   if (setup === 'use-abstraction-data') {
-    endpoint = 'check'
+    return 'check'
   }
 
-  if (setup === 'set-up-manually') {
-    endpoint = 'purpose/0'
+  if (setup === 'use-existing-requirements') {
+    return 'existing'
   }
 
-  return endpoint
+  return 'purpose/0'
 }
 
 async function _save (session, payload) {
