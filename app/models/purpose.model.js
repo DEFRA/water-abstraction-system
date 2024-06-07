@@ -39,6 +39,14 @@ class PurposeModel extends BaseModel {
           from: 'purposes.id',
           to: 'licenceVersionPurposes.purposeId'
         }
+      },
+      returnRequirementPurposes: {
+        relation: Model.HasManyRelation,
+        modelClass: 'return-requirement-purpose.model',
+        join: {
+          from: 'purposes.id',
+          to: 'returnRequirementPurposes.purposeId'
+        }
       }
     }
   }

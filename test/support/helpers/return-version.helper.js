@@ -1,30 +1,33 @@
 'use strict'
 
 /**
- * @module PurposeHelper
+ * @module ReturnVersionHelper
  */
 
-const PurposeModel = require('../../../app/models/purpose.model.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { randomInteger } = require('../general.js')
+const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 /**
- * Add a new purpose
+ * Add a new return version
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `legacyId` - [randomly generated - 420]
- * - `description` - Spray Irrigation - Storage
- * - `lossFactor` - high
- * - `twoPartTariff` - true
+ * - `externalId` - [randomly generated - 9:99999:100]
+ * - `licenceId` - [random UUID]
+ * - `reason` - new-licence
+ * - `startDate` - 2022-04-01
+ * - `status` - current
+ * - `version` - 100
  *
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  *
- * @returns {Promise<module:PurposeModel>} The instance of the newly created record
+ * @returns {Promise<module:ReturnVersionModel>} The instance of the newly created record
  */
 function add (data = {}) {
   const insertData = defaults(data)
 
-  return PurposeModel.query()
+  return ReturnVersionModel.query()
     .insert({ ...insertData })
     .returning('*')
 }
@@ -38,11 +41,15 @@ function add (data = {}) {
  * @param {Object} [data] Any data you want to use instead of the defaults used here or in the database
  */
 function defaults (data = {}) {
+  const version = data.version ? data.version : 100
+
   const defaults = {
-    legacyId: generatePurposeCode(),
-    description: 'Spray Irrigation - Storage',
-    lossFactor: 'high',
-    twoPartTariff: true
+    externalId: `9:${randomInteger(100, 99999)}:${version}`,
+    licenceId: generateUUID(),
+    reason: 'new-licence',
+    startDate: new Date('2022-04-01'),
+    status: 'current',
+    version
   }
 
   return {
@@ -51,14 +58,7 @@ function defaults (data = {}) {
   }
 }
 
-function generatePurposeCode () {
-  const numbering = randomInteger(1, 999)
-
-  return `${numbering}0`
-}
-
 module.exports = {
   add,
-  defaults,
-  generatePurposeCode
+  defaults
 }
