@@ -99,14 +99,10 @@ function determineCurrentFinancialYear () {
 }
 
 /**
- * Sets the default flash notification of {title: Updated, text: Changes made}
- */
-
-/**
- * Creates a flash notification using yar
+ * Creates a flash notification using yar.
  *
- * When a notification is needed we use yar to handle the notifications. This function acts as
- * the base for publishing notification to yar
+ * This function adds a key/value to 'notification' in yar.
+ *
  * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {string} [title='Updated'] - title for the notification
  * @param {string} [text='Changes made'] - text for the notification
