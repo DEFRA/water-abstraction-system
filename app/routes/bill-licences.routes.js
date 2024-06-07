@@ -6,8 +6,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-licences/{id}',
+    handler: BillLicencesController.view,
     options: {
-      handler: BillLicencesController.view,
       auth: {
         access: {
           scope: ['billing']
@@ -18,8 +18,8 @@ const routes = [
   {
     method: 'GET',
     path: '/bill-licences/{id}/remove',
+    handler: BillLicencesController.remove,
     options: {
-      handler: BillLicencesController.remove,
       auth: {
         access: {
           scope: ['billing']
@@ -30,8 +30,8 @@ const routes = [
   {
     method: 'POST',
     path: '/bill-licences/{id}/remove',
+    handler: BillLicencesController.submitRemove,
     options: {
-      handler: BillLicencesController.submitRemove,
       auth: {
         access: {
           scope: ['billing']
