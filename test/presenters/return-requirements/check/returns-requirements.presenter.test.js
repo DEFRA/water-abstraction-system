@@ -150,7 +150,7 @@ describe('Return Requirements presenter', () => {
             requirements = [{ ...requirement, agreementsExceptions: ['none'] }]
           })
 
-          it('should return \'None\' ', () => {
+          it('should return "None"', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].agreementsExceptions).to.equal('None')
