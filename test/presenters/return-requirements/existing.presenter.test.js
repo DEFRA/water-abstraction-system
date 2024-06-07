@@ -41,8 +41,38 @@ describe('Return Requirements - Existing presenter', () => {
       const result = ExistingPresenter.go(session)
 
       expect(result).to.equal({
+        existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
         licenceRef: '01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d'
+      })
+    })
+  })
+
+  describe('the "existingOptions" property', () => {
+    describe('when the return versions do not contain a "reason"', () => {
+      it('returns the version ID as the option value and just the start date as the option text', () => {
+        const result = ExistingPresenter.go(session)
+
+        expect(result.existingOptions).to.equal([
+          { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
+        ])
+      })
+    })
+
+    describe('when the return versions contain a "reason"', () => {
+      beforeEach(() => {
+        session.licence.returnVersions.unshift({
+          id: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5', reason: 'major-change', startDate: '2024-05-07T00:00:00.000Z'
+        })
+      })
+
+      it('returns the version ID as the option value and the start date and reason as the option text', () => {
+        const result = ExistingPresenter.go(session)
+
+        expect(result.existingOptions).to.equal([
+          { value: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5', text: '7 May 2024 - Major change' },
+          { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
+        ])
       })
     })
   })
