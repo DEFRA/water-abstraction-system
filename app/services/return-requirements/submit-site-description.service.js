@@ -5,7 +5,7 @@
  * @module SubmitSiteDescriptionService
  */
 
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const SessionModel = require('../../models/session.model.js')
 const SiteDescriptionPresenter = require('../../presenters/return-requirements/site-description.presenter.js')
 const SiteDescriptionValidator = require('../../validators/return-requirements/site-description.validator.js')
@@ -36,7 +36,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {

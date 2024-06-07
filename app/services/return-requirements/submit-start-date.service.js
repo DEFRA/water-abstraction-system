@@ -5,7 +5,7 @@
  * @module StartDateService
  */
 
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const SessionModel = require('../../models/session.model.js')
 const StartDatePresenter = require('../../presenters/return-requirements/start-date.presenter.js')
 const StartDateValidator = require('../../validators/return-requirements/start-date.validator.js')
@@ -37,7 +37,7 @@ async function go (sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {

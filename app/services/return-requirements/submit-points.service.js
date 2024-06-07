@@ -6,7 +6,7 @@
  */
 
 const FetchPointsService = require('../../services/return-requirements/fetch-points.service.js')
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const PointsPresenter = require('../../presenters/return-requirements/points.presenter.js')
 const PointsValidator = require('../../validators/return-requirements/points.validator.js')
 const SessionModel = require('../../models/session.model.js')
@@ -39,7 +39,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {

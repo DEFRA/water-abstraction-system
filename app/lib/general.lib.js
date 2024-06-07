@@ -99,6 +99,27 @@ function determineCurrentFinancialYear () {
 }
 
 /**
+ * Sets the default flash notification of {title: Updated, text: Changes made}
+ */
+
+/**
+ * Creates a flash notification using yar
+ *
+ * When a notification is needed we use yar to handle the temporary nature of the notification
+ * This will add a temporary notidicat
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {string} title - Title for the notification. Defaults to 'Updated'
+ * @param {string} text - text for the notification. Defaults to 'Changes made'
+ *
+ */
+function flashNotification (yar, title = 'Updated', text = 'Changes made') {
+  yar.flash('notification', {
+    title,
+    text
+  })
+}
+
+/**
  * Generate a string that represents an abstraction point
  *
  * When abstracting water the point at which this is done can be described in several ways depending on the number of
@@ -276,6 +297,7 @@ module.exports = {
   calculateAndLogTimeTaken,
   currentTimeInNanoseconds,
   determineCurrentFinancialYear,
+  flashNotification,
   generateAbstractionPointDetail,
   generateUUID,
   periodsOverlap,

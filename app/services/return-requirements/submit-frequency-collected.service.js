@@ -7,7 +7,7 @@
 
 const FrequencyCollectedPresenter = require('../../presenters/return-requirements/frequency-collected.presenter.js')
 const FrequencyCollectedValidator = require('../../validators/return-requirements/frequency-collected.validator.js')
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -36,7 +36,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {

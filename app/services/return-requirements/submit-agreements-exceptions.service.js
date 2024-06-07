@@ -8,7 +8,7 @@
 const AgreementsExceptionsPresenter = require('../../presenters/return-requirements/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../validators/return-requirements/agreements-exceptions.validator.js')
 const SessionModel = require('../../models/session.model.js')
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/agreements-exceptions` page
@@ -38,9 +38,9 @@ async function go (sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     } else {
-      NotificationLib.flashNotification(yar, 'Added', 'New requirement added')
+      GeneralLib.flashNotification(yar, 'Added', 'New requirement added')
     }
 
     return {

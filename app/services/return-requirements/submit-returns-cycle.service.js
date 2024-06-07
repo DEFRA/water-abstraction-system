@@ -5,7 +5,7 @@
  * @module SubmitReturnsCycleService
  */
 
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const ReturnsCyclePresenter = require('../../presenters/return-requirements/returns-cycle.presenter.js')
 const ReturnsCycleValidator = require('../../validators/return-requirements/returns-cycle.validator.js')
 const SessionModel = require('../../models/session.model.js')
@@ -36,7 +36,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {

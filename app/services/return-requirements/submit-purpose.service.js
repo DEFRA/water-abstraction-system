@@ -6,7 +6,7 @@
  */
 
 const FetchLicencePurposesService = require('./fetch-licence-purposes.service.js')
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const PurposePresenter = require('../../presenters/return-requirements/purpose.presenter.js')
 const PurposeValidation = require('../../validators/return-requirements/purpose.validator.js')
 const SessionModel = require('../../models/session.model.js')
@@ -40,7 +40,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {

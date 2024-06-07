@@ -5,7 +5,7 @@
  * @module SubmitReasonService
  */
 
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const ReasonPresenter = require('../../presenters/return-requirements/reason.presenter.js')
 const ReasonValidator = require('../../validators/return-requirements/reason.validator.js')
 const SessionModel = require('../../models/session.model.js')
@@ -35,7 +35,7 @@ async function go (sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {

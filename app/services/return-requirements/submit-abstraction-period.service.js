@@ -8,7 +8,7 @@
 const AbstractionPeriodPresenter = require('../../presenters/return-requirements/abstraction-period.presenter.js')
 const AbstractionPeriodValidator = require('../../validators/return-requirements/abstraction-period.validator.js')
 const SessionModel = require('../../models/session.model.js')
-const NotificationLib = require('../../lib/flash-notifications.lib.js')
+const GeneralLib = require('../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-requirements/{sessionId}/abstraction-period` page
@@ -36,7 +36,7 @@ async function go (sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      NotificationLib.flashNotification(yar)
+      GeneralLib.flashNotification(yar)
     }
 
     return {
