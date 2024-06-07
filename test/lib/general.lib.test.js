@@ -120,6 +120,32 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#flashNotification', () => {
+    let yarStub
+
+    beforeEach(() => {
+      yarStub = { flash: Sinon.stub() }
+    })
+
+    it('returns the standard notification { title: "Updated", text: "Changes made" }', () => {
+      GeneralLib.flashNotification(yarStub)
+
+      const [flashType, notification] = yarStub.flash.args[0]
+
+      expect(flashType).to.equal('notification')
+      expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+    })
+
+    it('returns the overridden notification { title: "Fancy new title", text: "better text" }', () => {
+      GeneralLib.flashNotification(yarStub, 'Fancy new title', 'better text')
+
+      const [flashType, notification] = yarStub.flash.args[0]
+
+      expect(flashType).to.equal('notification')
+      expect(notification).to.equal({ title: 'Fancy new title', text: 'better text' })
+    })
+  })
+
   describe('#generateUUID', () => {
     // NOTE: generateUUID() only calls crypto.randomUUID(); it does nothing else. So, there is nothing really to test
     // and certainly, testing the UUID is really unique is beyond the scope of this project! But this test at least

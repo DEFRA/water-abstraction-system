@@ -250,9 +250,9 @@ async function startDate (request, h) {
 }
 
 async function submitAbstractionPeriod (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/abstraction-period.njk', pageData)
@@ -266,9 +266,9 @@ async function submitAbstractionPeriod (request, h) {
 }
 
 async function submitAgreementsExceptions (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/agreements-exceptions.njk', pageData)
@@ -313,9 +313,9 @@ async function submitExisting (request, h) {
 }
 
 async function submitFrequencyCollected (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitFrequencyCollectedService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitFrequencyCollectedService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-collected.njk', pageData)
@@ -329,9 +329,9 @@ async function submitFrequencyCollected (request, h) {
 }
 
 async function submitFrequencyReported (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitFrequencyReportedService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitFrequencyReportedService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/frequency-reported.njk', pageData)
@@ -370,9 +370,9 @@ async function submitNote (request, h) {
 }
 
 async function submitPoints (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitPointsService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitPointsService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/points.njk', pageData)
@@ -386,9 +386,9 @@ async function submitPoints (request, h) {
 }
 
 async function submitPurpose (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitPurposeService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitPurposeService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/purpose.njk', pageData)
@@ -402,9 +402,9 @@ async function submitPurpose (request, h) {
 }
 
 async function submitReason (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload, yar } = request
 
-  const pageData = await SubmitReasonService.go(sessionId, request.payload)
+  const pageData = await SubmitReasonService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/reason.njk', pageData)
@@ -426,9 +426,9 @@ async function submitRemove (request, h) {
 }
 
 async function submitReturnsCycle (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitReturnsCycleService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitReturnsCycleService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/returns-cycle.njk', pageData)
@@ -454,9 +454,9 @@ async function submitSetup (request, h) {
 }
 
 async function submitSiteDescription (request, h) {
-  const { requirementIndex, sessionId } = request.params
+  const { params: { requirementIndex, sessionId }, payload, yar } = request
 
-  const pageData = await SubmitSiteDescriptionService.go(sessionId, requirementIndex, request.payload)
+  const pageData = await SubmitSiteDescriptionService.go(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/site-description.njk', pageData)
@@ -470,9 +470,9 @@ async function submitSiteDescription (request, h) {
 }
 
 async function submitStartDate (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload, yar } = request
 
-  const pageData = await SubmitStartDateService.go(sessionId, request.payload)
+  const pageData = await SubmitStartDateService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-requirements/start-date.njk', pageData)
