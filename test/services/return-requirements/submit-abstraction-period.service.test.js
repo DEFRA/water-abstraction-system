@@ -20,8 +20,8 @@ describe('Return Requirements - Submit Abstraction Period service', () => {
 
   let payload
   let session
-  let yarStub
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
