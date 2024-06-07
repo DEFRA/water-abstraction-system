@@ -44,7 +44,7 @@ async function _createSession (data) {
 }
 
 function _data (licence, journey) {
-  const { id, licenceRef, licenceVersions, startDate } = licence
+  const { id, licenceRef, licenceVersions, returnVersions, startDate } = licence
   const ends = licence.$ends()
 
   return {
@@ -55,6 +55,7 @@ function _data (licence, journey) {
       endDate: ends ? ends.date : null,
       licenceRef,
       licenceHolder: licence.$licenceHolder(),
+      returnVersions,
       startDate
     },
     journey,
@@ -79,6 +80,17 @@ async function _fetchLicence (licenceId) {
         .select([
           'id',
           'startDate'
+        ])
+        .where('status', 'current')
+        .orderBy('startDate', 'desc')
+    })
+    .withGraphFetched('returnVersions')
+    .modifyGraph('returnVersions', (builder) => {
+      builder
+        .select([
+          'id',
+          'startDate',
+          'reason'
         ])
         .where('status', 'current')
         .orderBy('startDate', 'desc')
