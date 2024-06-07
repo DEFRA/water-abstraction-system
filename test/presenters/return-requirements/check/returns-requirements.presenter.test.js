@@ -169,7 +169,8 @@ describe('Return Requirements presenter', () => {
           beforeEach(() => {
             requirements = [{ ...requirement, agreementsExceptions: ['gravity-fill', 'transfer-re-abstraction-scheme'] }]
           })
-          it('should return the exceptions in the string equivalent seperated with an and \'exception1 and exception2\' ', () => {
+
+          it('should return the exceptions as "Gravity fill and Transfer re-abstraction scheme"', () => {
             const result = ReturnRequirementsPresenter.go(requirements, purposes, points, journey)
 
             expect(result.requirements[0].agreementsExceptions).to.equal('Gravity fill and Transfer re-abstraction scheme')
