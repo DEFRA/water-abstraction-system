@@ -312,7 +312,7 @@ describe('Return requirements controller', () => {
           const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select an existing return requirement from')
+          expect(response.payload).to.contain('Select an existing requirements for returns from')
         })
       })
     })
