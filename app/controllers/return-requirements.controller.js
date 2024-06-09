@@ -30,6 +30,7 @@ const SubmitAdditionalSubmissionOptionsService = require('../services/return-req
 const SubmitAgreementsExceptions = require('../services/return-requirements/submit-agreements-exceptions.service.js')
 const SubmitCancel = require('../services/return-requirements/submit-cancel.service.js')
 const SubmitCheckService = require('../services/return-requirements/submit-check.service.js')
+const SubmitExistingService = require('../services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../services/return-requirements/submit-frequency-reported.service.js')
 const SubmitNoReturnsRequiredService = require('../services/return-requirements/submit-no-returns-required.service.js')
@@ -305,7 +306,13 @@ async function submitCheck (request, h) {
 }
 
 async function submitExisting (request, h) {
-  const { sessionId } = request.params
+  const { params: { sessionId }, payload } = request
+
+  const pageData = await SubmitExistingService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view('return-requirements/existing.njk', pageData)
+  }
 
   return h.redirect(`/system/return-requirements/${sessionId}/check`)
 }
