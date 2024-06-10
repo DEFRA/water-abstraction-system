@@ -12,6 +12,7 @@ const DatabaseSupport = require('../../support/database.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
+const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
@@ -20,6 +21,7 @@ const InitiateSessionService = require('../../../app/services/return-requirement
 describe('Return Requirements - Initiate Session service', () => {
   let journey
   let licence
+  let returnVersionId
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
@@ -28,11 +30,13 @@ describe('Return Requirements - Initiate Session service', () => {
   describe('when called', () => {
     describe('and the licence exists', () => {
       beforeEach(async () => {
+        journey = 'returns-required'
+
         // Create the licence record with an 'end' date so we can confirm the session gets populated with the licence's
         // 'ends' information
         licence = await LicenceHelper.add({ expiredDate: new Date('2024-08-10'), licenceRef: '01/ABC' })
 
-        // Create 2 licence versions so we can test the service only gets the 'current' version
+        // Create two licence versions so we can test the service only gets the 'current' version
         await LicenceVersionHelper.add({
           licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
         })
@@ -40,18 +44,8 @@ describe('Return Requirements - Initiate Session service', () => {
           licenceId: licence.id, startDate: new Date('2022-05-01')
         })
 
-        // Create 2 return versions so we can test the service only gets the 'current' version
-        await ReturnVersionHelper.add({
-          licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
-        })
-        await ReturnVersionHelper.add({
-          id: '7aac9bce-bb11-40c9-81b5-fda735c3d51c', licenceId: licence.id, startDate: new Date('2022-05-01')
-        })
-
         // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
         await LicenceHolderSeeder.seed(licence.licenceRef)
-
-        journey = 'returns-required'
       })
 
       it('creates a new session record containing details of the licence', async () => {
@@ -67,16 +61,81 @@ describe('Return Requirements - Initiate Session service', () => {
             endDate: new Date('2024-08-10'),
             licenceRef: '01/ABC',
             licenceHolder: 'Licence Holder Ltd',
-            returnVersions: [{
-              id: '7aac9bce-bb11-40c9-81b5-fda735c3d51c',
-              reason: 'new-licence',
-              startDate: new Date('2022-05-01')
-            }],
+            returnVersions: [],
             startDate: new Date('2022-01-01')
           },
           journey: 'returns-required',
           requirements: [{}]
         }, { skip: ['id'] })
+      })
+
+      describe('and has return versions with return requirements to copy from', () => {
+        beforeEach(async () => {
+          const returnVersion = await ReturnVersionHelper.add({
+            licenceId: licence.id, startDate: new Date('2022-05-01')
+          })
+          returnVersionId = returnVersion.id
+
+          await ReturnRequirementHelper.add({ returnVersionId })
+        })
+
+        it('includes details of the return versions in the session record created', async () => {
+          const result = await InitiateSessionService.go(licence.id, journey)
+
+          const { returnVersions } = result.data.licence
+
+          expect(returnVersions).to.equal([{
+            id: returnVersionId,
+            reason: 'new-licence',
+            startDate: new Date('2022-05-01')
+          }])
+        })
+      })
+
+      describe('and has return versions but they are not "current" (so cannot be copied from)', () => {
+        beforeEach(async () => {
+          const returnVersion = await ReturnVersionHelper.add({
+            licenceId: licence.id, startDate: new Date('2021-10-11'), status: 'superseded'
+          })
+
+          returnVersionId = returnVersion.id
+
+          await ReturnRequirementHelper.add({ returnVersionId })
+        })
+
+        it('does not contain any return version details in the session record created', async () => {
+          const result = await InitiateSessionService.go(licence.id, journey)
+
+          const { returnVersions } = result.data.licence
+
+          expect(returnVersions).to.be.empty()
+        })
+      })
+
+      describe('and has return versions but they do not have requirements (so cannot be copied from)', () => {
+        beforeEach(async () => {
+          await ReturnVersionHelper.add({
+            licenceId: licence.id, reason: 'transfer-licence', startDate: new Date('2021-10-11'), status: 'current'
+          })
+        })
+
+        it('does not contain any return version details in the session record created', async () => {
+          const result = await InitiateSessionService.go(licence.id, journey)
+
+          const { returnVersions } = result.data.licence
+
+          expect(returnVersions).to.be.empty()
+        })
+      })
+
+      describe('and has no return versions (so nothing to copy from)', () => {
+        it('does not contain any return version details in the session record created', async () => {
+          const result = await InitiateSessionService.go(licence.id, journey)
+
+          const { returnVersions } = result.data.licence
+
+          expect(returnVersions).to.be.empty()
+        })
       })
     })
 
