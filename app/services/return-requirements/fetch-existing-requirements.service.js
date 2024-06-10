@@ -32,6 +32,33 @@ async function go (returnVersionId) {
   return _transformForSetup(returnVersion)
 }
 
+function _agreementExceptions (returnRequirement) {
+  const { fiftySixException, gravityFill, reabstraction, twoPartTariff } = returnRequirement
+  const agreementsExceptions = []
+
+  if (fiftySixException) {
+    agreementsExceptions.push('56-returns-exception')
+  }
+
+  if (gravityFill) {
+    agreementsExceptions.push('gravity-fill')
+  }
+
+  if (reabstraction) {
+    agreementsExceptions.push('transfer-re-abstraction-scheme')
+  }
+
+  if (twoPartTariff) {
+    agreementsExceptions.push('two-part-tariff')
+  }
+
+  if (agreementsExceptions.length === 0) {
+    agreementsExceptions.push('none')
+  }
+
+  return agreementsExceptions
+}
+
 async function _fetch (returnVersionId) {
   return ReturnVersionModel.query()
     .findById(returnVersionId)
@@ -72,6 +99,18 @@ async function _fetch (returnVersionId) {
     })
 }
 
+function _points (returnRequirementPoints) {
+  return returnRequirementPoints.map((returnRequirementPoint) => {
+    return returnRequirementPoint.naldPointId.toString()
+  })
+}
+
+function _purposes (returnRequirementPurposes) {
+  return returnRequirementPurposes.map((returnRequirementPurpose) => {
+    return returnRequirementPurpose.purposeId
+  })
+}
+
 function _transformForSetup (returnVersion) {
   const { returnRequirements } = returnVersion
 
@@ -104,45 +143,6 @@ function _transformForSetup (returnVersion) {
       frequencyCollected: FREQUENCIES[collectionFrequency],
       agreementsExceptions: _agreementExceptions(returnRequirement)
     }
-  })
-}
-
-function _agreementExceptions (returnRequirement) {
-  const { fiftySixException, gravityFill, reabstraction, twoPartTariff } = returnRequirement
-  const agreementsExceptions = []
-
-  if (fiftySixException) {
-    agreementsExceptions.push('56-returns-exception')
-  }
-
-  if (gravityFill) {
-    agreementsExceptions.push('gravity-fill')
-  }
-
-  if (reabstraction) {
-    agreementsExceptions.push('transfer-re-abstraction-scheme')
-  }
-
-  if (twoPartTariff) {
-    agreementsExceptions.push('two-part-tariff')
-  }
-
-  if (agreementsExceptions.length === 0) {
-    agreementsExceptions.push('none')
-  }
-
-  return agreementsExceptions
-}
-
-function _points (returnRequirementPoints) {
-  return returnRequirementPoints.map((returnRequirementPoint) => {
-    return returnRequirementPoint.naldPointId.toString()
-  })
-}
-
-function _purposes (returnRequirementPurposes) {
-  return returnRequirementPurposes.map((returnRequirementPurpose) => {
-    return returnRequirementPurpose.purposeId
   })
 }
 
