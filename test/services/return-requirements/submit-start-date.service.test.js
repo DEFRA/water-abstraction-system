@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = exports.lab = Lab.script()
 const { expect } = Code
@@ -17,11 +18,13 @@ const SubmitStartDateService = require('../../../app/services/return-requirement
 describe('Return Requirements - Submit Start Date service', () => {
   let payload
   let session
+  let sessionData
+  let yarStub
 
   beforeEach(async () => {
     await DatabaseSupport.clean()
 
-    session = await SessionHelper.add({
+    sessionData = {
       data: {
         checkPageVisited: false,
         licence: {
@@ -36,7 +39,11 @@ describe('Return Requirements - Submit Start Date service', () => {
         requirements: [{}],
         startDateOptions: 'licenceStartDate'
       }
-    })
+    }
+
+    session = await SessionHelper.add(sessionData)
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   describe('when called', () => {
@@ -48,17 +55,43 @@ describe('Return Requirements - Submit Start Date service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitStartDateService.go(session.id, payload)
+        await SubmitStartDateService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.startDateOptions).to.equal('licenceStartDate')
       })
 
-      it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitStartDateService.go(session.id, payload)
+      describe('and the page has been not been visited', () => {
+        it('returns the correct details the controller needs to redirect the journey', async () => {
+          const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({ checkPageVisited: false, journey: 'returns-required' })
+          expect(result).to.equal({ checkPageVisited: false, journey: 'returns-required' })
+        })
+      })
+
+      describe('and the page has been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        })
+
+        it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
+          const result = await SubmitStartDateService.go(session.id, payload, yarStub)
+
+          expect(result).to.equal({
+            checkPageVisited: true,
+            journey: 'returns-required'
+          })
+        })
+
+        it('sets the notification message title to "Updated" and the text to "Changes made" ', async () => {
+          await SubmitStartDateService.go(session.id, payload, yarStub)
+
+          const [flashType, notification] = yarStub.flash.args[0]
+
+          expect(flashType).to.equal('notification')
+          expect(notification).to.equal({ title: 'Updated', text: 'Changes made' })
+        })
       })
     })
 
@@ -73,7 +106,7 @@ describe('Return Requirements - Submit Start Date service', () => {
       })
 
       it('saves the submitted values', async () => {
-        await SubmitStartDateService.go(session.id, payload)
+        await SubmitStartDateService.go(session.id, payload, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -84,7 +117,7 @@ describe('Return Requirements - Submit Start Date service', () => {
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitStartDateService.go(session.id, payload)
+        const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({ checkPageVisited: false, journey: 'returns-required' })
       })
@@ -96,7 +129,7 @@ describe('Return Requirements - Submit Start Date service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitStartDateService.go(session.id, payload)
+        const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'search',
@@ -114,7 +147,7 @@ describe('Return Requirements - Submit Start Date service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitStartDateService.go(session.id, payload)
+          const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
             message: 'Select the start date for the requirements for returns',
@@ -135,7 +168,7 @@ describe('Return Requirements - Submit Start Date service', () => {
         })
 
         it('includes an error for the date input element', async () => {
-          const result = await SubmitStartDateService.go(session.id, payload)
+          const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
           expect(result.error).to.equal({
             message: 'Enter a real start date',
@@ -145,7 +178,7 @@ describe('Return Requirements - Submit Start Date service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitStartDateService.go(session.id, payload)
+          const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
           expect(result.anotherStartDateDay).to.equal('a')
           expect(result.anotherStartDateMonth).to.equal('b')

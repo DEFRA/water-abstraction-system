@@ -7,6 +7,7 @@
 
 const FrequencyReportedPresenter = require('../../presenters/return-requirements/frequency-reported.presenter.js')
 const FrequencyReportedValidator = require('../../validators/return-requirements/frequency-reported.validator.js')
+const GeneralLib = require('../../lib/general.lib.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -21,17 +22,22 @@ const SessionModel = require('../../models/session.model.js')
  * @param {string} sessionId - The UUID of the current session
  * @param {string} requirementIndex - The index of the requirement being added or changed
  * @param {Object} payload - The submitted form data
+ * @param {Object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<Object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the frequency reported page including the validation error details
  */
-async function go (sessionId, requirementIndex, payload) {
+async function go (sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
     await _save(session, requirementIndex, payload)
+
+    if (session.checkPageVisited) {
+      GeneralLib.flashNotification(yar)
+    }
 
     return {
       checkPageVisited: session.checkPageVisited
