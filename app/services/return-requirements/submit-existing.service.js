@@ -7,6 +7,7 @@
 
 const ExistingPresenter = require('../../presenters/return-requirements/existing.presenter.js')
 const ExistingValidator = require('../../validators/return-requirements/existing.validator.js')
+const FetchExistingRequirementsService = require('./fetch-existing-requirements.service.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -16,7 +17,8 @@ const SessionModel = require('../../models/session.model.js')
  *
  * The validation result is then combined with the output of the presenter to generate the page data needed by the view.
  * If there was a validation error the controller will re-render the page so needs this information. If all is well the
- * controller will redirect to the next page in the journey.
+ * controller will redirect to the next page in the journey after the existing return requirements have been saved to
+ * the session.
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {Object} payload - The submitted form data
@@ -30,6 +32,10 @@ async function go (sessionId, payload) {
   const validationResult = _validate(payload, session)
 
   if (!validationResult) {
+    const existingReturnRequirements = await FetchExistingRequirementsService.go(payload.existing)
+
+    await _save(session, existingReturnRequirements)
+
     return {}
   }
 
@@ -41,6 +47,12 @@ async function go (sessionId, payload) {
     pageTitle: 'Select an existing requirements for returns from',
     ...formattedData
   }
+}
+
+async function _save (session, existingReturnRequirements) {
+  session.requirements = existingReturnRequirements
+
+  return session.$update()
 }
 
 function _validate (payload, session) {

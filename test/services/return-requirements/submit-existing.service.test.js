@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = exports.lab = Lab.script()
+const { describe, it, beforeEach, afterEach } = exports.lab = Lab.script()
 const { expect } = Code
 
 // Test helpers
 const DatabaseSupport = require('../../support/database.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
+
+// Things we need to stub
+const FetchExistingRequirementsService = require('../../../app/services/return-requirements/fetch-existing-requirements.service.js')
 
 // Thing under test
 const SubmitExistingService = require('../../../app/services/return-requirements/submit-existing.service.js')
@@ -47,18 +51,32 @@ describe('Return Requirements - Submit Existing service', () => {
     session = await SessionHelper.add(sessionData)
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
           existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab'
         }
+
+        Sinon.stub(FetchExistingRequirementsService, 'go').resolves([_transformedReturnRequirement()])
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
         const result = await SubmitExistingService.go(session.id, payload)
 
         expect(result).to.equal({})
+      })
+
+      it('saves the selected existing return requirements', async () => {
+        await SubmitExistingService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.requirements).to.equal([_transformedReturnRequirement()])
       })
     })
 
@@ -88,3 +106,21 @@ describe('Return Requirements - Submit Existing service', () => {
     })
   })
 })
+
+function _transformedReturnRequirement () {
+  return {
+    points: ['1234'],
+    purposes: ['1a1a68cc-b1f5-43db-8d1a-3452425bcc68'],
+    returnsCycle: 'winter-and-all-year',
+    siteDescription: 'FIRST BOREHOLE AT AVALON',
+    abstractionPeriod: {
+      'end-abstraction-period-day': 31,
+      'end-abstraction-period-month': 3,
+      'start-abstraction-period-day': 1,
+      'start-abstraction-period-month': 4
+    },
+    frequencyReported: 'weekly',
+    frequencyCollected: 'weekly',
+    agreementsExceptions: ['none']
+  }
+}
