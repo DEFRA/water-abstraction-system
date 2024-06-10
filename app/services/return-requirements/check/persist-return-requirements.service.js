@@ -6,6 +6,7 @@
  */
 
 const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
+const ReturnVersionModel = require('../../../models/return-version.model.js')
 
 /**
  * Persists the Requirements journey data based on session data
@@ -21,9 +22,15 @@ async function go (session) {
   const { startDateDay, startDateYear, startDateMonth, licence, reason, requirements } = session
 
   const returnVersion = _buildReturnVersion(startDateDay, startDateYear, startDateMonth, licence, reason)
-  const returnRequirements = _buildReturnRequirements(requirements, returnVersion)
+  const persistedReturnVersion = await _persistReturnVersion(returnVersion)
 
-  await _persistData(returnRequirements, returnVersion)
+  // Strip empty objects off array - investigate bug
+  const normalisedRequirements = requirements.filter((requirement) => { return Object.keys(requirement).length > 0 })
+
+  if (normalisedRequirements.length > 0) {
+    const returnRequirements = _buildReturnRequirements(normalisedRequirements, persistedReturnVersion.id)
+    await _persistReturnRequirements(returnRequirements)
+  }
 }
 
 function _buildReturnVersion (startDateDay, startDateYear, startDateMonth, licence, reason) {
@@ -40,14 +47,12 @@ function _buildReturnVersion (startDateDay, startDateYear, startDateMonth, licen
   }
 }
 
-function _buildReturnRequirements (requirements, returnVersion) {
+function _buildReturnRequirements (requirements, returnVersionId) {
   return requirements
-    // Strip empty objects off array - investigate bug
-    .filter((requirement) => { return Object.keys(requirement).length > 0 })
     .map((requirement) => {
       return {
         ..._mapRequirementToReturnRequirementSchema(requirement),
-        returnVersion
+        returnVersionId
       }
     })
 }
@@ -66,9 +71,14 @@ function _mapRequirementToReturnRequirementSchema (requirement) {
   }
 }
 
-async function _persistData (returnRequirements) {
+async function _persistReturnRequirements (data) {
   return ReturnRequirementModel.query()
-    .insertGraph(returnRequirements)
+    .insertGraph(data)
+}
+
+async function _persistReturnVersion (data) {
+  return ReturnVersionModel.query()
+    .insertGraph(data)
 }
 
 module.exports = {
