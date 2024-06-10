@@ -8,6 +8,7 @@
 const Boom = require('@hapi/boom')
 
 const LicenceModel = require('../../../app/models/licence.model.js')
+const ReturnRequirementModel = require('../../../app/models/return-requirement.model.js')
 const SessionModel = require('../../models/session.model.js')
 
 /**
@@ -93,6 +94,12 @@ async function _fetchLicence (licenceId) {
           'reason'
         ])
         .where('status', 'current')
+        // A return version must include return requirements in order for us to be able to copy from it
+        .whereExists(
+          ReturnRequirementModel.query()
+            .select(1)
+            .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
+        )
         .orderBy('startDate', 'desc')
     })
     // See licence.model.js `static get modifiers` if you are unsure about what this is doing
