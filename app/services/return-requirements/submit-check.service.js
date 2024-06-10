@@ -8,6 +8,7 @@
 const CheckLicenceEndedService = require('./check-licence-ended.service.js')
 const ExpandedError = require('../../errors/expanded.error.js')
 const SessionModel = require('../../models/session.model.js')
+const ReturnRequirementModel = require('../../models/return-requirement.model.js')
 
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed
@@ -28,6 +29,8 @@ async function go (sessionId) {
 
   await _validateLicence(session.licence.id)
 
+  await _createNewReturnsRequirement(session)
+
   return session.licence.id
 }
 
@@ -39,6 +42,39 @@ async function _validateLicence (licenceId) {
   }
 
   throw new ExpandedError('Invalid licence for return requirements', { licenceId, licenceEnded })
+}
+
+async function _createNewReturnsRequirement (session) {
+  // either licence start or selected,
+  const startDate = session.startDateDay ? new Date(`${session.startDateYear}-${session.startDateMonth}-${session.startDateDay}`) : session.licence.currentVersionStartDate
+
+  const returnVersion = {
+    version: 1,
+    licenceId: session.licence.id,
+    startDate,
+    status: 'current',
+    reason: session.reason
+  }
+
+  const mappedRequirements = session.requirements
+    .filter((requirement) => { return Object.keys(requirement).length > 0 })
+    .map((requirement) => {
+      return {
+        summer: requirement.returnsCycle === 'summer',
+        siteDescription: requirement.siteDescription,
+        abstraction_period_end_day: requirement.abstractionPeriod['end-abstraction-period-day'],
+        abstraction_period_end_month: requirement.abstractionPeriod['end-abstraction-period-month'],
+        abstraction_period_start_day: requirement.abstractionPeriod['start-abstraction-period-day'],
+        abstraction_period_start_month: requirement.abstractionPeriod['start-abstraction-period-month'],
+        reportingFrequency: requirement.frequencyReported,
+        collectionFrequency: requirement.frequencyCollected,
+        returns_frequency: 'year', // need to know this
+        returnVersion
+      }
+    })
+
+  return ReturnRequirementModel.query()
+    .insertGraph(mappedRequirements)
 }
 
 module.exports = {
