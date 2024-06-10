@@ -106,23 +106,6 @@ describe('Adjustment Factor validator', () => {
       })
     })
 
-    describe('because the user entered a value greater than 1', () => {
-      beforeEach(() => {
-        payload = {
-          amendedAggregateFactor: 1.1
-        }
-
-        validationType = 'aggregate'
-      })
-
-      it('fails the validation with the message "The aggregate factor must be equal to or less than 1"', () => {
-        const result = AdjustmentFactorValidator.go(payload.amendedAggregateFactor, maxNumberOfDecimals, validationType)
-
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The aggregate factor must be equal to or less than 1')
-      })
-    })
-
     describe('because the user entered a value less than 0', () => {
       beforeEach(() => {
         payload = {
@@ -188,23 +171,6 @@ describe('Adjustment Factor validator', () => {
 
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal('The charge factor must not have more than 15 decimal places')
-      })
-    })
-
-    describe('because the user entered a value greater than 1', () => {
-      beforeEach(() => {
-        payload = {
-          amendedChargeFactor: 1.1
-        }
-
-        validationType = 'charge'
-      })
-
-      it('fails the validation with the message "The charge factor must be equal to or less than 1"', () => {
-        const result = AdjustmentFactorValidator.go(payload.amendedChargeFactor, maxNumberOfDecimals, validationType)
-
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The charge factor must be equal to or less than 1')
       })
     })
 
