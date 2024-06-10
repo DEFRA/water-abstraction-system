@@ -28,6 +28,7 @@ exports.up = function (knex) {
       table.boolean('reabstraction').notNullable().defaultTo(false)
       table.boolean('two_part_tariff').notNullable().defaultTo(false)
       table.boolean('fifty_six_exception').notNullable().defaultTo(false)
+      table.text('reporting_frequency').notNullable().defaultTo('day')
 
       // Legacy timestamps
       table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
