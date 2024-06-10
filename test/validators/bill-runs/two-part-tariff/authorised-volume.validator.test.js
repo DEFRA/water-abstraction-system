@@ -18,9 +18,7 @@ describe('Authorised Volume validator', () => {
       beforeEach(() => {
         payload = {
           authorisedVolume: '10',
-          totalBillableReturns: '5',
-          minVolume: '5',
-          maxVolume: '20'
+          totalBillableReturns: '5'
         }
       })
 
@@ -36,9 +34,7 @@ describe('Authorised Volume validator', () => {
     describe('because the user did not enter an authorised volume', () => {
       beforeEach(() => {
         payload = {
-          totalBillableReturns: '5',
-          minVolume: '5',
-          maxVolume: '20'
+          totalBillableReturns: '5'
         }
       })
 
@@ -54,9 +50,7 @@ describe('Authorised Volume validator', () => {
       beforeEach(() => {
         payload = {
           authorisedVolume: 'Hello World',
-          totalBillableReturns: '5',
-          minVolume: '5',
-          maxVolume: '20'
+          totalBillableReturns: '5'
         }
       })
 
@@ -72,9 +66,7 @@ describe('Authorised Volume validator', () => {
       beforeEach(() => {
         payload = {
           authorisedVolume: '5',
-          totalBillableReturns: '6',
-          minVolume: '5',
-          maxVolume: '20'
+          totalBillableReturns: '6'
         }
       })
 
@@ -83,42 +75,6 @@ describe('Authorised Volume validator', () => {
 
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal('The authorised volume must be greater than 6')
-      })
-    })
-
-    describe('because the user entered a number less than the minVolume', () => {
-      beforeEach(() => {
-        payload = {
-          authorisedVolume: '5',
-          totalBillableReturns: '5',
-          minVolume: '6',
-          maxVolume: '20'
-        }
-      })
-
-      it('fails the validation with the message "The authorised volume must be greater than 6"', () => {
-        const result = AuthorisedVolumeValidator.go(payload)
-
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The authorised volume must be greater than 6')
-      })
-    })
-
-    describe('because the user entered a number greater than the max volume', () => {
-      beforeEach(() => {
-        payload = {
-          authorisedVolume: '25',
-          totalBillableReturns: '5',
-          minVolume: '6',
-          maxVolume: '20'
-        }
-      })
-
-      it('fails the validation with the message "The authorised volume must be equal to or less than 20"', () => {
-        const result = AuthorisedVolumeValidator.go(payload)
-
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The authorised volume must be equal to or less than 20')
       })
     })
 
@@ -126,9 +82,7 @@ describe('Authorised Volume validator', () => {
       beforeEach(() => {
         payload = {
           authorisedVolume: '15.1234567',
-          totalBillableReturns: '5',
-          minVolume: '6',
-          maxVolume: '20'
+          totalBillableReturns: '5'
         }
       })
 

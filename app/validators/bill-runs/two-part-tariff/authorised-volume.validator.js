@@ -15,7 +15,7 @@ const Joi = require('joi')
  * When editing the authorised volume on the charge reference, the user input box is pre-populated with the current
  * value. The user must overwrite this value with there own value to amend the authorised volume.
  * The validation happening here is to ensure that the volume has been entered, it has a maximum 6 decimal places and
- * is more than either the totalBillableReturns or the minVolume (whichever is more) and greater than the maxVolume.
+ * is more than the totalBillableReturns.
  *
  * @param {Object} payload - The payload from the request to be validated
  *
@@ -23,12 +23,9 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go (payload) {
-  const { authorisedVolume, totalBillableReturns, minVolume, maxVolume } = payload
+  const { authorisedVolume, totalBillableReturns } = payload
 
-  const minValue = Number(Math.max(totalBillableReturns, minVolume))
-  const maxValue = Number(maxVolume)
-
-  const validation = _validate(authorisedVolume, minValue, maxValue)
+  const validation = _validate(authorisedVolume, Number(totalBillableReturns))
 
   // The first check we are doing is validating that a number has been inputted within the correct range. If it has
   // then we can move onto next validating the number of decimal places
@@ -62,18 +59,16 @@ function _customValidation (quantity, helpers) {
   })
 }
 
-function _validate (authorisedVolume, minValue, maxValue) {
+function _validate (authorisedVolume, totalBillableReturns) {
   const schema = Joi.object({
     authorisedVolume: Joi
       .number()
-      .min(minValue)
-      .max(maxValue)
+      .min(totalBillableReturns)
       .required()
       .messages({
         'number.base': 'The authorised volume must be a number',
         'number.unsafe': 'The authorised volume must be a number or fewer than 17 digits long',
-        'number.min': `The authorised volume must be greater than ${minValue}`,
-        'number.max': `The authorised volume must be equal to or less than ${maxValue}`,
+        'number.min': `The authorised volume must be greater than ${totalBillableReturns}`,
         'any.required': 'Enter an authorised volume'
       })
   })

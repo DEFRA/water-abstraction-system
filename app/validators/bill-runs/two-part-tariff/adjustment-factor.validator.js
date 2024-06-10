@@ -16,7 +16,7 @@ const Joi = require('joi')
  * pre-populated with the current value for both. The user must overwrite this value with there own value to amend the
  * adjustments.
  * The validation happening here is to ensure that the adjustments have been entered. Both have a
- * minimum value of 0 and a maximum value of 1, and they both get validated to either 2 or 15 decimal places.
+ * minimum value of 0 and they both get validated to either 2 or 15 decimal places.
  *
  * @param {Object} payload - The payload from the request to be validated
  * @param {Number} maxNumberOfDecimals - The maximum number of decimal places the factor can be validated to
@@ -54,13 +54,11 @@ function _validate (quantity, maxNumberOfDecimals, validationType) {
     quantity: Joi
       .number()
       .min(0)
-      .max(1)
       .required()
       .messages({
         'number.base': `The ${validationType} factor must be a number`,
         'number.unsafe': `The ${validationType} factor must be a number`,
         'number.min': `The ${validationType} factor must be greater than 0`,
-        'number.max': `The ${validationType} factor must be equal to or less than 1`,
         'any.required': `Enter a ${validationType} factor`
       })
   })
