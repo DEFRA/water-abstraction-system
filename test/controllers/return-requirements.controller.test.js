@@ -17,6 +17,7 @@ const CheckService = require('../../app/services/return-requirements/check.servi
 const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
+const ExistingService = require('../../app/services/return-requirements/existing.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../../app/services/return-requirements/note.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
@@ -29,6 +30,7 @@ const SiteDescriptionService = require('../../app/services/return-requirements/s
 const StartDateService = require('../../app/services/return-requirements/start-date.service.js')
 const SubmitAbstractionPeriod = require('../../app/services/return-requirements/submit-abstraction-period.service.js')
 const SubmitAgreementsExceptions = require('../../app/services/return-requirements/submit-agreements-exceptions.service.js')
+const SubmitExistingService = require('../../app/services/return-requirements/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../../app/services/return-requirements/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../../app/services/return-requirements/submit-frequency-reported.service.js')
 const SubmitPointsService = require('../../app/services/return-requirements/submit-points.service.js')
@@ -308,11 +310,47 @@ describe('Return requirements controller', () => {
 
     describe('GET', () => {
       describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ExistingService, 'go').resolves({
+            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select an existing requirements for returns from'
+          })
+        })
+
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(200)
-          expect(response.payload).to.contain('Select an existing return requirement from')
+          expect(response.payload).to.contain('Select an existing requirements for returns from')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the validation fails', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitExistingService, 'go').resolves({ error: {} })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(200)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+
+        describe('and the validation succeeds', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitExistingService, 'go').resolves({})
+          })
+
+          it('redirects to /system/return-requirements/{sessionId}/check', async () => {
+            const response = await server.inject(_postOptions(path))
+
+            expect(response.statusCode).to.equal(302)
+            expect(response.headers.location).to.equal('/system/return-requirements/' + sessionId + '/check')
+          })
         })
       })
     })
