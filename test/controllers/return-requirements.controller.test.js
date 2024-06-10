@@ -17,6 +17,7 @@ const CheckService = require('../../app/services/return-requirements/check.servi
 const DeleteNoteService = require('../../app/services/return-requirements/delete-note.service.js')
 const FrequencyCollectedService = require('../../app/services/return-requirements/frequency-collected.service.js')
 const FrequencyReportedService = require('../../app/services/return-requirements/frequency-reported.service.js')
+const ExistingService = require('../../app/services/return-requirements/existing.service.js')
 const NoReturnsRequiredService = require('../../app/services/return-requirements/no-returns-required.service.js')
 const NoteService = require('../../app/services/return-requirements/note.service.js')
 const PointsService = require('../../app/services/return-requirements/points.service.js')
@@ -309,6 +310,12 @@ describe('Return requirements controller', () => {
 
     describe('GET', () => {
       describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ExistingService, 'go').resolves({
+            id: '8702b98f-ae51-475d-8fcc-e049af8b8d38', pageTitle: 'Select an existing requirements for returns from'
+          })
+        })
+
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
