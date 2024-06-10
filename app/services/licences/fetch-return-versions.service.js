@@ -2,7 +2,7 @@
 
 /**
  * Fetches return requirements data needed for the view '/licences/{id}/set-up` page
- * @module FetchReturnRequirementsService
+ * @module FetchReturnVersionsService
  */
 
 const ReturnVersionModel = require('../../models/return-version.model.js')

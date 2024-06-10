@@ -29,13 +29,13 @@ const agreementDescriptions = {
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
  * @param {module:LicenceAgreements[]} agreements - All agreements records for the licence
- * @param {[]} returnsRequirements - All returns requirement records for the licence
+ * @param {module:ReturnVersionModel[]} returnVersions - All returns requirement records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
  *
  * @returns {Object} The data formatted for the view template
  */
-function go (chargeVersions, workflows, agreements, returnsRequirements, auth, commonData) {
+function go (chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   return {
     links: {
       returnsRequirements: {
@@ -47,7 +47,7 @@ function go (chargeVersions, workflows, agreements, returnsRequirements, auth, c
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
     ..._agreementButtons(auth, commonData),
     ..._authorisedLinks(auth, commonData),
-    returnsRequirements: _returnsRequirements(returnsRequirements)
+    returnsRequirements: _returnsRequirements(returnVersions)
   }
 }
 
@@ -170,17 +170,17 @@ function _financialAgreementCode (agreement) {
   return agreement.financialAgreements[0].financialAgreementCode
 }
 
-function _returnsRequirements (returnsRequirements = [{}]) {
-  return returnsRequirements.map((returnsRequirement) => {
+function _returnsRequirements (returnVersions = [{}]) {
+  return returnVersions.map((returnVersion) => {
     return {
       action: [{
         text: 'View',
         link: ''
       }],
-      endDate: returnsRequirement.endDate ? formatLongDate(returnsRequirement.endDate) : '-',
-      reason: returnRequirementReasons[returnsRequirement.reason],
-      startDate: returnsRequirement.startDate ? formatLongDate(returnsRequirement.startDate) : '-',
-      status: returnsRequirement.status
+      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '-',
+      reason: returnRequirementReasons[returnVersion.reason],
+      startDate: returnVersion.startDate ? formatLongDate(returnVersion.startDate) : '-',
+      status: returnVersion.status
     }
   })
 }
