@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 const roles = {
   billing: 'billing',
@@ -46,7 +47,7 @@ function go (chargeVersions, workflows, agreements, returnsRequirements, auth, c
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
     ..._agreementButtons(auth, commonData),
     ..._authorisedLinks(auth, commonData),
-    returnsRequirements: _returnsRequirements(returnsRequirements),
+    returnsRequirements: _returnsRequirements(returnsRequirements)
   }
 }
 
@@ -177,7 +178,7 @@ function _returnsRequirements (returnsRequirements = [{}]) {
         link: ''
       }],
       endDate: returnsRequirement.endDate ? formatLongDate(returnsRequirement.endDate) : '-',
-      reason: '',
+      reason: returnRequirementReasons[returnsRequirement.reason],
       startDate: returnsRequirement.startDate ? formatLongDate(returnsRequirement.startDate) : '-',
       status: returnsRequirement.status
     }

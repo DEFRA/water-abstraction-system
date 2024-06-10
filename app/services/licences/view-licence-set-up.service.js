@@ -26,7 +26,7 @@ async function go (licenceId, auth) {
   const agreements = await FetchAgreementsService.go(commonData.licenceRef)
   const chargeVersions = await FetchChargeVersionsService.go(licenceId)
   const workflows = await FetchWorkflowsService.go(licenceId)
-  const returnsRequirements = await FetchReturnRequirementsService.go(commonData.licenceRef)
+  const returnsRequirements = await FetchReturnRequirementsService.go(licenceId)
 
   const licenceSetUpData = SetUpPresenter
     .go(chargeVersions, workflows, agreements, returnsRequirements, auth, commonData)
