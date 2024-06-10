@@ -33,7 +33,7 @@ describe('Allocate Returns to Charge Element Service', () => {
           expect(chargeReference.allocatedQuantity).to.equal(32)
         })
 
-        it('allocates 32 to the charge element and adds chargeDatesOverlap property as `false`', () => {
+        it('allocates 32 to the charge element and adds chargeDatesOverlap property as "false"', () => {
           const { chargeElement, chargeReference, matchingReturns } = testData
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
@@ -192,7 +192,7 @@ describe('Allocate Returns to Charge Element Service', () => {
         })
       })
 
-      describe('with a `returnSubmissionLine` outside of the `chargePeriod`', () => {
+      describe('with a "returnSubmissionLine" outside of the "chargePeriod"', () => {
         beforeEach(() => {
           testData = _generateTestData()
           testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
@@ -233,14 +233,14 @@ describe('Allocate Returns to Charge Element Service', () => {
         })
       })
 
-      describe('with a `returnSubmissionLine` with a `startDate` outside the charge period but endDate within', () => {
+      describe('with a "returnSubmissionLine" with a "startDate" outside the charge period but endDate within', () => {
         beforeEach(() => {
           testData = _generateTestData()
           testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2022-03-01')
           testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].endDate = new Date('2022-04-30')
         })
 
-        it('allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
+        it('allocates 32 to the charge element and sets "chargeDatesOverlap" to true', () => {
           const { chargeElement, chargeReference, matchingReturns } = testData
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
@@ -251,14 +251,14 @@ describe('Allocate Returns to Charge Element Service', () => {
         })
       })
 
-      describe('with a `returnSubmissionLine` with a `endDate` outside the charge period but startDate within', () => {
+      describe('with a "returnSubmissionLine" with a "endDate" outside the charge period but startDate within', () => {
         beforeEach(() => {
           testData = _generateTestData()
           testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].startDate = new Date('2023-03-01')
           testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].endDate = new Date('2023-04-31')
         })
 
-        it('allocates 32 to the charge element and sets `chargeDatesOverlap` to true', () => {
+        it('allocates 32 to the charge element and sets "chargeDatesOverlap" to true', () => {
           const { chargeElement, chargeReference, matchingReturns } = testData
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
@@ -290,7 +290,7 @@ describe('Allocate Returns to Charge Element Service', () => {
         })
       })
 
-      describe('with a nil return that has no `returnSubmissionLines`', () => {
+      describe('with a nil return that has no "returnSubmissionLines"', () => {
         beforeEach(() => {
           testData = _generateTestData()
           testData.matchingReturns[0].returnSubmissions[0].returnSubmissionLines = []
@@ -550,7 +550,7 @@ function _generateTestData (returnStatus = 'completed') {
     }
   ]
 
-  // If a returns status isn't `complete` it won't have any return submission lines and the `issues` will be `true`
+  // If a returns status isn't "complete" it won't have any return submission lines and the "issues" will be "true"
   const matchingReturns = [
     {
       returnSubmissions: returnStatus === 'completed' ? returnSubmissions : [],

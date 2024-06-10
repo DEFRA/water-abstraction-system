@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for gaugingStations (water.gauging_stations)
- * @module GaugingStationsnModel
+ * Model for gauging_stations (water.gauging_stations)
+ * @module GaugingStationModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class GaugingStationsnModel extends BaseModel {
+class GaugingStationModel extends BaseModel {
   static get tableName () {
     return 'gaugingStations'
   }
@@ -35,4 +35,4 @@ class GaugingStationsnModel extends BaseModel {
   }
 }
 
-module.exports = GaugingStationsnModel
+module.exports = GaugingStationModel

@@ -74,7 +74,7 @@ describe('Charging Module Create Transaction presenter', () => {
   })
 
   describe('customerName:', () => {
-    describe("when the 'company'", () => {
+    describe('when the "company"', () => {
       beforeEach(() => {
         address = AddressModel.fromJson({ ...standardAddress })
         contact = ContactModel.fromJson({})
@@ -85,7 +85,7 @@ describe('Charging Module Create Transaction presenter', () => {
           company = CompanyModel.fromJson({ name: 'AGENT COMPANY' })
         })
 
-        it("returns the name of the 'company' for customer name", () => {
+        it('returns the name of the "company" for customer name', () => {
           const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
           expect(result.customerName).to.equal('AGENT COMPANY')
@@ -107,7 +107,7 @@ describe('Charging Module Create Transaction presenter', () => {
   })
 
   describe('addressLine1:', () => {
-    describe("when the 'contact'", () => {
+    describe('when the "contact"', () => {
       beforeEach(() => {
         company = CompanyModel.fromJson({})
       })
@@ -181,7 +181,7 @@ describe('Charging Module Create Transaction presenter', () => {
   })
 
   describe('addressLine2: to addressLine4:', () => {
-    describe("when the 'contact'", () => {
+    describe('when the "contact"', () => {
       beforeEach(() => {
         company = CompanyModel.fromJson({})
       })

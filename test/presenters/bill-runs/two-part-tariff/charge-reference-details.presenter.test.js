@@ -42,7 +42,7 @@ describe('Charge Reference Details presenter', () => {
       })
     })
 
-    describe("the' adjustments' property", () => {
+    describe('the "adjustments" property', () => {
       describe('when the charge reference has an aggregate factor', () => {
         beforeEach(() => {
           reviewChargeReference.amendedAggregate = 0.5
@@ -55,7 +55,7 @@ describe('Charge Reference Details presenter', () => {
           expect(result.chargeReference.adjustments).to.equal(['Aggregate factor (0.5)'])
         })
 
-        it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
+        it('sets the "hasAggregateOrChargeFactor" property to true', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.hasAggregateOrChargeFactor).to.equal(true)
@@ -67,7 +67,7 @@ describe('Charge Reference Details presenter', () => {
             reviewChargeReference.amendedAggregate = 1
           })
 
-          it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
+          it('sets the "hasAggregateOrChargeFactor" property to true', () => {
             const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
             expect(result.hasAggregateOrChargeFactor).to.equal(true)
@@ -87,7 +87,7 @@ describe('Charge Reference Details presenter', () => {
           expect(result.chargeReference.adjustments).to.equal(['Charge adjustment (0.7)'])
         })
 
-        it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
+        it('sets the "hasAggregateOrChargeFactor" property to true', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.hasAggregateOrChargeFactor).to.equal(true)
@@ -99,7 +99,7 @@ describe('Charge Reference Details presenter', () => {
             reviewChargeReference.amendedChargeAdjustment = 1
           })
 
-          it("sets the 'hasAggregateOrChargeFactor' property to true", () => {
+          it('sets the "hasAggregateOrChargeFactor" property to true', () => {
             const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
             expect(result.hasAggregateOrChargeFactor).to.equal(true)
@@ -162,7 +162,7 @@ describe('Charge Reference Details presenter', () => {
           expect(result.chargeReference.adjustments).to.equal([])
         })
 
-        it("sets 'hasAggregateOrChargeFactor' property to false", () => {
+        it('sets "hasAggregateOrChargeFactor" property to false', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.hasAggregateOrChargeFactor).to.equal(false)
@@ -170,13 +170,13 @@ describe('Charge Reference Details presenter', () => {
       })
     })
 
-    describe("the 'additionalCharges' property", () => {
+    describe('the "additionalCharges" property', () => {
       describe('when the charge reference has a support source charge', () => {
         beforeEach(() => {
           reviewChargeReference.chargeReference.supportedSourceName = 'Thames'
         })
 
-        it("adds the supported source charge to the 'additionalCharges' property", () => {
+        it('adds the supported source charge to the "additionalCharges" property', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.additionalCharges).to.equal('Supported source Thames')
@@ -188,7 +188,7 @@ describe('Charge Reference Details presenter', () => {
           reviewChargeReference.chargeReference.waterCompanyCharge = true
         })
 
-        it("adds the water company charge to the 'additionalCharges' property", () => {
+        it('adds the water company charge to the "additionalCharges" property', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.additionalCharges).to.equal('Public Water Supply')
@@ -199,7 +199,7 @@ describe('Charge Reference Details presenter', () => {
             reviewChargeReference.chargeReference.supportedSourceName = 'Thames'
           })
 
-          it("adds the both charges to the 'additionalCharges' property", () => {
+          it('adds the both charges to the "additionalCharges" property', () => {
             const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
             expect(result.chargeReference.additionalCharges).to.equal('Supported source Thames, Public Water Supply')
@@ -208,7 +208,7 @@ describe('Charge Reference Details presenter', () => {
       })
 
       describe('when the charge reference has no extra charges', () => {
-        it("sets the 'additionalCharges' property to empty", () => {
+        it('sets the "additionalCharges" property to empty', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.additionalCharges).to.equal('')
@@ -216,13 +216,13 @@ describe('Charge Reference Details presenter', () => {
       })
     })
 
-    describe("the 'totalBillableReturns' property", () => {
+    describe('the "totalBillableReturns" property', () => {
       describe('when there are multiple charge elements on the charge reference', () => {
         beforeEach(() => {
           reviewChargeReference.reviewChargeElements = [{ amendedAllocated: 1 }, { amendedAllocated: 2 }]
         })
 
-        it("adds the 'amendedAllocated property' on the charge elements", () => {
+        it('adds the "amendedAllocated" property on the charge elements', () => {
           const result = ChargeReferenceDetailsPresenter.go(billRun, reviewChargeReference, licenceId)
 
           expect(result.chargeReference.totalBillableReturns).to.equal(3)

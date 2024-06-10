@@ -23,7 +23,7 @@ describe('View Bill Run service', () => {
   })
 
   describe('when a bill with a matching ID exists', () => {
-    describe("and it has a status of 'empty'", () => {
+    describe('and it has a status of "empty"', () => {
       beforeEach(() => {
         fetchBillRunResult = _singleGroupBillRun()
         fetchBillRunResult.billRun.status = 'empty'
@@ -49,7 +49,7 @@ describe('View Bill Run service', () => {
       })
     })
 
-    describe("and it has a status of 'errored'", () => {
+    describe('and it has a status of "errored"', () => {
       beforeEach(() => {
         fetchBillRunResult = _singleGroupBillRun()
         fetchBillRunResult.billRun.status = 'error'
@@ -76,7 +76,7 @@ describe('View Bill Run service', () => {
       })
     })
 
-    describe("and it has a status of 'sent'", () => {
+    describe('and it has a status of "sent"', () => {
       describe('and it is linked to bills from both groups (water companies and other abstractors)', () => {
         beforeEach(() => {
           fetchBillRunResult = _multipleGroupBillRun()

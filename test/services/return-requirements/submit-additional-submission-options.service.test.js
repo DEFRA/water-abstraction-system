@@ -64,7 +64,7 @@ describe('Return Requirements - Submit Additional Submission Options service', (
         expect(refreshedSession.additionalSubmissionOptions).to.include('multiple-upload')
       })
 
-      it("sets the notification message to 'Updated'", async () => {
+      it('sets the notification message to "Updated"', async () => {
         await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
         const [flashType, notification] = yarStub.flash.args[0]

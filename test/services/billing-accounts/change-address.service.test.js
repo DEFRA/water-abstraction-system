@@ -324,7 +324,7 @@ describe('Change address service', () => {
       })
     })
 
-    describe("and the 'current' billing account address", () => {
+    describe('and the "current" billing account address', () => {
       let clock
       let existingBillingAccountAddress
 

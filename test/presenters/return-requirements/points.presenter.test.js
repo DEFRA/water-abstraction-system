@@ -61,13 +61,13 @@ describe('Return Requirements - Points presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    describe("when the user has come from the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
       beforeEach(() => {
         session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check' page", () => {
+      it('returns a link back to the "check" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
@@ -75,7 +75,7 @@ describe('Return Requirements - Points presenter', () => {
     })
 
     describe('when the user has come from somewhere else', () => {
-      it("returns a link back to the 'purpose' page", () => {
+      it('returns a link back to the "purpose" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/purpose/0')
@@ -83,13 +83,13 @@ describe('Return Requirements - Points presenter', () => {
     })
   })
 
-  describe("the 'licencePoints' property", () => {
+  describe('the "licencePoints" property', () => {
     describe('when the points data contains a single grid reference point', () => {
       beforeEach(() => {
         pointsData = [_pointsData()[0]]
       })
 
-      it("returns a 'At National Grid Reference ...' point", () => {
+      it('returns a At "National Grid Reference ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
         expect(result.licencePoints).to.equal([{
@@ -104,7 +104,7 @@ describe('Return Requirements - Points presenter', () => {
         pointsData = [_pointsData()[1]]
       })
 
-      it("returns a 'Between National Grid References ...' point", () => {
+      it('returns a "Between National Grid References ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
         expect(result.licencePoints).to.equal([{
@@ -119,7 +119,7 @@ describe('Return Requirements - Points presenter', () => {
         pointsData = [_pointsData()[2]]
       })
 
-      it("returns a 'Within the area formed by the straight lines running between National Grid References ...' point", () => {
+      it('returns a "Within the area formed by the straight lines running between National Grid References ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, pointsData)
 
         expect(result.licencePoints).to.equal([{
@@ -130,7 +130,7 @@ describe('Return Requirements - Points presenter', () => {
     })
   })
 
-  describe("the 'points' property", () => {
+  describe('the "points" property', () => {
     describe('when the user has previously submitted points', () => {
       beforeEach(() => {
         session.requirements[0].points = [

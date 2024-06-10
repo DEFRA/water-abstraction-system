@@ -5,6 +5,7 @@
  * @module ViewLicenceSetUpService
  */
 
+const FetchAgreementsService = require('./fetch-agreements.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
 const FetchWorkflowsService = require('./fetch-workflows.service.js')
@@ -22,11 +23,13 @@ const ViewLicenceService = require('./view-licence.service.js')
 async function go (licenceId, auth) {
   const commonData = await ViewLicenceService.go(licenceId, auth)
 
+  const agreements = await FetchAgreementsService.go(commonData.licenceRef)
   const chargeVersions = await FetchChargeVersionsService.go(licenceId)
   const workflows = await FetchWorkflowsService.go(licenceId)
   const returnsRequirements = await FetchReturnRequirementsService.go(commonData.licenceRef)
 
-  const licenceSetUpData = SetUpPresenter.go(chargeVersions, workflows, returnsRequirements, auth, commonData)
+  const licenceSetUpData = SetUpPresenter
+    .go(chargeVersions, workflows, agreements, returnsRequirements, auth, commonData)
 
   return {
     activeTab: 'set-up',

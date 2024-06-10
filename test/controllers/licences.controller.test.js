@@ -319,16 +319,25 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Licence set up')
+        // Charge information
         expect(response.payload).to.contain('Charge information')
-        // Table headers
+        // Charge information table headers
         expect(response.payload).to.contain('Start date')
         expect(response.payload).to.contain('End date')
         expect(response.payload).to.contain('Reason')
         expect(response.payload).to.contain('Status')
         expect(response.payload).to.contain('Action')
-        // Button present
+        // Charge information buttons present
         expect(response.payload).to.contain('Set up a new charge')
         expect(response.payload).to.contain('Make licence non-chargeable')
+
+        // Agreements
+        expect(response.payload).to.contain('Agreements')
+        // Agreements table headers
+        expect(response.payload).to.contain('Agreement')
+        expect(response.payload).to.contain('Date signed')
+        // Charge information buttons present
+        expect(response.payload).to.contain('Set up a new agreement')
       })
     })
 
@@ -336,6 +345,7 @@ describe('Licences controller', () => {
       beforeEach(async () => {
         Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
           activeTab: 'set-up',
+          agreements: [],
           chargeInformation: []
         })
       })
@@ -347,6 +357,8 @@ describe('Licences controller', () => {
         expect(response.payload).to.contain('Licence set up')
         expect(response.payload).to.contain('Charge information')
         expect(response.payload).to.contain('No charge information for this licence.')
+        expect(response.payload).to.contain('Agreements')
+        expect(response.payload).to.contain('No agreements for this licence.')
       })
     })
   })
@@ -439,7 +451,9 @@ function _viewLicenceBills () {
 function _viewLicenceSetUp () {
   return {
     activeTab: 'set-up',
+    agreements: [{}],
     chargeInformation: [{ }],
+    setUpAgreement: '/',
     setupNewCharge: '/',
     makeLicenceNonChargeable: '/'
   }

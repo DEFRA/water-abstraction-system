@@ -55,7 +55,7 @@ describe('Bill Runs Setup Exists service', () => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
-        it("returns an object with an empty 'matchResults:', a null 'pageData:' property and year to use is as selected", async () => {
+        it('returns an object with an empty "matchResults:", a null "pageData:" property and year to use is as selected', async () => {
           const result = await ExistsService.go(setupSession.id)
 
           const { matchResults, pageData, session, yearToUse } = result
@@ -82,7 +82,7 @@ describe('Bill Runs Setup Exists service', () => {
           }])
         })
 
-        it("returns an object with 'matchResults:' set, a populated 'pageData:' property and year to use is as selected", async () => {
+        it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is as selected', async () => {
           const result = await ExistsService.go(setupSession.id)
 
           const { matchResults, pageData, session, yearToUse } = result
@@ -117,7 +117,7 @@ describe('Bill Runs Setup Exists service', () => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
-        it("returns an object with an empty 'matchResults:', a null 'pageData:' property and year to use is the current financial year end", async () => {
+        it('returns an object with an empty "matchResults:", a null "pageData:" property and year to use is the current financial year end', async () => {
           const result = await ExistsService.go(setupSession.id)
 
           const { matchResults, pageData, session, yearToUse } = result
@@ -144,7 +144,7 @@ describe('Bill Runs Setup Exists service', () => {
           }])
         })
 
-        it("returns an object with 'matchResults:' set, a populated 'pageData:' property and year to use is as selected", async () => {
+        it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is as selected', async () => {
           const result = await ExistsService.go(setupSession.id)
 
           const { matchResults, pageData, session, yearToUse } = result
@@ -179,7 +179,7 @@ describe('Bill Runs Setup Exists service', () => {
           Sinon.stub(DetermineBlockingBillRunService, 'go').resolves([])
         })
 
-        it("returns an object with an empty 'matchResults:', a null 'pageData:' property and year to use is the current financial year end", async () => {
+        it('returns an object with an empty "matchResults:", a null "pageData:" property and year to use is the current financial year end', async () => {
           const result = await ExistsService.go(setupSession.id)
 
           const { matchResults, pageData, session, yearToUse } = result
@@ -208,7 +208,7 @@ describe('Bill Runs Setup Exists service', () => {
 
         // NOTE: If there is only one match for supplementary we don't populate the pageData because we won't show the
         // exists page. If there is only one match, then we _can_ generate the other schema's bill run
-        it("returns an object with 'matchResults:' set, a null 'pageData:' property and year to use is the current financial year end", async () => {
+        it('returns an object with "matchResults:" set, a null "pageData:" property and year to use is the current financial year end', async () => {
           const result = await ExistsService.go(setupSession.id)
 
           const { matchResults, pageData, session, yearToUse } = result
@@ -251,7 +251,7 @@ describe('Bill Runs Setup Exists service', () => {
         // NOTE: If there are 2 matches for supplementary then we populate the pageData for the first match. TBH we
         // don't have a solution that can show both matches. But eventually we will only be generating SROC bill runs so
         // this problem will go away!
-        it("returns an object with 'matchResults:' set, a populated 'pageData:' property and year to use is the current financial year end", async () => {
+        it('returns an object with "matchResults:" set, a populated "pageData:" property and year to use is the current financial year end', async () => {
           const result = await ExistsService.go(setupSession.id)
 
           const { matchResults, pageData, session, yearToUse } = result

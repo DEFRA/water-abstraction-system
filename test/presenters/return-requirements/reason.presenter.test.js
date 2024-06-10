@@ -44,13 +44,13 @@ describe('Return Requirements - Reason presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    describe("when the user has come from the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
       beforeEach(() => {
         session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check' page", () => {
+      it('returns a link back to the "check" page', () => {
         const result = ReasonPresenter.go(session)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
@@ -58,7 +58,7 @@ describe('Return Requirements - Reason presenter', () => {
     })
 
     describe('when the user has come from somewhere else', () => {
-      it("returns a link back to the 'start-date' page", () => {
+      it('returns a link back to the "start-date" page', () => {
         const result = ReasonPresenter.go(session)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/start-date')
@@ -66,7 +66,7 @@ describe('Return Requirements - Reason presenter', () => {
     })
   })
 
-  describe("the 'reason' property", () => {
+  describe('the "reason" property', () => {
     describe('when the user has previously submitted a reason', () => {
       beforeEach(() => {
         session.reason = 'major-change'

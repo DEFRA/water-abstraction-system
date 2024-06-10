@@ -47,12 +47,12 @@ describe('View Licence Bills presenter', () => {
     })
 
     describe('billNumber', () => {
-      it('correctly formats the \'billNumber\' to the invoice number', () => {
+      it('correctly formats the "billNumber" to the invoice number', () => {
         const result = ViewLicenceBillsPresenter.go(_bills())
         expect(result.bills[0].billNumber).to.equal('inv123')
       })
 
-      it('correctly formats the \'billNumber\' to \'De minimis bill\'', () => {
+      it('correctly formats the "billNumber" to "De minimis bill"', () => {
         const bill = _bill()
         bill.invoiceNumber = null
         bill.deminimis = true
@@ -60,7 +60,7 @@ describe('View Licence Bills presenter', () => {
         expect(result.bills[0].billNumber).to.equal('De minimis bill')
       })
 
-      it('correctly formats the \'billNumber\' to \'NALD revised bill\'', () => {
+      it('correctly formats the "billNumber" to "NALD revised bill"', () => {
         const bill = _bill()
         bill.invoiceNumber = null
         bill.legacyId = 'lgcy'
@@ -68,7 +68,7 @@ describe('View Licence Bills presenter', () => {
         expect(result.bills[0].billNumber).to.equal('NALD revised bill')
       })
 
-      it('correctly formats the \'billNumber\' to \'Zero value bill\'', () => {
+      it('correctly formats the "billNumber" to "Zero value bill"', () => {
         const bill = _bill()
         bill.invoiceNumber = null
         bill.netAmount = 0

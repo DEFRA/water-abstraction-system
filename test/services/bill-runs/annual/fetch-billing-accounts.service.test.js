@@ -176,7 +176,7 @@ describe('Fetch Billing Accounts service', () => {
   })
 
   describe('when there are no billing accounts that should be considered for the annual bill run', () => {
-    describe("because all their charge versions do not have a status of 'current", () => {
+    describe('because all their charge versions do not have a status of "current"', () => {
       beforeEach(async () => {
         await ChargeVersionHelper.add({ status: 'draft', billingAccountId, licenceId })
       })
@@ -188,7 +188,7 @@ describe('Fetch Billing Accounts service', () => {
       })
     })
 
-    describe("because all their charge versions are for the 'alcs' (presroc) scheme", () => {
+    describe('because all their charge versions are for the "alcs" (presroc) scheme', () => {
       beforeEach(async () => {
         await ChargeVersionHelper.add({ scheme: 'alcs', billingAccountId, licenceId })
       })

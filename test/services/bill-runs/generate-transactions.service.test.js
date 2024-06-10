@@ -121,7 +121,7 @@ describe('Generate Transactions service', () => {
         )
       })
 
-      it('returns the charge element as JSON in the transaction line `purposes` property', () => {
+      it('returns the charge element as JSON in the transaction line "purposes" property', () => {
         const results = GenerateTransactionsService.go(
           billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker
         )
@@ -166,7 +166,7 @@ describe('Generate Transactions service', () => {
         )
       })
 
-      it('returns the charge element as JSON in both transaction lines `purposes` property', () => {
+      it('returns the charge element as JSON in both transaction lines "purposes" property', () => {
         const results = GenerateTransactionsService.go(
           billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker
         )
@@ -187,7 +187,7 @@ describe('Generate Transactions service', () => {
         newLicence = true
       })
 
-      it('returns `newLicence` as true in the results', () => {
+      it('returns "newLicence" as true in the results', () => {
         const results = GenerateTransactionsService.go(
           billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker
         )
@@ -197,7 +197,7 @@ describe('Generate Transactions service', () => {
     })
 
     describe('and is not a new licence', () => {
-      it('returns `newLicence` as false in the results', () => {
+      it('returns "newLicence" as false in the results', () => {
         const results = GenerateTransactionsService.go(
           billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker
         )

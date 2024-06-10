@@ -23,6 +23,11 @@ describe('Return Requirements - Setup presenter', () => {
         endDate: null,
         licenceRef: '01/ABC',
         licenceHolder: 'Turbo Kid',
+        returnVersions: [{
+          id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+          startDate: '2023-01-01T00:00:00.000Z',
+          reason: null
+        }],
         startDate: '2022-04-01T00:00:00.000Z'
       },
       journey: 'returns-required',
@@ -38,6 +43,7 @@ describe('Return Requirements - Setup presenter', () => {
 
       expect(result).to.equal({
         backLink: '/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason',
+        displayCopyExisting: true,
         licenceRef: '01/ABC',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         setup: null
@@ -45,15 +51,37 @@ describe('Return Requirements - Setup presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    it("returns a link back to the 'start-date' page", () => {
+  describe('the "backLink" property', () => {
+    it('returns a link back to the "start-date" page', () => {
       const result = SetupPresenter.go(session)
 
       expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/reason')
     })
   })
 
-  describe("the 'setup' property", () => {
+  describe('the "displayCopyExisting" property', () => {
+    describe('when the licence has return versions (something to copy from)', () => {
+      it('returns true', () => {
+        const result = SetupPresenter.go(session)
+
+        expect(result.displayCopyExisting).to.be.true()
+      })
+    })
+
+    describe('when the does not have return versions (nothing to copy from)', () => {
+      beforeEach(() => {
+        session.licence.returnVersions = []
+      })
+
+      it('returns false', () => {
+        const result = SetupPresenter.go(session)
+
+        expect(result.displayCopyExisting).to.be.false()
+      })
+    })
+  })
+
+  describe('the "setup" property', () => {
     describe('when the user has previously submitted a setup option', () => {
       beforeEach(() => {
         session.setup = 'set-up-manually'

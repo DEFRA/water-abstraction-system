@@ -10,6 +10,7 @@ const Boom = require('@hapi/boom')
 const AmendAdjustmentFactorService = require('../services/bill-runs/two-part-tariff/amend-adjustment-factor.service.js')
 const AmendAuthorisedVolumeService = require('../services/bill-runs/two-part-tariff/amend-authorised-volume.service.js')
 const AmendBillableReturnsService = require('../services/bill-runs/two-part-tariff/amend-billable-returns.service.js')
+const CalculateChargeService = require('../services/bill-runs/two-part-tariff/calculate-charge.service.js')
 const CancelBillRunService = require('../services/bill-runs/cancel-bill-run.service.js')
 const ChargeReferenceDetailsService = require('../services/bill-runs/two-part-tariff/charge-reference-details.service.js')
 const CreateBillRunValidator = require('../validators/create-bill-run.validator.js')
@@ -128,6 +129,14 @@ async function matchDetails (request, h) {
     activeNavBar: 'bill-runs',
     ...pageData
   })
+}
+
+async function previewCharge (request, h) {
+  const { id: billRunId, licenceId, reviewChargeReferenceId } = request.params
+
+  await CalculateChargeService.go(licenceId, reviewChargeReferenceId, request.yar)
+
+  return h.redirect(`/system/bill-runs/${billRunId}/review/${licenceId}/charge-reference-details/${reviewChargeReferenceId}`)
 }
 
 async function removeLicence (request, h) {
@@ -306,6 +315,7 @@ module.exports = {
   create,
   index,
   matchDetails,
+  previewCharge,
   removeLicence,
   review,
   reviewLicence,

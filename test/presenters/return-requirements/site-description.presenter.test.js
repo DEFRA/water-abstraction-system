@@ -48,13 +48,13 @@ describe('Return Requirements - Site Description presenter', () => {
     })
   })
 
-  describe("the 'backLink' property", () => {
-    describe("when the user has come from the 'check' page", () => {
+  describe('the "backLink" property', () => {
+    describe('when the user has come from the "check" page', () => {
       beforeEach(() => {
         session.checkPageVisited = true
       })
 
-      it("returns a link back to the 'check' page", () => {
+      it('returns a link back to the "check" page', () => {
         const result = SiteDescriptionPresenter.go(session, requirementIndex)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/check')
@@ -62,7 +62,7 @@ describe('Return Requirements - Site Description presenter', () => {
     })
 
     describe('when the user has come from somewhere else', () => {
-      it("returns a link back to the 'returns-cycle' page", () => {
+      it('returns a link back to the "returns-cycle" page', () => {
         const result = SiteDescriptionPresenter.go(session, requirementIndex)
 
         expect(result.backLink).to.equal('/system/return-requirements/61e07498-f309-4829-96a9-72084a54996d/returns-cycle/0')
@@ -70,7 +70,7 @@ describe('Return Requirements - Site Description presenter', () => {
     })
   })
 
-  describe("the 'siteDescription' property", () => {
+  describe('the "siteDescription" property', () => {
     describe('when the user has previously submitted a site description', () => {
       beforeEach(() => {
         session.requirements[0].siteDescription = 'This is a valid return requirement description'

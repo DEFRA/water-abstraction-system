@@ -67,7 +67,7 @@ describe('Auth service', () => {
   })
 
   describe('when the user has a top-level permission role', () => {
-    describe("such as 'ar_user'", () => {
+    describe('such as "ar_user"', () => {
       beforeEach(() => {
         Sinon.stub(FetchUserRolesAndGroupsService, 'go')
           .resolves({
@@ -84,7 +84,7 @@ describe('Auth service', () => {
       })
     })
 
-    describe("such as 'billing'", () => {
+    describe('such as "billing"', () => {
       beforeEach(() => {
         Sinon.stub(FetchUserRolesAndGroupsService, 'go')
           .resolves({
@@ -103,7 +103,7 @@ describe('Auth service', () => {
       })
     })
 
-    describe("such as 'returns'", () => {
+    describe('such as "returns"', () => {
       beforeEach(() => {
         Sinon.stub(FetchUserRolesAndGroupsService, 'go')
           .resolves({
@@ -131,13 +131,13 @@ describe('Auth service', () => {
         })
     })
 
-    it('returns isValid as `false`', async () => {
+    it('returns isValid as "false"', async () => {
       const result = await AuthService.go(12345)
 
       expect(result.isValid).to.be.false()
     })
 
-    it('returns `null` in credentials.user', async () => {
+    it('returns "null" in credentials.user', async () => {
       const result = await AuthService.go(12345)
 
       expect(result.credentials.user).to.be.null()

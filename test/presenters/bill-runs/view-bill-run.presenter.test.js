@@ -44,7 +44,7 @@ describe('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'billsCount' property", () => {
+    describe('the "billsCount" property', () => {
       // NOTE: We have no tests for zero value bills in this scenario because a bill run won't exist if it just contains
       // a single zero value bill. So, if there is only one bill it must be a credit or an invoice
       describe('when the sum of the invoice and credit count is 1', () => {
@@ -101,7 +101,7 @@ describe('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'billRunTotal' property", () => {
+    describe('the "billRunTotal" property', () => {
       describe('when the net total is greater than 0', () => {
         it('returns the value converted to pounds, formatted as money and showing as a debit (£707.00)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
@@ -135,7 +135,7 @@ describe('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'creditsCount' property", () => {
+    describe('the "creditsCount" property', () => {
       describe('when there is only 1 credit note', () => {
         beforeEach(() => {
           billRun.creditNoteCount = 1
@@ -157,7 +157,7 @@ describe('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'debitsCount' property", () => {
+    describe('the "debitsCount" property', () => {
       describe('when there is only 1 invoice', () => {
         beforeEach(() => {
           billRun.invoiceCount = 1
@@ -179,7 +179,7 @@ describe('View Bill Run presenter', () => {
       })
     })
 
-    describe("the 'displayCreditDebitTotals' property", () => {
+    describe('the "displayCreditDebitTotals" property', () => {
       describe('when the bill run is not supplementary', () => {
         beforeEach(() => {
           billRun.batchType = 'annual'

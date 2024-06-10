@@ -102,7 +102,7 @@ describe('Fetch Bill Run Licences service', () => {
         expect(result.licences.results[1].status).to.equal('ready')
       })
 
-      it("orders the licence by 'review status' first", async () => {
+      it('orders the licence by "review status" first', async () => {
         const result = await FetchBillRunLicencesService.go(
           billRun.id,
           filterIssues,

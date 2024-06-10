@@ -57,7 +57,7 @@ describe('Annual Process Bill Run service', () => {
     })
 
     describe('and nothing is billed', () => {
-      it("sets the bill run status to 'empty'", async () => {
+      it('sets the bill run status to "empty"', async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
         const result = await BillRunModel.query().findById(billRun.id)
@@ -77,7 +77,7 @@ describe('Annual Process Bill Run service', () => {
         Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
       })
 
-      it("sets the bill run status to 'processing'", async () => {
+      it('sets the bill run status to "processing"', async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
         const result = await BillRunModel.query().findById(billRun.id)
@@ -85,7 +85,7 @@ describe('Annual Process Bill Run service', () => {
         expect(result.status).to.equal('processing')
       })
 
-      it("tells the charging module API to 'generate' the bill run", async () => {
+      it('tells the charging module API to "generate" the bill run', async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
         expect(chargingModuleGenerateRequestStub.called).to.be.true()

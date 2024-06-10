@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Model for LicenceAgreements (water.licence_agreements)
- * @module LicenceAgreements
+ * Model for licence_agreements (water.licence_agreements)
+ * @module LicenceAgreementModel
  */
 
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
-class LicenceAgreements extends BaseModel {
+class LicenceAgreementModel extends BaseModel {
   static get tableName () {
     return 'licenceAgreements'
   }
@@ -28,4 +28,4 @@ class LicenceAgreements extends BaseModel {
   }
 }
 
-module.exports = LicenceAgreements
+module.exports = LicenceAgreementModel

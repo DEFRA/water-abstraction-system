@@ -123,7 +123,7 @@ describe('Initiate Bill Run service', () => {
         })
       })
 
-      it('creates a bill run with `error` status and error code 50', async () => {
+      it('creates a bill run with "error" status and error code 50', async () => {
         const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
         const billRun = await BillRunModel.query().limit(1).first()

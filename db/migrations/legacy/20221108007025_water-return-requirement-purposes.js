@@ -19,8 +19,8 @@ exports.up = function (knex) {
       table.string('external_id')
 
       // Legacy timestamps
-      table.timestamp('date_created', { useTz: false }).notNullable()
-      table.timestamp('date_updated', { useTz: false })
+      table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())
+      table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
 
       // Constraints
       table.unique(['external_id'], { useConstraint: true })

@@ -106,7 +106,7 @@ describe('Review Licence presenter', () => {
       })
     })
 
-    describe("the 'issues' property", () => {
+    describe('the "issues" property', () => {
       describe('when the charge element has multiple issues', () => {
         beforeEach(() => {
           licence[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].issues = 'Over abstraction, no returns'
@@ -144,13 +144,13 @@ describe('Review Licence presenter', () => {
       })
     })
 
-    describe("the 'returnStatus' property", () => {
-      describe("when a return has a status of 'due'", () => {
+    describe('the "returnStatus" property', () => {
+      describe('when a return has a status of "due"', () => {
         beforeEach(() => {
           licence[0].reviewReturns[0].returnStatus = 'due'
         })
 
-        it("changes the status text to 'overdue'", () => {
+        it('changes the status text to "overdue"', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.matchedReturns[0].returnStatus).to.equal('overdue')
@@ -170,13 +170,13 @@ describe('Review Licence presenter', () => {
       })
     })
 
-    describe("the 'underQuery' property", () => {
+    describe('the "underQuery" property', () => {
       describe('when a return is under query', () => {
         beforeEach(() => {
           licence[0].reviewReturns[0].underQuery = true
         })
 
-        it("changes the returns status to be 'under query'", () => {
+        it('changes the returns status to be "under query"', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.matchedReturns[0].returnStatus).to.equal('query')
@@ -184,13 +184,13 @@ describe('Review Licence presenter', () => {
       })
     })
 
-    describe("the 'adjustment' property's", () => {
+    describe('the "adjustment" properties', () => {
       describe('when a review charge reference has an aggregate', () => {
         beforeEach(() => {
           licence[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate = 0.5
         })
 
-        it("changes the chargeReferenceLink to 'Change details'", () => {
+        it('changes the chargeReferenceLink to "Change details"', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
@@ -202,7 +202,7 @@ describe('Review Licence presenter', () => {
           licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
         })
 
-        it("changes the chargeReferenceLink to 'Change details'", () => {
+        it('changes the chargeReferenceLink to "Change details"', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
@@ -215,7 +215,7 @@ describe('Review Licence presenter', () => {
           licence[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment = 0.5
         })
 
-        it("changes the chargeReferenceLink to 'Change details'", () => {
+        it('changes the chargeReferenceLink to "Change details"', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('Change details')
@@ -223,7 +223,7 @@ describe('Review Licence presenter', () => {
       })
 
       describe('when a review charge reference does not have an aggregate or charge factor adjustment', () => {
-        it("changes the chargeReferenceLink to 'View details'", () => {
+        it('changes the chargeReferenceLink to "View details"', () => {
           const result = ReviewLicencePresenter.go(billRun, licence)
 
           expect(result.chargeData[0].chargeReferences[0].chargeReferenceLink.linkName).to.equal('View details')

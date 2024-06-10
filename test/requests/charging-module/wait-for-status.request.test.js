@@ -42,7 +42,7 @@ describe('Charging Module Wait For Status request', () => {
         chargingModuleViewBillRunStatusRequestStub.onFirstCall().resolves(_testResponse('billing_not_required'))
       })
 
-      it('returns a `true` succeeded status', async () => {
+      it('returns a "true" succeeded status', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)
 
         expect(result.succeeded).to.be.true()
@@ -72,7 +72,7 @@ describe('Charging Module Wait For Status request', () => {
         chargingModuleViewBillRunStatusRequestStub.onThirdCall().resolves(_testResponse('billed'))
       })
 
-      it('returns a `true` success status', async () => {
+      it('returns a "true" success status', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
         expect(result.succeeded).to.be.true()
@@ -102,7 +102,7 @@ describe('Charging Module Wait For Status request', () => {
       chargingModuleViewBillRunStatusRequestStub.onThirdCall().resolves(_testResponse('processing'))
     })
 
-    it('returns a `false` success status', async () => {
+    it('returns a "false" success status', async () => {
       const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
       expect(result.succeeded).to.be.false()

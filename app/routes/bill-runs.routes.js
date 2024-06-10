@@ -12,8 +12,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'List all bill runs'
+      }
     }
   },
   {
@@ -28,8 +27,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Used to create a bill run'
+      }
     }
   },
   {
@@ -41,8 +39,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'View a bill run'
+      }
     }
   },
   {
@@ -54,8 +51,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Confirm cancel a bill run'
+      }
     }
   },
   {
@@ -67,8 +63,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit bill run cancellation'
+      }
     }
   },
   {
@@ -80,8 +75,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Confirm removing a licence from a bill run'
+      }
     }
   },
   {
@@ -93,8 +87,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit licence removal from a bill run'
+      }
     }
   },
   {
@@ -106,8 +99,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Review two-part tariff match and allocation results'
+      }
     }
   },
   {
@@ -119,8 +111,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'POST request received when filtering applied to review two-part tariff match and allocation results'
+      }
     }
   },
   {
@@ -132,8 +123,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Review a two-part tariff licence'
+      }
     }
   },
   {
@@ -145,8 +135,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'POST request received when progress marking is applied to review a two-part tariff licence'
+      }
     }
   },
   {
@@ -158,8 +147,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Review a charge reference from a two-part tariff licence'
+      }
     }
   },
   {
@@ -171,8 +159,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Amend a charge references authorised volume from a two-part tariff licence'
+      }
     }
   },
   {
@@ -184,8 +171,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the amended charge references authorised volume from a two-part tariff licence'
+      }
     }
   },
   {
@@ -197,8 +183,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Amend a charge references adjustment factors from a two-part tariff licence'
+      }
     }
   },
   {
@@ -210,8 +195,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the amended charge references adjustment factors from a two-part tariff licence'
+      }
     }
   },
   {
@@ -223,8 +207,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'View match details of a charge element'
+      }
     }
   },
   {
@@ -236,8 +219,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Amend the billable return volumes on a charge element'
+      }
     }
   },
   {
@@ -249,8 +231,19 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit the amended billable return volumes on a charge element'
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/bill-runs/{id}/review/{licenceId}/preview-charge/{reviewChargeReferenceId}',
+    handler: BillRunsController.previewCharge,
+    options: {
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
     }
   },
   {
@@ -262,8 +255,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Confirm (send) a bill run'
+      }
     }
   },
   {
@@ -275,8 +267,7 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      description: 'Submit bill run (send) confirmation'
+      }
     }
   }
 ]

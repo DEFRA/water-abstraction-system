@@ -51,7 +51,7 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the \'abstractionConditionDetails\' property', () => {
+  describe('the "abstractionConditionDetails" property', () => {
     describe('when there are multiple abstraction conditions', () => {
       beforeEach(() => {
         licenceAbstractionConditions.conditions = ['Derogation clause', 'General conditions']
@@ -120,7 +120,7 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the \'endDate\' property', () => {
+  describe('the "endDate" property', () => {
     describe('when the licence expired date is null', () => {
       it('returns NULL', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
@@ -152,7 +152,7 @@ describe('View Licence Summary presenter', () => {
         licence.expiredDate = new Date('2099-04-01')
       })
 
-      it('returns \'1 April 2099\'', () => {
+      it('returns "1 April 2099"', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.endDate).to.equal('1 April 2099')
@@ -160,9 +160,9 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the \'licenceHolder\' property', () => {
+  describe('the "licenceHolder" property', () => {
     describe('when the licence holder is not set', () => {
-      it('returns \'Unregistered licence\'', () => {
+      it('returns "Unregistered licence"', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.licenceHolder).to.equal('Unregistered licence')
@@ -174,7 +174,7 @@ describe('View Licence Summary presenter', () => {
         licence.licenceHolder = 'Barbara Liskov'
       })
 
-      it('returns \'Barbara Liskov\'', () => {
+      it('returns "Barbara Liskov"', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
 
         expect(result.licenceHolder).to.equal('Barbara Liskov')
@@ -182,7 +182,7 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the \'licenceVersionPurposes\' property', () => {
+  describe('the "licenceVersionPurposes" property', () => {
     describe('when there are no licenceVersions', () => {
       it('returns null', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
@@ -307,7 +307,7 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the \'monitoringStations\' property', () => {
+  describe('the "monitoringStations" property', () => {
     describe('when the licenceGaugingStations property is not an array', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = {}
@@ -332,7 +332,7 @@ describe('View Licence Summary presenter', () => {
       })
     })
 
-    describe('when the licence has a null \'licenceGaugingStations\' property', () => {
+    describe('when the licence has a null "licenceGaugingStations" property', () => {
       beforeEach(() => {
         licence.licenceGaugingStations = null
       })
@@ -380,7 +380,7 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the \'purposes\' property', () => {
+  describe('the "purposes" property', () => {
     describe('when there are no licenceVersions', () => {
       it('returns null', () => {
         const result = ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)
@@ -477,7 +477,7 @@ describe('View Licence Summary presenter', () => {
     })
   })
 
-  describe('the \'purposes\' property', () => {
+  describe('the "purposes" property', () => {
     describe('and it has a source of supply', () => {
       it('will return the source of supply for use in the licence summary page', async () => {
         const result = await ViewLicenceSummaryPresenter.go(licence, licenceAbstractionConditions)

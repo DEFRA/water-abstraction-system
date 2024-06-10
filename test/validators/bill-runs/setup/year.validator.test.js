@@ -21,7 +21,7 @@ describe('Bill Runs Setup Year validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    describe("because no 'year' is given", () => {
+    describe('because no "year" is given', () => {
       it('fails validation', () => {
         const result = YearValidator.go({ year: '' })
 
@@ -31,7 +31,7 @@ describe('Bill Runs Setup Year validator', () => {
       })
     })
 
-    describe("because an unknown 'year' is given", () => {
+    describe('because an unknown "year" is given', () => {
       it('fails validation', () => {
         const result = YearValidator.go({ year: '2020' })
 

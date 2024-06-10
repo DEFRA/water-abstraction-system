@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Model for PermitLicence (permit.licence)
+ * Model for permit_licences (permit.licence)
  * @module PermitLicenceModel
  */
 

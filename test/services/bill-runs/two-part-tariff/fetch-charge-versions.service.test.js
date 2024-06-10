@@ -205,7 +205,7 @@ describe('Fetch Charge Versions service', () => {
       await LicenceHelper.add({ id: licenceId, licenceRef, regionId })
     })
 
-    describe("because the scheme is 'presroc'", () => {
+    describe('because the scheme is "presroc"', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { scheme: 'alcs', licenceId, licenceRef }
@@ -265,7 +265,7 @@ describe('Fetch Charge Versions service', () => {
       })
     })
 
-    describe("because the status is not 'current'", () => {
+    describe('because the status is not "current"', () => {
       beforeEach(async () => {
         const { id: chargeVersionId } = await ChargeVersionHelper.add(
           { licenceId, licenceRef, status: 'superseded' }
