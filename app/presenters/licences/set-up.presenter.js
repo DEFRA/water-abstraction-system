@@ -47,7 +47,7 @@ function go (chargeVersions, workflows, agreements, returnVersions, auth, common
     },
     agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
-    returnsRequirements: _returnsRequirements(returnVersions)
+    returnsRequirements: _returnsVersions(returnVersions)
   }
 }
 
@@ -170,7 +170,7 @@ function _financialAgreementCode (agreement) {
   return agreement.financialAgreements[0].financialAgreementCode
 }
 
-function _returnsRequirements (returnVersions = [{}]) {
+function _returnsVersions (returnVersions = [{}]) {
   return returnVersions.map((returnVersion) => {
     return {
       action: [{
