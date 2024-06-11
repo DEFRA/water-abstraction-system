@@ -29,7 +29,7 @@ const agreementDescriptions = {
  * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
  * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
  * @param {module:LicenceAgreements[]} agreements - All agreements records for the licence
- * @param {module:ReturnVersionModel[]} returnVersions - All returns requirement records for the licence
+ * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
  * @param {Object} auth - The auth object taken from `request.auth` containing user details
  * @param {Object} commonData - Licence data already formatted for the view's shared elements
  *
