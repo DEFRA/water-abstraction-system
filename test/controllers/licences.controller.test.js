@@ -352,7 +352,9 @@ describe('Licences controller', () => {
         Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
           activeTab: 'set-up',
           agreements: [],
-          chargeInformation: []
+          chargeInformation: [],
+          enableRequirementsForReturns: true,
+          returnVersions: []
         })
       })
 
@@ -361,10 +363,31 @@ describe('Licences controller', () => {
 
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Licence set up')
+        expect(response.payload).to.contain('Requirements for returns')
+        expect(response.payload).to.contain('No requirements for returns for this licence.')
         expect(response.payload).to.contain('Charge information')
         expect(response.payload).to.contain('No charge information for this licence.')
         expect(response.payload).to.contain('Agreements')
         expect(response.payload).to.contain('No agreements for this licence.')
+      })
+    })
+
+    describe('when a request is valid but the requirements for returns toggle is false', () => {
+      beforeEach(async () => {
+        Sinon.stub(ViewLicenceSetUpService, 'go').resolves({
+          activeTab: 'set-up',
+          agreements: [],
+          chargeInformation: [],
+          enableRequirementsForReturns: false,
+          returnVersions: []
+        })
+      })
+
+      it('returns the page successfully with no requirements for returns', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(200)
+        expect(response.payload).to.not.contain('Requirements for returns')
       })
     })
   })
