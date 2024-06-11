@@ -33,8 +33,8 @@ async function go (licenceId, auth, page) {
   return {
     ...pageData,
     ...commonData,
-    pagination,
-    hasRequirements
+    hasRequirements,
+    pagination
   }
 }
 
