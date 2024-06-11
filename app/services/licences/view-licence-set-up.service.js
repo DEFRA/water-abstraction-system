@@ -5,13 +5,13 @@
  * @module ViewLicenceSetUpService
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchAgreementsService = require('./fetch-agreements.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FetchReturnVersionsService = require('./fetch-return-versions.service.js')
 const FetchWorkflowsService = require('./fetch-workflows.service.js')
 const SetUpPresenter = require('../../presenters/licences/set-up.presenter.js')
 const ViewLicenceService = require('./view-licence.service.js')
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence set up page
