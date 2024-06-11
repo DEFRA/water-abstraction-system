@@ -491,10 +491,10 @@ describe('Licence Set Up presenter', () => {
         returnVersions = [{ ...returnVersion }]
       })
 
-      it('correctly presents the returns requirement data', () => {
+      it('correctly presents the returns versions data', () => {
         const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-        expect(result.returnsRequirements).to.equal([
+        expect(result.returnVersions).to.equal([
           {
             action: [
               {
@@ -515,10 +515,10 @@ describe('Licence Set Up presenter', () => {
           returnVersions = [{ ...returnVersion, startDate: null, endDate: null, reason: null }]
         })
 
-        it('correctly presents the returns requirement data with the missing data defaults', () => {
+        it('correctly presents the returns versions data with the missing data defaults', () => {
           const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-          expect(result.returnsRequirements).to.equal([
+          expect(result.returnVersions).to.equal([
             {
               action: [
                 {
@@ -633,13 +633,13 @@ describe('Licence Set Up presenter', () => {
         })
       })
 
-      describe('when the user wants to manage return requirements', () => {
+      describe('when the user wants to manage return versions', () => {
         it('return the associated links', () => {
           const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, commonData)
 
-          expect(result.links.returnsRequirements.returnsRequired).to
+          expect(result.links.returnVersions.returnsRequired).to
             .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/returns-required')
-          expect(result.links.returnsRequirements.noReturnsRequired).to
+          expect(result.links.returnVersions.noReturnsRequired).to
             .equal('/system/licences/f91bf145-ce8e-481c-a842-4da90348062b/no-returns-required')
         })
       })

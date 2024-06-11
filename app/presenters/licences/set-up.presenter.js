@@ -40,14 +40,14 @@ function go (chargeVersions, workflows, agreements, returnVersions, auth, common
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),
       agreements: _agreementLinks(auth, commonData),
-      returnsRequirements: {
+      returnVersions: {
         returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
         noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
       }
     },
     agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
-    returnsRequirements: _returnsVersions(returnVersions)
+    returnVersions: _returnsVersions(returnVersions)
   }
 }
 

@@ -12,19 +12,17 @@
 
 <h2 class="govuk-heading-l">Licence set up</h2>
 
-{% set returnsRequirementsToggle = true %}
+{% if enableRequirementsForReturns %}
+  <h3 class="govuk-heading-m"> Requirements for returns </h3>
 
-{% if returnsRequirementsToggle %}
-  <h3 class="govuk-heading-m"> Returns for requirements </h3>
-
-  {% if returnsRequirements.length == 0 %}
-    <p class="govuk-body"> No returns for requirements for this licence.</p>
+  {% if returnVersions.length == 0 %}
+    <p class="govuk-body"> No requirements for returns for this licence.</p>
   {% endif %}
 
-  {% if returnsRequirements.length > 0 %}
-    {% set returnsRequirementsTableRows = [] %}
+  {% if returnVersions.length > 0 %}
+    {% set returnVersionsTableRows = [] %}
 
-    {% set returnsRequirementsTableHead = [
+    {% set returnVersionsTableHead = [
       {
         text: "Start date"
       },
@@ -42,8 +40,8 @@
       }
     ] %}
 
-    {% for returnsRequirement in  returnsRequirements %}
-      {% set returnsRequirementsTableRows = (returnsRequirementsTableRows.push([
+    {% for returnsRequirement in  returnVersions %}
+      {% set returnVersionsTableRows = (returnVersionsTableRows.push([
         {
           text: returnsRequirement.startDate
         },
@@ -59,31 +57,31 @@
         {
           html: createLink(returnsRequirement)
         }
-      ]), returnsRequirementsTableRows) %}
+      ]), returnVersionsTableRows) %}
     {% endfor %}
 
 
     {{ govukTable({
-        head: returnsRequirementsTableHead,
-        rows: returnsRequirementsTableRows
+        head: returnVersionsTableHead,
+        rows: returnVersionsTableRows
       }) }}
   {% endif %}
 
-  {% if links.returnsRequirements.returnsRequired %}
+  {% if links.returnVersions.returnsRequired %}
     <p>
       {{ govukButton({
         text: "Set up new returns requirement",
-        href: links.returnsRequirements.returnsRequired,
+        href: links.returnVersions.returnsRequired,
         classes: "govuk-button--secondary govuk-!-margin-right-3"
       }) }}
     </p>
   {% endif %}
 
-  {% if links.returnsRequirements.noReturnsRequired %}
+  {% if links.returnVersions.noReturnsRequired %}
     <p>
       {{ govukButton({
         text: "Mark licence as 'no returns needed'",
-        href: links.returnsRequirements.noReturnsRequired,
+        href: links.returnVersions.noReturnsRequired,
         classes: "govuk-button--secondary govuk-!-margin-right-3"
       }) }}
     </p>

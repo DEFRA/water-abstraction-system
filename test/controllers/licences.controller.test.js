@@ -320,7 +320,7 @@ describe('Licences controller', () => {
         expect(response.statusCode).to.equal(200)
         expect(response.payload).to.contain('Licence set up')
         // Returns for requirements
-        expect(response.payload).to.contain('Returns for requirements')
+        expect(response.payload).to.contain('Requirements for returns')
         // Returns for requirements present
         expect(response.payload).to.contain('Set up new returns requirement')
         expect(response.payload).to.contain('Mark licence as')
@@ -459,6 +459,7 @@ function _viewLicenceSetUp () {
     activeTab: 'set-up',
     agreements: [{}],
     chargeInformation: [{ }],
+    enableRequirementsForReturns: true,
     links: {
       agreements: {
         setUpAgreement: '/'
@@ -467,12 +468,12 @@ function _viewLicenceSetUp () {
         setupNewCharge: '/',
         makeLicenceNonChargeable: '/'
       },
-      returnsRequirements: {
+      returnVersions: {
         returnsRequired: '/',
         noReturnsRequired: '/'
       }
     },
-    returnsRequirements: [{ }]
+    returnVersions: [{ }]
   }
 }
 

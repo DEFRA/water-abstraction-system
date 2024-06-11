@@ -11,6 +11,7 @@ const FetchReturnVersionsService = require('./fetch-return-versions.service.js')
 const FetchWorkflowsService = require('./fetch-workflows.service.js')
 const SetUpPresenter = require('../../presenters/licences/set-up.presenter.js')
 const ViewLicenceService = require('./view-licence.service.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence set up page
@@ -34,7 +35,8 @@ async function go (licenceId, auth) {
   return {
     activeTab: 'set-up',
     ...commonData,
-    ...licenceSetUpData
+    ...licenceSetUpData,
+    enableRequirementsForReturns: FeatureFlagsConfig.enableRequirementsForReturns
   }
 }
 
