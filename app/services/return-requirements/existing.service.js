@@ -1,0 +1,35 @@
+'use strict'
+
+/**
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/existing` page
+ * @module ExistingService
+ */
+
+const ExistingPresenter = require('../../presenters/return-requirements/existing.presenter.js')
+const SessionModel = require('../../models/session.model.js')
+
+/**
+ * Orchestrates fetching and presenting the data for `/return-requirements/{sessionId}/existing` page
+ *
+ * Supports generating the data needed for the existing page in the return requirements setup journey. It fetches the
+ * current session record and from it determines what radio buttons to display to the user.
+ *
+ * @param {string} sessionId - The UUID of the current session
+ *
+ * @returns {Promise<Object>} The view data for the purpose page
+*/
+async function go (sessionId) {
+  const session = await SessionModel.query().findById(sessionId)
+
+  const formattedData = ExistingPresenter.go(session)
+
+  return {
+    activeNavBar: 'search',
+    pageTitle: 'Select an existing requirements for returns from',
+    ...formattedData
+  }
+}
+
+module.exports = {
+  go
+}

@@ -1,28 +1,58 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
-{% set rootLink = "/system/return-requirements/" + id %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block breadcrumbs %}
   {# Back link #}
   {{
     govukBackLink({
       text: 'Back',
-      href: rootLink + "/setup"
+      href: '/system/return-requirements/' + sessionId + "/setup"
     })
   }}
 {% endblock %}
 
 {% block content %}
-  {# Main heading #}
-  <div class="govuk-body">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-  </div>
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: error.text,
+          href: "#existing-error"
+        }
+      ]
+      }) }}
+  {% endif %}
 
-  <form method="post">
-    <div class="govuk-body">
+  {% set radioItems = [] %}
+  {% for existingOption in existingOptions %}
+    {% set radioItem = {
+      value: existingOption.value,
+      text: existingOption.text
+    } %}
+
+    {% set radioItems = (radioItems.push(radioItem), radioItems) %}
+  {% endfor %}
+
+  <div class="govuk-body">
+    <form method="post">
+      {{ govukRadios({
+        name: "existing",
+        errorMessage: error,
+        fieldset: {
+          legend: {
+            html: '<span class="govuk-caption-l">Licence ' + licenceRef + '</span>' + pageTitle,
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+          }
+        },
+        items: radioItems
+      }) }}
+
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </div>
-  </form>
+    </form>
+  </div>
 {% endblock %}
